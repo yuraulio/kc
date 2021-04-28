@@ -1,0 +1,62 @@
+<div class="card">
+    <div class="card-header">
+        <div class="row align-items-center">
+            <div class="col-8">
+                <h3 class="mb-0">{{ __('Assign Category - Topic') }}</h3>
+                <p class="text-sm mb-0">
+                    {{ __('This is an example of categories management.') }}
+                </p>
+            </div>
+            @can('create', App\Role::class)
+                <div class="col-4 text-right">
+                    <a href="{{ route('category.create') }}" class="btn btn-sm btn-primary">{{ __('Assign') }}</a>
+                </div>
+            @endcan
+        </div>
+    </div>
+    
+    <div class="col-12 mt-2">
+        @include('alerts.success')
+        @include('alerts.errors')
+    </div>
+
+    <div class="table-responsive py-4">
+        <table class="table table-flush"  id="datatable-basic">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">{{ __('Name') }}</th>
+                    <th scope="col">{{ __('Description') }}</th>
+                    <th scope="col">{{ __('Parent') }}</th>
+                    <th scope="col">{{ __('Hours') }}</th>
+                    @can('manage-users', App\User::class)
+                        <th scope="col"></th>
+                    @endcan
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($categories as $category)
+                    <tr>
+                        <td>{{ $category->name }}</td>
+                        <td>{{ $category->description }}</td>
+                        <td>{{ $category->parent }}</td>
+                        <td>{{ $category->hours }}</td>
+                        @can('manage-users', App\User::class)
+                            <td class="text-right">
+                                @can('update', $category)
+                                    <div class="dropdown">
+                                        <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                            <a class="dropdown-item" href="{{ route('category.edit', $category) }}">{{ __('Edit') }}</a>
+                                        </div>
+                                    </div>
+                                @endcan
+                            </td>
+                        @endcan
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
