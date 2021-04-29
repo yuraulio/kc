@@ -66,16 +66,23 @@
                                     @include('alerts.feedback', ['field' => 'title'])
                                 </div>
 
-                                <?php //dd($topic->category[0]->id); ?>
+                                <?php //dd(count($topic->event) == 0); ?>
 
                                 <div class="form-group{{ $errors->has('event_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-event">{{ __('Event') }}</label>
                                     <select name="event_id" id="input-event_id" class="form-control{{ $errors->has('event_id') ? ' is-invalid' : '' }}" placeholder="{{ __('Event') }}" required>
-                                        
-                                        <option value="">-</option>
-                                        @foreach ($topic->event as $event)
-                                            <option value="{{ $event->id }}" {{ $event->id == $topic->event[0]->id ? 'selected' : '' }}>{{ $event->title }}</option>
-                                        @endforeach
+                                       
+                                       <option value="">-</option>
+                                        @if(count($topic->event) == 0)
+                                            @foreach ($events as $event)
+                                                <option value="{{ $event->id }}">{{ $event->title }}</option>
+                                            @endforeach
+                                        @else                                   
+                                            @foreach ($events as $event)
+                                                <option value="{{ $event->id }}" {{ $event->id == $topic->event[0]->id ? 'selected' : '' }}>{{ $event->title }}</option>
+                                                @endforeach
+                                        @endif
+                                    
                                     </select>
 
                                     @include('alerts.feedback', ['field' => 'event_id'])
@@ -86,10 +93,17 @@
                                     <select name="category_id" id="input-category_id" class="form-control{{ $errors->has('category_id') ? ' is-invalid' : '' }}" placeholder="{{ __('Category') }}" required>
                                     
                                         <option value="">-</option>
-                                        @foreach ($topic->category as $category)
-                                        <?php print_r($category->id); ?>
-                                            <option value="{{ $category->id }}" {{ $category->id == $topic->category[0]->id ? 'selected' : '' }}>{{ $category->name }}</option>
-                                        @endforeach
+                                        @if(count($topic->category) == 0)
+                                            @foreach ($categories as $category)
+                                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                            @endforeach
+                                        @else                                   
+                                            @foreach ($categories as $category)
+                                                <option value="{{ $category->id }}" {{ $category->id == $topic->category[0]->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                                @endforeach
+                                        @endif
+
+                                        
                                     </select>
 
                                     @include('alerts.feedback', ['field' => 'category_id'])

@@ -14,4 +14,9 @@ class Lesson extends Model
     protected $fillable = [
         'priority', 'status', 'title', 'htmlTitle', 'subtitle', 'header', 'summary', 'body', 'vimeo_video', 'vimeo_duration','author_id', 'creator_id'
     ];
+
+    public function topic()
+    {
+        return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor');
+    }
 }

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Model\Lesson;
+use App\Model\Topic;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\LessonRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class LessonController extends Controller
 {
@@ -20,7 +22,9 @@ class LessonController extends Controller
         $this->authorize('manage-users', User::class);
         $user = Auth::user();
 
-        return view('lesson.index', ['lessons' => $model->all(), 'user' => $user]);
+        //dd($model->with('topic')->get());
+
+        return view('lesson.index', ['lessons' => $model->with('topic')->get(), 'user' => $user]);
     }
 
     /**
@@ -28,10 +32,11 @@ class LessonController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Topic $topics)
     {
         $user = Auth::user();
-        return view('lesson.create', ['user' => $user]);
+
+        return view('lesson.create', ['user' => $user, 'topics' => $topics->get(['id', 'title'])]);
     }
 
     /**
@@ -42,9 +47,23 @@ class LessonController extends Controller
      */
     public function store(LessonRequest $request, Lesson $model)
     {
-        $model->create($request->all());
 
-        return redirect()->route('lessons.index')->withStatus(__('Topic successfully created.'));
+        $les_id = $model->create($request->all());
+
+
+        $model->topic()->where('topic_id',$request->topic_id)->first()->topic()->updateExistingPivot($model, array('lesson_id' => $les_id), false);
+
+
+        // $relate = DB::table('event_topic_lesson_instructor')
+        //         ->where('topic_id', $request->topic_id)
+        //         ->first();
+
+        // $relate = DB::table('event_topic_lesson_instructor')
+        // ->where('id',$relate->id)
+        // ->update(['lesson_id' => $les_id]);
+        
+                
+        return redirect()->route('lessons.index')->withStatus(__('Lesson successfully created.'));
     }
 
     /**

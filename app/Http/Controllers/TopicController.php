@@ -9,6 +9,8 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\TopicRequest;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\Routing\Route as SymfonyRoute;;
+use Illuminate\Support\Facades\URL;
 
 class TopicController extends Controller
 {
@@ -73,9 +75,13 @@ class TopicController extends Controller
      * @param  \App\Model\Topic  $topic
      * @return \Illuminate\Http\Response
      */
-    public function edit(Topic $topic)
+    public function edit(Topic $topic, Event $events, Category $categories)
     {
-        return view('topics.edit', compact('topic'));
+        //$topic = $topic->with('event');
+        //dd($topic);
+        $events =  $events->get(['id', 'title']);
+        $categories =  $categories->get(['id', 'name']);
+        return view('topics.edit', compact('topic', 'events', 'categories'));
     }
 
     /**
@@ -87,7 +93,14 @@ class TopicController extends Controller
      */
     public function update(TopicRequest $request, Topic $topic)
     {
+        //$topic = $model;
+        //dd($topic);
+
         $topic->update($request->all());
+
+        $topic->event()->updateExistingPivot(1, array('event_id' => $request->event_id, 'topic_id' => $topic->id));
+
+        $topic->category()->updateExistingPivot(1, array('topic_id' => $topic->id, 'category_id' => $request->category_id));
 
         return redirect()->route('topics.index')->withStatus(__('Topic successfully updated.'));
     }

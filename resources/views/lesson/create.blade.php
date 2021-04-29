@@ -30,6 +30,7 @@
                             </div>
                         </div>
                     </div>
+                    <?php //dd($topics); ?>
                     <div class="card-body">
                         <form method="post" action="{{ route('lessons.store') }}" autocomplete="off"
                             enctype="multipart/form-data">
@@ -63,6 +64,18 @@
                                     <input type="text" name="htmlTitle" id="input-htmlTitle" class="form-control{{ $errors->has('htmlTitle') ? ' is-invalid' : '' }}" placeholder="{{ __('HTML Title') }}" value="{{ old('htmlTitle') }}" autofocus>
 
                                     @include('alerts.feedback', ['field' => 'htmlTitle'])
+                                </div>
+
+                                <div class="form-group{{ $errors->has('topic_id') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-topic_id">{{ __('Topic') }}</label>
+                                    <select name="topic_id" id="input-topic_id" class="form-control" placeholder="{{ __('Topic') }}" required>
+                                        <option value="">-</option>
+                                        @foreach ($topics as $topic)
+                                            <option value="{{ $topic->id }}" >{{ $topic->title }}</option>
+                                        @endforeach
+                                    </select>
+
+                                    @include('alerts.feedback', ['field' => 'topic_id'])
                                 </div>
 
                                 <div class="form-group{{ $errors->has('subtitle') ? ' has-danger' : '' }}">

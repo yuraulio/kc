@@ -45,23 +45,27 @@
                         <table class="table align-items-center table-flush"  id="datatable-basic">
                             <thead class="thead-light">
                                 <tr>
-                                    <th scope="col">{{ __('Priority') }}</th>
                                     <th scope="col">{{ __('Status') }}</th>
                                     <th scope="col">{{ __('Title') }}</th>
-                                    <th scope="col">{{ __('Summary') }}</th>
+                                    <th scope="col">{{ __('Assigned Topic') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
                                     @can('manage-users', App\User::class)
                                         <th scope="col"></th>
                                     @endcan
                                 </tr>
                             </thead>
+                            <?php //dd($lessons[0]->topic); ?>
                             <tbody>
                                 @foreach ($lessons as $lesson)
                                     <tr>
-                                        <td>{{ $lesson->priority }}</td>
                                         <td>{{ $lesson->status }}</td>
                                         <td>{{ $lesson->title }}</td>
-                                        <td>{{ $lesson->summary }}</td>
+                                        <td>
+                                        @foreach($lesson->topic as $topic)
+                                            {{ $topic->title }}
+                                        @endforeach
+                                        </td>
+                                        
                                         <td>{{ date_format($lesson->created_at, 'Y-m-d' ) }}</td>
 					                    @can('manage-users', App\User::class)
 					                        <td class="text-right">
