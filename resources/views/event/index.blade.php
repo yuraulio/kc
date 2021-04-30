@@ -39,16 +39,14 @@
                     <div class="col-12 mt-2">
                         @include('alerts.success')
                         @include('alerts.errors')
-                    </div>
-
+                    </div>                    
                     <div class="table-responsive py-4">
                         <table class="table align-items-center table-flush"  id="datatable-basic">
                             <thead class="thead-light">
                                 <tr>
-                                    <th scope="col">{{ __('Priority') }}</th>
                                     <th scope="col">{{ __('Status') }}</th>
                                     <th scope="col">{{ __('Title') }}</th>
-                                    <th scope="col">{{ __('Summary') }}</th>
+                                    <th scope="col">{{ __('Assigned to Category') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
                                     @can('manage-users', App\User::class)
                                         <th scope="col"></th>
@@ -58,10 +56,13 @@
                             <tbody>
                                 @foreach ($events as $event)
                                     <tr>
-                                        <td>{{ $event->priority }}</td>
                                         <td>{{ $event->status }}</td>
                                         <td>{{ $event->title }}</td>
-                                        <td>{{ $event->summary }}</td>
+                                        <td>
+                                        @foreach($event->category as $category)
+                                            {{ $category->name }}
+                                        @endforeach
+                                        </td>
                                         <td>{{ date_format($event->created_at, 'Y-m-d' ) }}</td>
 					                    @can('manage-users', App\User::class)
 					                        <td class="text-right">

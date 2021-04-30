@@ -65,24 +65,14 @@
                                     @include('alerts.feedback', ['field' => 'title'])
                                 </div>
 
-                                <div class="form-group{{ $errors->has('event_id') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-event">{{ __('Event') }}</label>
-                                    <select name="event_id" id="input-event" class="form-control{{ $errors->has('event_id') ? ' is-invalid' : '' }}" placeholder="{{ __('Event') }}" required>
-                                        <option value="">-</option>
-                                        @foreach ($events as $event)
-                                            <option value="{{ $event->id }}" {{ $event->id == old('event_id') ? 'selected' : '' }}>{{ $event->title }}</option>
-                                        @endforeach
-                                    </select>
-
-                                    @include('alerts.feedback', ['field' => 'event_id'])
-                                </div>
+                                
 
                                 <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
                                     <select name="category_id" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}" required>
                                         <option value="">-</option>
                                         @foreach ($categories as $category)
-                                            <option value="{{ $category->id }}" {{ $category->id == old('category_id') ? 'selected' : '' }}>{{ $category->name }}</option>
+                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
                                         @endforeach
                                     </select>
 
@@ -122,11 +112,11 @@
                                     <input type="text" name="body" id="input-body" class="form-control{{ $errors->has('body') ? ' is-invalid' : '' }}" placeholder="{{ __('Body') }}" value="{{ old('body') }}" autofocus>
 
                                     @include('alerts.feedback', ['field' => 'body'])
-                                </div>                             
+                                </div>     
+
                                     <input type="hidden" name="creator_id" id="input-creator_id" class="form-control" value="{{$user->id}}">
                                     <input type="hidden" name="author_id" id="input-author_id" class="form-control" value="{{$user->id}}">
 
-                                    @include('alerts.feedback', ['field' => 'ext_url'])
                                 
 
                                 <div class="text-center">

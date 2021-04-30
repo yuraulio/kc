@@ -30,6 +30,7 @@
                             </div>
                         </div>
                     </div>
+                    <?php //dd($event[0]); ?>
                     <div class="card-body">
                         <form method="post" action="{{ route('events.update', $event) }}" autocomplete="off"
                             enctype="multipart/form-data">
@@ -43,6 +44,20 @@
                                     <input type="number" name="priority" id="input-priority" class="form-control{{ $errors->has('priority') ? ' is-invalid' : '' }}" placeholder="{{ __('Priority') }}" value="{{ old('priority', $event->priority) }}" autofocus>
 
                                     @include('alerts.feedback', ['field' => 'priority'])
+                                </div>
+
+                                
+
+                                <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
+                                    <select name="category_id" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}" required>
+                                        <option value="">-</option>
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->id }}" {{ $category->id == $event->category[0]->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                        @endforeach
+                                    </select>
+
+                                    @include('alerts.feedback', ['field' => 'category_id'])
                                 </div>
 
                                 <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">

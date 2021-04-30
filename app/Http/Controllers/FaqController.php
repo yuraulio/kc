@@ -2,25 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Model\Event;
-use App\Category;
+use App\Model\Faq;
 use Illuminate\Http\Request;
-use App\Http\Requests\EventRequest;
 use Illuminate\Support\Facades\Auth;
+use App\Category;
+use App\Http\Requests\FaqRequest;
 
-class EventController extends Controller
+class FaqController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Event $model)
+    public function index(Faq $model)
     {
         $this->authorize('manage-users', User::class);
         $user = Auth::user();
 
-        return view('event.index', ['events' =>$model->with('category')->get(), 'user' => $user ]);
+        //dd($model->with('category')->get());
+
+        return view('faq.index', ['faqs' => $model->with('category')->get(), 'user' => $user]);
     }
 
     /**
@@ -32,7 +34,7 @@ class EventController extends Controller
     {
         $user = Auth::user();
 
-        return view('event.create', ['user' => $user, 'categories' => Category::all()]);
+        return view('faq.create', ['user' => $user, 'categories' => Category::all()]);
     }
 
     /**
@@ -41,23 +43,24 @@ class EventController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(EventRequest $request, Event $model)
+    public function store(FaqRequest $request, Faq $model)
     {
-        $event = $model->create($request->all());
+        $faq = $model->create($request->all());
+
         $category = Category::find($request->category_id);
 
-        $event->category()->attach([$category->id]);
+        $faq->category()->attach([$category->id]);
 
-        return redirect()->route('events.index')->withStatus(__('Event successfully created.'));
+        return redirect()->route('faqs.index')->withStatus(__('Faq successfully created.'));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Model\Event  $event
+     * @param  \App\Model\Faq  $faq
      * @return \Illuminate\Http\Response
      */
-    public function show(Event $event)
+    public function show(Faq $faq)
     {
         //
     }
@@ -65,39 +68,39 @@ class EventController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Model\Event  $event
+     * @param  \App\Model\Faq  $faq
      * @return \Illuminate\Http\Response
      */
-    public function edit(Event $event)
+    public function edit(Faq $faq, Category $categories)
     {
         $categories = Category::all();
-        $event = $event->with('category')->first();
+        $faq = $faq->with('category')->first();
 
-        return view('event.edit', compact('event', 'categories'));
+        return view('faq.edit', compact('faq', 'categories'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\Event  $event
+     * @param  \App\Model\Faq  $faq
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Event $event)
-    {    
-        $event->update($request->all());
-        $event->category()->sync([$request->category_id]);
-        
-        return redirect()->route('events.index')->withStatus(__('Event successfully updated.'));
+    public function update(FaqRequest $request, Faq $faq)
+    {
+        $faq->update($request->all());
+        $faq->category()->sync([$request->category_id]);
+
+        return redirect()->route('faqs.index')->withStatus(__('Faq successfully updated.'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Model\Event  $event
+     * @param  \App\Model\Faq  $faq
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Event $event)
+    public function destroy(Faq $faq)
     {
         //
     }

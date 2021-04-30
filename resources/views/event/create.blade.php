@@ -44,6 +44,18 @@
                                     @include('alerts.feedback', ['field' => 'priority'])
                                 </div>
 
+                                <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
+                                    <select name="category_id" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}" required>
+                                        <option value="">-</option>
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->id }}" {{ $category->id == old('category_id') ? 'selected' : '' }}>{{ $category->name }}</option>
+                                        @endforeach
+                                    </select>
+
+                                    @include('alerts.feedback', ['field' => 'category_id'])
+                                </div>
+
                                 <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-status">{{ __('Status') }}</label>
                                     <input type="number" name="status" id="input-status" class="form-control{{ $errors->has('status') ? ' is-invalid' : '' }}" placeholder="{{ __('Status') }}" value="{{ old('status') }}" autofocus>

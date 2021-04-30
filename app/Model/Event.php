@@ -5,6 +5,7 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Topic;
+use App\Category;
 
 class Event extends Model
 {
@@ -19,5 +20,12 @@ class Event extends Model
     public function topic()
     {
         return $this->belongsToMany(Topic::class);
+    }
+
+    //////////////////////////NEW
+
+    public function category()
+    {
+        return $this->morphToMany(Category::class, 'categoryable');
     }
 }

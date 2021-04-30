@@ -31,6 +31,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('lessons', 'LessonController', ['except' => ['show']]);
     Route::resource('events', 'EventController', ['except' => ['show']]);
     Route::resource('types', 'TypeController', ['except' => ['show']]);
+    Route::resource('testimonials', 'TestimonialController', ['except' => ['show']]);
+    Route::resource('faqs', 'FaqController', ['except' => ['show']]);
 
     // Route::get('role/delete/{id}', ['as' => 'role.delete', 'uses' => 'RoleController@delete']);
 

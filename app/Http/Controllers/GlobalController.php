@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Model\Topic;
 use App\Category;
 
 class GlobalController extends Controller
@@ -12,8 +11,8 @@ class GlobalController extends Controller
     {
         $this->authorize('manage-items', User::class);
 
-        // $cat = $categories->first();
-        // dd($cat);
-        return view('global_settings.index', ['categories' => $model->get()]);
+        $cat = $model->with('topics')->get();
+        //dd($cat);
+        return view('global_settings.index', ['categories' => $model->with('topics')->get()]);
     }
 }

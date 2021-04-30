@@ -157,7 +157,17 @@
                                     <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
                                         <a href="{{ route('types.index') }}" class="nav-link">{{ __('Types') }}</a>
                                     </li>
-                                @endcan                         
+                                @endcan   
+                                @can('manage-users', App\User::class)
+                                    <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
+                                        <a href="{{ route('testimonials.index') }}" class="nav-link">{{ __('Testimonials') }}</a>
+                                    </li>
+                                @endcan
+                                @can('manage-users', App\User::class)
+                                    <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
+                                        <a href="{{ route('faqs.index') }}" class="nav-link">{{ __('Faqs') }}</a>
+                                    </li>
+                                @endcan                      
                             </ul>
                         </div>
                     </li>

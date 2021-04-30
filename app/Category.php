@@ -18,6 +18,9 @@
 namespace App;
 
 use App\Model\Topic;
+use App\Model\Event;
+use App\Model\Testimonial;
+use App\Model\Faq;
 use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
@@ -42,7 +45,46 @@ class Category extends Model
 
     // public function topics()
     // {
-    //     return $this->belongsToMany(Topic::class);
+    //     return $this->belongsToMany(Topic::class, 'categories_topics_lesson');
     // }
+
+    ///////////////////////NEW
+
+    /**
+     * Get all of the events that are assigned this tag.
+     */
+
+    public function events()
+    {
+        return $this->morphedByMany(Event::class, 'categoryable');
+    }
+
+ 
+    /**
+     * Get all of the topics that are assigned this tag.
+     */
+
+    public function topics()
+    {
+        return $this->morphedByMany(Topic::class, 'categoryable');
+    }
+
+    /**
+     * Get all of the testimonials that are assigned this tag.
+     */
+
+    public function testimonials()
+    {
+        return $this->morphedByMany(Testimonial::class, 'categoryable');
+    }
+
+    /**
+     * Get all of the faqs that are assigned this tag.
+     */
+
+    public function faqs()
+    {
+        return $this->morphedByMany(Faqs::class, 'categoryable');
+    }
 
 }

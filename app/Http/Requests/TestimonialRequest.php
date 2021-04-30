@@ -3,10 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Model\Event;
-use Illuminate\Validation\Rule;
 
-class TopicRequest extends FormRequest
+class TestimonialRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,33 +24,18 @@ class TopicRequest extends FormRequest
     public function rules()
     {
         return [
-            'priority' => [
-                'numeric'
+            'title' => [
+                'required', 'min:3'
+            ],
+            'name' => [
+                'required', 'min:3'
             ],
             'status' => [
                 'numeric'
             ],
-            'comment_status' => [
-                
-            ],
-            'title' => [
+            'testimonial' => [
                 'required', 'min:3'
             ],
-            'short_title' => [
-                
-            ],
-            'subtitle' => [
-                
-            ],
-            'header' => [
-                
-            ],
-            'summary' => [
-                
-            ],
-            'body' => [
-                
-            ]
         ];
     }
 }

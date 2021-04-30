@@ -24,9 +24,9 @@ class TopicController extends Controller
         $this->authorize('manage-users', User::class);
         $user = Auth::user();
 
-        //dd($model->with('events')->get());
+        //dd($model->with('category')->get());
 
-        return view('topics.index', ['topics' => $model->with('event', 'category')->get(), 'user' => $user]);
+        return view('topics.index', ['topics' => $model->with('category')->get(), 'user' => $user]);
     }
 
     /**
@@ -34,11 +34,11 @@ class TopicController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Topic $model, Event $events, Category $categories)
+    public function create()
     {
         $user = Auth::user();
         //dd($events->get(['id', 'title']));
-        return view('topics.create', ['user' => $user, 'events' => $events->get(['id', 'title']), 'categories' => $categories->get(['id', 'name'])]);
+        return view('topics.create', ['user' => $user, 'categories' => Category::all()]);
     }
 
     /**
@@ -51,9 +51,9 @@ class TopicController extends Controller
     {
         $topic = $model->create($request->all());
 
-        $model->event()->attach(1, array('event_id' => $request->event_id, 'topic_id' => $topic->id));
+        $category = Category::find($request->category_id);
 
-        $model->category()->attach(1, array('topic_id' => $topic->id, 'category_id' => $request->category_id));
+        $topic->category()->attach([$category->id]);
 
         return redirect()->route('topics.index')->withStatus(__('Topic successfully created.'));
     }
@@ -75,13 +75,12 @@ class TopicController extends Controller
      * @param  \App\Model\Topic  $topic
      * @return \Illuminate\Http\Response
      */
-    public function edit(Topic $topic, Event $events, Category $categories)
+    public function edit(Topic $topic, Category $categories)
     {
-        //$topic = $topic->with('event');
-        //dd($topic);
-        $events =  $events->get(['id', 'title']);
-        $categories =  $categories->get(['id', 'name']);
-        return view('topics.edit', compact('topic', 'events', 'categories'));
+        $categories = Category::all();
+        $topic = $topic->with('category')->first();
+
+        return view('topics.edit', compact('topic', 'categories'));
     }
 
     /**
@@ -93,14 +92,8 @@ class TopicController extends Controller
      */
     public function update(TopicRequest $request, Topic $topic)
     {
-        //$topic = $model;
-        //dd($topic);
-
         $topic->update($request->all());
-
-        $topic->event()->updateExistingPivot(1, array('event_id' => $request->event_id, 'topic_id' => $topic->id));
-
-        $topic->category()->updateExistingPivot(1, array('topic_id' => $topic->id, 'category_id' => $request->category_id));
+        $topic->category()->sync([$request->category_id]);
 
         return redirect()->route('topics.index')->withStatus(__('Topic successfully updated.'));
     }

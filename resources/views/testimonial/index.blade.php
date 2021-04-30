@@ -11,7 +11,7 @@
                 {{ __('Examples') }}
             @endslot
 
-            <li class="breadcrumb-item"><a href="{{ route('topics.index') }}">{{ __('Topics Management') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('testimonials.index') }}">{{ __('Testimonials Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
         @endcomponent
     @endcomponent
@@ -23,14 +23,14 @@
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col-8">
-                                <h3 class="mb-0">{{ __('Topics') }}</h3>
+                                <h3 class="mb-0">{{ __('Testimonials') }}</h3>
                                 <p class="text-sm mb-0">
-                                        {{ __('This is an example of Topic management.') }}
+                                        {{ __('This is an example of Testimonial management.') }}
                                     </p>
                             </div>
                             @can('create', App\User::class)
                                 <div class="col-4 text-right">
-                                    <a href="{{ route('topics.create') }}" class="btn btn-sm btn-primary">{{ __('Add Topic') }}</a>
+                                    <a href="{{ route('testimonials.create') }}" class="btn btn-sm btn-primary">{{ __('Add Testimonial') }}</a>
                                 </div>
                             @endcan
                         </div>
@@ -45,8 +45,9 @@
                         <table class="table align-items-center table-flush"  id="datatable-basic">
                             <thead class="thead-light">
                                 <tr>
-                                    <th scope="col">{{ __('Status') }}</th>
+                                    <th scope="col">{{ __('Name') }}</th>
                                     <th scope="col">{{ __('Title') }}</th>
+                                    <th scope="col">{{ __('Testimonial') }}</th>
                                     <th scope="col">{{ __('Assigned Category') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
                                     @can('manage-users', App\User::class)
@@ -55,16 +56,17 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($topics as $topic)
+                                @foreach ($testimonials as $testimonial)
                                     <tr>
-                                        <td>{{ $topic->status }}</td>
-                                        <td>{{ $topic->title }}</td>
+                                        <td>{{ $testimonial->name }}</td>
+                                        <td>{{ $testimonial->title }}</td>
+                                        <td>{{ $testimonial->testimonial }}</td>
                                         <td>
-                                        @foreach($topic->category as $category)
+                                        @foreach($testimonial->category as $category)
                                             {{$category->name}}
                                         @endforeach
                                         </td>
-                                        <td>{{ date_format($topic->created_at, 'Y-m-d' ) }}</td>
+                                        <td>{{ date_format($testimonial->created_at, 'Y-m-d' ) }}</td>
 					                    @can('manage-users', App\User::class)
 					                        <td class="text-right">
                                                 @if (auth()->user()->can('update', $user) || auth()->user()->can('delete', $user))
@@ -75,10 +77,10 @@
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                                                             
                                                                 @can('update', $user)
-                                                                    <a class="dropdown-item" href="{{ route('topics.edit', $topic) }}">{{ __('Edit') }}</a>
+                                                                    <a class="dropdown-item" href="{{ route('testimonials.edit', $testimonial) }}">{{ __('Edit') }}</a>
                                                                 @endcan
     							                                @can('delete', $user)
-        							                                <form action="{{ route('topics.destroy', $topic) }}" method="post">
+        							                                <form action="{{ route('testimonials.destroy', $testimonial) }}" method="post">
                                                                         @csrf
                                                                         @method('delete')
 
