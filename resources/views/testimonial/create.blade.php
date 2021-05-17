@@ -52,11 +52,11 @@
                                     @include('alerts.feedback', ['field' => 'name'])
                                 </div>
 
-                                
+
 
                                 <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
-                                    <select name="category_id" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}" required>
+                                    <select name="category_id" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}">
                                         <option value="">-</option>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -80,7 +80,7 @@
                                     @include('alerts.feedback', ['field' => 'testimonial'])
                                 </div>
 
-                                
+
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
                                 </div>

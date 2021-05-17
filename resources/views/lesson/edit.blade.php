@@ -58,6 +58,47 @@
 
                                     @include('alerts.feedback', ['field' => 'title'])
                                 </div>
+                                <?php //dd($lesson); ?>
+
+                                <div class="form-group{{ $errors->has('topic_id') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-topic_id">{{ __('Topic') }}</label>
+                                    <select multiple name="topic_id[]" id="input-topic_id" class="form-control topics" placeholder="{{ __('Topic') }}" required>
+                                        <option value="">-</option>
+                                        @foreach ($topics as $topic)
+                                            <?php $selected = false; ?>
+                                            @foreach($lesson->topic as $selected_topic)
+                                                @if($topic->id == $selected_topic['id'])
+                                                    {{$selected = true}}
+                                                @endif
+
+                                            @endforeach
+
+                                            <option <?php if($selected === true){echo 'selected';} ?> data-category="{{ $topic->category[0]->id }}" value="{{ $topic->id }}" > {{ $topic->title }}</option>
+                                        @endforeach
+                                    </select>
+
+                                    @include('alerts.feedback', ['field' => 'topic_id'])
+                                </div>
+                                <?php //dd(count($lesson->type) == 0); ?>
+                                <div class="form-group{{ $errors->has('type_id') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-type_id">{{ __('Type') }}</label>
+                                    <select name="type_id" id="input-type_id" class="form-control" placeholder="{{ __('Type') }}" required>
+                                        <option value="">-</option>
+                                        @foreach ($types as $type)
+                                            <option <?php if(count($lesson->type) != 0){
+                                                if($lesson->type[0]->id == $type->id){
+                                                    echo 'selected';
+                                                }else{
+                                                    echo '';
+                                                }
+                                            }
+                                            ?>
+                                            value="{{ $type->id }}" > {{ $type->name }}</option>
+                                        @endforeach
+                                    </select>
+
+                                    @include('alerts.feedback', ['field' => 'type_id'])
+                                </div>
 
                                 <div class="form-group{{ $errors->has('htmlTitle') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-htmlTitle">{{ __('HTML Title') }}</label>
@@ -92,26 +133,26 @@
                                     <input type="text" name="body" id="input-body" class="form-control{{ $errors->has('body') ? ' is-invalid' : '' }}" placeholder="{{ __('Body') }}" value="{{ old('body', $lesson->body) }}" autofocus>
 
                                     @include('alerts.feedback', ['field' => 'body'])
-                                </div> 
+                                </div>
                                 <div class="form-group{{ $errors->has('body') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-vimeo_video">{{ __('Vimeo Video') }}</label>
                                     <input type="text" name="vimeo_video" id="input-vimeo_video" class="form-control{{ $errors->has('vimeo_video') ? ' is-invalid' : '' }}" placeholder="{{ __('Vimeo Video') }}" value="{{ old('vimeo_video', $lesson->vimeo_video) }}" autofocus>
 
                                     @include('alerts.feedback', ['field' => 'vimeo_video'])
-                                </div> 
+                                </div>
 
                                 <div class="form-group{{ $errors->has('body') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-vimeo_duration">{{ __('Vimeo Duration') }}</label>
                                     <input type="text" name="vimeo_duration" id="input-vimeo_duration" class="form-control{{ $errors->has('vimeo_duration') ? ' is-invalid' : '' }}" placeholder="{{ __('Vimeo Duration') }}" value="{{ old('vimeo_duration', $lesson->vimeo_duration) }}" autofocus>
 
                                     @include('alerts.feedback', ['field' => 'vimeo_duration'])
-                                </div> 
+                                </div>
 
                                     <input type="hidden" name="creator_id" id="input-creator_id" class="form-control" value="{{$lesson->creator_id}}">
                                     <input type="hidden" name="author_id" id="input-author_id" class="form-control" value="{{$lesson->author_id}}">
 
                                     @include('alerts.feedback', ['field' => 'ext_url'])
-                                
+
 
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
@@ -126,3 +167,55 @@
         @include('layouts.footers.auth')
     </div>
 @endsection
+
+@push('js')
+
+<script>
+let a = [];
+    $( "#input-topic_id" ).change(function(e) {
+        //alert( "Handler for .change() called." );
+
+        let selected_value = $(this).find(":selected").val();
+        let selected_cat = $(this).find(":selected").data("category");
+        console.log('select_value: ' + selected_value)
+        console.log('select_cat: ' + selected_cat)
+
+        if(selected_cat == undefined){
+            $( '.topics option' ).each(function() {
+                $( this ).removeAttr("disabled")
+                $(this).css("opacity", "1")
+
+                let a = [];
+            })
+        }
+        //alert('sdf'+selected_category)
+        //console.log(selected_category)
+
+
+
+        $( '.topics option' ).each(function(e) {
+            let cat = $( this ).data('category')
+            let value = $( this ).val()
+
+            if(selected_cat == cat && selected_value != value){
+                $(this).attr("disabled", "true")
+                $(this).css("opacity", "0.4")
+            }
+
+
+
+            // if(a.find(e => a = selected_category)){
+            //     alert(a)
+            //     $(this).attr("disabled", "true")
+            //     $(this).css("opacity", "0.4")
+            // }
+
+            // if(value != undefined){
+            //     a.push(cat)
+            // }
+        });
+    });
+
+</script>
+
+@endpush

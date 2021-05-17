@@ -46,18 +46,44 @@
                                     @include('alerts.feedback', ['field' => 'priority'])
                                 </div>
 
-                                
+
 
                                 <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
                                     <select name="category_id" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}" required>
                                         <option value="">-</option>
                                         @foreach ($categories as $category)
-                                            <option value="{{ $category->id }}" {{ $category->id == $event->category[0]->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                            <option <?php if(count($event->category) != 0){
+                                                if($event->category[0]->id == $category->id){
+                                                    echo 'selected';
+                                                }else{
+                                                    echo '';
+                                                }
+                                            }
+                                            ?> value="{{ $category->id }}" >{{ $category->name }}</option>
                                         @endforeach
                                     </select>
 
                                     @include('alerts.feedback', ['field' => 'category_id'])
+                                </div>
+
+                                <div class="form-group{{ $errors->has('type_id') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-type_id">{{ __('Type') }}</label>
+                                    <select name="type_id" id="input-type_id" class="form-control" placeholder="{{ __('Type') }}" required>
+                                        <option value="">-</option>
+                                        @foreach ($types as $type)
+                                            <option <?php if(count($event->type) != 0){
+                                                if($event->type[0]->id == $type->id){
+                                                    echo 'selected';
+                                                }else{
+                                                    echo '';
+                                                }
+                                            }
+                                            ?> value="{{ $type->id }}" >{{ $type->name }}</option>
+                                        @endforeach
+                                    </select>
+
+                                    @include('alerts.feedback', ['field' => 'type_id'])
                                 </div>
 
                                 <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
@@ -114,19 +140,19 @@
                                     <input type="number" name="hours" id="input-hours" class="form-control{{ $errors->has('hours') ? ' is-invalid' : '' }}" placeholder="{{ __('Hours') }}" value="{{ old('hours', $event->hours) }}"autofocus>
 
                                     @include('alerts.feedback', ['field' => 'hours'])
-                                </div> 
+                                </div>
 
                                 <div class="form-group{{ $errors->has('view_tpl') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-view_tpl">{{ __('View tpl') }}</label>
                                     <input type="text" name="view_tpl" id="input-view_tpl" class="form-control{{ $errors->has('view_tpl') ? ' is-invalid' : '' }}" placeholder="{{ __('View tpl') }}" value="{{ old('view_tpl', $event->view_tpl) }}"autofocus>
 
                                     @include('alerts.feedback', ['field' => 'view_tpl'])
-                                </div>                               
+                                </div>
                                     <input type="hidden" name="creator_id" id="input-creator_id" class="form-control" value="{{$event->creator_id}}">
                                     <input type="hidden" name="author_id" id="input-author_id" class="form-control" value="{{$event->author_id}}">
 
                                     @include('alerts.feedback', ['field' => 'ext_url'])
-                                
+
 
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>

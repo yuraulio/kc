@@ -68,7 +68,7 @@
 
                                 <div class="form-group{{ $errors->has('topic_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-topic_id">{{ __('Topic') }}</label>
-                                    <select name="topic_id" id="input-topic_id" class="form-control" placeholder="{{ __('Topic') }}" required>
+                                    <select multiple name="topic_id[]" id="input-topic_id" class="form-control topics" placeholder="{{ __('Topic') }}">
                                         <option value="">-</option>
                                         @foreach ($topics as $topic)
                                             <option value="{{ $topic->id }}" >{{ $topic->title }}</option>
@@ -76,6 +76,18 @@
                                     </select>
 
                                     @include('alerts.feedback', ['field' => 'topic_id'])
+                                </div>
+
+                                <div class="form-group{{ $errors->has('type_id') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-type_id">{{ __('Type') }}</label>
+                                    <select name="type_id" id="input-type_id" class="form-control" placeholder="{{ __('Type') }}">
+                                        <option value="">-</option>
+                                        @foreach ($types as $type)
+                                            <option value="{{ $type->id }}" >{{ $type->name }}</option>
+                                        @endforeach
+                                    </select>
+
+                                    @include('alerts.feedback', ['field' => 'type_id'])
                                 </div>
 
                                 <div class="form-group{{ $errors->has('subtitle') ? ' has-danger' : '' }}">
@@ -104,24 +116,24 @@
                                     <input type="text" name="body" id="input-body" class="form-control{{ $errors->has('body') ? ' is-invalid' : '' }}" placeholder="{{ __('Body') }}" value="{{ old('body') }}" autofocus>
 
                                     @include('alerts.feedback', ['field' => 'body'])
-                                </div>  
+                                </div>
                                 <div class="form-group{{ $errors->has('vimeo_video') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-vimeo_video">{{ __('Vimeo Video') }}</label>
                                     <input type="text" name="vimeo_video" id="input-vimeo_video" class="form-control{{ $errors->has('vimeo_video') ? ' is-invalid' : '' }}" placeholder="{{ __('Vimeo Video') }}" value="{{ old('vimeo_video') }}" autofocus>
 
                                     @include('alerts.feedback', ['field' => 'vimeo_video'])
-                                </div>  
+                                </div>
                                 <div class="form-group{{ $errors->has('vimeo_duration') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-vimeo_duration">{{ __('Vimeo Duration') }}</label>
                                     <input type="text" name="vimeo_duration" id="input-vimeo_duration" class="form-control{{ $errors->has('vimeo_duration') ? ' is-invalid' : '' }}" placeholder="{{ __('Vimeo Duration') }}" value="{{ old('vimeo_duration') }}" autofocus>
 
                                     @include('alerts.feedback', ['field' => 'vimeo_duration'])
-                                </div>                           
+                                </div>
                                     <input type="hidden" name="creator_id" id="input-creator_id" class="form-control" value="{{$user->id}}">
                                     <input type="hidden" name="author_id" id="input-author_id" class="form-control" value="{{$user->id}}">
 
                                     @include('alerts.feedback', ['field' => 'ext_url'])
-                                
+
 
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
@@ -136,3 +148,11 @@
         @include('layouts.footers.auth')
     </div>
 @endsection
+
+@push('js')
+<script>
+
+
+</script>
+
+@endpush

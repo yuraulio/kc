@@ -5,10 +5,10 @@
 ])
 
 @section('content')
-    @component('layouts.headers.auth') 
+    @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
-            @slot('title') 
-                {{ __('Examples') }} 
+            @slot('title')
+                {{ __('Examples') }}
             @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('role.index') }}">{{ __('Role Management') }}</a></li>
@@ -35,7 +35,7 @@
                             @endcan
                         </div>
                     </div>
-                    
+
                     <div class="col-12 mt-2">
                         @include('alerts.success')
                         @include('alerts.errors')
@@ -61,16 +61,23 @@
                                         <td>{{ $role->created_at->format('d/m/Y H:i') }}</td>
                                         @can('manage-users', App\User::class)
                                             <td class="text-right">
-                                                @can('update', $role)
+                                            @if (auth()->user()->can('update', $role) || auth()->user()->can('delete', $role))
                                                     <div class="dropdown">
                                                         <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                             <i class="fas fa-ellipsis-v"></i>
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                                                             <a class="dropdown-item" href="{{ route('role.edit', $role) }}">{{ __('Edit') }}</a>
+                                                            <form action="{{ route('role.destroy', $role) }}" method="post">
+                                                                @csrf
+                                                                @method('delete')
+                                                                <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this role?") }}') ? this.parentElement.submit() : ''">
+                                                                    {{ __('Delete') }}
+                                                                </button>
                                                         </div>
+
                                                     </div>
-                                                @endcan
+                                            @endif
                                             </td>
                                         @endcan
                                     </tr>
@@ -81,7 +88,7 @@
                 </div>
             </div>
         </div>
-            
+
         @include('layouts.footers.auth')
     </div>
 @endsection

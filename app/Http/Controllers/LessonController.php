@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Model\Lesson;
 use App\Model\Topic;
+use App\Model\Type;
 use App\User;
+use App\Category;
 use Illuminate\Http\Request;
 use App\Http\Requests\LessonRequest;
 use Illuminate\Support\Facades\Auth;
@@ -22,9 +24,7 @@ class LessonController extends Controller
         $this->authorize('manage-users', User::class);
         $user = Auth::user();
 
-        //dd($model->with('topic')->get());
-
-        return view('lesson.index', ['lessons' => $model->with('topic')->get(), 'user' => $user]);
+        return view('lesson.index', ['lessons' => $model->with('topic', 'type')->get(), 'user' => $user]);
     }
 
     /**
@@ -36,7 +36,7 @@ class LessonController extends Controller
     {
         $user = Auth::user();
 
-        return view('lesson.create', ['user' => $user, 'topics' => $topics->get(['id', 'title'])]);
+        return view('lesson.create', ['user' => $user, 'topics' => $topics->get(['id', 'title']), 'types' => Type::all()]);
     }
 
     /**
@@ -47,22 +47,26 @@ class LessonController extends Controller
      */
     public function store(LessonRequest $request, Lesson $model)
     {
+        $lesson = $model->create($request->all());
 
-        $les_id = $model->create($request->all());
+        if($request->topic_id != null){
+            foreach($request->topic_id as $topic){
+                $topic = Topic::find($topic);
+                $cat_id = $topic->with('category')->first()->category[0]->id;
+                $cat = Category::find($cat_id);
+
+                $cat->topic()->attach($topic, ['lesson_id' => $lesson->id]);
+            }
+        }
+
+        if($request->type_id != null){
+            $lesson->type()->detach();
+            $type = Type::find($request->type_id);
+
+            $lesson->type()->attach([$request->type_id]);
+        }
 
 
-        $model->topic()->where('topic_id',$request->topic_id)->first()->topic()->updateExistingPivot($model, array('lesson_id' => $les_id), false);
-
-
-        // $relate = DB::table('event_topic_lesson_instructor')
-        //         ->where('topic_id', $request->topic_id)
-        //         ->first();
-
-        // $relate = DB::table('event_topic_lesson_instructor')
-        // ->where('id',$relate->id)
-        // ->update(['lesson_id' => $les_id]);
-        
-                
         return redirect()->route('lessons.index')->withStatus(__('Lesson successfully created.'));
     }
 
@@ -85,7 +89,25 @@ class LessonController extends Controller
      */
     public function edit(Lesson $lesson)
     {
-        return view('lesson.edit', compact('lesson'));
+        $lesson = $lesson->with('topic', 'category','type')->find($lesson['id']);
+        $topics = Topic::with('category')->get();
+        $new_topics = [];
+
+        foreach($topics as $topic)
+        {
+            //dd($topic);
+            if($topic->category[0]['id'] != $lesson->category[0]['id']){
+                array_push($new_topics, $topic);
+            }
+        }
+
+        $topics = $new_topics;
+
+
+        $types = Type::all();
+
+
+        return view('lesson.edit', compact('lesson', 'topics', 'types'));
     }
 
     /**
@@ -97,7 +119,30 @@ class LessonController extends Controller
      */
     public function update(Request $request, Lesson $lesson)
     {
+        //dd($request->all());
+        $lesson_id = $lesson['id'];
         $lesson->update($request->all());
+
+
+        if($request->topic_id != null){
+            $lesson->topic()->detach();
+            foreach($request->topic_id as $topic)
+            {
+                $topic = Topic::with('category')->find($topic);
+                $cat = $topic->category[0];
+
+                $cat->topic()->attach($topic, ['lesson_id' => $lesson->id]);
+            }
+        }
+
+
+        if($request->type_id != null){
+            $lesson->type()->detach();
+            $type = Type::find($request->type_id);
+
+            $lesson->type()->attach([$request->type_id]);
+        }
+
 
         return redirect()->route('lessons.index')->withStatus(__('Lesson successfully updated.'));
     }
@@ -110,6 +155,13 @@ class LessonController extends Controller
      */
     public function destroy(Lesson $lesson)
     {
-        //
+        //dd($lesson);
+        if (!$lesson->topic->isEmpty()) {
+            return redirect()->route('lessons.index')->withErrors(__('This lesson has items attached and can\'t be deleted.'));
+        }
+
+        $lesson->delete();
+
+        return redirect()->route('lessons.index')->withStatus(__('Lesson successfully deleted.'));
     }
 }

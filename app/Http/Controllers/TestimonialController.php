@@ -44,8 +44,12 @@ class TestimonialController extends Controller
     public function store(Request $request, Testimonial $model)
     {
         $testimonial = $model->create($request->all());
-        $category = Category::find($request->category_id);
-        $testimonial->category()->attach([$category->id]);
+
+        if($request->category_id != null){
+            $category = Category::find($request->category_id);
+            $testimonial->category()->attach([$category->id]);
+        }
+
 
         return redirect()->route('testimonials.index')->withStatus(__('Testimonial successfully created.'));
     }
@@ -70,7 +74,7 @@ class TestimonialController extends Controller
     public function edit(Testimonial $testimonial)
     {
         $categories = Category::all();
-        $testimonial = $testimonial->with('category')->first();
+        $testimonial = $testimonial->with('category')->find($testimonial['id']);
 
         return view('testimonial.edit', compact('testimonial', 'categories'));
     }
@@ -85,8 +89,13 @@ class TestimonialController extends Controller
     public function update(Request $request, Testimonial $testimonial)
     {
         $testimonial->update($request->all());
-        $testimonial->category()->sync([$request->category_id]);
-        
+        //$testimonial->category()->sync([$request->category_id]);
+
+        if($request->category_id != null){
+            $category = Category::find($request->category_id);
+            $testimonial->category()->sync([$category->id]);
+        }
+
         return redirect()->route('testimonials.index')->withStatus(__('Testimonial successfully updated.'));
     }
 
@@ -98,6 +107,12 @@ class TestimonialController extends Controller
      */
     public function destroy(Testimonial $testimonial)
     {
-        //
+        if (!$testimonial->category->isEmpty()) {
+            return redirect()->route('testimonials.index')->withErrors(__('This testimonial has items attached and can\'t be deleted.'));
+        }
+
+        $testimonial->delete();
+
+        return redirect()->route('testimonials.index')->withStatus(__('Testimonial successfully deleted.'));
     }
 }

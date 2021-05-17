@@ -37,7 +37,7 @@
                             @method('put')
 
                             <h6 class="heading-small text-muted mb-4">{{ __('Testimonial information') }}</h6>
-                            <div class="pl-lg-4">                                              
+                            <div class="pl-lg-4">
 
                                 <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-name">{{ __('Name') }}</label>
@@ -59,13 +59,23 @@
 
                                     @include('alerts.feedback', ['field' => 'status'])
                                 </div>
-                               
+
                                 <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
                                     <select name="category_id" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}" required>
                                         <option value="">-</option>
                                         @foreach ($categories as $category)
-                                            <option value="{{ $category->id }}" {{ $category->id == $testimonial->category[0]->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                            <option value="{{ $category->id }}"
+                                            <?php if(count($testimonial->category) != 0){
+                                                if($category->id == $testimonial->category[0]->id){
+                                                    echo 'selected';
+                                                }else{
+                                                    echo '';
+                                                }
+                                            }
+                                            ?>
+
+                                                >{{ $category->name }}</option>
                                         @endforeach
                                     </select>
 
@@ -77,8 +87,8 @@
                                     <input type="text" name="testimonial" id="input-testimonial" class="form-control{{ $errors->has('testimonial') ? ' is-invalid' : '' }}" placeholder="{{ __('Testimonial') }}" value="{{ old('testimonial', $testimonial->testimonial) }}" autofocus>
 
                                     @include('alerts.feedback', ['field' => 'testimonial'])
-                                </div>                               
-                                
+                                </div>
+
 
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>

@@ -62,7 +62,7 @@
                                     <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
                                         <a href="{{ route('user.index') }}" class="nav-link">{{ __('User Management') }}</a>
                                     </li>
-                                @endcan                               
+                                @endcan
                             </ul>
                         </div>
                     </li>
@@ -82,22 +82,22 @@
                                     <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
                                         <a href="{{ route('user.index') }}" class="nav-link">{{ __('Site map settings') }}</a>
                                     </li>
-                                @endcan 
+                                @endcan
                                 @can('manage-users', App\User::class)
                                     <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
                                         <a href="{{ route('user.index') }}" class="nav-link">{{ __('Sharing settings') }}</a>
                                     </li>
-                                @endcan 
+                                @endcan
                                 @can('manage-users', App\User::class)
                                     <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
                                         <a href="{{ route('user.index') }}" class="nav-link">{{ __('Search engines settings') }}</a>
                                     </li>
-                                @endcan 
+                                @endcan
                                 @can('manage-users', App\User::class)
                                     <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
                                         <a href="{{ route('user.index') }}" class="nav-link">{{ __('Media library') }}</a>
                                     </li>
-                                @endcan                             
+                                @endcan
                             </ul>
                         </div>
                     </li>
@@ -117,7 +117,7 @@
                                     <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
                                         <a href="{{ route('user.index') }}" class="nav-link">{{ __('Blog') }}</a>
                                     </li>
-                                @endcan                          
+                                @endcan
                             </ul>
                         </div>
                     </li>
@@ -135,29 +135,30 @@
                                 @endcan
                                 @can('manage-users', App\User::class)
                                     <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
+                                        <a href="{{ route('events.index') }}" class="nav-link">{{ __('Events') }}</a>
+                                    </li>
+                                @endcan
+                                @can('manage-users', App\User::class)
+                                    <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
                                         <a href="{{ route('instructors.index') }}" class="nav-link">{{ __('Instructors') }}</a>
                                     </li>
-                                @endcan  
+                                @endcan
                                 @can('manage-users', App\User::class)
                                     <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
                                         <a href="{{ route('topics.index') }}" class="nav-link">{{ __('Topics') }}</a>
                                     </li>
-                                @endcan   
+                                @endcan
                                 @can('manage-users', App\User::class)
                                     <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
                                         <a href="{{ route('lessons.index') }}" class="nav-link">{{ __('Lessons') }}</a>
                                     </li>
-                                @endcan 
-                                @can('manage-users', App\User::class)
-                                    <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
-                                        <a href="{{ route('events.index') }}" class="nav-link">{{ __('Events') }}</a>
-                                    </li>
-                                @endcan  
+                                @endcan
+
                                 @can('manage-users', App\User::class)
                                     <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
                                         <a href="{{ route('types.index') }}" class="nav-link">{{ __('Types') }}</a>
                                     </li>
-                                @endcan   
+                                @endcan
                                 @can('manage-users', App\User::class)
                                     <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
                                         <a href="{{ route('testimonials.index') }}" class="nav-link">{{ __('Testimonials') }}</a>
@@ -167,7 +168,22 @@
                                     <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
                                         <a href="{{ route('faqs.index') }}" class="nav-link">{{ __('Faqs') }}</a>
                                     </li>
-                                @endcan                      
+                                @endcan
+                                @can('manage-users', App\User::class)
+                                    <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
+                                        <a href="{{ route('city.index') }}" class="nav-link">{{ __('City') }}</a>
+                                    </li>
+                                @endcan
+                                @can('manage-users', App\User::class)
+                                    <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
+                                        <a href="{{ route('career.index') }}" class="nav-link">{{ __('Career') }}</a>
+                                    </li>
+                                @endcan
+                                @can('manage-users', App\User::class)
+                                    <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
+                                        <a href="{{ route('section.index') }}" class="nav-link">{{ __('Section') }}</a>
+                                    </li>
+                                @endcan
                             </ul>
                         </div>
                     </li>

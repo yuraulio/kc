@@ -28,7 +28,7 @@ class Role extends Model
      * @var array
      */
     protected $fillable = ['name', 'permissions'];
-    
+
     /**
      * Get the users for the role
      *
@@ -36,6 +36,6 @@ class Role extends Model
      */
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'role_users');
     }
 }

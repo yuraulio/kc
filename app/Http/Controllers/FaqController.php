@@ -47,9 +47,13 @@ class FaqController extends Controller
     {
         $faq = $model->create($request->all());
 
-        $category = Category::find($request->category_id);
+        if($request->category_id != null ){
+            $category = Category::find($request->category_id);
 
-        $faq->category()->attach([$category->id]);
+            $faq->category()->attach([$category->id]);
+        }
+
+
 
         return redirect()->route('faqs.index')->withStatus(__('Faq successfully created.'));
     }
@@ -73,8 +77,9 @@ class FaqController extends Controller
      */
     public function edit(Faq $faq, Category $categories)
     {
+        $id = $faq['id'];
+        $faqs = $faq->with('category')->find($id);
         $categories = Category::all();
-        $faq = $faq->with('category')->first();
 
         return view('faq.edit', compact('faq', 'categories'));
     }
@@ -89,7 +94,8 @@ class FaqController extends Controller
     public function update(FaqRequest $request, Faq $faq)
     {
         $faq->update($request->all());
-        $faq->category()->sync([$request->category_id]);
+
+        $faq->category()->sync($request->category_id);
 
         return redirect()->route('faqs.index')->withStatus(__('Faq successfully updated.'));
     }
@@ -102,6 +108,12 @@ class FaqController extends Controller
      */
     public function destroy(Faq $faq)
     {
-        //
+        if (!$faq->category->isEmpty()) {
+            return redirect()->route('faqs.index')->withErrors(__('This faq has items attached and can\'t be deleted.'));
+        }
+
+        $faq->delete();
+
+        return redirect()->route('faqs.index')->withStatus(__('Faq successfully deleted.'));
     }
 }

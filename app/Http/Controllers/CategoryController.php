@@ -98,12 +98,12 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        if (!$category->items->isEmpty()) {
-            return redirect()->route('global_settings.categories.index')->withErrors(__('This category has items attached and can\'t be deleted.'));
+        if (!$category->topic->isEmpty()) {
+            return redirect()->route('global.index')->withErrors(__('This category has items attached and can\'t be deleted.'));
         }
 
         $category->delete();
 
-        return redirect()->route('global_settings.categories.index')->withStatus(__('Category successfully deleted.'));
+        return redirect()->route('global.index')->withStatus(__('Category successfully deleted.'));
     }
 }

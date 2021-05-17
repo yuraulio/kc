@@ -33,6 +33,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('types', 'TypeController', ['except' => ['show']]);
     Route::resource('testimonials', 'TestimonialController', ['except' => ['show']]);
     Route::resource('faqs', 'FaqController', ['except' => ['show']]);
+    Route::resource('career', 'CareerController', ['except' => ['show']]);
+    Route::resource('city', 'CityController', ['except' => ['show']]);
+    Route::resource('section', 'SectionController', ['except' => ['show']]);
 
     // Route::get('role/delete/{id}', ['as' => 'role.delete', 'uses' => 'RoleController@delete']);
 
@@ -47,7 +50,11 @@ Route::group(['middleware' => 'auth'], function () {
     //Notification
     Route::get('notification', ['as' => 'notification.show', 'uses' => 'NotificationController@index']);
 
-    
+    //Event_view
+    Route::get('events/{id}', ['as' => 'events.assign', 'uses' => 'EventController@assign']);
+    Route::post('events/assign_store/{id}', ['as' => 'events.assign_store', 'uses' => 'EventController@assign_store']);
+
+    Route::post('/events/fetchTopics', ['as' => 'events.fetchTopics', 'uses' => 'EventController@fetchTopics']);
 
 
     Route::get('{page}', ['as' => 'page.index', 'uses' => 'PageController@index']);

@@ -19,6 +19,7 @@ namespace App;
 
 use App\Model\Topic;
 use App\Model\Event;
+use App\Model\Lesson;
 use App\Model\Testimonial;
 use App\Model\Faq;
 use Illuminate\Database\Eloquent\Model;
@@ -34,23 +35,6 @@ class Category extends Model
     protected $fillable = ['name', 'description', 'parent', 'hours'];
 
     /**
-     * Get the items of the category
-     *
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    public function items()
-    {
-        return $this->hasMany(Item::class);
-    }
-
-    // public function topics()
-    // {
-    //     return $this->belongsToMany(Topic::class, 'categories_topics_lesson');
-    // }
-
-    ///////////////////////NEW
-
-    /**
      * Get all of the events that are assigned this tag.
      */
 
@@ -59,7 +43,7 @@ class Category extends Model
         return $this->morphedByMany(Event::class, 'categoryable');
     }
 
- 
+
     /**
      * Get all of the topics that are assigned this tag.
      */
@@ -67,6 +51,16 @@ class Category extends Model
     public function topics()
     {
         return $this->morphedByMany(Topic::class, 'categoryable');
+    }
+
+    public function topic()
+    {
+        return $this->belongsToMany(Topic::class, 'categories_topics_lesson', 'category_id', 'topic_id');
+    }
+
+    public function lessons()
+    {
+        return $this->belongsToMany(Lesson::class, 'categories_topics_lesson');
     }
 
     /**

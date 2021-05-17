@@ -37,7 +37,7 @@
                             @method('put')
 
                             <h6 class="heading-small text-muted mb-4">{{ __('Faq information') }}</h6>
-                            <div class="pl-lg-4">                                                                 
+                            <div class="pl-lg-4">
 
                                 <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-title">{{ __('Title') }}</label>
@@ -51,7 +51,7 @@
                                     <input type="text" name="answer" id="input-answer" class="form-control{{ $errors->has('answer') ? ' is-invalid' : '' }}" placeholder="{{ __('Faq') }}" value="{{ old('answer', $faq->answer) }}" autofocus>
 
                                     @include('alerts.feedback', ['field' => 'answer'])
-                                </div>  
+                                </div>
 
                                 <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-status">{{ __('Status') }}</label>
@@ -59,13 +59,22 @@
 
                                     @include('alerts.feedback', ['field' => 'status'])
                                 </div>
-                               
+
                                 <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
                                     <select name="category_id" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}" required>
                                         <option value="">-</option>
                                         @foreach ($categories as $category)
-                                            <option value="{{ $category->id }}" {{ $category->id == $faq->category[0]->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                            <option
+                                            <?php if(count($faq->category) != 0){
+                                                if($faq->category[0]->id == $category->id){
+                                                    echo 'selected';
+                                                }else{
+                                                    echo '';
+                                                }
+                                            }
+                                            ?>
+                                            value="{{ $category->id }}" >{{ $category->name }}</option>
                                         @endforeach
                                     </select>
 

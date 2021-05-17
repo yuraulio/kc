@@ -14,6 +14,7 @@
             <li class="breadcrumb-item"><a href="{{ route('instructors.index') }}">{{ __('Insctructors Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
         @endcomponent
+        @include('instructors.layouts.cards')
     @endcomponent
 
     <div class="container-fluid mt--6">
@@ -71,7 +72,7 @@
                                                             <i class="fas fa-ellipsis-v"></i>
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                            
+
                                                                 @can('update', $user)
                                                                     <a class="dropdown-item" href="{{ route('instructors.edit', $instructor) }}">{{ __('Edit') }}</a>
                                                                 @endcan
@@ -85,7 +86,7 @@
                                                                         </button>
                                                                     </form>
     						                                    @endcan
-                                                            
+
                                                         </div>
                                                     </div>
                                                 @endif

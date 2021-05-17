@@ -65,13 +65,21 @@
 
                                     @include('alerts.feedback', ['field' => 'title'])
                                 </div>
-                               
+
                                 <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
                                     <select name="category_id" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}" required>
                                         <option value="">-</option>
                                         @foreach ($categories as $category)
-                                            <option value="{{ $category->id }}" {{ $category->id == $topic->category[0]->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                            <option <?php if(count($topic->category) != 0){
+                                                if($topic->category[0]->id == $category->id){
+                                                    echo 'selected';
+                                                }else{
+                                                    echo '';
+                                                }
+                                            }
+                                            ?>
+                                            value="{{ $category->id }}" >{{ $category->name }}</option>
                                         @endforeach
                                     </select>
 
@@ -111,12 +119,12 @@
                                     <input type="text" name="body" id="input-body" class="form-control{{ $errors->has('body') ? ' is-invalid' : '' }}" placeholder="{{ __('Body') }}" value="{{ old('body', $topic->body) }}" autofocus>
 
                                     @include('alerts.feedback', ['field' => 'body'])
-                                </div>                              
+                                </div>
                                     <input type="hidden" name="creator_id" id="input-creator_id" class="form-control" value="{{$topic->creator_id}}">
                                     <input type="hidden" name="author_id" id="input-author_id" class="form-control" value="{{$topic->author_id}}">
 
                                     @include('alerts.feedback', ['field' => 'ext_url'])
-                                
+
 
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>

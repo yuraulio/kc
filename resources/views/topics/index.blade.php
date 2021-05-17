@@ -73,7 +73,7 @@
                                                             <i class="fas fa-ellipsis-v"></i>
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                            
+
                                                                 @can('update', $user)
                                                                     <a class="dropdown-item" href="{{ route('topics.edit', $topic) }}">{{ __('Edit') }}</a>
                                                                 @endcan
@@ -87,7 +87,7 @@
                                                                         </button>
                                                                     </form>
     						                                    @endcan
-                                                            
+
                                                         </div>
                                                     </div>
                                                 @endif

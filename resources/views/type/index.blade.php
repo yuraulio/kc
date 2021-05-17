@@ -46,6 +46,7 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col">{{ __('Name') }}</th>
+                                    <th scope="col">{{ __('Description') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
                                     @can('manage-users', App\User::class)
                                         <th scope="col"></th>
@@ -56,6 +57,7 @@
                                 @foreach ($types as $type)
                                     <tr>
                                         <td>{{ $type->name }}</td>
+                                        <td>{{ $type->description }}</td>
                                         <td>{{ date_format($type->created_at, 'Y-m-d' ) }}</td>
 					                    @can('manage-users', App\User::class)
 					                        <td class="text-right">
@@ -65,7 +67,7 @@
                                                             <i class="fas fa-ellipsis-v"></i>
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                            
+
                                                                 @can('update', $user)
                                                                     <a class="dropdown-item" href="{{ route('types.edit', $type) }}">{{ __('Edit') }}</a>
                                                                 @endcan
@@ -79,7 +81,7 @@
                                                                         </button>
                                                                     </form>
     						                                    @endcan
-                                                            
+
                                                         </div>
                                                     </div>
                                                 @endif

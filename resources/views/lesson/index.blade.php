@@ -48,13 +48,13 @@
                                     <th scope="col">{{ __('Status') }}</th>
                                     <th scope="col">{{ __('Title') }}</th>
                                     <th scope="col">{{ __('Assigned Topic') }}</th>
+                                    <th scope="col">{{ __('Assigned Type') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
                                     @can('manage-users', App\User::class)
                                         <th scope="col"></th>
                                     @endcan
                                 </tr>
                             </thead>
-                            <?php //dd($lessons[0]->topic); ?>
                             <tbody>
                                 @foreach ($lessons as $lesson)
                                     <tr>
@@ -65,7 +65,11 @@
                                             {{ $topic->title }}
                                         @endforeach
                                         </td>
-                                        
+                                        <td>
+                                        @foreach($lesson->type as $type)
+                                            {{ $type->name }}
+                                        @endforeach
+                                        </td>
                                         <td>{{ date_format($lesson->created_at, 'Y-m-d' ) }}</td>
 					                    @can('manage-users', App\User::class)
 					                        <td class="text-right">
@@ -75,7 +79,7 @@
                                                             <i class="fas fa-ellipsis-v"></i>
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                            
+
                                                                 @can('update', $user)
                                                                     <a class="dropdown-item" href="{{ route('lessons.edit', $lesson) }}">{{ __('Edit') }}</a>
                                                                 @endcan
@@ -89,7 +93,7 @@
                                                                         </button>
                                                                     </form>
     						                                    @endcan
-                                                            
+
                                                         </div>
                                                     </div>
                                                 @endif

@@ -28,11 +28,11 @@
                                         {{ __('This is an example of user management. This is a minimal setup in order to get started fast.') }}
                                     </p>
                             </div>
-                            @can('create', App\User::class)
+                            <!-- @can('create', App\User::class)
                                 <div class="col-4 text-right">
                                     <a href="{{ route('user.create') }}" class="btn btn-sm btn-primary">{{ __('Add user') }}</a>
                                 </div>
-                            @endcan
+                            @endcan -->
                         </div>
                     </div>
 
@@ -61,7 +61,11 @@
                                     <tr>
                                         <td>
                                             <span class="avatar avatar-sm rounded-circle">
-                                                <img src="{{ asset('profile_user') }}/{{ auth()->user()->image->original_name }}" alt="" style="max-width: 100px; border-radiu: 25px">
+                                            @if(auth()->user()->image != null)
+                                                <img src="{{ asset('profile_user') }}/{{ auth()->user()->image->original_name }}" alt="{{ $user->firstname }}" style="max-width: 100px; border-radiu: 25px">
+                                            @else
+                                            <img src="" alt="{{ $user->firstname }}" style="max-width: 100px; border-radiu: 25px">
+                                            @endif
                                             </span>
                                         </td>
                                         <td>{{ $user->firstname }}</td>
@@ -69,7 +73,7 @@
                                             <a href="mailto:{{ $user->email }}">{{ $user->email }}</a>
                                         </td>
                                         <td>
-                                        @foreach($user->roles as $role)
+                                        @foreach($user->role as $role)
                                             {{$role->name}}
                                         @endforeach
                                         </td>
@@ -89,7 +93,6 @@
                                                             <i class="fas fa-ellipsis-v"></i>
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                            @if ($user->id != auth()->id())
                                                                 @can('update', $user)
                                                                     <a class="dropdown-item" href="{{ route('user.edit', $user) }}">{{ __('Edit') }}</a>
                                                                 @endcan
@@ -103,9 +106,7 @@
                                                                         </button>
                                                                     </form>
     						                                    @endcan
-                                                            @else
-                                                                <a class="dropdown-item" href="{{ route('profile.edit') }}">{{ __('Edit') }}</a>
-                                                            @endif
+
                                                         </div>
                                                     </div>
                                                 @endif

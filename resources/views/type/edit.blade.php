@@ -47,7 +47,7 @@
 
                                 <div class="form-group{{ $errors->has('description') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-description">{{ __('Description') }}</label>
-                                    <textarea name="description" id="input-description"  class="ckeditor form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}" value="{{ old('description', $type->description) }}"  required autofocus>{{ old('description', $type->description) }}</textarea>
+                                    <textarea name="description" id="input-description"  class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}" value="{{ old('description', $type->description) }}"  required autofocus>{{ old('description', $type->description) }}</textarea>
 
                                     @include('alerts.feedback', ['field' => 'description'])
                                 </div>
@@ -63,14 +63,14 @@
 
         @include('layouts.footers.auth')
     </div>
-    
+
 @endsection
 
 @push('js')
-    
+
     <script type="text/javascript">
         $(document).ready(function () {
-            $('.ckeditor').ckeditor();            
+            $('.ckeditor').ckeditor();
         });
     </script>
 @endpush

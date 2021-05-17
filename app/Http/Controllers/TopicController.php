@@ -24,7 +24,7 @@ class TopicController extends Controller
         $this->authorize('manage-users', User::class);
         $user = Auth::user();
 
-        //dd($model->with('category')->get());
+        //dd($model->with('category', 'lessons')->get());
 
         return view('topics.index', ['topics' => $model->with('category')->get(), 'user' => $user]);
     }
@@ -51,9 +51,13 @@ class TopicController extends Controller
     {
         $topic = $model->create($request->all());
 
-        $category = Category::find($request->category_id);
+        if($request->category_id != null){
+            $category = Category::find($request->category_id);
 
-        $topic->category()->attach([$category->id]);
+            $topic->category()->attach([$category->id]);
+        }
+
+
 
         return redirect()->route('topics.index')->withStatus(__('Topic successfully created.'));
     }
@@ -93,7 +97,14 @@ class TopicController extends Controller
     public function update(TopicRequest $request, Topic $topic)
     {
         $topic->update($request->all());
-        $topic->category()->sync([$request->category_id]);
+        $topic->category()->sync($request->category_id);
+
+            // $category = Category::find($request->category_id);
+
+            // $category->topic()->sync([$category[]])
+
+            ///$topic->category()->sync([$category['id']]);
+
 
         return redirect()->route('topics.index')->withStatus(__('Topic successfully updated.'));
     }
@@ -106,6 +117,12 @@ class TopicController extends Controller
      */
     public function destroy(Topic $topic)
     {
-        //
+        if (!$topic->category->isEmpty()) {
+            return redirect()->route('topics.index')->withErrors(__('This topic has items attached and can\'t be deleted.'));
+        }
+
+        $topic->delete();
+
+        return redirect()->route('topics.index')->withStatus(__('topic successfully deleted.'));
     }
 }

@@ -19,7 +19,12 @@ class InstructorController extends Controller
         $this->authorize('manage-users', User::class);
         $user = Auth::user();
 
-        return view('instructors.index', ['instructors' =>$model->all(), 'user' => $user ]);
+        $data = [];
+
+        $data['active_instructors'] = $model::where('status', '1')->count();
+        $data['all_instructors'] = $model::count();
+
+        return view('instructors.index', ['instructors' =>$model->all(), 'user' => $user, 'data' => $data ]);
     }
 
     /**
@@ -30,7 +35,7 @@ class InstructorController extends Controller
     public function create()
     {
         $user = Auth::user();
-        
+
         return view('instructors.create', ['user' => $user]);
     }
 
@@ -77,10 +82,10 @@ class InstructorController extends Controller
      */
     public function update(Request $request, Instructor $instructor)
     {
-        $page->update($request->all());
+        $instructor->update($request->all());
 
-        
-        return redirect()->route('pages.index')->withStatus(__('Page successfully updated.'));
+
+        return redirect()->route('instructors.index')->withStatus(__('Page successfully updated.'));
     }
 
     /**
@@ -91,6 +96,12 @@ class InstructorController extends Controller
      */
     public function destroy(Instructor $instructor)
     {
-        //
+        if (!$instructor->lesson->isEmpty()) {
+            return redirect()->route('instructors.index')->withErrors(__('This instructor has items attached and can\'t be deleted.'));
+        }
+
+        $instructor->delete();
+
+        return redirect()->route('instructors.index')->withStatus(__('Instructor successfully deleted.'));
     }
 }

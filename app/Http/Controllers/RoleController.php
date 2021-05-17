@@ -89,5 +89,16 @@ class RoleController extends Controller
 
         return redirect()->route('role.index')->withStatus(__('Role successfully updated.'));
     }
-    
+
+    public function destroy(Role $role)
+    {
+        if (!$role->users->isEmpty()) {
+            return redirect()->route('role.index')->withErrors(__('This role has items attached and can\'t be deleted.'));
+        }
+
+        $role->delete();
+
+        return redirect()->route('role.index')->withStatus(__('Role successfully deleted.'));
+    }
+
 }

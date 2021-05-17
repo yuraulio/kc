@@ -41,7 +41,7 @@ class UserController extends Controller
         $this->authorize('manage-users', User::class);
         $user = Auth::user();
 
-        return view('users.index', ['users' => $model->with('roles')->get()]);
+        return view('users.index', ['users' => $model->with('role')->get()]);
     }
 
     /**

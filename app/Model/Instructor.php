@@ -4,6 +4,7 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Model\Topic;
 
 class Instructor extends Model
 {
@@ -14,4 +15,9 @@ class Instructor extends Model
     protected $fillable = [
         'priority', 'status', 'comment_status', 'title', 'short_title', 'subtitle', 'header', 'summary', 'body', 'ext_url', 'author_id', 'creator_id'
     ];
+
+    public function lesson()
+    {
+        return $this->belongsToMany(Lesson::class, 'event_topic_lesson_instructor');
+    }
 }

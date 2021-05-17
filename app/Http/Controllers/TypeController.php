@@ -19,7 +19,9 @@ class TypeController extends Controller
         $this->authorize('manage-users', User::class);
         $user = Auth::user();
 
-        return view('type.index', ['types' =>$model->all(), 'user' => $user ]);
+        //dd($model->get());
+
+        return view('type.index', ['types' => $model->get(), 'user' => $user ]);
     }
 
     /**
@@ -30,7 +32,7 @@ class TypeController extends Controller
     public function create()
     {
         $user = Auth::user();
-        
+
         return view('type.create', ['user' => $user]);
     }
 
@@ -54,7 +56,7 @@ class TypeController extends Controller
      */
     public function show(Type $type)
     {
-        
+
     }
 
     /**
@@ -77,8 +79,8 @@ class TypeController extends Controller
      */
     public function update(Request $request, Type $type)
     {
-        $page->update($request->all());
-        
+        $type->update($request->all());
+
         return redirect()->route('types.index')->withStatus(__('Type successfully updated.'));
     }
 
@@ -90,6 +92,13 @@ class TypeController extends Controller
      */
     public function destroy(Type $type)
     {
-        //
+        dd($type);
+        if (!$type->events->isEmpty()) {
+            return redirect()->route('types.index')->withErrors(__('This type has items attached and can\'t be deleted.'));
+        }
+
+        $type->delete();
+
+        return redirect()->route('types.index')->withStatus(__('Type successfully deleted.'));
     }
 }

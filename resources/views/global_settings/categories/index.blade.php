@@ -14,7 +14,7 @@
             @endcan
         </div>
     </div>
-    
+
     <div class="col-12 mt-2">
         @include('alerts.success')
         @include('alerts.errors')
@@ -35,7 +35,6 @@
             </thead>
             <tbody>
                 @foreach ($categories as $category)
-                <?php //dd($category); ?>
                     <tr>
                         <td>{{ $category->name }}</td>
                         <td>{{ $category->description }}</td>
@@ -50,7 +49,18 @@
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                                             <a class="dropdown-item" href="{{ route('category.edit', $category) }}">{{ __('Edit') }}</a>
+                                            @can('delete', $category)
+                                            <form action="{{ route('category.destroy', $category) }}" method="post">
+                                                @csrf
+                                                @method('delete')
+
+                                                <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this category?") }}') ? this.parentElement.submit() : ''">
+                                                    {{ __('Delete') }}
+                                                </button>
+                                            </form>
+                                            @endcan
                                         </div>
+
                                     </div>
                                 @endcan
                             </td>
