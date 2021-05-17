@@ -22,8 +22,10 @@ use App\User;
 use App\Model\Media;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\ProfileRequest;
+use Illuminate\Http\Request;
 use App\Http\Requests\PasswordRequest;
 use Illuminate\Support\Facades\Auth;
+use App\Role;
 
 class ProfileController extends Controller
 {
@@ -37,6 +39,27 @@ class ProfileController extends Controller
         return view('profile.edit');
     }
 
+    public function updateRole(Request $request)
+    {
+        $user = Auth::user();
+        $user = User::with('role')->find($user['id']);
+        //dd($user);
+
+        if($request->role_id != null){
+            foreach($request->role_id as $role){
+                //$role = Role::with('user')->find($role);
+                //dd($role);
+
+
+                $user->role()->attach($role);
+            }
+        }
+
+
+
+        return back()->withStatus(__('Profile role successfully updated.'));
+    }
+
     /**
      * Update the profile
      *
@@ -45,10 +68,11 @@ class ProfileController extends Controller
      */
     public function update(ProfileRequest $request)
     {
+        //dd('from controllre');
 
         if($request->file('photo')){
             //parse old image
-            $old_image = auth()->user()->image; 
+            $old_image = auth()->user()->image;
             //parse input photo
             $content = $request->file('photo');
             $name = explode(".",$content->getClientOriginalName());
@@ -61,15 +85,15 @@ class ProfileController extends Controller
             $media->name = $name;
             $media->ext = $content->guessClientExtension();
             $media->file_info = $content->getClientMimeType();
-            $media->mediable_id = $user['id'];       
+            $media->mediable_id = $user['id'];
         }
 
         if (Gate::denies('update', auth()->user())) {
-            
+
             return back()->withErrors(['not_allow_profile' => __('You are not allowed to change data for a default user.')]);
         }
 
-        
+
 
         auth()->user()->update(
             $request->merge(['picture' => $request->photo ? $path_name = $request->photo->store('profile_user', 'public') : null])
@@ -81,15 +105,15 @@ class ProfileController extends Controller
             $name = explode('profile_user/',$path_name);
             $media->original_name = $name[1];
             $user->image()->save($media);
-            
+
             //delete old image
-            //fetch old image  
-             
+            //fetch old image
+
             if($old_image != null){
                 //delete from folder
                 unlink('profile_user/'.$old_image['original_name']);
                 //delete from db
-                $old_image->delete();               
+                $old_image->delete();
             }
         }
 

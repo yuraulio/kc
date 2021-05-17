@@ -107,6 +107,9 @@
 
         <!-- Argon CSS -->
         <link type="text/css" href="{{ asset('css') }}/argon.css?v=2.0.0" rel="stylesheet">
+
+        <!-- My CSS -->
+        <link type="text/css" href="{{ asset('css') }}/style.css" rel="stylesheet">
     </head>
     <body class="{{ $class ?? '' }}">
         @if (env('IS_DEMO'))

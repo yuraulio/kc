@@ -85,6 +85,7 @@ class RoleController extends Controller
      */
     public function update(RoleRequest $request, Role $role)
     {
+        //dd('from store controller role');
         $role->update($request->all());
 
         return redirect()->route('role.index')->withStatus(__('Role successfully updated.'));

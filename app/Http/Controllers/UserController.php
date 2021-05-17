@@ -41,7 +41,10 @@ class UserController extends Controller
         $this->authorize('manage-users', User::class);
         $user = Auth::user();
 
-        return view('users.index', ['users' => $model->with('role')->get()]);
+        $data['all_users'] = $model::count();
+        $data['total_graduates'] = 0;
+
+        return view('users.index', ['users' => $model->with('role')->get(), 'data' => $data]);
     }
 
     /**
@@ -81,8 +84,9 @@ class UserController extends Controller
      */
     public function edit(User $user, Role $model)
     {
-        return view('users.edit', ['user' => $user->load('role'), 'roles' => $model->get(['id', 'name'])]);
+        return view('users.edit', ['user' => $user->load('role'), 'roles' => $model->all()]);
     }
+
 
     /**
      * Update the specified user in storage
