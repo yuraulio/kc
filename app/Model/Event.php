@@ -10,6 +10,7 @@ use App\Model\Ticket;
 use App\Category;
 use App\Model\Type;
 use App\Model\City;
+use App\Model\Summary;
 use App\Model\Section;
 
 class Event extends Model
@@ -41,6 +42,11 @@ class Event extends Model
     public function user()
     {
         return $this->belongsToMany(Event::class, 'event_user');
+    }
+
+    public function summary()
+    {
+        return $this->belongsToMany(Summary::class, 'events_summaryevent', 'event_id', 'summary_event_id' );
     }
 
     public function ticket()

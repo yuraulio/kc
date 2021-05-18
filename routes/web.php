@@ -37,6 +37,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('city', 'CityController', ['except' => ['show']]);
     Route::resource('section', 'SectionController', ['except' => ['show']]);
     Route::resource('ticket', 'TicketController', ['except' => ['show']]);
+    Route::resource('summary', 'SummaryController', ['except' => ['show']]);
 
 
 

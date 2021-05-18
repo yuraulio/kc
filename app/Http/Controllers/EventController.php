@@ -24,6 +24,7 @@ class EventController extends Controller
         $this->authorize('manage-users', User::class);
         $user = Auth::user();
 
+
         return view('event.index', ['events' => $model->with('category', 'type')->get(), 'user' => $user]);
     }
 
@@ -165,14 +166,14 @@ class EventController extends Controller
      */
     public function edit(Event $event)
     {
+        $user = Auth::user();
         $id = $event['id'];
-        $event = $event->with('category')->find($id);
+        $event = $event->with('category', 'summary')->find($id);
 
         $categories = Category::all();
-        //$event = $event->with('category')->first();
         $types = Type::all();
 
-        return view('event.edit', compact('event', 'categories', 'types'));
+        return view('event.edit', compact('event', 'categories', 'types', 'user'));
     }
 
     /**
