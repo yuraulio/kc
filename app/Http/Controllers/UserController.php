@@ -19,9 +19,12 @@ namespace App\Http\Controllers;
 
 use App\Role;
 use App\User;
+use App\Model\Event;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -58,6 +61,24 @@ class UserController extends Controller
         return view('users.create', ['roles' => $model->get(['id', 'name'])]);
     }
 
+    public function assignEventToUserCreate(Request $request)
+    {
+       $user = Auth::user();
+
+       $user_id = $request->user_id;
+       $event_ids = $request->event_id;
+
+
+       if($event_ids != null){
+           foreach($event_ids as $event_id){
+                $event = Event::find($event_id);
+                $event->user()->attach($user_id,['user_id'=> $user_id]);
+            }
+       }
+
+        return redirect()->route('user.index')->withStatus(__('Course successfully assiged to user.'));
+    }
+
     /**
      * Store a newly created user in storage
      *
@@ -84,7 +105,9 @@ class UserController extends Controller
      */
     public function edit(User $user, Role $model)
     {
-        return view('users.edit', ['user' => $user->load('role'), 'roles' => $model->all()]);
+        $events1 = Event::all();
+
+        return view('users.edit', ['events' => $events1 ,'user' => $user->load('role', 'events'), 'roles' => $model->all()]);
     }
 
 

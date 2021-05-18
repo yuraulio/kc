@@ -30,6 +30,7 @@
                                 <li class="nav-item {{ $elementName == 'dashboard' ? 'active' : '' }}">
                                     <a href="{{ route('home') }}" class="nav-link">{{ __('Dashboard') }}</a>
                                 </li>
+
                                 <!-- <li class="nav-item {{ $elementName == 'dashboard-alternative' ? 'active' : '' }}">
                                     <a href="{{ route('page.index','dashboard-alternative') }}" class="nav-link">{{ __('Alternative') }}</a>
                                 </li> -->
@@ -130,6 +131,11 @@
                             <ul class="nav nav-sm flex-column">
                                 @can('manage-users', App\User::class)
                                     <li class="nav-item  {{ $elementName == 'role-management' ? 'active' : '' }}">
+                                        <a href="{{ route('global.course_index') }}" class="nav-link">{{ __('Main') }}</a>
+                                    </li>
+                                @endcan
+                                @can('manage-users', App\User::class)
+                                    <li class="nav-item  {{ $elementName == 'role-management' ? 'active' : '' }}">
                                         <a href="{{ route('global.index') }}" class="nav-link">{{ __('Global settings') }}</a>
                                     </li>
                                 @endcan
@@ -182,6 +188,11 @@
                                 @can('manage-users', App\User::class)
                                     <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
                                         <a href="{{ route('section.index') }}" class="nav-link">{{ __('Section') }}</a>
+                                    </li>
+                                @endcan
+                                @can('manage-users', App\User::class)
+                                    <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
+                                        <a href="{{ route('ticket.index') }}" class="nav-link">{{ __('Tickets') }}</a>
                                     </li>
                                 @endcan
                             </ul>

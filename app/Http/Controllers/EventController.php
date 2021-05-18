@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Model\Event;
 use App\Model\Type;
 use App\Model\Topic;
+use App\Model\Ticket;
 use App\Model\Instructor;
 use App\Category;
 use Illuminate\Http\Request;
@@ -26,6 +27,18 @@ class EventController extends Controller
         return view('event.index', ['events' => $model->with('category', 'type')->get(), 'user' => $user]);
     }
 
+    public function assign_ticket(Request $request)
+    {
+        $this->authorize('manage-users', User::class);
+        $user = Auth::user();
+        $event = Event::with('type', 'category')->find($request->id);
+
+        $tickets = Ticket::all();
+
+        //dd($instructors);
+        return view('event.assign_ticket', ['user' => $user, 'event' => $event, 'tickets' => $tickets]);
+    }
+
     public function assign(Request $request)
     {
         $this->authorize('manage-users', User::class);
@@ -42,6 +55,16 @@ class EventController extends Controller
         $instructors = Instructor::all();
         //dd($instructors);
         return view('event.assign', ['user' => $user, 'event' => $event, 'topics' => $topics, 'instructors' => $instructors]);
+    }
+
+    public function assign_ticket_store(Request $request, $event_id)
+    {
+        $event = Event::find($event_id);
+
+
+        $event->ticket()->attach($request->ticket_id);
+
+        return redirect()->route('events.index')->withStatus(__('Ticket successfully assign.'));
     }
 
     public function fetchTopics(Request $request)

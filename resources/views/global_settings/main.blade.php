@@ -6,14 +6,7 @@
 
 @section('content')
     @component('layouts.headers.auth')
-    @component('layouts.headers.breadcrumbs')
-            @slot('title')
-                {{ __('Events') }}
-            @endslot
 
-            <li class="breadcrumb-item"><a href="{{ route('events.index') }}">{{ __('Events Management') }}</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ __('Edit Event') }}</li>
-        @endcomponent
     @endcomponent
 
     <div class="container-fluid mt--6">

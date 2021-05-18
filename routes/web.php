@@ -36,17 +36,29 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('career', 'CareerController', ['except' => ['show']]);
     Route::resource('city', 'CityController', ['except' => ['show']]);
     Route::resource('section', 'SectionController', ['except' => ['show']]);
+    Route::resource('ticket', 'TicketController', ['except' => ['show']]);
+
+
+
+
+    //User
+    Route::post('user/assignEventToUserCreate', ['as' => 'user.assignToCourse', 'uses' => 'UserController@assignEventToUserCreate']);
+
 
     // Route::get('role/delete/{id}', ['as' => 'role.delete', 'uses' => 'RoleController@delete']);
 
     //Global Settings
     Route::get('global', ['as' => 'global.index', 'uses' => 'GlobalController@index']);
+    Route::get('main', ['as' => 'global.course_index', 'uses' => 'GlobalController@course_index']);
 
     //Profile
     Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
     Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
     Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
 
+
+
+    //Events
     Route::put('profile/updateRole', ['as' => 'profile.updateRole', 'uses' => 'ProfileController@updateRole']);
 
     //Notification
@@ -55,6 +67,11 @@ Route::group(['middleware' => 'auth'], function () {
     //Event_view
     Route::get('events/{id}', ['as' => 'events.assign', 'uses' => 'EventController@assign']);
     Route::post('events/assign_store/{id}', ['as' => 'events.assign_store', 'uses' => 'EventController@assign_store']);
+
+    //Event assign ticket
+    Route::get('events/ticket/{id}', ['as' => 'events.ticket', 'uses' => 'EventController@assign_ticket']);
+    Route::post('events/assign_ticket/{id}', ['as' => 'events.assign_ticket_store', 'uses' => 'EventController@assign_ticket_store']);
+
 
     Route::post('/events/fetchTopics', ['as' => 'events.fetchTopics', 'uses' => 'EventController@fetchTopics']);
 

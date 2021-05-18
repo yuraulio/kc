@@ -36,6 +36,7 @@ class ProfileController extends Controller
      */
     public function edit()
     {
+        //dd('from index');
         return view('profile.edit');
     }
 

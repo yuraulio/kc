@@ -19,6 +19,7 @@ namespace App;
 
 use App\Model\Media;
 use App\Model\Activation;
+use App\Model\Event;
 use App\Role;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -117,5 +118,10 @@ class User extends Authenticatable
     public function image()
     {
         return $this->morphOne(Media::class, 'mediable');
+    }
+
+    public function events()
+    {
+        return $this->belongsToMany(Event::class, 'event_user');
     }
 }

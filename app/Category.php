@@ -53,6 +53,16 @@ class Category extends Model
         return $this->morphedByMany(Topic::class, 'categoryable');
     }
 
+    public function tickets()
+    {
+        return $this->morphedByMany(Ticket::class, 'categoryable');
+    }
+
+    public function ticket()
+    {
+        return $this->belongsToMany(Ticket::class, 'event_tickets');
+    }
+
     public function topic()
     {
         return $this->belongsToMany(Topic::class, 'categories_topics_lesson', 'category_id', 'topic_id');

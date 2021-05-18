@@ -5,6 +5,8 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Topic;
+use App\Model\Event;
+use App\Model\Ticket;
 use App\Category;
 use App\Model\Type;
 use App\Model\City;
@@ -33,6 +35,17 @@ class Event extends Model
     public function topic()
     {
         return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor');
+    }
+
+
+    public function user()
+    {
+        return $this->belongsToMany(Event::class, 'event_user');
+    }
+
+    public function ticket()
+    {
+        return $this->belongsToMany(Ticket::class, 'event_tickets');
     }
 
     public function city()

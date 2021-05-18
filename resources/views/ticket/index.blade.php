@@ -11,7 +11,7 @@
                 {{ __('Examples') }}
             @endslot
 
-            <li class="breadcrumb-item"><a href="{{ route('events.index') }}">{{ __('Insctructors Management') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('ticket.index') }}">{{ __('Tickets Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
         @endcomponent
     @endcomponent
@@ -23,14 +23,14 @@
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col-8">
-                                <h3 class="mb-0">{{ __('Events') }}</h3>
+                                <h3 class="mb-0">{{ __('Tickets') }}</h3>
                                 <p class="text-sm mb-0">
-                                        {{ __('This is an example of Event management.') }}
+                                        {{ __('This is an example of Ticket management.') }}
                                     </p>
                             </div>
                             @can('create', App\User::class)
                                 <div class="col-4 text-right">
-                                    <a href="{{ route('events.create') }}" class="btn btn-sm btn-primary">{{ __('Add Event') }}</a>
+                                    <a href="{{ route('ticket.create') }}" class="btn btn-sm btn-primary">{{ __('Add ticket') }}</a>
                                 </div>
                             @endcan
                         </div>
@@ -44,12 +44,11 @@
                         <table class="table align-items-center table-flush"  id="datatable-basic">
                             <thead class="thead-light">
                                 <tr>
-                                    <th scope="col">{{ __('Status') }}</th>
                                     <th scope="col">{{ __('Title') }}</th>
-                                    <th scope="col">{{ __('Assigned to Ticket') }}</th>
-                                    <th scope="col">{{ __('Assigned to Category') }}</th>
-                                    <th scope="col">{{ __('Assigned to Type') }}</th>
-                                    <th scope="col">{{ __('Assigned to Topic/Lesson/instructor') }}</th>
+                                    <th scope="col">{{ __('Subtitle') }}</th>
+                                    <th scope="col">{{ __('Type') }}</th>
+                                    <th scope="col">{{ __('features') }}</th>
+                                    <th scope="col">{{ __('Assiged to event') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
                                     @can('manage-users', App\User::class)
                                         <th scope="col"></th>
@@ -57,33 +56,22 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($events as $event)
+                            <?php //dd($tickets); ?>
+                                @foreach ($tickets as $ticket)
                                     <tr>
-                                        <td>{{ $event->status }}</td>
-                                        <td>{{ $event->title }}</td>
+                                        <td>{{ $ticket->title }}</td>
+                                        <td>{{ $ticket->subtitle }}</td>
+                                        <td>{{ $ticket->type }}</td>
+                                        <td>{{ $ticket->features }}</td>
                                         <td>
-                                            <!-- Button trigger modal -->
-                                            <a href="events/ticket/{{$event->id}}" id="assignButton" data-event-id={{$event->id}} class="btn btn-primary btn-sm">
-                                                Assign
-                                            </a>
+                                            @if(count($ticket->events) != 0)
+                                                @foreach($ticket->events as $event)
+                                                    {{ $event->title }}
+                                                @endforeach
+                                            @endif
                                         </td>
-                                        <td>
-                                        @foreach($event->category as $category)
-                                            {{ $category->name }}
-                                        @endforeach
-                                        </td>
-                                        <td>
-                                        @foreach($event->type as $type)
-                                            {{ $type->name }}
-                                        @endforeach
-                                        </td>
-                                        <td>
-                                            <!-- Button trigger modal -->
-                                            <a href="events/{{$event->id}}" id="assignButton" data-event-id={{$event->id}} class="btn btn-primary btn-sm">
-                                                Assign
-                                            </a>
-                                        </td>
-                                        <td>{{ date_format($event->created_at, 'Y-m-d' ) }}</td>
+
+                                        <td>{{ date_format($ticket->created_at, 'Y-m-d' ) }}</td>
 					                    @can('manage-users', App\User::class)
 					                        <td class="text-right">
                                                 @if (auth()->user()->can('update', $user) || auth()->user()->can('delete', $user))
@@ -94,14 +82,14 @@
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
 
                                                                 @can('update', $user)
-                                                                    <a class="dropdown-item" href="{{ route('events.edit', $event) }}">{{ __('Edit') }}</a>
+                                                                    <a class="dropdown-item" href="{{ route('ticket.edit', $ticket) }}">{{ __('Edit') }}</a>
                                                                 @endcan
     							                                @can('delete', $user)
-        							                                <form action="{{ route('events.destroy', $event) }}" method="post">
+        							                                <form action="{{ route('ticket.destroy', $ticket) }}" method="post">
                                                                         @csrf
                                                                         @method('delete')
 
-                                                                        <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
+                                                                        <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this Ticket?") }}') ? this.parentElement.submit() : ''">
                                                                             {{ __('Delete') }}
                                                                         </button>
                                                                     </form>

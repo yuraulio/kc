@@ -48,7 +48,10 @@
                                 <tr>
                                     <th scope="col">Photo</th>
                                     <th scope="col">{{ __('Name') }}</th>
+                                    <th scope="col">{{ __('Lastname') }}</th>
+                                    <th scope="col">{{ __('Mobile') }}</th>
                                     <th scope="col">{{ __('Email') }}</th>
+                                    <th scope="col">{{ __('Student Id') }}</th>
                                     <th scope="col">{{ __('Role') }}</th>
                                     <th scope="col">{{ __('Status') }}</th>
                                     <th scope="col">{{ __('Creation Date') }}</th>
@@ -70,6 +73,9 @@
                                             </span>
                                         </td>
                                         <td>{{ $user->firstname }}</td>
+                                        <td>{{ $user->lastname }}</td>
+                                        <td>{{ $user->mobile }}</td>
+                                        <td>{{ $user->id }}</td>
                                         <td>
                                             <a href="mailto:{{ $user->email }}">{{ $user->email }}</a>
                                         </td>

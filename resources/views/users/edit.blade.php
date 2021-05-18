@@ -231,13 +231,13 @@
             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-3-tab" data-toggle="tab" href="#tabs-icons-text-3" role="tab" aria-controls="tabs-icons-text-3" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Courses</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-4-tab" data-toggle="tab" href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-4" aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i>Payments & Invoices</a>
+            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-4-tab" data-toggle="tab" href="#tabs-icons-text-4" role="tab" aria-controls="tabs-icons-text-4" aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i>Payments & Invoices</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-5-tab" data-toggle="tab" href="#tabs-icons-text-2" role="tab" aria-controls="tabs-icons-text-5" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Activity Timeline</a>
+            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-5-tab" data-toggle="tab" href="#tabs-icons-text-5" role="tab" aria-controls="tabs-icons-text-5" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Activity Timeline</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-6-tab" data-toggle="tab" href="#tabs-icons-text-3" role="tab" aria-controls="tabs-icons-text-6" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Messages</a>
+            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-6-tab" data-toggle="tab" href="#tabs-icons-text-6" role="tab" aria-controls="tabs-icons-text-6" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Messages</a>
         </li>
     </ul>
 </div>
@@ -401,7 +401,7 @@
                         </div>
                 </div>
             <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
-            <form method="post" action="{{ route('profile.updateRole') }}" autocomplete="off"
+                <form method="post" action="{{ route('profile.updateRole') }}" autocomplete="off"
                             enctype="multipart/form-data">
                             @csrf
                             @method('put')
@@ -447,7 +447,149 @@
                         </form>
             </div>
             <div class="tab-pane fade" id="tabs-icons-text-3" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
-                <p class="description">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth.</p>
+                <div class="col-12 mt-2">
+                    @include('alerts.success')
+                    @include('alerts.errors')
+                </div>
+
+
+                <!-- Create Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Assign Course</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <?php //dd(count($user->events)); ?>
+                    <div class="modal-body">
+                        <form role="form" method="post" action="{{ route('user.assignToCourse') }}" autocomplete="off"
+                            enctype="multipart/form-data">
+                            @csrf
+
+                            <div class="form-group{{ $errors->has('event_id') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-topic_id">{{ __('Events') }}</label>
+                                    <select multiple name="event_id[]" id="input-event_id" class="form-control event" placeholder="{{ __('Event') }}">
+                                        <option value="">-</option>
+
+                                        @foreach ($events as $event)
+                                        <?php $selected = false; ?>
+                                            @if(count($user->events) != 0)
+                                                @foreach($user->events as $user_event)
+                                                    @if($user_event['id'] != $event->id)
+                                                        <?php $selected = true; ?>
+                                                    @endif
+                                                @endforeach
+                                                @if($selected != true)
+                                                        <option value="{{ $event->id }}" >{{ $event->title }}</option>
+                                                @endif
+                                            @else
+                                            <option value="{{ $event->id }}" >{{ $event->title }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+
+                                    @include('alerts.feedback', ['field' => 'event_id'])
+                                </div>
+
+                                <input type="hidden" name="user_id" value="{{$user['id']}}">
+
+                                <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+
+                        </form>
+                    </div>
+
+                    </div>
+                </div>
+                </div>
+
+
+
+                <div class="row align-items-center">
+                            <div class="col-8">
+                            </div>
+                            @can('create', App\User::class)
+                                <div class="col-4 text-right">
+                                    <!-- <a href="{{ route('user.assignToCourse') }}" class="btn btn-sm btn-primary">{{ __('Add course') }}</a> -->
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                    Add course
+                                    </button>
+                                </div>
+                            @endcan
+                        </div>
+
+                <div class="table-responsive py-4">
+                    <table class="table align-items-center table-flush"  id="datatable-basic">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">{{ __('id') }}</th>
+                                <th scope="col">{{ __('Title') }}</th>
+                                <th scope="col">{{ __('Created at') }}</th>
+                                @can('manage-users', App\User::class)
+                                    <th scope="col"></th>
+                                @endcan
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($user->events as $user_event)
+                                <tr>
+                                    <td>{{ $user_event->id }}</td>
+                                    <td>{{ $user_event->title }}</td>
+
+                                    <td>{{ date_format($user_event->created_at, 'Y-m-d' ) }}</td>
+                                    @can('manage-users', App\User::class)
+                                        <td class="text-right">
+                                            @if (auth()->user()->can('update', $user) || auth()->user()->can('delete', $user))
+                                                <div class="dropdown">
+                                                    <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fas fa-ellipsis-v"></i>
+                                                    </a>
+                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+
+                                                            {{--@can('update', $user)
+                                                                <a class="dropdown-item" href="{{ route('lessons.edit', $lesson) }}">{{ __('Edit') }}</a>
+                                                            @endcan
+                                                            @can('delete', $user)
+                                                                <form action="{{ route('lessons.destroy', $lesson) }}" method="post">
+                                                                    @csrf
+                                                                    @method('delete')
+
+                                                                    <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
+                                                                        {{ __('Delete') }}
+                                                                    </button>
+                                                                </form>
+                                                            @endcan--}}
+
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </td>
+                                    @endcan
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+
+
+
+
+
+            </div>
+            <div class="tab-pane fade" id="tabs-icons-text-4" role="tabpanel" aria-labelledby="tabs-icons-text-4-tab">
+                <p class="description">TAB 4 Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth.</p>
+            </div>
+            <div class="tab-pane fade" id="tabs-icons-text-5" role="tabpanel" aria-labelledby="tabs-icons-text-5-tab">
+                <p class="description">TAB 5  Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth.</p>
+            </div>
+            <div class="tab-pane fade" id="tabs-icons-text-6" role="tabpanel" aria-labelledby="tabs-icons-text-6-tab">
+                <p class="description">TAB 6 Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth.</p>
             </div>
         </div>
     </div>
