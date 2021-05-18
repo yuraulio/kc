@@ -43,19 +43,7 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         $user = User::with('role')->find($user['id']);
-        //dd($user);
-
-        if($request->role_id != null){
-            foreach($request->role_id as $role){
-                //$role = Role::with('user')->find($role);
-                //dd($role);
-
-
-                $user->role()->attach($role);
-            }
-        }
-
-
+        $user->role()->sync($request->role_id);
 
         return back()->withStatus(__('Profile role successfully updated.'));
     }

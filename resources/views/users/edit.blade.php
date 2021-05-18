@@ -411,10 +411,11 @@
 
                             <div class="form-group{{ $errors->has('role_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-role_id">{{ __('User Roles') }}</label>
-                                    @foreach($user->role as $role)
-                                    <p>{{$role['name']}},</p>
-                                    @endforeach
-
+                                    <ul>
+                                        @foreach($user->role as $role)
+                                        <li>{{$role['name']}}</li>
+                                        @endforeach
+                                    </ul>
                                     @include('alerts.feedback', ['field' => 'role_id'])
                                 </div>
 
