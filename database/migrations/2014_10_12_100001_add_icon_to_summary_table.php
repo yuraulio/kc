@@ -14,7 +14,7 @@ class AddIconToSummaryTable extends Migration
     public function up()
     {
         Schema::table('summary_events', function (Blueprint $table) {
-            $table->text('icon');
+            $table->string('icon', 255);
         });
     }
 

@@ -12,6 +12,8 @@ use App\Model\Type;
 use App\Model\City;
 use App\Model\Summary;
 use App\Model\Section;
+use App\Model\Benefit;
+use App\Model\Venue;
 
 class Event extends Model
 {
@@ -51,7 +53,7 @@ class Event extends Model
 
     public function ticket()
     {
-        return $this->belongsToMany(Ticket::class, 'event_tickets');
+        return $this->belongsToMany(Ticket::class, 'event_tickets')->withPivot('priority', 'price', 'options', 'quantity');
     }
 
     public function city()
@@ -67,6 +69,16 @@ class Event extends Model
     public function sections()
     {
         return $this->belongsToMany(Section::class, 'sectiontitles_event');
+    }
+
+    public function benefits()
+    {
+        return $this->morphToMany(Benefit::class, 'benefitable');
+    }
+
+    public function venues()
+    {
+        return $this->belongsToMany(Venue::class, 'event_venue');
     }
 
 }

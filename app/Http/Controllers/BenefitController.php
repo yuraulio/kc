@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Model\Summary;
-use App\Model\Event;
+use App\Model\Benefit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class SummaryController extends Controller
+class BenefitController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,6 +15,7 @@ class SummaryController extends Controller
      */
     public function index()
     {
+        //
     }
 
     /**
@@ -26,10 +26,9 @@ class SummaryController extends Controller
     public function create(Request $request)
     {
         $event_id = $request->id;
-        $event = Event::find($event_id);
         $user = Auth::user();
 
-        return view('summary.create', ['user' => $user, 'event' => $event]);
+        return view('benefit.create', ['user' => $user, 'event_id' => $event_id]);
     }
 
     /**
@@ -38,22 +37,22 @@ class SummaryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Summary $model)
+    public function store(Request $request, Benefit $model)
     {
         //dd($request->all());
-        $summary = $model->create($request->all());
-        if($request->event_id != null){
-            $summary->event()->attach($request->event_id);
-        }
+        $benefit = $model->create($request->all());
+        $benefit->events()->attach(['benefitable_id' => $request->event_id]);
+
+        return redirect()->route('events.index')->withStatus(__('Benefit successfully created.'));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Model\Summary  $summary
+     * @param  \App\Model\Benefit  $benefit
      * @return \Illuminate\Http\Response
      */
-    public function show(Summary $summary)
+    public function show(Benefit $benefit)
     {
         //
     }
@@ -61,36 +60,40 @@ class SummaryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Model\Summary  $summary
+     * @param  \App\Model\Benefit  $benefit
      * @return \Illuminate\Http\Response
      */
-    public function edit(Summary $summary)
+    public function edit(Benefit $benefit)
     {
-        return view('summary.edit', compact('summary'));
+        $user = Auth::user();
+        $id = $benefit['id'];
+        $benefit = $benefit->find($id);
+
+        return view('benefit.edit', compact('benefit'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\Summary  $summary
+     * @param  \App\Model\Benefit  $benefit
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Summary $summary)
+    public function update(Request $request, Benefit $benefit)
     {
-        $summary->update($request->all());
+        $benefit->update($request->all());
 
-        return redirect()->route('events.index')->withStatus(__('Summary successfully updated.'));
+        return redirect()->route('events.index')->withStatus(__('Benefit successfully updated.'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Model\Summary  $summary
+     * @param  \App\Model\Benefit  $benefit
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Summary $summary)
+    public function destroy(Benefit $benefit)
     {
-
+        //
     }
 }

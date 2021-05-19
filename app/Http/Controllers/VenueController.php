@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Model\Summary;
-use App\Model\Event;
+use App\Model\Venue;
 use Illuminate\Http\Request;
+use App\Model\Event;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\VenueRequest;
 
-class SummaryController extends Controller
+class VenueController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,6 +17,7 @@ class SummaryController extends Controller
      */
     public function index()
     {
+        //
     }
 
     /**
@@ -25,11 +27,9 @@ class SummaryController extends Controller
      */
     public function create(Request $request)
     {
-        $event_id = $request->id;
-        $event = Event::find($event_id);
         $user = Auth::user();
 
-        return view('summary.create', ['user' => $user, 'event' => $event]);
+        return view('venue.create', ['user' => $user, 'event_id' => $request->id]);
     }
 
     /**
@@ -38,22 +38,23 @@ class SummaryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Summary $model)
+    public function store(VenueRequest $request, Venue $model)
     {
         //dd($request->all());
-        $summary = $model->create($request->all());
-        if($request->event_id != null){
-            $summary->event()->attach($request->event_id);
-        }
+        $venue = $model->create($request->all());
+
+        $venue->events()->attach($request->event_id);
+
+        return redirect()->route('events.index')->withStatus(__('Event successfully created.'));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Model\Summary  $summary
+     * @param  \App\Model\Venue  $venue
      * @return \Illuminate\Http\Response
      */
-    public function show(Summary $summary)
+    public function show(Venue $venue)
     {
         //
     }
@@ -61,36 +62,40 @@ class SummaryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Model\Summary  $summary
+     * @param  \App\Model\Venue  $venue
      * @return \Illuminate\Http\Response
      */
-    public function edit(Summary $summary)
+    public function edit(Venue $venue, Request $request)
     {
-        return view('summary.edit', compact('summary'));
+        $user = Auth::user();
+
+        $event_id = $request->id;
+
+        return view('venue.edit', compact('venue', 'user', 'event_id'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\Summary  $summary
+     * @param  \App\Model\Venue  $venue
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Summary $summary)
+    public function update(Request $request, Venue $venue)
     {
-        $summary->update($request->all());
+        $venue->update($request->all());
 
-        return redirect()->route('events.index')->withStatus(__('Summary successfully updated.'));
+        return redirect()->route('events.index')->withStatus(__('Venue successfully updated.'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Model\Summary  $summary
+     * @param  \App\Model\Venue  $venue
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Summary $summary)
+    public function destroy(Venue $venue)
     {
-
+        //
     }
 }

@@ -39,39 +39,47 @@
                             <div class="pl-lg-4">
 
 
-                                <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-title">{{ __('Title') }}</label>
-                                    <input type="text" name="title" id="input-title" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title') }}" required autofocus>
-
-                                    @include('alerts.feedback', ['field' => 'title'])
-                                </div>
-
-                                <div class="form-group{{ $errors->has('subtitle') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-subtitle">{{ __('Subtitle') }}</label>
-                                    <input type="text" name="subtitle" id="input-subtitle" class="form-control{{ $errors->has('subtitle') ? ' is-invalid' : '' }}" placeholder="{{ __('subtitle') }}" value="{{ old('Subtitle') }}" autofocus>
-
-                                    @include('alerts.feedback', ['field' => 'subtitle'])
-                                </div>
-
-                                <div class="form-group{{ $errors->has('type') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-type">{{ __('Type') }}</label>
-                                    <select name="type" id="input-type" class="form-control" placeholder="{{ __('Type') }}">
+                            <div class="form-group{{ $errors->has('ticket_id') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-ticket_id">{{ __('Ticket') }}</label>
+                                    <select name="ticket_id" id="input-ticket_id" class="form-control" placeholder="{{ __('Ticket') }}">
                                         <option value="">-</option>
-                                            <option value="Alumni">Alumni</option>
-                                            <option value="Regular">Regular</option>
-                                            <option value="Special">Special</option>
+                                        @foreach ($tickets as $ticket)
+                                            <option value="{{ $ticket->id }}" >{{ $ticket->title }}</option>
+                                        @endforeach
                                     </select>
 
-                                    @include('alerts.feedback', ['field' => 'type'])
+                                    @include('alerts.feedback', ['field' => 'ticket_id'])
                                 </div>
 
+                                <div class="form-group{{ $errors->has('price') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-price">{{ __('Price') }}</label>
+                                    <input type="number" min="0.00" max="10000.00" step="0.50" name="price" id="input-price" class="form-control{{ $errors->has('price') ? ' is-invalid' : '' }}" placeholder="{{ __('Price') }}" value="{{ old('price') }}" autofocus>
 
-                                <div class="form-group{{ $errors->has('features') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-features">{{ __('Features') }}</label>
-                                    <input type="text" name="features" id="input-features" class="form-control{{ $errors->has('features') ? ' is-invalid' : '' }}" placeholder="{{ __('Features') }}" value="{{ old('features') }}" autofocus>
-
-                                    @include('alerts.feedback', ['field' => 'features'])
+                                    @include('alerts.feedback', ['field' => 'price'])
                                 </div>
+
+                                <div class="form-group{{ $errors->has('priority') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-priority">{{ __('Priority') }}</label>
+                                    <input type="number" min="0" name="priority" id="input-priority" class="form-control{{ $errors->has('priority') ? ' is-invalid' : '' }}" placeholder="{{ __('Priority') }}" value="{{ old('priority') }}" autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'priority'])
+                                </div>
+
+                                <div class="form-group{{ $errors->has('quantity') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-quantity">{{ __('Quantity') }}</label>
+                                    <input type="number" min="0" name="quantity" id="input-quantity" class="form-control{{ $errors->has('quantity') ? ' is-invalid' : '' }}" placeholder="{{ __('Quantity') }}" value="{{ old('quantity') }}" autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'quantity'])
+                                </div>
+
+                                <div class="form-group{{ $errors->has('option') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-option">{{ __('Option') }}</label>
+                                    <textarea type="textarea" name="option" id="input-option" class="form-control{{ $errors->has('option') ? ' is-invalid' : '' }}" placeholder="{{ __('Option') }}" value="{{ old('option') }}" autofocus></textarea>
+
+                                    @include('alerts.feedback', ['field' => 'option'])
+                                </div>
+
+                                <input type="hidden" name="event_id" value="{{$event_id}}">
 
 
                                 <div class="text-center">

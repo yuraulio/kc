@@ -177,11 +177,6 @@
                                 @endcan
                                 @can('manage-users', App\User::class)
                                     <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
-                                        <a href="{{ route('city.index') }}" class="nav-link">{{ __('City') }}</a>
-                                    </li>
-                                @endcan
-                                @can('manage-users', App\User::class)
-                                    <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
                                         <a href="{{ route('career.index') }}" class="nav-link">{{ __('Career') }}</a>
                                     </li>
                                 @endcan

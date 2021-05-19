@@ -46,7 +46,6 @@
                                 <tr>
                                     <th scope="col">{{ __('Status') }}</th>
                                     <th scope="col">{{ __('Title') }}</th>
-                                    <th scope="col">{{ __('Assigned to Ticket') }}</th>
                                     <th scope="col">{{ __('Assigned to Category') }}</th>
                                     <th scope="col">{{ __('Assigned to Type') }}</th>
                                     <th scope="col">{{ __('Assigned to Topic/Lesson/instructor') }}</th>
@@ -61,12 +60,7 @@
                                     <tr>
                                         <td>{{ $event->status }}</td>
                                         <td>{{ $event->title }}</td>
-                                        <td>
-                                            <!-- Button trigger modal -->
-                                            <a href="events/ticket/{{$event->id}}" id="assignButton" data-event-id={{$event->id}} class="btn btn-primary btn-sm">
-                                                Assign
-                                            </a>
-                                        </td>
+
                                         <td>
                                         @foreach($event->category as $category)
                                             {{ $category->name }}

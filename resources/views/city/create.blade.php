@@ -26,7 +26,7 @@
                                 <h3 class="mb-0">{{ __('City Management') }}</h3>
                             </div>
                             <div class="col-4 text-right">
-                                <a href="{{ route('city.index') }}" class="btn btn-sm btn-primary">{{ __('Back to list') }}</a>
+                                <a href="{{ route('events.index') }}" class="btn btn-sm btn-primary">{{ __('Back to list') }}</a>
                             </div>
                         </div>
                     </div>
@@ -43,17 +43,8 @@
                                     @include('alerts.feedback', ['field' => 'name'])
                                 </div>
 
-                                <div class="form-group{{ $errors->has('event_id') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-event_id">{{ __('Event') }}</label>
-                                    <select multiple name="event_id[]" id="input-event_id" class="form-control" placeholder="{{ __('Event') }}" >
-                                        <option value="">-</option>
-                                        @foreach ($events as $event)
-                                            <option value="{{ $event->id }}">{{ $event->title }}</option>
-                                        @endforeach
-                                    </select>
+                                <input type="hidden" name="event_id" value="{{$event_id}}">
 
-                                    @include('alerts.feedback', ['field' => 'event_id'])
-                                </div>
 
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>

@@ -1,4 +1,5 @@
 
+
     <div class="container-fluid mt--6">
         <div class="row">
             <div class="col">
@@ -6,14 +7,14 @@
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col-8">
-                                <h3 class="mb-0">{{ __('Types') }}</h3>
+                                <h3 class="mb-0">{{ __('Topics') }}</h3>
                                 <p class="text-sm mb-0">
-                                        {{ __('This is an example of Type management.') }}
+                                        {{ __('This is an example of Topic management.') }}
                                     </p>
                             </div>
                             @can('create', App\User::class)
                                 <div class="col-4 text-right">
-                                    <a href="{{ route('city.create', ['id' => $event['id']]) }}" class="btn btn-sm btn-primary">{{ __('Add City') }}</a>
+                                    <a href="{{ route('topics.create_event', ['event_id' => $event['id']]) }}" class="btn btn-sm btn-primary">{{ __('Assign Topic') }}</a>
                                 </div>
                             @endcan
                         </div>
@@ -28,7 +29,9 @@
                         <table class="table align-items-center table-flush"  id="datatable-basic">
                             <thead class="thead-light">
                                 <tr>
-                                    <th scope="col">{{ __('Name') }}</th>
+                                    <th scope="col">{{ __('Status') }}</th>
+                                    <th scope="col">{{ __('Title') }}</th>
+                                    <th scope="col">{{ __('Assigned Category') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
                                     @can('manage-users', App\User::class)
                                         <th scope="col"></th>
@@ -36,10 +39,17 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($event->city as $city)
+                            <?php //dd($event->topic); ?>
+                                @foreach ($event->topic as $topic)
                                     <tr>
-                                        <td>{{ $city->name }}</td>
-                                        <td>{{ date_format($city->created_at, 'Y-m-d' ) }}</td>
+                                        <td>{{ $topic->status }}</td>
+                                        <td>{{ $topic->title }}</td>
+                                        <td>
+                                        @foreach($topic->category as $category)
+                                            {{$category->name}}
+                                        @endforeach
+                                        </td>
+                                        <td>{{ date_format($topic->created_at, 'Y-m-d' ) }}</td>
 					                    @can('manage-users', App\User::class)
 					                        <td class="text-right">
                                                 @if (auth()->user()->can('update', $user) || auth()->user()->can('delete', $user))
@@ -50,10 +60,10 @@
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
 
                                                                 @can('update', $user)
-                                                                    <a class="dropdown-item" href="{{ route('city.edit', $city) }}">{{ __('Edit') }}</a>
+                                                                    <a class="dropdown-item" href="{{ route('topics.edit_event', ['topic' => $topic, 'event_id' => $event['id']]) }}">{{ __('Edit') }}</a>
                                                                 @endcan
     							                                @can('delete', $user)
-        							                                <form action="{{ route('city.destroy', $city) }}" method="post">
+        							                                <form action="{{ route('topics.destroy', $topic) }}" method="post">
                                                                         @csrf
                                                                         @method('delete')
 
@@ -79,6 +89,7 @@
 
         @include('layouts.footers.auth')
     </div>
+
 
 @push('css')
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css">

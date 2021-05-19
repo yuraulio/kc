@@ -21,7 +21,7 @@ class TicketController extends Controller
 
         //dd($model->get());
 
-        return view('ticket.index', ['tickets' => $model->with('events')->get(), 'user' => $user]);
+        return view('ticket.main.index', ['tickets' => $model->with('events')->get(), 'user' => $user]);
     }
 
     /**
@@ -29,11 +29,21 @@ class TicketController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         $user = Auth::user();
 
-        return view('ticket.create', ['user' => $user, 'events' => Event::all()]);
+        $tickets = Ticket::all();
+
+        return view('ticket.create', ['user' => $user, 'events' => Event::all(), 'event_id' => $request->id, 'tickets'=>$tickets]);
+    }
+
+    public function create_main(Request $request)
+    {
+        //dd('from create');
+        $user = Auth::user();
+
+        return view('ticket.main.create', ['user' => $user, 'events' => Event::all(), 'event_id' => $request->id]);
     }
 
     /**
@@ -44,21 +54,31 @@ class TicketController extends Controller
      */
     public function store(Request $request, Ticket $model)
     {
-        $ticket = $model->create($request->all());
+        $ticket = Ticket::find($request->ticket_id);
 
-        // if($request->event_ids != null){
-        //     foreach($request->event_ids as $event){
-        //         $event = Event::find($event);
+        if($request->event_id != null)
+        {
+            $ticket->events()->attach($request->event_id, [
+                'priority' => $request->priority,
+                'price' => $request->price,
+                'options' => $request->option,
+                'quantity' => $request->quantity
+                ]);
 
+        }
 
-
-        //         $event->ticket()->attach($event['id']);
-        //     }
-        // }
-
-        return redirect()->route('ticket.index')->withStatus(__('Ticket successfully created.'));
+        return redirect()->route('events.index')->withStatus(__('Ticket successfully created.'));
 
     }
+
+    public function store_main(Request $request, Ticket $model)
+    {
+        $ticket = $model->create($request->all());
+
+        return redirect()->route('events.index')->withStatus(__('Ticket successfully created.'));
+
+    }
+
 
     /**
      * Display the specified resource.
@@ -77,16 +97,25 @@ class TicketController extends Controller
      * @param  \App\Model\Ticket  $ticket
      * @return \Illuminate\Http\Response
      */
-    public function edit(Ticket $ticket)
+    public function edit(Request $request)
     {
-        $id = $ticket['id'];
-        $ticket = $ticket->with('events')->find($id);
+        //dd($request->all());
+        $event_id = $request->event_id;
+        $event = Event::with('ticket')->find($event_id);
 
-        $events = Event::all();
 
-        //dd($ticket);
 
-        return view('ticket.edit', compact('ticket', 'events'));
+        $ticket = Ticket::with('events')->find($request->ticket_id);
+        $event = $event->ticket()->wherePivot('ticket_id', $request->ticket_id)->first();
+
+        //dd($event);
+
+        return view('ticket.edit', compact('ticket', 'event'));
+    }
+
+    public function edit_main(Ticket $ticket)
+    {
+        return view('ticket.main.edit', compact('ticket'));
     }
 
     /**
@@ -98,14 +127,23 @@ class TicketController extends Controller
      */
     public function update(Request $request, Ticket $ticket)
     {
-        //dd($request->all());
         $ticket->update($request->all());
-        $ticket->events()->detach();
-       // $ticket->events()->sync([$request->event_ids]);
-        foreach($request->event_ids as $id){
-            $ticket->events()->attach($id);
-        }
 
+        $event = Event::with('ticket')->find($request->event_id);
+
+        $event->ticket()->wherePivot('ticket_id',$ticket['id'])->updateExistingPivot($ticket['id'],[
+            'priority' => $request->priority,
+            'price' => $request->price,
+            'options' => $request->option,
+            'quantity' => $request->quantity
+        ], false);
+
+        return redirect()->route('events.index')->withStatus(__('Ticket successfully updated.'));
+    }
+
+    public function update_main(Request $request, Ticket $ticket)
+    {
+        $ticket->update($request->all());
 
         return redirect()->route('ticket.index')->withStatus(__('Ticket successfully updated.'));
     }

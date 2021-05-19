@@ -168,8 +168,7 @@ class EventController extends Controller
     {
         $user = Auth::user();
         $id = $event['id'];
-        $event = $event->with('category', 'summary')->find($id);
-
+        $event = $event->with('category', 'summary', 'benefits', 'ticket', 'city', 'venues', 'topic')->find($id);
         $categories = Category::all();
         $types = Type::all();
 

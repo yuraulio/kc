@@ -62,6 +62,12 @@
                                                         <li class="nav-item">
                                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-5-tab_inside" data-toggle="tab" href="#tabs-icons-text-5_inside" role="tab" aria-controls="tabs-icons-text-5_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Tickets</a>
                                                         </li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-6-tab_inside" data-toggle="tab" href="#tabs-icons-text-6_inside" role="tab" aria-controls="tabs-icons-text-6_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>City</a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-7-tab_inside" data-toggle="tab" href="#tabs-icons-text-7_inside" role="tab" aria-controls="tabs-icons-text-7_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Venue</a>
+                                                        </li>
 
                                                     </ul>
                                                 </div>
@@ -200,32 +206,31 @@
 
                                                             </div>
                                                             <div class="tab-pane fade" id="tabs-icons-text-2_inside" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab_inside">
-                                                            <div class="col-12 mt-2">
-                                                                @include('alerts.success')
-                                                                @include('alerts.errors')
-                                                            </div>
-                                                            @include('summary.index')
-
-
-
-
+                                                                <div class="col-12 mt-2">
+                                                                    @include('alerts.success')
+                                                                    @include('alerts.errors')
+                                                                </div>
+                                                                @include('summary.index')
                                                             </div>
                                                             <div class="tab-pane fade" id="tabs-icons-text-3_inside" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab_inside">
-                                                                <p class="description">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth.</p>
+
+                                                                @include('benefit.index')
                                                             </div>
 
                                                             <div class="tab-pane fade show" id="tabs-icons-text-4_inside" role="tabpanel" aria-labelledby="tabs-icons-text-4-tab_inside">
-                                                                <p class="description">sdaRaw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth.</p>
-                                                                <p class="description">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse.</p>
+                                                                @include('topics.event.index')
                                                             </div>
                                                             <div class="tab-pane fade" id="tabs-icons-text-5_inside" role="tabpanel" aria-labelledby="tabs-icons-text-5-tab_inside">
-
-
-
-
-
-
+                                                                @include('ticket.index')
                                                             </div>
+                                                            <div class="tab-pane fade" id="tabs-icons-text-6_inside" role="tabpanel" aria-labelledby="tabs-icons-text-6-tab_inside">
+                                                                @include('city.index')
+                                                            </div>
+                                                            <div class="tab-pane fade" id="tabs-icons-text-7_inside" role="tabpanel" aria-labelledby="tabs-icons-text-7-tab_inside">
+                                                                @include('venue.index')
+                                                            </div>
+
+
 
                                                         </div>
                                                     </div>

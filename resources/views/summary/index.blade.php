@@ -56,7 +56,7 @@
                                                                 @can('update', $user)
                                                                     <a class="dropdown-item" href="{{ route('summary.edit', $summary) }}">{{ __('Edit') }}</a>
                                                                 @endcan
-    							                                @can('delete', $user)
+    							                                {{--@can('delete', $user)
         							                                <form action="{{ route('summary.destroy', $summary) }}" method="post">
                                                                         @csrf
                                                                         @method('delete')
@@ -65,7 +65,7 @@
                                                                             {{ __('Delete') }}
                                                                         </button>
                                                                     </form>
-    						                                    @endcan
+    						                                    @endcan--}}
 
                                                         </div>
                                                     </div>

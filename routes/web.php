@@ -38,12 +38,27 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('section', 'SectionController', ['except' => ['show']]);
     Route::resource('ticket', 'TicketController', ['except' => ['show']]);
     Route::resource('summary', 'SummaryController', ['except' => ['show']]);
+    Route::resource('benefit', 'BenefitController', ['except' => ['show']]);
+    Route::resource('venue', 'VenueController', ['except' => ['show']]);
 
 
 
 
     //User
     Route::post('user/assignEventToUserCreate', ['as' => 'user.assignToCourse', 'uses' => 'UserController@assignEventToUserCreate']);
+
+    //Custom Ticket
+    //ticket.edit
+    Route::get('ticket/edit', ['as' => 'ticket.edit', 'uses' => 'TicketController@edit']);
+    Route::get('ticket/create_main', ['as' => 'ticket.create_main', 'uses' => 'TicketController@create_main']);
+    Route::get('ticket/edit_main/{ticket}', ['as' => 'ticket.edit_main', 'uses' => 'TicketController@edit_main']);
+    Route::put('ticket/update_main/{ticket}', ['as' => 'ticket.update_main', 'uses' => 'TicketController@update_main']);
+    Route::post('ticket/store_main', ['as' => 'ticket.store_main', 'uses' => 'TicketController@store_main']);
+
+    //custom Topic (inside event)
+    Route::get('topics/index_event', ['as' => 'topics.index', 'uses' => 'TopicController@index']);
+    Route::get('topics/edit_event', ['as' => 'topics.edit_event', 'uses' => 'TopicController@edit_event']);
+    Route::get('topics/create_event', ['as' => 'topics.create_event', 'uses' => 'TopicController@create_event']);
 
 
     // Route::get('role/delete/{id}', ['as' => 'role.delete', 'uses' => 'RoleController@delete']);

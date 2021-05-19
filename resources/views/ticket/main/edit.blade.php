@@ -32,7 +32,7 @@
                     </div>
                     <?php //dd($ticket[0]); ?>
                     <div class="card-body">
-                        <form method="post" action="{{ route('ticket.update', $ticket) }}" autocomplete="off"
+                        <form method="post" action="{{ route('ticket.update_main', $ticket) }}" autocomplete="off"
                             enctype="multipart/form-data">
                             @csrf
                             @method('put')
@@ -54,7 +54,7 @@
                                 </div>
 
 
-                                <?php //dd($event->pivot->options); ?>
+                                <?php //dd($type); ?>
                                 <div class="form-group{{ $errors->has('type') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-type">{{ __('Type') }}</label>
                                     <select name="type" id="input-type" class="form-control" placeholder="{{ __('Type') }}" required>
@@ -73,39 +73,6 @@
 
                                     @include('alerts.feedback', ['field' => 'features'])
                                 </div>
-
-                                <div class="form-group{{ $errors->has('price') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-price">{{ __('Price') }}</label>
-                                    <input type="number" min="0.00" max="10000.00" step="0.50" name="price" id="input-price" class="form-control{{ $errors->has('price') ? ' is-invalid' : '' }}" placeholder="{{ __('Price') }}" value="{{ old('price', $event->pivot->price) }}" autofocus>
-
-                                    @include('alerts.feedback', ['field' => 'price'])
-                                </div>
-
-                                <div class="form-group{{ $errors->has('priority') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-priority">{{ __('Priority') }}</label>
-                                    <input type="number" min="0" name="priority" id="input-priority" class="form-control{{ $errors->has('priority') ? ' is-invalid' : '' }}" placeholder="{{ __('Priority') }}" value="{{ old('priority', $event->pivot->priority) }}" autofocus>
-
-                                    @include('alerts.feedback', ['field' => 'priority'])
-                                </div>
-
-                                <div class="form-group{{ $errors->has('quantity') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-quantity">{{ __('Quantity') }}</label>
-                                    <input type="number" min="0" name="quantity" id="input-quantity" class="form-control{{ $errors->has('quantity') ? ' is-invalid' : '' }}" placeholder="{{ __('Quantity') }}" value="{{ old('quantity', $event->pivot->quantity) }}" autofocus>
-
-                                    @include('alerts.feedback', ['field' => 'quantity'])
-                                </div>
-
-                                <div class="form-group{{ $errors->has('option') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-option">{{ __('Option') }}</label>
-                                    <textarea type="textarea" name="option" id="input-option" class="form-control{{ $errors->has('option') ? ' is-invalid' : '' }}" placeholder="{{ __('Option') }}" autofocus>{{$event->pivot->options}}</textarea>
-
-                                    @include('alerts.feedback', ['field' => 'option'])
-                                </div>
-
-                                <input type="hidden" name="event_id" value="{{$event->pivot->event_id}}">
-
-
-
 
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>

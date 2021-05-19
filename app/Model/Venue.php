@@ -6,20 +6,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Event;
 
-class Ticket extends Model
+class Venue extends Model
 {
     use HasFactory;
 
-    protected $table = 'tickets';
+    protected $table = 'venues';
 
     protected $fillable = [
-        'title', 'subtitle', 'type', 'features'
+        'name', 'address', 'longitude', 'latitude'
     ];
 
 
     public function events()
     {
-        return $this->belongsToMany(Event::class, 'event_tickets')->withPivot('priority', 'quantity', 'price', 'options');
+        return $this->belongsToMany(Event::class, 'event_venue');
     }
-
 }

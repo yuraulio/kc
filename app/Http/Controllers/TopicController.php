@@ -24,8 +24,6 @@ class TopicController extends Controller
         $this->authorize('manage-users', User::class);
         $user = Auth::user();
 
-        //dd($model->with('category', 'lessons')->get());
-
         return view('topics.index', ['topics' => $model->with('category')->get(), 'user' => $user]);
     }
 
@@ -39,6 +37,38 @@ class TopicController extends Controller
         $user = Auth::user();
         //dd($events->get(['id', 'title']));
         return view('topics.create', ['user' => $user, 'categories' => Category::all()]);
+    }
+
+    public function create_event(Request $request)
+    {
+        $user = Auth::user();
+        //dd($events->get(['id', 'title']));
+
+        $event = Event::with('category','topic')->find($request->event_id);
+        $assign_topics = $event->topic()->wherePivot('event_id', $request->event_id)->get();
+
+        $category_event = $event->category[0]['id'];
+        $category = Category::with('topics')->find($category_event);
+        $new_topics = $category->topics()->get();
+
+        $unassign_topics = [];
+
+        foreach($new_topics as $key => $new_topic){
+            //dd($new_topic);
+            $found = false;
+            foreach($assign_topics as $key1 => $assign_topic)
+            {
+                //dd($assign_topic);
+                if($new_topic['id'] == $assign_topic['id']){
+                    $found = true;
+                }
+            }
+            if($found != true){
+                array_push($unassign_topics, $new_topic);
+            }
+        }
+
+        return view('topics.event.create', ['user' => $user, 'topics' => $unassign_topics ,'event_id' => $request->event_id]);
     }
 
     /**
