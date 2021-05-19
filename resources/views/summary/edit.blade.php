@@ -53,6 +53,13 @@
                                     @include('alerts.feedback', ['field' => 'description'])
                                 </div>
 
+                                <div class="form-group{{ $errors->has('icon') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-icon">{{ __('icon') }}</label>
+                                    <input type="text" name="icon" id="input-icon" class="form-control{{ $errors->has('icon') ? ' is-invalid' : '' }}" placeholder="{{ __('icon') }}" value="{{ old('icon', $summary->icon) }}" autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'icon'])
+                                </div>
+
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
                                 </div>
