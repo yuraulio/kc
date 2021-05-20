@@ -170,7 +170,7 @@
 
                                 if(data.request.status1 == "true"){
                                     topic_row = `
-                                        <div id="inst_${data.lesson.title}" class="card">
+                                        <div id="inst_${data.lesson.id}" class="card">
                                             <div class="card-header" id="headingOne" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                                 <h5 class="mb-0">${data.lesson.title}</h5>
                                             </div>
@@ -183,7 +183,8 @@
                                             </div>
                                     </div>
                                         `
-                                    $('#instructor-wrapper').append(topic_row)
+                                    $('#accordionExample').append(topic_row)
+                                    let b = $('#inst_'+data.lesson.id).find('ul')
 
                                     $.each( data.lesson['lessons'], function( key, value ) {
                                     $.each( value, function( key1, value1 ) {
@@ -194,7 +195,7 @@
                                             lesson_row =`
                                         <li>${title}</li>
                                         `
-                                        $('#inst_'+data.lesson.title).find('ul').append(lesson_row)
+                                        $(b).append(lesson_row)
                                         }
 
 
@@ -202,7 +203,7 @@
                                 });
                                 }else{
                                     alert('from remove')
-                                    $('#inst_'+data.lesson.title).remove()
+                                    $('#inst_'+data.lesson.id).remove()
                                 }
 
 

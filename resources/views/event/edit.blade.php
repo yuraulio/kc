@@ -242,25 +242,26 @@
                                                                                 <?php //dd(); ?>
                                                                                 @foreach($allTopicsByCategory1 as $topic)
                                                                                 <div id="inst_{{$topic[0]['id']}}" class="card">
-                                                                                <div class="card-header" data-topic-id="{{$topic[0]['id']}}" id="headingOne" data-toggle="collapse" data-target="#collapseOne1" aria-expanded="true" aria-controls="collapseOne">
+                                                                                    <div class="card-header" id="headingOne" data-toggle="collapse" data-target="#collapseOne1" aria-expanded="true" aria-controls="collapseOne">
                                                                                         <h5 class="mb-0">{{$topic[0]['title']}}</h5>
                                                                                     </div>
 
                                                                                     <div id="collapseOne1" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
                                                                                         <div class="card-body">
-                                                                                        <ul>
-                                                                                            @foreach($topic[0]->lessons as $lesson)
-                                                                                            <li>
+                                                                                            <ul>
+                                                                                                @foreach($topic[0]->lessons as $lesson)
+                                                                                                <li>
 
-                                                                                            <?= $lesson['title'] ?>
-                                                                                            </li>
-                                                                                            @endforeach
-                                                                                        </ul>
+                                                                                                <?= $lesson['title'] ?>
+                                                                                                </li>
+                                                                                                @endforeach
+                                                                                            </ul>
                                                                                         </div>
                                                                                     </div>
+                                                                                </div>
                                                                                 @endforeach
 
-                                                                                </div>
+
 
 
 
