@@ -92,6 +92,24 @@ class TopicController extends Controller
         return redirect()->route('topics.index')->withStatus(__('Topic successfully created.'));
     }
 
+    public function store_event(Request $request, Topic $model)
+    {
+        $event = Event::find($request->event_id);
+
+        if($request->topic_ids[0] != null){
+            foreach($request->topic_ids as $topic)
+            {
+                $event->topic()->attach($topic);
+            }
+        }else{
+            dd('nothing selected');
+        }
+
+
+
+        return redirect()->route('topics.index')->withStatus(__('Topic successfully assign.'));
+    }
+
     /**
      * Display the specified resource.
      *

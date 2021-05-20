@@ -59,6 +59,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('topics/index_event', ['as' => 'topics.index', 'uses' => 'TopicController@index']);
     Route::get('topics/edit_event', ['as' => 'topics.edit_event', 'uses' => 'TopicController@edit_event']);
     Route::get('topics/create_event', ['as' => 'topics.create_event', 'uses' => 'TopicController@create_event']);
+    Route::post('topics/store_event', ['as' => 'topics.store_event', 'uses' => 'TopicController@store_event']);
 
 
     // Route::get('role/delete/{id}', ['as' => 'role.delete', 'uses' => 'RoleController@delete']);
@@ -82,7 +83,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     //Event_view
     Route::get('events/{id}', ['as' => 'events.assign', 'uses' => 'EventController@assign']);
-    Route::post('events/assign_store/{id}', ['as' => 'events.assign_store', 'uses' => 'EventController@assign_store']);
+    Route::post('events/assign_store', ['as' => 'events.assign_store', 'uses' => 'EventController@assign_store']);
 
     //Event assign ticket
     Route::get('events/ticket/{id}', ['as' => 'events.ticket', 'uses' => 'EventController@assign_ticket']);

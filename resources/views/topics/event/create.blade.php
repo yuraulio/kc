@@ -30,17 +30,18 @@
                             </div>
                         </div>
                     </div>
+                    <?php //dd($topics); ?>
                     <div class="card-body">
-                        <form method="post" action="{{ route('topics.store') }}" autocomplete="off"
+                        <form method="post" action="{{ route('topics.store_event') }}" autocomplete="off"
                             enctype="multipart/form-data">
                             @csrf
 
                             <h6 class="heading-small text-muted mb-4">{{ __('Topic information') }}</h6>
                             <div class="pl-lg-4">
 
-                                <div class="form-group{{ $errors->has('topic_id') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-topic_id">{{ __('Topic') }}</label>
-                                    <select multiple name="topic_id[]" id="input-topic_id" class="form-control" placeholder="{{ __('Topic') }}" >
+                                <div class="form-group{{ $errors->has('topic_ids') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-topic_ids">{{ __('Topic') }}</label>
+                                    <select multiple name="topic_ids[]" id="input-topic_ids" class="form-control" placeholder="{{ __('Topic') }}" >
                                         <option value="">-</option>
                                         @foreach ($topics as $topic)
                                             <option value="{{ $topic->id }}">{{ $topic->title }}</option>
@@ -49,6 +50,8 @@
 
                                     @include('alerts.feedback', ['field' => 'topic_id'])
                                 </div>
+
+                                <input type="hidden" name="event_id" value="{{$event_id}}">
 
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>

@@ -82,30 +82,33 @@ class EventController extends Controller
         echo json_encode($topics);
     }
 
-    public function assign_store(Request $request, $event_id)
+    public function assign_store(Request $request)
     {
-        $lessons = json_decode($request->all_lessons);
-        $event = Event::find($event_id);
-        foreach($lessons as $lesson){
 
-            $lesson = (array)$lesson;
+        $event = Event::find($request->event_id);
 
-            $lesson_id = explode("-",$lesson['name']);
+        $allLessons = Topic::with('lessons')->find($request->topic_id);
 
-            $instructor = $lesson['lesson_id'];
-
-            //dd($event);
-
-            if($event->topic()->wherePivot('lesson_id',$lesson_id[1])->first() == null){
-                $event->topic()->attach($lesson['topic_id'],['lesson_id'=> $lesson_id[1], 'instructor_id' => $instructor]);
+        foreach($allLessons->lessons as $lesson)
+        {
+            $find = $event->topic()->wherePivot('event_id', '=', $request->event_id)->wherePivot('topic_id', '=', $request->topic_id)->wherePivot('lesson_id', '=', $lesson['id'])->get();
+            //dd($find);
+            if(count($find) == 0 && $request->status1 == true)
+            {
+                $event->topic()->attach($request->topic_id,['lesson_id' => $lesson['id']]);
             }else{
-
-                $event->topic()->wherePivot('lesson_id',$lesson_id[1])->updateExistingPivot($lesson['topic_id'], ['instructor_id' => $instructor], false);
+                $topicLesson_for_detach = $event->topic()->detach($request->topic_id);
+                break;
             }
+
+
 
         }
 
-        return redirect()->route('events.index')->withStatus(__('Event successfully assign.'));
+        $data['request'] = $request->all();
+        $data['lesson'] = $allLessons;
+
+        echo json_encode($data);
     }
 
     /**
@@ -117,7 +120,10 @@ class EventController extends Controller
     {
         $user = Auth::user();
 
-        return view('city.create', ['user' => $user, 'events' => Events::all()]);
+        $categories = Category::all();
+        $types = Type::all();
+
+        return view('event.create', ['user' => $user, 'events' => Event::all(), 'categories' => $categories, 'types' => $types]);
     }
 
     /**
@@ -172,7 +178,14 @@ class EventController extends Controller
         $categories = Category::all();
         $types = Type::all();
 
-        return view('event.edit', compact('event', 'categories', 'types', 'user'));
+        $allTopicsByCategory = Category::with('topics')->find($event->category[0]->id);
+        //$allTopicsByCategory1 = $allTopicsByCategory->topic()->with('lessons')->get()->groupBy('id');
+
+        $allTopicsByCategory1 = $event->topic()->with('lessons')->get()->groupBy('id');
+
+
+
+        return view('event.edit', compact('event', 'categories', 'types', 'user', 'allTopicsByCategory', 'allTopicsByCategory1'));
     }
 
     /**

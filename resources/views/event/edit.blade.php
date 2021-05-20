@@ -219,6 +219,60 @@
 
                                                             <div class="tab-pane fade show" id="tabs-icons-text-4_inside" role="tabpanel" aria-labelledby="tabs-icons-text-4-tab_inside">
                                                                 @include('topics.event.index')
+                                                                <div class="container-fluid mt--6">
+                                                                    <div class="row">
+                                                                        <div class="col">
+                                                                            <div class="card">
+                                                                                <div class="card-header">
+                                                                                    <div class="row align-items-center">
+                                                                                        <div class="col-8">
+                                                                                            <h3 class="mb-0">{{ __('Instructors') }}</h3>
+
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+
+                                                                            <div class="accordion" id="accordionExample">
+
+
+
+
+                                                                                <?php //dd(); ?>
+                                                                                @foreach($allTopicsByCategory1 as $topic)
+                                                                                <div id="inst_{{$topic[0]['id']}}" class="card">
+                                                                                <div class="card-header" data-topic-id="{{$topic[0]['id']}}" id="headingOne" data-toggle="collapse" data-target="#collapseOne1" aria-expanded="true" aria-controls="collapseOne">
+                                                                                        <h5 class="mb-0">{{$topic[0]['title']}}</h5>
+                                                                                    </div>
+
+                                                                                    <div id="collapseOne1" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                                                                        <div class="card-body">
+                                                                                        <ul>
+                                                                                            @foreach($topic[0]->lessons as $lesson)
+                                                                                            <li>
+
+                                                                                            <?= $lesson['title'] ?>
+                                                                                            </li>
+                                                                                            @endforeach
+                                                                                        </ul>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                @endforeach
+
+                                                                                </div>
+
+
+
+
+                                                                            </div>
+
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+
                                                             </div>
                                                             <div class="tab-pane fade" id="tabs-icons-text-5_inside" role="tabpanel" aria-labelledby="tabs-icons-text-5-tab_inside">
                                                                 @include('ticket.index')
