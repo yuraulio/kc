@@ -141,8 +141,8 @@
                 data:data,
                 success: function(data) {
                     data = JSON.parse(data)
-                    console.log(data)
-                    let e = $('#'+data.request.topic_id).find('label')
+                    console.log(data.event.type[0].name)
+                    let e = $('.'+data.request.topic_id).find('label')
 
 
                         if(data.request.status1 == "true")
@@ -164,8 +164,10 @@
                                 if(data.request.status1 == "true"){
 
                                         new_topic_row = `
-                                            <tr id="topic_${data.lesson.id}">
+                                            <tr class="topic_${data.lesson.id}">
                                                 <td>${data.lesson.title}</td>
+                                                <td></td>
+                                                <td></td>
 
                                             </tr>
                                         `
@@ -196,10 +198,10 @@
                                         //$(b).append(lesson_row)
 
                                         new_topic_row = `
-                                        <tr id="topic_${data.lesson.id}">
+                                        <tr class="topic_${data.lesson.id}">
                                                 <td></td>
                                                 <td>${title}</td>
-                                                <td id="${id}"><button type="button" class="btn btn-block btn-primary btn-sm open_modal">Default</button></td>
+                                                <td class="${id}"><button type="button" class="btn btn-block btn-primary btn-sm open_modal">Default</button></td>
                                             </tr>
                                         `
 
@@ -212,11 +214,8 @@
                                     });
                                 });
                                 }else{
-                                    //alert('from remove')
-                                    //$('#topic_'+data.lesson.id).remove()
-
-                                    $( '#topic_'+data.lesson.id ).each(function( index ) {
-                                        $('#topic_'+data.lesson.id).remove()
+                                    $( '.topic_'+data.lesson.id ).each(function( index ) {
+                                        $('.topic_'+data.lesson.id).remove()
                                         });
                                 }
 
