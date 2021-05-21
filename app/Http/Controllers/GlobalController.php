@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Category;
+use App\Model\Category;
 use App\Model\Lesson;
 
 class GlobalController extends Controller

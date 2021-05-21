@@ -44,7 +44,7 @@ class Item extends Model
     /**
      * Get the category of the item
      *
-     * @return \App\Category
+     * @return \App\Model\Category
      */
     public function category()
     {

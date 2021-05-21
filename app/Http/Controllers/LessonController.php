@@ -6,7 +6,7 @@ use App\Model\Lesson;
 use App\Model\Topic;
 use App\Model\Type;
 use App\Model\User;
-use App\Category;
+use App\Model\Category;
 use Illuminate\Http\Request;
 use App\Http\Requests\LessonRequest;
 use Illuminate\Support\Facades\Auth;

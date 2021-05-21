@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Model\Testimonial;
-use App\Category;
+use App\Model\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\TestimonialRequest;

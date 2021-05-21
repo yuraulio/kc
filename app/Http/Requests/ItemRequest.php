@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use App\Tag;
 use App\Item;
-use App\Category;
+use App\Model\Category;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 

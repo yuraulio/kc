@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Topic;
 use App\Model\Type;
-use App\Category;
+use App\Model\Category;
 
 class Lesson extends Model
 {

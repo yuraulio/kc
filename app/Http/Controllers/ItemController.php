@@ -19,7 +19,7 @@ namespace App\Http\Controllers;
 
 use App\Tag;
 use App\Item;
-use App\Category;
+use App\Model\Category;
 use Carbon\Carbon;
 use App\Http\Requests\ItemRequest;
 
@@ -45,7 +45,7 @@ class ItemController extends Controller
      * Show the form for creating a new item
      *
      * @param  \App\Tag $tagModel
-     * @param  \App\Category $categoryModel
+     * @param  \App\Model\Category $categoryModel
      * @return \Illuminate\View\View
      */
     public function create(Tag $tagModel, Category $categoryModel)
@@ -82,7 +82,7 @@ class ItemController extends Controller
      *
      * @param  \App\Item  $item
      * @param  \App\Tag   $tagModel
-     * @param  \App\Category $categoryModel
+     * @param  \App\Model\Category $categoryModel
      * @return \Illuminate\View\View
      */
     public function edit(Item $item, Tag $tagModel, Category $categoryModel)

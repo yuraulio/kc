@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Model\Faq;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Category;
+use App\Model\Category;
 use App\Http\Requests\FaqRequest;
 
 class FaqController extends Controller

@@ -5,10 +5,10 @@
 ])
 
 @section('content')
-    @component('layouts.headers.auth') 
+    @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
-            @slot('title') 
-                {{ __('Examples') }} 
+            @slot('title')
+                {{ __('Examples') }}
             @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('category.index') }}">{{ __('Category Management') }}</a></li>
@@ -28,14 +28,14 @@
                                     {{ __('This is an example of category management. This is a minimal setup in order to get started fast.') }}
                                 </p>
                             </div>
-                            @if (auth()->user()->can('create', App\Category::class))
+                            @if (auth()->user()->can('create', App\Model\Category::class))
                                 <div class="col-4 text-right">
                                     <a href="{{ route('category.create') }}" class="btn btn-sm btn-primary">{{ __('Add category') }}</a>
                                 </div>
                             @endif
                         </div>
                     </div>
-                    
+
                     <div class="col-12 mt-2">
                         @include('alerts.success')
                         @include('alerts.errors')
@@ -92,7 +92,7 @@
                 </div>
             </div>
         </div>
-            
+
         @include('layouts.footers.auth')
     </div>
 @endsection

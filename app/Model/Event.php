@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Model\Topic;
 use App\Model\Event;
 use App\Model\Ticket;
-use App\Category;
+use App\Model\Category;
 use App\Model\Type;
 use App\Model\City;
 use App\Model\Summary;

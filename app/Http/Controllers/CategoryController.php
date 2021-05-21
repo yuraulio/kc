@@ -31,7 +31,7 @@ class CategoryController extends Controller
     /**
      * Display a listing of the categories
      *
-     * @param \App\Category  $model
+     * @param \App\Model\Category  $model
      * @return \Illuminate\View\View
      */
     public function index(Category $model)
@@ -55,7 +55,7 @@ class CategoryController extends Controller
      * Store a newly created category in storage
      *
      * @param  \App\Http\Requests\CategoryRequest  $request
-     * @param  \App\Category  $model
+     * @param  \App\Model\Category  $model
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(CategoryRequest $request, Category $model)
@@ -68,7 +68,7 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified category
      *
-     * @param  \App\Category  $category
+     * @param  \App\Model\Category  $category
      * @return \Illuminate\View\View
      */
     public function edit(Category $category)
@@ -80,7 +80,7 @@ class CategoryController extends Controller
      * Update the specified category in storage
      *
      * @param  \App\Http\Requests\CategoryRequest  $request
-     * @param  \App\Category  $category
+     * @param  \App\Model\Category  $category
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(CategoryRequest $request, Category $category)
@@ -93,7 +93,7 @@ class CategoryController extends Controller
     /**
      * Remove the specified category from storage
      *
-     * @param  \App\Category  $category
+     * @param  \App\Model\Category  $category
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Category $category)

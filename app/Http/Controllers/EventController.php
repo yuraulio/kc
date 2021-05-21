@@ -7,7 +7,7 @@ use App\Model\Type;
 use App\Model\Topic;
 use App\Model\Ticket;
 use App\Model\Instructor;
-use App\Category;
+use App\Model\Category;
 use Illuminate\Http\Request;
 use App\Http\Requests\EventRequest;
 use Illuminate\Support\Facades\Auth;

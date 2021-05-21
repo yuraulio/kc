@@ -4,7 +4,7 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Category;
+use App\Model\Category;
 use App\Model\lesson;
 
 class Topic extends Model
