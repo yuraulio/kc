@@ -17,8 +17,8 @@
 */
 namespace App\Http\Controllers;
 
-use App\Role;
-use App\User;
+use App\Model\Role;
+use App\Model\User;
 use App\Http\Requests\RoleRequest;
 
 class RoleController extends Controller
@@ -31,7 +31,7 @@ class RoleController extends Controller
     /**
      * Display a listing of the roles
      *
-     * @param \App\Role  $model
+     * @param \App\Model\Role  $model
      * @return \Illuminate\View\View
      */
     public function index(Role $model)
@@ -55,7 +55,7 @@ class RoleController extends Controller
      * Store a newly created role in storage
      *
      * @param  \App\Http\Requests\RoleRequest  $request
-     * @param  \App\Role  $model
+     * @param  \App\Model\Role  $model
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(RoleRequest $request, Role $model)
@@ -68,7 +68,7 @@ class RoleController extends Controller
     /**
      * Show the form for editing the specified role
      *
-     * @param  \App\Role  $role
+     * @param  \App\Model\Role  $role
      * @return \Illuminate\View\View
      */
     public function edit(Role $role)
@@ -80,7 +80,7 @@ class RoleController extends Controller
      * Update the specified role in storage
      *
      * @param  \App\Http\Requests\RoleRequest  $request
-     * @param  \App\Role  $role
+     * @param  \App\Model\Role  $role
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(RoleRequest $request, Role $role)

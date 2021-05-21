@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Item;
-use App\User;
+use App\Model\Item;
+use App\Model\User;
 use App\Observers\ItemObserver;
 use App\Observers\UserObserver;
 use Illuminate\Support\ServiceProvider;

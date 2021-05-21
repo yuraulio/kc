@@ -28,7 +28,7 @@
                                         {{ __('This is an example of Faq management.') }}
                                     </p>
                             </div>
-                            @can('create', App\User::class)
+                            @can('create', App\Model\User::class)
                                 <div class="col-4 text-right">
                                     <a href="{{ route('faqs.create') }}" class="btn btn-sm btn-primary">{{ __('Add Faq') }}</a>
                                 </div>
@@ -49,7 +49,7 @@
                                     <th scope="col">{{ __('Answer') }}</th>
                                     <th scope="col">{{ __('Assigned Category') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
-                                    @can('manage-users', App\User::class)
+                                    @can('manage-users', App\Model\User::class)
                                         <th scope="col"></th>
                                     @endcan
                                 </tr>
@@ -65,7 +65,7 @@
                                         @endforeach
                                         </td>
                                         <td>{{ date_format($faq->created_at, 'Y-m-d' ) }}</td>
-					                    @can('manage-users', App\User::class)
+					                    @can('manage-users', App\Model\User::class)
 					                        <td class="text-right">
                                                 @if (auth()->user()->can('update', $user) || auth()->user()->can('delete', $user))
                                                     <div class="dropdown">

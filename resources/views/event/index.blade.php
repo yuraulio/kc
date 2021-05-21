@@ -28,7 +28,7 @@
                                         {{ __('This is an example of Event management.') }}
                                     </p>
                             </div>
-                            @can('create', App\User::class)
+                            @can('create', App\Model\User::class)
                                 <div class="col-4 text-right">
                                     <a href="{{ route('events.create') }}" class="btn btn-sm btn-primary">{{ __('Add Event') }}</a>
                                 </div>
@@ -50,7 +50,7 @@
                                     <th scope="col">{{ __('Assigned to Type') }}</th>
                                     <th scope="col">{{ __('Assigned to Topic/Lesson/instructor') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
-                                    @can('manage-users', App\User::class)
+                                    @can('manage-users', App\Model\User::class)
                                         <th scope="col"></th>
                                     @endcan
                                 </tr>
@@ -78,7 +78,7 @@
                                             </a>
                                         </td>
                                         <td>{{ date_format($event->created_at, 'Y-m-d' ) }}</td>
-					                    @can('manage-users', App\User::class)
+					                    @can('manage-users', App\Model\User::class)
 					                        <td class="text-right">
                                                 @if (auth()->user()->can('update', $user) || auth()->user()->can('delete', $user))
                                                     <div class="dropdown">

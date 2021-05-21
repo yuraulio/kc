@@ -18,7 +18,7 @@
 namespace App\Http\Controllers;
 
 use App\Tag;
-use App\User;
+use App\Model\User;
 use App\Http\Requests\TagRequest;
 
 class TagController extends Controller

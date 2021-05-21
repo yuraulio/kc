@@ -10,7 +10,7 @@
                                         {{ __('This is an example of Benefits management.') }}
                                     </p>
                             </div>
-                            @can('create', App\User::class)
+                            @can('create', App\Model\User::class)
                                 <div class="col-4 text-right">
                                     <a href="{{ route('benefit.create', ['id' => $event['id']]) }}" class="btn btn-sm btn-primary">{{ __('Add benefit') }}</a>
                                 </div>
@@ -26,7 +26,7 @@
                                     <th scope="col">{{ __('Description') }}</th>
                                     <th scope="col">{{ __('Priority') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
-                                    @can('manage-users', App\User::class)
+                                    @can('manage-users', App\Model\User::class)
                                         <th scope="col"></th>
                                     @endcan
                                 </tr>
@@ -40,7 +40,7 @@
                                             <td>{{ $benefit->description }}</td>
                                             <td>{{ $benefit->priority }}</td>
                                             <td>{{ date_format($benefit->created_at, 'Y-m-d' ) }}</td>
-                                            @can('manage-users', App\User::class)
+                                            @can('manage-users', App\Model\User::class)
                                                 <td class="text-right">
                                                     @if (auth()->user()->can('update', $user) || auth()->user()->can('delete', $user))
                                                         <div class="dropdown">

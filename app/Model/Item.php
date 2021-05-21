@@ -15,10 +15,10 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-namespace App;
+namespace App\Model;
 
-use App\Tag;
-use App\Category;
+use App\Model\Tag;
+use App\Model\Category;
 use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model

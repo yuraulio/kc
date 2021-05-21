@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\User;
+use App\Model\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class UserPolicy
@@ -12,7 +12,7 @@ class UserPolicy
     /**
      * Determine whether the user can see the users.
      *
-     * @param  \App\User  $user
+     * @param  \App\Model\User  $user
      * @return boolean
      */
     public function viewAny(User $user)
@@ -23,7 +23,7 @@ class UserPolicy
     /**
      * Determine whether the authenticate user can create users.
      *
-     * @param  \App\User $user
+     * @param  \App\Model\User $user
      * @return boolean
      */
     public function create(User $user)
@@ -34,8 +34,8 @@ class UserPolicy
     /**
      * Determine whether the authenticate user can update the user.
      *
-     * @param  \App\User  $user
-     * @param  \App\User  $model
+     * @param  \App\Model\User  $user
+     * @param  \App\Model\User  $model
      * @return boolean
      */
     public function update(User $user, User $model)
@@ -46,8 +46,8 @@ class UserPolicy
     /**
      * Determine whether the authenticate user can delete the user.
      *
-     * @param  \App\User  $user
-     * @param  \App\User  $model
+     * @param  \App\Model\User  $user
+     * @param  \App\Model\User  $model
      * @return boolean
      */
     public function delete(User $user, User $model) {
@@ -58,7 +58,7 @@ class UserPolicy
     /**
      * Determine whether the authenticate user can manage other users.
      *
-     * @param  \App\User  $user
+     * @param  \App\Model\User  $user
      * @return boolean
      */
     public function manageUsers(User $user)
@@ -69,7 +69,7 @@ class UserPolicy
     /**
      * Determine whether the authenticate user can manage items and other related entities(tags, categories).
      *
-     * @param  \App\User  $user
+     * @param  \App\Model\User  $user
      * @return boolean
      */
     public function manageItems(User $user)

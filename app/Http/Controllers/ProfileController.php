@@ -18,14 +18,14 @@
 namespace App\Http\Controllers;
 
 use Gate;
-use App\User;
+use App\Model\User;
 use App\Model\Media;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\ProfileRequest;
 use Illuminate\Http\Request;
 use App\Http\Requests\PasswordRequest;
 use Illuminate\Support\Facades\Auth;
-use App\Role;
+use App\Model\Role;
 
 class ProfileController extends Controller
 {

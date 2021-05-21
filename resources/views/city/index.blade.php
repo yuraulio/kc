@@ -11,7 +11,7 @@
                                         {{ __('This is an example of Type management.') }}
                                     </p>
                             </div>
-                            @can('create', App\User::class)
+                            @can('create', App\Model\User::class)
                                 <div class="col-4 text-right">
                                     <a href="{{ route('city.create', ['id' => $event['id']]) }}" class="btn btn-sm btn-primary">{{ __('Add City') }}</a>
                                 </div>
@@ -30,7 +30,7 @@
                                 <tr>
                                     <th scope="col">{{ __('Name') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
-                                    @can('manage-users', App\User::class)
+                                    @can('manage-users', App\Model\User::class)
                                         <th scope="col"></th>
                                     @endcan
                                 </tr>
@@ -40,7 +40,7 @@
                                     <tr>
                                         <td>{{ $city->name }}</td>
                                         <td>{{ date_format($city->created_at, 'Y-m-d' ) }}</td>
-					                    @can('manage-users', App\User::class)
+					                    @can('manage-users', App\Model\User::class)
 					                        <td class="text-right">
                                                 @if (auth()->user()->can('update', $user) || auth()->user()->can('delete', $user))
                                                     <div class="dropdown">

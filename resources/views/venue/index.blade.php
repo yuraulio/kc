@@ -10,7 +10,7 @@
                                         {{ __('This is an example of venue management.') }}
                                     </p>
                             </div>
-                            @can('create', App\User::class)
+                            @can('create', App\Model\User::class)
                                 <div class="col-4 text-right">
                                     <a href="{{ route('venue.create', ['id' => $event['id']]) }}" class="btn btn-sm btn-primary">{{ __('Add venue') }}</a>
                                 </div>
@@ -31,7 +31,7 @@
                                     <th scope="col">{{ __('Longitude') }}</th>
                                     <th scope="col">{{ __('Latitude') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
-                                    @can('manage-users', App\User::class)
+                                    @can('manage-users', App\Model\User::class)
                                         <th scope="col"></th>
                                     @endcan
                                 </tr>
@@ -49,7 +49,7 @@
 
 
                                         <td>{{ date_format($venue->created_at, 'Y-m-d' ) }}</td>
-					                    @can('manage-users', App\User::class)
+					                    @can('manage-users', App\Model\User::class)
 					                        <td class="text-right">
                                                 @if (auth()->user()->can('update', $user) || auth()->user()->can('delete', $user))
                                                     <div class="dropdown">

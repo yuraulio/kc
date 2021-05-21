@@ -17,8 +17,8 @@
 */
 namespace App\Http\Controllers;
 
-use App\User;
-use App\Category;
+use App\Model\User;
+use App\Model\Category;
 use App\Http\Requests\CategoryRequest;
 
 class CategoryController extends Controller

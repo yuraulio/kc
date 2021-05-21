@@ -50,7 +50,7 @@
                                     <th scope="col">{{ __('Picture') }}</th>
                                     <th scope="col">{{ __('Tags') }}</th>
                                     <th scope="col">{{ __('Creation Date') }}</th>
-                                    @can('manage-items', App\User::class)
+                                    @can('manage-items', App\Model\User::class)
                                         <th scope="col"></th>
                                     @endcan
                                 </tr>
@@ -71,7 +71,7 @@
                                             @endforeach
                                         </td>
                                         <td>{{ $item->created_at->format('d/m/Y H:i') }}</td>
-                                        @can('manage-items', App\User::class)
+                                        @can('manage-items', App\Model\User::class)
                                             <td class="text-right">
                                                 @if (auth()->user()->can('update', $item) || auth()->user()->can('delete', $item))
                                                     <div class="dropdown">

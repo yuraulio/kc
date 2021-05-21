@@ -28,7 +28,7 @@
                                     {{ __('This is an example of role management. This is a minimal setup in order to get started fast.') }}
                                 </p>
                             </div>
-                            @can('create', App\Role::class)
+                            @can('create', App\Model\Role::class)
                                 <div class="col-4 text-right">
                                     <a href="{{ route('role.create') }}" class="btn btn-sm btn-primary">{{ __('Add role') }}</a>
                                 </div>
@@ -48,7 +48,7 @@
                                     <th scope="col">{{ __('Name') }}</th>
                                     <th scope="col">{{ __('Permission') }}</th>
                                     <th scope="col">{{ __('Creation date') }}</th>
-                                    @can('manage-users', App\User::class)
+                                    @can('manage-users', App\Model\User::class)
                                         <th scope="col"></th>
                                     @endcan
                                 </tr>
@@ -59,7 +59,7 @@
                                         <td>{{ $role->name }}</td>
                                         <td>{{ $role->permissions }}</td>
                                         <td>{{ $role->created_at->format('d/m/Y H:i') }}</td>
-                                        @can('manage-users', App\User::class)
+                                        @can('manage-users', App\Model\User::class)
                                             <td class="text-right">
                                             @if (auth()->user()->can('update', $role) || auth()->user()->can('delete', $role))
                                                     <div class="dropdown">

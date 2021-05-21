@@ -28,7 +28,7 @@
                                     {{ __('This is an example of pages management. This is a minimal setup in order to get started fast.') }}
                                 </p>
                             </div>
-                            @can('create', App\User::class)
+                            @can('create', App\Model\User::class)
                                 <div class="col-4 text-right">
                                     <a href="{{ route('pages.create') }}" class="btn btn-sm btn-primary">{{ __('Add page') }}</a>
                                 </div>
@@ -47,7 +47,7 @@
                                 <tr>
                                     <th scope="col">{{ __('Title') }}</th>
                                     <th scope="col">{{ __('Created') }}</th>
-                                    @can('manage-users', App\User::class)
+                                    @can('manage-users', App\Model\User::class)
                                     <th scope="col"></th>
                                     @endcan
                                 </tr>
@@ -58,7 +58,7 @@
                                     <tr>
                                         <td>{{ $page->title }}</td>
                                         <td>{{ $page->created_at->format('d/m/Y H:i') }}</td>
-                                        @can('manage-users', App\User::class)
+                                        @can('manage-users', App\Model\User::class)
 					                        <td class="text-right">
                                             <?php //dd($user); ?>
                                                 @if (auth()->user()->can('update', $user) || auth()->user()->can('delete', $user))

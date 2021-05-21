@@ -28,7 +28,7 @@
                                         {{ __('This is an example of Lesson management.') }}
                                     </p>
                             </div>
-                            @can('create', App\User::class)
+                            @can('create', App\Model\User::class)
                                 <div class="col-4 text-right">
                                     <a href="{{ route('lessons.create') }}" class="btn btn-sm btn-primary">{{ __('Add Lesson') }}</a>
                                 </div>
@@ -50,7 +50,7 @@
                                     <th scope="col">{{ __('Assigned Topic') }}</th>
                                     <th scope="col">{{ __('Assigned Type') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
-                                    @can('manage-users', App\User::class)
+                                    @can('manage-users', App\Model\User::class)
                                         <th scope="col"></th>
                                     @endcan
                                 </tr>
@@ -71,7 +71,7 @@
                                         @endforeach
                                         </td>
                                         <td>{{ date_format($lesson->created_at, 'Y-m-d' ) }}</td>
-					                    @can('manage-users', App\User::class)
+					                    @can('manage-users', App\Model\User::class)
 					                        <td class="text-right">
                                                 @if (auth()->user()->can('update', $user) || auth()->user()->can('delete', $user))
                                                     <div class="dropdown">

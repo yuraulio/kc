@@ -48,7 +48,7 @@
                                     <th scope="col">{{ __('Name') }}</th>
                                     <th scope="col">{{ __('Color') }}</th>
                                     <th scope="col">{{ __('Creation date') }}</th>
-                                    @can('manage-items', App\User::class)
+                                    @can('manage-items', App\Model\User::class)
                                         <th scope="col"></th>
                                     @endcan
                                 </tr>
@@ -59,7 +59,7 @@
                                         <td>{{ $tag->name }}</td>
                                         <td><span class="badge badge-default" style="background-color:{{ $tag->color }}">{{ $tag->name }}</span></td>
                                         <td>{{ $tag->created_at->format('d/m/Y H:i') }}</td>
-                                        @can('manage-items', App\User::class)
+                                        @can('manage-items', App\Model\User::class)
                                             <td class="text-right">
                                                 @if (auth()->user()->can('update', $tag) || auth()->user()->can('delete', $tag))
                                                     <div class="dropdown">

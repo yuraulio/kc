@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Model\Lesson;
 use App\Model\Topic;
 use App\Model\Type;
-use App\User;
+use App\Model\User;
 use App\Category;
 use Illuminate\Http\Request;
 use App\Http\Requests\LessonRequest;

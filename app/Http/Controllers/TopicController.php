@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Model\Topic;
 use App\Model\Event;
 use App\Category;
-use App\User;
+use App\Model\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\TopicRequest;
 use Illuminate\Support\Facades\Auth;

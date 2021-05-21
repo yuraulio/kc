@@ -48,7 +48,7 @@
                                     <th scope="col">{{ __('Name') }}</th>
                                     <th scope="col">{{ __('Description') }}</th>
                                     <th scope="col">{{ __('Creation date') }}</th>
-                                    @can('manage-items', App\User::class)
+                                    @can('manage-items', App\Model\User::class)
                                         <th scope="col"></th>
                                     @endcan
                                 </tr>
@@ -59,7 +59,7 @@
                                         <td>{{ $category->name }}</td>
                                         <td>{{ $category->description }}</td>
                                         <td>{{ $category->created_at->format('d/m/Y H:i') }}</td>
-                                        @can('manage-items', App\User::class)
+                                        @can('manage-items', App\Model\User::class)
                                             <td class="text-right">
                                                 @if (auth()->user()->can('update', $category) || auth()->user()->can('delete', $category))
                                                     <div class="dropdown">

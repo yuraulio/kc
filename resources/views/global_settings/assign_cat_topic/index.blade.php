@@ -7,7 +7,7 @@
                     {{ __('This is an example of categories management.') }}
                 </p>
             </div>
-            @can('create', App\Role::class)
+            @can('create', App\Model\Role::class)
                 <div class="col-4 text-right">
                     <a href="{{ route('category.create') }}" class="btn btn-sm btn-primary">{{ __('Assign') }}</a>
                 </div>
@@ -28,7 +28,7 @@
                     <th scope="col">{{ __('Description') }}</th>
                     <th scope="col">{{ __('Parent') }}</th>
                     <th scope="col">{{ __('Hours') }}</th>
-                    @can('manage-users', App\User::class)
+                    @can('manage-users', App\Model\User::class)
                         <th scope="col"></th>
                     @endcan
                 </tr>
@@ -40,7 +40,7 @@
                         <td>{{ $category->description }}</td>
                         <td>{{ $category->parent }}</td>
                         <td>{{ $category->hours }}</td>
-                        @can('manage-users', App\User::class)
+                        @can('manage-users', App\Model\User::class)
                             <td class="text-right">
                                 @can('update', $category)
                                     <div class="dropdown">
