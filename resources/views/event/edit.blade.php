@@ -234,28 +234,7 @@
                                                                             </div>
 
 
-                                                                            <div class="accordion" id="accordionExample">
-                                                                                @foreach($allTopicsByCategory1 as $topic)
-                                                                                <div id="inst_{{$topic[0]['id']}}" class="card">
-                                                                                    <div class="card-header" id="headingOne" data-toggle="collapse" data-target="#collapseOne1" aria-expanded="true" aria-controls="collapseOne">
-                                                                                        <h5 class="mb-0">{{$topic[0]['title']}}</h5>
-                                                                                    </div>
 
-                                                                                    <div id="collapseOne1" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-                                                                                        <div class="card-body">
-                                                                                            <ul>
-                                                                                                @foreach($topic[0]->lessons as $lesson)
-                                                                                                <li>
-
-                                                                                                <?= $lesson['title'] ?>
-                                                                                                </li>
-                                                                                                @endforeach
-                                                                                            </ul>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                @endforeach
-                                                                            </div>
 
 
 
@@ -328,15 +307,15 @@
 
                             <tbody id="topic_lessons" data-event-id="{{$event['id']}}">
                                 @foreach ($allTopicsByCategory1 as $topic)
-                                    <tr id="topic_{{$topic[0]->id}}">
+                                    <tr class="topic_{{$topic[0]->id}}">
                                         <td>{{ $topic[0]->title }}</td>
 
                                             <td>
                                                 @foreach($topic[0]->lessons as $lessons)
-                                                <tr id="topic_{{$topic[0]->id}}">
+                                                <tr class="topic_{{$topic[0]->id}}">
                                                     <td></td>
                                                     <td>{{ $lessons->title }}</td>
-                                                    <td id="lesson_{{ $lessons->id }}"><button type="button" class="btn btn-block btn-primary btn-sm open_modal">Default</button></td>
+                                                    <td class="lesson_{{ $lessons->id }}"><button type="button" class="btn btn-block btn-primary btn-sm open_modal">Default</button></td>
                                                 </tr>
                                                 @endforeach
                                             </td>
