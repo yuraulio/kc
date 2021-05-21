@@ -123,14 +123,7 @@
 
     <script>
         $( ".btn-group-toggle" ).change(function() {
-            function convertToSlug(Text)
-                {
-                    return Text
-                        .toLowerCase()
-                        .replace(/ /g,'-')
-                        .replace(/[^\w-]+/g,'')
-                        ;
-                }
+
             let status = $(this).find('label').hasClass('active')
             let id = $(this).find('label').data('topic-id')
             let event_id = $(this).find('label').data('event-id')
@@ -169,41 +162,62 @@
 
 
                                 if(data.request.status1 == "true"){
-                                    topic_row = `
-                                        <div id="inst_${data.lesson.id}" class="card">
-                                            <div class="card-header" id="headingOne" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                                <h5 class="mb-0">${data.lesson.title}</h5>
-                                            </div>
-                                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-                                                <div  class="card-body">
-                                                <ul >
-                                                </ul>
 
-                                                </div>
-                                            </div>
-                                    </div>
+                                        new_topic_row = `
+                                            <tr id="topic_${data.lesson.id}">
+                                                <td>${data.lesson.title}</td>
+
+                                            </tr>
                                         `
-                                    $('#accordionExample').append(topic_row)
+                                    $('#topic_lessons').append(new_topic_row)
+
+
+
+
                                     let b = $('#inst_'+data.lesson.id).find('ul')
 
                                     $.each( data.lesson['lessons'], function( key, value ) {
+                                        let id = 0
                                     $.each( value, function( key1, value1 ) {
+
                                         let title = ""
+
+                                        if(key1 == 'id')
+                                        {
+                                            id = value1;
+                                        }
+
                                         if(key1 == 'title'){
                                             title = value1;
                                             //alert(title)
                                             lesson_row =`
                                         <li>${title}</li>
                                         `
-                                        $(b).append(lesson_row)
+                                        //$(b).append(lesson_row)
+
+                                        new_topic_row = `
+                                        <tr id="topic_${data.lesson.id}">
+                                                <td></td>
+                                                <td>${title}</td>
+                                                <td id="${id}"><button type="button" class="btn btn-block btn-primary btn-sm open_modal">Default</button></td>
+                                            </tr>
+                                        `
+
+                                    $('#topic_lessons').append(new_topic_row)
+
+
                                         }
 
 
                                     });
                                 });
                                 }else{
-                                    alert('from remove')
-                                    $('#inst_'+data.lesson.id).remove()
+                                    //alert('from remove')
+                                    //$('#topic_'+data.lesson.id).remove()
+
+                                    $( '#topic_'+data.lesson.id ).each(function( index ) {
+                                        $('#topic_'+data.lesson.id).remove()
+                                        });
                                 }
 
 

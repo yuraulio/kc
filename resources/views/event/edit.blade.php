@@ -235,11 +235,6 @@
 
 
                                                                             <div class="accordion" id="accordionExample">
-
-
-
-
-                                                                                <?php //dd(); ?>
                                                                                 @foreach($allTopicsByCategory1 as $topic)
                                                                                 <div id="inst_{{$topic[0]['id']}}" class="card">
                                                                                     <div class="card-header" id="headingOne" data-toggle="collapse" data-target="#collapseOne1" aria-expanded="true" aria-controls="collapseOne">
@@ -260,13 +255,129 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 @endforeach
-
-
-
-
-
-
                                                                             </div>
+
+
+
+                                                                            <div class="table-responsive py-4">
+                        <table class="table align-items-center table-flush"  id="datatable-basic">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">{{ __('Topic') }}</th>
+                                    <th scope="col">{{ __('Lesson') }}</th>
+                                    <th scope="col">{{ __('Instructor') }}</th>
+                                    @if($event->type[0]['name'] == 'In-Class')
+                                        <th scope="col">{{ __('Date') }}</th>
+                                        <th scope="col">{{ __('Time starts') }}</th>
+                                        <th scope="col">{{ __('Time ends') }}</th>
+                                        <th scope="col">{{ __('Duration') }}</th>
+                                        <th scope="col">{{ __('Room') }}</th>
+                                        <th scope="col">{{ __('Priority') }}</th>
+                                    @endif
+
+                                    {{--@can('manage-users', App\User::class)
+                                        <th scope="col"></th>
+                                    @endcan--}}
+                                </tr>
+
+                            </thead>
+                            <?php //dd($allTopicsByCategory1); ?>
+                            <div class="row">
+  <div class="col-md-4">
+
+      <div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+    <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h6 class="modal-title" id="modal-title-default"></h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+
+                    <form>
+
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Select instructor</label>
+                        <select class="form-control" id="instFormControlSelect">
+                        <option>-</option>
+                        </select>
+                    </div>
+
+
+                    </form>
+
+
+
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-link  ml-auto" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+                            <tbody id="topic_lessons" data-event-id="{{$event['id']}}">
+                                @foreach ($allTopicsByCategory1 as $topic)
+                                    <tr id="topic_{{$topic[0]->id}}">
+                                        <td>{{ $topic[0]->title }}</td>
+
+                                            <td>
+                                                @foreach($topic[0]->lessons as $lessons)
+                                                <tr id="topic_{{$topic[0]->id}}">
+                                                    <td></td>
+                                                    <td>{{ $lessons->title }}</td>
+                                                    <td id="lesson_{{ $lessons->id }}"><button type="button" class="btn btn-block btn-primary btn-sm open_modal">Default</button></td>
+                                                </tr>
+                                                @endforeach
+                                            </td>
+
+
+                                        {{--@can('manage-users', App\User::class)
+                                            <td class="text-right">
+                                                @if (auth()->user()->can('update', $user) || auth()->user()->can('delete', $user))
+                                                    <div class="dropdown">
+                                                        <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            <i class="fas fa-ellipsis-v"></i>
+                                                        </a>
+                                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+
+                                                                @can('update', $user)
+                                                                    <a class="dropdown-item" href="{{ route('topics.edit_event', ['topic' => $topic, 'event_id' => $event['id']]) }}">{{ __('Edit') }}</a>
+                                                                @endcan
+                                                                @can('delete', $user)
+                                                                    <form action="{{ route('topics.destroy', $topic) }}" method="post">
+                                                                        @csrf
+                                                                        @method('delete')
+
+                                                                        <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
+                                                                            {{ __('Delete') }}
+                                                                        </button>
+                                                                    </form>
+                                                                @endcan
+
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            </td>
+                                        @endcan--}}
+                                    </tr>
+                                    @endforeach
+
+                            </tbody>
+                        </table>
+                    </div>
+
+
 
 
                                                                         </div>
@@ -323,4 +434,40 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
+
+    <script>
+        $(document).on('click','.open_modal',function(){
+            let id = 0
+            let elem = $(this).parent().attr('id');
+            elem = elem.split("_")
+            let topic_id = $(this).parent().parent().attr('id')
+            topic_id = topic_id.split("_")
+            const event_id = $('#topic_lessons').data('event-id')
+
+            data = {lesson_id:elem[1], topic_id:topic_id[1], event_id:event_id}
+            $.ajax({
+                type: 'POST',
+                headers: {
+                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+               },
+               Accept: 'application/json',
+                url: "/lesson/edit_instructor",
+                data:data,
+                success: function(data) {
+                    data = JSON.parse(data)
+                    console.log(data.instructors)
+                    $('#modal-title-default').text(data.lesson[0].title)
+
+                    $.each( data.instructors, function( key, value ) {
+                        $('#instFormControlSelect').append(`<option value="${value.id}">${value.title}</option>`)
+                    });
+
+
+
+                    $('#modal-default').modal('show');
+                }
+            });
+
+        });
+    </script>
 @endpush

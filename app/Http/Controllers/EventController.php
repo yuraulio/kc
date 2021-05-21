@@ -85,7 +85,9 @@ class EventController extends Controller
     public function assign_store(Request $request)
     {
 
-        $event = Event::find($request->event_id);
+        $event = Event::with('type')->find($request->event_id);
+
+        //dd($event);
 
         $allLessons = Topic::with('lessons')->find($request->topic_id);
 
@@ -107,7 +109,7 @@ class EventController extends Controller
 
         $data['request'] = $request->all();
         $data['lesson'] = $allLessons;
-
+        $data['event'] = $event;
         echo json_encode($data);
     }
 
@@ -179,9 +181,11 @@ class EventController extends Controller
         $types = Type::all();
 
         $allTopicsByCategory = Category::with('topics')->find($event->category[0]->id);
+
         //$allTopicsByCategory1 = $allTopicsByCategory->topic()->with('lessons')->get()->groupBy('id');
 
         $allTopicsByCategory1 = $event->topic()->with('lessons')->get()->groupBy('id');
+        //dd($allTopicsByCategory1);
 
 
 

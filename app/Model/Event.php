@@ -37,7 +37,7 @@ class Event extends Model
 
     public function topic()
     {
-        return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor');
+        return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->withPivot('instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority');
     }
 
 
