@@ -275,7 +275,7 @@
                                         <th scope="col">{{ __('Priority') }}</th>
                                     @endif
 
-                                    {{--@can('manage-users', App\User::class)
+                                    {{--@can('manage-users', App\Model\User::class)
                                         <th scope="col"></th>
                                     @endcan--}}
                                 </tr>
@@ -342,7 +342,7 @@
                                             </td>
 
 
-                                        {{--@can('manage-users', App\User::class)
+                                        {{--@can('manage-users', App\Model\User::class)
                                             <td class="text-right">
                                                 @if (auth()->user()->can('update', $user) || auth()->user()->can('delete', $user))
                                                     <div class="dropdown">

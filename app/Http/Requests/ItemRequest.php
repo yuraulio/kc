@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Tag;
-use App\Item;
+use App\Model\Tag;
+use App\Model\Item;
 use App\Model\Category;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
