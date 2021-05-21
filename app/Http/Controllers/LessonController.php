@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Model\Lesson;
 use App\Model\Topic;
 use App\Model\Type;
+use App\Model\Event;
+use App\Model\Instructor;
 use App\User;
 use App\Category;
 use Illuminate\Http\Request;
@@ -108,6 +110,23 @@ class LessonController extends Controller
 
 
         return view('lesson.edit', compact('lesson', 'topics', 'types'));
+    }
+
+    public function edit_instructor(Request $request)
+    {
+        $event = Event::with('topic')->find($request->event_id);
+
+        $lesson = $event->topic()->wherePivot('event_id', '=', $request->event_id)->wherePivot('topic_id', '=', $request->topic_id)->wherePivot('lesson_id', '=', $request->lesson_id)->get();
+
+        $instructors = Instructor::all();
+
+        $data['lesson'] = $lesson;
+        $data['instructors'] = $instructors;
+
+        echo json_encode($data);
+        //dd($find);
+        //dd('from edit instructor');
+        //return view('lesson.edit_instructor_modal');
     }
 
     /**

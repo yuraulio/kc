@@ -73,6 +73,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
     Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
 
+    //Edit Instructor
+    Route::post ('lesson/edit_instructor', ['as' => 'lesson.edit_instructor', 'uses' => 'LessonController@edit_instructor']);
+
 
 
     //Events
