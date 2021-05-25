@@ -47,7 +47,11 @@
 
                                 <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-status">{{ __('Status') }}</label>
-                                    <input type="number" name="status" id="input-status" class="form-control{{ $errors->has('status') ? ' is-invalid' : '' }}" placeholder="{{ __('Status') }}" value="{{ old('status', $instructor->status) }}" autofocus>
+                                    <select name="status" id="input-status" class="form-control" placeholder="{{ __('Status') }}" >
+                                        <option value="">-</option>
+                                            <option <?= ($instructor['status'] == 1) ? 'selected="selected"' : ''; ?> value="1">{{ __('Enable') }}</option>
+                                            <option <?= ($instructor['status'] == 0) ? 'selected="selected"' : ''; ?> value="0">{{ __('Disable') }}</option>
+                                    </select>
 
                                     @include('alerts.feedback', ['field' => 'status'])
                                 </div>
@@ -106,12 +110,12 @@
                                     <input type="text" name="ext_url" id="input-ext_url" class="form-control{{ $errors->has('ext_url') ? ' is-invalid' : '' }}" placeholder="{{ __('External url') }}" value="{{ old('ext_url', $instructor->ext_url) }}"autofocus>
 
                                     @include('alerts.feedback', ['field' => 'ext_url'])
-                                </div>                               
+                                </div>
                                     <input type="hidden" name="creator_id" id="input-creator_id" class="form-control" value="{{$instructor->creator_id}}">
                                     <input type="hidden" name="author_id" id="input-author_id" class="form-control" value="{{$instructor->author_id}}">
 
                                     @include('alerts.feedback', ['field' => 'ext_url'])
-                                
+
 
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>

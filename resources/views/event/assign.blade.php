@@ -158,7 +158,6 @@ let isValid = [];
 
     $('#assign_form').submit(function() {
     // DO STUFF...
-    alert('before submit')
     let new_data = []
     $('.custom-select option:selected').each(function(e) {
         let lesson_name = $(this).closest('.custom-select').attr("id")

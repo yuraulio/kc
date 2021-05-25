@@ -1,8 +1,4 @@
-   <div class="container-fluid mt--6">
-        <div class="row">
-            <div class="col">
-                <div class="card">
-                    <div class="card-header">
+
                         <div class="row align-items-center">
                             <div class="col-8">
                                 <h3 class="mb-0">{{ __('Benefits') }}</h3>
@@ -16,7 +12,7 @@
                                 </div>
                             @endcan
                         </div>
-                    </div>
+
 
                     <div class="table-responsive py-4">
                         <table class="table align-items-center table-flush"  id="datatable-basic">
@@ -74,9 +70,6 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </div>
-        </div>
 
         <!-- Modal -->
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -99,8 +92,6 @@
         </div>
         </div>
 
-        @include('layouts.footers.auth')
-    </div>
 
 
 @push('css')

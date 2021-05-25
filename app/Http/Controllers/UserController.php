@@ -66,17 +66,39 @@ class UserController extends Controller
        $user = Auth::user();
 
        $user_id = $request->user_id;
-       $event_ids = $request->event_id;
 
+       if($request->event_id != null){
 
-       if($event_ids != null){
-           foreach($event_ids as $event_id){
-                $event = Event::find($event_id);
-                $event->user()->attach($user_id,['user_id'=> $user_id]);
-            }
+            $event = Event::find($request->event_id);
+            $event->user()->attach($user_id,['user_id'=> $user_id]);
        }
 
         return redirect()->route('user.index')->withStatus(__('Course successfully assiged to user.'));
+    }
+
+    public function edit_ticket(Request $request)
+    {
+        $user = Auth::user();
+
+        $event = Event::with('ticket')->find($request->event_id);
+
+
+
+        return view('users.courses.edit_ticket', ['events' => $event ,'user' => $user]);
+    }
+
+    public function store_ticket()
+    {
+
+    }
+
+    public function assignEventToUserRemove($id)
+    {
+        $user = Auth::user();
+
+        $a = $user->events()->wherePivot('event_id', '=', $id)->detach($id);
+
+        return redirect()->route('user.index')->withStatus(__('Course successfully unassiged from user.'));
     }
 
     /**
@@ -105,9 +127,9 @@ class UserController extends Controller
      */
     public function edit(User $user, Role $model)
     {
-        $events1 = Event::all();
+        $events1 = Event::with('users')->get();
 
-        return view('users.edit', ['events' => $events1 ,'user' => $user->load('role', 'events'), 'roles' => $model->all()]);
+        return view('users.edit', ['events' => $events1 ,'user' => $user->load('role'), 'roles' => $model->all()]);
     }
 
 

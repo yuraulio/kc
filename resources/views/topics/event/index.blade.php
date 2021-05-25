@@ -1,9 +1,6 @@
 
 
-    <div class="container-fluid mt--6">
-        <div class="row">
-            <div class="col">
-                <div class="card">
+
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col-8">
@@ -97,12 +94,7 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </div>
-        </div>
 
-        @include('layouts.footers.auth')
-    </div>
 
 
 @push('css')
@@ -141,14 +133,15 @@
                 data:data,
                 success: function(data) {
                     data = JSON.parse(data)
-                    console.log(data.event.type[0].name)
+                    console.log(data)
+                    let event_type = data.event.type[0].name
                     let e = $('.'+data.request.topic_id).find('label')
 
 
                         if(data.request.status1 == "true")
                         {
-                                    $(e).text('Unassign')
-                                    $(e).append('<input type="checkbox" checked="" autocomplete="off">')
+                            $(e).text('Unassign')
+                            $(e).append('<input type="checkbox" checked="" autocomplete="off">')
 
 
                         }
@@ -160,59 +153,67 @@
 
                         }
 
-
+                                let row = ``
                                 if(data.request.status1 == "true"){
+
+                                    if(event_type == 'In-Class')
+                                    {
+                                        $row = `
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        `
+                                    }
 
                                         new_topic_row = `
                                             <tr class="topic_${data.lesson.id}">
-                                                <td>${data.lesson.title}</td>
-                                                <td></td>
-                                                <td></td>
+                                                <th rowspan="${data.lesson.lessons.length}">${data.lesson.title}</td>
 
                                             </tr>
                                         `
                                     $('#topic_lessons').append(new_topic_row)
-
-
 
 
                                     let b = $('#inst_'+data.lesson.id).find('ul')
 
                                     $.each( data.lesson['lessons'], function( key, value ) {
                                         let id = 0
-                                    $.each( value, function( key1, value1 ) {
+                                        $.each( value, function( key1, value1 ) {
 
-                                        let title = ""
+                                            let title = ""
 
-                                        if(key1 == 'id')
-                                        {
-                                            id = value1;
-                                        }
+                                            if(key1 == 'id')
+                                            {
+                                                id = value1;
+                                            }
 
-                                        if(key1 == 'title'){
-                                            title = value1;
-                                            //alert(title)
-                                            lesson_row =`
-                                        <li>${title}</li>
-                                        `
-                                        //$(b).append(lesson_row)
+                                            if(key1 == 'title'){
+                                                title = value1;
+                                                //alert(title)
+                                                lesson_row =`
+                                                    <li>${title}</li>
+                                                    `
+                                            //$(b).append(lesson_row)
 
-                                        new_topic_row = `
-                                        <tr class="topic_${data.lesson.id}">
-                                                <td></td>
-                                                <td>${title}</td>
-                                                <td class="${id}"><button type="button" class="btn btn-block btn-primary btn-sm open_modal">Default</button></td>
-                                            </tr>
-                                        `
+                                            new_topic_row = `
 
-                                    $('#topic_lessons').append(new_topic_row)
+                                                    <td>${title}</td>
+                                                    <td id="inst_lesson_${id}"></td>
+                                                    `+row+`
 
+                                            `
 
-                                        }
+                                            $('.topic_'+data.lesson.id).append(new_topic_row)
 
 
+                                            }
+
+
+                                        });
                                     });
-                                });
                                 }else{
                                     $( '.topic_'+data.lesson.id ).each(function( index ) {
                                         $('.topic_'+data.lesson.id).remove()

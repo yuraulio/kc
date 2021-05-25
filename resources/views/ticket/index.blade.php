@@ -1,9 +1,5 @@
 
-    <div class="container-fluid mt--6">
-        <div class="row">
-            <div class="col">
-                <div class="card">
-                    <div class="card-header">
+
                         <div class="row align-items-center">
                             <div class="col-8">
                                 <h3 class="mb-0">{{ __('Tickets') }}</h3>
@@ -17,7 +13,7 @@
                                 </div>
                             @endcan
                         </div>
-                    </div>
+
 
                     <div class="table-responsive py-4">
                         <table class="table align-items-center table-flush"  id="datatable-basic">
@@ -26,7 +22,8 @@
                                     <th scope="col">{{ __('Title') }}</th>
                                     <th scope="col">{{ __('Subtitle') }}</th>
                                     <th scope="col">{{ __('Type') }}</th>
-                                    <th scope="col">{{ __('features') }}</th>
+                                    <th scope="col">{{ __('Features') }}</th>
+                                    <th scope="col">{{ __('Quantity') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
                                     @can('manage-users', App\Model\User::class)
                                         <th scope="col"></th>
@@ -34,13 +31,14 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            <?php //dd($tickets); ?>
+                            <?php //dd($event->ticket); ?>
                                 @foreach ($event->ticket as $ticket)
                                     <tr>
                                         <td>{{ $ticket->title }}</td>
                                         <td>{{ $ticket->subtitle }}</td>
                                         <td>{{ $ticket->type }}</td>
                                         <td>{{ $ticket->features }}</td>
+                                        <td>{{ $ticket->pivot->quantity }}</td>
 
                                         <td>{{ date_format($ticket->created_at, 'Y-m-d' ) }}</td>
 					                    @can('manage-users', App\Model\User::class)
@@ -76,9 +74,7 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </div>
-        </div>
+
 
         <!-- Modal -->
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -101,8 +97,7 @@
         </div>
         </div>
 
-        @include('layouts.footers.auth')
-    </div>
+
 
 
 @push('css')

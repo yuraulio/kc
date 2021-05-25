@@ -40,23 +40,23 @@ class EventController extends Controller
         return view('event.assign_ticket', ['user' => $user, 'event' => $event, 'tickets' => $tickets]);
     }
 
-    public function assign(Request $request)
-    {
-        $this->authorize('manage-users', User::class);
-        $user = Auth::user();
-        $event = Event::with('type', 'category')->find($request->id);
+    // public function assign(Request $request)
+    // {
+    //     $this->authorize('manage-users', User::class);
+    //     $user = Auth::user();
+    //     $event = Event::with('type', 'category')->find($request->id);
 
-        $topics = [];
-        foreach($event->category as $category){
-            foreach($category->topics as $topic){
-                $topics[$topic->id] = $topic;
-            }
-        }
+    //     $topics = [];
+    //     foreach($event->category as $category){
+    //         foreach($category->topics as $topic){
+    //             $topics[$topic->id] = $topic;
+    //         }
+    //     }
 
-        $instructors = Instructor::all();
-        //dd($instructors);
-        return view('event.assign', ['user' => $user, 'event' => $event, 'topics' => $topics, 'instructors' => $instructors]);
-    }
+    //     $instructors = Instructor::all();
+    //     //dd($instructors);
+    //     return view('event.assign', ['user' => $user, 'event' => $event, 'topics' => $topics, 'instructors' => $instructors]);
+    // }
 
     public function assign_ticket_store(Request $request, $event_id)
     {
@@ -176,7 +176,7 @@ class EventController extends Controller
     {
         $user = Auth::user();
         $id = $event['id'];
-        $event = $event->with('category', 'summary', 'benefits', 'ticket', 'city', 'venues', 'topic')->find($id);
+        $event = $event->with('category', 'summary', 'benefits', 'ticket', 'city', 'venues', 'topic', 'users')->find($id);
         $categories = Category::all();
         $types = Type::all();
 
@@ -185,8 +185,6 @@ class EventController extends Controller
         //$allTopicsByCategory1 = $allTopicsByCategory->topic()->with('lessons')->get()->groupBy('id');
 
         $allTopicsByCategory1 = $event->topic()->with('lessons')->get()->groupBy('id');
-        //dd($allTopicsByCategory1);
-
 
 
         return view('event.edit', compact('event', 'categories', 'types', 'user', 'allTopicsByCategory', 'allTopicsByCategory1'));

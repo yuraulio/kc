@@ -46,6 +46,10 @@ Route::group(['middleware' => 'auth'], function () {
 
     //User
     Route::post('user/assignEventToUserCreate', ['as' => 'user.assignToCourse', 'uses' => 'UserController@assignEventToUserCreate']);
+    Route::get('user/assignEventToUserRemove/{id}', ['as' => 'user.unassignToCourse', 'uses' => 'UserController@assignEventToUserRemove']);
+    Route::get('user/edit_ticket', ['as' => 'user.edit_ticket', 'uses' => 'UserController@edit_ticket']);
+
+    Route::get('user/store_ticket', ['as' => 'user.store_ticket', 'uses' => 'UserController@store_ticket']);
 
     //Custom Ticket
     //ticket.edit
@@ -61,6 +65,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('topics/create_event', ['as' => 'topics.create_event', 'uses' => 'TopicController@create_event']);
     Route::post('topics/store_event', ['as' => 'topics.store_event', 'uses' => 'TopicController@store_event']);
 
+    //Custom unssign user from event
+
+    Route::post('user/store_event', ['as' => 'topics.store_event', 'uses' => 'TopicController@store_event']);
 
     // Route::get('role/delete/{id}', ['as' => 'role.delete', 'uses' => 'RoleController@delete']);
 
@@ -75,6 +82,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     //Edit Instructor
     Route::post ('lesson/edit_instructor', ['as' => 'lesson.edit_instructor', 'uses' => 'LessonController@edit_instructor']);
+    Route::post ('lesson/save_instructor', ['as' => 'lesson.save_instructor', 'uses' => 'LessonController@save_instructor']);
+    Route::post ('lesson/destroy_from_topic', ['as' => 'lesson.destroy_from_topic', 'uses' => 'LessonController@destroy_from_topic']);
+
 
 
 
@@ -85,7 +95,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('notification', ['as' => 'notification.show', 'uses' => 'NotificationController@index']);
 
     //Event_view
-    Route::get('events/{id}', ['as' => 'events.assign', 'uses' => 'EventController@assign']);
+    //Route::get('events/{id}', ['as' => 'events.assign', 'uses' => 'EventController@assign']);
     Route::post('events/assign_store', ['as' => 'events.assign_store', 'uses' => 'EventController@assign_store']);
 
     //Event assign ticket
