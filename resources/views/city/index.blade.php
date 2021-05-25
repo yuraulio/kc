@@ -1,12 +1,7 @@
 
-    <div class="container-fluid mt--6">
-        <div class="row">
-            <div class="col">
-                <div class="card">
-                    <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col-8">
-                                <h3 class="mb-0">{{ __('Types') }}</h3>
+                                <h3 class="mb-0">{{ __('City') }}</h3>
                                 <p class="text-sm mb-0">
                                         {{ __('This is an example of Type management.') }}
                                     </p>
@@ -17,7 +12,7 @@
                                 </div>
                             @endcan
                         </div>
-                    </div>
+
 
                     <div class="col-12 mt-2">
                         @include('alerts.success')
@@ -73,12 +68,6 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        @include('layouts.footers.auth')
-    </div>
 
 @push('css')
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css">

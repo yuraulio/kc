@@ -1,8 +1,4 @@
-<div class="container-fluid mt--6">
-        <div class="row">
-            <div class="col">
-                <div class="card">
-                    <div class="card-header">
+
                         <div class="row align-items-center">
                             <div class="col-8">
                                 <h3 class="mb-0">{{ __('Venues') }}</h3>
@@ -16,7 +12,7 @@
                                 </div>
                             @endcan
                         </div>
-                    </div>
+
 
                     <div class="col-12 mt-2">
                         @include('alerts.success')
@@ -83,9 +79,7 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </div>
-        </div>
+
 
         <!-- Modal -->
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -108,5 +102,3 @@
         </div>
         </div>
 
-        @include('layouts.footers.auth')
-    </div>

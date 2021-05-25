@@ -68,7 +68,11 @@
 
                                 <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-status">{{ __('Status') }}</label>
-                                    <input type="number" name="status" id="input-status" class="form-control{{ $errors->has('status') ? ' is-invalid' : '' }}" placeholder="{{ __('status') }}" autofocus>
+                                    <select name="status" id="input-status" class="form-control" placeholder="{{ __('Status') }}" >
+                                        <option value="">-</option>
+                                            <option value="1">{{ __('Enable') }}</option>
+                                            <option value="0">{{ __('Disable') }}</option>
+                                    </select>
 
                                     @include('alerts.feedback', ['field' => 'status'])
                                 </div>

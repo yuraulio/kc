@@ -33,7 +33,7 @@ class Topic extends Model
 
     public function event_topic()
     {
-        return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->withPivot('instructor_id');
+        return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->withPivot('event_id','lesson_id','instructor_id');
     }
 
 }

@@ -48,7 +48,6 @@
                                     <th scope="col">{{ __('Title') }}</th>
                                     <th scope="col">{{ __('Assigned to Category') }}</th>
                                     <th scope="col">{{ __('Assigned to Type') }}</th>
-                                    <th scope="col">{{ __('Assigned to Topic/Lesson/instructor') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
                                     @can('manage-users', App\Model\User::class)
                                         <th scope="col"></th>
@@ -70,12 +69,6 @@
                                         @foreach($event->type as $type)
                                             {{ $type->name }}
                                         @endforeach
-                                        </td>
-                                        <td>
-                                            <!-- Button trigger modal -->
-                                            <a href="events/{{$event->id}}" id="assignButton" data-event-id={{$event->id}} class="btn btn-primary btn-sm">
-                                                Assign
-                                            </a>
                                         </td>
                                         <td>{{ date_format($event->created_at, 'Y-m-d' ) }}</td>
 					                    @can('manage-users', App\Model\User::class)

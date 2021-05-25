@@ -60,7 +60,7 @@
                                 @foreach ($instructors as $instructor)
                                     <tr>
                                         <td>{{ $instructor->priority }}</td>
-                                        <td>{{ $instructor->status }}</td>
+                                        <td><?= ($instructor->status == 0) ? 'Disabled' : 'Enabled';  ?></td>
                                         <td>{{ $instructor->title }}</td>
                                         <td>{{ $instructor->summary }}</td>
                                         <td>{{ date_format($instructor->created_at, 'Y-m-d' ) }}</td>

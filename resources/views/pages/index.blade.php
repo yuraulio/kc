@@ -5,10 +5,10 @@
 ])
 
 @section('content')
-    @component('layouts.headers.auth') 
+    @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
-            @slot('title') 
-                {{ __('Examples') }} 
+            @slot('title')
+                {{ __('Examples') }}
             @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('notification.show') }}">{{ __('Pages') }}</a></li>
@@ -35,7 +35,7 @@
                             @endcan
                         </div>
                     </div>
-                    
+
                     <div class="col-12 mt-2">
                         @include('alerts.success')
                         @include('alerts.errors')
@@ -53,7 +53,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            <?php //dd($pages); ?>
                                 @foreach ($pages as $page)
                                     <tr>
                                         <td>{{ $page->title }}</td>
@@ -97,7 +96,7 @@
                 </div>
             </div>
         </div>
-            
+
         @include('layouts.footers.auth')
     </div>
 @endsection
@@ -123,6 +122,6 @@
     $(document).ready(function () {
         alert('asd')
         $('.ckeditor').ckeditor();
-        
+
     });
 @endpush

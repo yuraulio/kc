@@ -14,6 +14,7 @@ use App\Model\Summary;
 use App\Model\Section;
 use App\Model\Benefit;
 use App\Model\Venue;
+use App\Model\User;
 
 class Event extends Model
 {
@@ -37,9 +38,8 @@ class Event extends Model
 
     public function topic()
     {
-        return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->withPivot('instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority');
+        return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->withPivot('lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority');
     }
-
 
     public function user()
     {
@@ -79,6 +79,11 @@ class Event extends Model
     public function venues()
     {
         return $this->belongsToMany(Venue::class, 'event_venue');
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'event_user');
     }
 
 }

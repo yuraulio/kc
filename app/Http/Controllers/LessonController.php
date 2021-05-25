@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Model\Lesson;
+use App\Model\Event;
 use App\Model\Topic;
 use App\Model\Type;
 use App\Model\User;
+use App\Model\Instructor;
 use App\Model\Category;
 use Illuminate\Http\Request;
 use App\Http\Requests\LessonRequest;
@@ -110,9 +112,48 @@ class LessonController extends Controller
         return view('lesson.edit', compact('lesson', 'topics', 'types'));
     }
 
+    public function save_instructor(Request $request)
+    {
+        //dd($request->all());
+        $start = null;
+        $end = null;
+        $date = null;
+        $topic = Topic::find($request->topic_id);
+
+        if($request->date != null){
+            $date = date('Y-m-d H:i:s', strtotime($request->date));
+            $date1 = date('Y-m-d', strtotime($request->date));
+        }
+
+        if($request->start != null){
+            $start = date('Y-m-d H:i:s', strtotime($date1." ".$request->start));
+        }
+
+        if($request->end != null){
+            $end = date('Y-m-d H:i:s', strtotime($date1." ".$request->end));
+        }
+
+
+        $topic->event_topic()->wherePivot('lesson_id', '=', $request->lesson_id)->wherePivot('event_id', '=', $request->event_id)->updateExistingPivot($request->topic_id,[
+            'priority' => $request->priority,
+            'date' => $date,
+            'room' => $request->room,
+            'duration' => $request->duration,
+            'instructor_id' => $request->instructor_id,
+            'time_starts' => $start,
+            'time_ends' => $end
+        ], false);
+
+        $data['instructor'] = Instructor::find($request->instructor_id);
+        $data['lesson_id'] = $request->lesson_id;
+
+        echo json_encode($data);
+
+    }
+
     public function edit_instructor(Request $request)
     {
-        $event = Event::with('topic')->find($request->event_id);
+        $event = Event::with('topic', 'type')->find($request->event_id);
 
         $lesson = $event->topic()->wherePivot('event_id', '=', $request->event_id)->wherePivot('topic_id', '=', $request->topic_id)->wherePivot('lesson_id', '=', $request->lesson_id)->get();
 
@@ -120,11 +161,12 @@ class LessonController extends Controller
 
         $data['lesson'] = $lesson;
         $data['instructors'] = $instructors;
+        $data['event'] = $event;
+        $data['topic_id'] = $request->topic_id;
+        $data['lesson_id'] = $request->lesson_id;
 
         echo json_encode($data);
-        //dd($find);
-        //dd('from edit instructor');
-        //return view('lesson.edit_instructor_modal');
+
     }
 
     /**
@@ -180,5 +222,15 @@ class LessonController extends Controller
         $lesson->delete();
 
         return redirect()->route('lessons.index')->withStatus(__('Lesson successfully deleted.'));
+    }
+
+    public function destroy_from_topic(Request $request)
+    {
+        //dd($request->all());
+        $topic = Topic::find($request->topic_id);
+        $topic->event_topic()->wherePivot('lesson_id', '=', $request->lesson_id)->wherePivot('event_id', '=', $request->event_id)->detach($request->topic_id);
+
+
+        return redirect()->route('events.index')->withStatus(__('Lesson successfully deleted.'));
     }
 }

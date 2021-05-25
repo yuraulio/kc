@@ -44,6 +44,26 @@
                         </a>
                         <div class="collapse show" id="navbar-accounts">
                             <ul class="nav nav-sm flex-column">
+                                @can('manage-users', App\Model\User::class)
+                                    <li class="nav-item  {{ $elementName == 'role-management' ? 'active' : '' }}">
+                                        <a href="{{ route('role.index') }}" class="nav-link">{{ __('Role Management') }}</a>
+                                    </li>
+                                @endcan
+                                @can('manage-users', App\Model\User::class)
+                                    <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
+                                        <a href="{{ route('user.index') }}" class="nav-link">{{ __('User Management') }}</a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link active" href="#navbar-menus" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-accounts">
+                            <i class="fab fa-laravel" style="color: #f4645f;"></i>
+                            <span class="nav-link-text" style="color: #f4645f;">{{ __('Menus') }}</span>
+                        </a>
+                        <div class="collapse show" id="navbar-menus">
+                            <ul class="nav nav-sm flex-column">
                                 <!-- @can('manage-users', App\Model\User::class)
                                     <li class="nav-item  {{ $elementName == 'role-management' ? 'active' : '' }}">
                                         <a href="{{ route('role.index') }}" class="nav-link">{{ __('Role Management') }}</a>
@@ -55,13 +75,8 @@
                                     </li>
                                 @endcan -->
                                 @can('manage-users', App\Model\User::class)
-                                    <li class="nav-item  {{ $elementName == 'role-management' ? 'active' : '' }}">
-                                        <a href="{{ route('role.index') }}" class="nav-link">{{ __('Role Management') }}</a>
-                                    </li>
-                                @endcan
-                                @can('manage-users', App\Model\User::class)
                                     <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
-                                        <a href="{{ route('user.index') }}" class="nav-link">{{ __('User Management') }}</a>
+                                        <a href="{{ route('user.index') }}" class="nav-link">{{ __('Header') }}</a>
                                     </li>
                                 @endcan
                             </ul>
@@ -129,11 +144,6 @@
                         </a>
                         <div class="collapse show" id="navbar-courses">
                             <ul class="nav nav-sm flex-column">
-                                @can('manage-users', App\Model\User::class)
-                                    <li class="nav-item  {{ $elementName == 'role-management' ? 'active' : '' }}">
-                                        <a href="{{ route('global.course_index') }}" class="nav-link">{{ __('Main') }}</a>
-                                    </li>
-                                @endcan
                                 @can('manage-users', App\Model\User::class)
                                     <li class="nav-item  {{ $elementName == 'role-management' ? 'active' : '' }}">
                                         <a href="{{ route('global.index') }}" class="nav-link">{{ __('Global settings') }}</a>

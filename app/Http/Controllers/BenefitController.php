@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Model\Benefit;
+use App\Model\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,7 +14,7 @@ class BenefitController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Benefit $model)
     {
         //
     }

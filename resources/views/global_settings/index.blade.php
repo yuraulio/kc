@@ -5,10 +5,10 @@
 ])
 
 @section('content')
-    @component('layouts.headers.auth') 
+    @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
-            @slot('title') 
-                {{ __('Examples') }} 
+            @slot('title')
+                {{ __('Examples') }}
             @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('role.index') }}">{{ __('Global Settings') }}</a></li>
@@ -20,10 +20,9 @@
         <div class="row">
             <div class="col">
             @include('global_settings.categories.index')
-            @include('global_settings.assign_cat_topic.index')
             </div>
         </div>
-            
+
         @include('layouts.footers.auth')
     </div>
 @endsection
