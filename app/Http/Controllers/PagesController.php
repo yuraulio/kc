@@ -32,8 +32,11 @@ class PagesController extends Controller
      */
     public function create()
     {
-        //
-        return view('pages.create');
+
+        $data['page'] = new Pages;
+        $data['templates'] = get_templates();
+
+        return view('admin.pages.create', $data);
     }
 
     /**
@@ -44,7 +47,14 @@ class PagesController extends Controller
      */
     public function store(PagesRequest $request, Pages $model)
     {
-        $model->create($request->all());
+
+      //  dd($request->all());
+        $input = $request->all();
+        unset($input['slug']);
+        $model = $model->create($input);
+         
+        $model->createSlug($request->slug);
+        $model->createMetas($input);
 
         return redirect()->route('pages.index')->withStatus(__('Page successfully created.'));
     }
@@ -59,7 +69,17 @@ class PagesController extends Controller
      */
     public function edit(Pages $page)
     {
-        return view('pages.edit', compact('page'));
+
+        $data['page'] = $page;
+        $data['templates'] = get_templates();
+        $data['slug'] = $page->slugable;
+        $data['metas'] = $page->metable;
+        
+        if($page->template == 'corporate_page'){
+            return view('admin.pages.create_corporate',$data);
+        }else{
+            return view('admin.pages.create',$data);            
+        }
     }
 
     /**

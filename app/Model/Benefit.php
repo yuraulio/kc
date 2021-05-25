@@ -21,4 +21,9 @@ class Benefit extends Model
     {
         return $this->morphedMany(Event::class, 'benefitable', 'benefitables');
     }
+
+    public function pages()
+    {
+        return $this->morphedMany(Event::class, 'benefitable', 'benefitables');
+    }
 }

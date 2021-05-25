@@ -97,6 +97,14 @@ Route::group(['middleware' => 'auth'], function () {
 
 
     Route::get('{page}', ['as' => 'page.index', 'uses' => 'PageController@index']);
+
+    /////Slug
+    Route::get('/slug/create/{slug}','SlugController@create');
+    Route::post('/slug/update/{slug}','SlugController@update');
+
+    /////Metas
+    Route::post('/metas/update/{metas}','MetasController@update')->name('metas.update');
+
 });
 
 

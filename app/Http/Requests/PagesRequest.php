@@ -25,9 +25,15 @@ class PagesRequest extends FormRequest
      */
     public function rules()
     {
+        /*
+'title' => [
+                'required', 'min:3', Rule::unique((new Pages)->getTable())->ignore($this->route()->page->id ?? null)
+            ],
+        */
+
         return [
             'title' => [
-                'required', 'min:3', Rule::unique((new Pages)->getTable())->ignore($this->route()->page->id ?? null)
+                'required', 'min:3'
             ],
             'content' => [
                 'required'
