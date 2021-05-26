@@ -56,7 +56,8 @@ class PagesController extends Controller
         $model->createSlug($request->slug);
         $model->createMetas($input);
 
-        return redirect()->route('pages.index')->withStatus(__('Page successfully created.'));
+        return redirect()->route('pages.edit',$model->id)->withStatus(__('Page successfully created.'));
+        //return redirect()->route('pages.index')->withStatus(__('Page successfully created.'));
     }
 
    

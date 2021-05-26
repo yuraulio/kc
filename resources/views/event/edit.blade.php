@@ -34,6 +34,7 @@
                 </div>
                 <div class="card shadow">
                     <div class="card-body">
+                    @include('admin.preview.preview',['slug' => isset($slug) ? $slug : null])
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
                                 <p class="description">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth.</p>
@@ -64,6 +65,10 @@
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-7-tab_inside" data-toggle="tab" href="#tabs-icons-text-7_inside" role="tab" aria-controls="tabs-icons-text-7_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Venue</a>
                                         </li>
 
+                                        <li class="nav-item">
+                                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab_inside" data-toggle="tab" href="#metas" role="tab" aria-controls="metas" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Metas</a>
+                                        </li>
+
                                     </ul>
                                 </div>
                                 <div class="card shadow">
@@ -85,7 +90,7 @@
                                                             @include('alerts.feedback', ['field' => 'priority'])
                                                         </div>
 
-
+                                                       
 
                                                         <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
                                                             <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
@@ -142,7 +147,7 @@
 
                                                             @include('alerts.feedback', ['field' => 'title'])
                                                         </div>
-
+                                                        @include('admin.slug.slug',['slug' => isset($slug) ? $slug : null])
                                                         <div class="form-group{{ $errors->has('htmlTitle') ? ' has-danger' : '' }}">
                                                             <label class="form-control-label" for="input-htmlTitle">{{ __('HTML Title') }}</label>
                                                             <input type="text" name="htmlTitle" id="input-htmlTitle" class="form-control{{ $errors->has('htmlTitle') ? ' is-invalid' : '' }}" placeholder="{{ __('HTML Title') }}" value="{{ old('Short title', $event->htmlTitle) }}" autofocus>
@@ -187,8 +192,11 @@
 
                                                         <div class="form-group{{ $errors->has('view_tpl') ? ' has-danger' : '' }}">
                                                             <label class="form-control-label" for="input-view_tpl">{{ __('View tpl') }}</label>
-                                                            <input type="text" name="view_tpl" id="input-view_tpl" class="form-control{{ $errors->has('view_tpl') ? ' is-invalid' : '' }}" placeholder="{{ __('View tpl') }}" value="{{ old('view_tpl', $event->view_tpl) }}"autofocus>
-
+                                                            <select name="view_tpl"  class="form-control" placeholder="{{ __('View tpl') }}">
+                                                                @foreach (get_templates('events') as $key => $template)
+                                                                    <option value="{{ $template }}" {{ $template == old('template',$event->view_tpl) ? 'selected' : '' }}>{{ $key }}</option>
+                                                                @endforeach
+                                                            </select>
                                                             @include('alerts.feedback', ['field' => 'view_tpl'])
                                                         </div>
                                                             <input type="hidden" name="creator_id" id="input-creator_id" class="form-control" value="{{$event->creator_id}}">
@@ -211,9 +219,14 @@
                                                 </div>
                                                 @include('summary.index')
                                             </div>
+                                            <div class="tab-pane fade" id="metas" role="tabpanel" aria-labelledby="tabs-icons-text-8-tab_inside">
+                                              
+                                                    @include('admin.metas.metas',['metas' => $metas])
+                                              
+                                            </div>
                                             <div class="tab-pane fade" id="tabs-icons-text-3_inside" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab_inside">
 
-                                                @include('benefit.index')
+                                            @include('admin.benefits.benefits',['model' => $event])
                                             </div>
 
                                             <div class="tab-pane fade show" id="tabs-icons-text-4_inside" role="tabpanel" aria-labelledby="tabs-icons-text-4-tab_inside">

@@ -62,6 +62,23 @@ class User extends Authenticatable
      */
     protected $hidden = ['password', 'remember_token'];
 
+
+    public function scopeSearchUsers($query, $search_term)
+    {
+       
+            $query->where(function ($query) use ($search_term) {
+                $search_term_str = '%'.implode("%", explode(" ", $search_term)).'%';
+                $query->where('email', 'like', $search_term_str)
+                    ->orWhere('firstname', 'like', $search_term_str)
+                    ->orWhere('lastname', 'like', $search_term_str);
+            });
+      
+
+        
+        return $query->select('id','firstname','lastname')->get();
+    }
+
+
    /**
      * Get the role of the user
      *

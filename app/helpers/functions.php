@@ -32,3 +32,19 @@ if (!function_exists('check_for_slug')) {
 
     }
 }
+
+if (!function_exists('get_status_by_slug')){
+
+    function get_status_by_slug($slug){
+
+        $slug = Slug::where('slug',$slug)->first();
+
+        if($slug){
+            return $slug->slugable->published;
+        }
+
+        return false;
+
+    }
+
+}

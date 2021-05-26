@@ -16,9 +16,16 @@ use App\Model\Benefit;
 use App\Model\Venue;
 use App\Model\User;
 
+use App\Traits\SlugTrait;
+use App\Traits\MetasTrait;
+use App\Traits\BenefitTrait;
+
 class Event extends Model
 {
     use HasFactory;
+    use SlugTrait;
+    use MetasTrait;
+    use BenefitTrait;
 
     protected $table = 'events';
 

@@ -137,6 +137,8 @@ class EventController extends Controller
     public function store(EventRequest $request, Event $model)
     {
         $event = $model->create($request->all());
+        $event->createSlug($request->slug);
+        $event->createMetas($request->all());
 
         if($request->category_id != null){
             $category = Category::find($request->category_id);
@@ -151,8 +153,8 @@ class EventController extends Controller
             $event->type()->attach([$request->type_id]);
         }
 
-
-        return redirect()->route('events.index')->withStatus(__('Event successfully created.'));
+        return redirect()->route('events.edit',$event->id)->withStatus(__('Event successfully created.'));
+        //return redirect()->route('events.index')->withStatus(__('Event successfully created.'));
     }
 
     /**
@@ -186,8 +188,17 @@ class EventController extends Controller
 
         $allTopicsByCategory1 = $event->topic()->with('lessons')->get()->groupBy('id');
 
+        $data['event'] = $event;
+        $data['categories'] = $categories;
+        $data['types'] = $types;
+        $data['user'] = $user;
+        $data['allTopicsByCategory'] = $allTopicsByCategory;
+        $data['allTopicsByCategory1'] = $allTopicsByCategory1;
+        $data['slug'] = $event->slugable;
+        $data['metas'] = $event->metable;
 
-        return view('event.edit', compact('event', 'categories', 'types', 'user', 'allTopicsByCategory', 'allTopicsByCategory1'));
+
+        return view('event.edit', $data);
     }
 
     /**

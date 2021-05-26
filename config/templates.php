@@ -11,6 +11,16 @@ return[
         'Corporate Page' => 'corporate_page',
         'Give Away' => 'give_away_page',
         'Subscription Page' => 'subscription_page',
+    ],
+
+    'events' => [
+        'Generic Event' => 'generic_event',
+        'Challenge - Debate Event' => 'challenge_debate',
+        'Elearning Event' => 'elearning_event',
+        'E-learning Free' => 'elearning_free',
+        'Event Free' => 'event_free',
+        'Event Free Coupon' => 'event_free_coupon',
+        'Elearning Pending' => 'elearning_pending',
     ]
 
 ];

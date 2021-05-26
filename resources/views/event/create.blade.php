@@ -43,7 +43,7 @@
 
                                     @include('alerts.feedback', ['field' => 'priority'])
                                 </div>
-
+                                
                                 <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
                                     <select name="category_id" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}">
@@ -85,7 +85,7 @@
 
                                     @include('alerts.feedback', ['field' => 'title'])
                                 </div>
-
+                                @include('admin.slug.slug',['slug' => isset($slug) ? $slug : null])
                                 <div class="form-group{{ $errors->has('htmlTitle') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-htmlTitle">{{ __('HTML title') }}</label>
                                     <input type="text" name="htmlTitle" id="input-htmlTitle" class="form-control{{ $errors->has('htmlTitle') ? ' is-invalid' : '' }}" placeholder="{{ __('HTML title') }}" value="{{ old('Short title') }}" autofocus>
@@ -129,7 +129,11 @@
                                 </div>
                                 <div class="form-group{{ $errors->has('view_tpl') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-view_tpl">{{ __('View tpl') }}</label>
-                                    <input type="text" name="view_tpl" id="input-view_tpl" class="form-control{{ $errors->has('view_tpl') ? ' is-invalid' : '' }}" placeholder="{{ __('View tpl') }}" value="{{ old('view_tpl') }}"autofocus>
+                                    <select name="view_tpl"  class="form-control" placeholder="{{ __('View tpl') }}">
+                                        @foreach (get_templates('events') as $key => $template)
+                                            <option value="{{ $template }}" {{ $template == old('template') ? 'selected' : '' }}>{{ $key }}</option>
+                                        @endforeach
+                                    </select>
 
                                     @include('alerts.feedback', ['field' => 'view_tpl'])
                                 </div>

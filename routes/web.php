@@ -15,11 +15,14 @@ Route::get('/', 'Auth\LoginController@showLoginForm')->name('welcome');
 
 Auth::routes();
 
-Route::get('dashboard', 'HomeController@index')->name('home');
+//Route::get('dashboard', 'HomeController@index')->name('home');
 Route::get('pricing', 'PageController@pricing')->name('page.pricing');
 Route::get('lock', 'PageController@lock')->name('page.lock');
 
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
+
+    Route::get('/','HomeController@index')->name('home');
+
     Route::resource('category', 'CategoryController', ['except' => ['show']]);
     Route::resource('tag', 'TagController', ['except' => ['show']]);
     Route::resource('item', 'ItemController', ['except' => ['show']]);
@@ -38,7 +41,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('section', 'SectionController', ['except' => ['show']]);
     Route::resource('ticket', 'TicketController', ['except' => ['show']]);
     Route::resource('summary', 'SummaryController', ['except' => ['show']]);
-    Route::resource('benefit', 'BenefitController', ['except' => ['show']]);
+    Route::resource('benefit', 'BenefitController', ['except' => ['show','index','edit','create']]);
     Route::resource('venue', 'VenueController', ['except' => ['show']]);
 
 
@@ -106,7 +109,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/events/fetchTopics', ['as' => 'events.fetchTopics', 'uses' => 'EventController@fetchTopics']);
 
 
-    Route::get('{page}', ['as' => 'page.index', 'uses' => 'PageController@index']);
+    Route::get('/pages/{page}', ['as' => 'page.index', 'uses' => 'PageController@index']);
 
     /////Slug
     Route::get('/slug/create/{slug}','SlugController@create');
@@ -114,6 +117,19 @@ Route::group(['middleware' => 'auth'], function () {
 
     /////Metas
     Route::post('/metas/update/{metas}','MetasController@update')->name('metas.update');
+
+
+    ///DashboardController
+    Route::get('/search-user/{search_term}','Dashboard\DashboardController@searchUser');
+
+});
+
+
+Route::group(['middleware' => ['preview','web']], function () {
+
+    Route::get('/test', function(){
+        return view('welcome');
+    });
 
 });
 

@@ -16,6 +16,10 @@ class Benefit extends Model
         'name', 'description', 'priority'
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime:d-m-Y',
+    ];
+
 
     public function events()
     {

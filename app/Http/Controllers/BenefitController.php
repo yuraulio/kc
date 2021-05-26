@@ -9,70 +9,36 @@ use Illuminate\Support\Facades\Auth;
 
 class BenefitController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Benefit $model)
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Request $request)
-    {
-        $event_id = $request->id;
-        $user = Auth::user();
-
-        return view('benefit.create', ['user' => $user, 'event_id' => $event_id]);
-    }
-
+    
+   
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Benefit $model)
+    public function store(Request $request,Benefit $benefit)
     {
-        //dd($request->all());
-        $benefit = $model->create($request->all());
-        $benefit->events()->attach(['benefitable_id' => $request->event_id]);
+       
+        $model = app($request->model_type);
+        $model = $model::find($request->model_id);
 
-        return redirect()->route('events.index')->withStatus(__('Benefit successfully created.'));
+        $input['name'] = $request->name;
+        $input['description'] = $request->description;
+        $input['priority'] = count($model->benefits) + 1;
+
+        $benefit = $benefit->create($input);
+        $model->benefits()->save($benefit);
+
+        return response()->json([
+            'success' => __('Benefit successfully created.'),
+            'benefit' => $benefit,
+        ]);
+
+        ///return redirect()->route('events.index')->withStatus(__('Benefit successfully created.'));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Model\Benefit  $benefit
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Benefit $benefit)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Model\Benefit  $benefit
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Benefit $benefit)
-    {
-        $user = Auth::user();
-        $id = $benefit['id'];
-        $benefit = $benefit->find($id);
-
-        return view('benefit.edit', compact('benefit'));
-    }
-
+    
     /**
      * Update the specified resource in storage.
      *
@@ -84,7 +50,11 @@ class BenefitController extends Controller
     {
         $benefit->update($request->all());
 
-        return redirect()->route('events.index')->withStatus(__('Benefit successfully updated.'));
+        return response()->json([
+            'success' => __('Benefit successfully updated.'),
+            'benefit' => $benefit,
+        ]);
+        //return redirect()->route('events.index')->withStatus(__('Benefit successfully updated.'));
     }
 
     /**

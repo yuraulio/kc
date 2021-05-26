@@ -29,6 +29,10 @@
       @endif
    </ul>
 </div>
+<div class="col-12 mt-2">
+                        @include('alerts.success')
+                        @include('alerts.errors')
+                    </div>
 <div class="tab-content" id="myTabContent">
    <div class="tab-pane fade show active" id="page" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
       @if(!$page->title)
@@ -65,25 +69,38 @@
                            <textarea name="content" id="input-content"  class="ckeditor form-control{{ $errors->has('content') ? ' is-invalid' : '' }}" placeholder="{{ __('Page editor') }}"  required autofocus>{{ old('content',$page->content) }}</textarea>
                            @include('alerts.feedback', ['field' => 'permissions'])
                         </div>
-                        <div class="text-center">
-                           <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
-                        </div>
+                       
                      </div>
                   </div>
                </div>
             </div>
             <div   class="col-xl-3 order-xl-1">
-               <div class="card">
+            <div class="card">
                   <div class="card-header">
+                     @include('admin.preview.preview',['slug' => isset($slug) ? $slug : null])
                      <div class="form-group{{ $errors->has('template') ? ' has-danger' : '' }}">
                         <label class="form-control-label" for="input-category_id">{{ __('Template') }}</label>
                         <select name="template" id="input-category_id" class="form-control" placeholder="{{ __('Template') }}">
                         @foreach ($templates as $key => $template)
-                        <option value="{{ $template }}" {{ $template == old($template,$page->template) ? 'selected' : '' }}>{{ $key }}</option>
+                        <option value="{{ $template }}" {{ $template == old('template',$page->template) ? 'selected' : '' }}>{{ $key }}</option>
                         @endforeach
                         </select>
                         @include('alerts.feedback', ['field' => 'template'])
                      </div>
+                     <div class="form-group{{ $errors->has('published') ? ' has-danger' : '' }}">
+                        <label class="form-control-label" for="input-category_id">{{ __('Published') }}</label>
+                        <select name="published" id="input-category_id" class="form-control" placeholder="{{ __('Published') }}">
+                        
+                        <option value="0" {{ 0 == old('published',$page->published) ? 'selected' : '' }}> Unpublished </option>
+                        <option value="1" {{ 1 == old('published',$page->published) ? 'selected' : '' }}> Published </option>
+                        </select>
+                        @include('alerts.feedback', ['field' => 'template'])
+                     </div>
+                     <div class="pl-lg-4">
+                     <div class="text-center">
+                           <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
+                        </div>
+                        </div>
                   </div>
                </div>
             </div>

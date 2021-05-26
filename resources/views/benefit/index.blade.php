@@ -3,14 +3,14 @@
                             <div class="col-8">
                                 <h3 class="mb-0">{{ __('Benefits') }}</h3>
                                 <p class="text-sm mb-0">
-                                        {{ __('This is an example of Benefits management.') }}
-                                    </p>
+                                    {{ __('This is an example of Benefits management.') }}
+                                </p>
                             </div>
-                            @can('create', App\Model\User::class)
-                                <div class="col-4 text-right">
-                                    <a href="{{ route('benefit.create', ['id' => $event['id']]) }}" class="btn btn-sm btn-primary">{{ __('Add benefit') }}</a>
-                                </div>
-                            @endcan
+                           
+                             <div class="col-4 text-right">
+                                 <a href="{{ route('benefit.create', ['id' => $event['id']]) }}" class="btn btn-sm btn-primary">{{ __('Add benefit') }}</a>
+                             </div>
+                         
                         </div>
 
 

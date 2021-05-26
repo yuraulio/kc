@@ -9,7 +9,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-search"></i></span>
                         </div>
-                        <input class="form-control" placeholder="{{ __('Search') }}" type="text">
+                        <input id="search-user" class="form-control" placeholder="{{ __('Search') }}" type="text">
                     </div>
                 </div>
                 <button type="button" class="close" data-action="search-close" data-target="#navbar-search-main" aria-label="Close">
@@ -244,3 +244,27 @@
         </div>
     </div>
 </nav>
+
+@push('js')
+
+    <script>
+        $(document).on('keyup',"#search-user",function(){
+            $.ajax({
+               
+   			    type: 'get', 
+   			    url: '/admin/search-user/' + $(this).val(),
+                
+   			    success: function (data) {
+                    
+   			    },
+   			    error: function() { 
+   			         //console.log(data);
+   			    }
+   			
+
+         })
+
+        })
+    </script>
+
+@endpush
