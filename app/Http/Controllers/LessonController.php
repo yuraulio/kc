@@ -224,13 +224,11 @@ class LessonController extends Controller
         return redirect()->route('lessons.index')->withStatus(__('Lesson successfully deleted.'));
     }
 
-    public function destroy_from_topic(Request $request)
+    public function remove_lesson(Request $request)
     {
-        //dd($request->all());
         $topic = Topic::find($request->topic_id);
         $topic->event_topic()->wherePivot('lesson_id', '=', $request->lesson_id)->wherePivot('event_id', '=', $request->event_id)->detach($request->topic_id);
 
-
-        return redirect()->route('events.index')->withStatus(__('Lesson successfully deleted.'));
+        echo json_encode($request->all());
     }
 }

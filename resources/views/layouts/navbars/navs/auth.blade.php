@@ -9,7 +9,11 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-search"></i></span>
                         </div>
+<<<<<<< HEAD
                         <input id="search-user" class="form-control" placeholder="{{ __('Search') }}" type="text">
+=======
+                        <input id="search" class="form-control" placeholder="{{ __('Search') }}" type="text">
+>>>>>>> f784f92911e7c4a79b56b1ad3f704301a4c31599
                     </div>
                 </div>
                 <button type="button" class="close" data-action="search-close" data-target="#navbar-search-main" aria-label="Close">
@@ -217,7 +221,7 @@
                                     <img src="" alt="{{auth()->user()->firstname}}" class="rounded-circle">
                                 @endif
 
-                                
+
                             </span>
                             <div class="media-body ml-2 d-none d-lg-block">
                                 <span class="mb-0 text-sm  font-weight-bold">{{ auth()->user()->name }}</span>

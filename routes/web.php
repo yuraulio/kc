@@ -43,6 +43,8 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
     Route::resource('summary', 'SummaryController', ['except' => ['show']]);
     Route::resource('benefit', 'BenefitController', ['except' => ['show','index','edit','create']]);
     Route::resource('venue', 'VenueController', ['except' => ['show']]);
+    Route::resource('partner', 'PartnerController', ['except' => ['show']]);
+    Route::resource('exams', 'ExamController', ['except' => ['show']]);
 
 
 
@@ -68,6 +70,12 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
     Route::get('topics/create_event', ['as' => 'topics.create_event', 'uses' => 'TopicController@create_event']);
     Route::post('topics/store_event', ['as' => 'topics.store_event', 'uses' => 'TopicController@store_event']);
 
+    //custom Partner (inside event)
+    Route::get('partner/index_event', ['as' => 'partner.index', 'uses' => 'PartnerController@index']);
+    Route::get('partner/edit_event', ['as' => 'partner.edit_event', 'uses' => 'PartnerController@edit_event']);
+    Route::get('partner/create_event', ['as' => 'partner.create_event', 'uses' => 'PartnerController@create_event']);
+    Route::post('partner/store_event', ['as' => 'partner.store_event', 'uses' => 'PartnerController@store_event']);
+
     //Custom unssign user from event
 
     Route::post('user/store_event', ['as' => 'topics.store_event', 'uses' => 'TopicController@store_event']);
@@ -85,8 +93,10 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
 
     //Edit Instructor
     Route::post ('lesson/edit_instructor', ['as' => 'lesson.edit_instructor', 'uses' => 'LessonController@edit_instructor']);
-    Route::post ('lesson/save_instructor', ['as' => 'lesson.save_instructor', 'uses' => 'LessonController@save_instructor']);
-    Route::post ('lesson/destroy_from_topic', ['as' => 'lesson.destroy_from_topic', 'uses' => 'LessonController@destroy_from_topic']);
+
+    Route::post ('lesson/remove_lesson', ['as' => 'lesson.remove_lesson', 'uses' => 'LessonController@remove_lesson']);
+
+    //Route::post('lesson/destroy_from_topic1', ['as' => 'lesson.destroy_from_topic1', 'uses' => 'LessonController@destroy_from_topic1']);
 
 
 

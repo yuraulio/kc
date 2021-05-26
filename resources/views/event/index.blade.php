@@ -44,8 +44,10 @@
                         <table class="table align-items-center table-flush"  id="datatable-basic">
                             <thead class="thead-light">
                                 <tr>
-                                    <th scope="col">{{ __('Status') }}</th>
+
                                     <th scope="col">{{ __('Title') }}</th>
+                                    <th scope="col">{{ __('Published') }}</th>
+                                    <th scope="col">{{ __('Status') }}</th>
                                     <th scope="col">{{ __('Assigned to Category') }}</th>
                                     <th scope="col">{{ __('Assigned to Type') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
@@ -57,8 +59,26 @@
                             <tbody>
                                 @foreach ($events as $event)
                                     <tr>
-                                        <td>{{ $event->status }}</td>
+
                                         <td>{{ $event->title }}</td>
+                                        <td>
+                                            @if($event->published == 0)
+                                                {{'Unpublished'}}
+                                            @elseif($event->published == 1)
+                                                {{'Published'}}
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($event->status == 0)
+                                                {{'Close'}}
+                                            @elseif($event->status == 1)
+                                                {{'Open'}}
+                                            @elseif($event->status == 2)
+                                                {{'Completed'}}
+                                            @elseif($event->status == 3)
+                                                {{'Soldout'}}
+                                            @endif
+                                        </td>
 
                                         <td>
                                         @foreach($event->category as $category)

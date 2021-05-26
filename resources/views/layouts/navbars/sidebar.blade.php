@@ -146,7 +146,7 @@
                             <ul class="nav nav-sm flex-column">
                                 @can('manage-users', App\Model\User::class)
                                     <li class="nav-item  {{ $elementName == 'role-management' ? 'active' : '' }}">
-                                        <a href="{{ route('global.index') }}" class="nav-link">{{ __('Global settings') }}</a>
+                                        <a href="{{ route('global.index') }}" class="nav-link">{{ __('Categories') }}</a>
                                     </li>
                                 @endcan
                                 @can('manage-users', App\Model\User::class)
@@ -192,12 +192,17 @@
                                 @endcan
                                 @can('manage-users', App\Model\User::class)
                                     <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
-                                        <a href="{{ route('section.index') }}" class="nav-link">{{ __('Section') }}</a>
+                                        <a href="{{ route('ticket.index') }}" class="nav-link">{{ __('Tickets') }}</a>
                                     </li>
                                 @endcan
                                 @can('manage-users', App\Model\User::class)
                                     <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
-                                        <a href="{{ route('ticket.index') }}" class="nav-link">{{ __('Tickets') }}</a>
+                                        <a href="{{ route('partner.index') }}" class="nav-link">{{ __('Partners') }}</a>
+                                    </li>
+                                @endcan
+                                @can('manage-users', App\Model\User::class)
+                                    <li class="nav-item {{ $elementName == 'exams-management' ? 'active' : '' }}">
+                                        <a href="{{ route('exams.index') }}" class="nav-link">{{ __('Exams') }}</a>
                                     </li>
                                 @endcan
                             </ul>

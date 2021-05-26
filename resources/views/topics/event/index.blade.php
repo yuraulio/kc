@@ -172,15 +172,18 @@
                                             <tr class="topic_${data.lesson.id}">
                                                 <th rowspan="${data.lesson.lessons.length}">${data.lesson.title}</td>
 
+
+
                                             </tr>
                                         `
                                     $('#topic_lessons').append(new_topic_row)
 
 
                                     let b = $('#inst_'+data.lesson.id).find('ul')
-
+                                    let i = 0
                                     $.each( data.lesson['lessons'], function( key, value ) {
                                         let id = 0
+
                                         $.each( value, function( key1, value1 ) {
 
                                             let title = ""
@@ -198,15 +201,45 @@
                                                     `
                                             //$(b).append(lesson_row)
 
-                                            new_topic_row = `
+                                            action_row = `
+                                            <td class="text-right">
+                                                <div class="dropdown">
+                                                    <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fas fa-ellipsis-v"></i>
+                                                    </a>
+                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow" style="">
+                                                        <a href="javascript:void(0)" id="open_modal" data-topic-id="topic_${data.lesson.id}" data-lesson-id="lesson_${id}" class="dropdown-item open_modal">Edit</a>
+                                                        <a href="javascript:void(0)" id="remove_lesson" data-topic-id="topic_${data.lesson.id}" data-lesson-id="lesson_${id}" class="dropdown-item">Delete</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            `
+
+
+
+                                            if(i == 0){
+                                                new_topic_row = `
 
                                                     <td>${title}</td>
                                                     <td id="inst_lesson_${id}"></td>
-                                                    `+row+`
+                                                    `+row+action_row+`
 
-                                            `
+                                                `
+                                                i++;
+                                                $('.topic_'+data.lesson.id).append(new_topic_row)
+                                            }else{
+                                                new_topic_row = `
+                                                    <tr class="topic_${data.lesson.id}">
+                                                    <td>${title}</td>
+                                                    <td id="inst_lesson_${id}"></td>
+                                                    `+row+action_row+`
 
-                                            $('.topic_'+data.lesson.id).append(new_topic_row)
+                                                    </tr>
+                                                `
+                                                $('#topic_lessons').append(new_topic_row)
+                                            }
+
+
 
 
                                             }

@@ -64,6 +64,12 @@
                                         <li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-7-tab_inside" data-toggle="tab" href="#tabs-icons-text-7_inside" role="tab" aria-controls="tabs-icons-text-7_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Venue</a>
                                         </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab_inside" data-toggle="tab" href="#tabs-icons-text-8_inside" role="tab" aria-controls="tabs-icons-text-8_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Partners</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-9-tab_inside" data-toggle="tab" href="#tabs-icons-text-9_inside" role="tab" aria-controls="tabs-icons-text-9_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Sections</a>
+                                        </li>
 
                                         <li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab_inside" data-toggle="tab" href="#metas" role="tab" aria-controls="metas" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Metas</a>
@@ -130,12 +136,25 @@
                                                             @include('alerts.feedback', ['field' => 'type_id'])
                                                         </div>
 
+                                                        <div class="form-group{{ $errors->has('published') ? ' has-danger' : '' }}">
+                                                            <label class="form-control-label" for="input-published">{{ __('Published') }}</label>
+                                                            <select name="published" id="input-published" class="form-control" placeholder="{{ __('Published') }}" >
+                                                                <option value="">-</option>
+                                                                    <option <?= ($event['published'] == 1) ? 'selected="selected"' : ''; ?> value="1">{{ __('Published') }}</option>
+                                                                    <option <?= ($event['published'] == 0) ? 'selected="selected"' : ''; ?> value="0">{{ __('Unpublished') }}</option>
+                                                            </select>
+
+                                                            @include('alerts.feedback', ['field' => 'published'])
+                                                        </div>
+
                                                         <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
                                                             <label class="form-control-label" for="input-status">{{ __('Status') }}</label>
                                                             <select name="status" id="input-status" class="form-control" placeholder="{{ __('Status') }}" >
                                                                 <option value="">-</option>
-                                                                    <option <?= ($event['status'] == 1) ? 'selected="selected"' : ''; ?> value="1">{{ __('Enable') }}</option>
-                                                                    <option <?= ($event['status'] == 0) ? 'selected="selected"' : ''; ?> value="0">{{ __('Disable') }}</option>
+                                                                    <option <?= ($event['status'] == 3) ? 'selected="selected"' : ''; ?> value="3">{{ __('Soldout') }}</option>
+                                                                    <option <?= ($event['status'] == 2) ? 'selected="selected"' : ''; ?> value="2">{{ __('Completed') }}</option>
+                                                                    <option <?= ($event['status'] == 1) ? 'selected="selected"' : ''; ?> value="1">{{ __('Open') }}</option>
+                                                                    <option <?= ($event['status'] == 0) ? 'selected="selected"' : ''; ?> value="0">{{ __('Close') }}</option>
                                                             </select>
 
                                                             @include('alerts.feedback', ['field' => 'status'])
@@ -266,13 +285,14 @@
 
                                                                     @foreach ($allTopicsByCategory1 as $topic1)
                                                                     <?php $i=0; ?>
+                                                                    <?php //dd(count($topic1));?>
                                                                     @foreach($topic1 as $topic)
 
                                                                     <tr class="topic_{{$topic->id}}">
 
 
                                                                             @if($i == 0)
-                                                                                <th rowspan="{{count($topic->lessons)}}">{{ $topic->title }}</th>
+                                                                                <th rowspan="{{count($topic1)}}">{{ $topic->title }}</th>
                                                                                 <?php $i++;?>
                                                                             @endif
                                                                     @foreach($topic->lessons as $lesson)
@@ -308,7 +328,8 @@
                                                                                                     @can('update', $user)
                                                                                                         <a href="javascript:void(0)" id="open_modal" data-topic-id="topic_{{$topic->id}}"  data-lesson-id="lesson_{{ $lesson->id }}" class="dropdown-item open_modal">{{ __('Edit') }}</a>
                                                                                                     @endcan
-                                                                                                    @can('delete', $user)
+                                                                                                    <a href="javascript:void(0)" id="remove_lesson" data-topic-id="topic_{{$topic->id}}"  data-lesson-id="lesson_{{ $lesson->id }}" class="dropdown-item">{{ __('Delete') }}</a>
+                                                                                                    {{--@can('delete', $user)
                                                                                                         <form action="{{ route('lesson.destroy_from_topic', [
                                                                                                                         'topic_id' => $topic->id,
                                                                                                                         'lesson_id'=> $lesson->id,
@@ -317,13 +338,13 @@
                                                                                                                         ) }}"
                                                                                                                         method="post">
                                                                                                             @csrf
-                                                                                                            @method('post')
 
+                                                                                                      @method('post')
                                                                                                             <button type="button" class="dropdown-item btn btn-primary btn-sm" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
                                                                                                                 {{ __('Delete') }}
                                                                                                             </button>
                                                                                                         </form>
-                                                                                                    @endcan
+                                                                                                    @endcan--}}
 
                                                                                             </div>
                                                                                         </div>
@@ -350,6 +371,12 @@
                                             </div>
                                             <div class="tab-pane fade" id="tabs-icons-text-7_inside" role="tabpanel" aria-labelledby="tabs-icons-text-7-tab_inside">
                                                 @include('venue.index')
+                                            </div>
+                                            <div class="tab-pane fade" id="tabs-icons-text-8_inside" role="tabpanel" aria-labelledby="tabs-icons-text-8-tab_inside">
+                                                @include('partner.event.index')
+                                            </div>
+                                            <div class="tab-pane fade" id="tabs-icons-text-9_inside" role="tabpanel" aria-labelledby="tabs-icons-text-9-tab_inside">
+                                                @include('section.index')
                                             </div>
                                         </div>
                                     </div>
@@ -508,6 +535,34 @@
 
             return time;
         }
+
+        $(document).on('click', '#remove_lesson', function() {
+            var confirmation = confirm("are you sure you want to remove the item?");
+            let elem = $(this).data('lesson-id');
+            elem = elem.split("_")
+            let topic_id = $(this).data('topic-id')
+            topic_id = topic_id.split("_")
+            const event_id = $('#topic_lessons').data('event-id')
+
+            console.log(elem[1])
+            console.log(topic_id[1])
+            console.log(event_id)
+
+            data = {lesson_id:elem[1], topic_id:topic_id[1], event_id:event_id}
+            $.ajax({
+                type : 'POST',
+                headers: {
+                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+               },
+               Accept: 'application/json',
+                url: "/lesson/remove_lesson",
+                data:data,
+                success: function(data){
+                    data = JSON.parse(data)
+                    $('#inst_lesson_'+data.lesson_id).parent().remove()
+                }
+            });
+        });
 
         $(document).on('click','#open_modal',function(){
             let id = 0

@@ -41,7 +41,7 @@ class TestimonialController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Testimonial $model)
+    public function store(TestimonialRequest $request, Testimonial $model)
     {
         $testimonial = $model->create($request->all());
 

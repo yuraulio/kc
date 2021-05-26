@@ -6,19 +6,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Event;
 
-class Section extends Model
+class Partner extends Model
 {
     use HasFactory;
 
-    protected $table = 'section_titles';
+    protected $table = 'partners';
 
     protected $fillable = [
-        'section', 'title', 'description'
+        'name'
     ];
 
     public function events()
     {
-        return $this->belongsToMany(Event::class, 'sectiontitles_event', 'event_id', 'section_title_id');
+        return $this->belongsToMany(Event::class, 'event_partner');
     }
-
 }
