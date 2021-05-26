@@ -40,7 +40,6 @@ class VenueController extends Controller
      */
     public function store(VenueRequest $request, Venue $model)
     {
-        //dd($request->all());
         $venue = $model->create($request->all());
 
         $venue->events()->attach($request->event_id);

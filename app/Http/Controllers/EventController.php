@@ -8,6 +8,7 @@ use App\Model\Topic;
 use App\Model\Ticket;
 use App\Model\Instructor;
 use App\Model\Category;
+use App\Model\Partner;
 use Illuminate\Http\Request;
 use App\Http\Requests\EventRequest;
 use Illuminate\Support\Facades\Auth;
@@ -176,9 +177,10 @@ class EventController extends Controller
     {
         $user = Auth::user();
         $id = $event['id'];
-        $event = $event->with('category', 'summary', 'benefits', 'ticket', 'city', 'venues', 'topic', 'users')->find($id);
+        $event = $event->with('category', 'summary', 'benefits', 'ticket', 'city', 'venues', 'topic', 'users', 'partners', 'sections')->find($id);
         $categories = Category::all();
         $types = Type::all();
+        $partners = Partner::all();
 
         $allTopicsByCategory = Category::with('topics')->find($event->category[0]->id);
 
@@ -187,7 +189,7 @@ class EventController extends Controller
         $allTopicsByCategory1 = $event->topic()->with('lessons')->get()->groupBy('id');
 
 
-        return view('event.edit', compact('event', 'categories', 'types', 'user', 'allTopicsByCategory', 'allTopicsByCategory1'));
+        return view('event.edit', compact('event', 'categories', 'types', 'user', 'allTopicsByCategory', 'allTopicsByCategory1', 'partners'));
     }
 
     /**

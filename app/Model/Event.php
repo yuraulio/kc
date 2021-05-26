@@ -15,6 +15,7 @@ use App\Model\Section;
 use App\Model\Benefit;
 use App\Model\Venue;
 use App\Model\User;
+use App\Model\Partner;
 
 class Event extends Model
 {
@@ -23,7 +24,7 @@ class Event extends Model
     protected $table = 'events';
 
     protected $fillable = [
-        'priority', 'status', 'title', 'htmlTitle', 'subtitle', 'header', 'summary', 'body', 'hours','author_id', 'creator_id', 'view_tpl', 'view_counter'
+        'priority', 'published', 'status', 'title', 'htmlTitle', 'subtitle', 'header', 'summary', 'body', 'hours','author_id', 'creator_id', 'view_tpl', 'view_counter'
     ];
 
     public function category()
@@ -68,7 +69,7 @@ class Event extends Model
 
     public function sections()
     {
-        return $this->belongsToMany(Section::class, 'sectiontitles_event');
+        return $this->belongsToMany(Section::class, 'sectiontitles_event', 'event_id', 'section_title_id');
     }
 
     public function benefits()
@@ -84,6 +85,11 @@ class Event extends Model
     public function users()
     {
         return $this->belongsToMany(User::class, 'event_user');
+    }
+
+    public function partners()
+    {
+        return $this->belongsToMany(Partner::class, 'event_partner');
     }
 
 }

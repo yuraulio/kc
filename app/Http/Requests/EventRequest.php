@@ -27,29 +27,32 @@ class EventRequest extends FormRequest
             'priority' => [
                 'numeric'
             ],
+            'published' => [
+                'boolean'
+            ],
             'status' => [
-                'numeric'
+                'digits:1'
             ],
             'title' => [
                 'required', 'min:3'
             ],
             'htmlTitle' => [
-                
+
             ],
             'subtitle' => [
-                
+
             ],
             'header' => [
-                
+
             ],
             'summary' => [
-                
+
             ],
             'body' => [
-                
+
             ],
             'hours' => [
-                'numeric' 
+                'numeric'
             ],
             'view_tpl' => [
 

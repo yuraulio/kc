@@ -9,7 +9,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-search"></i></span>
                         </div>
-                        <input class="form-control" placeholder="{{ __('Search') }}" type="text">
+                        <input id="search" class="form-control" placeholder="{{ __('Search') }}" type="text">
                     </div>
                 </div>
                 <button type="button" class="close" data-action="search-close" data-target="#navbar-search-main" aria-label="Close">
@@ -217,7 +217,7 @@
                                     <img src="" alt="{{auth()->user()->firstname}}" class="rounded-circle">
                                 @endif
 
-                                
+
                             </span>
                             <div class="media-body ml-2 d-none d-lg-block">
                                 <span class="mb-0 text-sm  font-weight-bold">{{ auth()->user()->name }}</span>
@@ -244,3 +244,12 @@
         </div>
     </div>
 </nav>
+
+@push('js')
+    <script>
+        $( "#search" ).keypress(function() {
+            let word = $(this).val()
+            console.log( word );
+        });
+    </script>
+@endpush

@@ -68,12 +68,25 @@
                                     @include('alerts.feedback', ['field' => 'type_id'])
                                 </div>
 
+                                <div class="form-group{{ $errors->has('published') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-published">{{ __('Published') }}</label>
+                                    <select name="published" id="input-published" class="form-control" placeholder="{{ __('Published') }}" >
+                                        <option value="">-</option>
+                                            <option value="1">{{ __('Published') }}</option>
+                                            <option value="0">{{ __('Unpublished') }}</option>
+                                    </select>
+
+                                    @include('alerts.feedback', ['field' => 'published'])
+                                </div>
+
                                 <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-status">{{ __('Status') }}</label>
                                     <select name="status" id="input-status" class="form-control" placeholder="{{ __('Status') }}" >
-                                        <option value="">-</option>
-                                            <option value="1">{{ __('Enable') }}</option>
-                                            <option value="0">{{ __('Disable') }}</option>
+                                            <option value="">-</option>
+                                            <option value="3">{{ __('Soldout') }}</option>
+                                            <option value="2">{{ __('Completed') }}</option>
+                                            <option value="1">{{ __('Open') }}</option>
+                                            <option value="0">{{ __('Close') }}</option>
                                     </select>
 
                                     @include('alerts.feedback', ['field' => 'status'])

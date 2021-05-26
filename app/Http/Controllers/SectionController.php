@@ -30,12 +30,11 @@ class SectionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         $user = Auth::user();
-        $events = Event::all();
 
-        return view('section.create', ['user' => $user, 'events' => $events]);
+        return view('section.create', ['user' => $user, 'event_id' => $request->id]);
     }
 
     /**
@@ -44,9 +43,14 @@ class SectionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SectionRequest $request ,Section $model)
     {
-        //
+        $event_id = $request->event_id;
+        $section = $model->create($request->all());
+        $event = Event::find($event_id);
+        $event->sections()->attach(['section_title_id' => $section['id']]);
+
+        return redirect()->route('events.edit', ['event' => $request->event_id])->withStatus(__('Event successfully created.'));
     }
 
     /**
@@ -66,9 +70,11 @@ class SectionController extends Controller
      * @param  \App\Model\Section  $section
      * @return \Illuminate\Http\Response
      */
-    public function edit(Section $section)
+    public function edit(Section $section, Request $request)
     {
-        //
+        $event_id = $request->id;
+
+        return view('section.edit', compact('section', 'event_id'));
     }
 
     /**
@@ -78,9 +84,11 @@ class SectionController extends Controller
      * @param  \App\Model\Section  $section
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Section $section)
+    public function update(SectionRequest $request, Section $section)
     {
-        //
+        $section->update($request->all());
+
+        return redirect()->route('events.edit', ['event' => $request->event_id])->withStatus(__('Section successfully updated.'));
     }
 
     /**

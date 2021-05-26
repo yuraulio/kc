@@ -1,18 +1,40 @@
+@extends('layouts.app', [
+    'title' => __('Exam Management'),
+    'parentSection' => 'laravel',
+    'elementName' => 'exam-management'
+])
 
+@section('content')
+    @component('layouts.headers.auth')
+        @component('layouts.headers.breadcrumbs')
+            @slot('title')
+                {{ __('Examples') }}
+            @endslot
+
+            <li class="breadcrumb-item"><a href="{{ route('exams.index') }}">{{ __('Exams Management') }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
+        @endcomponent
+    @endcomponent
+
+    <div class="container-fluid mt--6">
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col-8">
-                                <h3 class="mb-0">{{ __('Sections') }}</h3>
+                                <h3 class="mb-0">{{ __('Exams') }}</h3>
                                 <p class="text-sm mb-0">
-                                        {{ __('This is an example of Section management.') }}
+                                        {{ __('This is an example of Exam management.') }}
                                     </p>
                             </div>
                             @can('create', App\Model\User::class)
                                 <div class="col-4 text-right">
-                                    <a href="{{ route('section.create', ['id' => $event['id']]) }}" class="btn btn-sm btn-primary">{{ __('Add Section') }}</a>
+                                    <a href="{{ route('exams.create') }}" class="btn btn-sm btn-primary">{{ __('Add Exam') }}</a>
                                 </div>
                             @endcan
                         </div>
-
+                    </div>
 
                     <div class="col-12 mt-2">
                         @include('alerts.success')
@@ -23,24 +45,26 @@
                         <table class="table align-items-center table-flush"  id="datatable-basic">
                             <thead class="thead-light">
                                 <tr>
-                                    <th scope="col">{{ __('Section') }}</th>
-                                    <th scope="col">{{ __('Title') }}</th>
-                                    <th scope="col">{{ __('Description') }}</th>
+                                    <th scope="col">{{ __('Status') }}</th>
+                                    <th scope="col">{{ __('Exam Title') }}</th>
+                                    <th scope="col">{{ __('Event Subject') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
                                     @can('manage-users', App\Model\User::class)
                                         <th scope="col"></th>
                                     @endcan
                                 </tr>
                             </thead>
-
                             <tbody>
-                                @foreach ($event->sections as $section)
+                                @foreach ($exams as $exam)
                                     <tr>
-                                        <td>{{ $section->section }}</td>
-                                        <td>{{ $section->title }}</td>
-                                        <td>{{ $section->description }}</td>
-
-                                        <td>{{ date_format($section->created_at, 'Y-m-d' ) }}</td>
+                                        <td>{{ $exam->title }}</td>
+                                        <td>{{ $exam->answer }}</td>
+                                        <td>
+                                        @foreach($exam->category as $category)
+                                            {{$category->name}}
+                                        @endforeach
+                                        </td>
+                                        <td>{{ date_format($exam->created_at, 'Y-m-d' ) }}</td>
 					                    @can('manage-users', App\Model\User::class)
 					                        <td class="text-right">
                                                 @if (auth()->user()->can('update', $user) || auth()->user()->can('delete', $user))
@@ -51,10 +75,10 @@
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
 
                                                                 @can('update', $user)
-                                                                    <a class="dropdown-item" href="{{ route('section.edit', ['section' => $section, 'id' => $event['id']]) }}">{{ __('Edit') }}</a>
+                                                                    <a class="dropdown-item" href="{{ route('exams.edit', $exam) }}">{{ __('Edit') }}</a>
                                                                 @endcan
     							                                @can('delete', $user)
-        							                                <form action="{{ route('section.destroy', $section) }}" method="post">
+        							                                <form action="{{ route('exams.destroy', $exam) }}" method="post">
                                                                         @csrf
                                                                         @method('delete')
 
@@ -74,7 +98,13 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+        </div>
 
+        @include('layouts.footers.auth')
+    </div>
+@endsection
 
 @push('css')
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
