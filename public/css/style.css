@@ -10,3 +10,16 @@
 #tab_inside_tab li {
     margin-bottom: 15px;
 }
+
+/***** Search List *****/
+.search{
+    display: block!important;
+}
+.search-list{
+    background-color: #fff;
+    border-radius: 10px;
+}
+.search-list li{
+    cursor: pointer;
+    list-style: none;
+}

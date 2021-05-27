@@ -48,3 +48,20 @@ if (!function_exists('get_status_by_slug')){
     }
 
 }
+
+if (!function_exists('get_processor_config')){
+    function get_processor_config($processor_id){
+        $available_processors = config('processors')['processors'];
+        $processor_config = [];
+        if (!empty($available_processors)) {
+            foreach ($available_processors as $key => $row) {
+                
+                if (intval($key) == intval($processor_id)) {
+                    $processor_config = $row;
+                    break;
+                }
+            }
+        }
+        return $processor_config;
+    }
+}

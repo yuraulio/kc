@@ -114,6 +114,11 @@
                                         <a href="{{ route('user.index') }}" class="nav-link">{{ __('Media library') }}</a>
                                     </li>
                                 @endcan
+                                @can('manage-users', App\Model\User::class)
+                                    <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
+                                        <a href="{{ route('payments.index') }}" class="nav-link">{{ __('Payment Methods') }}</a>
+                                    </li>
+                                @endcan
                             </ul>
                         </div>
                     </li>

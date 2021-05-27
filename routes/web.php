@@ -46,9 +46,6 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
     Route::resource('partner', 'PartnerController', ['except' => ['show']]);
     Route::resource('exams', 'ExamController', ['except' => ['show']]);
 
-
-
-
     //User
     Route::post('user/assignEventToUserCreate', ['as' => 'user.assignToCourse', 'uses' => 'UserController@assignEventToUserCreate']);
     Route::get('user/assignEventToUserRemove/{id}', ['as' => 'user.unassignToCourse', 'uses' => 'UserController@assignEventToUserRemove']);
@@ -115,6 +112,8 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
     Route::get('events/ticket/{id}', ['as' => 'events.ticket', 'uses' => 'EventController@assign_ticket']);
     Route::post('events/assign_ticket/{id}', ['as' => 'events.assign_ticket_store', 'uses' => 'EventController@assign_ticket_store']);
 
+    //Event assign method
+    Route::post('events/assing-method/{event}','EventController@assignPaymentMethod')->name('event.assing-method');
 
     Route::post('/events/fetchTopics', ['as' => 'events.fetchTopics', 'uses' => 'EventController@fetchTopics']);
 
@@ -131,6 +130,13 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
 
     ///DashboardController
     Route::get('/search-user/{search_term}','Dashboard\DashboardController@searchUser');
+
+    ///PaymentMethods
+    Route::get('/payment-methods','Dashboard\PaymentMethodsController@index')->name('payments.index');
+    Route::get('/payment-methods/create','Dashboard\PaymentMethodsController@create')->name('payments.create');
+    Route::post('/payment-methods/store','Dashboard\PaymentMethodsController@store')->name('payments.store');
+    Route::get('/payment-methods/edit/{method}','Dashboard\PaymentMethodsController@edit')->name('payments.edit');
+    Route::post('/payment-methods/update/{method}','Dashboard\PaymentMethodsController@update')->name('payments.update');
 
 });
 

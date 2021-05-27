@@ -7,7 +7,7 @@
     </div>
 @endif
 
-<div id="success-message" class="alert alert-success alert-dismissible" style="display:none;" role="alert">
+<div id="success-message" class="alert alert-success alert-dismissible success-message" style="display:none;" role="alert">
         <p> </p>
         <button type="button" class="close-message close" aria-label="Close">
             <span aria-hidden="true">&times;</span>

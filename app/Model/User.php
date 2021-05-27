@@ -66,16 +66,16 @@ class User extends Authenticatable
     public function scopeSearchUsers($query, $search_term)
     {
        
-            $query->where(function ($query) use ($search_term) {
-                $search_term_str = '%'.implode("%", explode(" ", $search_term)).'%';
-                $query->where('email', 'like', $search_term_str)
-                    ->orWhere('firstname', 'like', $search_term_str)
-                    ->orWhere('lastname', 'like', $search_term_str);
-            });
+        $query->where(function ($query) use ($search_term) {
+            $search_term_str = '%'.implode("%", explode(" ", $search_term)).'%';
+            $query->where('email', 'like', $search_term_str)
+                ->orWhere('firstname', 'like', $search_term_str)
+                ->orWhere('lastname', 'like', $search_term_str);
+        });
       
 
         
-        return $query->select('id','firstname','lastname')->get();
+        return $query->select('id','firstname','lastname','email')->get();
     }
 
 

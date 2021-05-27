@@ -9,6 +9,7 @@ use App\Model\Ticket;
 use App\Model\Instructor;
 use App\Model\Category;
 use App\Model\Partner;
+use App\Model\PaymentMethod;
 use Illuminate\Http\Request;
 use App\Http\Requests\EventRequest;
 use Illuminate\Support\Facades\Auth;
@@ -104,14 +105,23 @@ class EventController extends Controller
                 break;
             }
 
-
-
         }
 
         $data['request'] = $request->all();
         $data['lesson'] = $allLessons;
         $data['event'] = $event;
         echo json_encode($data);
+    }
+
+    public function assignPaymentMethod(Request $request, Event $event)
+    {
+        $event->paymentMethod()->detach();
+        $event->paymentMethod()->attach($request->payment_method);
+
+        return response()->json([
+            'message' => 'Payment Method Changed'
+        ]);
+        
     }
 
     /**
@@ -179,7 +189,8 @@ class EventController extends Controller
     {
         $user = Auth::user();
         $id = $event['id'];
-        $event = $event->with('category', 'summary', 'benefits', 'ticket', 'city', 'venues', 'topic', 'users', 'partners', 'sections')->find($id);
+        $event = $event->with('category', 'summary', 'benefits', 'ticket', 'city', 'venues', 'topic', 'users', 'partners', 'sections','paymentMethod','slugable','metable')->find($id);
+        
         $categories = Category::all();
         $types = Type::all();
         $partners = Partner::all();
@@ -196,9 +207,9 @@ class EventController extends Controller
         $data['user'] = $user;
         $data['allTopicsByCategory'] = $allTopicsByCategory;
         $data['allTopicsByCategory1'] = $allTopicsByCategory1;
-        $data['slug'] = $event->slugable;
-        $data['metas'] = $event->metable;
-
+        $data['slug'] = $event['slugable'];
+        $data['metas'] = $event['metable'];
+        $data['methods'] = PaymentMethod::where('status',1)->get();
 
         return view('event.edit', $data);
     }

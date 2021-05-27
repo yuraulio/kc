@@ -34,11 +34,24 @@
                 </div>
                 <div class="card shadow">
                     <div class="card-body">
+                    <div class="col-12 mt-2">
+                                                    @include('alerts.success')
+                                                    @include('alerts.errors')
+                                                </div>
                     @include('admin.preview.preview',['slug' => isset($slug) ? $slug : null])
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
-                                <p class="description">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth.</p>
-                                <p class="description">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse.</p>
+                                <div class="form-group">
+                                    <label class="form-control-label" for="input-method">{{ __('Method Payment') }}</label>
+                                    <select name="payment_method" id="input-method" class="form-control" placeholder="{{ __('Method Payment') }}" required>
+                                        <option value="">-</option>
+                                        @foreach ($methods as $method) 
+                                            <option value="{{ $method->id }}" {{$event['paymentMethod']->first() && $event['paymentMethod']->first()->id ==$method->id ? 'selected' : ''}} >{{ $method->method_name }}</option>
+                                        @endforeach
+                                    </select>
+
+                                    @include('alerts.feedback', ['field' => 'payment_method'])
+                                </div>
                             </div>
                             <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
                                 <div class="nav-wrapper">
@@ -232,10 +245,7 @@
 
                                             </div>
                                             <div class="tab-pane fade" id="tabs-icons-text-2_inside" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab_inside">
-                                                <div class="col-12 mt-2">
-                                                    @include('alerts.success')
-                                                    @include('alerts.errors')
-                                                </div>
+                                               
                                                 @include('summary.index')
                                             </div>
                                             <div class="tab-pane fade" id="metas" role="tabpanel" aria-labelledby="tabs-icons-text-8-tab_inside">
@@ -681,4 +691,36 @@
 
         });
     </script>
+
+    <script>
+        $(document).on('change',"#input-method",function(){
+
+            if($(this).val()){
+                $.ajax({
+                    headers: {
+                       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+   			        type: 'POST', 
+   			        url: '/admin/events/assing-method/' + "{{$event->id}}",
+                    data: {'payment_method': $(this).val()},
+   			        success: function (data) {
+                        $(".success-message p").html(data.message);
+   	                    $(".success-message").show();
+
+                           setTimeout(function(){
+                            $(".close-message").click();
+                           }, 2000)
+
+   			        },
+   			        error: function() { 
+   			             //console.log(data);
+   			        }
+   			    });
+
+            }
+            
+
+        })
+    </script>
+
 @endpush

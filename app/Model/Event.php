@@ -99,4 +99,9 @@ class Event extends Model
         return $this->belongsToMany(Partner::class, 'event_partner');
     }
 
+    public function paymentMethod()
+    {
+        return $this->belongsToMany(PaymentMethod::class, 'paymentmethod_event');
+    }
+
 }
