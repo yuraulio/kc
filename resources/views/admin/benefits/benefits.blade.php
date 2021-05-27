@@ -17,10 +17,11 @@
             <th scope="col">{{ __('Description') }}</th>
             <th scope="col">{{ __('Priority') }}</th>
             <th scope="col">{{ __('Created at') }}</th>
+            <th scope="col"></th>
          </tr>
       </thead>
       <tbody class="benefit-body">
-         <?php //dd($event->benefitable); ?>
+         <?php //dd($model->benefits); ?>
          @if($model->benefits)
          @foreach ($model->benefits as $benefit)
          <tr>
@@ -89,7 +90,7 @@
    <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Modal titlew</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
@@ -104,7 +105,7 @@
                </div>
                <div class="form-group{{ $errors->has('description') ? ' has-danger' : '' }}">
                   <label class="form-control-label" for="edit-description">{{ __('Description') }}</label>
-                  <input type="text" name="description" id="edit-description" class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}" value="{{ old('description') }}" autofocus>
+                  <input type="text" name="description" id="edit-description1" class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}" value="{{ old('description') }}" autofocus>
                   @include('alerts.feedback', ['field' => 'description'])
                </div>
                <input type="text" id="benefit-id"  value="" hidden>
@@ -120,21 +121,21 @@
 @push('js')
 <script>
    $(document).on('click',"#save-benefit",function(){
-        
+
    let modelType = "{{addslashes ( get_class($model) )}}";
    let modelId = "{{ $model->id }}";
-   
+
         $.ajax({
            headers: {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
            },
-   	    type: 'post', 
+   	    type: 'post',
    	    url: '{{route("benefit.store")}}',
             data: {'name':$('#input-name').val(),'description':$('#input-description').val(),'model_type':modelType,'model_id':modelId},
    	    success: function (data) {
    	//console.log(data);
    	let benefit = data.benefit;
-   	let newBenefit = 
+   	let newBenefit =
    	`<tr>` +
    	`<td id="name-` + benefit['id'] +`">` + benefit['name'] + `</td>` +
    	`<td id="desc-` + benefit['id'] +`">` + benefit['description'] + `</td>` +
@@ -148,63 +149,64 @@
                   </a>
                   <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                      <a class="dropdown-item" data-toggle="modal" data-target="#editModal" data-id="` + benefit['id'] + `" data-name="`+benefit['name'] +`" data-description="`+ benefit['description'] + `">{{ __('Edit') }}</a>
-                     
+
                   </div>
                </div>
             </td>
 
    	</tr>`;
-   	
-   
+
+
    	$(".benefit-body").append(newBenefit);
    	$(".close-modal").click();
    	$("#success-message p").html(data.success);
    	$("#success-message").show();
    	    },
-   	    error: function() { 
+   	    error: function() {
    	         //console.log(data);
    	    }
    	});
-   
-        
-   
+
+
+
    })
 </script>
 <script>
    $(document).on('click',"#edit-benefit",function(){
-        
+
    $benefitId = $("#benefit-id").val()
    $.ajax({
            headers: {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
            },
-   	    type: 'put', 
-   	    url: '/benefit/' + $benefitId,
-            data: {'name':$('#edit-name').val(),'description':$('#edit-description').val()},
+   	    type: 'put',
+   	    url: '/admin/benefit/' + $benefitId,
+            data: {'name':$('#edit-name').val(),'description':$('#edit-description1').val()},
    	    success: function (data) {
-   	
+
    	let benefit = data.benefit;
-   	
+
    	$("#name-"+benefit['id']).html(benefit['name'])
    	$("#desc-"+benefit['id']).html(benefit['description'])
    	$(".close-modal").click();
-   
+
    	$("#success-message p").html(data.success);
    	$("#success-message").show();
-   
+
    	    },
-   	    error: function() { 
+   	    error: function() {
    	         //console.log(data);
    	    }
    	});
-   
-        
-   
+
+
+
    })
 </script>
 <script>
    $(document).on('shown.bs.modal', '#editModal',function(e) {
-      	
+       //e.preventDefault()
+
    	var link  = e.relatedTarget,
         	modal    = $(this),
          id = e.relatedTarget.dataset.id
@@ -212,12 +214,12 @@
          //description =e.relatedTarget.dataset.description;
          name = $("#name-"+id).text(),
          description = $("#desc-"+id).text();
-     
+
       modal.find("#edit-name").val(name);
-      modal.find("#edit-description").val(description);
+      modal.find("#edit-description1").val(description);
    	modal.find("#benefit-id").val(id)
-   
+
    });
-   
+
 </script>
 @endpush

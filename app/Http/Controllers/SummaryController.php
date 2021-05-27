@@ -10,63 +10,27 @@ use Illuminate\Support\Facades\Auth;
 class SummaryController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Request $request)
-    {
-        $event_id = $request->id;
-        $event = Event::find($event_id);
-        $user = Auth::user();
-
-        return view('summary.create', ['user' => $user, 'event' => $event]);
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Summary $model)
+    public function store(Request $request, Summary $summary)
     {
-        //dd($request->all());
-        $summary = $model->create($request->all());
-        if($request->event_id != null){
-            $summary->event()->attach($request->event_id);
-        }
-    }
+        $model = app($request->model_type);
+        $model = $model::find($request->model_id);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Model\Summary  $summary
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Summary $summary)
-    {
-        //
-    }
+        $input['title'] = $request->title;
+        $input['description'] = $request->description;
+        $input['icon'] = $request->icon;
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Model\Summary  $summary
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Summary $summary)
-    {
-        return view('summary.edit', compact('summary'));
+        $summary = $summary->create($input);
+        $model->summary()->save($summary);
+
+        return response()->json([
+            'success' => __('Summary successfully created.'),
+            'summary' => $summary,
+        ]);
     }
 
     /**
@@ -80,7 +44,10 @@ class SummaryController extends Controller
     {
         $summary->update($request->all());
 
-        return redirect()->route('events.index')->withStatus(__('Summary successfully updated.'));
+        return response()->json([
+            'success' => __('Summary successfully updated.'),
+            'summary' => $summary,
+        ]);
     }
 
     /**

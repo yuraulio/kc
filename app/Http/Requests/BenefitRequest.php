@@ -29,10 +29,8 @@ class BenefitRequest extends FormRequest
             ],
             'description' => [
                 'required', 'min:3'
-            ],
-            'priority' => [
-                'numeric'
             ]
+
         ];
     }
 }

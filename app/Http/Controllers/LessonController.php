@@ -114,7 +114,6 @@ class LessonController extends Controller
 
     public function save_instructor(Request $request)
     {
-        //dd($request->all());
         $start = null;
         $end = null;
         $date = null;

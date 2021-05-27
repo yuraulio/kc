@@ -59,11 +59,19 @@ class PartnerController extends Controller
 
     public function store_event(Request $request, Partner $model)
     {
-        $event = Event::find($request->event_id);
+        $model = app($request->model_type);
+        $model = $model::find($request->model_id);
 
-        $event->partners()->attach(['partner_id' => $request->partner_id]);
+        //dd($model);
 
-        return redirect()->route('events.edit', ['event' => $request->event_id])->withStatus(__('Partner successfully created.'));
+        //$model->partners()->attach([$request->partner_id]);
+
+        $partner = Partner::find($request->partner_id);
+
+        return response()->json([
+            'success' => __('Partner successfully assigned.'),
+            'partner' => $partner,
+        ]);
     }
 
     /**
@@ -122,6 +130,33 @@ class PartnerController extends Controller
         $partner->delete();
 
         return redirect()->route('partner.index')->withStatus(__('Partner successfully deleted.'));
+    }
+
+    public function remove_event(Request $request, Partner $model)
+    {
+        $model = app($request->model_type);
+        $model = $model::find($request->model_id);
+
+        $model->partners()->detach([$request->partner_id]);
+
+        return response()->json([
+            'success' => __('Partner successfully removed.'),
+            'partner_id' => $request->partner_id
+        ]);
+    }
+
+    public function fetchAllPartners(Request $request, Partner $model)
+    {
+        $data['partners'] = Partner::all();
+
+        $event = Event::with('partners')->find($request->model_id);
+        $data['assignedPartners'] = $event->partners()->get();
+
+
+        return response()->json([
+            'success' => __('Partners successfully fetched.'),
+            'data' => $data,
+        ]);
     }
 
 }
