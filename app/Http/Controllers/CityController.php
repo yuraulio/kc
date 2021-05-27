@@ -10,7 +10,19 @@ use App\Http\Requests\CityRequest;
 
 class CityController extends Controller
 {
-    public function index(City $model)
+    // public function index(City $model)
+    // {
+    //     $this->authorize('manage-users', User::class);
+
+    //     $user = Auth::user();
+
+    //     $cities = $model->with('event')->get();
+
+
+    //     return view('city.index', ['user' => $user,'cities' => $cities]);
+    // }
+
+    public function index_main(City $model)
     {
         $this->authorize('manage-users', User::class);
 
@@ -19,49 +31,80 @@ class CityController extends Controller
         $cities = $model->with('event')->get();
 
 
-        return view('city.index', ['user' => $user,'cities' => $cities]);
+        return view('admin.city.main.index', ['user' => $user,'cities' => $cities]);
     }
 
-    public function create(Request $request)
+    // public function create(Request $request)
+    // {
+    //     $user = Auth::user();
+
+    //     return view('city.create', ['user' => $user, 'event_id' => $request->id]);
+    // }
+
+    public function create_main()
     {
         $user = Auth::user();
 
-        return view('city.create', ['user' => $user, 'event_id' => $request->id]);
+        return view('admin.city.main.create', ['user' => $user]);
     }
 
-    public function store(CityRequest $request, City $model)
+    public function store(Request $request, City $city)
     {
         //dd($request->all());
-        $city = $model->create($request->all());
+        $model = app($request->model_type);
+        $model = $model::find($request->model_id);
 
+        //dd($model);
 
-        if($request->event_id != null){
+        $model->city()->sync([$request->city_id]);
 
-            $event = Event::find($request->event_id);
-            $event->city()->attach($city->id);
+        $city = City::find($request->city_id);
 
-        }
-
-
-        return redirect()->route('events.index')->withStatus(__('Event successfully created.'));
+        return response()->json([
+            'success' => __('City successfully assigned.'),
+            'city' => $city,
+        ]);
     }
 
-    public function edit(City $city)
+    public function store_main(CityRequest $request, City $model)
     {
-        $id = $city['id'];
-        $city = $city->with('event')->find($id);
+        $city = $model->create($request->all());
 
-        $events = Event::all();
-        //$event = $event->with('category')->first();
+        return redirect()->route('city.index_main')->withStatus(__('City successfully created.'));
+    }
 
-        return view('city.edit', compact('events', 'city'));
+    // public function edit(City $city)
+    // {
+    //     $id = $city['id'];
+    //     $city = $city->with('event')->find($id);
+
+    //     $events = Event::all();
+    //     //$event = $event->with('category')->first();
+
+    //     return view('admin.city.main.edit', compact('events', 'city'));
+    // }
+
+    public function edit_main(City $city)
+    {
+
+        return view('admin.city.main.edit', compact('city'));
     }
 
     public function update(Request $request, City $city)
     {
         $city->update($request->all());
 
-        return redirect()->route('events.index')->withStatus(__('City successfully updated.'));
+        return response()->json([
+            'success' => __('Benefit successfully updated.'),
+            'city' => $city,
+        ]);
+    }
+
+    public function update_main(Request $request, City $city)
+    {
+        $city->update($request->all());
+
+        return redirect()->route('city.index_main')->withStatus(__('City successfully updated.'));
     }
 
     public function destroy(City $city)
@@ -74,5 +117,15 @@ class CityController extends Controller
         $city->delete();
 
         return redirect()->route('events.index')->withStatus(__('City successfully deleted.'));
+    }
+
+    public function fetchAllCities()
+    {
+        $cities = City::all();
+
+        return response()->json([
+            'success' => __('Cities successfully fetched.'),
+            'cities' => $cities,
+        ]);
     }
 }

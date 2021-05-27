@@ -10,7 +10,10 @@
                             <span class="input-group-text"><i class="fas fa-search"></i></span>
                         </div>
                         <input id="search-user" class="form-control" placeholder="{{ __('Search') }}" type="text">
+<<<<<<< HEAD
                         
+=======
+>>>>>>> d3df5a75880c1709f2009045f68e23e9e229655b
                     </div>
                     <ul class="search-list">
 
@@ -260,10 +263,10 @@
             }
 
             $.ajax({
-               
-   			    type: 'get', 
+
+   			    type: 'get',
    			    url: '/admin/search-user/' + $(this).val(),
-                
+
    			    success: function (data) {
                     let searchList = '';
                     
@@ -284,10 +287,10 @@
                     $(".search-list").empty();
                     $(".search-list").append(searchList);
    			    },
-   			    error: function() { 
+   			    error: function() {
    			         //console.log(data);
    			    }
-   			
+
 
          })
 

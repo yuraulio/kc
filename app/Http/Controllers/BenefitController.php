@@ -6,20 +6,20 @@ use App\Model\Benefit;
 use App\Model\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\BenefitRequest;
 
 class BenefitController extends Controller
 {
-    
-   
+
+
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request,Benefit $benefit)
+    public function store(BenefitRequest $request,Benefit $benefit)
     {
-       
         $model = app($request->model_type);
         $model = $model::find($request->model_id);
 
@@ -38,7 +38,6 @@ class BenefitController extends Controller
         ///return redirect()->route('events.index')->withStatus(__('Benefit successfully created.'));
     }
 
-    
     /**
      * Update the specified resource in storage.
      *

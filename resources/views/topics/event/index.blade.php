@@ -221,7 +221,7 @@
                                                 new_topic_row = `
 
                                                     <td>${title}</td>
-                                                    <td id="inst_lesson_${id}"></td>
+                                                    <td id="inst_lesson_${id}">-</td>
                                                     `+row+action_row+`
 
                                                 `
@@ -231,7 +231,7 @@
                                                 new_topic_row = `
                                                     <tr class="topic_${data.lesson.id}">
                                                     <td>${title}</td>
-                                                    <td id="inst_lesson_${id}"></td>
+                                                    <td id="inst_lesson_${id}">-</td>
                                                     `+row+action_row+`
 
                                                     </tr>
@@ -248,6 +248,8 @@
                                         });
                                     });
                                 }else{
+
+
                                     $( '.topic_'+data.lesson.id ).each(function( index ) {
                                         $('.topic_'+data.lesson.id).remove()
                                         });

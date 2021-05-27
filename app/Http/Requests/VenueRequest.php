@@ -31,10 +31,10 @@ class VenueRequest extends FormRequest
                 'required', 'min:3'
             ],
             'longitude' => [
-                'digits_between:-180,180'
+                'required', 'integer', 'between:-180,180'
             ],
             'latitude' => [
-                'digits_between:-90,90'
+                'required','integer','between:-90,90'
             ]
         ];
     }

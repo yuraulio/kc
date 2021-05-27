@@ -197,6 +197,17 @@
                                 @endcan
                                 @can('manage-users', App\Model\User::class)
                                     <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
+                                        <a href="{{ route('city.index_main') }}" class="nav-link">{{ __('Cities') }}</a>
+                                    </li>
+                                @endcan
+                                @can('manage-users', App\Model\User::class)
+                                    <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
+                                        <a href="{{ route('venue.index_main') }}" class="nav-link">{{ __('Venues') }}</a>
+                                    </li>
+                                @endcan
+
+                                @can('manage-users', App\Model\User::class)
+                                    <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
                                         <a href="{{ route('ticket.index') }}" class="nav-link">{{ __('Tickets') }}</a>
                                     </li>
                                 @endcan

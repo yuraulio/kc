@@ -109,7 +109,7 @@
                                                             @include('alerts.feedback', ['field' => 'priority'])
                                                         </div>
 
-                                                       
+
 
                                                         <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
                                                             <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
@@ -245,13 +245,16 @@
 
                                             </div>
                                             <div class="tab-pane fade" id="tabs-icons-text-2_inside" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab_inside">
-                                               
-                                                @include('summary.index')
+                                                <div class="col-12 mt-2">
+                                                    @include('alerts.success')
+                                                    @include('alerts.errors')
+                                                </div>
+                                                @include('admin.summary.summary', ['model' => $event])
                                             </div>
                                             <div class="tab-pane fade" id="metas" role="tabpanel" aria-labelledby="tabs-icons-text-8-tab_inside">
-                                              
+
                                                     @include('admin.metas.metas',['metas' => $metas])
-                                              
+
                                             </div>
                                             <div class="tab-pane fade" id="tabs-icons-text-3_inside" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab_inside">
 
@@ -374,16 +377,16 @@
                                                 </div>
                                             </div>
                                             <div class="tab-pane fade" id="tabs-icons-text-5_inside" role="tabpanel" aria-labelledby="tabs-icons-text-5-tab_inside">
-                                                @include('ticket.index')
+                                                @include('admin.ticket.index', ['model' => $event])
                                             </div>
                                             <div class="tab-pane fade" id="tabs-icons-text-6_inside" role="tabpanel" aria-labelledby="tabs-icons-text-6-tab_inside">
-                                                @include('city.index')
+                                                @include('admin.city.event.index', ['model' => $event])
                                             </div>
                                             <div class="tab-pane fade" id="tabs-icons-text-7_inside" role="tabpanel" aria-labelledby="tabs-icons-text-7-tab_inside">
-                                                @include('venue.index')
+                                                @include('admin.venue.event.index', ['model' => $event])
                                             </div>
                                             <div class="tab-pane fade" id="tabs-icons-text-8_inside" role="tabpanel" aria-labelledby="tabs-icons-text-8-tab_inside">
-                                                @include('partner.event.index')
+                                                @include('admin.partner.event.index', ['model' => $event])
                                             </div>
                                             <div class="tab-pane fade" id="tabs-icons-text-9_inside" role="tabpanel" aria-labelledby="tabs-icons-text-9-tab_inside">
                                                 @include('section.index')
@@ -432,7 +435,7 @@
 
                     <div class="modal-footer">
                         <button type="button" id="lesson_update_btn" class="btn btn-primary">Save changes</button>
-                        <button type="button" class="btn btn-link  ml-auto" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-link close_modal ml-auto" data-dismiss="modal">Close</button>
                     </div>
 
                 </div>
@@ -461,6 +464,18 @@
 
     <script>
 
+
+
+        $(document).on('click','.close_modal',function(){
+            $('.modal-title').text('')
+
+            $('#instFormControlSelect option').each(function(key, value) {
+                    $(value).remove()
+            });
+
+            $('#instFormControlSelect').append(`<option>-</option>`)
+        });
+
         $(document).on('click','#lesson_update_btn',function(){
             let start = $('#time_starts').val()
             let date = $('#date').val()
@@ -484,7 +499,7 @@
                 'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
                },
                Accept: 'application/json',
-                url: "/lesson/save_instructor",
+                url: "/admin/lesson/save_instructor",
                 data:data,
                 success: function(data) {
                     data = JSON.parse(data)
@@ -554,10 +569,6 @@
             topic_id = topic_id.split("_")
             const event_id = $('#topic_lessons').data('event-id')
 
-            console.log(elem[1])
-            console.log(topic_id[1])
-            console.log(event_id)
-
             data = {lesson_id:elem[1], topic_id:topic_id[1], event_id:event_id}
             $.ajax({
                 type : 'POST',
@@ -565,10 +576,17 @@
                 'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
                },
                Accept: 'application/json',
-                url: "/lesson/remove_lesson",
+                url: "/admin/lesson/remove_lesson",
                 data:data,
                 success: function(data){
                     data = JSON.parse(data)
+
+                    let length = $('#inst_lesson_'+data.lesson_id).parent().find('th').attr('rowspan')
+                    let text = $('#inst_lesson_'+data.lesson_id).parent().find('th').text()
+
+                    if($('#inst_lesson_'+data.lesson_id).parent().find('th').length == 1){
+                        $(`<th rowspan='${length - 1}'>${text}</th>`).prependTo('.topic_'+data.topic_id)
+                    }
                     $('#inst_lesson_'+data.lesson_id).parent().remove()
                 }
             });
@@ -591,7 +609,7 @@
                 'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
                },
                Accept: 'application/json',
-                url: "/lesson/edit_instructor",
+                url: "/admin/lesson/edit_instructor",
                 data:data,
                 success: function(data) {
                     date = ''

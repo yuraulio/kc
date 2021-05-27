@@ -40,11 +40,32 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
     Route::resource('city', 'CityController', ['except' => ['show']]);
     Route::resource('section', 'SectionController', ['except' => ['show']]);
     Route::resource('ticket', 'TicketController', ['except' => ['show']]);
-    Route::resource('summary', 'SummaryController', ['except' => ['show']]);
+    Route::resource('summary', 'SummaryController', ['except' => ['show','index','edit','create']]);
     Route::resource('benefit', 'BenefitController', ['except' => ['show','index','edit','create']]);
     Route::resource('venue', 'VenueController', ['except' => ['show']]);
     Route::resource('partner', 'PartnerController', ['except' => ['show']]);
     Route::resource('exams', 'ExamController', ['except' => ['show']]);
+
+    //Partner
+    Route::get('partner/index_main', ['as' => 'partner.index_main', 'uses' => 'PartnerController@index_main']);
+    Route::post('partner/remove_event', ['as' => 'partner.remove_event', 'uses' => 'PartnerController@remove_event']);
+    Route::post('partner/fetchAllPartners', ['as' => 'partner.fetchAllPartners', 'uses' => 'PartnerController@fetchAllPartners']);
+
+    //Venue
+    Route::get('venue/index_main', ['as' => 'venue.index_main', 'uses' => 'VenueController@index_main']);
+    Route::get('venue/create_main', ['as' => 'venue.create_main', 'uses' => 'VenueController@create_main']);
+    Route::post('venue/store_main', ['as' => 'venue.store_main', 'uses' => 'VenueController@store_main']);
+    Route::get('venue/edit_main/{venue}', ['as' => 'venue.edit_main', 'uses' => 'VenueController@edit_main']);
+    Route::post('venue/fetchAllVenues', ['as' => 'venue.fetchAllVenues', 'uses' => 'VenueController@fetchAllVenues']);
+    Route::post('venue/remove_event', ['as' => 'venue.remove_event', 'uses' => 'VenueController@remove_event']);
+
+    //City
+    Route::get('city/index_main', ['as' => 'city.index_main', 'uses' => 'CityController@index_main']);
+    Route::get('city/create_main', ['as' => 'city.create_main', 'uses' => 'CityController@create_main']);
+    Route::get('city/edit_main/{city}', ['as' => 'city.edit_main', 'uses' => 'CityController@edit_main']);
+    Route::put('city/update_main/{city}', ['as' => 'city.update_main', 'uses' => 'CityController@update_main']);
+    Route::post('city/store_main', ['as' => 'city.store_main', 'uses' => 'CityController@store_main']);
+    Route::get('city/fetchAllCities', ['as' => 'city.fetchAllCities', 'uses' => 'CityController@fetchAllCities']);
 
     //User
     Route::post('user/assignEventToUserCreate', ['as' => 'user.assignToCourse', 'uses' => 'UserController@assignEventToUserCreate']);
@@ -90,7 +111,7 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
 
     //Edit Instructor
     Route::post ('lesson/edit_instructor', ['as' => 'lesson.edit_instructor', 'uses' => 'LessonController@edit_instructor']);
-
+    Route::post ('lesson/save_instructor', ['as' => 'lesson.save_instructor', 'uses' => 'LessonController@save_instructor']);
     Route::post ('lesson/remove_lesson', ['as' => 'lesson.remove_lesson', 'uses' => 'LessonController@remove_lesson']);
 
     //Route::post('lesson/destroy_from_topic1', ['as' => 'lesson.destroy_from_topic1', 'uses' => 'LessonController@destroy_from_topic1']);
