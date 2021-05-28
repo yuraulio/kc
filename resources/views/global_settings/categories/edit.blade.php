@@ -34,7 +34,6 @@
                         <form method="post" action="{{ route('category.update', $category) }}" autocomplete="off">
                             @csrf
                             @method('put')
-
                             <h6 class="heading-small text-muted mb-4">{{ __('Category information') }}</h6>
                             <div class="pl-lg-4">
                                 <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
@@ -52,7 +51,7 @@
 
                                 <div class="form-group{{ $errors->has('hours') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-hours">{{ __('Hours') }}</label>
-                                    <input type="number" name="hours" id="input-hours" class="form-control{{ $errors->has('hours') ? ' is-invalid' : '' }}" placeholder="{{ __('Hours') }}" value="{{ old('hours', $category->hours) }}">
+                                    <input type="text" name="hours" id="input-hours" class="form-control{{ $errors->has('hours') ? ' is-invalid' : '' }}" placeholder="{{ __('Hours') }}" value="{{ old('hours', $category->hours) }}">
 
                                     @include('alerts.feedback', ['field' => 'hours'])
                                 </div>

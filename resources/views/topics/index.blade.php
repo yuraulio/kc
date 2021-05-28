@@ -64,7 +64,7 @@
                                             {{$category->name}}
                                         @endforeach
                                         </td>
-                                        <td>{{ date_format($topic->created_at, 'Y-m-d' ) }}</td>
+                                        @if($topic->created_at)<td>{{ date_format($topic->created_at, 'Y-m-d' ) }}</td>@endif
 					                    @can('manage-users', App\Model\User::class)
 					                        <td class="text-right">
                                                 @if (auth()->user()->can('update', $user) || auth()->user()->can('delete', $user))
