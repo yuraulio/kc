@@ -5,10 +5,10 @@
 ])
 
 @section('content')
-    @component('layouts.headers.auth') 
+    @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
-            @slot('title') 
-                {{ __('Examples') }} 
+            @slot('title')
+                {{ __('Examples') }}
             @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('global.index') }}">{{ __('Categories Management') }}</a></li>
@@ -33,7 +33,7 @@
                     <div class="card-body">
                         <form method="post" action="{{ route('category.store') }}" autocomplete="off">
                             @csrf
-                            
+
                             <h6 class="heading-small text-muted mb-4">{{ __('Category information') }}</h6>
                             <div class="pl-lg-4">
                                 <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
@@ -56,6 +56,15 @@
                                     @include('alerts.feedback', ['field' => 'hours'])
                                 </div>
 
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect1">Select Dropbox Folder</label>
+                                    <select multiple class="form-control" name="folder_name[]" id="folder_name">
+                                        @foreach($folders as $folder)
+                                            <option value="{{ $folder }}">{{ $folder }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
                                 </div>
@@ -65,7 +74,7 @@
                 </div>
             </div>
         </div>
-        
+
         @include('layouts.footers.auth')
     </div>
 @endsection

@@ -13,8 +13,9 @@ class GlobalController extends Controller
         $this->authorize('manage-items', User::class);
 
         $cat = $model->with('topics')->get();
+        //dd($model->with('topics','dropbox')->get());
         //dd($model->with('topics', 'lessons')->get());
-        return view('global_settings.index', ['categories' => $model->with('topics')->get()]);
+        return view('global_settings.index', ['categories' => $model->with('topics','dropbox')->get()]);
     }
 
     public function course_index()

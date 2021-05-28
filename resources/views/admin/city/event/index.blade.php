@@ -100,7 +100,7 @@
 
             <div class="modal-footer">
                 <button type="button" data-event-id="{{$model->id}}" id="city_save_btn" class="btn btn-primary">Save changes</button>
-                <button type="button" class="btn btn-link close_modal ml-auto" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-link close_modal ml-auto close-modal" data-dismiss="modal">Close</button>
             </div>
 
         </div>
@@ -209,18 +209,6 @@
         });
 
     })
-
-   	// var link  = e.relatedTarget,
-    //     	modal    = $(this),
-    //      id = e.relatedTarget.dataset.id
-    //      //name = e.relatedTarget.dataset.name,
-    //      //description =e.relatedTarget.dataset.description;
-    //      name = $("#name-"+id).text(),
-    //      description = $("#desc-"+id).text();
-
-    //   modal.find("#edit-name").val(name);
-    //   modal.find("#edit-description1").val(description);
-   	// modal.find("#benefit-id").val(id)
 
 
 

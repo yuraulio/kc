@@ -45,6 +45,7 @@ class TypeController extends Controller
     public function store(TypeRequest $request, Type $model)
     {
         $model->create($request->all());
+        $model->createSlug($request->slug);
         return redirect()->route('types.index')->withStatus(__('Type successfully created.'));
     }
 

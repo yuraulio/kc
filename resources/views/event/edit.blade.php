@@ -45,7 +45,7 @@
                                     <label class="form-control-label" for="input-method">{{ __('Method Payment') }}</label>
                                     <select name="payment_method" id="input-method" class="form-control" placeholder="{{ __('Method Payment') }}" required>
                                         <option value="">-</option>
-                                        @foreach ($methods as $method) 
+                                        @foreach ($methods as $method)
                                             <option value="{{ $method->id }}" {{$event['paymentMethod']->first() && $event['paymentMethod']->first()->id ==$method->id ? 'selected' : ''}} >{{ $method->method_name }}</option>
                                         @endforeach
                                     </select>
@@ -257,8 +257,11 @@
 
                                             </div>
                                             <div class="tab-pane fade" id="tabs-icons-text-3_inside" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab_inside">
-
-                                            @include('admin.benefits.benefits',['model' => $event])
+                                                <div class="col-12 mt-2">
+                                                    @include('alerts.success')
+                                                    @include('alerts.errors')
+                                                </div>
+                                                @include('admin.benefits.benefits',['model' => $event])
                                             </div>
 
                                             <div class="tab-pane fade show" id="tabs-icons-text-4_inside" role="tabpanel" aria-labelledby="tabs-icons-text-4-tab_inside">
@@ -389,7 +392,7 @@
                                                 @include('admin.partner.event.index', ['model' => $event])
                                             </div>
                                             <div class="tab-pane fade" id="tabs-icons-text-9_inside" role="tabpanel" aria-labelledby="tabs-icons-text-9-tab_inside">
-                                                @include('section.index')
+                                                @include('admin.section.index', ['model' => $event])
                                             </div>
                                         </div>
                                     </div>
@@ -446,25 +449,14 @@
 
 @endsection
 
-@push('css')
-    <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">
-    <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css">
-@endpush
 
 @push('js')
-    <script src="{{ asset('argon') }}/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="{{ asset('argon') }}/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
-    <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="{{ asset('argon') }}/vendor/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
-    <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.html5.min.js"></script>
-    <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
-    <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
-    <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
+
 
     <script>
-
-
+        $(document).ready(function() {
+            $('.table').DataTable();
+        } );
 
         $(document).on('click','.close_modal',function(){
             $('.modal-title').text('')
@@ -718,7 +710,7 @@
                     headers: {
                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-   			        type: 'POST', 
+   			        type: 'POST',
    			        url: '/admin/events/assing-method/' + "{{$event->id}}",
                     data: {'payment_method': $(this).val()},
    			        success: function (data) {
@@ -730,13 +722,13 @@
                            }, 2000)
 
    			        },
-   			        error: function() { 
+   			        error: function() {
    			             //console.log(data);
    			        }
    			    });
 
             }
-            
+
 
         })
     </script>

@@ -38,13 +38,16 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
     Route::resource('faqs', 'FaqController', ['except' => ['show']]);
     Route::resource('career', 'CareerController', ['except' => ['show']]);
     Route::resource('city', 'CityController', ['except' => ['show']]);
-    Route::resource('section', 'SectionController', ['except' => ['show']]);
+    Route::resource('section', 'SectionController', ['except' => ['show','index','edit','create']]);
     Route::resource('ticket', 'TicketController', ['except' => ['show']]);
     Route::resource('summary', 'SummaryController', ['except' => ['show','index','edit','create']]);
     Route::resource('benefit', 'BenefitController', ['except' => ['show','index','edit','create']]);
     Route::resource('venue', 'VenueController', ['except' => ['show']]);
     Route::resource('partner', 'PartnerController', ['except' => ['show']]);
     Route::resource('exams', 'ExamController', ['except' => ['show']]);
+
+    //Dropbox
+    Route::get('dropbox/update', ['as' => 'dropbox.update', 'uses' => 'DropboxController@update']);
 
     //Partner
     Route::get('partner/index_main', ['as' => 'partner.index_main', 'uses' => 'PartnerController@index_main']);
@@ -73,6 +76,7 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
     Route::get('user/edit_ticket', ['as' => 'user.edit_ticket', 'uses' => 'UserController@edit_ticket']);
 
     Route::get('user/store_ticket', ['as' => 'user.store_ticket', 'uses' => 'UserController@store_ticket']);
+    Route::get('ticket/fetchAllTickets', ['as' => 'ticket.fetchAllTickets', 'uses' => 'TicketController@fetchAllTickets']);
 
     //Custom Ticket
     //ticket.edit
@@ -81,6 +85,7 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
     Route::get('ticket/edit_main/{ticket}', ['as' => 'ticket.edit_main', 'uses' => 'TicketController@edit_main']);
     Route::put('ticket/update_main/{ticket}', ['as' => 'ticket.update_main', 'uses' => 'TicketController@update_main']);
     Route::post('ticket/store_main', ['as' => 'ticket.store_main', 'uses' => 'TicketController@store_main']);
+    Route::post('ticket/remove_event', ['as' => 'ticket.remove_event', 'uses' => 'TicketController@remove_event']);
 
     //custom Topic (inside event)
     Route::get('topics/index_event', ['as' => 'topics.index', 'uses' => 'TopicController@index']);

@@ -21,7 +21,7 @@
                 <th scope="col"></th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="summary-body">
         <?php //dd($model->summary()->get()); ?>
         @if($model->summary()->get())
             @foreach ($model->summary()->get() as $summary)
@@ -76,8 +76,8 @@
             <h6 class="heading-small text-muted mb-4">{{ __('Summary information') }}</h6>
             <div class="pl-lg-4">
                <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
-                  <label class="form-control-label" for="input-title">{{ __('Title') }}</label>
-                  <input type="text" name="title" id="input-title" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title') }}" required autofocus>
+                  <label class="form-control-label" for="input-title-summary">{{ __('Title') }}</label>
+                  <input type="text" name="title" id="input-title-summary" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title') }}" required autofocus>
                   @include('alerts.feedback', ['field' => 'title'])
                </div>
                <div class="form-group{{ $errors->has('description2') ? ' has-danger' : '' }}">
@@ -93,7 +93,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary close-modal" data-dismiss="modal">Close</button>
             <button type="button" id="save_summary" class="btn btn-primary">Save changes</button>
         </div>
         </div>
@@ -141,7 +141,6 @@
 @push('js')
 <script>
    $(document).on('click',"#save_summary",function(){
-       alert($('#input-description2').val())
    let modelType = "{{addslashes ( get_class($model) )}}";
    let modelId = "{{ $model->id }}";
 
@@ -151,7 +150,7 @@
            },
    	    type: 'post',
    	    url: '{{route("summary.store")}}',
-            data: {'title':$('#input-title').val(),'description':$('#input-description2').val(),'icon':$('#input-icon').val(),'model_type':modelType,'model_id':modelId},
+            data: {'title':$('#input-title-summary').val(),'description':$('#input-description2').val(),'icon':$('#input-icon').val(),'model_type':modelType,'model_id':modelId},
    	    success: function (data) {
    	//console.log(data);
    	let summary = data.summary;
@@ -178,7 +177,7 @@
    	</tr>`;
 
 
-   	$(".summary-body").append(newBenefit);
+   	$(".summary-body").append(newSummary);
    	$(".close-modal").click();
    	$("#success-message p").html(data.success);
    	$("#success-message").show();

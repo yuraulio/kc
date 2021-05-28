@@ -6,9 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Event;
 
+use App\Traits\SlugTrait;
+
 class City extends Model
 {
     use HasFactory;
+    use SlugTrait;
 
     protected $table = 'cities';
 

@@ -28,6 +28,7 @@
                     <th scope="col">{{ __('Description') }}</th>
                     <th scope="col">{{ __('Parent') }}</th>
                     <th scope="col">{{ __('Hours') }}</th>
+                    <th scope="col">{{ __('Dropbox') }}</th>
                     @can('manage-users', App\Model\User::class)
                         <th scope="col"></th>
                     @endcan
@@ -40,6 +41,11 @@
                         <td>{{ $category->description }}</td>
                         <td>{{ $category->parent }}</td>
                         <td>{{ $category->hours }}</td>
+                        <td>
+                        @if(count($category->dropbox) != 0)
+                            <i class="ni ni-check-bold"></i>
+                        @endif
+                        </td>
                         @can('manage-users', App\Model\User::class)
                             <td class="text-right">
                                 @can('update', $category)

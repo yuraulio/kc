@@ -18,6 +18,7 @@
 namespace App\Model;
 
 use App\Model\Topic;
+use App\Model\Dropbox;
 use App\Model\Event;
 use App\Model\Lesson;
 use App\Model\Testimonial;
@@ -53,6 +54,7 @@ class Category extends Model
         return $this->morphedByMany(Topic::class, 'categoryable');
     }
 
+
     public function tickets()
     {
         return $this->morphedByMany(Ticket::class, 'categoryable');
@@ -66,6 +68,11 @@ class Category extends Model
     public function topic()
     {
         return $this->belongsToMany(Topic::class, 'categories_topics_lesson', 'category_id', 'topic_id');
+    }
+
+    public function dropbox()
+    {
+        return $this->belongsToMany(Dropbox::class, 'dropboxcache_category', 'category_id', 'dropbox_cache_category_id');
     }
 
     public function lessons()

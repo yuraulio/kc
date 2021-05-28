@@ -44,6 +44,7 @@
 
                                     @include('alerts.feedback', ['field' => 'name'])
                                 </div>
+                                @include('admin.slug.slug',['slug' => isset($slug) ? $slug : null])
 
 
                                 <div class="text-center">
