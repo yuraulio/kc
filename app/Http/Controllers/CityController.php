@@ -70,6 +70,8 @@ class CityController extends Controller
     {
         $city = $model->create($request->all());
 
+        $city->createSlug($request->slug);
+
         return redirect()->route('city.index_main')->withStatus(__('City successfully created.'));
     }
 

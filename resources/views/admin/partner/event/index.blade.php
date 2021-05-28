@@ -75,38 +75,6 @@
       </div>
    </div>
 </div>
-<div class="modal fade" id="editPartnerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-   <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-         <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
-         </div>
-         <div class="modal-body">
-            <h6 class="heading-small text-muted mb-4">{{ __('Partner information') }}</h6>
-            <div class="pl-lg-4">
-               <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
-                  <label class="form-control-label" for="edit-name">{{ __('Name') }}</label>
-                  <input type="text" name="name" id="edit-name" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" placeholder="{{ __('Name') }}" value="{{ old('name') }}" required autofocus>
-                  @include('alerts.feedback', ['field' => 'name'])
-               </div>
-               <div class="form-group{{ $errors->has('description') ? ' has-danger' : '' }}">
-                  <label class="form-control-label" for="edit-description">{{ __('Description') }}</label>
-                  <input type="text" name="description" id="edit-description1" class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}" value="{{ old('description') }}" autofocus>
-                  @include('alerts.feedback', ['field' => 'description'])
-               </div>
-               <input type="text" id="partner-id"  value="" hidden>
-            </div>
-         </div>
-         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary close-modal" data-dismiss="modal">Close</button>
-            <button type="button" id="edit-partner" class="btn btn-primary">Save changes</button>
-         </div>
-      </div>
-   </div>
-</div>
 
 
 @push('css')
@@ -188,9 +156,9 @@
                 </tr>`;
 
                 $(".partner-body").append(newPartner);
-                // $(".close-modal").click();
-                // $("#success-message p").html(data.success);
-                // $("#success-message").show();
+                $(".close-modal").click();
+                $("#success-message p").html(data.success);
+                $("#success-message").show();
 
 
             }

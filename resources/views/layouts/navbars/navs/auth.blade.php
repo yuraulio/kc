@@ -10,10 +10,6 @@
                             <span class="input-group-text"><i class="fas fa-search"></i></span>
                         </div>
                         <input id="search-user" class="form-control" placeholder="{{ __('Search') }}" type="text">
-<<<<<<< HEAD
-                        
-=======
->>>>>>> d3df5a75880c1709f2009045f68e23e9e229655b
                     </div>
                     <ul class="search-list">
 
@@ -239,6 +235,10 @@
                             <i class="ni ni-single-02"></i>
                             <span>{{ __('My profile') }}</span>
                         </a>
+                        <a href="javascript:void(0)" id="update-btn" class="dropdown-item">
+                            <i class="fab fa-dropbox"></i>
+                            <span>{{ __('Update Dropbox') }}</span>
+                        </a>
                         <div class="dropdown-divider"></div>
                         <a href="{{ route('logout') }}" class="dropdown-item" onclick="event.preventDefault();
                         document.getElementById('logout-form').submit();">
@@ -253,6 +253,29 @@
 </nav>
 
 @push('js')
+<script>
+    $(document).on("click", "#update-btn", function(){
+        $.ajax({
+
+        type: 'get',
+        url: '/admin/dropbox/update',
+
+        success: function (data) {
+            console.log(data)
+
+
+
+
+
+        },
+        error: function() {
+            //console.log(data);
+        }
+
+
+        })
+    })
+</script>
 
     <script>
         $(document).on('keyup',"#search-user",function(){
@@ -269,14 +292,14 @@
 
    			    success: function (data) {
                     let searchList = '';
-                    
+
                     $.each(data.searchData, function( index, value ) {
 
                         searchList += `<div>
                                             <a href="`+  value['link'] +`">
-                                                <li>` + value['name'] + 
-                                                    `<div>` + 
-                                                        value['email'] + 
+                                                <li>` + value['name'] +
+                                                    `<div>` +
+                                                        value['email'] +
                                                     `</div>
                                                 </li>
                                             </a>

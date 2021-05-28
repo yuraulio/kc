@@ -36,15 +36,6 @@
                   </a>
                   <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                      <a class="dropdown-item" data-toggle="modal" data-target="#editModal" data-id="{{$benefit->id}}" data-name="{{$benefit->name}}" data-description="{{$benefit->description}}">{{ __('Edit') }}</a>
-                     {{--@can('delete', $user)
-                     <form action="{{ route('benefit.destroy', $benefit) }}" method="post">
-                        @csrf
-                        @method('delete')
-                        <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this Ticket?") }}') ? this.parentElement.submit() : ''">
-                        {{ __('Delete') }}
-                        </button>
-                     </form>
-                     @endcan--}}
                   </div>
                </div>
             </td>
@@ -55,11 +46,11 @@
    </table>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="benefitModalLabel" aria-hidden="true">
    <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            <h5 class="modal-title" id="benefitModalLabel">Modal title</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
@@ -67,6 +58,7 @@
          <div class="modal-body">
             <h6 class="heading-small text-muted mb-4">{{ __('Benefit information') }}</h6>
             <div class="pl-lg-4">
+            <form id="benefit-form" >
                <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
                   <label class="form-control-label" for="input-name">{{ __('Name') }}</label>
                   <input type="text" name="name" id="input-name" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" placeholder="{{ __('Name') }}" value="{{ old('name') }}" required autofocus>
@@ -77,6 +69,7 @@
                   <input type="text" name="description" id="input-description" class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}" value="{{ old('description') }}" autofocus>
                   @include('alerts.feedback', ['field' => 'description'])
                </div>
+            </form>
             </div>
          </div>
          <div class="modal-footer">
@@ -86,11 +79,11 @@
       </div>
    </div>
 </div>
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="benefitModalLabel" aria-hidden="true">
    <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            <h5 class="modal-title" id="benefitModalLabel">Modal title</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
@@ -98,6 +91,7 @@
          <div class="modal-body">
             <h6 class="heading-small text-muted mb-4">{{ __('Benefit information') }}</h6>
             <div class="pl-lg-4">
+            <form id="benefit-form-edit">
                <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
                   <label class="form-control-label" for="edit-name">{{ __('Name') }}</label>
                   <input type="text" name="name" id="edit-name" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" placeholder="{{ __('Name') }}" value="{{ old('name') }}" required autofocus>
@@ -109,6 +103,7 @@
                   @include('alerts.feedback', ['field' => 'description'])
                </div>
                <input type="text" id="benefit-id"  value="" hidden>
+            </form>
             </div>
          </div>
          <div class="modal-footer">
@@ -161,6 +156,7 @@
    	$(".close-modal").click();
    	$("#success-message p").html(data.success);
    	$("#success-message").show();
+       $('#benefit-form').trigger('reset');
    	    },
    	    error: function() {
    	         //console.log(data);
@@ -188,6 +184,7 @@
 
    	$("#name-"+benefit['id']).html(benefit['name'])
    	$("#desc-"+benefit['id']).html(benefit['description'])
+       $('#benefit-form-edit').trigger('reset');
    	$(".close-modal").click();
 
    	$("#success-message p").html(data.success);
@@ -215,11 +212,14 @@
          name = $("#name-"+id).text(),
          description = $("#desc-"+id).text();
 
+         modal.find("#benefitModalLabel").val(name)
+
       modal.find("#edit-name").val(name);
       modal.find("#edit-description1").val(description);
    	modal.find("#benefit-id").val(id)
 
    });
+
 
 </script>
 @endpush

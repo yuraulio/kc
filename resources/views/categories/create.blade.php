@@ -5,16 +5,16 @@
 ])
 
 @section('content')
-    @component('layouts.headers.auth') 
+    @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
-            @slot('title') 
-                {{ __('Examples') }} 
+            @slot('title')
+                {{ __('Examples') }}
             @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('category.index') }}">{{ __('Category Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('Add Category') }}</li>
         @endcomponent
-    @endcomponent   
+    @endcomponent
 
     <div class="container-fluid mt--6">
         <div class="row">
@@ -33,7 +33,7 @@
                     <div class="card-body">
                         <form method="post" action="{{ route('category.store') }}" autocomplete="off">
                             @csrf
-                            
+
                             <h6 class="heading-small text-muted mb-4">{{ __('Category information') }}</h6>
                             <div class="pl-lg-4">
                                 <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
@@ -58,7 +58,7 @@
                 </div>
             </div>
         </div>
-        
+
         @include('layouts.footers.auth')
     </div>
 @endsection

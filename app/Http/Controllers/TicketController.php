@@ -52,24 +52,44 @@ class TicketController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Ticket $model)
+    public function store(Request $request, Ticket $ticket)
     {
+        $model = app($request->model_type);
+        $model = $model::with('ticket')->find($request->model_id);
+
         $ticket = Ticket::find($request->ticket_id);
 
-        if($request->event_id != null)
-        {
-            $ticket->events()->attach($request->event_id, [
-                'priority' => $request->priority,
-                'price' => $request->price,
-                'options' => $request->option,
-                'quantity' => $request->quantity
-                ]);
 
-        }
+        $ticket->events()->attach($request->model_id, [
+            'price' => $request->price,
+            'quantity' => $request->quantity,
+            'priority' => count($model->ticket) + 1
+            ]);
 
-        return redirect()->route('events.index')->withStatus(__('Ticket successfully created.'));
+
+
+
+        return response()->json([
+            'success' => __('Ticket successfully assigned.'),
+            'ticket' => $ticket,
+        ]);
 
     }
+
+    public function remove_event(Request $request, Ticket $ticket)
+    {
+        $model = app($request->model_type);
+        $model = $model::find($request->model_id);
+
+        $model->ticket()->wherePivot('event_id', '=', $request->model_id)->wherePivot('ticket_id', '=', $request->ticket_id)->detach($request->ticket_id);
+
+
+        return response()->json([
+            'success' => __('Ticket successfully removed.'),
+            'ticket_id' => $request->ticket_id
+        ]);
+    }
+
 
     public function store_main(Request $request, Ticket $model)
     {
@@ -127,18 +147,23 @@ class TicketController extends Controller
      */
     public function update(Request $request, Ticket $ticket)
     {
-        $ticket->update($request->all());
 
-        $event = Event::with('ticket')->find($request->event_id);
-
-        $event->ticket()->wherePivot('ticket_id',$ticket['id'])->updateExistingPivot($ticket['id'],[
-            'priority' => $request->priority,
+        $ticket_id = $ticket['id'];
+        $event = Event::find($request->model_id);
+        $event->ticket()->wherePivot('event_id', '=', $request->model_id)->wherePivot('ticket_id', '=', $ticket_id)->updateExistingPivot($request->model_id,[
+            'quantity' => $request->quantity,
             'price' => $request->price,
-            'options' => $request->option,
-            'quantity' => $request->quantity
         ], false);
 
-        return redirect()->route('events.index')->withStatus(__('Ticket successfully updated.'));
+        $data['ticket_id'] = $ticket_id;
+        $data['quantity'] = $request->quantity;
+        $data['price'] = $request->price;
+
+        return response()->json([
+            'success' => __('Ticket successfully updated.'),
+            'data' => $data,
+        ]);
+
     }
 
     public function update_main(Request $request, Ticket $ticket)
@@ -162,5 +187,15 @@ class TicketController extends Controller
         $ticket->delete();
 
         return redirect()->route('ticket.index')->withStatus(__('Ticket successfully deleted.'));
+    }
+
+    public function fetchAllTickets(Request $request)
+    {
+        $data['tickets'] = Ticket::all();
+
+        return response()->json([
+            'success' => __('Ticket successfully fetched.'),
+            'data' => $data,
+        ]);
     }
 }

@@ -10,32 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class SectionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Section $model)
-    {
-        $this->authorize('manage-users', User::class);
-        $user = Auth::user();
 
-        $sections = $model->with('events')->get();
-
-        return view('section.index', ['user' => $user,'sections' => $sections]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Request $request)
-    {
-        $user = Auth::user();
-
-        return view('section.create', ['user' => $user, 'event_id' => $request->id]);
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -43,38 +18,22 @@ class SectionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(SectionRequest $request ,Section $model)
+    public function store(SectionRequest $request ,Section $section)
     {
-        $event_id = $request->event_id;
-        $section = $model->create($request->all());
-        $event = Event::find($event_id);
-        $event->sections()->attach(['section_title_id' => $section['id']]);
+        $model = app($request->model_type);
+        $model = $model::find($request->model_id);
 
-        return redirect()->route('events.edit', ['event' => $request->event_id])->withStatus(__('Event successfully created.'));
-    }
+        $input['section'] = $request->section;
+        $input['description'] = $request->description;
+        $input['title'] = $request->title;
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Model\Section  $section
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Section $section)
-    {
-        //
-    }
+        $section = $section->create($input);
+        $model->sections()->save($section);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Model\Section  $section
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Section $section, Request $request)
-    {
-        $event_id = $request->id;
-
-        return view('section.edit', compact('section', 'event_id'));
+        return response()->json([
+            'success' => __('Section successfully created.'),
+            'section' => $section,
+        ]);
     }
 
     /**
@@ -88,7 +47,10 @@ class SectionController extends Controller
     {
         $section->update($request->all());
 
-        return redirect()->route('events.edit', ['event' => $request->event_id])->withStatus(__('Section successfully updated.'));
+        return response()->json([
+            'success' => __('Section successfully updated.'),
+            'section' => $section,
+        ]);
     }
 
     /**

@@ -17,7 +17,9 @@
 */
 namespace App\Http\Controllers;
 
+use Storage;
 use App\Model\User;
+use App\Model\Dropbox;
 use App\Model\Category;
 use App\Http\Requests\CategoryRequest;
 
@@ -48,7 +50,21 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('global_settings.categories.create');
+        $li = Storage::disk('dropbox');
+
+        if($li) {
+
+            $folders = $li->listContents();
+            //dd($folders);
+            //$data['folders'][0] = 'Select Dropbox Folder';
+            foreach ($folders as $key => $row) {
+                if($row['type'] == 'dir') :
+                    $data['folders'][$row['basename']] = $row['basename'];
+                endif;
+            }
+        }
+
+        return view('global_settings.categories.create', $data);
     }
 
     /**
@@ -60,7 +76,14 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request, Category $model)
     {
-        $model->create($request->all());
+
+        $model = $model->create($request->all());
+        foreach($request->folder_name as $folder_name){
+
+            $exist_dropbox = Dropbox::where('folder_name', $folder_name)->first();
+            $model->dropbox()->attach($exist_dropbox->id,['category_id' => $model->id]);
+
+        }
 
         return redirect()->route('global.index')->withStatus(__('Category successfully created.'));
     }

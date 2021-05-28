@@ -88,7 +88,7 @@
 
             <div class="modal-footer">
                 <button type="button" data-event-id="{{$model->id}}" id="venue_save_btn" class="btn btn-primary">Save changes</button>
-                <button type="button" class="btn btn-link close_modal ml-auto" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-link close_modal ml-auto close-modal" data-dismiss="modal">Close</button>
             </div>
 
         </div>
@@ -112,22 +112,6 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
 
     <script>
-//    $(document).on('shown.bs.modal', '#venueModal',function(e) {
-//        //e.preventDefault()
-//         alert('open')
-//    	var link  = e.relatedTarget,
-//         	modal    = $(this),
-//          id = e.relatedTarget.dataset.id
-//          //name = e.relatedTarget.dataset.name,
-//          //description =e.relatedTarget.dataset.description;
-//          name = $("#name-"+id).text(),
-//          description = $("#desc-"+id).text();
-
-//       modal.find("#edit-name").val(name);
-//       modal.find("#edit-description1").val(description);
-//    	modal.find("#benefit-id").val(id)
-
-//    });
 
     $(document).on('shown.bs.modal', '#venueModal',function(e) {
         let modelType = "{{addslashes ( get_class($model) )}}";
@@ -234,29 +218,15 @@
                 </tr>`;
 
                 $(".venue-body").append(newVenue);
-                // $(".close-modal").click();
-                // $("#success-message p").html(data.success);
-   	            // $("#success-message").show();
+                $(".close-modal").click();
+                $("#success-message p").html(data.success);
+   	            $("#success-message").show();
 
 
             }
         });
 
     })
-
-   	// var link  = e.relatedTarget,
-    //     	modal    = $(this),
-    //      id = e.relatedTarget.dataset.id
-    //      //name = e.relatedTarget.dataset.name,
-    //      //description =e.relatedTarget.dataset.description;
-    //      name = $("#name-"+id).text(),
-    //      description = $("#desc-"+id).text();
-
-    //   modal.find("#edit-name").val(name);
-    //   modal.find("#edit-description1").val(description);
-   	// modal.find("#benefit-id").val(id)
-
-
 
 </script>
 @endpush

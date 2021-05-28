@@ -42,6 +42,7 @@
 
                                     @include('alerts.feedback', ['field' => 'name'])
                                 </div>
+                                @include('admin.slug.slug',['slug' => isset($slug) ? $slug : null])
 
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
