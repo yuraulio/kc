@@ -60,39 +60,38 @@
                                         <td>{{ $topic->status }}</td>
                                         <td>{{ $topic->title }}</td>
                                         <td>
-                                        @foreach($topic->category as $category)
+                                        @foreach($topic['category'] as $category)
                                             {{$category->name}}
                                         @endforeach
                                         </td>
-                                        @if($topic->created_at)<td>{{ date_format($topic->created_at, 'Y-m-d' ) }}</td>@endif
-					                    @can('manage-users', App\Model\User::class)
+                                        <td>{{ $topic->created_at ? date_format($topic->created_at, 'Y-m-d' ) : '' }}</td>
+					                   
 					                        <td class="text-right">
-                                                @if (auth()->user()->can('update', $user) || auth()->user()->can('delete', $user))
-                                                    <div class="dropdown">
-                                                        <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                            <i class="fas fa-ellipsis-v"></i>
-                                                        </a>
-                                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                               
+                                                <div class="dropdown">
+                                                    <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fas fa-ellipsis-v"></i>
+                                                    </a>
+                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
 
-                                                                @can('update', $user)
-                                                                    <a class="dropdown-item" href="{{ route('topics.edit', $topic) }}">{{ __('Edit') }}</a>
-                                                                @endcan
-    							                                @can('delete', $user)
-        							                                <form action="{{ route('topics.destroy', $topic) }}" method="post">
-                                                                        @csrf
-                                                                        @method('delete')
+                                                           
+                                                                <a class="dropdown-item" href="{{ route('topics.edit', $topic) }}">{{ __('Edit') }}</a>
+                                                           
+        							                            <form action="{{ route('topics.destroy', $topic) }}" method="post">
+                                                                    @csrf
+                                                                    @method('delete')
 
-                                                                        <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
-                                                                            {{ __('Delete') }}
-                                                                        </button>
-                                                                    </form>
-    						                                    @endcan
+                                                                    <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
+                                                                        {{ __('Delete') }}
+                                                                    </button>
+                                                                </form>
+    						                                
 
-                                                        </div>
                                                     </div>
-                                                @endif
+                                                </div>
+                                               
                                             </td>
-					                    @endcan
+					                    
                                     </tr>
                                 @endforeach
                             </tbody>
