@@ -24,7 +24,7 @@ class TopicController extends Controller
         $this->authorize('manage-users', User::class);
         $user = Auth::user();
 
-        return view('topics.index', ['topics' => $model->with('category')->paginate(20), 'user' => $user]);
+        return view('topics.index', ['topics' => $model->with('category'), 'user' => $user]);
     }
 
     /**
