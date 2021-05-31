@@ -83,6 +83,9 @@
                                         <li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-9-tab_inside" data-toggle="tab" href="#tabs-icons-text-9_inside" role="tab" aria-controls="tabs-icons-text-9_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Sections</a>
                                         </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-10-tab_inside" data-toggle="tab" href="#tabs-icons-text-10_inside" role="tab" aria-controls="tabs-icons-text-10_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Faqs</a>
+                                        </li>
 
                                         <li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab_inside" data-toggle="tab" href="#metas" role="tab" aria-controls="metas" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Metas</a>
@@ -102,7 +105,7 @@
 
                                                     <h6 class="heading-small text-muted mb-4">{{ __('Event information') }}</h6>
                                                     <div class="pl-lg-4">
-                                                        <div class="form-group{{ $errors->has('priority') ? ' has-danger' : '' }}">
+                                                        <div class="d-none form-group{{ $errors->has('priority') ? ' has-danger' : '' }}">
                                                             <label class="form-control-label" for="input-priority">{{ __('Priority') }}</label>
                                                             <input type="number" name="priority" id="input-priority" class="form-control{{ $errors->has('priority') ? ' is-invalid' : '' }}" placeholder="{{ __('Priority') }}" value="{{ old('priority', $event->priority) }}" autofocus>
 
@@ -148,6 +151,26 @@
 
                                                             @include('alerts.feedback', ['field' => 'type_id'])
                                                         </div>
+
+                                                        <div class="form-group{{ $errors->has('delivery_id') ? ' has-danger' : '' }}">
+                                                            <label class="form-control-label" for="input-delivery_id">{{ __('Delivery') }}</label>
+                                                            <select name="delivery_id" id="input-delivery_id" class="form-control" placeholder="{{ __('Delivery') }}" required>
+                                                                <option value="">-</option>
+                                                                @foreach ($delivery as $delivery)
+                                                                    <option <?php if(count($event->delivery) != 0){
+                                                                        if($event->delivery[0]->id == $delivery->id){
+                                                                            echo 'selected';
+                                                                        }else{
+                                                                            echo '';
+                                                                        }
+                                                                    }
+                                                                    ?> value="{{ $delivery->id }}" >{{ $delivery->name }}</option>
+                                                                @endforeach
+                                                            </select>
+
+                                                            @include('alerts.feedback', ['field' => 'delivery_id'])
+                                                        </div>
+
 
                                                         <div class="form-group{{ $errors->has('published') ? ' has-danger' : '' }}">
                                                             <label class="form-control-label" for="input-published">{{ __('Published') }}</label>
@@ -281,7 +304,7 @@
                                                                 <th scope="col">{{ __('Topic') }}</th>
                                                                 <th scope="col">{{ __('Lesson') }}</th>
                                                                 <th scope="col">{{ __('Instructor') }}</th>
-                                                                @if(count($event->type) > 0 && $event->type[0]['name'] == 'In-Class')
+                                                                @if(count($event->type) > 0 && $isInclassCourse)
                                                                     <th scope="col">{{ __('Date') }}</th>
                                                                     <th scope="col">{{ __('Time starts') }}</th>
                                                                     <th scope="col">{{ __('Time ends') }}</th>
@@ -324,7 +347,7 @@
                                                                             }else{
                                                                                 echo '-';
                                                                             } ?></td>
-                                                                            @if(count($event->type) > 0 && $event->type[0]['name'] == 'In-Class')
+                                                                            @if(count($event->type) > 0 && $isInclassCourse)
                                                                             <td></td>
                                                                             <td></td>
                                                                             <td></td>
@@ -393,6 +416,9 @@
                                             </div>
                                             <div class="tab-pane fade" id="tabs-icons-text-9_inside" role="tabpanel" aria-labelledby="tabs-icons-text-9-tab_inside">
                                                 @include('admin.section.index', ['model' => $event])
+                                            </div>
+                                            <div class="tab-pane fade" id="tabs-icons-text-10_inside" role="tabpanel" aria-labelledby="tabs-icons-text-10-tab_inside">
+                                                @include('admin.faq.index', ['model' => $event])
                                             </div>
                                         </div>
                                     </div>
@@ -608,7 +634,7 @@
 
                     data = JSON.parse(data)
 
-                    let event_type = data.event.type[0].name
+                    let event_type = data.isInclassCourse
                     let event_id = data.event
 
                     lesson = data.lesson[0].pivot
@@ -647,7 +673,7 @@
                     }
 
 
-                    if(event_type == 'In-Class'){
+                    if(event_type){
                         let row = `
                             <div class="form-group">
                                 <div class="input-group">

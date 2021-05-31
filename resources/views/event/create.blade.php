@@ -37,13 +37,13 @@
 
                             <h6 class="heading-small text-muted mb-4">{{ __('Event information') }}</h6>
                             <div class="pl-lg-4">
-                                <div class="form-group{{ $errors->has('priority') ? ' has-danger' : '' }}">
+                                <div class="d-none form-group{{ $errors->has('priority') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-priority">{{ __('Priority') }}</label>
-                                    <input type="number" name="priority" id="input-priority" class="form-control{{ $errors->has('priority') ? ' is-invalid' : '' }}" placeholder="{{ __('Priority') }}" value="{{ old('priority') }}" autofocus>
+                                    <input type="number" name="priority" id="input-priority" class="form-control{{ $errors->has('priority') ? ' is-invalid' : '' }}" placeholder="{{ __('Priority') }}" value="{{ old('priority') }}">
 
                                     @include('alerts.feedback', ['field' => 'priority'])
                                 </div>
-                                
+
                                 <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
                                     <select name="category_id" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}">
@@ -58,7 +58,7 @@
 
                                 <div class="form-group{{ $errors->has('type_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-type_id">{{ __('Type') }}</label>
-                                    <select name="type_id" id="input-type_id" class="form-control" placeholder="{{ __('Type') }}">
+                                    <select name="type_id" id="input-type_id" class="form-control" placeholder="{{ __('Type') }}" required>
                                         <option value="">-</option>
                                         @foreach ($types as $type)
                                             <option value="{{ $type->id }}" >{{ $type->name }}</option>
@@ -74,6 +74,17 @@
                                         <option value="">-</option>
                                             <option value="1">{{ __('Published') }}</option>
                                             <option value="0">{{ __('Unpublished') }}</option>
+                                    </select>
+
+                                    @include('alerts.feedback', ['field' => 'published'])
+                                </div>
+
+                                <div class="form-group{{ $errors->has('delivery') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-delivery">{{ __('Delivery') }}</label>
+                                    <select name="delivery" id="input-delivery" class="form-control" placeholder="{{ __('Delivery') }}" >
+                                            @foreach ($delivery as $delivery)
+                                                <option value="{{ $delivery->id }}" >{{ $delivery->name }}</option>
+                                            @endforeach
                                     </select>
 
                                     @include('alerts.feedback', ['field' => 'published'])

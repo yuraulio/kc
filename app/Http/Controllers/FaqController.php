@@ -20,7 +20,13 @@ class FaqController extends Controller
         $this->authorize('manage-users', User::class);
         $user = Auth::user();
 
-        //dd($model->with('category')->get());
+        return view('faq.index', ['faqs' => $model->with('category')->get(), 'user' => $user]);
+    }
+
+    public function index_categories(Faq $model)
+    {
+        $this->authorize('manage-users', User::class);
+        $user = Auth::user();
 
         return view('faq.index', ['faqs' => $model->with('category')->get(), 'user' => $user]);
     }
@@ -47,15 +53,43 @@ class FaqController extends Controller
     {
         $faq = $model->create($request->all());
 
+        //dd($request->category_id);
         if($request->category_id != null ){
-            $category = Category::find($request->category_id);
 
-            $faq->category()->attach([$category->id]);
+            foreach($request->category_id as $key => $category_id){
+                //dd($category);
+                $category = Category::find($category_id);
+
+                $faq->category()->attach([$category_id]);
+            }
+
         }
 
 
 
         return redirect()->route('faqs.index')->withStatus(__('Faq successfully created.'));
+    }
+
+    public function store_event(Request $request, Faq $faq)
+    {
+        //dd($request->all());
+        $model = app($request->model_type);
+        $model = $model::find($request->model_id);
+
+        //dd($model);
+
+        $model->faqs()->sync($request->faqs_id);
+
+        foreach($request->faqs_id as $key => $faq_id){
+            $data[$key] = Faq::find($faq_id);
+        }
+
+
+
+        return response()->json([
+            'success' => __('Faqs successfully assigned.'),
+            'data' => $data,
+        ]);
     }
 
     /**
@@ -115,5 +149,23 @@ class FaqController extends Controller
         $faq->delete();
 
         return redirect()->route('faqs.index')->withStatus(__('Faq successfully deleted.'));
+    }
+
+    public function fetchAllFaqs(Request $request)
+    {
+        $model = app($request->model_type);
+        $model = $model::with('category')->find($request->model_id);
+        //dd($model->category[0]['id']);
+
+        $faqByCat = Category::with('faqs')->find($model->category[0]['id']);
+        //dd($faqByCat->faqs);
+        //dd($faqByCat->faqs()->wherePivot('category_id', '=', $model->category[0]['id'])->get());
+
+        $faqs = Faq::all();
+
+        return response()->json([
+            'success' => __('Faqs successfully fetched.'),
+            'faqs' => $faqByCat->faqs,
+        ]);
     }
 }

@@ -95,7 +95,7 @@ class Category extends Model
 
     public function faqs()
     {
-        return $this->morphedByMany(Faqs::class, 'categoryable');
+        return $this->morphedByMany(Faq::class, 'categoryable');
     }
 
 }

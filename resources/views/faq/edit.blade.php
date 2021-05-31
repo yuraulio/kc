@@ -53,21 +53,23 @@
                                     @include('alerts.feedback', ['field' => 'answer'])
                                 </div>
 
-                                <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-status">{{ __('Status') }}</label>
-                                    <input type="number" name="status" id="input-status" class="form-control{{ $errors->has('status') ? ' is-invalid' : '' }}" placeholder="{{ __('Status') }}" value="{{ old('status', $faq->status) }}" autofocus>
-
-                                    @include('alerts.feedback', ['field' => 'status'])
-                                </div>
-
                                 <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
-                                    <select name="category_id" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}" required>
-                                        <option value="">-</option>
+                                    <select multiple name="category_id[]" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}" required>
+                                    <?php //dd($faq); ?>
                                         @foreach ($categories as $category)
                                             <option
-                                            <?php if(count($faq->category) != 0){
-                                                if($faq->category[0]->id == $category->id){
+
+                                            <?php $found = false;
+                                             if(count($faq->category) != 0){
+                                                foreach($faq->category as $assign_cat)
+                                                {
+                                                    if($assign_cat['id'] == $category->id){
+                                                        $found = true;
+                                                    }
+
+                                                }
+                                                if($found){
                                                     echo 'selected';
                                                 }else{
                                                     echo '';

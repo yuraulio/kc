@@ -33,9 +33,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            <?php //$summary = $event->summary()->get(); ?>
-                            <?php //dd($event); ?>
-
                                 @foreach ($event->venues as $venue)
                                     <tr>
                                         <td>{{ $venue->name }}</td>
@@ -45,37 +42,18 @@
 
 
                                         <td>{{ date_format($venue->created_at, 'Y-m-d' ) }}</td>
-					                    @can('manage-users', App\Model\User::class)
-					                        <td class="text-right">
-                                                @if (auth()->user()->can('update', $user) || auth()->user()->can('delete', $user))
-                                                    <div class="dropdown">
-                                                        <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                            <i class="fas fa-ellipsis-v"></i>
-                                                        </a>
-                                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-
-                                                                @can('update', $user)
-                                                                    <a class="dropdown-item" href="{{ route('venue.edit', ['venue' => $venue, 'event_id'=>$event['id']]) }}">{{ __('Edit') }}</a>
-                                                                @endcan
-    							                                {{--@can('delete', $user)
-        							                                <form action="{{ route('venue.destroy', $venue) }}" method="post">
-                                                                        @csrf
-                                                                        @method('delete')
-
-                                                                        <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this summary?") }}') ? this.parentElement.submit() : ''">
-                                                                            {{ __('Delete') }}
-                                                                        </button>
-                                                                    </form>
-    						                                    @endcan--}}
-
-                                                        </div>
-                                                    </div>
-                                                @endif
-                                            </td>
-					                    @endcan
+                                        <td class="text-right">
+                                            <div class="dropdown">
+                                                <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fas fa-ellipsis-v"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                                    <a class="dropdown-item" href="{{ route('venue.edit', ['venue' => $venue, 'event_id'=>$event['id']]) }}">{{ __('Edit') }}</a>
+                                                </div>
+                                            </div>
+                                        </td>
                                     </tr>
                                 @endforeach
-
                             </tbody>
                         </table>
                     </div>

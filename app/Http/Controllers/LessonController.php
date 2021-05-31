@@ -163,6 +163,7 @@ class LessonController extends Controller
         $data['event'] = $event;
         $data['topic_id'] = $request->topic_id;
         $data['lesson_id'] = $request->lesson_id;
+        $data['isInclassCourse'] = $event->is_inclass_course();
 
         echo json_encode($data);
 
