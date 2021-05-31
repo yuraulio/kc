@@ -59,13 +59,30 @@ class TicketController extends Controller
 
         $ticket = Ticket::find($request->ticket_id);
 
+        $features = json_encode($request->features);
+
+
+        $options['featured'] = ($request->option1 == 1 ? true : false);
+        $options['dropdown'] = ($request->option2 == 1 ? true : false);
+        $options['alumni'] = ($request->option3 == 1 ? true : false);
+
+        $options = json_encode($options);
+
 
         $ticket->events()->attach($request->model_id, [
             'price' => $request->price,
             'quantity' => $request->quantity,
+            'features' => $features,
+            'options' => $options,
             'priority' => count($model->ticket) + 1
             ]);
 
+            //dd($ticket);
+            $ticket->features = $features;
+            $ticket->options = $options;
+            $ticket->subtitle = $ticket['subtitle'];
+            $ticket->quantity = $request->quantity;
+            $ticket->price = $request->price;
 
 
 
@@ -148,16 +165,33 @@ class TicketController extends Controller
     public function update(Request $request, Ticket $ticket)
     {
 
+        //dd($request->all());
         $ticket_id = $ticket['id'];
         $event = Event::find($request->model_id);
-        $event->ticket()->wherePivot('event_id', '=', $request->model_id)->wherePivot('ticket_id', '=', $ticket_id)->updateExistingPivot($request->model_id,[
+
+        $features = json_encode($request->features);
+
+
+        $options['featured'] = ($request->option1 == 1 ? true : false);
+        $options['dropdown'] = ($request->option2 == 1 ? true : false);
+        $options['alumni'] = ($request->option3 == 1 ? true : false);
+
+        $options = json_encode($options);
+
+        //dd($event->ticket()->wherePivot('event_id', '=', $request->model_id)->wherePivot('ticket_id', '=', $ticket_id)->get());
+
+        $event->ticket()->wherePivot('event_id', '=', $request->model_id)->wherePivot('ticket_id', '=', $ticket_id)->updateExistingPivot($ticket_id,[
             'quantity' => $request->quantity,
             'price' => $request->price,
+            'options' => $options,
+            'features' => $features
         ], false);
 
         $data['ticket_id'] = $ticket_id;
         $data['quantity'] = $request->quantity;
         $data['price'] = $request->price;
+        $data['features'] = $features;
+        $data['options'] = $options;
 
         return response()->json([
             'success' => __('Ticket successfully updated.'),
@@ -191,7 +225,18 @@ class TicketController extends Controller
 
     public function fetchAllTickets(Request $request)
     {
+        $model = app($request->modelType);
+        $model = $model::with('ticket')->find($request->modelId);
         $data['tickets'] = Ticket::all();
+
+        foreach($model->ticket as $key => $ticket){
+            foreach($data['tickets'] as $allTicket){
+                if($ticket['id'] == $allTicket['id']){
+                    unset($data['tickets'][$key]);
+                }
+            }
+
+        }
 
         return response()->json([
             'success' => __('Ticket successfully fetched.'),

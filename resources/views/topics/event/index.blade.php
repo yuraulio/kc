@@ -63,7 +63,7 @@
                                         @if($topic->created_at)<td>{{ date_format($topic->created_at, 'Y-m-d' ) }}</td>@endif
 					                    {{--@can('manage-users', App\Model\User::class)
 					                        <td class="text-right">
-                                                @if (auth()->user()->can('update', $user) || auth()->user()->can('delete', $user))
+
                                                     <div class="dropdown">
                                                         <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                             <i class="fas fa-ellipsis-v"></i>
@@ -86,7 +86,7 @@
 
                                                         </div>
                                                     </div>
-                                                @endif
+
                                             </td>
 					                    @endcan--}}
                                     </tr>
@@ -133,8 +133,7 @@
                 data:data,
                 success: function(data) {
                     data = JSON.parse(data)
-                    console.log(data)
-                    let event_type = data.event.type[0].name
+                    let event_type = data.isInclassCourse
                     let e = $('.'+data.request.topic_id).find('label')
 
 
@@ -156,7 +155,7 @@
                                 let row = ``
                                 if(data.request.status1 == "true"){
 
-                                    if(event_type == 'In-Class')
+                                    if(event_type)
                                     {
                                         $row = `
                                         <td></td>

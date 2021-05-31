@@ -57,20 +57,13 @@
                                     <label class="form-control-label" for="input-type">{{ __('Type') }}</label>
                                     <select name="type" id="input-type" class="form-control" placeholder="{{ __('Type') }}">
                                         <option value="">-</option>
+                                        <option value="Early-bird">Early Bird</option>
                                             <option value="Alumni">Alumni</option>
                                             <option value="Regular">Regular</option>
                                             <option value="Special">Special</option>
                                     </select>
 
                                     @include('alerts.feedback', ['field' => 'type'])
-                                </div>
-
-
-                                <div class="form-group{{ $errors->has('features') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-features">{{ __('Features') }}</label>
-                                    <input type="text" name="features" id="input-features" class="form-control{{ $errors->has('features') ? ' is-invalid' : '' }}" placeholder="{{ __('Features') }}" value="{{ old('features') }}" autofocus>
-
-                                    @include('alerts.feedback', ['field' => 'features'])
                                 </div>
 
                                 <div class="text-center">

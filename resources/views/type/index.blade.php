@@ -59,34 +59,27 @@
                                         <td>{{ $type->name }}</td>
                                         <td>{{ $type->description }}</td>
                                         <td>{{ date_format($type->created_at, 'Y-m-d' ) }}</td>
-					                    @can('manage-users', App\Model\User::class)
+
 					                        <td class="text-right">
-                                                @if (auth()->user()->can('update', $user) || auth()->user()->can('delete', $user))
-                                                    <div class="dropdown">
-                                                        <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                            <i class="fas fa-ellipsis-v"></i>
-                                                        </a>
-                                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                                <div class="dropdown">
+                                                    <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fas fa-ellipsis-v"></i>
+                                                    </a>
+                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                                        <a class="dropdown-item" href="{{ route('types.edit', $type) }}">{{ __('Edit') }}</a>
 
-                                                                @can('update', $user)
-                                                                    <a class="dropdown-item" href="{{ route('types.edit', $type) }}">{{ __('Edit') }}</a>
-                                                                @endcan
-    							                                @can('delete', $user)
-        							                                <form action="{{ route('types.destroy', $type) }}" method="post">
-                                                                        @csrf
-                                                                        @method('delete')
+                                                        <form action="{{ route('types.destroy', $type) }}" method="post">
+                                                            @csrf
+                                                            @method('delete')
 
-                                                                        <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
-                                                                            {{ __('Delete') }}
-                                                                        </button>
-                                                                    </form>
-    						                                    @endcan
-
-                                                        </div>
+                                                            <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
+                                                                {{ __('Delete') }}
+                                                            </button>
+                                                        </form>
                                                     </div>
-                                                @endif
+                                                </div>
+
                                             </td>
-					                    @endcan
                                     </tr>
                                 @endforeach
                             </tbody>

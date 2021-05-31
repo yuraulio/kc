@@ -11,6 +11,7 @@ use App\Model\Category;
 use App\Model\Type;
 use App\Model\City;
 use App\Model\Summary;
+use App\Model\Delivery;
 use App\Model\Section;
 use App\Model\Benefit;
 use App\Model\Venue;
@@ -59,9 +60,28 @@ class Event extends Model
         return $this->belongsToMany(Summary::class, 'events_summaryevent', 'event_id', 'summary_event_id' );
     }
 
+    public function is_inclass_course()
+    {
+        if($this->delivery[0]['id'] == 2){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function faqs()
+    {
+        return $this->belongsToMany(Faq::class, 'events_faqevent', 'event_id', 'events_faqevent' );
+    }
+
+    public function delivery()
+    {
+        return $this->belongsToMany(Delivery::class, 'event_delivery', 'event_id', 'delivery_id');
+    }
+
     public function ticket()
     {
-        return $this->belongsToMany(Ticket::class, 'event_tickets')->withPivot('id','priority', 'price', 'options', 'quantity');
+        return $this->belongsToMany(Ticket::class, 'event_tickets')->withPivot('id','priority', 'price', 'options', 'quantity', 'features');
     }
 
     public function city()

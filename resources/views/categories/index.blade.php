@@ -59,31 +59,24 @@
                                         <td>{{ $category->name }}</td>
                                         <td>{{ $category->description }}</td>
                                         <td>{{ $category->created_at->format('d/m/Y H:i') }}</td>
-                                        @can('manage-items', App\Model\User::class)
-                                            <td class="text-right">
-                                                @if (auth()->user()->can('update', $category) || auth()->user()->can('delete', $category))
-                                                    <div class="dropdown">
-                                                        <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                            <i class="fas fa-ellipsis-v"></i>
-                                                        </a>
-                                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                            @can('update', $category)
-                                                                <a class="dropdown-item" href="{{ route('category.edit', $category) }}">{{ __('Edit') }}</a>
-                                                            @endcan
-                                                            @if ($category->items->isEmpty() && auth()->user()->can('delete', $category))
-                                                                <form action="{{ route('category.destroy', $category) }}" method="post">
-                                                                    @csrf
-                                                                    @method('delete')
-                                                                    <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this category?") }}') ? this.parentElement.submit() : ''">
-                                                                        {{ __('Delete') }}
-                                                                    </button>
-                                                                </form>
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                @endif
-                                            </td>
-                                        @endcan
+
+                                        <td class="text-right">
+                                            <div class="dropdown">
+                                                <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fas fa-ellipsis-v"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                                    <a class="dropdown-item" href="{{ route('category.edit', $category) }}">{{ __('Edit') }}</a>
+                                                    <form action="{{ route('category.destroy', $category) }}" method="post">
+                                                        @csrf
+                                                        @method('delete')
+                                                        <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this category?") }}') ? this.parentElement.submit() : ''">
+                                                            {{ __('Delete') }}
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>

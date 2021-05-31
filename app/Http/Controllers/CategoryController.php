@@ -81,7 +81,13 @@ class CategoryController extends Controller
         foreach($request->folder_name as $folder_name){
 
             $exist_dropbox = Dropbox::where('folder_name', $folder_name)->first();
-            $model->dropbox()->attach($exist_dropbox->id,['category_id' => $model->id]);
+            //dd($exist_dropbox);
+            if($exist_dropbox){
+                $model->dropbox()->attach($exist_dropbox->id,['category_id' => $model->id]);
+            }else{
+                return redirect()->route('global.index')->withStatus(__('Update Dropbox First.'));
+            }
+
 
         }
 

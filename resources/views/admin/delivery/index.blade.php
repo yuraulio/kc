@@ -1,18 +1,40 @@
+@extends('layouts.app', [
+    'title' => __('User Management'),
+    'parentSection' => 'laravel',
+    'elementName' => 'user-management'
+])
 
+@section('content')
+    @component('layouts.headers.auth')
+        @component('layouts.headers.breadcrumbs')
+            @slot('title')
+                {{ __('Examples') }}
+            @endslot
+
+            <li class="breadcrumb-item"><a href="{{ route('delivery.index') }}">{{ __('Deliveries Management') }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
+        @endcomponent
+    @endcomponent
+
+    <div class="container-fluid mt--6">
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col-8">
-                                <h3 class="mb-0">{{ __('Partners') }}</h3>
+                                <h3 class="mb-0">{{ __('Deliveries') }}</h3>
                                 <p class="text-sm mb-0">
-                                    {{ __('This is an example of partner management. This is a minimal setup in order to get started fast.') }}
-                                </p>
+                                        {{ __('This is an example of Delivery management.') }}
+                                    </p>
                             </div>
-                            @if (auth()->user()->can('create', App\User::class))
+                            @can('create', App\Model\User::class)
                                 <div class="col-4 text-right">
-                                    <a href="{{ route('partner.create_event', ['event_id' => $event->id]) }}" class="btn btn-sm btn-primary">{{ __('Assign partner') }}</a>
+                                    <a href="{{ route('delivery.create') }}" class="btn btn-sm btn-primary">{{ __('Add Delivery') }}</a>
                                 </div>
-                            @endif
+                            @endcan
                         </div>
-
+                    </div>
 
                     <div class="col-12 mt-2">
                         @include('alerts.success')
@@ -24,48 +46,57 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col">{{ __('Name') }}</th>
-                                    <th scope="col">{{ __('Creation Date') }}</th>
-                                    @can('manage-items', App\User::class)
+                                    <th scope="col">{{ __('Created at') }}</th>
+                                    @can('manage-users', App\Model\User::class)
                                         <th scope="col"></th>
                                     @endcan
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($event->partners as $partner)
+                                @foreach ($deliveries as $delivery)
                                     <tr>
-                                        <td>{{ $partner->name }}</td>
-                                        <td>{{ $partner->created_at->format('d/m/Y H:i') }}</td>
-                                        @can('manage-items', App\User::class)
-                                            <td class="text-right">
-                                                @if (auth()->user()->can('update', $user) || auth()->user()->can('delete', $user))
+                                        <td>{{ $delivery->name }}</td>
+                                        <td>{{ date_format($delivery->created_at, 'Y-m-d' ) }}</td>
+
+					                        <td class="text-right">
+
                                                     <div class="dropdown">
                                                         <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                             <i class="fas fa-ellipsis-v"></i>
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                            {{--@can('update', $user)
-                                                                <a class="dropdown-item" href="{{ route('partner.edit_event', $partner) }}">{{ __('Edit') }}</a>
-                                                            @endcan--}}
-                                                            {{--@can('delete', $user)
-                                                                <form action="{{ route('partner.destroy', $partner) }}" method="post">
-                                                                    @csrf
-                                                                    @method('delete')
-                                                                    <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this item?") }}') ? this.parentElement.submit() : ''">
+
+                                                                @can('update', $user)
+                                                                    <a class="dropdown-item" href="{{ route('delivery.edit', $delivery) }}">{{ __('Edit') }}</a>
+                                                                @endcan
+    							                                {{--@can('delete', $user)
+        							                                <form action="{{ route('delivery.destroy', $delivery) }}" method="post">
+                                                                        @csrf
+                                                                        @method('delete')
+
+                                                                        <button delivery="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
                                                                             {{ __('Delete') }}
-                                                                    </button>
-                                                                </form>
-                                                            @endcan--}}
+                                                                        </button>
+                                                                    </form>
+    						                                    @endcan--}}
+
                                                         </div>
                                                     </div>
-                                                @endif
+
                                             </td>
-                                        @endcan
+
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+        </div>
 
+        @include('layouts.footers.auth')
+    </div>
+@endsection
 
 @push('css')
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css">

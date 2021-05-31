@@ -143,6 +143,26 @@
                         </div>
                     </li>
                     <li class="nav-item active">
+                        <a class="nav-link active" href="#navbar-pages" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-pages">
+                            <i class="fab fa-laravel" style="color: #f4645f;"></i>
+                            <span class="nav-link-text" style="color: #f4645f;">{{ __('Faqs') }}</span>
+                        </a>
+                        <div class="collapse show" id="navbar-pages">
+                            <ul class="nav nav-sm flex-column">
+                                @can('manage-users', App\Model\User::class)
+                                    <li class="nav-item  {{ $elementName == 'role-management' ? 'active' : '' }}">
+                                        <a href="{{ route('faqs.categories') }}" class="nav-link">{{ __('Category') }}</a>
+                                    </li>
+                                @endcan
+                                @can('manage-users', App\Model\User::class)
+                                    <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
+                                        <a href="{{ route('user.index') }}" class="nav-link">{{ __('Faqs') }}</a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item active">
                         <a class="nav-link active" href="#navbar-courses" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-courses">
                             <i class="fab fa-laravel" style="color: #f4645f;"></i>
                             <span class="nav-link-text" style="color: #f4645f;">{{ __('Courses') }}</span>
@@ -219,6 +239,11 @@
                                 @can('manage-users', App\Model\User::class)
                                     <li class="nav-item {{ $elementName == 'exams-management' ? 'active' : '' }}">
                                         <a href="{{ route('exams.index') }}" class="nav-link">{{ __('Exams') }}</a>
+                                    </li>
+                                @endcan
+                                @can('manage-users', App\Model\User::class)
+                                    <li class="nav-item {{ $elementName == 'deliveries-management' ? 'active' : '' }}">
+                                        <a href="{{ route('delivery.index') }}" class="nav-link">{{ __('Deliveries') }}</a>
                                     </li>
                                 @endcan
                             </ul>

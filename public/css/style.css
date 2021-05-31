@@ -23,3 +23,7 @@
     cursor: pointer;
     list-style: none;
 }
+
+#newRow, #newRowEdit {
+    margin-top: 20px;
+}

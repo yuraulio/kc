@@ -45,6 +45,10 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
     Route::resource('venue', 'VenueController', ['except' => ['show']]);
     Route::resource('partner', 'PartnerController', ['except' => ['show']]);
     Route::resource('exams', 'ExamController', ['except' => ['show']]);
+    Route::resource('delivery', 'DeliveryController', ['except' => ['show']]);
+
+    //Faqs
+    Route::get('faqs/categories', ['as' => 'faqs.categories', 'uses' => 'FaqController@index_categories']);
 
     //Dropbox
     Route::get('dropbox/update', ['as' => 'dropbox.update', 'uses' => 'DropboxController@update']);
@@ -70,13 +74,18 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
     Route::post('city/store_main', ['as' => 'city.store_main', 'uses' => 'CityController@store_main']);
     Route::get('city/fetchAllCities', ['as' => 'city.fetchAllCities', 'uses' => 'CityController@fetchAllCities']);
 
+
+    //Faqs
+    Route::post('faqs/fetchAllFaqs', ['as' => 'faqs.fetchAllFaqs', 'uses' => 'FaqController@fetchAllFaqs']);
+    Route::post('faqs/store_event', ['as' => 'faqs.store_event', 'uses' => 'FaqController@store_event']);
+
     //User
     Route::post('user/assignEventToUserCreate', ['as' => 'user.assignToCourse', 'uses' => 'UserController@assignEventToUserCreate']);
     Route::get('user/assignEventToUserRemove/{id}', ['as' => 'user.unassignToCourse', 'uses' => 'UserController@assignEventToUserRemove']);
     Route::get('user/edit_ticket', ['as' => 'user.edit_ticket', 'uses' => 'UserController@edit_ticket']);
 
     Route::get('user/store_ticket', ['as' => 'user.store_ticket', 'uses' => 'UserController@store_ticket']);
-    Route::get('ticket/fetchAllTickets', ['as' => 'ticket.fetchAllTickets', 'uses' => 'TicketController@fetchAllTickets']);
+    Route::post('ticket/fetchAllTickets', ['as' => 'ticket.fetchAllTickets', 'uses' => 'TicketController@fetchAllTickets']);
 
     //Custom Ticket
     //ticket.edit

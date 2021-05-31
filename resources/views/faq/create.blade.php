@@ -54,7 +54,7 @@
 
                                 <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
-                                    <select name="category_id" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}">
+                                    <select multiple name="category_id[]" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}">
                                         <option value="">-</option>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -62,13 +62,6 @@
                                     </select>
 
                                     @include('alerts.feedback', ['field' => 'category_id'])
-                                </div>
-
-                                <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-status">{{ __('Status') }}</label>
-                                    <input type="number" name="status" id="input-status" class="form-control{{ $errors->has('status') ? ' is-invalid' : '' }}" placeholder="{{ __('status') }}" autofocus>
-
-                                    @include('alerts.feedback', ['field' => 'status'])
                                 </div>
 
                                 <div class="text-center">

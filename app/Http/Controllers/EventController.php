@@ -10,6 +10,7 @@ use App\Model\Instructor;
 use App\Model\Category;
 use App\Model\Partner;
 use App\Model\PaymentMethod;
+use App\Model\Delivery;
 use Illuminate\Http\Request;
 use App\Http\Requests\EventRequest;
 use Illuminate\Support\Facades\Auth;
@@ -87,9 +88,9 @@ class EventController extends Controller
     public function assign_store(Request $request)
     {
 
-        $event = Event::with('type')->find($request->event_id);
+        $event = Event::with('delivery')->find($request->event_id);
+        $data['isInclassCourse'] = $event->is_inclass_course();
 
-        //dd($event);
 
         $allLessons = Topic::with('lessons')->find($request->topic_id);
 
@@ -110,6 +111,7 @@ class EventController extends Controller
         $data['request'] = $request->all();
         $data['lesson'] = $allLessons;
         $data['event'] = $event;
+
         echo json_encode($data);
     }
 
@@ -121,7 +123,7 @@ class EventController extends Controller
         return response()->json([
             'message' => 'Payment Method Changed'
         ]);
-        
+
     }
 
     /**
@@ -135,8 +137,9 @@ class EventController extends Controller
 
         $categories = Category::all();
         $types = Type::all();
+        $delivery = Delivery::all();
 
-        return view('event.create', ['user' => $user, 'events' => Event::all(), 'categories' => $categories, 'types' => $types]);
+        return view('event.create', ['user' => $user, 'events' => Event::all(), 'categories' => $categories, 'types' => $types, 'delivery' =>$delivery]);
     }
 
     /**
@@ -164,6 +167,12 @@ class EventController extends Controller
             $event->type()->attach([$request->type_id]);
         }
 
+        if($request->delivery_id != null){
+            $delivery = Delivery::find($request->delivery_id);
+
+            $event->delivery()->attach([$request->delivery_id]);
+        }
+
         return redirect()->route('events.edit',$event->id)->withStatus(__('Event successfully created.'));
         //return redirect()->route('events.index')->withStatus(__('Event successfully created.'));
     }
@@ -189,8 +198,8 @@ class EventController extends Controller
     {
         $user = Auth::user();
         $id = $event['id'];
-        $event = $event->with('category', 'summary', 'benefits', 'ticket', 'city', 'venues', 'topic', 'users', 'partners', 'sections','paymentMethod','slugable','metable')->find($id);
-        
+        $event = $event->with('delivery','category', 'summary', 'benefits', 'ticket', 'city', 'venues', 'topic', 'users', 'partners', 'sections','paymentMethod','slugable','metable','faqs')->find($id);
+
         $categories = Category::all();
         $types = Type::all();
         $partners = Partner::all();
@@ -210,6 +219,8 @@ class EventController extends Controller
         $data['slug'] = $event['slugable'];
         $data['metas'] = $event['metable'];
         $data['methods'] = PaymentMethod::where('status',1)->get();
+        $data['delivery'] = Delivery::all();
+        $data['isInclassCourse'] = $event->is_inclass_course();
 
         return view('event.edit', $data);
     }
@@ -231,6 +242,13 @@ class EventController extends Controller
             $type = Type::find($request->type_id);
 
             $event->type()->attach([$request->type_id]);
+        }
+
+        if($request->delivery_id != null){
+            $event->delivery()->detach();
+            $delivery = Delivery::find($request->delivery_id);
+
+            $event->delivery()->attach([$request->delivery_id]);
         }
 
         return redirect()->route('events.index')->withStatus(__('Event successfully updated.'));
