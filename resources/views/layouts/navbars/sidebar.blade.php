@@ -64,19 +64,9 @@
                         </a>
                         <div class="collapse show" id="navbar-menus">
                             <ul class="nav nav-sm flex-column">
-                                <!-- @can('manage-users', App\Model\User::class)
-                                    <li class="nav-item  {{ $elementName == 'role-management' ? 'active' : '' }}">
-                                        <a href="{{ route('role.index') }}" class="nav-link">{{ __('Role Management') }}</a>
-                                    </li>
-                                @endcan
                                 @can('manage-users', App\Model\User::class)
                                     <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
-                                        <a href="{{ route('user.index') }}" class="nav-link">{{ __('User Management') }}</a>
-                                    </li>
-                                @endcan -->
-                                @can('manage-users', App\Model\User::class)
-                                    <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
-                                        <a href="{{ route('user.index') }}" class="nav-link">{{ __('Header') }}</a>
+                                        <a href="{{ route('menu.index') }}" class="nav-link">{{ __('Menus') }}</a>
                                     </li>
                                 @endcan
                             </ul>
@@ -156,7 +146,7 @@
                                 @endcan
                                 @can('manage-users', App\Model\User::class)
                                     <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
-                                        <a href="{{ route('user.index') }}" class="nav-link">{{ __('Faqs') }}</a>
+                                        <a href="{{ route('faqs.index') }}" class="nav-link">{{ __('Faqs') }}</a>
                                     </li>
                                 @endcan
                             </ul>
@@ -205,11 +195,11 @@
                                         <a href="{{ route('testimonials.index') }}" class="nav-link">{{ __('Testimonials') }}</a>
                                     </li>
                                 @endcan
-                                @can('manage-users', App\Model\User::class)
+                                {{--@can('manage-users', App\Model\User::class)
                                     <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
                                         <a href="{{ route('faqs.index') }}" class="nav-link">{{ __('Faqs') }}</a>
                                     </li>
-                                @endcan
+                                @endcan--}}
                                 @can('manage-users', App\Model\User::class)
                                     <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
                                         <a href="{{ route('career.index') }}" class="nav-link">{{ __('Career') }}</a>

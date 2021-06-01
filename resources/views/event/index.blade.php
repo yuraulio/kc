@@ -51,9 +51,7 @@
                                     <th scope="col">{{ __('Assigned to Category') }}</th>
                                     <th scope="col">{{ __('Assigned to Type') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
-                                    @can('manage-users', App\Model\User::class)
-                                        <th scope="col"></th>
-                                    @endcan
+                                    <th scope="col"></th>
                                 </tr>
                             </thead>
                             <tbody>

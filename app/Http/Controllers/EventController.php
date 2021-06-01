@@ -11,6 +11,7 @@ use App\Model\Category;
 use App\Model\Partner;
 use App\Model\PaymentMethod;
 use App\Model\Delivery;
+use App\Model\Categories_Faqs;
 use Illuminate\Http\Request;
 use App\Http\Requests\EventRequest;
 use Illuminate\Support\Facades\Auth;
@@ -210,6 +211,7 @@ class EventController extends Controller
        // dd($event['topic']->groupBy('id'));
         //dd($allTopicsByCategory1);
         $data['event'] = $event;
+        //dd($event);
         $data['categories'] = $categories;
         $data['types'] = $types;
         $data['user'] = $user;

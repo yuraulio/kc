@@ -19,7 +19,7 @@ class CreateEventsFaqeventTable extends Migration
             $table->foreign('event_id')->references('id')->on('events');
 
             $table->integer('events_faqevent');
-            $table->foreign('events_faqevent')->references('id')->on('faqs');
+            $table->foreign('events_faqevent')->references('id')->on('categories_faqs');
         });
     }
 

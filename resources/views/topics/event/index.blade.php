@@ -9,11 +9,6 @@
                                         {{ __('This is an example of Topic management.') }}
                                     </p>
                             </div>
-                            {{--@can('create', App\Model\User::class)
-                                <div class="col-4 text-right">
-                                    <a href="{{ route('topics.create_event', ['event_id' => $event['id']]) }}" class="btn btn-sm btn-primary">{{ __('Assign Topic') }}</a>
-                                </div>
-                            @endcan--}}
                         </div>
                     </div>
 
@@ -29,15 +24,12 @@
                                     <th scope="col">{{ __('Title') }}</th>
 
                                     <th scope="col">{{ __('Assigned to event') }}</th>
-                                    <th scope="col">{{ __('Created at') }}</th>
-                                    {{--@can('manage-users', App\Model\User::class)
-                                        <th scope="col"></th>
-                                    @endcan--}}
                                 </tr>
                             </thead>
                             <tbody>
-                            <?php //dd($allTopicsByCategory); ?>
+                            <?php //dd($allTopicsByCategory->topics); ?>
                                 @foreach ($allTopicsByCategory->topics as $topic)
+                                <?php //dd($topic); ?>
 
                                     <tr>
                                         <td>{{ $topic->status }}</td>
@@ -60,35 +52,7 @@
 
 
                                         </td>
-                                        @if($topic->created_at)<td>{{ date_format($topic->created_at, 'Y-m-d' ) }}</td>@endif
-					                    {{--@can('manage-users', App\Model\User::class)
-					                        <td class="text-right">
 
-                                                    <div class="dropdown">
-                                                        <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                            <i class="fas fa-ellipsis-v"></i>
-                                                        </a>
-                                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-
-                                                                @can('update', $user)
-                                                                    <a class="dropdown-item" href="{{ route('topics.edit_event', ['topic' => $topic, 'event_id' => $event['id']]) }}">{{ __('Edit') }}</a>
-                                                                @endcan
-    							                                @can('delete', $user)
-        							                                <form action="{{ route('topics.destroy', $topic) }}" method="post">
-                                                                        @csrf
-                                                                        @method('delete')
-
-                                                                        <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
-                                                                            {{ __('Delete') }}
-                                                                        </button>
-                                                                    </form>
-    						                                    @endcan
-
-                                                        </div>
-                                                    </div>
-
-                                            </td>
-					                    @endcan--}}
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -253,16 +217,6 @@
                                         $('.topic_'+data.lesson.id).remove()
                                         });
                                 }
-
-
-
-
-
-
-
-
-
-
 
                 }
             });
