@@ -75,6 +75,8 @@
                                                 {{'Completed'}}
                                             @elseif($event->status == 3)
                                                 {{'Soldout'}}
+                                            @elseif($event->status == 4)
+                                                {{ __('My Account Only') }}
                                             @endif
                                         </td>
 

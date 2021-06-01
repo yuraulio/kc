@@ -94,6 +94,7 @@
                                     <label class="form-control-label" for="input-status">{{ __('Status') }}</label>
                                     <select name="status" id="input-status" class="form-control" placeholder="{{ __('Status') }}" >
                                             <option value="">-</option>
+                                            <option value="4">{{ __('My Account Only') }}</option>
                                             <option value="3">{{ __('Soldout') }}</option>
                                             <option value="2">{{ __('Completed') }}</option>
                                             <option value="1">{{ __('Open') }}</option>
