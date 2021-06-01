@@ -11,6 +11,7 @@ use App\Model\Category;
 use App\Model\Partner;
 use App\Model\PaymentMethod;
 use App\Model\Delivery;
+use App\Model\Categories_Faqs;
 use Illuminate\Http\Request;
 use App\Http\Requests\EventRequest;
 use Illuminate\Support\Facades\Auth;
@@ -199,7 +200,7 @@ class EventController extends Controller
         $user = Auth::user();
         $id = $event['id'];
         $event = $event->with('delivery','category', 'summary', 'benefits', 'ticket', 'city', 'venues', 'topic', 'users', 'partners', 'sections','paymentMethod','slugable','metable','faqs')->find($id);
-
+        //dd($event);
         $categories = Category::all();
         $types = Type::all();
         $partners = Partner::all();
@@ -209,8 +210,10 @@ class EventController extends Controller
         //$allTopicsByCategory1 = $allTopicsByCategory->topic()->with('lessons')->get()->groupBy('id');
 
         $allTopicsByCategory1 = $event->topic()->with('lessons')->get()->groupBy('id');
+        //dd($allTopicsByCategory1);
 
         $data['event'] = $event;
+        //dd($event);
         $data['categories'] = $categories;
         $data['types'] = $types;
         $data['user'] = $user;
@@ -221,6 +224,7 @@ class EventController extends Controller
         $data['methods'] = PaymentMethod::where('status',1)->get();
         $data['delivery'] = Delivery::all();
         $data['isInclassCourse'] = $event->is_inclass_course();
+
 
         return view('event.edit', $data);
     }

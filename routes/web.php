@@ -46,9 +46,20 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
     Route::resource('partner', 'PartnerController', ['except' => ['show']]);
     Route::resource('exams', 'ExamController', ['except' => ['show']]);
     Route::resource('delivery', 'DeliveryController', ['except' => ['show']]);
+    Route::resource('menu', 'MenuController', ['except' => ['show']]);
+
+    //Menu item
+    Route::get('menu/add_item', ['as' => 'menu.add_item', 'uses' => 'MenuController@add_item']);
+    Route::post('menu/fetchAllMenu', ['as' => 'menu.fetchAllMenu', 'uses' => 'MenuController@fetchAllMenu']);
+    Route::post('menu/store_item', ['as' => 'menu.store_item', 'uses' => 'MenuController@store_item']);
+    Route::post('menu/remove_item', ['as' => 'menu.remove_item', 'uses' => 'MenuController@remove_item']);
 
     //Faqs
     Route::get('faqs/categories', ['as' => 'faqs.categories', 'uses' => 'FaqController@index_categories']);
+    Route::get('faqs/create_category', ['as' => 'faqs.create_category', 'uses' => 'FaqController@create_category']);
+    Route::post('faqs/store_category', ['as' => 'faqs.store_category', 'uses' => 'FaqController@store_category']);
+    Route::get('faqs/edit_category/{category}', ['as' => 'faqs.edit_category', 'uses' => 'FaqController@edit_category']);
+    Route::put('faqs/update_category/{category}', ['as' => 'faqs.update_category', 'uses' => 'FaqController@update_category']);
 
     //Dropbox
     Route::get('dropbox/update', ['as' => 'dropbox.update', 'uses' => 'DropboxController@update']);

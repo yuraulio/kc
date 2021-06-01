@@ -6,7 +6,9 @@ use App\Model\Faq;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Model\Category;
+use App\Model\Categories_Faqs;
 use App\Http\Requests\FaqRequest;
+use App\Http\Requests\Categories_faqsRequest;
 
 class FaqController extends Controller
 {
@@ -23,12 +25,12 @@ class FaqController extends Controller
         return view('faq.index', ['faqs' => $model->with('category')->get(), 'user' => $user]);
     }
 
-    public function index_categories(Faq $model)
+    public function index_categories(Categories_Faqs $model)
     {
         $this->authorize('manage-users', User::class);
         $user = Auth::user();
 
-        return view('faq.index', ['faqs' => $model->with('category')->get(), 'user' => $user]);
+        return view('faq.category.index', ['category' => $model->get(), 'user' => $user]);
     }
 
     /**
@@ -40,7 +42,14 @@ class FaqController extends Controller
     {
         $user = Auth::user();
 
-        return view('faq.create', ['user' => $user, 'categories' => Category::all()]);
+        return view('faq.create', ['user' => $user, 'categories' => Categories_Faqs::all()]);
+    }
+
+    public function create_category()
+    {
+        $user = Auth::user();
+
+        return view('faq.category.create', ['user' => $user]);
     }
 
     /**
@@ -53,16 +62,9 @@ class FaqController extends Controller
     {
         $faq = $model->create($request->all());
 
-        //dd($request->category_id);
         if($request->category_id != null ){
 
-            foreach($request->category_id as $key => $category_id){
-                //dd($category);
-                $category = Category::find($category_id);
-
-                $faq->category()->attach([$category_id]);
-            }
-
+            $faq->category()->attach([$request->category_id]);
         }
 
 
@@ -70,18 +72,29 @@ class FaqController extends Controller
         return redirect()->route('faqs.index')->withStatus(__('Faq successfully created.'));
     }
 
+    public function store_category(Request $request, Categories_Faqs $model)
+    {
+        $model->create($request->all());
+
+        return redirect()->route('faqs.categories')->withStatus(__('Faq Category successfully created.'));
+    }
+
     public function store_event(Request $request, Faq $faq)
     {
-        //dd($request->all());
         $model = app($request->model_type);
         $model = $model::find($request->model_id);
 
-        //dd($model);
+        $faqs = Categories_Faqs::with('faqs')->find($request->faqs_id);
+        //dd($faqs->faqs);
+        foreach($faqs->faqs as $key => $faq){
+            $find = $model->faqs()->wherePivot('event_id', '=', $request->model_id)->wherePivot('events_faqevent', '=', $faq['id'])->get();
+            //dd($find);
+            if(count($find) == 0){
+                $model->faqs()->attach($faq['id']);
+                $data = null;
+            }
 
-        $model->faqs()->sync($request->faqs_id);
-
-        foreach($request->faqs_id as $key => $faq_id){
-            $data[$key] = Faq::find($faq_id);
+            $data[$key] = Faq::find($faq['id']);
         }
 
 
@@ -118,6 +131,14 @@ class FaqController extends Controller
         return view('faq.edit', compact('faq', 'categories'));
     }
 
+    public function edit_category(Categories_Faqs $category)
+    {
+        $id = $category['id'];
+        $category = $category->find($id);
+
+        return view('faq.category.edit', compact('category'));
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -132,6 +153,15 @@ class FaqController extends Controller
         $faq->category()->sync($request->category_id);
 
         return redirect()->route('faqs.index')->withStatus(__('Faq successfully updated.'));
+    }
+
+    public function update_category(Categories_faqsRequest $request, Categories_Faqs $model)
+    {
+        //dd($request->all());
+        $cat = Categories_Faqs::where('id',$request->id)->update(['name' => $request->name, 'description' => $request->description]);
+        //$model->update($request->all());
+
+        return redirect()->route('faqs.categories')->withStatus(__('Faq Category successfully updated.'));
     }
 
     /**
@@ -155,17 +185,15 @@ class FaqController extends Controller
     {
         $model = app($request->model_type);
         $model = $model::with('category')->find($request->model_id);
-        //dd($model->category[0]['id']);
 
-        $faqByCat = Category::with('faqs')->find($model->category[0]['id']);
-        //dd($faqByCat->faqs);
-        //dd($faqByCat->faqs()->wherePivot('category_id', '=', $model->category[0]['id'])->get());
+        //$faqByCat = Category::with('faqs')->find($model->category[0]['id']);
 
-        $faqs = Faq::all();
+        //$faqs = Faq::all();
+        $faqs = Categories_Faqs::all();
 
         return response()->json([
             'success' => __('Faqs successfully fetched.'),
-            'faqs' => $faqByCat->faqs,
+            'faqs' => $faqs,
         ]);
     }
 }

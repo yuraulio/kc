@@ -53,8 +53,8 @@
                                 </div>
 
                                 <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
-                                    <select multiple name="category_id[]" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}">
+                                    <label class="form-control-label" for="input-category_id">{{ __('Faq Category') }}</label>
+                                    <select name="category_id" id="input-category_id" class="form-control" placeholder="{{ __('Faq Category') }}">
                                         <option value="">-</option>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}">{{ $category->name }}</option>

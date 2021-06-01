@@ -80,7 +80,7 @@
                 <div class="pl-lg-4">
                     <div class="form-group">
                         <label for="exampleFormControlSelect1">Select Faq</label>
-                        <select multiple class="form-control" id="faqFormControlSelect">
+                        <select class="form-control" id="faqFormControlSelect">
                             <option>-</option>
                         </select>
                     </div>
@@ -120,9 +120,8 @@
 
 
                     $.each( faq, function( key, value ) {
-                        console.log( key + ": " + value.title );
                         row =`
-                            <option value="${value.id}">${value.title}</option>
+                            <option value="${value.id}">${value.name}</option>
                         `
                         $('#faqFormControlSelect').append(row)
                     });

@@ -54,6 +54,11 @@ class Category extends Model
         return $this->morphedByMany(Topic::class, 'categoryable');
     }
 
+    public function menu()
+    {
+        return $this->morphedByMany(Menu::class, 'menu');
+    }
+
 
     public function tickets()
     {
