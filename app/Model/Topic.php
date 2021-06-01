@@ -36,4 +36,9 @@ class Topic extends Model
         return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->withPivot('event_id','lesson_id','instructor_id');
     }
 
+    public function event_lesson()
+    {
+        return $this->belongsToMany(Lesson::class, 'event_topic_lesson_instructor')->withPivot('event_id','lesson_id','instructor_id','topic_id')->with('instructor');
+    }
+
 }

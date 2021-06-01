@@ -15,6 +15,7 @@ class AddPublishedEventsTable extends Migration
     {
         Schema::table('events', function (Blueprint $table) {
             $table->boolean('published')->after('status');
+            $table->string('published_at')->nullable()->after('view_counter');
         });
     }
 

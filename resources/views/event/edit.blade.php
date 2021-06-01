@@ -334,20 +334,25 @@
                                                                                 <th rowspan="{{count($topic1)}}">{{ $topic->title }}</th>
                                                                                 <?php $i++;?>
                                                                             @endif
-                                                                    @foreach($topic->lessons as $lesson)
+                                                                    @foreach($topic['lessons'] as $lesson)
                                                                     @if($topic->getOriginal('pivot_lesson_id') == $lesson['id'])
 
 
                                                                             <td>{{ $lesson->title }}</td>
-                                                                            <td id="inst_lesson_{{$lesson['id']}}"><?php if($topic->pivot['instructor_id'] != null)
+                                                                            <td id="inst_lesson_{{$lesson['id']}}"><?php if($topic['pivot']['instructor_id'] != null)
                                                                             {
 
-                                                                                $inst = $lesson->get_instructor($topic->pivot['instructor_id']);
-                                                                                echo $inst['title'];
+                                                                                //dd($lesson->instructor->first());
+                                                                                
+                                                                                //$inst = $lesson->get_instructor($topic['pivot']['instructor_id']);
+                                                                                //$inst = $lesson['instructor']->first();
+                                                                                
+                                                                                //echo $inst['title'];
+                                                                                echo'hello';
                                                                             }else{
                                                                                 echo '-';
                                                                             } ?></td>
-                                                                            @if(count($event->type) > 0 && $isInclassCourse)
+                                                                            @if(count($event['type']) > 0 && $isInclassCourse)
                                                                             <td></td>
                                                                             <td></td>
                                                                             <td></td>
@@ -355,18 +360,18 @@
                                                                             <td></td>
                                                                             <td></td>
                                                                             @endif
-                                                                            @can('manage-users', App\Model\User::class)
+                                                                           
                                                                                 <td class="text-right">
-                                                                                    @if (auth()->user()->can('update', $user) || auth()->user()->can('delete', $user))
+                                                                                   
                                                                                         <div class="dropdown">
                                                                                             <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                                                 <i class="fas fa-ellipsis-v"></i>
                                                                                             </a>
                                                                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
 
-                                                                                                    @can('update', $user)
+                                                                                                  
                                                                                                         <a href="javascript:void(0)" id="open_modal" data-topic-id="topic_{{$topic->id}}"  data-lesson-id="lesson_{{ $lesson->id }}" class="dropdown-item open_modal">{{ __('Edit') }}</a>
-                                                                                                    @endcan
+                                                                                                    
                                                                                                     <a href="javascript:void(0)" id="remove_lesson" data-topic-id="topic_{{$topic->id}}"  data-lesson-id="lesson_{{ $lesson->id }}" class="dropdown-item">{{ __('Delete') }}</a>
                                                                                                     {{--@can('delete', $user)
                                                                                                         <form action="{{ route('lesson.destroy_from_topic', [
@@ -387,9 +392,9 @@
 
                                                                                             </div>
                                                                                         </div>
-                                                                                    @endif
+                                                                                    
                                                                                 </td>
-                                                                            @endcan
+                                                                           
                                                                         </tr>
 
                                                             @endif

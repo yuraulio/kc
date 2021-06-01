@@ -47,7 +47,9 @@ class Event extends Model
 
     public function topic()
     {
-        return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->withPivot('lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority');
+        
+        return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor','event_id')
+            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority');
     }
 
     public function user()
@@ -61,8 +63,9 @@ class Event extends Model
     }
 
     public function is_inclass_course()
-    {
-        if($this->delivery[0]['id'] == 2){
+    {   
+        
+        if($this->delivery->first() && $this->delivery->first()->id == 2){
             return true;
         }else{
             return false;

@@ -198,30 +198,31 @@ class EventController extends Controller
     {
         $user = Auth::user();
         $id = $event['id'];
-        $event = $event->with('delivery','category', 'summary', 'benefits', 'ticket', 'city', 'venues', 'topic', 'users', 'partners', 'sections','paymentMethod','slugable','metable','faqs')->find($id);
+        $event = $event->with('delivery','category', 'summary', 'benefits', 'ticket', 'city', 'venues', 'topic','topic.event_lesson', 'users', 'partners', 'sections','paymentMethod','slugable','metable','faqs')->find($id);
 
         $categories = Category::all();
         $types = Type::all();
         $partners = Partner::all();
-
-        $allTopicsByCategory = Category::with('topics')->find($event->category[0]->id);
-
-        //$allTopicsByCategory1 = $allTopicsByCategory->topic()->with('lessons')->get()->groupBy('id');
-
-        $allTopicsByCategory1 = $event->topic()->with('lessons')->get()->groupBy('id');
-
+        
+        $allTopicsByCategory = Category::with('topics')->find($event->category->first()->id);
+        
+        $allTopicsByCategory1 = $event['topic']->groupBy('id');
+       // dd($event['topic']->groupBy('id'));
+        //dd($allTopicsByCategory1);
         $data['event'] = $event;
         $data['categories'] = $categories;
         $data['types'] = $types;
         $data['user'] = $user;
         $data['allTopicsByCategory'] = $allTopicsByCategory;
         $data['allTopicsByCategory1'] = $allTopicsByCategory1;
+        
         $data['slug'] = $event['slugable'];
         $data['metas'] = $event['metable'];
+        
         $data['methods'] = PaymentMethod::where('status',1)->get();
         $data['delivery'] = Delivery::all();
         $data['isInclassCourse'] = $event->is_inclass_course();
-
+        
         return view('event.edit', $data);
     }
 

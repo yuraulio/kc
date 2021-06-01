@@ -35,6 +35,13 @@ class Lesson extends Model
         return $this->morphToMany(Type::class, 'typeable');
     }
 
+    public function instructor()
+    {
+    
+        return $this->belongsToMany(Instructor::class, 'event_topic_lesson_instructor',)->withPivot('instructor_id','lesson_id','topic_id');
+        
+    }
+
     public function get_instructor($id)
     {
         $instructor = Instructor::find($id);

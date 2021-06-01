@@ -17,7 +17,6 @@
                 <th scope="col">{{ __('Title') }}</th>
                 <th scope="col">{{ __('Description') }}</th>
                 <th scope="col">{{ __('Icon') }}</th>
-                <th scope="col">{{ __('Created at') }}</th>
                 <th scope="col"></th>
             </tr>
         </thead>
@@ -29,7 +28,6 @@
                     <td id="title-{{$summary->id}}">{{ $summary->title }}</td>
                     <td id="desc-{{$summary->id}}">{{ $summary->description }}</td>
                     <td id="icon-{{$summary->id}}">{{ $summary->icon }}</td>
-                    <td>{{ date_format($summary->created_at, 'Y-m-d' ) }}</td>
                     <td class="text-right">
                         <div class="dropdown">
                             <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
