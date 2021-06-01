@@ -28,7 +28,7 @@
                             </thead>
                             <tbody>
                             <?php //dd($allTopicsByCategory->topics); ?>
-                                @foreach ($allTopicsByCategory->topics as $topic)
+                                @foreach ($allTopicsByCategory['topics'] as $topic)
                                 <?php //dd($topic); ?>
 
                                     <tr>
@@ -37,7 +37,7 @@
 
                                         <td>
                                             <?php $status=""; ?>
-                                            @foreach($event->topic as $topic_db)
+                                            @foreach($event['topic'] as $topic_db)
                                                 @if($topic['id'] == $topic_db->id)
                                                     <?php $status="active"; ?>
                                                     <?php //dd($topic); ?>
