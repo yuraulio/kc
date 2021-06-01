@@ -38,44 +38,38 @@
                         </thead>
                         <tbody id="topic_lessons" data-event-id="{{$event['id']}}">
                             <?php $i=0; ?>
-                            @foreach($topic1 as $topic)
+                            <?php $topic = $topic1->first() ?>
+
 
                             <tr class="topic_{{$topic->id}}">
-                                @foreach($topic->lessons as $lesson)
-                                @if($topic->getOriginal('pivot_lesson_id') == $lesson['id'])
+                                @foreach($topic['event_lesson'] as $lesson)
                                 <td>{{ $lesson->title }}</td>
-                                <td id="inst_lesson_{{$lesson['id']}}"><?php if($topic->pivot['instructor_id'] != null)
+                                <?php //dd($lesson['instructor']->first()['id']); ?>
+                                <td id="inst_lesson_{{$lesson['id']}}"><?php if($lesson['instructor']->first() != null)
                                 {
-
-                                    $inst = $lesson->get_instructor($topic->pivot['instructor_id']);
-                                    echo $inst['title'];
+                                    echo $lesson['instructor']->first()['title'];
                                 }else{
                                     echo '-';
                                 } ?></td>
-                                    @if(count($event->type) > 0 && $isInclassCourse)
+                                    @if(count($event['type']) > 0 && $isInclassCourse)
                                     <td></td><td></td><td></td><td></td><td></td><td></td>
                                     @endif
-                                @can('manage-users', App\Model\User::class)
+
                                     <td class="text-right">
                                         <div class="dropdown">
                                             <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i class="fas fa-ellipsis-v"></i>
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-
-                                            @can('update', $user)
                                                 <a href="javascript:void(0)" id="open_modal" data-topic-id="topic_{{$topic->id}}"  data-lesson-id="lesson_{{ $lesson->id }}" class="dropdown-item open_modal">{{ __('Edit') }}</a>
-                                            @endcan
                                             <a href="javascript:void(0)" id="remove_lesson" data-topic-id="topic_{{$topic->id}}"  data-lesson-id="lesson_{{ $lesson->id }}" class="dropdown-item">{{ __('Delete') }}</a>
                                             </div>
                                         </div>
                                     </td>
-                                @endcan
                             </tr>
 
-                                @endif
                                 @endforeach
-                            @endforeach
+
                         </tbody>
                     </table>
                 </div>

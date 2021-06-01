@@ -204,10 +204,10 @@ class EventController extends Controller
         $categories = Category::all();
         $types = Type::all();
         $partners = Partner::all();
-        
+
         $allTopicsByCategory = Category::with('topics')->find($event->category->first()->id);
-        
-        $allTopicsByCategory1 = $event['topic']->groupBy('id');
+
+        $allTopicsByCategory1 = $event['topic']->unique()->groupBy('id');
        // dd($event['topic']->groupBy('id'));
         //dd($allTopicsByCategory1);
         $data['event'] = $event;
@@ -217,14 +217,14 @@ class EventController extends Controller
         $data['user'] = $user;
         $data['allTopicsByCategory'] = $allTopicsByCategory;
         $data['allTopicsByCategory1'] = $allTopicsByCategory1;
-        
+
         $data['slug'] = $event['slugable'];
         $data['metas'] = $event['metable'];
-        
+
         $data['methods'] = PaymentMethod::where('status',1)->get();
         $data['delivery'] = Delivery::all();
         $data['isInclassCourse'] = $event->is_inclass_course();
-        
+
         return view('event.edit', $data);
     }
 
