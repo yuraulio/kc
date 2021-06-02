@@ -5,7 +5,7 @@
     </div>
 </div>
 
-<div class="accordion" id="accordionExample">
+<div class="accordion accord_topic" id="accordionExample">
     <?php //dd($allTopicsByCategory1); ?>
     @foreach($topics as $key => $topic)
         <?php $topic = $topic->first() ?>
@@ -13,7 +13,7 @@
         <div class="card-header" id="{{$key}}" data-toggle="collapse" data-target="#col_{{$key}}" aria-expanded="true" aria-controls="collapseOne">
             <h5 class="mb-0">{{$topic->title}}</h5>
         </div>
-        <div id="col_{{$key}}" class="collapse show" aria-labelledby="{{$key}}" data-parent="#accordionExample">
+        <div id="col_{{$key}}" class="collapse" aria-labelledby="{{$key}}" data-parent="#accordionExample">
             <div class="card-body">
                 <div class="table-responsive py-4">
                     <table class="table align-items-center table-flush"  id="datatable-basic">
@@ -30,9 +30,9 @@
                                     <th scope="col">{{ __('Priority') }}</th>
                                 @endif
 
-                               
+
                                     <th scope="col"></th>
-                               
+
                             </tr>
 
                         </thead>

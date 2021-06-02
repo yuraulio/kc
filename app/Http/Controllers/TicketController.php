@@ -112,7 +112,7 @@ class TicketController extends Controller
     {
         $ticket = $model->create($request->all());
 
-        return redirect()->route('events.index')->withStatus(__('Ticket successfully created.'));
+        return redirect()->route('ticket.index')->withStatus(__('Ticket successfully created.'));
 
     }
 

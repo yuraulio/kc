@@ -21,6 +21,10 @@
         <div class="row">
             <div class="col">
                 <div class="card">
+                <div class="col-12 mt-2">
+                        @include('alerts.success')
+                        @include('alerts.errors')
+                    </div>
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col-8">
@@ -61,7 +65,6 @@
                                         </td>--}}
                                         <?php $id = $menu['data']['id']; ?>
                                         {{--<td>{{ date_format($menu['created_at'], 'Y-m-d' ) }}</td>--}}
-					                    @can('manage-users', App\Model\User::class)
 					                        <td class="text-right">
                                                 <div class="dropdown">
                                                     <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -84,7 +87,6 @@
                                                     </div>
                                                 </div>
                                             </td>
-					                    @endcan
                                     </tr>
                                 @endforeach
                             @endif
@@ -100,7 +102,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="menuModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="menuModalLabel">{{$name}}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
@@ -218,6 +220,7 @@
             url: '{{route("menu.store_item")}}',
             data: {'menu':$(selected_option).val(),'name':menu_name},
             success: function (data) {
+                console.log(data)
             let item = data.data.find_item;
             let menu = data.data.menu;
             let newItem =
@@ -240,8 +243,8 @@
 
             $("#menu-body").append(newItem);
             $(".close-modal").click();
-            // $("#success-message p").html(data.success);
-            // $("#success-message").show();
+            $("#success-message p").html(data.success);
+            $("#success-message").show();
             // $('#newRow').empty()
             // $('#newRowEdit').empty()
             // $('#ticket-form').trigger('reset');

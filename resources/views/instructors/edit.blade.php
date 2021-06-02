@@ -1,7 +1,7 @@
 @extends('layouts.app', [
-    'title' => __('User Management'),
+    'title' => __('Instructors Management'),
     'parentSection' => 'laravel',
-    'elementName' => 'user-management'
+    'elementName' => 'instructors-management'
 ])
 
 @section('content')
@@ -38,19 +38,13 @@
 
                             <h6 class="heading-small text-muted mb-4">{{ __('Instructor information') }}</h6>
                             <div class="pl-lg-4">
-                                <div class="form-group{{ $errors->has('priority') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-priority">{{ __('Priority') }}</label>
-                                    <input type="number" name="priority" id="input-priority" class="form-control{{ $errors->has('priority') ? ' is-invalid' : '' }}" placeholder="{{ __('Priority') }}" value="{{ old('priority', $instructor->priority) }}" autofocus>
-
-                                    @include('alerts.feedback', ['field' => 'priority'])
-                                </div>
 
                                 <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-status">{{ __('Status') }}</label>
                                     <select name="status" id="input-status" class="form-control" placeholder="{{ __('Status') }}" >
                                         <option value="">-</option>
-                                            <option <?= ($instructor['status'] == 1) ? 'selected="selected"' : ''; ?> value="1">{{ __('Enable') }}</option>
-                                            <option <?= ($instructor['status'] == 0) ? 'selected="selected"' : ''; ?> value="0">{{ __('Disable') }}</option>
+                                            <option <?= ($instructor['status'] == 1) ? 'selected="selected"' : ''; ?> value="1">{{ __('Published') }}</option>
+                                            <option <?= ($instructor['status'] == 0) ? 'selected="selected"' : ''; ?> value="0">{{ __('Unpublished') }}</option>
                                     </select>
 
                                     @include('alerts.feedback', ['field' => 'status'])
