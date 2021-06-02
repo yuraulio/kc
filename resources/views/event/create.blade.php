@@ -90,6 +90,21 @@
                                     @include('alerts.feedback', ['field' => 'published'])
                                 </div>
 
+
+
+                                <div class="form-group{{ $errors->has('release_date_files') ? ' has-danger' : '' }}">
+                                <label class="form-control-label" for="input-delivery">{{ __('Release Date Files') }}</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
+                                        </div>
+                                        <input class="form-control datepicker" id="input-release_date_files" name="release_date_files" placeholder="Select date" type="text" value="20/06/2020">
+                                    </div>
+                                    @include('alerts.feedback', ['field' => 'release_date_files'])
+                                </div>
+
+
+
                                 <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-status">{{ __('Status') }}</label>
                                     <select name="status" id="input-status" class="form-control" placeholder="{{ __('Status') }}" >

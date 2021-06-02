@@ -16,6 +16,7 @@
                         @include('alerts.success')
                         @include('alerts.errors')
                     </div>
+                    <?php ?>
                     <div class="table-responsive py-4">
                         <table class="table align-items-center table-flush"  id="datatable-basic">
                             <thead class="thead-light">
@@ -26,7 +27,7 @@
                                     <th scope="col">{{ __('Assigned to event') }}</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="topic_lessons" data-event-id="{{$event['id']}}">
                             <?php //dd($allTopicsByCategory->topics); ?>
                                 @foreach ($allTopicsByCategory['topics'] as $topic)
                                 <?php //dd($topic); ?>
@@ -79,7 +80,6 @@
 
     <script>
         $( ".btn-group-toggle" ).change(function() {
-
             let status = $(this).find('label').hasClass('active')
             let id = $(this).find('label').data('topic-id')
             let event_id = $(this).find('label').data('event-id')
@@ -98,7 +98,10 @@
                 success: function(data) {
                     data = JSON.parse(data)
                     let event_type = data.isInclassCourse
-                    let e = $('.'+data.request.topic_id).find('label')
+                    let e = $('#'+data.request.topic_id).find('label')
+
+                    let topic = data.lesson;
+                    let lessons = data.lesson.lessons
 
 
                         if(data.request.status1 == "true")
@@ -121,7 +124,7 @@
 
                                     if(event_type)
                                     {
-                                        $row = `
+                                        row = `
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -131,16 +134,66 @@
                                         `
                                     }
 
-                                        new_topic_row = `
-                                            <tr class="topic_${data.lesson.id}">
-                                                <th rowspan="${data.lesson.lessons.length}">${data.lesson.title}</td>
+                                        // new_topic_row = `
+                                        //     <tr class="topic_${data.lesson.id}">
+                                        //         <th rowspan="${data.lesson.lessons.length}">${data.lesson.title}</td>
 
 
 
-                                            </tr>
-                                        `
-                                    $('#topic_lessons').append(new_topic_row)
+                                        //     </tr>
+                                        // `
+                                        ///////////////////////////////////
+                                        row_accor = `
+                                        <div class="card" id="topic_card_${topic.id}">
+                                            <div class="card-header" id="${topic.id}" data-toggle="collapse" data-target="#col_`+topic.id+`" aria-expanded="true" aria-controls="collapseOne">
+                                                <h5 class="mb-0">${topic.title}</h5>
+                                            </div>
+                                            <div id="col_${topic.id}" class="collapse" aria-labelledby="${topic.id}" data-parent="#accordionExample">
+                                            <div class="card-body">
+                                                <div class="table-responsive py-4">
+                                                    <table class="table align-items-center table-flush"  id="datatable-basic">
+                                                        <thead class="thead-light">
+                                                            <tr>
+                                                                <th scope="col">{{ __('Lesson') }}</th>
+                                                                <th scope="col">{{ __('Instructor') }}</th>
+                                                                ${row}
+                                                                <th scope="col"></th>
+                                                            </tr>
 
+                                                        </thead>
+                                                        <tbody id="topic_lessons_${topic.id}">
+
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        `;
+                                        $('.accord_topic').append(row_accor)
+
+                                        $.each( lessons , function(key, value) {
+                                            let row_lessons = `
+                                                <tr id="inst_lesson_${value.id}" class="topic_`+value.id+`">
+                                                <td>${value.title}</td>
+                                                <td id="inst_lesson_edit_`+value.id+`">-</td>
+                                                    ${row}
+                                                    <td class="text-right">
+                                                        <div class="dropdown">
+                                                            <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                <i class="fas fa-ellipsis-v"></i>
+                                                            </a>
+                                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                                                <a href="javascript:void(0)" id="open_modal" data-topic-id="topic_${topic.id}"  data-lesson-id="lesson_${value.id}" class="dropdown-item open_modal">{{ __('Edit') }}</a>
+                                                            <a href="javascript:void(0)" id="remove_lesson" data-topic-id="topic_${topic.id}"  data-lesson-id="lesson_${value.id}" class="dropdown-item">{{ __('Delete') }}</a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            `
+                                            $('#topic_lessons_'+topic.id).append(row_lessons)
+                                        })
 
                                     let b = $('#inst_'+data.lesson.id).find('ul')
                                     let i = 0
@@ -177,34 +230,6 @@
                                                 </div>
                                             </td>
                                             `
-
-
-
-                                            if(i == 0){
-                                                new_topic_row = `
-
-                                                    <td>${title}</td>
-                                                    <td id="inst_lesson_${id}">-</td>
-                                                    `+row+action_row+`
-
-                                                `
-                                                i++;
-                                                $('.topic_'+data.lesson.id).append(new_topic_row)
-                                            }else{
-                                                new_topic_row = `
-                                                    <tr class="topic_${data.lesson.id}">
-                                                    <td>${title}</td>
-                                                    <td id="inst_lesson_${id}">-</td>
-                                                    `+row+action_row+`
-
-                                                    </tr>
-                                                `
-                                                $('#topic_lessons').append(new_topic_row)
-                                            }
-
-
-
-
                                             }
 
 
@@ -212,10 +237,8 @@
                                     });
                                 }else{
 
+                                    $('#topic_card_'+data.lesson.id).remove()
 
-                                    $( '.topic_'+data.lesson.id ).each(function( index ) {
-                                        $('.topic_'+data.lesson.id).remove()
-                                        });
                                 }
 
                 }

@@ -151,7 +151,10 @@ class EventController extends Controller
      */
     public function store(EventRequest $request, Event $model)
     {
+        $request->request->add(['release_date_files' => date('Y-m-d H:i:s', strtotime($request->release_date_files))]);
+
         $event = $model->create($request->all());
+
         $event->createSlug($request->slug);
         $event->createMetas($request->all());
 
@@ -205,11 +208,18 @@ class EventController extends Controller
         $types = Type::all();
         $partners = Partner::all();
 
-        $allTopicsByCategory = Category::with('topics')->find($event->category->first()->id);
+        //dd($event->category->first());
+        if($event->category->first() != null){
+            $allTopicsByCategory = Category::with('topics')->find($event->category->first()->id);
+        }else{
+            $allTopicsByCategory = Category::with('topics')->first();
+        }
+
+
 
         $allTopicsByCategory1 = $event['topic']->unique()->groupBy('id');
        // dd($event['topic']->groupBy('id'));
-        //dd($allTopicsByCategory1);
+        //dd($allTopicsByCategory);
         $data['event'] = $event;
         //dd($event);
         $data['categories'] = $categories;
@@ -237,7 +247,13 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
+        $request->request->add(['release_date_files' => date('Y-m-d H:i:s', strtotime($request->release_date_files))]);
+
+
         $event->update($request->all());
+
+        $updated_event = Event::find($event['id']);
+        Event::where('id',$updated_event['id'])->update(['release_date_files' => $timestamp]);
         $event->category()->sync([$request->category_id]);
 
         if($request->type_id != null){

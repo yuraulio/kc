@@ -26,32 +26,29 @@ class TopicRequest extends FormRequest
     public function rules()
     {
         return [
-            'priority' => [
-                'numeric'
-            ],
             'status' => [
                 'numeric'
             ],
             'comment_status' => [
-                
+
             ],
             'title' => [
                 'required', 'min:3'
             ],
             'short_title' => [
-                
+
             ],
             'subtitle' => [
-                
+
             ],
             'header' => [
-                
+
             ],
             'summary' => [
-                
+
             ],
             'body' => [
-                
+
             ]
         ];
     }

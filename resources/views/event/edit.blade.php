@@ -35,9 +35,9 @@
                 <div class="card shadow">
                     <div class="card-body">
                     <div class="col-12 mt-2">
-                                                    @include('alerts.success')
-                                                    @include('alerts.errors')
-                                                </div>
+                        @include('alerts.success')
+                        @include('alerts.errors')
+                    </div>
                     @include('admin.preview.preview',['slug' => isset($slug) ? $slug : null])
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
@@ -152,6 +152,7 @@
                                                             @include('alerts.feedback', ['field' => 'type_id'])
                                                         </div>
 
+
                                                         <div class="form-group{{ $errors->has('delivery_id') ? ' has-danger' : '' }}">
                                                             <label class="form-control-label" for="input-delivery_id">{{ __('Delivery') }}</label>
                                                             <select name="delivery_id" id="input-delivery_id" class="form-control" placeholder="{{ __('Delivery') }}" required>
@@ -182,6 +183,21 @@
 
                                                             @include('alerts.feedback', ['field' => 'published'])
                                                         </div>
+
+                                                        <?php
+                                                        $date = date_create($event->release_date_files);
+                                                        $old_date = date_format($date,"d/m/Y");
+                                                         ?>
+                                                        <div class="form-group{{ $errors->has('release_date_files') ? ' has-danger' : '' }}">
+                                                            <label class="form-control-label" for="input-delivery">{{ __('Release Date Files') }}</label>
+                                                                <div class="input-group">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
+                                                                    </div>
+                                                                    <input class="form-control datepicker" id="input-release_date_files" name="release_date_files" placeholder="Select date" type="text" value="{{ old('release_date_files', $old_date) }}">
+                                                                </div>
+                                                                @include('alerts.feedback', ['field' => 'release_date_files'])
+                                                            </div>
 
                                                         <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
                                                             <label class="form-control-label" for="input-status">{{ __('Status') }}</label>
@@ -269,32 +285,18 @@
 
                                             </div>
                                             <div class="tab-pane fade" id="tabs-icons-text-2_inside" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab_inside">
-                                                <div class="col-12 mt-2">
-                                                    @include('alerts.success')
-                                                    @include('alerts.errors')
-                                                </div>
                                                 @include('admin.summary.summary', ['model' => $event])
                                             </div>
                                             <div class="tab-pane fade" id="metas" role="tabpanel" aria-labelledby="tabs-icons-text-8-tab_inside">
-
-                                                    @include('admin.metas.metas',['metas' => $metas])
-
+                                                @include('admin.metas.metas',['metas' => $metas])
                                             </div>
                                             <div class="tab-pane fade" id="tabs-icons-text-3_inside" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab_inside">
-                                                <div class="col-12 mt-2">
-                                                    @include('alerts.success')
-                                                    @include('alerts.errors')
-                                                </div>
                                                 @include('admin.benefits.benefits',['model' => $event])
                                             </div>
-
                                             <div class="tab-pane fade show" id="tabs-icons-text-4_inside" role="tabpanel" aria-labelledby="tabs-icons-text-4-tab_inside">
                                                 @include('topics.event.index')
                                                 @include('topics.event.instructors')
                                             </div>
-
-
-
                                             <div class="tab-pane fade" id="tabs-icons-text-5_inside" role="tabpanel" aria-labelledby="tabs-icons-text-5-tab_inside">
                                                 @include('admin.ticket.index', ['model' => $event])
                                             </div>
@@ -357,7 +359,7 @@
 
                     <div class="modal-footer">
                         <button type="button" id="lesson_update_btn" class="btn btn-primary">Save changes</button>
-                        <button type="button" class="btn btn-link close_modal ml-auto" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-link close_modal ml-auto close_modal" data-dismiss="modal">Close</button>
                     </div>
 
                 </div>
@@ -415,8 +417,9 @@
                 success: function(data) {
                     data = JSON.parse(data)
                     console.log(data)
-                    $('#inst_lesson_'+data.lesson_id).text(data.instructor.title)
+                    $('#inst_lesson_edit_'+data.lesson_id).text(data.instructor.title)
                     $('#modal-default').modal()
+                    $('.close_modal').click()
 
                 }
             });
@@ -492,13 +495,13 @@
                 success: function(data){
                     data = JSON.parse(data)
 
-                    let length = $('#inst_lesson_'+data.lesson_id).parent().find('th').attr('rowspan')
-                    let text = $('#inst_lesson_'+data.lesson_id).parent().find('th').text()
+                    // let length = $('#inst_lesson_'+data.lesson_id).parent().find('th').attr('rowspan')
+                    // let text = $('#inst_lesson_'+data.lesson_id).parent().find('th').text()
 
-                    if($('#inst_lesson_'+data.lesson_id).parent().find('th').length == 1){
-                        $(`<th rowspan='${length - 1}'>${text}</th>`).prependTo('.topic_'+data.topic_id)
-                    }
-                    $('#inst_lesson_'+data.lesson_id).parent().remove()
+                    // if($('#inst_lesson_'+data.lesson_id).parent().find('th').length == 1){
+                    //     $(`<th rowspan='${length - 1}'>${text}</th>`).prependTo('.topic_'+data.topic_id)
+                    // }
+                    $('#inst_lesson_'+data.lesson_id).remove()
                 }
             });
         });

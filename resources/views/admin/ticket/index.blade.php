@@ -26,7 +26,6 @@
                 <th scope="col"></th>
             </tr>
         </thead>
-        <?php //dd($event->ticket[0]->pivot->options); ?>
         <tbody class="ticket-body">
             @foreach ($event->ticket as $ticket)
                 <tr id="ticket_{{$ticket->id}}">

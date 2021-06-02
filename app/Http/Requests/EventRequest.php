@@ -51,6 +51,9 @@ class EventRequest extends FormRequest
             'hours' => [
                 'numeric'
             ],
+            'release_date_files' => [
+                'date', 'nullable'
+            ],
             'view_tpl' => [
 
             ]

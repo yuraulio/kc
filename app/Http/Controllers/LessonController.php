@@ -156,7 +156,7 @@ class LessonController extends Controller
 
         $lesson = $event->topic()->wherePivot('event_id', '=', $request->event_id)->wherePivot('topic_id', '=', $request->topic_id)->wherePivot('lesson_id', '=', $request->lesson_id)->get();
 
-        $instructors = Instructor::all();
+        $instructors = Instructor::where('status', 1)->get();
 
         $data['lesson'] = $lesson;
         $data['instructors'] = $instructors;

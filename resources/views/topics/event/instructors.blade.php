@@ -5,15 +5,15 @@
     </div>
 </div>
 
-<div class="accordion" id="accordionExample">
+<div class="accordion accord_topic" id="accordionExample">
     <?php //dd($allTopicsByCategory1); ?>
     @foreach ($allTopicsByCategory1 as $key => $topic1)
     <?php //dd($topic1); ?>
-    <div class="card">
+    <div class="card" id="topic_card_{{$key}}">
         <div class="card-header" id="{{$key}}" data-toggle="collapse" data-target="#col_{{$key}}" aria-expanded="true" aria-controls="collapseOne">
             <h5 class="mb-0">{{$topic1[0]['title']}}</h5>
         </div>
-        <div id="col_{{$key}}" class="collapse show" aria-labelledby="{{$key}}" data-parent="#accordionExample">
+        <div id="col_{{$key}}" class="collapse" aria-labelledby="{{$key}}" data-parent="#accordionExample">
             <div class="card-body">
                 <div class="table-responsive py-4">
                     <table class="table align-items-center table-flush"  id="datatable-basic">
@@ -30,22 +30,24 @@
                                     <th scope="col">{{ __('Priority') }}</th>
                                 @endif
 
-                               
+
                                     <th scope="col"></th>
-                               
+
                             </tr>
 
                         </thead>
                         <tbody id="topic_lessons" data-event-id="{{$event['id']}}">
                             <?php $i=0; ?>
                             <?php $topic = $topic1->first() ?>
+                            <?php //dd($topic); ?>
 
 
-                            <tr class="topic_{{$topic->id}}">
+
                                 @foreach($topic['event_lesson'] as $lesson)
+                                <tr id="inst_lesson_{{ $lesson->id }}" class="topic_{{$topic->id}}">
                                 <td>{{ $lesson->title }}</td>
                                 <?php //dd($lesson['instructor']->first()['id']); ?>
-                                <td id="inst_lesson_{{$lesson['id']}}"><?php if($lesson['instructor']->first() != null)
+                                <td id="inst_lesson_edit_{{ $lesson->id }}"><?php if($lesson['instructor']->first() != null)
                                 {
                                     echo $lesson['instructor']->first()['title'];
                                 }else{

@@ -32,7 +32,7 @@ class Event extends Model
     protected $table = 'events';
 
     protected $fillable = [
-        'priority', 'published', 'status', 'title', 'htmlTitle', 'subtitle', 'header', 'summary', 'body', 'hours','author_id', 'creator_id', 'view_tpl', 'view_counter'
+        'published', 'release_date_files' ,'status', 'title', 'htmlTitle', 'subtitle', 'header', 'summary', 'body', 'hours','author_id', 'creator_id', 'view_tpl', 'view_counter'
     ];
 
     public function category()
@@ -47,7 +47,7 @@ class Event extends Model
 
     public function topic()
     {
-        
+
         return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor','event_id')
             ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority');
     }
@@ -63,9 +63,9 @@ class Event extends Model
     }
 
     public function is_inclass_course()
-    {   
-        
-        if($this->delivery->first() && $this->delivery->first()->id == 2){
+    {
+
+        if($this->delivery->first() && $this->delivery->first()->id == 139){
             return true;
         }else{
             return false;

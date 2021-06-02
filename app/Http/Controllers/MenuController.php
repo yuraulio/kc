@@ -17,16 +17,11 @@ class MenuController extends Controller
     {
         $this->authorize('manage-items', User::class);
 
-        //Group by
+        //Group by key
         $result = array();
         foreach ($model->all() as $element) {
             $result[$element['name']][] = $element;
-
-            // $model = app($element['menuable_type']);
-            // $element->data = $model::find($element['menuable_id']);
-
         }
-        //dd($result);
 
         return view('admin.menu.index', ['menu' => $result]);
     }
@@ -92,7 +87,7 @@ class MenuController extends Controller
         $data['menu'] = $menu;
 
         return response()->json([
-            'success' => __('Menu successfully fetched.'),
+            'success' => __('Item successfully assigned.'),
             'data' => $data,
         ]);
 
