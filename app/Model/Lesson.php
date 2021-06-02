@@ -37,8 +37,7 @@ class Lesson extends Model
 
     public function instructor()
     {
-    
-        return $this->belongsToMany(Instructor::class, 'event_topic_lesson_instructor',)->withPivot('instructor_id','lesson_id','topic_id');
+        return $this->belongsToMany(Instructor::class, 'event_topic_lesson_instructor')->select('instructors.*');
         
     }
 

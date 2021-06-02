@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="5704.889 2473 17.945 16.889">
+  <defs>
+    <style>
+      .cls-11, .cls-44 {
+        fill: none;
+      }
+
+      .cls-11 {
+        stroke: #b9b9b9;
+        stroke-width: 3px;
+      }
+
+      .cls-22 {
+        fill: #b9b9b9;
+      }
+
+      .cls-33 {
+        stroke: none;
+      }
+    </style>
+  </defs>
+  <g id="bydatesvg" data-name="bydatesvg" transform="translate(3960 1350)">
+    <g id="Rectangle_353" data-name="Rectangle 353" class="cls-11" transform="translate(1744.889 1125.111)">
+      <rect class="cls-33" width="17.945" height="14.778"/>
+      <rect class="cls-44" x="1.5" y="1.5" width="14.945" height="11.778"/>
+    </g>
+    <rect id="Rectangle_354" data-name="Rectangle 354" class="cls-22" width="2.111" height="7.185" transform="translate(1750.245 1123)"/>
+    <rect id="Rectangle_355" data-name="Rectangle 355" class="cls-22" width="2.111" height="7.185" transform="translate(1755.367 1123)"/>
+  </g>
+</svg>

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="9518 5570 53.6 53.6">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <g id="Group_880" data-name="Group 880" transform="translate(8385 3400)">
+    <path id="Path_1664" data-name="Path 1664" class="cls-1" d="M464.8,29.4V29a2.462,2.462,0,0,0-1-2V14.4a1.6,1.6,0,0,0-3.2,0V27a2.61,2.61,0,0,0-1,2,2.647,2.647,0,0,0,2.6,2.6h.2L473.9,43a1.626,1.626,0,1,0,2.3-2.3Z" transform="translate(697.6 2167.8)"/>
+    <path id="Path_1665" data-name="Path 1665" class="cls-1" d="M462.2,2.2A26.8,26.8,0,1,0,489,29,26.8,26.8,0,0,0,462.2,2.2Zm0,51.4A24.6,24.6,0,1,1,486.8,29,24.646,24.646,0,0,1,462.2,53.6Z" transform="translate(697.6 2167.8)"/>
+    <circle id="Ellipse_95" data-name="Ellipse 95" class="cls-1" cx="1" cy="1" r="1" transform="translate(1158.6 2174.6)"/>
+    <circle id="Ellipse_96" data-name="Ellipse 96" class="cls-1" cx="1" cy="1" r="1" transform="translate(1149.446 2176.718) rotate(-23.999)"/>
+    <circle id="Ellipse_97" data-name="Ellipse 97" class="cls-1" cx="1" cy="1" r="1" transform="matrix(0.669, -0.743, 0.743, 0.669, 1142.042, 2182.366)"/>
+    <circle id="Ellipse_98" data-name="Ellipse 98" class="cls-1" cx="1" cy="1" r="1" transform="translate(1137.574 2190.6) rotate(-72.002)"/>
+    <circle id="Ellipse_99" data-name="Ellipse 99" class="cls-1" cx="1" cy="1" r="1" transform="translate(1136.587 2197.915) rotate(-5.999)"/>
+    <circle id="Ellipse_100" data-name="Ellipse 100" class="cls-1" cx="1" cy="1" r="1" transform="matrix(0.866, -0.5, 0.5, 0.866, 1138.828, 2207.047)"/>
+    <circle id="Ellipse_101" data-name="Ellipse 101" class="cls-1" cx="1" cy="1" r="1" transform="matrix(0.588, -0.809, 0.809, 0.588, 1144.706, 2214.384)"/>
+    <circle id="Ellipse_102" data-name="Ellipse 102" class="cls-1" cx="1" cy="1" r="1" transform="translate(1152.932 2218.834) rotate(-78)"/>
+    <circle id="Ellipse_103" data-name="Ellipse 103" class="cls-1" cx="1" cy="1" r="1" transform="translate(1161.888 2217.431) rotate(-12)"/>
+    <circle id="Ellipse_104" data-name="Ellipse 104" class="cls-1" cx="1" cy="1" r="1" transform="matrix(0.809, -0.588, 0.588, 0.809, 1169.924, 2214.587)"/>
+    <circle id="Ellipse_105" data-name="Ellipse 105" class="cls-1" cx="1" cy="1" r="1" transform="matrix(0.5, -0.866, 0.866, 0.5, 1176.151, 2208.633)"/>
+    <circle id="Ellipse_106" data-name="Ellipse 106" class="cls-1" cx="1" cy="1" r="1" transform="translate(1179.292 2200.75) rotate(-84.001)"/>
+    <circle id="Ellipse_107" data-name="Ellipse 107" class="cls-1" cx="1" cy="1" r="1" transform="translate(1178.458 2190.271) rotate(-17.998)"/>
+    <circle id="Ellipse_108" data-name="Ellipse 108" class="cls-1" cx="1" cy="1" r="1" transform="matrix(0.743, -0.669, 0.669, 0.743, 1173.995, 2183.041)"/>
+    <circle id="Ellipse_109" data-name="Ellipse 109" class="cls-1" cx="1" cy="1" r="1" transform="translate(1166.925 2178.153) rotate(-66.001)"/>
+  </g>
+</svg>

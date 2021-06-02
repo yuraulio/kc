@@ -1,0 +1,39 @@
+/* ==========================================================================
+   ALERTS
+   ========================================================================== */
+   .alert-outer{ padding: 30px 0; }
+   .alert-wrapper{ position: relative; padding: 50px 15px; border-radius: 5px; box-shadow: 4px 3px 13.58px 0.42px rgba(33, 33, 33, 0.22); }
+   .alert-wrapper.info-alert{ background: rgb(29,129,237); background: linear-gradient(90deg, rgba(29,129,237,1) 0%, rgba(101,175,255,1) 100%); }
+   .alert-wrapper.success-alert{ background: rgb(172,185,0); background: linear-gradient(90deg, rgba(172,185,0,1) 0%, rgba(195,206,57,1) 100%); }
+   .alert-wrapper.warning-alert{ background: rgb(255,107,9); background: linear-gradient(90deg, rgba(255,107,9,1) 0%, rgba(255,159,28,1) 100%); }
+   .alert-wrapper.error-alert{ background: rgb(209,50,11); background: linear-gradient(90deg, rgba(209,50,11,1) 0%, rgba(245,48,0,1) 100%); }
+   .alert-wrapper .alert-inner{ position: relative; max-width: 930px; margin: 0 auto; padding-right: 25px; }
+   .alert-wrapper .alert-inner p{ position: relative; padding-left: 35px; color: #ffffff; margin: 0; }
+   .alert-wrapper .alert-inner p img{ width: 24px; height: auto; position: absolute; display: block; top: 50%; transform: translateY(-50%); left: 0; }
+   .alert-wrapper .alert-inner p svg{ width: 24px; height: auto; position: absolute; display: block; top: 50%; transform: translateY(-50%); left: 0; }
+   .alert-wrapper .alert-inner p path{ stroke: #ffffff; }
+   .alert-wrapper .alert-inner .close-alert{ width: 22px; height: auto; display: block; position: absolute; top: 50%; right: 0; transform: translateY(-50%); }
+   .alert-wrapper .alert-inner .close-alert img{ width: 100%; height: auto; display: block; }
+   .alert-wrapper .alert-inner .close-alert svg{ width: 100%; height: auto; display: block; }
+   .alert-wrapper .alert-inner .close-alert path{ stroke: #ffffff; }
+
+   #favDialog, #couponDialog {
+    position: fixed;
+    z-index: 9999;
+    text-align: center;
+    left: 0;
+    right: 0;
+    max-width: 1000px;
+    margin: auto;
+    top:50%;
+}
+#favDialog1,#examDialog {
+    position: fixed;
+    z-index: 9999;
+    text-align: center;
+    left: 0;
+    right: 0;
+    max-width: 500px;
+    margin: auto;
+    top:50%;
+}

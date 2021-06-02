@@ -1,4 +1,6 @@
 {
-    "/js/app.js": "/js/app.js",
-    "/css/argon.css": "/css/argon.css"
+    "/js/app.js": "/js/app.js?id=592c439a76adc536454d",
+    "/css/argon.css": "/css/argon.css?id=74376c3e32d3ad3250c9",
+    "/theme/assets/css/style_ver.css": "/theme/assets/css/style_ver.css?id=d41d8cd98f00b204e980",
+    "/theme/assets/js/front.js": "/theme/assets/js/front.js?id=d41d8cd98f00b204e980"
 }

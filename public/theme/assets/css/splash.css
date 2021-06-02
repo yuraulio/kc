@@ -1,0 +1,15 @@
+.spalshArea {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 50px;
+}
+.spalshArea .spalshRow { display: table; }
+.spalshRow .splashCont { display: table-row; }
+.spalshRow .splashCont a { display: table-cell; padding: 5% 15% 0 15%; }
+.spalshRow .splashCont a img {
+    display: inline-block;
+    width: 100%;
+    height: auto;
+    min-width: 320px;
+}

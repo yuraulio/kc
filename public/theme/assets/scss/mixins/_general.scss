@@ -1,0 +1,197 @@
+// clearfix
+// ------------------------------
+%clearfix {
+    &::after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+
+// placeholder
+// ------------------------------
+@mixin placeholder {
+    &:-moz-placeholder {
+        @content;
+    }
+
+    &::-moz-placeholder {
+        @content;
+    }
+
+    &:-ms-input-placeholder {
+        @content;
+    }
+
+    &::-webkit-input-placeholder {
+        @content;
+    }
+}
+
+// box-sizing
+// ------------------------------
+@mixin box-sizing($type: border-box) {
+    -webkit-box-sizing: $type;
+    -moz-box-sizing: $type;
+    box-sizing: $type;
+}
+
+// opacity
+// ------------------------------
+@mixin opacity($opacity: 0.5) {
+    opacity: $opacity;
+    filter: alpha(opacity = $opacity * 100);
+}
+
+// border-radius
+// ------------------------------
+@mixin border-radius($value: 3px) {
+    -webkit-border-radius: $value;
+    -moz-border-radius: $value;
+    border-radius: $value;
+}
+
+// icon font
+// ------------------------------
+@mixin icon-font($font) {
+    font-family: "#{$font}" !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+@mixin icon($icon, $font) {
+    content: $icon;
+
+    @include icon-font($font);
+}
+
+// box-shadow
+// ------------------------------
+@mixin box-shadow($setting: 10px 10px 0px 0px #000000) {
+    -webkit-box-shadow: $setting;
+    -moz-box-shadow: $setting;
+    box-shadow: $setting;
+}
+
+// vertical-align
+// ------------------------------
+@mixin vertical-align {
+    position: relative;
+    top: 50%;
+
+    @include translateY(-50%);
+}
+
+// gradient
+// ------------------------------
+@mixin gradient($start-color, $end-color, $orientation) {
+    background: $start-color;
+
+    @if $orientation == vertical {
+        // vertical
+        background: -moz-linear-gradient(top, $start-color 0%, $end-color 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, $start-color), color-stop(100%, $end-color));
+        background: -webkit-linear-gradient(top, $start-color 0%, $end-color 100%);
+        background: -o-linear-gradient(top, $start-color 0%, $end-color 100%);
+        background: -ms-linear-gradient(top, $start-color 0%, $end-color 100%);
+        background: linear-gradient(to bottom, $start-color 0%, $end-color 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$start-color', endColorstr='$end-color',GradientType=0 );
+    }
+    @else if $orientation == horizontal {
+        // horizontal
+        background: -moz-linear-gradient(left, $start-color 0%, $end-color 100%);
+        background: -webkit-gradient(linear, left top, right top, color-stop(0%, $start-color), color-stop(100%, $end-color));
+        background: -webkit-linear-gradient(left, $start-color 0%, $end-color 100%);
+        background: -o-linear-gradient(left, $start-color 0%, $end-color 100%);
+        background: -ms-linear-gradient(left, $start-color 0%, $end-color 100%);
+        background: linear-gradient(to right, $start-color 0%, $end-color 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$start-color', endColorstr='$end-color',GradientType=1 );
+    }
+    @else {
+        // radial
+        background: -moz-radial-gradient(center, ellipse cover, $start-color 0%, $end-color 100%);
+        background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, $start-color), color-stop(100%, $end-color));
+        background: -webkit-radial-gradient(center, ellipse cover, $start-color 0%, $end-color 100%);
+        background: -o-radial-gradient(center, ellipse cover, $start-color 0%, $end-color 100%);
+        background: -ms-radial-gradient(center, ellipse cover, $start-color 0%, $end-color 100%);
+        background: radial-gradient(ellipse at center, $start-color 0%, $end-color 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$start-color', endColorstr='$end-color',GradientType=1 );
+    }
+}
+
+// background-size
+// ------------------------------
+@mixin bg-size($size: cover) {
+    -webkit-background-size: $size;
+    -moz-background-size: $size;
+    -o-background-size: $size;
+    background-size: $size;
+}
+
+@mixin background-size($size) {
+    @include bg-size($size);
+}
+
+// background-cover
+// ------------------------------
+@mixin bg-cover($bg-img-path, $bg-options) {
+    background: url($bg-img-path) $bg-options;
+
+    @include bg-size;
+
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='#{$bg-img-path}', sizingMethod='scale');
+    -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='#{$bg-img-path}', sizingMethod='scale')";
+}
+
+@mixin background-cover($bg-img-path, $bg-options) {
+    @include bg-cover($bg-img-path, $bg-options);
+}
+
+// appearance
+// ------------------------------
+@mixin appearance($value: none) {
+    -webkit-appearance: $value;
+    -moz-appearance: $value;
+    appearance: $value;
+}
+
+// hide-text
+// ------------------------------
+@mixin hide-text {
+    font: 0/0 a;
+    color: transparent;
+    text-shadow: none;
+}
+
+// control text selection
+// ------------------------------
+@mixin user-select($value: none) {
+    -webkit-user-select: $value;
+    user-select: $value;
+}
+
+// columns
+// ------------------------------
+@mixin columns($value) {
+    -webkit-columns: $value;
+    -moz-columns: $value;
+    columns: $value;
+}
+
+@mixin column-gap($value) {
+    -webkit-column-gap: $value;
+    -moz-column-gap: $value;
+    column-gap: $value;
+}
+
+//  SCSS mixin to convert letter-spacing from Adobe XD to CSS #xd #letter-spacing
+// ------------------------------
+@mixin letter-spacing($spacing) {
+    letter-spacing: $spacing / 1000 * 1em;
+}

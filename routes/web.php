@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/', 'Auth\LoginController@showLoginForm')->name('welcome');
+//Route::get('/', 'Auth\LoginController@showLoginForm')->name('welcome');
 
 Auth::routes();
 
@@ -189,9 +189,7 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
 
 Route::group(['middleware' => ['preview','web']], function () {
 
-    Route::get('/test', function(){
-        return view('welcome');
-    });
+    Route::get('{slug}', 'Theme\HomeController@index');
 
 });
 

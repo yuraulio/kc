@@ -17,7 +17,8 @@ use App\Model\Benefit;
 use App\Model\Venue;
 use App\Model\User;
 use App\Model\Partner;
-
+use App\Model\Lesson;
+use App\Model\Instructor;
 use App\Traits\SlugTrait;
 use App\Traits\MetasTrait;
 use App\Traits\BenefitTrait;
@@ -48,14 +49,22 @@ class Event extends Model
     public function topic()
     {
         
-        return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor','event_id')
+        return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id')
             ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority');
     }
 
-    public function user()
+    public function lessons()
     {
-        return $this->belongsToMany(Event::class, 'event_user');
+        
+        return $this->belongsToMany(Lesson::class,'event_topic_lesson_instructor')->where('status',true)->select('lessons.*','topic_id','event_id', 'lesson_id','instructor_id')
+        ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority');
     }
+
+    public function instructors()
+    {
+        return $this->belongsToMany(Instructor::class,'event_topic_lesson_instructor')->where('status',true)->select('instructors.*','lesson_id')->withPivot('lesson_id');
+    }
+
 
     public function summary()
     {
@@ -125,6 +134,20 @@ class Event extends Model
     public function paymentMethod()
     {
         return $this->belongsToMany(PaymentMethod::class, 'paymentmethod_event');
+    }
+
+    public function topicsLessonsInstructors(){
+        $topics = [];
+        //dd($this->topic->unique()->groupBy('topic_id'));
+        //dd($this->lessons->groupBy('topic_id'));
+        //dd($this->instructors->groupBy('lesson_id'));
+        $lessons = $this->lessons->groupBy('topic_id');
+        foreach($this->topic->groupBy('topic_id') as $key => $topic){
+            //dd($topic);
+            dd($lessons[$key]);
+
+        }
+
     }
 
 }

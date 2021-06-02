@@ -7,11 +7,11 @@
 
 <div class="accordion" id="accordionExample">
     <?php //dd($allTopicsByCategory1); ?>
-    @foreach ($allTopicsByCategory1 as $key => $topic1)
-    <?php //dd($topic1); ?>
+    @foreach($topics as $key => $topic)
+        <?php $topic = $topic->first() ?>
     <div class="card">
         <div class="card-header" id="{{$key}}" data-toggle="collapse" data-target="#col_{{$key}}" aria-expanded="true" aria-controls="collapseOne">
-            <h5 class="mb-0">{{$topic1[0]['title']}}</h5>
+            <h5 class="mb-0">{{$topic->title}}</h5>
         </div>
         <div id="col_{{$key}}" class="collapse show" aria-labelledby="{{$key}}" data-parent="#accordionExample">
             <div class="card-body">
@@ -38,16 +38,17 @@
                         </thead>
                         <tbody id="topic_lessons" data-event-id="{{$event['id']}}">
                             <?php $i=0; ?>
-                            <?php $topic = $topic1->first() ?>
-
-
+                            
+                             
                             <tr class="topic_{{$topic->id}}">
-                                @foreach($topic['event_lesson'] as $lesson)
+                                @foreach($lessons[$key] as $key1 => $lesson)
+                               
+                                
                                 <td>{{ $lesson->title }}</td>
-                                <?php //dd($lesson['instructor']->first()['id']); ?>
-                                <td id="inst_lesson_{{$lesson['id']}}"><?php if($lesson['instructor']->first() != null)
+                                
+                                <td id="inst_lesson_{{$lesson['id']}}"><?php if(isset($instructors[$lesson->id]) && $instructors[$lesson->id]->first() != null)
                                 {
-                                    echo $lesson['instructor']->first()['title'];
+                                    echo $instructors[$lesson->id]->first()['title'];
                                 }else{
                                     echo '-';
                                 } ?></td>
@@ -67,7 +68,7 @@
                                         </div>
                                     </td>
                             </tr>
-
+                               
                                 @endforeach
 
                         </tbody>

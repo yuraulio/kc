@@ -1,0 +1,51 @@
+.event-background:nth-child(2n + 1){
+    background-color: #f0f0f0;
+}
+/*
+.elearning-page-wrapper div#courses-explain-video iframe {
+    width: 100%;
+    height: 423px;
+}
+.elearning-page-wrapper div#courses-explain-video figure {
+    margin: 0 !important;
+}
+*
+.section-course-tabs .responsive-fb-video figure {
+    margin: 0;
+}
+.section-course-tabs .responsive-fb-video iframe {height: 100vh;}*/
+.instructor-studies ul li svg path, .instructor-studies ul li svg line {
+    stroke: #419cff !important;
+    stroke-width: 1.5!important;
+}
+
+.xs-cart{
+    display: none;
+}
+
+.mar-top-15{
+    margin-top:15px;
+}
+
+.non-pointer{
+    pointer-events:none!important;
+}
+
+.padd-bottom{
+    padding-bottom: 100px;
+}
+
+.page-wrapper{
+  /*  pointer-events:none;*/
+}
+@media (max-width:980px) {
+    .xs-flex{
+        display: inline-flex;
+    }
+
+    .xs-cart{
+        margin-top: 5px;
+        margin-right: 15px;
+        display: block;
+    }
+}

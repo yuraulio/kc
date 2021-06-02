@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="7678 13228 51 51">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #f53000;
+      }
+
+      .cls-2 {
+        fill: none;
+        stroke: #fff;
+        stroke-width: 3px;
+      }
+    </style>
+  </defs>
+  <g id="Symbol_9_1" data-name="Symbol 9 – 1" transform="translate(6029 5917)">
+    <circle id="Ellipse_4" data-name="Ellipse 4" class="cls-1" cx="25.5" cy="25.5" r="25.5" transform="translate(1700 7362) rotate(180)"/>
+    <path id="Path_574" data-name="Path 574" class="cls-2" d="M4236.375,2320l-6.375,9.862,6.375,9.861" transform="translate(-2559.5 5006.777)"/>
+  </g>
+</svg>

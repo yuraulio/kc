@@ -199,24 +199,28 @@ class EventController extends Controller
     {
         $user = Auth::user();
         $id = $event['id'];
-        $event = $event->with('delivery','category', 'summary', 'benefits', 'ticket', 'city', 'venues', 'topic','topic.event_lesson', 'users', 'partners', 'sections','paymentMethod','slugable','metable','faqs')->find($id);
+        $event = $event->with('delivery','category', 'summary', 'benefits', 'ticket', 'city', 'venues', 'topic', 'lessons', 'instructors', 'users', 'partners', 'sections','paymentMethod','slugable','metable','faqs')->find($id);
 
         $categories = Category::all();
         $types = Type::all();
         $partners = Partner::all();
 
-        $allTopicsByCategory = Category::with('topics')->find($event->category->first()->id);
-
-        $allTopicsByCategory1 = $event['topic']->unique()->groupBy('id');
-       // dd($event['topic']->groupBy('id'));
-        //dd($allTopicsByCategory1);
+        $allTopicsByCategory = Category::with('topic')->has('events')->find($event->category->first()->id);
+        //dd($event);
+        
+        $allTopicsByCategory1 = $event['lessons']->unique()->groupBy('topic_id');
+        $instructors = $event['instructors']->groupBy('lesson_id');
+        $topics = $event['topic']->unique()->groupBy('topic_id');
+        
         $data['event'] = $event;
         //dd($event);
         $data['categories'] = $categories;
         $data['types'] = $types;
         $data['user'] = $user;
         $data['allTopicsByCategory'] = $allTopicsByCategory;
-        $data['allTopicsByCategory1'] = $allTopicsByCategory1;
+        $data['lessons'] = $allTopicsByCategory1;
+        $data['instructors'] = $instructors;
+        $data['topics'] = $topics;
 
         $data['slug'] = $event['slugable'];
         $data['metas'] = $event['metable'];
@@ -224,7 +228,7 @@ class EventController extends Controller
         $data['methods'] = PaymentMethod::where('status',1)->get();
         $data['delivery'] = Delivery::all();
         $data['isInclassCourse'] = $event->is_inclass_course();
-
+        //dd($data['topics']);
         return view('event.edit', $data);
     }
 

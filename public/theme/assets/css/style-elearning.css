@@ -1,0 +1,299 @@
+.main-body-background{
+    background: #f6f6f6;
+}
+
+.tab-background{
+    background: white;
+}
+
+
+#overview{
+    padding-top: -1px;
+    padding-bottom: 100px;
+    /* padding: 0; */
+}
+.video-section {
+    /* padding-top: 0px; */
+    /* padding-bottom: 122px; */
+    margin-top: 0;
+    padding-left: 0px;
+    position: relative;
+    /* border-top: 2px #dcdcdc solid; */
+}
+
+.navbar-custom{
+    background: linear-gradient(to right, #407bc9 0%, #407bc9 100%)!important;
+    min-height: 126px !important;
+}
+
+.video-section .hs-responsive-embed-youtube iframe, .oembed_media iframe {
+    /* position: absolute; */
+    width: 100%!important;
+    height: 395px !important;
+   /* box-shadow: 14px 11px 20px 3px #0000007a;*/
+}
+
+.video-section .hs-responsive-embed-youtube, .oembed_media {
+    position: relative;
+    padding: 0;
+    width: 764px;
+}
+
+.elearning-title  {
+    font-size: 42px !important;
+    padding-bottom: -4px! important;
+    margin-bottom: 15px !important;
+    margin-top: 83px !important;
+}
+
+#elearning-body .sum-icon{
+    width: 155px;
+    height: 79px;
+    display: flex;
+}
+
+#elearning-body .sum-icon p{
+    margin: 6px auto;
+    max-width: 100%;
+    text-align: left;
+    padding-left: 9px;
+    font-size: 0.9rem;
+}
+
+#overview .summary{
+    right: -7px;
+    max-width: 764px;
+    padding-bottom: 65px;
+}
+
+#overview .icons{
+    padding-top: 5%;
+    padding-left: 0;
+}
+
+#elearning-body img.img-responsive {
+    display: inline-flex !important;
+    width: 25px !important;
+    height: 25px !important;
+    border-radius: 100px !important;
+    margin-left: -5px !important;
+}
+
+#elearning-body #section-syllabus h2 {
+    margin-bottom: 15px;
+    margin-top: -56px;
+    color: #419cff;
+    font-size: 0.9rem;
+    margin-left: 29px;
+    max-width: 128px !important;
+    text-align: left;
+    padding-right: 33px;
+}
+
+#elearning-body #syllabus p {
+    margin: -12px 27px 17px;
+    font-size: 0.9rem;
+    width: 124%;
+}
+
+
+#extramenu-elarning #vtab {
+    width: auto;
+    padding: 6px 25px;
+    position: absolute;
+    /* display: none; */
+}
+
+#extramenu-elarning {
+    /* position: relative; */
+    margin-top: 394px;
+    /* right: 0px; */
+    margin-left: 0px;
+    z-index: 100;
+    /* margin-top: 12px; */
+    background: #3f6fb6;
+    /* border-bottom: 1px #193c6f solid; */
+    padding: 0 0;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    height: 51px;
+    width: 765px;
+}
+
+#extramenu-elarning a, a:visited, a:focus {
+    color: #ffffff;
+    outline: 0;
+    -webkit-transition: all .2s ease-in-out;
+    -moz-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+    text-decoration: none;
+    letter-spacing: 2px;
+    font-weight: 100;
+    font-size: inherit;
+  }
+
+
+#extramenu-elarning a:active {
+    color: #d2ff00 !important;
+    outline: 0;
+    -webkit-transition: all .2s ease-in-out;
+    -moz-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+    text-decoration: none;
+    letter-spacing: 2px;
+    font-weight: 100;
+    font-size: inherit;
+  }
+
+  #extramenu-elarning a:hover {
+    color: #f0ffa9;
+    text-decoration: none;
+    outline: 0;
+    -webkit-transition: all .2s ease-in-out;
+    -moz-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+    letter-spacing: 2px;
+    font-weight: normal;
+  }
+
+  #elearning-body .sum-icon svg {
+    max-width: 25px;
+    height: 25px;
+}
+  
+
+#elearning-body .enroll-button{
+    /* float: right; */
+    margin-top: 67px;
+    margin-left: 36px;
+}
+
+.enroll-button a,a:visited,a:focus{
+    text-decoration:none !important;
+}
+
+.enroll-button a:hover{
+    text-decoration:none;
+}
+
+
+#elearning-body .topics{
+    margin-top: 45px;
+    right: -8px;
+}
+
+#elearning-body .panel-default>.panel-heading a {
+    display: block;
+    padding: 14px 15px;
+    font-size: 0.9rem;
+    background: #ededed;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+    color: black;
+    text-decoration: none;
+    letter-spacing: normal;
+    font-weight: bold;
+    padding-left: 7px;
+    max-width: 99%;
+    padding-top: 16px;
+    padding-left: 12px;
+}
+
+#elearning-body .panel-group .panel {
+    margin-bottom: -6px;
+    border-radius: 0px;
+}
+
+#elearning-body .panel-title {
+    margin-bottom: 0;
+    background: #ededed;
+}
+
+#elearning-body .panel-default {
+    border-color: #9e9e9e !important;
+}
+
+#elearning-body .panel-default>.panel-heading a:after {
+    content: "\e259";
+    position: relative;
+    top: 0px;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    float: right;
+    transition: transform .25s linear;
+    -webkit-transition: -webkit-transform .25s linear;
+    font-size: 1rem;
+}
+
+#elearning-body .panel-default>.panel-heading a:after {
+    content: "\e259";
+    position: relative;
+    top: -1px;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    float: right;
+    transition: transform .25s linear;
+    -webkit-transition: -webkit-transform .25s linear;
+    font-size: 0.8rem;
+  }
+  
+  #elearning-body .lesson-list-title h4 {
+    font-size: 0.9rem !important;
+    font-weight: bold;
+    padding-left: 10%;
+  }
+  
+  #elearning-body .lesson-list-inst {
+    /* display: table-caption; */
+    text-align: right;
+    width: 143%;
+    margin-top: -67px;
+}
+
+#elearning-body .lesson-list-main {
+    width: 66%;
+    display: inline-block;
+  }
+  
+  #elearning-body .intructor-alt:hover:after {
+    background: #ebebeb;
+    border-radius: 5px;
+    bottom: 40px;
+    color: black;
+    content: attr(data-title);
+    left: -60px;
+    padding: 5px 5px;
+    text-align: center;
+    position: absolute;
+    z-index: 98;
+   font-size: 13px;
+   font-weight: bold;
+    width: 150px;
+  }
+
+  #elearning-body .lesson-list-inst-image{
+    width: 50px;
+    height: 50px;
+  }
+
+  .overview-text{
+    padding-left: 40px;
+  }
+
+  .panel-shadow{
+    box-shadow: 16px 13px 48px 3px rgba(76,76,76,0.23);
+
+  }

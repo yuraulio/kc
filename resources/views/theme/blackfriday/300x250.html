@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="el">
+	<head>
+		<meta charset="utf-8">
+		<title>Know Crunch</title>
+		<meta name="description" content="Know Crunch">
+		<meta name="author" content="Epsilon-8">
+		<meta name="ad.size" content="width=300,height=250">
+		
+	   <script type="text/javascript">
+		  	var clickTag = "https://google.com";
+	   </script>
+		
+		<style>
+			body {
+				margin: 0; padding: 0;
+				font-size: 6px;
+				text-align: center;
+			}
+			#container {				
+				width: 300px;
+				height: 250px;
+				overflow: hidden;
+				position: relative;
+				box-sizing: border-box;
+				box-shadow: 0 0 2px #cccccc;
+				cursor: pointer;
+			}
+			#container:hover #cta {
+				filter: brightness(1.1);
+			}
+			.screen {
+				width: 100%;
+				height: 100%;
+				position: absolute;
+				left: 0; top: 0;
+				background-repeat: no-repeat;
+			}
+			img {position: absolute;}
+			#container {
+				background-image: url(images/bg.jpg); 
+				background-size: cover;
+			}
+			#text1 {
+				left: 0px;
+				top: 125px;
+			}
+			#text2 {
+				left: 20px;
+				top: 135px;
+			}
+			#cta {
+				left: 20px;
+				top: 200px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="container" onclick="javascript:void(window.open(clickTag))">
+			<div class="screen" id="s1">
+				<img id="text1" src="./images/text1.png" width="230" alt="ΠΡΟΣΦΟΡΑ"/>
+				<img id="text2" src="./images/text2.png" width="211" alt="ΠΡΟΣΦΟΡΑ"/>
+				<img id="cta" src="./images/cta.png" width="164" alt="ΠΡΟΣΦΟΡΑ"/>
+			</div>
+		</div>
+		
+		<script src="js.js"></script>
+		<script type="text/javascript">
+			var sceneDuration = 4;
+			var tl = gsap.timeline({repeat: -1});
+			tl.from("#s1", 1, {opacity:0} )				
+				.from("#text1", 0.5, {x:-20, opacity:0, ease:Sine.easeInOut} )
+				.from("#cta", 0.5, {scale:0, opacity:0, ease:Back.easeOut }, "-=0.2" )
+				.from("#text2", 0.5, {x:-20, opacity:0, ease:Sine.easeInOut}, "+=4" )
+				.to("#text1", 0.5, {opacity:0, ease:Sine.easeInOut}, "-=0.5" )
+				.to("#s1", 0.2, {autoAlpha: 0, delay: sceneDuration })
+				.play();
+		</script>
+		
+	</body>
+	
+</html>

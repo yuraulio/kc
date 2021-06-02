@@ -5,7 +5,8 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Category;
-use App\Model\lesson;
+use App\Model\Lesson;
+use App\Model\Event;
 
 class Topic extends Model
 {
@@ -37,8 +38,8 @@ class Topic extends Model
     }
 
     public function event_lesson()
-    {
-        return $this->belongsToMany(Lesson::class, 'event_topic_lesson_instructor')->withPivot('event_id','lesson_id','instructor_id','topic_id')->with('instructor');
+    {   
+        return $this->belongsToMany(Lesson::class, 'event_topic_lesson_instructor')->select('event_id')->where('status',true)->withPivot('event_id','lesson_id','instructor_id','topic_id')->with('instructor');
     }
 
 }

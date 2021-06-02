@@ -18,6 +18,10 @@ class Slug extends Model
         'slugable_id',
     ];
 
+    public function getRouteKeyName() {
+        return 'slug';
+    }
+
     public function slugable()
     {
         return $this->morphTo();

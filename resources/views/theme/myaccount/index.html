@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <base href="{!! URL::to('/') !!}/" target="_self" />
+    <meta charset="UTF-8" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{{ cdn('theme/assets/css/new/normalize.css') }}" />
+    <link rel="stylesheet" href="{{ cdn('theme/assets/css/new/core.css') }}" />
+    <title>Document</title>
+  </head>
+
+
+  @inject('frontHelp', 'Library\FrontendHelperLib')
+
+  <body>
+    <div class="container">
+      <div class="content-wrapper">
+        <div class="sidebar-wrapper open jsSidebar">
+          <header class="sidebar-header">
+            <a tabindex="0" href="#">
+              <img
+                id="logo"
+                src="theme/assets/img/new/logo-knowcrunch-seminars.svg"
+                alt="knowcruch logo"
+            /></a>
+            <a tabindex="0" href="#" class="jsHideSidebar">
+              <img
+                id="sidebar-toggle"
+                src="theme/assets/img/new/arrows.svg"
+                alt="toggle sidebar"
+              />
+            </a>
+          </header>
+          <!-- ./sidebar-header -->
+          <div class="searchbar-wrapper">
+            <form class="searchbar" action="/">
+              <label for="search">Search: </label>
+              <input
+                class="jsSearchInput"
+                type="text"
+                id="search"
+                placeholder="SEARCH"
+                name="search"
+              />
+              <img id="jsSearchButton" src="theme/assets/img/new/search-icon.svg" alt="search" />
+            </form>
+          </div>
+          <!-- ./searchbar-wrapper -->
+          <div class="sidebar-content">
+            <nav>
+            <ul class="topics-list">
+
+                
+                @foreach($topics as $keyTopic => $topic)
+
+
+
+                
+                <li class="topic">
+                <a href="#" tabindex="0" class="topic-header">
+                    <div class="topic-info">
+                      <h3
+                        class="topic-info_title"
+                        data-title="Digital Marketing Funamentals"
+                      >
+                      {{$keyTopic}}
+                      </h3>
+                      <span class="topic-info_duration">0</span>
+                    </div>
+                    <!-- ./topic-info -->
+                    <img
+                      class="topic-open jsTopicOpen"
+                      src="theme/assets/img/new/arrow-down.svg"
+                      alt="open topic"
+                    />
+                    <img
+                      class="topic-close jsTopicClose"
+                      src="theme/assets/img/new/arrow-up.svg"
+                      alt="close topic"
+                    />
+                  </a>
+                  <!-- ./topic-header -->
+                  <ul class="lessons-list">
+                  @foreach($topic as $keyLesso => $lesso)
+                    @foreach($lesso as $keyLesson => $lesson)
+                    
+                    <li class="lesson">
+                      <a href="{{$lesson['vimeo']}}" onclick="" tabindex="0">
+                        <img
+                          class="lesson-progress"
+                          src="
+                          <?php
+                          if($lesson['seen'] == 1){
+                            echo 'theme/assets/img/new/completed_lesson_icon.svg';
+                          }else{
+                            echo 'theme/assets/img/new/lesson_icon.svg';
+                          }
+                          ?>
+                          "
+                          alt="lesson progress"
+                        />
+                        <div class="lesson-info">
+                          <h3
+                            class="lesson-info_title"
+                            data-title="Elearning masterclass overview"
+                          >
+                            {{$keyLesson}}
+                          </h3>
+                          <span class="lesson-info_duration">{{$lesson['duration']}}</span>
+                        </div>
+                        <!-- ./lesson-info -->
+                        <img
+                          class="lesson-teacher"
+                          src="img/teacher-icon.png"
+                          alt="lesson teacher"
+                        />
+
+                      </a>
+                    </li>
+                    
+                    @endforeach
+                    @endforeach
+                  </ul>
+                </li>
+
+                @endforeach
+
+                
+              </ul>
+            </nav>
+          </div>
+          <!-- ./sidebar-content -->
+        </div>
+        <!-- ./sidebar-wrapper -->
+        <div class="lesson-wrapper jsLesson">
+          <header class="lesson-header">
+            <a tabindex="0" class="jsShowSidebar" href="#">
+              <img
+                class="show-sidebar"
+                src="theme/assets/img/new/arrows.svg"
+                alt="show sidebar"
+              />
+            </a>
+            <h1 class="lesson-header-title">
+              E-Learning Masterclass in Digital & Social Media Marketing
+            </h1>
+            <div class="progress-bar-wrapper">
+              <div class="progress-bar"></div>
+              <!-- ./progress-bar -->
+            </div>
+            <!-- ./progress-bar-wrapper -->
+          </header>
+          <!-- ./lesson-header -->
+          <div class="video-wrapper">
+            <div style="padding: 56.25% 0 0 0; position: relative">
+              <iframe
+                aria-label="lesson video"
+                src="https://player.vimeo.com/video/515362672?color=efc900&title=0&byline=0"
+                style="
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  width: 100%;
+                  height: 100%;
+                "
+                allow="autoplay; fullscreen; picture-in-picture"
+                allowfullscreen
+              ></iframe>
+            </div>
+            <script src="https://player.vimeo.com/api/player.js"></script>
+          </div>
+          <!-- ./video-wrapper -->
+          <div class="lesson-main">
+            <div class="lesson-main-title-wrapper">
+              <h2 class="lesson-main-title">Elearning masterclass overview</h2>
+              <div class="lesson-main-info">
+                <img src="theme/assets/img/new/info-information.svg" alt="lesson information" />
+                <span>Live Tutorial</span>
+              </div>
+              <!-- ./lesson-main-info -->
+            </div>
+            <!-- ./lesson-main-title-wrapper -->
+            <div class="lesson-controls">
+              <div class="lesson-controls-left">
+                <a
+                  tabindex="0"
+                  href="#"
+                  class="tab-button resources-button jsOpenResourcesTab active"
+                >
+                <div tabindex="-1" class="inner-tab-button">
+                  <img src="theme/assets/img/new/resources-icon.svg" alt="resources" />
+                  <span>Resources</span>
+
+                </div>
+                </a>
+                <!-- ./resources-button -->
+                <a
+                  tabindex="0"
+                  href="#"
+                  class="tab-button notes-button jsOpenNotesTab"
+                >
+                <div tabindex="-1" class="inner-tab-button">
+                  <img src="theme/assets/img/new/notes-icon.svg" alt="notes" />
+                  <span>Notes</span>
+                </div>
+                </a>
+                <!-- ./notes-button -->
+              </div>
+              <!-- ./lesson-controls-left -->
+              <div class="lesson-controls-right">
+                <a
+                  href="#"
+                  tabindex="0"
+                  class="change-lesson-button previous-video-button"
+                >
+                  <div tabindex="-1" class="inner-change-lesson-button">
+                    <img src="theme/assets/img/new/previous_video_icon.svg" alt="previous video" />
+                    <span>Previous video</span>
+                  </div>
+                </a>
+                <!-- ./previous-video-button -->
+                <a
+                  href="#"
+                  tabindex="0"
+                  class="change-lesson-button next-video-button"
+                >
+                  <div tabindex="-1" class="inner-change-lesson-button">
+                    <span>Next video</span>
+                    <img src="theme/assets/img/new/next_video_icon.svg" alt="next video" />
+                  </div>
+                </a>
+                <!-- ./next-video-button -->
+                <div class="share-container">
+                  <a href="#" tabindex="0" class="share-lesson-button">
+                    <img src="theme/assets/img/new/share-arrow-square.svg" alt="share lesson" />
+                  </a>
+                  <div class="share-options">
+                    <ul>
+                      <li>
+                        <a href="#"
+                          ><img tabindex="0" src="theme/assets/img/new/facebook.svg" alt="facebook"
+                        /></a>
+                      </li>
+                      <li>
+                        <a href="#"
+                          ><img tabindex="0" src="theme/assets/img/new/instagram.svg" alt="instagram"
+                        /></a>
+                      </li>
+                      <li>
+                        <a href="#"
+                          ><img tabindex="0" src="theme/assets/img/new/pinterest.svg" alt="pinterest"
+                        /></a>
+                      </li>
+                    </ul>
+                  </div>
+                  <!-- ./share-options -->
+                </div>
+                <!-- ./share-container -->
+              </div>
+              <!-- ./lesson-controls-right -->
+            </div>
+            <!-- ./lesson-controls -->
+            <div class="lesson-misc-wrapper">
+              <div class="lesson-misc resources active">
+                <h3 class="lesson-misc-title">Lesson resources</h3>
+                <div class="lesson-resources">
+                  <div class="lesson-downloads">
+                    <h4 class="resource-list-title">Downloads</h4>
+                    <ul class="resource-list">
+                      <li class="resource">
+                        <a href="#"
+                          ><img
+                            src="theme/assets/img/new/download.svg"
+                            alt="download resource" /></a
+                        >Videos zip file
+                      </li>
+                      <li class="resource">
+                        <a href="#"
+                          ><img
+                            src="theme/assets/img/new/download.svg"
+                            alt="download resource" /></a
+                        >Transcripts zip file
+                      </li>
+                      <li class="resource">
+                        <a href="#"
+                          ><img
+                            src="theme/assets/img/new/download.svg"
+                            alt="download resource" /></a
+                        >Presentation
+                      </li>
+                    </ul>
+                  </div>
+                  <!-- ./lesson-downloads -->
+                  <div class="lesson-links">
+                    <h4 class="resource-list-title">Links</h4>
+                    <ul class="resource-list">
+                      <li class="resource">
+                        <a href="#"
+                          ><img
+                            src="theme/assets/img/new/link.svg"
+                            alt="external resource link" /></a
+                        >https://knowcrunch.com/video-on-demand-courses
+                      </li>
+                      <li class="resource">
+                        <a href="#"
+                          ><img
+                            src="theme/assets/img/new/link.svg"
+                            alt="external resource link" /></a
+                        >https://knowcrunch.com/in-class-courses
+                      </li>
+                    </ul>
+                  </div>
+                  <!-- ./lesson-links -->
+                </div>
+                <!-- ./lesson-resources -->
+              </div>
+              <!-- ./lesson-misc -->
+              <div class="lesson-misc notes">
+                <h3 class="lesson-misc-title">Lesson notes</h3>
+                <div class="lesson-notes">
+                  <label for="notes">Your notes: </label>
+                  <textarea
+                    name="notes"
+                    id="notes"
+                    placeholder="My notes for this lesson"
+                    rows="10"
+                  ></textarea>
+                  <div class="lesson-notes_status">
+                    Your notes are <span>saved.</span>
+                  </div>
+                </div>
+                <!-- ./lesson-notes -->
+              </div>
+              <!-- ./lesson-misc -->
+            </div>
+            <!-- ./lesson-misc -->
+          </div>
+          <!-- ./lesson-main -->
+          <footer class="lesson-footer">
+            <div class="lesson-footer-links">
+              <a href="/">Home</a>
+              <a href="/">In-class courses</a>
+              <a href="/">Video e-learning courses</a>
+            </div>
+            <!-- ./lesson-footer-links -->
+            <span class="copyright">KnowCrunch Inc. © 2021</span>
+          </footer>
+          <!-- ./lesson-footer -->
+        </div>
+        <!-- ./lesson-wrapper -->
+      </div>
+      <!-- ./content-wrapper -->
+    </div>
+    <!-- ./container -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+      integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+      integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+      crossorigin="anonymous"
+    ></script>
+    <script src="{{ cdn('theme/assets/js/new_js1/app.js') }}"></script>
+
+    <script src="https://player.vimeo.com/api/player.js"></script>
+<script>
+   
+   var event = false;
+   var videos = false;
+   var videosSeen = [];
+   var lastVideoSeen = -1
+   var previousVideo = false;
+   var previousK=false;
+   var videoId;
+   var eventStatistic;
+   var playVi = false;
+   var frame = false;
+   var frameVi = [];
+   var videoPlayers = [];
+   var tabWatching = false;
+   var previousFrame = false;
+   var videosPlayed = [];
+   
+   function tabclick(videos,event,seen,statisticId,frame){
+   
+
+      if(previousFrame){
+        
+         if(playVi){
+            videoPlayers[previousFrame].pause().then(function() {
+
+         
+            }).catch(function(error) {
+               switch (error.name) {
+                  case 'PasswordError':
+                        // the video is password-protected and the viewer needs to enter the
+                        // password first
+                        break;
+
+                  case 'PrivacyError':
+                        // the video is private
+                        break;
+
+                  default:
+                        // some other error occurred
+                        break;
+               }
+            });
+         }
+
+      }else{
+         playVi = false;
+      }
+
+      this.event = event;
+      this.lastVideoSeen = seen
+      this.eventStatistic = statisticId
+      this.frame = frame
+      previousFrame = frame;
+      
+      //console.log('videos seen = ', videosSeen)  
+      if(frame in this.videosSeen == false){
+         this.videos = videos;   
+      }else{           
+        //console.log(videosSeen);
+        //console.log('videos seen');
+        videos = videosSeen[frame];
+      }
+
+      if(frame in this.frameVi == false){
+         this.frameVi[frame] = frame;
+         this.videoPlayers[frame] = '';
+         this.videosPlayed[frame] = [];
+      }else{
+       //  this.videoPlayers[frame].on('play');
+      }
+   
+      if(!this.previousK){
+   
+         this.previousK = frame
+         this.previousK = this.previousK.replace('{',''); 
+         this.previousK = this.previousK.replace('}','');
+      
+      }  
+     
+      if(lastVideoSeen!=-1){
+         
+         $(".active-tab").removeClass("active-tab");
+         $this = $('#'+videos[lastVideoSeen]['tab']).parent().parent().children('h2')
+         $this.click();
+        
+      }
+     
+      if(seen != -1){
+         
+         if(tabWatching != false){
+            document.getElementById(tabWatching).classList.remove('isWatching')
+         }
+
+         previousVideo = videos[seen]['tab'];
+         tabWatching = videos[seen]['tab'];
+
+         document.getElementById(previousVideo).classList.add('isWatching')
+   
+         let vimeoID ='"{ video'+videos[seen]['lesson_id'] + frame + '}"';
+         var cvl = document.getElementById(this.frameVi[this.frame]).cloneNode(true);;
+         cvl = document.getElementById(this.frameVi[this.frame]).setAttribute('id',vimeoID);
+   
+         $('#courses-video').append(cvl)
+         
+         this.previousK = vimeoID;
+         this.frameVi[this.frame] = this.previousK;
+        
+         //videoPlayers[frame] = new Vimeo.Player(vimeoID);
+ 
+        // if(videosPlayed[frame].includes(seen) == false){ 
+
+            //console.log('frame = ', frame)
+           // console.log(videosPlayed)
+
+            videoPlayers[frame] = new Vimeo.Player(vimeoID); 
+          //  videosPlayed[frame].push(parseInt(seen)); 
+         
+       //  }
+
+         videoPlayers[frame].loadVideo(seen).then(function(id) {
+            
+            videoId = id
+            videoPlayers[frame].setCurrentTime(videos[id]['stop_time'])
+            
+         }).catch(function(error) {
+
+            switch (error.name) {
+               case 'TypeError':
+                     // the id was not a number
+                  //   console.log('edww');
+                     break;
+   
+               case 'PasswordError':
+                     // the video is password-protected and the viewer needs to enter the
+                     // password first
+                     break;
+   
+               case 'PrivacyError':
+                     // the video is password-protected or private
+                     break;
+   
+               default:
+                     // some other error occurred
+                     break;
+            }
+         });
+
+      }
+
+      this.videoPlayers[this.frame].on('play', function(e) {
+
+         if(!playVi){
+            videoPlayers[frame].setCurrentTime(videos[videoId]['stop_time'])
+
+         }
+         playVi = true;
+  
+      });
+      
+      this.videoPlayers[this.frame].on('pause', function(e) {
+        
+         @if(!$instructor_topics)
+            
+            if(playVi){
+               playVi = false;
+               videos[videoId]['stop_time'] = e['seconds'];
+               videos[videoId]['percentMinutes'] = e['percent'];     
+      
+               if(e['percent'] >= 0.8){
+                     videos[videoId]['seen'] = 1;
+               }
+              // console.log('edww');
+            //   this.videoPlayers[this.frame].off('play');;
+               $.ajax({
+                  type: 'PUT',
+                  url: '/elearning/save',
+                  data:{'videos':videos,'event_statistic':eventStatistic,'lastVideoSeen':videoId,'event':event},
+                  success: function(data) {    
+                        if(!data['loged_in']){
+                           notLogin(data)
+                        }else{
+                           videosSeen[frame] = data['videos'];      
+                        }
+                        //playVi = true;
+                    
+                  }
+               });
+            }
+
+         @endif
+   
+      });
+    
+      this.videoPlayers[this.frame].on('progress', function(e) {
+      
+         @if(!$instructor_topics)
+         
+            if(e['percent'] >= 0.8){
+               if(videos[videoId]['seen'] == 0){
+                  
+                  videos[videoId]['stop_time'] = e['seconds'];
+                  videos[videoId]['percentMinutes'] = e['percent'];
+                  videos[videoId]['seen'] = 1;
+                  
+                  document.getElementById(previousVideo).classList.add('watched')
+                  document.getElementById('play-image-account'+videos[videoId]['lesson_id']).setAttribute('src',"{{cdn('/theme/assets/images/icons/check_lesson.svg')}}")
+                          
+
+                  $.ajax({
+                     type: 'PUT',
+                     url: '/elearning/save',
+                     data:{'videos':videos,'event_statistic':eventStatistic,'lastVideoSeen':videoId,'event':event},
+                     success: function(data) {  
+                        if(!data['loged_in']){
+                           notLogin(data)
+                        }else{
+                           videosSeen[frame] = data['videos'];    
+                           checkForExam(data['exam_access'])
+                        }  
+                       
+                     }
+                  });
+            
+         
+               }
+            }
+         
+         @endif
+      
+      });
+   
+      this.videoPlayers[this.frame].on('fullscreenchange', function(e) {
+         window.focus()
+      });
+   
+   
+   }
+   
+   function play_video(video,playingVideo,vk,lesson){
+   
+      if(previousVideo !==false){
+         document.getElementById(previousVideo).classList.remove('isWatching')
+      
+      }
+              
+      document.getElementById(playingVideo).classList.add('isWatching')
+      tabWatching = playingVideo;
+      previousVideo = playingVideo;
+
+      vk = vk.replace('{',''); 
+      vk = vk.replace('}',''); 
+      let vimeoID ='"{'+ vk + this.frame + '}"';
+         
+      var cvl = document.getElementById(previousK).cloneNode(true);;
+      cvl = document.getElementById(previousK).setAttribute('id',vimeoID);
+
+      $('#courses-video').append(cvl)
+      this.previousK = vimeoID;
+      this.frameVi[this.frame] = this.previousK;
+      
+      video = video.split('/')
+      video = video[4].split('?')[0]
+
+      this.videoPlayers[frame] = new Vimeo.Player(vimeoID);
+
+      videoPlayers[frame].loadVideo(video).then(function(id) {
+     
+         this.videoId = id
+         this.videoPlayers[this.frame].setCurrentTime(videos[id]['stop_time'])
+
+      }).catch(function(error) {
+         switch (error.name) {
+            case 'TypeError':
+                  // the id was not a number
+                  break;
+
+            case 'PasswordError':
+                  // the video is password-protected and the viewer needs to enter the
+                  // password first
+                  break;
+
+            case 'PrivacyError':
+                  // the video is password-protected or private
+                  break;
+
+            default:
+                  // some other error occurred
+                  break;
+         }
+      });
+   
+   
+       
+   }
+   
+   @if(!$instructor_topics)
+  // console.log('olay = ', this.playVi)
+  // if(playVi){
+      window.onbeforeunload = function (ev) {
+   
+         this.videoPlayers[this.frame].pause().then(function() {
+
+         
+         }).catch(function(error) {
+            switch (error.name) {
+               case 'PasswordError':
+                     // the video is password-protected and the viewer needs to enter the
+                     // password first
+                     break;
+
+               case 'PrivacyError':
+                     // the video is private
+                     break;
+
+               default:
+                     // some other error occurred
+                     break;
+            }
+         });
+
+      };
+
+  // }
+   @endif
+   
+   document.body.onkeydown= function(e){
+
+
+      if(e.keyCode == 32){
+
+         if(this.playVi){
+
+            this.playVi = false;
+
+            videoPlayers[frame].pause().then(function() {
+
+            }).catch(function(error) {
+               switch (error.name) {
+                  case 'PasswordError':
+                        // the video is password-protected and the viewer needs to enter the
+                        // password first
+                        break;
+
+                  case 'PrivacyError':
+                        // the video is private
+                        break;
+
+                  default:
+                        // some other error occurred
+                        break;
+               }
+            });
+
+         }else{
+            this.playVi = true;
+
+            videoPlayers[frame].play().then(function() {
+            // the video was paused
+            }).catch(function(error) {
+               switch (error.name) {
+                  case 'PasswordError':
+                        // the video is password-protected and the viewer needs to enter the
+                        // password first
+                        break;
+
+                  case 'PrivacyError':
+                        // the video is private
+                        break;
+
+                  default:
+                        // some other error occurred
+                        break;
+               }
+            });
+
+         
+
+         e.preventDefault();
+
+         }
+
+      }   
+   }
+   
+</script>
+
+<script>
+
+   function notLogin(data){
+      let p = ''
+      p = `<img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-success-alert.svg')}}" alt="Info Alert">` + data['message'];         
+      $('#message').append(p);
+      var favDialog = document.getElementById('favDialog1');
+      favDialog.style.display = "block";
+      $("body").css("overflow-y", "hidden")
+
+      setTimeout( function(){
+            window.location.replace(data['redirect']);
+      }, 3000 );
+
+   }
+
+</script>
+
+
+<script>
+
+   function checkForExam(examAccess){
+     
+      if(examAccess){
+
+         var d = new Date();
+         d.setTime(d.getTime() + (1*24*60*60*1000));
+         var expires = "expires="+ d.toUTCString();
+         document.cookie = 'examMessage-' + eventStatistic + "=" + 'showmessage' + ";" + expires + ";path=/";
+
+         var favDialog = document.getElementById('examDialog');
+         favDialog.style.display = "block";
+         $("body").css("overflow-y", "hidden")
+
+         videoPlayers[frame].pause().then(function() {
+
+         }).catch(function(error) {
+            switch (error.name) {
+               case 'PasswordError':
+                     // the video is password-protected and the viewer needs to enter the
+                     // password first
+                     break;
+
+               case 'PrivacyError':
+                     // the video is private
+                     break;
+
+               default:
+                     // some other error occurred
+                     break;
+            }
+         });
+
+      }
+      
+   }
+
+</script>
+
+
+<script>
+
+   $("#close-exam-dialog").click(function(){
+
+      var favDialog = document.getElementById('examDialog');
+         favDialog.style.display = "none";
+         $("body").css("overflow-y", "auto")
+
+      videoPlayers[frame].play().then(function() {
+            // the video was paused
+            }).catch(function(error) {
+               switch (error.name) {
+                  case 'PasswordError':
+                        // the video is password-protected and the viewer needs to enter the
+                        // password first
+                        break;
+
+                  case 'PrivacyError':
+                        // the video is private
+                        break;
+
+                  default:
+                        // some other error occurred
+                        break;
+               }
+            });
+   })
+
+
+   $(".go-to-account").click(function(){
+      window.location.replace('/myaccount');
+   })
+
+
+
+
+</script>
+    
+  </body>
+</html>
