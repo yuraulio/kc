@@ -24,9 +24,7 @@
         <thead class="thead-light">
             <tr>
                 <th scope="col">{{ __('Name') }}</th>
-                @can('manage-users', App\Model\User::class)
-                    <th scope="col"></th>
-                @endcan
+                <th scope="col"></th>
             </tr>
         </thead>
         <tbody class="city-body">
@@ -36,30 +34,26 @@
                     <td id="name-{{$city->id}}">{{ $city->name }}</td>
                     {{--@can('manage-users', App\Model\User::class)
                         <td class="text-right">
-                            @if (auth()->user()->can('update', $user) || auth()->user()->can('delete', $user))
+
                                 <div class="dropdown">
                                     <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="fas fa-ellipsis-v"></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                                         <a class="dropdown-item" data-toggle="modal" data-target="#editCityModal" data-id="{{$city->id}}" data-name="{{$city->name}}">{{ __('Edit') }}</a>
-                                            @can('update', $user)
-                                                <a class="dropdown-item" href="{{ route('city.edit', $city) }}">{{ __('Edit') }}</a>
-                                            @endcan
-                                            @can('delete', $user)
-                                                <form action="{{ route('city.destroy', $city) }}" method="post">
-                                                    @csrf
-                                                    @method('delete')
 
-                                                    <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
-                                                        {{ __('Delete') }}
-                                                    </button>
-                                                </form>
-                                            @endcan
+                                        <a class="dropdown-item" href="{{ route('city.edit', $city) }}">{{ __('Edit') }}</a>
+                                        <form action="{{ route('city.destroy', $city) }}" method="post">
+                                            @csrf
+                                            @method('delete')
 
+                                            <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
+                                                {{ __('Delete') }}
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
-                            @endif
+
                         </td>
                     @endcan--}}
                 </tr>
@@ -124,22 +118,6 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
 
     <script>
-//    $(document).on('shown.bs.modal', '#cityModal',function(e) {
-//        //e.preventDefault()
-//         alert('open')
-//    	var link  = e.relatedTarget,
-//         	modal    = $(this),
-//          id = e.relatedTarget.dataset.id
-//          //name = e.relatedTarget.dataset.name,
-//          //description =e.relatedTarget.dataset.description;
-//          name = $("#name-"+id).text(),
-//          description = $("#desc-"+id).text();
-
-//       modal.find("#edit-name").val(name);
-//       modal.find("#edit-description1").val(description);
-//    	modal.find("#benefit-id").val(id)
-
-//    });
 
     $(document).on('shown.bs.modal', '#cityModal',function(e) {
 

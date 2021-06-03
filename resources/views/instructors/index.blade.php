@@ -46,23 +46,17 @@
                         <table class="table align-items-center table-flush"  id="datatable-basic">
                             <thead class="thead-light">
                                 <tr>
-                                    <th scope="col">{{ __('Priority') }}</th>
                                     <th scope="col">{{ __('Status') }}</th>
                                     <th scope="col">{{ __('Title') }}</th>
-                                    <th scope="col">{{ __('Summary') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
-                                    @can('manage-users', App\Model\User::class)
-                                        <th scope="col"></th>
-                                    @endcan
+                                    <th scope="col"></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($instructors as $instructor)
                                     <tr>
-                                        <td>{{ $instructor->priority }}</td>
-                                        <td><?= ($instructor->status == 0) ? 'Disabled' : 'Enabled';  ?></td>
+                                        <td><?= ($instructor->status == 0) ? 'Inactive' : 'Active';  ?></td>
                                         <td>{{ $instructor->title }}</td>
-                                        <td>{{ $instructor->summary }}</td>
                                         <td>{{ date_format($instructor->created_at, 'Y-m-d' ) }}</td>
 
                                         <td class="text-right">

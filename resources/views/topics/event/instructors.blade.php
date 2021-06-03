@@ -27,7 +27,6 @@
                                     <th scope="col">{{ __('Time ends') }}</th>
                                     <th scope="col">{{ __('Duration') }}</th>
                                     <th scope="col">{{ __('Room') }}</th>
-                                    <th scope="col">{{ __('Priority') }}</th>
                                 @endif
 
 
@@ -38,22 +37,26 @@
                         </thead>
                         <tbody id="topic_lessons" data-event-id="{{$event['id']}}">
                             <?php $i=0; ?>
-                            
-                             
+
+
                             <tr class="topic_{{$topic->id}}">
                                 @foreach($lessons[$key] as $key1 => $lesson)
-                               
-                                
+
+
                                 <td>{{ $lesson->title }}</td>
-                                
-                                <td id="inst_lesson_{{$lesson['id']}}"><?php if(isset($instructors[$lesson->id]) && $instructors[$lesson->id]->first() != null)
+
+                                <td id="inst_lesson_edit_{{$lesson['id']}}"><?php if(isset($instructors[$lesson->id]) && $instructors[$lesson->id]->first() != null)
                                 {
                                     echo $instructors[$lesson->id]->first()['title'];
                                 }else{
                                     echo '-';
                                 } ?></td>
                                     @if(count($event['type']) > 0 && $isInclassCourse)
-                                    <td></td><td></td><td></td><td></td><td></td><td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
                                     @endif
 
                                     <td class="text-right">
@@ -68,7 +71,7 @@
                                         </div>
                                     </td>
                             </tr>
-                               
+
                                 @endforeach
 
                         </tbody>

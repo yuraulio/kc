@@ -101,6 +101,7 @@
         <!-- Icons -->
         <link href="{{ asset('argon') }}/vendor/nucleo/css/nucleo.css" rel="stylesheet">
         <link href="{{ asset('argon') }}/vendor/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+        <link href="{{ asset('argon') }}/vendor/select2/dist/css/select2.min.css" rel="stylesheet">
 
 
         @stack('css')
@@ -152,6 +153,7 @@
         <script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.extension.js"></script>
 
         <script src="{{ asset('argon') }}/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+        <script src="{{ asset('argon') }}/vendor/select2/dist/js/select2.min.js"></script>
 
 
 

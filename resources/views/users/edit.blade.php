@@ -244,6 +244,7 @@
 <div class="card shadow">
     <div class="card-body">
         <div class="tab-content" id="myTabContent">
+        @include('alerts.success')
             <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
                 <div class="card-body">
                             <form method="post" action="{{ route('profile.update') }}" autocomplete="off"
@@ -447,57 +448,57 @@
                         </form>
             </div>
             <div class="tab-pane fade" id="tabs-icons-text-3" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
-                <div class="col-12 mt-2">
-                    @include('alerts.success')
-                    @include('alerts.errors')
-                </div>
 
 
                 <!-- Create Modal -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade" id="assignUserEvent" tabindex="-1" role="dialog" aria-labelledby="assignUserEventLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Assign Course</h5>
+                        <h5 class="modal-title" id="assignUserEventLabel">Assign Course</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form role="form" method="post" action="{{ route('user.assignToCourse') }}" autocomplete="off"
-                            enctype="multipart/form-data">
-                            @csrf
+                        <form>
 
                             <div class="form-group{{ $errors->has('event_id') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-topic_id">{{ __('Events') }}</label>
-                                    <select name="event_id" id="input-event_id" class="form-control event" placeholder="{{ __('Event') }}">
-                                        <option value="">-</option>
+                                <label class="form-control-label" for="input-topic_id">{{ __('Events') }}</label>
+                                <select name="event_id" id="input-event_id" class="form-control event" placeholder="{{ __('Event') }}">
+                                    <option selected="selected" value="">-</option>
 
-                                        @foreach ($events as $event)
-                                        <?php $selected = false; ?>
-                                            @if(count($event->users) != 0)
-                                                @foreach($event->users as $user_event)
-                                                    @if($user_event['id'] != $user['id'])
-                                                        <?php $selected = true; ?>
-                                                    @endif
-                                                @endforeach
-                                                @if($selected == true)
-                                                        <option value="{{ $event->id }}" >{{ $event->title }}</option>
+                                    @foreach ($events as $event)
+                                    <?php $selected = false; ?>
+                                        @if(count($event->users) != 0)
+                                            @foreach($event->users as $user_event)
+                                                @if($user_event['id'] != $user['id'])
+                                                    <?php $selected = true; ?>
                                                 @endif
-                                            @else
-                                            <option value="{{ $event->id }}" >{{ $event->title }}</option>
+                                            @endforeach
+                                            @if($selected)
+                                                    <option value="{{ $event->id }}" >{{ $event->title }}</option>
                                             @endif
-                                        @endforeach
-                                    </select>
+                                        @else
+                                        <option value="{{ $event->id }}" >{{ $event->title }}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
 
-                                    @include('alerts.feedback', ['field' => 'event_id'])
+                                @include('alerts.feedback', ['field' => 'event_id'])
+                            </div>
+
+                            <div class="form-group">
+                                <div class="card-deck" id="card-ticket">
                                 </div>
+                            </div>
 
-                                <input type="hidden" name="user_id" value="{{$user['id']}}">
 
-                                <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
+                            <input type="hidden" name="user_id" value="{{$user['id']}}">
+
+                            <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary close_modal" data-dismiss="modal">Close</button>
+                        <button type="button" data-user-id="{{$user['id']}}" id="assignTicketUser" class="btn btn-primary">Save changes</button>
                     </div>
 
                         </form>
@@ -510,66 +511,49 @@
 
 
                 <div class="row align-items-center">
-                            <div class="col-8">
-                            </div>
-                            @can('create', App\Model\User::class)
-                                <div class="col-4 text-right">
-                                    <!-- <a href="{{ route('user.assignToCourse') }}" class="btn btn-sm btn-primary">{{ __('Add course') }}</a> -->
-                                    <!-- Button trigger modal -->
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                                    Add course
-                                    </button>
-                                </div>
-                            @endcan
+                    <div class="col-8">
+                    </div>
+                        <div class="col-4 text-right">
+                            <!-- <a href="{{ route('user.assignToCourse') }}" class="btn btn-sm btn-primary">{{ __('Add course') }}</a> -->
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#assignUserEvent">
+                            Add course
+                            </button>
                         </div>
+                </div>
 
                 <div class="table-responsive py-4">
                     <table class="table align-items-center table-flush"  id="datatable-basic">
                         <thead class="thead-light">
                             <tr>
-                                <th scope="col">{{ __('id') }}</th>
-                                <th scope="col">{{ __('Title') }}</th>
-                                <th scope="col">{{ __('Created at') }}</th>
-                                @can('manage-users', App\Model\User::class)
-                                    <th scope="col"></th>
-                                @endcan
+                                <th scope="col">{{ __('Event') }}</th>
+                                <th scope="col">{{ __('Ticket') }}</th>
+                                <th scope="col">{{ __('Expired') }}</th>
+                                <th scope="col"></th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <?php //dd($user->events); ?>
+                        <tbody id="assigned_ticket_users">
                             @foreach ($user->events as $user_event)
-                                <tr>
-                                    <td>{{ $user_event->id }}</td>
+                                <tr id="event_{{$user_event->id}}">
+                                    <td>{{ $user_event->title }}</td>
                                     <td>{{ $user_event->title }}</td>
 
-                                    <td>{{ date_format($user_event->created_at, 'Y-m-d' ) }}</td>
-                                    @can('manage-users', App\Model\User::class)
+                                    <td>{{ $user_event->pivot->expiration}}</td>
+
                                         <td class="text-right">
-                                            @if (auth()->user()->can('update', $user) || auth()->user()->can('delete', $user))
+
                                                 <div class="dropdown">
                                                     <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         <i class="fas fa-ellipsis-v"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-
-                                                            @can('update', $user)
-                                                                <a class="dropdown-item" href="{{ route('user.edit_ticket', ['user' => $user, 'event_id' => $user_event->id]) }}">{{ __('Edit') }}</a>
-                                                            @endcan
-                                                            @can('delete', $user)
-                                                                <form action="{{ route('user.unassignToCourse', $user_event) }}" method="post">
-                                                                    @csrf
-                                                                    @method('get')
-
-                                                                    <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
-                                                                        {{ __('Delete') }}
-                                                                    </button>
-                                                                </form>
-                                                            @endcan
-
+                                                        <a class="dropdown-item" id="remove_ticket_user" data-event-id="{{$user_event->id}}" data-user-id="{{$user->id}}" data-ticket-id="{{ $user_event->ticket_id }}">{{ __('Delete') }}</a>
                                                     </div>
                                                 </div>
-                                            @endif
+
                                         </td>
-                                    @endcan
+
                                 </tr>
                             @endforeach
                         </tbody>
@@ -599,3 +583,139 @@
         @include('layouts.footers.auth')
     </div>
 @endsection
+
+@push('js')
+
+<script>
+    $(document).on('click', '#remove_ticket_user',function(e) {
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type: 'post',
+        url: '{{route("user.remove_ticket_user")}}',
+        data: {'ticket_id':$(this).data('ticket-id'), 'user_id':$(this).data('user-id'), 'event_id': $(this).data('event-id')},
+        success: function (data) {
+
+            $('#event_'+data.data).remove()
+            $(".close_modal").click();
+            $("#success-message p").html(data.success);
+            $("#success-message").show();
+            console.log($("#success-message"))
+
+        }
+    });
+    })
+</script>
+
+<script>
+    //on change event fetch ticket
+    $( "#input-event_id" ).change(function() {
+        $('#card-ticket').empty()
+
+        var event_id = $(this).val()
+        $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: 'post',
+                url: '/admin/ticket/fetchTicketsById',
+                data:{'eventId': event_id},
+                success: function (data) {
+                    console.log(data)
+
+                    let tickets = data.data
+
+                    $.each( tickets, function(key, value) {
+                        ticketCard = `
+                            <div class="card ticket-card${value.pivot.quantity == 0 ? 'not_selectable' : ''}">
+                                <div class="card-body">
+                                <input style="display:none;" id="${value.id}" type="radio" name="ticket_radio" ${value.pivot.quantity == 0 ? 'disabled' : ''}>
+                                <h5 class="card-title">${value.title}</h5>
+                                <p class="card-text">${value.pivot.price}€</p>
+                                <p class="card-text"><small class="text-muted">${value.subtitle}</small></p>
+                                </div>
+                            </div>
+
+                    `
+                    $('#card-ticket').append(ticketCard)
+
+                    })
+
+                }
+            });
+    });
+
+</script>
+
+<script>
+$(document).on('click', '.ticket-card', function () {
+    var ticket_id = $(this).find('input').attr('id')
+    if(!$('#'+ticket_id).attr('disabled')){
+        $('#'+ticket_id).prop("checked", true);
+    }
+
+    $('.ticket-card').removeClass('selected_ticket')
+    $(this).addClass('selected_ticket')
+})
+
+</script>
+
+<script>
+    $(document).on('click', '#assignTicketUser', function () {
+        const user_id = $(this).data('user-id')
+        var event_id = $('#input-event_id').val()
+        var ticket_id = $(".ticket-card input[type='radio']:checked").attr('id');
+
+        $.ajax({
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: 'post',
+                url: '/admin/user/assignEventToUserCreate',
+                data: {'event_id': event_id, 'ticket_id': ticket_id, 'user_id': user_id},
+                success: function (data) {
+
+                    let ticket = data.data.ticket;
+                    console.log(data.success)
+                    let newRow =
+                    `<tr id="event_`+ticket.event_id +`">` +
+                    `<td>` + ticket.event + `</td>` +
+                    `<td>` + ticket.ticket_title + `</td>` +
+                    `<td>` + ticket.exp + `</td>` +
+                    `<td class="text-right">
+
+                        <div class="dropdown">
+                            <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                <a class="dropdown-item" id="remove_ticket_user" data-event-id="${ticket.event_id}" data-user-id="${data.data.user_id}" data-ticket-id="${ticket.ticket_id}">{{ __('Delete') }}</a>
+                            </div>
+                        </div>
+
+                        </td>
+
+                        </tr>`;
+
+
+                    $("#assigned_ticket_users").append(newRow);
+                    $(".close_modal").click();
+                    $("#success-message p").html(data.success);
+                    $("#success-message").show();
+                        },
+                        error: function() {
+                            //console.log(data);
+                        }
+
+
+
+
+            })
+    })
+</script>
+
+
+
+@endpush
+

@@ -29,4 +29,9 @@ class Instructor extends Model
     {
         return $this->belongsToMany(Event::class, 'event_topic_lesson_instructor');
     }
+    
+    public function testimonials()
+    {
+        return $this->morphToMany(Testimonial::class, 'testimoniable');
+    }
 }

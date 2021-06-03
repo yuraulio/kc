@@ -36,9 +36,9 @@
                         <td id="section-desc-{{$section->id}}">{{ $section->description }}</td>
 
                         <td>{{ date_format($section->created_at, 'Y-m-d' ) }}</td>
-                        @can('manage-users', App\Model\User::class)
+
                             <td class="text-right">
-                                @if (auth()->user()->can('update', $user) || auth()->user()->can('delete', $user))
+
                                     <div class="dropdown">
                                         <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="fas fa-ellipsis-v"></i>
@@ -47,9 +47,9 @@
                                         <a class="dropdown-item" data-toggle="modal" data-target="#editSectionModal" data-id="{{$section->id}}" data-section="{{$section->section}}" data-desc="{{$section->description}}" data-title="{{$section->title}}">{{ __('Edit') }}</a>
                                         </div>
                                     </div>
-                                @endif
+
                             </td>
-                        @endcan
+
                     </tr>
                 @endforeach
             @endif
@@ -61,7 +61,7 @@
    <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
          <div class="modal-header">
-            <h5 class="modal-title" id="sectionModalLabel">Modal title</h5>
+            <h5 class="modal-title" id="sectionModalLabel">Create Section</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
@@ -99,7 +99,7 @@
    <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
          <div class="modal-header">
-            <h5 class="modal-title" id="sectionModalLabel">Modal title</h5>
+            <h5 class="modal-title" id="sectionModalLabel">Edit Section</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>

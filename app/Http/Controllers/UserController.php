@@ -20,6 +20,7 @@ namespace App\Http\Controllers;
 use App\Model\Role;
 use App\Model\User;
 use App\Model\Event;
+use App\Model\TIcket;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -63,17 +64,53 @@ class UserController extends Controller
 
     public function assignEventToUserCreate(Request $request)
     {
-       $user = Auth::user();
 
        $user_id = $request->user_id;
+       $event_id = $request->event_id;
+       $ticket_id = $request->ticket_id;
 
-       if($request->event_id != null){
+       $user = User::find($user_id);
+       $user->ticket()->attach($ticket_id, ['event_id' => $event_id]);
 
-            $event = Event::find($request->event_id);
-            $event->user()->attach($user_id,['user_id'=> $user_id]);
+       $data['event'] = Event::with('delivery', 'ticket')->find($event_id);
+       //dd($data['event']['ticket']);
+       foreach($data['event']->ticket as $ticket){
+           //dd($ticket);
+           if($ticket->pivot->ticket_id == $ticket_id)
+           {
+               $data['event']['ticket_title'] = $ticket['title'];
+                $quantity = $ticket->pivot->quantity - 1;
+           }
+
+
+       }
+       $extra_month = $data['event']['expiration'];
+
+        $ticket = Ticket::find($ticket_id);
+
+        $ticket->events()->updateExistingPivot($event_id,['quantity' => $quantity], false);
+
+       if($data['event']['expiration'] != null){
+            $exp_date = date('Y-m-d', strtotime("+".$extra_month." months", strtotime('now')));
+       }else{
+           $exp_date = null;
        }
 
-        return redirect()->route('user.index')->withStatus(__('Course successfully assiged to user.'));
+
+
+       $user->events()->attach($event_id, ['paid' => 1, 'expiration' => $exp_date]);
+
+       $response_data['ticket']['event'] = $data['event']['title'];
+       $response_data['ticket']['ticket_title'] = $ticket['title'];
+       $response_data['ticket']['exp'] = $exp_date;
+       $response_data['ticket']['event_id'] = $data['event']['id'];
+       $response_data['user_id'] = $user['id'];
+       $response_data['ticket']['ticket_id'] = $ticket['id'];;
+
+       return response()->json([
+            'success' => __('Ticket assigned succesfully.'),
+            'data' => $response_data
+        ]);
     }
 
     public function edit_ticket(Request $request)
@@ -92,13 +129,16 @@ class UserController extends Controller
 
     }
 
-    public function assignEventToUserRemove($id)
+    public function remove_ticket_user(Request $request)
     {
-        $user = Auth::user();
-
-        $a = $user->events()->wherePivot('event_id', '=', $id)->detach($id);
-
-        return redirect()->route('user.index')->withStatus(__('Course successfully unassiged from user.'));
+        $user = User::find($request->user_id);
+        $user->ticket()->wherePivot('event_id', '=', $request->event_id)->wherePivot('ticket_id', '=', $request->ticket_id)->detach($request->ticket_id);
+        $user->events()->wherePivot('event_id', '=', $request->event_id)->detach($request->event_id);
+        //$user->ticket()->attach($ticket_id, ['event_id' => $event_id]);
+        return response()->json([
+            'success' => 'Ticket assigned removed from user',
+            'data' => $request->event_id
+        ]);
     }
 
     /**
@@ -127,9 +167,20 @@ class UserController extends Controller
      */
     public function edit(User $user, Role $model)
     {
-        $events1 = Event::with('users')->get();
+        $data['events'] = Event::has('ticket')->get();
 
-        return view('users.edit', ['events' => $events1 ,'user' => $user->load('role'), 'roles' => $model->all()]);
+        //dd($data['events']);
+        $data['user'] = $user::with('ticket','role','events')->first();
+        //dd($user->events);
+        foreach($user->events as $key => $value){
+            $user_id = $value->pivot->user_id;
+            $event_id = $value->pivot->event_id;
+            $event = Event::find($event_id);
+            $ticket = $event->tickets()->wherePivot('event_id', '=', $event_id)->wherePivot('user_id', '=', $user_id)->first();
+            $data['user']['events'][$key]['ticket_id'] = $ticket->pivot->ticket_id;
+        }
+
+        return view('users.edit', ['events' => $data['events'] ,'user' => $data['user'], 'roles' => $model->all()]);
     }
 
 

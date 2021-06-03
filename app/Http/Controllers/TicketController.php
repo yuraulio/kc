@@ -243,4 +243,16 @@ class TicketController extends Controller
             'data' => $data,
         ]);
     }
+
+    public function fetchTicketsById(Request $request)
+    {
+        $data['event'] = Event::with('ticket')->find($request->eventId);
+        $data['tickets'] = $data['event']['ticket'];
+
+        return response()->json([
+            'success' => __('Ticket by id successfully fetched.'),
+            'data' => $data['tickets'],
+        ]);
+
+    }
 }

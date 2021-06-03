@@ -65,7 +65,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            <h5 class="modal-title" id="exampleModalLabel">{{ __('Create summary') }}</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
@@ -73,21 +73,23 @@
         <div class="modal-body">
             <h6 class="heading-small text-muted mb-4">{{ __('Summary information') }}</h6>
             <div class="pl-lg-4">
-               <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
-                  <label class="form-control-label" for="input-title-summary">{{ __('Title') }}</label>
-                  <input type="text" name="title" id="input-title-summary" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title') }}" required autofocus>
-                  @include('alerts.feedback', ['field' => 'title'])
-               </div>
-               <div class="form-group{{ $errors->has('description2') ? ' has-danger' : '' }}">
-                  <label class="form-control-label" for="input-description2">{{ __('Description') }}</label>
-                  <input type="text" name="description2" id="input-description2" class="form-control{{ $errors->has('description2') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}" value="{{ old('description2') }}" autofocus>
-                  @include('alerts.feedback', ['field' => 'description2'])
-               </div>
-               <div class="form-group{{ $errors->has('icon') ? ' has-danger' : '' }}">
-                  <label class="form-control-label" for="input-icon">{{ __('Icon') }}</label>
-                  <input type="text" name="icon" id="input-icon" class="form-control{{ $errors->has('icon') ? ' is-invalid' : '' }}" placeholder="{{ __('Icon') }}" value="{{ old('icon') }}" autofocus>
-                  @include('alerts.feedback', ['field' => 'icon'])
-               </div>
+                <form id="sum_create">
+                    <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
+                        <label class="form-control-label" for="input-title-summary">{{ __('Title') }}</label>
+                        <input type="text" name="title" id="input-title-summary" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title') }}" required autofocus>
+                        @include('alerts.feedback', ['field' => 'title'])
+                    </div>
+                    <div class="form-group{{ $errors->has('description2') ? ' has-danger' : '' }}">
+                        <label class="form-control-label" for="input-description2">{{ __('Description') }}</label>
+                        <input type="text" name="description2" id="input-description2" class="form-control{{ $errors->has('description2') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}" value="{{ old('description2') }}" autofocus>
+                        @include('alerts.feedback', ['field' => 'description2'])
+                    </div>
+                    <div class="form-group{{ $errors->has('icon') ? ' has-danger' : '' }}">
+                        <label class="form-control-label" for="input-icon">{{ __('Icon') }}</label>
+                        <input type="text" name="icon" id="input-icon" class="form-control{{ $errors->has('icon') ? ' is-invalid' : '' }}" placeholder="{{ __('Icon') }}" value="{{ old('icon') }}" autofocus>
+                        @include('alerts.feedback', ['field' => 'icon'])
+                    </div>
+                </form>
             </div>
         </div>
         <div class="modal-footer">
@@ -102,7 +104,7 @@
    <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Edit summary</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
@@ -158,8 +160,6 @@
    	`<td id="desc-` + summary['id'] +`">` + summary['description'] + `</td>` +
     `<td id="icon-` + summary['id'] +`">` + summary['icon'] + `</td>` +
 
-   	`<td>` + summary['created_at'] + `</td>` +
-
       `<td class="text-right">
                <div class="dropdown">
                   <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -179,6 +179,7 @@
    	$(".close-modal").click();
    	$("#success-message p").html(data.success);
    	$("#success-message").show();
+    $("#sum_create").trigger('reset')
    	    },
    	    error: function() {
    	         //console.log(data);
@@ -191,7 +192,6 @@
 </script>
 <script>
    $(document).on('click',"#edit-summary",function(){
-    alert($('#edit-icon').val())
    $summaryId = $("#summary-id").val()
    $.ajax({
            headers: {
@@ -224,6 +224,7 @@
 </script>
 <script>
    $(document).on('shown.bs.modal', '#editModalSummary',function(e) {
+    $("#sum_create").trigger('reset')
 
    	var link  = e.relatedTarget,
         	modal    = $(this),
@@ -233,7 +234,6 @@
          title = $("#title-"+id).text(),
          description = $("#desc-"+id).text();
          icon = $("#icon-"+id).text();
-         alert(title)
 
       modal.find("#edit-title").val(title);
       modal.find("#edit-description2").val(description);

@@ -49,16 +49,13 @@
                                     <th scope="col">{{ __('Title') }}</th>
                                     <th scope="col">{{ __('Assigned Topic') }}</th>
                                     <th scope="col">{{ __('Assigned Type') }}</th>
-                                    <th scope="col">{{ __('Created at') }}</th>
-                                    @can('manage-users', App\Model\User::class)
-                                        <th scope="col"></th>
-                                    @endcan
+                                    <th scope="col"></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($lessons as $lesson)
                                     <tr>
-                                        <td>{{ $lesson->status }}</td>
+                                        <td><?= ($lesson->status == 1) ? 'Published' : 'Unpublished'; ?></td>
                                         <td>{{ $lesson->title }}</td>
                                         <td>
                                         @foreach($lesson->topic as $topic)
@@ -70,7 +67,6 @@
                                             {{ $type->name }}
                                         @endforeach
                                         </td>
-                                        @if($lesson->created_at)<td>{{ date_format($lesson->created_at, 'Y-m-d' ) }}</td>@endif
 
                                         <td class="text-right">
 
@@ -79,19 +75,15 @@
                                                     <i class="fas fa-ellipsis-v"></i>
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                                    <a class="dropdown-item" href="{{ route('lessons.edit', $lesson) }}">{{ __('Edit') }}</a>
+                                                    <form action="{{ route('lessons.destroy', $lesson) }}" method="post">
+                                                        @csrf
+                                                        @method('delete')
 
-
-                                                            <a class="dropdown-item" href="{{ route('lessons.edit', $lesson) }}">{{ __('Edit') }}</a>
-
-
-                                                            <form action="{{ route('lessons.destroy', $lesson) }}" method="post">
-                                                                @csrf
-                                                                @method('delete')
-
-                                                                <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
-                                                                    {{ __('Delete') }}
-                                                                </button>
-                                                            </form>
+                                                        <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
+                                                            {{ __('Delete') }}
+                                                        </button>
+                                                    </form>
 
 
                                                 </div>

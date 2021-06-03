@@ -30,11 +30,23 @@ class TestimonialRequest extends FormRequest
             'name' => [
                 'required', 'min:3'
             ],
+            'lastname' => [
+                'required', 'min:3'
+            ],
             'status' => [
                 'numeric'
             ],
             'testimonial' => [
                 'required', 'min:3'
+            ],
+            'facebook' => [
+                'nullable', 'url'
+            ],
+            'linkedin' => [
+                'nullable', 'url'
+            ],
+            'youtube' => [
+                'nullable', 'url'
             ],
         ];
     }
