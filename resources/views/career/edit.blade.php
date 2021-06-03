@@ -38,12 +38,6 @@
 
                             <h6 class="heading-small text-muted mb-4">{{ __('Instructor information') }}</h6>
                             <div class="pl-lg-4">
-                                <div class="form-group{{ $errors->has('priority') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-priority">{{ __('Priority') }}</label>
-                                    <input type="number" name="priority" id="input-priority" class="form-control{{ $errors->has('priority') ? ' is-invalid' : '' }}" placeholder="{{ __('Priority') }}" value="{{ old('priority', $career->priority) }}" autofocus>
-
-                                    @include('alerts.feedback', ['field' => 'priority'])
-                                </div>
 
                                 <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-name">{{ __('Title') }}</label>

@@ -153,9 +153,9 @@
                                                         </div>
 
 
-                                                        <div class="form-group{{ $errors->has('delivery_id') ? ' has-danger' : '' }}">
-                                                            <label class="form-control-label" for="input-delivery_id">{{ __('Delivery') }}</label>
-                                                            <select name="delivery_id" id="input-delivery_id" class="form-control" placeholder="{{ __('Delivery') }}" required>
+                                                        <div class="form-group{{ $errors->has('delivery') ? ' has-danger' : '' }}">
+                                                            <label class="form-control-label" for="input-delivery">{{ __('Delivery') }}</label>
+                                                            <select name="delivery" id="input-delivery" class="form-control" placeholder="{{ __('Delivery') }}" required>
                                                                 <option value="">-</option>
                                                                 @foreach ($delivery as $delivery)
                                                                     <option <?php if(count($event->delivery) != 0){
@@ -169,7 +169,7 @@
                                                                 @endforeach
                                                             </select>
 
-                                                            @include('alerts.feedback', ['field' => 'delivery_id'])
+                                                            @include('alerts.feedback', ['field' => 'delivery'])
                                                         </div>
 
 
@@ -182,6 +182,13 @@
                                                             </select>
 
                                                             @include('alerts.feedback', ['field' => 'published'])
+                                                        </div>
+
+                                                        <div id="exp_input" class="form-group{{ $errors->has('expiration') ? ' has-danger' : '' }}">
+                                                            <label class="form-control-label" for="input-expiration">{{ __('Months access') }}</label>
+                                                            <input type="number" min="1" name="expiration" id="input-expiration" class="form-control{{ $errors->has('expiration') ? ' is-invalid' : '' }}" placeholder="{{ __('Enter number of months') }}" value="{{ old('expiration', $event->expiration) }}"autofocus>
+
+                                                            @include('alerts.feedback', ['field' => 'expiration'])
                                                         </div>
 
                                                         <?php
@@ -243,14 +250,14 @@
 
                                                         <div class="form-group{{ $errors->has('summary') ? ' has-danger' : '' }}">
                                                             <label class="form-control-label" for="input-summary">{{ __('Summary') }}</label>
-                                                            <input type="text" name="summary" id="input-summary" class="form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Summary') }}" value="{{ old('summary', $event->summary) }}" autofocus>
+                                                            <textarea name="summary" id="input-summary"  class="ckeditor form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Summary') }}" required autofocus>{{ old('summary', $event->summary) }}</textarea>
 
                                                             @include('alerts.feedback', ['field' => 'summary'])
                                                         </div>
 
                                                         <div class="form-group{{ $errors->has('body') ? ' has-danger' : '' }}">
                                                             <label class="form-control-label" for="input-body">{{ __('Body') }}</label>
-                                                            <input type="text" name="body" id="input-body" class="form-control{{ $errors->has('body') ? ' is-invalid' : '' }}" placeholder="{{ __('Body') }}" value="{{ old('body', $event->body) }}" autofocus>
+                                                            <textarea name="body" id="input-body"  class="ckeditor form-control{{ $errors->has('body') ? ' is-invalid' : '' }}" placeholder="{{ __('Body') }}" required autofocus>{{ old('body', $event->body) }}</textarea>
 
                                                             @include('alerts.feedback', ['field' => 'body'])
                                                         </div>
@@ -340,7 +347,7 @@
                 <div class="modal-content">
 
                     <div class="modal-header">
-                        <h6 class="modal-title" id="modal-title-default"></h6>
+                        <h6 class="modal-title" id="modal-title-default">Instructor</h6>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
@@ -350,8 +357,7 @@
                         <form>
                             <div class="form-group">
                                 <label for="exampleFormControlSelect1">Select instructor</label>
-                                <select class="form-control" id="instFormControlSelect">
-                                <option>-</option>
+                                <select class="form-control select2" id="instFormControlSelect">
                                 </select>
                             </div>
                         </form>
@@ -370,23 +376,48 @@
 
 @endsection
 
-
 @push('js')
 
 
+
+<script>
+    $( "#input-delivery" ).change(function() {
+        if($(this).val() == 143){
+            $('#exp_input').css('display', 'block')
+        }else{
+            $('#exp_input').css('display', 'none')
+        }
+    });
+</script>
+
     <script>
+
+
+
+
         $(document).ready(function() {
+            $('#instFormControlSelect').select2({
+                dropdownParent: $('#modal-default')
+            });
             $('.table').DataTable();
+
+
+            if($("#input-delivery").val() == 143){
+                $('#exp_input').css('display', 'block')
+            }else{
+                $('#exp_input').css('display', 'none')
+            }
+
+
         } );
 
         $(document).on('click','.close_modal',function(){
-            $('.modal-title').text('')
 
             $('#instFormControlSelect option').each(function(key, value) {
                     $(value).remove()
             });
 
-            $('#instFormControlSelect').append(`<option>-</option>`)
+            $('#instFormControlSelect').append(`<option value="" disabled selected>Choose instructor</option>`)
         });
 
         $(document).on('click','#lesson_update_btn',function(){
@@ -400,8 +431,6 @@
             let event_id = $('#event_id').val()
             let lesson_id = $('#lesson_id').val()
             let instructor_id = $('#instFormControlSelect').val()
-
-
 
 
             data = {date:date, start:start, event_id:event_id, end:end, duration:duration, room:room, priority:priority, instructor_id:instructor_id, topic_id:topic_id, lesson_id:lesson_id}

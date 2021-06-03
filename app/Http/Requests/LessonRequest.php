@@ -24,9 +24,6 @@ class LessonRequest extends FormRequest
     public function rules()
     {
         return [
-            'priority' => [
-                'numeric'
-            ],
             'status' => [
                 'numeric'
             ],
@@ -37,22 +34,22 @@ class LessonRequest extends FormRequest
                 'required', 'min:3'
             ],
             'subtitle' => [
-                
+
             ],
             'header' => [
-                
+
             ],
             'summary' => [
-                
+
             ],
             'body' => [
-                
+
             ],
             'vimeo_video' => [
-                
+
             ],
             'vimeo_duration' => [
-                
+
             ]
         ];
     }

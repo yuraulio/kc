@@ -65,16 +65,16 @@ class User extends Authenticatable
 
     public function scopeSearchUsers($query, $search_term)
     {
-       
+
         $query->where(function ($query) use ($search_term) {
             $search_term_str = '%'.implode("%", explode(" ", $search_term)).'%';
             $query->where('email', 'like', $search_term_str)
                 ->orWhere('firstname', 'like', $search_term_str)
                 ->orWhere('lastname', 'like', $search_term_str);
         });
-      
 
-        
+
+
         return $query->select('id','firstname','lastname','email')->get();
     }
 
@@ -152,8 +152,12 @@ class User extends Authenticatable
 
     public function events()
     {
-        return $this->belongsToMany(Event::class, 'event_user');
+        return $this->belongsToMany(Event::class, 'event_user')->withPivot('paid', 'expiration');
     }
 
+    public function ticket()
+    {
+        return $this->belongsToMany(Ticket::class, 'event_user_ticket')->withPivot('ticket_id');
+    }
 
 }

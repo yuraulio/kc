@@ -31,3 +31,35 @@
 .accordion {
     margin-top: 15px;
 }
+
+.select2-container--default .select2-selection--single{
+         border: 1px solid #ccc !important;
+     border-radius: 0px !important;
+}
+
+#exp_input {
+    display: none;
+}
+
+.ticket-card {
+    cursor: pointer;
+}
+
+
+.ticket-card:hover{
+    box-shadow: 1px 8px 20px #5e72e4;
+    -webkit-transition:  box-shadow .6s ease-in;
+}
+
+.selected_ticket {
+    box-shadow: 1px 8px 20px #5e72e4;
+    -webkit-transition:  box-shadow .6s ease-in;
+}
+
+.not_selectable {
+    cursor: none !important;
+    box-shadow: none !important;
+}
+
+
+

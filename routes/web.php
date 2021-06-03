@@ -92,11 +92,10 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
 
     //User
     Route::post('user/assignEventToUserCreate', ['as' => 'user.assignToCourse', 'uses' => 'UserController@assignEventToUserCreate']);
-    Route::get('user/assignEventToUserRemove/{id}', ['as' => 'user.unassignToCourse', 'uses' => 'UserController@assignEventToUserRemove']);
     Route::get('user/edit_ticket', ['as' => 'user.edit_ticket', 'uses' => 'UserController@edit_ticket']);
-
+    Route::post('user/remove_ticket_user', ['as' => 'user.remove_ticket_user', 'uses' => 'UserController@remove_ticket_user']);
     Route::get('user/store_ticket', ['as' => 'user.store_ticket', 'uses' => 'UserController@store_ticket']);
-    Route::post('ticket/fetchAllTickets', ['as' => 'ticket.fetchAllTickets', 'uses' => 'TicketController@fetchAllTickets']);
+
 
     //Custom Ticket
     //ticket.edit
@@ -106,6 +105,9 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
     Route::put('ticket/update_main/{ticket}', ['as' => 'ticket.update_main', 'uses' => 'TicketController@update_main']);
     Route::post('ticket/store_main', ['as' => 'ticket.store_main', 'uses' => 'TicketController@store_main']);
     Route::post('ticket/remove_event', ['as' => 'ticket.remove_event', 'uses' => 'TicketController@remove_event']);
+    Route::post('ticket/fetchTicketsById', ['as' => 'ticket.fetchTicketsById', 'uses' => 'TicketController@fetchTicketsById']);
+    Route::post('ticket/fetchAllTickets', ['as' => 'ticket.fetchAllTickets', 'uses' => 'TicketController@fetchAllTickets']);
+
 
     //custom Topic (inside event)
     Route::get('topics/index_event', ['as' => 'topics.index', 'uses' => 'TopicController@index']);

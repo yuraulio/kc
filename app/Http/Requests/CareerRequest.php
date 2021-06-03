@@ -26,9 +26,6 @@ class CareerRequest extends FormRequest
         return [
             'name' => [
                 'required', 'min:3'
-            ],
-            'priority' => [
-                'numeric'
             ]
         ];
     }

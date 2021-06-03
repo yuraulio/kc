@@ -5,6 +5,7 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Category;
+use App\Model\Instructor;
 
 class Testimonial extends Model
 {
@@ -12,7 +13,7 @@ class Testimonial extends Model
     protected $table = 'testimonials';
 
     protected $fillable = [
-        'status', 'title', 'name', 'testimonial'
+        'status', 'title', 'name','lastname' , 'testimonial', 'video_url', 'social_url'
     ];
 
 
@@ -20,4 +21,10 @@ class Testimonial extends Model
     {
         return $this->morphToMany(Category::class, 'categoryable');
     }
+
+    public function instructors()
+    {
+        return $this->morphedByMany(Instructor::class, 'testimoniable');
+    }
+
 }

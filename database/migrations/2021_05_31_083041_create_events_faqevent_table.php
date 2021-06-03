@@ -16,10 +16,7 @@ class CreateEventsFaqeventTable extends Migration
         Schema::create('events_faqevent', function (Blueprint $table) {
             $table->id();
             $table->integer('event_id');
-            $table->foreign('event_id')->references('id')->on('events');
-
             $table->integer('events_faqevent');
-            $table->foreign('events_faqevent')->references('id')->on('categories_faqs');
         });
     }
 

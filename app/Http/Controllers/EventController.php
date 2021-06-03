@@ -152,8 +152,8 @@ class EventController extends Controller
     public function store(EventRequest $request, Event $model)
     {
         $request->request->add(['release_date_files' => date('Y-m-d H:i:s', strtotime($request->release_date_files))]);
-
         $event = $model->create($request->all());
+        //dd($request->all());
 
         $event->createSlug($request->slug);
         $event->createMetas($request->all());
@@ -166,15 +166,12 @@ class EventController extends Controller
 
 
         if($request->type_id != null){
-            $type = Type::find($request->type_id);
-
             $event->type()->attach([$request->type_id]);
         }
 
-        if($request->delivery_id != null){
-            $delivery = Delivery::find($request->delivery_id);
+        if($request->delivery != null){
+            $event->delivery()->attach($request->delivery);
 
-            $event->delivery()->attach([$request->delivery_id]);
         }
 
         return redirect()->route('events.edit',$event->id)->withStatus(__('Event successfully created.'));
@@ -253,23 +250,17 @@ class EventController extends Controller
 
 
         $event->update($request->all());
-
-        $updated_event = Event::find($event['id']);
-        Event::where('id',$updated_event['id'])->update(['release_date_files' => $timestamp]);
         $event->category()->sync([$request->category_id]);
 
         if($request->type_id != null){
             $event->type()->detach();
-            $type = Type::find($request->type_id);
-
-            $event->type()->attach([$request->type_id]);
+            $event->type()->attach($request->type_id);
         }
 
-        if($request->delivery_id != null){
+        if($request->delivery != null){
             $event->delivery()->detach();
-            $delivery = Delivery::find($request->delivery_id);
 
-            $event->delivery()->attach([$request->delivery_id]);
+            $event->delivery()->attach($request->delivery);
         }
 
         return redirect()->route('events.index')->withStatus(__('Event successfully updated.'));

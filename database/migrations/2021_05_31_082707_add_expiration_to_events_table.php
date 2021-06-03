@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFaqsCategoryfaqsTable extends Migration
+class AddExpirationToEventsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class CreateFaqsCategoryfaqsTable extends Migration
      */
     public function up()
     {
-        //Schema::dropIfExists('faqs_categoryfaqs');
-        Schema::create('faqs_categoryfaqs', function (Blueprint $table) {
-            $table->id();
-            $table->integer('faq_id');
-            $table->integer('faqs_categoryfaqs');
+        Schema::table('events', function (Blueprint $table) {
+            $table->integer("expiration")->after('release_date_files')->nullable();
         });
     }
 
@@ -28,6 +25,8 @@ class CreateFaqsCategoryfaqsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('faqs_categoryfaqs');
+        Schema::table('events', function (Blueprint $table) {
+            //
+        });
     }
 }

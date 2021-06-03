@@ -56,9 +56,8 @@
                                 <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-status">{{ __('Status') }}</label>
                                     <select name="status" id="input-status" class="form-control" placeholder="{{ __('Status') }}" >
-                                        <option value="">-</option>
-                                            <option <?= ($testimonial['status'] == 1) ? 'selected="selected"' : ''; ?> value="1">{{ __('Enable') }}</option>
-                                            <option <?= ($testimonial['status'] == 0) ? 'selected="selected"' : ''; ?> value="0">{{ __('Disable') }}</option>
+                                            <option <?= ($testimonial['status'] == 1) ? 'selected="selected"' : ''; ?> value="1">{{ __('Published') }}</option>
+                                            <option <?= ($testimonial['status'] == 0) ? 'selected="selected"' : ''; ?> value="0">{{ __('Unpublished') }}</option>
                                     </select>
 
                                     @include('alerts.feedback', ['field' => 'status'])
@@ -86,11 +85,63 @@
                                     @include('alerts.feedback', ['field' => 'category_id'])
                                 </div>
 
+                                <?php //dd($testimonial); ?>
+
+                                <div class="form-group{{ $errors->has('instructor_id') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-instructor_id">{{ __('Instructor') }}</label>
+                                    <select name="instructor_id" id="input-instructor_id" class="form-control" placeholder="{{ __('Instructor') }}" required>
+                                        <option value="">-</option>
+                                        @foreach ($instructors as $instructor)
+                                            <option value="{{ $instructor->id }}"
+                                            <?php if(count($testimonial->instructors) != 0){
+                                                if($instructor->id == $testimonial->instructors[0]->id){
+                                                    echo 'selected';
+                                                }else{
+                                                    echo '';
+                                                }
+                                            }
+                                            ?>
+
+                                                >{{ $instructor->title }}</option>
+                                        @endforeach
+                                    </select>
+
+                                    @include('alerts.feedback', ['field' => 'instructor_id'])
+                                </div>
+
                                 <div class="form-group{{ $errors->has('testimonial') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-testimonial">{{ __('Testimonial') }}</label>
                                     <input type="text" name="testimonial" id="input-testimonial" class="form-control{{ $errors->has('testimonial') ? ' is-invalid' : '' }}" placeholder="{{ __('Testimonial') }}" value="{{ old('testimonial', $testimonial->testimonial) }}" autofocus>
 
                                     @include('alerts.feedback', ['field' => 'testimonial'])
+                                </div>
+
+                                <?php
+                                    $video = $testimonial['video_url'];
+                                    $video = json_decode($video);
+                                    $social = $testimonial['social_url'];
+                                    $social = json_decode($social);
+                                ?>
+
+                                <div class="form-group{{ $errors->has('facebook') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-facebook">{{ __('Facebook') }}</label>
+                                    <input type="text" name="facebook" id="input-facebook" class="form-control{{ $errors->has('facebook') ? ' is-invalid' : '' }}" placeholder="{{ __('Facebook') }}" value="{{ old('facebook', $social->facebook) }}" autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'facebook'])
+                                </div>
+
+                                <div class="form-group{{ $errors->has('linkedin') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-linkedin">{{ __('Linkedin') }}</label>
+                                    <input type="text" name="linkedin" id="input-linkedin" class="form-control{{ $errors->has('linkedin') ? ' is-invalid' : '' }}" placeholder="{{ __('Linkedin') }}" value="{{ old('linkedin', $social->linkedin) }}" autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'linkedin'])
+                                </div>
+
+                                <div class="form-group{{ $errors->has('youtube') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-youtube">{{ __('Youtube') }}</label>
+                                    <input type="text" name="youtube" id="input-youtube" class="form-control{{ $errors->has('youtube') ? ' is-invalid' : '' }}" placeholder="{{ __('Youtube') }}" value="{{ old('youtube', $video->youtube) }}" autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'youtube'])
                                 </div>
 
 

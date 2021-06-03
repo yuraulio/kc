@@ -87,7 +87,14 @@
                                             @endforeach
                                     </select>
 
-                                    @include('alerts.feedback', ['field' => 'published'])
+                                    @include('alerts.feedback', ['field' => 'delivery'])
+                                </div>
+
+                                <div id="exp_input" class="form-group{{ $errors->has('expiration') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-expiration">{{ __('Months access') }}</label>
+                                    <input type="number" min="1" name="expiration" id="input-expiration" class="form-control{{ $errors->has('expiration') ? ' is-invalid' : '' }}" placeholder="{{ __('Enter number of months') }}"autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'expiration'])
                                 </div>
 
 
@@ -149,14 +156,14 @@
 
                                 <div class="form-group{{ $errors->has('summary') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-summary">{{ __('Summary') }}</label>
-                                    <input type="text" name="summary" id="input-summary" class="form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Summary') }}" value="{{ old('summary') }}" autofocus>
+                                    <textarea name="summary" id="input-summary"  class="ckeditor form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Summary') }}"  required autofocus></textarea>
 
                                     @include('alerts.feedback', ['field' => 'summary'])
                                 </div>
 
                                 <div class="form-group{{ $errors->has('body') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-body">{{ __('Body') }}</label>
-                                    <input type="text" name="body" id="input-body" class="form-control{{ $errors->has('body') ? ' is-invalid' : '' }}" placeholder="{{ __('Body') }}" value="{{ old('body') }}" autofocus>
+                                    <textarea name="body" id="input-body"  class="ckeditor form-control{{ $errors->has('body') ? ' is-invalid' : '' }}" placeholder="{{ __('Body') }}"  required autofocus></textarea>
 
                                     @include('alerts.feedback', ['field' => 'body'])
                                 </div>
@@ -196,3 +203,18 @@
         @include('layouts.footers.auth')
     </div>
 @endsection
+
+
+@push('js')
+
+<script>
+    $( "#input-delivery" ).change(function() {
+        if($(this).val() == 143){
+            $('#exp_input').css('display', 'block')
+        }else{
+            $('#exp_input').css('display', 'none')
+        }
+    });
+</script>
+
+@endpush

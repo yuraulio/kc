@@ -5,6 +5,7 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Topic;
+use App\Model\Testimonial;
 
 class Instructor extends Model
 {
@@ -19,5 +20,10 @@ class Instructor extends Model
     public function lesson()
     {
         return $this->belongsToMany(Lesson::class, 'event_topic_lesson_instructor');
+    }
+
+    public function testimonials()
+    {
+        return $this->morphToMany(Testimonial::class, 'testimoniable');
     }
 }

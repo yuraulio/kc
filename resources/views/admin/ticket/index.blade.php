@@ -12,6 +12,11 @@
     @endcan
 </div>
 
+<div class="col-12 mt-2">
+    @include('alerts.success')
+    @include('alerts.errors')
+</div>
+
 
 <div class="table-responsive py-4">
     <table class="table align-items-center table-flush"  id="datatable-basic">
@@ -46,8 +51,8 @@
                                 <i class="fas fa-ellipsis-v"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                <a class="dropdown-item" id="remove_ticket" data-ticket-id="{{ $ticket->id }}">{{ __('Remove') }}</a>
                                 <a class="dropdown-item" data-toggle="modal" data-target="#editTicketModal" data-id="{{$ticket->id}}" data-price="{{$ticket->price}}" data-quantity="{{$ticket->pivot->quantity}}">{{ __('Edit') }}</a>
+                                <a class="dropdown-item" id="remove_ticket" data-ticket-id="{{ $ticket->id }}">{{ __('Delete') }}</a>
                             </div>
                         </div>
                     </td>
@@ -100,7 +105,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="optionFormControlSelect1">FEATURED (BLUE)</label>
+                        <label class="form-control-label" for="optionFormControlSelect1">{{ __('FEATURED (BLUE)') }}</label>
                         <select class="form-control" id="option1">
                         <option value="0">No</option>
                         <option value="1">Yes</option>
@@ -108,14 +113,14 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="optionFormControlSelect2">DROPDOWN BOOK NOW</label>
+                        <label class="form-control-label" for="optionFormControlSelect2">{{ __('DROPDOWN BOOK NOW') }}</label>
                         <select class="form-control" id="option2">
                         <option value="0">No</option>
                         <option value="1">Yes</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="optionFormControlSelect3">SHOW ONLY ON ALUMNI</label>
+                        <label class="form-control-label" for="optionFormControlSelect3">{{ __('SHOW ONLY ON ALUMNI') }}</label>
                         <select class="form-control" id="option3">
                         <option value="0">No</option>
                         <option value="1">Yes</option>
@@ -137,7 +142,7 @@
    <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            <h5 class="modal-title" id="exampleModalLabel">{{ __('Edit ticket') }}</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
@@ -167,7 +172,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="optionFormControlSelect1">FEATURED (BLUE)</label>
+                        <label class="form-control-label" for="optionFormControlSelect1">{{ __('FEATURED (BLUE)') }}</label>
                         <select class="form-control" id="option1_edit">
                         <option value="0">No</option>
                         <option value="1">Yes</option>
@@ -175,14 +180,14 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="optionFormControlSelect2">DROPDOWN BOOK NOW</label>
+                        <label class="form-control-label" for="optionFormControlSelect2">{{ __('DROPDOWN BOOK NOW') }}</label>
                         <select class="form-control" id="option2_edit">
                         <option value="0">No</option>
                         <option value="1">Yes</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="optionFormControlSelect3">SHOW ONLY ON ALUMNI</label>
+                        <label class="form-control-label" for="optionFormControlSelect3">{{ __('SHOW ONLY ON ALUMNI') }}</label>
                         <select class="form-control" id="option3_edit">
                         <option value="0">No</option>
                         <option value="1">Yes</option>
@@ -193,7 +198,7 @@
             </div>
          </div>
          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary close-modal" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary close_modal" data-dismiss="modal">Close</button>
             <button type="button" id="edit-ticket" class="btn btn-primary">Save changes</button>
          </div>
       </div>
@@ -322,54 +327,54 @@
                 url: '{{route("ticket.store")}}',
                 data: {'option1':$('#option1_edit').val(),'option2':$('#option2_edit').val(),'option3':$('#option3_edit').val(),'features':features,'price':$('#input-price').val(),'quantity':$('#input-quantity').val(),'ticket_id':$(selected_option).val(),'model_type':modelType,'model_id':modelId},
                 success: function (data) {
-            //console.log(data);
-            let ticket = data.ticket;
-            let newTicket =
-            `<tr id="ticket_`+ticket['id'] +`">` +
-            `<td id="title_ticket-` +ticket['id'] +`">` + ticket['title'] + `</td>` +
-            `<td id="subtitle_ticket` + ticket['id'] +`">` + ticket['subtitle'] + `</td>` +
-            `<td id="type_ticket-` +ticket['id'] +`">` + ticket['type'] + `</td>` +
-            `<td id="quantity_ticket` + ticket['id'] +`">` + ticket['quantity'] + `</td>` +
-            `<td id="price_ticket` + ticket['id'] +`">` + ticket['price'] + `</td>` +
-            `<td>` + ticket['created_at'] + `</td>` +
+
+                    let ticket = data.ticket;
+                    let newTicket =
+                    `<tr id="ticket_`+ticket['id'] +`">` +
+                    `<td id="title_ticket-` +ticket['id'] +`">` + ticket['title'] + `</td>` +
+                    `<td id="subtitle_ticket` + ticket['id'] +`">` + ticket['subtitle'] + `</td>` +
+                    `<td id="type_ticket-` +ticket['id'] +`">` + ticket['type'] + `</td>` +
+                    `<td id="quantity-` + ticket['id'] +`">` + ticket['quantity'] + `</td>` +
+                    `<td id="price-` + ticket['id'] +`">` + ticket['price'] + `</td>` +
+                    `<td>` + ticket['created_at'] + `</td>` +
 
 
-            `<td class="d-none" id="options-`+ticket['id']+`" >`+ticket['options']+`</td>`+
-            `<td class="d-none" id="features-`+ticket['id']+`" >`+ticket['features']+`</td>`+
+                    `<td class="d-none" id="options-`+ticket['id']+`" >`+ticket['options']+`</td>`+
+                    `<td class="d-none" id="features-`+ticket['id']+`" >`+ticket['features']+`</td>`+
 
 
-            `<td class="text-right">
-                        <div class="dropdown">
-                        <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-ellipsis-v"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                        <a class="dropdown-item" data-toggle="modal" data-target="#editTicketModal" data-id="`+ticket['id']+`" data-price="`+ticket['price']+`" data-quantity="`+ticket['quantity']+`">{{ __('Edit') }}</a>
-                        <a class="dropdown-item" id="remove_ticket" data-ticket-id="`+ticket['id']+`">{{ __('Delete') }}</a>
+                    `<td class="text-right">
+                                <div class="dropdown">
+                                <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                <a class="dropdown-item" data-toggle="modal" data-target="#editTicketModal" data-id="`+ticket['id']+`" data-price="`+ticket['price']+`" data-quantity="`+ticket['quantity']+`">{{ __('Edit') }}</a>
+                                <a class="dropdown-item" id="remove_ticket" data-ticket-id="`+ticket['id']+`">{{ __('Delete') }}</a>
 
-                        </div>
-                        </div>
-                    </td>
+                                </div>
+                                </div>
+                            </td>
 
-                </tr>`;
-
-
-            $(".ticket-body").append(newTicket);
-            $(".close-modal").click();
-            $("#success-message p").html(data.success);
-            $("#success-message").show();
-            $('#newRow').empty()
-            $('#newRowEdit').empty()
-            $('#ticket-form').trigger('reset');
-                },
-                error: function() {
-                    //console.log(data);
-                }
-            });
+                        </tr>`;
 
 
+                    $(".ticket-body").append(newTicket);
+                    $(".close_modal").click();
+                    $("#success-message p").html(data.success);
+                    $("#success-message").show();
+                    $('#newRow').empty()
+                    $('#newRowEdit').empty()
+                    $('#ticket-form').trigger('reset');
+                        },
+                        error: function() {
+                            //console.log(data);
+                        }
+                    });
 
-        })
+
+
+            })
 
         $(document).on('click', '#remove_ticket',function(e) {
 
@@ -405,6 +410,7 @@
          //name = e.relatedTarget.dataset.name,
          //description =e.relatedTarget.dataset.description;
          price = $("#price-"+id).text(),
+         //alert(price)
          quantity = $("#quantity-"+id).text();
          options = $("#options-"+id).text();
          features = $("#features-"+id).text();
@@ -435,7 +441,7 @@
              }
          })
 
-        $.each( JSON.parse(features), function(key, value) {
+        $.each( features, function(key, value) {
             if(key != 0){
             var html = '';
             html += '<div id="inputFormRow">';
@@ -494,7 +500,7 @@
         $("#price-"+ticket_id).html(price)
         $("#options-"+ticket_id).html(options);
         $("#features-"+ticket_id).html(features);
-        $(".close-modal").click();
+        $(".close_modal").click();
 
         $("#success-message p").html(data.success);
         $("#success-message").show();

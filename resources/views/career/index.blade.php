@@ -45,7 +45,6 @@
                         <table class="table align-items-center table-flush"  id="datatable-basic">
                             <thead class="thead-light">
                                 <tr>
-                                    <th scope="col">{{ __('Priority') }}</th>
                                     <th scope="col">{{ __('Name') }}</th>
                                     <th scope="col">{{ __('Assigned') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
@@ -58,10 +57,8 @@
                             <tbody>
                                 @foreach ($careers as $career)
                                     <tr>
-                                        <td>{{ $career->priority }}</td>
                                         <td>{{ $career->name }}</td>
                                         <td>
-                                        <?php //dd($career); ?>
                                         @foreach($career->events as $event)
                                             {{ $event->title }}
                                         @endforeach

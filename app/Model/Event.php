@@ -33,7 +33,7 @@ class Event extends Model
     protected $table = 'events';
 
     protected $fillable = [
-        'published', 'release_date_files' ,'status', 'title', 'htmlTitle', 'subtitle', 'header', 'summary', 'body', 'hours','author_id', 'creator_id', 'view_tpl', 'view_counter'
+        'published', 'release_date_files', 'expiration' ,'status', 'title', 'htmlTitle', 'subtitle', 'header', 'summary', 'body', 'hours','author_id', 'creator_id', 'view_tpl', 'view_counter'
     ];
 
     public function category()
@@ -48,14 +48,14 @@ class Event extends Model
 
     public function topic()
     {
-        
+
         return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id')
             ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority');
     }
 
     public function lessons()
     {
-        
+
         return $this->belongsToMany(Lesson::class,'event_topic_lesson_instructor')->where('status',true)->select('lessons.*','topic_id','event_id', 'lesson_id','instructor_id')
         ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority');
     }
@@ -94,6 +94,11 @@ class Event extends Model
     public function ticket()
     {
         return $this->belongsToMany(Ticket::class, 'event_tickets')->withPivot('id','priority', 'price', 'options', 'quantity', 'features');
+    }
+
+    public function tickets()
+    {
+        return $this->belongsToMany(Ticket::class, 'event_user_ticket');
     }
 
     public function city()

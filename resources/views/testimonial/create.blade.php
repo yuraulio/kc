@@ -52,7 +52,12 @@
                                     @include('alerts.feedback', ['field' => 'name'])
                                 </div>
 
+                                <div class="form-group{{ $errors->has('lastname') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-lastname">{{ __('Last name') }}</label>
+                                    <input type="text" name="lastname" id="input-lastname" class="form-control{{ $errors->has('lastname') ? ' is-invalid' : '' }}" placeholder="{{ __('Last name') }}" value="{{ old('lastname') }}" required autofocus>
 
+                                    @include('alerts.feedback', ['field' => 'lastname'])
+                                </div>
 
                                 <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
@@ -66,12 +71,23 @@
                                     @include('alerts.feedback', ['field' => 'category_id'])
                                 </div>
 
+                                <div class="form-group{{ $errors->has('instructor_id') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-instructor_id">{{ __('Instructor') }}</label>
+                                    <select name="instructor_id" id="input-instructor_id" class="form-control" placeholder="{{ __('Instructor') }}">
+                                        <option value="">-</option>
+                                        @foreach ($instructors as $instructor)
+                                            <option value="{{ $instructor->id }}">{{ $instructor->title }} {{ $instructor->subtitle }}</option>
+                                        @endforeach
+                                    </select>
+
+                                    @include('alerts.feedback', ['field' => 'instructor_id'])
+                                </div>
+
                                 <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-status">{{ __('Status') }}</label>
                                     <select name="status" id="input-status" class="form-control" placeholder="{{ __('Status') }}" >
-                                        <option value="">-</option>
-                                            <option value="1">{{ __('Enable') }}</option>
-                                            <option value="0">{{ __('Disable') }}</option>
+                                            <option value="1">{{ __('Published') }}</option>
+                                            <option value="0">{{ __('Unpublished') }}</option>
                                     </select>
 
                                     @include('alerts.feedback', ['field' => 'status'])
@@ -82,6 +98,27 @@
                                     <input type="text" name="testimonial" id="input-testimonial" class="form-control{{ $errors->has('testimonial') ? ' is-invalid' : '' }}" placeholder="{{ __('Testimonial') }}" autofocus>
 
                                     @include('alerts.feedback', ['field' => 'testimonial'])
+                                </div>
+
+                                <div class="form-group{{ $errors->has('facebook') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-facebook">{{ __('Facebook link') }}</label>
+                                    <input type="text" name="facebook" id="input-facebook" class="form-control{{ $errors->has('facebook') ? ' is-invalid' : '' }}" placeholder="{{ __('Facebook link') }}" autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'facebook'])
+                                </div>
+
+                                <div class="form-group{{ $errors->has('linkedin') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-linkedin">{{ __('Linkedin link') }}</label>
+                                    <input type="text" name="linkedin" id="input-linkedin" class="form-control{{ $errors->has('linkedin') ? ' is-invalid' : '' }}" placeholder="{{ __('Linkedin link') }}" autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'linkedin'])
+                                </div>
+
+                                <div class="form-group{{ $errors->has('youtube') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-youtube">{{ __('Youtube link') }}</label>
+                                    <input type="text" name="youtube" id="input-youtube" class="form-control{{ $errors->has('youtube') ? ' is-invalid' : '' }}" placeholder="{{ __('Youtube link') }}" autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'youtube'])
                                 </div>
 
 
