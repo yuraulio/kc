@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3.0|^8.0",
+        "ctf0/media-manager": "^3.8",
         "doctrine/dbal": "^3.1",
         "fideloper/proxy": "^4.0",
         "hardevine/shoppingcart": "^3.0",
@@ -65,6 +66,12 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
+        ],
+        "post-install-cmd": [
+            "@php artisan pcl:post-install"
+        ],
+        "post-update-cmd": [
+            "@php artisan pcl:post-update"
         ]
     }
 }

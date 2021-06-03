@@ -154,6 +154,9 @@
 
         <script src="{{ asset('argon') }}/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
         <script src="{{ asset('argon') }}/vendor/select2/dist/js/select2.min.js"></script>
+        <script src="{{ asset('argon') }}/vendor/dropzone/dist/min/dropzone.min.js"></script>
+
+
 
 
 

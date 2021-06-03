@@ -151,6 +151,7 @@ class EventController extends Controller
      */
     public function store(EventRequest $request, Event $model)
     {
+        dd($request->all());
         $request->request->add(['release_date_files' => date('Y-m-d H:i:s', strtotime($request->release_date_files))]);
         $event = $model->create($request->all());
         //dd($request->all());
