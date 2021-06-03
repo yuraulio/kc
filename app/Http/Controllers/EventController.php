@@ -202,7 +202,7 @@ class EventController extends Controller
     {
         $user = Auth::user();
         $id = $event['id'];
-        $event = $event->with('delivery','category', 'summary', 'benefits', 'ticket', 'city', 'venues', 'topic', 'lessons', 'instructors', 'users', 'partners', 'sections','paymentMethod','slugable','metable','faqs')->find($id);
+        $event = $event->with('delivery','category', 'summary', 'benefits', 'ticket', 'city', 'venues', 'topic',/*'categoryFaqs'*/, 'lessons', 'instructors', 'users', 'partners', 'sections','paymentMethod','slugable','metable','faqs')->find($id);
 
         $categories = Category::all();
         $types = Type::all();
@@ -237,6 +237,8 @@ class EventController extends Controller
         $data['delivery'] = Delivery::all();
         $data['isInclassCourse'] = $event->is_inclass_course();
         //dd($data['topics']);
+
+        //dd($event['categoryFaqs']);
         return view('event.edit', $data);
     }
 

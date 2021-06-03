@@ -85,7 +85,7 @@
                   <div class="mobile-toggle">
                      <ul class="footer-menu">
                         <li class="account-menu">
-                        @if (Sentinel::check())
+                        @if (Auth::check())
                         <a href="/myaccount" title = 'Manage Account'> manage your account </a> 
 
                         @else
@@ -107,7 +107,7 @@
             <div class="clearfix">
                <ul class="footer-social-menu">
 
-                  @if($social_media[1]['facebook']['url'] != '')
+                  {{--@if($social_media[1]['facebook']['url'] != '')
                     <li><a target="_blank" title="{{ $social_media[1]['facebook']['title'] }}" href="{{ $social_media[1]['facebook']['url'] }}">
                            <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Facebook.svg')}}" width="23" alt="{{ $social_media[1]['facebook']['title'] }}">
                         </a>
@@ -149,7 +149,7 @@
                     <li><a target="_blank" title="{{ $social_media[1]['medium']['title'] }}" href="{{ $social_media[1]['medium']['url'] }}">
                         <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Medium.svg')}}" width="23" alt="{{ $social_media[1]['medium']['title'] }}"> </a>                 
                      </li>
-                  @endif
+                  @endif--}}
                </ul>
             </div>
             <div class="copyright-wrapper">

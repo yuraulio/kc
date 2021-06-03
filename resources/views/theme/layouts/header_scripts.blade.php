@@ -1,4 +1,3 @@
-@inject('frontHelp', 'Library\FrontendHelperLib')
 {{--<link rel="icon" href="{{ cdn('theme/assets/img/icon/fav_icon.gif') }}">
 <link type="text/css" rel="stylesheet" href="{{ cdn('theme/assets/bootstrap/css/bootstrap.min.css') }}">
 <link type="text/css" rel="stylesheet" href="{!! URL::to('/') !!}/theme/assets/css/font-awesome.min.css">
@@ -7,7 +6,7 @@
 <link type="text/css" rel="stylesheet" href="assets/css/owl.carousel.css" />
 <link type="text/css" rel="stylesheet" href="assets/css/owl.theme.css" />
 <link type="text/css" rel="stylesheet" href="{!! URL::to('/') !!}/theme/assets/css/style.css" />
-<link type="text/css" rel="stylesheet" href="{{ elixir('theme/assets/css/style.css') }}" media="all" />
+<link type="text/css" rel="stylesheet" href="{{ mix('theme/assets/css/style.css') }}" media="all" />
 <!--<link href="{{ cdn(elixir('theme/assets/css/style_ver.css')) }}" rel="stylesheet" media="all" />
 <link type="text/css" rel="stylesheet" href="{{ cdn('theme/assets/css/mobile_style_v2.css') }}" />-->
 <link type="text/css" rel="stylesheet" href="{{ cdn('theme/assets/css/dpanimate.css') }}" />
@@ -26,7 +25,7 @@
 <link rel="stylesheet" href="{{ cdn('theme/assets/css/fontawesome/css/kcfonts.css') }}" />--}}
 
 <!-- <link rel="stylesheet" href="https://use.typekit.net/pfo3bjs.css"> -->
-<link href="{{ cdn(elixir('theme/assets/css/style_ver.css')) }}" rel="stylesheet" media="all" />
+<link href="{{ cdn(mix('theme/assets/css/style_ver.css')) }}" rel="stylesheet" media="all" />
 <script type="application/ld+json">
         {
           "@context": "http://schema.org",

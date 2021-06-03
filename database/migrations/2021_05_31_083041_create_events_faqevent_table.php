@@ -13,13 +13,13 @@ class CreateEventsFaqeventTable extends Migration
      */
     public function up()
     {
-        Schema::create('events_faqevent', function (Blueprint $table) {
+        Schema::create('event_categoryfaqs', function (Blueprint $table) {
             $table->id();
             $table->integer('event_id');
-            $table->foreign('event_id')->references('id')->on('events');
+            //$table->foreign('event_id')->references('id')->on('events');
 
-            $table->integer('events_faqevent');
-            $table->foreign('events_faqevent')->references('id')->on('categories_faqs');
+            $table->integer('categoryfaq_id');
+            //$table->foreign('events_faqevent')->references('id')->on('categories_faqs');
         });
     }
 
@@ -30,6 +30,6 @@ class CreateEventsFaqeventTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('events_faqevent');
+        Schema::dropIfExists('event_faqs');
     }
 }

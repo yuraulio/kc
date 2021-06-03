@@ -1,4 +1,4 @@
-<script src="{{ cdn(elixir('theme/assets/js/front.js')) }}" > </script>
+<script src="{{ cdn(mix('theme/assets/js/front.js')) }}" > </script>
 
 <script>
 

@@ -16,14 +16,14 @@
             </li>
             @endforeach
             @endif
-            @if (Sentinel::check())
+            @if (Auth::check())
             <li class="nav-item">
             <li  class="account-menu"><a href="/myaccount">Account</a></li>
 
             <?php $cartitems = Cart::content()->count(); ?>
             @if($cartitems > 0)
                <li class="cart-menu">
-                  <a href="/cart" title="Cart">Cart<span class="cart-number-mobile @if(Sentinel::check()) loged @endif">{{ Cart::content()->count() }}</span>
+                  <a href="/cart" title="Cart">Cart<span class="cart-number-mobile @if(Auth::check()) loged @endif">{{ Cart::content()->count() }}</span>
                   </a>
                </li>
             @endif
@@ -38,7 +38,7 @@
             <?php $cartitems = Cart::content()->count(); ?>
             @if($cartitems > 0)
                <li class="cart-menu">
-                  <a href="/cart" title="Cart">Cart<span class="cart-number-mobile @if(Sentinel::check()) loged @endif">{{ Cart::content()->count() }}</span>
+                  <a href="/cart" title="Cart">Cart<span class="cart-number-mobile @if(Auth::check()) loged @endif">{{ Cart::content()->count() }}</span>
                   </a>
                </li>
             @endif    

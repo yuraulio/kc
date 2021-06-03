@@ -188,7 +188,9 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
 
 
 Route::group(['middleware' => ['preview','web']], function () {
-
+    Route::get('/', function(){
+        return view('welcome');
+    });
     Route::get('{slug}', 'Theme\HomeController@index');
 
 });

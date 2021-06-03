@@ -5,11 +5,15 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Topic;
+use App\Traits\SlugTrait;
+use App\Traits\MetasTrait;
 
 class Instructor extends Model
 {
     use HasFactory;
-
+    use SlugTrait;
+    use MetasTrait;
+    
     protected $table = 'instructors';
 
     protected $fillable = [
@@ -19,5 +23,10 @@ class Instructor extends Model
     public function lesson()
     {
         return $this->belongsToMany(Lesson::class, 'event_topic_lesson_instructor');
+    }
+
+    public function event()
+    {
+        return $this->belongsToMany(Event::class, 'event_topic_lesson_instructor');
     }
 }

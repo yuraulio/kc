@@ -1,4 +1,3 @@
-@inject('frontHelp', 'Library\FrontendHelperLib')
 
 {{-- Navigation {{ !Request::is('/') ? "top-nav-collapse short" : "" }}--}}
 
@@ -39,12 +38,13 @@
                                     </li>
 								@endif
                                 
-                                @if (Sentinel::check())
+                                @if (Auth::check())
 
 								<?php 
-								
 									
-									$currentuser = Sentinel::getUser();
+									
+									$currentuser = Auth::getUser();
+									
 									if(isset($currentuser->avatar) && $currentuser->avatar > 0 && $currentuser->avatar!=''){
 										
 										$mediaAvatar = PostRider\Media::select('id','path','name','ext','details')->findOrFail($currentuser->avatar)->toArray(); 
@@ -129,4 +129,4 @@
 </script>
 @endif
 
-@include('flash::message')
+{{--@include('flash::message')--}}

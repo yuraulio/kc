@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Model\Slug;
 use App\Model\Event;
+use View;
 
 class HomeController extends Controller
 {
@@ -17,8 +18,7 @@ class HomeController extends Controller
 
         switch (get_class($slug->slugable)) {
             case Event::class:
-
-                $this->event($slug->slugable);
+                return $this->event($slug->slugable);
                 break;
            
         }
@@ -27,6 +27,18 @@ class HomeController extends Controller
 
 
     private function event($event){
-        dd($event->topicsLessonsInstructors()->groupBy('topic_id'));
+        //dd($event);
+        //dd($event->topicsLessonsInstructors()->groupBy('topic_id'));
+        $data = $event->topicsLessonsInstructors();
+        $data['event'] = $event;
+        $data['benefits'] = $event->benefits;
+        $data['summary'] = $event->summary()->get();
+       
+        $data['sections'] = $event->sections->groupBy('section');
+        //dd($data['sections']);
+        //dd('theme.event.' . $event->view_tpl);
+        return view('theme.event.' . $event->view_tpl,$data);
+
+       
     }
 }

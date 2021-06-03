@@ -23,28 +23,28 @@ mix.js('resources/js/app.js', 'public/js')
       ], 'public/theme/assets/css/style_ver.css');*/
   
       mix.styles([
-          '../../../public/theme/assets/css/old.css', 
-          '../../../public/theme/assets/css/normalize.css', 
-          '../../../public/theme/assets/css/jquery.mCustomScrollbar.css',
-          '../../../public/theme/assets/css/jquery-ui.css', 
-          '../../../public/theme/assets/css/grid.css', 
-          '../../../public/theme/assets/css/grid-flex.css', 
-          '../../../public/theme/assets/css/global.css', 
-          '../../../public/theme/assets/css/main.css', 
-          '../../../public/theme/assets/css/fontawesome/css/kcfonts.css',
-          '../../../public/theme/assets/css/select2.css', 
+          'public/theme/assets/css/old.css', 
+          'public/theme/assets/css/normalize.css', 
+          'public/theme/assets/css/jquery.mCustomScrollbar.css',
+          'public/theme/assets/css/jquery-ui.css', 
+          'public/theme/assets/css/grid.css', 
+          'public/theme/assets/css/grid-flex.css', 
+          'public/theme/assets/css/global.css', 
+          'public/theme/assets/css/main.css', 
+          'public/theme/assets/css/fontawesome/css/kcfonts.css',
+          'public/theme/assets/css/select2.css', 
       ], 'public/theme/assets/css/style_ver.css');
   
       /* */
   
       mix.scripts([
           
-          '../../../public/theme/assets/js/new_js/vendor/modernizr-3.7.1.min.js',
-          '../../../public/theme/assets/js/new_js/jquery-3.4.1.min.js',
-          '../../../public/theme/assets/js/new_js/jquery-ui.js',
-          '../../../public/theme/assets/js/new_js/plugins.js',
-          '../../../public/theme/assets/js/new_js/main.js',
-          '../../../public/theme/assets/js/new_js/select2.js',
+          'public/theme/assets/js/new_js/vendor/modernizr-3.7.1.min.js',
+          'public/theme/assets/js/new_js/jquery-3.4.1.min.js',
+          'public/theme/assets/js/new_js/jquery-ui.js',
+          'public/theme/assets/js/new_js/plugins.js',
+          'public/theme/assets/js/new_js/main.js',
+          'public/theme/assets/js/new_js/select2.js',
       ],'public/theme/assets/js/front.js')
   
       mix.version([

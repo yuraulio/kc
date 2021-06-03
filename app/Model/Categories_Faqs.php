@@ -5,12 +5,13 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Faq;
+use App\Model\Event;
 
 class Categories_Faqs extends Model
 {
     use HasFactory;
 
-    protected $table = 'categories_faqs';
+    protected $table = 'faqcategories';
     /**
      * The attributes that are mass assignable.
      *
@@ -18,8 +19,16 @@ class Categories_Faqs extends Model
      */
     protected $fillable = ['name', 'description'];
 
-    public function faqs()
+    /*public function faqs()
     {
-        return $this->belongsToMany(Faq::class, 'faqs_categoryfaqs','faqs_categoryfaqs', 'faq_id');
+        return $this->belongsToMany(Faq::class,'categoryfaqables');
     }
+
+
+    public function events()
+    {
+        return $this->morphedMany(Event::class, 'categoryfaqables');
+    }*/
+
+   
 }

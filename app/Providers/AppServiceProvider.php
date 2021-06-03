@@ -19,7 +19,7 @@ class AppServiceProvider extends ServiceProvider
     {
 
         define('__ROOT__', dirname(dirname(__FILE__)));
-        require_once(__ROOT__.'/helpers\functions.php');
+        require_once(__ROOT__.'/helpers/functions.php');
 
         Item::observe(ItemObserver::class);
         User::observe(UserObserver::class);

@@ -18,6 +18,7 @@ use App\Model\Venue;
 use App\Model\User;
 use App\Model\Partner;
 use App\Model\Lesson;
+use App\Model\Faq;
 use App\Model\Instructor;
 use App\Traits\SlugTrait;
 use App\Traits\MetasTrait;
@@ -62,7 +63,8 @@ class Event extends Model
 
     public function instructors()
     {
-        return $this->belongsToMany(Instructor::class,'event_topic_lesson_instructor')->where('status',true)->select('instructors.*','lesson_id')->withPivot('lesson_id');
+        return $this->belongsToMany(Instructor::class,'event_topic_lesson_instructor')->where('status',true)->select('instructors.*','lesson_id','instructor_id','event_id')
+            ->withPivot('lesson_id','instructor_id')->with('slugable');
     }
 
 
@@ -81,9 +83,14 @@ class Event extends Model
         }
     }
 
+    public function categoryFaqs()
+    {
+        return $this->belongsToMany(Categories_Faqs::class,'categoryfaqables','categoryfaq_id','faqable_id');
+    }
+
     public function faqs()
     {
-        return $this->belongsToMany(Faq::class, 'events_faqevent', 'event_id', 'events_faqevent' );
+        return $this->belongsToMany(Faq::class, 'event_faqs', 'event_id' );
     }
 
     public function delivery()
@@ -111,10 +118,7 @@ class Event extends Model
         return $this->belongsToMany(Section::class, 'sectiontitles_event', 'event_id', 'section_title_id');
     }
 
-    public function benefits()
-    {
-        return $this->morphToMany(Benefit::class, 'benefitable');
-    }
+    
 
     public function venues()
     {
@@ -137,17 +141,24 @@ class Event extends Model
     }
 
     public function topicsLessonsInstructors(){
+        
         $topics = [];
-        //dd($this->topic->unique()->groupBy('topic_id'));
-        //dd($this->lessons->groupBy('topic_id'));
-        //dd($this->instructors->groupBy('lesson_id'));
+        
         $lessons = $this->lessons->groupBy('topic_id');
-        foreach($this->topic->groupBy('topic_id') as $key => $topic){
-            //dd($topic);
-            dd($lessons[$key]);
+        $instructors = $this->instructors->unique()->groupBy('instructor_id')->toArray();
+        foreach($this->topic->unique()->groupBy('topic_id') as $key => $topic){
+
+            foreach($topic as $t){
+                $topics[$t->title]['lessons'] = $lessons[$t->id]->toArray();
+            }
+            
 
         }
 
+        $data['topics'] = $topics;
+        $data['instructors'] = $instructors;
+        
+        return $data;
     }
 
 }

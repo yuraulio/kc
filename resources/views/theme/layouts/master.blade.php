@@ -6,13 +6,11 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
+@yield('metas')
 @yield('css')
 
 {{-- title and favicons --}}
-@if (isset($meta) && isset($meta['header_code']))
-{!! $meta['header_code'] !!}
-@endif
+
 {{--<link rel="icon" href="theme/assets/img/icon/fav_icon.gif">--}}
 {{-- necessary stylesheets --}}
 @include('theme.layouts.favicons')
@@ -75,8 +73,7 @@ setTimeout(timer1801,1801000);
 
 
 <!-- OneTrust Cookies Consent Notice (Production CDN, knowcrunch.com, en-GB) start -->
-@if(Agent::isDesktop())
-{{--<script src="https://cdn.cookielaw.org/consent/db838fc2-3cee-42e6-9af7-4c6f2fc126b0.js" type="text/javascript" charset="UTF-8"></script>--}}
+{{--@if(Agent::isDesktop())
 
 
 <script type="text/javascript">
@@ -91,7 +88,7 @@ function OptanonWrapper() { }
 
 </script>
 
-@endif
+@endif--}}
 
 {{-- Linkedin Code --}}
 <script type="text/javascript">
@@ -135,7 +132,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="page-wrapper non-pointer">
 @include('theme.layouts.header')
 @include('theme.layouts.mobile_menu')
-@if (!Sentinel::check())
+@if (!Auth::check())
 
 <div  class="login-popup-wrapper">
 

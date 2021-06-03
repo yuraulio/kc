@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFaqsCategoryfaqsTable extends Migration
+class AddAtColumnInstructors extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,8 @@ class CreateFaqsCategoryfaqsTable extends Migration
      */
     public function up()
     {
-        //Schema::dropIfExists('faqs_categoryfaqs');
-        Schema::create('faq_categoryfaqs', function (Blueprint $table) {
-            $table->integer('categoryfaq_id');
-            $table->integer('faq_id');
+        Schema::table('instructors', function (Blueprint $table) {
+            $table->string('company')->after('header')->nullable();
         });
     }
 
@@ -27,6 +25,8 @@ class CreateFaqsCategoryfaqsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('faqs_categoryfaqs');
+        Schema::table('instructors', function (Blueprint $table) {
+            //
+        });
     }
 }

@@ -1,0 +1,655 @@
+@extends('theme.layouts.master')
+
+@section('metas')
+
+   {!! $event->metable->getMetas() !!}
+
+@endsection
+
+@section('content')
+<?php echo" <script>
+   document.getElementById('header').classList.add('header-transparent');
+   </script>"?>
+
+<?php $estatus = $event->status ?>
+
+<main id="main-area" class="with-hero" role="main">
+   <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Course",
+        "name": "{!!$event->title!!}",
+        "description": "{{ $event->subtitle }}",
+        "award": "Awarded as the 'Best Digital & Social Media Education', by Social Media World in 2016, 2017 and 2018.",
+        "inLanguage": "Greek/Ellinika",
+        "educationalCredentialAwarded": "EQF 5+ level",
+        "author": {
+        	"@type": "Person",
+        	"name": "Tolis Aivalis"
+        },
+        "provider": {
+          "@type": "Organization",
+          "name": "Know Crunch",
+          "sameAs": "https://knowcrunch.com/"
+        }
+      }
+   </script>
+   <?php
+      
+      $img = '';
+      /*if (!empty($event['featured']) && isset($event['featured'][0]) &&isset($event['featured'][0]['media']) && !empty($event['featured'][0]['media'])){
+        $img =  $frontHelp->pImg($event, 'header-image');
+      }*/
+
+
+      ?>
+   <section class="section-hero section-after-tabs-mob" style="background-image: url('{{$img}}');">
+      <div class="overlay"></div>
+      <div class="container">
+         <div class="hero-message">
+            <h1>{{ $event->title }}</h1>
+            <h2>{{ $event->subtitle }}</h2>
+         </div>
+      </div>
+      <!-- /.section-hero -->
+   </section>
+   <section class="section-course-tabs">
+      <div class="content-wrapper">
+         <div class="tabs-wrapper fixed-tab-controls">
+            <div class="tab-controls">
+               <div class="container">
+                  <a href="#" class="mobile-tabs-menu">Menu</a>
+                  <ul class="clearfix tab-controls-list">
+                     <li><a href="#overview" class="active">Overview</a></li>
+                     @if($estatus == 0 || $estatus == 2)
+                    
+                     @if(count($benefits) > 0)<li><a href="#benefits">Benefits</a></li>@endif
+                    
+                     <li><a href="#topics">Topics</a></li>
+                     <li><a href="#instructors">Instructors</a></li>
+                     <li><a href="#testimonials">Testimonials</a></li>
+                     <li><a href="#location">Location</a></li>
+                     <li><a href="#faq">FAQ</a></li>
+                     @elseif($estatus == 3 || $estatus == 1 )
+                     <li><a href="#topics">Topics</a></li>
+                     <li><a href="#instructors">Instructors</a></li>
+                     @endif
+                  </ul>
+                 
+                  @if($estatus == 0 )
+                  <a href="#seats" class="btn btn--lg btn--primary go-to-href">ENROLL NOW</a>
+                  @elseif($estatus != 3 && $estatus != 1 )
+                  <a href="#seats" class="btn btn--lg btn--primary go-to-href go-to-href soldout">SOLD OUT</a>
+                  @endif
+                  <!-- /.container -->
+               </div>
+               <!-- /.tab-controls -->
+            </div>
+            <div class="tabs-content">
+               <div id="overview" class="tab-content-wrapper active-tab">
+                  <div class="container">
+                     @if($estatus == 0 || $estatus == 2)
+                     <div class="social-share">
+                        <ul class="clearfix">
+                           <li class="fb-icon"><a target="_blank" title="Share on facebook" href="http://www.facebook.com/sharer.php?u={{ Request::url() }}" onclick="javascript:window.open(this.href,
+                              '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=300');return false;"><i class="icon-facebook"></i></a></li>
+                           <li class="tw-icon "><a target="_blank" title="Share on Twitter" href="http://twitter.com/share?text={{ $event->title }}&amp;url={{ Request::url() }}&amp;via=KnowCrunch" onclick="javascript:window.open(this.href,
+                              '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"><i class="icon-twitter"></i></a></li>
+                           <li class="in-icon"><a target="_blank" title="Share on LinkedIn" href="https://www.linkedin.com/shareArticle?mini=true&amp;url={{ Request::url() }}&amp;title={{ $event->title }}
+                              &amp;summary={{ $event->summary }}&amp;source=KnowCrunch" onclick="javascript:window.open(this.href,
+                              '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"><i class="icon-linkedin"></i></a></li>
+                        </ul>
+                     </div>
+                     @endif
+                     <?php
+                        $title = '' ;
+                        $body = '' ;
+                        
+                        
+                        if(isset($sections['overview'])){
+                              $title = $sections['overview']->first()->title;
+                              $body = $sections['overview']->first()->description;
+                           }
+                        
+                        ?>
+                     
+                     <?php switch ($estatus) {
+                        case 0:
+                        case 2: ?>
+                        <h2 class="tab-title">{{$title}}</h2>
+                     <h3 > {!!$body!!} </h3>
+                     <div class="course-overview clearfix">
+                        <div class="course-tab-text" itemprop="abstract">
+                           {!! $event->body !!}
+                           <div class="author-infos">
+                              <div class="row">
+                                 <div class="col6 col-xs-12">
+                                    <div id="syll" class="ibox">
+                                       <div class="author-img">
+                                          <?php
+                                             $alt='';
+                                             $img ='';
+                                             
+                                             /*if (!empty($section_syllabus_manager['featured']) && isset($section_syllabus_manager['featured'][0]) && 
+                                             isset($section_syllabus_manager['featured'][0]['media']) && !empty($section_syllabus_manager['featured'][0]['media'])){
+                                               $alt = $frontHelp->pField($section_syllabus_manager, 'title') ;
+                                               $img = $frontHelp->pImg($section_syllabus_manager, 'instructors-small');
+                                             }*/
+                                             
+                                             ?>
+                                          <a id="syllabus-link" href=""><img src="{{cdn($img)}}" alt="{{$alt}}"></a>
+                                       </div>
+                                       <div class="ibox-text">
+                                          {{--<p>{{ $section_syllabus_manager->title }}<br/>{!! $section_syllabus_manager->body !!}</p>--}}
+                                       </div>
+                                    </div>
+                                 </div>
+                                 {{--@if(isset($section_organisers)) 
+                                 <div class="col6 col-xs-12">
+                                    <div class="ibox">
+                                       @foreach($evorg as $vkey => $vvalue)
+                                       <?php
+                                          $alt='';
+                                          $img ='';
+                                          
+                                          if (isset($evorg)){
+                                            $media = PostRider\Media::select('id','path','name','ext')->findOrFail($evorg[0]->allMedia[0]['media_id'])->toArray();
+                                            $alt = $evorg[0]->name;
+                                            $img = "/uploads/originals/".$media['path'] . '/' . $media['name'] . $media['ext'];
+                                          }
+                                          
+                                          ?>
+                                       <div class="ibox-img">
+                                          <a href="{{$evorg[0]->abbr}}" title="{{$alt}}" target="_blank"><img src="{{cdn($img)}}" alt="{{$alt}}"></a>
+                                       </div>
+                                       <div class="ibox-text">
+                                          {!! $section_organisers->htmlTitle !!}
+                                       </div>
+                                       @endforeach
+                                    </div>
+                                 </div>
+                                 @endif--}}
+                              </div>
+                           </div>
+                           <!-- /.course-overview-text -->
+                        </div>
+                        <div class="course-tab-sidebar">
+                           <div class="course-details @if(!isset($section_fullvideo)) non-video-height @endif">
+                              <ul class="two-column-list">
+                                        
+                              <?php if (isset($summary[0]) && $summary[0]['title'] != '') : ?>
+                                 <li>
+                                    <img class="info-icon" class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Duration_Hours.svg')}}" width="30" />
+                                    <div class="info-text">
+
+                                       <p>{{ $summary[0]['title'] }}</br>
+                                          {{ $summary[0]['description'] }}
+                                       </p>
+                                    </div>
+                                 </li>
+                                 <?php endif ?>
+
+                                 <?php if (isset($summary[1]) && $summary[0]['title'] != '') : ?>
+                                 <li>
+                                    <img class="info-icon" class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Days-Week.svg')}}"  width="30" />
+                                    <div class="info-text">
+                                    <p>{{ $summary[1]['title'] }}</br>
+                                          {{ $summary[1]['description'] }}
+                                       </p>
+                                    </div>
+                                 </li>
+                                 <?php endif ?>
+
+                                 <?php if (isset($summary[2]) && $summary[2]['title'] != '') : ?>
+                                 <li>
+                                    <img class="info-icon" class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Times.svg')}}" width="30" />
+                                    <div class="info-text">
+                                    <p>{{ $summary[2]['title'] }}</br>
+                                          {{ $summary[2]['description'] }}
+                                       </p>
+                                    </div>
+                                 </li>
+                                 <?php endif ?>
+
+                                 <?php if (isset($summary[3]) && $summary[3]['title'] != '') : ?>
+                                 <li>
+                                    <img class="info-icon" class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Language.svg')}}"  width="30" />
+                                    <div class="info-text">
+                                    <p>{{ $summary[3]['title'] }}</br>
+                                          {{ $summary[3]['description'] }}
+                                       </p>
+                                    </div>
+                                 </li>
+                                 <?php endif ?>
+
+                               
+                                
+                                 <?php if (isset($summary[4]) && $summary[4]['title'] != '') : ?>
+                                 <li>
+                                    <img class="info-icon" class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Level.svg')}}"  width="30" />
+                                    <div class="info-text">
+                                    <p>{{ $summary[4]['title'] }}</br>
+                                          {{ $summary[4]['description'] }}
+                                       </p>
+                                    </div>
+                                 </li>
+                                 <?php endif ?>
+
+                                 <?php if (isset($summary[5]) && $summary[5]['title'] != '') : ?>
+                                 <li>
+                                    <img class="info-icon" class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" width="30" />
+                                    <div class="info-text">
+                                    <p>{{ $summary[5]['title'] }}</br>
+                                          {{ $summary[5]['description'] }}
+                                       </p>
+                                    </div>
+                                 </li>
+                                 <?php endif ?>
+                                    
+                                 <?php if (isset($summary[6]) && $summary[6]['title'] != '') : ?>
+                                 <li>
+                                    <img class="info-icon" class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/messages-warning-information.svg')}}" width="30" />
+                                    <div class="info-text">
+                                    <p>{{ $summary[6]['title'] }}</br>
+                                          {{ $summary[6]['description'] }}
+                                       </p>
+                                    </div>
+                                 </li>
+                                 <?php endif ?>
+
+                                 <?php if (isset($summary[7]) && $summary[7]['title'] != '' && isset($sumStudent) && $sumStudent > 0) : ?>
+                                    <li>
+                                       <img class="info-icon" src="{{cdn('/theme/assets/images/icons/Group_User.1.svg')}}"  width="21" />
+                                       <div class="info-text">
+                                       <p>@if($summary[7]['title'] != ''){{ $summary[7]['title'] }}<br/>@endif{{ $sumStudent }} {{ $summary[7]['description'] }}</p>
+                                       </div>
+                                    </li>
+                                 <?php endif ?>
+                                
+                                
+                              </ul>
+                              <!-- /.course-details -->
+                           </div>
+                           <!-- /.course-overview-sidebar -->
+                        </div>
+                        <!-- /.course-overview.clearfix -->
+                     </div>
+                     <?php break;
+                        case 1:
+                        case 3: ?>
+                     
+                     <div  class="course-overview clearfix padd-bottom">
+                        <div class="course-tab-text" itemprop="abstract">
+                 
+                           <span class="completed">The event is completed</span>
+                           <p style="display:none">The best digital &amp; social media diploma with a long track record trusted by top executives, agencies, brands and corporations is completed.</p>
+                           <p >Please check all our @if(isset($location->name)) <a href="{{ $location->slug }}">upcoming events in {{ $location->name }}</a> @else upcoming events in this city @endif.</p>
+                           {{--<p style="display:none">Please check all our @if(isset($location->name)) <a href="{{ $location->slug }}">upcoming events in {{ $location->name }}</a> @else upcoming events in this city @endif.</p>--}}
+                       
+                        </div>
+                     </div>
+                     <?php break;
+                        } ?>
+                     {{--@if($estatus == 0 || $estatus == 2)
+                     @if(isset($section_fullvideo) && $section_fullvideo->body != '')
+                     <div class="video-wrapper">
+                        <div class="responsive-fb-video">
+                           {!! $section_fullvideo->body !!}
+                        </div>
+                     </div>
+                     @endif
+                     @endif--}}
+                     <!-- /.container -->
+                  </div>
+                  <!-- /.tab-content-wrapper -->
+               </div>
+            
+               <div id="benefits" class="tab-content-wrapper">
+                  <div class="course-benefits-text">
+                     <div class="container">
+                        <?php
+                           $title = '' ;
+                           $body = '' ;
+                           
+                           
+                           if(isset($sections['benefits'])){
+                              $title = $sections['benefits']->first()->title;
+                              $body = $sections['benefits']->first()->description;
+                           }
+                           
+                           ?>
+                        <h2 class="text-align-center text-xs-left tab-title">{!!$title!!}</h2>
+                        <h3>{!!$body!!}</h3>
+                        <div class="benefits-list">
+                           <div class="row-flex row-flex-17">
+
+                              <?php  $category = 'freepresentations';  ;
+                            
+                                 if (isset($benefits[0]) && $benefits[0]['name'] != '') : ?>
+                              <div class="col-3 col-sm-6 col-xs-12">
+                                 <div class="benefit-box">
+                                    <div class="box-icon">
+                                       <img class="replace-with-svg" src="{{cdn('theme/assets/images/icons/Access-Files.svg')}}" width="40" alt="">
+                                    </div>
+                                    <h3>{{ $benefits[0]['name'] }}</h3>
+                                    {!! $benefits[0]['description'] !!}
+                                    <!-- /.benefit-box -->
+                                 </div>
+                              </div>
+                              <?php endif ?>
+                              <?php $category = 'e-learning';  ;
+                                 if (isset($benefits[1]) && $benefits[1]['name'] != '') :  ?>
+                              <div class="col-3 col-sm-6 col-xs-12">
+                                 <div class="benefit-box">
+                                    <div class="box-icon">
+                                       <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/E-Learning.svg')}}" width="40" alt="">
+                                    </div>
+                                    <h3>{{ $benefits[1]['name'] }}</h3>
+                                    {!! $benefits[1]['description'] !!}
+                                    <!-- /.benefit-box -->
+                                 </div>
+                              </div>
+                              <?php endif ?>
+                              <?php $category = 'support group'; 
+                                 if (isset($benefits[2]) && $benefits[2]['name'] != '') :  ?>
+                              <div class="col-3 col-sm-6 col-xs-12">
+                                 <div class="benefit-box">
+                                    <div class="box-icon">
+                                       <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Support-Group.svg')}}" width="40" alt="">
+                                    </div>
+                                    <h3>{{ $benefits[2]['name'] }}</h3>
+                                    {!! $benefits[2]['description'] !!}
+                                    <!-- /.benefit-box -->
+                                 </div>
+                              </div>
+                              <?php endif ?>
+                              <?php $category = 'jobs access'; 
+                                 if (isset($benefits[3]) && $benefits[3]['name'] != '') :  ?>
+                              <div class="col-3 col-sm-6 col-xs-12">
+                                 <div class="benefit-box">
+                                    <div class="box-icon">
+                                       <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Jobs_access.svg')}}" width="40" alt="">
+                                    </div>
+                                    <h3>{{ $benefits[3]['name'] }}</h3>
+                                    {!! $benefits[3]['description'] !!}
+                                    <!-- /.benefit-box -->
+                                 </div>
+                              </div>
+                              <?php endif ?>
+                              <?php $category = 'events access';
+                                 if (isset($benefits[4]) && $benefits[4]['name'] != '') :  ?>
+                              <div class="col-3 col-sm-6 col-xs-12">
+                                 <div class="benefit-box">
+                                    <div class="box-icon">
+                                       <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Events_Access.svg')}}" width="40" alt="">
+                                    </div>
+                                    <h3>{{ $benefits[4]['name'] }}</h3>
+                                    {!! $benefits[4]['description'] !!}
+                                    <!-- /.benefit-box -->
+                                 </div>
+                              </div>
+                              <?php endif ?>
+                              <?php $category = 'free recaps';
+                                 if (isset($benefits[5]) && $benefits[5]['name'] != '') :  ?>
+                              <div class="col-3 col-sm-6 col-xs-12">
+                                 <div class="benefit-box">
+                                    <div class="box-icon">
+                                       <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Recap-Events.svg')}}" width="40" alt="">
+                                    </div>
+                                    <h3>{{ $benefits[5]['name'] }}</h3>
+                                    {!! $benefits[5]['description'] !!}
+                                    <!-- /.benefit-box -->
+                                 </div>
+                              </div>
+                              <?php endif ?>
+                              
+                              <?php $category = 'projects info';
+                             
+                                 if (isset($benefits[6]) && $benefits[6]['name'] != '') :  ?>
+                              <div class="col-3 col-sm-6 col-xs-12">
+                                 <div class="benefit-box">
+                                    <div class="box-icon">
+                                       <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" width="40" alt="">
+                                    </div>
+                                    <h3>{{ $benefits[6]['name'] }}</h3>
+                                    {!! $benefits[6]['description'] !!}
+                                    <!-- /.benefit-box -->
+                                 </div>
+                              </div>
+                              <?php endif ?>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- /.tab-content-wrapper -->
+               </div>
+            
+               
+               <div id="topics" class="tab-content-wrapper">
+                  <div class="container">
+                     <div class="course-full-text">
+                        <?php
+                           //$title = $section_topics->title ;
+                           //$body = $section_topics->body ;
+                           if(isset($sections['topics'])){
+                              $title = $sections['topics']->first()->title;
+                              $body = $sections['topics']->first()->description;
+                           }
+                           
+                           ?>
+                        <h2 class="text-align-center text-xs-left tab-title"> {!! $title !!}</h2>
+                        <div class="topic-text-area">
+                           {!! $body !!}
+                        </div>
+                        @if(isset($topics))
+                        <div class="tab-faq-wrapper topic-content">
+                           <div class="accordion-wrapper accordion-big">
+                              @foreach($topics as $key => $topic)
+                              <div class="accordion-item">
+                                 <h3 class="accordion-title title-blue-gradient scroll-to-top">{!! $key !!}</h3>
+                                 <div class="accordion-content">
+                                 
+                                 @foreach($topic['lessons'] as $lkey => $lesson)
+                                
+                                    <div class="topic-wrapper-big">
+                                       <div class="topic-title-meta">
+                                          <h4 class="@if(isset($lesson['bold']) && $lesson['bold']) bold-topic @endif">{!! $lesson['title'] !!}</h4>
+                                        
+                                          
+                                          <div class="topic-meta">
+                                             @if(isset($lesson['type']) && $lesson['type'])<div class="category">{{$lesson['type']}}</div>@endif
+                                             
+                                             <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/Times.svg')}}" width="12" alt="" />{{$lesson['vimeo_duration']}}</span>
+
+                                          </div>
+                                          <!-- /.topic-title-meta -->
+                                       </div>
+                                       <div class="author-img">
+                                      
+                                          <?php 
+                                             $instructor = reset($instructors[$lesson['instructor_id']]); 
+                                             
+                                          ?>
+                                          @if($instructor['status'])
+                                             <a href="{{ $instructor['slugable']['slug']}}">
+                                             <span class="custom-tooltip">{{ $instructor['title'] }} {{$instructor['subtitle']}}</span>
+                                             <img alt="{{ $instructor['title']}} {{$instructor['subtitle']}}" src="{{ cdn('') }}"/>
+                                             </a>
+                                          @else
+                                             <a class="non-pointer" href="javascript:void(0)">
+                                                <span class="custom-tooltip">{{ $instructor['title'] }} {{$instructor['subtitle']}}</span>
+                                                <img alt="{{ $instructor['title']}} {{$instructor['subtitle']}}" src="{{ cdn('') }}"/>
+                                             </a>
+                                             @endif
+                                       </div>
+                                       <!-- /.topic-wrapper -->
+                                    </div>
+                                    @endforeach
+                                    <!-- /.accordion-content -->
+                                 </div>
+                                 <!-- /.accordion-item -->
+                              </div>
+                              <!-- /.accordion-wrapper -->
+                              @endforeach
+                           </div>
+                           <!-- /.tab-faq-wrapper -->
+                        </div>
+                        @endif
+                        <!-- /.course-full-text -->
+                     </div>
+                  </div>
+                  <!-- /.tab-content-wrapper -->
+               </div>
+               
+               <div id="instructors" class="tab-content-wrapper tab-blue-gradient">
+                  <div class="container">
+                     <div class="course-full-text">
+                        @if(isset($instructors))
+                        <?php
+                           //$title = $section_instructors->title ;
+                           //$body = $section_instructors->body ;
+                           if(isset($sections['instructors'])){
+                              $title = $sections['instructors']->first()->title;
+                              $body = $sections['instructors']->first()->description;
+                           }
+                           
+                           ?>
+                        <h2 class="text-align-center text-xs-left tab-title">{!!$title!!}</h2>
+                        <h3>{!!$body!!}</h3>
+                        <div class="instructors-wrapper row row-flex row-flex-23">
+                           @foreach($instructors as $instructor)
+                           @foreach($instructor as $inst)
+                           <div class="col-3 col-md-4 col-sm-6 col-xs-12">
+                              <div class="instructor-box">
+                                 <div class="instructor-inner">
+                                   
+                                    <div class="profile-img">
+                                      @if($inst['status']) 
+                                          <a href="{{$inst['slugable']['slug']}}"><img src="{{cdn('')}}"  title="{{$inst['title']}}" alt="{{$inst['title']}}"></a>
+                                      @else
+                                          <img src="{{cdn('$img')}}"  title="{{$inst['title']}}" alt="{{$inst['title']}}">
+                                      @endif
+                                    </div>
+                                    @if($inst['status']) 
+                                       <h3><a href="{{$inst['slugable']['slug']}}">{{$inst['title']}}</a></h3>
+                                    @else
+                                       <h3>{{$inst['title']}}</h3>
+                                    @endif
+                                    <p>{{$inst['header']}}, <a target="_blank" title="{{$inst['header']}}" @if($inst['ext_url'] != '') href="{{$inst['ext_url']}}" @endif > test</a>.</p>
+                                    {{--<ul class="social-wrapper">
+                                       @if($fb != '')	
+                                       <li><a target="_blank" href="{{$fb}}"><img class="replace-with-svg"  src="/theme/assets/images/icons/social/Facebook.svg" width="16" alt="Visit"></a></li>
+                                       @endif
+                                       @if($inst !='')	
+                                       <li><a target="_blank" href="{{$inst}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Instagram.svg')}}" width="16" alt="Visit"></a></li>
+                                       @endif
+                                       @if($linkedIn !='')	
+                                       <li><a target="_blank" href="{{$linkedIn}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Linkedin.svg')}}" width="16" alt="Visit"></a></li>
+                                       @endif
+                                       @if($pint !='')	
+                                       <li><a target="_blank" href="{{$pint}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Pinterest.svg')}}" width="16" alt="Visit"></a></li>
+                                       @endif
+                                       @if($twitter !='')	
+                                       <li><a target="_blank" href="{{$twitter}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Twitter.svg')}}" width="16" alt="Visit"></a></li>
+                                       @endif
+                                       @if($yt !='')	
+                                       <li><a target="_blank" href="{{$yt}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Youtube.svg')}}" width="16" alt="Visit"></a></li>
+                                       @endif
+                                       @if($med !='')	
+                                       <li><a target="_blank" href="#"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Medium.svg')}}" width="16" alt="Visit"></a></li>
+                                       @endif
+                                    </ul>--}}
+                                    <!-- /.instructor-inner -->
+                                 </div>
+                                 <!-- /.instructor-box -->
+                              </div>
+                              <!-- /.col-3.col-sm-12 -->
+                           </div>
+                           @endforeach
+                           @endforeach
+                           @endif
+                           <!-- /.row.row-flex -->
+                        </div>
+                        <!-- /.course-full-text -->
+                     </div>
+                     <!-- /.container -->
+                  </div>
+                  <!-- /.tab-content-wrapper -->
+               </div>
+             
+           
+               <!-- /.tabs-content -->
+            </div>
+            <!-- /.tabs-wrapper -->
+         </div>
+         <!-- /.content-wrapper -->
+      </div>
+      <!-- /.section-course-tabs -->
+   </section>
+</main>
+@endsection
+@section('scripts')
+
+@if($estatus == 0 || $estatus == 2)
+
+
+{{--<script>
+
+fbq('track', 'ViewContent', {
+  content_name: '<?php echo $event->title ?>',
+  content_category: '<?php echo $categoryScript ?>',
+  content_ids: ['{{$event->id}}'],
+  content_type: 'product',
+  value: {{$priceForScript}},
+  currency: 'EUR'
+ });
+</script>--}}
+
+{{--<script>
+
+  gtag('event', 'page_view', {
+    'send_to': 'AW-859787100',
+    'value': '{{$priceForScript}}',
+    'items': [{
+      'id': '{{$event->id}}',
+      'google_business_vertical': 'custom'
+    }]
+  });
+
+</script>--}}
+
+@endif
+
+
+<script>
+   /// set link to syllabus manager image
+   let syllabusLink = $('.ibox-text').find('a').attr('href');
+   document.getElementById('syllabus-link').setAttribute('href',syllabusLink);
+</script>
+
+<script src="{{ cdn('theme/assets/js/cart.js') }}"></script>
+@stop
+@section('fbchat')
+<div id="fb-root"></div>
+{{--@if(Agent::isDesktop())
+<script>
+window.fbAsyncInit = function() {
+  FB.init({
+    xfbml            : true,
+    version          : 'v5.0'
+  });
+};
+(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<!-- Your customer chat code -->
+<div class="fb-customerchat"
+  attribution=install_email
+  page_id="486868751386439">
+</div>
+@endif--}}
+@stop

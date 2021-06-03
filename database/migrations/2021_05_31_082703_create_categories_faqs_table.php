@@ -13,7 +13,7 @@ class CreateCategoriesFaqsTable extends Migration
      */
     public function up()
     {
-        Schema::create('categories_faqs', function (Blueprint $table) {
+        Schema::create('faqcategories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('description')->nullable();
@@ -28,6 +28,6 @@ class CreateCategoriesFaqsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('categories_faqs');
+        Schema::dropIfExists('faqcategories');
     }
 }
