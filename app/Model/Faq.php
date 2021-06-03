@@ -4,7 +4,7 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Model\Categories_Faqs;
+use App\Model\CategoriesFaqs;
 
 class Faq extends Model
 {
@@ -18,6 +18,6 @@ class Faq extends Model
 
     public function category()
     {
-        return $this->belongsToMany(Categories_Faqs::class, 'faqs_categoryfaqs','faq_id', 'faqs_categoryfaqs');
+        return $this->belongsToMany(CategoriesFaqs::class, 'faq_categoryfaqs','faq_id','categoryfaq_id');
     }
 }

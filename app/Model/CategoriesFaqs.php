@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Model\Faq;
 use App\Model\Event;
 
-class Categories_Faqs extends Model
+class CategoriesFaqs extends Model
 {
     use HasFactory;
 

@@ -11,7 +11,7 @@ use App\Model\Category;
 use App\Model\Partner;
 use App\Model\PaymentMethod;
 use App\Model\Delivery;
-use App\Model\Categories_Faqs;
+use App\Model\CategoriesFaqs;
 use Illuminate\Http\Request;
 use App\Http\Requests\EventRequest;
 use Illuminate\Support\Facades\Auth;
@@ -197,9 +197,13 @@ class EventController extends Controller
      */
     public function edit(Event $event)
     {
+
+        //$faq = Faq::find(16);
+        //dd($faq->category);
+
         $user = Auth::user();
         $id = $event['id'];
-        $event = $event->with('delivery','category', 'summary', 'benefits', 'ticket', 'city', 'venues', 'topic',/*'categoryFaqs'*/, 'lessons', 'instructors', 'users', 'partners', 'sections','paymentMethod','slugable','metable','faqs')->find($id);
+        $event = $event->with('delivery','category', 'summary', 'benefits', 'ticket', 'city', 'venues', 'topic', 'lessons', 'instructors', 'users', 'partners', 'sections','paymentMethod','slugable','metable')->find($id);
 
         $categories = Category::all();
         $types = Type::all();
@@ -234,7 +238,6 @@ class EventController extends Controller
         $data['delivery'] = Delivery::all();
         $data['isInclassCourse'] = $event->is_inclass_course();
         //dd($data['topics']);
-
         //dd($event['categoryFaqs']);
         return view('event.edit', $data);
     }

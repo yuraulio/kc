@@ -44,7 +44,6 @@ class Category extends Model
         return $this->morphedByMany(Event::class, 'categoryable');
     }
 
-
     /**
      * Get all of the topics that are assigned this tag.
      */
@@ -100,7 +99,7 @@ class Category extends Model
 
     public function faqs()
     {
-        return $this->morphedByMany(Faq::class, 'categoryable');
+        return $this->morphedByMany(Faq::class, 'categoryable')->withPivot('categoryable_id')->with('category');
     }
 
 }

@@ -39,7 +39,7 @@ class Event extends Model
 
     public function category()
     {
-        return $this->morphToMany(Category::class, 'categoryable');
+        return $this->morphToMany(Category::class, 'categoryable')->with('faqs');
     }
 
     public function type()
@@ -81,16 +81,6 @@ class Event extends Model
         }else{
             return false;
         }
-    }
-
-    public function categoryFaqs()
-    {
-        return $this->belongsToMany(Categories_Faqs::class,'categoryfaqables','categoryfaq_id','faqable_id');
-    }
-
-    public function faqs()
-    {
-        return $this->belongsToMany(Faq::class, 'event_faqs', 'event_id' );
     }
 
     public function delivery()
@@ -164,6 +154,17 @@ class Event extends Model
         $data['instructors'] = $instructors;
         
         return $data;
+    }
+
+    public function getFaqs(){
+        
+        $faqs = [];
+        
+        foreach($this->category['faqs']->toArray() as $faq){
+            
+        } 
+        
+        return $faqs;
     }
 
 }

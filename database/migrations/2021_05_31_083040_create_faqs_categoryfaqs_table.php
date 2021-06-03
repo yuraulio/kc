@@ -13,8 +13,8 @@ class CreateFaqsCategoryfaqsTable extends Migration
      */
     public function up()
     {
-        //Schema::dropIfExists('faqs_categoryfaqs');
         Schema::create('faq_categoryfaqs', function (Blueprint $table) {
+            $table->id();
             $table->integer('categoryfaq_id');
             $table->integer('faq_id');
         });
