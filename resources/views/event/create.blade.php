@@ -184,6 +184,29 @@
 
                                     @include('alerts.feedback', ['field' => 'view_tpl'])
                                 </div>
+
+
+
+                        <div class="dropzone dropzone-single" data-toggle="dropzone" data-dropzone-url="http://kcversion8.test">
+                            <div class="fallback">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="dropzoneBasicUpload">
+                                    <label class="custom-file-label" for="dropzoneBasicUpload">Choose file</label>
+                                </div>
+                            </div>
+
+                            <div class="dz-preview dz-preview-single">
+                                <div class="dz-preview-cover">
+                                    <img class="dz-preview-img" src="..." alt="..." data-dz-thumbnail>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
                                     <input type="hidden" name="creator_id" id="input-creator_id" class="form-control" value="{{$user->id}}">
                                     <input type="hidden" name="author_id" id="input-author_id" class="form-control" value="{{$user->id}}">
 

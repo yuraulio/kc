@@ -56,6 +56,9 @@ class EventRequest extends FormRequest
             ],
             'view_tpl' => [
 
+            ],
+            'image' => [
+                'image'
             ]
         ];
     }
