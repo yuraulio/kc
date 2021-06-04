@@ -90,7 +90,7 @@ class Category extends Model
 
     public function testimonials()
     {
-        return $this->morphedByMany(Testimonial::class, 'categoryable');
+        return $this->morphToMany(Testimonial::class, 'testimoniable');
     }
 
     /**
@@ -99,7 +99,7 @@ class Category extends Model
 
     public function faqs()
     {
-        return $this->morphedByMany(Faq::class, 'categoryable')->withPivot('categoryable_id')->with('category');
+        return $this->morphedByMany(Faq::class, 'categoryable')->with('category');
     }
 
 }

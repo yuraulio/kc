@@ -68,7 +68,6 @@
                      <li><a href="#topics">Topics</a></li>
                      <li><a href="#instructors">Instructors</a></li>
                      <li><a href="#testimonials">Testimonials</a></li>
-                     <li><a href="#location">Location</a></li>
                      <li><a href="#faq">FAQ</a></li>
                      @elseif($estatus == 3 || $estatus == 1 )
                      <li><a href="#topics">Topics</a></li>
@@ -429,8 +428,8 @@
                   <div class="container">
                      <div class="course-full-text">
                         <?php
-                           //$title = $section_topics->title ;
-                           //$body = $section_topics->body ;
+                                  $title = '';
+                                  $body = '';
                            if(isset($sections['topics'])){
                               $title = $sections['topics']->first()->title;
                               $body = $sections['topics']->first()->description;
@@ -506,8 +505,8 @@
                      <div class="course-full-text">
                         @if(isset($instructors))
                         <?php
-                           //$title = $section_instructors->title ;
-                           //$body = $section_instructors->body ;
+                                  $title = '';
+                                  $body = '';
                            if(isset($sections['instructors'])){
                               $title = $sections['instructors']->first()->title;
                               $body = $sections['instructors']->first()->description;
@@ -575,6 +574,203 @@
                      <!-- /.container -->
                   </div>
                   <!-- /.tab-content-wrapper -->
+               </div>
+
+               @if(count($testimonials) > 0)
+               <?php
+                        $title = '';
+                        $body = '';
+                  if(isset($sections['testimonials'])){
+                     $title = $sections['testimonials']->first()->title;
+                     $body = $sections['testimonials']->first()->description;
+                  }
+                  
+                  ?>
+               <div id="testimonials" class="tab-content-wrapper tab-no-pad">
+                  <div class="container">
+                     <div class="course-full-text full-w-pad">
+                        <h2 class="text-align-center text-xs-left tab-title">{!!$title!!}</h2>
+                        <h3 class="text-align-center text-xs-left tab-title"> {!!$body!!} </h3>
+                        <div class="testimonial-carousel-wrapper hidden-xs">
+                       
+                           <div class="video-carousel-big owl-carousel">
+                              @foreach($testimonials as $key => $video)
+                              <?php
+                            
+                                 if(!$video['video_url']){
+                                    continue;
+                                 }
+                                 $urlArr = explode("/",$video['video_url']);
+                                 $urlArrNum = count($urlArr);
+                                 
+                                 // YouTube video ID
+                                 $youtubeVideoId = $urlArr[$urlArrNum - 1];
+                                 
+                                 // Generate youtube thumbnail url
+                                 $thumbURL = 'https://img.youtube.com/vi/'.$youtubeVideoId.'/mqdefault.jpg';
+                                 ?>
+                              <div class="slide">
+                                 <a data-fancybox href="{{ $video['video_url'] }}"><img src="{{ $thumbURL }}" alt=""/></a>
+                              </div>
+                              @endforeach
+                           </div>
+                           <!-- /.testimonial-carousel-wrapper -->
+                        </div>
+                        <!-- /.course-full-text -->
+                     </div>
+                  </div>
+                  <div class="user-testimonial-wrapper">
+                     <div class="container">
+                        <div class="user-testimonial-big owl-carousel">
+                           
+                           @foreach ($testimonials as $key => $row)
+                           @if($row['video_url'])
+                                 <?php continue;?>
+                           @endif
+                           <div class="slide">
+                              <div class="testimonial-box">
+                                 <div class="author-infos">
+                                    <div class="author-img">
+                                       <img src="''" alt="{!! $row['name'] !!}">
+                                    </div>
+                                    <span class="author-name">
+                                    {!! $row['name'] !!} {!! $row['lastname'] !!}</span>
+                                    <span class="author-job">{!! $row['title'] !!}</span>
+                                 </div>
+                                 <div class="testimonial-text">
+                                    <?php 
+                                          $rev = $row['testimonial'];   
+                                          $rev = str_replace('"','',$rev);
+                                    ?>
+                                    {!! $row['testimonial'] !!}
+                                 </div>
+                              </div>
+                              <script type="application/ld+json">
+														{
+														  "@context": "https://schema.org/",
+														  "@type": "UserReview",
+														  "itemReviewed": {
+														    "@type": "Course",
+                                                            "provider": "Know Crunch",
+														    "image": "",
+														    "name": "{!!$event->title!!}",
+                                                            "description": "{!! $event->subtitle !!}"
+														  },
+														  "reviewRating": {
+														    "@type": "Rating",
+														    "ratingValue": "5"
+														  },
+														  "name": "{!!$event->title!!}",
+														  "author": {
+														    "@type": "Person",
+														    "name": "{!! $row['name'] !!} {!! $row['lastname'] !!}"
+														  },
+														  "reviewBody": "{!! $rev !!}",
+														  "publisher": {
+														    "@type": "Organization",
+														    "name": "KnowCrunch"
+														  }
+														}
+													</script>
+                              
+                              <!-- /.slide -->
+                           </div>
+                           @endforeach
+                           
+                        </div>
+                     </div>
+                  </div>
+                  <!-- /.tab-content-wrapper -->
+               </div>
+               @endif
+
+
+               <div id="faq" class="tab-content-wrapper">
+                 
+                  <?php
+                  $title = '';
+                  $body = '';
+                     if(isset($sections['questions'])){
+                        $title = $sections['questions']->first()->title;
+                        $body = $sections['questions']->first()->description;
+                     }
+                     
+                     ?>
+                  <div class="container">
+                     <div class="course-full-text">
+                        <h2 class="text-align-center text-xs-left tab-title">{!!$title!!}</h2>
+                        <h3 class="text-align-center text-xs-left tab-title">{!!$body!!}</h3>
+                        
+                        @if (count($faqs) > 0)
+                        
+                        <?php $f=[] ?>
+                        @foreach ($faqs as $key => $row)
+                        
+                        <h3 class="tab-sub-title">{!! $key !!}</h3>
+                        <div class="tab-faq-wrapper multiple-accordions">
+                           <div class="accordion-wrapper">
+                            
+                              
+                              @foreach ($row as $qkey => $qna)
+                              <?php $questions = [];?>
+                             
+                              <div class="accordion-item">
+                                 <h4 class="accordion-title title-blue-gradient scroll-to-top">{!! $qna['question'] !!}</h4>
+                                 <div class="accordion-content">
+                                    <div class="shorten-content">
+                                    {!! $qna['answer'] !!}
+                                    </div>
+                                 </div>
+                                 <!-- /.accordion-item -->
+                              </div>
+                             
+
+                              <?php
+                                 $qq = [];
+                                 $title = $qna['question'];
+                                 $quest = $qna['answer'];
+
+                                 $questions['@type'] = "Question";
+                                 $questions['name'] = $title;
+                                 $qq["@type"] = "Answer";
+                                 $qq["text"] = $quest;
+
+                                 $questions["acceptedAnswer"] = $qq;//json_encode($qq);
+
+                                 $f[]= $questions; //json_encode($questions);
+                                 
+
+                              ?>
+
+                              @endforeach
+                              
+                             
+                        
+
+                             
+
+                              <!-- /.accordion-wrapper -->
+                           </div>
+                           <!-- /.tab-faq-wrapper -->
+                        </div>
+                  
+                       
+                        @endforeach
+                        <?php $f=json_encode($f);?>
+                        <script type="application/ld+json">
+                           {
+                              "@context": "https://schema.org",
+                              "@type": "FAQPage",
+                              "mainEntity": {!!$f!!}
+                              }
+									</script>
+                        @endif
+                        <!-- /.course-full-text -->
+                     </div>
+                 
+                  </div>
+                  <!-- /.tab-content-wrapper -->
+                 
                </div>
              
            

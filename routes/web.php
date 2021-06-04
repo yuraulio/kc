@@ -91,6 +91,8 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
     //Faqs
     Route::post('faqs/fetchAllFaqs', ['as' => 'faqs.fetchAllFaqs', 'uses' => 'FaqController@fetchAllFaqs']);
     Route::post('faqs/store_event', ['as' => 'faqs.store_event', 'uses' => 'FaqController@store_event']);
+    Route::get('faqs/assign-event/{event}/{faq}', 'FaqController@assignFaq');
+    Route::get('faqs/unsign-event/{event}/{faq}', 'FaqController@unsignFaq');
 
     //User
     Route::post('user/assignEventToUserCreate', ['as' => 'user.assignToCourse', 'uses' => 'UserController@assignEventToUserCreate']);

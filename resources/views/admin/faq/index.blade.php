@@ -23,40 +23,29 @@
         <thead class="thead-light">
             <tr>
                 <th scope="col">{{ __('Title') }}</th>
-                <th scope="col">{{ __('Answer') }}</th>
-                <th scope="col">{{ __('Created at') }}</th>
-                @can('manage-users', App\Model\User::class)
-                    <th scope="col"></th>
-                @endcan
+                <th scope="col">{{ __('Category') }}</th>
+                <th scope="col">{{ __('Operations') }}</th>
+                
             </tr>
         </thead>
         <tbody id="faq-body">
-        @if($event->faqs)
-            @foreach ($event->faqs as $faq)
+        @if($event->category->first())
+      
+            @foreach ($event->category->first()->faqs as $faq)
                 <tr id="faq-{{$faq->id}}">
                     <td>{{ $faq->title }}</td>
-                    <td>{{ $faq->answer }}</td>
+                    <td>{{ $faq->category->first()->name }}</td>
+                    
 
-                    <td>{{ date_format($faq->created_at, 'Y-m-d' ) }}</td>
-                        {{--<td class="text-right">
-
-                            <div class="dropdown">
-                                <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                    <a class="dropdown-item" href="{{ route('faqs.edit', $faq) }}">{{ __('Edit') }}</a>
-                                    <form action="{{ route('faqs.destroy', $faq) }}" method="post">
-                                        @csrf
-                                        @method('delete')
-
-                                        <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
-                                            {{ __('Delete') }}
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        </td>--}}
+                    <td> 
+                        @if(!in_array($faq->id,$eventFaqs)) 
+                            <button class="btn btn-primary assing" data-faq = '{{$faq->id}}' type="button">Assign</button>
+                        @else
+                            <button class="btn btn-primary unsing" data-faq = '{{$faq->id}}' type="button">Unsign</button>
+                        @endif
+                    </td>
+                   
+                       
                 </tr>
             @endforeach
         @endif
@@ -146,19 +135,22 @@
                     data: {'faqs_id':$('#faqFormControlSelect').val(), 'model_type':modelType,'model_id':modelId},
                     success: function (data) {
                         let faq = data.data
+
                         $('#faq-body tr').remove();
 
                         $.each(faq, function(key,val){
-                            console.log(key+':'+val.title)
+                           
                             let newFaq =
                             `<tr id="faq-`+val.id+`">` +
                             `<td id="title-` + val.id +`">` + val.title + `</td>` +
-                            `<td id="answer-` + val.id +`">` + val.answer + `</td>` +
-                            `<td>` + val.created_at + `</td>` +
+                          
+                            `<td id="category-` + val.id +`">` + val.category[0]['name'] + `</td>` +
+
+                            ` <td><button class="btn btn-primary assing" data-faq = '` + val.id +`' type="button">Unsign</button></td>` +
                             `
-
+                           
                             </tr>`;
-
+                            
                             $("#faq-body").append(newFaq);
                         })
 
@@ -171,7 +163,102 @@
                 });
 
                 })
+
+                $(document).on('click', '.assing',function(e) {
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        type: 'get',
+                        url: '/admin/faqs/assign-event/' + "{{$event->id}}" +'/' + $(this).data('faq'),
+                        success: function (data) {
+                            let faq = data.allFaqs
+                            let assignedFaqs = data.eventFaqs;
+                            $('#faq-body tr').remove();
+
+                            
+                            $.each(faq, function(key,val){
+                            
+                                let newFaq =
+                                `<tr id="faq-`+val.id+`">` +
+                                `<td id="title-` + val.id +`">` + val.title + `</td>` +
+                            
+                                `<td id="category-` + val.id +`">` + val.category[0]['name'] + `</td>`
+                                
+                                if(assignedFaqs.indexOf(val.id) !== -1){
+                                
+                                    newFaq +=
+                                    
+                                    ` <td><button class="btn btn-primary unsing" data-faq = '` + val.id +`' type="button">unsign</button></td>` +
+                                    `</tr>`;
+                                }else{
+                                    newFaq +=
+                            
+                                    ` <td><button class="btn btn-primary assing" data-faq = '` + val.id +`' type="button">assign</button></td>` +
+                                    `</tr>`;
+                                }
+                                
+                                
+                                $("#faq-body").append(newFaq);
+                            })
+
+                            $(".assing").unbind("click");
+                            $("#success-message p").html(data.success);
+                            $("#success-message").show();
+                        }
+                    })
+                });
+                $(document).on('click', '.unsing',function(e) {
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        type: 'get',
+                        url: '/admin/faqs/unsign-event/' + "{{$event->id}}" +'/' + $(this).data('faq'),
+                        success: function (data) {
+                            let faq = data.allFaqs
+                            let assignedFaqs = data.eventFaqs;
+
+                            
+                            $('#faq-body tr').remove();
+
+                            $.each(faq, function(key,val){
+                            
+                                let newFaq =
+                                `<tr id="faq-`+val.id+`">` +
+                                `<td id="title-` + val.id +`">` + val.title + `</td>` +
+                            
+                                `<td id="category-` + val.id +`">` + val.category[0]['name'] + `</td>`;
+                                
+                                if(assignedFaqs.indexOf(val.id) !== -1){
+                                    newFaq +=
+                            
+                                    ` <td><button class="btn btn-primary unsing" data-faq = '` + val.id +`' type="button">unsign</button></td>` +
+                                    `
+                                        
+                                    </tr>`;
+                                }else{
+                                    newFaq +=
+                            
+                                    ` <td><button class="btn btn-primary assing" data-faq = '` + val.id +`' type="button">assign</button></td>` +
+                                    `
+
+                                    </tr>`;
+                                }
+                                
+                                
+                                $("#faq-body").append(newFaq);
+                            })
+
+                            $(".unsing").unbind("click");
+                            $("#success-message p").html(data.success);
+                            $("#success-message").show();
+                        }
+                    })
+                });
     </script>
+
+
 
 
 @endpush

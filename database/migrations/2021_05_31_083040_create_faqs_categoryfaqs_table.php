@@ -13,10 +13,19 @@ class CreateFaqsCategoryfaqsTable extends Migration
      */
     public function up()
     {
-        Schema::create('faq_categoryfaqs', function (Blueprint $table) {
-            $table->id();
+        //'faq_categoryfaqs'
+        Schema::create('faqables', function (Blueprint $table) {
+            /*$table->id();
             $table->integer('categoryfaq_id');
+            $table->integer('faq_id');*/
+
+            $table->id();
             $table->integer('faq_id');
+            $table->integer('faqable_id');
+            $table->string('faqable_type');
+            $table->integer('priority');
+
+
         });
     }
 
@@ -27,6 +36,6 @@ class CreateFaqsCategoryfaqsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('faqs_categoryfaqs');
+        Schema::dropIfExists('faqables');
     }
 }

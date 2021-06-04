@@ -19,13 +19,13 @@ class CategoriesFaqs extends Model
      */
     protected $fillable = ['name', 'description'];
 
-    /*public function faqs()
+    public function faqs()
     {
-        return $this->belongsToMany(Faq::class,'categoryfaqables');
+        return $this->morphToMany(Faq::class,'faqable');
     }
 
 
-    public function events()
+    /*public function events()
     {
         return $this->morphedMany(Event::class, 'categoryfaqables');
     }*/

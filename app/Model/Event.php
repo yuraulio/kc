@@ -16,6 +16,7 @@ use App\Model\Section;
 use App\Model\Benefit;
 use App\Model\Venue;
 use App\Model\User;
+use App\Model\Testimonial;
 use App\Model\Partner;
 use App\Model\Lesson;
 use App\Model\Faq;
@@ -39,9 +40,15 @@ class Event extends Model
 
     public function category()
     {
-        return $this->morphToMany(Category::class, 'categoryable')->with('faqs');
+        return $this->morphToMany(Category::class, 'categoryable')->with('faqs','testimonials');
     }
 
+    public function faqs()
+    {
+        return $this->morphToMany(Faq::class, 'faqable')->with('category')->orderBy('priority','asc');
+    }
+
+    
     public function type()
     {
         return $this->morphToMany(Type::class, 'typeable');
@@ -159,12 +166,20 @@ class Event extends Model
     public function getFaqs(){
         
         $faqs = [];
-        
-        foreach($this->category['faqs']->toArray() as $faq){
+
+        foreach($this->faqs->toArray() as $faq){
+            if(!isset($faq['category']['0'])){
+                continue;
+            }
+           
+            $faqs[$faq['category']['0']['name']][] = ['question' =>$faq['title'] , 'answer' => $faq['answer'] ];
+
             
         } 
-        
+       // dd($faqs);
         return $faqs;
     }
+
+   
 
 }

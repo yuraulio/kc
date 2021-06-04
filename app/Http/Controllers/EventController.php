@@ -151,7 +151,7 @@ class EventController extends Controller
      */
     public function store(EventRequest $request, Event $model)
     {
-        dd($request->all());
+        
         $request->request->add(['release_date_files' => date('Y-m-d H:i:s', strtotime($request->release_date_files))]);
         $event = $model->create($request->all());
         //dd($request->all());
@@ -238,8 +238,9 @@ class EventController extends Controller
         $data['methods'] = PaymentMethod::where('status',1)->get();
         $data['delivery'] = Delivery::all();
         $data['isInclassCourse'] = $event->is_inclass_course();
+        $data['eventFaqs'] = $event->faqs->pluck('id')->toArray();
         //dd($data['topics']);
-        //dd($event['categoryFaqs']);
+        
         return view('event.edit', $data);
     }
 
