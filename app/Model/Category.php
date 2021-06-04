@@ -102,4 +102,9 @@ class Category extends Model
         return $this->morphedByMany(Faq::class, 'categoryable')->with('category');
     }
 
+    /*public function faqs()
+    {
+        return $this->morphToMany(Faq::class, 'faqable')->with('category');
+    }*/
+
 }
