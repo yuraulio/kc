@@ -161,6 +161,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -231,6 +232,7 @@ return [
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
 
         'Cart' => Gloudemans\Shoppingcart\Facades\Cart::class,
+        'Image' => Intervention\Image\Facades\Image::class,
     ],
 
 ];

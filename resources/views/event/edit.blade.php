@@ -86,6 +86,9 @@
                                         <li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-10-tab_inside" data-toggle="tab" href="#tabs-icons-text-10_inside" role="tab" aria-controls="tabs-icons-text-10_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Faqs</a>
                                         </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-11-tab_inside" data-toggle="tab" href="#tabs-icons-text-11_inside" role="tab" aria-controls="tabs-icons-text-11_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Image version</a>
+                                        </li>
 
                                         <li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab_inside" data-toggle="tab" href="#metas" role="tab" aria-controls="metas" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Metas</a>
@@ -278,6 +281,32 @@
                                                             </select>
                                                             @include('alerts.feedback', ['field' => 'view_tpl'])
                                                         </div>
+                                                        <!-- Button trigger modal -->
+                                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#select_ImageModal">
+                                                        Upload Image
+                                                        </button>
+
+                                                        <!-- Modal -->
+                                                        <div class="modal fade" id="select_ImageModal" tabindex="-1" role="dialog" aria-labelledby="select_ImageModalLabel" aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    @include('admin.media2.modal')
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" id="close" class="btn btn-secondary close-modal" data-dismiss="modal">Close</button>
+                                                                    <button type="button" id="select-image" class="btn btn-primary">Select</button>
+                                                                </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
                                                             <input type="hidden" name="creator_id" id="input-creator_id" class="form-control" value="{{$event->creator_id}}">
                                                             <input type="hidden" name="author_id" id="input-author_id" class="form-control" value="{{$event->author_id}}">
 
@@ -322,6 +351,9 @@
                                             <div class="tab-pane fade" id="tabs-icons-text-10_inside" role="tabpanel" aria-labelledby="tabs-icons-text-10-tab_inside">
                                                 @include('admin.faq.index', ['model' => $event])
                                             </div>
+                                            <div class="tab-pane fade" id="tabs-icons-text-11_inside" role="tabpanel" aria-labelledby="tabs-icons-text-11-tab_inside">
+                                                @include('event.image_versions', ['model' => $event])
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -336,6 +368,40 @@
             </div>
         </div>
         @include('layouts.footers.auth')
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="modal fade" id="media-modal" tabindex="-1" role="dialog" aria-labelledby="media-modal" aria-hidden="true">
+            <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h6 class="modal-title" id="modal-title-default">Instructor</h6>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="exampleFormControlSelect1">Select instructor</label>
+                                <select class="form-control select2" id="instFormControlSelect">
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" id="lesson_update_btn" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-link close_modal ml-auto close_modal" data-dismiss="modal">Close</button>
+                    </div>
+
+                </div>
+            </div>
+            </div>
+        </div>
     </div>
 
 
@@ -378,6 +444,22 @@
 
 @push('js')
 
+<script>
+    $( "#select-image" ).click(function() {
+        path = 'public/'
+        $.each( $('.fm-breadcrumb li'), function(key, value) {
+            if(key != 0){
+                path = path+'/'+$(value).text()
+            }
+        })
+
+        name = $('.table-info .fm-content-item').text()
+        path = path+'/'+name
+        $(".close").click();
+    });
+
+</script>
+
 
 
 <script>
@@ -391,10 +473,6 @@
 </script>
 
     <script>
-
-
-
-
         $(document).ready(function() {
             $('#instFormControlSelect').select2({
                 dropdownParent: $('#modal-default')

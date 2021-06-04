@@ -1,10 +1,37 @@
 <?php
 
 use App\Model\Slug;
+use App\Model\Media;
 use Illuminate\Support\Str;
 
+function get_split_image_path($path)
+    {
+        $part = [];
+
+        $pos = strrpos($path, '/');
+        $id = $pos === false ? $path : substr($path, $pos + 1);
+        $folder =substr($path, 0,strrpos($path, '/'));
+        $path = explode(".",$id);
+
+        $part['folder'] = $folder;
+        $part['filename'] = $path[0];
+        $part['ext'] = $path[1];
+
+        return $part;
+    }
+
+if(!function_exists('get_image_versions')){
+
+    function get_image_versions($ver = 'versions')
+    {
+        $versions = isset(config('image_versions')[$ver]) ? config('image_versions')[$ver] : [];
+        return $versions;
+    }
+
+}
+
 if (!function_exists('get_templates')) {
-    
+
     function get_templates($model = 'pages')
     {
         $templates = isset(config('templates')[$model]) ? config('templates')[$model] : [];
@@ -13,7 +40,7 @@ if (!function_exists('get_templates')) {
 }
 
 if (!function_exists('check_for_slug')) {
-    
+
     function check_for_slug($slug)
     {
 
@@ -55,7 +82,7 @@ if (!function_exists('get_processor_config')){
         $processor_config = [];
         if (!empty($available_processors)) {
             foreach ($available_processors as $key => $row) {
-                
+
                 if (intval($key) == intval($processor_id)) {
                     $processor_config = $row;
                     break;
