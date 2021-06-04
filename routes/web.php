@@ -190,6 +190,9 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
     Route::get('/payment-methods/edit/{method}','Dashboard\PaymentMethodsController@edit')->name('payments.edit');
     Route::post('/payment-methods/update/{method}','Dashboard\PaymentMethodsController@update')->name('payments.update');
 
+    //media2
+    Route::get('media2/index', ['as' => 'media2.index', 'uses' => 'Media2Controller@index']);
+
 });
 
 

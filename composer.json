@@ -9,10 +9,12 @@
     "license": "MIT",
     "require": {
         "php": "^7.3.0|^8.0",
+        "alexusmai/laravel-file-manager": "^2.5",
         "ctf0/media-manager": "^3.8",
         "doctrine/dbal": "^3.1",
         "fideloper/proxy": "^4.0",
         "hardevine/shoppingcart": "^3.0",
+        "intervention/image": "^2.5",
         "laravel/framework": "^8.0",
         "laravel/legacy-factories": "^1.0",
         "laravel/tinker": "^2.0",

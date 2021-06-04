@@ -11,6 +11,7 @@ use App\Model\Category;
 use App\Model\Partner;
 use App\Model\PaymentMethod;
 use App\Model\Delivery;
+use App\Model\Media;
 use App\Model\CategoriesFaqs;
 use Illuminate\Http\Request;
 use App\Http\Requests\EventRequest;
@@ -154,6 +155,10 @@ class EventController extends Controller
         
         $request->request->add(['release_date_files' => date('Y-m-d H:i:s', strtotime($request->release_date_files))]);
         $event = $model->create($request->all());
+
+        if($event){
+            $event->createMedia($request->image_upload);
+        }
         //dd($request->all());
 
         $event->createSlug($request->slug);
@@ -204,8 +209,9 @@ class EventController extends Controller
 
         $user = Auth::user();
         $id = $event['id'];
-        $event = $event->with('delivery','category', 'summary', 'benefits', 'ticket', 'city', 'venues', 'topic', 'lessons', 'instructors', 'users', 'partners', 'sections','paymentMethod','slugable','metable')->find($id);
+        $event = $event->with('delivery','category', 'summary', 'benefits', 'ticket', 'city', 'venues', 'topic', 'lessons', 'instructors', 'users', 'partners', 'sections','paymentMethod','slugable','metable', 'medias')->find($id);
 
+        //dd($event);
         $categories = Category::all();
         $types = Type::all();
         $partners = Partner::all();

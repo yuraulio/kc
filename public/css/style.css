@@ -61,5 +61,14 @@
     box-shadow: none !important;
 }
 
+#select_ImageModal .modal-dialog {
+    max-width: none !important;
+}
+
+.img_version {
+    text-align: center;
+    margin: 30px auto;
+}
+
 
 

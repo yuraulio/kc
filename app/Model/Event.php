@@ -20,10 +20,12 @@ use App\Model\Testimonial;
 use App\Model\Partner;
 use App\Model\Lesson;
 use App\Model\Faq;
+use App\Model\Media;
 use App\Model\Instructor;
 use App\Traits\SlugTrait;
 use App\Traits\MetasTrait;
 use App\Traits\BenefitTrait;
+use App\Traits\MediaTrait;
 
 class Event extends Model
 {
@@ -31,6 +33,7 @@ class Event extends Model
     use SlugTrait;
     use MetasTrait;
     use BenefitTrait;
+    use MediaTrait;
 
     protected $table = 'events';
 
@@ -120,7 +123,7 @@ class Event extends Model
         return $this->belongsToMany(Section::class, 'sectiontitles_event', 'event_id', 'section_title_id');
     }
 
-    
+
 
     public function venues()
     {
@@ -142,10 +145,15 @@ class Event extends Model
         return $this->belongsToMany(PaymentMethod::class, 'paymentmethod_event');
     }
 
+    public function medias()
+    {
+        return $this->morphOne(Media::class, 'mediable');
+    }
+
     public function topicsLessonsInstructors(){
-        
+
         $topics = [];
-        
+
         $lessons = $this->lessons->groupBy('topic_id');
         $instructors = $this->instructors->unique()->groupBy('instructor_id')->toArray();
         foreach($this->topic->unique()->groupBy('topic_id') as $key => $topic){
@@ -153,18 +161,18 @@ class Event extends Model
             foreach($topic as $t){
                 $topics[$t->title]['lessons'] = $lessons[$t->id]->toArray();
             }
-            
+
 
         }
 
         $data['topics'] = $topics;
         $data['instructors'] = $instructors;
-        
+
         return $data;
     }
 
     public function getFaqs(){
-        
+
         $faqs = [];
 
         foreach($this->faqs->toArray() as $faq){
