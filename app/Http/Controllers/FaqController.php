@@ -97,13 +97,20 @@ class FaqController extends Controller
         $model = app($request->model_type);
         $model = $model::find($request->model_id);
 
-        //$faqs = CategoriesFaqs::with('faqs')->find($request->faqs_id);
+        $faqs = CategoriesFaqs::with('faqs')->find($request->faqs_id);
         //dd($model->category->first()->faqs()->category);
-        $faqs = $model->category->first()->faqs;
+        //$faqs = $model->category->first()->faqs;
+
+        $category = Category::find($model->category->first()->id);  
+        
        //$model->faqs()->detach();
-        foreach($faqs as $key => $faq){
-           
+        foreach($faqs->faqs as $key => $faq){
+            $faq->categoryEvent()->detach($category);
+            $faq->categoryEvent()->attach($category);
             if($faq->category->first() && $faq->category->first()->id == $request->faqs_id){
+              
+                //$category = Category::find($model->category->first()->id);   
+                //$faq->categoryEvent()->attach($category);
                 $model->faqs()->detach($faq);
                 $model->faqs()->attach($faq,['priority'=>$key]);
             }

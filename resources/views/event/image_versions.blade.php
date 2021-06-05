@@ -3,7 +3,7 @@
       <h3 class="mb-0">{{ __('Image versions') }}</h3>
         <div class="row">
             <?php
-                $parts = get_split_image_path($event->medias['original_name']);
+                //$parts = get_split_image_path($event->medias['original_name']);
             ?>
             @foreach(get_image_versions() as $version)
             <div style="text-align:center;" class="col-12 img_version">

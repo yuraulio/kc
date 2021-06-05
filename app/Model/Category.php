@@ -97,14 +97,14 @@ class Category extends Model
      * Get all of the faqs that are assigned this tag.
      */
 
-    public function faqs()
-    {
-        return $this->morphedByMany(Faq::class, 'categoryable')->with('category');
-    }
-
     /*public function faqs()
     {
-        return $this->morphToMany(Faq::class, 'faqable')->with('category');
+        return $this->morphedByMany(Faq::class, 'categoryable')->with('category');
     }*/
+
+    public function faqs()
+    {
+        return $this->morphToMany(Faq::class, 'faqable')->with('category');
+    }
 
 }

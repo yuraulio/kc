@@ -30,6 +30,6 @@ class Faq extends Model
 
     public function categoryEvent()
     {
-        return $this->morphToMany(Category::class, 'categoryable');
+        return $this->morphedByMany(Category::class, 'faqable');
     }
 }

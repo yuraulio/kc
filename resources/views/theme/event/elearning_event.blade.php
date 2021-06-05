@@ -127,7 +127,7 @@
                                        <div class="author-img">
                                           <?php
                                              $alt='';
-                                             $img ='';
+                                             $img = ''; //$event->mediable->original_name;
                                              
                                              /*if (!empty($section_syllabus_manager['featured']) && isset($section_syllabus_manager['featured'][0]) && 
                                              isset($section_syllabus_manager['featured'][0]['media']) && !empty($section_syllabus_manager['featured'][0]['media'])){
@@ -136,7 +136,7 @@
                                              }*/
                                              
                                              ?>
-                                          <a id="syllabus-link" href=""><img src="{{cdn($img)}}" alt="{{$alt}}"></a>
+                                          <a id="syllabus-link" href=""><img src="{{cdn(get_image($event->mediable))}}" alt="{{$alt}}"></a>
                                        </div>
                                        <div class="ibox-text">
                                           {{--<p>{{ $section_syllabus_manager->title }}<br/>{!! $section_syllabus_manager->body !!}</p>--}}
@@ -472,7 +472,7 @@
                                           @if($instructor['status'])
                                              <a href="{{ $instructor['slugable']['slug']}}">
                                              <span class="custom-tooltip">{{ $instructor['title'] }} {{$instructor['subtitle']}}</span>
-                                             <img alt="{{ $instructor['title']}} {{$instructor['subtitle']}}" src="{{ cdn('') }}"/>
+                                             <img alt="{{ $instructor['title']}} {{$instructor['subtitle']}}" src="{{ cdn(get_image($instructor['mediable'])) }}"/>
                                              </a>
                                           @else
                                              <a class="non-pointer" href="javascript:void(0)">
@@ -524,7 +524,7 @@
                                    
                                     <div class="profile-img">
                                       @if($inst['status']) 
-                                          <a href="{{$inst['slugable']['slug']}}"><img src="{{cdn('')}}"  title="{{$inst['title']}}" alt="{{$inst['title']}}"></a>
+                                          <a href="{{$inst['slugable']['slug']}}"><img src="{{cdn(get_image($inst['mediable']))}}"  title="{{$inst['title']}}" alt="{{$inst['title']}}"></a>
                                       @else
                                           <img src="{{cdn('$img')}}"  title="{{$inst['title']}}" alt="{{$inst['title']}}">
                                       @endif

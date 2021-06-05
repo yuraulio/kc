@@ -20,6 +20,7 @@ trait MediaTrait
 
         $media = new Media;
         $media->original_name = $mediaKey;
+        $media->path = $folders;
         $media->name = $path[0];
         $media->ext = $path[1];
 
@@ -28,7 +29,7 @@ trait MediaTrait
         foreach(get_image_versions() as $value){
             $image_resize = Image::make(public_path($mediaKey));
             $image_resize->crop($value['w'], $value['h']);
-            $image_resize->save(public_path($folders.'/'.$path[0].'-'.$value['w'].'-'. $value['h'].'.'.$path[1]), $value['q']);
+            $image_resize->save(public_path($folders.'/'.$path[0].'-'.$value['version'].'.'.$path[1]), $value['q']);
         }
 
 

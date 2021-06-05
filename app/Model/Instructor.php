@@ -7,12 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use App\Model\Topic;
 use App\Traits\SlugTrait;
 use App\Traits\MetasTrait;
+use App\Traits\MediaTrait;
 
 class Instructor extends Model
 {
     use HasFactory;
     use SlugTrait;
     use MetasTrait;
+    use MediaTrait;
     
     protected $table = 'instructors';
 

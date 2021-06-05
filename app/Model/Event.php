@@ -73,7 +73,7 @@ class Event extends Model
 
     public function instructors()
     {
-        return $this->belongsToMany(Instructor::class,'event_topic_lesson_instructor')->where('status',true)->select('instructors.*','lesson_id','instructor_id','event_id')
+        return $this->belongsToMany(Instructor::class,'event_topic_lesson_instructor')->with('mediable')->where('status',true)->select('instructors.*','lesson_id','instructor_id','event_id')
             ->withPivot('lesson_id','instructor_id')->with('slugable');
     }
 
@@ -156,6 +156,7 @@ class Event extends Model
 
         $lessons = $this->lessons->groupBy('topic_id');
         $instructors = $this->instructors->unique()->groupBy('instructor_id')->toArray();
+       
         foreach($this->topic->unique()->groupBy('topic_id') as $key => $topic){
 
             foreach($topic as $t){
