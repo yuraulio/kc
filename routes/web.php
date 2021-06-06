@@ -47,9 +47,7 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
     Route::resource('exams', 'ExamController', ['except' => ['show']]);
     Route::resource('delivery', 'DeliveryController', ['except' => ['show']]);
     Route::resource('menu', 'MenuController', ['except' => ['show']]);
-    // MediaManager
-    ctf0\MediaManager\MediaRoutes::routes();
-
+   
     //Menu item
     Route::get('menu/add_item', ['as' => 'menu.add_item', 'uses' => 'MenuController@add_item']);
     Route::post('menu/fetchAllMenu', ['as' => 'menu.fetchAllMenu', 'uses' => 'MenuController@fetchAllMenu']);

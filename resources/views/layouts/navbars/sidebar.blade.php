@@ -99,11 +99,7 @@
                                         <a href="{{ route('user.index') }}" class="nav-link">{{ __('Search engines settings') }}</a>
                                     </li>
                                 @endcan
-                                @can('manage-users', App\Model\User::class)
-                                    <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
-                                        <a href="{{ route('media.index') }}" class="nav-link">{{ __('Media library') }}</a>
-                                    </li>
-                                @endcan
+                          
                                 @can('manage-users', App\Model\User::class)
                                     <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
                                         <a href="{{ route('media2.index') }}" class="nav-link">{{ __('Media library') }}</a>
