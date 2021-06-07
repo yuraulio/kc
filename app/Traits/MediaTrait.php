@@ -19,22 +19,19 @@ trait MediaTrait
         $path = explode(".",$id);
 
         $media = new Media;
-        $media->original_name = $mediaKey;
+        $media->original_name = $id;
         $media->path = $folders;
         $media->name = $path[0];
-        $media->ext = $path[1];
+        $media->ext = '.'.$path[1];
 
         $this->mediable()->save($media);
 
         foreach(get_image_versions() as $value){
             $image_resize = Image::make(public_path($mediaKey));
-            $image_resize->crop($value['w'], $value['h']);
+            $image_resize->resize($value['w'], $value['h']);
+            $image_resize->fit($value['w'], $value['h']);
             $image_resize->save(public_path($folders.'/'.$path[0].'-'.$value['version'].'.'.$path[1]), $value['q']);
         }
-
-
-
-
     }
 
     /**

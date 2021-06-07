@@ -152,7 +152,7 @@ class EventController extends Controller
      */
     public function store(EventRequest $request, Event $model)
     {
-        
+
         $request->request->add(['release_date_files' => date('Y-m-d H:i:s', strtotime($request->release_date_files))]);
         $event = $model->create($request->all());
 
@@ -225,6 +225,7 @@ class EventController extends Controller
 
         $allTopicsByCategory1 = $event['lessons']->unique()->groupBy('topic_id');
         $instructors = $event['instructors']->groupBy('lesson_id');
+        //dd($instructors);
         $topics = $event['topic']->unique()->groupBy('topic_id');
        // dd($event['topic']->groupBy('id'));
         //dd($allTopicsByCategory);
@@ -246,7 +247,7 @@ class EventController extends Controller
         $data['isInclassCourse'] = $event->is_inclass_course();
         $data['eventFaqs'] = $event->faqs->pluck('id')->toArray();
         //dd($data['topics']);
-        
+
         return view('event.edit', $data);
     }
 

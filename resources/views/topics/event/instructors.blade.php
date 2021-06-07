@@ -35,6 +35,7 @@
                             </tr>
 
                         </thead>
+                        <?php //dd($instructors); ?>
                         <tbody id="topic_lessons" data-event-id="{{$event['id']}}">
                             <?php $i=0; ?>
 
@@ -44,6 +45,7 @@
 
 
                                 <td>{{ $lesson->title }}</td>
+                                <?php //dd($instructors); ?>
 
                                 <td id="inst_lesson_edit_{{$lesson['id']}}"><?php if(isset($instructors[$lesson->id]) && $instructors[$lesson->id]->first() != null)
                                 {

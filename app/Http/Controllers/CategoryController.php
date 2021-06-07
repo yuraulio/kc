@@ -76,12 +76,10 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request, Category $model)
     {
-
         $model = $model->create($request->all());
         foreach($request->folder_name as $folder_name){
 
             $exist_dropbox = Dropbox::where('folder_name', $folder_name)->first();
-            //dd($exist_dropbox);
             if($exist_dropbox){
                 $model->dropbox()->attach($exist_dropbox->id,['category_id' => $model->id]);
             }else{
@@ -114,9 +112,11 @@ class CategoryController extends Controller
                     $data['folders'][$row['basename']] = $row['basename'];
                 endif;
             }
+
+            $already_assign = $category->dropbox()->get();
         }
 
-        return view('global_settings.categories.edit', compact('category', 'data'));
+        return view('global_settings.categories.edit', compact('category', 'data', 'already_assign'));
     }
 
     /**
@@ -129,6 +129,21 @@ class CategoryController extends Controller
     public function update(CategoryRequest $request, Category $category)
     {
         $category->update($request->all());
+
+        $ids = [];
+
+        foreach($request->folder_name as $folder_name){
+
+            $exist_dropbox = Dropbox::where('folder_name', $folder_name)->first();
+            if($exist_dropbox){
+                array_push($ids, $exist_dropbox->id);
+                //$model->dropbox()->attach($exist_dropbox->id,['category_id' => $model->id]);
+            }else{
+                return redirect()->route('global.index')->withStatus(__('Update Dropbox First.'));
+            }
+
+            $category->dropbox()->sync($ids);
+        }
 
         return redirect()->route('global.index')->withStatus(__('Category successfully updated.'));
     }

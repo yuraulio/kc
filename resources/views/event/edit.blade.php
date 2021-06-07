@@ -285,6 +285,10 @@
                                                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#select_ImageModal">
                                                         Upload Image
                                                         </button>
+                                                                    <?php //dd($event->medias); ?>
+                                                        <div class="form-group">
+                                                            <img src="{{$event->medias['path']}}.{{$event->medias['original_name']}}" id='img-upload'/>
+                                                        </div>
 
                                                         <!-- Modal -->
                                                         <div class="modal fade" id="select_ImageModal" tabindex="-1" role="dialog" aria-labelledby="select_ImageModalLabel" aria-hidden="true">
@@ -311,6 +315,8 @@
                                                             <input type="hidden" name="author_id" id="input-author_id" class="form-control" value="{{$event->author_id}}">
 
                                                             @include('alerts.feedback', ['field' => 'ext_url'])
+
+
 
 
                                                         <div class="text-center">
@@ -369,42 +375,6 @@
         </div>
         @include('layouts.footers.auth')
     </div>
-
-    <div class="row">
-        <div class="col-md-4">
-            <div class="modal fade" id="media-modal" tabindex="-1" role="dialog" aria-labelledby="media-modal" aria-hidden="true">
-            <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
-                <div class="modal-content">
-
-                    <div class="modal-header">
-                        <h6 class="modal-title" id="modal-title-default">Instructor</h6>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-
-                    <div class="modal-body">
-                        <form>
-                            <div class="form-group">
-                                <label for="exampleFormControlSelect1">Select instructor</label>
-                                <select class="form-control select2" id="instFormControlSelect">
-                                </select>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" id="lesson_update_btn" class="btn btn-primary">Save changes</button>
-                        <button type="button" class="btn btn-link close_modal ml-auto close_modal" data-dismiss="modal">Close</button>
-                    </div>
-
-                </div>
-            </div>
-            </div>
-        </div>
-    </div>
-
-
 
     <div class="row">
         <div class="col-md-4">
@@ -636,6 +606,7 @@
                     date = ''
 
                     data = JSON.parse(data)
+                    let instructors = data.instructors
 
                     let event_type = data.isInclassCourse
                     let event_id = data.event
@@ -652,7 +623,8 @@
                     }
                     $('#modal-title-default').text(data.lesson[0].title)
 
-                    $.each( data.instructors, function( key, value ) {
+                    $.each( instructors, function( key, value ) {
+                        console.log(key+':'+value.title)
                         $('#instFormControlSelect').append(`<option ${lesson.instructor_id == value.id ? 'selected' : ''} value="${value.id}">${value.title}</option>`)
                     });
 

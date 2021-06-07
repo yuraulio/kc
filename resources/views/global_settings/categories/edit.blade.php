@@ -56,11 +56,23 @@
                                     @include('alerts.feedback', ['field' => 'hours'])
                                 </div>
 
+                                <?php //dd($data['folders']); ?>
+
                                 <div class="form-group">
                                     <label for="exampleFormControlSelect1">Select Dropbox Folder</label>
                                     <select multiple class="form-control" name="folder_name[]" id="folder_name">
                                         @foreach($data['folders'] as $folder)
-                                            <option value="{{ $folder }}">{{ $folder }}</option>
+                                            <?php $found = false; ?>
+                                            @foreach($already_assign as $ass)
+                                                @if($ass['folder_name'] == $folder)
+                                                <?php $found = true; ?>
+                                                @endif
+                                            @endforeach
+                                            @if($found)
+                                                <option selected value="{{ $folder }}">{{ $folder }}</option>
+                                            @else
+                                                <option value="{{ $folder }}">{{ $folder }}</option>
+                                            @endif
                                         @endforeach
                                     </select>
                                     @include('alerts.feedback', ['field' => 'dropbox'])

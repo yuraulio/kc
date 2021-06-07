@@ -25,7 +25,6 @@
             <thead class="thead-light">
                 <tr>
                     <th scope="col">{{ __('Name') }}</th>
-                    <th scope="col">{{ __('Description') }}</th>
                     <th scope="col">{{ __('Parent') }}</th>
                     <th scope="col">{{ __('Hours') }}</th>
                     <th scope="col">{{ __('Dropbox') }}</th>
@@ -38,7 +37,6 @@
                 @foreach ($categories as $category)
                     <tr>
                         <td>{{ $category->name }}</td>
-                        <td>{{ $category->description }}</td>
                         <td>{{ $category->parent }}</td>
                         <td>{{ $category->hours }}</td>
                         <td>
