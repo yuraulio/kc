@@ -5,16 +5,16 @@
 ])
 
 @section('content')
-    @component('layouts.headers.auth') 
+    @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
-            @slot('title') 
-                {{ __('Examples') }} 
+            @slot('title')
+                {{ __('Examples') }}
             @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('global.index') }}">{{ __('Global Management') }}</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ __('Edit Role') }}</li>
+            <li class="breadcrumb-item active" aria-current="page">{{ __('Edit Category') }}</li>
         @endcomponent
-    @endcomponent   
+    @endcomponent
 
     <div class="container-fluid mt--6">
         <div class="row">
@@ -23,7 +23,7 @@
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col-8">
-                                <h3 class="mb-0">{{ __('Role Management') }}</h3>
+                                <h3 class="mb-0">{{ __('Category Management') }}</h3>
                             </div>
                             <div class="col-4 text-right">
                                 <a href="{{ route('global.index') }}" class="btn btn-sm btn-primary">{{ __('Back to list') }}</a>
@@ -56,6 +56,16 @@
                                     @include('alerts.feedback', ['field' => 'hours'])
                                 </div>
 
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect1">Select Dropbox Folder</label>
+                                    <select multiple class="form-control" name="folder_name[]" id="folder_name">
+                                        @foreach($data['folders'] as $folder)
+                                            <option value="{{ $folder }}">{{ $folder }}</option>
+                                        @endforeach
+                                    </select>
+                                    @include('alerts.feedback', ['field' => 'dropbox'])
+                                </div>
+
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
                                 </div>
@@ -65,7 +75,7 @@
                 </div>
             </div>
         </div>
-        
+
         @include('layouts.footers.auth')
     </div>
 @endsection
