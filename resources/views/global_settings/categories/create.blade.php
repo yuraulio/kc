@@ -63,6 +63,7 @@
                                             <option value="{{ $folder }}">{{ $folder }}</option>
                                         @endforeach
                                     </select>
+                                    @include('alerts.feedback', ['field' => 'dropbox'])
                                 </div>
 
                                 <div class="text-center">

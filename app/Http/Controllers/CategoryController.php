@@ -102,7 +102,21 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        return view('global_settings.categories.edit', compact('category'));
+        $li = Storage::disk('dropbox');
+
+        if($li) {
+
+            $folders = $li->listContents();
+            //dd($folders);
+            //$data['folders'][0] = 'Select Dropbox Folder';
+            foreach ($folders as $key => $row) {
+                if($row['type'] == 'dir') :
+                    $data['folders'][$row['basename']] = $row['basename'];
+                endif;
+            }
+        }
+
+        return view('global_settings.categories.edit', compact('category', 'data'));
     }
 
     /**
