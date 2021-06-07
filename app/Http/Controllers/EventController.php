@@ -113,6 +113,7 @@ class EventController extends Controller
         $data['request'] = $request->all();
         $data['lesson'] = $allLessons;
         $data['event'] = $event;
+        $data['isInclassCourse'] = $event->is_inclass_course();
 
         echo json_encode($data);
     }

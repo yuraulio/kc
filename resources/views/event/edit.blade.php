@@ -204,7 +204,7 @@
                                                                     <div class="input-group-prepend">
                                                                         <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
                                                                     </div>
-                                                                    <input class="form-control datepicker" id="input-release_date_files" name="release_date_files" placeholder="Select date" type="text" value="{{ old('release_date_files', $old_date) }}">
+                                                                    <input class="form-control datepicker" id="input-release_date_file" name="release_date_files" placeholder="Select date" type="text" value="{{ old('release_date_files', $old_date) }}">
                                                                 </div>
                                                                 @include('alerts.feedback', ['field' => 'release_date_files'])
                                                             </div>
@@ -390,12 +390,8 @@
                     </div>
 
                     <div class="modal-body">
-                        <form>
-                            <div class="form-group">
-                                <label for="exampleFormControlSelect1">Select instructor</label>
-                                <select class="form-control select2" id="instFormControlSelect">
-                                </select>
-                            </div>
+                        <form id="lesson_details">
+
                         </form>
                     </div>
 
@@ -468,7 +464,7 @@
             $('#instFormControlSelect').append(`<option value="" disabled selected>Choose instructor</option>`)
         });
 
-        $(document).on('click','#lesson_update_btn',function(){
+        $(document).on('click','#lesson_update_btn',function(e){
             let start = $('#time_starts').val()
             let date = $('#date').val()
             let end =  $('#time_ends').val()
@@ -493,8 +489,14 @@
                 data:data,
                 success: function(data) {
                     data = JSON.parse(data)
-                    console.log(data)
+
                     $('#inst_lesson_edit_'+data.lesson_id).text(data.instructor.title)
+                    $('#date_lesson_edit_'+data.lesson_id).text(data.date1)
+                    $('#start_lesson_edit_'+data.lesson_id).text(data.start)
+                    $('#end_lesson_edit_'+data.lesson_id).text(data.end)
+                    $('#duration_lesson_edit_'+data.lesson_id).text(data.duration)
+                    $('#room_lesson_edit_'+data.lesson_id).text(data.room)
+
                     $('#modal-default').modal()
                     $('.close_modal').click()
 
@@ -510,7 +512,7 @@
 
     <script>
 
-        $( "#instFormControlSelect" ).change(function() {
+        $( document ).on('change',"#instFormControlSelect",function() {
             if($('#instFormControlSelect').val() == '-'){
                 $('#lesson_update_btn').prop('disabled', true);
                 $('#lesson_update_btn').css('opacity', '0.4')
@@ -572,18 +574,13 @@
                 success: function(data){
                     data = JSON.parse(data)
 
-                    // let length = $('#inst_lesson_'+data.lesson_id).parent().find('th').attr('rowspan')
-                    // let text = $('#inst_lesson_'+data.lesson_id).parent().find('th').text()
-
-                    // if($('#inst_lesson_'+data.lesson_id).parent().find('th').length == 1){
-                    //     $(`<th rowspan='${length - 1}'>${text}</th>`).prependTo('.topic_'+data.topic_id)
-                    // }
-                    $('#inst_lesson_'+data.lesson_id).remove()
+                    $('#'+data.lesson_id).remove()
                 }
             });
         });
 
         $(document).on('click','#open_modal',function(){
+            $('#lesson_details').empty()
             let id = 0
             let elem = $(this).data('lesson-id');
             elem = elem.split("_")
@@ -591,6 +588,7 @@
             topic_id = topic_id.split("_")
             const event_id = $('#topic_lessons').data('event-id')
             let instructor_id = $('#instFormControlSelect').val()
+
 
 
             data = {lesson_id:elem[1], topic_id:topic_id[1], event_id:event_id}
@@ -613,6 +611,8 @@
 
                     lesson = data.lesson[0].pivot
 
+                   console.log(lesson)
+
                     if(lesson.instructor_id == null){
 
                         $('#lesson_update_btn').prop('disabled', true);
@@ -622,6 +622,14 @@
                         $('#lesson_update_btn').css('opacity', '1')
                     }
                     $('#modal-title-default').text(data.lesson[0].title)
+
+                   inst_row =  `<div class="form-group">
+                                <label for="exampleFormControlSelect1">Select instructor</label>
+                                <select class="form-control select2" id="instFormControlSelect">
+                                </select>
+                            </div>`
+
+                    $('#lesson_details').append(inst_row)
 
                     $.each( instructors, function( key, value ) {
                         console.log(key+':'+value.title)
@@ -681,7 +689,20 @@
                             </div>
                         `
 
-                        $('.modal-body form').append(row)
+                        $('#lesson_details').append(row)
+                        var datePickerOptions = {
+                            dateFormat: 'yy/m/d',
+                            firstDay: 1,
+                            changeMonth: true,
+                            changeYear: true,
+                            // ...
+                        }
+
+                        $(document).ready(function () {
+                            $(".datepicker").datepicker(datePickerOptions);
+                        });
+
+
 
 
                     }
@@ -692,7 +713,7 @@
                             <input type="hidden" name="lesson_id" id="lesson_id" value="${data.lesson_id}">
                         `
 
-                    $('.modal-body form').append(input_hidden)
+                    $('#lesson_details').append(input_hidden)
 
 
 
@@ -733,5 +754,6 @@
 
         })
     </script>
+
 
 @endpush

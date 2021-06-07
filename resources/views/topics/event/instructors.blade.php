@@ -18,6 +18,7 @@
                 <div class="table-responsive py-4">
                     <table class="table align-items-center table-flush"  id="datatable-basic">
                         <thead class="thead-light">
+                            <?php //dd($isInclassCourse); ?>
                             <tr>
                                 <th scope="col">{{ __('Lesson') }}</th>
                                 <th scope="col">{{ __('Instructor') }}</th>
@@ -35,17 +36,15 @@
                             </tr>
 
                         </thead>
-                        <?php //dd($instructors); ?>
                         <tbody id="topic_lessons" data-event-id="{{$event['id']}}">
                             <?php $i=0; ?>
 
 
-                            <tr class="topic_{{$topic->id}}">
+
                                 @foreach($lessons[$key] as $key1 => $lesson)
-
-
+                                <?php //dd($lesson);?>
+                                <tr id="{{$lesson['id']}}" class="topic_{{$topic->id}}">
                                 <td>{{ $lesson->title }}</td>
-                                <?php //dd($instructors); ?>
 
                                 <td id="inst_lesson_edit_{{$lesson['id']}}"><?php if(isset($instructors[$lesson->id]) && $instructors[$lesson->id]->first() != null)
                                 {
@@ -53,12 +52,21 @@
                                 }else{
                                     echo '-';
                                 } ?></td>
-                                    @if(count($event['type']) > 0 && $isInclassCourse)
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    @if(count($event['type']) > 0 && $isInclassCourse )
+                                    @if($lesson->pivot->date != null)
+                                    <?php //dd('asd');?>
+                                    <td id="date_lesson_edit_{{$lesson['id']}}"><?php $date = strtotime($lesson->pivot->date);  ?>{{ date('d-m-Y', $date ) }} </td>
+                                    <td id="start_lesson_edit_{{$lesson['id']}}"><?php $start = strtotime($lesson->pivot->time_starts); ?><?=  date('H:i:sa', $start ) ?></td>
+                                    <td id="end_lesson_edit_{{$lesson['id']}}"><?php $ends = strtotime($lesson->pivot->time_ends); ?>{{ date('H:i:sa', $ends ) }}</td>
+                                    <td id="duration_lesson_edit_{{$lesson['id']}}">{{$lesson->pivot->duration}}</td>
+                                    <td id="room_lesson_edit_{{$lesson['id']}}">{{$lesson->pivot->room}}</td>
+                                    @else
+                                    <td id="date_lesson_edit_{{$lesson['id']}}"></td>
+                                    <td id="start_lesson_edit_{{$lesson['id']}}"></td>
+                                    <td id="end_lesson_edit_{{$lesson['id']}}"></td>
+                                    <td id="duration_lesson_edit_{{$lesson['id']}}"></td>
+                                    <td id="room_lesson_edit_{{$lesson['id']}}"></td>
+                                    @endif
                                     @endif
 
                                     <td class="text-right">

@@ -98,6 +98,7 @@
                 success: function(data) {
                     data = JSON.parse(data)
                     let event_type = data.isInclassCourse
+                    console.log(event_type)
                     let e = $('#'+data.request.topic_id).find('label')
 
                     let topic = data.lesson;
@@ -125,75 +126,71 @@
                                     if(event_type)
                                     {
                                         row = `
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <th>{{ __('Date') }}</th>
+                                        <th>{{ __('Time Starts') }}</th>
+                                        <th>{{ __('Time Ends') }}</th>
+                                        <th>{{ __('Duration') }}</th>
+                                        <th>{{ __('Room') }}</th>
+                                        `
+                                        row1 = `
+                                        <td id="date_lesson_edit_${topic.id}"></td>
+                                        <td id="start_lesson_edit_${topic.id}"></td>
+                                        <td id="ends_lesson_edit_${topic.id}"></td>
+                                        <td id="duration_lesson_edit_${topic.id}"></td>
+                                        <td id="room_lesson_edit_${topic.id}"></td>
                                         `
                                     }
+                                    row_accor = `
+                                    <div class="card" id="topic_card_${topic.id}">
+                                        <div class="card-header" id="${topic.id}" data-toggle="collapse" data-target="#col_`+topic.id+`" aria-expanded="true" aria-controls="collapseOne">
+                                            <h5 class="mb-0">${topic.title}</h5>
+                                        </div>
+                                        <div id="col_${topic.id}" class="collapse" aria-labelledby="${topic.id}" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            <div class="table-responsive py-4">
+                                                <table class="table align-items-center table-flush"  id="datatable-basic">
+                                                    <thead class="thead-light">
+                                                        <tr>
+                                                            <th scope="col">{{ __('Lesson') }}</th>
+                                                            <th scope="col">{{ __('Instructor') }}</th>`+
+                                                            row +
+                                                            `<th scope="col"></th>
+                                                        </tr>
 
-                                        // new_topic_row = `
-                                        //     <tr class="topic_${data.lesson.id}">
-                                        //         <th rowspan="${data.lesson.lessons.length}">${data.lesson.title}</td>
-
-
-
-                                        //     </tr>
-                                        // `
-                                        ///////////////////////////////////
-                                        row_accor = `
-                                        <div class="card" id="topic_card_${topic.id}">
-                                            <div class="card-header" id="${topic.id}" data-toggle="collapse" data-target="#col_`+topic.id+`" aria-expanded="true" aria-controls="collapseOne">
-                                                <h5 class="mb-0">${topic.title}</h5>
-                                            </div>
-                                            <div id="col_${topic.id}" class="collapse" aria-labelledby="${topic.id}" data-parent="#accordionExample">
-                                            <div class="card-body">
-                                                <div class="table-responsive py-4">
-                                                    <table class="table align-items-center table-flush"  id="datatable-basic">
-                                                        <thead class="thead-light">
-                                                            <tr>
-                                                                <th scope="col">{{ __('Lesson') }}</th>
-                                                                <th scope="col">{{ __('Instructor') }}</th>
-                                                                ${row}
-                                                                <th scope="col"></th>
-                                                            </tr>
-
-                                                        </thead>
-                                                        <tbody id="topic_lessons_${topic.id}">
+                                                    </thead>
+                                                    <tbody id="topic_lessons_${topic.id}">
 
 
-                                                        </tbody>
-                                                    </table>
-                                                </div>
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         </div>
+                                    </div>
 
-                                        `;
-                                        $('.accord_topic').append(row_accor)
+                                    `;
+                                    $('.accord_topic').append(row_accor)
 
-                                        $.each( lessons , function(key, value) {
-                                            let row_lessons = `
-                                                <tr id="inst_lesson_${value.id}" class="topic_`+value.id+`">
-                                                <td>${value.title}</td>
-                                                <td id="inst_lesson_edit_`+value.id+`">-</td>
-                                                    ${row}
-                                                    <td class="text-right">
-                                                        <div class="dropdown">
-                                                            <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                <i class="fas fa-ellipsis-v"></i>
-                                                            </a>
-                                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                                <a href="javascript:void(0)" id="open_modal" data-topic-id="topic_${topic.id}"  data-lesson-id="lesson_${value.id}" class="dropdown-item open_modal">{{ __('Edit') }}</a>
-                                                            <a href="javascript:void(0)" id="remove_lesson" data-topic-id="topic_${topic.id}"  data-lesson-id="lesson_${value.id}" class="dropdown-item">{{ __('Delete') }}</a>
-                                                            </div>
+                                    $.each( lessons , function(key, value) {
+                                        let row_lessons = `
+                                            <tr id="inst_lesson_${value.id}" class="topic_`+value.id+`">
+                                            <td>${value.title}</td>
+                                            <td id="inst_lesson_edit_`+value.id+`">-</td>
+                                                ${row1}
+                                                <td class="text-right">
+                                                    <div class="dropdown">
+                                                        <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            <i class="fas fa-ellipsis-v"></i>
+                                                        </a>
+                                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                                            <a href="javascript:void(0)" id="open_modal" data-topic-id="topic_${topic.id}"  data-lesson-id="lesson_${value.id}" class="dropdown-item open_modal">{{ __('Edit') }}</a>
+                                                        <a href="javascript:void(0)" id="remove_lesson" data-topic-id="topic_${topic.id}"  data-lesson-id="lesson_${value.id}" class="dropdown-item">{{ __('Delete') }}</a>
                                                         </div>
-                                                    </td>
-                                                </tr>
-                                            `
-                                            $('#topic_lessons_'+topic.id).append(row_lessons)
-                                        })
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        `
+                                        $('#topic_lessons_'+topic.id).append(row_lessons)
+                                    })
 
                                     let b = $('#inst_'+data.lesson.id).find('ul')
                                     let i = 0

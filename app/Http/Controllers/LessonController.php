@@ -145,6 +145,11 @@ class LessonController extends Controller
 
         $data['instructor'] = Instructor::find($request->instructor_id);
         $data['lesson_id'] = $request->lesson_id;
+        $data['date1'] = $date1;
+        $data['start'] = $start;
+        $data['end'] = $end;
+        $data['duration'] = $request->duration;
+        $data['room'] = $request->room;
 
         echo json_encode($data);
 
