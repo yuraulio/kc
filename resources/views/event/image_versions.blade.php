@@ -35,7 +35,8 @@
         let name = value.version
         const cropper = new Cropper(document.getElementById(`${value.version}`), {
             responsive: true,
-            movable: false,
+            movable: true,
+            dragMode:"move",
             zoomable: true,
 
             minCropBoxWidth: value.w,
