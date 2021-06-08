@@ -266,6 +266,8 @@
         ext = ext.replace(/\s/g, '')
         path = path +'/'+name+'.'+ext
 
+        alert(path)
+
         $('#image_upload').val(path)
 
         $('#img-upload').attr('src', path);

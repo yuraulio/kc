@@ -48,7 +48,7 @@
 
                                 <td id="inst_lesson_edit_{{$lesson['id']}}"><?php if(isset($instructors[$lesson->id]) && $instructors[$lesson->id]->first() != null)
                                 {
-                                    echo $instructors[$lesson->id]->first()['title'];
+                                    echo $instructors[$lesson->id]->first()['title'].' '.$instructors[$lesson->id]->first()['subtitle'];
                                 }else{
                                     echo '-';
                                 } ?></td>

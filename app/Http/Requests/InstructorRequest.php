@@ -24,12 +24,6 @@ class InstructorRequest extends FormRequest
     public function rules()
     {
         return [
-            'status' => [
-                'numeric'
-            ],
-            'comment_status' => [
-
-            ],
             'title' => [
                 'required', 'min:3'
             ],
@@ -37,7 +31,7 @@ class InstructorRequest extends FormRequest
 
             ],
             'subtitle' => [
-
+                'required', 'min:3'
             ],
             'header' => [
 

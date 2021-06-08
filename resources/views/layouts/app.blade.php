@@ -160,6 +160,7 @@
         <script src="{{ asset('argon') }}/vendor/dropzone/dist/min/dropzone.min.js"></script>
         <script src="{{ asset('vendor/file-manager/js/file-manager.js') }}"></script>
         <script src="{{ asset('argon') }}/vendor/cropper/dist/cropper.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cropper/1.0.1/jquery-cropper.min.js" integrity="sha512-V8cSoC5qfk40d43a+VhrTEPf8G9dfWlEJgvLSiq2T2BmgGRmZzB8dGe7XAABQrWj3sEfrR5xjYICTY4eJr76QQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 
 

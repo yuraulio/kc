@@ -16,6 +16,7 @@ use App\Model\CategoriesFaqs;
 use Illuminate\Http\Request;
 use App\Http\Requests\EventRequest;
 use Illuminate\Support\Facades\Auth;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class EventController extends Controller
 {
@@ -303,5 +304,27 @@ class EventController extends Controller
         $event->delete();
 
         return redirect()->route('events.index')->withStatus(__('Event successfully deleted.'));
+    }
+
+    public function crop_image(Request $request)
+    {
+        //dd($request->all());
+        $mediaKey = $request->path;
+        $pos = strrpos($mediaKey, '/');
+        $id = $pos === false ? $mediaKey : substr($mediaKey, $pos + 1);
+
+        $folders =substr($mediaKey, 0,strrpos($mediaKey, '/'));
+
+        $path = explode(".",$id);
+
+        $name = $path[0];
+        $ext = $path[1];
+
+
+
+        $image = Image::make(public_path($mediaKey));
+        $image->crop(intval($request->width),intval($request->height), intval($request->x), intval($request->y));
+        $image->save(public_path($folders.'/'.$path[0].'-'.$request->version.'.'.$path[1]), 50);
+
     }
 }

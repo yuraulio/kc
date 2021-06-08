@@ -40,20 +40,16 @@
                             <div class="pl-lg-4">
 
                                 <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-status">{{ __('Status') }}</label>
-                                    <select name="status" id="input-status" class="form-control" placeholder="{{ __('Status') }}" >
-                                            <option <?= ($instructor['status'] == 1) ? 'selected="selected"' : ''; ?> value="1">{{ __('Active') }}</option>
-                                            <option <?= ($instructor['status'] == 0) ? 'selected="selected"' : ''; ?> value="0">{{ __('Inactive') }}</option>
-                                    </select>
-
-                                    @include('alerts.feedback', ['field' => 'status'])
-                                </div>
-
-                                <div class="form-group{{ $errors->has('comment_status') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-comment_status">{{ __('Comment status') }}</label>
-                                    <input type="text" name="comment_status" id="input-comment_status" class="form-control{{ $errors->has('comment_status') ? ' is-invalid' : '' }}" placeholder="{{ __('Comment status') }}" value="{{ old('comment_status', $instructor->comment_status) }}" autofocus>
-
-                                    @include('alerts.feedback', ['field' => 'comment_status'])
+                                    <div class="status-label">
+                                        <label class="form-control-label" for="input-status">{{ __('Status') }}</label>
+                                    </div>
+                                    <div class="status-toogle">
+                                        <label class="custom-toggle">
+                                            <input type="checkbox" name="status" id="input-status" <?= ($instructor['status'] == 1) ? 'checked' : ''; ?>>
+                                            <span class="custom-toggle-slider rounded-circle"></span>
+                                        </label>
+                                        @include('alerts.feedback', ['field' => 'status'])
+                                    </div>
                                 </div>
 
                                 <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
