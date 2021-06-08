@@ -248,7 +248,7 @@ class EventController extends Controller
         $data['isInclassCourse'] = $event->is_inclass_course();
         $data['eventFaqs'] = $event->faqs->pluck('id')->toArray();
         //dd($data['topics']);
-
+        
         return view('event.edit', $data);
     }
 

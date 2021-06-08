@@ -34,16 +34,8 @@
         }
       }
    </script>
-   <?php
-      
-      $img = '';
-      /*if (!empty($event['featured']) && isset($event['featured'][0]) &&isset($event['featured'][0]['media']) && !empty($event['featured'][0]['media'])){
-        $img =  $frontHelp->pImg($event, 'header-image');
-      }*/
 
-
-      ?>
-   <section class="section-hero section-after-tabs-mob" style="background-image: url('{{$img}}');">
+   <section class="section-hero section-after-tabs-mob" style="background-image: url('{{cdn(get_image($event->mediable,'header-image'))}}');">
       <div class="overlay"></div>
       <div class="container">
          <div class="hero-message">
@@ -136,7 +128,7 @@
                                              }*/
                                              
                                              ?>
-                                          <a id="syllabus-link" href=""><img src="{{cdn(get_image($event->mediable))}}" alt="{{$alt}}"></a>
+                                          <a id="syllabus-link" href=""><img src="{{cdn(get_image(''))}}" alt="{{$alt}}"></a>
                                        </div>
                                        <div class="ibox-text">
                                           {{--<p>{{ $section_syllabus_manager->title }}<br/>{!! $section_syllabus_manager->body !!}</p>--}}
@@ -472,7 +464,7 @@
                                           @if($instructor['status'])
                                              <a href="{{ $instructor['slugable']['slug']}}">
                                              <span class="custom-tooltip">{{ $instructor['title'] }} {{$instructor['subtitle']}}</span>
-                                             <img alt="{{ $instructor['title']}} {{$instructor['subtitle']}}" src="{{ cdn(get_image($instructor['mediable'])) }}"/>
+                                             <img alt="{{ $instructor['title']}} {{$instructor['subtitle']}}" src="{{ cdn(get_image($instructor['mediable'],'instructors-small')) }}"/>
                                              </a>
                                           @else
                                              <a class="non-pointer" href="javascript:void(0)">
@@ -524,7 +516,7 @@
                                    
                                     <div class="profile-img">
                                       @if($inst['status']) 
-                                          <a href="{{$inst['slugable']['slug']}}"><img src="{{cdn(get_image($inst['mediable']))}}"  title="{{$inst['title']}}" alt="{{$inst['title']}}"></a>
+                                          <a href="{{$inst['slugable']['slug']}}"><img src="{{cdn(get_image($inst['mediable'],'instructors-testimonials'))}}"  title="{{$inst['title']}}" alt="{{$inst['title']}}"></a>
                                       @else
                                           <img src="{{cdn('$img')}}"  title="{{$inst['title']}}" alt="{{$inst['title']}}">
                                       @endif
@@ -631,7 +623,7 @@
                               <div class="testimonial-box">
                                  <div class="author-infos">
                                     <div class="author-img">
-                                       <img src="''" alt="{!! $row['name'] !!}">
+                                       <img src="{{ cdn(get_image($row['mediable'],'instructors-small')) }}" alt="{!! $row['name'] !!}">
                                     </div>
                                     <span class="author-name">
                                     {!! $row['name'] !!} {!! $row['lastname'] !!}</span>
@@ -782,6 +774,9 @@
       </div>
       <!-- /.section-course-tabs -->
    </section>
+   @if($estatus == 0 || $estatus == 2)
+      @include('theme.event.partials.seats')
+   @endif
 </main>
 @endsection
 @section('scripts')

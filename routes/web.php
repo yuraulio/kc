@@ -193,7 +193,6 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
 
 });
 
-
 Route::group(['middleware' => ['preview','web']], function () {
     Route::get('/', function(){
         return view('welcome');
@@ -202,5 +201,12 @@ Route::group(['middleware' => ['preview','web']], function () {
 
 });
 
+Route::group([ 'prefix' => '{id}' ], function() {
+    /*Route::post('/dpremove', [ 'as' => 'cart.remove-item', 'uses' => 'Theme\CartController@dpremove']);*/
+    Route::get('/{ticket}/{type}/add', [ 'as' => 'cart.add-item', 'uses' => 'Theme\CartController@add']);
+
+    //Route::get('move', [ 'as' => 'cart.move-item', 'uses' => 'Theme\CartController@move']);
+
+});
 
 

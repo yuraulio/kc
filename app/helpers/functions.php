@@ -140,9 +140,9 @@ if (!function_exists('cdnPath')){
 if (!function_exists('get_image')){
     function get_image($media, $version = null) {
         if(!$version){
-            return isset($media['original_name']) ? $media['original_name']  : '';
+            return isset($media['original_name']) ? $media['path'] . $media['original_name']  : '';
         }
 
-        return isset($media['name']) ? $media['path'] .  '/' . $media['name'] . '-' . $version . $media['ext'] : '';
+        return isset($media['name']) ? $media['path']  . $media['name'] . '-' . $version . $media['ext'] : '';
     }
 }

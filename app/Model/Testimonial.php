@@ -6,10 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Category;
 use App\Model\Instructor;
+use App\Traits\MediaTrait;
 
 class Testimonial extends Model
 {
     use HasFactory;
+    use MediaTrait;
+
     protected $table = 'testimonials';
 
     protected $fillable = [

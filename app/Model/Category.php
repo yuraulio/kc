@@ -90,7 +90,7 @@ class Category extends Model
 
     public function testimonials()
     {
-        return $this->morphToMany(Testimonial::class, 'testimoniable');
+        return $this->morphToMany(Testimonial::class, 'testimoniable')->with('mediable');
     }
 
     /**

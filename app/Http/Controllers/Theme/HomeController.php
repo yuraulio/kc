@@ -35,6 +35,7 @@ class HomeController extends Controller
         $data['sections'] = $event->sections->groupBy('section');
         $data['faqs'] = $event->getFaqs();
         $data['testimonials'] = isset($event->category->toArray()[0]) ? $event->category->toArray()[0]['testimonials'] : [];
+        $data['tickets'] = $event->ticket->toArray();
 
         return view('theme.event.' . $event->view_tpl,$data);
 
