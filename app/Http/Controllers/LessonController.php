@@ -126,11 +126,15 @@ class LessonController extends Controller
 
         if($request->start != null){
             $start = date('Y-m-d H:i:s', strtotime($date1." ".$request->start));
+            $start_response = date('H:i:s a', strtotime($date1." ".$request->start));
         }
 
         if($request->end != null){
             $end = date('Y-m-d H:i:s', strtotime($date1." ".$request->end));
+            $end_response = date('H:i:s a', strtotime($date1." ".$request->end));
         }
+
+
 
 
         $topic->event_topic()->wherePivot('lesson_id', '=', $request->lesson_id)->wherePivot('event_id', '=', $request->event_id)->updateExistingPivot($request->topic_id,[
@@ -143,11 +147,13 @@ class LessonController extends Controller
             'time_ends' => $end
         ], false);
 
+        //dd(date_format($start,"H:i:sa"));
+
         $data['instructor'] = Instructor::find($request->instructor_id);
         $data['lesson_id'] = $request->lesson_id;
         $data['date1'] = $date1;
-        $data['start'] = $start;
-        $data['end'] = $end;
+        $data['start'] = $start_response;
+        $data['end'] = $end_response;
         $data['duration'] = $request->duration;
         $data['room'] = $request->room;
 

@@ -47,7 +47,8 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col">{{ __('Status') }}</th>
-                                    <th scope="col">{{ __('Title') }}</th>
+                                    <th scope="col">{{ __('Firstname') }}</th>
+                                    <th scope="col">{{ __('Laststname') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
                                     <th scope="col"></th>
                                 </tr>
@@ -57,6 +58,7 @@
                                     <tr>
                                         <td><?= ($instructor->status == 0) ? 'Inactive' : 'Active';  ?></td>
                                         <td>{{ $instructor->title }}</td>
+                                        <td>{{ $instructor->subtitle }}</td>
                                         <td>{{ date_format($instructor->created_at, 'Y-m-d' ) }}</td>
 
                                         <td class="text-right">

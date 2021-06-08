@@ -264,7 +264,14 @@ class EventController extends Controller
         $request->request->add(['release_date_files' => date('Y-m-d H:i:s', strtotime($request->release_date_files))]);
 
 
-        $event->update($request->all());
+        $ev = $event->update($request->all());
+
+        //dd($request->image_upload_edit);
+
+        if($ev){
+            $event->updateMedia($request->image_upload_edit);
+        }
+
         $event->category()->sync([$request->category_id]);
 
         if($request->type_id != null){

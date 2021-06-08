@@ -287,8 +287,10 @@
                                                         </button>
                                                                     <?php //dd($event->medias); ?>
                                                         <div class="form-group">
-                                                            <img src="{{$event->medias['path']}}.{{$event->medias['original_name']}}" id='img-upload'/>
+                                                            <img id="img-upload1" src="{{$event->medias['path']}}{{$event->medias['original_name']}}">
                                                         </div>
+
+                                                        <input type="hidden" value="" id="image_upload_edit" name="image_upload_edit">
 
                                                         <!-- Modal -->
                                                         <div class="modal fade" id="select_ImageModal" tabindex="-1" role="dialog" aria-labelledby="select_ImageModalLabel" aria-hidden="true">
@@ -411,8 +413,12 @@
 @push('js')
 
 <script>
+
+</script>
+
+<script>
     $( "#select-image" ).click(function() {
-        path = 'public/'
+        path = ''
         $.each( $('.fm-breadcrumb li'), function(key, value) {
             if(key != 0){
                 path = path+'/'+$(value).text()
@@ -420,7 +426,13 @@
         })
 
         name = $('.table-info .fm-content-item').text()
-        path = path+'/'+name
+        name = name.replace(/\s/g, '')
+        ext = $('.table-info td:nth-child(3)').text()
+        ext = ext.replace(/\s/g, '')
+        path = path +'/'+name+'.'+ext
+        //console.log(path)
+        $('#image_upload_edit').val(path)
+        $('#img-upload1').attr('src', path);
         $(".close").click();
     });
 
@@ -492,8 +504,8 @@
 
                     $('#inst_lesson_edit_'+data.lesson_id).text(data.instructor.title)
                     $('#date_lesson_edit_'+data.lesson_id).text(data.date1)
-                    $('#start_lesson_edit_'+data.lesson_id).text(data.start)
-                    $('#end_lesson_edit_'+data.lesson_id).text(data.end)
+                    $('#start_lesson_edit_'+data.lesson_id).text(tConvert(data.start))
+                    $('#end_lesson_edit_'+data.lesson_id).text(tConvert(data.end))
                     $('#duration_lesson_edit_'+data.lesson_id).text(data.duration)
                     $('#room_lesson_edit_'+data.lesson_id).text(data.room)
 
@@ -579,6 +591,18 @@
             });
         });
 
+        function tConvert (time) {
+            // Check correct time format and split into components
+            time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+
+            if (time.length > 1) { // If time format correct
+                time = time.slice (1);  // Remove full string match value
+                time[5] = +time[0] < 12 ? 'AM' : 'PM'; // Set AM/PM
+                time[0] = +time[0] % 12 || 12; // Adjust hours
+            }
+            return time.join (''); // return adjusted time or original string
+            }
+
         $(document).on('click','#open_modal',function(){
             $('#lesson_details').empty()
             let id = 0
@@ -611,7 +635,7 @@
 
                     lesson = data.lesson[0].pivot
 
-                   console.log(lesson)
+                   //console.log(lesson)
 
                     if(lesson.instructor_id == null){
 
@@ -632,8 +656,8 @@
                     $('#lesson_details').append(inst_row)
 
                     $.each( instructors, function( key, value ) {
-                        console.log(key+':'+value.title)
-                        $('#instFormControlSelect').append(`<option ${lesson.instructor_id == value.id ? 'selected' : ''} value="${value.id}">${value.title}</option>`)
+                        //console.log(key+':'+value.title)
+                        $('#instFormControlSelect').append(`<option ${lesson.instructor_id == value.id ? 'selected' : ''} value="${value.id}">${value.title} ${value.subtitle}</option>`)
                     });
 
                     if(lesson.date != null){
@@ -691,7 +715,7 @@
 
                         $('#lesson_details').append(row)
                         var datePickerOptions = {
-                            dateFormat: 'yy/m/d',
+                            dateFormat: 'd/m/yy',
                             firstDay: 1,
                             changeMonth: true,
                             changeYear: true,

@@ -132,13 +132,7 @@
                                         <th>{{ __('Duration') }}</th>
                                         <th>{{ __('Room') }}</th>
                                         `
-                                        row1 = `
-                                        <td id="date_lesson_edit_${topic.id}"></td>
-                                        <td id="start_lesson_edit_${topic.id}"></td>
-                                        <td id="ends_lesson_edit_${topic.id}"></td>
-                                        <td id="duration_lesson_edit_${topic.id}"></td>
-                                        <td id="room_lesson_edit_${topic.id}"></td>
-                                        `
+
                                     }
                                     row_accor = `
                                     <div class="card" id="topic_card_${topic.id}">
@@ -175,7 +169,11 @@
                                             <tr id="inst_lesson_${value.id}" class="topic_`+value.id+`">
                                             <td>${value.title}</td>
                                             <td id="inst_lesson_edit_`+value.id+`">-</td>
-                                                ${row1}
+                                            <td id="date_lesson_edit_${value.id}"></td>
+                                        <td id="start_lesson_edit_${value.id}"></td>
+                                        <td id="end_lesson_edit_${value.id}"></td>
+                                        <td id="duration_lesson_edit_${value.id}"></td>
+                                        <td id="room_lesson_edit_${value.id}"></td>
                                                 <td class="text-right">
                                                     <div class="dropdown">
                                                         <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
