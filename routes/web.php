@@ -47,7 +47,7 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
     Route::resource('exams', 'ExamController', ['except' => ['show']]);
     Route::resource('delivery', 'DeliveryController', ['except' => ['show']]);
     Route::resource('menu', 'MenuController', ['except' => ['show']]);
-   
+
     //Menu item
     Route::get('menu/add_item', ['as' => 'menu.add_item', 'uses' => 'MenuController@add_item']);
     Route::post('menu/fetchAllMenu', ['as' => 'menu.fetchAllMenu', 'uses' => 'MenuController@fetchAllMenu']);
@@ -145,6 +145,8 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
 
     //Route::post('lesson/destroy_from_topic1', ['as' => 'lesson.destroy_from_topic1', 'uses' => 'LessonController@destroy_from_topic1']);
 
+
+    Route::post('events/crop_image', ['as' => 'events.crop_image', 'uses' => 'EventController@crop_image']);
 
 
 

@@ -7,21 +7,17 @@
             ?>
             <?php //dd(get_image_versions()); ?>
             @foreach(get_image_versions() as $version)
-            <div style="text-align:center;" class="col-12 img_version">
-                <img class="img-fluid" id="image1" src="{{$event->medias['path']}}{{$event->medias['original_name']}}" alt="">
+            <div class="col-12 img_version">
+                <img class="img-fluid" id="{{$version['version']}}" data-version="{{$version['version']}}" src="<?php if(isset($event->medias)) {
+                                                                echo $event->medias['path'].$event->medias['original_name'];
+                                                            }else{
+                                                                echo '';
+                                                            }?>" alt="">
             </div>
-
-            <button class="btn btn-primary" id="crop" type="button">Crop</button>
+            <button class="btn btn-primary crop" data-version="{{$version['version']}}" type="button">Crop</button>
 
             @endforeach
         </div>
-
-
-                <!-- <img style="max-width:100%;" id="image" src="/argon/img/theme/angular.jpg"> -->
-
-
-
-
    </div>
 
 </div>
@@ -30,47 +26,67 @@
 
 <script>
 
-    // As a Vanilla JS plugin
-const cropper = new Cropper(document.getElementById('image1'), {
-    responsive: true,
-	movable: false,
-    zoomable: false,
-    minCanvasWidth: 700,
+    var versions = @json(get_image_versions());
+    console.log(versions)
+    let myObj = {};
+    let myArr = []
 
-	minCanvasHeight: 500,
+    $.each(versions, function(key, value){
+        let name = value.version
+        const cropper = new Cropper(document.getElementById(`${value.version}`), {
+            responsive: true,
+            movable: false,
+            zoomable: true,
 
-	minCropBoxWidth: 470,
+            minCropBoxWidth: value.w,
 
-	minCropBoxHeight: 470,
+            minCropBoxHeight: value.h,
 
-	minContainerWidth: 700,
+            minContainerWidth: 650,
 
-	minContainerHeight: 500,
-    crop(event) {
-        console.log(event.detail.x);
-        console.log(event.detail.y);
-        console.log(event.detail.width);
-        console.log(event.detail.height);
-        console.log(event.detail.rotate);
-        console.log(event.detail.scaleX);
-        console.log(event.detail.scaleY);
-
-        $("#crop").click(function(){
-            canvas = cropper.getCroppedCanvas({
-                width: event.detail.width,
-                height: event.detail.height,
-            });
-
-            console.log(canvas)
+            minContainerHeight: 400,
+            cropBoxResizable: false,
+            data:{
+                    width: parseFloat(value.w),
+                    height: parseFloat(value.h),
+                },
+            crop(event) {
+                // console.log(event.detail.x);
+                // console.log(event.detail.y);
+                // console.log(event.detail.width);
+                // console.log(event.detail.height);
+            },
         });
-    },
+        console.log('float'+parseFloat(value.w))
+        versions[key]['insta'] = cropper;
+    })
 
-});
+    $(".crop").click(function(){
+        let path = $(this).parent().find('img').attr('src')
+        //console.log('path is :'+path)
+        let version = $(this).data('version')
+        //console.log('version is :'+version)
 
 
+        $.each(versions, function(key,value){
+            if(value.version == version){
+                cropper = value.insta
+            }
+        })
 
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: 'post',
+            url: '/admin/events/crop_image',
+            data: {'version':version ,'path':path, 'x':cropper.getData().x, 'y':cropper.getData().y, 'width':cropper.getData().width, 'height':cropper.getData().height},
+            success: function (data) {
+                //console.log(data)
+            }
+        });
 
-
+    });
 
 </script>
 

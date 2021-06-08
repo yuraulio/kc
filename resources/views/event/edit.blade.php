@@ -287,7 +287,12 @@
                                                         </button>
                                                                     <?php //dd($event->medias); ?>
                                                         <div class="form-group">
-                                                            <img id="img-upload1" src="{{$event->medias['path']}}{{$event->medias['original_name']}}">
+                                                            <img id="img-upload_edit" src="
+                                                            <?php if(isset($event->medias)) {
+                                                                echo $event->medias['path'].$event->medias['original_name'];
+                                                            }else{
+                                                                echo '';
+                                                            }?>">
                                                         </div>
 
                                                         <input type="hidden" value="" id="image_upload_edit" name="image_upload_edit">
@@ -430,9 +435,9 @@
         ext = $('.table-info td:nth-child(3)').text()
         ext = ext.replace(/\s/g, '')
         path = path +'/'+name+'.'+ext
-        //console.log(path)
+        console.log(path)
         $('#image_upload_edit').val(path)
-        $('#img-upload1').attr('src', path);
+        $('#img-upload_edit').attr('src', path);
         $(".close").click();
     });
 
@@ -667,9 +672,21 @@
 
                     if(lesson.time_starts != null)
                     {
+                        console.log(lesson.time_starts)
                         d = new Date(lesson.time_starts)
+                        console.log(d.getTime())
+                        time_starts = d.getTime()
+                        console.log(new Date(time_starts).toLocaleTimeString());
+                        time_starts = new Date(time_starts).toLocaleTimeString()
+                        var rest = time_starts.substring(0, time_starts.lastIndexOf(":") + 1);
+                        var rest = rest.substring(0, rest.lastIndexOf(":") + 1);
+                        console.log(rest)
+                        // time_starts = convertTimestamptoTime(time_starts)
+                        // alert(time_starts)
+                        //console.log(d.toLocaleTimeString())
 
-                        time_starts = convertTimestamptoTime(d.getTime())
+                        //time_starts = convertTimestamptoTime(d.getTime())
+
                     }
 
                     if(lesson.time_ends != null)

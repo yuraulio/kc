@@ -47,6 +47,15 @@ class InstructorController extends Controller
      */
     public function store(InstructorRequest $request, Instructor $model)
     {
+        if($request->status == 'on')
+        {
+            $status = 1;
+        }else
+        {
+            $status = 0;
+        }
+
+        $request->request->add(['status' => $status]);
         $model->create($request->all());
         return redirect()->route('instructors.index')->withStatus(__('Instructor successfully created.'));
     }
@@ -82,6 +91,15 @@ class InstructorController extends Controller
      */
     public function update(Request $request, Instructor $instructor)
     {
+        if($request->status == 'on')
+        {
+            $status = 1;
+        }else
+        {
+            $status = 0;
+        }
+
+        $request->request->add(['status' => $status]);
         $instructor->update($request->all());
 
 
