@@ -103,12 +103,6 @@
         <?php //dd($topic);
         //$topic = $topic->first() ?>
         <?php $status=""; ?>
-        @foreach($event['topic'] as $topic_db)
-            @if($topic['id'] == $topic_db->id)
-                <?php $status="active"; ?>
-                <?php //dd($topic); ?>
-            @endif
-        @endforeach
     <div class="card">
         <div class="row">
             <div class="card-header col-10" id="{{$key}}" data-toggle="collapse" data-target="#col_{{$key}}" aria-expanded="true" aria-controls="collapseOne">
@@ -117,7 +111,7 @@
 
             <div class="col-2 assign-toggle" id="toggle_{{$key}}">
                 <label class="custom-toggle">
-                    <input class="<?= ($status == 'active') ? 'active' : ''; ?>" id="assign-toogle" type="checkbox" data-event-id="{{$event['id']}}" data-topic-id="{{$topic['id']}}" <?= ($status == 'active') ? 'checked' : ''; ?> >
+                    <input class="" id="assign-toogle" type="checkbox" data-event-id="{{$event['id']}}" data-topic-id="{{$topic['id']}}" <?= ($status == 'active') ? 'checked' : ''; ?> >
                     <span class="custom-toggle-slider rounded-circle" ></span>
                 </label>
             </div>
@@ -147,7 +141,7 @@
                         </thead>
                         <tbody id="topic_lessons" data-event-id="{{$event['id']}}">
                             <?php $i=0; ?>
-                                @foreach($lessons[$key] as $key1 => $lesson)
+                                @foreach($topic->lessons as $key1 => $lesson)
                                 <?php //dd($lesson);?>
                                 <tr id="{{$lesson['id']}}" class="topic_{{$topic->id}}">
                                 <td>{{ $lesson->title }}</td>
