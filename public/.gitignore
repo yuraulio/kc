@@ -1,4 +1,6 @@
 /profile_user
+uploads
+/*.jpg
 !pictures
 !.gitignore
 !pictures/img1.jpg
