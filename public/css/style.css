@@ -66,11 +66,16 @@
 }
 
 .img_version {
-    text-align: center;
     margin: 30px auto;
+    margin-top: 30px;
 }
 
-#img-upload1, #img-upload_edit {
+.img_version button {
+    margin-top: 20px;
+}
+
+
+#img-upload, #img-upload1 {
     width: 100%;
     height: 50vh;
     object-fit: cover;
@@ -84,6 +89,25 @@
     display: inline-block;
     margin-left: 40px;
     vertical-align: middle;
+}
+
+.crop-msg {
+    display: none;
+    padding: 20px;
+    color:#6bad07;
+}
+
+.form_event_btn {
+    text-align: right;
+}
+
+.save_event_btn, .preview_event_btn {
+    display: inline-block;
+}
+
+.assign-toggle {
+    text-align: center;
+    margin: auto;
 }
 
 

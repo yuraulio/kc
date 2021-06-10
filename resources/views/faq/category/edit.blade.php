@@ -49,7 +49,7 @@
 
                                 <div class="form-group{{ $errors->has('description') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-description">{{ __('Description') }}</label>
-                                    <input type="text" name="description" id="input-description" class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}" value="{{ old('description', $category->description) }}" autofocus>
+                                    <textarea type="text" name="description" id="input-description" class="ckeditor form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}">{{ old('description', $category->description) }}</textarea>
 
                                     @include('alerts.feedback', ['field' => 'description'])
                                 </div>

@@ -88,19 +88,47 @@ class EventController extends Controller
         echo json_encode($topics);
     }
 
+    // public function assign_store(Request $request)
+    // {
+
+    //     $event = Event::with('delivery')->find($request->event_id);
+    //     $data['isInclassCourse'] = $event->is_inclass_course();
+
+
+    //     $allLessons = Topic::with('lessons')->find($request->topic_id);
+
+    //     foreach($allLessons->lessons as $lesson)
+    //     {
+    //         $find = $event->topic()->wherePivot('event_id', '=', $request->event_id)->wherePivot('topic_id', '=', $request->topic_id)->wherePivot('lesson_id', '=', $lesson['id'])->get();
+    //         //dd($find);
+    //         if(count($find) == 0 && $request->status1 == true)
+    //         {
+    //             $event->topic()->attach($request->topic_id,['lesson_id' => $lesson['id']]);
+    //         }else{
+    //             $topicLesson_for_detach = $event->topic()->detach($request->topic_id);
+    //             break;
+    //         }
+
+    //     }
+
+    //     $data['request'] = $request->all();
+    //     $data['lesson'] = $allLessons;
+    //     $data['event'] = $event;
+    //     $data['isInclassCourse'] = $event->is_inclass_course();
+
+    //     echo json_encode($data);
+    // }
+
     public function assign_store(Request $request)
     {
-
-        $event = Event::with('delivery')->find($request->event_id);
-        $data['isInclassCourse'] = $event->is_inclass_course();
-
-
+        $event = Event::find($request->event_id);
         $allLessons = Topic::with('lessons')->find($request->topic_id);
+
+        //dd($allLessons);
 
         foreach($allLessons->lessons as $lesson)
         {
             $find = $event->topic()->wherePivot('event_id', '=', $request->event_id)->wherePivot('topic_id', '=', $request->topic_id)->wherePivot('lesson_id', '=', $lesson['id'])->get();
-            //dd($find);
             if(count($find) == 0 && $request->status1 == true)
             {
                 $event->topic()->attach($request->topic_id,['lesson_id' => $lesson['id']]);
@@ -114,7 +142,6 @@ class EventController extends Controller
         $data['request'] = $request->all();
         $data['lesson'] = $allLessons;
         $data['event'] = $event;
-        $data['isInclassCourse'] = $event->is_inclass_course();
 
         echo json_encode($data);
     }
@@ -154,11 +181,18 @@ class EventController extends Controller
      */
     public function store(EventRequest $request, Event $model)
     {
+        if($request->published == 'on')
+        {
+            $published = 1;
+        }else
+        {
+            $published = 0;
+        }
 
-        $request->request->add(['release_date_files' => date('Y-m-d H:i:s', strtotime($request->release_date_files))]);
+        $request->request->add(['published' => $published,'release_date_files' => date('Y-m-d H:i:s', strtotime($request->release_date_files))]);
         $event = $model->create($request->all());
 
-        if($event){
+        if($event && $request->image_upload){
             $event->createMedia($request->image_upload);
         }
         //dd($request->all());
@@ -167,9 +201,21 @@ class EventController extends Controller
         $event->createMetas($request->all());
 
         if($request->category_id != null){
-            $category = Category::find($request->category_id);
+            $category = Category::with('topics')->find($request->category_id);
 
             $event->category()->attach([$category->id]);
+
+            //assign all topics with lesson
+
+            foreach($category->topics as $topic){
+                $lessons = Topic::with('lessons')->find($topic['id']);
+                $lessons = $lessons->lessons;
+
+                foreach($lessons as $lesson){
+                    $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id']]);
+                }
+            }
+
         }
 
 
@@ -181,6 +227,9 @@ class EventController extends Controller
             $event->delivery()->attach($request->delivery);
 
         }
+
+
+
 
         return redirect()->route('events.edit',$event->id)->withStatus(__('Event successfully created.'));
         //return redirect()->route('events.index')->withStatus(__('Event successfully created.'));
@@ -225,12 +274,34 @@ class EventController extends Controller
             $allTopicsByCategory = Category::with('topics')->first();
         }
 
+
+
         $allTopicsByCategory1 = $event['lessons']->unique()->groupBy('topic_id');
+        //dd($allTopicsByCategory1);
         $instructors = $event['instructors']->groupBy('lesson_id');
         //dd($instructors);
         $topics = $event['topic']->unique()->groupBy('topic_id');
+
+        $unassigned = [];
+
+        foreach($allTopicsByCategory->topics as $key => $allTopics){
+
+            $found = false;
+            foreach($allTopicsByCategory1 as $key1 => $assig){
+                //dd($assig);
+                if($allTopics['id'] == $key1){
+                    $found = true;
+                }
+            }
+            if(!$found){
+                $unassigned[$allTopics['id']] = $allTopics;
+                $unassigned[$allTopics['id']]['lessons'] = Topic::with('lessons')->find($allTopics['id'])->lessons;
+            }
+        }
+        //dd($unassigned);
        // dd($event['topic']->groupBy('id'));
         //dd($allTopicsByCategory);
+        $data['unassigned'] = $unassigned;
         $data['event'] = $event;
         //dd($event);
         $data['categories'] = $categories;
@@ -249,7 +320,7 @@ class EventController extends Controller
         $data['isInclassCourse'] = $event->is_inclass_course();
         $data['eventFaqs'] = $event->faqs->pluck('id')->toArray();
         //dd($data['topics']);
-        
+
         return view('event.edit', $data);
     }
 
@@ -262,15 +333,20 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
-        $request->request->add(['release_date_files' => date('Y-m-d H:i:s', strtotime($request->release_date_files))]);
+        if($request->published == 'on')
+        {
+            $published = 1;
+        }else
+        {
+            $published = 0;
+        }
 
-
+        //dd($request->all());
+        $request->request->add(['published' => $published,'release_date_files' => date('Y-m-d H:i:s', strtotime($request->release_date_files))]);
         $ev = $event->update($request->all());
 
-        //dd($request->image_upload_edit);
-
         if($ev){
-            $event->updateMedia($request->image_upload_edit);
+            $event->updateMedia($request->image_upload);
         }
 
         $event->category()->sync([$request->category_id]);
@@ -304,27 +380,5 @@ class EventController extends Controller
         $event->delete();
 
         return redirect()->route('events.index')->withStatus(__('Event successfully deleted.'));
-    }
-
-    public function crop_image(Request $request)
-    {
-        //dd($request->all());
-        $mediaKey = $request->path;
-        $pos = strrpos($mediaKey, '/');
-        $id = $pos === false ? $mediaKey : substr($mediaKey, $pos + 1);
-
-        $folders =substr($mediaKey, 0,strrpos($mediaKey, '/'));
-
-        $path = explode(".",$id);
-
-        $name = $path[0];
-        $ext = $path[1];
-
-
-
-        $image = Image::make(public_path($mediaKey));
-        $image->crop(intval($request->width),intval($request->height), intval($request->x), intval($request->y));
-        $image->save(public_path($folders.'/'.$path[0].'-'.$request->version.'.'.$path[1]), 50);
-
     }
 }

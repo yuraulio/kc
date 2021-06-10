@@ -79,6 +79,15 @@ class TopicController extends Controller
      */
     public function store(TopicRequest $request, Topic $model)
     {
+        if($request->status == 'on')
+        {
+            $status = 1;
+        }else
+        {
+            $status = 0;
+        }
+        $request->request->add(['status' => $status]);
+
         $topic = $model->create($request->all());
 
         if($request->category_id != null){
@@ -144,15 +153,18 @@ class TopicController extends Controller
      */
     public function update(TopicRequest $request, Topic $topic)
     {
+        if($request->status == 'on')
+        {
+            $status = 1;
+        }else
+        {
+            $status = 0;
+        }
+
+        $request->request->add(['status' => $status]);
+
         $topic->update($request->all());
         $topic->category()->sync($request->category_id);
-
-            // $category = Category::find($request->category_id);
-
-            // $category->topic()->sync([$category[]])
-
-            ///$topic->category()->sync([$category['id']]);
-
 
         return redirect()->route('topics.index')->withStatus(__('Topic successfully updated.'));
     }

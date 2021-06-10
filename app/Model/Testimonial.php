@@ -5,6 +5,7 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Category;
+use App\Model\Media;
 use App\Model\Instructor;
 use App\Traits\MediaTrait;
 
@@ -28,6 +29,11 @@ class Testimonial extends Model
     public function instructors()
     {
         return $this->morphedByMany(Instructor::class, 'testimoniable');
+    }
+
+    public function medias()
+    {
+        return $this->morphOne(Media::class, 'mediable');
     }
 
 }

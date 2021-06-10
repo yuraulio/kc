@@ -26,9 +26,6 @@ class TopicRequest extends FormRequest
     public function rules()
     {
         return [
-            'status' => [
-                'numeric'
-            ],
             'comment_status' => [
 
             ],

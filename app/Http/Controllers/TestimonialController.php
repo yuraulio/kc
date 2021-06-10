@@ -58,6 +58,10 @@ class TestimonialController extends Controller
 
         $testimonial = $model->create($request->all());
 
+        if($testimonial){
+            $testimonial->createMedia($request->image_upload);
+        }
+
         if($request->instructor_id != null){
             $instructor = Instructor::find($request->instructor_id);
             $instructor->testimonials()->attach($testimonial->id);
@@ -92,7 +96,7 @@ class TestimonialController extends Controller
     public function edit(Testimonial $testimonial)
     {
         $categories = Category::all();
-        $testimonial = $testimonial->with('category', 'instructors')->find($testimonial['id']);
+        $testimonial = $testimonial->with('category', 'instructors', 'medias')->find($testimonial['id']);
         $instructors = Instructor::with('testimonials')->get();
 
 
@@ -119,7 +123,11 @@ class TestimonialController extends Controller
         $video = json_encode($video);
 
         $request->request->add(['social_url' => $social, 'video_url' => $video]);
-        $testimonial->update($request->all());
+        $isUpdate = $testimonial->update($request->all());
+
+        if($isUpdate){
+            $testimonial->updateMedia($request->image_upload);
+        }
 
         if($request->instructor_id != null){
             $testimonial->instructors()->detach();

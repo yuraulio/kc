@@ -121,6 +121,8 @@
                                     @include('alerts.feedback', ['field' => 'youtube'])
                                 </div>
 
+                                @include('admin.upload.upload', ['event' => ( isset($testimonial) && $testimonial->medias['path'] != null) ? $event : null])
+
 
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>

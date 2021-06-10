@@ -14,8 +14,6 @@
       <thead class="thead-light">
          <tr>
             <th scope="col">{{ __('Name') }}</th>
-            <th scope="col">{{ __('Description') }}</th>
-            <th scope="col">{{ __('Priority') }}</th>
             <th scope="col">{{ __('Created at') }}</th>
             <th scope="col"></th>
          </tr>
@@ -26,8 +24,6 @@
          @foreach ($model->benefits as $benefit)
          <tr>
             <td id="name-{{$benefit->id}}">{{ $benefit->name }}</td>
-            <td id="desc-{{$benefit->id}}">{{ $benefit->description }}</td>
-            <td>{{ $benefit->priority }}</td>
             <td>{{ date_format($benefit->created_at, 'd-m-Y' ) }}</td>
             <td class="text-right">
                <div class="dropdown">
@@ -66,7 +62,7 @@
                </div>
                <div class="form-group{{ $errors->has('description') ? ' has-danger' : '' }}">
                   <label class="form-control-label" for="input-description">{{ __('Description') }}</label>
-                  <input type="text" name="description" id="input-description" class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}" value="{{ old('description') }}" autofocus>
+                  <textarea name="description" id="input-description" class="ckeditor form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}"></textarea>
                   @include('alerts.feedback', ['field' => 'description'])
                </div>
             </form>
@@ -99,7 +95,7 @@
                </div>
                <div class="form-group{{ $errors->has('description') ? ' has-danger' : '' }}">
                   <label class="form-control-label" for="edit-description">{{ __('Description') }}</label>
-                  <input type="text" name="description" id="edit-description1" class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}" value="{{ old('description') }}" autofocus>
+                  <textarea name="description" id="edit-description1" class="ckeditor form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}">{{ old('description') }}</textarea>
                   @include('alerts.feedback', ['field' => 'description'])
                </div>
                <input type="text" id="benefit-id"  value="" hidden>
@@ -126,15 +122,13 @@
            },
    	    type: 'post',
    	    url: '{{route("benefit.store")}}',
-            data: {'name':$('#input-name').val(),'description':$('#input-description').val(),'model_type':modelType,'model_id':modelId},
+            data: {'name':$('#input-name').val(),'description':CKEDITOR.instances['input-description'].getData(),'model_type':modelType,'model_id':modelId},
    	    success: function (data) {
    	//console.log(data);
    	let benefit = data.benefit;
    	let newBenefit =
    	`<tr>` +
    	`<td id="name-` + benefit['id'] +`">` + benefit['name'] + `</td>` +
-   	`<td id="desc-` + benefit['id'] +`">` + benefit['description'] + `</td>` +
-   	`<td>` + benefit['priority'] + `</td>` +
    	`<td>` + benefit['created_at'] + `</td>` +
 
       `<td class="text-right">
@@ -177,13 +171,13 @@
            },
    	    type: 'put',
    	    url: '/admin/benefit/' + $benefitId,
-            data: {'name':$('#edit-name').val(),'description':$('#edit-description1').val()},
+            data: {'name':$('#edit-name').val(),'description':CKEDITOR.instances['edit-description1'].getData()},
    	    success: function (data) {
 
    	let benefit = data.benefit;
 
    	$("#name-"+benefit['id']).html(benefit['name'])
-   	$("#desc-"+benefit['id']).html(benefit['description'])
+       $("#name-"+benefit['id']).parent().find('.dropdown-item').attr('data-description', benefit['description'])
        $('#benefit-form-edit').trigger('reset');
    	$(".close-modal").click();
 
@@ -204,19 +198,20 @@
    $(document).on('shown.bs.modal', '#editModal',function(e) {
        //e.preventDefault()
 
+
    	var link  = e.relatedTarget,
         	modal    = $(this),
          id = e.relatedTarget.dataset.id
          //name = e.relatedTarget.dataset.name,
          //description =e.relatedTarget.dataset.description;
          name = $("#name-"+id).text(),
-         description = $("#desc-"+id).text();
 
          modal.find("#benefitModalLabel").val(name)
+         description = e.relatedTarget.dataset.description
 
       modal.find("#edit-name").val(name);
-      modal.find("#edit-description1").val(description);
-   	modal.find("#benefit-id").val(id)
+      CKEDITOR.instances['edit-description1'].setData(description)
+   	    modal.find("#benefit-id").val(id)
 
    });
 
