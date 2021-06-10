@@ -42,7 +42,7 @@
 @push('js')
 
 <script>
-    if($event){
+    if("{{$event}}"){
         image_details = @json($event)
     }else{
         image_details = null;

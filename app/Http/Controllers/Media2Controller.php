@@ -15,12 +15,12 @@ class Media2Controller extends Controller
 
     public function crop_image(Request $request)
     {
+        
         $mediaKey = $request->path;
         $pos = strrpos($mediaKey, '/');
         $id = $pos === false ? $mediaKey : substr($mediaKey, $pos + 1);
 
         $folders = substr($mediaKey, 0,strrpos($mediaKey, '/'));
-
         $path = explode(".",$id);
 
         $name = $path[0];
