@@ -6,11 +6,11 @@
                 {{ __('This is an example of Faq management.') }}
             </p>
     </div>
-    @can('create', App\Model\User::class)
-        <div class="col-4 text-right">
+   
+        {{--<div class="col-4 text-right">
         <button data-toggle="modal" data-target="#faqModal" class="btn btn-sm btn-primary">{{ __('Assign Faqs') }}</button>
-        </div>
-    @endcan
+        </div>--}}
+
 </div>
 
 <div class="col-12 mt-2">
@@ -30,7 +30,7 @@
         </thead>
         <tbody id="faq-body">
         @if($event->category->first())
-      
+    
             @foreach ($event->category->first()->faqs as $faq)
                 <tr id="faq-{{$faq->id}}">
                     <td>{{ $faq->title }}</td>
@@ -53,7 +53,7 @@
     </table>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="faqModal" tabindex="-1" role="dialog" aria-labelledby="faqModalLabel" aria-hidden="true">
+{{--<div class="modal fade" id="faqModal" tabindex="-1" role="dialog" aria-labelledby="faqModalLabel" aria-hidden="true">
    <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
          <div class="modal-header">
@@ -83,7 +83,7 @@
          </div>
       </div>
    </div>
-</div>
+</div>--}}
 @push('js')
     <script>
         $(document).on('shown.bs.modal', '#faqModal',function(e) {

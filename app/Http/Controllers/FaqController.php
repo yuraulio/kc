@@ -94,6 +94,9 @@ class FaqController extends Controller
 
     public function store_event(Request $request)
     {
+
+        ///dd($request->all());
+
         $model = app($request->model_type);
         $model = $model::find($request->model_id);
 
@@ -102,18 +105,34 @@ class FaqController extends Controller
         //$faqs = $model->category->first()->faqs;
 
         $category = Category::find($model->category->first()->id);  
-        
-       //$model->faqs()->detach();
+        $category->faqs()->detach($faqs);
+        $category->faqs()->attach($faqs);
+        //dd($category->faqs);
+        //$model->faqs()->detach();
         foreach($faqs->faqs as $key => $faq){
-            $faq->categoryEvent()->detach($category);
-            $faq->categoryEvent()->attach($category);
-            if($faq->category->first() && $faq->category->first()->id == $request->faqs_id){
+            //$faq->categoryEvent()->detach($category);
+            //$faq->categoryEvent()->attach($category);
+            //dd($faq->categoryEvent);
+            //dd($faq->category);
+            
+            foreach($faq->categoryEvent as $categoryEvent){
+                if($categoryEvent['id'] == $category->id){
+                    
+                    $categoryEvent->faqs()->detach($faq);
+                    $categoryEvent->faqs()->attach($faq,['priority'=>$key]);
+
+                    $model->faqs()->detach($faq);
+                    $model->faqs()->attach($faq,['priority'=>$key]);
+                }
+            }
+            
+            /*if($faq->category->first() && $faq->category->first()->id == $request->faqs_id){
               
                 //$category = Category::find($model->category->first()->id);   
                 //$faq->categoryEvent()->attach($category);
-                $model->faqs()->detach($faq);
-                $model->faqs()->attach($faq,['priority'=>$key]);
-            }
+                //$model->faqs()->detach($faq);
+                //$model->faqs()->attach($faq,['priority'=>$key]);
+            }*/
            
             
         }
