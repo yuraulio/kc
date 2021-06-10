@@ -5,6 +5,7 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Topic;
+use App\Model\Media;
 use App\Traits\SlugTrait;
 use App\Traits\MetasTrait;
 use App\Traits\MediaTrait;
@@ -15,7 +16,7 @@ class Instructor extends Model
     use SlugTrait;
     use MetasTrait;
     use MediaTrait;
-    
+
     protected $table = 'instructors';
 
     protected $fillable = [
@@ -31,9 +32,14 @@ class Instructor extends Model
     {
         return $this->belongsToMany(Event::class, 'event_topic_lesson_instructor');
     }
-    
+
     public function testimonials()
     {
         return $this->morphToMany(Testimonial::class, 'testimoniable');
+    }
+
+    public function medias()
+    {
+        return $this->morphOne(Media::class, 'mediable');
     }
 }

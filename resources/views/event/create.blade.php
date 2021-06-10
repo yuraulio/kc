@@ -44,6 +44,19 @@
                                     @include('alerts.feedback', ['field' => 'priority'])
                                 </div>
 
+                                <div class="form-group{{ $errors->has('published') ? ' has-danger' : '' }}">
+                                    <div class="status-label">
+                                        <label class="form-control-label" for="input-published">{{ __('Published') }}</label>
+                                    </div>
+                                    <div class="status-toogle">
+                                        <label class="custom-toggle">
+                                            <input type="checkbox" name="published" id="input-published">
+                                            <span class="custom-toggle-slider rounded-circle"></span>
+                                        </label>
+                                        @include('alerts.feedback', ['field' => 'published'])
+                                    </div>
+                                </div>
+
                                 <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
                                     <select name="category_id" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}">
@@ -66,17 +79,6 @@
                                     </select>
 
                                     @include('alerts.feedback', ['field' => 'type_id'])
-                                </div>
-
-                                <div class="form-group{{ $errors->has('published') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-published">{{ __('Published') }}</label>
-                                    <select name="published" id="input-published" class="form-control" placeholder="{{ __('Published') }}" >
-                                        <option value="">-</option>
-                                            <option value="1">{{ __('Published') }}</option>
-                                            <option value="0">{{ __('Unpublished') }}</option>
-                                    </select>
-
-                                    @include('alerts.feedback', ['field' => 'published'])
                                 </div>
 
                                 <div class="form-group{{ $errors->has('delivery') ? ' has-danger' : '' }}">
@@ -190,38 +192,11 @@
 
                                     @include('alerts.feedback', ['field' => 'ext_url'])
 
-                                    <!-- Button trigger modal -->
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#select_ImageModal">
-                                    Upload Image
-                                    </button>
-
-                                    <div class="form-group">
-                                        <img id='img-upload'/>
-                                    </div>
-
-                                    <input type="hidden" value="" id="image_upload" name="image_upload">
+                                    @include('admin.upload.upload', ['event' => ( isset($event) && $event->medias != null) ? $event->medias : null])
 
 
 
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="select_ImageModal" tabindex="-1" role="dialog" aria-labelledby="select_ImageModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                @include('admin.media2.modal')
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" id="close" class="btn btn-secondary close-modal" data-dismiss="modal">Close</button>
-                                                <button type="button" id="select-image" class="btn btn-primary">Select</button>
-                                            </div>
-                                            </div>
-                                        </div>
-                                    </div>
+
 
 
                                 <div class="text-center">
@@ -266,11 +241,13 @@
         ext = ext.replace(/\s/g, '')
         path = path +'/'+name+'.'+ext
 
-        alert(path)
-
         $('#image_upload').val(path)
 
+
+
         $('#img-upload').attr('src', path);
+
+        alert($('#img-upload').width())
         $(".close").click();
     });
 

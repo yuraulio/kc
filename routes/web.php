@@ -146,7 +146,7 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
     //Route::post('lesson/destroy_from_topic1', ['as' => 'lesson.destroy_from_topic1', 'uses' => 'LessonController@destroy_from_topic1']);
 
 
-    Route::post('events/crop_image', ['as' => 'events.crop_image', 'uses' => 'EventController@crop_image']);
+    Route::post('media/crop_image', ['as' => 'media.crop_image', 'uses' => 'Media2Controller@crop_image']);
 
 
 

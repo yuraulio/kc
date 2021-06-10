@@ -15,7 +15,6 @@
         <thead class="thead-light">
             <tr>
                 <th scope="col">{{ __('Title') }}</th>
-                <th scope="col">{{ __('Description') }}</th>
                 <th scope="col">{{ __('Icon') }}</th>
                 <th scope="col"></th>
             </tr>
@@ -26,7 +25,6 @@
             @foreach ($model->summary()->get() as $summary)
                 <tr>
                     <td id="title-{{$summary->id}}">{{ $summary->title }}</td>
-                    <td id="desc-{{$summary->id}}">{{ $summary->description }}</td>
                     <td id="icon-{{$summary->id}}">{{ $summary->icon }}</td>
                     <td class="text-right">
                         <div class="dropdown">
@@ -81,8 +79,8 @@
                     </div>
                     <div class="form-group{{ $errors->has('description2') ? ' has-danger' : '' }}">
                         <label class="form-control-label" for="input-description2">{{ __('Description') }}</label>
-                        <input type="text" name="description2" id="input-description2" class="form-control{{ $errors->has('description2') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}" value="{{ old('description2') }}" autofocus>
-                        @include('alerts.feedback', ['field' => 'description2'])
+                        <textarea name="description4" id="input-description4" class="ckeditor form-control{{ $errors->has('description2') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}"></textarea>
+                        @include('alerts.feedback', ['field' => 'description4'])
                     </div>
                     <div class="form-group{{ $errors->has('icon') ? ' has-danger' : '' }}">
                         <label class="form-control-label" for="input-icon">{{ __('Icon') }}</label>
@@ -119,7 +117,7 @@
                </div>
                <div class="form-group{{ $errors->has('description') ? ' has-danger' : '' }}">
                   <label class="form-control-label" for="edit-description">{{ __('Description') }}</label>
-                  <input type="text" name="description" id="edit-description2" class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}" value="{{ old('description') }}" autofocus>
+                  <textarea name="description" id="edit-description2" class="ckeditor form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}">{{ old('description') }}</textarea>
                   @include('alerts.feedback', ['field' => 'description'])
                </div>
                <div class="form-group{{ $errors->has('icon') ? ' has-danger' : '' }}">
@@ -150,14 +148,13 @@
            },
    	    type: 'post',
    	    url: '{{route("summary.store")}}',
-            data: {'title':$('#input-title-summary').val(),'description':$('#input-description2').val(),'icon':$('#input-icon').val(),'model_type':modelType,'model_id':modelId},
+            data: {'title':$('#input-title-summary').val(),'description':CKEDITOR.instances['input-description4'].getData(),'icon':$('#input-icon').val(),'model_type':modelType,'model_id':modelId},
    	    success: function (data) {
    	//console.log(data);
    	let summary = data.summary;
    	let newSummary =
    	`<tr>` +
    	`<td id="title-` + summary['id'] +`">` + summary['title'] + `</td>` +
-   	`<td id="desc-` + summary['id'] +`">` + summary['description'] + `</td>` +
     `<td id="icon-` + summary['id'] +`">` + summary['icon'] + `</td>` +
 
       `<td class="text-right">
@@ -199,13 +196,14 @@
            },
    	    type: 'put',
    	    url: '/admin/summary/' + $summaryId,
-            data: {'title':$('#edit-title').val(),'description':$('#edit-description2').val(),'icon':$('#edit-icon').val()},
+            data: {'title':$('#edit-title').val(),'description':CKEDITOR.instances['edit-description2'].getData(),'icon':$('#edit-icon').val()},
    	    success: function (data) {
 
    	let summary = data.summary;
 
    	$("#title-"+summary['id']).html(summary['title'])
-   	$("#desc-"+summary['id']).html(summary['description'])
+   	// $("#desc-"+summary['id']).html(summary['description'])
+       $("#title-"+summary['id']).parent().find('.dropdown-item').attr('data-description', summary['description'])
     $("#icon-"+summary['id']).html(summary['icon'])
    	$(".close-modal").click();
 
@@ -232,11 +230,11 @@
          //title = e.relatedTarget.dataset.title,
          //description =e.relatedTarget.dataset.description;
          title = $("#title-"+id).text(),
-         description = $("#desc-"+id).text();
+         description = e.relatedTarget.dataset.description
          icon = $("#icon-"+id).text();
 
       modal.find("#edit-title").val(title);
-      modal.find("#edit-description2").val(description);
+      CKEDITOR.instances['edit-description2'].setData(description)
       modal.find("#edit-icon").val(icon);
    	modal.find("#summary-id").val(id)
 

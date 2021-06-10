@@ -24,9 +24,6 @@ class LessonRequest extends FormRequest
     public function rules()
     {
         return [
-            'status' => [
-                'numeric'
-            ],
             'htmlTitle' => [
                 'required', 'min:3'
             ],

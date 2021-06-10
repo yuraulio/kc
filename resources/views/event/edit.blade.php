@@ -38,12 +38,22 @@
                         @include('alerts.success')
                         @include('alerts.errors')
                     </div>
-                    @include('admin.preview.preview',['slug' => isset($slug) ? $slug : null])
+                    <form method="post" id="event_edit_form" method="POST" action="{{ route('events.update', $event) }}" autocomplete="off"
+                        enctype="multipart/form-data">
+                        @csrf
+                        @method('put')
+
+                        <div class="form_event_btn">
+                            <div class="save_event_btn" >@include('admin.save.save',['event' => isset($event) ? $event : null])</div>
+                            <div class="preview_event_btn">@include('admin.preview.preview',['slug' => isset($slug) ? $slug : null])</div>
+
+                        </div>
+
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
                                 <div class="form-group">
                                     <label class="form-control-label" for="input-method">{{ __('Method Payment') }}</label>
-                                    <select name="payment_method" id="input-method" class="form-control" placeholder="{{ __('Method Payment') }}" required>
+                                    <select name="payment_method" id="input-method" class="form-control" placeholder="{{ __('Method Payment') }}" no-mouseflow>
                                         <option value="">-</option>
                                         @foreach ($methods as $method)
                                             <option value="{{ $method->id }}" {{$event['paymentMethod']->first() && $event['paymentMethod']->first()->id ==$method->id ? 'selected' : ''}} >{{ $method->method_name }}</option>
@@ -52,6 +62,124 @@
 
                                     @include('alerts.feedback', ['field' => 'payment_method'])
                                 </div>
+
+
+
+
+                                <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
+                                    <select name="category_id" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}" required>
+                                        <option value="">-</option>
+                                        @foreach ($categories as $category)
+                                            <option <?php if(count($event->category) != 0){
+                                                if($event->category[0]->id == $category->id){
+                                                    echo 'selected';
+                                                }else{
+                                                    echo '';
+                                                }
+                                            }
+                                            ?> value="{{ $category->id }}" >{{ $category->name }}</option>
+                                        @endforeach
+                                    </select>
+
+                                    @include('alerts.feedback', ['field' => 'category_id'])
+                                </div>
+
+                                <div class="form-group{{ $errors->has('type_id') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-type_id">{{ __('Type') }}</label>
+                                    <select name="type_id" id="input-type_id" class="form-control" placeholder="{{ __('Type') }}" required>
+                                        <option value="">-</option>
+                                        @foreach ($types as $type)
+                                            <option <?php if(count($event->type) != 0){
+                                                if($event->type[0]->id == $type->id){
+                                                    echo 'selected';
+                                                }else{
+                                                    echo '';
+                                                }
+                                            }
+                                            ?> value="{{ $type->id }}" >{{ $type->name }}</option>
+                                        @endforeach
+                                    </select>
+
+                                    @include('alerts.feedback', ['field' => 'type_id'])
+                                </div>
+
+
+                                <div class="form-group{{ $errors->has('delivery') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-delivery">{{ __('Delivery') }}</label>
+                                    <select name="delivery" id="input-delivery" class="form-control" placeholder="{{ __('Delivery') }}" required>
+                                        <option value="">-</option>
+                                        @foreach ($delivery as $delivery)
+                                            <option <?php if(count($event->delivery) != 0){
+                                                if($event->delivery[0]->id == $delivery->id){
+                                                    echo 'selected';
+                                                }else{
+                                                    echo '';
+                                                }
+                                            }
+                                            ?> value="{{ $delivery->id }}" >{{ $delivery->name }}</option>
+                                        @endforeach
+                                    </select>
+
+                                    @include('alerts.feedback', ['field' => 'delivery'])
+                                </div>
+
+                                <div class="form-group{{ $errors->has('published') ? ' has-danger' : '' }}">
+                                            <div class="status-label">
+                                                <label class="form-control-label" for="input-published">{{ __('Published') }}</label>
+                                            </div>
+                                            <div class="status-toogle">
+                                                <label class="custom-toggle">
+                                                    <input type="checkbox" name="published" id="input-published" <?= ($event['published'] == 1) ? 'checked' : ''; ?>>
+                                                    <span class="custom-toggle-slider rounded-circle"></span>
+                                                </label>
+                                                @include('alerts.feedback', ['field' => 'published'])
+                                            </div>
+                                        </div>
+
+                                <div id="exp_input" class="form-group{{ $errors->has('expiration') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-expiration">{{ __('Months access') }}</label>
+                                    <input type="number" min="1" name="expiration" id="input-expiration" class="form-control{{ $errors->has('expiration') ? ' is-invalid' : '' }}" placeholder="{{ __('Enter number of months') }}" value="{{ old('expiration', $event->expiration) }}"autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'expiration'])
+                                </div>
+
+                                <?php
+                                $date = date_create($event->release_date_files);
+                                $old_date = date_format($date,"d/m/Y");
+                                    ?>
+                                <div class="form-group{{ $errors->has('release_date_files') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-delivery">{{ __('Release Date Files') }}</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
+                                            </div>
+                                            <input class="form-control datepicker" id="input-release_date_file" name="release_date_files" placeholder="Select date" type="text" value="{{ old('release_date_files', $old_date) }}">
+                                        </div>
+                                        @include('alerts.feedback', ['field' => 'release_date_files'])
+                                    </div>
+
+                                <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-status">{{ __('Status') }}</label>
+                                    <select name="status" id="input-status" class="form-control" placeholder="{{ __('Status') }}" >
+                                        <option value="">-</option>
+                                            <option <?= ($event['status'] == 4) ? 'selected="selected"' : ''; ?> value="4">{{ __('My Account Only') }}</option>
+                                            <option <?= ($event['status'] == 3) ? 'selected="selected"' : ''; ?> value="3">{{ __('Soldout') }}</option>
+                                            <option <?= ($event['status'] == 2) ? 'selected="selected"' : ''; ?> value="2">{{ __('Completed') }}</option>
+                                            <option <?= ($event['status'] == 1) ? 'selected="selected"' : ''; ?> value="1">{{ __('Open') }}</option>
+                                            <option <?= ($event['status'] == 0) ? 'selected="selected"' : ''; ?> value="0">{{ __('Close') }}</option>
+                                    </select>
+
+                                    @include('alerts.feedback', ['field' => 'status'])
+                                </div>
+
+                                <div class="form-group{{ $errors->has('hours') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-hours">{{ __('Hours') }}</label>
+                                    <input type="number" name="hours" id="input-hours" class="form-control{{ $errors->has('hours') ? ' is-invalid' : '' }}" placeholder="{{ __('Hours') }}" value="{{ old('hours', $event->hours) }}"autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'hours'])
+                                </div>
+
                             </div>
                             <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
                                 <div class="nav-wrapper">
@@ -101,127 +229,12 @@
                                         <div class="tab-content" id="myTabContent">
                                             <div class="tab-pane fade show active" id="tabs-icons-text-1_inside" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab_inside">
 
-                                                <form method="post" action="{{ route('events.update', $event) }}" autocomplete="off"
-                                                    enctype="multipart/form-data">
-                                                    @csrf
-                                                    @method('put')
+
 
                                                     <h6 class="heading-small text-muted mb-4">{{ __('Event information') }}</h6>
                                                     <div class="pl-lg-4">
-                                                        <div class="d-none form-group{{ $errors->has('priority') ? ' has-danger' : '' }}">
-                                                            <label class="form-control-label" for="input-priority">{{ __('Priority') }}</label>
-                                                            <input type="number" name="priority" id="input-priority" class="form-control{{ $errors->has('priority') ? ' is-invalid' : '' }}" placeholder="{{ __('Priority') }}" value="{{ old('priority', $event->priority) }}" autofocus>
-
-                                                            @include('alerts.feedback', ['field' => 'priority'])
-                                                        </div>
 
 
-
-                                                        <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
-                                                            <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
-                                                            <select name="category_id" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}" required>
-                                                                <option value="">-</option>
-                                                                @foreach ($categories as $category)
-                                                                    <option <?php if(count($event->category) != 0){
-                                                                        if($event->category[0]->id == $category->id){
-                                                                            echo 'selected';
-                                                                        }else{
-                                                                            echo '';
-                                                                        }
-                                                                    }
-                                                                    ?> value="{{ $category->id }}" >{{ $category->name }}</option>
-                                                                @endforeach
-                                                            </select>
-
-                                                            @include('alerts.feedback', ['field' => 'category_id'])
-                                                        </div>
-
-                                                        <div class="form-group{{ $errors->has('type_id') ? ' has-danger' : '' }}">
-                                                            <label class="form-control-label" for="input-type_id">{{ __('Type') }}</label>
-                                                            <select name="type_id" id="input-type_id" class="form-control" placeholder="{{ __('Type') }}" required>
-                                                                <option value="">-</option>
-                                                                @foreach ($types as $type)
-                                                                    <option <?php if(count($event->type) != 0){
-                                                                        if($event->type[0]->id == $type->id){
-                                                                            echo 'selected';
-                                                                        }else{
-                                                                            echo '';
-                                                                        }
-                                                                    }
-                                                                    ?> value="{{ $type->id }}" >{{ $type->name }}</option>
-                                                                @endforeach
-                                                            </select>
-
-                                                            @include('alerts.feedback', ['field' => 'type_id'])
-                                                        </div>
-
-
-                                                        <div class="form-group{{ $errors->has('delivery') ? ' has-danger' : '' }}">
-                                                            <label class="form-control-label" for="input-delivery">{{ __('Delivery') }}</label>
-                                                            <select name="delivery" id="input-delivery" class="form-control" placeholder="{{ __('Delivery') }}" required>
-                                                                <option value="">-</option>
-                                                                @foreach ($delivery as $delivery)
-                                                                    <option <?php if(count($event->delivery) != 0){
-                                                                        if($event->delivery[0]->id == $delivery->id){
-                                                                            echo 'selected';
-                                                                        }else{
-                                                                            echo '';
-                                                                        }
-                                                                    }
-                                                                    ?> value="{{ $delivery->id }}" >{{ $delivery->name }}</option>
-                                                                @endforeach
-                                                            </select>
-
-                                                            @include('alerts.feedback', ['field' => 'delivery'])
-                                                        </div>
-
-
-                                                        <div class="form-group{{ $errors->has('published') ? ' has-danger' : '' }}">
-                                                            <label class="form-control-label" for="input-published">{{ __('Published') }}</label>
-                                                            <select name="published" id="input-published" class="form-control" placeholder="{{ __('Published') }}" >
-                                                                <option value="">-</option>
-                                                                    <option <?= ($event['published'] == 1) ? 'selected="selected"' : ''; ?> value="1">{{ __('Published') }}</option>
-                                                                    <option <?= ($event['published'] == 0) ? 'selected="selected"' : ''; ?> value="0">{{ __('Unpublished') }}</option>
-                                                            </select>
-
-                                                            @include('alerts.feedback', ['field' => 'published'])
-                                                        </div>
-
-                                                        <div id="exp_input" class="form-group{{ $errors->has('expiration') ? ' has-danger' : '' }}">
-                                                            <label class="form-control-label" for="input-expiration">{{ __('Months access') }}</label>
-                                                            <input type="number" min="1" name="expiration" id="input-expiration" class="form-control{{ $errors->has('expiration') ? ' is-invalid' : '' }}" placeholder="{{ __('Enter number of months') }}" value="{{ old('expiration', $event->expiration) }}"autofocus>
-
-                                                            @include('alerts.feedback', ['field' => 'expiration'])
-                                                        </div>
-
-                                                        <?php
-                                                        $date = date_create($event->release_date_files);
-                                                        $old_date = date_format($date,"d/m/Y");
-                                                         ?>
-                                                        <div class="form-group{{ $errors->has('release_date_files') ? ' has-danger' : '' }}">
-                                                            <label class="form-control-label" for="input-delivery">{{ __('Release Date Files') }}</label>
-                                                                <div class="input-group">
-                                                                    <div class="input-group-prepend">
-                                                                        <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
-                                                                    </div>
-                                                                    <input class="form-control datepicker" id="input-release_date_file" name="release_date_files" placeholder="Select date" type="text" value="{{ old('release_date_files', $old_date) }}">
-                                                                </div>
-                                                                @include('alerts.feedback', ['field' => 'release_date_files'])
-                                                            </div>
-
-                                                        <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
-                                                            <label class="form-control-label" for="input-status">{{ __('Status') }}</label>
-                                                            <select name="status" id="input-status" class="form-control" placeholder="{{ __('Status') }}" >
-                                                                <option value="">-</option>
-                                                                    <option <?= ($event['status'] == 3) ? 'selected="selected"' : ''; ?> value="4">{{ __('My Account Only') }}</option>
-                                                                    <option <?= ($event['status'] == 3) ? 'selected="selected"' : ''; ?> value="3">{{ __('Soldout') }}</option>
-                                                                    <option <?= ($event['status'] == 2) ? 'selected="selected"' : ''; ?> value="2">{{ __('Completed') }}</option>
-                                                                    <option <?= ($event['status'] == 1) ? 'selected="selected"' : ''; ?> value="1">{{ __('Open') }}</option>
-                                                                    <option <?= ($event['status'] == 0) ? 'selected="selected"' : ''; ?> value="0">{{ __('Close') }}</option>
-                                                            </select>
-
-                                                            @include('alerts.feedback', ['field' => 'status'])
-                                                        </div>
 
                                                         <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
                                                             <label class="form-control-label" for="input-title">{{ __('Title') }}</label>
@@ -252,7 +265,7 @@
                                                         </div>
 
                                                         <div class="form-group{{ $errors->has('summary') ? ' has-danger' : '' }}">
-                                                            <label class="form-control-label" for="input-summary">{{ __('Summary') }}</label>
+                                                            <label class="form-control-label" for="input-summary">{{ __('XML Summary') }}</label>
                                                             <textarea name="summary" id="input-summary"  class="ckeditor form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Summary') }}" required autofocus>{{ old('summary', $event->summary) }}</textarea>
 
                                                             @include('alerts.feedback', ['field' => 'summary'])
@@ -265,13 +278,6 @@
                                                             @include('alerts.feedback', ['field' => 'body'])
                                                         </div>
 
-                                                        <div class="form-group{{ $errors->has('hours') ? ' has-danger' : '' }}">
-                                                            <label class="form-control-label" for="input-hours">{{ __('Hours') }}</label>
-                                                            <input type="number" name="hours" id="input-hours" class="form-control{{ $errors->has('hours') ? ' is-invalid' : '' }}" placeholder="{{ __('Hours') }}" value="{{ old('hours', $event->hours) }}"autofocus>
-
-                                                            @include('alerts.feedback', ['field' => 'hours'])
-                                                        </div>
-
                                                         <div class="form-group{{ $errors->has('view_tpl') ? ' has-danger' : '' }}">
                                                             <label class="form-control-label" for="input-view_tpl">{{ __('View tpl') }}</label>
                                                             <select name="view_tpl"  class="form-control" placeholder="{{ __('View tpl') }}">
@@ -281,41 +287,10 @@
                                                             </select>
                                                             @include('alerts.feedback', ['field' => 'view_tpl'])
                                                         </div>
-                                                        <!-- Button trigger modal -->
-                                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#select_ImageModal">
-                                                        Upload Image
-                                                        </button>
-                                                                    <?php //dd($event->medias); ?>
-                                                        <div class="form-group">
-                                                            <img id="img-upload_edit" src="
-                                                            <?php if(isset($event->medias)) {
-                                                                echo $event->medias['path'].$event->medias['original_name'];
-                                                            }else{
-                                                                echo '';
-                                                            }?>">
-                                                        </div>
+                                                        <?php //dd($event->medias); ?>
+                                                        @include('admin.upload.upload', ['event' => ($event->medias != null) ? $event->medias : null])
 
-                                                        <input type="hidden" value="" id="image_upload_edit" name="image_upload_edit">
 
-                                                        <!-- Modal -->
-                                                        <div class="modal fade" id="select_ImageModal" tabindex="-1" role="dialog" aria-labelledby="select_ImageModalLabel" aria-hidden="true">
-                                                            <div class="modal-dialog" role="document">
-                                                                <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    @include('admin.media2.modal')
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" id="close" class="btn btn-secondary close-modal" data-dismiss="modal">Close</button>
-                                                                    <button type="button" id="select-image" class="btn btn-primary">Select</button>
-                                                                </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
 
 
                                                             <input type="hidden" name="creator_id" id="input-creator_id" class="form-control" value="{{$event->creator_id}}">
@@ -326,9 +301,7 @@
 
 
 
-                                                        <div class="text-center">
-                                                            <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
-                                                        </div>
+
                                                     </div>
                                                 </form>
 
@@ -365,7 +338,7 @@
                                                 @include('admin.faq.index', ['model' => $event])
                                             </div>
                                             <div class="tab-pane fade" id="tabs-icons-text-11_inside" role="tabpanel" aria-labelledby="tabs-icons-text-11-tab_inside">
-                                                @include('event.image_versions', ['model' => $event])
+                                                @include('event.image_versions', ['event' => $event->medias,'versions1'=> ['event-card', 'header-image', 'social-media-sharing']])
                                             </div>
                                         </div>
                                     </div>
@@ -417,31 +390,6 @@
 
 @push('js')
 
-<script>
-
-</script>
-
-<script>
-    $( "#select-image" ).click(function() {
-        path = ''
-        $.each( $('.fm-breadcrumb li'), function(key, value) {
-            if(key != 0){
-                path = path+'/'+$(value).text()
-            }
-        })
-
-        name = $('.table-info .fm-content-item').text()
-        name = name.replace(/\s/g, '')
-        ext = $('.table-info td:nth-child(3)').text()
-        ext = ext.replace(/\s/g, '')
-        path = path +'/'+name+'.'+ext
-        console.log(path)
-        $('#image_upload_edit').val(path)
-        $('#img-upload_edit').attr('src', path);
-        $(".close").click();
-    });
-
-</script>
 
 
 
@@ -796,5 +744,13 @@
         })
     </script>
 
+    <script>
+        $('#submit-btn').on('click', function(){
+            $('#event_edit_form').submit()
+        })
+
+
+
+    </script>
 
 @endpush

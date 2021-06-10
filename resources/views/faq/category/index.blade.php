@@ -46,7 +46,6 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col">{{ __('Name') }}</th>
-                                    <th scope="col">{{ __('Description') }}</th>
                                     {{--<th scope="col">{{ __('Assigned Category') }}</th>--}}
                                     <th scope="col">{{ __('Created at') }}</th>
                                     @can('manage-users', App\Model\User::class)
@@ -58,7 +57,6 @@
                                 @foreach ($category as $category)
                                     <tr>
                                         <td>{{ $category->name }}</td>
-                                        <td>{{ $category->description }}</td>
                                         {{--<td>
                                         @foreach($faq->category as $category)
                                             {{$category->name}}

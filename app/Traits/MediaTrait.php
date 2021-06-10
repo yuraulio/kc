@@ -19,24 +19,27 @@ trait MediaTrait
 
         $path = explode(".",$id);
 
+        $image = Image::make(public_path($mediaKey));
+
         $media = new Media;
         $media->original_name = $id;
         $media->path = $folders.'/';
         $media->name = $path[0];
         $media->ext = '.'.$path[1];
+        $media->width = $image->width();
+        $media->height = $image->height();
 
         $this->mediable()->save($media);
 
         foreach(get_image_versions() as $value){
-            $image_resize = Image::make(public_path($mediaKey));
-            $image_resize->resize($value['w'], $value['h']);
-            $image_resize->fit($value['w'], $value['h']);
-            $image_resize->save(public_path($folders.'/'.$path[0].'-'.$value['version'].'.'.$path[1]), $value['q']);
+            $image->resize($value['w'], $value['h']);
+            $image->fit($value['w'], $value['h']);
+            $image->save(public_path($folders.'/'.$path[0].'-'.$value['version'].'.'.$path[1]), $value['q']);
         }
     }
 
     public function updateMedia($mediaKey){
-        //dd($this['id']);
+        //dd($mediaKey);
         $pos = strrpos($mediaKey, '/');
         $id = $pos === false ? $mediaKey : substr($mediaKey, $pos + 1);
 
@@ -44,18 +47,35 @@ trait MediaTrait
 
         $path = explode(".",$id);
 
-        $this->mediable()->update([
-            'original_name' => $id,
-            'name' => $path[0],
-            'path' => $folders.'/',
-            'ext' => '.'.$path[1]
-        ]);
+        $image = Image::make(public_path($mediaKey));
+
+        if($this->mediable()->first()){
+            $this->mediable()->update([
+                'original_name' => $id,
+                'name' => $path[0],
+                'path' => $folders.'/',
+                'ext' => '.'.$path[1],
+                'width' => $image->width(),
+                'height' => $image->height()
+            ]);
+        }else{
+            $media = new Media;
+            $media->original_name = $id;
+            $media->path = $folders.'/';
+            $media->name = $path[0];
+            $media->ext = '.'.$path[1];
+            $media->width = $image->width();
+            $media->height = $image->height();
+
+            $this->mediable()->save($media);
+        }
+
+
 
         foreach(get_image_versions() as $value){
-            $image_resize = Image::make(public_path($mediaKey));
-            $image_resize->resize($value['w'], $value['h']);
-            $image_resize->fit($value['w'], $value['h']);
-            $image_resize->save(public_path($folders.'/'.$path[0].'-'.$value['version'].'.'.$path[1]), $value['q']);
+            $image->resize($value['w'], $value['h']);
+            $image->fit($value['w'], $value['h']);
+            $image->save(public_path($folders.'/'.$path[0].'-'.$value['version'].'.'.$path[1]), $value['q']);
         }
     }
 

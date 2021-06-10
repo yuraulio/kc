@@ -44,7 +44,6 @@
                         <table class="table align-items-center table-flush"  id="datatable-basic">
                             <thead class="thead-light">
                                 <tr>
-
                                     <th scope="col">{{ __('Title') }}</th>
                                     <th scope="col">{{ __('Published') }}</th>
                                     <th scope="col">{{ __('Status') }}</th>
@@ -57,8 +56,7 @@
                             <tbody>
                                 @foreach ($events as $event)
                                     <tr>
-
-                                        <td>{{ $event->title }}</td>
+                                        <td><a href="{{ route('events.edit', $event) }}">{{ $event->title }}</a></td>
                                         <td>
                                             @if($event->published == 0)
                                                 {{'Unpublished'}}

@@ -40,14 +40,16 @@
                             <div class="pl-lg-4">
 
                                 <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-status">{{ __('Status') }}</label>
-                                    <select name="status" id="input-status" class="form-control" placeholder="{{ __('Status') }}" >
-                                        <option value="">-</option>
-                                            <option <?= ($topic['status'] == 1) ? 'selected="selected"' : ''; ?> value="1">{{ __('Enable') }}</option>
-                                            <option <?= ($topic['status'] == 0) ? 'selected="selected"' : ''; ?> value="0">{{ __('Disable') }}</option>
-                                    </select>
-
-                                    @include('alerts.feedback', ['field' => 'status'])
+                                    <div class="status-label">
+                                        <label class="form-control-label" for="input-status">{{ __('Status') }}</label>
+                                    </div>
+                                    <div class="status-toogle">
+                                        <label class="custom-toggle">
+                                            <input type="checkbox" name="status" id="input-status" <?= ($topic['status'] == 1) ? 'checked' : ''; ?>>
+                                            <span class="custom-toggle-slider rounded-circle"></span>
+                                        </label>
+                                        @include('alerts.feedback', ['field' => 'status'])
+                                    </div>
                                 </div>
 
                                 <div class="form-group{{ $errors->has('comment_status') ? ' has-danger' : '' }}">
@@ -107,14 +109,14 @@
 
                                 <div class="form-group{{ $errors->has('summary') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-summary">{{ __('Summary') }}</label>
-                                    <input type="text" name="summary" id="input-summary" class="form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Summary') }}" value="{{ old('summary', $topic->summary) }}" autofocus>
+                                    <textarea name="summary" id="input-summary"  class="ckeditor form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Summary') }}" required autofocus>{{ old('summary', $topic->summary) }}</textarea>
 
                                     @include('alerts.feedback', ['field' => 'summary'])
                                 </div>
 
                                 <div class="form-group{{ $errors->has('body') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-body">{{ __('Body') }}</label>
-                                    <input type="text" name="body" id="input-body" class="form-control{{ $errors->has('body') ? ' is-invalid' : '' }}" placeholder="{{ __('Body') }}" value="{{ old('body', $topic->body) }}" autofocus>
+                                    <textarea name="body" id="input-body"  class="ckeditor form-control{{ $errors->has('body') ? ' is-invalid' : '' }}" placeholder="{{ __('Body') }}" required autofocus>{{ old('body', $topic->body) }}</textarea>
 
                                     @include('alerts.feedback', ['field' => 'body'])
                                 </div>

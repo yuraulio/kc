@@ -56,7 +56,12 @@ class InstructorController extends Controller
         }
 
         $request->request->add(['status' => $status]);
-        $model->create($request->all());
+        $isCreate = $model->create($request->all());
+        if($isCreate){
+            $isCreate->createMedia($request->image_upload);
+        }
+
+
         return redirect()->route('instructors.index')->withStatus(__('Instructor successfully created.'));
     }
 
@@ -100,7 +105,11 @@ class InstructorController extends Controller
         }
 
         $request->request->add(['status' => $status]);
-        $instructor->update($request->all());
+        $isUpdate = $instructor->update($request->all());
+
+        if($isUpdate){
+            $instructor->updateMedia($request->image_upload);
+        }
 
 
         return redirect()->route('instructors.index')->withStatus(__('Page successfully updated.'));

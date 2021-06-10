@@ -24,9 +24,6 @@ class EventRequest extends FormRequest
     public function rules()
     {
         return [
-            'published' => [
-                'boolean'
-            ],
             'status' => [
                 'digits:1'
             ],

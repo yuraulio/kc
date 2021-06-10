@@ -49,15 +49,35 @@ class LessonController extends Controller
      */
     public function store(LessonRequest $request, Lesson $model)
     {
+        if($request->status == 'on')
+        {
+            $status = 1;
+        }else
+        {
+            $status = 0;
+        }
+
+        $request->request->add(['status' => $status]);
+
         $lesson = $model->create($request->all());
 
         if($request->topic_id != null){
             foreach($request->topic_id as $topic){
+
+                //assign on Topic
                 $topic = Topic::find($topic);
                 $cat_id = $topic->with('category')->first()->category[0]->id;
-                $cat = Category::find($cat_id);
+                $cat = Category::with('events')->find($cat_id);
 
                 $cat->topic()->attach($topic, ['lesson_id' => $lesson->id]);
+
+                //assign on AllEvents
+                $allEvents = $cat->events;
+                foreach($allEvents as $event)
+                {
+                    $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id']]);
+                }
+
             }
         }
 
@@ -188,7 +208,16 @@ class LessonController extends Controller
      */
     public function update(Request $request, Lesson $lesson)
     {
-        //dd($request->all());
+        if($request->status == 'on')
+        {
+            $status = 1;
+        }else
+        {
+            $status = 0;
+        }
+
+        $request->request->add(['status' => $status]);
+
         $lesson_id = $lesson['id'];
         $lesson->update($request->all());
 
