@@ -28,11 +28,9 @@
                                         {{ __('This is an example of Delivery management.') }}
                                     </p>
                             </div>
-                            @can('create', App\Model\User::class)
-                                <div class="col-4 text-right">
-                                    <a href="{{ route('delivery.create') }}" class="btn btn-sm btn-primary">{{ __('Add Delivery') }}</a>
-                                </div>
-                            @endcan
+                            <div class="col-4 text-right">
+                                <a href="{{ route('delivery.create') }}" class="btn btn-sm btn-primary">{{ __('Add Delivery') }}</a>
+                            </div>
                         </div>
                     </div>
 
@@ -47,15 +45,13 @@
                                 <tr>
                                     <th scope="col">{{ __('Name') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
-                                    @can('manage-users', App\Model\User::class)
-                                        <th scope="col"></th>
-                                    @endcan
+                                    <th scope="col"></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($deliveries as $delivery)
                                     <tr>
-                                        <td>{{ $delivery->name }}</td>
+                                        <td><a href="{{ route('delivery.edit', $delivery) }}">{{ $delivery->name }}</a></td>
                                         <td>{{ date_format($delivery->created_at, 'Y-m-d' ) }}</td>
 
 					                        <td class="text-right">
@@ -65,21 +61,7 @@
                                                             <i class="fas fa-ellipsis-v"></i>
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-
-                                                                @can('update', $user)
-                                                                    <a class="dropdown-item" href="{{ route('delivery.edit', $delivery) }}">{{ __('Edit') }}</a>
-                                                                @endcan
-    							                                {{--@can('delete', $user)
-        							                                <form action="{{ route('delivery.destroy', $delivery) }}" method="post">
-                                                                        @csrf
-                                                                        @method('delete')
-
-                                                                        <button delivery="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
-                                                                            {{ __('Delete') }}
-                                                                        </button>
-                                                                    </form>
-    						                                    @endcan--}}
-
+                                                            <a class="dropdown-item" href="{{ route('delivery.edit', $delivery) }}">{{ __('Edit') }}</a>
                                                         </div>
                                                     </div>
 

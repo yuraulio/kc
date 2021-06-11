@@ -46,16 +46,13 @@
                                     <th scope="col">{{ __('features') }}</th>
                                     <th scope="col">{{ __('Assiged to event') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
-                                    @can('manage-users', App\Model\User::class)
-                                        <th scope="col"></th>
-                                    @endcan
+                                    <th scope="col"></th>
                                 </tr>
                             </thead>
                             <tbody>
-                            <?php //dd($tickets); ?>
                                 @foreach ($tickets as $ticket)
                                     <tr>
-                                        <td>{{ $ticket->title }}</td>
+                                        <td><a href="{{ route('ticket.edit_main', $ticket) }}">{{ $ticket->title }}</a></td>
                                         <td>{{ $ticket->subtitle }}</td>
                                         <td>{{ $ticket->type }}</td>
                                         <td>{{ $ticket->features }}</td>
@@ -68,7 +65,6 @@
                                         </td>
 
                                         <td>{{ date_format($ticket->created_at, 'Y-m-d' ) }}</td>
-					                    @can('manage-users', App\Model\User::class)
 					                        <td class="text-right">
                                                 <div class="dropdown">
                                                     <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -88,7 +84,6 @@
                                                     </div>
                                                 </div>
                                             </td>
-					                    @endcan
                                     </tr>
                                 @endforeach
                             </tbody>

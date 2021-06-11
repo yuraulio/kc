@@ -56,7 +56,7 @@
                             <tbody>
                                 @foreach ($roles as $role)
                                     <tr>
-                                        <td>{{ $role->name }}</td>
+                                        <td><a href="{{ route('role.edit', $role) }}">{{ $role->name }}</a></td>
                                         <td>{{ $role->permissions }}</td>
                                         <td>{{ $role->created_at->format('d/m/Y H:i') }}</td>
                                         @can('manage-users', App\Model\User::class)

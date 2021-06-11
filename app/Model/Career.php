@@ -19,7 +19,7 @@ class Career extends Model
 
     public function events()
     {
-        return $this->belongsToMany(Event::class, 'career_event');
+        return $this->morphToMany(Event::class, 'careerpathables');
     }
 
 

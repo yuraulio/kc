@@ -46,7 +46,6 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col">{{ __('Title') }}</th>
-                                    <th scope="col">{{ __('Answer') }}</th>
                                     <th scope="col">{{ __('Assigned Category') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
                                     @can('manage-users', App\Model\User::class)
@@ -57,8 +56,7 @@
                             <tbody>
                                 @foreach ($faqs as $faq)
                                     <tr>
-                                        <td>{{ $faq->title }}</td>
-                                        <td>{{ $faq->answer }}</td>
+                                        <td><a href="{{ route('faqs.edit', $faq) }}">{{ $faq->title }}</a></td>
                                         <td>
                                         @foreach($faq->category as $category)
                                             {{$category->name}}

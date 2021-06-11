@@ -110,5 +110,13 @@
     margin: auto;
 }
 
+#tabs-icons-text-2_inside .modal-dialog {
+    max-width: 650px;
+}
+
+#tabs-icons-text-3_inside .modal-dialog {
+    max-width: 650px;
+}
+
 
 

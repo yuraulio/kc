@@ -56,7 +56,7 @@
                             <tbody>
                                 @foreach ($category as $category)
                                     <tr>
-                                        <td>{{ $category->name }}</td>
+                                        <td><a href="{{ route('faqs.edit_category', $category) }}">{{$category->name}}</a></td>
                                         {{--<td>
                                         @foreach($faq->category as $category)
                                             {{$category->name}}

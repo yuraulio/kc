@@ -24,7 +24,7 @@ class InstructorController extends Controller
         $data['active_instructors'] = $model::where('status', '1')->count();
         $data['all_instructors'] = $model::count();
 
-        return view('instructors.index', ['instructors' =>$model->all(), 'user' => $user, 'data' => $data ]);
+        return view('instructors.index', ['instructors' =>$model->with('medias')->get(), 'user' => $user, 'data' => $data ]);
     }
 
     /**

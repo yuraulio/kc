@@ -58,25 +58,25 @@
                                 @foreach ($topics as $topic)
                                     <tr>
                                         <td>{{ $topic->status }}</td>
-                                        <td>{{ $topic->title }}</td>
+                                        <td> <a href="{{ route('topics.edit', $topic) }}">{{ $topic->title }}</a></td>
                                         <td>
                                         @foreach($topic['category'] as $category)
                                             {{$category->name}}
                                         @endforeach
                                         </td>
                                         <td>{{ $topic->created_at ? date_format($topic->created_at, 'Y-m-d' ) : '' }}</td>
-					                   
+
 					                        <td class="text-right">
-                                               
+
                                                 <div class="dropdown">
                                                     <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         <i class="fas fa-ellipsis-v"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
 
-                                                           
+
                                                                 <a class="dropdown-item" href="{{ route('topics.edit', $topic) }}">{{ __('Edit') }}</a>
-                                                           
+
         							                            <form action="{{ route('topics.destroy', $topic) }}" method="post">
                                                                     @csrf
                                                                     @method('delete')
@@ -85,13 +85,13 @@
                                                                         {{ __('Delete') }}
                                                                     </button>
                                                                 </form>
-    						                                
+
 
                                                     </div>
                                                 </div>
-                                               
+
                                             </td>
-					                    
+
                                     </tr>
                                 @endforeach
                             </tbody>

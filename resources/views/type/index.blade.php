@@ -56,7 +56,7 @@
                             <tbody>
                                 @foreach ($types as $type)
                                     <tr>
-                                        <td>{{ $type->name }}</td>
+                                        <td><a href="{{ route('types.edit', $type) }}">{{ $type->name }}</a></td>
                                         <td>{{ $type->description }}</td>
                                         <td>{{ date_format($type->created_at, 'Y-m-d' ) }}</td>
 

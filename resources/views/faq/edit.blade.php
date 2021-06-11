@@ -47,8 +47,8 @@
                                 </div>
 
                                 <div class="form-group{{ $errors->has('answer') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-answer">{{ __('Faq') }}</label>
-                                    <input type="text" name="answer" id="input-answer" class="form-control{{ $errors->has('answer') ? ' is-invalid' : '' }}" placeholder="{{ __('Faq') }}" value="{{ old('answer', $faq->answer) }}" autofocus>
+                                    <label class="form-control-label" for="input-answer">{{ __('Answer') }}</label>
+                                    <textarea name="answer" id="input-answer" class="ckeditor form-control{{ $errors->has('answer') ? ' is-invalid' : '' }}" placeholder="{{ __('Faq') }}">{{ old('answer', $faq->answer) }}</textarea>
 
                                     @include('alerts.feedback', ['field' => 'answer'])
                                 </div>
@@ -56,12 +56,11 @@
                                 <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
                                     <select multiple name="category_id[]" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}" required>
-                                    <?php //dd($faq); ?>
                                         @foreach ($categories as $category)
 
                                         <option value="{{ $category->id }}" @if(in_array($category->id,$faqCategories)) selected @endif>{{ $category->name }}</option>
 
-                                       
+
                                         @endforeach
                                     </select>
 

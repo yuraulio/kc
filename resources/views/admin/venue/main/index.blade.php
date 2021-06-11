@@ -28,11 +28,9 @@
                                         {{ __('This is an example of Venue management.') }}
                                     </p>
                             </div>
-                            @can('create', App\Model\User::class)
-                                <div class="col-4 text-right">
-                                    <a href="{{ route('venue.create_main') }}" class="btn btn-sm btn-primary">{{ __('Add Venue') }}</a>
-                                </div>
-                            @endcan
+                            <div class="col-4 text-right">
+                                <a href="{{ route('venue.create_main') }}" class="btn btn-sm btn-primary">{{ __('Add Venue') }}</a>
+                            </div>
                         </div>
                     </div>
 
@@ -47,50 +45,30 @@
                                 <tr>
                                     <th scope="col">{{ __('Name') }}</th>
                                     <th scope="col">{{ __('Address') }}</th>
-                                    <th scope="col">{{ __('Longitude') }}</th>
-                                    <th scope="col">{{ __('Latitude') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
-                                    @can('manage-users', App\Model\User::class)
-                                        <th scope="col"></th>
-                                    @endcan
+                                    <th scope="col"></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($venues as $venue)
                                     <tr>
-                                        <td>{{ $venue->name }}</td>
+                                        <td><a href="{{ route('venue.edit_main', $venue) }}">{{ $venue->name }}</a></td>
                                         <td>{{ $venue->address }}</td>
-                                        <td>{{ $venue->longitude }}</td>
-                                        <td>{{ $venue->latitude }}</td>
                                         <td>{{ date_format($venue->created_at, 'Y-m-d' ) }}</td>
-					                    @can('manage-users', App\Model\User::class)
+
 					                        <td class="text-right">
-                                                @if (auth()->user()->can('update', $user) || auth()->user()->can('delete', $user))
-                                                    <div class="dropdown">
-                                                        <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                            <i class="fas fa-ellipsis-v"></i>
-                                                        </a>
-                                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
 
-                                                                @can('update', $user)
-                                                                    <a class="dropdown-item" href="{{ route('venue.edit_main', $venue) }}">{{ __('Edit') }}</a>
-                                                                @endcan
-    							                                {{--@can('delete', $user)
-        							                                <form action="{{ route('venue.destroy', $venue) }}" method="post">
-                                                                        @csrf
-                                                                        @method('delete')
+                                            <div class="dropdown">
+                                                <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fas fa-ellipsis-v"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                                    <a class="dropdown-item" href="{{ route('venue.edit_main', $venue) }}">{{ __('Edit') }}</a>
+                                                </div>
+                                            </div>
 
-                                                                        <button venue="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
-                                                                            {{ __('Delete') }}
-                                                                        </button>
-                                                                    </form>
-    						                                    @endcan--}}
-
-                                                        </div>
-                                                    </div>
-                                                @endif
                                             </td>
-					                    @endcan
+
                                     </tr>
                                 @endforeach
                             </tbody>

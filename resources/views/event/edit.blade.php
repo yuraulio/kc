@@ -64,12 +64,10 @@
                                 </div>
 
 
-
-
                                 <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
-                                    <select name="category_id" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}" required>
-                                        <option value="">-</option>
+                                    <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="category_id" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}" required>
+                                        <option></option>
                                         @foreach ($categories as $category)
                                             <option <?php if(count($event->category) != 0){
                                                 if($event->category[0]->id == $category->id){
@@ -406,7 +404,7 @@
     <script>
         $(document).ready(function() {
             $('#instFormControlSelect').select2({
-                dropdownParent: $('#modal-default')
+                dropdownParent: $('#modal-default'),
             });
             $('.table').DataTable();
 

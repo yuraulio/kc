@@ -80,7 +80,7 @@
                 <form id="ticket-form">
                     <div class="form-group">
                         <label for="exampleFormControlSelect1">Select Ticket</label>
-                        <select class="form-control" id="ticketFormControlSelect">
+                        <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." class="form-control" id="ticketFormControlSelect">
                             <option>-</option>
                         </select>
                     </div>
@@ -131,8 +131,8 @@
             </div>
 
             <div class="modal-footer">
+                <button type="button" class="btn btn-secondary close-modal" data-dismiss="modal">Close</button>
                 <button type="button" id="ticket_save_btn" class="btn btn-primary">Save changes</button>
-                <button type="button" class="btn btn-link close_modal ml-auto" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -198,7 +198,7 @@
             </div>
          </div>
          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary close_modal" data-dismiss="modal">Close</button>
+         <button type="button" class="btn btn-secondary close-modal" data-dismiss="modal">Close</button>
             <button type="button" id="edit-ticket" class="btn btn-primary">Save changes</button>
          </div>
       </div>
@@ -360,7 +360,7 @@
 
 
                     $(".ticket-body").append(newTicket);
-                    $(".close_modal").click();
+                    $(".close-modal").click();
                     $("#success-message p").html(data.success);
                     $("#success-message").show();
                     $('#newRow').empty()
@@ -500,7 +500,7 @@
         $("#price-"+ticket_id).html(price)
         $("#options-"+ticket_id).html(options);
         $("#features-"+ticket_id).html(features);
-        $(".close_modal").click();
+        $(".close-modal").click();
 
         $("#success-message p").html(data.success);
         $("#success-message").show();

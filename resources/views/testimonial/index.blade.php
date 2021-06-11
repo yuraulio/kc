@@ -28,11 +28,9 @@
                                         {{ __('This is an example of Testimonial management.') }}
                                     </p>
                             </div>
-                            @can('create', App\Model\User::class)
-                                <div class="col-4 text-right">
-                                    <a href="{{ route('testimonials.create') }}" class="btn btn-sm btn-primary">{{ __('Add Testimonial') }}</a>
-                                </div>
-                            @endcan
+                            <div class="col-4 text-right">
+                                <a href="{{ route('testimonials.create') }}" class="btn btn-sm btn-primary">{{ __('Add Testimonial') }}</a>
+                            </div>
                         </div>
                     </div>
 
@@ -47,20 +45,16 @@
                                 <tr>
                                     <th scope="col">{{ __('Name') }}</th>
                                     <th scope="col">{{ __('Title') }}</th>
-                                    <th scope="col">{{ __('Testimonial') }}</th>
                                     <th scope="col">{{ __('Assigned Category') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
-                                    @can('manage-users', App\Model\User::class)
-                                        <th scope="col"></th>
-                                    @endcan
+                                    <th scope="col"></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($testimonials as $testimonial)
                                     <tr>
-                                        <td>{{ $testimonial->name }}</td>
+                                        <td><a href="{{ route('testimonials.edit', $testimonial) }}">{{ $testimonial->name }}</a></td>
                                         <td>{{ $testimonial->title }}</td>
-                                        <td>{{ $testimonial->testimonial }}</td>
                                         <td>
                                         @foreach($testimonial->category as $category)
                                             {{$category->name}}

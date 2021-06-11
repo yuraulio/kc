@@ -56,7 +56,7 @@
                                 @foreach ($lessons as $lesson)
                                     <tr>
                                         <td><?= ($lesson->status == 1) ? 'Published' : 'Unpublished'; ?></td>
-                                        <td>{{ $lesson->title }}</td>
+                                        <td><a href="{{ route('lessons.edit', $lesson) }}">{{ $lesson->title }}</a></td>
                                         <td>
                                         @foreach($lesson->topic as $topic)
                                             {{ $topic->title }}

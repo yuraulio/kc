@@ -87,8 +87,8 @@
             </div>
 
             <div class="modal-footer">
+                <button type="button" class="btn btn-secondary close-modal" data-dismiss="modal">Close</button>
                 <button type="button" data-event-id="{{$model->id}}" id="venue_save_btn" class="btn btn-primary">Save changes</button>
-                <button type="button" class="btn btn-link close_modal ml-auto close-modal" data-dismiss="modal">Close</button>
             </div>
 
         </div>
