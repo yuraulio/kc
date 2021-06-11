@@ -46,24 +46,6 @@ class EventController extends Controller
         return view('event.assign_ticket', ['user' => $user, 'event' => $event, 'tickets' => $tickets]);
     }
 
-    // public function assign(Request $request)
-    // {
-    //     $this->authorize('manage-users', User::class);
-    //     $user = Auth::user();
-    //     $event = Event::with('type', 'category')->find($request->id);
-
-    //     $topics = [];
-    //     foreach($event->category as $category){
-    //         foreach($category->topics as $topic){
-    //             $topics[$topic->id] = $topic;
-    //         }
-    //     }
-
-    //     $instructors = Instructor::all();
-    //     //dd($instructors);
-    //     return view('event.assign', ['user' => $user, 'event' => $event, 'topics' => $topics, 'instructors' => $instructors]);
-    // }
-
     public function assign_ticket_store(Request $request, $event_id)
     {
         $event = Event::find($event_id);

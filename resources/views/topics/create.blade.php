@@ -69,7 +69,7 @@
 
                                 <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
-                                    <select name="category_id" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}" >
+                                    <select name="category_id" data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." id="input-category_id" class="form-control" placeholder="{{ __('Category') }}" >
                                         <option value="">-</option>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}">{{ $category->name }}</option>

@@ -33,7 +33,9 @@ class TestimonialController extends Controller
     {
         $user = Auth::user();
 
-        return view('testimonial.create', ['user' => $user, 'categories' => Category::all(), 'instructors' => Instructor::all()]);
+        //dd(Instructor::with('medias')->get()->groupBy('id'));
+
+        return view('testimonial.create', ['user' => $user, 'categories' => Category::all(), 'instructors' => Instructor::with('medias')->where('status', 1)->get()->groupBy('id')]);
     }
 
     /**
@@ -54,11 +56,19 @@ class TestimonialController extends Controller
         $video['youtube'] = $request->youtube;
         $video = json_encode($video);
 
-        $request->request->add(['social_url' => $social, 'video_url' => $video]);
+        if($request->status == 'on')
+        {
+            $status = 1;
+        }else
+        {
+            $status = 0;
+        }
+
+        $request->request->add(['status' => $status,'social_url' => $social, 'video_url' => $video]);
 
         $testimonial = $model->create($request->all());
 
-        if($testimonial){
+        if($testimonial && $request->image_upload != null){
             $testimonial->createMedia($request->image_upload);
         }
 
@@ -97,7 +107,8 @@ class TestimonialController extends Controller
     {
         $categories = Category::all();
         $testimonial = $testimonial->with('category', 'instructors', 'medias')->find($testimonial['id']);
-        $instructors = Instructor::with('testimonials')->get();
+        //$instructors = Instructor::with('testimonials','medias')->get();
+        $instructors = Instructor::with('medias')->get()->groupBy('id');
 
 
         return view('testimonial.edit', compact('testimonial', 'categories', 'instructors'));
@@ -122,10 +133,20 @@ class TestimonialController extends Controller
         $video['youtube'] = $request->youtube;
         $video = json_encode($video);
 
-        $request->request->add(['social_url' => $social, 'video_url' => $video]);
+        if($request->status == 'on')
+        {
+            $status = 1;
+        }else
+        {
+            $status = 0;
+        }
+
+        $request->request->add([]);
+
+        $request->request->add(['status' => $status,'social_url' => $social, 'video_url' => $video]);
         $isUpdate = $testimonial->update($request->all());
 
-        if($isUpdate){
+        if($isUpdate && $request->image_upload != null){
             $testimonial->updateMedia($request->image_upload);
         }
 

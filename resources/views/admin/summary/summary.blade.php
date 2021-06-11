@@ -20,7 +20,6 @@
             </tr>
         </thead>
         <tbody class="summary-body">
-        <?php //dd($model->summary()->get()); ?>
         @if($model->summary()->get())
             @foreach ($model->summary()->get() as $summary)
                 <tr>
@@ -33,20 +32,6 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                                 <a class="dropdown-item" data-toggle="modal" data-target="#editModalSummary" data-id="{{$summary->id}}" data-title="{{$summary->title}}" data-description="{{$summary->description}}" data-icon="{{$summary->icon}}">{{ __('Edit') }}</a>
-                                {{--@can('update', $user)
-                                    <a class="dropdown-item" href="{{ route('summary.edit', $summary) }}">{{ __('Edit') }}</a>
-                                @endcan--}}
-                                {{--@can('delete', $user)
-                                    <form action="{{ route('summary.destroy', $summary) }}" method="post">
-                                        @csrf
-                                        @method('delete')
-
-                                        <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this summary?") }}') ? this.parentElement.submit() : ''">
-                                            {{ __('Delete') }}
-                                        </button>
-                                    </form>
-                                @endcan--}}
-
                             </div>
                         </div>
                     </td>

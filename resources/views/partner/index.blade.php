@@ -28,11 +28,9 @@
                                     {{ __('This is an example of partner management. This is a minimal setup in order to get started fast.') }}
                                 </p>
                             </div>
-                            @if (auth()->user()->can('create', App\User::class))
-                                <div class="col-4 text-right">
-                                    <a href="{{ route('partner.create') }}" class="btn btn-sm btn-primary">{{ __('Add partner') }}</a>
-                                </div>
-                            @endif
+                            <div class="col-4 text-right">
+                                <a href="{{ route('partner.create') }}" class="btn btn-sm btn-primary">{{ __('Add partner') }}</a>
+                            </div>
                         </div>
                     </div>
 
@@ -48,15 +46,13 @@
                                     <th scope="col">{{ __('Name') }}</th>
                                     <th scope="col">{{ __('Assigned Event') }}</th>
                                     <th scope="col">{{ __('Creation Date') }}</th>
-                                    @can('manage-items', App\User::class)
-                                        <th scope="col"></th>
-                                    @endcan
+                                    <th scope="col"></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($partners as $partner)
                                     <tr>
-                                        <td>{{ $partner->name }}</td>
+                                        <td><a href="{{ route('partner.edit', $partner) }}">{{ $partner->name }}</a></td>
                                         <td>
                                         @if(count($partner->events) != 0)
                                             @foreach($partner->events as $event)
@@ -65,18 +61,13 @@
                                         @endif
                                         </td>
                                         <td>{{ $partner->created_at->format('d/m/Y H:i') }}</td>
-                                        @can('manage-items', App\User::class)
                                             <td class="text-right">
-                                                @if (auth()->user()->can('update', $user) || auth()->user()->can('delete', $user))
                                                     <div class="dropdown">
                                                         <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                             <i class="fas fa-ellipsis-v"></i>
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                            @can('update', $user)
                                                                 <a class="dropdown-item" href="{{ route('partner.edit', $partner) }}">{{ __('Edit') }}</a>
-                                                            @endcan
-                                                            @can('delete', $user)
                                                                 <form action="{{ route('partner.destroy', $partner) }}" method="post">
                                                                     @csrf
                                                                     @method('delete')
@@ -84,12 +75,9 @@
                                                                             {{ __('Delete') }}
                                                                     </button>
                                                                 </form>
-                                                            @endcan
                                                         </div>
                                                     </div>
-                                                @endif
                                             </td>
-                                        @endcan
                                     </tr>
                                 @endforeach
                             </tbody>

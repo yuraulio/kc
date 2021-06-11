@@ -36,7 +36,7 @@
             <tbody>
                 @foreach ($categories as $category)
                     <tr>
-                        <td>{{ $category->name }}</td>
+                        <td><a href="{{ route('category.edit', $category) }}">{{ $category->name }}</a></td>
                         <td>{{ $category->parent }}</td>
                         <td>{{ $category->hours }}</td>
                         <td>

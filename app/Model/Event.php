@@ -51,7 +51,7 @@ class Event extends Model
         return $this->morphToMany(Faq::class, 'faqable')->with('category')->orderBy('priority','asc');
     }
 
-    
+
     public function type()
     {
         return $this->morphToMany(Type::class, 'typeable');
@@ -115,7 +115,7 @@ class Event extends Model
 
     public function career()
     {
-        return $this->belongsToMany(Career::class, 'career_event');
+        return $this->morphedByMany(Career::class, 'careerpathables');
     }
 
     public function sections()
@@ -156,7 +156,7 @@ class Event extends Model
 
         $lessons = $this->lessons->groupBy('topic_id');
         $instructors = $this->instructors->unique()->groupBy('instructor_id')->toArray();
-       
+
         foreach($this->topic->unique()->groupBy('topic_id') as $key => $topic){
 
             foreach($topic as $t){
@@ -180,15 +180,15 @@ class Event extends Model
             if(!isset($faq['category']['0'])){
                 continue;
             }
-           
+
             $faqs[$faq['category']['0']['name']][] = ['question' =>$faq['title'] , 'answer' => $faq['answer'] ];
 
-            
-        } 
+
+        }
        // dd($faqs);
         return $faqs;
     }
 
-   
+
 
 }

@@ -46,6 +46,7 @@
                         <table class="table align-items-center table-flush"  id="datatable-basic">
                             <thead class="thead-light">
                                 <tr>
+                                    <th scope="col">{{ __('Image') }}</th>
                                     <th scope="col">{{ __('Status') }}</th>
                                     <th scope="col">{{ __('Firstname') }}</th>
                                     <th scope="col">{{ __('Laststname') }}</th>
@@ -55,7 +56,9 @@
                             </thead>
                             <tbody>
                                 @foreach ($instructors as $instructor)
+                                <?php //dd($instructor); ?>
                                     <tr>
+                                        <td><span class="avatar avatar-sm rounded-circle">  <img src="{{$instructor->medias['path']}}/{{$instructor->medias['name']}}-instructors-small{{$instructor->medias['ext']}}" class="rounded-circle" alt="{{$instructor['title']}} {{$instructor['subtitle']}}"></span> </td>
                                         <td><?= ($instructor->status == 0) ? 'Inactive' : 'Active';  ?></td>
                                         <td>{{ $instructor->title }}</td>
                                         <td>{{ $instructor->subtitle }}</td>

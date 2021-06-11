@@ -45,6 +45,19 @@
                                     <h6 class="heading-small text-muted mb-4">{{ __('Testimonial information') }}</h6>
                                     <div class="pl-lg-4">
 
+                                        <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
+                                            <div class="status-label">
+                                                <label class="form-control-label" for="input-status">{{ __('Status') }}</label>
+                                            </div>
+                                            <div class="status-toogle">
+                                                <label class="custom-toggle">
+                                                    <input type="checkbox" name="status" id="input-status" <?= ($testimonial['status'] == 1) ? 'checked' : ''; ?>>
+                                                    <span class="custom-toggle-slider rounded-circle"></span>
+                                                </label>
+                                                @include('alerts.feedback', ['field' => 'status'])
+                                            </div>
+                                        </div>
+
                                         <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-name">{{ __('Name') }}</label>
                                             <input type="text" name="name" id="input-name" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" placeholder="{{ __('Name') }}" value="{{ old('name', $testimonial->name) }}" autofocus>
@@ -59,19 +72,11 @@
                                             @include('alerts.feedback', ['field' => 'title'])
                                         </div>
 
-                                        <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
-                                            <label class="form-control-label" for="input-status">{{ __('Status') }}</label>
-                                            <select name="status" id="input-status" class="form-control" placeholder="{{ __('Status') }}" >
-                                                    <option <?= ($testimonial['status'] == 1) ? 'selected="selected"' : ''; ?> value="1">{{ __('Published') }}</option>
-                                                    <option <?= ($testimonial['status'] == 0) ? 'selected="selected"' : ''; ?> value="0">{{ __('Unpublished') }}</option>
-                                            </select>
 
-                                            @include('alerts.feedback', ['field' => 'status'])
-                                        </div>
 
                                         <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
-                                            <select name="category_id" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}" required>
+                                            <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="category_id" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}" required>
                                                 <option value="">-</option>
                                                 @foreach ($categories as $category)
                                                     <option value="{{ $category->id }}"
@@ -93,9 +98,9 @@
 
                                         <?php //dd($testimonial); ?>
 
-                                        <div class="form-group{{ $errors->has('instructor_id') ? ' has-danger' : '' }}">
+                                        {{--<div class="form-group{{ $errors->has('instructor_id') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-instructor_id">{{ __('Instructor') }}</label>
-                                            <select name="instructor_id" id="input-instructor_id" class="form-control" placeholder="{{ __('Instructor') }}" required>
+                                            <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="instructor_id" id="input-instructor_id" class="form-control" placeholder="{{ __('Instructor') }}" required>
                                                 <option value="">-</option>
                                                 @foreach ($instructors as $instructor)
                                                     <option value="{{ $instructor->id }}"
@@ -113,11 +118,37 @@
                                             </select>
 
                                             @include('alerts.feedback', ['field' => 'instructor_id'])
+                                        </div>--}}
+
+                                        <?php //dd($testimonial->instructors[0]['id']); ?>
+                                        <div class="form-group{{ $errors->has('instructor_id') ? ' has-danger' : '' }}">
+                                            <label class="form-control-label" for="input-instructor_id">{{ __('Instructor') }}</label>
+                                            <select name="instructor_id" data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." id="input-instructor_id" class="form-control" placeholder="{{ __('Instructor') }}">
+                                                <option value="">-</option>
+
+
+                                                @foreach ($instructors as $key => $instructor)
+                                                <?php //dd($key); ?>
+
+                                                    <option
+                                                    <?php if(count($testimonial->instructors) != 0){
+                                                        if($key == $testimonial->instructors[0]['id']){
+                                                            echo 'selected';
+                                                        }else{
+                                                            echo '';
+                                                        }
+                                                    }
+                                                    ?>
+                                                     ext="{{$instructors[$key][0]->medias['ext']}}" original_name="{{$instructors[$key][0]->medias['original_name']}}" name="{{$instructors[$key][0]->medias['name']}}" path="{{$instructors[$key][0]->medias['path']}}" value="{{$key}}">{{ $instructors[$key][0]['title'] }} {{ $instructors[$key][0]['subtitle'] }}</option>
+                                                @endforeach
+                                            </select>
+
+                                            @include('alerts.feedback', ['field' => 'instructor_id'])
                                         </div>
 
                                         <div class="form-group{{ $errors->has('testimonial') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-testimonial">{{ __('Testimonial') }}</label>
-                                            <input type="text" name="testimonial" id="input-testimonial" class="form-control{{ $errors->has('testimonial') ? ' is-invalid' : '' }}" placeholder="{{ __('Testimonial') }}" value="{{ old('testimonial', $testimonial->testimonial) }}" autofocus>
+                                            <textarea name="testimonial" id="input-testimonial" class="ckeditor form-control{{ $errors->has('testimonial') ? ' is-invalid' : '' }}">{{ old('testimonial', $testimonial->testimonial) }}</textarea>
 
                                             @include('alerts.feedback', ['field' => 'testimonial'])
                                         </div>
@@ -198,3 +229,39 @@
         @include('layouts.footers.auth')
     </div>
 @endsection
+
+@push('js')
+
+<script>
+
+    instructors = @json($instructors);
+
+    $(document).ready(function(){
+        $("#input-instructor_id").select2({
+        templateResult: formatOptions
+        });
+        });
+
+        function formatOptions (state) {
+            //console.log(state)
+        if (!state.id) { return state.text; }
+        console.log(state.text)
+
+        path = state.element.attributes['path'].value
+        name = state.element.attributes['name'].value
+        plus_name = '-instructors-small'
+        ext = state.element.attributes['ext'].value
+
+        var $state = $(
+        '<span class="rounded-circle"><img class="avatar-sm rounded-circle" sytle="display: inline-block;" src="' +path + name + plus_name + ext +'" /> ' + state.text + '</span>'
+        );
+
+        var $state1 = $(
+        '<span class="avatar avatar-sm rounded-circle"><img class="rounded-circle" sytle="display: inline-block;" src="' +path + name + plus_name + ext +'"/></span>'
+        );
+        return $state;
+        }
+</script>
+
+@endpush
+
