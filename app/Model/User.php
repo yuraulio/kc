@@ -9,6 +9,7 @@ use App\Model\Media;
 use App\Model\Activation;
 use App\Model\Event;
 use App\Model\Role;
+use App\Model\Instructor;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -87,6 +88,11 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsToMany(Role::class, 'role_users');
+    }
+
+    public function instructor()
+    {
+        return $this->belongsToMany(Instructor::class, 'instructors_user');
     }
 
     public function statusAccount()

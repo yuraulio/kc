@@ -187,6 +187,26 @@
                                     @include('alerts.feedback', ['field' => 'view_tpl'])
                                 </div>
 
+                                <?php //dd($instructors[10][0]); ?>
+
+                                <div class="form-group{{ $errors->has('syllabus') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-syllabus">{{ __('Syllabus Manager') }}</label>
+                                    <select name="syllabus" data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." id="input-syllabus" class="form-control" placeholder="{{ __('Syllabus Manager') }}">
+                                        <option value=""></option>
+
+                                        @foreach ($instructors as $key => $instructor)
+                                            @if($instructors[$key][0]->medias != null)
+                                            <option ext="{{$instructors[$key][0]->medias['ext']}}" original_name="{{$instructors[$key][0]->medias['original_name']}}" name="{{$instructors[$key][0]->medias['name']}}" path="{{$instructors[$key][0]->medias['path']}}" value="{{$key}}">{{ $instructors[$key][0]['title'] }} {{ $instructors[$key][0]['subtitle'] }}</option>
+                                            @else
+                                            <option path="null" name="null" ext="null" value="{{$key}}">{{ $instructors[$key][0]['title'] }} {{ $instructors[$key][0]['subtitle'] }}</option>
+                                            @endif
+
+                                        @endforeach
+                                    </select>
+
+                                    @include('alerts.feedback', ['field' => 'syllabus'])
+                                </div>
+
                                     <input type="hidden" name="creator_id" id="input-creator_id" class="form-control" value="{{$user->id}}">
                                     <input type="hidden" name="author_id" id="input-author_id" class="form-control" value="{{$user->id}}">
 
@@ -215,6 +235,37 @@
 
 
 @push('js')
+
+<script>
+
+    instructors = @json($instructors);
+
+    $(document).ready(function(){
+        $("#input-syllabus").select2({
+        templateResult: formatOptions
+        });
+        });
+
+        function formatOptions (state) {
+            //console.log(state)
+        if (!state.id) { return state.text; }
+        console.log(state.text)
+
+        path = state.element.attributes['path'].value
+        name = state.element.attributes['name'].value
+        plus_name = '-instructors-small'
+        ext = state.element.attributes['ext'].value
+
+        var $state = $(
+        '<span class="rounded-circle"><img class="avatar-sm rounded-circle" sytle="display: inline-block;" src="' +path + name + plus_name + ext +'" /> ' + state.text + '</span>'
+        );
+
+        var $state1 = $(
+        '<span class="avatar avatar-sm rounded-circle"><img class="rounded-circle" sytle="display: inline-block;" src="' +path + name + plus_name + ext +'"/></span>'
+        );
+        return $state;
+        }
+</script>
 
 <script>
     $( "#input-delivery" ).change(function() {

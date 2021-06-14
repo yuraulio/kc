@@ -66,7 +66,7 @@
 
                                 <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
-                                    <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="category_id" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}" required>
+                                    <select name="category_id" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}" required>
                                         <option></option>
                                         @foreach ($categories as $category)
                                             <option <?php if(count($event->category) != 0){
@@ -177,6 +177,35 @@
 
                                     @include('alerts.feedback', ['field' => 'hours'])
                                 </div>
+                                <?php //dd($event->instructors); ?>
+                                <div class="form-group{{ $errors->has('syllabus') ? ' has-danger' : '' }}">
+                                            <label class="form-control-label" for="input-syllabus">{{ __('Syllabus Manager') }}</label>
+                                            <select name="syllabus" data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." id="input-syllabus" class="form-control" placeholder="{{ __('Syllabus Manager') }}">
+                                                <option value=""></option>
+
+
+                                                @foreach ($instructors1 as $key => $instructor)
+                                                <?php //dd($key); ?>
+
+                                                    <option
+                                                    <?php if(count($event->syllabus) != 0){
+                                                        if($key == $event->syllabus[0]['id']){
+                                                            echo 'selected';
+                                                        }else{
+                                                            echo '';
+                                                        }
+                                                    }
+                                                    ?>
+                                                    @if($instructors1[$key][0]->medias != null)
+                                                     ext="{{$instructors1[$key][0]->medias['ext']}}" original_name="{{$instructors1[$key][0]->medias['original_name']}}" name="{{$instructors1[$key][0]->medias['name']}}" path="{{$instructors1[$key][0]->medias['path']}}" value="{{$key}}">{{ $instructors1[$key][0]['title'] }} {{ $instructors1[$key][0]['subtitle'] }}</option>
+                                                    @else
+                                                    ext="null" original_name="null" name="null" path="null" value="{{$key}}">{{ $instructors1[$key][0]['title'] }} {{ $instructors1[$key][0]['subtitle'] }}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+
+                                            @include('alerts.feedback', ['field' => 'syllabus'])
+                                        </div>
 
                             </div>
                             <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
@@ -453,7 +482,7 @@
                 success: function(data) {
                     data = JSON.parse(data)
 
-                    $('#inst_lesson_edit_'+data.lesson_id).text(data.instructor.title)
+                    $('#inst_lesson_edit_'+data.lesson_id).text(data.instructor.title+' '+data.instructor.title)
                     $('#date_lesson_edit_'+data.lesson_id).text(data.date1)
                     $('#start_lesson_edit_'+data.lesson_id).text(tConvert(data.start))
                     $('#end_lesson_edit_'+data.lesson_id).text(tConvert(data.end))
@@ -461,7 +490,7 @@
                     $('#room_lesson_edit_'+data.lesson_id).text(data.room)
 
                     $('#modal-default').modal()
-                    $('.close_modal').click()
+                    $('.close-modal').click()
 
                 }
             });
@@ -586,6 +615,8 @@
 
                     lesson = data.lesson[0].pivot
 
+
+
                    //console.log(lesson)
 
                     if(lesson.instructor_id == null){
@@ -600,7 +631,7 @@
 
                    inst_row =  `<div class="form-group">
                                 <label for="exampleFormControlSelect1">Select instructor</label>
-                                <select class="form-control select2" id="instFormControlSelect">
+                                <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." class="form-control" id="instFormControlSelect">
                                 </select>
                             </div>`
 
@@ -618,15 +649,16 @@
 
                     if(lesson.time_starts != null)
                     {
-                        console.log(lesson.time_starts)
                         d = new Date(lesson.time_starts)
+
                         console.log(d.getTime())
+
                         time_starts = d.getTime()
-                        console.log(new Date(time_starts).toLocaleTimeString());
+                        //console.log(new Date(time_starts).toLocaleTimeString());
                         time_starts = new Date(time_starts).toLocaleTimeString()
-                        var rest = time_starts.substring(0, time_starts.lastIndexOf(":") + 1);
-                        var rest = rest.substring(0, rest.lastIndexOf(":") + 1);
-                        console.log(rest)
+                        //var rest = time_starts.substring(0, time_starts.lastIndexOf(":") + 1);
+                        //var rest = rest.substring(0, rest.lastIndexOf(":") + 1);
+                        //console.log(rest)
                         // time_starts = convertTimestamptoTime(time_starts)
                         // alert(time_starts)
                         //console.log(d.toLocaleTimeString())
@@ -656,7 +688,7 @@
 
                             <div class="form-group">
                                 <label for="date">Time starts</label>
-                                <input type="time" name="time_starts" class="form-control" id="time_starts" value="${lesson.time_starts != null ? time_starts : ''}" placeholder="Start">
+                                <input type="text" data-time-format="H:i:s" name="time_starts" class="form-control timepicker" id="time_starts" value="${lesson.time_starts != null ? time_starts : ''}" placeholder="Start">
                             </div>
                             <div class="form-group">
                                 <label for="date">Time ends</label>
@@ -685,9 +717,14 @@
                             // ...
                         }
 
-                        $(document).ready(function () {
-                            $(".datepicker").datepicker(datePickerOptions);
-                        });
+                        $('.timepicker').each(function(){
+                            console.log(this)
+        $(this).timepicker({
+        showSecond: false,
+        timeFormat: "H:mm",
+        stepMinute: 15
+        });
+    });
 
 
 
@@ -751,4 +788,73 @@
 
     </script>
 
+<script>
+
+instructors = @json($instructors1);
+
+$(document).ready(function(){
+    $("#input-syllabus").select2({
+    templateResult: formatOptions
+    });
+    });
+
+    function formatOptions (state) {
+        //console.log(state)
+    if (!state.id) { return state.text; }
+    console.log(state.text)
+
+    path = state.element.attributes['path'].value
+    name = state.element.attributes['name'].value
+    plus_name = '-instructors-small'
+    ext = state.element.attributes['ext'].value
+
+    var $state = $(
+    '<span class="rounded-circle"><img class="avatar-sm rounded-circle" sytle="display: inline-block;" src="' +path + name + plus_name + ext +'" /> ' + state.text + '</span>'
+    );
+
+    var $state1 = $(
+    '<span class="avatar avatar-sm rounded-circle"><img class="rounded-circle" sytle="display: inline-block;" src="' +path + name + plus_name + ext +'"/></span>'
+    );
+    return $state;
+    }
+
+    $(document).ready(function(){
+    $("#input-syllabus").select2({
+    templateResult: formatOptions
+    });
+    });
+
+    function formatOptions (state) {
+        //console.log(state)
+    if (!state.id) { return state.text; }
+    console.log(state.text)
+
+    path = state.element.attributes['path'].value
+    name = state.element.attributes['name'].value
+    plus_name = '-instructors-small'
+    ext = state.element.attributes['ext'].value
+
+    var $state = $(
+    '<span class="rounded-circle"><img class="avatar-sm rounded-circle" sytle="display: inline-block;" src="' +path + name + plus_name + ext +'" /> ' + state.text + '</span>'
+    );
+
+    var $state1 = $(
+    '<span class="avatar avatar-sm rounded-circle"><img class="rounded-circle" sytle="display: inline-block;" src="' +path + name + plus_name + ext +'"/></span>'
+    );
+    return $state;
+    }
+</script>
+
+<script>
+
+
+$(document).ready(function(){
+    $('input.timepicker').timepicker({'timeFormat': 'H:i:s'});
+});
+
+
+</script>
+
 @endpush
+
+

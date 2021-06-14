@@ -17,6 +17,8 @@
     @endcomponent
 
 
+<?php //dd($instructor->user()->first()); ?>
+
     <div class="container-fluid mt--6">
 
             <div class="col-xl-12 order-xl-1">
@@ -106,6 +108,25 @@
                                             <input type="text" name="ext_url" id="input-ext_url" class="form-control{{ $errors->has('ext_url') ? ' is-invalid' : '' }}" placeholder="{{ __('External url') }}" value="{{ old('ext_url', $instructor->ext_url) }}"autofocus>
 
                                             @include('alerts.feedback', ['field' => 'ext_url'])
+                                        </div>
+
+                                        <div class="form-group{{ $errors->has('user_id') ? ' has-danger' : '' }}">
+                                            <label class="form-control-label" for="input-user_id">{{ __('Assign User') }}</label>
+                                            <select name="user_id" data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." id="input-user_id" class="form-control" placeholder="{{ __('Instructor') }}">
+                                                <option value=""></option>
+
+                                                @foreach ($users as $key => $user)
+
+                                                @if($instructor->user->first() != null && $instructor->user->first()['id'] == $user['id'])
+                                                <option selected value="{{$user['id']}}">{{ $user['firstname'] }} {{ $user['lastname'] }}</option>
+                                                @else
+                                                <option value="{{$user['id']}}">{{ $user['firstname'] }} {{ $user['lastname'] }}</option>
+                                                @endif
+
+                                                @endforeach
+                                            </select>
+
+                                            @include('alerts.feedback', ['field' => 'user_id'])
                                         </div>
 
                                         @include('admin.upload.upload', ['event' => ( isset($instructor) && $instructor->medias != null) ? $instructor : null])

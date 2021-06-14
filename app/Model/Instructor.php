@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Topic;
 use App\Model\Media;
+use App\Model\User;
 use App\Traits\SlugTrait;
 use App\Traits\MetasTrait;
 use App\Traits\MediaTrait;
@@ -41,5 +42,10 @@ class Instructor extends Model
     public function medias()
     {
         return $this->morphOne(Media::class, 'mediable');
+    }
+
+    public function user()
+    {
+        return $this->belongsToMany(User::class, 'instructors_user');
     }
 }
