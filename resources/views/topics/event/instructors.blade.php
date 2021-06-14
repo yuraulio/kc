@@ -25,7 +25,7 @@
         <div id="col_{{$key}}" class="collapse" aria-labelledby="{{$key}}" data-parent="#accordionExample">
             <div class="card-body">
                 <div class="table-responsive py-4">
-                    <table class="table align-items-center table-flush"  id="datatable-basic">
+                    <table class="table align-items-center table-flush lessons-table" >
                         <thead class="thead-light">
                             <?php //dd($isInclassCourse); ?>
                             <tr>
@@ -45,11 +45,11 @@
                             </tr>
 
                         </thead>
-                        <tbody id="topic_lessons" data-event-id="{{$event['id']}}">
+                        <tbody id="topic_lessons"  class="lessons-order" data-event-id="{{$event['id']}}">
                             <?php $i=0; ?>
                                 @foreach($lessons[$key] as $key1 => $lesson)
                                 <?php //dd($lesson);?>
-                                <tr id="{{$lesson['id']}}" class="topic_{{$topic->id}}">
+                                <tr id="{{$lesson['id']}}" class="topic_{{$topic->id}} lessons-list">
                                 <td>{{ $lesson->title }}</td>
 
                                 <td id="inst_lesson_edit_{{$lesson['id']}}"><?php if(isset($instructors[$lesson->id]) && $instructors[$lesson->id]->first() != null)
@@ -238,7 +238,83 @@ success: function(data) {
             });
 
     })
+
 </script>
+<script>
+
+
+$(document).ready( function () {
+    $('.lessons-table').dataTable( {
+        "ordering": false,
+        "paging": false
+    });
+});
+</script>
+
+<script src="{{ asset('js/sortable/Sortable.js') }}"></script>
+<script>
+    (function( $ ){
+        var el
+
+        $( ".lessons-order" ).each(function( index ) {
+
+
+
+            el = document.getElementsByClassName('lessons-order')[index];
+            //var el = document.getElementsByClassName('lessons-order')[0];
+            //var el = document.getElementsByClassName('lessons-table')[0];
+            //var el = document.getElementById('lessons-order');
+
+
+
+            new Sortable(el, {
+               group: "words",
+               handle: ".my-handle",
+               draggable: ".item",
+               ghostClass: "sortable-ghost",
+
+            });
+
+            new Sortable(el, {
+
+                // Element dragging ended
+                onEnd: function ( /**Event*/ evt) {
+
+                    let lessons = {};
+
+                    $( ".lessons-list" ).each(function( index ) {
+                        lessons[$(this).attr('id')] = index
+                    });
+                    console.log(lessons);
+
+
+                    $.ajax({
+                        type: 'POST',
+                        headers: {
+                        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                        },
+                        Accept: 'application/json',
+                        url: "{{ route ('sort-lessons', $event->id) }}",
+                        data:lessons,
+                        success: function(data) {
+
+
+                        }
+                    });
+
+
+
+
+                },
+            });
+
+        });
+
+
+    })( jQuery );
+
+</script>
+
 @endpush
 
 

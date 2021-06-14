@@ -27,9 +27,14 @@ class Topic extends Model
         return $this->morphToMany(Category::class, 'categoryable');
     }
 
-    public function lessons()
+    /*public function lessons()
     {
         return $this->belongsToMany(Lesson::class, 'categories_topics_lesson');
+    }*/
+
+    public function lessons()
+    {
+        return $this->belongsToMany(Lesson::class, 'event_topic_lesson_instructor')->withPivot('event_topic_lesson_instructor.priority')->orderBy('event_topic_lesson_instructor.priority','asc');
     }
 
     public function event_topic()
@@ -38,7 +43,7 @@ class Topic extends Model
     }
 
     public function event_lesson()
-    {   
+    {
         return $this->belongsToMany(Lesson::class, 'event_topic_lesson_instructor')->select('event_id')->where('status',true)->withPivot('event_id','lesson_id','instructor_id','topic_id')->with('instructor');
     }
 

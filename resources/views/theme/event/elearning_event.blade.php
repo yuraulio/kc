@@ -54,9 +54,9 @@
                   <ul class="clearfix tab-controls-list">
                      <li><a href="#overview" class="active">Overview</a></li>
                      @if($estatus == 0 || $estatus == 2)
-                    
+
                      @if(count($benefits) > 0)<li><a href="#benefits">Benefits</a></li>@endif
-                    
+
                      <li><a href="#topics">Topics</a></li>
                      <li><a href="#instructors">Instructors</a></li>
                      <li><a href="#testimonials">Testimonials</a></li>
@@ -66,7 +66,7 @@
                      <li><a href="#instructors">Instructors</a></li>
                      @endif
                   </ul>
-                 
+
                   @if($estatus == 0 )
                   <a href="#seats" class="btn btn--lg btn--primary go-to-href">ENROLL NOW</a>
                   @elseif($estatus != 3 && $estatus != 1 )
@@ -95,15 +95,15 @@
                      <?php
                         $title = '' ;
                         $body = '' ;
-                        
-                        
+
+
                         if(isset($sections['overview'])){
                               $title = $sections['overview']->first()->title;
                               $body = $sections['overview']->first()->description;
                            }
-                        
+
                         ?>
-                     
+
                      <?php switch ($estatus) {
                         case 0:
                         case 2: ?>
@@ -120,13 +120,13 @@
                                           <?php
                                              $alt='';
                                              $img = ''; //$event->mediable->original_name;
-                                             
-                                             /*if (!empty($section_syllabus_manager['featured']) && isset($section_syllabus_manager['featured'][0]) && 
+
+                                             /*if (!empty($section_syllabus_manager['featured']) && isset($section_syllabus_manager['featured'][0]) &&
                                              isset($section_syllabus_manager['featured'][0]['media']) && !empty($section_syllabus_manager['featured'][0]['media'])){
                                                $alt = $frontHelp->pField($section_syllabus_manager, 'title') ;
                                                $img = $frontHelp->pImg($section_syllabus_manager, 'instructors-small');
                                              }*/
-                                             
+
                                              ?>
                                           <a id="syllabus-link" href=""><img src="{{cdn(get_image(''))}}" alt="{{$alt}}"></a>
                                        </div>
@@ -135,20 +135,20 @@
                                        </div>
                                     </div>
                                  </div>
-                                 {{--@if(isset($section_organisers)) 
+                                 {{--@if(isset($section_organisers))
                                  <div class="col6 col-xs-12">
                                     <div class="ibox">
                                        @foreach($evorg as $vkey => $vvalue)
                                        <?php
                                           $alt='';
                                           $img ='';
-                                          
+
                                           if (isset($evorg)){
                                             $media = PostRider\Media::select('id','path','name','ext')->findOrFail($evorg[0]->allMedia[0]['media_id'])->toArray();
                                             $alt = $evorg[0]->name;
                                             $img = "/uploads/originals/".$media['path'] . '/' . $media['name'] . $media['ext'];
                                           }
-                                          
+
                                           ?>
                                        <div class="ibox-img">
                                           <a href="{{$evorg[0]->abbr}}" title="{{$alt}}" target="_blank"><img src="{{cdn($img)}}" alt="{{$alt}}"></a>
@@ -167,7 +167,7 @@
                         <div class="course-tab-sidebar">
                            <div class="course-details @if(!isset($section_fullvideo)) non-video-height @endif">
                               <ul class="two-column-list">
-                                        
+
                               <?php if (isset($summary[0]) && $summary[0]['title'] != '') : ?>
                                  <li>
                                     <img class="info-icon" class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Duration_Hours.svg')}}" width="30" />
@@ -213,8 +213,8 @@
                                  </li>
                                  <?php endif ?>
 
-                               
-                                
+
+
                                  <?php if (isset($summary[4]) && $summary[4]['title'] != '') : ?>
                                  <li>
                                     <img class="info-icon" class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Level.svg')}}"  width="30" />
@@ -236,7 +236,7 @@
                                     </div>
                                  </li>
                                  <?php endif ?>
-                                    
+
                                  <?php if (isset($summary[6]) && $summary[6]['title'] != '') : ?>
                                  <li>
                                     <img class="info-icon" class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/messages-warning-information.svg')}}" width="30" />
@@ -256,8 +256,8 @@
                                        </div>
                                     </li>
                                  <?php endif ?>
-                                
-                                
+
+
                               </ul>
                               <!-- /.course-details -->
                            </div>
@@ -268,15 +268,15 @@
                      <?php break;
                         case 1:
                         case 3: ?>
-                     
+
                      <div  class="course-overview clearfix padd-bottom">
                         <div class="course-tab-text" itemprop="abstract">
-                 
+
                            <span class="completed">The event is completed</span>
                            <p style="display:none">The best digital &amp; social media diploma with a long track record trusted by top executives, agencies, brands and corporations is completed.</p>
                            <p >Please check all our @if(isset($location->name)) <a href="{{ $location->slug }}">upcoming events in {{ $location->name }}</a> @else upcoming events in this city @endif.</p>
                            {{--<p style="display:none">Please check all our @if(isset($location->name)) <a href="{{ $location->slug }}">upcoming events in {{ $location->name }}</a> @else upcoming events in this city @endif.</p>--}}
-                       
+
                         </div>
                      </div>
                      <?php break;
@@ -294,20 +294,20 @@
                   </div>
                   <!-- /.tab-content-wrapper -->
                </div>
-            
+
                <div id="benefits" class="tab-content-wrapper">
                   <div class="course-benefits-text">
                      <div class="container">
                         <?php
                            $title = '' ;
                            $body = '' ;
-                           
-                           
+
+
                            if(isset($sections['benefits'])){
                               $title = $sections['benefits']->first()->title;
                               $body = $sections['benefits']->first()->description;
                            }
-                           
+
                            ?>
                         <h2 class="text-align-center text-xs-left tab-title">{!!$title!!}</h2>
                         <h3>{!!$body!!}</h3>
@@ -315,7 +315,7 @@
                            <div class="row-flex row-flex-17">
 
                               <?php  $category = 'freepresentations';  ;
-                            
+
                                  if (isset($benefits[0]) && $benefits[0]['name'] != '') : ?>
                               <div class="col-3 col-sm-6 col-xs-12">
                                  <div class="benefit-box">
@@ -341,7 +341,7 @@
                                  </div>
                               </div>
                               <?php endif ?>
-                              <?php $category = 'support group'; 
+                              <?php $category = 'support group';
                                  if (isset($benefits[2]) && $benefits[2]['name'] != '') :  ?>
                               <div class="col-3 col-sm-6 col-xs-12">
                                  <div class="benefit-box">
@@ -354,7 +354,7 @@
                                  </div>
                               </div>
                               <?php endif ?>
-                              <?php $category = 'jobs access'; 
+                              <?php $category = 'jobs access';
                                  if (isset($benefits[3]) && $benefits[3]['name'] != '') :  ?>
                               <div class="col-3 col-sm-6 col-xs-12">
                                  <div class="benefit-box">
@@ -393,9 +393,9 @@
                                  </div>
                               </div>
                               <?php endif ?>
-                              
+
                               <?php $category = 'projects info';
-                             
+
                                  if (isset($benefits[6]) && $benefits[6]['name'] != '') :  ?>
                               <div class="col-3 col-sm-6 col-xs-12">
                                  <div class="benefit-box">
@@ -414,8 +414,8 @@
                   </div>
                   <!-- /.tab-content-wrapper -->
                </div>
-            
-               
+
+
                <div id="topics" class="tab-content-wrapper">
                   <div class="container">
                      <div class="course-full-text">
@@ -426,7 +426,7 @@
                               $title = $sections['topics']->first()->title;
                               $body = $sections['topics']->first()->description;
                            }
-                           
+
                            ?>
                         <h2 class="text-align-center text-xs-left tab-title"> {!! $title !!}</h2>
                         <div class="topic-text-area">
@@ -439,27 +439,28 @@
                               <div class="accordion-item">
                                  <h3 class="accordion-title title-blue-gradient scroll-to-top">{!! $key !!}</h3>
                                  <div class="accordion-content">
-                                 
+
                                  @foreach($topic['lessons'] as $lkey => $lesson)
-                                
+
                                     <div class="topic-wrapper-big">
                                        <div class="topic-title-meta">
                                           <h4 class="@if(isset($lesson['bold']) && $lesson['bold']) bold-topic @endif">{!! $lesson['title'] !!}</h4>
-                                        
-                                          
+
+
                                           <div class="topic-meta">
                                              @if(isset($lesson['type']) && $lesson['type'])<div class="category">{{$lesson['type']}}</div>@endif
-                                             
+
                                              <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/Times.svg')}}" width="12" alt="" />{{$lesson['vimeo_duration']}}</span>
 
                                           </div>
                                           <!-- /.topic-title-meta -->
                                        </div>
                                        <div class="author-img">
-                                      
-                                          <?php 
-                                             $instructor = reset($instructors[$lesson['instructor_id']]); 
-                                             
+
+                                          <?php
+
+                                             $instructor = reset($instructors[$lesson['instructor_id']]);
+
                                           ?>
                                           @if($instructor['status'])
                                              <a href="{{ $instructor['slugable']['slug']}}">
@@ -491,7 +492,7 @@
                   </div>
                   <!-- /.tab-content-wrapper -->
                </div>
-               
+
                <div id="instructors" class="tab-content-wrapper tab-blue-gradient">
                   <div class="container">
                      <div class="course-full-text">
@@ -503,7 +504,7 @@
                               $title = $sections['instructors']->first()->title;
                               $body = $sections['instructors']->first()->description;
                            }
-                           
+
                            ?>
                         <h2 class="text-align-center text-xs-left tab-title">{!!$title!!}</h2>
                         <h3>{!!$body!!}</h3>
@@ -513,40 +514,40 @@
                            <div class="col-3 col-md-4 col-sm-6 col-xs-12">
                               <div class="instructor-box">
                                  <div class="instructor-inner">
-                                   
+
                                     <div class="profile-img">
-                                      @if($inst['status']) 
+                                      @if($inst['status'])
                                           <a href="{{$inst['slugable']['slug']}}"><img src="{{cdn(get_image($inst['mediable'],'instructors-testimonials'))}}"  title="{{$inst['title']}}" alt="{{$inst['title']}}"></a>
                                       @else
                                           <img src="{{cdn('$img')}}"  title="{{$inst['title']}}" alt="{{$inst['title']}}">
                                       @endif
                                     </div>
-                                    @if($inst['status']) 
+                                    @if($inst['status'])
                                        <h3><a href="{{$inst['slugable']['slug']}}">{{$inst['title']}}</a></h3>
                                     @else
                                        <h3>{{$inst['title']}}</h3>
                                     @endif
                                     <p>{{$inst['header']}}, <a target="_blank" title="{{$inst['header']}}" @if($inst['ext_url'] != '') href="{{$inst['ext_url']}}" @endif > test</a>.</p>
                                     {{--<ul class="social-wrapper">
-                                       @if($fb != '')	
+                                       @if($fb != '')
                                        <li><a target="_blank" href="{{$fb}}"><img class="replace-with-svg"  src="/theme/assets/images/icons/social/Facebook.svg" width="16" alt="Visit"></a></li>
                                        @endif
-                                       @if($inst !='')	
+                                       @if($inst !='')
                                        <li><a target="_blank" href="{{$inst}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Instagram.svg')}}" width="16" alt="Visit"></a></li>
                                        @endif
-                                       @if($linkedIn !='')	
+                                       @if($linkedIn !='')
                                        <li><a target="_blank" href="{{$linkedIn}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Linkedin.svg')}}" width="16" alt="Visit"></a></li>
                                        @endif
-                                       @if($pint !='')	
+                                       @if($pint !='')
                                        <li><a target="_blank" href="{{$pint}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Pinterest.svg')}}" width="16" alt="Visit"></a></li>
                                        @endif
-                                       @if($twitter !='')	
+                                       @if($twitter !='')
                                        <li><a target="_blank" href="{{$twitter}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Twitter.svg')}}" width="16" alt="Visit"></a></li>
                                        @endif
-                                       @if($yt !='')	
+                                       @if($yt !='')
                                        <li><a target="_blank" href="{{$yt}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Youtube.svg')}}" width="16" alt="Visit"></a></li>
                                        @endif
-                                       @if($med !='')	
+                                       @if($med !='')
                                        <li><a target="_blank" href="#"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Medium.svg')}}" width="16" alt="Visit"></a></li>
                                        @endif
                                     </ul>--}}
@@ -576,7 +577,7 @@
                      $title = $sections['testimonials']->first()->title;
                      $body = $sections['testimonials']->first()->description;
                   }
-                  
+
                   ?>
                <div id="testimonials" class="tab-content-wrapper tab-no-pad">
                   <div class="container">
@@ -584,20 +585,20 @@
                         <h2 class="text-align-center text-xs-left tab-title">{!!$title!!}</h2>
                         <h3 class="text-align-center text-xs-left tab-title"> {!!$body!!} </h3>
                         <div class="testimonial-carousel-wrapper hidden-xs">
-                       
+
                            <div class="video-carousel-big owl-carousel">
                               @foreach($testimonials as $key => $video)
                               <?php
-                            
+
                                  if(!$video['video_url']){
                                     continue;
                                  }
                                  $urlArr = explode("/",$video['video_url']);
                                  $urlArrNum = count($urlArr);
-                                 
+
                                  // YouTube video ID
                                  $youtubeVideoId = $urlArr[$urlArrNum - 1];
-                                 
+
                                  // Generate youtube thumbnail url
                                  $thumbURL = 'https://img.youtube.com/vi/'.$youtubeVideoId.'/mqdefault.jpg';
                                  ?>
@@ -614,7 +615,7 @@
                   <div class="user-testimonial-wrapper">
                      <div class="container">
                         <div class="user-testimonial-big owl-carousel">
-                           
+
                            @foreach ($testimonials as $key => $row)
                            @if($row['video_url'])
                                  <?php continue;?>
@@ -630,8 +631,8 @@
                                     <span class="author-job">{!! $row['title'] !!}</span>
                                  </div>
                                  <div class="testimonial-text">
-                                    <?php 
-                                          $rev = $row['testimonial'];   
+                                    <?php
+                                          $rev = $row['testimonial'];
                                           $rev = str_replace('"','',$rev);
                                     ?>
                                     {!! $row['testimonial'] !!}
@@ -664,11 +665,11 @@
 														  }
 														}
 													</script>
-                              
+
                               <!-- /.slide -->
                            </div>
                            @endforeach
-                           
+
                         </div>
                      </div>
                   </div>
@@ -678,7 +679,7 @@
 
 
                <div id="faq" class="tab-content-wrapper">
-                 
+
                   <?php
                   $title = '';
                   $body = '';
@@ -686,26 +687,26 @@
                         $title = $sections['questions']->first()->title;
                         $body = $sections['questions']->first()->description;
                      }
-                     
+
                      ?>
                   <div class="container">
                      <div class="course-full-text">
                         <h2 class="text-align-center text-xs-left tab-title">{!!$title!!}</h2>
                         <h3 class="text-align-center text-xs-left tab-title">{!!$body!!}</h3>
-                        
+
                         @if (count($faqs) > 0)
-                        
+
                         <?php $f=[] ?>
                         @foreach ($faqs as $key => $row)
-                        
+
                         <h3 class="tab-sub-title">{!! $key !!}</h3>
                         <div class="tab-faq-wrapper multiple-accordions">
                            <div class="accordion-wrapper">
-                            
-                              
+
+
                               @foreach ($row as $qkey => $qna)
                               <?php $questions = [];?>
-                             
+
                               <div class="accordion-item">
                                  <h4 class="accordion-title title-blue-gradient scroll-to-top">{!! $qna['question'] !!}</h4>
                                  <div class="accordion-content">
@@ -715,7 +716,7 @@
                                  </div>
                                  <!-- /.accordion-item -->
                               </div>
-                             
+
 
                               <?php
                                  $qq = [];
@@ -730,23 +731,23 @@
                                  $questions["acceptedAnswer"] = $qq;//json_encode($qq);
 
                                  $f[]= $questions; //json_encode($questions);
-                                 
+
 
                               ?>
 
                               @endforeach
-                              
-                             
-                        
 
-                             
+
+
+
+
 
                               <!-- /.accordion-wrapper -->
                            </div>
                            <!-- /.tab-faq-wrapper -->
                         </div>
-                  
-                       
+
+
                         @endforeach
                         <?php $f=json_encode($f);?>
                         <script type="application/ld+json">
@@ -759,13 +760,13 @@
                         @endif
                         <!-- /.course-full-text -->
                      </div>
-                 
+
                   </div>
                   <!-- /.tab-content-wrapper -->
-                 
+
                </div>
-             
-           
+
+
                <!-- /.tabs-content -->
             </div>
             <!-- /.tabs-wrapper -->

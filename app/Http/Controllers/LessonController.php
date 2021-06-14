@@ -270,4 +270,15 @@ class LessonController extends Controller
 
         echo json_encode($request->all());
     }
+
+    public function orderLesson(Request $request, Event $event){
+        //dd($request->all());
+        foreach($event->lessons as $lesson){
+            $lesson->pivot->priority = $request->all()[$lesson['id']];
+            $lesson->pivot->save();
+
+        }
+
+    }
+
 }

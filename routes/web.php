@@ -193,6 +193,9 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
     //media2
     Route::get('media2/index', ['as' => 'media2.index', 'uses' => 'Media2Controller@index']);
 
+     //Lessons
+     Route::post('/sort-lessons/{event}', 'LessonController@orderLesson')->name('sort-lessons');
+
 });
 
 Route::group(['middleware' => ['preview','web']], function () {

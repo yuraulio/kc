@@ -80,7 +80,6 @@
             }
         });
 
-        console.log(cropper.getCropBoxData())
         versions[key]['insta'] = cropper;
 
     })

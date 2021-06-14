@@ -68,13 +68,13 @@ class Event extends Model
     {
 
         return $this->belongsToMany(Lesson::class,'event_topic_lesson_instructor')->where('status',true)->select('lessons.*','topic_id','event_id', 'lesson_id','instructor_id')
-        ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority');
+        ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room','priority')->orderBy('event_topic_lesson_instructor.priority','asc');
     }
 
     public function instructors()
     {
         return $this->belongsToMany(Instructor::class,'event_topic_lesson_instructor')->with('mediable')->where('status',true)->select('instructors.*','lesson_id','instructor_id','event_id')
-            ->withPivot('lesson_id','instructor_id')->with('slugable');
+            ->withPivot('lesson_id','instructor_id')->orderBy('event_topic_lesson_instructor.priority','asc')->with('slugable');
     }
 
 
@@ -155,12 +155,22 @@ class Event extends Model
         $topics = [];
 
         $lessons = $this->lessons->groupBy('topic_id');
+         //dd($lessons[279]);
         $instructors = $this->instructors->unique()->groupBy('instructor_id')->toArray();
 
         foreach($this->topic->unique()->groupBy('topic_id') as $key => $topic){
 
             foreach($topic as $t){
-                $topics[$t->title]['lessons'] = $lessons[$t->id]->toArray();
+
+                $lessonsArray = $lessons[$t->id]->toArray();
+                foreach( $lessonsArray as $key => $lesson){
+                    if(!$lesson['instructor_id']){
+                        unset($lessonsArray[$key]);
+                    }
+                }
+                if(count($lessonsArray)>0){
+                    $topics[$t->title]['lessons'] = $lessonsArray;
+                }
             }
 
 
