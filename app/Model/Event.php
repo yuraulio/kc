@@ -140,6 +140,11 @@ class Event extends Model
         return $this->belongsToMany(Partner::class, 'event_partner');
     }
 
+    public function syllabus()
+    {
+        return $this->belongsToMany(instructor::class, 'event_syllabus_manager');
+    }
+
     public function paymentMethod()
     {
         return $this->belongsToMany(PaymentMethod::class, 'paymentmethod_event');

@@ -100,6 +100,20 @@
                                     @include('alerts.feedback', ['field' => 'ext_url'])
                                 </div>
 
+                                <div class="form-group{{ $errors->has('user_id') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-user_id">{{ __('Assign User') }}</label>
+                                    <select name="user_id" data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." id="input-user_id" class="form-control" placeholder="{{ __('Instructor') }}">
+                                        <option value=""></option>
+
+                                        @foreach ($users as $key => $user)
+
+                                            <option value="{{$user['id']}}">{{ $user['firstname'] }} {{ $user['lastname'] }}</option>
+                                        @endforeach
+                                    </select>
+
+                                    @include('alerts.feedback', ['field' => 'user_id'])
+                                </div>
+
                                 @include('admin.upload.upload', ['event' => ( isset($event) && $event->medias['path'] != null) ? $event : null])
 
                                 <input type="hidden" name="creator_id" id="input-creator_id" class="form-control" value="{{$user->id}}">

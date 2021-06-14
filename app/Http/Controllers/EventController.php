@@ -151,8 +151,9 @@ class EventController extends Controller
         $categories = Category::all();
         $types = Type::all();
         $delivery = Delivery::all();
+        $instructors = Instructor::with('medias')->where('status', 1)->get()->groupBy('id');
 
-        return view('event.create', ['user' => $user, 'events' => Event::all(), 'categories' => $categories, 'types' => $types, 'delivery' =>$delivery]);
+        return view('event.create', ['user' => $user, 'events' => Event::all(), 'categories' => $categories, 'types' => $types, 'delivery' =>$delivery, 'instructors' => $instructors]);
     }
 
     /**
@@ -176,6 +177,10 @@ class EventController extends Controller
 
         if($event && $request->image_upload){
             $event->createMedia($request->image_upload);
+        }
+
+        if($request->syllabus){
+            $event->syllabus()->attach(['instructor_id' => $request->syllabus]);
         }
         //dd($request->all());
 
@@ -260,6 +265,7 @@ class EventController extends Controller
 
         $allTopicsByCategory1 = $event['lessons']->unique()->groupBy('topic_id');
         //dd($allTopicsByCategory1);
+        $data['instructors1'] = Instructor::with('medias')->get()->groupBy('id');
         $instructors = $event['instructors']->groupBy('lesson_id');
         //dd($instructors);
         $topics = $event['topic']->unique()->groupBy('topic_id');
@@ -327,8 +333,12 @@ class EventController extends Controller
         $request->request->add(['published' => $published,'release_date_files' => date('Y-m-d H:i:s', strtotime($request->release_date_files))]);
         $ev = $event->update($request->all());
 
-        if($ev){
+        if($request->image_upload != null && $ev){
             $event->updateMedia($request->image_upload);
+        }
+
+        if($request->syllabus){
+            $event->syllabus()->sync($request->syllabus);
         }
 
         $event->category()->sync([$request->category_id]);

@@ -88,11 +88,16 @@
                                 <div class="form-group{{ $errors->has('instructor_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-instructor_id">{{ __('Instructor') }}</label>
                                     <select name="instructor_id" data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." id="input-instructor_id" class="form-control" placeholder="{{ __('Instructor') }}">
-                                        <option value="">-</option>
+                                        <option value=""></option>
 
                                         @foreach ($instructors as $key => $instructor)
 
-                                            <option ext="{{$instructors[$key][0]->medias['ext']}}" original_name="{{$instructors[$key][0]->medias['original_name']}}" name="{{$instructors[$key][0]->medias['name']}}" path="{{$instructors[$key][0]->medias['path']}}" value="{{$key}}">{{ $instructors[$key][0]['title'] }} {{ $instructors[$key][0]['subtitle'] }}</option>
+                                        @if($instructors[$key][0]->medias != null)
+                                        <option ext="{{$instructors[$key][0]->medias['ext']}}" original_name="{{$instructors[$key][0]->medias['original_name']}}" name="{{$instructors[$key][0]->medias['name']}}" path="{{$instructors[$key][0]->medias['path']}}" value="{{$key}}">{{ $instructors[$key][0]['title'] }} {{ $instructors[$key][0]['subtitle'] }}</option>
+                                        @else
+                                        <option ext="null" original_name="null" name="null" path="null" value="{{$key}}">{{ $instructors[$key][0]['title'] }} {{ $instructors[$key][0]['subtitle'] }}</option>
+                                        @endif
+
                                         @endforeach
                                     </select>
 

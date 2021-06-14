@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Model\Instructor;
+use App\Model\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\InstructorRequest;
 use Illuminate\Support\Facades\Auth;
@@ -36,7 +37,9 @@ class InstructorController extends Controller
     {
         $user = Auth::user();
 
-        return view('instructors.create', ['user' => $user]);
+        $users = User::all();
+
+        return view('instructors.create', ['user' => $user, 'users' => $users]);
     }
 
     /**
@@ -58,7 +61,15 @@ class InstructorController extends Controller
         $request->request->add(['status' => $status]);
         $isCreate = $model->create($request->all());
         if($isCreate){
-            $isCreate->createMedia($request->image_upload);
+            if($request->image_upload != null){
+                $isCreate->createMedia($request->image_upload);
+            }
+
+
+            //attach instructor-user
+            if($request->user_id != null){
+                $isCreate->user()->attach(['user_id' => $request->user_id]);
+            }
         }
 
 
@@ -84,7 +95,8 @@ class InstructorController extends Controller
      */
     public function edit(Instructor $instructor)
     {
-        return view('instructors.edit', compact('instructor'));
+        $users = User::all();
+        return view('instructors.edit', compact('instructor', 'users'));
     }
 
     /**
@@ -108,7 +120,14 @@ class InstructorController extends Controller
         $isUpdate = $instructor->update($request->all());
 
         if($isUpdate){
-            $instructor->updateMedia($request->image_upload);
+            if($request->image_upload){
+                $instructor->updateMedia($request->image_upload);
+            }
+
+            if($request->user_id){
+                $instructor->user()->sync($request->user_id);
+            }
+
         }
 
 

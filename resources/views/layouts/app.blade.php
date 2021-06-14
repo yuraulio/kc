@@ -104,6 +104,8 @@
         <link href="{{ asset('argon') }}/vendor/select2/dist/css/select2.min.css" rel="stylesheet">
         <link rel="stylesheet" href="{{ asset('vendor/file-manager/css/file-manager.css') }}">
         <link href="{{ asset('argon') }}/vendor/cropper/dist/cropper.min.css" rel="stylesheet">
+        <link href="{{ asset('argon') }}/vendor/timepicker/jquery.timepicker.min.css" rel="stylesheet">
+
 
 
 
@@ -161,7 +163,7 @@
         <script src="{{ asset('vendor/file-manager/js/file-manager.js') }}"></script>
         <script src="{{ asset('argon') }}/vendor/cropper/dist/cropper.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cropper/1.0.1/jquery-cropper.min.js" integrity="sha512-V8cSoC5qfk40d43a+VhrTEPf8G9dfWlEJgvLSiq2T2BmgGRmZzB8dGe7XAABQrWj3sEfrR5xjYICTY4eJr76QQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
+        <script src="{{ asset('argon') }}/vendor/timepicker/jquery.timepicker.min.js"></script>
 
 
 

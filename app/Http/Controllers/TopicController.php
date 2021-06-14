@@ -24,7 +24,10 @@ class TopicController extends Controller
         $this->authorize('manage-users', User::class);
         $user = Auth::user();
         $topics = $model->with('category')->get();
-        return view('topics.index', ['topics' => $topics, 'user' => $user]);
+
+        $categories = Category::with('topics')->get();
+        //dd($categories);
+        return view('topics.index', ['topics' => $topics, 'user' => $user, 'categories' => $categories]);
     }
 
     /**
