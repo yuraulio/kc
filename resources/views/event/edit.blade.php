@@ -529,7 +529,8 @@
             if (day.length < 2)
                 day = '0' + day;
 
-            return [month, day,year].join('/');
+
+            return [day,month,year].join('/');
         }
 
         function convertTimestamptoTime(timestamp) {
@@ -616,9 +617,6 @@
                     lesson = data.lesson[0].pivot
 
 
-
-                   //console.log(lesson)
-
                     if(lesson.instructor_id == null){
 
                         $('#lesson_update_btn').prop('disabled', true);
@@ -642,10 +640,19 @@
                         $('#instFormControlSelect').append(`<option ${lesson.instructor_id == value.id ? 'selected' : ''} value="${value.id}">${value.title} ${value.subtitle}</option>`)
                     });
 
-                    if(lesson.date != null){
-                        date =  new Date(lesson.date).toDateString()
-                        date = formatDate(date)
-                    }
+                    if(lesson.date != null && lesson.date != ""){
+                        // date =  new Date(lesson.date).toDateString()
+                        // date = formatDate(date)
+                        //alert(date)
+                        var date = new Date(lesson.date);
+                            date =((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + date.getFullYear()
+                        alert(date)
+                    }else{
+                        //date = lesson.time_starts.split(" ")[0]
+                        var date = new Date(lesson.time_starts);
+                            date =((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + date.getFullYear()
+
+                        }
 
                     if(lesson.time_starts != null)
                     {
@@ -688,7 +695,7 @@
 
                             <div class="form-group">
                                 <label for="date">Time starts</label>
-                                <input type="text" data-time-format="H:i:s" name="time_starts" class="form-control timepicker" id="time_starts" value="${lesson.time_starts != null ? time_starts : ''}" placeholder="Start">
+                                <input type="text" name="time_starts" class="form-control timepicker" id="time_starts" value="${lesson.time_starts != null ? time_starts : ''}" placeholder="Start">
                             </div>
                             <div class="form-group">
                                 <label for="date">Time ends</label>
@@ -710,21 +717,14 @@
 
                         $('#lesson_details').append(row)
                         var datePickerOptions = {
-                            dateFormat: 'd/m/yy',
+                            dateFormat: 'Y-m-d',
                             firstDay: 1,
                             changeMonth: true,
                             changeYear: true,
                             // ...
                         }
+                        $(".datepicker").datepicker(datePickerOptions);
 
-                        $('.timepicker').each(function(){
-                            console.log(this)
-        $(this).timepicker({
-        showSecond: false,
-        timeFormat: "H:mm",
-        stepMinute: 15
-        });
-    });
 
 
 
