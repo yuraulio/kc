@@ -67,7 +67,7 @@ class InitPages extends Command
         ///cart
         $page = new Pages;
 
-        $page->title = '';
+        $page->title = 'Cart';
         $page->content = '';
         $page->template = 'cart';
         $page->published = true;

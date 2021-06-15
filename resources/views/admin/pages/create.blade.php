@@ -134,11 +134,11 @@
       </div>
    </div>
    @endif
-
+   @if($page->title && $page->template != 'cart')
    <div class="tab-pane fade" id="media" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
       <div class="row">
          <div class="col-xl-12 order-xl-1">
-           
+         @include('admin.upload.upload', ['event' => ($media != null) ? $media : null])
          </div>
       </div>
    </div>
@@ -146,10 +146,11 @@
    <div class="tab-pane fade" id="media_version" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
       <div class="row">
          <div class="col-xl-12 order-xl-1">
-            
+            @include('event.image_versions', ['event' => $media,'versions1'=> ['event-card', 'header-image', 'social-media-sharing']])
          </div>
       </div>
    </div>
+   @endif
 
    @include('layouts.footers.auth')
 </div>
