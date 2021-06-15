@@ -35,7 +35,6 @@
                                     <th scope="col">{{ __('Date') }}</th>
                                     <th scope="col">{{ __('Time starts') }}</th>
                                     <th scope="col">{{ __('Time ends') }}</th>
-                                    <th scope="col">{{ __('Duration') }}</th>
                                     <th scope="col">{{ __('Room') }}</th>
                                 @endif
 
@@ -59,24 +58,23 @@
                                     echo '-';
                                 } ?></td>
                                     @if(count($event['type']) > 0 && $isInclassCourse )
-                                    @if($lesson->pivot->date != null || $lesson->pivot->date != "")
+                                    @if($lesson->pivot->date != null)
                                     <td id="date_lesson_edit_{{$lesson['id']}}"><?php $date = strtotime($lesson->pivot->date);  ?>{{ date('d-m-Y', $date ) }} </td>
-                                    <td id="start_lesson_edit_{{$lesson['id']}}"><?php $start = strtotime($lesson->pivot->time_starts); ?><?=  date('H:i:s', $start ) ?></td>
-                                    <td id="end_lesson_edit_{{$lesson['id']}}"><?php $ends = strtotime($lesson->pivot->time_ends); ?>{{ date('H:i:s', $ends ) }}</td>
-                                    <td id="duration_lesson_edit_{{$lesson['id']}}">{{$lesson->pivot->duration}}</td>
-                                    <td id="room_lesson_edit_{{$lesson['id']}}">{{$lesson->pivot->room}}</td>
-                                    @elseif($lesson->pivot->time_starts != "" || $lesson->pivot->time_starts != null)
-                                    <td id="date_lesson_edit_{{$lesson['id']}}"><?php $date = strtotime($lesson->pivot->time_starts);  ?>{{ date('d-m-Y', $date ) }} </td>
-                                    <td id="start_lesson_edit_{{$lesson['id']}}"><?php $start = strtotime($lesson->pivot->time_starts); ?><?=  date('H:i:s', $start ) ?></td>
-                                    <td id="end_lesson_edit_{{$lesson['id']}}"><?php $ends = strtotime($lesson->pivot->time_ends); ?>{{ date('H:i:s', $ends ) }}</td>
-                                    <td id="duration_lesson_edit_{{$lesson['id']}}">{{$lesson->pivot->duration}}</td>
+                                    <td id="start_lesson_edit_{{$lesson['id']}}"><?php if($lesson->pivot->time_starts != null){$start = strtotime($lesson->pivot->time_starts);}else{ $start = "";} ?><?php  if($start != ""){ echo date('H:i:s', $start );} ?></td>
+                                    <td id="end_lesson_edit_{{$lesson['id']}}"><?php if($lesson->pivot->time_ends != null){ $ends = strtotime($lesson->pivot->time_ends);}else{$ends = "";} ?><?php if($ends != ""){ echo date('H:i:s', $ends );}?></td>
                                     <td id="room_lesson_edit_{{$lesson['id']}}">{{$lesson->pivot->room}}</td>
                                     @else
+                                    @if($lesson->pivot->time_starts == null)
                                     <td id="date_lesson_edit_{{$lesson['id']}}"></td>
                                     <td id="start_lesson_edit_{{$lesson['id']}}"></td>
                                     <td id="end_lesson_edit_{{$lesson['id']}}"></td>
-                                    <td id="duration_lesson_edit_{{$lesson['id']}}"></td>
                                     <td id="room_lesson_edit_{{$lesson['id']}}"></td>
+                                    @else
+                                    <td id="date_lesson_edit_{{$lesson['id']}}"><?php $date = strtotime($lesson->pivot->time_starts);  ?>{{ date('d-m-Y', $date ) }} </td>
+                                    <td id="start_lesson_edit_{{$lesson['id']}}"><?php if($lesson->pivot->time_starts != null){$start = strtotime($lesson->pivot->time_starts);}else{ $start = "";} ?><?php  if($start != ""){ echo date('H:i:s', $start );} ?></td>
+                                    <td id="end_lesson_edit_{{$lesson['id']}}"><?php if($lesson->pivot->time_ends != null){ $ends = strtotime($lesson->pivot->time_ends);}else{$ends = "";} ?><?php if($ends != ""){ echo date('H:i:s', $ends );}?></td>
+                                    <td id="room_lesson_edit_{{$lesson['id']}}">{{$lesson->pivot->room}}</td>
+                                    @endif
                                     @endif
                                     @endif
 
@@ -161,7 +159,7 @@
                                     @if(count($event['type']) > 0 && $isInclassCourse )
                                     @if($lesson->pivot->date != null)
                                     <td id="date_lesson_edit_{{$lesson['id']}}"><?php $date = strtotime($lesson->pivot->date);  ?>{{ date('d-m-Y', $date ) }} </td>
-                                    <td id="start_lesson_edit_{{$lesson['id']}}"><?php $start = strtotime($lesson->pivot->time_starts); ?><?=  date('H:i:s', $start ) ?></td>
+                                    <td id="start_lesson_edit_{{$lesson['id']}}"><?php dd($lesson->pivot->time_starts); if($lesson->pivot->time_starts != null){$start = strtotime($lesson->pivot->time_starts);}else{ $start = "";} ?><?=  date('H:i:s', $start ) ?></td>
                                     <td id="end_lesson_edit_{{$lesson['id']}}"><?php $ends = strtotime($lesson->pivot->time_ends); ?>{{ date('H:i:s', $ends ) }}</td>
                                     <td id="duration_lesson_edit_{{$lesson['id']}}">{{$lesson->pivot->duration}}</td>
                                     <td id="room_lesson_edit_{{$lesson['id']}}">{{$lesson->pivot->room}}</td>

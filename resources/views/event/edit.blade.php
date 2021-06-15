@@ -404,7 +404,7 @@
 
                     <div class="modal-footer">
                         <button type="button" id="lesson_update_btn" class="btn btn-primary">Save changes</button>
-                        <button type="button" class="btn btn-link close_modal ml-auto close_modal" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-link ml-auto close-modal" data-dismiss="modal">Close</button>
                     </div>
 
                 </div>
@@ -448,7 +448,7 @@
 
         } );
 
-        $(document).on('click','.close_modal',function(){
+        $(document).on('click','.close-modal',function(){
 
             $('#instFormControlSelect option').each(function(key, value) {
                     $(value).remove()
@@ -462,14 +462,13 @@
             let date = $('#date').val()
             let end =  $('#time_ends').val()
             let room = $('#room').val()
-            let priority = $('#priority').val()
             let topic_id = $('#topic_id').val()
             let event_id = $('#event_id').val()
             let lesson_id = $('#lesson_id').val()
             let instructor_id = $('#instFormControlSelect').val()
 
 
-            data = {date:date, start:start, event_id:event_id, end:end, room:room, priority:priority, instructor_id:instructor_id, topic_id:topic_id, lesson_id:lesson_id}
+            data = {date:date, start:start, event_id:event_id, end:end, room:room, instructor_id:instructor_id, topic_id:topic_id, lesson_id:lesson_id}
 
             $.ajax({
                 type: 'POST',
@@ -532,20 +531,6 @@
             return [day,month,year].join('/');
         }
 
-        function convertTimestamptoTime(timestamp) {
-            unixTimestamp = timestamp;
-
-
-            // convert to milliseconds and
-            // then create a new Date object
-            dateObj = new Date(unixTimestamp * 1000);
-            utcString = dateObj.toUTCString();
-
-            time = utcString.slice(-12, -4);
-
-            return time;
-        }
-
         $(document).on('click', '#remove_lesson', function() {
             var confirmation = confirm("are you sure you want to remove the item?");
             let elem = $(this).data('lesson-id');
@@ -572,15 +557,20 @@
         });
 
         function tConvert (time) {
-            // Check correct time format and split into components
-            time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+            let unix_timestamp = 1549312452
+            // Create a new JavaScript Date object based on the timestamp
+            // multiplied by 1000 so that the argument is in milliseconds, not seconds.
+            var date = new Date(unix_timestamp * 1000);
+            // Hours part from the timestamp
+            var hours = date.getHours();
+            // Minutes part from the timestamp
+            var minutes = "0" + date.getMinutes();
+            // Seconds part from the timestamp
+            var seconds = "0" + date.getSeconds();
 
-            if (time.length > 1) { // If time format correct
-                time = time.slice (1);  // Remove full string match value
-                time[5] = +time[0] < 12 ? 'AM' : 'PM'; // Set AM/PM
-                time[0] = +time[0] % 12 || 12; // Adjust hours
-            }
-            return time.join (''); // return adjusted time or original string
+            // Will display time in 10:30:23 format
+            var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+            return formattedTime; // return adjusted time or original string
             }
 
         $(document).on('click','#open_modal',function(){
@@ -639,44 +629,38 @@
                         $('#instFormControlSelect').append(`<option ${lesson.instructor_id == value.id ? 'selected' : ''} value="${value.id}">${value.title} ${value.subtitle}</option>`)
                     });
 
-                    if(lesson.date != null && lesson.date != ""){
+                    if(lesson.date != null){
                         // date =  new Date(lesson.date).toDateString()
                         // date = formatDate(date)
                         //alert(date)
                         var date = new Date(lesson.date);
                             date =((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + date.getFullYear()
-                        alert(date)
                     }else{
-                        //date = lesson.time_starts.split(" ")[0]
-                        var date = new Date(lesson.time_starts);
+                        if(lesson.time_starts == null){
+                            date = ""
+                        }else{
+                            var date = new Date(lesson.time_starts);
                             date =((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + date.getFullYear()
-
                         }
+
+                    }
+
+
 
                     if(lesson.time_starts != null)
                     {
                         d = new Date(lesson.time_starts)
 
-                        console.log(d.getTime())
-
-                        time_starts = d.getTime()
-                        //console.log(new Date(time_starts).toLocaleTimeString());
-                        time_starts = new Date(time_starts).toLocaleTimeString()
-                        //var rest = time_starts.substring(0, time_starts.lastIndexOf(":") + 1);
-                        //var rest = rest.substring(0, rest.lastIndexOf(":") + 1);
-                        //console.log(rest)
-                        // time_starts = convertTimestamptoTime(time_starts)
-                        // alert(time_starts)
-                        //console.log(d.toLocaleTimeString())
-
-                        //time_starts = convertTimestamptoTime(d.getTime())
+                        time_starts = d.toLocaleTimeString('it-IT')
+                        alert(time_starts)
 
                     }
 
                     if(lesson.time_ends != null)
                     {
                         d = new Date(lesson.time_ends)
-                        time_ends = convertTimestamptoTime(d.getTime())
+                        time_ends = d.toLocaleTimeString('it-IT')
+                        alert(time_ends)
 
                     }
 
@@ -703,10 +687,6 @@
                             <div class="form-group">
                                 <label for="date">Room</label>
                                 <input type="text" name="room" class="form-control" id="room" value="${lesson.room != null ? lesson.room : ''}" placeholder="Room">
-                            </div>
-                            <div class="form-group">
-                                <label for="date">Priority</label>
-                                <input type="number" name="priority" class="form-control" id="priority" value="${lesson.priority != null ? lesson.priority : ''}" placeholder="Priority">
                             </div>
                         `
 
