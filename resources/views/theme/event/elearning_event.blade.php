@@ -114,27 +114,29 @@
                            {!! $event->body !!}
                            <div class="author-infos">
                               <div class="row">
+                                 @if(count($syllabus) > 0)
                                  <div class="col6 col-xs-12">
                                     <div id="syll" class="ibox">
                                        <div class="author-img">
                                           <?php
                                              $alt='';
-                                             $img = ''; //$event->mediable->original_name;
+                                             $img = get_image($syllabus[0]['mediable'],'instructors-small'); //$event->mediable->original_name;
 
-                                             /*if (!empty($section_syllabus_manager['featured']) && isset($section_syllabus_manager['featured'][0]) &&
-                                             isset($section_syllabus_manager['featured'][0]['media']) && !empty($section_syllabus_manager['featured'][0]['media'])){
-                                               $alt = $frontHelp->pField($section_syllabus_manager, 'title') ;
-                                               $img = $frontHelp->pImg($section_syllabus_manager, 'instructors-small');
-                                             }*/
-
+                                            
                                              ?>
-                                          <a id="syllabus-link" href=""><img src="{{cdn(get_image(''))}}" alt="{{$alt}}"></a>
+                                          <a id="syllabus-link" href=""><img src="{{cdn($img)}}" alt="{{$alt}}"></a>
                                        </div>
                                        <div class="ibox-text">
-                                          {{--<p>{{ $section_syllabus_manager->title }}<br/>{!! $section_syllabus_manager->body !!}</p>--}}
+
+                                       
+                                          <p>Syllabus Manager<br></p>
+                                          <p>
+                                             <a href="{{$syllabus[0]['slugable']['slug']}}">{{ $syllabus[0]['title'] }} {!! $syllabus[0]['subtitle'] !!}</a>
+                                          </p>                                      
                                        </div>
                                     </div>
                                  </div>
+                                 @endif
                                  {{--@if(isset($section_organisers))
                                  <div class="col6 col-xs-12">
                                     <div class="ibox">

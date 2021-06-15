@@ -27,10 +27,10 @@ class Topic extends Model
         return $this->morphToMany(Category::class, 'categoryable');
     }
 
-    /*public function lessons()
+    public function lessonsCategory()
     {
         return $this->belongsToMany(Lesson::class, 'categories_topics_lesson');
-    }*/
+    }
 
     public function lessons()
     {

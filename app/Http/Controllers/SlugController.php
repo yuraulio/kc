@@ -18,12 +18,17 @@ class SlugController extends Controller
         ]);
     }
 
-    public function update(Request $request, Slug $slug){
+    public function update(Request $request, $slug){
 
-        $slug->slug = check_for_slug( $request->slug );
-        $slug->save();
-        return response()->json([
-            'slug' => $slug->slug
-        ]);
+        $slug = Slug::where('id',$slug)->first();
+
+        if($slug){
+            $slug->slug = check_for_slug( $request->slug );
+            $slug->save();
+            return response()->json([
+                'slug' => $slug->slug
+            ]);
+        }
+       
     }
 }

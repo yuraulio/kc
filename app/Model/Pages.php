@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Traits\SlugTrait;
 use App\Traits\MetasTrait;
 use App\Traits\BenefitTrait;
+use App\Traits\MediaTrait;
 
 class Pages extends Model
 {
@@ -14,6 +15,7 @@ class Pages extends Model
     use SlugTrait;
     use MetasTrait;
     use BenefitTrait;
+    use MediaTrait;
 
     protected $table = 'pages';
 

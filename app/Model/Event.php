@@ -142,7 +142,7 @@ class Event extends Model
 
     public function syllabus()
     {
-        return $this->belongsToMany(instructor::class, 'event_syllabus_manager');
+        return $this->belongsToMany(Instructor::class, 'event_syllabus_manager')->with('mediable','slugable');
     }
 
     public function paymentMethod()

@@ -36,7 +36,8 @@ class HomeController extends Controller
         $data['faqs'] = $event->getFaqs();
         $data['testimonials'] = isset($event->category->toArray()[0]) ? $event->category->toArray()[0]['testimonials'] : [];
         $data['tickets'] = $event->ticket->toArray();
-
+        $data['syllabus'] = $event->syllabus->toArray();
+        //dd($data['syllabus']);
         return view('theme.event.' . $event->view_tpl,$data);
 
     }

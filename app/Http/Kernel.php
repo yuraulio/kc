@@ -62,6 +62,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
         'preview' => \App\Http\Middleware\Preview::class,
+        'static_page' => \App\Http\Middleware\StaticPages::class,
     ];
 
     /**

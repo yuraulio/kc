@@ -4,6 +4,8 @@
     'elementName' => 'role-management'
 ])
 
+
+
 @section('content')
     @component('layouts.headers.auth')
     @component('layouts.headers.breadcrumbs')
@@ -38,10 +40,7 @@
                         @include('alerts.success')
                         @include('alerts.errors')
                     </div>
-                    <form method="post" id="event_edit_form" method="POST" action="{{ route('events.update', $event) }}" autocomplete="off"
-                        enctype="multipart/form-data">
-                        @csrf
-                        @method('put')
+                  
 
                         <div class="form_event_btn">
                             <div class="save_event_btn" >@include('admin.save.save',['event' => isset($event) ? $event : null])</div>
@@ -51,6 +50,10 @@
 
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
+                                <form method="post" id="event_edit_form" method="POST" action="{{ route('events.update', $event) }}" autocomplete="off"
+                                            enctype="multipart/form-data">
+                                            @csrf
+                                            @method('put')
                                 <div class="form-group">
                                     <label class="form-control-label" for="input-method">{{ __('Method Payment') }}</label>
                                     <select name="payment_method" id="input-method" class="form-control" placeholder="{{ __('Method Payment') }}" no-mouseflow>
@@ -206,7 +209,7 @@
 
                                             @include('alerts.feedback', ['field' => 'syllabus'])
                                         </div>
-
+                              
                             </div>
                             <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
                                 <div class="nav-wrapper">
@@ -254,6 +257,7 @@
                                 <div class="card shadow">
                                     <div class="card-body">
                                         <div class="tab-content" id="myTabContent">
+                                       
                                             <div class="tab-pane fade show active" id="tabs-icons-text-1_inside" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab_inside">
 
 
@@ -265,7 +269,7 @@
 
                                                         <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
                                                             <label class="form-control-label" for="input-title">{{ __('Title') }}</label>
-                                                            <input type="text" name="title" id="input-title" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title', $event->title) }}" required autofocus>
+                                                            <input type="text" name="title" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title', $event->title) }}" required autofocus>
 
                                                             @include('alerts.feedback', ['field' => 'title'])
                                                         </div>
@@ -330,9 +334,10 @@
 
 
                                                     </div>
-                                                </form>
+                                               
 
                                             </div>
+                                            </form>
                                             <div class="tab-pane fade" id="tabs-icons-text-2_inside" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab_inside">
                                                 @include('admin.summary.summary', ['model' => $event])
                                             </div>
@@ -419,7 +424,6 @@
 
 
 
-
 <script>
     $( "#input-delivery" ).change(function() {
         if($(this).val() == 143){
@@ -430,7 +434,7 @@
     });
 </script>
 
-    <script>
+<script>
         $(document).ready(function() {
             $('#instFormControlSelect').select2({
                 dropdownParent: $('#modal-default'),
@@ -500,9 +504,8 @@
 
 
 
-    </script>
-
-    <script>
+</script>
+<script>
 
         $( document ).on('change',"#instFormControlSelect",function() {
             if($('#instFormControlSelect').val() == '-'){
@@ -515,9 +518,9 @@
         //alert( "Handler for .change() called." );
         });
 
-    </script>
+</script>
 
-    <script>
+<script>
             function formatDate(date) {
             var d = new Date(date),
                 month = '' + (d.getMonth() + 1),
@@ -699,7 +702,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="date">Time ends</label>
-                                <input type="time" name="time_ends" class="form-control" id="time_ends" value="${lesson.time_ends != null ? time_ends : ''}" placeholder="End">
+                                <input type="text" name="time_ends" class="form-control timepicker" id="time_ends" value="${lesson.time_ends != null ? time_ends : ''}" placeholder="End">
                             </div>
                             <div class="form-group">
                                 <label for="date">Duration</label>
@@ -724,6 +727,24 @@
                             // ...
                         }
                         $(".datepicker").datepicker(datePickerOptions);
+                        /*$('#time_starts').timepicker({
+                            timeFormat: 'h:mm p',
+                                                
+                            minTime: '10',
+                            maxTime: '6:00pm',
+                            defaultTime: '11',
+                            startTime: '10:00',
+                            dynamic: false,
+                            dropdown: true,
+                            scrollbar: true,
+                            zindex: 9999999
+                        });*/
+                        $('.timepicker').timepicker({
+                            timeFormat: 'HH:mm',
+                            zindex: 9999999,
+                            interval: 5,
+                        });
+
 
 
 
@@ -746,9 +767,8 @@
             });
 
         });
-    </script>
-
-    <script>
+</script>
+<script>
         $(document).on('change',"#input-method",function(){
 
             if($(this).val()){
@@ -777,25 +797,24 @@
 
 
         })
-    </script>
-
-    <script>
+</script>
+<script>
         $('#submit-btn').on('click', function(){
             $('#event_edit_form').submit()
         })
 
 
 
-    </script>
+</script>
 
 <script>
 
-instructors = @json($instructors1);
+    instructors = @json($instructors1);
 
-$(document).ready(function(){
-    $("#input-syllabus").select2({
-    templateResult: formatOptions
-    });
+    $(document).ready(function(){
+        $("#input-syllabus").select2({
+            templateResult: formatOptions
+        });
     });
 
     function formatOptions (state) {
@@ -843,16 +862,6 @@ $(document).ready(function(){
     );
     return $state;
     }
-</script>
-
-<script>
-
-
-$(document).ready(function(){
-    $('input.timepicker').timepicker({'timeFormat': 'H:i:s'});
-});
-
-
 </script>
 
 @endpush

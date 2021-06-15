@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Auth;
 
 class PagesController extends Controller
 {
+
+    public function __construct(){
+        //$this->middleware('static_page')->only('destroy');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -75,6 +80,7 @@ class PagesController extends Controller
         $data['templates'] = get_templates();
         $data['slug'] = $page->slugable;
         $data['metas'] = $page->metable;
+        $data['media'] = $page->mediable;
         
         if($page->template == 'corporate_page'){
             return view('admin.pages.create_corporate',$data);

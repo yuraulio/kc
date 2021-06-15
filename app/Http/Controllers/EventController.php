@@ -104,11 +104,9 @@ class EventController extends Controller
     public function assign_store(Request $request)
     {
         $event = Event::find($request->event_id);
-        $allLessons = Topic::with('lessons')->find($request->topic_id);
+        $allLessons = Topic::with('lessonsCategory')->find($request->topic_id);
 
-        //dd($allLessons);
-
-        foreach($allLessons->lessons as $lesson)
+        foreach($allLessons->lessonsCategory as $lesson)
         {
             $find = $event->topic()->wherePivot('event_id', '=', $request->event_id)->wherePivot('topic_id', '=', $request->topic_id)->wherePivot('lesson_id', '=', $lesson['id'])->get();
             if(count($find) == 0 && $request->status1 == true)
@@ -283,10 +281,10 @@ class EventController extends Controller
             }
             if(!$found){
                 $unassigned[$allTopics['id']] = $allTopics;
-                $unassigned[$allTopics['id']]['lessons'] = Topic::with('lessons')->find($allTopics['id'])->lessons;
+                $unassigned[$allTopics['id']]['lessons'] = Topic::with('lessonsCategory')->find($allTopics['id'])->lessonsCategory;
             }
         }
-        //dd($unassigned);
+        //dd($unassigned[288]);
        // dd($event['topic']->groupBy('id'));
         //dd($allTopicsByCategory);
         $data['unassigned'] = $unassigned;
@@ -321,6 +319,7 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
+        
         if($request->published == 'on')
         {
             $published = 1;
@@ -329,7 +328,7 @@ class EventController extends Controller
             $published = 0;
         }
 
-        //dd($request->all());
+        
         $request->request->add(['published' => $published,'release_date_files' => date('Y-m-d H:i:s', strtotime($request->release_date_files))]);
         $ev = $event->update($request->all());
 
@@ -354,7 +353,9 @@ class EventController extends Controller
             $event->delivery()->attach($request->delivery);
         }
 
-        return redirect()->route('events.index')->withStatus(__('Event successfully updated.'));
+        return back()->withStatus(__('Event successfully updated.'));
+        //return redirect()->route('events.edit',$event->id)->withStatus(__('Event successfully created.'));
+        //return redirect()->route('events.index')->withStatus(__('Event successfully updated.'));
     }
 
     /**

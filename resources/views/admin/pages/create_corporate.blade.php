@@ -1,3 +1,4 @@
+<?php $noEditablePages = ['home','cart']; ?>
 @extends('layouts.app', [
 'title' => __('Role Management'),
 'parentSection' => 'laravel',
