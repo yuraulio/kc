@@ -493,6 +493,25 @@
                                 </div>
                             </div>
 
+                            <div class="form-group">
+                                <label class="form-control-label" for="input-topic_id">{{ __('Select Billing Details') }}</label>
+                                <select class="form-control" name="billing" id="billing">
+                                    <option value="1">Receipt</option>
+                                    <option value="2">Invoice</option>
+
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-control-label" for="input-topic_id">{{ __('Select Payment Type') }}</label>
+                                <select class="form-control" name="cardtype" id="cardtype">
+                                    <option value="3">Bank Transfer</option>
+                                    <option value="4">Cash</option>
+                                </select>
+                            </div>
+
+
+
 
                             <input type="hidden" name="user_id" value="{{$user['id']}}">
 
@@ -514,8 +533,6 @@
                     <div class="col-8">
                     </div>
                         <div class="col-4 text-right">
-                            <!-- <a href="{{ route('user.assignToCourse') }}" class="btn btn-sm btn-primary">{{ __('Add course') }}</a> -->
-                            <!-- Button trigger modal -->
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#assignUserEvent">
                             Add course
                             </button>
@@ -532,12 +549,11 @@
                                 <th scope="col"></th>
                             </tr>
                         </thead>
-                        <?php //dd($user->events); ?>
                         <tbody id="assigned_ticket_users">
                             @foreach ($user->events as $user_event)
                                 <tr id="event_{{$user_event->id}}">
                                     <td>{{ $user_event->title }}</td>
-                                    <td>{{ $user_event->title }}</td>
+                                    <td>{{ $user_event->ticket_title }}</td>
 
                                     <td>{{ $user_event->pivot->expiration}}</td>
 
@@ -665,6 +681,8 @@ $(document).on('click', '.ticket-card', function () {
     $(document).on('click', '#assignTicketUser', function () {
         const user_id = $(this).data('user-id')
         var event_id = $('#input-event_id').val()
+        var billing = $('#billing').val()
+        var cardtype = $('#cardtype').val()
         var ticket_id = $(".ticket-card input[type='radio']:checked").attr('id');
 
         $.ajax({
@@ -673,11 +691,11 @@ $(document).on('click', '.ticket-card', function () {
                 },
                 type: 'post',
                 url: '/admin/user/assignEventToUserCreate',
-                data: {'event_id': event_id, 'ticket_id': ticket_id, 'user_id': user_id},
+                data: {'cardtype':cardtype, 'billing':billing ,'event_id': event_id, 'ticket_id': ticket_id, 'user_id': user_id},
                 success: function (data) {
 
                     let ticket = data.data.ticket;
-                    console.log(data.success)
+                    //console.log(data.success)
                     let newRow =
                     `<tr id="event_`+ticket.event_id +`">` +
                     `<td>` + ticket.event + `</td>` +

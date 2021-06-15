@@ -286,7 +286,7 @@ $(document).ready( function () {
                 // Element dragging ended
                 onEnd: function ( /**Event*/ evt) {
 
-                   
+
                     orderLessons()
 
 
@@ -327,7 +327,7 @@ $(document).ready( function () {
         $( ".lessons-list" ).each(function( index ) {
             lessons[$(this).attr('id')] = index
         });
-        
+
         $.ajax({
             type: 'POST',
             headers: {
@@ -337,8 +337,8 @@ $(document).ready( function () {
             url: "{{ route ('sort-lessons', $event->id) }}",
             data:lessons,
             success: function(data) {
-            
-            
+
+
             }
         });
     }

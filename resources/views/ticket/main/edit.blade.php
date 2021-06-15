@@ -57,6 +57,7 @@
                                     <label class="form-control-label" for="input-type">{{ __('Type') }}</label>
                                     <select name="type" id="input-type" class="form-control" placeholder="{{ __('Type') }}" required>
                                         <option value="">-</option>
+                                        <option <?php if($ticket['type'] == 'Early-bird')  echo 'selected'; ?> value="Early-bird">Early-bird</option>
                                         <option <?php if($ticket['type'] == 'Alumni')  echo 'selected'; ?> value="Alumni">Alumni</option>
                                         <option <?php if($ticket['type'] == 'Regular')  echo 'selected'; ?> value="Regular">Regural</option>
                                         <option <?php if($ticket['type'] == 'Special')  echo 'selected'; ?> value="Special">Special</option>

@@ -420,6 +420,7 @@
 
 
 
+
 <script>
     $( "#input-delivery" ).change(function() {
         if($(this).val() == 143){
@@ -460,7 +461,6 @@
             let start = $('#time_starts').val()
             let date = $('#date').val()
             let end =  $('#time_ends').val()
-            let duration = $('#duration').val()
             let room = $('#room').val()
             let priority = $('#priority').val()
             let topic_id = $('#topic_id').val()
@@ -469,7 +469,7 @@
             let instructor_id = $('#instFormControlSelect').val()
 
 
-            data = {date:date, start:start, event_id:event_id, end:end, duration:duration, room:room, priority:priority, instructor_id:instructor_id, topic_id:topic_id, lesson_id:lesson_id}
+            data = {date:date, start:start, event_id:event_id, end:end, room:room, priority:priority, instructor_id:instructor_id, topic_id:topic_id, lesson_id:lesson_id}
 
             $.ajax({
                 type: 'POST',
@@ -482,11 +482,10 @@
                 success: function(data) {
                     data = JSON.parse(data)
 
-                    $('#inst_lesson_edit_'+data.lesson_id).text(data.instructor.title+' '+data.instructor.title)
+                    $('#inst_lesson_edit_'+data.lesson_id).text(data.instructor.title+' '+data.instructor.subtitle)
                     $('#date_lesson_edit_'+data.lesson_id).text(data.date1)
                     $('#start_lesson_edit_'+data.lesson_id).text(tConvert(data.start))
                     $('#end_lesson_edit_'+data.lesson_id).text(tConvert(data.end))
-                    $('#duration_lesson_edit_'+data.lesson_id).text(data.duration)
                     $('#room_lesson_edit_'+data.lesson_id).text(data.room)
 
                     $('#modal-default').modal()
@@ -700,10 +699,6 @@
                             <div class="form-group">
                                 <label for="date">Time ends</label>
                                 <input type="time" name="time_ends" class="form-control" id="time_ends" value="${lesson.time_ends != null ? time_ends : ''}" placeholder="End">
-                            </div>
-                            <div class="form-group">
-                                <label for="date">Duration</label>
-                                <input type="text" name="duration" class="form-control" id="duration" value="${lesson.duration != null ? lesson.duration : ''}" placeholder="Duration">
                             </div>
                             <div class="form-group">
                                 <label for="date">Room</label>
