@@ -280,28 +280,8 @@ $(document).ready( function () {
                 // Element dragging ended
                 onEnd: function ( /**Event*/ evt) {
 
-                    let lessons = {};
-
-                    $( ".lessons-list" ).each(function( index ) {
-                        lessons[$(this).attr('id')] = index
-                    });
-                    console.log(lessons);
-
-
-                    $.ajax({
-                        type: 'POST',
-                        headers: {
-                        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-                        },
-                        Accept: 'application/json',
-                        url: "{{ route ('sort-lessons', $event->id) }}",
-                        data:lessons,
-                        success: function(data) {
-
-
-                        }
-                    });
-
+                   
+                    orderLessons()
 
 
 
@@ -310,8 +290,52 @@ $(document).ready( function () {
 
         });
 
+        el = document.getElementById('accordionExample');
+
+        new Sortable(el, {
+           group: "words",
+           handle: ".my-handle",
+           draggable: ".item",
+           ghostClass: "sortable-ghost",
+
+        });
+
+        new Sortable(el, {
+
+            // Element dragging ended
+            onEnd: function ( /**Event*/ evt) {
+
+                orderLessons()
+
+
+            },
+        });
+
 
     })( jQuery );
+
+
+    function orderLessons(){
+        let lessons = {};
+
+        $( ".lessons-list" ).each(function( index ) {
+            lessons[$(this).attr('id')] = index
+        });
+        
+        $.ajax({
+            type: 'POST',
+            headers: {
+            'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+            },
+            Accept: 'application/json',
+            url: "{{ route ('sort-lessons', $event->id) }}",
+            data:lessons,
+            success: function(data) {
+            
+            
+            }
+        });
+    }
 
 </script>
 

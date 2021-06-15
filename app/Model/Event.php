@@ -61,7 +61,7 @@ class Event extends Model
     {
 
         return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id')
-            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority');
+            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority')->orderBy('event_topic_lesson_instructor.priority','asc');;
     }
 
     public function lessons()
@@ -160,7 +160,7 @@ class Event extends Model
         $topics = [];
 
         $lessons = $this->lessons->groupBy('topic_id');
-         //dd($lessons[279]);
+       
         $instructors = $this->instructors->unique()->groupBy('instructor_id')->toArray();
 
         foreach($this->topic->unique()->groupBy('topic_id') as $key => $topic){
