@@ -141,11 +141,10 @@ class LessonController extends Controller
 
         if($request->date != null){
             $date = date('Y-m-d H:i:s', strtotime($request->date));
-            //$date1 = date('Y-m-d', strtotime($request->date));
+            $date1 = date('d-m-Y', strtotime($request->date));
         }
 
         if($request->start != null){
-            dd($request->start);
             $start = date('Y-m-d H:i:s', strtotime($date1." ".$request->start));
             //$start_response = date('H:i:s', strtotime($date1." ".$request->start));
         }
@@ -172,7 +171,7 @@ class LessonController extends Controller
 
         $data['instructor'] = Instructor::find($request->instructor_id);
         $data['lesson_id'] = $request->lesson_id;
-        //$data['date1'] = $date1;
+        $data['date1'] = $date1;
         //$data['start'] = $start_response;
         //$data['end'] = $end_response;
         $data['duration'] = $request->duration;
