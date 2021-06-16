@@ -52,7 +52,9 @@ class UserController extends Controller
         $data['all_users'] = $model::count();
         $data['total_graduates'] = 0;
 
-        return view('users.index', ['users' => $model->with('role')->get(), 'data' => $data]);
+        //dd($model->with('role', 'image')->get()[0]);
+
+        return view('users.index', ['users' => $model->with('role', 'image')->get(), 'data' => $data]);
     }
 
     /**
@@ -179,11 +181,6 @@ class UserController extends Controller
         return view('users.courses.edit_ticket', ['events' => $event ,'user' => $user]);
     }
 
-    public function store_ticket()
-    {
-
-    }
-
     public function remove_ticket_user(Request $request)
     {
         $user = User::find($request->user_id);
@@ -222,11 +219,12 @@ class UserController extends Controller
      */
     public function edit(User $user, Role $model)
     {
+        //dd($user);
         $data['events'] = Event::has('ticket')->get();
 
         //dd($data['events']);
-        $data['user'] = $user::with('ticket','role','events')->first();
-        //dd($user->events);
+        $data['user'] = $user::with('ticket','role','events','image')->find($user['id']);
+        //dd($data['user']);
         foreach($user->events as $key => $value){
             $user_id = $value->pivot->user_id;
             $event_id = $value->pivot->event_id;
