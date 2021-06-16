@@ -99,7 +99,7 @@
                                         <a href="{{ route('user.index') }}" class="nav-link">{{ __('Search engines settings') }}</a>
                                     </li>
                                 @endcan
-                          
+
                                 @can('manage-users', App\Model\User::class)
                                     <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
                                         <a href="{{ route('media2.index') }}" class="nav-link">{{ __('Media library') }}</a>
@@ -134,11 +134,26 @@
                         </div>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link active" href="#navbar-pages" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-pages">
+                        <a class="nav-link active" href="#navbar-booking" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-booking">
+                            <i class="fab fa-laravel" style="color: #f4645f;"></i>
+                            <span class="nav-link-text" style="color: #f4645f;">{{ __('Booking') }}</span>
+                        </a>
+                        <div class="collapse show" id="navbar-booking">
+                            <ul class="nav nav-sm flex-column">
+                                @can('manage-users', App\Model\User::class)
+                                    <li class="nav-item  {{ $elementName == 'role-management' ? 'active' : '' }}">
+                                        <a href="{{ route('transaction.participants') }}" class="nav-link">{{ __('Participants') }}</a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link active" href="#navbar-faqs" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-faqs">
                             <i class="fab fa-laravel" style="color: #f4645f;"></i>
                             <span class="nav-link-text" style="color: #f4645f;">{{ __('Faqs') }}</span>
                         </a>
-                        <div class="collapse show" id="navbar-pages">
+                        <div class="collapse show" id="navbar-faqs">
                             <ul class="nav nav-sm flex-column">
                                 @can('manage-users', App\Model\User::class)
                                     <li class="nav-item  {{ $elementName == 'role-management' ? 'active' : '' }}">

@@ -20,7 +20,11 @@ namespace App\Http\Controllers;
 use App\Model\Role;
 use App\Model\User;
 use App\Model\Event;
-use App\Model\TIcket;
+use App\Model\Ticket;
+use App\Model\Transaction;
+use \Cart as Cart;
+use Carbon\Carbon;
+use Session;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -64,12 +68,13 @@ class UserController extends Controller
 
     public function assignEventToUserCreate(Request $request)
     {
-
+        //dd($request->all());
        $user_id = $request->user_id;
        $event_id = $request->event_id;
        $ticket_id = $request->ticket_id;
 
        $user = User::find($user_id);
+       //dd($user);
        $user->ticket()->attach($ticket_id, ['event_id' => $event_id]);
 
        $data['event'] = Event::with('delivery', 'ticket')->find($event_id);
@@ -90,15 +95,65 @@ class UserController extends Controller
 
         $ticket->events()->updateExistingPivot($event_id,['quantity' => $quantity], false);
 
+
+
        if($data['event']['expiration'] != null){
             $exp_date = date('Y-m-d', strtotime("+".$extra_month." months", strtotime('now')));
        }else{
            $exp_date = null;
        }
 
-
-
        $user->events()->attach($event_id, ['paid' => 1, 'expiration' => $exp_date]);
+
+       $payment_method = $request->cardtype;
+       $billing = $request->billing;
+
+       $event = Event::find($event_id);
+       $price = $event->ticket()->wherePivot('ticket_id',$ticket_id)->first()->pivot->price;
+
+
+
+
+       //fetch user information
+       $person_details = [];
+       $person_details['billing'] = $billing;
+       $person_details['billname'] = $user['name'];
+       $person_details['billsurname'] = $user['surname'];
+
+        if($user['address'] != null){
+            $person_details['billaddress'] = $user['address'];
+        }
+        if($user['address_num'] != null){
+            $person_details['billaddressnum'] = $user['address_num'];
+        }
+        if($user['postcode'] != null){
+            $person_details['billpostcode'] = $user['postcode'];
+        }
+        if($user['city'] != null){
+            $person_details['billcity'] = $user['city'];
+        }
+
+        $person_details = json_encode($person_details);
+
+
+       //Create Transaction
+       $transaction = new Transaction;
+       $transaction->placement_date = Carbon::now();
+       $transaction->ip_address = \Request::ip();
+       $transaction->type = $ticket['type'];
+       $transaction->billing_details = $person_details;
+       $transaction->total_amount = $price;
+       $transaction->amount = $price;
+
+       $transaction->save();
+
+        //attach transaction with user
+       $transaction->user()->attach($user['id']);
+
+       //attach transaction with event
+       $transaction->event()->attach($event_id);
+
+
 
        $response_data['ticket']['event'] = $data['event']['title'];
        $response_data['ticket']['ticket_title'] = $ticket['title'];
@@ -178,6 +233,7 @@ class UserController extends Controller
             $event = Event::find($event_id);
             $ticket = $event->tickets()->wherePivot('event_id', '=', $event_id)->wherePivot('user_id', '=', $user_id)->first();
             $data['user']['events'][$key]['ticket_id'] = $ticket->pivot->ticket_id;
+            $data['user']['events'][$key]['ticket_title'] = $ticket['title'];
         }
 
         return view('users.edit', ['events' => $data['events'] ,'user' => $data['user'], 'roles' => $model->all()]);
@@ -220,4 +276,5 @@ class UserController extends Controller
 
         return redirect()->route('user.index')->withStatus(__('User successfully deleted.'));
     }
+
 }

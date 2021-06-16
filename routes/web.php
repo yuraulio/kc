@@ -48,6 +48,8 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
     Route::resource('delivery', 'DeliveryController', ['except' => ['show']]);
     Route::resource('menu', 'MenuController', ['except' => ['show']]);
 
+    Route::get('Transaction/participants', ['as' => 'transaction.participants', 'uses' => 'TransactionController@participants']);
+
     //Menu item
     Route::get('menu/add_item', ['as' => 'menu.add_item', 'uses' => 'MenuController@add_item']);
     Route::post('menu/fetchAllMenu', ['as' => 'menu.fetchAllMenu', 'uses' => 'MenuController@fetchAllMenu']);
