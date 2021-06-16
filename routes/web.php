@@ -198,7 +198,7 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
     Route::post('/sort-lessons/{event}', 'LessonController@orderLesson')->name('sort-lessons');
 
     //Benefits
-    Route::post('/benefits/{event}', 'BenefitController@orderBenefits')->name('sort-benefits');
+    Route::post('/benefits', 'BenefitController@orderBenefits')->name('sort-benefits');
 
     //Summaries
     Route::post('/summaries/{event}', 'SummaryController@orderSummaries')->name('sort-summaries');

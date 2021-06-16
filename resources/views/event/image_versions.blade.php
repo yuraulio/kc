@@ -30,8 +30,12 @@
 
                 }
                 foreach($versions as $key1 => $value1){
-                    //dd($value);
-                    foreach($details['img_align'] as $key => $value){
+                    $versions[$key1]['x'] = 0;
+                    $versions[$key1]['y'] = 0;
+                    if(!isset($details['img_align'])){
+                        continue;
+                    }
+                    foreach( $details['img_align'] as $key => $value){
                         //dd($value);
                         if($key == $value1['version']){
                             $found1 = true;

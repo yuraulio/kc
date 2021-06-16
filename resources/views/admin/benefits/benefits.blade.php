@@ -259,8 +259,8 @@
          'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
          },
          Accept: 'application/json',
-         url: "{{ route ('sort-benefits', $model->id) }}",
-         data:{'benefits':benefits,'id':"{{$model->id}}"},
+         url: "{{ route ('sort-benefits') }}",
+         data:{'benefits':benefits,'id':"{{$model->id}}",'modelType':"{{addslashes ( get_class($model) )}}"},
          success: function(data) {
          
          

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Model\Media;
 use Intervention\Image\ImageManagerStatic as Image;
-use App\Model\Media;
+
 
 class MediaController extends Controller
 {

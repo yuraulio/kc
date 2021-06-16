@@ -68,9 +68,11 @@ class BenefitController extends Controller
         //
     }
 
-    public function orderBenefits(Request $request, Event $event){
+    public function orderBenefits(Request $request){
 
-        $event->orderBenefits($request->benefits);
+        $model = app($request->modelType);
+        $model = $model::find($request->id);
+        $model->orderBenefits($request->benefits);
         
     }
 
