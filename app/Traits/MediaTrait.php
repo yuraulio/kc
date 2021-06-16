@@ -10,7 +10,15 @@ use Illuminate\Support\Facades\Storage;
 trait MediaTrait
 {
 
-    public function createMedia($mediaKey){
+    public function createMedia(){
+
+        $media = new Media;
+        $media->save();
+
+        $this->mediable()->save($media);
+    }
+
+    /*public function createMedia($mediaKey){
 
         $pos = strrpos($mediaKey, '/');
         $id = $pos === false ? $mediaKey : substr($mediaKey, $pos + 1);
@@ -36,7 +44,7 @@ trait MediaTrait
             $image->fit($value['w'], $value['h']);
             $image->save(public_path($folders.'/'.$path[0].'-'.$value['version'].'.'.$path[1]), $value['q']);
         }
-    }
+    }*/
 
     public function updateMedia($mediaKey){
         //dd($mediaKey);

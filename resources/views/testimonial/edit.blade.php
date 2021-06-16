@@ -197,9 +197,9 @@
                                             @include('alerts.feedback', ['field' => 'youtube'])
                                         </div>
 
-                                        <?php //dd($testimonial->medias != null); ?>
+                    >
 
-                                        @include('admin.upload.upload', ['event' => ( isset($testimonial) && $testimonial->medias != null) ? $testimonial : null])
+                                       
 
 
                                         <div class="text-center">
@@ -209,6 +209,7 @@
                                 </form>
                             </div>
                             <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
+                            @include('admin.upload.upload', ['event' => ( isset($testimonial) && $testimonial->medias != null) ? $testimonial->medias : null])
                             @include('event.image_versions', ['event' => $testimonial->medias, 'versions1'=>['instructors-testimonials']])
                             </div>
 

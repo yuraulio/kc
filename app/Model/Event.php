@@ -48,7 +48,7 @@ class Event extends Model
 
     public function faqs()
     {
-        return $this->morphToMany(Faq::class, 'faqable')->with('category')->orderBy('priority','asc');
+        return $this->morphToMany(Faq::class, 'faqable')->with('category')->withPivot('priority')->orderBy('faqables.priority','asc');
     }
 
 
@@ -100,7 +100,7 @@ class Event extends Model
 
     public function ticket()
     {
-        return $this->belongsToMany(Ticket::class, 'event_tickets')->withPivot('id','priority', 'price', 'options', 'quantity', 'features');
+        return $this->belongsToMany(Ticket::class, 'event_tickets')->withPivot('id','priority', 'price', 'options', 'quantity', 'features')->orderBy('priority');
     }
 
     public function tickets()

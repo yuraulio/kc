@@ -10,7 +10,7 @@
    </div>
 </div>
 <div class="table-responsive py-4">
-   <table class="table align-items-center table-flush"  id="datatable-basic">
+   <table class="table align-items-center table-flush benefits-table"  id="datatable-basic">
       <thead class="thead-light">
          <tr>
             <th scope="col">{{ __('Name') }}</th>
@@ -18,12 +18,12 @@
             <th scope="col"></th>
          </tr>
       </thead>
-      <tbody class="benefit-body">
+      <tbody class="benefit-body benefits-order">
          <?php //dd($model->benefits); ?>
          @if($model->benefits)
          @foreach ($model->benefits as $benefit)
          <tr>
-            <td id="name-{{$benefit->id}}">{{ $benefit->name }}</td>
+            <td id="name-{{$benefit->id}}" class="benefit-list" data-id ="{{$benefit->id}}">{{ $benefit->name }}</td>
             <td>{{ date_format($benefit->created_at, 'd-m-Y' ) }}</td>
             <td class="text-right">
                <div class="dropdown">
@@ -217,4 +217,63 @@
 
 
 </script>
+
+
+<script src="{{ asset('js/sortable/Sortable.js') }}"></script>
+
+<script>
+
+   (function( $ ){
+      
+      var el = document.getElementsByClassName('benefits-order')[0];
+         
+      new Sortable(el, {
+         group: "words",
+         handle: ".my-handle",
+         draggable: ".item",
+         ghostClass: "sortable-ghost",
+
+      });
+
+      new Sortable(el, {
+
+          // Element dragging ended
+          onEnd: function ( /**Event*/ evt) {
+            orderBenefits()
+          },
+      });
+
+   })( jQuery );
+
+   function orderBenefits(){
+      let benefits={}
+
+      $( ".benefit-list" ).each(function( index ) {
+          benefits[$(this).data('id')] = index
+      });
+   
+
+      $.ajax({
+         type: 'POST',
+         headers: {
+         'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+         },
+         Accept: 'application/json',
+         url: "{{ route ('sort-benefits', $model->id) }}",
+         data:{'benefits':benefits,'id':"{{$model->id}}"},
+         success: function(data) {
+         
+         
+         }
+      });
+   }
+  
+   $(document).ready( function () {
+      $('.benefits-table').dataTable( {
+          "ordering": false
+      });
+   });
+
+</script>
+
 @endpush

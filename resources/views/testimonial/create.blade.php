@@ -132,7 +132,7 @@
                                     @include('alerts.feedback', ['field' => 'youtube'])
                                 </div>
 
-                                @include('admin.upload.upload', ['event' => ( isset($testimonial) && $testimonial->medias['path'] != null) ? $event : null])
+                                {{--@include('admin.upload.upload', ['event' => ( isset($testimonial) && $testimonial->medias['path'] != null) ? $event : null])--}}
 
 
                                 <div class="text-center">

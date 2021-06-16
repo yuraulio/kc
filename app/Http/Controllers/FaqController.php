@@ -278,4 +278,16 @@ class FaqController extends Controller
             'faqs' => $faqs,
         ]);
     }
+
+    public function sortFaqs(Request $request, Event $event){
+        //dd($request->all());
+      //  dd($event->faqs->pluck('id')->toArray());
+        foreach($event->faqs as $faq){
+            
+            $faq->pivot->priority = $request->all()['faqs'][$faq['id']];
+            $faq->pivot->save();
+
+        }
+
+    }
 }

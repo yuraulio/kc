@@ -147,10 +147,9 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
 
     //Route::post('lesson/destroy_from_topic1', ['as' => 'lesson.destroy_from_topic1', 'uses' => 'LessonController@destroy_from_topic1']);
 
-
-    Route::post('media/crop_image', ['as' => 'media.crop_image', 'uses' => 'Media2Controller@crop_image']);
-
-
+    //Media
+    Route::put('media/upload-image/{media}', 'MediaController@uploadImage')->name('upload.image');
+    Route::post('media/crop_image', ['as' => 'media.crop_image', 'uses' => 'MediaController@crop_image']);
 
     //Events
     Route::put('profile/updateRole', ['as' => 'profile.updateRole', 'uses' => 'ProfileController@updateRole']);
@@ -195,8 +194,28 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
     //media2
     Route::get('media2/index', ['as' => 'media2.index', 'uses' => 'Media2Controller@index']);
 
-     //Lessons
-     Route::post('/sort-lessons/{event}', 'LessonController@orderLesson')->name('sort-lessons');
+    //Lessons
+    Route::post('/sort-lessons/{event}', 'LessonController@orderLesson')->name('sort-lessons');
+
+    //Benefits
+    Route::post('/benefits/{event}', 'BenefitController@orderBenefits')->name('sort-benefits');
+
+    //Summaries
+    Route::post('/summaries/{event}', 'SummaryController@orderSummaries')->name('sort-summaries');
+    
+    //Tickets
+    Route::post('/tickets/{event}', 'TicketController@sortTickets')->name('sort-tickets');
+
+    //Faqs
+    Route::post('/faqs/{event}', 'FaqController@sortFaqs')->name('sort-faqs');
+
+    //Logos
+    Route::get('/logos', 'Dashboard\LogosController@index')->name('logos.index');
+    Route::get('/logos/create', 'Dashboard\LogosController@create')->name('logos.create');
+    Route::post('/logos/store', 'Dashboard\LogosController@store')->name('logos.store');
+    Route::get('/logos/edit/{logo}', 'Dashboard\LogosController@edit')->name('logos.edit');
+    Route::put('/logos/update/{logo}', 'Dashboard\LogosController@update')->name('logos.update');
+
 
 });
 

@@ -11,6 +11,7 @@ return[
         'Corporate Page' => 'corporate_page',
         'Give Away' => 'give_away_page',
         'Subscription Page' => 'subscription_page',
+        'Trained-Media Page' => 'trained_media_page',
     ],
 
     'events' => [

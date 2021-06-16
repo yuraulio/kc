@@ -11,7 +11,7 @@
     </div>
 </div>
 <div class="table-responsive py-4">
-    <table class="table align-items-center table-flush"  id="datatable-basic">
+    <table class="table align-items-center table-flush summary-table"  id="datatable-basic">
         <thead class="thead-light">
             <tr>
                 <th scope="col">{{ __('Title') }}</th>
@@ -19,11 +19,11 @@
                 <th scope="col"></th>
             </tr>
         </thead>
-        <tbody class="summary-body">
+        <tbody class="summary-body summaries-order">
         @if($model->summary()->get())
             @foreach ($model->summary()->get() as $summary)
                 <tr>
-                    <td id="title-{{$summary->id}}">{{ $summary->title }}</td>
+                    <td id="title-{{$summary->id}}" data-id="{{$summary->id}}" class="summary-list">{{ $summary->title }}</td>
                     <td id="icon-{{$summary->id}}">{{ $summary->icon }}</td>
                     <td class="text-right">
                         <div class="dropdown">
@@ -226,6 +226,58 @@
    });
 
 </script>
+<script src="{{ asset('js/sortable/Sortable.js') }}"></script>
+
+<script>
+
+   (function( $ ){
+      
+      var el = document.getElementsByClassName('summaries-order')[0];
+         
+      new Sortable(el, {
+         group: "words",
+         handle: ".my-handle",
+         draggable: ".item",
+         ghostClass: "sortable-ghost",
+
+      });
+
+      new Sortable(el, {
+
+          // Element dragging ended
+          onEnd: function ( /**Event*/ evt) {
+            orderSummary()
+          },
+      });
+
+   })( jQuery );
+
+   function orderSummary(){
+      let summaries={}
+
+      $( ".summary-list" ).each(function( index ) {
+            summaries[$(this).data('id')] = index
+      });
+   
+
+      $.ajax({
+         type: 'POST',
+         headers: {
+         'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+         },
+         Accept: 'application/json',
+         url: "{{ route ('sort-summaries', $event->id) }}",
+         data:{'summaries':summaries},
+         success: function(data) {
+         
+         
+         }
+      });
+   }
+
+
+</script>
+
 @endpush
 
 

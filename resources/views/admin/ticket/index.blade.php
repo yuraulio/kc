@@ -19,7 +19,7 @@
 
 
 <div class="table-responsive py-4">
-    <table class="table align-items-center table-flush"  id="datatable-basic">
+    <table class="table align-items-center table-flush ticket-table"  id="datatable-basic">
         <thead class="thead-light">
             <tr>
                 <th scope="col">{{ __('Title') }}</th>
@@ -31,9 +31,9 @@
                 <th scope="col"></th>
             </tr>
         </thead>
-        <tbody class="ticket-body">
+        <tbody class="ticket-body ticket-order">
             @foreach ($event->ticket as $ticket)
-                <tr id="ticket_{{$ticket->id}}">
+                <tr id="ticket_{{$ticket->id}}" data-id="{{$ticket->id}}" class="ticket-list">
                     <td>{{ $ticket->title }}</td>
                     <td>{{ $ticket->subtitle }}</td>
                     <td>{{ $ticket->type }}</td>
@@ -518,4 +518,63 @@
 
 
       </script>
+
+
+<script src="{{ asset('js/sortable/Sortable.js') }}"></script>
+
+<script>
+
+   (function( $ ){
+      
+      var el = document.getElementsByClassName('ticket-order')[0];
+         
+      new Sortable(el, {
+         group: "words",
+         handle: ".my-handle",
+         draggable: ".item",
+         ghostClass: "sortable-ghost",
+
+      });
+
+      new Sortable(el, {
+
+          // Element dragging ended
+          onEnd: function ( /**Event*/ evt) {
+            orderTickets()
+          },
+      });
+
+   })( jQuery );
+
+   function orderTickets(){
+      let tickets={}
+
+      $( ".ticket-list" ).each(function( index ) {
+        tickets[$(this).data('id')] = index
+      });
+   
+
+      $.ajax({
+         type: 'POST',
+         headers: {
+         'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+         },
+         Accept: 'application/json',
+         url: "{{ route ('sort-tickets', $event->id) }}",
+         data:{'tickets':tickets},
+         success: function(data) {
+         
+         
+         }
+      });
+   }
+  
+   $(document).ready( function () {
+      $('.ticket-table').dataTable( {
+          "ordering": false
+      });
+   });
+
+</script>
+
 @endpush

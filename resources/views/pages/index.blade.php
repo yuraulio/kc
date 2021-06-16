@@ -55,7 +55,7 @@
                             <tbody>
                                 @foreach ($pages as $page)
                                     <tr>
-                                        <td>{{ $page->title }}</td>
+                                        <td>{{ $page->name }}</td>
                                         <td>{{ $page->created_at->format('d/m/Y H:i') }}</td>
                                         @can('manage-users', App\Model\User::class)
 					                        <td class="text-right">

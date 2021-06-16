@@ -43,6 +43,7 @@ class InitPages extends Command
     {
         $page = new Pages;
 
+        $page->name = 'Home';
         $page->title = 'Professional educational courses & training';
         $page->content = 'Learn, transform, thrive';
         $page->template = 'home';
@@ -67,7 +68,8 @@ class InitPages extends Command
         ///cart
         $page = new Pages;
 
-        $page->title = 'Cart';
+        $page->name = 'Cart';
+        $page->title = '';
         $page->content = '';
         $page->template = 'cart';
         $page->published = true;

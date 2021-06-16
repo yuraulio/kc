@@ -19,7 +19,7 @@
 </div>
 
 <div class="table-responsive py-4">
-    <table class="table align-items-center table-flush"  id="datatable-basic">
+    <table class="table align-items-center table-flush faq-table"  id="datatable-basic">
         <thead class="thead-light">
             <tr>
                 <th scope="col">{{ __('Title') }}</th>
@@ -28,11 +28,11 @@
                 
             </tr>
         </thead>
-        <tbody id="faq-body">
+        <tbody id="faq-body" class="faq-order">
         @if($event->category->first())
     
             @foreach ($event->category->first()->faqs as $faq)
-                <tr id="faq-{{$faq->id}}">
+                <tr id="faq-{{$faq->id}}" data-id="{{$faq->id}}" class="faq-list">
                     <td>{{ $faq->title }}</td>
                     <td>{{ $faq->category->first()->name }}</td>
                     
@@ -259,7 +259,63 @@
     </script>
 
 
+<script src="{{ asset('js/sortable/Sortable.js') }}"></script>
 
+<script>
+
+   (function( $ ){
+      
+      var el = document.getElementsByClassName('faq-order')[0];
+         
+      new Sortable(el, {
+         group: "words",
+         handle: ".my-handle",
+         draggable: ".item",
+         ghostClass: "sortable-ghost",
+
+      });
+
+      new Sortable(el, {
+
+          // Element dragging ended
+          onEnd: function ( /**Event*/ evt) {
+            orderFaqs()
+          },
+      });
+
+   })( jQuery );
+
+   function orderFaqs(){
+      let faqs={}
+
+      $( ".faq-list" ).each(function( index ) {
+        faqs[$(this).data('id')] = index
+      });
+   
+
+      $.ajax({
+         type: 'POST',
+         headers: {
+         'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+         },
+         Accept: 'application/json',
+         url: "{{ route ('sort-faqs', $event->id) }}",
+         data:{'faqs':faqs},
+         success: function(data) {
+         
+         
+         }
+      });
+   }
+  
+   $(document).ready( function () {
+      $('.faq-table').dataTable( {
+          "ordering": false,
+          "paging": false
+      });
+   });
+
+</script>
 
 @endpush
 

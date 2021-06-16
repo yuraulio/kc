@@ -3,21 +3,25 @@
 Upload Image
 </button>
 
-@if($event)
-<div class="form-group">
-    <img id="img-upload" src="
-    <?php if($event['path'] != null) {
-        echo $event['path'].$event['original_name'];
-    }?>">
-</div>
-<input type="hidden" value="{{$event['path'].$event['original_name']}}" id="image_upload" name="image_upload">
-@else
-<div class="form-group">
-    <img id="img-upload" src="">
-</div>
-<input type="hidden" value="" id="image_upload" name="image_upload">
-@endif
+<form method="post" id="upload_form" method="POST" action="{{ route('upload.image', $event) }}" autocomplete="off" enctype="multipart/form-data">
+    @csrf
+    @method('put')
 
+    @if($event)
+        <div class="form-group">
+            <img id="img-upload" src="
+            <?php if($event['path'] != null) {
+                echo $event['path'].$event['original_name'];
+            }?>">
+        </div>
+        <input type="hidden" value="{{$event['path'].$event['original_name']}}" id="image_upload" name="image_upload">
+    @else
+        <div class="form-group">
+            <img id="img-upload" src="">
+        </div>
+        <input type="hidden" value="" id="image_upload" name="image_upload">
+    @endif
+</form>
 
 
 <!-- Modal -->
@@ -56,10 +60,12 @@ Upload Image
         ext = $('.table-info td:nth-child(3)').text()
         ext = ext.replace(/\s/g, '')
         path = path +'/'+name+'.'+ext
-        console.log(path)
         $('#image_upload').val(path)
         $('#img-upload').attr('src', path);
         $(".close").click();
+        console.log('gfdgsfd');
+        $("#upload_form").submit();
+
     });
 
 </script>

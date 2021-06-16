@@ -255,4 +255,14 @@ class TicketController extends Controller
         ]);
 
     }
+
+    public function sortTickets(Request $request, Event $event){
+
+        foreach($event->ticket as $ticket){
+            $ticket->pivot->priority = $request->all()['tickets'][$ticket['id']];
+            $ticket->pivot->save();
+
+        }
+
+    }
 }

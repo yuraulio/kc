@@ -173,10 +173,10 @@ class EventController extends Controller
         $request->request->add(['published' => $published,'release_date_files' => date('Y-m-d H:i:s', strtotime($request->release_date_files))]);
         $event = $model->create($request->all());
 
-        if($event && $request->image_upload){
+        /*if($event && $request->image_upload){
             $event->createMedia($request->image_upload);
-        }
-
+        }*/
+        $event->createMedia();
         if($request->syllabus){
             $event->syllabus()->attach(['instructor_id' => $request->syllabus]);
         }
@@ -332,9 +332,9 @@ class EventController extends Controller
         $request->request->add(['published' => $published,'release_date_files' => date('Y-m-d H:i:s', strtotime($request->release_date_files))]);
         $ev = $event->update($request->all());
 
-        if($request->image_upload != null && $ev){
+        /*if($request->image_upload != null && $ev){
             $event->updateMedia($request->image_upload);
-        }
+        }*/
 
         if($request->syllabus){
             $event->syllabus()->sync($request->syllabus);

@@ -212,7 +212,7 @@
 
                                     @include('alerts.feedback', ['field' => 'ext_url'])
 
-                                    @include('admin.upload.upload', ['event' => ( isset($event) && $event->medias != null) ? $event->medias : null])
+                                    {{--@include('admin.upload.upload', ['event' => ( isset($event) && $event->medias != null) ? $event->medias : null])--}}
 
 
 

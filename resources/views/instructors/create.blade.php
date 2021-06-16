@@ -114,7 +114,7 @@
                                     @include('alerts.feedback', ['field' => 'user_id'])
                                 </div>
 
-                                @include('admin.upload.upload', ['event' => ( isset($event) && $event->medias['path'] != null) ? $event : null])
+                                {{--@include('admin.upload.upload', ['event' => ( isset($event) && $event->medias['path'] != null) ? $event : null])--}}
 
                                 <input type="hidden" name="creator_id" id="input-creator_id" class="form-control" value="{{$user->id}}">
                                 <input type="hidden" name="author_id" id="input-author_id" class="form-control" value="{{$user->id}}">

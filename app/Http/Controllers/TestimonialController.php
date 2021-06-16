@@ -68,9 +68,11 @@ class TestimonialController extends Controller
 
         $testimonial = $model->create($request->all());
 
-        if($testimonial && $request->image_upload != null){
+        /*if($testimonial && $request->image_upload != null){
             $testimonial->createMedia($request->image_upload);
-        }
+        }*/
+
+        $testimonial->createMedia($request->image_upload);
 
         if($request->instructor_id != null){
             $instructor = Instructor::find($request->instructor_id);
@@ -146,9 +148,9 @@ class TestimonialController extends Controller
         $request->request->add(['status' => $status,'social_url' => $social, 'video_url' => $video]);
         $isUpdate = $testimonial->update($request->all());
 
-        if($isUpdate && $request->image_upload != null){
+        /*if($isUpdate && $request->image_upload != null){
             $testimonial->updateMedia($request->image_upload);
-        }
+        }*/
 
         if($request->instructor_id != null){
             $testimonial->instructors()->detach();

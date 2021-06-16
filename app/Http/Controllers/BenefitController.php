@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Model\Benefit;
+use App\Model\Event;
 use App\Model\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -66,4 +67,11 @@ class BenefitController extends Controller
     {
         //
     }
+
+    public function orderBenefits(Request $request, Event $event){
+
+        $event->orderBenefits($request->benefits);
+        
+    }
+
 }

@@ -61,10 +61,11 @@ class InstructorController extends Controller
         $request->request->add(['status' => $status]);
         $isCreate = $model->create($request->all());
         if($isCreate){
-            if($request->image_upload != null){
+            /*if($request->image_upload != null){
                 $isCreate->createMedia($request->image_upload);
-            }
+            }*/
 
+            $isCreate->createMedia();
 
             //attach instructor-user
             if($request->user_id != null){
@@ -120,9 +121,9 @@ class InstructorController extends Controller
         $isUpdate = $instructor->update($request->all());
 
         if($isUpdate){
-            if($request->image_upload){
+            /*if($request->image_upload){
                 $instructor->updateMedia($request->image_upload);
-            }
+            }*/
 
             if($request->user_id){
                 $instructor->user()->sync($request->user_id);

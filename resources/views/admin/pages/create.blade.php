@@ -21,7 +21,7 @@
       <li class="nav-item">
          <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab" href="#page" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i>Page</a>
       </li>
-      @if($page->title || in_array($page->template,$noEditablePages))
+      @if($page->name || in_array($page->template,$noEditablePages))
       <li class="nav-item">
          <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#metas" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Metas</a>
       </li>
@@ -42,7 +42,7 @@
 </div>
 <div class="tab-content" id="myTabContent">
    <div class="tab-pane fade show active" id="page" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
-      @if(!$page->title)
+      @if(!$page->name)
          <form method="post" action="{{ route('pages.store') }}" autocomplete="off" enctype="multipart/form-data">
       @else
          <form method="post" action="{{ route('pages.update',$page->id) }}" autocomplete="off" enctype="multipart/form-data">
@@ -67,14 +67,27 @@
                      
                     @if($page->template != 'cart')
                      <div class="pl-lg-4">
+                        <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
+                           <label class="form-control-label" for="input-name">{{ __('Name') }}</label>
+                           <input type="text" name="name" id="input-name" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" placeholder="{{ __('Name') }}" value="{{ old('name',$page->name) }}"  required autofocus>
+                           @include('alerts.feedback', ['field' => 'name'])
+                        </div>
+                        @if(!in_array($page->template,$noEditablePages))
+                           @include('admin.slug.slug',['slug' => isset($slug) ? $slug : null])
+                        @endif
+
                         <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
                            <label class="form-control-label" for="input-title">{{ __('Title') }}</label>
                            <input type="text" name="title" id="input-title" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title',$page->title) }}"  required autofocus>
                            @include('alerts.feedback', ['field' => 'title'])
                         </div>
-                        @if(!in_array($page->template,$noEditablePages))
-                           @include('admin.slug.slug',['slug' => isset($slug) ? $slug : null])
-                        @endif
+
+                        <div class="form-group{{ $errors->has('summary') ? ' has-danger' : '' }}">
+                           <label class="form-control-label" for="input-summary">{{ __('Page Summary') }}</label>
+                           <textarea name="summary" id="input-summary"  class="ckeditor form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Page summary') }}"  required autofocus>{{ old('summary',$page->summary) }}</textarea>
+                           @include('alerts.feedback', ['field' => 'summary'])
+                        </div>
+
                         <div class="form-group{{ $errors->has('permissions') ? ' has-danger' : '' }}">
                            <label class="form-control-label" for="input-permissions">{{ __('Page Editor') }}</label>
                            <textarea name="content" id="input-content"  class="ckeditor form-control{{ $errors->has('content') ? ' is-invalid' : '' }}" placeholder="{{ __('Page editor') }}"  required autofocus>{{ old('content',$page->content) }}</textarea>
@@ -125,7 +138,7 @@
       </form>
    </div>
    
-   @if($page->title || in_array($page->template,$noEditablePages))
+   @if($page->name || in_array($page->template,$noEditablePages))
    <div class="tab-pane fade" id="metas" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
       <div class="row">
          <div class="col-xl-12 order-xl-1">
@@ -134,7 +147,7 @@
       </div>
    </div>
    @endif
-   @if($page->title && $page->template != 'cart')
+   @if($page->name && $page->template != 'cart')
    <div class="tab-pane fade" id="media" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
       <div class="row">
          <div class="col-xl-12 order-xl-1">

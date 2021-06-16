@@ -20,7 +20,7 @@
       <li class="nav-item">
          <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab" href="#page" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i>Page</a>
       </li>
-      @if($page->title)
+      @if($page->name)
       <li class="nav-item">
          <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#benefits" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Benefits</a>
       </li>
@@ -36,7 +36,7 @@
                     </div>
 <div class="tab-content" id="myTabContent">
    <div class="tab-pane fade show active" id="page" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
-      @if(!$page->title)
+      @if(!$page->name)
          <form method="post" action="{{ route('pages.store') }}" autocomplete="off" enctype="multipart/form-data">
       @else
          <form method="post" action="{{ route('pages.update',$page->id) }}" autocomplete="off" enctype="multipart/form-data">
@@ -61,7 +61,7 @@
                      <div class="pl-lg-4">
                         <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
                            <label class="form-control-label" for="input-title">{{ __('Title') }}</label>
-                           <input type="text" name="title" id="input-title" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title',$page->title) }}"  required autofocus>
+                           <input type="text" name="title" id="input-title" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title',$page->name) }}"  required autofocus>
                            @include('alerts.feedback', ['field' => 'title'])
                         </div>
                         @include('admin.slug.slug',['slug' => isset($slug) ? $slug : null])
@@ -108,7 +108,7 @@
          </div>
       </form>
    </div>
-   @if($page->title)
+   @if($page->name)
    <div class="tab-pane fade" id="metas" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
       <div class="row">
          <div class="col-xl-12 order-xl-1">
