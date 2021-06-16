@@ -3,16 +3,63 @@
       <h6 class="heading-small text-muted mb-4">{{ __('Image versions') }}</h6>
         <div class="row">
             <?php
+
+
+            if($event['details'] != null){
+                $details = json_decode($event['details'], true);
+            }else{
+                $details = null;
+            }
+
             $versions = [];
+
+            //dd(get_image_versions());
+
                 foreach (get_image_versions() as $key => $version) {
                     foreach($versions1 as $version_from_include){
                         if($version_from_include == $version['version']){
+                            $found = true;
+                        }else{
+                            $found = false;
+                        }
+                        if($found){
                             $versions[$key] = $version;
                         }
+
                     }
 
                 }
+                foreach($versions as $key1 => $value1){
+                    //dd($value);
+                    foreach($details['img_align'] as $key => $value){
+                        //dd($value);
+                        if($key == $value1['version']){
+                            $found1 = true;
+                            //break;
+                        }else{
+                            $found1 = false;
+                        }
+                        if($found1){
+                            //var_dump($value);
+                            $versions[$key1]['x'] = $value['x'];
+                            $versions[$key1]['y'] = $value['y'];
+
+                            $versions[$key1]['w'] = $value['width'];
+                            $versions[$key1]['h'] = $value['height'];
+                            break;
+                        }else{
+                            $versions[$key1]['x'] = 0;
+                            $versions[$key1]['y'] = 0;
+                        }
+
+                    }
+
+                }
+                //dd($versions);
             ?>
+
+
+
 
             @foreach($versions as $version)
 
@@ -54,6 +101,7 @@
 
     $.each(versions, function(key, value){
         let name = value.version
+        console.log(value)
         const cropper = new Cropper(document.getElementById(`${value.version}`), {
             aspectRatio: Number((value.w/value.h), 4),
             viewMode: 0,
@@ -73,10 +121,10 @@
             // minCanvasHeight: 350,
 
             data:{
-                x:0,
-                y:0,
-                width: value.w,
-                height: value.h
+                x:parseInt(value.x),
+                y:parseInt(value.y),
+                width: parseInt(value.w),
+                height: parseInt(value.h)
             }
         });
 
@@ -85,6 +133,7 @@
     })
 
     $(".crop").click(function(){
+        let media = @json($event);
         let path = $(this).parent().find('img').attr('src')
         let version = $(this).data('version')
 
@@ -94,13 +143,16 @@
             }
         })
 
+        alert(cropper.getData({rounded: true}).height)
+
+
         $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             type: 'post',
             url: '/admin/media/crop_image',
-            data: {'version':version ,'path':path, 'x':cropper.getData({rounded: true}).x, 'y':cropper.getData({rounded: true}).y, 'width':cropper.getData({rounded: true}).width, 'height':cropper.getData({rounded: true}).height},
+            data: {'media_id': media.id,'version':version ,'path':path, 'x':cropper.getData({rounded: true}).x, 'y':cropper.getData({rounded: true}).y, 'width':cropper.getData({rounded: true}).width, 'height':cropper.getData({rounded: true}).height},
             success: function (data) {
                 //console.log(data)
                 console.log(data.data.version)

@@ -63,8 +63,8 @@
                                     <tr>
                                         <td>
                                             <span class="avatar avatar-sm rounded-circle">
-                                            @if(auth()->user()->image != null)
-                                                <img src="{{ asset('profile_user') }}/{{ auth()->user()->image->original_name }}" alt="{{ $user->firstname }}" style="max-width: 100px; border-radiu: 25px">
+                                            @if($user->image != null)
+                                                <img src="{{ asset('profile_user') }}/{{ $user->image->original_name }}" alt="{{ $user->firstname }}" style="max-width: 100px; border-radiu: 25px">
                                             @else
                                             <img src="" alt="{{ $user->firstname }}" style="max-width: 100px; border-radiu: 25px">
                                             @endif
@@ -73,20 +73,22 @@
                                         <td>{{ $user->firstname }}</td>
                                         <td>{{ $user->lastname }}</td>
                                         <td>{{ $user->mobile }}</td>
+                                        <td><a href="mailto:{{ $user->email }}">{{ $user->email }}</a></td>
                                         <td>{{ $user->id }}</td>
-                                        <td>
-                                            <a href="mailto:{{ $user->email }}">{{ $user->email }}</a>
-                                        </td>
+
                                         <td>
                                         @foreach($user->role as $role)
                                             {{$role->name}}
                                         @endforeach
                                         </td>
+                                        <?php //dd($user->statusAccount['completed'] == 1); ?>
                                         <td>
-                                        @if($user->statusAccount->completed == 1)
+                                        @if($user->statusAccount != null)
+                                        @if($user->statusAccount['completed'] == 1)
                                             {{ __('Active') }}
                                         @else
                                             {{ __('Inactive') }}
+                                        @endif
                                         @endif
                                         </td>
                                         <td>{{ date_format($user->created_at, 'Y-m-d' ) }}</td>

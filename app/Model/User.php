@@ -37,6 +37,7 @@ class User extends Authenticatable
         'birthday',
         'username',
         'mobile',
+        'telephone',
         'address',
         'address_num',
         'postcode',
@@ -97,6 +98,7 @@ class User extends Authenticatable
 
     public function statusAccount()
     {
+        //dd('asd');
         return $this->hasOne(Activation::class);
     }
 

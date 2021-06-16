@@ -39,15 +39,39 @@
                     <?php //dd($transactions[0]); ?>
 
                     <div class="table-responsive py-4">
+
+                    <div class="text-center">
+                <a class="btn btn-success btn-lg " href="#"><i class="fa fa-filter "></i> Filter</a>
+                <a class="btn btn-secondary btn-lg " onclick="clear()" href="#"><i class="fa fa-eraser "></i> Clear Filter</a>
+                </div>
                     <table id="range-date" cellspacing="5" cellpadding="5" border="0">
                         <tbody>
                             <tr>
-                                <td>Minimum date:</td>
+                                <div class="" id="filter_col1" data-column="1">
+                                    <label>Event</label>
+                                    <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="col1_filter">
+                                    </select>
+
+                                </div>
+                            </tr>
+
+                            <tr>
+                            <div class="" id="filter_col4" data-column="4">
+                            <label>Coupon</label>
+                            <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col4_filter" placeholder="Coupon">
+                        </div>
+                            </tr>
+                            <tr>
+                                <td>From:</td>
                                 <td><input type="text" id="min" name="min"></td>
                             </tr>
                             <tr>
-                                <td>Maximum date:</td>
+                                <td>To:</td>
                                 <td><input type="text" id="max" name="max"></td>
+                            </tr>
+                            <tr>
+                                <td>Total Amount</td>
+                                <td id="total"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -166,7 +190,35 @@ $(document).ready(function() {
     // DataTables initialisation
     var table = $('#participants_table').DataTable();
 
+    events = table.column(1).data().unique().sort()
+    coupons = table.column(4).data().unique().sort()
+    prices = table.column(3).data()
+    //console.log(prices)
+
+    var sum = prices.reduce(function(a, b){
+        return parseInt(a) + parseInt(b);
+    }, 0);
+
+    //let sum = 0;
+
+    $.each(events, function(key, value){
+
+        $('#col1_filter').append('<option value="'+value+'">'+value+'</option>')
+    })
+    $.each(coupons, function(key, value){
+        $('#col4_filter').append('<option value="'+value+'">'+value+'</option>')
+    })
+
+    // $.each(prices, function(key, value){
+    //     //console.log(value)
+    //     //sum = sum + parseInt(value)
+    // })
+    $('#total').text(sum)
+
+
+
     $("#participants_table tfoot th").each( function ( i ) {
+
 
         if(i != 5){
             var select = $('<select><option value=""></option></select>')
@@ -175,10 +227,21 @@ $(document).ready(function() {
                 table.column( i )
                     .search( $(this).val() )
                     .draw();
+
+                    prices = table.column(3).data()
+
+                    var sum = prices.reduce(function(a, b){
+                        return parseInt(a) + parseInt(b);
+                    }, 0);
+                    $('#total').text(sum)
             } );
 
+
+            //
         table.column( i ).data().unique().sort().each( function ( d, j ) {
+
             select.append( '<option value="'+d+'">'+d+'</option>' )
+
         } );
         }
 
@@ -190,6 +253,48 @@ $(document).ready(function() {
     });
 });
 
+
+
+
+
+
+
+
+
+function filterGlobal () {
+    $('#participants_table').DataTable().search(
+        $('#global_filter').val(),
+
+
+    ).draw();
+
+}
+
+    function filterColumn ( i ) {
+        $('#participants_table').DataTable().column( i ).search(
+            $('#col'+i+'_filter').val()
+        ).draw();
+    }
+
+    $(document).ready(function() {
+        $('#participants_table').DataTable();
+
+
+
+        $('input.global_filter').on( 'keyup click', function () {
+            filterGlobal();
+        } );
+
+        $('input.column_filter').on( 'keyup click', function () {
+            filterColumn( $(this).parents('div').attr('data-column') );
+        } );
+    } );
+
+    $('select.column_filter').on('change', function () {
+            filterColumn( $(this).parents('div').attr('data-column') );
+            var table = $('#participants_table').DataTable();
+            alert(table.column( 3 ).data().sum());
+        } );
 
 
 

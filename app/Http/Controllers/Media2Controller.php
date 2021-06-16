@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Model\Media;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class Media2Controller extends Controller
@@ -15,7 +16,55 @@ class Media2Controller extends Controller
 
     public function crop_image(Request $request)
     {
-        
+        //dd($request->all());
+        $media = Media::find($request->media_id);
+        if($media['details'] != null){
+            $details = json_decode($media['details'], true);
+
+            //find version
+            //dd((array)$details->img_align);
+
+            $found = false;
+            foreach($details['img_align'] as $key => $value){
+                //dd($request->version);
+                if($key == $request->version){
+                    $found = true;
+                }
+
+            }
+
+            //dd($found);
+
+            if($found){
+                //dd('found in json');
+
+                //dd($details['img_align'][$request->version]);
+                $details['img_align'][$request->version]['x'] = $request->x;
+                $details['img_align'][$request->version]['y'] = $request->y;
+                $details['img_align'][$request->version]['width'] = $request->width;
+                $details['img_align'][$request->version]['height'] = $request->height;
+                $details['img_align'][$request->version]['slug'] = $request->version;
+
+
+            }else{
+                $details['img_align'][$request->version]['x'] = $request->x;
+                $details['img_align'][$request->version]['y'] = $request->y;
+                $details['img_align'][$request->version]['width'] = $request->width;
+                $details['img_align'][$request->version]['height'] = $request->height;
+                $details['img_align'][$request->version]['slug'] = $request->version;
+
+            }
+
+            $details = json_encode($details);
+
+            Media::where('id', $request->media_id)->update(['details' => $details]);
+
+
+            //dd($details);
+        }else{
+            //dd('dhmiourgw to array');
+        }
+
         $mediaKey = $request->path;
         $pos = strrpos($mediaKey, '/');
         $id = $pos === false ? $mediaKey : substr($mediaKey, $pos + 1);

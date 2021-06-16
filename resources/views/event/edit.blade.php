@@ -40,7 +40,7 @@
                         @include('alerts.success')
                         @include('alerts.errors')
                     </div>
-                  
+
 
                         <div class="form_event_btn">
                             <div class="save_event_btn" >@include('admin.save.save',['event' => isset($event) ? $event : null])</div>
@@ -209,7 +209,7 @@
 
                                             @include('alerts.feedback', ['field' => 'syllabus'])
                                         </div>
-                              
+
                             </div>
                             <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
                                 <div class="nav-wrapper">
@@ -257,7 +257,7 @@
                                 <div class="card shadow">
                                     <div class="card-body">
                                         <div class="tab-content" id="myTabContent">
-                                       
+
                                             <div class="tab-pane fade show active" id="tabs-icons-text-1_inside" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab_inside">
 
 
@@ -334,7 +334,7 @@
 
 
                                                     </div>
-                                               
+
 
                                             </div>
                                             </form>
@@ -483,11 +483,12 @@
                 data:data,
                 success: function(data) {
                     data = JSON.parse(data)
+                    console.log(data)
 
                     $('#inst_lesson_edit_'+data.lesson_id).text(data.instructor.title+' '+data.instructor.subtitle)
                     $('#date_lesson_edit_'+data.lesson_id).text(data.date1)
-                    $('#start_lesson_edit_'+data.lesson_id).text(tConvert(data.start))
-                    $('#end_lesson_edit_'+data.lesson_id).text(tConvert(data.end))
+                    $('#start_lesson_edit_'+data.lesson_id).text(data.start)
+                    $('#end_lesson_edit_'+data.lesson_id).text(data.end)
                     $('#room_lesson_edit_'+data.lesson_id).text(data.room)
 
                     $('#modal-default').modal()
@@ -632,9 +633,6 @@
                     });
 
                     if(lesson.date != null){
-                        // date =  new Date(lesson.date).toDateString()
-                        // date = formatDate(date)
-                        //alert(date)
                         var date = new Date(lesson.date);
                             date =((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + date.getFullYear()
                     }else{
@@ -652,17 +650,13 @@
                     if(lesson.time_starts != null)
                     {
                         d = new Date(lesson.time_starts)
-
                         time_starts = d.toLocaleTimeString('it-IT')
-                        alert(time_starts)
-
                     }
 
                     if(lesson.time_ends != null)
                     {
                         d = new Date(lesson.time_ends)
                         time_ends = d.toLocaleTimeString('it-IT')
-                        alert(time_ends)
 
                     }
 
@@ -703,7 +697,7 @@
                         $(".datepicker").datepicker(datePickerOptions);
                         /*$('#time_starts').timepicker({
                             timeFormat: 'h:mm p',
-                                                
+
                             minTime: '10',
                             maxTime: '6:00pm',
                             defaultTime: '11',

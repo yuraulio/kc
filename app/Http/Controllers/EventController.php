@@ -247,7 +247,7 @@ class EventController extends Controller
         $id = $event['id'];
         $event = $event->with('delivery','category', 'summary', 'benefits', 'ticket', 'city', 'venues', 'topic', 'lessons', 'instructors', 'users', 'partners', 'sections','paymentMethod','slugable','metable', 'medias')->find($id);
 
-        //dd($event);
+        //dd($event->medias->details);
         $categories = Category::all();
         $types = Type::all();
         $partners = Partner::all();
@@ -319,7 +319,7 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
-        
+
         if($request->published == 'on')
         {
             $published = 1;
@@ -328,7 +328,7 @@ class EventController extends Controller
             $published = 0;
         }
 
-        
+
         $request->request->add(['published' => $published,'release_date_files' => date('Y-m-d H:i:s', strtotime($request->release_date_files))]);
         $ev = $event->update($request->all());
 

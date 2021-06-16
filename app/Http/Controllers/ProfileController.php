@@ -57,17 +57,19 @@ class ProfileController extends Controller
      */
     public function update(ProfileRequest $request)
     {
-        //dd('from controllre');
+        //dd($request->all());
+
+        $user = User::find($request->user_id);
 
         if($request->file('photo')){
             //parse old image
-            $old_image = auth()->user()->image;
+            $old_image = $user->image;
             //parse input photo
             $content = $request->file('photo');
             $name = explode(".",$content->getClientOriginalName());
             $name = $name[0];
 
-            $user= Auth::user();
+            //$user= Auth::user();
             //create new instance
             $media = new Media;
             $media->original_name = $content->getClientOriginalName();
@@ -84,7 +86,7 @@ class ProfileController extends Controller
 
 
 
-        auth()->user()->update(
+        $user->update(
             $request->merge(['picture' => $request->photo ? $path_name = $request->photo->store('profile_user', 'public') : null])
                 ->except([$request->hasFile('photo') ? '' : 'picture'])
 
