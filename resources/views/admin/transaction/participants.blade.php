@@ -40,39 +40,49 @@
 
                     <div class="table-responsive py-4">
 
-                    <div class="text-center">
+                    <!-- <div class="text-center">
                 <a class="btn btn-success btn-lg " href="#"><i class="fa fa-filter "></i> Filter</a>
                 <a class="btn btn-secondary btn-lg " onclick="clear()" href="#"><i class="fa fa-eraser "></i> Clear Filter</a>
-                </div>
+                </div> -->
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-4" id="filter_col1" data-column="1">
+
+        <label>Event</label>
+        <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="col1_filter">
+        </select>
+
+
+    </div>
+    <div class="col-sm-4" id="filter_col4" data-column="4">
+        <label>Coupon</label>
+        <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col4_filter" placeholder="Coupon"></select>
+    </div>
+    <div class="col-sm-4">
+        <div class="form-group">
+            <label>Min</label>
+            <input type="text" id="min" name="min">
+        </div>
+
+        <div class="form-group">
+        <label>Max</label>
+        <input type="text" id="max" name="max">
+        </div>
+
+
+    </div>
+
+  </div>
+</div>
+
+
                     <table id="range-date" cellspacing="5" cellpadding="5" border="0">
                         <tbody>
-                            <tr>
-                                <div class="" id="filter_col1" data-column="1">
-                                    <label>Event</label>
-                                    <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="col1_filter">
-                                    </select>
+                            <label for="">Total Amount:</label>
+                            <div id="total"></div>
 
-                                </div>
-                            </tr>
-
-                            <tr>
-                            <div class="" id="filter_col4" data-column="4">
-                            <label>Coupon</label>
-                            <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col4_filter" placeholder="Coupon">
-                        </div>
-                            </tr>
-                            <tr>
-                                <td>From:</td>
-                                <td><input type="text" id="min" name="min"></td>
-                            </tr>
-                            <tr>
-                                <td>To:</td>
-                                <td><input type="text" id="max" name="max"></td>
-                            </tr>
-                            <tr>
-                                <td>Total Amount</td>
-                                <td id="total"></td>
-                            </tr>
                         </tbody>
                     </table>
                         <table class="table align-items-center table-flush"  id="participants_table">
@@ -198,6 +208,7 @@ $(document).ready(function() {
     var sum = prices.reduce(function(a, b){
         return parseInt(a) + parseInt(b);
     }, 0);
+    $('#total').text(sum)
 
     //let sum = 0;
 
@@ -213,7 +224,7 @@ $(document).ready(function() {
     //     //console.log(value)
     //     //sum = sum + parseInt(value)
     // })
-    $('#total').text(sum)
+
 
 
 
@@ -228,12 +239,6 @@ $(document).ready(function() {
                     .search( $(this).val() )
                     .draw();
 
-                    prices = table.column(3).data()
-
-                    var sum = prices.reduce(function(a, b){
-                        return parseInt(a) + parseInt(b);
-                    }, 0);
-                    $('#total').text(sum)
             } );
 
 
@@ -264,9 +269,9 @@ $(document).ready(function() {
 function filterGlobal () {
     $('#participants_table').DataTable().search(
         $('#global_filter').val(),
-
-
     ).draw();
+
+    //console.log($('#global_filter').val())
 
 }
 
@@ -274,6 +279,9 @@ function filterGlobal () {
         $('#participants_table').DataTable().column( i ).search(
             $('#col'+i+'_filter').val()
         ).draw();
+        //console.log($('#participants_table').DataTable().column( 3 ).data())
+            let sum = 0
+
     }
 
     $(document).ready(function() {
@@ -292,8 +300,6 @@ function filterGlobal () {
 
     $('select.column_filter').on('change', function () {
             filterColumn( $(this).parents('div').attr('data-column') );
-            var table = $('#participants_table').DataTable();
-            alert(table.column( 3 ).data().sum());
         } );
 
 
