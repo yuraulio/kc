@@ -10,7 +10,7 @@
    </div>
 </div>
 <div class="table-responsive py-4">
-   <table class="table align-items-center table-flush benefits-table"  id="datatable-basic">
+   <table class="table align-items-center table-flush benefits-table"  id="datatable-basic-benefits">
       <thead class="thead-light">
          <tr>
             <th scope="col">{{ __('Name') }}</th>

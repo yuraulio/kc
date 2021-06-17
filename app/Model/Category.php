@@ -107,4 +107,22 @@ class Category extends Model
         return $this->morphToMany(Faq::class, 'faqable')->with('category');
     }
 
+    public function getFaqsCategorized()
+    {
+
+        $faqs = [];
+
+        foreach($this->faqs->toArray() as $faq){
+            if(!isset($faq['category']['0'])){
+                continue;
+            }
+
+            $faqs[$faq['category']['0']['name']][] = ['id'=>$faq['id'],'question' =>$faq['title'] , 'answer' => $faq['answer'] ];
+
+
+        }
+        dd($faqs);
+        return $this->morphToMany(Faq::class, 'faqable')->with('category');
+    }
+
 }

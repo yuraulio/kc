@@ -63,35 +63,37 @@
                                     <tr>
                                         <td>
                                             <span class="avatar avatar-sm rounded-circle">
-                                            @if($user->image != null)
-                                                <img src="{{ asset('profile_user') }}/{{ $user->image->original_name }}" alt="{{ $user->firstname }}" style="max-width: 100px; border-radiu: 25px">
+                                            @if($user['image'] != null)
+                                                <img src="{{ asset('profile_user') }}/{{ $user['image']['original_name'] }}" alt="{{ $user['firstname'] }}" style="max-width: 100px; border-radiu: 25px">
                                             @else
-                                            <img src="" alt="{{ $user->firstname }}" style="max-width: 100px; border-radiu: 25px">
+                                            <img src="" alt="{{ $user['firstname'] }}" style="max-width: 100px; border-radiu: 25px">
                                             @endif
                                             </span>
                                         </td>
-                                        <td>{{ $user->firstname }}</td>
-                                        <td>{{ $user->lastname }}</td>
-                                        <td>{{ $user->mobile }}</td>
-                                        <td><a href="mailto:{{ $user->email }}">{{ $user->email }}</a></td>
-                                        <td>{{ $user->id }}</td>
+                                        <td>{{ $user['firstname'] }}</td>
+                                        <td>{{ $user['lastname'] }}</td>
+                                        <td>{{ $user['mobile'] }}</td>
+                                        <td><a href="mailto:{{ $user['email'] }}">{{ $user['email'] }}</a></td>
+                                        <td>{{ $user['id'] }}</td>
 
                                         <td>
-                                        @foreach($user->role as $role)
-                                            {{$role->name}}
+                                        @foreach($user['role'] as $role)
+                                            {{$role['name']}}
                                         @endforeach
                                         </td>
                                         <?php //dd($user->statusAccount['completed'] == 1); ?>
                                         <td>
-                                        @if($user->statusAccount != null)
-                                        @if($user->statusAccount['completed'] == 1)
+                                       
+                                        @if($user['status_account'] != null)
+                                        @if($user['status_account']['completed'] == 1)
                                             {{ __('Active') }}
                                         @else
                                             {{ __('Inactive') }}
                                         @endif
                                         @endif
                                         </td>
-                                        <td>{{ date_format($user->created_at, 'Y-m-d' ) }}</td>
+                                        
+                                        <td>{{ $user['created_at'] }}</td>
 
                                         <td class="text-right">
                                             <div class="dropdown">
@@ -99,9 +101,9 @@
                                                     <i class="fas fa-ellipsis-v"></i>
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                    <a class="dropdown-item" href="{{ route('user.edit', $user) }}">{{ __('Edit') }}</a>
+                                                    <a class="dropdown-item" href="{{ route('user.edit', $user['id']) }}">{{ __('Edit') }}</a>
 
-                                                    <form action="{{ route('user.destroy', $user) }}" method="post">
+                                                    <form action="{{ route('user.destroy', $user['id']) }}" method="post">
                                                         @csrf
                                                         @method('delete')
 

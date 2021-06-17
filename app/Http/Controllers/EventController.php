@@ -213,7 +213,11 @@ class EventController extends Controller
 
         }
 
-
+        $priority = 0;
+        foreach($event->category->first()->faqs as $faq){
+            $event->faqs()->attach($faq,['priority'=> $priority]);
+            $priority +1;
+        }
 
 
         return redirect()->route('events.edit',$event->id)->withStatus(__('Event successfully created.'));
@@ -305,6 +309,7 @@ class EventController extends Controller
         $data['delivery'] = Delivery::all();
         $data['isInclassCourse'] = $event->is_inclass_course();
         $data['eventFaqs'] = $event->faqs->pluck('id')->toArray();
+        $data['event_user'] = $event->users->toArray();
         //dd($data['topics']);
 
         return view('event.edit', $data);

@@ -54,7 +54,9 @@ class UserController extends Controller
 
         //dd($model->with('role', 'image')->get()[0]);
 
-        return view('users.index', ['users' => $model->with('role', 'image')->get(), 'data' => $data]);
+        //dd($model->with('role', 'image')->get()->toArray()[0]['image']);
+
+        return view('users.index', ['users' => $model->with('role', 'image','statusAccount')->get()->toArray(), 'data' => $data]);
     }
 
     /**
@@ -230,10 +232,11 @@ class UserController extends Controller
             $event_id = $value->pivot->event_id;
             $event = Event::find($event_id);
             $ticket = $event->tickets()->wherePivot('event_id', '=', $event_id)->wherePivot('user_id', '=', $user_id)->first();
-            $data['user']['events'][$key]['ticket_id'] = $ticket->pivot->ticket_id;
-            $data['user']['events'][$key]['ticket_title'] = $ticket['title'];
+            
+            $data['user']['events'][$key]['ticket_id'] = isset($ticket->pivot) ? $ticket->pivot->ticket_id : null;
+            $data['user']['events'][$key]['ticket_title'] = isset($ticket['title']) ? $ticket['title'] : '';
         }
-
+        
         return view('users.edit', ['events' => $data['events'] ,'user' => $data['user'], 'roles' => $model->all()]);
     }
 

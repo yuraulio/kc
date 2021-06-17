@@ -18,40 +18,57 @@
     @include('alerts.errors')
 </div>
 
-<div class="table-responsive py-4">
-    <table class="table align-items-center table-flush faq-table"  id="datatable-basic">
-        <thead class="thead-light">
-            <tr>
-                <th scope="col">{{ __('Title') }}</th>
-                <th scope="col">{{ __('Category') }}</th>
-                <th scope="col">{{ __('Operations') }}</th>
-                
-            </tr>
-        </thead>
-        <tbody id="faq-body" class="faq-order">
-        @if($event->category->first())
-    
-            @foreach ($event->category->first()->faqs as $faq)
-                <tr id="faq-{{$faq->id}}" data-id="{{$faq->id}}" class="faq-list">
-                    <td>{{ $faq->title }}</td>
-                    <td>{{ $faq->category->first()->name }}</td>
-                    
+<div class="accordion"  id="accordionTopicMain1">
+    @foreach ($event->getFaqsByCategoryEvent() as $key => $faqs)
 
-                    <td> 
-                        @if(!in_array($faq->id,$eventFaqs)) 
-                            <button class="btn btn-primary assing" data-faq = '{{$faq->id}}' type="button">Assign</button>
-                        @else
-                            <button class="btn btn-primary unsing" data-faq = '{{$faq->id}}' type="button">Unsign</button>
-                        @endif
-                    </td>
-                   
-                       
-                </tr>
-            @endforeach
-        @endif
-        </tbody>
-    </table>
+
+        <div class="card">
+            <div class="card-header" id="cattt_{{\Illuminate\Support\Str::slug($key)}}" data-toggle="collapse" data-target="#catt_{{\Illuminate\Support\Str::slug($key)}}" aria-expanded="false" >
+                <h5 class="mb-0">{{$key}}</h5>
+            </div>
+
+            <div id="catt_{{\Illuminate\Support\Str::slug($key)}}" class="collapse" aria-labelledby="catt_{{\Illuminate\Support\Str::slug($key)}}" data-parent="#accordionTopicMain1">
+                <div class="card-body">
+                    <div class="table-responsive py-4">
+                        <table class="table align-items-center table-flush"  id="datatable-basic">
+                            <thead class="thead-light">
+                                <tr>
+                                <th scope="col">{{ __('Title') }}</th>
+                                <th scope="col">{{ __('Operations') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody id="faq-body" class="faq-order">
+                            @foreach($faqs as $faq)
+                                <tr id="faq-{{$faq['id']}}" data-id="{{$faq['id']}}" class="faq-list">
+                                    <td>{{ $faq['question'] }}</td>
+
+
+                                    <td> 
+                                        @if(!in_array($faq['id'],$eventFaqs)) 
+                                            <button class="btn btn-primary assing" data-faq = '{{$faq["id"]}}' type="button">Assign</button>
+                                        @else
+                                            <button class="btn btn-primary unsing" data-faq = '{{$faq["id"]}}' type="button">Unsign</button>
+                                        @endif
+                                    </td>
+
+
+                                </tr>
+                            @endforeach
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+        
+        </div>
+
+    @endforeach
 </div>
+
+
 <!-- Modal -->
 {{--<div class="modal fade" id="faqModal" tabindex="-1" role="dialog" aria-labelledby="faqModalLabel" aria-hidden="true">
    <div class="modal-dialog modal-dialog-centered" role="document">
@@ -116,9 +133,9 @@
                     });
                 }
             });
-            })
+        })
 
-            $(document).on('click', '#save-faq',function(e) {
+        $(document).on('click', '#save-faq',function(e) {
 
                 let modelType = "{{addslashes ( get_class($model) )}}";
                 let modelId = "{{ $model->id }}";
@@ -172,36 +189,65 @@
                         type: 'get',
                         url: '/admin/faqs/assign-event/' + "{{$event->id}}" +'/' + $(this).data('faq'),
                         success: function (data) {
+
                             let faq = data.allFaqs
                             let assignedFaqs = data.eventFaqs;
-                            $('#faq-body tr').remove();
+                            let accordion = '';
+                            let index = 0;
 
-                            
                             $.each(faq, function(key,val){
-                            
-                                let newFaq =
-                                `<tr id="faq-`+val.id+`">` +
-                                `<td id="title-` + val.id +`">` + val.title + `</td>` +
-                            
-                                `<td id="category-` + val.id +`">` + val.category[0]['name'] + `</td>`
+                               
+                                accordion +=           
                                 
-                                if(assignedFaqs.indexOf(val.id) !== -1){
-                                
-                                    newFaq +=
-                                    
-                                    ` <td><button class="btn btn-primary unsing" data-faq = '` + val.id +`' type="button">unsign</button></td>` +
-                                    `</tr>`;
-                                }else{
-                                    newFaq +=
-                            
-                                    ` <td><button class="btn btn-primary assing" data-faq = '` + val.id +`' type="button">assign</button></td>` +
-                                    `</tr>`;
-                                }
-                                
-                                
-                                $("#faq-body").append(newFaq);
-                            })
+                                `<div class="card">
+                                    <div class="card-header" id="accordion_topicc` + index +`" data-toggle="collapse" data-target="#accordion_topic` + index +`" aria-expanded="false" aria-controls="collapseOne">
+                                        <h5 class="mb-0">` + key + `</h5>
+                                    </div>
 
+                                    <div id="accordion_topic` + index +`" class="collapse" aria-labelledby="accordion_topic` + index +`" data-parent="#accordionTopicMain1">
+                                        <div class="card-body">
+                                            <div class="table-responsive py-4">
+                                                <table class="table align-items-center table-flush"  id="datatable-basic">
+                                                    <thead class="thead-light">
+                                                        <tr>
+                                                        <th scope="col">{{ __('Title') }}</th>
+                                                        <th scope="col">{{ __('Operations') }}</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="faq-body" class="faq-order">`;
+
+                                                    $.each(val, function(key,val1){
+                                                        accordion +=
+                                                            `<tr id="faq-` + val1['id'] +`" data-id="` + val1['id'] +`" class="faq-list">
+                                                                <td>`+ val1['question']  +`</td>`;
+
+                                                            if(assignedFaqs.indexOf(val1.id) !== -1){
+                                                                accordion += `<td>
+                                                                            <button class="btn btn-primary unsing" data-faq = '` + val1.id +`' type="button">unsign</button> 
+                                                                             </td>`
+                                                            }else{
+                                                                accordion += ` <td><button class="btn btn-primary assing" data-faq = '` + val1.id +`' type="button">assign</button></td>` 
+                                                            }
+                                                         
+                                                    });
+                                                accordion +=`
+                                                    </tr></tbody>
+                                                </table>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>`
+
+                                index += 1;
+
+                            });
+
+                            $("#accordionTopicMain1").empty();
+                            $("#accordionTopicMain1").append(accordion)
+                            faqOrder();
+                            
                             $(".assing").unbind("click");
                             $("#success-message p").html(data.success);
                             $("#success-message").show();
@@ -219,37 +265,62 @@
                             let faq = data.allFaqs
                             let assignedFaqs = data.eventFaqs;
 
-                            
-                            $('#faq-body tr').remove();
+                            let accordion = '';
+                            let index = 0;
 
                             $.each(faq, function(key,val){
-                            
-                                let newFaq =
-                                `<tr id="faq-`+val.id+`">` +
-                                `<td id="title-` + val.id +`">` + val.title + `</td>` +
-                            
-                                `<td id="category-` + val.id +`">` + val.category[0]['name'] + `</td>`;
+                               
+                                accordion +=           
                                 
-                                if(assignedFaqs.indexOf(val.id) !== -1){
-                                    newFaq +=
-                            
-                                    ` <td><button class="btn btn-primary unsing" data-faq = '` + val.id +`' type="button">unsign</button></td>` +
-                                    `
-                                        
-                                    </tr>`;
-                                }else{
-                                    newFaq +=
-                            
-                                    ` <td><button class="btn btn-primary assing" data-faq = '` + val.id +`' type="button">assign</button></td>` +
-                                    `
+                                `<div class="card">
+                                    <div class="card-header" id="accordion_topicc` + index +`" data-toggle="collapse" data-target="#accordion_topic` + index +`" aria-expanded="false" aria-controls="collapseOne">
+                                        <h5 class="mb-0">` + key + `</h5>
+                                    </div>
 
-                                    </tr>`;
-                                }
-                                
-                                
-                                $("#faq-body").append(newFaq);
-                            })
+                                    <div id="accordion_topic` + index +`" class="collapse" aria-labelledby="accordion_topic` + index +`" data-parent="#accordionTopicMain1">
+                                        <div class="card-body">
+                                            <div class="table-responsive py-4">
+                                                <table class="table align-items-center table-flush"  id="datatable-basic">
+                                                    <thead class="thead-light">
+                                                        <tr>
+                                                        <th scope="col">{{ __('Title') }}</th>
+                                                        <th scope="col">{{ __('Operations') }}</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="faq-body" class="faq-order">`;
 
+                                                    $.each(val, function(key,val1){
+                                                        accordion +=
+                                                            `<tr id="faq-` + val1['id'] +`" data-id="` + val1['id'] +`" class="faq-list">
+                                                                <td>`+ val1['question']  +`</td>`;
+
+                                                            if(assignedFaqs.indexOf(val1.id) !== -1){
+                                                                accordion += `<td>
+                                                                            <button class="btn btn-primary unsing" data-faq = '` + val1.id +`' type="button">unsign</button> 
+                                                                             </td>`
+                                                            }else{
+                                                                accordion += ` <td><button class="btn btn-primary assing" data-faq = '` + val1.id +`' type="button">assign</button></td>` 
+                                                            }
+                                                         
+                                                    });
+                                                accordion +=`
+                                                    </tr></tbody>
+                                                </table>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>`
+
+                                index += 1;
+
+                            });
+
+                            $("#accordionTopicMain1").empty();
+                            $("#accordionTopicMain1").append(accordion)
+                            faqOrder();
+     
                             $(".unsing").unbind("click");
                             $("#success-message p").html(data.success);
                             $("#success-message").show();
@@ -263,27 +334,59 @@
 
 <script>
 
-   (function( $ ){
-      
-      var el = document.getElementsByClassName('faq-order')[0];
+    $(document).ready(function(){
+        faqOrder();
+    })
+
+    function faqOrder(){
+
+        
+
+        var el;
          
-      new Sortable(el, {
-         group: "words",
-         handle: ".my-handle",
-         draggable: ".item",
-         ghostClass: "sortable-ghost",
+        
+        $( ".faq-order" ).each(function( index ) {
+    
+            el = document.getElementsByClassName('faq-order')[index];
+            new Sortable(el, {
+                group: "words",
+                handle: ".my-handle",
+                draggable: ".item",
+                ghostClass: "sortable-ghost",
 
-      });
+            });
 
-      new Sortable(el, {
+            new Sortable(el, {
+                // Element dragging ended
+                onEnd: function ( /**Event*/ evt) {
+                    orderFaqs()
+                },
+            });
 
-          // Element dragging ended
-          onEnd: function ( /**Event*/ evt) {
-            orderFaqs()
-          },
-      });
+        });
 
-   })( jQuery );
+        el = document.getElementById('accordionTopicMain1');
+
+        new Sortable(el, {
+           group: "words",
+           handle: ".my-handle",
+           draggable: ".item",
+           ghostClass: "sortable-ghost",
+
+        });
+
+        new Sortable(el, {
+
+            // Element dragging ended
+            onEnd: function ( /**Event*/ evt) {
+
+                orderFaqs()
+
+
+            },
+        });
+    }
+   
 
    function orderFaqs(){
       let faqs={}
@@ -292,8 +395,8 @@
         faqs[$(this).data('id')] = index
       });
    
-
-      $.ajax({
+    
+        $.ajax({
          type: 'POST',
          headers: {
          'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
@@ -305,7 +408,7 @@
          
          
          }
-      });
+        });
    }
   
    $(document).ready( function () {

@@ -15,7 +15,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-
+use Carbon\Carbon;
 
 class User extends Authenticatable
 
@@ -166,6 +166,11 @@ class User extends Authenticatable
     public function ticket()
     {
         return $this->belongsToMany(Ticket::class, 'event_user_ticket')->withPivot('ticket_id');
+    }
+
+    public function getCreatedAtAttribute($date)
+    {
+        return Carbon::parse($date)->format('d-m-Y H:i');
     }
 
 }

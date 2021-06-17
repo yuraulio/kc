@@ -105,7 +105,7 @@
 
     $.each(versions, function(key, value){
         let name = value.version
-        console.log(value)
+        //console.log(value)
         const cropper = new Cropper(document.getElementById(`${value.version}`), {
             aspectRatio: Number((value.w/value.h), 4),
             viewMode: 0,

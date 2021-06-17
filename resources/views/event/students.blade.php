@@ -24,10 +24,9 @@
             <tr>
                 <th scope="col">{{ __('Name') }}</th>
                 <th scope="col">{{ __('Lastname') }}</th>
+                <th scope="col">{{ __('Expiration') }}</th>
 
-                {{--@can('manage-users', App\Model\User::class)
-                    <th scope="col"></th>
-                @endcan--}}
+        
             </tr>
         </thead>
         <tbody>
@@ -37,37 +36,8 @@
                 <tr>
                     <td>{{ $user->firstname }}</td>
                     <td>{{ $user->lastname }}</td>
-                    <td>{{ $user->paid }}</td>
                     <td>{{ $user->expiration }}</td>
 
-                    {{--@can('manage-users', App\Model\User::class)
-                        <td class="text-right">
-                            @if (auth()->user()->can('update', $user) || auth()->user()->can('delete', $user))
-                                <div class="dropdown">
-                                    <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-ellipsis-v"></i>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-
-                                            @can('update', $user)
-                                                <a class="dropdown-item" href="{{ route('topics.edit_event', ['topic' => $topic, 'event_id' => $event['id']]) }}">{{ __('Edit') }}</a>
-                                            @endcan
-                                            @can('delete', $user)
-                                                <form action="{{ route('topics.destroy', $topic) }}" method="post">
-                                                    @csrf
-                                                    @method('delete')
-
-                                                    <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
-                                                        {{ __('Delete') }}
-                                                    </button>
-                                                </form>
-                                            @endcan
-
-                                    </div>
-                                </div>
-                            @endif
-                        </td>
-                    @endcan--}}
                 </tr>
             @endforeach
         </tbody>

@@ -153,7 +153,7 @@ class FaqController extends Controller
       
         return response()->json([
             'success' => __('Faqs successfully assigned.'),
-            'allFaqs' => $event->category->first()->faqs,
+            'allFaqs' => $event->getFaqsByCategoryEvent(),
             'eventFaqs' => $event->faqs->pluck('id')->toArray()
         ]);
     }
@@ -165,7 +165,7 @@ class FaqController extends Controller
         
         return response()->json([
             'success' => __('Faqs successfully unsigned.'),
-            'allFaqs' => $event->category->first()->faqs,
+            'allFaqs' => $event->getFaqsByCategoryEvent(),
             'eventFaqs' => $event->faqs->pluck('id')->toArray()
         ]);
     }

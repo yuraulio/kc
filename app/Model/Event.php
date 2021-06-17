@@ -204,6 +204,34 @@ class Event extends Model
         return $faqs;
     }
 
+    public function getFaqsByCategoryEvent(){
+
+        $faqs = [];
+
+        foreach($this->getFaqs() as $key => $faq){
+            if(key_exists($key,$faqs)){
+                continue;
+            }
+            $faqs[$key] = [];
+        }
+
+        //dd($faqs);
+
+        if($this->category->first()){
+            $categoryFaqs = $this->category->first()->faqs;
+
+            foreach($categoryFaqs as $faq){
+               
+                foreach($faq->category as $categoryFaq){
+                    $faqs[$categoryFaq['name']][] = array('id' => $faq['id'], 'question' =>  $faq['title']);
+                }
+                
+            }
+
+        }
+
+        return $faqs;
+    }
 
 
 }
