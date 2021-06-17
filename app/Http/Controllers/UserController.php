@@ -232,12 +232,17 @@ class UserController extends Controller
             $event_id = $value->pivot->event_id;
             $event = Event::find($event_id);
             $ticket = $event->tickets()->wherePivot('event_id', '=', $event_id)->wherePivot('user_id', '=', $user_id)->first();
-            
+
             $data['user']['events'][$key]['ticket_id'] = isset($ticket->pivot) ? $ticket->pivot->ticket_id : null;
             $data['user']['events'][$key]['ticket_title'] = isset($ticket['title']) ? $ticket['title'] : '';
         }
-        
-        return view('users.edit', ['events' => $data['events'] ,'user' => $data['user'], 'roles' => $model->all()]);
+
+        $data['receipt'] = json_decode($data['user']['receipt_details'], true);
+        //dd($data['billing']);
+        $data['invoice'] = json_decode($data['user']['invoice_details'], true);
+        //dd($data['invoice']);
+
+        return view('users.edit', ['events' => $data['events'] ,'user' => $data['user'],'receipt' => $data['receipt'],'invoice' => $data['invoice'] ,'roles' => $model->all()]);
     }
 
 

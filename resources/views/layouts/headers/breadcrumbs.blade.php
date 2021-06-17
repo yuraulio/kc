@@ -12,9 +12,8 @@
         {{ $calendar }}
     @else
         <div class="col-lg-6 col-5 text-right">
-            <!-- <a href="#" class="btn btn-sm btn-neutral">{{ __('New') }}</a> -->
-            <!-- <a href="#" class="btn btn-sm btn-neutral">{{ __('Filters') }}</a> -->
-            @if($filter)
+
+            @if(isset($filter))
             {{ $filter }}
             @endif
 

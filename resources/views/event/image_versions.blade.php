@@ -3,7 +3,7 @@
       <h6 class="heading-small text-muted mb-4">{{ __('Image versions') }}</h6>
         <div class="row">
             <?php
-
+                //dd($event);
 
             if($event['details'] != null){
                 $details = json_decode($event['details'], true);

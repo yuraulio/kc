@@ -226,6 +226,9 @@
             <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i>Personal Data</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-7-tab" data-toggle="tab" href="#tabs-icons-text-7" role="tab" aria-controls="tabs-icons-text-7" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Billing details</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#tabs-icons-text-2" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Roles</a>
         </li>
         <li class="nav-item">
@@ -240,8 +243,12 @@
         <li class="nav-item">
             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-6-tab" data-toggle="tab" href="#tabs-icons-text-6" role="tab" aria-controls="tabs-icons-text-6" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Messages</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab" data-toggle="tab" href="#tabs-icons-text-8" role="tab" aria-controls="tabs-icons-text-8" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Profile image</a>
+        </li>
     </ul>
 </div>
+<?php //dd($user); ?>
 <div class="card shadow">
     <div class="card-body">
         <div class="tab-content" id="myTabContent">
@@ -249,170 +256,170 @@
             <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
                 <div class="card-body">
                 <?php //dd($user); ?>
-                            <form method="post" action="{{ route('profile.update') }}" autocomplete="off"
-                                enctype="multipart/form-data">
-                                @csrf
-                                @method('put')
+                    <form method="post" action="{{ route('profile.update') }}" autocomplete="off"
+                        enctype="multipart/form-data">
+                        @csrf
+                        @method('put')
 
-                                <h6 class="heading-small text-muted mb-4">{{ __('User information') }}</h6>
+                        <h6 class="heading-small text-muted mb-4">{{ __('User information') }}</h6>
 
-                                @include('alerts.error_self_update', ['key' => 'not_allow_profile'])
+                        @include('alerts.error_self_update', ['key' => 'not_allow_profile'])
 
-                                <div class="pl-lg-4">
-                                    <div class="form-group{{ $errors->has('firstname') ? ' has-danger' : '' }}">
-                                        <label class="form-control-label" for="input-firstname">{{ __('Firstname') }}</label>
-                                        <input type="text" name="firstname" id="input-firstname" class="form-control{{ $errors->has('firstname') ? ' is-invalid' : '' }}" placeholder="{{ __('firstname') }}" value="{{ old('firstname', $user['firstname']) }}" required autofocus>
+                        <div class="pl-lg-4">
+                            <div class="form-group{{ $errors->has('firstname') ? ' has-danger' : '' }}">
+                                <label class="form-control-label" for="input-firstname">{{ __('Firstname') }}</label>
+                                <input type="text" name="firstname" id="input-firstname" class="form-control{{ $errors->has('firstname') ? ' is-invalid' : '' }}" placeholder="{{ __('firstname') }}" value="{{ old('firstname', $user['firstname']) }}" required autofocus>
 
-                                        @include('alerts.feedback', ['field' => 'firstname'])
-                                    </div>
-                                    <div class="form-group{{ $errors->has('lastname') ? ' has-danger' : '' }}">
-                                        <label class="form-control-label" for="input-lastname">{{ __('Lastname') }}</label>
-                                        <input type="text" name="lastname" id="input-lastname" class="form-control{{ $errors->has('lastname') ? ' is-invalid' : '' }}" placeholder="{{ __('Lastname') }}" value="{{ old('lastname', $user['lastname']) }}" required autofocus>
+                                @include('alerts.feedback', ['field' => 'firstname'])
+                            </div>
+                            <div class="form-group{{ $errors->has('lastname') ? ' has-danger' : '' }}">
+                                <label class="form-control-label" for="input-lastname">{{ __('Lastname') }}</label>
+                                <input type="text" name="lastname" id="input-lastname" class="form-control{{ $errors->has('lastname') ? ' is-invalid' : '' }}" placeholder="{{ __('Lastname') }}" value="{{ old('lastname', $user['lastname']) }}" required autofocus>
 
-                                        @include('alerts.feedback', ['field' => 'lastname'])
-                                    </div>
-                                    <div class="form-group{{ $errors->has('email') ? ' has-danger' : '' }}">
-                                        <label class="form-control-label" for="input-email">{{ __('Email') }}</label>
-                                        <input type="email" name="email" id="input-email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" placeholder="{{ __('Email') }}" value="{{ old('email', $user['email']) }}" required>
+                                @include('alerts.feedback', ['field' => 'lastname'])
+                            </div>
+                            <div class="form-group{{ $errors->has('email') ? ' has-danger' : '' }}">
+                                <label class="form-control-label" for="input-email">{{ __('Email') }}</label>
+                                <input type="email" name="email" id="input-email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" placeholder="{{ __('Email') }}" value="{{ old('email', $user['email']) }}" required>
 
-                                        @include('alerts.feedback', ['field' => 'email'])
-                                    </div>
-                                    <div class="form-group{{ $errors->has('photo') ? ' has-danger' : '' }}">
-                                        <label class="form-control-label">{{ __('Profile photo') }}</label>
-                                        <div class="custom-file">
-                                            <label class="custom-file-label" for="input-picture">{{ __('Select profile photo') }}</label>
-                                            <input type="file" name="photo" class="custom-file-input{{ $errors->has('photo') ? ' is-invalid' : '' }}" id="input-picture" accept="image/*">
+                                @include('alerts.feedback', ['field' => 'email'])
+                            </div>
+                            <div class="form-group{{ $errors->has('photo') ? ' has-danger' : '' }}">
+                                <label class="form-control-label">{{ __('Profile photo') }}</label>
+                                <div class="custom-file">
+                                    <label class="custom-file-label" for="input-picture">{{ __('Select profile photo') }}</label>
+                                    <input type="file" name="photo" class="custom-file-input{{ $errors->has('photo') ? ' is-invalid' : '' }}" id="input-picture" accept="image/*">
 
-                                        </div>
-
-                                        @include('alerts.feedback', ['field' => 'photo'])
-                                    </div>
-                                    <div class="form-group{{ $errors->has('company') ? ' has-danger' : '' }}">
-                                        <label class="form-control-label" for="input-company">{{ __('Company') }}</label>
-                                        <input type="text" name="company" id="input-company" class="form-control{{ $errors->has('company') ? ' is-invalid' : '' }}" placeholder="{{ __('Company') }}" value="{{ old('company', $user['company']) }}" required autofocus>
-
-                                        @include('alerts.feedback', ['field' => 'company'])
-                                    </div>
-                                    <div class="form-group{{ $errors->has('job_title') ? ' has-danger' : '' }}">
-                                        <label class="form-control-label" for="input-job_title">{{ __('Job title') }}</label>
-                                        <input type="text" name="job_title" id="input-job_title" class="form-control{{ $errors->has('job_title') ? ' is-invalid' : '' }}" placeholder="{{ __('Job title') }}" value="{{ old('job_title', $user['job_title']) }}" required autofocus>
-
-                                        @include('alerts.feedback', ['field' => 'job_title'])
-                                    </div>
-                                    <div class="form-group{{ $errors->has('birthday') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-birthday">{{ __('Birthday') }}</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
-                                            </div>
-                                            @if($user['birthday'] != null)
-                                            <?php $birthday = $user['birthday']; ?>
-                                            @else
-                                            <?php $birthday = ''; ?>
-                                            @endif
-                                            <?php //dd($birthday); ?>
-                                            <input name="birthday" id="input-birthday" class="form-control datepicker{{ $errors->has('birthday') ? ' is-invalid' : '' }}" placeholder="Select date" type="text" value="{{ old('birthday', $user['birthday']) }}" required autofocus>
-
-                                            @include('alerts.feedback', ['field' => 'birthday'])
-
-                                        </div>
-                                    </div>
-
-
-
-                                    <div class="form-group{{ $errors->has('mobile') ? ' has-danger' : '' }}">
-                                        <label class="form-control-label" for="input-mobile">{{ __('Mobile') }}</label>
-                                        <input type="number" name="mobile" id="input-mobile" class="form-control{{ $errors->has('mobile') ? ' is-invalid' : '' }}" placeholder="{{ __('Mobile') }}" value="{{ old('mobile', $user['mobile']) }}" required autofocus>
-
-                                        @include('alerts.feedback', ['field' => 'mobile'])
-                                    </div>
-
-                                    <?php //dd(auth()->user()); ?>
-
-                                    <div class="form-group{{ $errors->has('telephone') ? ' has-danger' : '' }}">
-                                        <label class="form-control-label" for="input-telephone">{{ __('Telephone') }}</label>
-                                        <input type="number" name="telephone" id="input-telephone" class="form-control{{ $errors->has('telephone') ? ' is-invalid' : '' }}" placeholder="{{ __('Telephone') }}" value="{{ old('telephone', $user['telephone']) }}" autofocus>
-
-                                        @include('alerts.feedback', ['field' => 'telephone'])
-                                    </div>
-
-                                    <div class="form-group{{ $errors->has('address') ? ' has-danger' : '' }}">
-                                        <label class="form-control-label" for="input-address">{{ __('Address') }}</label>
-                                        <input type="text" name="address" id="input-address" class="form-control{{ $errors->has('address') ? ' is-invalid' : '' }}" placeholder="{{ __('Address') }}" value="{{ old('address', $user['address']) }}" required autofocus>
-
-                                        @include('alerts.feedback', ['field' => 'address'])
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group{{ $errors->has('address_num') ? ' has-danger' : '' }} col-md-4">
-                                            <label class="form-control-label" for="input-address_num">{{ __('Address No') }}</label>
-                                            <input type="number" name="address_num" id="input-address_num" class="form-control{{ $errors->has('address_num') ? ' is-invalid' : '' }}" placeholder="{{ __('Address No') }}" value="{{ old('address_num', $user['address_num']) }}" required autofocus>
-
-                                            @include('alerts.feedback', ['field' => 'address_num'])
-                                        </div>
-
-                                        <div class="form-group{{ $errors->has('postcode') ? ' has-danger' : '' }} col-md-4">
-                                            <label class="form-control-label" for="input-postcode">{{ __('Postcode') }}</label>
-                                            <input type="number" name="postcode" id="input-postcode" class="form-control{{ $errors->has('postcode') ? ' is-invalid' : '' }}" placeholder="{{ __('Postcode') }}" value="{{ old('postcode', $user['postcode']) }}" required autofocus>
-
-                                            @include('alerts.feedback', ['field' => 'postcode'])
-                                        </div>
-
-                                        <div class="form-group{{ $errors->has('city') ? ' has-danger' : '' }} col-md-4">
-                                            <label class="form-control-label" for="input-city">{{ __('City') }}</label>
-                                            <input type="text" name="city" id="input-city" class="form-control{{ $errors->has('city') ? ' is-invalid' : '' }}" placeholder="{{ __('City') }}" value="{{ old('city', $user['city']) }}" required autofocus>
-
-                                            @include('alerts.feedback', ['field' => 'city'])
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group{{ $errors->has('afm') ? ' has-danger' : '' }}">
-                                            <label class="form-control-label" for="input-afm">{{ __('Afm') }}</label>
-                                            <input type="number" name="afm" id="input-afm" class="form-control{{ $errors->has('afm') ? ' is-invalid' : '' }}" placeholder="{{ __('Afm') }}" value="{{ old('afm', $user['afm']) }}" required autofocus>
-
-                                            @include('alerts.feedback', ['field' => 'afm'])
-                                        </div>
-
-                                        <input type="hidden" name="user_id" value="{{$user['id']}}">
-
-                                    <div class="text-center">
-                                        <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
-                                    </div>
                                 </div>
-                            </form>
-                            <hr class="my-4" />
-                            <form method="post" action="{{ route('profile.password') }}" autocomplete="off">
-                                @csrf
-                                @method('put')
 
-                                <h6 class="heading-small text-muted mb-4">{{ __('Password') }}</h6>
+                                @include('alerts.feedback', ['field' => 'photo'])
+                            </div>
+                            <div class="form-group{{ $errors->has('company') ? ' has-danger' : '' }}">
+                                <label class="form-control-label" for="input-company">{{ __('Company') }}</label>
+                                <input type="text" name="company" id="input-company" class="form-control{{ $errors->has('company') ? ' is-invalid' : '' }}" placeholder="{{ __('Company') }}" value="{{ old('company', $user['company']) }}" required autofocus>
 
-                                @include('alerts.success', ['key' => 'password_status'])
-                                @include('alerts.error_self_update', ['key' => 'not_allow_password'])
+                                @include('alerts.feedback', ['field' => 'company'])
+                            </div>
+                            <div class="form-group{{ $errors->has('job_title') ? ' has-danger' : '' }}">
+                                <label class="form-control-label" for="input-job_title">{{ __('Job title') }}</label>
+                                <input type="text" name="job_title" id="input-job_title" class="form-control{{ $errors->has('job_title') ? ' is-invalid' : '' }}" placeholder="{{ __('Job title') }}" value="{{ old('job_title', $user['job_title']) }}" required autofocus>
 
-                                <div class="pl-lg-4">
-                                    <div class="form-group{{ $errors->has('old_password') ? ' has-danger' : '' }}">
-                                        <label class="form-control-label" for="input-current-password">{{ __('Current Password') }}</label>
-                                        <input type="password" name="old_password" id="input-current-password" class="form-control{{ $errors->has('old_password') ? ' is-invalid' : '' }}" placeholder="{{ __('Current Password') }}" value="" required>
-
-                                        @include('alerts.feedback', ['field' => 'old_password'])
+                                @include('alerts.feedback', ['field' => 'job_title'])
+                            </div>
+                            <div class="form-group{{ $errors->has('birthday') ? ' has-danger' : '' }}">
+                            <label class="form-control-label" for="input-birthday">{{ __('Birthday') }}</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
                                     </div>
-                                    <div class="form-group{{ $errors->has('password') ? ' has-danger' : '' }}">
-                                        <label class="form-control-label" for="input-password">{{ __('New Password') }}</label>
-                                        <input type="password" name="password" id="input-password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" placeholder="{{ __('New Password') }}" value="" required>
+                                    @if($user['birthday'] != null)
+                                    <?php $birthday = $user['birthday']; ?>
+                                    @else
+                                    <?php $birthday = ''; ?>
+                                    @endif
+                                    <?php //dd($birthday); ?>
+                                    <input name="birthday" id="input-birthday" class="form-control datepicker{{ $errors->has('birthday') ? ' is-invalid' : '' }}" placeholder="Select date" type="text" value="{{ old('birthday', $user['birthday']) }}" required autofocus>
 
-                                        @include('alerts.feedback', ['field' => 'password'])
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="input-password-confirmation">{{ __('Confirm New Password') }}</label>
-                                        <input type="password" name="password_confirmation" id="input-password-confirmation" class="form-control" placeholder="{{ __('Confirm New Password') }}" value="" required>
-                                    </div>
+                                    @include('alerts.feedback', ['field' => 'birthday'])
 
-                                    <div class="text-center">
-                                        <button type="submit" class="btn btn-success mt-4">{{ __('Change password') }}</button>
-                                    </div>
                                 </div>
-                            </form>
+                            </div>
+
+
+
+                            <div class="form-group{{ $errors->has('mobile') ? ' has-danger' : '' }}">
+                                <label class="form-control-label" for="input-mobile">{{ __('Mobile') }}</label>
+                                <input type="number" name="mobile" id="input-mobile" class="form-control{{ $errors->has('mobile') ? ' is-invalid' : '' }}" placeholder="{{ __('Mobile') }}" value="{{ old('mobile', $user['mobile']) }}" required autofocus>
+
+                                @include('alerts.feedback', ['field' => 'mobile'])
+                            </div>
+
+                            <?php //dd(auth()->user()); ?>
+
+                            <div class="form-group{{ $errors->has('telephone') ? ' has-danger' : '' }}">
+                                <label class="form-control-label" for="input-telephone">{{ __('Telephone') }}</label>
+                                <input type="number" name="telephone" id="input-telephone" class="form-control{{ $errors->has('telephone') ? ' is-invalid' : '' }}" placeholder="{{ __('Telephone') }}" value="{{ old('telephone', $user['telephone']) }}" autofocus>
+
+                                @include('alerts.feedback', ['field' => 'telephone'])
+                            </div>
+
+                            <div class="form-group{{ $errors->has('address') ? ' has-danger' : '' }}">
+                                <label class="form-control-label" for="input-address">{{ __('Address') }}</label>
+                                <input type="text" name="address" id="input-address" class="form-control{{ $errors->has('address') ? ' is-invalid' : '' }}" placeholder="{{ __('Address') }}" value="{{ old('address', $user['address']) }}" required autofocus>
+
+                                @include('alerts.feedback', ['field' => 'address'])
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group{{ $errors->has('address_num') ? ' has-danger' : '' }} col-md-4">
+                                    <label class="form-control-label" for="input-address_num">{{ __('Address No') }}</label>
+                                    <input type="number" name="address_num" id="input-address_num" class="form-control{{ $errors->has('address_num') ? ' is-invalid' : '' }}" placeholder="{{ __('Address No') }}" value="{{ old('address_num', $user['address_num']) }}" required autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'address_num'])
+                                </div>
+
+                                <div class="form-group{{ $errors->has('postcode') ? ' has-danger' : '' }} col-md-4">
+                                    <label class="form-control-label" for="input-postcode">{{ __('Postcode') }}</label>
+                                    <input type="number" name="postcode" id="input-postcode" class="form-control{{ $errors->has('postcode') ? ' is-invalid' : '' }}" placeholder="{{ __('Postcode') }}" value="{{ old('postcode', $user['postcode']) }}" required autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'postcode'])
+                                </div>
+
+                                <div class="form-group{{ $errors->has('city') ? ' has-danger' : '' }} col-md-4">
+                                    <label class="form-control-label" for="input-city">{{ __('City') }}</label>
+                                    <input type="text" name="city" id="input-city" class="form-control{{ $errors->has('city') ? ' is-invalid' : '' }}" placeholder="{{ __('City') }}" value="{{ old('city', $user['city']) }}" required autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'city'])
+                                </div>
+                            </div>
+
+                            <div class="form-group{{ $errors->has('afm') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-afm">{{ __('Afm') }}</label>
+                                    <input type="number" name="afm" id="input-afm" class="form-control{{ $errors->has('afm') ? ' is-invalid' : '' }}" placeholder="{{ __('Afm') }}" value="{{ old('afm', $user['afm']) }}" required autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'afm'])
+                                </div>
+
+                                <input type="hidden" name="user_id" value="{{$user['id']}}">
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
+                            </div>
                         </div>
+                    </form>
+                    <hr class="my-4" />
+                    <form method="post" action="{{ route('profile.password') }}" autocomplete="off">
+                        @csrf
+                        @method('put')
+
+                        <h6 class="heading-small text-muted mb-4">{{ __('Password') }}</h6>
+
+                        @include('alerts.success', ['key' => 'password_status'])
+                        @include('alerts.error_self_update', ['key' => 'not_allow_password'])
+
+                        <div class="pl-lg-4">
+                            <div class="form-group{{ $errors->has('old_password') ? ' has-danger' : '' }}">
+                                <label class="form-control-label" for="input-current-password">{{ __('Current Password') }}</label>
+                                <input type="password" name="old_password" id="input-current-password" class="form-control{{ $errors->has('old_password') ? ' is-invalid' : '' }}" placeholder="{{ __('Current Password') }}" value="" required>
+
+                                @include('alerts.feedback', ['field' => 'old_password'])
+                            </div>
+                            <div class="form-group{{ $errors->has('password') ? ' has-danger' : '' }}">
+                                <label class="form-control-label" for="input-password">{{ __('New Password') }}</label>
+                                <input type="password" name="password" id="input-password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" placeholder="{{ __('New Password') }}" value="" required>
+
+                                @include('alerts.feedback', ['field' => 'password'])
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label" for="input-password-confirmation">{{ __('Confirm New Password') }}</label>
+                                <input type="password" name="password_confirmation" id="input-password-confirmation" class="form-control" placeholder="{{ __('Confirm New Password') }}" value="" required>
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-success mt-4">{{ __('Change password') }}</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
                 </div>
             <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
                 <form method="post" action="{{ route('profile.updateRole') }}" autocomplete="off"
@@ -602,6 +609,143 @@
             </div>
             <div class="tab-pane fade" id="tabs-icons-text-6" role="tabpanel" aria-labelledby="tabs-icons-text-6-tab">
                 <p class="description">TAB 6 Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth.</p>
+            </div>
+            <div class="tab-pane fade" id="tabs-icons-text-7" role="tabpanel" aria-labelledby="tabs-icons-text-7-tab">
+                <form method="post" action="{{ route('profile.update_billing') }}" autocomplete="off"
+                    enctype="multipart/form-data">
+                    @csrf
+                    @method('put')
+
+                    <h6 class="heading-small text-muted mb-4">{{ __('Student invoice details') }}</h6>
+
+                    @include('alerts.error_self_update', ['key' => 'not_allow_profile'])
+
+                    <div class="pl-lg-4">
+                        <div class="form-group{{ $errors->has('companyname') ? ' has-danger' : '' }}">
+                            <label class="form-control-label" for="input-companyname">{{ __('Company Name') }}</label>
+                            <input type="text" name="companyname" id="input-companyname" class="form-control{{ $errors->has('companyname') ? ' is-invalid' : '' }}" placeholder="{{ __('Company Name') }}" value="{{ old('companyname', $invoice['companyname'] ) }}" required autofocus>
+
+                            @include('alerts.feedback', ['field' => 'companyname'])
+                        </div>
+                        <div class="form-group{{ $errors->has('companyprofession') ? ' has-danger' : '' }}">
+                            <label class="form-control-label" for="input-companyprofession">{{ __('Company Profession') }}</label>
+                            <input type="text" name="companyprofession" id="input-companyprofession" class="form-control{{ $errors->has('companyprofession') ? ' is-invalid' : '' }}" placeholder="{{ __('Company Profession') }}" value="{{ old('companyprofession', $invoice['companyprofession']) }}" required autofocus>
+
+                            @include('alerts.feedback', ['field' => 'companyprofession'])
+                        </div>
+                        <div class="form-group{{ $errors->has('companyafm') ? ' has-danger' : '' }}">
+                            <label class="form-control-label" for="input-companyafm">{{ __('VAT Number') }}</label>
+                            <input type="text" name="companyafm" id="input-companyafm" class="form-control{{ $errors->has('companyafm') ? ' is-invalid' : '' }}" placeholder="{{ __('VAT Number') }}" value="{{ old('companyafm', $invoice['companyafm']) }}" required>
+
+                            @include('alerts.feedback', ['field' => 'companyafm'])
+                        </div>
+                        <div class="form-group{{ $errors->has('companydoy') ? ' has-danger' : '' }}">
+                            <label class="form-control-label" for="input-companydoy">{{ __('Company area') }}</label>
+                            <input type="text" name="companydoy" id="input-companydoy" class="form-control{{ $errors->has('companydoy') ? ' is-invalid' : '' }}" placeholder="{{ __('Company area') }}" value="{{ old('companydoy', $invoice['companydoy']) }}" required autofocus>
+
+                            @include('alerts.feedback', ['field' => 'companydoy'])
+                        </div>
+                        <div class="form-group{{ $errors->has('companyaddress') ? ' has-danger' : '' }}">
+                            <label class="form-control-label" for="input-companyaddress">{{ __('Company address') }}</label>
+                            <input type="text" name="companyaddress" id="input-companyaddress" class="form-control{{ $errors->has('companyaddress') ? ' is-invalid' : '' }}" placeholder="{{ __('Company address') }}" value="{{ old('companyaddress', $invoice['companyaddress']) }}" required autofocus>
+
+                            @include('alerts.feedback', ['field' => 'companyaddress'])
+                        </div>
+                        <div class="form-row">
+                                <div class="form-group{{ $errors->has('companyaddressnum') ? ' has-danger' : '' }} col-md-4">
+                                    <label class="form-control-label" for="input-companyaddressnum">{{ __('Company address num') }}</label>
+                                    <input type="number" name="companyaddressnum" id="input-companyaddressnum" class="form-control{{ $errors->has('companyaddressnum') ? ' is-invalid' : '' }}" placeholder="{{ __('Company address num') }}" value="{{ old('companyaddressnum',$invoice['companyaddressnum']) }}" required autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'companyaddressnum'])
+                                </div>
+
+                                <div class="form-group{{ $errors->has('companypostcode') ? ' has-danger' : '' }} col-md-4">
+                                    <label class="form-control-label" for="input-companypostcode">{{ __('Postcode') }}</label>
+                                    <input type="number" name="companypostcode" id="input-companypostcode" class="form-control{{ $errors->has('companypostcode') ? ' is-invalid' : '' }}" placeholder="{{ __('Postcode') }}" value="{{ old('companypostcode',$invoice['companypostcode']) }}" required autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'companypostcode'])
+                                </div>
+
+                                <div class="form-group{{ $errors->has('companycity') ? ' has-danger' : '' }} col-md-4">
+                                    <label class="form-control-label" for="input-companycity">{{ __('City') }}</label>
+                                    <input type="text" name="companycity" id="input-companycity" class="form-control{{ $errors->has('companycity') ? ' is-invalid' : '' }}" placeholder="{{ __('City') }}" value="{{ old('companycity',$invoice['companycity']) }}" required autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'companycity'])
+                                </div>
+                            </div>
+
+                        <h6 class="heading-small text-muted mb-4">{{ __('Student receipt details') }}</h6>
+
+                        <div class="form-group{{ $errors->has('billname') ? ' has-danger' : '' }}">
+                            <label class="form-control-label" for="input-billname">{{ __('Firstname') }}</label>
+                            <input type="text" name="billname" id="input-billname" class="form-control{{ $errors->has('billname') ? ' is-invalid' : '' }}" placeholder="{{ __('Firstname') }}" value="{{ old('billname', $receipt['billname']) }}" required autofocus>
+
+                            @include('alerts.feedback', ['field' => 'billname'])
+                        </div>
+
+                        <div class="form-group{{ $errors->has('billsurname') ? ' has-danger' : '' }}">
+                            <label class="form-control-label" for="input-billsurname">{{ __('Lastname') }}</label>
+                            <input type="text" name="billsurname" id="input-billsurname" class="form-control{{ $errors->has('billsurname') ? ' is-invalid' : '' }}" placeholder="{{ __('Lastname') }}" value="{{ old('billsurname',$receipt['billsurname']) }}" required autofocus>
+
+                            @include('alerts.feedback', ['field' => 'billsurname'])
+                        </div>
+                        <div class="form-group{{ $errors->has('billaddress') ? ' has-danger' : '' }}">
+                            <label class="form-control-label" for="input-billaddress">{{ __('Address') }}</label>
+                            <input type="text" name="billaddress" id="input-billaddress" class="form-control{{ $errors->has('billaddress') ? ' is-invalid' : '' }}" placeholder="{{ __('Address') }}" value="{{ old('billaddress',$receipt['billaddress']) }}" required autofocus>
+
+                            @include('alerts.feedback', ['field' => 'billaddress'])
+                        </div>
+                        <div class="form-row">
+                                <div class="form-group{{ $errors->has('billaddressnum') ? ' has-danger' : '' }} col-md-4">
+                                    <label class="form-control-label" for="input-billaddressnum">{{ __('Address No') }}</label>
+                                    <input type="number" name="billaddressnum" id="input-billaddressnum" class="form-control{{ $errors->has('billaddressnum') ? ' is-invalid' : '' }}" placeholder="{{ __('Address No') }}" value="{{ old('billaddressnum',$receipt['billaddressnum']) }}" required autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'billaddressnum'])
+                                </div>
+
+                                <div class="form-group{{ $errors->has('billpostcode') ? ' has-danger' : '' }} col-md-4">
+                                    <label class="form-control-label" for="input-billpostcode">{{ __('Postcode') }}</label>
+                                    <input type="number" name="billpostcode" id="input-billpostcode" class="form-control{{ $errors->has('billpostcode') ? ' is-invalid' : '' }}" placeholder="{{ __('Postcode') }}" value="{{ old('billpostcode',$receipt['billpostcode']) }}" required autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'billpostcode'])
+                                </div>
+
+                                <div class="form-group{{ $errors->has('billcity') ? ' has-danger' : '' }} col-md-4">
+                                    <label class="form-control-label" for="input-billcity">{{ __('City') }}</label>
+                                    <input type="text" name="billcity" id="input-billcity" class="form-control{{ $errors->has('billcity') ? ' is-invalid' : '' }}" placeholder="{{ __('City') }}" value="{{ old('billcity',$receipt['billcity']) }}" required autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'billcity'])
+                                </div>
+                            </div>
+
+
+
+                            <input type="hidden" name="user_id" value="{{$user['id']}}">
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="tab-pane fade" id="tabs-icons-text-8" role="tabpanel" aria-labelledby="tabs-icons-text-8-tab">
+
+                <div class="col-12 img_version">
+                    <h3>Profile Image</h3>
+
+                    <img class="img-fluid" id="profile_image" src="
+                    <?php
+                        if(isset($user)) {
+                            echo public_path('\\uploads\\profile_user\\'.$user->image->original_name);
+                        }else{
+                            echo '';
+                        }
+                    ?>" alt="">
+
+                    <button class="btn btn-primary crop" type="button">Crop</button>
+                    <div class="crop-msg" id=""></div>
+                </div>
+
             </div>
         </div>
     </div>
