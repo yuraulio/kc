@@ -51,10 +51,10 @@ class ExamRequest extends FormRequest
             'end_of_time_text' => [
                 'required', 'min:3'
             ],
-            'success_text ' => [
+            'success_text' => [
                 'required', 'min:3'
             ],
-            'failure_text ' => [
+            'failure_text' => [
                 'required', 'min:3'
             ],
 

@@ -34,10 +34,10 @@ class ExamController extends Controller
     public function create()
     {
         $user = Auth::user();
-
         $events = Event::all();
+        $edit = false;
 
-        return view('admin.exams.create', ['user' => $user, 'events' => $events]);
+        return view('admin.exams.create', ['user' => $user, 'events' => $events,$edit]);
     }
 
     /**
@@ -47,8 +47,8 @@ class ExamController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(ExamRequest $request, Exam $model)
-    {
-        dd();
+    {   
+       
         $exam = $model->create($request->all());
     }
 
