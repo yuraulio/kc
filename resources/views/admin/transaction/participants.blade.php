@@ -10,6 +10,11 @@
             @slot('title')
                 {{ __('Examples') }}
             @endslot
+            @slot('filter')
+                <!-- <a href="#" class="btn btn-sm btn-neutral">{{ __('Filters') }}</a> -->
+                <a class="btn btn-sm btn-neutral" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">{{ __('Filters') }}</a>
+
+            @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('city.index') }}">{{ __('Cities Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
@@ -40,106 +45,131 @@
 
                     <div class="table-responsive py-4">
 
-                    <!-- <div class="text-center">
-                <a class="btn btn-success btn-lg " href="#"><i class="fa fa-filter "></i> Filter</a>
-                <a class="btn btn-secondary btn-lg " onclick="clear()" href="#"><i class="fa fa-eraser "></i> Clear Filter</a>
-                </div> -->
 
+                <div class="collapse" id="collapseExample">
+                <div class="container">
+                        <div class="row">
+                            <div class="col-sm-4" id="filter_col1" data-column="1">
+                                <label>Event</label>
+                                <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="col1_filter">
+                                </select>
+                            </div>
+                            <div class="col-sm-4" id="filter_col4" data-column="4">
+                                <label>Coupon</label>
+                                <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col4_filter" placeholder="Coupon"></select>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>Min</label>
+                                    <input type="text" id="min" name="min">
+                                </div>
 
-<div class="container">
-  <div class="row">
-    <div class="col-sm-4" id="filter_col1" data-column="1">
-
-        <label>Event</label>
-        <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="col1_filter">
-        </select>
-
-
-    </div>
-    <div class="col-sm-4" id="filter_col4" data-column="4">
-        <label>Coupon</label>
-        <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col4_filter" placeholder="Coupon"></select>
-    </div>
-    <div class="col-sm-4">
-        <div class="form-group">
-            <label>Min</label>
-            <input type="text" id="min" name="min">
-        </div>
-
-        <div class="form-group">
-        <label>Max</label>
-        <input type="text" id="max" name="max">
-        </div>
-
-
-    </div>
-
-  </div>
-</div>
-
-
-                    <table id="range-date" cellspacing="5" cellpadding="5" border="0">
-                        <tbody>
-                            <label for="">Total Amount:</label>
-                            <div id="total"></div>
-
-                        </tbody>
-                    </table>
-                        <table class="table align-items-center table-flush"  id="participants_table">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th scope="col">{{ __('Student Data') }}</th>
-                                    <th scope="col">{{ __('Event') }}</th>
-                                    <th scope="col">{{ __('Ticket Type') }}</th>
-                                    <th scope="col">{{ __('Ticket Price') }}</th>
-                                    <th scope="col">{{ __('Coupon') }}</th>
-                                    <th scope="col">{{ __('Registration Date') }}</th>
-                                </tr>
-                            </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>{{ __('Student Data') }}</th>
-                                    <th>{{ __('Event') }}</th>
-                                    <th>{{ __('Ticket Type') }}</th>
-                                    <th>{{ __('Ticket Price') }}</th>
-                                    <th>{{ __('Coupon') }}</th>
-                                    <th>{{ __('Registration Date') }}</th>
-                                </tr>
-                            </tfoot>
-                            <tbody>
-                                @foreach ($transactions as $transaction)
-                                <?php //dd($transaction); ?>
-                                    <tr>
-                                        <td>
-                                            <?php if(count($transaction->user) > 0){
-                                                        echo $transaction->user->first()['firstname'].$transaction->user->first()['lasttname'];
-                                                    }else{
-                                                        echo "";
-                                                    }?>
-                                        </td>
-                                        <td>
-                                            <?php if(count($transaction->event) > 0){
-                                                        echo $transaction->event->first()['title'];
-                                                    }else{
-                                                        echo "";
-                                                    }?>
-                                        </td>
-                                        <td>
-                                            @if($transaction['type'] != null )
-                                                {{ $transaction['type'] }}
-                                            @endif
-                                        </td>
-                                        <td>{{ $transaction->amount }}</td>
-                                        <td>{{ $transaction->coupon_code }}</td>
-                                        <td>{{ date_format($transaction->created_at, 'Y/m/d' )}}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                <div class="form-group">
+                                    <label>Max</label>
+                                    <input type="text" id="max" name="max">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <div class="card bg-gradient-default">
+                    <div class="card-body">
+                        <!-- <h3 class="card-title text-white">Testimonial</h3>
+                        <blockquote class="blockquote text-white mb-0">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+                            <footer class="blockquote-footer text-danger">Someone famous in <cite title="Source Title">Source Title</cite></footer>
+                        </blockquote> -->
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm">
+                                <h3 class="card-title text-white">Total Amount:</h3>
+                                <div id="total"></div>
+                                </div>
+                                <div class="col-sm">
+                                <h3 class="card-title text-white"><div id="count_early"></div> Early birds:</h3>
+                                <div id="early"></div>
+                                </div>
+                                <div class="col-sm">
+                                <h3 class="card-title text-white"><div id="count_regular"></div> Regular:</h3>
+                                <div id="regular"></div>
+                                </div>
+                                <div class="col-sm">
+                                <h3 class="card-title text-white"><div id="count_alumni"></div> Alumni:</h3>
+                                <div id="alumni"></div>
+                                </div>
+                                <div class="col-sm">
+                                <h3 class="card-title text-white"><div id="count_special"></div> Special:</h3>
+                                <div id="special"></div>
+                                </div>
+                                <div class="col-sm">
+                                <h3 class="card-title text-white"><div id="count_sponsored"></div> Sponsored:</h3>
+                                <div id="sponsored"></div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div style="margin-top:10px" class="container">
+                        <div class="row" id="participants_info">
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="table align-items-center table-flush"  id="participants_table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">{{ __('Student Data') }}</th>
+                            <th scope="col">{{ __('Event') }}</th>
+                            <th scope="col">{{ __('Ticket Type') }}</th>
+                            <th scope="col">{{ __('Ticket Price') }}</th>
+                            <th scope="col">{{ __('Coupon') }}</th>
+                            <th scope="col">{{ __('Registration Date') }}</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>{{ __('Student Data') }}</th>
+                            <th>{{ __('Event') }}</th>
+                            <th>{{ __('Ticket Type') }}</th>
+                            <th>{{ __('Ticket Price') }}</th>
+                            <th>{{ __('Coupon') }}</th>
+                            <th>{{ __('Registration Date') }}</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @foreach ($transactions as $transaction)
+                        <?php //dd($transaction); ?>
+                            <tr>
+                                <td>
+                                    <?php if(count($transaction->user) > 0){
+                                                echo $transaction->user->first()['firstname'].$transaction->user->first()['lasttname'];
+                                            }else{
+                                                echo "";
+                                            }?>
+                                </td>
+                                <td>
+                                    <?php if(count($transaction->event) > 0){
+                                                echo $transaction->event->first()['title'];
+                                            }else{
+                                                echo "";
+                                            }?>
+                                </td>
+                                <td>
+                                    @if($transaction['type'] != null )
+                                        {{ $transaction['type'] }}
+                                    @endif
+                                </td>
+                                <td>{{ $transaction->amount }}</td>
+                                <td>{{ $transaction->coupon_code }}</td>
+                                <td>{{ date_format($transaction->created_at, 'Y/m/d' )}}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
+    </div>
+</div>
 
         @include('layouts.footers.auth')
     </div>
@@ -191,10 +221,10 @@ $.fn.dataTable.ext.search.push(
 $(document).ready(function() {
     // Create date inputs
     minDate = new DateTime($('#min'), {
-        format: ('MMM Do YY')
+        format: 'L'
     });
     maxDate = new DateTime($('#max'), {
-        format: 'MMM Do YY'
+        format: 'L'
     });
 
     // DataTables initialisation
@@ -220,41 +250,53 @@ $(document).ready(function() {
         $('#col4_filter').append('<option value="'+value+'">'+value+'</option>')
     })
 
-    // $.each(prices, function(key, value){
-    //     //console.log(value)
-    //     //sum = sum + parseInt(value)
-    // })
-
-
-
-
-    $("#participants_table tfoot th").each( function ( i ) {
-
-
-        if(i != 5){
-            var select = $('<select><option value=""></option></select>')
-            .appendTo( $(this).empty() )
-            .on( 'change', function () {
-                table.column( i )
-                    .search( $(this).val() )
-                    .draw();
-
-            } );
-
-
-            //
-        table.column( i ).data().unique().sort().each( function ( d, j ) {
-
-            select.append( '<option value="'+d+'">'+d+'</option>' )
-
-        } );
-        }
-
-    } );
-
     // Refilter the table
     $('#min, #max').on('change', function () {
         table.draw();
+        console.log(table.column(1).data())
+        price = $('#participants_table').DataTable().column( 3 ).data();
+        let sum = 0;
+        let alumni = 0;
+        let special = 0;
+        let regular = 0;
+        let sponsored = 0;
+        let early = 0;
+
+        let min = new Date($('#min').val());
+        let max = new Date($('#max').val());
+
+        min = moment(min).format('YYYY/MM/DD')
+        max = moment(max).format('YYYY/MM/DD')
+
+            $.each(price, function(key, value){
+                if($('#participants_table').DataTable().column( 5 ).data()[key] >= min && $('#participants_table').DataTable().column( 5 ).data()[key] <= max){
+                sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key])
+
+
+
+                if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Alumni'){
+                alumni = alumni + parseInt(value)
+                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Regular'){
+                    regular = regular + parseInt(value)
+                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Special'){
+                    special = special + parseInt(value)
+                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Sponsored'){
+                    sponsored = sponsored + parseInt(value)
+                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early Bird'){
+                    early = early + parseInt(value)
+                }
+                }
+
+
+
+        })
+        //alert(sum)
+        $('#total').text(sum)
+        $('#special').text(special)
+        $('#regular').text(regular)
+        $('#alumni').text(alumni)
+        $('#early').text(early)
+        $('#sponsored').text(sponsored)
     });
 });
 
@@ -271,21 +313,212 @@ function filterGlobal () {
         $('#global_filter').val(),
     ).draw();
 
-    //console.log($('#global_filter').val())
+}
 
+function removeSpecial(s){
+    //console.log('sss'+s)
+
+    s = s.replace(/ /g,'');
+    s = s.replace(/&/g,'');
+    s = s.replace(/amp;/g,'');
+  return s
 }
 
     function filterColumn ( i ) {
         $('#participants_table').DataTable().column( i ).search(
             $('#col'+i+'_filter').val()
         ).draw();
-        //console.log($('#participants_table').DataTable().column( 3 ).data())
-            let sum = 0
+
+
+        console.log($('#col'+i+'_filter').val())
+        //console.log($('#participants_table').DataTable().column( i ).data()[0])
+            //let sum = 0
+        price = $('#participants_table').DataTable().column( 3 ).data();
+        // coupon = $('#participants_table').DataTable().column( 4 ).data()[2511];
+        // console.log(coupon)
+        //console.log(price)
+            let sum = 0;
+            let alumni = 0;
+            let special = 0;
+            let regular = 0;
+            let sponsored = 0;
+            let early = 0;
+            let count_alumni = 0;
+            let count_special = 0;
+            let count_regural = 0;
+            let count_sponsored = 0;
+            let count_early = 0;
+
+            let coupons = []
+        $.each(price, function(key, value){
+
+            // console.log(removeSpecial($('#participants_table').DataTable().column( i ).data()[key]))
+            // console.log(removeSpecial($('#col'+i+'_filter').val()))
+            // console.log(removeSpecial($('#participants_table').DataTable().column( i ).data()[key]) == removeSpecial($('#col'+i+'_filter').val()))
+            if(removeSpecial($('#participants_table').DataTable().column( i ).data()[key]) == removeSpecial($('#col'+i+'_filter').val())){
+                //console.log($('#participants_table').DataTable().column( 3 ).data()[key])
+                sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key])
+
+                if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Alumni'){
+                    alumni = alumni + parseInt(value)
+                    count_alumni++
+                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Regular'){
+                    regular = regular + parseInt(value)
+                    count_regural++
+                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Special'){
+                    special = special + parseInt(value)
+                    count_special++
+                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Sponsored'){
+                    sponsored = sponsored + parseInt(value)
+                    count_sponsored++
+                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early Bird'){
+                    early = early + parseInt(value)
+                    count_early++
+                }
+
+
+                // if(event.search('E-learning') !=){
+
+                // }
+                //console.log('asd')
+                event = removeSpecial($('#col'+i+'_filter').val())
+                //console.log(event)
+                //console.log(event.search('E-Learning'))
+
+                if(event.search('E-Learning') != -1){
+                    //console.log('test')
+                    coupon = $('#participants_table').DataTable().column( 4 ).data()[key];
+                    //console.log(coupon)
+                    if(coupon != ""){
+                        coupons.push({
+                            'price': $('#participants_table').DataTable().column( 3 ).data()[key],
+                            'type' : $('#participants_table').DataTable().column( 2 ).data()[key],
+                            'name' : coupon
+                    })
+                    }
+
+                }
+            }
+        })
+
+
+        // $.each(coupons, function(key, value) {
+        //     coupons1.push({,'price':value.price, 'type': value.type})
+        // })
+
+        // Accepts the array and key
+        const groupBy = (array, key) => {
+        // Return the end result
+        return array.reduce((result, currentValue) => {
+            // If an array already present for key, push it to the array. Else create an array and push the object
+            (result[currentValue[key]] = result[currentValue[key]] || []).push(
+            currentValue
+            );
+            // Return the current iteration `result` value, this will be taken as next iteration `result` value and accumulate
+            return result;
+        }, {}); // empty object is the initial value for result object
+        };
+
+        // Group by color as key to the person array
+        const couponsGroupedByName = groupBy(coupons, 'name');
+
+        sumCoupon = []
+        //console.log(couponsGroupedByName)
+        $.each(couponsGroupedByName, function(key, value){
+            var sum = 0
+            $.each(value, function(key1, value1){
+                //console.log(value1.name)
+
+                 sum = sum + parseInt(value1.price)
+            })
+
+            sumCoupon[key] = sum
+            console.log(key+'::'+sum)
+
+            elem =`<div class="col-sm">
+                    <h3 class="card-title text-white"><div id="count_sponsored"></div> ${key}:</h3>
+                    <div id="sponsored">${sum}</div>
+                    </div>`
+
+                    $('#participants_info').append(elem)
+
+        })
+        //console.log('coupon..:' + sumCoupon)
+        $('#total').text(sum)
+        $('#special').text(special)
+        $('#regular').text(regular)
+        $('#alumni').text(alumni)
+        $('#early').text(early)
+        $('#sponsored').text(sponsored)
+        $('#count_special').text(count_special)
+        $('#count_regular').text(count_regular)
+        $('#count_alumni').text(count_alumni)
+        $('#count_early').text(count_early)
+        $('#count_sponsored').text(count_sponsored)
+
+
+
 
     }
 
     $(document).ready(function() {
         $('#participants_table').DataTable();
+
+
+        price = $('#participants_table').DataTable().column( 3 ).data();
+        let sum = 0;
+        let alumni = 0;
+        let special = 0;
+        let regular = 0;
+        let sponsored = 0;
+        let early = 0;
+        let count_alumni = 0;
+        let count_special = 0;
+        let count_regular = 0;
+        let count_sponsored = 0;
+        let count_early = 0;
+
+            $.each(price, function(key, value){
+            //console.log($('#participants_table').DataTable().column( i ).data()[key] == $('#col'+i+'_filter').val())
+                //console.log('asd')
+                //console.log($('#participants_table').DataTable().column( 3 ).data()[key])
+                sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key])
+
+                if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Alumni'){
+                    alumni = alumni + parseInt(value)
+                    count_alumni++
+                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Regular'){
+                    //console.log($('#participants_table').DataTable().column( 2 ).data()[key])
+                    regular = regular + parseInt(value)
+                    count_regular++
+                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Special'){
+                    special = special + parseInt(value)
+                    count_special++
+                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Sponsored'){
+                    sponsored = sponsored + parseInt(value)
+                    count_sponsored++
+                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early Bird'){
+                    early = early + parseInt(value)
+                    count_early++
+                }
+
+
+
+        })
+        $('#total').text(sum)
+        $('#special').text(special)
+        $('#regular').text(regular)
+        $('#alumni').text(alumni)
+        $('#early').text(early)
+        $('#sponsored').text(sponsored)
+        $('#count_special').text(count_special)
+        $('#count_regular').text(count_regular)
+        $('#count_alumni').text(count_alumni)
+        $('#count_early').text(count_early)
+        $('#count_sponsored').text(count_sponsored)
+
+
+
 
 
 
@@ -300,6 +533,7 @@ function filterGlobal () {
 
     $('select.column_filter').on('change', function () {
             filterColumn( $(this).parents('div').attr('data-column') );
+
         } );
 
 

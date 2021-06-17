@@ -10,6 +10,9 @@
             @slot('title')
                 {{ __('Examples') }}
             @endslot
+            @slot('filter')
+
+            @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('user.index') }}">{{ __('User Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
