@@ -49,6 +49,40 @@ class ProfileController extends Controller
         return back()->withStatus(__('Profile role successfully updated.'));
     }
 
+    public function update_billing(Request $request)
+    {
+        $user = User::find($request->user_id);
+
+        $receipt = json_decode($user['receipt_details'], true);
+        $invoice = json_decode($user['invoice_details'], true);
+
+        $invoice['companyname'] = $request->companyname;
+        $invoice['companyprofession'] = $request->companyprofession;
+        $invoice['companyafm'] = $request->companyafm;
+        $invoice['companydoy'] = $request->companydoy;
+        $invoice['companyaddress'] = $request->companyaddress;
+        $invoice['companyaddressnum'] = $request->companyaddressnum;
+        $invoice['companypostcode'] = $request->companypostcode;
+        $invoice['companycity'] = $request->companycity;
+
+        $receipt['billname'] = $request->billname;
+        $receipt['billsurname'] = $request->billsurname;
+        $receipt['billaddress'] = $request->billaddress;
+        $receipt['billaddressnum'] = $request->billaddressnum;
+        $receipt['billpostcode'] = $request->billpostcode;
+        $receipt['billcity'] = $request->billcity;
+
+        $receipt = json_encode($receipt);
+        $invoice = json_encode($invoice);
+
+        $user->update([
+            'receipt_details' => $receipt,
+            'invoice_details' => $invoice
+        ]);
+
+        return back()->withStatus(__('Profile successfully updated.'));
+    }
+
     /**
      * Update the profile
      *
@@ -102,7 +136,7 @@ class ProfileController extends Controller
 
             if($old_image != null){
                 //delete from folder
-                unlink('profile_user/'.$old_image['original_name']);
+                unlink('uploads/profile_user/'.$old_image['original_name']);
                 //delete from db
                 $old_image->delete();
             }

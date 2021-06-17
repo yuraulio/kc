@@ -37,7 +37,7 @@ class ProfileRequest extends FormRequest
             'city' => ['required', 'min:3'],
             'afm' => ['required', 'max:9'],
             'photo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'email' => [auth()->id() == 1 ? 'sometimes' : 'required', 'email', Rule::unique((new User)->getTable())->ignore(auth()->id())],
+            'email' => ['required', 'email'],
         ];
     }
 }

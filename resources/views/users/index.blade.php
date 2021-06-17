@@ -10,9 +10,6 @@
             @slot('title')
                 {{ __('Examples') }}
             @endslot
-            @slot('filter')
-
-            @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('user.index') }}">{{ __('User Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
@@ -86,7 +83,7 @@
                                         </td>
                                         <?php //dd($user->statusAccount['completed'] == 1); ?>
                                         <td>
-                                       
+
                                         @if($user['status_account'] != null)
                                         @if($user['status_account']['completed'] == 1)
                                             {{ __('Active') }}
@@ -95,7 +92,7 @@
                                         @endif
                                         @endif
                                         </td>
-                                        
+
                                         <td>{{ $user['created_at'] }}</td>
 
                                         <td class="text-right">

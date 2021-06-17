@@ -139,6 +139,7 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
     Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
     Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
     Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
+    Route::put('profile/update_billing', ['as' => 'profile.update_billing', 'uses' => 'ProfileController@update_billing']);
 
     //Edit Instructor
     Route::post ('lesson/edit_instructor', ['as' => 'lesson.edit_instructor', 'uses' => 'LessonController@edit_instructor']);
@@ -202,7 +203,7 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
 
     //Summaries
     Route::post('/summaries/{event}', 'SummaryController@orderSummaries')->name('sort-summaries');
-    
+
     //Tickets
     Route::post('/tickets/{event}', 'TicketController@sortTickets')->name('sort-tickets');
 
