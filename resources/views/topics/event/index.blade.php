@@ -98,7 +98,7 @@
                 success: function(data) {
                     data = JSON.parse(data)
                     let event_type = data.isInclassCourse
-                    console.log(event_type)
+                    //console.log(event_type)
                     let e = $('#'+data.request.topic_id).find('label')
 
                     let topic = data.lesson;

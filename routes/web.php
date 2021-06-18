@@ -217,6 +217,11 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
     Route::get('/logos/edit/{logo}', 'Dashboard\LogosController@edit')->name('logos.edit');
     Route::put('/logos/update/{logo}', 'Dashboard\LogosController@update')->name('logos.update');
 
+    //Exams
+    Route::post('/exams/add-question/{exam}', 'ExamController@addQuestion')->name('exam.add_question');
+    Route::post('/exams/update-question/{exam}', 'ExamController@updateQuestion')->name('exam.update-question');
+    Route::post('/exams/order-question/{exam}', 'ExamController@orderQuestion')->name('exam.order-questions');
+
 
 });
 

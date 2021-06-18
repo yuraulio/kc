@@ -340,8 +340,6 @@
 
     function faqOrder(){
 
-        
-
         var el;
          
         

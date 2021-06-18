@@ -46,53 +46,14 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col">{{ __('Status') }}</th>
-                                    <th scope="col">{{ __('Exam Title') }}</th>
-                                    <th scope="col">{{ __('Event Subject') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
-                                    @can('manage-users', App\Model\User::class)
-                                        <th scope="col"></th>
-                                    @endcan
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($exams as $exam)
                                     <tr>
-                                        <td>{{ $exam->title }}</td>
-                                        <td>{{ $exam->answer }}</td>
-                                        <td>
-                                        @foreach($exam->category as $category)
-                                            {{$category->name}}
-                                        @endforeach
-                                        </td>
+                                        <td>{{ $exam->exam_name }}</td>
                                         <td>{{ date_format($exam->created_at, 'Y-m-d' ) }}</td>
-					                    @can('manage-users', App\Model\User::class)
-					                        <td class="text-right">
-                                                @if (auth()->user()->can('update', $user) || auth()->user()->can('delete', $user))
-                                                    <div class="dropdown">
-                                                        <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                            <i class="fas fa-ellipsis-v"></i>
-                                                        </a>
-                                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-
-                                                                @can('update', $user)
-                                                                    <a class="dropdown-item" href="{{ route('exams.edit', $exam) }}">{{ __('Edit') }}</a>
-                                                                @endcan
-    							                                @can('delete', $user)
-        							                                <form action="{{ route('exams.destroy', $exam) }}" method="post">
-                                                                        @csrf
-                                                                        @method('delete')
-
-                                                                        <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
-                                                                            {{ __('Delete') }}
-                                                                        </button>
-                                                                    </form>
-    						                                    @endcan
-
-                                                        </div>
-                                                    </div>
-                                                @endif
-                                            </td>
-					                    @endcan
                                     </tr>
                                 @endforeach
                             </tbody>

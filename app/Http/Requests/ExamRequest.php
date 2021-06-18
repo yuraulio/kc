@@ -24,7 +24,7 @@ class ExamRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => [
+            'exam_name' => [
                 'required', 'min:3'
             ],
             'duration' => [
