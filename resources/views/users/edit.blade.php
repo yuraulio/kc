@@ -25,7 +25,7 @@
                                 <a href="#">
                                 <?php //dd($user); ?>
                                 @if(isset($user->image->original_name))
-                                    <img src="{{ asset('profile_user') }}/{{ $user->image->original_name }}" class="rounded-circle">
+                                    <img src="{{ asset('uploads/profile_user') }}/{{ $user->image->original_name }}" class="rounded-circle">
                                 @else
                                 <img src="" alt="{{$user['firstname']}}" class="rounded-circle">
                                 @endif
@@ -620,55 +620,58 @@
 
                     @include('alerts.error_self_update', ['key' => 'not_allow_profile'])
 
+                    <?php //dd($user); ?>
+
+
                     <div class="pl-lg-4">
                         <div class="form-group{{ $errors->has('companyname') ? ' has-danger' : '' }}">
                             <label class="form-control-label" for="input-companyname">{{ __('Company Name') }}</label>
-                            <input type="text" name="companyname" id="input-companyname" class="form-control{{ $errors->has('companyname') ? ' is-invalid' : '' }}" placeholder="{{ __('Company Name') }}" value="{{ old('companyname', $invoice['companyname'] ) }}" required autofocus>
+                            <input type="text" name="companyname" id="input-companyname" class="form-control{{ $errors->has('companyname') ? ' is-invalid' : '' }}" placeholder="{{ __('Company Name') }}" value="{{($invoice != null && $invoice['companyname'] != null) ? $invoice['companyname'] : '' }}" required autofocus>
 
                             @include('alerts.feedback', ['field' => 'companyname'])
                         </div>
                         <div class="form-group{{ $errors->has('companyprofession') ? ' has-danger' : '' }}">
                             <label class="form-control-label" for="input-companyprofession">{{ __('Company Profession') }}</label>
-                            <input type="text" name="companyprofession" id="input-companyprofession" class="form-control{{ $errors->has('companyprofession') ? ' is-invalid' : '' }}" placeholder="{{ __('Company Profession') }}" value="{{ old('companyprofession', $invoice['companyprofession']) }}" required autofocus>
+                            <input type="text" name="companyprofession" id="input-companyprofession" class="form-control{{ $errors->has('companyprofession') ? ' is-invalid' : '' }}" placeholder="{{ __('Company Profession') }}" value="{{($invoice != null && $invoice['companyprofession'] != null) ? $invoice['companyprofession'] : '' }}" required autofocus>
 
                             @include('alerts.feedback', ['field' => 'companyprofession'])
                         </div>
                         <div class="form-group{{ $errors->has('companyafm') ? ' has-danger' : '' }}">
                             <label class="form-control-label" for="input-companyafm">{{ __('VAT Number') }}</label>
-                            <input type="text" name="companyafm" id="input-companyafm" class="form-control{{ $errors->has('companyafm') ? ' is-invalid' : '' }}" placeholder="{{ __('VAT Number') }}" value="{{ old('companyafm', $invoice['companyafm']) }}" required>
+                            <input type="text" name="companyafm" id="input-companyafm" class="form-control{{ $errors->has('companyafm') ? ' is-invalid' : '' }}" placeholder="{{ __('VAT Number') }}" value="{{ ($invoice != null && $invoice['companyafm'] != null) ? $invoice['companyafm'] : '' }}" required>
 
                             @include('alerts.feedback', ['field' => 'companyafm'])
                         </div>
                         <div class="form-group{{ $errors->has('companydoy') ? ' has-danger' : '' }}">
                             <label class="form-control-label" for="input-companydoy">{{ __('Company area') }}</label>
-                            <input type="text" name="companydoy" id="input-companydoy" class="form-control{{ $errors->has('companydoy') ? ' is-invalid' : '' }}" placeholder="{{ __('Company area') }}" value="{{ old('companydoy', $invoice['companydoy']) }}" required autofocus>
+                            <input type="text" name="companydoy" id="input-companydoy" class="form-control{{ $errors->has('companydoy') ? ' is-invalid' : '' }}" placeholder="{{ __('Company area') }}" value="{{ ($invoice != null && $invoice['companydoy'] != null) ? $invoice['companydoy'] : '' }}" required autofocus>
 
                             @include('alerts.feedback', ['field' => 'companydoy'])
                         </div>
                         <div class="form-group{{ $errors->has('companyaddress') ? ' has-danger' : '' }}">
                             <label class="form-control-label" for="input-companyaddress">{{ __('Company address') }}</label>
-                            <input type="text" name="companyaddress" id="input-companyaddress" class="form-control{{ $errors->has('companyaddress') ? ' is-invalid' : '' }}" placeholder="{{ __('Company address') }}" value="{{ old('companyaddress', $invoice['companyaddress']) }}" required autofocus>
+                            <input type="text" name="companyaddress" id="input-companyaddress" class="form-control{{ $errors->has('companyaddress') ? ' is-invalid' : '' }}" placeholder="{{ __('Company address') }}" value="{{($invoice != null && $invoice['companyaddress'] != null) ? $invoice['companyaddress'] : ''}}" required autofocus>
 
                             @include('alerts.feedback', ['field' => 'companyaddress'])
                         </div>
                         <div class="form-row">
                                 <div class="form-group{{ $errors->has('companyaddressnum') ? ' has-danger' : '' }} col-md-4">
                                     <label class="form-control-label" for="input-companyaddressnum">{{ __('Company address num') }}</label>
-                                    <input type="number" name="companyaddressnum" id="input-companyaddressnum" class="form-control{{ $errors->has('companyaddressnum') ? ' is-invalid' : '' }}" placeholder="{{ __('Company address num') }}" value="{{ old('companyaddressnum',$invoice['companyaddressnum']) }}" required autofocus>
+                                    <input type="number" name="companyaddressnum" id="input-companyaddressnum" class="form-control{{ $errors->has('companyaddressnum') ? ' is-invalid' : '' }}" placeholder="{{ __('Company address num') }}" value="{{ ($invoice != null && $invoice['companyaddressnum'] != null) ? $invoice['companyaddressnum'] : '' }}" required autofocus>
 
                                     @include('alerts.feedback', ['field' => 'companyaddressnum'])
                                 </div>
 
                                 <div class="form-group{{ $errors->has('companypostcode') ? ' has-danger' : '' }} col-md-4">
                                     <label class="form-control-label" for="input-companypostcode">{{ __('Postcode') }}</label>
-                                    <input type="number" name="companypostcode" id="input-companypostcode" class="form-control{{ $errors->has('companypostcode') ? ' is-invalid' : '' }}" placeholder="{{ __('Postcode') }}" value="{{ old('companypostcode',$invoice['companypostcode']) }}" required autofocus>
+                                    <input type="number" name="companypostcode" id="input-companypostcode" class="form-control{{ $errors->has('companypostcode') ? ' is-invalid' : '' }}" placeholder="{{ __('Postcode') }}" value="{{ ($invoice != null && $invoice['companypostcode'] != null) ? $invoice['companypostcode'] : '' }}" required autofocus>
 
                                     @include('alerts.feedback', ['field' => 'companypostcode'])
                                 </div>
 
                                 <div class="form-group{{ $errors->has('companycity') ? ' has-danger' : '' }} col-md-4">
                                     <label class="form-control-label" for="input-companycity">{{ __('City') }}</label>
-                                    <input type="text" name="companycity" id="input-companycity" class="form-control{{ $errors->has('companycity') ? ' is-invalid' : '' }}" placeholder="{{ __('City') }}" value="{{ old('companycity',$invoice['companycity']) }}" required autofocus>
+                                    <input type="text" name="companycity" id="input-companycity" class="form-control{{ $errors->has('companycity') ? ' is-invalid' : '' }}" placeholder="{{ __('City') }}" value="{{($invoice != null && $invoice['companycity'] != null) ? $invoice['companycity'] : '' }}" required autofocus>
 
                                     @include('alerts.feedback', ['field' => 'companycity'])
                                 </div>
@@ -678,41 +681,41 @@
 
                         <div class="form-group{{ $errors->has('billname') ? ' has-danger' : '' }}">
                             <label class="form-control-label" for="input-billname">{{ __('Firstname') }}</label>
-                            <input type="text" name="billname" id="input-billname" class="form-control{{ $errors->has('billname') ? ' is-invalid' : '' }}" placeholder="{{ __('Firstname') }}" value="{{ old('billname', $receipt['billname']) }}" required autofocus>
+                            <input type="text" name="billname" id="input-billname" class="form-control{{ $errors->has('billname') ? ' is-invalid' : '' }}" placeholder="{{ __('Firstname') }}" value="{{ ($invoice != null && $receipt['billname'] != null) ? $receipt['billname'] : '' }}" required autofocus>
 
                             @include('alerts.feedback', ['field' => 'billname'])
                         </div>
 
                         <div class="form-group{{ $errors->has('billsurname') ? ' has-danger' : '' }}">
                             <label class="form-control-label" for="input-billsurname">{{ __('Lastname') }}</label>
-                            <input type="text" name="billsurname" id="input-billsurname" class="form-control{{ $errors->has('billsurname') ? ' is-invalid' : '' }}" placeholder="{{ __('Lastname') }}" value="{{ old('billsurname',$receipt['billsurname']) }}" required autofocus>
+                            <input type="text" name="billsurname" id="input-billsurname" class="form-control{{ $errors->has('billsurname') ? ' is-invalid' : '' }}" placeholder="{{ __('Lastname') }}" value="{{($invoice != null && $receipt['billsurname'] != null) ? $receipt['billsurname'] : ''}}" required autofocus>
 
                             @include('alerts.feedback', ['field' => 'billsurname'])
                         </div>
                         <div class="form-group{{ $errors->has('billaddress') ? ' has-danger' : '' }}">
                             <label class="form-control-label" for="input-billaddress">{{ __('Address') }}</label>
-                            <input type="text" name="billaddress" id="input-billaddress" class="form-control{{ $errors->has('billaddress') ? ' is-invalid' : '' }}" placeholder="{{ __('Address') }}" value="{{ old('billaddress',$receipt['billaddress']) }}" required autofocus>
+                            <input type="text" name="billaddress" id="input-billaddress" class="form-control{{ $errors->has('billaddress') ? ' is-invalid' : '' }}" placeholder="{{ __('Address') }}" value="{{($invoice != null && $receipt['billaddress'] != null) ? $receipt['billaddress'] : '' }}" required autofocus>
 
                             @include('alerts.feedback', ['field' => 'billaddress'])
                         </div>
                         <div class="form-row">
                                 <div class="form-group{{ $errors->has('billaddressnum') ? ' has-danger' : '' }} col-md-4">
                                     <label class="form-control-label" for="input-billaddressnum">{{ __('Address No') }}</label>
-                                    <input type="number" name="billaddressnum" id="input-billaddressnum" class="form-control{{ $errors->has('billaddressnum') ? ' is-invalid' : '' }}" placeholder="{{ __('Address No') }}" value="{{ old('billaddressnum',$receipt['billaddressnum']) }}" required autofocus>
+                                    <input type="number" name="billaddressnum" id="input-billaddressnum" class="form-control{{ $errors->has('billaddressnum') ? ' is-invalid' : '' }}" placeholder="{{ __('Address No') }}" value="{{($invoice != null && $receipt['billaddressnum'] != null) ? $receipt['billaddressnum'] : '' }}" required autofocus>
 
                                     @include('alerts.feedback', ['field' => 'billaddressnum'])
                                 </div>
 
                                 <div class="form-group{{ $errors->has('billpostcode') ? ' has-danger' : '' }} col-md-4">
                                     <label class="form-control-label" for="input-billpostcode">{{ __('Postcode') }}</label>
-                                    <input type="number" name="billpostcode" id="input-billpostcode" class="form-control{{ $errors->has('billpostcode') ? ' is-invalid' : '' }}" placeholder="{{ __('Postcode') }}" value="{{ old('billpostcode',$receipt['billpostcode']) }}" required autofocus>
+                                    <input type="number" name="billpostcode" id="input-billpostcode" class="form-control{{ $errors->has('billpostcode') ? ' is-invalid' : '' }}" placeholder="{{ __('Postcode') }}" value="{{ ($invoice != null && $receipt['billpostcode'] != null) ? $receipt['billpostcode'] : '' }}" required autofocus>
 
                                     @include('alerts.feedback', ['field' => 'billpostcode'])
                                 </div>
 
                                 <div class="form-group{{ $errors->has('billcity') ? ' has-danger' : '' }} col-md-4">
                                     <label class="form-control-label" for="input-billcity">{{ __('City') }}</label>
-                                    <input type="text" name="billcity" id="input-billcity" class="form-control{{ $errors->has('billcity') ? ' is-invalid' : '' }}" placeholder="{{ __('City') }}" value="{{ old('billcity',$receipt['billcity']) }}" required autofocus>
+                                    <input type="text" name="billcity" id="input-billcity" class="form-control{{ $errors->has('billcity') ? ' is-invalid' : '' }}" placeholder="{{ __('City') }}" value="{{ ($invoice != null && $receipt['billcity'] != null) ? $receipt['billcity'] : '' }}" required autofocus>
 
                                     @include('alerts.feedback', ['field' => 'billcity'])
                                 </div>
@@ -729,14 +732,13 @@
                 </form>
             </div>
             <div class="tab-pane fade" id="tabs-icons-text-8" role="tabpanel" aria-labelledby="tabs-icons-text-8-tab">
-
                 <div class="col-12 img_version">
                     <h3>Profile Image</h3>
-
                     <img class="img-fluid" id="profile_image" src="
                     <?php
-                        if(isset($user)) {
-                            echo public_path('\\uploads\\profile_user\\'.$user->image->original_name);
+                        if(isset($user) && $user->image != null) {
+
+                            echo asset('uploads/profile_user').'/'.$user->image->original_name;
                         }else{
                             echo '';
                         }
@@ -750,6 +752,8 @@
         </div>
     </div>
 </div>
+
+<?php //dd($user->image); ?>
 
             </div>
         </div>
@@ -896,6 +900,90 @@ $(document).on('click', '.ticket-card', function () {
 
             })
     })
+
+    if($user->image != null){
+
+
+        image_details = @json($user->image['details']);
+
+
+        width = @json($user->image['width']);
+        height = @json($user->image['height']);
+        x = 0;
+    y = 0;
+ console.log('asd')
+    // console.log(image_details)
+    // console.log(x)
+    // console.log(y)
+
+    const cropper = new Cropper(document.getElementById(`profile_image`), {
+        aspectRatio: Number((width/height), 4),
+        viewMode: 0,
+        dragMode: "crop",
+        responsive: false,
+        autoCropArea: 1,
+        restore: false,
+        movable: false,
+        rotatable: false,
+        scalable: false,
+        zoomable: false,
+        cropBoxMovable: true,
+        cropBoxResizable: true,
+        minContainerWidth: 300,
+        minContainerHeight: 300,
+        // minCanvasWidth: 350,
+        // minCanvasHeight: 350,
+
+        data:{
+            x:parseInt(x),
+            y:parseInt(y),
+            width: width,
+            height: height
+        }
+    });
+
+    $(".crop").click(function(){
+        let media = @json($user->image);
+
+        let path = $(this).parent().find('img').attr('src')
+
+        let version = 'profile_image'
+
+        path = path.split('/')
+
+        path = '/'+path[3]+'/' + path[4]+'/' + path[5]
+
+
+
+
+
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: 'post',
+            url: '/admin/media/crop_image',
+            data: {'media_id': media.id,'version':version ,'path':path, 'x':cropper.getData({rounded: true}).x, 'y':cropper.getData({rounded: true}).y, 'width':cropper.getData({rounded: true}).width, 'height':cropper.getData({rounded: true}).height},
+            success: function (data) {
+                //console.log(data)
+                if(data){
+                    $('#msg_'+data.data.version).append(data.success)
+                    $('#msg_'+data.data.version).css('display', 'inline-block')
+                }
+            }
+        });
+
+    });
+
+
+    }
+
+
+
+
+
+
+
 </script>
 
 
