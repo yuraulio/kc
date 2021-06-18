@@ -173,4 +173,9 @@ class User extends Authenticatable
         return Carbon::parse($date)->format('d-m-Y H:i');
     }
 
+    public function statistic()
+    {
+        return $this->belongsToMany(User::class, 'event_statistics')->withPivot('videos', 'event_id');
+    }
+
 }

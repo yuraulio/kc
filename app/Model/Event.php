@@ -160,7 +160,7 @@ class Event extends Model
         $topics = [];
 
         $lessons = $this->lessons->groupBy('topic_id');
-       
+
         $instructors = $this->instructors->unique()->groupBy('instructor_id')->toArray();
 
         foreach($this->topic->unique()->groupBy('topic_id') as $key => $topic){
@@ -221,17 +221,19 @@ class Event extends Model
             $categoryFaqs = $this->category->first()->faqs;
 
             foreach($categoryFaqs as $faq){
-               
+
                 foreach($faq->category as $categoryFaq){
                     $faqs[$categoryFaq['name']][] = array('id' => $faq['id'], 'question' =>  $faq['title']);
                 }
-                
+
             }
 
         }
 
         return $faqs;
     }
+
+
 
 
 }

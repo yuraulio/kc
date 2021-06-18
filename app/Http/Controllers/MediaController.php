@@ -106,11 +106,19 @@ class MediaController extends Controller
         $name = $path[0];
         $ext = $path[1];
 
+
         $image = Image::make(public_path($mediaKey));
         $image->crop(intval($request->width),intval($request->height), intval($request->x), intval($request->y));
-        $image->save(public_path($folders.'/'.$path[0].'-'.$request->version.'.'.$path[1]), 50);
+        if($request->version != 'profile_image'){
+            $image->save(public_path($folders.'/'.$path[0].'-'.$request->version.'.'.$path[1]), 50);
+            $data['version'] = $request->version;
+        }else{
+            $image->save(public_path($folders.'/'.$path[0].'.'.$path[1]), 50);
+            $data['version'] = 'profile_image';
+        }
 
-        $data['version'] = $request->version;
+
+
 
         return response()->json([
             'success' => __('Already image cropped.'),

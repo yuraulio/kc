@@ -141,6 +141,8 @@
         let path = $(this).parent().find('img').attr('src')
         let version = $(this).data('version')
 
+        console.log(path)
+
         $.each(versions, function(key,value){
             if(value.version == version){
                 cropper = value.insta

@@ -237,10 +237,17 @@ class UserController extends Controller
             $data['user']['events'][$key]['ticket_title'] = isset($ticket['title']) ? $ticket['title'] : '';
         }
 
-        $data['receipt'] = json_decode($data['user']['receipt_details'], true);
-        //dd($data['billing']);
-        $data['invoice'] = json_decode($data['user']['invoice_details'], true);
-        //dd($data['invoice']);
+        if($data['user']['receipt_details'] != null){
+            $data['receipt'] = json_decode($data['user']['receipt_details'], true);
+        }else{
+            $data['receipt'] = null;
+        }
+
+        if($data['user']['invoice_details'] != null){
+            $data['invoice'] = json_decode($data['user']['invoice_details'], true);
+        }else{
+            $data['invoice'] = null;
+        }
 
         return view('users.edit', ['events' => $data['events'] ,'user' => $data['user'],'receipt' => $data['receipt'],'invoice' => $data['invoice'] ,'roles' => $model->all()]);
     }

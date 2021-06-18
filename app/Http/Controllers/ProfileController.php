@@ -53,24 +53,52 @@ class ProfileController extends Controller
     {
         $user = User::find($request->user_id);
 
-        $receipt = json_decode($user['receipt_details'], true);
-        $invoice = json_decode($user['invoice_details'], true);
+        if($user['receipt_details'] != null){
+            $data['receipt'] = json_decode($user['receipt_details'], true);
 
-        $invoice['companyname'] = $request->companyname;
-        $invoice['companyprofession'] = $request->companyprofession;
-        $invoice['companyafm'] = $request->companyafm;
-        $invoice['companydoy'] = $request->companydoy;
-        $invoice['companyaddress'] = $request->companyaddress;
-        $invoice['companyaddressnum'] = $request->companyaddressnum;
-        $invoice['companypostcode'] = $request->companypostcode;
-        $invoice['companycity'] = $request->companycity;
+            $receipt['billname'] = $request->billname;
+            $receipt['billsurname'] = $request->billsurname;
+            $receipt['billaddress'] = $request->billaddress;
+            $receipt['billaddressnum'] = $request->billaddressnum;
+            $receipt['billpostcode'] = $request->billpostcode;
+            $receipt['billcity'] = $request->billcity;
 
-        $receipt['billname'] = $request->billname;
-        $receipt['billsurname'] = $request->billsurname;
-        $receipt['billaddress'] = $request->billaddress;
-        $receipt['billaddressnum'] = $request->billaddressnum;
-        $receipt['billpostcode'] = $request->billpostcode;
-        $receipt['billcity'] = $request->billcity;
+        }else{
+            $receipt['billname'] = $request->billname;
+            $receipt['billsurname'] = $request->billsurname;
+            $receipt['billaddress'] = $request->billaddress;
+            $receipt['billaddressnum'] = $request->billaddressnum;
+            $receipt['billpostcode'] = $request->billpostcode;
+            $receipt['billcity'] = $request->billcity;
+        }
+
+        if($user['invoice_details'] != null){
+            $data['invoice'] = json_decode($user['invoice_details'], true);
+
+            $invoice['companyname'] = $request->companyname;
+            $invoice['companyprofession'] = $request->companyprofession;
+            $invoice['companyafm'] = $request->companyafm;
+            $invoice['companydoy'] = $request->companydoy;
+            $invoice['companyaddress'] = $request->companyaddress;
+            $invoice['companyaddressnum'] = $request->companyaddressnum;
+            $invoice['companypostcode'] = $request->companypostcode;
+            $invoice['companycity'] = $request->companycity;
+        }else{
+
+            $invoice['companyname'] = $request->companyname;
+            $invoice['companyprofession'] = $request->companyprofession;
+            $invoice['companyafm'] = $request->companyafm;
+            $invoice['companydoy'] = $request->companydoy;
+            $invoice['companyaddress'] = $request->companyaddress;
+            $invoice['companyaddressnum'] = $request->companyaddressnum;
+            $invoice['companypostcode'] = $request->companypostcode;
+            $invoice['companycity'] = $request->companycity;
+        }
+
+
+
+
+
 
         $receipt = json_encode($receipt);
         $invoice = json_encode($invoice);
@@ -128,7 +156,10 @@ class ProfileController extends Controller
         );
        if($request->file('photo')){
             $name = explode('profile_user/',$path_name);
+            $size = getimagesize('uploads/'.$path_name);
             $media->original_name = $name[1];
+            $media->width = $size[0];
+            $media->height = $size[1];
             $user->image()->save($media);
 
             //delete old image
