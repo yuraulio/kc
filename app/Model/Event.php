@@ -190,7 +190,6 @@ class Event extends Model
     public function getFaqs(){
 
         $faqs = [];
-
         foreach($this->faqs->toArray() as $faq){
             if(!isset($faq['category']['0'])){
                 continue;

@@ -24,19 +24,19 @@
             <tr>
                 <th scope="col">{{ __('Name') }}</th>
                 <th scope="col">{{ __('Lastname') }}</th>
-                <th scope="col">{{ __('Expiration') }}</th>
+                
 
         
             </tr>
         </thead>
         <tbody>
         <?php //dd($allTopicsByCategory); ?>
-            @foreach ($event->users as $user)
+            @foreach ($eventUsers as $user)
 
                 <tr>
-                    <td>{{ $user->firstname }}</td>
-                    <td>{{ $user->lastname }}</td>
-                    <td>{{ $user->expiration }}</td>
+                    <td>{{ $user['firstname'] }}</td>
+                    <td>{{ $user['lastname'] }}</td>
+                    
 
                 </tr>
             @endforeach

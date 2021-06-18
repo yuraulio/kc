@@ -184,7 +184,7 @@ class EventController extends Controller
 
         $event->createSlug($request->slug);
         $event->createMetas($request->all());
-
+        
         if($request->category_id != null){
             $category = Category::with('topics')->find($request->category_id);
 
@@ -193,8 +193,9 @@ class EventController extends Controller
             //assign all topics with lesson
 
             foreach($category->topics as $topic){
-                $lessons = Topic::with('lessons')->find($topic['id']);
-                $lessons = $lessons->lessons;
+               //dd($topic);
+                //$lessons = Topic::with('lessons')->find($topic['id']);
+                $lessons = $topic->lessonsCategory;
 
                 foreach($lessons as $lesson){
                     $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id']]);
@@ -202,7 +203,6 @@ class EventController extends Controller
             }
 
         }
-
 
         if($request->type_id != null){
             $event->type()->attach([$request->type_id]);
@@ -216,7 +216,7 @@ class EventController extends Controller
         $priority = 0;
         foreach($event->category->first()->faqs as $faq){
             $event->faqs()->attach($faq,['priority'=> $priority]);
-            $priority +1;
+            $priority += 1;
         }
 
 
@@ -309,7 +309,8 @@ class EventController extends Controller
         $data['delivery'] = Delivery::all();
         $data['isInclassCourse'] = $event->is_inclass_course();
         $data['eventFaqs'] = $event->faqs->pluck('id')->toArray();
-        $data['event_user'] = $event->users->toArray();
+        $data['eventUsers'] = $event->users->toArray();
+      
         //dd($data['topics']);
 
         return view('event.edit', $data);
