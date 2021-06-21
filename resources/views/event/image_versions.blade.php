@@ -141,7 +141,7 @@
         let path = $(this).parent().find('img').attr('src')
         let version = $(this).data('version')
 
-        console.log(path)
+        //console.log(path)
 
         $.each(versions, function(key,value){
             if(value.version == version){
@@ -149,7 +149,7 @@
             }
         })
 
-        alert(cropper.getData({rounded: true}).height)
+        //alert(cropper.getData({rounded: true}).height)
 
 
         $.ajax({

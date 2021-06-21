@@ -109,6 +109,7 @@
                                     <h4 class="card-title text-white"><div id="count_sponsored"></div> Sponsored:</h4>
                                     <div class="text-white" id="sponsored"></div>
                                 </div>
+                                <hr id="participantHr">
 
                             </div>
                         </div>
@@ -126,8 +127,9 @@
                             <th scope="col">{{ __('Event') }}</th>
                             <th scope="col">{{ __('Ticket Type') }}</th>
                             <th scope="col">{{ __('Ticket Price') }}</th>
-                            <th class="participant_elearning none">{{ __('Video Seen') }}</th>
+                            
                             <th scope="col">{{ __('Coupon') }}</th>
+                            <th class="participant_elearning none">{{ __('Video Seen') }}</th>
                             <th scope="col">{{ __('Registration Date') }}</th>
                             <th class="participant_elearning none">{{ __('Initial Expiration Date') }}</th>
                             <th class="participant_elearning none">{{ __('New Expiration Date') }}</th>
@@ -139,8 +141,9 @@
                             <th>{{ __('Event') }}</th>
                             <th>{{ __('Ticket Type') }}</th>
                             <th>{{ __('Ticket Price') }}</th>
-                            <th class="participant_elearning none">{{ __('Video Seen') }}</th>
+                            
                             <th>{{ __('Coupon') }}</th>
+                            <th class="participant_elearning none">{{ __('Video Seen') }}</th>
                             <th>{{ __('Registration Date') }}</th>
                             <th class="participant_elearning none">{{ __('Initial Expiration Date') }}</th>
                             <th class="participant_elearning none">{{ __('New Expiration Date') }}</th>
@@ -171,6 +174,8 @@
                                     @endif
                                 </td>
                                 <td>{{ $transaction->amount }}</td>
+                                
+                                <td>{{ $transaction->coupon_code }}</td>
                                 <td class="participant_elearning none">
 
                                     <?php
@@ -207,39 +212,41 @@
                                         echo $sum.'/'.count($videos);
 
                                     }
-
-
-
-
                                     ?>
                                     <?php //dd($transaction->event[0]['expiration']); ?>
                                 </td>
-                                <td>{{ $transaction->coupon_code }}</td>
                                 <td>{{ date_format($transaction->created_at, 'Y/m/d' )}}</td>
                                 <?php //dd($transaction->event); ?>
-                                <td>
+                                {{--<td class="exp_{{$transaction['id']}}" class="participant_elearning none">
                                     <?php
                                         $exp = '';
                                     ?>
-
                                         @if($transaction->event[0]['expiration'] != null)
                                             <?php
                                                 $expMonth = '+'.$transaction->event[0]['expiration'].' months';
-                                                //dd($expMonth);
                                                 $exp = date('Y-m-d', strtotime($expMonth, strtotime($transaction->created_at)));
                                             ?>
                                             {{$exp}}
                                         @else
                                             {{$exp}}
                                         @endif
+                                </td>--}}
+                                <td class="exp_{{$transaction['id']}} participant_elearning none" >
+                                  
+                                    <?php
+                                       $date = strtotime($transaction->ends_at);
+                                       $newformat = date('d/m/Y',$date);
+                                       echo $newformat;
+                                    ?>
+                                         
                                 </td>
+                                <?php 
+                                $date = strtotime($transaction->ends_at);
+                                $newformat = date('d/m/Y',$date);
+                                ?>
                                 <td class="participant_elearning none">
-
-
-
-                                        <input class="form-control datepicker" placeholder="Select date" type="text" value="<?= date_format($transaction->created_at, 'm/d/Y' ); ?>">
-
-
+                                    <input id="{{$transaction['id']}}" class="form-control datepicker" placeholder="Select date" type="text" value="<?= $newformat; ?>">
+                                    <button class="update_exp btn btn-info btn-sm" style="margin-top:10px;" type="button" data-id="{{$transaction['id']}}" >Update</button>
                                 </td>
                             </tr>
                         @endforeach
@@ -275,6 +282,9 @@
     <script>
 
 
+    
+
+
 
 var minDate, maxDate;
 
@@ -300,6 +310,26 @@ $.fn.dataTable.ext.search.push(
 );
 
 $(document).ready(function() {
+
+    $( ".update_exp" ).on( "click", function() {
+        const transaction_id = $(this).data('id')
+        let new_date =  $('#'+transaction_id).val()
+
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: 'post',
+            url: '/admin/transaction/updateExpirationDate',
+            data: {'id': transaction_id, 'date': new_date},
+            success: function (data) {
+                console.log(data)
+                data = data.data
+                date = data.date.split(' ')
+                $('.exp_'+data.id).text(date[0])
+            }
+        });
+    });
 
 
     // Create date inputs
@@ -357,7 +387,7 @@ $(document).ready(function() {
         max = moment(max).format('YYYY/MM/DD')
 
         $.each(price, function(key, value){
-            if($('#participants_table').DataTable().column( 5 ).data()[key] >= min && $('#participants_table').DataTable().column( 5 ).data()[key] <= max){
+            if($('#participants_table').DataTable().column( 6 ).data()[key] >= min && $('#participants_table').DataTable().column( 6 ).data()[key] <= max){
             sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key])
 
 
@@ -374,7 +404,7 @@ $(document).ready(function() {
             }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Sponsored'){
                 sponsored = sponsored + parseInt(value)
                 count_sponsored++
-            }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early Bird'){
+            }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early birds'){
                 early = early + parseInt(value)
                 count_early++
             }
@@ -411,6 +441,7 @@ function removeSpecial(s){
 }
 
     function filterColumn ( i ) {
+        alert(i)
         $('#participants_table').DataTable().column( i ).search(
             $('#col'+i+'_filter').val()
         ).draw();
@@ -422,9 +453,10 @@ function removeSpecial(s){
                 $('.participant_elearning').removeClass('none')
             }
         }else{
-
-                $('.participant_elearning').addClass('none')
+            $('.participant_elearning').addClass('none')
         }
+
+        console.log(removeSpecial($('#col'+i+'_filter').val()))
 
 
         price = $('#participants_table').DataTable().column( 3 ).data();
@@ -442,6 +474,7 @@ function removeSpecial(s){
 
             let coupons = []
         $.each(price, function(key, value){
+            console.log(removeSpecial($('#participants_table').DataTable().column( i ).data()[key]))
 
             if(removeSpecial($('#participants_table').DataTable().column( i ).data()[key]) == removeSpecial($('#col'+i+'_filter').val())){
                 sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key])
@@ -458,7 +491,7 @@ function removeSpecial(s){
                 }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Sponsored'){
                     sponsored = sponsored + parseInt(value)
                     count_sponsored++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early Bird'){
+                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early birds'){
                     early = early + parseInt(value)
                     count_early++
                 }
@@ -468,8 +501,7 @@ function removeSpecial(s){
 
                 if(event.search('E-Learning') != -1){
                     //console.log('test')
-                    coupon = $('#participants_table').DataTable().column( 5 ).data()[key];
-                    //console.log(coupon)
+                    coupon = $('#participants_table').DataTable().column( 4 ).data()[key];
                     if(coupon != ""){
                         coupons.push({
                             'price': $('#participants_table').DataTable().column( 3 ).data()[key],
@@ -499,7 +531,7 @@ function removeSpecial(s){
                 }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Sponsored'){
                     sponsored = sponsored + parseInt(value)
                     count_sponsored++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early Bird'){
+                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early birds'){
                     early = early + parseInt(value)
                     count_early++
                 }
@@ -523,6 +555,7 @@ function removeSpecial(s){
             }
         })
 
+
         // Accepts the array and key
         const groupBy = (array, key) => {
         // Return the end result
@@ -539,6 +572,8 @@ function removeSpecial(s){
         // Group by color as key to the person array
         const couponsGroupedByName = groupBy(coupons, 'name');
 
+        console.log(couponsGroupedByName)
+
         sumCoupon = []
         //console.log(couponsGroupedByName)
         $.each(couponsGroupedByName, function(key, value){
@@ -554,11 +589,11 @@ function removeSpecial(s){
             //console.log(key+'::'+sum)
 
             elem =`<div class="col-sm-2">
-                    <h4 class="card-title text-white"><div id="count_sponsored">${count1}</div> ${key}:</h4>
+                    <h4 class="card-title text-white"><div id="count_sponsored">${count1}x ${key}:</div></h4>
                     <div class="text-white" id="sponsored">${sum1}</div>
                     </div>`
 
-                    //$('#participants_info').append(elem)
+                    $('#participants_info').append(elem)
 
         })
         $('#total').text(sum)
@@ -613,7 +648,7 @@ function removeSpecial(s){
                 }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Sponsored'){
                     sponsored = sponsored + parseInt(value)
                     count_sponsored++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early Bird'){
+                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early birds'){
                     early = early + parseInt(value)
                     count_early++
                 }
