@@ -684,7 +684,7 @@
            $(this).attr('data-id',index)
    
        });
-   
+   console.log(questions);
        $.ajax({
            type: 'POST',
            headers: {

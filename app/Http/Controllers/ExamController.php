@@ -120,7 +120,7 @@ class ExamController extends Controller
 
     public function updateQuestion(Request $request, Exam $exam){
 
-        
+
        
 
     }
@@ -134,10 +134,12 @@ class ExamController extends Controller
 
         ksort($questionsNew);
 
+        
+
         foreach($questionsNew as $key => $question){
             $sortedQuestions[] = $oldQuestions[$question];
         }
-
+        
         $exam->questions = json_encode($sortedQuestions);
         $exam->save();
     }
