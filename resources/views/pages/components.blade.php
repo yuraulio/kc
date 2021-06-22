@@ -3,16 +3,16 @@
     'elementName' => 'components'
 ])
 
-@section('content') 
-    @component('layouts.headers.auth') 
+@section('content')
+    @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
-            @slot('title') 
-                {{ __('Components') }} 
+            @slot('title')
+                {{ __('Components') }}
             @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('page.index', 'components') }}">{{ __('Forms') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('Components') }}</li>
-        @endcomponent 
+        @endcomponent
     @endcomponent
 
     <div class="container-fluid mt--6">
@@ -330,8 +330,8 @@
 
 @push('css')
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/select2/dist/css/select2.min.css">
-    <link rel="stylesheet" href="{{ asset('argon') }}/vendor/quill/dist/quill.core.css"> 
-@endpush 
+    <link rel="stylesheet" href="{{ asset('argon') }}/vendor/quill/dist/quill.core.css">
+@endpush
 
 @push('js')
     <script src="{{ asset('argon') }}/vendor/select2/dist/js/select2.min.js"></script>
