@@ -75,7 +75,7 @@ class ExamController extends Controller
         $user = Auth::user();
         $events = Event::all();
         $edit = true;
-         
+        //dd(json_decode($exam->questions,true));
         return view('admin.exams.create', ['user' => $user, 'events' => $events, 'edit' => $edit, 'exam' => $exam]);
     }
 
@@ -103,9 +103,8 @@ class ExamController extends Controller
     }
 
     public function addQuestion(Request $request, Exam $exam){
-        //dd($request->question);
 
-        $questions = json_decode($exam->questions) ? json_decode($exam->questions) : [];
+        $questions = json_decode($exam->questions) ? json_decode($exam->questions,true) : [];
 
         $questions[] = $request->question;
 
@@ -120,8 +119,20 @@ class ExamController extends Controller
 
     public function updateQuestion(Request $request, Exam $exam){
 
+       
+       $oldQuestions = json_decode($exam->questions,true);
+       //dd($oldQuestion); 
+       //dd($request->question);
+       $oldQuestions[$request->key] = $request->question;
 
        
+
+       $exam->questions = json_encode($oldQuestions);
+       $exam->save();
+
+       return response()->json([
+        'questions' => $exam->questions
+    ]);
 
     }
 

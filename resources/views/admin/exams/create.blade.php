@@ -17,14 +17,14 @@
    <div class="nav-wrapper" style="margin-top: 65px;">
       <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
          <li class="nav-item">
-            <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i>Page</a>
+            <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i>Settings</a>
          </li>
          @if($edit)
          <li class="nav-item">
-            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#questions" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Metas</a>
+            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#questions" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Content</a>
          </li>
          <li class="nav-item">
-            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#media" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Media</a>
+            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#media" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Live Results</a>
          </li>
          @endif
       </ul>
@@ -175,7 +175,7 @@
                                        <i class="fas fa-ellipsis-v"></i>
                                        </a>
                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                          <a class="dropdown-item" data-toggle="modal" data-target="#editModal" data-id="{{$key}}" data-question="{{json_encode(json_decode($exam->questions,true)[$key])}}">{{ __('Edit') }}</a>
+                                          <a class="dropdown-item question-item" data-toggle="modal" data-target="#editModal" data-id="{{$key}}" data-question="{{json_encode(json_decode($exam->questions,true)[$key])}}">{{ __('Edit') }}</a>
                                        </div>
                                     </div>
                                  </td>
@@ -628,6 +628,30 @@
            data:{'question':question},
            success: function(data) {
                initQuestionFields()
+               var  questionsList = '';
+               let questions = JSON.parse(data.questions);
+               $.each(questions,function(index, value){
+                  
+                  questionsList += `<tr id="question-` + index + `" data-id="` + index + `" class="question-list">` +
+                     `<td>` + value['question'] + `</td>` +
+                     `<td class="text-right">
+                        <div class="dropdown">
+                           <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <i class="fas fa-ellipsis-v"></i>
+                           </a>
+                           <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                              <a class="dropdown-item question-item" data-toggle="modal" data-target="#editModal" data-id="`+ index +`" data-question='`+ JSON.stringify(value) +`'>{{ __('Edit') }}</a>
+                           </div>
+                        </div>
+                     </td>
+                  </tr>`
+
+
+               })
+           
+               $("#question-body").empty();
+               $("#question-body").append(questionsList)
+               questionOrder()
            }
        });
    
@@ -684,7 +708,13 @@
            $(this).attr('data-id',index)
    
        });
-   console.log(questions);
+
+      $( ".dropdown-item.question-item" ).each(function( index ) {
+   
+         $(this).attr('data-id',index)
+            
+      });
+
        $.ajax({
            type: 'POST',
            headers: {
@@ -716,7 +746,7 @@
        
        question['question'] = CKEDITOR.instances['edit-question'].getData();
        question['answer-credit'] = $(".modal #answer-credit").val() ? $(".modal #answer-credit").val() : 1;
-       question['question-type'] = $(".modal #question-types").val();
+       question['question-type'] = $("#edit-question-types").val();
    
        var answer = [];
        var correctAnswers = [];
@@ -746,8 +776,6 @@
        
        question['answers'] = answer;
        question['correct_answer'] =  correctAnswers;
-		 question['key'] = $("#update-question").data('qu');
-		 console.log(question);
 
        $.ajax({
            type: 'POST',
@@ -756,9 +784,10 @@
            },
            Accept: 'application/json',
            url: "{{ route ('exam.update-question',$exam->id) }}",
-           data:{'question':question},
+           data:{'question':question,'key':$("#update-question").attr('data-qu')},
            success: function(data) {
                //initQuestionFields()
+               $(".close-modal").click();
            }
        });
    
@@ -789,10 +818,8 @@
 				}
 
 			})
-			console.log(e.relatedTarget.dataset.id);
+		
 			modal.find("#update-question").attr('data-qu',e.relatedTarget.dataset.id)
-	
-
       	CKEDITOR.instances['edit-question'].setData(question['question'])
    	//    modal.find("#benefit-id").val(id)
 
