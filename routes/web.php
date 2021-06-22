@@ -49,6 +49,7 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
     Route::resource('menu', 'MenuController', ['except' => ['show']]);
 
     Route::get('Transaction/participants', ['as' => 'transaction.participants', 'uses' => 'TransactionController@participants']);
+    Route::post('transaction/updateExpirationDate', ['as' => 'transaction.updateExpirationDate', 'uses' => 'TransactionController@updateExpirationDate']);
 
     //Menu item
     Route::get('menu/add_item', ['as' => 'menu.add_item', 'uses' => 'MenuController@add_item']);
