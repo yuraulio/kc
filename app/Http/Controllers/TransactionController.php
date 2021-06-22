@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Model\Transaction;
+use App\Model\Event;
 
 class TransactionController extends Controller
 {
     public function participants()
     {
-        $data['transactions'] = Transaction::with('user.statistic', 'event')->orderBy('created_at', 'DESC')->has('event')->get();
-        //dd($data['transactions']);
+        $data['transactions'] = Transaction::with('user.statistic', 'event.users',)->orderBy('created_at', 'DESC')->has('event')->get();
+        //dd($data['transactions'][0]);
 
         return view('admin.transaction.participants', $data);
     }
@@ -20,21 +21,27 @@ class TransactionController extends Controller
         $transaction_id = $request->id;
         $date = $request->date;
 
-        //dd($date);
+        $transaction = Transaction::with('user', 'event')->find($transaction_id);
 
-        $transaction = Transaction::find($transaction_id);
-        $old_date = explode(" ",$transaction->ends_at);
+        $user = $transaction->user[0]['id'];
+        $event = $transaction->event[0]['id'];
 
-        //dd($old_date);
+        $event = Event::find($event);
+
+        $old_date = explode(" ",$event->users()->wherePivot('user_id',$user)->first()->pivot->expiration);
+
 
         $new_date = $date.' '.$old_date[1];
         $new_date = date('Y-m-d H:i:s', strtotime($new_date));
-        //dd($new_date);
+        $res_new_date = date('d/m/Y', strtotime($new_date));
 
-        Transaction::where('id',$transaction_id)->update(['ends_at' => $new_date]);
+        $event->users()->wherePivot('user_id',$user)->updateExistingPivot($user,[
+            'expiration' => $new_date
+        ], false);
+
 
         $data['id'] = $transaction_id;
-        $data['date'] = $new_date;
+        $data['date'] = $res_new_date;
 
         return response()->json([
             'message' => 'Expiration date has updated!',

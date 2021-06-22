@@ -127,7 +127,6 @@
                             <th scope="col">{{ __('Event') }}</th>
                             <th scope="col">{{ __('Ticket Type') }}</th>
                             <th scope="col">{{ __('Ticket Price') }}</th>
-                            
                             <th scope="col">{{ __('Coupon') }}</th>
                             <th class="participant_elearning none">{{ __('Video Seen') }}</th>
                             <th scope="col">{{ __('Registration Date') }}</th>
@@ -141,7 +140,6 @@
                             <th>{{ __('Event') }}</th>
                             <th>{{ __('Ticket Type') }}</th>
                             <th>{{ __('Ticket Price') }}</th>
-                            
                             <th>{{ __('Coupon') }}</th>
                             <th class="participant_elearning none">{{ __('Video Seen') }}</th>
                             <th>{{ __('Registration Date') }}</th>
@@ -174,7 +172,7 @@
                                     @endif
                                 </td>
                                 <td>{{ $transaction->amount }}</td>
-                                
+
                                 <td>{{ $transaction->coupon_code }}</td>
                                 <td class="participant_elearning none">
 
@@ -215,7 +213,8 @@
                                     ?>
                                     <?php //dd($transaction->event[0]['expiration']); ?>
                                 </td>
-                                <td>{{ date_format($transaction->created_at, 'Y/m/d' )}}</td>
+
+                                <td>{{ date_format($transaction->created_at, 'd/m/Y' )}}</td>
                                 <?php //dd($transaction->event); ?>
                                 {{--<td class="exp_{{$transaction['id']}}" class="participant_elearning none">
                                     <?php
@@ -231,18 +230,24 @@
                                             {{$exp}}
                                         @endif
                                 </td>--}}
+                                <?php //dd($transaction->event[0]->users[0]->pivot->expiration); ?>
                                 <td class="exp_{{$transaction['id']}} participant_elearning none" >
-                                  
+
                                     <?php
-                                       $date = strtotime($transaction->ends_at);
-                                       $newformat = date('d/m/Y',$date);
-                                       echo $newformat;
+                                       //$date = strtotime($transaction->event[0]->users[0]->pivot->expiration);
+                                       //$newformat = date('d/m/Y',$date);
+                                       //echo $newformat;
+                                       //echo 'asd';
+                                       //echo $transaction->event[0]->users[0]->pivot->expiration;
+                                       $date = strtotime($transaction->event[0]->users[0]->pivot->expiration);
+                                        $newformat = date('d/m/Y',$date);
+                                        echo $newformat;
                                     ?>
-                                         
+
                                 </td>
-                                <?php 
-                                $date = strtotime($transaction->ends_at);
-                                $newformat = date('d/m/Y',$date);
+                                <?php
+                                $date = strtotime($transaction->event[0]->users[0]->pivot->expiration);
+                                $newformat = date('m/d/Y',$date);
                                 ?>
                                 <td class="participant_elearning none">
                                     <input id="{{$transaction['id']}}" class="form-control datepicker" placeholder="Select date" type="text" value="<?= $newformat; ?>">
@@ -282,7 +287,7 @@
     <script>
 
 
-    
+
 
 
 
@@ -293,7 +298,7 @@ $.fn.dataTable.ext.search.push(
     function( settings, data, dataIndex ) {
         var min = minDate.val();
         var max = maxDate.val();
-        var date = new Date( data[5] );
+        var date = new Date( data[6] );
 
 
 
@@ -311,6 +316,8 @@ $.fn.dataTable.ext.search.push(
 
 $(document).ready(function() {
 
+
+
     $( ".update_exp" ).on( "click", function() {
         const transaction_id = $(this).data('id')
         let new_date =  $('#'+transaction_id).val()
@@ -323,7 +330,7 @@ $(document).ready(function() {
             url: '/admin/transaction/updateExpirationDate',
             data: {'id': transaction_id, 'date': new_date},
             success: function (data) {
-                console.log(data)
+                //console.log(data)
                 data = data.data
                 date = data.date.split(' ')
                 $('.exp_'+data.id).text(date[0])
@@ -342,6 +349,22 @@ $(document).ready(function() {
 
     // DataTables initialisation
     var table = $('#participants_table').DataTable();
+
+
+    //otan allazei selida kai einai E-learnign na energopoiounte oi antistoixes sthles
+    $('#participants_table').on( 'page.dt', function () {
+        selected_event = $('#select2-col1_filter-container').attr('title')
+
+        if(selected_event.search('E-Learning') != -1){
+            //$('.participant_elearning').removeClass('none')
+            //$('#participants_table').DataTable().page(4).draw('page');
+
+            table.$('.participant_elearning').removeClass('none');
+        }else{
+            table.$('.participant_elearning').addClass('none');
+        }
+
+    } );
 
     events = table.column(1).data().unique().sort()
     coupons = table.column(4).data().unique().sort()
@@ -441,7 +464,6 @@ function removeSpecial(s){
 }
 
     function filterColumn ( i ) {
-        alert(i)
         $('#participants_table').DataTable().column( i ).search(
             $('#col'+i+'_filter').val()
         ).draw();
@@ -449,14 +471,16 @@ function removeSpecial(s){
         event = removeSpecial($('#col'+i+'_filter').val())
 
         if(event.search('E-Learning') != -1){
+
             if($('.participant_elearning').hasClass('none')){
                 $('.participant_elearning').removeClass('none')
+                console.log($('.participant_elearning'))
             }
         }else{
             $('.participant_elearning').addClass('none')
         }
 
-        console.log(removeSpecial($('#col'+i+'_filter').val()))
+        //console.log(removeSpecial($('#col'+i+'_filter').val()))
 
 
         price = $('#participants_table').DataTable().column( 3 ).data();
@@ -474,7 +498,7 @@ function removeSpecial(s){
 
             let coupons = []
         $.each(price, function(key, value){
-            console.log(removeSpecial($('#participants_table').DataTable().column( i ).data()[key]))
+            //console.log(removeSpecial($('#participants_table').DataTable().column( i ).data()[key]))
 
             if(removeSpecial($('#participants_table').DataTable().column( i ).data()[key]) == removeSpecial($('#col'+i+'_filter').val())){
                 sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key])
@@ -572,12 +596,12 @@ function removeSpecial(s){
         // Group by color as key to the person array
         const couponsGroupedByName = groupBy(coupons, 'name');
 
-        console.log(couponsGroupedByName)
+        //console.log(couponsGroupedByName)
 
         sumCoupon = []
         //console.log(couponsGroupedByName)
         $.each(couponsGroupedByName, function(key, value){
-            console.log('from coupons')
+            //console.log('from coupons')
             var sum1 = 0
             var count1 = 0
             $.each(value, function(key1, value1){
@@ -687,20 +711,29 @@ function removeSpecial(s){
 
         } );
 
-        function ClearFields(){
-    //var table = $('#participants_table').DataTable().clear().destroy();
-    //$('#participants_table').DataTable()
-            $('#min').val('')
-            $('#max').val('')
-            $("#participants_table").DataTable().destroy()
-            $("#participants_table").DataTable({
-                    "destroy": true,
-                })
-                }
+    function ClearFields(){
+        console.log('from clear')
 
+        $('#min').val('')
+        $('#max').val('')
+        //$('.column_filter').val(1).trigger('change.select2');
+
+        $('#col1_filter').val('');
+        $('#col4_filter').val('');
+
+        $('#col1_filter').select2().trigger('change');
+        $('#col4_filter').select2().trigger('change');
+
+
+        $('#participants_table').DataTable().column( 1 ).search('').draw();
+        $('#participants_table').DataTable().column( 2 ).search('').draw();
+        $('#participants_table').DataTable().column( 6 ).search('').draw();
+    }
 
 
 
 
     </script>
+
+
 @endpush

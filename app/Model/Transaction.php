@@ -4,6 +4,7 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Model\User;
 
 class Transaction extends Model
 {
@@ -46,4 +47,10 @@ class Transaction extends Model
     {
         return $this->morphedByMany(Event::class, 'transactionable','transactionables');
     }
+
+    // public function events()
+    // {
+    //     return $this->belongsToMany(User::class, 'event_user');
+    // }
+
 }

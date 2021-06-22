@@ -194,7 +194,7 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
     Route::post('/payment-methods/update/{method}','Dashboard\PaymentMethodsController@update')->name('payments.update');
 
     //media2
-    Route::get('media2/index', ['as' => 'media2.index', 'uses' => 'Media2Controller@index']);
+    Route::get('media2/index', ['as' => 'media2.index', 'uses' => 'MediaController@index']);
 
     //Lessons
     Route::post('/sort-lessons/{event}', 'LessonController@orderLesson')->name('sort-lessons');
