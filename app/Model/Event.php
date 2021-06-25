@@ -43,7 +43,7 @@ class Event extends Model
 
     public function category()
     {
-        return $this->morphToMany(Category::class, 'categoryable')->with('faqs','testimonials');
+        return $this->morphToMany(Category::class, 'categoryable')->with('faqs','testimonials','dropbox');
     }
 
     public function faqs()
@@ -61,8 +61,9 @@ class Event extends Model
     {
 
         return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id')
-            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority')->orderBy('event_topic_lesson_instructor.priority','asc');;
+            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority')->orderBy('event_topic_lesson_instructor.priority','asc');
     }
+
 
     public function lessons()
     {
@@ -71,6 +72,7 @@ class Event extends Model
         ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room','priority')->orderBy('event_topic_lesson_instructor.priority','asc');
     }
 
+
     public function instructors()
     {
         return $this->belongsToMany(Instructor::class,'event_topic_lesson_instructor')->with('mediable')->where('status',true)->select('instructors.*','lesson_id','instructor_id','event_id')
@@ -78,7 +80,7 @@ class Event extends Model
     }
 
 
-    public function summary()
+    public function summary1()
     {
         return $this->belongsToMany(Summary::class, 'events_summaryevent', 'event_id', 'summary_event_id' );
     }
@@ -87,6 +89,16 @@ class Event extends Model
     {
 
         if($this->delivery->first() && $this->delivery->first()->id == 139){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function is_elearning_course()
+    {
+
+        if($this->delivery->first() && $this->delivery->first()->id == 143){
             return true;
         }else{
             return false;
@@ -160,12 +172,92 @@ class Event extends Model
         $topics = [];
 
         $lessons = $this->lessons->groupBy('topic_id');
+        //dd($lessons);
+        $sum1 = 0;
+
+        // sum topic duration
+        foreach($lessons as $key => $lesson1){
+
+
+
+            $sum1 = 0;
+
+            foreach($lesson1 as $key1 => $lesson){
+                $sum = 0;
+
+                if($lesson['vimeo_duration'] != null && $lesson['vimeo_duration'] != '0'){
+
+                    $vimeo_duration = explode(' ', $lesson['vimeo_duration']);
+                    $hour = 0;
+                    $min = 0;
+                    $sec = 0;
+
+
+
+                    if(count($vimeo_duration) == 3){
+                        $string_hour = $vimeo_duration[0];
+                        $string_hour = intval(explode('h',$string_hour)[0]);
+                        $hour = $string_hour * 3600;
+
+                        $string_min = $vimeo_duration[1];
+                        $string_min = intval(explode('m',$string_min)[0]);
+                        $min = $string_min * 60;
+
+                        $string_sec = $vimeo_duration[2];
+                        $string_sec = intval(explode('s',$string_sec)[0]);
+                        $sec = $string_sec;
+
+                        $sum = $hour + $min + $sec;
+
+                    }else if(count($vimeo_duration) == 2){
+                        $string_min = $vimeo_duration[0];
+                        $string_min = intval(explode('m',$string_min)[0]);
+                        $min = $string_min * 60;
+
+                        $string_sec = $vimeo_duration[1];
+                        $string_sec = intval(explode('s',$string_sec)[0]);
+                        $sec = $string_sec;
+
+                        $sum = $min + $sec;
+                    }else if(count($vimeo_duration) == 1){
+                        //dd($vimeo_duration);
+                        $a = strpos( $vimeo_duration[0], 's');
+                        //dd($a);
+                        if($a === false ){
+                            $sum = 0;
+                            if(strpos( $vimeo_duration[0], 'm')){
+                                $string_min = $vimeo_duration[0];
+                                $string_min = intval(explode('m',$string_min)[0]);
+                                $min = $string_min * 60;
+                                $sum = $min;
+                            }
+
+                        }else if($a !== false ){
+                            $string_sec = intval(explode('s',$vimeo_duration[0])[0]);
+                            $sec = $string_sec;
+                            $sum = $sec;
+
+                        }
+                    }
+
+                }
+
+                $sum1 = $sum1 + $sum;
+                //var_dump($sum1);
+                $data['keys'][$key] = $sum1;
+
+        }
+
+
+        }
+
 
         $instructors = $this->instructors->unique()->groupBy('instructor_id')->toArray();
 
         foreach($this->topic->unique()->groupBy('topic_id') as $key => $topic){
 
             foreach($topic as $t){
+
 
                 $lessonsArray = $lessons[$t->id]->toArray();
                 foreach( $lessonsArray as $key => $lesson){
@@ -183,6 +275,11 @@ class Event extends Model
 
         $data['topics'] = $topics;
         $data['instructors'] = $instructors;
+        foreach($data['topics'] as $key => $topics){
+            $topic_id = $topics['lessons'][0]['topic_id'];
+            $data['topics'][$key]['topic_duration'] = $data['keys'][$topic_id];
+
+        }
 
         return $data;
     }
@@ -230,6 +327,22 @@ class Event extends Model
         }
 
         return $faqs;
+    }
+
+    public function progress($user)
+    {
+
+        $videos = $user->statistic()->wherePivot('event_id',$this['id'])->first()->pivot['videos'];
+        $videos = json_decode($videos, true);
+        $sum = 0;
+        foreach($videos as $video){
+            if($video['seen'] == 1){
+                $sum++;
+            }
+
+        }
+
+        return ($sum/count($videos)) * 100;
     }
 
 

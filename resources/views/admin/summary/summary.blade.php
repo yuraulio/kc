@@ -11,19 +11,21 @@
     </div>
 </div>
 <div class="table-responsive py-4">
-    <table class="table align-items-center table-flush summary-table"  id="datatable-basic">
+    <table class="table align-items-center table-flush summary-table" id="datatable-basic-summary">
         <thead class="thead-light">
             <tr>
                 <th scope="col">{{ __('Title') }}</th>
+                <th scope="col">{{ __('Section') }}</th>
                 <th scope="col">{{ __('Icon') }}</th>
                 <th scope="col"></th>
             </tr>
         </thead>
         <tbody class="summary-body summaries-order">
-        @if($model->summary()->get())
-            @foreach ($model->summary()->get() as $summary)
+        @if($model->summary1)
+            @foreach ($model->summary1 as $summary)
                 <tr>
                     <td id="title-{{$summary->id}}" data-id="{{$summary->id}}" class="summary-list">{{ $summary->title }}</td>
+                    <td id="section_sum-{{$summary->id}}" data-id="{{$summary->id}}" class="summary-list">{{ $summary->section }}</td>
                     <td id="icon-{{$summary->id}}">{{ $summary->icon }}</td>
                     <td class="text-right">
                         <div class="dropdown">
@@ -31,7 +33,7 @@
                                 <i class="fas fa-ellipsis-v"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                <a class="dropdown-item" data-toggle="modal" data-target="#editModalSummary" data-id="{{$summary->id}}" data-title="{{$summary->title}}" data-description="{{$summary->description}}" data-icon="{{$summary->icon}}">{{ __('Edit') }}</a>
+                                <a class="dropdown-item" data-toggle="modal" data-target="#editModalSummary" data-id="{{$summary->id}}" data-title="{{$summary->title}}" data-description="{{$summary->description}}" data-section="{{$summary->section}}" data-icon="{{$summary->icon}}">{{ __('Edit') }}</a>
                             </div>
                         </div>
                     </td>
@@ -72,11 +74,19 @@
                         <input type="text" name="icon" id="input-icon" class="form-control{{ $errors->has('icon') ? ' is-invalid' : '' }}" placeholder="{{ __('Icon') }}" value="{{ old('icon') }}" autofocus>
                         @include('alerts.feedback', ['field' => 'icon'])
                     </div>
+                    <div class="form-group{{ $errors->has('section_sum') ? ' has-danger' : '' }}">
+                        <label class="form-control-label" for="input-section_sum">{{ __('Section') }}</label>
+
+                        <select name="section_sum" id="input-section_sum" class="form-control" placeholder="{{ __('Section') }}">
+                            <option value="date">Date</option>
+                        </select>
+                        @include('alerts.feedback', ['field' => 'section_sum'])
+                    </div>
                 </form>
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary close-modal" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary close_modal" data-dismiss="modal">Close</button>
             <button type="button" id="save_summary" class="btn btn-primary">Save changes</button>
         </div>
         </div>
@@ -110,11 +120,18 @@
                   <input type="text" name="icon" id="edit-icon" class="form-control{{ $errors->has('icon') ? ' is-invalid' : '' }}" placeholder="{{ __('Icon') }}" value="{{ old('icon') }}" autofocus>
                   @include('alerts.feedback', ['field' => 'icon'])
                </div>
+               <div class="form-group{{ $errors->has('section_sum') ? ' has-danger' : '' }}">
+                  <label class="form-control-label" for="edit-section_sum">{{ __('Section') }}</label>
+                    <select name="section_sum" id="edit_section_sum" class="form-control" placeholder="{{ __('Section') }}">
+                        <option value="date">Date</option>
+                    </select>
+                  @include('alerts.feedback', ['field' => 'section_sum'])
+               </div>
                <input type="text" id="summary-id"  value="" hidden>
             </div>
          </div>
          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary close-modal" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary close_modal" data-dismiss="modal">Close</button>
             <button type="button" id="edit-summary" class="btn btn-primary">Save changes</button>
          </div>
       </div>
@@ -133,13 +150,14 @@
            },
    	    type: 'post',
    	    url: '{{route("summary.store")}}',
-            data: {'title':$('#input-title-summary').val(),'description':CKEDITOR.instances['input-description4'].getData(),'icon':$('#input-icon').val(),'model_type':modelType,'model_id':modelId},
+            data: {'title':$('#input-title-summary').val(),'section':$('#input-section_sum').val(),'description':CKEDITOR.instances['input-description4'].getData(),'icon':$('#input-icon').val(),'model_type':modelType,'model_id':modelId},
    	    success: function (data) {
    	//console.log(data);
    	let summary = data.summary;
    	let newSummary =
    	`<tr>` +
    	`<td id="title-` + summary['id'] +`">` + summary['title'] + `</td>` +
+    `<td id="section_sum-` + summary['id'] +`">` + summary['section'] + `</td>` +
     `<td id="icon-` + summary['id'] +`">` + summary['icon'] + `</td>` +
 
       `<td class="text-right">
@@ -158,7 +176,7 @@
 
 
    	$(".summary-body").append(newSummary);
-   	$(".close-modal").click();
+   	$(".close_modal").click();
    	$("#success-message p").html(data.success);
    	$("#success-message").show();
     $("#sum_create").trigger('reset')
@@ -187,10 +205,10 @@
    	let summary = data.summary;
 
    	$("#title-"+summary['id']).html(summary['title'])
-   	// $("#desc-"+summary['id']).html(summary['description'])
+   	$("#section_sum-"+summary['id']).html(summary['section'])
        $("#title-"+summary['id']).parent().find('.dropdown-item').attr('data-description', summary['description'])
     $("#icon-"+summary['id']).html(summary['icon'])
-   	$(".close-modal").click();
+   	$(".close_modal").click();
 
    	$("#success-message p").html(data.success);
    	$("#success-message").show();
@@ -209,19 +227,24 @@
    $(document).on('shown.bs.modal', '#editModalSummary',function(e) {
     $("#sum_create").trigger('reset')
 
+
    	var link  = e.relatedTarget,
         	modal    = $(this),
          id = e.relatedTarget.dataset.id
          //title = e.relatedTarget.dataset.title,
          //description =e.relatedTarget.dataset.description;
          title = $("#title-"+id).text(),
+         section = e.relatedTarget.dataset.section
          description = e.relatedTarget.dataset.description
          icon = $("#icon-"+id).text();
 
       modal.find("#edit-title").val(title);
       CKEDITOR.instances['edit-description2'].setData(description)
       modal.find("#edit-icon").val(icon);
-   	modal.find("#summary-id").val(id)
+      modal.find("#edit-icon").val(icon);
+   	    modal.find("#summary-id").val(id)
+       modal.find("#edit-section_sum").val(section)
+
 
    });
 
@@ -231,9 +254,9 @@
 <script>
 
    (function( $ ){
-      
+
       var el = document.getElementsByClassName('summaries-order')[0];
-         
+
       new Sortable(el, {
          group: "words",
          handle: ".my-handle",
@@ -258,7 +281,7 @@
       $( ".summary-list" ).each(function( index ) {
             summaries[$(this).data('id')] = index
       });
-   
+
 
       $.ajax({
          type: 'POST',
@@ -269,11 +292,12 @@
          url: "{{ route ('sort-summaries', $event->id) }}",
          data:{'summaries':summaries},
          success: function(data) {
-         
-         
+
+
          }
       });
    }
+
 
 
 </script>

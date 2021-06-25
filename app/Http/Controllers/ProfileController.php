@@ -95,11 +95,6 @@ class ProfileController extends Controller
             $invoice['companycity'] = $request->companycity;
         }
 
-
-
-
-
-
         $receipt = json_encode($receipt);
         $invoice = json_encode($invoice);
 
@@ -150,7 +145,7 @@ class ProfileController extends Controller
 
         $user->update(
             $request->merge(['picture' => $request->photo ? $path_name = $request->photo->store('profile_user', 'public') : null])
-                ->except([$request->hasFile('photo') ? '' : 'picture'])
+                    ->except([$request->hasFile('photo') ? '' : 'picture'])
 
 
         );

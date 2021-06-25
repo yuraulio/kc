@@ -1,6 +1,11 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Api\PassportAuthController;
+use App\Http\Controllers\Api\HelloController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\EventController;
+use App\Http\Controllers\Api\LessonController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +18,24 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('login', [PassportAuthController::class, 'login']);
+
+
+Route::middleware('auth:api')->group(function () {
+    Route::get('hello', [HelloController::class, 'index']);
+
+    // User
+    //Route::get('user/{user}/edit', [UserController::class, 'edit']);
+    Route::get('myprofile', [UserController::class, 'index']);
+    Route::post('myprofile/update', [UserController::class, 'update']);
+    Route::get('myprofile/events', [UserController::class, 'events']);
+
+    //
+    Route::post('lesson/save_note', [LessonController::class, 'saveNote']);
+    Route::post('lesson/save_video_progress', [LessonController::class, 'saveVideoProgress']);
+
+
+    // Logout
+    Route::post('logout', [PassportAuthController::class, 'logout']);
+
 });

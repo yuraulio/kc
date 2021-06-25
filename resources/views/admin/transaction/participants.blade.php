@@ -296,17 +296,21 @@ var minDate, maxDate;
 // Custom filtering function which will search data in column four between two values
 $.fn.dataTable.ext.search.push(
     function( settings, data, dataIndex ) {
+        //console.log('asd'+data[6])
         var min = minDate.val();
         var max = maxDate.val();
         var date = new Date( data[6] );
+        // console.log('min:'+min)
+        // console.log('max:'+max)
+        // console.log('date:'+date)
 
 
 
         if (
             ( min === null && max === null ) ||
-            ( min === null && date <= max ) ||
-            ( min <= date   && max === null ) ||
-            ( min <= date   && date <= max )
+            ( min === null && date.getTime() <= max.getTime() ) ||
+            ( min.getTime() <= date.getTime()   && max === null ) ||
+            ( min.getTime() <= date.getTime()   && date.getTime() <= max.getTime() )
         ) {
             return true;
         }
@@ -388,6 +392,7 @@ $(document).ready(function() {
 
     // Refilter the table
     $('#min, #max').on('change', function () {
+        console.log('from change min!!')
         table.draw();
         //console.log(table.column(1).data())
         price = $('#participants_table').DataTable().column( 3 ).data();
@@ -406,11 +411,19 @@ $(document).ready(function() {
         let min = new Date($('#min').val());
         let max = new Date($('#max').val());
 
-        min = moment(min).format('YYYY/MM/DD')
-        max = moment(max).format('YYYY/MM/DD')
+        //min = moment(min).format('MM/DD/YYYY')
+        //console.log('Min:'+min)
+        //max = moment(max).format('MM/DD/YYYY')
+
 
         $.each(price, function(key, value){
-            if($('#participants_table').DataTable().column( 6 ).data()[key] >= min && $('#participants_table').DataTable().column( 6 ).data()[key] <= max){
+            console.log('pre if')
+            console.log('selected min:'+min.getTime())
+            datatable_date = $('#participants_table').DataTable().column( 6 ).data()[key]
+            datatable_date = new Date(datatable_date);
+            console.log('from datatable'+ min.getTime()<=datatable_date.getTime())
+            if(datatable_date.getTime() >= min.getTime() && datatable_date.getTime() <= max.getTime()){
+                console.log('true1')
             sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key])
 
 
@@ -456,12 +469,12 @@ function filterGlobal () {
 
 }
 
-function removeSpecial(s){
-    s = s.replace(/ /g,'');
-    s = s.replace(/&/g,'');
-    s = s.replace(/amp;/g,'');
-  return s
-}
+    function removeSpecial(s){
+        s = s.replace(/ /g,'');
+        s = s.replace(/&/g,'');
+        s = s.replace(/amp;/g,'');
+        return s
+    }
 
     function filterColumn ( i ) {
         $('#participants_table').DataTable().column( i ).search(
@@ -728,6 +741,7 @@ function removeSpecial(s){
         $('#participants_table').DataTable().column( 1 ).search('').draw();
         $('#participants_table').DataTable().column( 2 ).search('').draw();
         $('#participants_table').DataTable().column( 6 ).search('').draw();
+
     }
 
 

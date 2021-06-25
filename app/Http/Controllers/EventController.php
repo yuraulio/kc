@@ -184,7 +184,7 @@ class EventController extends Controller
 
         $event->createSlug($request->slug);
         $event->createMetas($request->all());
-        
+
         if($request->category_id != null){
             $category = Category::with('topics')->find($request->category_id);
 
@@ -249,7 +249,7 @@ class EventController extends Controller
 
         $user = Auth::user();
         $id = $event['id'];
-        $event = $event->with('delivery','category', 'summary', 'benefits', 'ticket', 'city', 'venues', 'topic', 'lessons', 'instructors', 'users', 'partners', 'sections','paymentMethod','slugable','metable', 'medias')->find($id);
+        $event = $event->with('delivery','category', 'summary1', 'benefits', 'ticket', 'city', 'venues', 'topic', 'lessons', 'instructors', 'users', 'partners', 'sections','paymentMethod','slugable','metable', 'medias')->find($id);
 
         //dd($event->medias->details);
         $categories = Category::all();
@@ -310,7 +310,7 @@ class EventController extends Controller
         $data['isInclassCourse'] = $event->is_inclass_course();
         $data['eventFaqs'] = $event->faqs->pluck('id')->toArray();
         $data['eventUsers'] = $event->users->toArray();
-      
+
         //dd($data['topics']);
 
         return view('event.edit', $data);

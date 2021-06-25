@@ -13,7 +13,7 @@ class Summary extends Model
     protected $table = 'summary_events';
 
     protected $fillable = [
-        'title', 'description', 'icon'
+        'title', 'description', 'icon', 'section'
     ];
 
     public function event()

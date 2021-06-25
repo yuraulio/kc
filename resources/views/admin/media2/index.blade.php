@@ -46,7 +46,7 @@
 
     <script>
     $( document ).ready(function() {
-        console.log( "ready!" );
+        //console.log( "ready!" );
         search = `<div role="group" class="btn-group"><div class="p-4 bg-secondary">
                         <input type="text" class="form-control form-control-alternative search_input" placeholder="Search">
                         <button class="btn btn-primary btn-sm" id="search_btn" type="button">Button</button>
@@ -67,8 +67,6 @@
                 success: function(data) {
                     // data = JSON.parse(data)
                     data = data.data
-
-
 
                     first_grid = $('.fas.fa-th-list').parent().hasClass('active')
 

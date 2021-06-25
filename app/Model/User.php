@@ -16,12 +16,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 
 {
 
-    use Notifiable;
+    use Notifiable, HasApiTokens;
     /**
      * The attributes that are mass assignable.
      *
@@ -175,7 +176,7 @@ class User extends Authenticatable
 
     public function statistic()
     {
-        return $this->belongsToMany(User::class, 'event_statistics')->withPivot('videos', 'event_id');
+        return $this->belongsToMany(User::class, 'event_statistics')->withPivot('videos','lastVideoSeen', 'notes', 'event_id');
     }
 
 }
