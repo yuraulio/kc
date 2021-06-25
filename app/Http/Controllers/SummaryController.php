@@ -21,11 +21,16 @@ class SummaryController extends Controller
         $model = $model::find($request->model_id);
 
         $input['title'] = $request->title;
-        $input['description'] = $request->description;
+
+        if($request->description != null){
+            $input['description'] = $request->description;
+        }
+
         $input['icon'] = $request->icon;
+        $input['section'] = $request->section;
 
         $summary = $summary->create($input);
-        $model->summary()->save($summary);
+        $model->summary1()->save($summary);
 
         return response()->json([
             'success' => __('Summary successfully created.'),
@@ -63,13 +68,13 @@ class SummaryController extends Controller
 
     public function orderSummaries(Request $request, Event $event){
 
-        foreach($event->summary()->get() as $summary){
+        foreach($event->summary1()->get() as $summary){
             //$summary->priority = $request->all()['summaries'][$summary['id']];
             //$summary->save();
-    
+
         }
-    
-        
-        
+
+
+
     }
 }

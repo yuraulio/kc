@@ -17,8 +17,8 @@ class Dropbox extends Model
         'folders', 'files', 'folder_name'
     ];
 
-    public function categories()
-    {
-        return $this->belongsToMany(Category::class, 'dropboxcache_category', 'category_id', 'dropboxcache_category_id');
-    }
+     public function categories()
+     {
+         return $this->morphedByMany(Category::class, 'dropboxcacheable');
+     }
 }

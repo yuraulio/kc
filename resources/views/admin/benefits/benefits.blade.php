@@ -224,9 +224,9 @@
 <script>
 
    (function( $ ){
-      
+
       var el = document.getElementsByClassName('benefits-order')[0];
-         
+
       new Sortable(el, {
          group: "words",
          handle: ".my-handle",
@@ -251,7 +251,7 @@
       $( ".benefit-list" ).each(function( index ) {
           benefits[$(this).data('id')] = index
       });
-   
+
 
       $.ajax({
          type: 'POST',
@@ -262,12 +262,12 @@
          url: "{{ route ('sort-benefits') }}",
          data:{'benefits':benefits,'id':"{{$model->id}}",'modelType':"{{addslashes ( get_class($model) )}}"},
          success: function(data) {
-         
-         
+
+
          }
       });
    }
-  
+
    $(document).ready( function () {
       $('.benefits-table').dataTable( {
           "ordering": false

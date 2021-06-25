@@ -34,6 +34,7 @@
                 </tr>
             </thead>
             <tbody>
+            <?php //dd($categories); ?>
                 @foreach ($categories as $category)
                     <tr>
                         <td><a href="{{ route('category.edit', $category) }}">{{ $category->name }}</a></td>

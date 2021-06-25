@@ -32,9 +32,6 @@ class CategoryRequest extends FormRequest
             'description' => [
                 'nullable', 'min:5'
             ],
-            'hours' => [
-                'numeric'
-            ]
         ];
     }
 }

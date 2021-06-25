@@ -51,14 +51,14 @@
 
                                 <div class="form-group{{ $errors->has('hours') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-hours">{{ __('Hours') }}</label>
-                                    <input type="number" name="hours" id="input-hours" class="form-control{{ $errors->has('hours') ? ' is-invalid' : '' }}" placeholder="{{ __('Hours') }}" value="{{ old('hours') }}">
+                                    <input type="text" name="hours" id="input-hours" class="form-control{{ $errors->has('hours') ? ' is-invalid' : '' }}" placeholder="{{ __('Hours') }}" value="{{ old('hours') }}">
 
                                     @include('alerts.feedback', ['field' => 'hours'])
                                 </div>
 
                                 <div class="form-group">
                                     <label for="exampleFormControlSelect1">Select Dropbox Folder</label>
-                                    <select multiple class="form-control" name="folder_name[]" id="folder_name">
+                                    <select class="form-control" name="folder_name" id="folder_name">
                                         @foreach($folders as $folder)
                                             <option value="{{ $folder }}">{{ $folder }}</option>
                                         @endforeach

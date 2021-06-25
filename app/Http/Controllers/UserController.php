@@ -198,7 +198,7 @@ class UserController extends Controller
     /**
      * Store a newly created user in storage
      *
-     * @param  \App\Http\Requests\UserRequest  $request
+     * @param  \App\Http\Requests\UserRequest
      * @param  \App\Model\User  $model
      * @return \Illuminate\Http\RedirectResponse
      */
