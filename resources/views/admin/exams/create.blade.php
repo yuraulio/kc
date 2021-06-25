@@ -77,7 +77,7 @@
                                  <select name="event_id" id="input-event_id" class="form-control" placeholder="{{ __('Event') }}">
                                     <option value="">-</option>
                                     @foreach ($events as $event)
-                                    <option value="{{ $event->id }}" @if(old('event_id') == $event->id) checked @endif>{{ $event->title }}</option>
+                                    <option value="{{ $event->id }}" @if(old('event_id',$event_id) == $event->id) selected @endif>{{ $event->title }}</option>
                                     @endforeach
                                  </select>
                                  @include('alerts.feedback', ['field' => 'event_id'])
@@ -579,7 +579,8 @@
        }
    })
    
-   $(".add-question").click(function(){
+   @if($edit)
+      $(".add-question").click(function(){
        
        let question = {};
    
@@ -656,90 +657,10 @@
        });
    
    
-   })
-   
-   function initQuestionFields(){
-       $("input.answer-check").each(function( ) {
-   
-           $(this).prop('checked',false);
-       
-       });
-   
-       $(".answer-input").each(function( ) {
-   
-           $(this).val('');
-       
-       });
-   
-   
-       CKEDITOR.instances['question'].setData('');
-       $("#answer-credit").val(1);
-   
-   }
-   
-   function questionOrder(){
-   
-       var el = document.getElementById('question-body');
-       new Sortable(el, {
-           group: "words",
-           handle: ".my-handle",
-           draggable: ".item",
-           ghostClass: "sortable-ghost",
-       
-       });
-   
-       new Sortable(el, {
-           // Element dragging ended
-           onEnd: function ( /**Event*/ evt) {
-               orderQuestions(evt)
-           },
-       });
-       
-       
-   
-   }
-   
-   function orderQuestions(evt){
-       
-       let questions = {}
-       $( ".question-list" ).each(function( index ) {
-   
-           questions[index] = $(this).data('id')
-           $(this).attr('data-id',index)
-   
-       });
+      })
 
-      $( ".dropdown-item.question-item" ).each(function( index ) {
-   
-         $(this).attr('data-id',index)
-            
-      });
-
-       $.ajax({
-           type: 'POST',
-           headers: {
-               'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-           },
-           Accept: 'application/json',
-           url: "{{route('exam.order-questions',$exam->id)}}",
-           data:{'questions':questions},
-           success: function(data) {
-           
-           
-           }
-       });
-   }
-   
-   $(document).ready( function () {
-       questionOrder();
-       $('#datatable-basic').dataTable( {
-           "ordering": false,
-           "paging": false
-       });
-   });
-   
-	$(document).on('click','#update-question' ,function(){
-	//$("edit-question").click(function(){
+      $(document).on('click','#update-question' ,function(){
+	   //$("edit-question").click(function(){
        
        let question = {};
    
@@ -792,7 +713,95 @@
        });
    
    
-   })
+      })
+
+      function questionOrder(){
+   
+         var el = document.getElementById('question-body');
+         new Sortable(el, {
+             group: "words",
+             handle: ".my-handle",
+             draggable: ".item",
+             ghostClass: "sortable-ghost",
+         
+         });
+      
+         new Sortable(el, {
+             // Element dragging ended
+             onEnd: function ( /**Event*/ evt) {
+                 orderQuestions(evt)
+             },
+         });
+   
+   
+
+      }
+
+      function orderQuestions(evt){
+      
+         let questions = {}
+         $( ".question-list" ).each(function( index ) {
+
+             questions[index] = $(this).data('id')
+             $(this).attr('data-id',index)
+
+         });
+
+         $( ".dropdown-item.question-item" ).each(function( index ) {
+
+           $(this).attr('data-id',index)
+
+         });
+
+         $.ajax({
+             type: 'POST',
+             headers: {
+                 'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+             },
+             Accept: 'application/json',
+             url: "{{route('exam.order-questions',$exam->id)}}",
+             data:{'questions':questions},
+             success: function(data) {
+            
+            
+             }
+         });
+      }
+
+   @endif
+   
+   function initQuestionFields(){
+       $("input.answer-check").each(function( ) {
+   
+           $(this).prop('checked',false);
+       
+       });
+   
+       $(".answer-input").each(function( ) {
+   
+           $(this).val('');
+       
+       });
+   
+   
+       CKEDITOR.instances['question'].setData('');
+       $("#answer-credit").val(1);
+   
+   }
+   
+
+
+
+   
+   $(document).ready( function () {
+       questionOrder();
+       $('#datatable-basic').dataTable( {
+           "ordering": false,
+           "paging": false
+       });
+   });
+   
+	
 
 </script>
 

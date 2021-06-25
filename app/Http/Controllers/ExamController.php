@@ -37,8 +37,9 @@ class ExamController extends Controller
         $events = Event::all();
         $exam = new Exam;
         $edit = false;
+        $event_edit = false;
 
-        return view('admin.exams.create', ['user' => $user, 'events' => $events, 'edit' => $edit, 'exam' => $exam]);
+        return view('admin.exams.create', ['user' => $user, 'events' => $events, 'edit' => $edit, 'exam' => $exam,'event_id'=>$event_edit]);
     }
 
     /**
@@ -51,6 +52,7 @@ class ExamController extends Controller
     {   
        
         $exam = $model->create($request->all());
+        $exam->event()->attach($request->event_id);
     }
 
     /**
@@ -75,8 +77,9 @@ class ExamController extends Controller
         $user = Auth::user();
         $events = Event::all();
         $edit = true;
+        $event_edit = $exam->event->first()->id;
         //dd(json_decode($exam->questions,true));
-        return view('admin.exams.create', ['user' => $user, 'events' => $events, 'edit' => $edit, 'exam' => $exam]);
+        return view('admin.exams.create', ['user' => $user, 'events' => $events, 'edit' => $edit, 'exam' => $exam,'event_id'=>$event_edit]);
     }
 
     /**
