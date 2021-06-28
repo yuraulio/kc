@@ -5,6 +5,7 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Exam;
+use App\Model\ExamResult;
 
 class Exam extends Model
 {
@@ -19,5 +20,9 @@ class Exam extends Model
     public function event()
     {
         return $this->morphedByMany(Event::class, 'examable');
+    }
+
+    public function results(){
+        return $this->hasMany(ExamResult::class);
     }
 }

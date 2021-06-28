@@ -75,7 +75,7 @@ class Event extends Model
 
     public function instructors()
     {
-        return $this->belongsToMany(Instructor::class,'event_topic_lesson_instructor')->with('mediable')->where('status',true)->select('instructors.*','lesson_id','instructor_id','event_id')
+        return $this->belongsToMany(Instructor::class,'event_topic_lesson_instructor')->with('mediable')->select('instructors.*','lesson_id','instructor_id','event_id')
             ->withPivot('lesson_id','instructor_id')->orderBy('event_topic_lesson_instructor.priority','asc')->with('slugable');
     }
 

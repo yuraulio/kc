@@ -31,7 +31,7 @@ class HomeController extends Controller
         $data = $event->topicsLessonsInstructors();
         $data['event'] = $event;
         $data['benefits'] = $event->benefits;
-        $data['summary'] = $event->summary()->get();
+        $data['summary'] = $event->summary1()->get();
         $data['sections'] = $event->sections->groupBy('section');
         $data['faqs'] = $event->getFaqs();
         $data['testimonials'] = isset($event->category->toArray()[0]) ? $event->category->toArray()[0]['testimonials'] : [];

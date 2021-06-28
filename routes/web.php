@@ -19,7 +19,7 @@ Auth::routes();
 Route::get('pricing', 'PageController@pricing')->name('page.pricing');
 Route::get('lock', 'PageController@lock')->name('page.lock');
 
-Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
+Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function () {
 
     Route::get('/','HomeController@index')->name('home');
 
@@ -222,6 +222,9 @@ Route::group(['middleware' => 'auth','prefix'=>'admin'], function () {
     Route::post('/exams/add-question/{exam}', 'ExamController@addQuestion')->name('exam.add_question');
     Route::post('/exams/update-question/{exam}', 'ExamController@updateQuestion')->name('exam.update-question');
     Route::post('/exams/order-question/{exam}', 'ExamController@orderQuestion')->name('exam.order-questions');
+
+    //ExamsResult
+    Route::get('/student-summary/{examResult}/{user_id}','Dashboard\ExamResultController@showResult');
 
 
 });

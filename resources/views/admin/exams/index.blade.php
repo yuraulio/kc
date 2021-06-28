@@ -47,13 +47,26 @@
                                 <tr>
                                     <th scope="col">{{ __('Status') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
+                                    <th scope="col"></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($exams as $exam)
                                     <tr>
-                                        <td>{{ $exam->exam_name }}</td>
+                                        <td><a href="{{ route('exams.edit', $exam->id) }}">{{ $exam->exam_name }} </a></td>
                                         <td>{{ date_format($exam->created_at, 'Y-m-d' ) }}</td>
+                                        <td class="text-right">
+
+                                            <div class="dropdown">
+                                                <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fas fa-ellipsis-v"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                                    <a class="dropdown-item" href="{{ route('exams.edit', $exam->id) }}">{{ __('Edit') }}</a>
+                                                </div>
+                                            </div>
+
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>

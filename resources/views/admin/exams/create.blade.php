@@ -24,7 +24,7 @@
             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#questions" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Content</a>
          </li>
          <li class="nav-item">
-            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#media" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Live Results</a>
+            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#results" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i> Results</a>
          </li>
          @endif
       </ul>
@@ -100,8 +100,8 @@
                                  <label class="form-control-label" for="input-examMethods">{{ __('Exam Methods') }}</label>
                                  <select name="examMethods" id="input-examMethods" class="form-control" placeholder="{{ __('Choose Method') }}">
                                     <option value="">Choose Method</option>
-                                    <option value="Percentage">Percentage</option>
-                                    <option value="Point">Point</option>
+                                    <option @if(old("examMethods",$exam->examMethods) == "percentage" ) selected @endif value="Percentage">Percentage</option>
+                                    <option @if(old("examMethods",$exam->examMethods) == "point" ) selected @endif>Point</option>
                                  </select>
                                  @include('alerts.feedback', ['field' => 'examMethods'])
                               </div>
@@ -287,6 +287,68 @@
             </div>
          </div>
       </div>
+
+      <div class="tab-pane fade" id="results" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
+         <table class="table align-items-center table-flush"  id="results-table">
+            <thead class="thead-light">
+               <tr>
+                  <th scope="col">{{ __('SL NO.') }}</th>
+                  <th scope="col">{{ __('Name') }}</th>
+                  <th scope="col">{{ __('Score') }}</th>
+                  <th scope="col">{{ __('Percentage') }}</th>
+                  <th scope="col">{{ __('Start Time') }}</th>
+                  <th scope="col">{{ __('End Time') }}</th>
+                  <th scope="col">{{ __('Total Time') }}</th>
+                  <th scope="col">{{ __('Action') }}</th>
+
+               </tr>
+            </thead>
+            <tbody >
+               @foreach($results as $key => $result)
+               <tr>
+                  <td>
+                     {{ $key + 1 }}
+                  </td>
+                  <td>
+                     {{ $result['first_name'] }} {{ $result['last_name'] }}
+                  </td>
+
+                  <td>
+                     {{ $result['score'] }}
+                  </td>
+
+                  <td>
+                     {{ $result['scorePerc'] }}
+                  </td>
+
+                  <td>
+                     {{ $result['start_time'] }}
+                  </td>
+
+                  <td>
+                     {{ $result['end_time'] }}
+                  </td>
+
+                  <td>
+                     {{ $result['total_time'] }}
+                  </td>
+
+                  <td class="text-right">
+                     <div class="dropdown">
+                        <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                           <a class="dropdown-item" href="/admin/student-summary/{{$result['exam_id']}}/{{$result['user_id']}}" target="_blank">{{ __('Show') }}</a>
+                        </div>
+                     </div>
+                  </td>
+               </tr>
+               @endforeach
+            </tbody>
+         </table>
+      </div>
+
       @endif
    </div>
 </div>
