@@ -144,15 +144,16 @@ class ProfileController extends Controller
 
 
         $user->update(
-            $request->merge(['picture' => $request->photo ? $path_name = $request->photo->store('profile_user', 'public') : null])
+            $request->merge(['picture' => $img = $request->photo ? $path_name = $request->photo->store('profile_user', 'public') : null])
                     ->except([$request->hasFile('photo') ? '' : 'picture'])
 
 
         );
+        $img = explode('profile_user/', $img);
        if($request->file('photo')){
             $name = explode('profile_user/',$path_name);
             $size = getimagesize('uploads/'.$path_name);
-            $media->original_name = $name[1];
+            $media->original_name = $img[1];
             $media->width = $size[0];
             $media->height = $size[1];
             $user->image()->save($media);
@@ -160,9 +161,9 @@ class ProfileController extends Controller
             //delete old image
             //fetch old image
 
-            if($old_image != null){
+            if($old_image != null && $old_image['name']){
                 //delete from folder
-                unlink('uploads/profile_user/'.$old_image['original_name']);
+                unlink('uploads/profile_user/'.$old_image['name']);
                 //delete from db
                 $old_image->delete();
             }

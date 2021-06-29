@@ -60,15 +60,14 @@
 
                                 <div class="form-group">
                                     <label for="exampleFormControlSelect1">Select Dropbox Folder</label>
-                                    <?php //dd($already_assign[0]->dropbox); ?>
+                                    <?php //dd($already_assign[0]); ?>
                                     <select class="form-control" name="folder_name" id="folder_name">
 
                                         @foreach($data['folders'] as $folder)
 
                                             <?php $found = false; ?>
                                             @foreach($already_assign as $ass)
-                                            <?php //dd($ass['folder_name'] == $folder); ?>
-                                                @if(count($ass->dropbox) != 0 && $ass->dropbox[0]['folder_name'] == $folder)
+                                                @if(isset($ass) && $ass['folder_name'] == $folder)
                                                 <?php $found = true; ?>
 
                                                 @endif

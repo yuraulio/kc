@@ -45,6 +45,77 @@ class MediaController extends Controller
 
     }
 
+    public function uploadProfileImage(Request $request, Media $media){
+
+    }
+
+
+
+    public function crop_profile_image(Request $request)
+    {
+        //dd('asd');
+        //dd($request->all());
+        $media = Media::find($request->media_id);
+        if($media['details'] != null){
+            //dd('has details');
+            $details = json_decode($media['details'], true);
+
+            //find version
+            //dd((array)$details->img_align);
+
+            $found = false;
+            foreach($details['img_align'] as $key => $value){
+                //dd($request->version);
+                if($key == $request->version){
+                    $found = true;
+                }
+
+            }
+
+            //dd($found);
+
+            if($found){
+                //dd('found in json');
+
+                //dd($details['img_align'][$request->version]);
+                $details['img_align'][$request->version]['x'] = $request->x;
+                $details['img_align'][$request->version]['y'] = $request->y;
+                $details['img_align'][$request->version]['width'] = $request->width;
+                $details['img_align'][$request->version]['height'] = $request->height;
+                $details['img_align'][$request->version]['slug'] = $request->version;
+
+
+            }else{
+                $details['img_align'][$request->version]['x'] = $request->x;
+                $details['img_align'][$request->version]['y'] = $request->y;
+                $details['img_align'][$request->version]['width'] = $request->width;
+                $details['img_align'][$request->version]['height'] = $request->height;
+                $details['img_align'][$request->version]['slug'] = $request->version;
+
+            }
+
+            $details = json_encode($details);
+
+            Media::where('id', $request->media_id)->update(['details' => $details]);
+
+
+            //dd($details);
+        }else{
+            $arr = [];
+            $arr['x'] = $request->x;
+            $arr['y'] = $request->y;
+            $arr['width'] = $request->width;
+            $arr['height'] = $request->height;
+
+            $details = json_encode($arr);
+
+            Media::where('id', $request->media_id)->update(['details' => $details]);
+            //dd($arr);
+            //dd('dhmiourgw to array');
+            //dd('has not details');
+        }
+    }
+
     public function crop_image(Request $request)
     {
         //dd($request->all());

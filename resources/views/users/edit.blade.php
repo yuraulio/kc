@@ -25,7 +25,7 @@
                                 <a href="#">
                                 <?php //dd($user); ?>
                                 @if(isset($user->image->original_name))
-                                    <img src="{{ asset('uploads/profile_user') }}/{{ $user->image->original_name }}" class="rounded-circle">
+                                    <img src="{{ asset('uploads/profile_user') }}/{{ $user->image->name }}" class="rounded-circle">
                                 @else
                                 <img src="" alt="{{$user['firstname']}}" class="rounded-circle">
                                 @endif
@@ -738,13 +738,13 @@
                     <?php
                         if(isset($user) && $user->image != null) {
 
-                            echo asset('uploads/profile_user').'/'.$user->image->original_name;
+                            echo asset('uploads/profile_user').'/'.$user->image->name;
                         }else{
                             echo '';
                         }
                     ?>" alt="">
 
-                    <button class="btn btn-primary crop" type="button">Crop</button>
+                    <button class="btn btn-primary crop_profile" type="button">Crop</button>
                     <div class="crop-msg" id=""></div>
                 </div>
 
@@ -900,24 +900,33 @@ $(document).on('click', '.ticket-card', function () {
 
             })
     })
+    if(@json($user->image) != null){
+        $image = @json($user->image)
+        //console.log($image)
+    }
+    //alert('asd')
 
-    image = @json($user->image)
-
-    if(image != null){
-
-        //image_details = @json($user->image['details']);
 
 
-        //width = @json($user->image['width']);
-        //height = @json($user->image['height']);
-        width = 50
-        height = 50
+    if($image != null){
+        //alert('has image')
+
+        console.log($image['details']);
+        data = $image['details'].split(',')
+        //console.log(data)
+        //image = JSON.parse($image)
+
+
+        //console.log(image)
+
+        width = $image['width']
+        height = $image['height']
+
         x = 0;
         y = 0;
-        console.log('asd')
-        // console.log(image_details)
-        // console.log(x)
-        // console.log(y)
+        //width = 50
+        //height = 50
+
 
     const cropper = new Cropper(document.getElementById(`profile_image`), {
         aspectRatio: Number((width/height), 4),
@@ -945,10 +954,13 @@ $(document).on('click', '.ticket-card', function () {
         }
     });
 
-    $(".crop").click(function(){
+    $(".crop_profile").click(function(){
         let media = @json($user->image);
 
+        //console.log(media)
+
         let path = $(this).parent().find('img').attr('src')
+        //console.log(path)
 
         let version = 'profile_image'
 
@@ -958,14 +970,12 @@ $(document).on('click', '.ticket-card', function () {
 
 
 
-
-
         $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             type: 'post',
-            url: '/admin/media/crop_image',
+            url: '/admin/media/crop_profile_image',
             data: {'media_id': media.id,'version':version ,'path':path, 'x':cropper.getData({rounded: true}).x, 'y':cropper.getData({rounded: true}).y, 'width':cropper.getData({rounded: true}).width, 'height':cropper.getData({rounded: true}).height},
             success: function (data) {
                 //console.log(data)

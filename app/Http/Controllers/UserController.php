@@ -24,6 +24,7 @@ use App\Model\Ticket;
 use App\Model\Transaction;
 use \Cart as Cart;
 use Carbon\Carbon;
+use App\Model\Media;
 use Session;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
@@ -204,10 +205,13 @@ class UserController extends Controller
      */
     public function store(UserRequest $request, User $model)
     {
-        $model->create($request->merge([
-            'picture' => $request->photo ? $request->photo->store('profile_user', 'public') : null,
-            'password' => Hash::make($request->get('password'))
+        //dd('asd');
+        //dd($request->all());
+        $user = $model->create($request->merge([
+            'password' => Hash::make($request->get('password')),
         ])->all());
+
+        $user->createMedia();
 
         return redirect()->route('user.index')->withStatus(__('User successfully created.'));
     }

@@ -29,11 +29,9 @@
                                         {{ __('This is an example of user management. This is a minimal setup in order to get started fast.') }}
                                     </p>
                             </div>
-                            <!-- @can('create', App\Model\User::class)
-                                <div class="col-4 text-right">
-                                    <a href="{{ route('user.create') }}" class="btn btn-sm btn-primary">{{ __('Add user') }}</a>
-                                </div>
-                            @endcan -->
+                            <div class="col-4 text-right">
+                                <a href="{{ route('user.create') }}" class="btn btn-sm btn-primary">{{ __('Add user') }}</a>
+                            </div>
                         </div>
                     </div>
 
@@ -62,9 +60,10 @@
                                 @foreach ($users as $user)
                                     <tr>
                                         <td>
+                                        <?php //dd(asset('profile_user').'/'.$user['image']['name'] ); ?>
                                             <span class="avatar avatar-sm rounded-circle">
                                             @if($user['image'] != null)
-                                                <img src="{{ asset('profile_user') }}/{{ $user['image']['original_name'] }}" alt="{{ $user['firstname'] }}" style="max-width: 100px; border-radiu: 25px">
+                                                <img src="{{ asset('uploads/profile_user') }}/{{ $user['image']['name'] }}" alt="{{ $user['firstname'] }}" style="max-width: 100px; border-radiu: 25px">
                                             @else
                                             <img src="" alt="{{ $user['firstname'] }}" style="max-width: 100px; border-radiu: 25px">
                                             @endif

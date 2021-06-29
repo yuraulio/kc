@@ -17,10 +17,13 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Laravel\Passport\HasApiTokens;
+use App\Traits\MediaTrait;
 
 class User extends Authenticatable
 
 {
+
+    use MediaTrait;
 
     use Notifiable, HasApiTokens;
     /**
@@ -29,12 +32,11 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name',
         'email',
         'password',
         'company',
-        'first_name',
-        'last_name',
+        'firstname',
+        'lastname',
         'birthday',
         'username',
         'mobile',

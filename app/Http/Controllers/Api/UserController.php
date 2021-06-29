@@ -46,10 +46,10 @@ class UserController extends Controller
 
         foreach($user->events as $key => $event)
         {
-            if($event['title'] == 'E-Learning Masterclass in Digital & Social Media Marketing 2020'){
+            //if($event['title'] == 'E-Learning Masterclass in Digital & Social Media Marketing 2020'){
 
             $event = Event::find($event['id']);
-            // $data[$key][$event] =
+            //dd($event->category);
 
             $data[$key]['event'] = $event->toArray();
             //dd($data[$key]['event']);
@@ -189,7 +189,7 @@ class UserController extends Controller
 
                 //dd($data1['bonus']);
                 //EDWWWWWWWWWWWWWW
-                //dd($data1['folders']);
+                //dd($data1);
                 foreach($data1['folders'] as $key_folder => $folder){
                     //dd($folder);
 
@@ -265,6 +265,7 @@ class UserController extends Controller
 
             // is Inclass?
             if($event->is_inclass_course()){
+                //dd($key);
                 $data[$key]['is_inclass'] = true;
                 $data[$key]['date'] = $date;
                 //$data[$key]['city'] = $event->city->toArray();
@@ -287,6 +288,11 @@ class UserController extends Controller
 
                 }
 
+
+
+                // if inclass, parse dropbox files without attach by topic
+                $data[$key]['files'] = $data1;
+
             }else if($event->is_elearning_course()){
                 $data[$key]['is_elearning'] = true;
                 //progress here
@@ -305,8 +311,10 @@ class UserController extends Controller
                 $data[$key]['is_inClass'] = false;
             }
 
+            //dd($event->topicsLessonsInstructors()[]);
 
             foreach($event->topicsLessonsInstructors()['topics'] as $key11 => $topic){
+                //dd($key11);
 
                 foreach($topic['lessons'] as $key_topic => $lesson1){
                         $data[$key]['topics'][$key11]['lessons'][$key_topic]['title'] = $lesson1['title'];
@@ -402,52 +410,30 @@ class UserController extends Controller
                         $instructor['media'] = \Request::url().$instructors[$lesson1['instructor_id']][0]->medias['path'].$instructors[$lesson1['instructor_id']][0]->medias['original_name'];
                         $data[$key]['topics'][$key11]['lessons'][$key_topic]['instructor'] = $instructor;
 
+                        $topic1 = preg_replace('/[0-9]+/', '', $key11);
+                        $topic1 = str_slug($topic1);
 
-                          //}
-                    //dd($key11);
-                //Gmail Advertising
-                dd($data1);
+                        //dd($data1);
 
+                        foreach($data1['folders'] as $folder){
+                            //dd($key11);
+                            //dd($folder);
+                            $folderName = $folder['foldername'];
+                            $folderName = preg_replace('/[0-9]+/', '', $folderName);
 
-                //$topic1 = explode($file1['filename'], $file1['dirname']);
-                //dd($file222);
-                //dd($key11);
-                $topic1 = preg_replace('/[0-9]+/', '', $key11);
-                //dd($topic1);
-
-                //$topic1 = str_replace('/', '', $topic1);
-                $topic1 = str_slug($topic1);
-                //dd($topic1);
-
-                foreach($data1['folders'] as $folder){
-                    //dd($key11);
-                    //dd($folder);
-                    $folderName = $folder['foldername'];
-                    $folderName = preg_replace('/[0-9]+/', '', $folderName);
-
-                    //$folderName = str_replace('/', '', $folderName);
-                    $folderName = str_slug($folderName);
-                    //dd($folderName);
-                    //dd();
-                    if($topic1 == $folderName){
-
-                    //dd($folder);
-                        //dd($topic1.$folderName);
-
-                        //dd($data[$key]['topics'][$key11]);
-                        $data[$key]['topics'][$key11]['files'] = $folder;
-                        //dd($data[$key]['topics']);
-                    }
-                }
+                            //$folderName = str_replace('/', '', $folderName);
+                            $folderName = str_slug($folderName);
+                            //dd($folderName);
+                            if($topic1 == $folderName){
+                                $data[$key]['topics'][$key11]['files'] = $folder;
+                                //dd($data[$key]['topics']);
+                            }
+                        }
 
                 }
-
-
-
-
             }
             //dd($data);
-        }
+        //}
 
 
         }
