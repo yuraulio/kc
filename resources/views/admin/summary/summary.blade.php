@@ -118,12 +118,12 @@
 
                @include('admin.summary.upload_svg', ['data' => $summary->medias])
                <input type="text" id="summary-id"  value="" hidden>
-               <input type="hidden" value="" id="image_svg_upload">
+               <input type="hidden" value="" name="image_svg_upload" id="image_svg_upload">
             </div>
          </div>
          <div class="modal-footer">
             <button type="button" class="btn btn-secondary close_modal" data-dismiss="modal">Close</button>
-            <button type="button" id="edit-summary" class="btn btn-primary">Save changes</button>
+            <button type="button" id="edit-summary" data-id="" class="btn btn-primary">Save changes</button>
          </div>
       </div>
    </div>
@@ -182,13 +182,13 @@
 </script>
 <script>
    $(document).on('click',"#edit-summary",function(){
-   $summaryId = $("#summary-id").val()
+   $summaryId = $("#edit-summary").data('id')
    $.ajax({
            headers: {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
            },
-   	    type: 'put',
-   	    url: '/admin/summary/' + $summaryId,
+   	    type: 'post',
+   	    url: '/admin/summary/update/' + $summaryId,
             data: {'title':$('#edit-title').val(),'description':CKEDITOR.instances['edit-description2'].getData(), 'svg': $('#image_svg_upload').val()},
    	    success: function (data) {
 
@@ -229,6 +229,8 @@
       modal.find("#edit-title").val(title);
       CKEDITOR.instances['edit-description2'].setData(description)
    	    modal.find("#summary-id").val(id)
+           //$("#summary-id").val('asd')
+           $("#edit-summary").attr('data-id', id)
        modal.find("#edit-section_sum").val(section)
 
 

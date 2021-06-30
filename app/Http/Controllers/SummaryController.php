@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Model\Summary;
 use App\Model\Event;
+use App\Http\Controllers\MediaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -48,6 +49,11 @@ class SummaryController extends Controller
     public function update(Request $request, Summary $summary)
     {
         $summary->update($request->all());
+
+        //dd($summary->medias);
+        if($request->svg){
+            (new MediaController)->uploadSvg($request, $summary->medias);
+        }
 
         return response()->json([
             'success' => __('Summary successfully updated.'),

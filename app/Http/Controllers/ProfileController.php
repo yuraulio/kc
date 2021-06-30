@@ -129,7 +129,7 @@ class ProfileController extends Controller
         }
 
         if($request->photo){
-            (new MediaController)->uploadProfileImage($request, $user->image);
+            (new MediaController)->uploadProfileImage($request, $user->medias);
         }
 
 

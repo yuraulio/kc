@@ -48,6 +48,8 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::resource('delivery', 'DeliveryController', ['except' => ['show']]);
     Route::resource('menu', 'MenuController', ['except' => ['show']]);
 
+    Route::post('/summary/update/{summary}', 'SummaryController@update')->name('summary.update');
+
     Route::get('Transaction/participants', ['as' => 'transaction.participants', 'uses' => 'TransactionController@participants']);
     Route::post('transaction/updateExpirationDate', ['as' => 'transaction.updateExpirationDate', 'uses' => 'TransactionController@updateExpirationDate']);
 

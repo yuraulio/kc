@@ -15,6 +15,27 @@ class MediaController extends Controller
         return view('admin.media2.index');
     }
 
+    public function uploadSvg(Request $request, Media $media){
+        $mediaKey = $request->svg;
+
+        $pos = strrpos($mediaKey, '/');
+        $id = $pos === false ? $mediaKey : substr($mediaKey, $pos + 1);
+
+        $folders =substr($mediaKey, 0,strrpos($mediaKey, '/'));
+        $path = explode(".",$id);
+        
+        $image = Image::make(public_path('uploads').$mediaKey);
+
+        $media->original_name = $id;
+        $media->path = $folders.'/'.$path[0].'.'.$path[1];
+        $media->name = $path[0];
+        $media->ext = '.'.$path[1];
+        $media->width = $image->width();
+        $media->height = $image->height();
+
+        $media->save();
+    }
+
     public function uploadVersionImage(Request $request, Media $media){
         //dd($request->all());
         $versions = json_decode($request->versions);
@@ -27,9 +48,7 @@ class MediaController extends Controller
 
         $folders =substr($mediaKey, 0,strrpos($mediaKey, '/'));
         $path = explode(".",$id);
-        //dd($folders.'||'.$path);
-        //dd(public_path('uploads').$mediaKey);
-        // C:\laragon\www\kcversion8\public\uploads/test/companyAvatar.png
+
         $image = Image::make(public_path('uploads').$mediaKey);
 
         $media->original_name = $id;
