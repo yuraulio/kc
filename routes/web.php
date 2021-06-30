@@ -230,9 +230,8 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
 });
 
 Route::group(['middleware' => ['preview','web']], function () {
-    Route::get('/', function(){
-        return view('welcome');
-    });
+    Route::get('/', 'Theme\HomeController@homePage');
+    Route::post('/add-payment-method', 'Theme\HomeController@addPaymentMethod')->name('add.paymentMethod');
     Route::get('{slug}', 'Theme\HomeController@index');
 
 });

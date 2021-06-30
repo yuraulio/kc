@@ -75,5 +75,11 @@
         "post-update-cmd": [
             "@php artisan pcl:post-update"
         ]
+    },
+    "repositories": {
+        "cartalyst": {
+            "type": "composer",
+            "url": "https://packages.cartalyst.com"
+        }
     }
 }
