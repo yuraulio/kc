@@ -3,7 +3,14 @@
 Upload Image
 </button>
 
-<form method="post" id="upload_form" method="POST" action="{{ route('upload.image', $event) }}" autocomplete="off" enctype="multipart/form-data">
+<?php
+    if(isset($versions)){
+        $versions = json_encode($versions);
+    }
+ ?>
+
+
+<form method="post" id="upload_form" method="POST" action="{{ route('upload.versionImage', $event) }}" autocomplete="off" enctype="multipart/form-data">
     @csrf
     @method('put')
 
@@ -11,10 +18,14 @@ Upload Image
         <div class="form-group">
             <img id="img-upload" src="
             <?php if($event['path'] != null) {
-                echo $event['path'].$event['original_name'];
+                echo url('uploads').$event['path'].$event['original_name'];
             }?>">
         </div>
         <input type="hidden" value="{{$event['path'].$event['original_name']}}" id="image_upload" name="image_upload">
+        @isset($versions)
+        <input type="hidden" value="{{$versions}}" name="versions">
+        @endisset
+
     @else
         <div class="form-group">
             <img id="img-upload" src="">
@@ -63,7 +74,6 @@ Upload Image
         $('#image_upload').val(path)
         $('#img-upload').attr('src', path);
         $(".close").click();
-        console.log('gfdgsfd');
         $("#upload_form").submit();
 
     });

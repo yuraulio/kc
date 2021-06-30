@@ -123,7 +123,8 @@ class CategoryController extends Controller
             }
 
             //dd($category->with('dropbox')->get());
-            $already_assign = $category->with('dropbox')->get();
+            $already_assign = $category->dropbox;
+            //dd($already_assign);
 
         }
 

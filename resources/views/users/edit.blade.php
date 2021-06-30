@@ -23,7 +23,7 @@
                         <div class="col-lg-3 order-lg-2">
                             <div class="card-profile-image">
                                 <a href="#">
-                                <?php //dd($user); ?>
+                                <?php //dd($user->image->name); ?>
                                 @if(isset($user->image->original_name))
                                     <img src="{{ asset('uploads/profile_user') }}/{{ $user->image->original_name }}" class="rounded-circle">
                                 @else
@@ -744,8 +744,8 @@
                         }
                     ?>" alt="">
 
-                    <button class="btn btn-primary crop" type="button">Crop</button>
-                    <div class="crop-msg" id=""></div>
+                    <button class="btn btn-primary crop_profile" type="button">Crop</button>
+                    <div class="crop-msg" id="profile_image_msg"></div>
                 </div>
 
             </div>
@@ -900,24 +900,27 @@ $(document).on('click', '.ticket-card', function () {
 
             })
     })
+    $img = @json($user->image);
 
-    image = @json($user->image)
-
-    if(image != null){
-
-        //image_details = @json($user->image['details']);
+    console.log($img['details'])
 
 
-        //width = @json($user->image['width']);
-        //height = @json($user->image['height']);
-        width = 50
-        height = 50
+    if($img != null && $img['details'] != null){
+        image_details = JSON.parse($img['details'].split(','))
+        width = image_details.width
+        height = image_details.height
+        x = image_details.x
+        y = image_details.y
+
+
+    }else{
+        width = 800
+        height = 800
         x = 0;
         y = 0;
-        console.log('asd')
-        // console.log(image_details)
-        // console.log(x)
-        // console.log(y)
+    }
+
+
 
     const cropper = new Cropper(document.getElementById(`profile_image`), {
         aspectRatio: Number((width/height), 4),
@@ -940,23 +943,19 @@ $(document).on('click', '.ticket-card', function () {
         data:{
             x:parseInt(x),
             y:parseInt(y),
-            width: width,
-            height: height
+            width: parseInt(width),
+            height: parseInt(height)
         }
     });
 
-    $(".crop").click(function(){
+    $(".crop_profile").click(function(){
         let media = @json($user->image);
 
         let path = $(this).parent().find('img').attr('src')
 
-        let version = 'profile_image'
-
         path = path.split('/')
 
         path = '/'+path[3]+'/' + path[4]+'/' + path[5]
-
-
 
 
 
@@ -965,13 +964,13 @@ $(document).on('click', '.ticket-card', function () {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             type: 'post',
-            url: '/admin/media/crop_image',
-            data: {'media_id': media.id,'version':version ,'path':path, 'x':cropper.getData({rounded: true}).x, 'y':cropper.getData({rounded: true}).y, 'width':cropper.getData({rounded: true}).width, 'height':cropper.getData({rounded: true}).height},
+            url: '/admin/media/crop_profile_image',
+            data: {'media_id': media.id,'path':path, 'x':cropper.getData({rounded: true}).x, 'y':cropper.getData({rounded: true}).y, 'width':cropper.getData({rounded: true}).width, 'height':cropper.getData({rounded: true}).height},
             success: function (data) {
                 //console.log(data)
                 if(data){
-                    $('#msg_'+data.data.version).append(data.success)
-                    $('#msg_'+data.data.version).css('display', 'inline-block')
+                    $('#profile_image_msg').append(data.success)
+                    $('#profile_image_msg').css('display', 'inline-block')
                 }
             }
         });
@@ -979,7 +978,8 @@ $(document).on('click', '.ticket-card', function () {
     });
 
 
-    }
+
+
 
 
 

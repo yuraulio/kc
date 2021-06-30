@@ -90,6 +90,8 @@ class DropboxController extends Controller
                 //foreach ($allbcats as $catkey => $cat) {
                     $li = Storage::disk('dropbox');
                     $folders = $li->listContents();
+
+                    //dd($folders);
                 foreach ($folders as $key => $row) {
                     if($row['type'] == 'dir') {
                         $value  = $row['basename'];

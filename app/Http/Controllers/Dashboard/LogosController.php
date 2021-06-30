@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Model\Logos;
+use App\Model\Type;
 use Illuminate\Support\Facades\Auth;
 
 class LogosController extends Controller
@@ -13,7 +14,7 @@ class LogosController extends Controller
 
         $data['logos'] = Logos::all();
         $data['user'] = Auth::user();
-        
+
         return view('admin.logos.index',$data);
     }
 
@@ -25,7 +26,7 @@ class LogosController extends Controller
     {
 
         $data['logo'] = new Logos;
-        
+
 
         return view('admin.logos.create', $data);
     }
@@ -47,7 +48,7 @@ class LogosController extends Controller
 
     }
 
-   
+
 
     /**
      * Show the form for editing the specified resource.
@@ -60,9 +61,9 @@ class LogosController extends Controller
 
         $data['logo'] = $logo;
         $data['media'] = $logo->mediable;
-        
-        return view('admin.logos.create',$data);            
-        
+
+        return view('admin.logos.create',$data);
+
     }
 
     /**
@@ -76,7 +77,7 @@ class LogosController extends Controller
     {
         $logo->update($request->all());
 
-        
+
         return redirect()->route('logos.index')->withStatus(__('Logo successfully updated.'));
     }
 

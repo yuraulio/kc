@@ -27,14 +27,10 @@ class UserRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => [
-                'required', 'min:3'
-            ],
+            'firstname' => ['required', 'min:3'],
+            'lastname' => ['required', 'min:3'],
             'email' => [
                 'required', 'email'
-            ],
-            'role_id' => [
-                'required', 'exists:'.(new Role)->getTable().',id'
             ],
             'password' => [
                 $this->route()->user ? 'nullable' : 'required', 'confirmed', 'min:6'
@@ -42,15 +38,5 @@ class UserRequest extends FormRequest
         ];
     }
 
-    /**
-     * Get the validation attributes that apply to the request.
-     *
-     * @return array
-     */
-    public function attributes()
-    {
-        return [
-            'role_id' => 'role',
-        ];
-    }
+
 }

@@ -16,7 +16,6 @@
             <tr>
                 <th scope="col">{{ __('Title') }}</th>
                 <th scope="col">{{ __('Section') }}</th>
-                <th scope="col">{{ __('Icon') }}</th>
                 <th scope="col"></th>
             </tr>
         </thead>
@@ -26,14 +25,13 @@
                 <tr>
                     <td id="title-{{$summary->id}}" data-id="{{$summary->id}}" class="summary-list">{{ $summary->title }}</td>
                     <td id="section_sum-{{$summary->id}}" data-id="{{$summary->id}}" class="summary-list">{{ $summary->section }}</td>
-                    <td id="icon-{{$summary->id}}">{{ $summary->icon }}</td>
                     <td class="text-right">
                         <div class="dropdown">
                             <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-ellipsis-v"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                <a class="dropdown-item" data-toggle="modal" data-target="#editModalSummary" data-id="{{$summary->id}}" data-title="{{$summary->title}}" data-description="{{$summary->description}}" data-section="{{$summary->section}}" data-icon="{{$summary->icon}}">{{ __('Edit') }}</a>
+                                <a class="dropdown-item" data-toggle="modal" data-target="#editModalSummary" data-id="{{$summary->id}}" data-title="{{$summary->title}}" data-description="{{$summary->description}}" data-section="{{$summary->section}}" >{{ __('Edit') }}</a>
                             </div>
                         </div>
                     </td>
@@ -68,11 +66,6 @@
                         <label class="form-control-label" for="input-description2">{{ __('Description') }}</label>
                         <textarea name="description4" id="input-description4" class="ckeditor form-control{{ $errors->has('description2') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}"></textarea>
                         @include('alerts.feedback', ['field' => 'description4'])
-                    </div>
-                    <div class="form-group{{ $errors->has('icon') ? ' has-danger' : '' }}">
-                        <label class="form-control-label" for="input-icon">{{ __('Icon') }}</label>
-                        <input type="text" name="icon" id="input-icon" class="form-control{{ $errors->has('icon') ? ' is-invalid' : '' }}" placeholder="{{ __('Icon') }}" value="{{ old('icon') }}" autofocus>
-                        @include('alerts.feedback', ['field' => 'icon'])
                     </div>
                     <div class="form-group{{ $errors->has('section_sum') ? ' has-danger' : '' }}">
                         <label class="form-control-label" for="input-section_sum">{{ __('Section') }}</label>
@@ -115,11 +108,6 @@
                   <textarea name="description" id="edit-description2" class="ckeditor form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}">{{ old('description') }}</textarea>
                   @include('alerts.feedback', ['field' => 'description'])
                </div>
-               <div class="form-group{{ $errors->has('icon') ? ' has-danger' : '' }}">
-                  <label class="form-control-label" for="edit-icon">{{ __('Icon') }}</label>
-                  <input type="text" name="icon" id="edit-icon" class="form-control{{ $errors->has('icon') ? ' is-invalid' : '' }}" placeholder="{{ __('Icon') }}" value="{{ old('icon') }}" autofocus>
-                  @include('alerts.feedback', ['field' => 'icon'])
-               </div>
                <div class="form-group{{ $errors->has('section_sum') ? ' has-danger' : '' }}">
                   <label class="form-control-label" for="edit-section_sum">{{ __('Section') }}</label>
                     <select name="section_sum" id="edit_section_sum" class="form-control" placeholder="{{ __('Section') }}">
@@ -127,7 +115,10 @@
                     </select>
                   @include('alerts.feedback', ['field' => 'section_sum'])
                </div>
+
+               @include('admin.summary.upload_svg', ['data' => $summary->medias])
                <input type="text" id="summary-id"  value="" hidden>
+               <input type="hidden" value="" id="image_svg_upload">
             </div>
          </div>
          <div class="modal-footer">
@@ -150,7 +141,7 @@
            },
    	    type: 'post',
    	    url: '{{route("summary.store")}}',
-            data: {'title':$('#input-title-summary').val(),'section':$('#input-section_sum').val(),'description':CKEDITOR.instances['input-description4'].getData(),'icon':$('#input-icon').val(),'model_type':modelType,'model_id':modelId},
+            data: {'title':$('#input-title-summary').val(),'section':$('#input-section_sum').val(),'description':CKEDITOR.instances['input-description4'].getData(),'model_type':modelType,'model_id':modelId},
    	    success: function (data) {
    	//console.log(data);
    	let summary = data.summary;
@@ -158,7 +149,6 @@
    	`<tr>` +
    	`<td id="title-` + summary['id'] +`">` + summary['title'] + `</td>` +
     `<td id="section_sum-` + summary['id'] +`">` + summary['section'] + `</td>` +
-    `<td id="icon-` + summary['id'] +`">` + summary['icon'] + `</td>` +
 
       `<td class="text-right">
                <div class="dropdown">
@@ -166,7 +156,7 @@
                   <i class="fas fa-ellipsis-v"></i>
                   </a>
                   <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                     <a class="dropdown-item" data-toggle="modal" data-target="#editModalSummary" data-id="` + summary['id'] + `" data-title="`+summary['title'] +`" data-description="`+ summary['description'] + `" data-icon="`+summary['icon'] +`">{{ __('Edit') }}</a>
+                     <a class="dropdown-item" data-toggle="modal" data-target="#editModalSummary" data-id="` + summary['id'] + `" data-title="`+summary['title'] +`" data-description="`+ summary['description']`">{{ __('Edit') }}</a>
 
                   </div>
                </div>
@@ -199,7 +189,7 @@
            },
    	    type: 'put',
    	    url: '/admin/summary/' + $summaryId,
-            data: {'title':$('#edit-title').val(),'description':CKEDITOR.instances['edit-description2'].getData(),'icon':$('#edit-icon').val()},
+            data: {'title':$('#edit-title').val(),'description':CKEDITOR.instances['edit-description2'].getData(), 'svg': $('#image_svg_upload').val()},
    	    success: function (data) {
 
    	let summary = data.summary;
@@ -207,7 +197,6 @@
    	$("#title-"+summary['id']).html(summary['title'])
    	$("#section_sum-"+summary['id']).html(summary['section'])
        $("#title-"+summary['id']).parent().find('.dropdown-item').attr('data-description', summary['description'])
-    $("#icon-"+summary['id']).html(summary['icon'])
    	$(".close_modal").click();
 
    	$("#success-message p").html(data.success);
@@ -236,12 +225,9 @@
          title = $("#title-"+id).text(),
          section = e.relatedTarget.dataset.section
          description = e.relatedTarget.dataset.description
-         icon = $("#icon-"+id).text();
 
       modal.find("#edit-title").val(title);
       CKEDITOR.instances['edit-description2'].setData(description)
-      modal.find("#edit-icon").val(icon);
-      modal.find("#edit-icon").val(icon);
    	    modal.find("#summary-id").val(id)
        modal.find("#edit-section_sum").val(section)
 

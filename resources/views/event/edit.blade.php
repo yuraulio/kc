@@ -361,7 +361,7 @@
                                             </div>
                                             <div class="tab-pane fade" id="tabs-icons-text-11_inside" role="tabpanel" aria-labelledby="tabs-icons-text-11-tab_inside">
 
-                                                @include('admin.upload.upload', ['event' => ($event->medias != null) ? $event->medias : null])
+                                                @include('admin.upload.upload', ['event' => ($event->medias != null) ? $event->medias : null, 'versions' => ['event-card', 'header-image', 'social-media-sharing']])
 
                                                 <input type="hidden" name="creator_id" id="input-creator_id" class="form-control" value="{{$event->creator_id}}">
                                                 <input type="hidden" name="author_id" id="input-author_id" class="form-control" value="{{$event->author_id}}">
