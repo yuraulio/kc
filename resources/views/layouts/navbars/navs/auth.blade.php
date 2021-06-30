@@ -215,7 +215,7 @@
                         <div class="media align-items-center">
                             <span class="avatar avatar-sm rounded-circle">
                                 @if(isset(auth()->user()->image->original_name))
-                                    <img alt="Image placeholder" src="{{ asset('profile_user') }}/{{ auth()->user()->image->original_name }}">
+                                    <img alt="{{auth()->user()->firstname}}" src="{{ asset('uploads/profile_user') }}/{{ auth()->user()->image->original_name }}">
                                 @else
                                     <img src="" alt="{{auth()->user()->firstname}}" class="rounded-circle">
                                 @endif
@@ -223,7 +223,7 @@
 
                             </span>
                             <div class="media-body ml-2 d-none d-lg-block">
-                                <span class="mb-0 text-sm  font-weight-bold">{{ auth()->user()->name }}</span>
+                                <span class="mb-0 text-sm  font-weight-bold">{{ auth()->user()->firstname }}</span>
                             </div>
                         </div>
                     </a>

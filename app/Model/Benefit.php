@@ -5,10 +5,11 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Event;
+use App\Traits\MediaTrait;
 
 class Benefit extends Model
 {
-    use HasFactory;
+    use HasFactory, MediaTrait;
 
     protected $table = 'benefits';
 

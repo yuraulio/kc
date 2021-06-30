@@ -23,9 +23,9 @@
                         <div class="col-lg-3 order-lg-2">
                             <div class="card-profile-image">
                                 <a href="#">
-                                <?php //dd($user); ?>
+                                <?php //dd($user->image->name); ?>
                                 @if(isset($user->image->original_name))
-                                    <img src="{{ asset('uploads/profile_user') }}/{{ $user->image->name }}" class="rounded-circle">
+                                    <img src="{{ asset('uploads/profile_user') }}/{{ $user->image->original_name }}" class="rounded-circle">
                                 @else
                                 <img src="" alt="{{$user['firstname']}}" class="rounded-circle">
                                 @endif
@@ -738,14 +738,14 @@
                     <?php
                         if(isset($user) && $user->image != null) {
 
-                            echo asset('uploads/profile_user').'/'.$user->image->name;
+                            echo asset('uploads/profile_user').'/'.$user->image->original_name;
                         }else{
                             echo '';
                         }
                     ?>" alt="">
 
                     <button class="btn btn-primary crop_profile" type="button">Crop</button>
-                    <div class="crop-msg" id=""></div>
+                    <div class="crop-msg" id="profile_image_msg"></div>
                 </div>
 
             </div>
@@ -900,32 +900,26 @@ $(document).on('click', '.ticket-card', function () {
 
             })
     })
-    if(@json($user->image) != null){
-        $image = @json($user->image)
-        //console.log($image)
-    }
-    //alert('asd')
+    $img = @json($user->image);
+
+    console.log($img['details'])
 
 
-
-    if($image != null){
-        //alert('has image')
-
-        console.log($image['details']);
-        data = $image['details'].split(',')
-        //console.log(data)
-        //image = JSON.parse($image)
+    if($img != null && $img['details'] != null){
+        image_details = JSON.parse($img['details'].split(','))
+        width = image_details.width
+        height = image_details.height
+        x = image_details.x
+        y = image_details.y
 
 
-        //console.log(image)
-
-        width = $image['width']
-        height = $image['height']
-
+    }else{
+        width = 800
+        height = 800
         x = 0;
         y = 0;
-        //width = 50
-        //height = 50
+    }
+
 
 
     const cropper = new Cropper(document.getElementById(`profile_image`), {
@@ -949,20 +943,15 @@ $(document).on('click', '.ticket-card', function () {
         data:{
             x:parseInt(x),
             y:parseInt(y),
-            width: width,
-            height: height
+            width: parseInt(width),
+            height: parseInt(height)
         }
     });
 
     $(".crop_profile").click(function(){
         let media = @json($user->image);
 
-        //console.log(media)
-
         let path = $(this).parent().find('img').attr('src')
-        //console.log(path)
-
-        let version = 'profile_image'
 
         path = path.split('/')
 
@@ -976,12 +965,12 @@ $(document).on('click', '.ticket-card', function () {
             },
             type: 'post',
             url: '/admin/media/crop_profile_image',
-            data: {'media_id': media.id,'version':version ,'path':path, 'x':cropper.getData({rounded: true}).x, 'y':cropper.getData({rounded: true}).y, 'width':cropper.getData({rounded: true}).width, 'height':cropper.getData({rounded: true}).height},
+            data: {'media_id': media.id,'path':path, 'x':cropper.getData({rounded: true}).x, 'y':cropper.getData({rounded: true}).y, 'width':cropper.getData({rounded: true}).width, 'height':cropper.getData({rounded: true}).height},
             success: function (data) {
                 //console.log(data)
                 if(data){
-                    $('#msg_'+data.data.version).append(data.success)
-                    $('#msg_'+data.data.version).css('display', 'inline-block')
+                    $('#profile_image_msg').append(data.success)
+                    $('#profile_image_msg').css('display', 'inline-block')
                 }
             }
         });
@@ -989,7 +978,8 @@ $(document).on('click', '.ticket-card', function () {
     });
 
 
-    }
+
+
 
 
 

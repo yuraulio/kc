@@ -26,6 +26,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\PasswordRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Model\Role;
+use App\Http\Controllers\MediaController;
 
 class ProfileController extends Controller
 {
@@ -118,56 +119,24 @@ class ProfileController extends Controller
 
         $user = User::find($request->user_id);
 
-        if($request->file('photo')){
-            //parse old image
-            $old_image = $user->image;
-            //parse input photo
-            $content = $request->file('photo');
-            $name = explode(".",$content->getClientOriginalName());
-            $name = $name[0];
+        //dd($request->file('photo'));
 
-            //$user= Auth::user();
-            //create new instance
-            $media = new Media;
-            $media->original_name = $content->getClientOriginalName();
-            $media->name = $name;
-            $media->ext = $content->guessClientExtension();
-            $media->file_info = $content->getClientMimeType();
-            $media->mediable_id = $user['id'];
-        }
+
 
         if (Gate::denies('update', auth()->user())) {
 
             return back()->withErrors(['not_allow_profile' => __('You are not allowed to change data for a default user.')]);
         }
 
-
-
-        $user->update(
-            $request->merge(['picture' => $img = $request->photo ? $path_name = $request->photo->store('profile_user', 'public') : null])
-                    ->except([$request->hasFile('photo') ? '' : 'picture'])
-
-
-        );
-        $img = explode('profile_user/', $img);
-       if($request->file('photo')){
-            $name = explode('profile_user/',$path_name);
-            $size = getimagesize('uploads/'.$path_name);
-            $media->original_name = $img[1];
-            $media->width = $size[0];
-            $media->height = $size[1];
-            $user->image()->save($media);
-
-            //delete old image
-            //fetch old image
-
-            if($old_image != null && $old_image['name']){
-                //delete from folder
-                unlink('uploads/profile_user/'.$old_image['name']);
-                //delete from db
-                $old_image->delete();
-            }
+        if($request->photo){
+            (new MediaController)->uploadProfileImage($request, $user->image);
         }
+
+
+
+        $user->update($request->all());
+
+
 
         return back()->withStatus(__('Profile successfully updated.'));
     }

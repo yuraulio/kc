@@ -26,10 +26,10 @@ class SummaryController extends Controller
             $input['description'] = $request->description;
         }
 
-        $input['icon'] = $request->icon;
         $input['section'] = $request->section;
 
         $summary = $summary->create($input);
+        $summary->createMedia();
         $model->summary1()->save($summary);
 
         return response()->json([

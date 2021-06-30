@@ -3,7 +3,6 @@
       <h6 class="heading-small text-muted mb-4">{{ __('Image versions') }}</h6>
         <div class="row">
             <?php
-                //dd($event);
 
             if($event['details'] != null){
                 $details = json_decode($event['details'], true);
@@ -13,7 +12,7 @@
 
             $versions = [];
 
-            //dd(get_image_versions());
+
 
                 foreach (get_image_versions() as $key => $version) {
                     foreach($versions1 as $version_from_include){
@@ -73,7 +72,7 @@
                 <img class="img-fluid" id="{{$version['version']}}" data-version="{{$version['version']}}" src="
                 <?php
                     if(isset($event)) {
-                        echo $event['path'].$event['original_name'];
+                        echo url('uploads').$event['path'].$event['original_name'];
                     }else{
                         echo '';
                     }

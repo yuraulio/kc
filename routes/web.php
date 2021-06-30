@@ -150,7 +150,7 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     //Route::post('lesson/destroy_from_topic1', ['as' => 'lesson.destroy_from_topic1', 'uses' => 'LessonController@destroy_from_topic1']);
 
     //Media
-    Route::put('media/upload-image/{media}', 'MediaController@uploadImage')->name('upload.image');
+    Route::put('media/upload-image/{media}', 'MediaController@uploadVersionImage')->name('upload.versionImage');
     Route::post('media/crop_image', ['as' => 'media.crop_image', 'uses' => 'MediaController@crop_image']);
     Route::post('media/crop_profile_image', ['as' => 'media.crop_profile_image', 'uses' => 'MediaController@crop_profile_image']);
 
