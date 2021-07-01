@@ -17,15 +17,15 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Laravel\Passport\HasApiTokens;
-//use Laravel\Cashier\Billable;
+use Laravel\Cashier\Billable;
 use App\Traits\MediaTrait;
 
 class User extends Authenticatable
 
 {
 
-    //use Notifiable, HasApiTokens, MediaTrait,Billable;
-    use Notifiable, HasApiTokens, MediaTrait;
+    use Notifiable, HasApiTokens, MediaTrait, Billable;
+    //use Notifiable, HasApiTokens, MediaTrait;
     /**
      * The attributes that are mass assignable.
      *

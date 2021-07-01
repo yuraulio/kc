@@ -23,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
 
         Item::observe(ItemObserver::class);
         User::observe(UserObserver::class);
+        //Cashier::useCustomerModel(User::class);
     }
 
     /**

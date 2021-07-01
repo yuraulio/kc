@@ -164,6 +164,7 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Laravel\Passport\PassportServiceProvider::class,
 
+
         /*
          * Package Service Providers...
          */
@@ -180,7 +181,7 @@ return [
 
         Barryvdh\Debugbar\ServiceProvider::class,
         Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
-        
+
 
     ],
 
@@ -234,7 +235,7 @@ return [
 
         'Cart' => Gloudemans\Shoppingcart\Facades\Cart::class,
         'Image' => Intervention\Image\Facades\Image::class,
-       
+
     ],
 
 ];
