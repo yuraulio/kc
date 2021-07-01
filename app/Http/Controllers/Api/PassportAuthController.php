@@ -35,11 +35,6 @@ class PassportAuthController extends Controller
      */
     public function logout(Request $request)
     {
-        $data = [
-            'email' => $request->email,
-            'password' => $request->password
-        ];
-
         Auth::user()->token()->delete();
 
         //Auth::logout();

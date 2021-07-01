@@ -25,13 +25,18 @@
                 <tr>
                     <td id="title-{{$summary->id}}" data-id="{{$summary->id}}" class="summary-list">{{ $summary->title }}</td>
                     <td id="section_sum-{{$summary->id}}" data-id="{{$summary->id}}" class="summary-list">{{ $summary->section }}</td>
+                    <td hidden id="media_sum-{{$summary->id}}" data-id="{{$summary->id}}" class="summary-list">
+                    @isset($summary->medias)
+                    {{ $summary->medias['path'] }}
+                    @endisset
+                    </td>
                     <td class="text-right">
                         <div class="dropdown">
                             <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-ellipsis-v"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                <a class="dropdown-item" data-toggle="modal" data-target="#editModalSummary" data-id="{{$summary->id}}" data-title="{{$summary->title}}" data-description="{{$summary->description}}" data-section="{{$summary->section}}" >{{ __('Edit') }}</a>
+                                <a class="dropdown-item" data-toggle="modal" data-target="#editModalSummary" data-id="{{$summary->id}}" data-title="{{$summary->title}}" data-description="{{$summary->description}}" data-section="{{$summary->section}}" data-media="@isset($summary->medias){{$summary->medias['path']}}@endisset" >{{ __('Edit') }}</a>
                             </div>
                         </div>
                     </td>
@@ -75,6 +80,7 @@
                         </select>
                         @include('alerts.feedback', ['field' => 'section_sum'])
                     </div>
+
                 </form>
             </div>
         </div>
@@ -116,9 +122,12 @@
                   @include('alerts.feedback', ['field' => 'section_sum'])
                </div>
 
-               @include('admin.summary.upload_svg', ['data' => $summary->medias])
+               @include('admin.summary.upload_svg', ['data' => $summary->medias, 'template1' => 'summary'])
                <input type="text" id="summary-id"  value="" hidden>
-               <input type="hidden" value="" name="image_svg_upload" id="image_svg_upload">
+               <input type="hidden" value="" name="image_svg_upload" id="image_svg_upload-summary">
+            </div>
+            <div class="form-group">
+                <img style="margin-top:10px;" id="img-upload-summary" src="">
             </div>
          </div>
          <div class="modal-footer">
@@ -149,6 +158,7 @@
    	`<tr>` +
    	`<td id="title-` + summary['id'] +`">` + summary['title'] + `</td>` +
     `<td id="section_sum-` + summary['id'] +`">` + summary['section'] + `</td>` +
+    `<td hidden id="media_sum-` + summary['id'] +`" data-id="` + summary['id'] +`" class="summary-list"></td>`+
 
       `<td class="text-right">
                <div class="dropdown">
@@ -189,7 +199,7 @@
            },
    	    type: 'post',
    	    url: '/admin/summary/update/' + $summaryId,
-            data: {'title':$('#edit-title').val(),'description':CKEDITOR.instances['edit-description2'].getData(), 'svg': $('#image_svg_upload').val()},
+            data: {'title':$('#edit-title').val(),'description':CKEDITOR.instances['edit-description2'].getData(), 'section': $('#editModalSummary #edit_section_sum').val(),'svg': $('#image_svg_upload-summary').val()},
    	    success: function (data) {
 
    	let summary = data.summary;
@@ -217,21 +227,36 @@
     $("#sum_create").trigger('reset')
 
 
+
    	var link  = e.relatedTarget,
         	modal    = $(this),
-         id = e.relatedTarget.dataset.id
-         //title = e.relatedTarget.dataset.title,
-         //description =e.relatedTarget.dataset.description;
-         title = $("#title-"+id).text(),
-         section = e.relatedTarget.dataset.section
-         description = e.relatedTarget.dataset.description
+            id = e.relatedTarget.dataset.id
 
-      modal.find("#edit-title").val(title);
-      CKEDITOR.instances['edit-description2'].setData(description)
-   	    modal.find("#summary-id").val(id)
-           //$("#summary-id").val('asd')
-           $("#edit-summary").attr('data-id', id)
-       modal.find("#edit-section_sum").val(section)
+            // if open first modal with id pass data
+            // if open second modal(file-manager) no pass data
+            if(id != null){
+
+            //title = e.relatedTarget.dataset.title,
+            //description =e.relatedTarget.dataset.description;
+            title = $("#title-"+id).text(),
+            section = e.relatedTarget.dataset.section
+            description = e.relatedTarget.dataset.description
+            media = e.relatedTarget.dataset.media
+            modal.find("#edit-title").val(title);
+            CKEDITOR.instances['edit-description2'].setData(description)
+                modal.find("#summary-id").val(id)
+            //$("#summary-id").val('asd')
+            $("#edit-summary").attr('data-id', id)
+            $("#image_svg_upload-summary").val(media)
+            modal.find("#edit-section_sum").val(section)
+
+            base_url = window.location.protocol + "//" + window.location.host
+            $("#img-upload-summary").attr('src', base_url+'/uploads'+media)
+            console.log(base_url+'/uploads'+media)
+
+            }
+
+
 
 
    });

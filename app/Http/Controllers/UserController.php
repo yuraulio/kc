@@ -205,8 +205,6 @@ class UserController extends Controller
      */
     public function store(UserRequest $request, User $model)
     {
-        //dd('asd');
-        //dd($request->all());
         $user = $model->create($request->merge([
             'password' => Hash::make($request->get('password')),
         ])->all());

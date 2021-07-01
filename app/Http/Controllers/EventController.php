@@ -251,6 +251,7 @@ class EventController extends Controller
         $id = $event['id'];
         $event = $event->with('delivery','category', 'summary1', 'benefits', 'ticket', 'city', 'venues', 'topic', 'lessons', 'instructors', 'users', 'partners', 'sections','paymentMethod','slugable','metable', 'medias')->find($id);
 
+        //dd($event->summary1);
         //dd($event->medias->details);
         $categories = Category::all();
         $types = Type::all();

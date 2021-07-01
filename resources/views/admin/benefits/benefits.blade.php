@@ -19,19 +19,23 @@
          </tr>
       </thead>
       <tbody class="benefit-body benefits-order">
-         <?php //dd($model->benefits); ?>
          @if($model->benefits)
          @foreach ($model->benefits as $benefit)
          <tr>
             <td id="name-{{$benefit->id}}" class="benefit-list" data-id ="{{$benefit->id}}">{{ $benefit->name }}</td>
             <td>{{ date_format($benefit->created_at, 'd-m-Y' ) }}</td>
+            <td hidden id="media_ben-{{$benefit->id}}" data-id="{{$benefit->id}}" class="benefit-list">
+                    @isset($benefit->medias)
+                    {{ $benefit->medias['path'] }}
+                    @endisset
+                    </td>
             <td class="text-right">
                <div class="dropdown">
                   <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="fas fa-ellipsis-v"></i>
                   </a>
                   <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                     <a class="dropdown-item" data-toggle="modal" data-target="#editModal" data-id="{{$benefit->id}}" data-name="{{$benefit->name}}" data-description="{{$benefit->description}}">{{ __('Edit') }}</a>
+                     <a class="dropdown-item" data-toggle="modal" data-target="#editModal" data-id="{{$benefit->id}}" data-name="{{$benefit->name}}" data-description="{{$benefit->description}}" data-media="@isset($benefit->medias){{$benefit->medias['path']}}@endisset">{{ __('Edit') }}</a>
                   </div>
                </div>
             </td>
@@ -98,13 +102,21 @@
                   <textarea name="description" id="edit-description1" class="ckeditor form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}">{{ old('description') }}</textarea>
                   @include('alerts.feedback', ['field' => 'description'])
                </div>
+
+               @include('admin.summary.upload_svg', ['data' => $benefit->medias, 'template1' => 'benefit'])
+
                <input type="text" id="benefit-id"  value="" hidden>
+               <input type="hidden" value="" name="image_svg_upload" id="image_svg_upload-benefit" >
             </form>
+
+            <div class="form-group">
+                <img style="margin-top:10px;" id="img-upload-benefit" src="">
+            </div>
             </div>
          </div>
          <div class="modal-footer">
             <button type="button" class="btn btn-secondary close-modal" data-dismiss="modal">Close</button>
-            <button type="button" id="edit-benefit" class="btn btn-primary">Save changes</button>
+            <button type="button" id="edit-benefit" data-id="" class="btn btn-primary">Save changes</button>
          </div>
       </div>
    </div>
@@ -130,6 +142,7 @@
    	`<tr>` +
    	`<td id="name-` + benefit['id'] +`">` + benefit['name'] + `</td>` +
    	`<td>` + benefit['created_at'] + `</td>` +
+       `<td hidden id="media_ben-` + benefit['id'] +`" data-id="` + benefit['id'] +`" class="benefit-list">`+benefit.medias['path']+`</td>`+
 
       `<td class="text-right">
                <div class="dropdown">
@@ -164,20 +177,23 @@
 <script>
    $(document).on('click',"#edit-benefit",function(){
 
-   $benefitId = $("#benefit-id").val()
+   //$benefitId = $("#benefit-id").val()
+ console.log($('#image_svg_upload-benefit').val())
+   $benefitId = $("#edit-benefit").data('id')
    $.ajax({
            headers: {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
            },
    	    type: 'put',
    	    url: '/admin/benefit/' + $benefitId,
-            data: {'name':$('#edit-name').val(),'description':CKEDITOR.instances['edit-description1'].getData()},
+            data: {'name':$('#edit-name').val(),'description':CKEDITOR.instances['edit-description1'].getData(),'svg': $('#image_svg_upload-benefit').val()},
    	    success: function (data) {
 
    	let benefit = data.benefit;
 
    	$("#name-"+benefit['id']).html(benefit['name'])
        $("#name-"+benefit['id']).parent().find('.dropdown-item').attr('data-description', benefit['description'])
+       $("#media_ben-"+benefit['id']).text(benefit.medias['path'])
        $('#benefit-form-edit').trigger('reset');
    	$(".close-modal").click();
 
@@ -193,6 +209,7 @@
 
 
    })
+
 </script>
 <script>
    $(document).on('shown.bs.modal', '#editModal',function(e) {
@@ -202,16 +219,25 @@
    	var link  = e.relatedTarget,
         	modal    = $(this),
          id = e.relatedTarget.dataset.id
-         //name = e.relatedTarget.dataset.name,
-         //description =e.relatedTarget.dataset.description;
-         name = $("#name-"+id).text(),
 
-         modal.find("#benefitModalLabel").val(name)
-         description = e.relatedTarget.dataset.description
+         if(id != null){
+            //name = e.relatedTarget.dataset.name,
+            //description =e.relatedTarget.dataset.description;
+            name = $("#name-"+id).text(),
 
-      modal.find("#edit-name").val(name);
-      CKEDITOR.instances['edit-description1'].setData(description)
-   	    modal.find("#benefit-id").val(id)
+            modal.find("#benefitModalLabel").val(name)
+            description = e.relatedTarget.dataset.description
+            media = e.relatedTarget.dataset.media
+
+            modal.find("#edit-name").val(name);
+            CKEDITOR.instances['edit-description1'].setData(description)
+            //modal.find("#benefit-id").val(id)
+            $("#edit-benefit").attr('data-id', id)
+            $("#image_svg_upload-benefit").val(media)
+            $("#img-upload").attr('src', media)
+            base_url = window.location.protocol + "//" + window.location.host
+            $("#img-upload-benefit").attr('src', base_url+'/uploads'+media)
+         }
 
    });
 

@@ -5,6 +5,7 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Event;
+use App\Model\Media;
 use App\Traits\MediaTrait;
 
 class Benefit extends Model
@@ -30,5 +31,10 @@ class Benefit extends Model
     public function pages()
     {
         return $this->morphedMany(Event::class, 'benefitable', 'benefitables');
+    }
+
+    public function medias()
+    {
+        return $this->morphOne(Media::class, 'mediable');
     }
 }

@@ -1,10 +1,11 @@
+<?php //dd(); ?>
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#select_Svg_Modal">
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".select_Svg_Modal-{{$template1}}">
 Upload Image
 </button>
 
 <!-- Modal -->
-<div class="modal fade" id="select_Svg_Modal" tabindex="-1" role="dialog" aria-labelledby="select_Svg_ModalLabel" aria-hidden="true">
+<div class="modal fade select_Svg_Modal-{{$template1}}" id=""  tabindex="-1" role="dialog" aria-labelledby="select_Svg_ModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
         <div class="modal-header">
@@ -13,11 +14,21 @@ Upload Image
             </button>
         </div>
         <div class="modal-body">
-            @include('admin.media2.modal')
+        <div class="container-fluid mt--6">
+        <div class="row">
+            <div class="col">
+            <div style="height: 600px;">
+                <div id="{{$template1}}-t"></div>
+            </div>
+            </div>
+        </div>
+
+
+    </div>
         </div>
         <div class="modal-footer">
-            <button type="button" id="close_svg_modal" class="btn btn-secondary" >Close</button>
-            <button type="button" id="select-svg" class="btn btn-primary">Select</button>
+            <button type="button" class="close_svg_modal btn btn-secondary" >Close</button>
+            <button type="button" id="select-svg-{{$template1}}" class="btn btn-primary">Select</button>
         </div>
         </div>
     </div>
@@ -26,29 +37,37 @@ Upload Image
 @push('js')
 
 <script>
-$("#close_svg_modal").click(function() {
-    $('#select_Svg_Modal').modal('hide')
+from = @json($template1);
+$(".close_svg_modal").click(function() {
+    $('#select_Svg_Modal-'+from).modal('hide')
 })
 
-    $( "#select-svg" ).click(function() {
+    $( "#select-svg-"+from ).click(function() {
         path = ''
-        $.each( $('.fm-breadcrumb li'), function(key, value) {
+
+        console.log("from: "+from)
+
+
+        $.each( $('.select_Svg_Modal-'+from + ' .fm-breadcrumb li'), function(key, value) {
             if(key != 0){
                 path = path+'/'+$(value).text()
             }
         })
 
-        name = $('.table-info .fm-content-item').text()
+        name = $('.select_Svg_Modal-'+from+ ' .table-info .fm-content-item').text()
         name = name.replace(/\s/g, '')
-        ext = $('.table-info td:nth-child(3)').text()
+        ext = $('.select_Svg_Modal-'+from+ ' .table-info td:nth-child(3)').text()
         ext = ext.replace(/\s/g, '')
         path = path +'/'+name+'.'+ext
-        console.log(path);
-        $('#image_svg_upload').val(path)
-        $('#svg-upload').attr('src', path);
-        $('#select_Svg_Modal').modal('hide')
+
+        $('#image_svg_upload-'+from).val(path)
+
+        $('.select_Svg_Modal-'+from).modal('hide')
+
 
     });
+
+
 
 
 

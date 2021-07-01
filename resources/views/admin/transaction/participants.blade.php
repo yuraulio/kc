@@ -154,7 +154,7 @@
                             <tr>
                                 <td>
                                     <?php if(count($transaction->user) > 0){
-                                                echo $transaction->user->first()['firstname'].$transaction->user->first()['lasttname'];
+                                                echo $transaction->user->first()['firstname'].$transaction->user->first()['lastname'];
                                             }else{
                                                 echo "";
                                             }?>
@@ -214,7 +214,7 @@
                                     <?php //dd($transaction->event[0]['expiration']); ?>
                                 </td>
 
-                                <td>{{ date_format($transaction->created_at, 'd/m/Y' )}}</td>
+                                <td>{{ date_format($transaction->created_at, 'm/d/Y' )}}</td>
                                 <?php //dd($transaction->event); ?>
                                 {{--<td class="exp_{{$transaction['id']}}" class="participant_elearning none">
                                     <?php
@@ -295,27 +295,46 @@ var minDate, maxDate;
 
 // Custom filtering function which will search data in column four between two values
 $.fn.dataTable.ext.search.push(
+
+    // function( settings, data, dataIndex ) {
+    //     //console.log('asd'+data[6])
+    //     var min = minDate.val();
+    //     var max = maxDate.val();
+    //     var date = new Date( data[6] );
+    //     console.log(date.getTime())
+    //     // console.log('min:'+min)
+    //     // console.log('max:'+max)
+    //     // console.log('date:'+date)
+
+
+
+    //     if (
+    //         ( min === null && max === null ) ||
+    //         ( min === null && date.getTime() <= max.getTime() ) ||
+    //         ( min.getTime() <= date.getTime()   && max === null ) ||
+    //         ( min.getTime() <= date.getTime()   && date.getTime() <= max.getTime() )
+    //     ) {
+    //         return true;
+    //     }
+    //     return false;
+    // }
+
+
     function( settings, data, dataIndex ) {
-        //console.log('asd'+data[6])
         var min = minDate.val();
         var max = maxDate.val();
         var date = new Date( data[6] );
-        // console.log('min:'+min)
-        // console.log('max:'+max)
-        // console.log('date:'+date)
-
-
-
         if (
             ( min === null && max === null ) ||
-            ( min === null && date.getTime() <= max.getTime() ) ||
-            ( min.getTime() <= date.getTime()   && max === null ) ||
-            ( min.getTime() <= date.getTime()   && date.getTime() <= max.getTime() )
+            ( min === null && date <= max ) ||
+            ( min <= date   && max === null ) ||
+            ( min <= date   && date <= max )
         ) {
             return true;
         }
         return false;
     }
+
 );
 
 $(document).ready(function() {
@@ -344,15 +363,29 @@ $(document).ready(function() {
 
 
     // Create date inputs
+    // minDate = new DateTime($('#min'), {
+    //     format: 'L'
+    // });
+    // maxDate = new DateTime($('#max'), {
+    //     format: 'L'
+    // });
+
+    // Create date inputs
+    //console.log($('#min'))
     minDate = new DateTime($('#min'), {
         format: 'L'
     });
+    //console.log('--min: '+minDate.val())
     maxDate = new DateTime($('#max'), {
         format: 'L'
     });
 
     // DataTables initialisation
     var table = $('#participants_table').DataTable();
+
+    // $('#min, #max').on('change', function () {
+    //     table.draw();
+    // });
 
 
     //otan allazei selida kai einai E-learnign na energopoiounte oi antistoixes sthles
@@ -390,9 +423,9 @@ $(document).ready(function() {
         $('#col4_filter').append('<option value="'+value+'">'+value+'</option>')
     })
 
-    // Refilter the table
+    //Refilter the table
     $('#min, #max').on('change', function () {
-        console.log('from change min!!')
+        //console.log('from change min!!')
         table.draw();
         //console.log(table.column(1).data())
         price = $('#participants_table').DataTable().column( 3 ).data();
@@ -411,18 +444,29 @@ $(document).ready(function() {
         let min = new Date($('#min').val());
         let max = new Date($('#max').val());
 
-        //min = moment(min).format('MM/DD/YYYY')
+        minDate = new DateTime($('#min'), {
+            format: 'L'
+        });
+
+        //console.log(minDate.getTime())
+       // moment()
+
+        min = moment(min).format('MM/DD/YYYY')
         //console.log('Min:'+min)
-        //max = moment(max).format('MM/DD/YYYY')
+        max = moment(max).format('MM/DD/YYYY')
+
+        //console.log(moment(min).isBefore(max))
 
 
         $.each(price, function(key, value){
-            console.log('pre if')
-            console.log('selected min:'+min.getTime())
+            // console.log('pre if')
+            // console.log('selected min:'+min.getTime())
             datatable_date = $('#participants_table').DataTable().column( 6 ).data()[key]
+            //console.log('--|:  '+datatable_date)
             datatable_date = new Date(datatable_date);
-            console.log('from datatable'+ min.getTime()<=datatable_date.getTime())
-            if(datatable_date.getTime() >= min.getTime() && datatable_date.getTime() <= max.getTime()){
+            console.log(min+' ||| '+datatable_date)
+           console.log(moment(min).isAfter(datatable_date) && moment(max).isBefore(datatable_date))
+            if(moment(min).isAfter(datatable_date) && moment(max).isBefore(datatable_date)){
                 console.log('true1')
             sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key])
 
@@ -480,6 +524,7 @@ function filterGlobal () {
         $('#participants_table').DataTable().column( i ).search(
             $('#col'+i+'_filter').val()
         ).draw();
+
         $('#participants_info').empty()
         event = removeSpecial($('#col'+i+'_filter').val())
 
@@ -649,9 +694,9 @@ function filterGlobal () {
     }
 
     $(document).ready(function() {
-        $('#participants_table').DataTable({
-            "destroy": true,
-        });
+        // $('#participants_table').DataTable({
+        //     "destroy": true,
+        // });
 
 
         price = $('#participants_table').DataTable().column( 3 ).data();

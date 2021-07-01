@@ -8,6 +8,7 @@ use App\Model\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\BenefitRequest;
+use App\Http\Controllers\MediaController;
 
 class BenefitController extends Controller
 {
@@ -29,7 +30,9 @@ class BenefitController extends Controller
         $input['priority'] = count($model->benefits) + 1;
 
         $benefit = $benefit->create($input);
+        $benefit->createMedia();
         $model->benefits()->save($benefit);
+
 
         return response()->json([
             'success' => __('Benefit successfully created.'),
@@ -49,6 +52,10 @@ class BenefitController extends Controller
     public function update(Request $request, Benefit $benefit)
     {
         $benefit->update($request->all());
+
+        if($request->svg){
+            (new MediaController)->uploadSvg($request, $benefit->medias);
+        }
 
         return response()->json([
             'success' => __('Benefit successfully updated.'),
@@ -73,7 +80,7 @@ class BenefitController extends Controller
         $model = app($request->modelType);
         $model = $model::find($request->id);
         $model->orderBenefits($request->benefits);
-        
+
     }
 
 }

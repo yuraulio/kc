@@ -2,9 +2,7 @@
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\PassportAuthController;
-use App\Http\Controllers\Api\HelloController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\LessonController;
 
 /*
@@ -22,7 +20,6 @@ Route::post('login', [PassportAuthController::class, 'login']);
 
 
 Route::middleware('auth:api')->group(function () {
-    Route::get('hello', [HelloController::class, 'index']);
 
     // User
     //Route::get('user/{user}/edit', [UserController::class, 'edit']);

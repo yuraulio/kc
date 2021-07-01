@@ -13,6 +13,7 @@ use App\Model\Topic;
 use App\Model\Category;
 use App\Model\Testimonial;
 use App\Model\Instructor;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -83,7 +84,7 @@ class UserController extends Controller
                             $folder_bonus1 = preg_replace('/[0-9]+/', '', $folder_bonus['dirname']);
                             $folder_bonus1 = str_replace('/', '', $folder_bonus1);
                             //dd($folder_bonus1);
-                            $folder_bonus1 = str_slug($folder_bonus1);
+                            $folder_bonus1 = Str::slug($folder_bonus1);
 
                             //dd($folder_bonus1);
                             //how-to-use-urls-with-utms-how-to-work-with-utmsbonus-files
@@ -99,7 +100,7 @@ class UserController extends Controller
                                 $file2 = preg_replace('/[0-9]+/', '', $file11[0]);
                                 $file2 = str_replace('/', '', $file2);
                             //dd($file);
-                                $file2 = str_slug($file2);
+                                $file2 = Str::slug($file2);
                                 //dd($file2);
 
                                 //$file2 = explode('-', $file['dirname']);
@@ -149,7 +150,7 @@ class UserController extends Controller
                                     ///Diploma in Digital & Social Media / - Check First
 
                                     $folder2 = str_replace('/', '', $folder2);
-                                    $folder2 = str_slug($folder2);
+                                    $folder2 = Str::slug($folder2);
                                     //dd($folder2);
                                     //      ///
                                     //diploma-in-digital-social-media-check-first
@@ -170,7 +171,7 @@ class UserController extends Controller
 
                                         $file2 = str_replace('/', '', $file2);
                                         //dd($file2);
-                                        $file2 = str_slug($file2);
+                                        $file2 = Str::slug($file2);
                                         //dd($file2);
 
                                         if($folder2 == $file2){
@@ -198,7 +199,7 @@ class UserController extends Controller
 
                             $folder_dir = str_replace('/', '', $folder_dir);
                             //dd($file2);
-                            $folder_dir = str_slug($folder_dir);
+                            $folder_dir = Str::slug($folder_dir);
                     //dd($folder_dir);
                     if(isset($data1['bonus'])){
                         //dd('asd');
@@ -215,7 +216,7 @@ class UserController extends Controller
                             //dd($file3333);
                             $file3333 = str_replace('/', '', $file3333);
                             //dd($file3333);
-                            $file3333 = str_slug($file3333);
+                            $file3333 = Str::slug($file3333);
                             $file3333 = str_replace('bonus-files','',$file3333);
                             //dd($folder_dir);
                             //dd($file3333);
@@ -411,7 +412,7 @@ class UserController extends Controller
                         $data[$key]['topics'][$key11]['lessons'][$key_topic]['instructor'] = $instructor;
 
                         $topic1 = preg_replace('/[0-9]+/', '', $key11);
-                        $topic1 = str_slug($topic1);
+                        $topic1 = Str::slug($topic1);
 
                         //dd($data1);
 
@@ -422,7 +423,7 @@ class UserController extends Controller
                             $folderName = preg_replace('/[0-9]+/', '', $folderName);
 
                             //$folderName = str_replace('/', '', $folderName);
-                            $folderName = str_slug($folderName);
+                            $folderName = Str::slug($folderName);
                             //dd($folderName);
                             if($topic1 == $folderName){
                                 $data[$key]['topics'][$key11]['files'] = $folder;
