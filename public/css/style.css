@@ -134,3 +134,11 @@
 #participantHr {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
+
+#exam-edit-modal {
+    max-width: 60%;
+}
+
+.answer-input {
+    text-overflow: ellipsis;
+}

@@ -26,6 +26,10 @@
 
         @include('layouts.footers.auth')
     </div>
+    <ul id="context-menu">
+    <li>Item 1</li>
+    <li>Item 2</li>
+</ul>
 @endsection
 
 @push('css')
@@ -45,7 +49,11 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
 
     <script>
+
+
+
     $( document ).ready(function() {
+
         //console.log( "ready!" );
         search = `<div role="group" class="btn-group"><div class="p-4 bg-secondary">
                         <input type="text" class="form-control form-control-alternative search_input" placeholder="Search">
@@ -53,6 +61,8 @@
                     </div></div>`
         $('#file_manager .fm-navbar .col-auto.text-right').append(search)
     });
+
+
 
     $( document ).on("click","#search_btn",function() {
         file = $('.search_input').val()
@@ -79,7 +89,7 @@
                     $.each(data, function(key, value) {
                         console.log('test'+value[key])
                         if(first_grid){
-                            row = `<tr class=""><td class="fm-content-item unselectable"><i class="far fa-file"></i> ${value.name} </td><td></td><td>Folder</td><td> 6/7/2021, 12:13:38 PM </td></tr>`
+                            row = `<tr class="search-result"><td class="fm-content-item unselectable"><i class="far fa-file"></i> ${value.name} </td><td></td><td>Folder</td><td> 6/7/2021, 12:13:38 PM </td></tr>`
                             $('.fm-content-body tbody').append(row)
                         }else{
                             row =`<div title="fdf" class="fm-grid-item text-center unselectable active"><div class="fm-item-icon"><i class="fa-5x pb-2 far fa-folder"></i></div><div class="fm-item-info">${value.name}</div></div>`
@@ -88,9 +98,20 @@
 
 
                     })
+
+
                 }
             });
     });
+    $(document).on("click", ".table.table-sm tr", function(){
+        $(this).removeClass('table-info')
+        $(this).addClass('table-info')
+
+
+    })
+
+
+
 
     </script>
 @endpush
