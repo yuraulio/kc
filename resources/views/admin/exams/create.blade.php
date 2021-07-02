@@ -237,7 +237,7 @@
          </div>
       </div>
       <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="benefitModalLabel" aria-hidden="true">
-         <div class="modal-dialog modal-dialog-centered" role="document">
+         <div id="exam-edit-modal" class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                <div class="modal-header">
                   <h5 class="modal-title" id="benefitModalLabel">Modal title</h5>
@@ -275,7 +275,7 @@
                            </div>
                         </div>
                         <div class="form-group row edit-answer-types">
-                           
+
                         </div>
                      </div>
                   </div>
@@ -366,7 +366,7 @@
        });
    })
    $(".checkboxes").click(function(){
-       
+
        if($(this).is(':checked')){
            $(this).val(1)
        }else{
@@ -376,7 +376,7 @@
 </script>
 <script>
    $("#question-types").change(function(){
-   
+
        if($(this).val() == 'true or false'){
            $('.answer-types').empty();
            $('.answer-types').append(`<div class="custom-control custom-radio mb-3">
@@ -403,7 +403,7 @@
                        </div>
                    </div>
                </div>
-   
+
                <div class="col-6">
                    <div class="form-group">
                        <div class="input-group answers">
@@ -416,7 +416,7 @@
                        </div>
                    </div>
                </div>
-   
+
                <div class="col-6">
                    <div class="form-group">
                        <div class="input-group answers">
@@ -429,7 +429,7 @@
                        </div>
                    </div>
                </div>
-               
+
                <div class="col-6">
                    <div class="form-group">
                        <div class="input-group answers">
@@ -443,7 +443,7 @@
                    </div>
                </div>`)
        }else if($(this).val() == 'check boxes'){
-   
+
            $('.answer-types').empty();
            $('.answer-types').append(
                `<div class="col-6">
@@ -458,7 +458,7 @@
                        </div>
                    </div>
                </div>
-   
+
                <div class="col-6">
                    <div class="form-group">
                        <div class="input-group answers">
@@ -471,7 +471,7 @@
                        </div>
                    </div>
                </div>
-   
+
                <div class="col-6">
                    <div class="form-group">
                        <div class="input-group answers">
@@ -484,7 +484,7 @@
                        </div>
                    </div>
                </div>
-   
+
                <div class="col-6">
                    <div class="form-group">
                        <div class="input-group answers">
@@ -497,14 +497,14 @@
                        </div>
                    </div>
                </div>`)
-   
+
        }
-   
+
    })
 
 
 	$("#edit-question-types").change(function(){
-   
+
 	if($(this).val() == 'true or false'){
 		 $('.edit-answer-types').empty();
 		 $('.edit-answer-types').append(`<div class="custom-control custom-radio mb-3">
@@ -557,7 +557,7 @@
 						 </div>
 					</div>
 			  </div>
-			  
+
 			  <div class="col-6">
 					<div class="form-group">
 						 <div class="input-group answers">
@@ -629,7 +629,7 @@
 	}
 
 })
-   
+
    $(document).on('click',".answer-check",function(){
        if($(this).attr('type') == 'radio'){
            let self = $(this);
@@ -640,47 +640,47 @@
            });
        }
    })
-   
+
    @if($edit)
       $(".add-question").click(function(){
-       
+
        let question = {};
-   
-       
+
+
        question['question'] = CKEDITOR.instances['question'].getData();
        question['answer-credit'] = $("#answer-credit").val() ? $("#answer-credit").val() : 1;
        question['question-type'] = $("#question-types").val();
-   
+
        var answer = [];
        var correctAnswers = [];
        let answerChecked = false;
        $(".answers").each(function(){
-   
+
            if(!$(this).find('.answer-input').val()){
                alert('πρεπει να βαλετε ολες τις ερωτησεις')
-   
+
                return;
            }
-   
-           
+
+
            answer.push($(this).find('.answer-input').val());
            if($(this).find('.answer-check').is(':checked')){
                answerChecked = true;
                correctAnswers.push($(this).find('.answer-input').val());
            }
-   
-           
+
+
        })
        if(!answerChecked){
            alert('πρεπει να επιλέξετε τη σωστη απάντηση')
-   
+
            return;
        }
-       
+
        question['answers'] = answer;
        question['correct_answer'] =  correctAnswers;
-   
-   
+
+
        $.ajax({
            type: 'POST',
            headers: {
@@ -694,7 +694,7 @@
                var  questionsList = '';
                let questions = JSON.parse(data.questions);
                $.each(questions,function(index, value){
-                  
+
                   questionsList += `<tr id="question-` + index + `" data-id="` + index + `" class="question-list">` +
                      `<td>` + value['question'] + `</td>` +
                      `<td class="text-right">
@@ -711,52 +711,52 @@
 
 
                })
-           
+
                $("#question-body").empty();
                $("#question-body").append(questionsList)
                questionOrder()
            }
        });
-   
-   
+
+
       })
 
       $(document).on('click','#update-question' ,function(){
 	   //$("edit-question").click(function(){
-       
+
        let question = {};
-   
-       
+
+
        question['question'] = CKEDITOR.instances['edit-question'].getData();
        question['answer-credit'] = $(".modal #answer-credit").val() ? $(".modal #answer-credit").val() : 1;
        question['question-type'] = $("#edit-question-types").val();
-   
+
        var answer = [];
        var correctAnswers = [];
        let answerChecked = false;
        $(".modal .answers").each(function(){
-   
+
            if(!$(this).find('.answer-input').val()){
                alert('πρεπει να βαλετε ολες τις ερωτησεις')
-   
+
                return;
            }
-   
-           
+
+
            answer.push($(this).find('.answer-input').val());
            if($(this).find('.answer-check').is(':checked')){
                answerChecked = true;
                correctAnswers.push($(this).find('.answer-input').val());
            }
-   
-           
+
+
        })
        if(!answerChecked){
            alert('πρεπει να επιλέξετε τη σωστη απάντηση')
-   
+
            return;
        }
-       
+
        question['answers'] = answer;
        question['correct_answer'] =  correctAnswers;
 
@@ -773,34 +773,34 @@
                $(".close-modal").click();
            }
        });
-   
-   
+
+
       })
 
       function questionOrder(){
-   
+
          var el = document.getElementById('question-body');
          new Sortable(el, {
              group: "words",
              handle: ".my-handle",
              draggable: ".item",
              ghostClass: "sortable-ghost",
-         
+
          });
-      
+
          new Sortable(el, {
              // Element dragging ended
              onEnd: function ( /**Event*/ evt) {
                  orderQuestions(evt)
              },
          });
-   
-   
+
+
 
       }
 
       function orderQuestions(evt){
-      
+
          let questions = {}
          $( ".question-list" ).each(function( index ) {
 
@@ -824,37 +824,37 @@
              url: "{{route('exam.order-questions',$exam->id)}}",
              data:{'questions':questions},
              success: function(data) {
-            
-            
+
+
              }
          });
       }
 
    @endif
-   
+
    function initQuestionFields(){
        $("input.answer-check").each(function( ) {
-   
+
            $(this).prop('checked',false);
-       
+
        });
-   
+
        $(".answer-input").each(function( ) {
-   
+
            $(this).val('');
-       
+
        });
-   
-   
+
+
        CKEDITOR.instances['question'].setData('');
        $("#answer-credit").val(1);
-   
+
    }
-   
 
 
 
-   
+
+
    $(document).ready( function () {
        questionOrder();
        $('#datatable-basic').dataTable( {
@@ -862,8 +862,8 @@
            "paging": false
        });
    });
-   
-	
+
+
 
 </script>
 
@@ -880,7 +880,7 @@
 			modal.find("#edit-question-types").change();
 
 			modal.find("#answer-credit").val(question['answer-credit']);
-        
+
 			modal.find(".answer-input").each(function(index){
 				$(this).val(question['answers'][index])
 
@@ -889,7 +889,7 @@
 				}
 
 			})
-		
+
 			modal.find("#update-question").attr('data-qu',e.relatedTarget.dataset.id)
       	CKEDITOR.instances['edit-question'].setData(question['question'])
    	//    modal.find("#benefit-id").val(id)
