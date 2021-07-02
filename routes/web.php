@@ -232,11 +232,33 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
 
 });
 
-Route::group(['middleware' => ['preview','web']], function () {
-    Route::get('/', 'Theme\HomeController@homePage');
-    Route::post('/add-payment-method', 'Theme\HomeController@addPaymentMethod')->name('add.paymentMethod');
-    Route::get('{slug}', 'Theme\HomeController@index');
 
+
+
+Route::group(['prefix' => 'cart','middleware' => ['web']], function () {
+//Route::group(['prefix' => 'cart', 'middleware' => 'free.event' ], function() {
+//    Route::group(['middleware' => 'auth.sms' ], function () {
+
+        Route::get('/', [ 'as' => 'cart', 'uses' => 'Theme\CartController@index' ]);
+        Route::post('/', [ 'as' => 'cart.update', 'uses' => 'Theme\CartController@update' ]);
+        Route::get('count', [ 'as' => 'cart.count', 'uses' => 'Theme\CartController@count' ]);
+        Route::get('destroy', [ 'as' => 'cart.destroy', 'uses' => 'Theme\CartController@destroy' ]);
+        Route::get('checkout', [ 'as' => 'cart.checkout', 'uses' => 'Theme\CartController@checkout' ]);
+        Route::post('checkDereeId', [ 'as' => 'cart.dereeid', 'uses' => 'Theme\CartController@checkDereeId' ]);
+        Route::post('checkCoupon','Theme\CartController@checkCoupon');
+        Route::post('/checkKnocrunchId', [ 'as' => 'cart.knowcrunchid', 'uses' => 'Theme\CartController@checkKnowcrunchId' ]);
+        Route::post('checkoutcheck', [ 'as' => 'cart.checkout', 'uses' => 'Theme\CartController@checkoutcheck' ]);
+        Route::post('/remove', [ 'as' => 'cart.remove-item', 'uses' => 'Theme\CartController@dpremove']);
+
+        //Route::group([ 'prefix' => '{id}' ], function() {
+        //    /*Route::post('/dpremove', [ 'as' => 'cart.remove-item', 'uses' => 'Theme\CartController@dpremove']);*/
+        //    Route::get('/{ticket}/{type}/add', [ 'as' => 'cart.add-item', 'uses' => 'Theme\CartController@add']);
+
+        //    //Route::get('move', [ 'as' => 'cart.move-item', 'uses' => 'Theme\CartController@move']);
+
+        //});
+   // });
+//});
 });
 
 Route::group([ 'prefix' => '{id}' ], function() {
@@ -244,6 +266,14 @@ Route::group([ 'prefix' => '{id}' ], function() {
     Route::get('/{ticket}/{type}/add', [ 'as' => 'cart.add-item', 'uses' => 'Theme\CartController@add']);
 
     //Route::get('move', [ 'as' => 'cart.move-item', 'uses' => 'Theme\CartController@move']);
+
+});
+
+
+Route::group(['middleware' => ['preview','web']], function () {
+    Route::get('/', 'Theme\HomeController@homePage');
+    Route::post('/add-payment-method', 'Theme\HomeController@addPaymentMethod')->name('add.paymentMethod');
+    Route::get('{slug}', 'Theme\HomeController@index');
 
 });
 

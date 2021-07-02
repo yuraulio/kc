@@ -112,7 +112,7 @@ class Event extends Model
 
     public function ticket()
     {
-        return $this->belongsToMany(Ticket::class, 'event_tickets')->withPivot('id','priority', 'price', 'options', 'quantity', 'features')->orderBy('priority');
+        return $this->belongsToMany(Ticket::class, 'event_tickets')->select('tickets.*','event_tickets.ticket_id')->withPivot('id','priority','ticket_id', 'price', 'options', 'quantity', 'features')->orderBy('priority');
     }
 
     public function tickets()

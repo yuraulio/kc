@@ -1,7 +1,6 @@
 @extends('theme.layouts.master')
 @section('content')
-@inject('frontHelp', 'Library\FrontendHelperLib')
-@inject('cFieldLib', 'Library\CustomFieldHelperLib')
+
 <?php $thetype =0;
 //$info=null;  
 if(!isset($info)){
@@ -38,7 +37,7 @@ if(!isset($info)){
    </section>
 </main>
 <!--   NOT LOGIN    -->
-@elseif (!Sentinel::check() && sizeof(Cart::content()) != 0)
+@elseif (!Auth::check() && sizeof(Cart::content()) != 0)
 <main id="main-area" role="main">
 
    <section class="booking-login-create">
@@ -575,15 +574,16 @@ if(!isset($info)){
             $totalitems = 0;?>
          @foreach (Cart::content() as $item)
          <?php 
-            $mod = $item->model; $cFieldLib->contentCustomFields($mod);
-            
+            $mod = $item->model; 
+            //dd($item);
             			//get stock of this ticket
             			$curStock = 1;
+                     $price = 'free';
             			foreach ($eventtickets as $tkey => $tvalue) {
-            
-            				if ($tvalue->event_id == $item->options->event && $tvalue->ticket_id == $mod->id) {
-            
-            					$curStock = $tvalue->stock;
+            				if ($tvalue->pivot->event_id == $item->options->event && $tvalue->ticket_id == $item->id) {
+            					$curStock = $tvalue->pivot->quantity;
+                           $price = $tvalue->pivot->price;
+                          
             				}
             
             			}
@@ -666,12 +666,13 @@ if(!isset($info)){
                   <ul class="checkout-infos">
                      <li>
                         <span class="label">Ticket:</span>
-                        <span class="value">{{ $item->model->header }}</span>
+                        
+                        <span class="value">{{ $item->model->type }}</span>
                      </li>
                      <li>
                         <span class="label">Price:</span>
-                        @if($item->price > 0)
-                        <span class="value ticket-coupon">€{{ $item->price }}</span>
+                        @if($price > 0)
+                        <span class="value ticket-coupon">€{{ $price }}</span>
                         @else
                         <span class="value">Free</span>
                         @endif
@@ -690,6 +691,7 @@ if(!isset($info)){
             <!-- ./item -->
          </div>
          @endforeach
+        
       </div>
    </section>
    <section class="section-checkout checkout-participant">
@@ -742,13 +744,13 @@ if(!isset($info)){
                               <div class="col6 col-sm-12">
                                  <label>First name <span>*</span></label>
                                  <div class="input-safe-wrapper">
-                                    <input class="required" type="text" id="name<?php echo $i; ?>" name="name[]" placeholder="Name*" value="@if(isset($pay_seats_data) && isset($pay_seats_data['names'][$i])){{$pay_seats_data['names'][$i]}}@elseif(isset($cur_user) && $i == 0){{$cur_user->first_name}}@endif" required />
+                                    <input class="required" type="text" id="name<?php echo $i; ?>" name="name[]" placeholder="Name*" value="@if(isset($pay_seats_data) && isset($pay_seats_data['names'][$i])){{$pay_seats_data['names'][$i]}}@elseif(isset($cur_user) && $i == 0){{$cur_user->firstname}}@endif" required />
                                  </div>
                               </div>
                               <div class="col6 col-sm-12">
                                  <label>Last name <span>*</span></label>
                                  <div class="input-safe-wrapper">
-                                          <input class="required" type="text" id="surname<?php echo $i; ?>" name="surname[]" placeholder="Surname*" value="@if(isset($pay_seats_data) && isset($pay_seats_data['surnames'][$i])){{$pay_seats_data['surnames'][$i]}}@elseif(isset($cur_user) && $i == 0){{$cur_user->last_name}}@endif" required />
+                                          <input class="required" type="text" id="surname<?php echo $i; ?>" name="surname[]" placeholder="Surname*" value="@if(isset($pay_seats_data) && isset($pay_seats_data['surnames'][$i])){{$pay_seats_data['surnames'][$i]}}@elseif(isset($cur_user) && $i == 0){{$cur_user->lastname}}@endif" required />
                                  </div>
                               </div>
                               <div class="col6 col-sm-12">
