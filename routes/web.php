@@ -261,6 +261,20 @@ Route::group(['prefix' => 'cart','middleware' => ['web']], function () {
 //});
 });
 
+Route::post('/card/store_from_payment',  'Theme\CardController@store_from_payment');
+Route::post('pay-sbt', [
+    'as' => 'userPaySbt', 'uses' => 'Theme\CartController@userPaySbt'
+]);
+
+Route::group([ 'prefix' => 'info'], function () {
+    Route::get('order_error', [
+            'as' => 'info.Order.Error', 'uses' => 'Theme\InfoController@orderError'
+        ]);
+    Route::get('order_success', [
+            'as' => 'info.Order.Success', 'uses' => 'Theme\InfoController@orderSuccess'
+        ]);
+    });
+
 Route::group([ 'prefix' => '{id}' ], function() {
     /*Route::post('/dpremove', [ 'as' => 'cart.remove-item', 'uses' => 'Theme\CartController@dpremove']);*/
     Route::get('/{ticket}/{type}/add', [ 'as' => 'cart.add-item', 'uses' => 'Theme\CartController@add']);

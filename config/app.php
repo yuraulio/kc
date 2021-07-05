@@ -181,7 +181,7 @@ return [
 
         Barryvdh\Debugbar\ServiceProvider::class,
         Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
-
+        //Barryvdh\DomPDF\ServiceProvider::class,
 
     ],
 
@@ -235,6 +235,7 @@ return [
 
         'Cart' => Gloudemans\Shoppingcart\Facades\Cart::class,
         'Image' => Intervention\Image\Facades\Image::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
 
     ],
 

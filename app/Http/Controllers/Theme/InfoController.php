@@ -1,0 +1,635 @@
+<?php
+
+namespace App\Http\Controllers\Theme;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use \Cart as Cart;
+use Redirect;
+use Mail;
+use App\Model\Transaction;
+use App\Model\PaymentMethod;
+use Auth;
+use App\Model\Event;
+use Flash;
+use App\Model\ShoppingCart;
+use Session;
+use App\Model\User;
+use PDF;
+
+class InfoController extends Controller
+{
+
+    public function __construct()
+    {
+        
+        if (Session::has('transaction_id')) {
+            $transaction = Transaction::where('id', Session::get('transaction_id'))->first();
+            //->with('user')
+
+            //$transaction = Transaction::where('id', 4)->with('user','account.defaultStore')->first();
+            if ($transaction) {
+                $this->transaction = $transaction->toArray();
+            } else {
+                $this->transaction = [];
+            }
+        } else {
+            $this->transaction = [];
+        }
+        //dd($this->transaction);
+    }
+
+    public function orderSuccess()
+    {
+
+    	$data = array();
+        //$data['lang'] = $_ENV['LANG'];
+        //$data['website'] = $_ENV['WEBSITE'];
+
+        $data['pay_methods'] = array();
+    	$data['pay_methods'] = PaymentMethod::whereIn('status', [1,2])->get();
+
+        
+                       
+        if (Session::has('transaction_id')) {
+         	 $transaction = Transaction::where('id', Session::get('transaction_id'))->first();
+                
+         	 if ($transaction) {
+                $this->transaction = $transaction->toArray();
+            } else {
+                $this->transaction = [];
+            }
+         }
+         else {
+            $this->transaction = [];
+        }
+
+        $data['info']['success'] = true;
+        $data['info']['title'] = '<h1>Booking successful</h1>';
+        $data['info']['message'] = '<h2>Thank you and congratulations!<br/>We are very excited about you joining us. We hope you are too!</h2>
+        <p>An email with more information is on its way to your inbox.</p>';
+        $data['info']['transaction'] = $this->transaction;
+        $data['info']['statusClass'] = 'success';
+
+        if (isset($this->transaction['payment_response'])) {
+	        $cart = Cart::content();
+
+	        foreach ($cart as $item) {
+
+
+                //Update Stock
+
+                $thisevent = Event::where('id', '=', $item->options['event'])->first();
+
+	        	$stockHelper = $thisevent->ticket->where('ticket_id', $item->id)->first();
+	        	$newstock = $stockHelper->pivot->quantity - $item->qty;
+	        	$stockHelper->pivot->quantity = $newstock;
+	        	$stockHelper->save();
+               
+                //check for active and stockable tickets
+
+                if ($newstock == 0) {
+
+                    /*$eventStockHelper = Eventticket::where('event_id', $item->options['event'])->get();
+
+                    $globalSoldOut = 1;
+
+                    foreach ($eventStockHelper as $ekey => $evalue) {
+                        $ticketstock = $evalue->stock;
+                        if ($ticketstock > 0 && $evalue->type == 1) {
+
+                            $globalSoldOut = 0;
+                        }
+                    }*/
+
+                    //Update event status to soldout if no ticket stock
+                    //$newstock == 0
+                    /*if ($globalSoldOut == 1) {
+                        $ev_status = CustomFields::where('content_id', $item->options['event'])->where('c_field_name', 'dropdown_select_status')->first();
+                        if ($ev_status) {
+                            $ev_status->value = 2;
+                            $ev_status->save();
+                        }
+                    }*/
+                }
+            
+                if($this->transaction['amount'] - floor($this->transaction['amount'])>0){
+                    $tr_price = number_format($this->transaction['amount'] , 2 , '.', ',');
+                }else{
+                    $tr_price = number_format($this->transaction['amount'] , 0 , '.', '');
+                }
+                
+                $data['tigran'] = ['evid' => $item->options['event'], 'price' => $tr_price, 'transid' => $this->transaction['id']];
+	        }
+
+	        if ($transaction) {
+
+	    		$this->createUsersFromTransaction($transaction);
+
+			}
+	    }
+
+	    //$this->sendEmails($trans_id);
+
+
+        //DELETE SAVED CART IF USER LOGGED
+        if($user = Auth::user()) {
+           
+            $existingcheck = ShoppingCart::where('identifier', $user->id)->first();
+            if($existingcheck) {
+                $existingcheck->delete($user->id);
+            }
+            //$user->cart->delete();
+        }
+
+         //DESTROY CART HERE AND SESSION vars
+        Cart::instance('default')->destroy();
+        Session::forget('pay_seats_data');
+        Session::forget('transaction_id');
+        Session::forget('cardtype');
+        Session::forget('installments');
+        //Session::forget('pay_invoice_data');
+        Session::forget('pay_bill_data');
+        Session::forget('deree_user_data');
+
+        if (isset($this->transaction['payment_response'])) {
+        	return view('theme.cart.cart', $data);
+        }
+        else {
+        	return Redirect::to('/');
+        }
+
+    }
+
+    public function createUsersFromTransaction($transaction)
+    {
+    	/*
+    	1. Knowcrunch Student ID
+		KC - KnowCrunch
+		YY - year of registration e.g. 17
+		MM - month of registration e.g. 01
+		ID - next available ID on the system 4-digit 0001-9999 e.g. 0129
+		KC-17010004
+		*/
+
+		$KC = "KC-";
+		$time = strtotime($transaction->placement_date);
+		$MM = date("m",$time);
+		$YY = date("y",$time);
+
+		//$optionid = \Config::get('dpoptions.ncgenerator.id');
+		//$option = Option::findOrFail($optionid);
+		// next number available up to 9999
+		//$next = $option->value;
+        
+        $pay_seats_data = $transaction['status_history'][0]['pay_seats_data'];
+        if(isset($transaction['status_history'][0]['deree_user_data'])) {
+             $deree_user_data = $transaction['status_history'][0]['deree_user_data'];
+        }
+        else {
+             $deree_user_data = [];
+        }
+       
+       	$pay_bill_data = $transaction['status_history'][0]['pay_bill_data'];
+           
+        if(isset($transaction['status_history'][0]['cardtype'])){
+            $cardtype = $transaction['status_history'][0]['cardtype'];
+        }
+           
+        $installments = $transaction['status_history'][0]['installments'];
+
+        $emailsCollector = [];
+
+        if (isset($transaction['billing_details']['billing'])) {
+            if ($transaction['billing_details']['billing'] == 2) {
+                $invoice = 'YES';
+            }
+            else {
+                $invoice = 'NO';
+            }
+        }
+        else {
+                $invoice = 'NO';
+        }
+
+
+        if (isset($transaction->status_history[0]['cart_data'])) {
+
+            $cart = $transaction->status_history[0]['cart_data'];
+
+            foreach ($cart as $akey => $avalue) {
+                $evid = $avalue['options']['event'];
+                $tickettypedrop = $avalue['options']['type'];
+                $ticketid = $avalue['id'];
+                if ($evid && $evid > 0) {
+                    break;
+                }
+            }
+
+           
+        
+            //get event name and date from cart
+            $thisevent = Event::where('id', '=', $evid)->first();
+           
+            $specialseats = 0;
+            $thisticket = $thisevent->ticket->where('ticket_id', $ticketid)->first();
+            $tickettypename = $thisticket->type; // e.g. Early Birds
+
+            $eventname = '';
+            $eventdate = '';
+            $eventcity  = '';
+            $elearning = false;
+            $expirationDate = '';
+            $eventslug = '';
+
+            if ($thisevent) {
+
+                if($thisevent->view_tpl === 'elearning_event'){
+
+                    $elearning = true;
+                    $eventslug = $thisevent->slug;
+                }
+              //  dd($eventslug);
+                $eventname = $thisevent->title;
+                $eventcity = '';//$thisevent->categories->where('parent_id',9)->first()->name;
+
+                if($thisevent->city->first() != null){
+                    $eventcity = $thisevent->city->first()->name;
+                }
+               
+            }
+            else {
+                $eventname = 'EventName';
+                $eventdate = 'EventDate';
+               
+                $eventcity  = 'EventCity';
+            }
+        }
+
+
+        //Collect all users from seats
+        $newmembersdetails = [];
+       
+        foreach ($pay_seats_data['emails'] as $key => $value) {
+
+    		$thismember = [];
+    		$thismember['first_name'] = $pay_seats_data['names'][$key];
+    		$thismember['last_name'] = $pay_seats_data['surnames'][$key];
+    		$thismember['email'] = $pay_seats_data['emails'][$key];
+        
+            if(isset($deree_user_data[$value])) {
+                $thismember['password'] = $deree_user_data[$value];
+            }
+            else {
+                $thismember['password'] = $thismember['email'] . '-knowcrunch';
+            }
+
+            
+
+            $thismember['mobile'] = $pay_seats_data['mobiles'][$key];
+            $thismember['country_code'] = $pay_seats_data['countryCodes'][$key];
+    
+            $thismember['job_title'] = $pay_seats_data['jobtitles'][$key];
+            if($pay_seats_data['companies'][$key] != '')
+                $thismember['company'] = $pay_seats_data['companies'][$key];
+            
+            if(isset($pay_seats_data['afms'][$key]))
+                $thismember['afm'] = $pay_seats_data['afms'][$key];
+
+    		$checkemailuser = User::where('email', '=', $thismember['email'])->first();
+
+    		if ($checkemailuser) {
+              
+                //if ($key == 0) { 
+                //REMOVED 22/10/2018
+
+                    /*$transaction->user_id = $checkemailuser->id;
+                    $transaction->save();*/
+
+                    
+
+                    if ($evid && $evid > 0) {
+
+                        $today = date('Y/m/d'); 
+                        $expiration_date = '';
+
+                        if($thisevent->expiration){
+                            $monthsExp = '+' . $thisevent->expiration .'months';
+                            $expiration_date = date('Y-m-d', strtotime($monthsExp, strtotime($today)));
+                        }
+
+                        if($tickettypedrop == 7){
+                            //$tmp = EventStudent::firstOrCreate(['event_id' => $evid, 'student_id' => $checkemailuser->id, 'trans_id' => $transaction->id,'comment'=>'unilever']);
+                            $thisevent->users()->save($checkemailuser,['comment'=>'unilever','expiration'=>$expiration_date,'paid'=>true]);
+                        }else{
+
+                            if($transaction->coupon_code != ''){
+                                //$tmp = EventStudent::firstOrCreate(['event_id' => $evid, 'student_id' => $checkemailuser->id, 'trans_id' => $transaction->id,'comment'=>'coupon']);
+                                $thisevent->users()->save($checkemailuser,['comment'=>'coupon','expiration'=>$expiration_date,'paid'=>true]);
+                            }else{
+                                $thisevent->users()->save($checkemailuser,['expiration'=>$expiration_date,'paid'=>true]);
+                            }
+
+                        }
+
+                        
+                       
+                    }
+                    //SHOULD but back used deree id?
+                    
+
+                    $fullname = $checkemailuser->first_name . ' ' . $checkemailuser->last_name;
+                    $firstname = $checkemailuser->first_name;
+
+                    $emailsCollector[] = ['email' => $checkemailuser->email, 'name' => $fullname, 'first' => $firstname];
+
+                    //Update user details with the given ones
+
+                    $checkemailuser->firstname = $thismember['first_name'];
+                    $checkemailuser->lastname = $thismember['last_name'];
+                    $checkemailuser->mobile = $thismember['mobile'];
+                    $checkemailuser->country_code = $thismember['country_code'];
+                    $checkemailuser->job_title = $thismember['job_title'];
+                    if(isset($thismember['company']))
+                        $checkemailuser->company = $thismember['company'];
+                    
+                    if(isset($thismember['afm']))
+                        $checkemailuser->afm = $thismember['afm'];
+
+                    if($checkemailuser->partner_id == '' && isset($deree_user_data[$value]))
+                        $checkemailuser->partner_id = $deree_user_data[$value];
+                    
+                    if($checkemailuser->kc_id == '') {
+                        $next_kc_id = str_pad($next, 4, '0', STR_PAD_LEFT);
+                        $knowcrunch_id = $KC.$YY.$MM.$next_kc_id;
+                        $checkemailuser->kc_id = $knowcrunch_id;
+                        $checkemailuser->save();
+                        $thismember['password'] =  $knowcrunch_id;
+                        
+                        if ($next == 9999) {
+                            $next = 1;
+                        }
+                        else {
+                            $next = $next + 1;
+                        }
+                    }
+
+
+                    $checkemailuser->save();
+	        	//}
+    		}
+    		else {
+               
+    			$newmembersdetails[] = $thismember;
+    			$fullname = $thismember['first_name'] . ' ' . $thismember['last_name'];
+    			$firstname = $thismember['first_name'];
+                $emailsCollector[] = ['email' => $thismember['email'], 'name' => $fullname, 'first' => $firstname];
+                
+
+    		}
+        }
+
+        $groupEmailLink = '';
+        if ($evid && $evid == 2068) {
+            $groupEmailLink = 'https://www.facebook.com/groups/846949352547091';
+        }else{
+            $groupEmailLink = 'https://www.facebook.com/groups/elearningdigital/';
+        }
+		$extrainfo = [$tickettypedrop, $tickettypename, $eventname, $eventdate, $specialseats, $invoice,$eventcity,$groupEmailLink];
+
+        //Create new collected users
+
+        $helperdetails = [];
+
+        /*foreach ($newmembersdetails as $key => $member) {
+          
+            $next_kc_id = str_pad($next, 4, '0', STR_PAD_LEFT);
+            $knowcrunch_id = $KC.$YY.$MM.$next_kc_id;
+            $member['password'] = $KC.$YY.$MM.$next_kc_id;
+            $user = Sentinel::register($member);
+          
+        	$code = Activation::create($user)->code;
+        	$role = Sentinel::findRoleBySlug('know-crunch');
+            $user->roles()->attach($role);
+
+
+            //CHECK FOR NON REQUIRED FIELDS
+            $user->mobile = $member['mobile'];
+            $user->country_code = $member['country_code'];
+    		$user->job_title = $pay_seats_data['jobtitles'][$key];
+    		$user->company = $pay_seats_data['companies'][$key];
+            if(isset($deree_user_data[$value])) {
+                $user->partner_id = $deree_user_data[$value];
+            }
+            else {
+                $user->partner_id = '';
+            }
+
+    		$user->kc_id = $knowcrunch_id;
+            $user->terms = 1;
+
+            if(isset($pay_seats_data['studentId'][$key])) {
+                $user->student_type_id = $pay_seats_data['studentId'][$key];
+            }
+            else {
+                $user->student_type_id = '';
+            }
+            if(isset($pay_seats_data['afms'][$key])) {
+                $user->afm = $pay_seats_data['afms'][$key];
+            }
+            else {
+                $user->afm = '';
+            }
+
+           
+            $user->save();
+            
+            // Send the activation email
+            $sent = Mail::send('sentinel.emails.activate_groupof2+', compact('user', 'code'), function ($m) use ($user) {
+                $m->to($user->email)->subject('Activate Your Account');
+            });  
+
+            $helperdetails[$user->email] = ['kcid' => $user->kc_id, 'deid' => $user->partner_id, 'stid' => $user->student_type_id, 'jobtitle' => $user->job_title, 'company' => $user->company, 'mobile' => $user->mobile];
+
+    		//Associate first user with transaction
+            if ($key == 0) {
+                $transaction->user_id = $user->id;
+                $transaction->save();
+        	}
+
+            //Save taxonomy Event_student
+            if ($evid && $evid > 0) {
+                if($tickettypedrop == 7){
+                    $tmp = EventStudent::firstOrCreate(['event_id' => $evid, 'student_id' => $user->id, 'trans_id' => $transaction->id,'comment'=>'unilever']);
+
+                }else{
+                    $tmp = EventStudent::firstOrCreate(['event_id' => $evid, 'student_id' => $user->id, 'trans_id' => $transaction->id]);
+                }
+
+                if($elearning){
+                    $today = date('Y/m/d');
+                    $monthsExp = '+4 months';
+                    if($evid !== 1350 ){
+                        $monthsExp = '+6 months';
+                    }else{
+                       // $expDate = date('Y-m-d', strtotime("+6 months", strtotime($today)));
+                       // $tmp1 = EventStudent::firstOrCreate(['event_id' => 2068, 'student_id' => $user->id, 'trans_id' => 0,'expiration_date' => $expDate]);
+                    }
+                    
+                    $tmp->expiration_date = date('Y-m-d', strtotime($monthsExp, strtotime($today)));  
+                    $tmp->save();
+                }
+
+            }
+
+            if ($next == 9999) {
+                $next = 1;
+            }
+            else {
+                $next = $next + 1;
+            }
+        }*/
+
+       
+        $this->sendEmails($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug);
+
+    }
+
+    public function sendEmails($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug)
+    {
+       // dd($elearning);
+        // 5 email, admin, user, 2 deree, darkpony
+    	//$generalInfo = \Config::get('dpoptions.website_details.settings');
+        $adminemail = 'info@knowcrunch.com';
+
+        $data = [];
+     
+    	foreach ($emailsCollector as $key => $muser) {
+            $data['user'] = $muser;
+            
+    		$data['trans'] = $transaction;
+    		$data['extrainfo'] = $extrainfo;
+            $data['helperdetails'] = $helperdetails;
+            $data['$elearning'] = $elearning;
+            $data['eventslug'] = $eventslug;
+            
+            //dd($helperdetails);
+
+            if($elearning){
+  
+                $sent = Mail::send('emails.admin.info_new_registration_elearning', $data, function ($m) use ($adminemail, $muser) {
+
+    			    $fullname = $muser['name'];
+    			    $first = $muser['first'];
+                    $sub = 'Knowcrunch - ' . $first . ' your registration has been completed.';
+	                $m->from($adminemail, 'Knowcrunch');
+	                $m->to($muser['email'], $fullname);
+                    $m->subject($sub);
+                   // $m->attachData($pdf->output(), "invoice.pdf");
+                });
+
+            }else{
+                
+                $sent = Mail::send('emails.admin.info_new_registration', $data, function ($m) use ($adminemail, $muser) {
+
+    			    $fullname = $muser['name'];
+    			    $first = $muser['first'];
+                    $sub = 'Knowcrunch - ' . $first . ' your registration has been completed.';
+	                $m->from($adminemail, 'Knowcrunch');
+	                $m->to($muser['email'], $fullname);
+	                $m->subject($sub);
+                });
+            }
+    	}
+
+      
+        if($elearning){
+
+            //dd($transaction);
+            //dd($transaction->invoice);
+            $pdf = $transaction->invoice->first()->generateInvoice();
+            $pdf = $pdf->output();
+            $data = [];  
+            $muser = [];
+            $muser['name'] = $transaction->invoice->first()->user->first()->firstname;
+            $muser['first'] = $transaction->invoice->first()->user->first()->firstname;
+            $muser['email'] = $transaction->invoice->first()->user->first()->email;
+            $muser['event_title'] =$transaction->invoice->first()->event->first()->title;
+            $data['firstName'] = $transaction->invoice->first()->user->first()->firstname;
+            $data['eventTitle'] =$transaction->invoice->first()->event->first()->title;
+
+            $sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf) {
+
+                $fullname = $muser['name'];
+                $first = $muser['first'];
+                $sub = 'KnowCrunch |' . $first . ' – Payment Successful in ' . $muser['event_title'];;
+                $m->from($adminemail, 'Knowcrunch');
+                $m->to($muser['email'], $fullname);
+                $m->subject($sub);
+                $m->attachData($pdf, "invoice.pdf");
+                
+                });
+
+            $pathFile = url('/') . '/pdf/elearning/KnowCrunch - How to access our website & account.pdf';
+            $pathFile = str_replace(' ','%20',$pathFile);
+            $sent = Mail::send('emails.admin.elearning_after_register', $data, function ($m) use ($adminemail, $muser,$pathFile) {
+
+                    $fullname = $muser['name'];
+                    $first = $muser['first'];
+                    $sub = 'KnowCrunch |' . $first . ', welcome to ' . $muser['event_title'].'!';
+                    $m->from($adminemail, 'Knowcrunch');
+                    $m->to($muser['email'], $fullname);
+                    $m->subject($sub);
+                    $m->attach($pathFile);
+                    
+                    });
+
+            $sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf) {
+
+                $fullname = $muser['name'];
+                $first = $muser['first'];
+                $sub =  'KnowCrunch |' . $first . ' – Payment Successful in ' . $muser['event_title'];;
+                $m->from($adminemail, 'Knowcrunch');
+                $m->to('info@knowcrunch.com', $fullname);
+                //$m->to('moulopoulos@lioncode.gr', $fullname);
+                $m->subject($sub);
+                $m->attachData($pdf, "invoice.pdf");
+                
+            });
+
+        }
+
+
+        $transdata = [];
+        $transdata['trans'] = $transaction;
+        foreach ($emailsCollector as $key => $muser) {
+
+        	$transdata['user'] = $muser;
+        	$transdata['trans'] = $transaction;
+        	$transdata['extrainfo'] = $extrainfo;
+        	$transdata['helperdetails'] = $helperdetails;
+           
+            if($transaction->payment_method_id == 100) {
+                $sentadmin = Mail::send('emails.admin.admin_info_new_registration', $transdata, function ($m) use ($adminemail) {
+
+                    $m->from($adminemail, 'Knowcrunch');
+                    $m->to($adminemail, 'Knowcrunch');
+           
+                    $m->subject('Knowcrunch - New Registration');
+                });
+            }
+            else {
+                $sentadmin = Mail::send('emails.admin.admin_info_new_registration', $transdata, function ($m) use ($adminemail) {
+
+                    $m->from($adminemail, 'Knowcrunch');
+                    $m->to($adminemail, 'Knowcrunch');
+             
+                    $m->subject('Knowcrunch - New Registration');
+                });
+            }
+
+
+        }
+
+    }
+}

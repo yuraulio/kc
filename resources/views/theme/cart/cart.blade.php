@@ -1391,121 +1391,168 @@ if(!isset($info)){
 
 <script>
     $(document).on('click', '#addCard', function(e){
-       $('#addCard').prop('disabled', true);
-      $('.msg_save_card').remove();
-      $('#container').append(`<div class="row cardForm">
-      <h4>Add New Card</h4>
-      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-         <label> Card number <span>*</span></label>
-         <input onblur="this.placeholder = 'Card Number'" autocomplete='off' onfocus="this.placeholder = ''" placeholder="Card Number" onkeyup="cardNo(this)"  type='text' name="card_no" id="card_no">
-      </div>
-      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-         <label>CVV <span>*</span></label>
-         <input onblur="this.placeholder = 'e.g. 311'" autocomplete='off' onfocus="this.placeholder = ''" placeholder='e.g. 311' onkeyup="cvv(this)"  type='text' name="cvvNumber" id="cvvNumber">
-      </div>
-      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-         <label>Expiration month <span>*</span></label>
-       
-            <input onblur="this.placeholder = 'MM'" onfocus="this.placeholder = ''"  placeholder='MM' onkeyup="month(this)" type='text' name="ccExpiryMonth" id="ccExpiryMonth" required>
-         
-      </div>
-      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-         <label>Expiration year <span>*</span></label>
-         
-            <input onblur="this.placeholder = 'YYYY'" onfocus="this.placeholder = ''" placeholder='YYYY' type='text' maxlength="4" size="4" onkeyup="year(this)"  name="ccExpiryYear" id="ccExpiryYear" required>
+      
+      /*$('<script>')
+       .attr('src', 'https://js.stripe.com/v3/')
+       .attr('id', 'stripe-js')
+       .appendTo('head');*/
+
    
-         <input class='form-control ammount' type='hidden' name="amount" value="{{ Cart::instance('default')->subtotal() }}">
-      </div>
-      <div class="checkout-proceed-action">
-         <button id="saveCard" type="button" class="btn btn--secondary btn--sm">Save Card</button>
-      </div>
-   </div>`)
+      
+      $('#addCard').prop('disabled', true);
+      $('.msg_save_card').remove();
+      $('#container').append(`
+         <input id="card-holder-name" type="text">
+         <!-- Stripe Elements Placeholder -->
+         <div id="card-element"></div>
+         <button id="card-button" type="button" class="btn btn--secondary btn--sm" data-secret="{{ Auth::user()->createSetupIntent()->client_secret }}">
+             Update Payment Method
+         </button>`)
+
+
+         $('<script>')
+       .text(`var stripe = Stripe('{{env('STRIPE_KEY')}}',{locale: 'en'});
+               var elements = stripe.elements();
+               var cardElement = elements.create('card',{
+                  style: {
+                     base: {
+      
+                        fontSize: '18px',
+      
+                     },
+                  },
+                  hidePostalCode: true,
+                  });
+               cardElement.mount('#card-element');`)
+
+       .attr('id', 'stripe-form')
+       .appendTo('head');
+
+     
+
+      
    })
+
+  
+
 </script>
 
+
+
+
 <script>
-    $(document).on('click', '#saveCard', function(e){
-      let card_no = $('#card_no').val()
-      let cvv = $('#cvvNumber').val()
-      let exp_month = $('#ccExpiryMonth').val()
-      let exp_year = $('#ccExpiryYear').val()
-      $('button').prop('disabled', true);
-      $.ajax({
-               type:'POST',
-               url:'myaccount/card/store_from_payment',
-               headers: {
-                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-               },
-               data:{ 'card_no' : card_no, 'cvv' : cvv, 'exp_month' : exp_month, 'exp_year' : exp_year},
-               success:function(data) {
+
+
+   $(document).on('click',"#card-button",async (e) => {
+      var cardHolderName = document.getElementById('card-holder-name');
+      var cardButton = document.getElementById('card-button');
+      var clientSecret = cardButton.dataset.secret;
+      let { setupIntent, error } = await stripe.confirmCardSetup(
+           clientSecret, {
+               payment_method: {
+                   card: cardElement,
+                   billing_details: { name: cardHolderName.value }
+               }
+           }
+       ).then(function (result) {
+            if (result.error) {
+               console.log('error = ', result.error)
+                //$('#card-errors').text(result.error.message)
+                //$('button.pay').removeAttr('disabled')
+            } else {
+               paymentMethod = result.setupIntent.payment_method
+               console.log(paymentMethod)
+               $('button').prop('disabled', true);
+               $.ajax({
+                  type:'POST',
+                  url:'card/store_from_payment',
+                  headers: {
+                   'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                  },
+                  data:{ 'payment_method' : paymentMethod},
+                  success:function(data) {
                  
-                  if(data['success']){
-                     data = JSON.stringify(data['card'])
-                     data = JSON.parse(data)
+                     if(data['success']){
+                        data = JSON.stringify(data['card'])
+                        data = JSON.parse(data)
 
 
-                     $('#brand').text(data['brand'])
-                     $('#last4').text(data['last4'])
-                     $('#exp_month').text(data['exp_month'])
-                     $('#exp_year').text(data['exp_year'])
+                        $('#brand').text(data['brand'])
+                        $('#last4').text(data['last4'])
+                        $('#exp_month').text(data['exp_month'])
+                        $('#exp_year').text(data['exp_year'])
 
+                        $("#stripe-form").remove();
+                     $("#stripe-js").remove();
 
-                     $('#container').children().remove();
+                        $('#container').children().remove();
 
-                     $('#container').append(`<p class="normal msg_save_card"> Successfully added card!!</p>`)
-                     $('#addCard').prop('disabled', false);
-                     $('button').prop('disabled', false);
-                  }else{
-                     let message = `<img src="{{cdn('theme/assets/images/icons/alert-icons/icon-error-alert.svg')}}" alt="Info Alert">` + data['message'];
-                     $("#card-message").html( message)
+                        $('#container').append(`<p class="normal msg_save_card"> Successfully added card!!</p>`)
+                        $('#addCard').prop('disabled', false);
+                        $('button').prop('disabled', false);
+                     }else{
+                        let message = `<img src="{{cdn('theme/assets/images/icons/alert-icons/icon-error-alert.svg')}}" alt="Info Alert">` + data['message'];
+                        $("#card-message").html( message)
+
+                        var favDialogCard = document.getElementById('favDialogCardNumberFailed');
+                        favDialogCard.style.display = "block";
+
+                        $('#addCard').prop('disabled', false);
+                        $('button').prop('disabled', false);
+                        $("#stripe-form").remove();
+                     $("#stripe-js").remove();
+                     }
+
                      
+
+                  },
+                  /*error:function(data){
+
+                     let message = `<img src="{{cdn('theme/assets/images/icons/alert-icons/icon-error-alert.svg')}}" alt="Info Alert">` + data.responseJSON['message'];
+                     $("#card-message").html( message)
+                  
                      var favDialogCard = document.getElementById('favDialogCardNumberFailed');
                      favDialogCard.style.display = "block";
-
                      $('#addCard').prop('disabled', false);
                      $('button').prop('disabled', false);
-                  }
-               },
-               error:function(data){
+                  }*/
+               });
+            }
+         });
+               
+   })
+  
 
-                  let message = `<img src="{{cdn('theme/assets/images/icons/alert-icons/icon-error-alert.svg')}}" alt="Info Alert">` + data.responseJSON['message'];
-                  $("#card-message").html( message)
-         
-                  var favDialogCard = document.getElementById('favDialogCardNumberFailed');
-                  favDialogCard.style.display = "block";
-                  $('#addCard').prop('disabled', false);
-                  $('button').prop('disabled', false);
-               }
-            });
-    });
+
+
 </script>
 
 <script>
-$(document).ready(function() {
-    $(document).on('submit', '#billing-setting', function() {
-        $('#checkout-button').attr('disabled', 'disabled');
-        $('button').prop('disabled', true);
-    });
-});
+   $(document).ready(function() {
+       $(document).on('submit', '#billing-setting', function() {
+           $('#checkout-button').attr('disabled', 'disabled');
+           $('button').prop('disabled', true);
+       });
+   });
 </script>
 
 <script>
- $(document).on('click', '.newCustomer', function(e){
-   var thec = $('input#regaccept');
-    if (thec.prop("checked") === false) {
-       // e.preventDefault();
-      //  alert('Please accept the terms, conditions & data privacy in order to complete your registration.');
-      var favDialog = document.getElementById('favDialog');
-       // favDialog.showModal();
-       favDialog.style.display = "block";
-        $("body").css("overflow-y", "hidden")
-     
-     // favDialog.show();
-    }else{
-      var form = document.getElementById('new-customer-form');
-      //console.log($('#new-customer-form').serialize);
-      form.submit();
-    }
+   $(document).on('click', '.newCustomer', function(e){
+      var thec = $('input#regaccept');
+      if (thec.prop("checked") === false) {
+         // e.preventDefault();
+        //  alert('Please accept the terms, conditions & data privacy in order to complete your registration.');
+        var favDialog = document.getElementById('favDialog');
+         // favDialog.showModal();
+         favDialog.style.display = "block";
+          $("body").css("overflow-y", "hidden")
+   
+       // favDialog.show();
+      }else{
+        var form = document.getElementById('new-customer-form');
+        //console.log($('#new-customer-form').serialize);
+        form.submit();
+      }
    })
 </script>
 

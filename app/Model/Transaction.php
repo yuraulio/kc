@@ -5,6 +5,7 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\User;
+use App\Model\Invoice;
 
 class Transaction extends Model
 {
@@ -48,9 +49,23 @@ class Transaction extends Model
         return $this->morphedByMany(Event::class, 'transactionable','transactionables');
     }
 
+    public function invoice()
+    {
+        return $this->morphToMany(Invoice::class, 'invoiceable','invoiceables');
+    }
+
     // public function events()
     // {
     //     return $this->belongsToMany(User::class, 'event_user');
     // }
+
+    public function getStatusHistoryAttribute($value)
+    {
+        if ($value) {
+            return json_decode($value, true);
+        } else {
+            return [];
+        }
+    }
 
 }

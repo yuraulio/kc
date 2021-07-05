@@ -133,6 +133,11 @@
     padding: 30px 0;
 }
 
+#card-element{
+    padding:  20px 0;
+}
+
+
 @media (min-width:981px) {
    
     .lg-flex{

@@ -77,6 +77,12 @@
 
                         <select name="section_sum" id="input-section_sum" class="form-control" placeholder="{{ __('Section') }}">
                             <option value="date">Date</option>
+                            <option value="language">Language</option>
+                            <option value="duration">Duration</option>
+                            <option value="students"> Students</option>
+                            <option value="access"> Access </option>
+                            <option value="diploma"> Diploma </option>
+                            <option value="exams"> Exams</option>
                         </select>
                         @include('alerts.feedback', ['field' => 'section_sum'])
                     </div>

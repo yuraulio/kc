@@ -1,0 +1,1 @@
+στον ιστοχώρο <a href="{{ URL::to('/') }}" target="_blank">Knowcrunch</a>

@@ -85,6 +85,7 @@
          <div class="label-wrapper">
             <label for="radio-installment-full-control">Expire year <span id="exp_year" class="ticket-coupon">-</span></label>
          </div>
+        
       </div>
    <div class="row cardForm">
       <div id="addCardBtn" class="col12">
@@ -102,7 +103,7 @@
             <label for="radio-installment-full-control">Brand: <span id="brand" class="ticket-coupon">{{$default_card->brand}}</span></label>
          </div>
          <div class="label-wrapper">
-            <label for="radio-installment-full-control">Last four: <span id="last4" class="ticket-coupon">{{$default_card->last_four}}</span></label>
+            <label for="radio-installment-full-control">Last four: <span id="last4" class="ticket-coupon">{{$default_card->last4}}</span></label>
          </div>
          <div class="label-wrapper">
             <label for="radio-installment-full-control">Expire month: <span id="exp_month" class="ticket-coupon">{{$default_card->exp_month}}</span></label>
