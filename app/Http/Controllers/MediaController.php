@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Model\Media;
+use App\Model\Event;
 use Intervention\Image\ImageManagerStatic as Image;
+use Alexusmai\LaravelFileManager\Events\Download;
 
 
 class MediaController extends Controller
 {
+
     public function index()
     {
 
@@ -59,9 +62,6 @@ class MediaController extends Controller
         $media->height = $image->height();
 
         $media->save();
-
-
-
 
         foreach(get_image_versions() as $value){
             //dd($value['version']);
@@ -260,5 +260,19 @@ class MediaController extends Controller
             'data' => $data,
         ]);
     }
+
+    // public function createFolder($event = null){
+    //     $event = new Event;
+    //     //dd($event);
+    //     \Event::listen('Alexusmai\LaravelFileManager\Events\BeforeInitialization',
+    //     function ($event) {
+    //         var_dump('from listener');
+    //         \Log::info('Download:', [
+    //             $event->t(),
+    //             // $event->path(),
+    //         ]);
+    //     }
+    // );
+    // }
 
 }
