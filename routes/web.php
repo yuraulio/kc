@@ -156,6 +156,8 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::post('media/crop_image', ['as' => 'media.crop_image', 'uses' => 'MediaController@crop_image']);
     Route::post('media/crop_profile_image', ['as' => 'media.crop_profile_image', 'uses' => 'MediaController@crop_profile_image']);
 
+    //Route::get('media/createFolder', ['as' => 'media.createFolder', 'uses' => 'MediaController@createFolder']);
+
     //Events
     Route::put('profile/updateRole', ['as' => 'profile.updateRole', 'uses' => 'ProfileController@updateRole']);
 
