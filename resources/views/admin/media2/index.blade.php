@@ -81,27 +81,68 @@
     <!-- Rename Modal -->
     <div class="modal fade" id="renameModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content fm-modal-delete">
-            <div class="modal-header">
-            <h5 class="modal-title w-75 text-truncate"> Delete <small class="text-muted pl-3 title-small"></small></h5>
+            <div class="modal-content fm-modal-rename">
+                <div class="modal-header">
+                <h5 class="modal-title w-75 text-truncate"> Rename <small class="text-muted pl-3 title-small"></small></h5>
 
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
 
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="fm-input-rename">Enter new name</label>
-                    <input type="text" id="fm-input-rename" class="form-control">
-                    <div class="invalid-feedback" style="display: none;"> Invalid name </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="fm-input-rename">Enter new name</label>
+                        <input type="text" id="fm-input-rename" value="" class="form-control">
+                        <input type="hidden" id="old-input-rename" value="" class="form-control">
+                        <input type="hidden" id="folder-ren" value="" class="form-control">
+                        <div class="invalid-feedback" style="display: none;"> Invalid name </div>
+                    </div>
+                </div>
+
+
+                <div class="modal-footer">
+                    <button id="renameFile" disabled="disabled" class="btn btn-info">Submit </button>
+                    <button class="btn btn-light">Cancel</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Clipboard Modal -->
+    <div class="modal fade" id="clipboardModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content fm-modal-clipboard">
+                <div class="modal-header">
+                    <h5 class="modal-title"> Clipboard </h5>
+
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="d-flex justify-content-between">
+                        <div class="w-75 text-truncate"><span><i class="far fa-hdd"></i>uploads </span></div>
+                        <div class="text-right text-muted"><span title="Type - Copy"><i class="fas fa-copy"></i></span></div>
+                    </div>
+                    <hr>
+                    <div id="clipboard-files">
+                    </div>
+                    <!-- <div  class="d-flex justify-content-between"> -->
 
 
-            <div class="modal-footer">
-                <button disabled="disabled" class="btn btn-info">Submit </button>
-                <button class="btn btn-light">
-            </div>
+                        <!-- <div class="w-75 text-truncate"><span><i class="far fa-folder"></i>originals </span></div>
+                        <div class="text-right">
+                            <button type="button" title="Delete" class="close"><span aria-hidden="true">×</span></button>
+                        </div> -->
+
+                    <!-- </div> -->
+                </div>
+
+
+                <div class="modal-footer table-info">
+                    <button id="clear-clipboard" class="btn btn-danger">Clear </button>
+                    <button class="btn btn-light">Cancel</button>
+                </div>
             </div>
         </div>
     </div>
@@ -123,6 +164,9 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
     <script>
+
+        let files = []
+
         $(function(){
             $('.fm-content-body tbody').contextMenu({
                 selector: 'tr',
@@ -169,7 +213,95 @@
                                 });
 
                             }else if(key == 'rename'){
+                                $('#fm-input-rename').val('')
+                                $('#old-input-rename').val('')
+                                $('#folder-ren').val('')
+                                let elem = $(this).find('td')[0]
+
+                                name = $(elem).data('name')
+                                str = $(elem).data('path')
+                                console.log($(elem).data('name'))
+
+                                console.log('test: '+$('#fm-input-rename').val())
+
+                                // split last slash
+                                var rest = str.substring(0, str.lastIndexOf("/") + 1);
+                                var last = str.substring(str.lastIndexOf("/") + 1, str.length);
+
+                                console.log('last-----'+last)
+
                                 $('#renameModal').modal('toggle');
+                                $('#fm-input-rename').val(name)
+                                $('#old-input-rename').val(name)
+                                $('#folder-ren').val(rest)
+
+                            }else if(key == 'copy'){
+                                elem_clip = $('.col-auto.text-right').find('span')[1]
+                                $(elem_clip).attr('id', 'clipboard-toggle')
+
+                                $(elem_clip).show()
+
+
+                                let element_for_copy = $('.table-info')
+                                $.each(element_for_copy, function(key, value) {
+                                    local_elem = $(value).find('td')[0]
+                                    path = $(local_elem).data('path')
+                                    name = $(local_elem).data('name')
+
+                                    files[key] = []
+                                    files[key]['path'] = path
+                                    files[key]['name'] = name
+
+                                })
+                                //console.log(files)
+
+
+                                //console.log($elem_clip)
+                            }else if(key == 'paste'){
+
+                                path = ''
+                                $.each( $('.fm-breadcrumb li'), function(key, value) {
+                                    if(key != 0){
+                                        path = path+'/'+$(value).text()
+                                    }
+                                })
+
+                                const obj = Object.assign({}, files);
+                                obj[0] = Object.assign({}, obj[0])
+
+                                let arr = {};
+                                arr['disk'] = {};
+                                arr = {disk: 'uploads'};
+                                arr['disk']['path'] = [];
+                                arr['disk'] = {path: path}
+                                arr['disk']['clipboard'] = {};
+                                arr['disk']['clipboard'] = {type: 'copy', disk: 'uploads', directories: [], files: obj}
+                                // arr['disk']['clipboard']['type'] = 'copy';
+                                // arr['disk']['clipboard']['disk'] = 'uploads';
+                                // arr['disk']['clipboard']['directories'] = [];
+                                // arr['disk']['clipboard']['files'] = files;
+
+                                console.log(arr)
+
+                                data = { disk: arr['disk']}
+
+
+                                $.ajax({
+                                    type: 'POST',
+                                    headers: {
+                                        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                                    },
+                                    contentType: "application/json; charset=utf-8",
+                                    dataType: "json",
+                                    url: "/file-manager/paste",
+                                    data: JSON.stringify(arr),
+                                    success: function(data) {
+                                        //console.log('data: '+data.new)
+
+                                    }
+                                });
+
+
                             }
 
 
@@ -179,9 +311,11 @@
                         items: {
                             "view": {name: "View", icon: "fas fa-eye"},
                             "download": {name: "Download", icon: "fas fa-download"},
-
-                            "rename": {name: "Rename", icon: "fas fa-edit"},
                             "sep1": "---------",
+                            "copy": {name: "Copy", icon: "far fa-copy"},
+                            "paste": {name: "Paste", icon: "fas fa-paste"},
+                            "rename": {name: "Rename", icon: "fas fa-edit"},
+                            "sep2": "---------",
                             "delete": {name: "Delete", icon: "delete"},
                             }
                     }
@@ -191,6 +325,116 @@
     </script>
 
     <script>
+
+
+
+        $( document ).on("click","#clear-clipboard",function() {
+            $('#clipboard-files').empty()
+        })
+
+
+        $( document ).on("click","#clipboard-toggle",function() {
+            $('.fm-modal').hide();
+            $('#clipboardModal').modal('toggle');
+
+            let selected_elem = $('.table-info')
+            //console.log(selected_elem)
+
+
+            $.each(files, function(key, value) {
+                //console.log()
+                // let elem = $(value).find('td')[0]
+
+                // name = $(elem).data('name')
+                // path = $(elem).data('path')
+                let row = `
+                    <div  class="d-flex justify-content-between">
+                        <div class="copy-file" data-id="${key}" data-path="${value['path']}" class="w-75 text-truncate"><span><i class="far fa-file"></i> ${value['name']} </span></div>
+                        <div class="text-right">
+                            <button type="button" title="Delete" class="close deleteFileFromClipboard"><span aria-hidden="true">×</span></button>
+                        </div>
+                    </div>
+                `
+
+                $('#clipboard-files').append(row)
+            })
+
+            //$('#clipboard-files')
+
+        })
+
+        $( document ).on("change","#fm-input-rename",function() {
+            $('#renameFile').removeAttr('disabled')
+        })
+
+
+
+
+        $( document ).on("click", ".deleteFileFromClipboard", function() {
+            let fileForDelete = $(this).parent().parent().find('.copy-file')
+            let path = $(fileForDelete).data('path')
+
+            $.each(files, function(key, value) {
+                if(value.path == path){
+                    files.splice(key, 1);
+                    console.log($(fileForDelete).parent().remove())
+
+                }
+            })
+            //console.log(index)
+            // files.splice(id)
+             console.log(files)
+        })
+
+
+    $( document ).on("click","#renameFile",function() {
+        let newName = $('#fm-input-rename').val()
+        let oldName = $('#old-input-rename').val()
+        let folder = $('#folder-ren').val()
+        $('#renameFile').attr('disabled', true)
+
+
+        newName = folder + newName
+        oldName = folder + oldName
+
+        data = {disk: 'uploads', newName: newName, oldName: oldName, type: 'file'}
+
+
+        $.ajax({
+            type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+            },
+            url: "/file-manager/rename",
+            data: data,
+            success: function(data) {
+                //console.log('data: '+data.new)
+                if(data){
+                    $('#renameModal').modal('hide');
+
+                    $.each($('.search-result'), function(key, value) {
+                        //console.log($(value).find('td').data('name'))
+                        old = data.old
+                        var rest = old.substring(0, old.lastIndexOf("/") + 1);
+                        var last = old.substring(old.lastIndexOf("/") + 1, old.length);
+
+                        if($(value).find('td').data('name') == last){
+                            let elem = $(value).find('td')[0]
+                            console.log(elem)
+
+                            new_ = data.new
+                            var rest = new_.substring(0, new_.lastIndexOf("/") + 1);
+                            var last = new_.substring(new_.lastIndexOf("/") + 1, new_.length);
+
+                            $(elem).data('name', last)
+                            $(elem).data('path', data.new)
+                            $(elem).text(last)
+                        }
+                    })
+                }
+            }
+        });
+    })
 
     $( document ).on("click","#deleteFiles",function() {
         selected_elem = $('.selected-files')
@@ -229,6 +473,8 @@
 
 
     $( document ).ready(function() {
+
+
 
 
 
@@ -284,12 +530,32 @@
                 }
             });
     });
-    $(document).on("click", ".table.table-sm tr", function(){
-        $(this).removeClass('table-info')
-        $(this).addClass('table-info')
 
+    $(document).on("click",".search-result", function (evt) {
 
-    })
+        if (evt.ctrlKey){
+            console.log('asd')
+            $(this).toggleClass("table-info");
+        }else if(evt.which != 3){
+
+            $('.table-info').removeClass('table-info')
+            $(this).addClass('table-info')
+        }
+
+    });
+
+    $(document).mousedown(function(e){
+        console.log(e.button)
+            if( e.button == 2 ) {
+                //$("#test").removeClass("class-one").addClass("class-two");
+                //$('.table-info').removeClass('table-info')
+                let elem = e.target
+                $(elem).parent().addClass('table-info')
+
+                return false;
+            }
+            return true;
+        });
 
     // $(document).on("click", ".fm-download", function(){
 
