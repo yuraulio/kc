@@ -31,21 +31,121 @@
     <!-- Preview Modal -->
     <div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content fm-modal-preview">
-            <div class="modal-header">
-            <h5 class="modal-title w-75 text-truncate"> Preview <small class="text-muted pl-3 title-small"></small></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
+            <div class="modal-content fm-modal-preview table-info">
+                <div class="modal-header">
+                <h5 class="modal-title w-75 text-truncate"> Preview <small class="text-muted pl-3 title-small"></small></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
 
-            <div class="modal-body text-center">
-                <img src="" alt="" style="max-height: 300px;">
-            </div>
+                <div class="modal-body text-center">
+                    <img id="preview-img-file" src="" alt="" style="max-height: 300px;">
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
+                    <div id="fm-additions-cropper" class="fm-additions-cropper">
+                        <div class="row" style="max-height: 300px;">
+                            <div class="col-sm-9 cropper-block">
+                                <!-- <img src="" alt="" class="cropper-hidden cropper-img"> -->
+                                <div class="cropper-container cropper-bg" touch-action="none" style="width: 745px; height: 300px;">
+                                    <div class="cropper-wrap-box">
+                                        <div class="cropper-canvas">
+                                            <img id="img-cropper" src="" alt="" class="cropper-hide cropper-img">
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-sm-3 pl-0">
+                                <div class="cropper-preview" style="width: 216px; height: 93.5765px;">
+
+                                    <!-- <div class="preview"></div> -->
+
+                                    <!-- <img src="http://kcversion8.test/file-manager/preview?disk=uploads&amp;path=company32.png&amp;v=1625661829" alt="company32.png" style="display: block; width: 270px; height: 116.971px; min-width: 0px !important; min-height: 0px !important; max-width: none !important; max-height: none !important; transform: translateX(-27px) translateY(-11.6971px);"></div> -->
+                                    <div class="cropper-data">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-prepend"><label for="dataX" class="input-group-text">X</label></span>
+                                            <input type="text" value="" id="dataX" class="form-control">
+                                            <span class="input-group-append">
+                                                <span class="input-group-text">px</span>
+                                            </span>
+                                        </div>
+                                        <div class="input-group input-group-sm"><span class="input-group-prepend"><label for="dataY" class="input-group-text">Y</label></span>
+                                            <input type="text" value="" id="dataY" class="form-control">
+                                            <span class="input-group-append">
+                                                <span class="input-group-text">px</span>
+                                            </span>
+                                        </div>
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-prepend"><label for="dataWidth" class="input-group-text">Width</label></span>
+                                            <input type="text" value="" id="dataWidth" class="form-control">
+                                            <span class="input-group-append">
+                                                <span class="input-group-text">px</span>
+                                            </span>
+                                        </div>
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-prepend"><label for="dataHeight" class="input-group-text">Height</label></span>
+                                            <input type="text" value="" id="dataHeight" class="form-control">
+                                            <span class="input-group-append"><span class="input-group-text">px</span></span>
+                                        </div>
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-prepend">
+                                                <label for="dataRotate" class="input-group-text">Rotate</label>
+                                            </span>
+                                            <input type="text" value="" id="dataRotate" class="form-control">
+                                            <span class="input-group-append">
+                                                <span class="input-group-text">deg</span>
+                                            </span>
+                                        </div>
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-prepend"><label for="dataScaleX" class="input-group-text">ScaleX</label></span>
+                                            <input type="text" value="" id="dataScaleX" class="form-control">
+                                        </div>
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-prepend"><label for="dataScaleY" class="input-group-text">ScaleY</label></span>
+                                            <input type="text" value="" id="dataScaleY" class="form-control">
+                                        </div>
+                                        <button id="apply-crop" title="Apply" type="button" class="btn btn-block btn-sm btn-info mb-2"><i class="fas fa-check"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <div role="group" aria-label="Scale" class="btn-group mr-2">
+                                        <button id="move-left" class="btn btn-info"><i class="fas fa-arrow-left"></i></button>
+                                        <button id="move-right" class="btn btn-info"><i class="fas fa-arrow-right"></i></button>
+                                        <button id="move-up" class="btn btn-info"><i class="fas fa-arrow-up"></i></button>
+                                        <button id="move-down" class="btn btn-info"><i class="fas fa-arrow-down"></i></button>
+                                    </div>
+                                    <div role="group" aria-label="Scale" class="btn-group mr-2">
+                                        <button id="scale-X" class="btn btn-info"><i class="fas fa-arrows-alt-h"></i></button>
+                                        <button id="scale-Y" class="btn btn-info"><i class="fas fa-arrows-alt-v"></i></button>
+                                    </div>
+                                    <div role="group" aria-label="Rotate" class="btn-group mr-2">
+                                        <button id="rotate-plus" class="btn btn-info"><i class="fas fa-undo"></i></button>
+                                        <button id="rotate-minus" class="btn btn-info"><i class="fas fa-redo"></i></button>
+                                    </div>
+                                    <div role="group" aria-label="Rotate" class="btn-group mr-2">
+                                        <button id="zoom-plus" class="btn btn-info"><i class="fas fa-search-plus"></i></button>
+                                        <button id="zoom-minus" class="btn btn-info"><i class="fas fa-search-minus"></i></button>
+                                    </div>
+                                    <button id="crop-reset" title="Reset" class="btn btn-info mr-2"><i class="fas fa-sync-alt"></i></button>
+                                    <button title="Save" class="btn btn-danger mr-2"><i class="far fa-save"></i></button>
+                                </div>
+                                <span class="d-block">
+                                    <button class="btn btn-light">Back</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                <div class="d-flex justify-content-between">
+                    <span class="d-block table-info">
+                        <button id="crop-image-file-manager" title="Cropping" class="btn btn-info table-info"><i class="fas fa-crop-alt"></i></button>
+                    </span>
+                    <span class="d-block"><button class="btn btn-light">Cancel</button></span>
+                </div>
             </div>
         </div>
     </div>
@@ -127,22 +227,96 @@
                     <hr>
                     <div id="clipboard-files">
                     </div>
-                    <!-- <div  class="d-flex justify-content-between"> -->
-
-
-                        <!-- <div class="w-75 text-truncate"><span><i class="far fa-folder"></i>originals </span></div>
-                        <div class="text-right">
-                            <button type="button" title="Delete" class="close"><span aria-hidden="true">×</span></button>
-                        </div> -->
-
-                    <!-- </div> -->
                 </div>
 
 
                 <div class="modal-footer table-info">
-                    <button id="clear-clipboard" class="btn btn-danger">Clear </button>
+                    <button class="btn btn-danger clear-files">Clear </button>
                     <button class="btn btn-light">Cancel</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Zip Modal -->
+    <div class="modal fade" id="zipModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content fm-modal-zip">
+                <div class="modal-header">
+                    <h5 class="modal-title"> Create archive </h5>
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body table-info">
+                    <label for="fm-zip-name">Archive name</label>
+                    <div class="input-group mb-3">
+                        <input type="text" value="" id="fm-zip-name" class="form-control">
+                        <div class="input-group-append"><span class="input-group-text">.zip</span></div>
+                        <div class="invalid-feedback" style="display: none;"> Archive exists! </div>
+                    </div>
+                    <hr>
+                    <div class="fm-additions-file-list">
+
+                    </div>
+                </div>
+
+
+                <div class="modal-footer">
+                    <button id="zip-submit" disabled="disabled" class="btn btn-info">Submit </button>
+                    <button class="btn btn-light">Cancel</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Properties Modal -->
+    <div class="modal fade" id="propertiesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content fm-modal-properties">
+                <div class="modal-header">
+                    <h5 class="modal-title"> Properties </h5>
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-2">Disk:</div>
+                        <div class="col-9">uploads</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">Name:</div>
+                        <div id="properties-name" class="col-9 properties">companyAvatar-header-image.png</div>
+                        <div class="col-1 text-right"><i title="Copy" class="far fa-copy"></i></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">Path:</div>
+                        <div id="properties-path" class="col-9 properties">originals/companyAvatar-header-image.png</div>
+                        <div class="col-1 text-right"><i title="Copy" class="far fa-copy"></i></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">Size:</div>
+                        <div id="properties-size" class="col-9"></div>
+                        <div class="col-1 text-right"><i title="Copy" class="far fa-copy"></i></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-2">Modified:</div>
+                        <div id="properties-mod" class="col-9 properties"></div>
+                    </div>
+                </div>
+
+
+
+
+                <div class="modal-footer">
+                    <button class="btn btn-light">Cancel</button>
+                </div>
+
             </div>
         </div>
     </div>
@@ -164,8 +338,138 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
     <script>
+        let value = 200
+
+
+
+        window.addEventListener('DOMContentLoaded', function () {
+            var image = document.getElementById('img-cropper');
+            var cropBoxData;
+            var canvasData;
+            var cropper;
+
+
+
+
+
+            $('#previewModal').on('shown.bs.modal', function () {
+                cropper = new Cropper(image, {
+                autoCropArea: 0.5,
+                ready: function () {
+                    //Should set crop box data first here
+                    cropper.setCropBoxData(cropBoxData).setCanvasData(canvasData);
+                },
+                crop(event) {
+                    $('#dataX').val(Math.round(event.detail.x))
+                    $('#dataY').val(Math.round(event.detail.y))
+                    $('#dataHeight').val(Math.round(event.detail.height))
+                    $('#dataWidth').val(Math.round(event.detail.width))
+                    $('#dataRotate').val(Math.round(event.detail.rotate))
+                    $('#dataScaleX').val(event.detail.scaleX)
+                    $('#dataScaleY').val(event.detail.scaleY)
+
+                    console.log(cropper.getCroppedCanvas({ maxWidth: 4096, maxHeight: 4096}))
+                },
+                });
+
+            }).on('hidden.bs.modal', function () {
+                cropBoxData = cropper.getCropBoxData();
+                canvasData = cropper.getCanvasData();
+                cropper.destroy();
+            });
+
+
+
+            $( document ).on('click', '#move-left', function() {
+                cropper.move(-15,0);
+            })
+
+            $( document ).on('click', '#move-right', function() {
+                cropper.move(15,0);
+            })
+
+            $( document ).on('click', '#move-up', function() {
+                cropper.move(0,-15);
+            })
+
+            $( document ).on('click', '#move-down', function() {
+                cropper.move(0,15);
+            })
+
+            $( document ).on('click', '#rotate-plus', function() {
+                cropper.rotate(-45);
+            })
+
+            $( document ).on('click', '#rotate-minus', function() {
+                cropper.rotate(45);
+            })
+
+            $( document ).on('click', '#zoom-plus', function() {
+                cropper.zoom(0.1);
+            })
+
+            $( document ).on('click', '#zoom-minus', function() {
+                cropper.zoom(-0.1);
+            })
+
+            $( document ).on('click', '#crop-reset', function() {
+                cropper.reset();
+            })
+
+            $( document ).on('click', '#scale-X', function() {
+                let x = $('#dataScaleX').val()
+                if(x == -1){
+                    cropper.scaleX(1);
+                }else{
+                    cropper.scaleX(-1);
+                }
+
+            })
+
+            $( document ).on('click', '#scale-Y', function() {
+                let y = $('#dataScaleY').val()
+                if(y == -1){
+                    cropper.scaleY(1);
+                }else{
+                    cropper.scaleY(-1);
+                }
+            })
+
+
+            $( document ).on('click', '#apply-crop', function() {
+                x = $('#dataX').val()
+                y = $('#dataY').val()
+                height = $('#dataHeight').val()
+                width = $('#dataWidth').val()
+                rotate = $('#dataRotate').val()
+                scaleX = $('#dataScaleX').val()
+                scaleY = $('#dataScaleY').val()
+
+                cropper.setData({
+                    x: parseInt(x),
+                    y: parseInt(y),
+                    height: parseInt(height),
+                    width: parseInt(width),
+                    rotate: parseInt(rotate),
+                    scaleX: parseInt(scaleX),
+                    scaleY: parseInt(scaleY),
+                })
+
+
+
+            })
+
+
+        });
+
+
+
+
+    </script>
+    <script>
 
         let files = []
+        let type = ''
 
         $(function(){
             $('.fm-content-body tbody').contextMenu({
@@ -194,6 +498,10 @@
                                 $('#previewModal .title-small').text(name)
                                 $('#previewModal img').attr('src', base_url+'/uploads'+path)
 
+                                $('.cropper-img').attr('src', base_url+'/uploads'+path)
+
+
+
                             }else if(key == 'delete'){
                                 $('#deleteModal .fm-additions-file-list').empty()
                                 $('#deleteModal').modal('toggle');
@@ -220,15 +528,15 @@
 
                                 name = $(elem).data('name')
                                 str = $(elem).data('path')
-                                console.log($(elem).data('name'))
+                                //console.log($(elem).data('name'))
 
-                                console.log('test: '+$('#fm-input-rename').val())
+                                //console.log('test: '+$('#fm-input-rename').val())
 
                                 // split last slash
                                 var rest = str.substring(0, str.lastIndexOf("/") + 1);
                                 var last = str.substring(str.lastIndexOf("/") + 1, str.length);
 
-                                console.log('last-----'+last)
+                                //console.log('last-----'+last)
 
                                 $('#renameModal').modal('toggle');
                                 $('#fm-input-rename').val(name)
@@ -236,6 +544,7 @@
                                 $('#folder-ren').val(rest)
 
                             }else if(key == 'copy'){
+                                type = "copy"
                                 elem_clip = $('.col-auto.text-right').find('span')[1]
                                 $(elem_clip).attr('id', 'clipboard-toggle')
 
@@ -266,24 +575,21 @@
                                     }
                                 })
 
-                                const obj = Object.assign({}, files);
-                                obj[0] = Object.assign({}, obj[0])
+
+                                obj1 = {}
+
+                                $.each(files, function(key, value){
+                                    //console.log(value)
+                                    obj1[key] = value['path']
+                                })
+                                console.log(obj1)
 
                                 let arr = {};
-                                arr['disk'] = {};
-                                arr = {disk: 'uploads'};
-                                arr['disk']['path'] = [];
-                                arr['disk'] = {path: path}
-                                arr['disk']['clipboard'] = {};
-                                arr['disk']['clipboard'] = {type: 'copy', disk: 'uploads', directories: [], files: obj}
-                                // arr['disk']['clipboard']['type'] = 'copy';
-                                // arr['disk']['clipboard']['disk'] = 'uploads';
-                                // arr['disk']['clipboard']['directories'] = [];
-                                // arr['disk']['clipboard']['files'] = files;
+                                arr = {[key]: key, type: type, disk: 'uploads', directories: [], files: obj1}
 
-                                console.log(arr)
+                                //console.log(path)
 
-                                data = { disk: arr['disk']}
+                                data = { disk: 'uploads', path: path, clipboard: arr}
 
 
                                 $.ajax({
@@ -294,7 +600,7 @@
                                     contentType: "application/json; charset=utf-8",
                                     dataType: "json",
                                     url: "/file-manager/paste",
-                                    data: JSON.stringify(arr),
+                                    data: JSON.stringify(data),
                                     success: function(data) {
                                         //console.log('data: '+data.new)
 
@@ -302,6 +608,65 @@
                                 });
 
 
+                            }else if(key == 'cut'){
+                                type = "cut"
+                                elem_clip = $('.col-auto.text-right').find('span')[1]
+                                $(elem_clip).attr('id', 'clipboard-toggle')
+
+                                $(elem_clip).show()
+
+
+                                let element_for_copy = $('.table-info')
+                                $.each(element_for_copy, function(key, value) {
+                                    local_elem = $(value).find('td')[0]
+                                    path = $(local_elem).data('path')
+                                    name = $(local_elem).data('name')
+
+                                    files[key] = []
+                                    files[key]['path'] = path
+                                    files[key]['name'] = name
+
+                                })
+
+                            }else if(key == 'zip'){
+                                files = []
+                                $('#zipModal').modal('toggle');
+
+                                selected_elem = $('.table-info')
+
+                                $.each(selected_elem, function(key,value) {
+                                    elem = $(value).find('td')[0]
+                                    path = $(elem).data('path')
+                                    name = $(elem).data('name')
+
+                                    row = `
+                                        <div class="d-flex justify-content-between">
+                                            <div class="w-75 text-truncate"><span><i class="far fa-file-image"></i> ${name} </span></div>
+                                        </div>
+                                    `
+
+                                    $('.fm-additions-file-list').append(row)
+
+
+                                    files[key] = []
+                                    files[key]['path'] = path
+                                    files[key]['name'] = name
+
+
+                                })
+
+                                //console.log(files)
+                            }else if(key == 'properties'){
+                                $('#propertiesModal').modal('show');
+                                details = name.split(' ')
+                                console.log(name)
+                                console.log('1111111')
+                                console.log(details)
+                                $('#properties-name').text(details[1])
+                                $('#properties-path').text(path)
+                                $('#properties-path').text(path)
+                                $('#properties-mod').text(details[3]+details[4]+details[5])
+                                //console.log('name: '+name + 'path:  '+ path)
                             }
 
 
@@ -313,10 +678,14 @@
                             "download": {name: "Download", icon: "fas fa-download"},
                             "sep1": "---------",
                             "copy": {name: "Copy", icon: "far fa-copy"},
+                            "cut": {name: "Cut", icon: "fas fa-cut"},
                             "paste": {name: "Paste", icon: "fas fa-paste"},
                             "rename": {name: "Rename", icon: "fas fa-edit"},
+                            "zip": {name: "Zip", icon: "fas fa-file-archive"},
                             "sep2": "---------",
                             "delete": {name: "Delete", icon: "delete"},
+                            "sep3": "---------",
+                            "properties": {name: "Properties", icon: "far fa-list-alt"},
                             }
                     }
                 }
@@ -327,10 +696,95 @@
     <script>
 
 
+        $( document ).on("click", "#crop-image-file-manager", function() {
 
-        $( document ).on("click","#clear-clipboard",function() {
-            $('#clipboard-files').empty()
+            $('#previewModal .modal-body.text-center').hide()
+            $('#crop-image-file-manager').hide()
+            $('#fm-additions-cropper').css('display', 'block')
+
+
+
+
         })
+
+
+
+        $( document ).on("click", ".fa-copy", function() {
+            var copyText = $(this).parent().parent().find('.properties').text();
+
+            document.execCommand("copy")
+
+        })
+
+        $( document ).on("click",".clear-files",function() {
+            $('#clipboard-files').empty()
+            files = []
+        })
+
+        $( document ).on("click","#zip-submit",function() {
+
+            let name = $('#fm-zip-name').val()
+            //alert(name)
+
+
+
+            obj1 = {}
+            arr = {}
+
+            $.each(files, function(key, value){
+                //console.log(value)
+                obj1[key] = {}
+                obj1[key] = value['path']
+            })
+            //console.log(obj1)
+
+
+            arr = { files: obj1, directories: [] }
+
+            console.log(arr)
+
+            data = { disk: 'uploads', name: name+'.zip', path: null, elements: arr}
+
+
+
+
+            $.ajax({
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                },
+                url: "/file-manager/zip",
+                data: data,
+                success: function(data) {
+                    //console.log('data: '+data.new)
+                    if(data){
+                        $('#zipModal').modal('hide');
+
+                        $.each($('.search-result'), function(key, value) {
+                            //console.log($(value).find('td').data('name'))
+                            old = data.old
+                            var rest = old.substring(0, old.lastIndexOf("/") + 1);
+                            var last = old.substring(old.lastIndexOf("/") + 1, old.length);
+
+                            if($(value).find('td').data('name') == last){
+                                let elem = $(value).find('td')[0]
+                                //console.log(elem)
+
+                                new_ = data.new
+                                var rest = new_.substring(0, new_.lastIndexOf("/") + 1);
+                                var last = new_.substring(new_.lastIndexOf("/") + 1, new_.length);
+
+                                $(elem).data('name', last)
+                                $(elem).data('path', data.new)
+                                $(elem).text(last)
+                            }
+                        })
+                    }
+                }
+            });
+        })
+
+
 
 
         $( document ).on("click","#clipboard-toggle",function() {
@@ -367,6 +821,10 @@
             $('#renameFile').removeAttr('disabled')
         })
 
+        $( document ).on("change","#fm-zip-name",function() {
+            $('#zip-submit').removeAttr('disabled')
+        })
+
 
 
 
@@ -377,13 +835,13 @@
             $.each(files, function(key, value) {
                 if(value.path == path){
                     files.splice(key, 1);
-                    console.log($(fileForDelete).parent().remove())
+                    //console.log($(fileForDelete).parent().remove())
 
                 }
             })
             //console.log(index)
             // files.splice(id)
-             console.log(files)
+             //console.log(files)
         })
 
 
@@ -420,7 +878,7 @@
 
                         if($(value).find('td').data('name') == last){
                             let elem = $(value).find('td')[0]
-                            console.log(elem)
+                            //console.log(elem)
 
                             new_ = data.new
                             var rest = new_.substring(0, new_.lastIndexOf("/") + 1);
@@ -514,7 +972,7 @@
 
 
                     $.each(data, function(key, value) {
-                        console.log(value.path+'/'+value.name)
+                        //console.log(value.path+'/'+value.name)
                         if(first_grid){
                             row = `<tr class="search-result"><td data-name="${value.name}" data-path='${value.path}/${value.name}' class="fm-content-item unselectable fm-download"><i class="far fa-file"></i> ${value.name} </td><td></td><td>File</td><td> 6/7/2021, 12:13:38 PM </td></tr>`
                             $('.fm-content-body tbody').append(row)
@@ -534,7 +992,7 @@
     $(document).on("click",".search-result", function (evt) {
 
         if (evt.ctrlKey){
-            console.log('asd')
+            //console.log('asd')
             $(this).toggleClass("table-info");
         }else if(evt.which != 3){
 
@@ -545,7 +1003,7 @@
     });
 
     $(document).mousedown(function(e){
-        console.log(e.button)
+        //console.log(e.button)
             if( e.button == 2 ) {
                 //$("#test").removeClass("class-one").addClass("class-two");
                 //$('.table-info').removeClass('table-info')
@@ -556,6 +1014,7 @@
             }
             return true;
         });
+
 
     // $(document).on("click", ".fm-download", function(){
 
