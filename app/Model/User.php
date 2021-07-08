@@ -19,6 +19,8 @@ use Carbon\Carbon;
 use Laravel\Passport\HasApiTokens;
 use Laravel\Cashier\Billable;
 use App\Traits\MediaTrait;
+use App\Model\Invoice;
+
 
 class User extends Authenticatable
 
@@ -165,6 +167,7 @@ class User extends Authenticatable
         return $this->belongsToMany(Event::class, 'event_user')->withPivot('paid', 'expiration');
     }
 
+
     public function ticket()
     {
         return $this->belongsToMany(Ticket::class, 'event_user_ticket')->withPivot('ticket_id');
@@ -178,6 +181,12 @@ class User extends Authenticatable
     public function statistic()
     {
         return $this->belongsToMany(User::class, 'event_statistics')->withPivot('videos','lastVideoSeen', 'notes', 'event_id');
+    }
+
+    public function invoices(){
+        return $this->morphToMany(Invoice::class, 'invoiceable');
+
+        //return $this->morphToMany(Invoice::class, 'invoiceable')->whereHasMorph('event',[Event::class]);
     }
 
 }

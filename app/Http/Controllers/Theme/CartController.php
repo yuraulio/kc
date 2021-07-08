@@ -17,6 +17,10 @@ use Validator;
 use Illuminate\Support\Arr;
 use App\Model\Transaction;
 use App\Model\Invoice;
+use \Stripe\Plan;
+use \Stripe\Stripe;
+use \Stripe\StripeClient;
+use Laravel\Cashier\Payment;
 
 class CartController extends Controller
 {
@@ -203,64 +207,18 @@ class CartController extends Controller
      */
     public function index()
     {
-
-       
+  
         $data = array();
         //$data['lang'] = $_ENV['LANG'];
         //$data['website'] = $_ENV['WEBSITE'];
 
         $data['pay_methods'] = array();
 
-
         $data['eventtickets'] = [];
         $categoryScript = ''; 
         $data['couponEvent'] = false;
 
-        /*$data['pay_methods'] = PaymentMethod::where('status', [1,2])->whereNotIn('method_slug', ['bonus'])->get()->toArray();*/
-        /*if(Sentinel::check()) {
-        if (Sentinel::inRole('super_admin') || Sentinel::inRole('administrator')) {
-            $data['pay_methods'] = PaymentMethod::whereIn('status', [1,2])->get();
-        } else {*/
-            //$data['pay_methods'] = PaymentMethod::where('status', 1)->get();
-             //DEBUG ONLY
-            $data['pay_methods'] = PaymentMethod::whereIn('status', [1,2])->get();
-        /*}
-        }*/
-
-
-        //$data['social_media'] =  \Config::get('dpoptions.social_media.settings');
-
-        //$data['google_analytics'] =  \Config::get('dpoptions.google_analytics');
-
-       // $data['filter_location'] = Category::where('id', 9)->first()->getDescendants()->where('status',1)->where('type',0)->sortBy('name')->toHierarchy();
-
-       // $data['filter_type'] = Category::where('id', 12)->first()->getDescendants()->where('status',1)->where('type',0)->toHierarchy();
-
-        /*$data['footerLinks'] = Content::filterContent([
-                            'status' => 1,
-                            'type' => 36,
-                            'author_id' => '',
-                            'search_term' => '',
-                            'abbr' => 'footergroup',
-                            'sort' => 'priority',
-                            'sort_direction' => 'asc',
-                            'lang' => $data['lang'],
-                        ])->get();
-
-        $data['block_logos'] = Content::filterContent([
-                    'take' => 1,
-                    'status' => 1,
-                    'type' => 31,
-                    'lang' => $data['lang'],
-                    'abbr' => 'block_logos',
-                    'sort' => 'published_at',
-                    'sort_direction' => 'desc',
-                    'excluding_ids' => [],
-                    'on_categories' => []
-                ])->with('categories','tags','author','featured.media')->get();*/
-
-
-
+    
         if (Session::has('pay_seats_data')) {   
             $data['pay_seats_data'] = Session::get('pay_seats_data');
             
@@ -334,7 +292,14 @@ class CartController extends Controller
                 
                 $categoryScript = 'Event > ' . $ev->category->first()->name;
                 //dd($categoryScript);
-      
+                
+                $data['stripe_key'] = '';
+                if($ev->paymentMethod->first()){
+                    session()->put('payment_method',$ev->paymentMethod->first()->id);
+                    $data['stripe_key'] = $ev->paymentMethod->first()->processor_options['key'];
+                }
+                $data['pay_methods'] = $ev->paymentMethod->first();
+
 
 
                 if(isset($ev->custom_style) && $ev->custom_style != '' && $ev->custom_style == 'knowcrunch-event') {
@@ -372,11 +337,12 @@ class CartController extends Controller
             
             if(!$loggedin_user) {
                 
-
+                
                 return view('theme.cart.cart', $data);
             }
-          
+           
             else {
+                
                 // Get user billing details in order to pre populate values
                 if(isset($data['pay_bill_data']) && empty($data['pay_bill_data'])) {
                     $inv = []; $rec = [];
@@ -394,9 +360,9 @@ class CartController extends Controller
 
                     $data['pay_bill_data'] = array_merge($inv, $rec);
                 }
-
-                $data['default_card'] = $loggedin_user->defaultPaymentMethod()->card;
-               
+              
+                $data['default_card'] = $loggedin_user->defaultPaymentMethod() ? $loggedin_user->defaultPaymentMethod()->card : false;
+           
                 return view('theme.cart.cart', $data);
             }
             
@@ -689,96 +655,56 @@ class CartController extends Controller
             
 
              if($installments > 1) {
-
+               
+                //Stripe::setApiKey(env('STRIPE_SECRET'));
+                //Stripe::make('sk_test_51IdYeZHnPmfgPmgK8xh8OuZLSiIY0xZuUgpW7xsgc0qIwxOCIrvPYHO4GtEHiEDJIZvbeye1DyNpn9hzFzw7edqi00ajurn9Cf');
+                //Stripe::setApiKey('sk_test_51IdYeZHnPmfgPmgK8xh8OuZLSiIY0xZuUgpW7xsgc0qIwxOCIrvPYHO4GtEHiEDJIZvbeye1DyNpn9hzFzw7edqi00ajurn9Cf');
                 $instamount = round($namount / $installments, 2);
-
-                if (! $dpuser->isBillable()) {
-                    //dd("Entity is not ready to be billed!");
-                    $dpuser->createStripeCustomer([
-                        'name' => $st_name,
-                        'email' => $dpuser->email,
-                        'metadata' => $temp,
-                        //'description' => $st_desc,
-                        'tax_info' => ['tax_id' => $st_tax_id, 'type' => 'vat'],
-                        'shipping' => ['name' => $st_name, 'address' => ['line1' => $st_line1,'postal_code' => $st_postal_code,'city' => $st_city,'country' => 'GR']],
-
-                    ]); //,'phone' => $st_phone
-
-                    // Check if the entity has any active subscription
-                    if ($dpuser->isSubscribed()) {
-                       // dd('Entity has at least one active subscription!');
-                        \Session::put('dperror','You have at least one active subscription!');
-                          return '/cart';
-                    }
-                    else {
-                        // Create the card
-                        //dd('here');
-                        if (! $dpuser->hasActiveCards()) {
-                            $card = $dpuser->card()->create($token['id']);
-                        }
-                        // Create the plan to subscribe
-                        $desc = $installments . ' installments';
-                        $planid = 'plan_'.$dpuser->id.'_E_'.$ev->id.'_T_'.$ticket_id.'_x'.$installments;
-                        $name = $ev_title . ' ' . $ev_date_help . ' | ' . $desc;
-                        $plan = $stripe->plans()->create([
-                            'id'                   => $planid,
-                            'name'                 => $name,
-                            'amount'               => $instamount,
-                            'currency'             => 'eur',
-                            'interval'             => 'month',
-                            'statement_descriptor' => $desc,
-
-                        ]);
-
-                        // Create the subscription
-                        $sub = $dpuser
-                            ->subscription()
-                            ->onPlan($planid)
-                            ->create(['metadata' => ['installments_paid' => 0, 'installments' => $installments]])
-                        ;
-
-                    }
-
+               
+                if($instamount - floor($instamount)>0){
+                    $planAmount = str_replace('.','',$instamount);
+                }else{
+                    $planAmount  = $instamount . '00';
                 }
-                else {
-
-                    $dpuser->subscription()->syncWithStripe();
+                    //$dpuser->subscription()->syncWithStripe();
                    // dd("Entity ready to be billed!");
                     // Check if the entity has any active subscription
-                    if ($dpuser->isSubscribed()) {
-                        \Session::put('dperror','You have at least one active subscription!');
-                          return '/cart';
-                    }
-                    else {
+                    
                        
                         //./ngrok authtoken 69hUuQ1DgonuoGjunLYJv_3PVuHFueuq5Kiuz7S1t21
                         // Create the plan to subscribe
                         $desc = $installments . ' installments';
                         $planid = 'plan_'.$dpuser->id.'_E_'.$ev->id.'_T_'.$ticket_id.'_x'.$installments;
                         $name = $ev_title . ' ' . $ev_date_help . ' | ' . $desc;
-
-                            $plan = $stripe->plans()->create([
-                                'id'                   => $planid,
+                        //dd(str_replace('.','',$instamount) . '00');
+                        
+                        $plan = Plan::create([
+                            'id'                   => $planid,
+                            "product" => array(
                                 'name'                 => $name,
-                                'amount'               => $instamount,
-                                'currency'             => 'eur',
-                                'interval'             => 'month',
-                                'statement_descriptor' => $desc,
+                              ),
+                            
+                            'amount'               => $planAmount,
+                            'currency'             => 'eur',
+                            'interval'             => 'month',
+                            //'statement_descriptor' => $desc,
 
-                            ]);
+                        ]);
 
-                        $sub = $dpuser
+                                             
+                        /*$sub = $dpuser
                             ->subscription()
                             ->onPlan($planid)
                             ->create(['metadata' => ['installments_paid' => 0, 'installments' => $installments]])
-                        ;
+                        ;*/
 
-                    }
-                }
+                        $charge = $dpuser->newSubscription('month', $plan->id)->create($dpuser->defaultPaymentMethod()->id, 
+                        ['email' => $dpuser->email],
+                                    ['metadata' => ['installments_paid' => 0, 'installments' => $installments]]);
 
-               
-
-
+                        $charge->metadata = json_encode(['installments_paid' => 0, 'installments' => $installments]);
+                        $charge->price = $instamount;
+                        $charge->save();
              }
 
 
@@ -822,7 +748,7 @@ class CartController extends Controller
 
         
 
-            if($charge->status == 'succeeded') {
+            if( (is_array($charge)  &&  $charge['status'] == 'succeeded' ) || $charge->status == 'succeeded') {
                  /**
                  * Write Here Your Database insert logic.
                  */
@@ -872,10 +798,12 @@ class CartController extends Controller
                     $transaction->user()->save($dpuser);
                     $transaction->event()->save($ev);
 
-                    if(!Invoice::latest()->first()){
+                    /*if(!Invoice::latest()->doesntHave('subscription')->first()){
+                    //if(!Invoice::has('event')->latest()->first()){
                         $invoiceNumber = sprintf('%04u', 1);
                     }else{
-                        $invoiceNumber = Invoice::latest()->first()->invoice;
+                        //$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;
+                        $invoiceNumber = Invoice::latest()->doesntHave('subscription')->first()->invoice;
                         $invoiceNumber = (int) $invoiceNumber + 1;
                         $invoiceNumber = sprintf('%04u', $invoiceNumber);
                     }
@@ -893,7 +821,7 @@ class CartController extends Controller
 
                     $elearningInvoice->user()->save($dpuser);
                     $elearningInvoice->event()->save($ev);
-                    $elearningInvoice->transaction()->save($transaction);
+                    $elearningInvoice->transaction()->save($transaction);*/
 
                     \Session::put('transaction_id', $transaction->id);
                 }
@@ -918,6 +846,12 @@ class CartController extends Controller
             \Session::put('dperror',$e->getMessage());
               return '/cart';
              //return redirect('/info/order_error');
+        }
+        catch(\Stripe\Exception\InvalidRequestException $e) {
+            //dd($e);
+            \Session::put('dperror',$e->getMessage());
+            //return redirect('/info/order_error');
+            return '/cart';
         }
         catch(\Stripe\Exception\MissingParameterException $e) {
             //dd($e);

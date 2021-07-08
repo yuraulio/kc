@@ -1411,7 +1411,7 @@ if(!isset($info)){
 
 
          $('<script>')
-       .text(`var stripe = Stripe('{{env('STRIPE_KEY')}}',{locale: 'en'});
+       .text(`var stripe = Stripe('{{$stripe_key}}',{locale: 'en'});
                var elements = stripe.elements();
                var cardElement = elements.create('card',{
                   style: {

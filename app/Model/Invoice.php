@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Model\User;
 use App\Model\Transaction;
 use App\Model\Event;
+use App\Model\Subscription;
 use PDF;
 
 class Invoice extends Model
@@ -16,17 +17,22 @@ class Invoice extends Model
 
     public function user()
     {
-        return $this->morphedByMany(User::class, 'invoiceable','invoiceables');
+        return $this->morphedByMany(User::class, 'invoiceable');
     }
 
     public function event()
     {
-        return $this->morphedByMany(Event::class, 'invoiceable','invoiceables');
+        return $this->morphedByMany(Event::class, 'invoiceable');
+    }
+
+    public function subscription()
+    {
+        return $this->morphedByMany(Subscription::class, 'invoiceable');
     }
 
     public function transaction()
     {
-        return $this->morphedByMany(Transaction::class, 'invoiceable','invoiceables');
+        return $this->morphedByMany(Transaction::class, 'invoiceable');
     }
 
 
@@ -127,7 +133,7 @@ class Invoice extends Model
         $data=[];
         $remainingInst=0;
         $date = '-';
-        $billing = $this->transaction->billing_details;
+        $billing = json_decode($this->transaction->first()->billing_details,true);
 
         //dd($this->transaction);
 
@@ -148,21 +154,16 @@ class Invoice extends Model
         $this->instalments_remaining = 0;
         $this->save();
     
-        if(!InvoiceElearning::latest()->first()){
+        if(!Invoice::latest()->doesntHave('subscription')->first()){
             $invoiceNumber = sprintf('%04u', 1);
         }else{
-            $invoiceNumber = InvoiceElearning::latest()->first()->invoice;
+            $invoiceNumber = Invoice::latest()->doesntHave('subscription')->first()->invoice;
             $invoiceNumber = (int) $invoiceNumber + 1;
             $invoiceNumber = sprintf('%04u', $invoiceNumber);
         }
 
         
-
-        $newInvoice = new InvoiceElearning;
-
-        $newInvoice->trans_id = $this->trans_id;
-        $newInvoice->user_id = $this->user_id;
-        $newInvoice->event_id = $this->event_id;
+        $newInvoice = new Invoice;
 
         $newInvoice->name = $this->name;
         $newInvoice->amount = $this->amount;
@@ -173,6 +174,8 @@ class Invoice extends Model
 
         $newInvoice->save();
 
+        $newInvoice->event()->save($this->event()->first());
+
         if($this->amount - floor($this->amount)>0){
             $data['amount'] = number_format ($newInvoice->amount , 2 , ',', '.');
         }else{
@@ -180,7 +183,7 @@ class Invoice extends Model
         }
   
         $data['date'] = date('d') . '-' . date('F') . '-' . date('Y');
-        $data['title'] = $newInvoice->event->title;
+        $data['title'] = $newInvoice->event->first()->title;
         $data['name'] = $newInvoice->name;
         $data['billInfo'] = $billInfo ;
         $data['invoice'] = $newInvoice->invoice ;

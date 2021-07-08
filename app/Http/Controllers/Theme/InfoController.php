@@ -547,18 +547,18 @@ class InfoController extends Controller
 
             //dd($transaction);
             //dd($transaction->invoice);
-            $pdf = $transaction->invoice->first()->generateInvoice();
-            $pdf = $pdf->output();
+            //$pdf = $transaction->invoice->first()->generateInvoice();
+            //$pdf = $pdf->output();
             $data = [];  
             $muser = [];
-            $muser['name'] = $transaction->invoice->first()->user->first()->firstname;
-            $muser['first'] = $transaction->invoice->first()->user->first()->firstname;
-            $muser['email'] = $transaction->invoice->first()->user->first()->email;
-            $muser['event_title'] =$transaction->invoice->first()->event->first()->title;
-            $data['firstName'] = $transaction->invoice->first()->user->first()->firstname;
-            $data['eventTitle'] =$transaction->invoice->first()->event->first()->title;
+            $muser['name'] = $transaction->user->first()->firstname;
+            $muser['first'] = $transaction->user->first()->firstname;
+            $muser['email'] = $transaction->user->first()->email;
+            $muser['event_title'] =$transaction->event->first()->title;
+            $data['firstName'] = $transaction->user->first()->firstname;
+            $data['eventTitle'] =$transaction->event->first()->title;
 
-            $sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf) {
+            /*$sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf) {
 
                 $fullname = $muser['name'];
                 $first = $muser['first'];
@@ -568,7 +568,7 @@ class InfoController extends Controller
                 $m->subject($sub);
                 $m->attachData($pdf, "invoice.pdf");
                 
-                });
+                });*/
 
             $pathFile = url('/') . '/pdf/elearning/KnowCrunch - How to access our website & account.pdf';
             $pathFile = str_replace(' ','%20',$pathFile);
@@ -584,7 +584,7 @@ class InfoController extends Controller
                     
                     });
 
-            $sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf) {
+            /*$sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf) {
 
                 $fullname = $muser['name'];
                 $first = $muser['first'];
@@ -595,7 +595,7 @@ class InfoController extends Controller
                 $m->subject($sub);
                 $m->attachData($pdf, "invoice.pdf");
                 
-            });
+            });*/
 
         }
 

@@ -19,8 +19,8 @@ class HomeController extends Controller
         $stripe_key = env('STRIPE_KEY');
         //$stripe = Stripe::make($skey);
 
-        $user = User::find(1359);
-
+        //$user = User::find(1359);
+        //dd($user->events->where('id',2304)->first()->invoicesByUser(1359)->get());
         /*if($user['stripe_id'] == null){
             $options=['name' => $user['firstname'] . ' ' . $user['lastname'], 'email' => $user['email']];
 

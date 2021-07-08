@@ -67,8 +67,9 @@
 
 
 
-   <?php //dd($default_card); ?>
-   @if(!isset($default_card))
+   <?//php dd($default_card); ?>
+
+   @if(!isset($default_card) || (isset($default_card) && !$default_card))
    <?php //dd($default_card); ?>
    <div class="col12">
          <h4>Card Information</h4>

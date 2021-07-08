@@ -13,8 +13,8 @@ class CreateSubscriptionItemsTable extends Migration
      */
     public function up()
     {
-        /*Schema::create('subscription_items', function (Blueprint $table) {
-            /*$table->bigIncrements('id');
+        Schema::create('subscription_items', function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->unsignedBigInteger('subscription_id');
             $table->string('stripe_id')->index();
             $table->string('stripe_product');
@@ -23,7 +23,7 @@ class CreateSubscriptionItemsTable extends Migration
             $table->timestamps();
 
             $table->unique(['subscription_id', 'stripe_price']);
-        });*/
+        });
     }
 
     /**
@@ -33,6 +33,6 @@ class CreateSubscriptionItemsTable extends Migration
      */
     public function down()
     {
-        //Schema::dropIfExists('subscription_items');
+        Schema::dropIfExists('subscription_items');
     }
 }

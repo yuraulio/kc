@@ -26,6 +26,7 @@ use App\Traits\SlugTrait;
 use App\Traits\MetasTrait;
 use App\Traits\BenefitTrait;
 use App\Traits\MediaTrait;
+use App\Traits\Invoices;
 
 class Event extends Model
 {
@@ -345,7 +346,31 @@ class Event extends Model
         return ($sum/count($videos)) * 100;
     }
 
+    public function invoices(){
+        return $this->morphToMany(Invoice::class, 'invoiceable');
+    }
 
+    public function transactions(){
+        return $this->morphToMany(Transaction::class, 'transactionable');
+    }
+
+    public function invoicesByUser($user){
+       
+        return $this->invoices()->doesntHave('subscription')->whereHas('user', function ($query) use($user) {
+                $query->where('id', $user);
+            })->withPivot('invoiceable_id','invoiceable_type');
+    }
+
+    public function transactionsByUser($user){
+       
+        /*return $this->transactions()->doesntHave('subscription')->whereHas('user', function ($query) use($user) {
+                $query->where('id', $user);
+            });*/
+
+        return $this->transactions()->whereHas('user', function ($query) use($user) {
+            $query->where('id', $user);
+        });
+    }
 
 
 }

@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use App\Model\Item;
 use App\Model\User;
+use App\Model\Cashier as newCashier;
 use App\Observers\ItemObserver;
 use App\Observers\UserObserver;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Cashier\Cashier;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,7 +25,8 @@ class AppServiceProvider extends ServiceProvider
 
         Item::observe(ItemObserver::class);
         User::observe(UserObserver::class);
-        //Cashier::useCustomerModel(User::class);
+        Cashier::useCustomerModel(User::class);
+
     }
 
     /**
@@ -33,6 +36,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+      
     }
 }

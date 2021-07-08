@@ -19,9 +19,17 @@ class CardController extends Controller
     
         $user = Auth::user();	
         if($user['stripe_id'] == null){
-
+           
             $options=['name' => $user['firstname'] . ' ' . $user['lastname'], 'email' => $user['email']];
             $user->createAsStripeCustomer($options);
+
+            $stripe_ids = json_decode($user->stripe_ids,true);
+            $stripe_ids[] = $user->stripe_id;
+
+            $user->stripe_ids = json_encode($stripe_ids);
+            $user->save();
+
+            //dd($user);
         }
 
 
@@ -46,7 +54,7 @@ class CardController extends Controller
            return response()->json([
                 'success' => true,
                 'card' => $card,
-                'payment_method' => $request->$request->payment_method
+                'payment_method' => $request->payment_method
             ]);
           
         } catch (Exception $e) {

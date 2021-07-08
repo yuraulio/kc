@@ -285,6 +285,7 @@ Route::group([ 'prefix' => '{id}' ], function() {
 
 });
 
+Route::post('webhook/stripe', [ 'as' => 'stripe.webhook', 'uses' => 'Webhook\WebhookController@handleWebhook' ]);
 
 Route::group(['middleware' => ['preview','web']], function () {
     Route::get('/', 'Theme\HomeController@homePage');
