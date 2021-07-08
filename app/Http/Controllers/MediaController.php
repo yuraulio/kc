@@ -18,6 +18,20 @@ class MediaController extends Controller
         return view('admin.media2.index');
     }
 
+    public function crop_file_manager_image(Request $request){
+        $path = $request->folder.$request->name;
+        //dd($request->all());
+        $image = Image::make(public_path('uploads').$path);
+        $image->crop(intval($request->width),intval($request->height), intval($request->x), intval($request->y));
+        $image->save(public_path('uploads').$path);
+
+        return response()->json([
+            'success' => __('Already image cropped.'),
+            'data' => $path,
+        ]);
+
+    }
+
     public function uploadSvg(Request $request, Media $media){
         $mediaKey = $request->svg;
 
@@ -158,15 +172,9 @@ class MediaController extends Controller
 
     public function crop_image(Request $request)
     {
-        //dd(public_path('uploads'));
-        //dd($request->all());
         $media = Media::find($request->media_id);
-        //dd($media);
         if($media['details'] != null){
             $details = json_decode($media['details'], true);
-
-            //find version
-            //dd((array)$details->img_align);
 
             $found = false;
             foreach($details['img_align'] as $key => $value){
@@ -177,12 +185,8 @@ class MediaController extends Controller
 
             }
 
-            //dd($found);
 
             if($found){
-                //dd('found in json');
-
-                //dd($details['img_align'][$request->version]);
                 $details['img_align'][$request->version]['x'] = $request->x;
                 $details['img_align'][$request->version]['y'] = $request->y;
                 $details['img_align'][$request->version]['width'] = $request->width;
@@ -191,7 +195,6 @@ class MediaController extends Controller
 
 
             }else{
-                //dd('not found');
                 $details['img_align'][$request->version]['x'] = $request->x;
                 $details['img_align'][$request->version]['y'] = $request->y;
                 $details['img_align'][$request->version]['width'] = $request->width;

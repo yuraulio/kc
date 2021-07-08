@@ -155,6 +155,7 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::put('media/upload-image/{media}', 'MediaController@uploadVersionImage')->name('upload.versionImage');
     Route::post('media/crop_image', ['as' => 'media.crop_image', 'uses' => 'MediaController@crop_image']);
     Route::post('media/crop_profile_image', ['as' => 'media.crop_profile_image', 'uses' => 'MediaController@crop_profile_image']);
+    Route::post('media/crop_file_manager_image', ['as' => 'media.crop_file_manager_image', 'uses' => 'MediaController@crop_file_manager_image']);
 
     //Route::get('media/createFolder', ['as' => 'media.createFolder', 'uses' => 'MediaController@createFolder']);
 
@@ -293,5 +294,12 @@ Route::group(['middleware' => ['preview','web']], function () {
     Route::get('{slug}', 'Theme\HomeController@index');
 
 });
+
+Route::namespace('Alexusmai\\LaravelFileManager\\Controllers\\')->group(function () {
+    Route::get('/search', 'FileManagerController@search')
+        ->name('fm.search');
+});
+
+
 
 

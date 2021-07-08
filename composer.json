@@ -48,13 +48,14 @@
     "autoload": {
         "psr-4": {
             "App\\": "app/",
-            "Laravel\\Cashier\\": "app/Model"
-            
+            "Laravel\\Cashier\\": "app/Model",
+            "Alexusmai\\LaravelFileManager\\Controllers\\": "app/overrides/file-manager/"
         },
         "classmap": [
             "database/seeds",
             "database/factories"
         ]
+
     },
     "autoload-dev": {
         "psr-4": {
