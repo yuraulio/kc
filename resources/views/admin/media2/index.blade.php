@@ -31,9 +31,9 @@
     <!-- Preview Modal -->
     <div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content fm-modal-preview table-info">
+            <div class="modal-content fm-modal-preview">
                 <div class="modal-header">
-                <h5 class="modal-title w-75 text-truncate"> Preview <small class="text-muted pl-3 title-small"></small></h5>
+                    <h5 class="modal-title w-75 text-truncate"> Preview <small class="text-muted pl-3 title-small"></small></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -43,6 +43,7 @@
                     <img id="preview-img-file" src="" alt="" style="max-height: 300px;">
 
                     <div id="fm-additions-cropper" class="fm-additions-cropper">
+
                         <div class="row" style="max-height: 300px;">
                             <div class="col-sm-9 cropper-block">
                                 <!-- <img src="" alt="" class="cropper-hidden cropper-img"> -->
@@ -56,9 +57,11 @@
                                 </div>
                             </div>
                             <div class="col-sm-3 pl-0">
-                                <div class="cropper-preview" style="width: 216px; height: 93.5765px;">
+                                <div class="cropper-preview"></div>
 
-                                    <!-- <div class="preview"></div> -->
+                                    <input type="file" value="" name="image" class="image" id="upload_image" style="display:none" />
+
+                                    <!-- <div class="preview" style="display: block; width: 270px; height: 116.971px; min-width: 0px !important; min-height: 0px !important; max-width: none !important; max-height: none !important;"></div> -->
 
                                     <!-- <img src="http://kcversion8.test/file-manager/preview?disk=uploads&amp;path=company32.png&amp;v=1625661829" alt="company32.png" style="display: block; width: 270px; height: 116.971px; min-width: 0px !important; min-height: 0px !important; max-width: none !important; max-height: none !important; transform: translateX(-27px) translateY(-11.6971px);"></div> -->
                                     <div class="cropper-data">
@@ -106,55 +109,59 @@
                                         </div>
                                         <button id="apply-crop" title="Apply" type="button" class="btn btn-block btn-sm btn-info mb-2"><i class="fas fa-check"></i></button>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <div role="group" aria-label="Scale" class="btn-group mr-2">
-                                        <button id="move-left" class="btn btn-info"><i class="fas fa-arrow-left"></i></button>
-                                        <button id="move-right" class="btn btn-info"><i class="fas fa-arrow-right"></i></button>
-                                        <button id="move-up" class="btn btn-info"><i class="fas fa-arrow-up"></i></button>
-                                        <button id="move-down" class="btn btn-info"><i class="fas fa-arrow-down"></i></button>
-                                    </div>
-                                    <div role="group" aria-label="Scale" class="btn-group mr-2">
-                                        <button id="scale-X" class="btn btn-info"><i class="fas fa-arrows-alt-h"></i></button>
-                                        <button id="scale-Y" class="btn btn-info"><i class="fas fa-arrows-alt-v"></i></button>
-                                    </div>
-                                    <div role="group" aria-label="Rotate" class="btn-group mr-2">
-                                        <button id="rotate-plus" class="btn btn-info"><i class="fas fa-undo"></i></button>
-                                        <button id="rotate-minus" class="btn btn-info"><i class="fas fa-redo"></i></button>
-                                    </div>
-                                    <div role="group" aria-label="Rotate" class="btn-group mr-2">
-                                        <button id="zoom-plus" class="btn btn-info"><i class="fas fa-search-plus"></i></button>
-                                        <button id="zoom-minus" class="btn btn-info"><i class="fas fa-search-minus"></i></button>
-                                    </div>
-                                    <button id="crop-reset" title="Reset" class="btn btn-info mr-2"><i class="fas fa-sync-alt"></i></button>
-                                    <button title="Save" class="btn btn-danger mr-2"><i class="far fa-save"></i></button>
-                                </div>
-                                <span class="d-block">
-                                    <button class="btn btn-light">Back</button>
-                                </span>
+
                             </div>
                         </div>
+
+                        <div class="d-flex justify-content-between">
+                            <div>
+
+                                <div role="group" aria-label="Scale" class="btn-group mr-2">
+                                    <button id="move-left" class="btn btn-info"><i class="fas fa-arrow-left"></i></button>
+                                    <button id="move-right" class="btn btn-info"><i class="fas fa-arrow-right"></i></button>
+                                    <button id="move-up" class="btn btn-info"><i class="fas fa-arrow-up"></i></button>
+                                    <button id="move-down" class="btn btn-info"><i class="fas fa-arrow-down"></i></button>
+                                </div>
+                                <div role="group" aria-label="Scale" class="btn-group mr-2">
+                                    <button id="scale-X" class="btn btn-info"><i class="fas fa-arrows-alt-h"></i></button>
+                                    <button id="scale-Y" class="btn btn-info"><i class="fas fa-arrows-alt-v"></i></button>
+                                </div>
+                                <div role="group" aria-label="Rotate" class="btn-group mr-2">
+                                    <button id="rotate-plus" class="btn btn-info"><i class="fas fa-undo"></i></button>
+                                    <button id="rotate-minus" class="btn btn-info"><i class="fas fa-redo"></i></button>
+                                </div>
+                                <div role="group" aria-label="Rotate" class="btn-group mr-2">
+                                    <button id="zoom-plus" class="btn btn-info"><i class="fas fa-search-plus"></i></button>
+                                    <button id="zoom-minus" class="btn btn-info"><i class="fas fa-search-minus"></i></button>
+                                </div>
+
+                                <button id="crop-reset" title="Reset" class="btn btn-info mr-2"><i class="fas fa-sync-alt"></i></button>
+                                <button id="crop-img-modal" title="Save" class="btn btn-danger mr-2"><i class="far fa-save"></i></button>
+                            </div>
+                            <span class="d-block">
+                                <button id="back-btn-preview" class="btn btn-light">Back</button>
+                            </span>
+                        </div>
                     </div>
+                </div>
 
-
-
-                <div class="d-flex justify-content-between">
-                    <span class="d-block table-info">
-                        <button id="crop-image-file-manager" title="Cropping" class="btn btn-info table-info"><i class="fas fa-crop-alt"></i></button>
+                <div class="d-flex justify-content-between pre-crop-modal">
+                    <span class="d-block">
+                        <button id="crop-image-file-manager" title="Cropping" class="btn btn-info"><i class="fas fa-crop-alt"></i></button>
                     </span>
-                    <span class="d-block"><button class="btn btn-light">Cancel</button></span>
+                    <span class="d-block"><button class="btn btn-light close_modal">Cancel</button></span>
                 </div>
             </div>
         </div>
     </div>
+
     <!-- Delete Modal -->
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content fm-modal-delete">
             <div class="modal-header">
             <h5 class="modal-title w-75 text-truncate"> Delete <small class="text-muted pl-3 title-small"></small></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 
                 <span aria-hidden="true">&times;</span>
                 </button>
@@ -171,7 +178,7 @@
 
             <div class="modal-footer">
                 <button id="deleteFiles" class="btn btn-danger">Delete </button>
-                <button class="btn btn-light">Cancel</button>
+                <button class="btn btn-light close_modal">Cancel</button>
                 <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
             </div>
             </div>
@@ -184,6 +191,7 @@
             <div class="modal-content fm-modal-rename">
                 <div class="modal-header">
                 <h5 class="modal-title w-75 text-truncate"> Rename <small class="text-muted pl-3 title-small"></small></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -202,7 +210,7 @@
 
                 <div class="modal-footer">
                     <button id="renameFile" disabled="disabled" class="btn btn-info">Submit </button>
-                    <button class="btn btn-light">Cancel</button>
+                    <button class="btn btn-light close_modal">Cancel</button>
                 </div>
             </div>
         </div>
@@ -214,7 +222,7 @@
             <div class="modal-content fm-modal-clipboard">
                 <div class="modal-header">
                     <h5 class="modal-title"> Clipboard </h5>
-
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -230,9 +238,9 @@
                 </div>
 
 
-                <div class="modal-footer table-info">
+                <div class="modal-footer">
                     <button class="btn btn-danger clear-files">Clear </button>
-                    <button class="btn btn-light">Cancel</button>
+                    <button class="btn btn-light close_modal">Cancel</button>
                 </div>
             </div>
         </div>
@@ -244,11 +252,12 @@
             <div class="modal-content fm-modal-zip">
                 <div class="modal-header">
                     <h5 class="modal-title"> Create archive </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
 
-                <div class="modal-body table-info">
+                <div class="modal-body">
                     <label for="fm-zip-name">Archive name</label>
                     <div class="input-group mb-3">
                         <input type="text" value="" id="fm-zip-name" class="form-control">
@@ -264,7 +273,7 @@
 
                 <div class="modal-footer">
                     <button id="zip-submit" disabled="disabled" class="btn btn-info">Submit </button>
-                    <button class="btn btn-light">Cancel</button>
+                    <button class="btn btn-light close_modal">Cancel</button>
                 </div>
 
             </div>
@@ -277,6 +286,7 @@
             <div class="modal-content fm-modal-properties">
                 <div class="modal-header">
                     <h5 class="modal-title"> Properties </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -314,7 +324,7 @@
 
 
                 <div class="modal-footer">
-                    <button class="btn btn-light">Cancel</button>
+                    <button class="btn btn-light close_modal">Cancel</button>
                 </div>
 
             </div>
@@ -339,22 +349,34 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
     <script>
         let value = 200
+        let selected = 0
 
 
 
         window.addEventListener('DOMContentLoaded', function () {
             var image = document.getElementById('img-cropper');
-            var cropBoxData;
+            var image1 = $('#preview-img-file')
+            // var cropBoxData= {
+            //     width: $(image1).width * ($(image1).width/$(image1).height),
+            //     height: $(image1).height * ($(image1).width/$(image1).height),
+            // };
             var canvasData;
             var cropper;
 
 
 
-
-
             $('#previewModal').on('shown.bs.modal', function () {
+
                 cropper = new Cropper(image, {
-                autoCropArea: 0.5,
+                preview: ".cropper-preview",
+                aspectRatio: Number(($(image1).width/$(image1).height), 4),
+                viewMode: 0,
+                dragMode: "crop",
+                autoCropArea: 1,
+                cropBoxMovable: true,
+                cropBoxResizable: true,
+                minContainerWidth: 700,
+                minContainerHeight: 300,
                 ready: function () {
                     //Should set crop box data first here
                     cropper.setCropBoxData(cropBoxData).setCanvasData(canvasData);
@@ -368,8 +390,8 @@
                     $('#dataScaleX').val(event.detail.scaleX)
                     $('#dataScaleY').val(event.detail.scaleY)
 
-                    console.log(cropper.getCroppedCanvas({ maxWidth: 4096, maxHeight: 4096}))
                 },
+
                 });
 
             }).on('hidden.bs.modal', function () {
@@ -436,6 +458,33 @@
             })
 
 
+
+            $( document ).on('click', '#crop-img-modal', function(e) {
+                var rest = path.substring(0, path.lastIndexOf("/") + 1);
+                var last = path.substring(path.lastIndexOf("/") + 1, path.length);
+
+                data = {folder: rest, name: last, x:cropper.getData({rounded: true}).x, y:cropper.getData({rounded: true}).y, width:cropper.getData({rounded: true}).width, height:cropper.getData({rounded: true}).height}
+                //EDW
+                $.ajax({
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "/admin/media/crop_file_manager_image",
+                    data: data,
+                    success: function(data) {
+
+                        $('#img-cropper').attr('src', data)
+                        $('.cropper-crop-box.table-info img').attr('src', data)
+
+                        console.log(cropper.getCroppedCanvas({maxWidth: 4096, maxHeight: 4096}))
+
+
+                    }
+                });
+            })
+
+
             $( document ).on('click', '#apply-crop', function() {
                 x = $('#dataX').val()
                 y = $('#dataY').val()
@@ -461,8 +510,6 @@
 
 
         });
-
-
 
 
     </script>
@@ -499,6 +546,8 @@
                                 $('#previewModal img').attr('src', base_url+'/uploads'+path)
 
                                 $('.cropper-img').attr('src', base_url+'/uploads'+path)
+
+                                $('#upload_image').val(base_url+'/uploads'+path)
 
 
 
@@ -655,13 +704,9 @@
 
                                 })
 
-                                //console.log(files)
                             }else if(key == 'properties'){
                                 $('#propertiesModal').modal('show');
                                 details = name.split(' ')
-                                console.log(name)
-                                console.log('1111111')
-                                console.log(details)
                                 $('#properties-name').text(details[1])
                                 $('#properties-path').text(path)
                                 $('#properties-path').text(path)
@@ -674,23 +719,64 @@
                             // window.console && console.log(m) || alert(m);
                         },
                         items: {
-                            "view": {name: "View", icon: "fas fa-eye"},
-                            "download": {name: "Download", icon: "fas fa-download"},
+                            "view": {
+                                name: "View",
+                                icon: "fas fa-eye",
+                                disabled: function(key, opt){
+                                    if(selected == 1){
+                                        return false
+                                    }else{
+                                        return true
+                                    }
+                                }
+                                },
+                            "download": {
+                                name: "Download",
+                                icon: "fas fa-download",
+                                disabled: function(key, opt){
+                                    if(selected == 1){
+                                        return false
+                                    }else{
+                                        return true
+                                    }
+                                }
+                                },
                             "sep1": "---------",
                             "copy": {name: "Copy", icon: "far fa-copy"},
                             "cut": {name: "Cut", icon: "fas fa-cut"},
                             "paste": {name: "Paste", icon: "fas fa-paste"},
-                            "rename": {name: "Rename", icon: "fas fa-edit"},
+                            "rename": {
+                                name: "Rename",
+                                icon: "fas fa-edit",
+                                disabled: function(key, opt){
+                                    if(selected == 1){
+                                        return false
+                                    }else{
+                                        return true
+                                    }
+                                }
+                                },
                             "zip": {name: "Zip", icon: "fas fa-file-archive"},
                             "sep2": "---------",
                             "delete": {name: "Delete", icon: "delete"},
                             "sep3": "---------",
-                            "properties": {name: "Properties", icon: "far fa-list-alt"},
+                            "properties": {
+                                name: "Properties",
+                                icon: "far fa-list-alt",
+                                disabled: function(key, opt){
+                                    if(selected == 1){
+                                        return false
+                                    }else{
+                                        return true
+                                    }
+                                }
+                                },
                             }
                     }
                 }
             });
         });
+
     </script>
 
     <script>
@@ -698,13 +784,19 @@
 
         $( document ).on("click", "#crop-image-file-manager", function() {
 
-            $('#previewModal .modal-body.text-center').hide()
-            $('#crop-image-file-manager').hide()
+            $('#preview-img-file').css('display', 'none')
+            $('.pre-crop-modal').attr('style', 'display: none !important');
+            $('#crop-image-file-manager').css('display', 'none')
             $('#fm-additions-cropper').css('display', 'block')
+        })
 
 
+        $( document ).on("click", "#back-btn-preview", function() {
 
-
+            $('#preview-img-file').css('display', 'block')
+            $('.pre-crop-modal').attr('style', 'display: block');
+            $('#crop-image-file-manager').css('display', 'block')
+            $('#fm-additions-cropper').css('display', 'none')
         })
 
 
@@ -839,6 +931,8 @@
 
                 }
             })
+            $(this).parent().parent().remove()
+
             //console.log(index)
             // files.splice(id)
              //console.log(files)
@@ -1002,6 +1096,19 @@
 
     });
 
+    $(document).on("click","tr", function () {
+
+        selected = $('.search-result.table-info').length
+
+    });
+
+    $(document).on("click",".close_modal", function () {
+        console.log('close modal')
+
+        $('.close').click()
+
+    });
+
     $(document).mousedown(function(e){
         //console.log(e.button)
             if( e.button == 2 ) {
@@ -1016,61 +1123,7 @@
         });
 
 
-    // $(document).on("click", ".fm-download", function(){
 
-
-
-
-    // })
-
-    /*
-
-    // Trigger action when the contexmenu is about to be shown
-$(document).bind("contextmenu", function (event) {
-
-    // Avoid the real one
-    event.preventDefault();
-
-    // Show contextmenu
-    $(".custom-menu").finish().toggle(100).
-
-    // In the right position (the mouse)
-    css({
-        top: event.pageY + "px",
-        left: event.pageX + "px"
-    });
-});
-
-
-// If the document is clicked somewhere
-$(document).bind("mousedown", function (e) {
-
-    // If the clicked element is not the menu
-    if (!$(e.target).parents(".custom-menu").length > 0) {
-
-        // Hide it
-        $(".custom-menu").hide(100);
-    }
-});
-
-
-// If the menu element is clicked
-$(".custom-menu li").click(function(){
-
-    // This is the triggered action name
-    switch($(this).attr("data-action")) {
-
-        // A case for each action. Your actions here
-        case "first": alert("first"); break;
-        case "second": alert("second"); break;
-        case "third": alert("third"); break;
-    }
-
-    // Hide it AFTER the action was triggered
-    $(".custom-menu").hide(100);
-  });
-
-*/
 
 
     </script>

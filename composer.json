@@ -44,12 +44,14 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "app/"
+            "App\\": "app/",
+            "Alexusmai\\LaravelFileManager\\Controllers\\": "app/overrides/file-manager/"
         },
         "classmap": [
             "database/seeds",
             "database/factories"
         ]
+
     },
     "autoload-dev": {
         "psr-4": {

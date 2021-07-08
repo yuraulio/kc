@@ -143,12 +143,25 @@
     text-overflow: ellipsis;
 }
 
-/* #fm-additions-cropper {
+#fm-additions-cropper {
     display: none;
-} */
+}
 
 .modal-xl {
     max-width: 90%;
 }
 
+.cropper-preview {
+    overflow: hidden;
+    width: 200px !important;
+    height: 93px !important;
+  }
+
+#preview-img-file {
+    margin: 0 auto;
+}
+
+.w-65, .w-10, .w-auto {
+    z-index: 1 !important;
+}
 
