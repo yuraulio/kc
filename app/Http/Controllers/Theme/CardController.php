@@ -23,7 +23,7 @@ class CardController extends Controller
             $options=['name' => $user['firstname'] . ' ' . $user['lastname'], 'email' => $user['email']];
             $user->createAsStripeCustomer($options);
 
-            $stripe_ids = json_decode($user->stripe_ids,true);
+            $stripe_ids = json_decode($user->stripe_ids,true) ? json_decode($user->stripe_ids,true) : [];
             $stripe_ids[] = $user->stripe_id;
 
             $user->stripe_ids = json_encode($stripe_ids);
