@@ -20,6 +20,7 @@ namespace App\Model;
 use App\Model\Topic;
 use App\Model\Dropbox;
 use App\Model\Event;
+use App\Model\Slug;
 use App\Model\Lesson;
 use App\Model\Testimonial;
 use App\Model\Faq;
@@ -111,6 +112,11 @@ class Category extends Model
     {
         return $this->morphToMany(Faq::class, 'faqable')->with('category');
     }
+
+    // public function slug()
+    // {
+    //     return $this->morphedByMany(Slug::class, 'slugs');
+    // }
 
     public function getFaqsCategorized()
     {

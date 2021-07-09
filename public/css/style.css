@@ -152,10 +152,10 @@
 }
 
 .cropper-preview {
-    overflow: hidden;
     width: 200px !important;
     height: 93px !important;
   }
+
 
 #preview-img-file {
     margin: 0 auto;
