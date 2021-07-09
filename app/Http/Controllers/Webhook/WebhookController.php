@@ -13,44 +13,6 @@ use \Carbon\Carbon;
 
 class WebhookController extends BaseWebhookController
 {
-    /*public function handleInvoicePaymentSucceeded(array $payload)
-    {
-
-		//Stripe::setApiKey('sk_test_stfgk5Q0OrCEpa0fViIKrPlI00hfuMdawv');
-
-        //dd($payload);
-		//dd($_ENV['STRIPE_SECRET']);
-    	//$skey = $_ENV['STRIPE_SECRET'];
-    	//$stripe = Stripe::make($skey);
-    	//$sub = $payload['lines']['data'][0];
-		//$payload['data']['object']['lines']['data']['metadata']
-		$sub = $payload['data']['object']['lines']['data'][0];
-		$entity = $this->getUserByStripeId($payload['data']['object']['customer']);
-
-    	if (isset($sub['metadata']['installments_paid'])) {
-    		
-			if(isset($sub['metadata']['installments']))
-    		  $totalinst = $sub['metadata']['installments'];
-            else 
-                $totalinst = 3;
-            
-	    	$count++;
-
-		    $subscription = $stripe->subscriptions()->update($payload['data']['object']['subscription'], ['metadata' => ['installments_paid' => $count, 'installments' => $totalinst]]);
-
-		    if ($count >= $totalinst) {
-		    	//$subscription = $stripe->subscriptions()->cancel($payload['customer'], $sub['id']);
-				$user->subscription($payload['data']['object']['subscription'])->cancelNow();
-		    }
-
-		    //$entity = $this->getUserByStripeId($payload['data']['object']['customer']);
-		    //$entity->subscription()->syncWithStripe();
-		    //$entity->syncWithStripe();
-	    }
-		//$subscription = $stripe->subscriptions()->cancel('cus_4EBumIjyaKooft', 'sub_4ETjGeEPC5ai9J');
-		//$subscription = $entity->subscriptions()->where('stripe_id', 'sub_5vp6DX7N6yVJqY')->first();
-        return $this->sendResponse('Webhook successfully handled.');
-    }*/
 
 	public function handleInvoicePaymentSucceeded(array $payload){
 
@@ -70,10 +32,12 @@ class WebhookController extends BaseWebhookController
 	    	$count++;
 
 			$subscription = $user->subscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first();
+			$eventId = explode('_',$subscription->stripe_price)[3];
 
 			$data = $payload['data']['object'];
 			
-
+			Stripe::setApiKey($user->events->where('id',$eventId)->first()->paymentMethod->first()->processor_options['secret_key']);
+			session()->put('payment_method',$user->events->where('id',$eventId)->first()->paymentMethod->first()->id);
             $subscription->metadata = ['installments_paid' => $count, 'installments' => $totalinst];
 			$subscription->save();
 			
@@ -81,15 +45,13 @@ class WebhookController extends BaseWebhookController
 			$stripeSubscription->metadata = ['installments_paid' => $count, 'installments' => $totalinst];
 			$stripeSubscription->save();
 
-			$eventId = explode('_',$subscription->stripe_price)[3];
-			
 			$invoices = $user->events->where('id',$eventId)->first()->invoicesByUser($user->id)->get();
 			if(count($invoices) > 0){
 				$invoice = $invoices->last();
 				$pdf = $invoice->generateCronjobInvoice();
 				$this->sendEmail($invoice,$pdf);
 			}else{
-				if(!Invoice::has('event')->latest()->first()){
+				if(!Invoice::doesntHave('subscription')->latest()->first()){
 					$invoiceNumber = sprintf('%04u', 1);
 				}else{
 

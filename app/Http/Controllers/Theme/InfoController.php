@@ -547,8 +547,7 @@ class InfoController extends Controller
 
             //dd($transaction);
             //dd($transaction->invoice);
-            //$pdf = $transaction->invoice->first()->generateInvoice();
-            //$pdf = $pdf->output();
+            
             $data = [];  
             $muser = [];
             $muser['name'] = $transaction->user->first()->firstname;
@@ -558,17 +557,38 @@ class InfoController extends Controller
             $data['firstName'] = $transaction->user->first()->firstname;
             $data['eventTitle'] =$transaction->event->first()->title;
 
-            /*$sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf) {
-
-                $fullname = $muser['name'];
-                $first = $muser['first'];
-                $sub = 'KnowCrunch |' . $first . ' – Payment Successful in ' . $muser['event_title'];;
-                $m->from($adminemail, 'Knowcrunch');
-                $m->to($muser['email'], $fullname);
-                $m->subject($sub);
-                $m->attachData($pdf, "invoice.pdf");
+            if(Session::has('installments') && Session::get('installments') <= 1){
                 
-                });*/
+                $pdf = $transaction->invoice->first()->generateInvoice();
+                $pdf = $pdf->output();
+                $sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf) {
+
+                    $fullname = $muser['name'];
+                    $first = $muser['first'];
+                    $sub =  'KnowCrunch |' . $first . ' – Payment Successful in ' . $muser['event_title'];;
+                    $m->from($adminemail, 'Knowcrunch');
+                    $m->to('info@knowcrunch.com', $fullname);
+                    //$m->to('moulopoulos@lioncode.gr', $fullname);
+                    $m->subject($sub);
+                    $m->attachData($pdf, "invoice.pdf");
+                
+                });
+
+                $sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf) {
+
+                    $fullname = $muser['name'];
+                    $first = $muser['first'];
+                    $sub = 'KnowCrunch |' . $first . ' – Payment Successful in ' . $muser['event_title'];;
+                    $m->from($adminemail, 'Knowcrunch');
+                    $m->to($muser['email'], $fullname);
+                    $m->subject($sub);
+                    $m->attachData($pdf, "invoice.pdf");
+                
+                });
+
+            }
+
+        
 
             $pathFile = url('/') . '/pdf/elearning/KnowCrunch - How to access our website & account.pdf';
             $pathFile = str_replace(' ','%20',$pathFile);
@@ -584,19 +604,9 @@ class InfoController extends Controller
                     
                     });
 
-            /*$sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf) {
+            
 
-                $fullname = $muser['name'];
-                $first = $muser['first'];
-                $sub =  'KnowCrunch |' . $first . ' – Payment Successful in ' . $muser['event_title'];;
-                $m->from($adminemail, 'Knowcrunch');
-                $m->to('info@knowcrunch.com', $fullname);
-                //$m->to('moulopoulos@lioncode.gr', $fullname);
-                $m->subject($sub);
-                $m->attachData($pdf, "invoice.pdf");
-                
-            });*/
-
+           
         }
 
 

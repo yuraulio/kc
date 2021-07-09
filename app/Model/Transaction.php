@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\User;
 use App\Model\Invoice;
+use App\Model\Subscription;
 
 class Transaction extends Model
 {
@@ -54,10 +55,10 @@ class Transaction extends Model
         return $this->morphToMany(Invoice::class, 'invoiceable','invoiceables');
     }
 
-    /*public function subscription()
+    public function subscription()
     {
-        return $this->morphToMany(::class, 'invoiceable','invoiceables');
-    }*/
+        return $this->morphToMany(Subscription::class, 'invoiceable','invoiceables');
+    }
 
     // public function events()
     // {

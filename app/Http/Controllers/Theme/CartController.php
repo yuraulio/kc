@@ -22,6 +22,7 @@ use \Stripe\Stripe;
 use \Stripe\StripeClient;
 use Laravel\Cashier\Payment;
 
+
 class CartController extends Controller
 {
 
@@ -294,22 +295,16 @@ class CartController extends Controller
                 //dd($categoryScript);
                 
                 $data['stripe_key'] = '';
+                $data['paywithstripe'] = 0;
                 if($ev->paymentMethod->first()){
+                    if($ev->paymentMethod->first()->metod_slug == 'stripe'){
+                        $data['paywithstripe'] = 1;
+                    }
                     session()->put('payment_method',$ev->paymentMethod->first()->id);
                     $data['stripe_key'] = $ev->paymentMethod->first()->processor_options['key'];
                 }
                 $data['pay_methods'] = $ev->paymentMethod->first();
 
-
-
-                if(isset($ev->custom_style) && $ev->custom_style != '' && $ev->custom_style == 'knowcrunch-event') {
-                    $data['paywithstripe'] = 1;
-                }
-                if($ev->view_tpl == 'elearning_event'){
-                    $data['paywithstripe'] = 1;
-                }
-
-                //dd($ev->summary1->where('section','date')->first());
               
                 $data['duration'] = $ev->summary1->where('section','date')->first() ? $ev->summary1->where('section','date')->first()->title:'';
 
@@ -342,6 +337,7 @@ class CartController extends Controller
             }
            
             else {
+                $loggedin_user->asStripeCustomer();
                 
                 // Get user billing details in order to pre populate values
                 if(isset($data['pay_bill_data']) && empty($data['pay_bill_data'])) {
@@ -656,9 +652,7 @@ class CartController extends Controller
 
              if($installments > 1) {
                
-                //Stripe::setApiKey(env('STRIPE_SECRET'));
-                //Stripe::make('sk_test_51IdYeZHnPmfgPmgK8xh8OuZLSiIY0xZuUgpW7xsgc0qIwxOCIrvPYHO4GtEHiEDJIZvbeye1DyNpn9hzFzw7edqi00ajurn9Cf');
-                //Stripe::setApiKey('sk_test_51IdYeZHnPmfgPmgK8xh8OuZLSiIY0xZuUgpW7xsgc0qIwxOCIrvPYHO4GtEHiEDJIZvbeye1DyNpn9hzFzw7edqi00ajurn9Cf');
+                Stripe::setApiKey($ev->paymentMethod->first()->processor_options['secret_key']);
                 $instamount = round($namount / $installments, 2);
                
                 if($instamount - floor($instamount)>0){
@@ -674,7 +668,7 @@ class CartController extends Controller
                         //./ngrok authtoken 69hUuQ1DgonuoGjunLYJv_3PVuHFueuq5Kiuz7S1t21
                         // Create the plan to subscribe
                         $desc = $installments . ' installments';
-                        $planid = 'plan_'.$dpuser->id.'_E_'.$ev->id.'_T_'.$ticket_id.'_x'.$installments;
+                        $planid = 'plan_'.$dpuser->id.'_fsfdsdgfdsdgE_'.$ev->id.'_T_'.$ticket_id.'_x'.$installments;
                         $name = $ev_title . ' ' . $ev_date_help . ' | ' . $desc;
                         //dd(str_replace('.','',$instamount) . '00');
                         
@@ -698,7 +692,7 @@ class CartController extends Controller
                             ->create(['metadata' => ['installments_paid' => 0, 'installments' => $installments]])
                         ;*/
 
-                        $charge = $dpuser->newSubscription('month', $plan->id)->create($dpuser->defaultPaymentMethod()->id, 
+                        $charge = $dpuser->newSubscription($name, $plan->id)->create($dpuser->defaultPaymentMethod()->id, 
                         ['email' => $dpuser->email],
                                     ['metadata' => ['installments_paid' => 0, 'installments' => $installments]]);
 
@@ -714,7 +708,11 @@ class CartController extends Controller
                 $charge['type'] = $installments . ' Installments';
             }
             else {
-                
+                if($namount - floor($namount)>0){
+                    $stripeAmount = str_replace('.','',$namount);
+                }else{
+                    $stripeAmount  = $namount . '00';
+                }
                 $dpuser->updateStripeCustomer([
                     'name' => $st_name,
                     'email' => $dpuser->email,
@@ -731,12 +729,12 @@ class CartController extends Controller
                 $nevent = $ev_title . ' ' . $ev_date_help;
                 
                  $charge = $dpuser->charge(
-                    $namount,
+                    $stripeAmount,
                     $dpuser->defaultPaymentMethod()->id,
                     [
                     
                         'currency' => 'eur',
-                        'amount' => $namount,
+                        'amount' => $stripeAmount,
                         'description' => $nevent,
                         'customer' => $dpuser->stripe_id,
                         'metadata' => $temp,
@@ -754,7 +752,7 @@ class CartController extends Controller
                  */
                 
                  $status_history = [];
-           //      $payment_cardtype = intval($input["cardtype"]);
+                //$payment_cardtype = intval($input["cardtype"]);
                  $status_history[] = [
                     'datetime' => Carbon::now()->toDateTimeString(),
                     'status' => 1,
@@ -765,7 +763,7 @@ class CartController extends Controller
                     'pay_seats_data' => $pay_seats_data,
                     'pay_bill_data' => $pay_bill_data,
                     'deree_user_data' => [$dpuser->email => ''],
-                 //   'cardtype' => $payment_cardtype,
+                    //'cardtype' => $payment_cardtype,
                     'installments' => $installments,
                     'cart_data' => $cart
 
@@ -798,30 +796,32 @@ class CartController extends Controller
                     $transaction->user()->save($dpuser);
                     $transaction->event()->save($ev);
 
-                    /*if(!Invoice::latest()->doesntHave('subscription')->first()){
-                    //if(!Invoice::has('event')->latest()->first()){
-                        $invoiceNumber = sprintf('%04u', 1);
-                    }else{
-                        //$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;
-                        $invoiceNumber = Invoice::latest()->doesntHave('subscription')->first()->invoice;
-                        $invoiceNumber = (int) $invoiceNumber + 1;
-                        $invoiceNumber = sprintf('%04u', $invoiceNumber);
+                    if($installments <= 1){
+                        if(!Invoice::latest()->doesntHave('subscription')->first()){
+                        //if(!Invoice::has('event')->latest()->first()){
+                            $invoiceNumber = sprintf('%04u', 1);
+                        }else{
+                            //$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;
+                            $invoiceNumber = Invoice::latest()->doesntHave('subscription')->first()->invoice;
+                            $invoiceNumber = (int) $invoiceNumber + 1;
+                            $invoiceNumber = sprintf('%04u', $invoiceNumber);
+                        }
+
+                    
+                        $elearningInvoice = new Invoice;
+                        $elearningInvoice->name = json_decode($transaction->billing_details,true)['billname'];
+                        $elearningInvoice->amount = round($namount / $installments, 2);
+                        $elearningInvoice->invoice = $invoiceNumber;
+                        $elearningInvoice->date = Carbon::today()->toDateString();
+                        $elearningInvoice->instalments_remaining = $installments;
+                        $elearningInvoice->instalments = $installments;
+
+                        $elearningInvoice->save();
+
+                        $elearningInvoice->user()->save($dpuser);
+                        $elearningInvoice->event()->save($ev);
+                        $elearningInvoice->transaction()->save($transaction);
                     }
-
-    
-                    $elearningInvoice = new Invoice;
-                    $elearningInvoice->name = json_decode($transaction->billing_details,true)['billname'];
-                    $elearningInvoice->amount = round($namount / $installments, 2);
-                    $elearningInvoice->invoice = $invoiceNumber;
-                    $elearningInvoice->date = Carbon::today()->toDateString();
-                    $elearningInvoice->instalments_remaining = $installments;
-                    $elearningInvoice->instalments = $installments;
-
-                    $elearningInvoice->save();
-
-                    $elearningInvoice->user()->save($dpuser);
-                    $elearningInvoice->event()->save($ev);
-                    $elearningInvoice->transaction()->save($transaction);*/
 
                     \Session::put('transaction_id', $transaction->id);
                 }

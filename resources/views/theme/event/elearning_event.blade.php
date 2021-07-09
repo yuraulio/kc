@@ -169,95 +169,22 @@
                         <div class="course-tab-sidebar">
                            <div class="course-details @if(!isset($section_fullvideo)) non-video-height @endif">
                               <ul class="two-column-list">
-
-                              <?php if (isset($summary[0]) && $summary[0]['title'] != '') : ?>
+                              
+                              @foreach($summary as $sum)
+                                 @if($sum['title'])
                                  <li>
-                                    <img class="info-icon" class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Duration_Hours.svg')}}" width="30" />
+                                    @if($sum['medias'])<img class="info-icon" class="replace-with-svg" src="{{cdn(get_image($sum['medias']))}}" width="30" />@endif
                                     <div class="info-text">
 
-                                       <p>{{ $summary[0]['title'] }}</br>
-                                          {{ $summary[0]['description'] }}
+                                       <p>{{  $sum['title'] }}</br>
+                                          {{  $sum['description'] }}
                                        </p>
                                     </div>
                                  </li>
-                                 <?php endif ?>
+                                 @endif
 
-                                 <?php if (isset($summary[1]) && $summary[0]['title'] != '') : ?>
-                                 <li>
-                                    <img class="info-icon" class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Days-Week.svg')}}"  width="30" />
-                                    <div class="info-text">
-                                    <p>{{ $summary[1]['title'] }}</br>
-                                          {{ $summary[1]['description'] }}
-                                       </p>
-                                    </div>
-                                 </li>
-                                 <?php endif ?>
-
-                                 <?php if (isset($summary[2]) && $summary[2]['title'] != '') : ?>
-                                 <li>
-                                    <img class="info-icon" class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Times.svg')}}" width="30" />
-                                    <div class="info-text">
-                                    <p>{{ $summary[2]['title'] }}</br>
-                                          {{ $summary[2]['description'] }}
-                                       </p>
-                                    </div>
-                                 </li>
-                                 <?php endif ?>
-
-                                 <?php if (isset($summary[3]) && $summary[3]['title'] != '') : ?>
-                                 <li>
-                                    <img class="info-icon" class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Language.svg')}}"  width="30" />
-                                    <div class="info-text">
-                                    <p>{{ $summary[3]['title'] }}</br>
-                                          {{ $summary[3]['description'] }}
-                                       </p>
-                                    </div>
-                                 </li>
-                                 <?php endif ?>
-
-
-
-                                 <?php if (isset($summary[4]) && $summary[4]['title'] != '') : ?>
-                                 <li>
-                                    <img class="info-icon" class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Level.svg')}}"  width="30" />
-                                    <div class="info-text">
-                                    <p>{{ $summary[4]['title'] }}</br>
-                                          {{ $summary[4]['description'] }}
-                                       </p>
-                                    </div>
-                                 </li>
-                                 <?php endif ?>
-
-                                 <?php if (isset($summary[5]) && $summary[5]['title'] != '') : ?>
-                                 <li>
-                                    <img class="info-icon" class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" width="30" />
-                                    <div class="info-text">
-                                    <p>{{ $summary[5]['title'] }}</br>
-                                          {{ $summary[5]['description'] }}
-                                       </p>
-                                    </div>
-                                 </li>
-                                 <?php endif ?>
-
-                                 <?php if (isset($summary[6]) && $summary[6]['title'] != '') : ?>
-                                 <li>
-                                    <img class="info-icon" class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/messages-warning-information.svg')}}" width="30" />
-                                    <div class="info-text">
-                                    <p>{{ $summary[6]['title'] }}</br>
-                                          {{ $summary[6]['description'] }}
-                                       </p>
-                                    </div>
-                                 </li>
-                                 <?php endif ?>
-
-                                 <?php if (isset($summary[7]) && $summary[7]['title'] != '' && isset($sumStudent) && $sumStudent > 0) : ?>
-                                    <li>
-                                       <img class="info-icon" src="{{cdn('/theme/assets/images/icons/Group_User.1.svg')}}"  width="21" />
-                                       <div class="info-text">
-                                       <p>@if($summary[7]['title'] != ''){{ $summary[7]['title'] }}<br/>@endif{{ $sumStudent }} {{ $summary[7]['description'] }}</p>
-                                       </div>
-                                    </li>
-                                 <?php endif ?>
+                              @endforeach
+                           
 
 
                               </ul>

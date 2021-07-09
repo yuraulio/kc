@@ -745,12 +745,24 @@
    			        url: '/admin/events/assing-method/' + "{{$event->id}}",
                     data: {'payment_method': $(this).val()},
    			        success: function (data) {
-                        $(".success-message p").html(data.message);
-   	                    $(".success-message").show();
+
+                        if(data.success){
+                            $(".success-message p").html(data.message);
+   	                        $(".success-message").show();
 
                            setTimeout(function(){
                             $(".close-message").click();
                            }, 2000)
+                        }else{
+                            $(".error-message p").html(data.message);
+   	                        $(".error-message").show();
+
+                           setTimeout(function(){
+                            $(".close-message").click();
+                           }, 2000)
+                        }
+
+                   
 
    			        },
    			        error: function() {

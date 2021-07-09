@@ -128,10 +128,19 @@ class EventController extends Controller
 
     public function assignPaymentMethod(Request $request, Event $event)
     {
+
+        if(count($event->users) > 0){
+            return response()->json([
+                'success' => false,
+                'message' => 'Payment Method Cannot Changed'
+            ]); 
+        }
+
         $event->paymentMethod()->detach();
         $event->paymentMethod()->attach($request->payment_method);
 
         return response()->json([
+            'success' => true,
             'message' => 'Payment Method Changed'
         ]);
 
@@ -307,6 +316,7 @@ class EventController extends Controller
         $data['metas'] = $event['metable'];
 
         $data['methods'] = PaymentMethod::where('status',1)->get();
+        dd($data['methods']);
         $data['delivery'] = Delivery::all();
         $data['isInclassCourse'] = $event->is_inclass_course();
         $data['eventFaqs'] = $event->faqs->pluck('id')->toArray();

@@ -94,7 +94,9 @@ class Cashier
     
         $stripeId = $stripeId instanceof StripeCustomer ? $stripeId->id : $stripeId;
 
-        return $stripeId ? (new static::$customerModel)->where('stripe_id', $stripeId)->first() : null;
+        //return $stripeId ? (new static::$customerModel)->where('stripe_id', $stripeId)->first() : null;
+        return $stripeId ? (new static::$customerModel)->whereRaw('json_contains(stripe_ids, \'["'.$stripeId.'"]\')')->first() : null;
+        
     }
 
     /**
@@ -113,13 +115,6 @@ class Cashier
         if($paymentMethod){
             $stripeKey = $paymentMethod->processor_options['secret_key'];
         }
-
-        $stripe = new StripeClient(array_merge([
-            'api_key' => $options['api_key'] ?? $stripeKey,
-            'stripe_version' => static::STRIPE_VERSION,
-        ], $options));
-
-        //dd($stripe->customers);
 
         return new StripeClient(array_merge([
             'api_key' => $options['api_key'] ?? $stripeKey,

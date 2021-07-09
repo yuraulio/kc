@@ -363,13 +363,13 @@ class Event extends Model
 
     public function transactionsByUser($user){
        
-        /*return $this->transactions()->doesntHave('subscription')->whereHas('user', function ($query) use($user) {
+        return $this->transactions()->doesntHave('subscription')->whereHas('user', function ($query) use($user) {
                 $query->where('id', $user);
-            });*/
+            });
 
-        return $this->transactions()->whereHas('user', function ($query) use($user) {
+        /*return $this->transactions()->whereHas('user', function ($query) use($user) {
             $query->where('id', $user);
-        });
+        });*/
     }
 
 

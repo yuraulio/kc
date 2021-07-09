@@ -69,6 +69,7 @@ class PaymentMethodsController extends Controller
     {
         $input = $request->except('_token');
 
+
         if (isset($input['processor'])) {
             $input['processor_options'] = encrypt(json_encode($input['processor']));
         } else {
