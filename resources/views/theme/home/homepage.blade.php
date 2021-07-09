@@ -1,12 +1,12 @@
 @extends('theme.layouts.master')
 @section('content')
-@inject('frontHelp', 'Library\FrontendHelperLib')
+{{--@inject('frontHelp', 'Library\FrontendHelperLib')--}}
 <?php
    if(Session::has('scopeone')){
        $fone = Session::get('scopeone');
    }
    else { $fone = 0; }
-   
+
    $totalfound = 0;
    $totalcats = 0;
    ?>
@@ -24,15 +24,16 @@
       </div>
       <!-- /.section-hero -->
    </section>
-   <?php 
+   <?php
       endif;
       endforeach;
       endif; ?>
+      <?php //dd($eventsbycategory[0]); ?>
    @if(isset($events))
    @foreach($eventsbycategory as $bcatid => $bcateventids)
-   @if(isset($eventsbycategoryHelper) && isset($eventsbycategoryDetailsHelper) && isset($eventsbycategoryHelper[$bcatid]) && 
-   ($eventsbycategoryDetailsHelper[$bcatid]->view_tpl !== 'elearning_english' && $eventsbycategoryDetailsHelper[$bcatid]->view_tpl !== 'elearning_pending' && $eventsbycategoryDetailsHelper[$bcatid]->view_tpl !== 'elearning_greek' 
-         && $eventsbycategoryDetailsHelper[$bcatid]->view_tpl !== 'elearning_free' && $eventsbycategoryDetailsHelper[$bcatid]->view_tpl !== 'event_free' && $eventsbycategoryDetailsHelper[$bcatid]->view_tpl !== 'event_free_coupon'))
+   {{--@if(isset($eventsbycategoryHelper) && isset($eventsbycategoryDetailsHelper) && isset($eventsbycategoryHelper[$bcatid]) &&
+   ($eventsbycategoryDetailsHelper[$bcatid]->view_tpl !== 'elearning_english' && $eventsbycategoryDetailsHelper[$bcatid]->view_tpl !== 'elearning_pending' && $eventsbycategoryDetailsHelper[$bcatid]->view_tpl !== 'elearning_greek'
+         && $eventsbycategoryDetailsHelper[$bcatid]->view_tpl !== 'elearning_free' && $eventsbycategoryDetailsHelper[$bcatid]->view_tpl !== 'event_free' && $eventsbycategoryDetailsHelper[$bcatid]->view_tpl !== 'event_free_coupon'))--}}
    <section class="section-text-carousel background event-background">
       <div class="container container--md">
          <div class="row-text-carousel clearfix">
@@ -46,8 +47,9 @@
                       else {
                          $until = $string;
                          }*/
-                         
-                         $until = $eventsbycategoryHelper[$bcatid]->name
+
+                        //  $until = $bcateventids->name
+                        $until = $bcateventids->name;
                          ?>
                   <h2>{{ $until }}</h2>
                   <?php
@@ -56,8 +58,10 @@
                      $eventtopic = [];
                      $advancedtag = 0;
                      $advancedtagslug = '';
-                     if (isset($eventsbycategoryDetailsHelper[$bcatid]->categories) && !empty($eventsbycategoryDetailsHelper[$bcatid]->categories)) :
-                         foreach ($eventsbycategoryDetailsHelper[$bcatid]->categories as $category) :
+                    //  if (isset($eventsbycategoryDetailsHelper[$bcatid]->categories) && !empty($eventsbycategoryDetailsHelper[$bcatid]->categories)) :
+                        if (isset($eventsbycategory1) && !empty($eventsbycategory1)) :
+                        //  foreach ($eventsbycategoryDetailsHelper[$bcatid]->categories as $category) :
+                            foreach ($eventsbycategory1 as $category) :
                              /*if ($category->depth != 0 && $category->parent_id == 9) {
                                   $location=$category;
                              }
@@ -67,27 +71,35 @@
                              if ($category->depth != 0 && $category->parent_id == 22) {
                                  $eventtopic[]=$category->id;
                              }*/
-                     
+
+                             //EDWWWWWWWWWWWW ********************************************************************
+
                              if ($category->id == 117) {
                                  $advancedtag = 1;
                                  $advancedtagslug = $category->slug;
                              }
+
+                             //EDWWWWWWWWWWWW ********************************************************************
                          endforeach;
                      endif;
                      ?>
-                  @if (isset($eventsbycategoryDetailsHelper[$bcatid]['c_fields']['simple_text'][12]) && $eventsbycategoryDetailsHelper[$bcatid]['c_fields']['simple_text'][12]['value'] != '')
-                  @if(isset($eventsbycategoryHelper[$bcatid]) && $eventsbycategoryHelper[$bcatid]->hours)<span class="duration"><img src="{{ cdn('/theme/assets/images/icons/Start-Finish.svg')}}" class="replace-with-svg" alt=""/>{{ $eventsbycategoryHelper[$bcatid]->hours }}</span>@endif
-                  @endif
-                  <p>{!!$eventsbycategoryHelper[$bcatid]->description!!}</p>
+                     <?php //dd($bcateventids); ?>
+                    @if (isset($bcateventids->description) && $bcateventids->description != '')
+                        @if(isset($bcateventids->id) && $bcateventids->hours)
+                            <span class="duration"><img src="{{ cdn('/theme/assets/images/icons/Start-Finish.svg')}}" class="replace-with-svg" alt=""/>{{ $bcateventids->hours }}</span>
+                        @endif
+                    @endif
+                    <p>{!!$bcateventids->description!!}</p>
                </div>
             </div>
+            <?php //dd($events[0]); ?>
             <div class="carousel-column">
                <div class="carousel-wrapper">
                   <div class="boxes-carousel owl-carousel">
                      <?php $lastmonth = ''; ?>
                      @foreach($events as $key => $row)
                      @if($row->view_tpl != 'event_free' && $row->view_tpl != 'event_free_coupon')
-                     <?php
+                    <?php
                         $location = [];
                         $eventtype = [];
                         $eventtopic = [];
@@ -96,122 +108,174 @@
                         $advancedtagslug = '';
                         $categoryEvent = false;
 
-                        if (isset($row->categories) && !empty($row->categories)) :
-                        foreach ($row->categories as $category) :
-                        if ($category->depth != 0 && $category->parent_id == 9) {
-                            $location=$category;
-                        }
+                        //dd($row->category);
 
-                        if ($category->parent_id == 12) {
-                           $categoryType=$category;
-                       }
+                        if (isset($row->category) && !empty($row->category)) :
+                            foreach ($row->category as $category) :
+                                if(count($row->city)>0){
+                                    $location=$row->city[0];
+                                }else{
+                                    $location = null;
+                                }
 
-                        if ($category->depth != 0 && $category->parent_id == 12) {
-                            $eventtype=$category;
-                        }
-                                   if ($category->depth != 0 && $category->parent_id == 22) {
-                                       $eventtopic[]=$category->id;
-                                   }
-                                   if ($category->depth != 0 && $category->parent_id == 45) {
-                                       $onthiscat=$category->id;
-                                   }
-                                   if ($category->id == 117) {
-                                       $advancedtag = 1;
-                                       $advancedtagslug = $category->slug;
-                                   }
-                        endforeach;
+
+
+                                $eventtype=$category;
+                                $eventtopic[]=$category->id;
+                                $onthiscat=$category->id;
+                                ////////////EDWWWWWWWWWW ******************
+                                if ($category->id == 117) {
+                                    $advancedtag = 1;
+                                    $advancedtagslug = $category->slug;
+                                }
+                                ////////////EDWWWWWWWWWW ****************
+                            endforeach;
                         endif;
-                        
+
+                        //dd($location);
+
                         $dont = true;
-                        
-                        
-                        
-                           $totalfound++;
-                           $chmonth = date('m', strtotime($row->published_at));
+
+                        $totalfound++;
+                        $chmonth = date('m', strtotime($row->published_at));
                         $month = date('F Y', strtotime($row->published_at));
+
                         if($chmonth != $lastmonth) {
-                        $lastmonth = $chmonth;
+                            $lastmonth = $chmonth;
                         }
-                           ?>
+                    ?>
+                    <?php
+                           //dd($location);
+                           //dd($bcatid)
+?>
                      @if($onthiscat == $bcatid)
+
+
                      <div class="slide">
-                     <?php
-                              $string = $frontHelp->pField($row, 'title');
-                               if( strpos($string, ',') !== false ) {
-                                 $until = substr($string, 0, strrpos($string, ","));
-                               }
-                               else {
-                                  $until = $string;
-                                  } ?>
-                        @if (!empty($row['featured']) && isset($row['featured'][0]) &&isset($row['featured'][0]['media']) && !empty($row['featured'][0]['media']))
-                        <a href="{{ $frontHelp->pSlug($row) }}"><img src="{{ cdn($frontHelp->pImg($row, 'event-card')) }}" alt="{{$until}}"/></a>
+                        <?php
+                            $string = $row->title;
+                            if( strpos($string, ',') !== false ) {
+                                $until = substr($string, 0, strrpos($string, ","));
+                            }
+                            else {
+                                $until = $string;
+
+                            }
+                        ?>
+                        <?php //var_dump($until) ?>
+                        @if (isset($row->media) && !empty($row->media) && !empty($row->media['path']))
+
+                            <a href="{{ $row->slugable['slug'] }}"><img src="{{ $row->media['path'] }}/{{$row->media['name']}}-event-card{{$row->media['ext']}}}}" alt="{{$until}}"/></a>
                         @endif
                         <div class="box-text">
                            <?php
-                              $string = $frontHelp->pField($row, 'title');
-                               if( strpos($string, ',') !== false ) {
-                                 $until = substr($string, 0, strrpos($string, ","));
-                               }
-                               else {
-                                  $until = $string;
-                                  } ?>
-                     
+                            $string = $row->title;
+                            if( strpos($string, ',') !== false ) {
+                                $until = substr($string, 0, strrpos($string, ","));
+                            }
+                            else {
+                                $until = $string;
+                            }
+                            ?>
+
                            <?php
-                              if (isset($eventprices[$row->id])) {
-                                      $price = $eventprices[$row->id];
+
+                           //dd($row->ticket);
+                              if (isset($row->ticket) && count($row->ticket) > 0) {
+                                  //dd($row->ticket[0]);
+                                      $price = $row->ticket[0]->pivot->price;
+                                      //dd($price);
                               }
-                              else { $price = 0; } ?>
-                           @if(isset($row['c_fields']['dropdown_select_status']['value']))
-                           <?php $etstatus = $row['c_fields']['dropdown_select_status']['value']; ?>
+                              else { $price = 0; }
+                              ?>
+                           @if(isset($row->status))
+                            <?php
+                                if($row->status == 0){
+                                        $etstatus = 0;
+                                }else if($row->status == 1){
+                                        $etstatus = 1;
+                                }else if($row->status == 2){
+                                        $etstatus = 2;
+                                }else{
+                                        $etstatus = 3;
+                                }
+                                //dd($etstatus);
+                            ?>
                            @endif
-                           <h3><a href="{{ $frontHelp->pSlug($row) }}">{{ $until }}</a></h3>
-                           @if(isset($location->name)) 
-                           
-                              <a href="{{ $location->slug }}" class="location">{{ $location->name }}</a> 
-                           
+                           <?php //var_dump($row); ?>
+
+                            <?php
+                            if(isset($row['slugable'])){
+                                $slug = $row['slugable']['slug'];
+                            }else{
+                                $slug = '';
+                            }
+                             ?>
+                           <?php $url = url($slug); ?>
+
+                           <h3><a href="{{$url}}">{{ $until }}</a></h3>
+
+                           <?php //dd($location); ?>
+
+                           @if($location != null && isset($location))
+                           <?php //dd(count($location) >0); ?>
+
+                              <a href="{{ $location->slugable['slug'] }}" class="location">{{ $location->name }}</a>
+
                            @else
-                              <a href="{{$categoryType['slug']}}" class="location">{{ $categoryType['name'] }}</a> 
+                            <!-- EDWWWWWWWWWWWWWWWWWW ******************** -->
+                            {{--<a href="{{$categoryType['slug']}}" class="location">{{ $categoryType['name'] }}</a>--}}
                            @endif
                            <span class="date"> {{$month}}</span>
-                           @if(isset($row['c_fields']['dropdown_select_status']['value']))
-                           <?php $estatus = $row['c_fields']['dropdown_select_status']['value'];
 
-                              if($price == 0 && $estatus == 0){
+                           <?php
+
+                           //dd($row->slugable['slug']);
+                           if(isset($row->status)){
+                                $estatus = $row->status;
+                                //dd($estatus);
+
+                              if($price == 0 && $estatus == 1){
                                  $estatus = 2;
+                                 //dd($estatus);
                               }
+                              //dd($estatus);
 
                               switch ($estatus) {
-                              	case 0:
-                              		//'OPEN'
+                              	case 1:
+                              		//'Closed'
                               		?>
-                           <a href="{{ $frontHelp->pSlug($row) }}" class="btn btn--sm btn--secondary">course details</a>
+                           <a href="{{ $slug }}" class="btn btn--sm btn--secondary">course details</a>
                            <?php
                               break;
-                              case 1:
+                              case 0:
                               	//'CLOSED'
-                              ?>                            <a href="{{ $frontHelp->pSlug($row) }}" class="btn btn--sm btn--secondary btn--completed">closed</a>
-                           <?php
-                              break;
-                              case 2:
-                              	//'SOLD-OUT'
-                              ?>                            <a href="{{ $frontHelp->pSlug($row) }}" class="btn btn--sm btn--secondary btn--sold-out">sold out</a>
+                              ?>                            <a href="{{ $slug }}" class="btn btn--sm btn--secondary btn--completed">closed</a>
                            <?php
                               break;
                               case 3:
+                              	//'SOLD-OUT'
+                              ?>                            <a href="{{ $slug }}" class="btn btn--sm btn--secondary btn--sold-out">sold out</a>
+                           <?php
+                              break;
+                              case 2:
                               	//'COMPLETED'
-                              ?>                            <a href="{{ $frontHelp->pSlug($row) }}" class="btn btn--sm btn--secondary btn--sold-out">course details</a>
+                              ?>                            <a href="{{ $slug }}" class="btn btn--sm btn--secondary btn--sold-out">course details</a>
                            <?php
                               break;
                               default:
                               ?>
-                           <a href="{{ $frontHelp->pSlug($row) }}" class="btn btn--sm btn--secondary btn--completed">course details</a>
+                           <a href="{{ $slug }}" class="btn btn--sm btn--secondary btn--completed">course details</a>
                            <?php
                               break;
                               }
-                              ?>
-                           @else
-                           <a href="{{ $frontHelp->pSlug($row) }}" class="btn btn--sm btn--secondary">course details</a>
-                           @endif
+
+                           }else{
+                               ?>
+                           <a href="{{ $row->slugable['slug'] }}" class="btn btn--sm btn--secondary">course details</a>
+                           <?php
+                           }
+                           ?>
                         </div>
                      </div>
                      @endif
@@ -223,14 +287,15 @@
          </div>
       </div>
    </section>
-   @endif
    @endforeach
    @endif
 
+<?php //dd('end'); ?>
+
    @if(isset($events))
-   @foreach($eventsbycategory as $bcatid => $bcateventids)
-   @if(isset($eventsbycategoryHelper) && isset($eventsbycategoryDetailsHelper) && isset($eventsbycategoryHelper[$bcatid]) && 
-   ($eventsbycategoryDetailsHelper[$bcatid]->view_tpl === 'elearning_english' || $eventsbycategoryDetailsHelper[$bcatid]->view_tpl === 'elearning_pending' || $eventsbycategoryDetailsHelper[$bcatid]->view_tpl === 'elearning_greek' || $eventsbycategoryDetailsHelper[$bcatid]->view_tpl === 'elearning_free'))
+   @foreach($eventsbycategoryElearning as $bcatid => $bcateventids)
+   <?php dd($bcateventids); ?>
+
    <section class="section-text-carousel section--blue-gradient">
       <div class="container container--md">
          <div class="row-text-carousel clearfix">
@@ -244,7 +309,7 @@
                       else {
                          $until = $string;
                          }*/
-                         $until = $eventsbycategoryHelper[$bcatid]->name
+                         $until = $bcateventids->name
                          ?>
                   <?php
                      $location = [];
@@ -253,8 +318,8 @@
                      $advancedtag = 0;
                      $advancedtagslug = '';
                      $categoryType=false;
-                     if (isset($eventsbycategoryDetailsHelper[$bcatid]->categories) && !empty($eventsbycategoryDetailsHelper[$bcatid]->categories)) :
-                         foreach ($eventsbycategoryDetailsHelper[$bcatid]->categories as $category) :
+                     if (isset($bcateventids) && !empty($bcateventids)) :
+                         foreach ($bcateventids as $category) :
                              /*if ($category->depth != 0 && $category->parent_id == 9) {
                                   $location=$category;
                              }
@@ -264,10 +329,9 @@
                              if ($category->depth != 0 && $category->parent_id == 22) {
                                  $eventtopic[]=$category->id;
                              }*/
-                     
-                              if ($category->parent_id == 12) {
-                                 $categoryType=$category;
-                              }   
+
+                             /////////////////////////////
+                            //  EDWWWWWWWWWW
 
                              if ($category->id == 117) {
                                  $advancedtag = 1;
@@ -317,11 +381,11 @@
                                    }
                         endforeach;
                         endif;
-                        
+
                         $dont = true;
-                        
-                        
-                        
+
+
+
                            $totalfound++;
                            $chmonth = date('m', strtotime($row->published_at));
                         $month = date('F Y', strtotime($row->published_at));
@@ -342,11 +406,11 @@
                         @if (!empty($row['featured']) && isset($row['featured'][0]) &&isset($row['featured'][0]['media']) && !empty($row['featured'][0]['media']))
                         <a href="{{ $frontHelp->pSlug($row) }}"><img src="{{ cdn($frontHelp->pImg($row, 'event-card')) }}" alt="{{ $until}}"/></a>
                         @endif
-                       
+
                         <div class="box-text">
                            <h3><a href="{{ $frontHelp->pSlug($row) }}">{{ $until}}</a></h3>
-                          
-                           <a href="{{$categoryType['slug']}}" class="location">{{ $categoryType['name'] }}</a> 
+
+                           <a href="{{$categoryType['slug']}}" class="location">{{ $categoryType['name'] }}</a>
                            <span class="date"> </span>
                            <a href="{{ $frontHelp->pSlug($row) }}" class="btn btn--sm btn--secondary">course details</a>
                         </div>
@@ -361,13 +425,13 @@
       </div>
       <!-- /.section-text-carousel.section--blue-gradient -->
    </section>
-   @endif
+
    @endforeach
    @endif
 
    @if(isset($events))
    @foreach($inclassEventsbycategoryFree as $bcatid => $bcateventids)
-   @if(isset($inclassEventsbycategoryHelperFree) && isset($inclassEventsbycategoryDetailsHelperFree) && isset($inclassEventsbycategoryHelperFree[$bcatid]) && 
+   @if(isset($inclassEventsbycategoryHelperFree) && isset($inclassEventsbycategoryDetailsHelperFree) && isset($inclassEventsbycategoryHelperFree[$bcatid]) &&
    ($inclassEventsbycategoryDetailsHelperFree[$bcatid]->view_tpl === 'event_free' || $inclassEventsbycategoryDetailsHelperFree[$bcatid]->view_tpl === 'event_free_coupon'))
    <section class="section-text-carousel background event-background">
       <div class="container container--md">
@@ -403,10 +467,10 @@
                              if ($category->depth != 0 && $category->parent_id == 22) {
                                  $eventtopic[]=$category->id;
                              }*/
-                     
+
                               if ($category->parent_id == 12) {
                                  $categoryType=$category;
-                              }  
+                              }
 
                              if ($category->id == 117) {
                                  $advancedtag = 1;
@@ -453,15 +517,15 @@
                                    if ($category->id == 117) {
                                        $advancedtag = 1;
                                        $advancedtagslug = $category->slug;
-                                    
+
                                    }
                         endforeach;
                         endif;
-                        
+
                         $dont = true;
-                        
-                        
-                        
+
+
+
                            $totalfound++;
                            $chmonth = date('m', strtotime($row->published_at));
                         $month = date('F Y', strtotime($row->published_at));
@@ -482,16 +546,16 @@
                         @if (!empty($row['featured']) && isset($row['featured'][0]) &&isset($row['featured'][0]['media']) && !empty($row['featured'][0]['media']))
                         <a href="{{ $frontHelp->pSlug($row) }}"><img src="{{ cdn($frontHelp->pImg($row, 'event-card')) }}" alt="{{ $until}}"/></a>
                         @endif
-                       
+
                         <div class="box-text">
                            <h3><a href="{{ $frontHelp->pSlug($row) }}">{{ $until}}</a></h3>
-             
-                           <a href="{{$categoryType['slug']}}" class="location">{{ $categoryType['name'] }}</a> 
+
+                           <a href="{{$categoryType['slug']}}" class="location">{{ $categoryType['name'] }}</a>
                            <span class="date"></span>
                            @if($row->view_tpl == 'event_free')
                            <a href="{{ $frontHelp->pSlug($row) }}" class="btn btn--sm btn--secondary">enroll for free</a>
                            @elseif($row->view_tpl == 'event_free_coupon')
-                           <a href="{{ $frontHelp->pSlug($row) }}" class="btn btn--sm btn--secondary">course details</a>                           
+                           <a href="{{ $frontHelp->pSlug($row) }}" class="btn btn--sm btn--secondary">course details</a>
                            @endif
 
                         </div>
@@ -507,13 +571,13 @@
       <!-- /.section-text-carousel.section--blue-gradient -->
    </section>
    @endif
-  
+
    @endforeach
    @endif
 
    @if(isset($events))
    @foreach($eventsbycategoryFree as $bcatid => $bcateventids)
-   @if(isset($eventsbycategoryHelperFree) && isset($eventsbycategoryDetailsHelperFree) && isset($eventsbycategoryHelperFree[$bcatid]) && 
+   @if(isset($eventsbycategoryHelperFree) && isset($eventsbycategoryDetailsHelperFree) && isset($eventsbycategoryHelperFree[$bcatid]) &&
    ($eventsbycategoryDetailsHelperFree[$bcatid]->view_tpl === 'elearning_free'))
    <section class="section-text-carousel background event-background">
       <div class="container container--md">
@@ -549,10 +613,10 @@
                              if ($category->depth != 0 && $category->parent_id == 22) {
                                  $eventtopic[]=$category->id;
                              }*/
-                     
+
                               if ($category->parent_id == 12) {
                                  $categoryType=$category;
-                              }  
+                              }
 
                              if ($category->id == 117) {
                                  $advancedtag = 1;
@@ -599,15 +663,15 @@
                                    if ($category->id == 117) {
                                        $advancedtag = 1;
                                        $advancedtagslug = $category->slug;
-                                    
+
                                    }
                         endforeach;
                         endif;
-                        
+
                         $dont = true;
-                        
-                        
-                        
+
+
+
                            $totalfound++;
                            $chmonth = date('m', strtotime($row->published_at));
                         $month = date('F Y', strtotime($row->published_at));
@@ -628,11 +692,11 @@
                         @if (!empty($row['featured']) && isset($row['featured'][0]) &&isset($row['featured'][0]['media']) && !empty($row['featured'][0]['media']))
                         <a href="{{ $frontHelp->pSlug($row) }}"><img src="{{ cdn($frontHelp->pImg($row, 'event-card')) }}" alt="{{ $until}}"/></a>
                         @endif
-                       
+
                         <div class="box-text">
                            <h3><a href="{{ $frontHelp->pSlug($row) }}">{{ $until}}</a></h3>
-             
-                           <a href="{{$categoryType['slug']}}" class="location">{{ $categoryType['name'] }}</a> 
+
+                           <a href="{{$categoryType['slug']}}" class="location">{{ $categoryType['name'] }}</a>
                            <span class="date"></span>
                            <a href="{{ $frontHelp->pSlug($row) }}" class="btn btn--sm btn--secondary">enroll for free</a>
                         </div>
@@ -648,7 +712,7 @@
       <!-- /.section-text-carousel.section--blue-gradient -->
    </section>
    @endif
-  
+
    @endforeach
    @endif
 
@@ -663,7 +727,7 @@
                $rand_keys = array_rand($homeBrands, 6);
                //   echo print_r($rand_keys);
                //  echo print_r($homeBrands[7]['image']);
-               
+
                ?>
             @foreach ($rand_keys as $key)
             <div class="col">
@@ -685,7 +749,7 @@
                $rand_keys = array_rand($homeLogos, 6);
                //   echo print_r($rand_keys);
                //  echo print_r($homeBrands[7]['image']);
-               
+
                ?>
             @foreach ($rand_keys as $key)
             <div class="col">

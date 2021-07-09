@@ -123,7 +123,7 @@ class Event extends Model
 
     public function city()
     {
-        return $this->belongsToMany(City::class, 'event_city');
+        return $this->belongsToMany(City::class, 'event_city')->with('slugable');
     }
 
     public function career()
@@ -355,14 +355,14 @@ class Event extends Model
     }
 
     public function invoicesByUser($user){
-       
+
         return $this->invoices()->doesntHave('subscription')->whereHas('user', function ($query) use($user) {
                 $query->where('id', $user);
             })->withPivot('invoiceable_id','invoiceable_type');
     }
 
     public function transactionsByUser($user){
-       
+
         /*return $this->transactions()->doesntHave('subscription')->whereHas('user', function ($query) use($user) {
                 $query->where('id', $user);
             });*/

@@ -350,56 +350,18 @@
     <script>
         let value = 200
         let selected = 0
+        var cropBoxData;
 
+        var canvasData;
+        var cropper;
 
+        $(document).ready(function() {
 
-        window.addEventListener('DOMContentLoaded', function () {
-            var image = document.getElementById('img-cropper');
-            var image1 = $('#preview-img-file')
-            // var cropBoxData= {
-            //     width: $(image1).width * ($(image1).width/$(image1).height),
-            //     height: $(image1).height * ($(image1).width/$(image1).height),
-            // };
-            var canvasData;
-            var cropper;
-
-
-
-            $('#previewModal').on('shown.bs.modal', function () {
-
-                cropper = new Cropper(image, {
-                preview: ".cropper-preview",
-                aspectRatio: Number(($(image1).width/$(image1).height), 4),
-                viewMode: 0,
-                dragMode: "crop",
-                autoCropArea: 1,
-                cropBoxMovable: true,
-                cropBoxResizable: true,
-                minContainerWidth: 700,
-                minContainerHeight: 300,
-                ready: function () {
-                    //Should set crop box data first here
-                    cropper.setCropBoxData(cropBoxData).setCanvasData(canvasData);
-                },
-                crop(event) {
-                    $('#dataX').val(Math.round(event.detail.x))
-                    $('#dataY').val(Math.round(event.detail.y))
-                    $('#dataHeight').val(Math.round(event.detail.height))
-                    $('#dataWidth').val(Math.round(event.detail.width))
-                    $('#dataRotate').val(Math.round(event.detail.rotate))
-                    $('#dataScaleX').val(event.detail.scaleX)
-                    $('#dataScaleY').val(event.detail.scaleY)
-
-                },
-
-                });
-
-            }).on('hidden.bs.modal', function () {
+            $('#previewModal').on('hidden.bs.modal', function () {
                 cropBoxData = cropper.getCropBoxData();
                 canvasData = cropper.getCanvasData();
                 cropper.destroy();
             });
-
 
 
             $( document ).on('click', '#move-left', function() {
@@ -788,6 +750,49 @@
             $('.pre-crop-modal').attr('style', 'display: none !important');
             $('#crop-image-file-manager').css('display', 'none')
             $('#fm-additions-cropper').css('display', 'block')
+
+            var image1 = $('#preview-img-file')
+                var image = document.getElementById('img-cropper');
+
+
+                cropper = new Cropper(image, {
+                    preview: ".cropper-preview",
+                    aspectRatio: Number($(image1).width()/$(image1).height(), 4),
+                    viewMode: 0,
+                    responsive: false,
+                    dragMode: "move",
+                    autoCropArea: 1,
+                    cropBoxMovable: true,
+                    cropBoxResizable: true,
+                    minContainerWidth: 750,
+                    minContainerHeight: 300,
+                    ready: function () {
+                        //Should set crop box data first here
+                        cropBoxData = {
+                            width: 240,
+                            height:  607,
+                        },
+                        canvasData = {
+                            width: 750,
+                            height: 300
+                        }
+                        cropper.setCropBoxData(cropBoxData).setCanvasData(canvasData);
+                    },
+
+                    crop(event) {
+                        $('#dataX').val(Math.round(event.detail.x))
+                        $('#dataY').val(Math.round(event.detail.y))
+                        $('#dataHeight').val(Math.round(event.detail.height))
+                        $('#dataWidth').val(Math.round(event.detail.width))
+                        $('#dataRotate').val(Math.round(event.detail.rotate))
+                        $('#dataScaleX').val(event.detail.scaleX)
+                        $('#dataScaleY').val(event.detail.scaleY)
+                        console.log(Math.round(event.detail.height))
+                        console.log(Math.round(event.detail.width))
+
+                    },
+
+                    });
         })
 
 

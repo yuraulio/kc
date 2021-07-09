@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 use App\Model\Slug;
 use App\Model\Event;
+use App\Model\Media;
+use App\Model\Category;
 use View;
 
 use Laravel\Cashier\Cashier;
@@ -25,7 +27,7 @@ class HomeController extends Controller
             $options=['name' => $user['firstname'] . ' ' . $user['lastname'], 'email' => $user['email']];
 
             $nw = $user->createAsStripeCustomer($options);
-            
+
 
 
         }
@@ -40,21 +42,46 @@ class HomeController extends Controller
         ///$options=['customer_id'=>$user->stripe_i]
             */
         //$intent = $user->createSetupIntent();
-        
+
         //return view('add_card.new_card',compact('intent','stripe_key'));
 
         /*dd($intent);
 
         //$user->addPaymentMethod($user->stripe_id,$paymentMethod);
-        
+
         dd($user->defaultPaymentMethod());
         dd($user->paymentMethods());
 
         //$user->createAsStripeCustomer($options);
-        
+
 
         //dd($slug->slugable);*/
-       
+
+        $data = [];
+
+        $data['events'] = Event::with('category', 'medias', 'slugable', 'ticket')->get();
+        //dd($data['events'][20]);
+
+        $data['eventsbycategory1'] = Category::with('events')->get();
+
+        //dd($data['eventsbycategory1']);
+        foreach($data['eventsbycategory1'] as $key => $bcatid){
+            //dd($bcatid['events']);
+            $data['eventsbycategory'][$key] = $bcatid;
+            $data['eventsbycategoryElearning'][$key] = $bcatid;
+            foreach($bcatid['events'] as $key1 => $event){
+                if(!$event->is_elearning_course()){
+
+                    $data['eventsbycategory'][$key]['events'][$key1] = $event;
+                }else{
+                    $data['eventsbycategoryElearning'][$key] = $bcatid;
+                }
+            }
+        }
+        dd($data['eventsbycategoryElearning']);
+
+        //dd($data['eventsbycategory']);
+        return view('theme.home.homepage',$data);
 
     }
 
@@ -66,7 +93,7 @@ class HomeController extends Controller
     }
 
     public function index(Slug $slug){
-        
+
         //dd($slug->slugable);
         //dd(get_class($slug->slugable) == Event::class);
 
@@ -74,14 +101,14 @@ class HomeController extends Controller
             case Event::class:
                 return $this->event($slug->slugable);
                 break;
-           
+
         }
 
     }
 
 
     private function event($event){
-        
+
         $data = $event->topicsLessonsInstructors();
         $data['event'] = $event;
         $data['benefits'] = $event->benefits;
