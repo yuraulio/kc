@@ -82,10 +82,10 @@ trait ManagesCustomer
         // and allow us to retrieve users from Stripe later when we need to work.
         $customer = $this->stripe()->customers->create($options);
 
-        $stripeIds = json_decode($this->stripe_id,true) ? json_decode($this->stripe_id,true) : [];
+        //$stripeIds = json_decode($this->stripe_id,true) ? json_decode($this->stripe_id,true) : [];
         $this->stripe_id = $customer->id;
-        $stripeIds[] = $customer->id;
-        $this->stripeIds = json_encode($stripeIds);
+        //$stripeIds[] = $customer->id;
+        //$this->stripeIds = json_encode($stripeIds);
         $this->save();
 
         return $customer;
