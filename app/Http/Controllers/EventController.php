@@ -70,37 +70,6 @@ class EventController extends Controller
         echo json_encode($topics);
     }
 
-    // public function assign_store(Request $request)
-    // {
-
-    //     $event = Event::with('delivery')->find($request->event_id);
-    //     $data['isInclassCourse'] = $event->is_inclass_course();
-
-
-    //     $allLessons = Topic::with('lessons')->find($request->topic_id);
-
-    //     foreach($allLessons->lessons as $lesson)
-    //     {
-    //         $find = $event->topic()->wherePivot('event_id', '=', $request->event_id)->wherePivot('topic_id', '=', $request->topic_id)->wherePivot('lesson_id', '=', $lesson['id'])->get();
-    //         //dd($find);
-    //         if(count($find) == 0 && $request->status1 == true)
-    //         {
-    //             $event->topic()->attach($request->topic_id,['lesson_id' => $lesson['id']]);
-    //         }else{
-    //             $topicLesson_for_detach = $event->topic()->detach($request->topic_id);
-    //             break;
-    //         }
-
-    //     }
-
-    //     $data['request'] = $request->all();
-    //     $data['lesson'] = $allLessons;
-    //     $data['event'] = $event;
-    //     $data['isInclassCourse'] = $event->is_inclass_course();
-
-    //     echo json_encode($data);
-    // }
-
     public function assign_store(Request $request)
     {
         $event = Event::find($request->event_id);

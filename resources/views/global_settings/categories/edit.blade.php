@@ -82,6 +82,21 @@
                                     @include('alerts.feedback', ['field' => 'dropbox'])
                                 </div>
 
+                                <?php //dd($category->show_homepage); ?>
+
+                                <div class="form-group{{ $errors->has('show_homepage') ? ' has-danger' : '' }}">
+                                    <div class="status-label">
+                                        <label class="form-control-label" for="input-show_homepage">{{ __('Show Homepage') }}</label>
+                                    </div>
+                                    <div class="status-toogle">
+                                        <label class="custom-toggle">
+                                            <input type="checkbox" name="show_homepage" id="input-show_homepage" <?= ($category->show_homepage == 1) ? 'checked' : ''; ?>>
+                                            <span class="custom-toggle-slider rounded-circle"></span>
+                                        </label>
+                                        @include('alerts.feedback', ['field' => 'show_homepage'])
+                                    </div>
+                                </div>
+
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
                                 </div>

@@ -46,6 +46,8 @@
                                     @include('alerts.feedback', ['field' => 'name'])
                                 </div>
 
+                                @include('admin.slug.slug',['slug' => isset($slug) ? $slug : null])
+
                                 <div class="form-group{{ $errors->has('menu') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-menu">{{ __('Menu') }}</label>
                                     <select multiple name="menu[]" id="input-menu" class="form-control" placeholder="{{ __('Menu') }}">

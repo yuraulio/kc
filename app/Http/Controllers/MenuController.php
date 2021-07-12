@@ -115,7 +115,6 @@ class MenuController extends Controller
         $name = $menu['name'];
 
         $menus = Menu::where('name', $name)->get();
-        //dd($menus);
         $result = array();
         foreach ($menus as $key => $element) {
             $result[$element['name']][] = $element;
