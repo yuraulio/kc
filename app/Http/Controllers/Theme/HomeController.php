@@ -22,49 +22,6 @@ class HomeController extends Controller
 
     public function homePage(){
 
-        dd( Invoice::latest()->has('subscription')->first());
-
-        $user = User::find(1359);
-        $subscription = $user->subscriptions()->first();
-        $transaction = $user->events->where('id',2304)->first()->subscriptionΤransactionsByUser($user->id)->first();
-        dd($transaction);
-        $stripe_key = env('STRIPE_KEY');
-        //$stripe = Stripe::make($skey);
-
-        //$user = User::find(1359);
-        //dd($user->events->where('id',2304)->first()->invoicesByUser(1359)->get());
-        /*if($user['stripe_id'] == null){
-            $options=['name' => $user['firstname'] . ' ' . $user['lastname'], 'email' => $user['email']];
-
-            $nw = $user->createAsStripeCustomer($options);
-
-
-
-        }
-
-        $paymentMethod = ['card'=>[
-            'number'    => 4242424242424242,
-            'exp_month' => 06,
-            'cvc'       => 123,
-            'exp_year'  => 2022
-        ]];
-
-        ///$options=['customer_id'=>$user->stripe_i]
-            */
-        //$intent = $user->createSetupIntent();
-
-        //return view('add_card.new_card',compact('intent','stripe_key'));
-
-        /*dd($intent);
-
-        //$user->addPaymentMethod($user->stripe_id,$paymentMethod);
-
-        dd($user->defaultPaymentMethod());
-        dd($user->paymentMethods());
-
-        //$user->createAsStripeCustomer($options);
-
-
         //dd($slug->slugable);*/
 
         $data = [];
