@@ -347,7 +347,7 @@ class Event extends Model
     }
 
     public function invoices(){
-        return $this->morphToMany(Invoice::class, 'invoiceable');
+        return $this->morphToMany(Invoice::class, 'invoiceable','invoiceables');
     }
 
     public function transactions(){
@@ -359,6 +359,24 @@ class Event extends Model
         return $this->invoices()->doesntHave('subscription')->whereHas('user', function ($query) use($user) {
                 $query->where('id', $user);
             })->withPivot('invoiceable_id','invoiceable_type');
+    }
+
+    public function subscriptionInvoicesByUser($user){
+        return $this->invoices()->has('subscription')->whereHas('user', function ($query) use($user) {
+                $query->where('id', $user);
+            })->withPivot('invoiceable_id','invoiceable_type');
+    }
+
+
+    public function subscriptionΤransactionsByUser($user){
+       
+        return $this->transactions()/*->has('subscription')*/->whereHas('user', function ($query) use($user) {
+                $query->where('id', $user);
+            });
+
+        /*return $this->transactions()->whereHas('user', function ($query) use($user) {
+            $query->where('id', $user);
+        });*/
     }
 
     public function transactionsByUser($user){

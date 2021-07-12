@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\User;
 use App\Model\Invoice;
-use App\Model\Subscription;
+use Laravel\Cashier\Subscription as Sub;
 
 class Transaction extends Model
 {
@@ -37,7 +37,9 @@ class Transaction extends Model
         'discount_amount',
         'amount',
         'total_amount',
-        'created_at'
+        'created_at',
+        'ends_at',
+        'trial',
     ];
 
     public function user()
@@ -52,13 +54,13 @@ class Transaction extends Model
 
     public function invoice()
     {
-        return $this->morphToMany(Invoice::class, 'invoiceable','invoiceables');
+        return $this->morphedByMany(Invoice::class, 'invoiceable','invoiceables');
     }
 
-    public function subscription()
+    /*public function subscription()
     {
-        return $this->morphToMany(Subscription::class, 'invoiceable','invoiceables');
-    }
+        return $this->morphedByMany(Sub::class, 'invoiceable','invoiceables');
+    }*/
 
     // public function events()
     // {

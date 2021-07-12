@@ -13,11 +13,19 @@ use View;
 
 use Laravel\Cashier\Cashier;
 use App\Model\User;
+use App\Model\Invoice;
 
 class HomeController extends Controller
 {
 
     public function homePage(){
+
+        dd( Invoice::latest()->has('subscription')->first());
+
+        $user = User::find(1359);
+        $subscription = $user->subscriptions()->first();
+        $transaction = $user->events->where('id',2304)->first()->subscriptionΤransactionsByUser($user->id)->first();
+        dd($transaction);
         $stripe_key = env('STRIPE_KEY');
         //$stripe = Stripe::make($skey);
 

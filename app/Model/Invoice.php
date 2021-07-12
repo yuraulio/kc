@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Model\User;
 use App\Model\Transaction;
 use App\Model\Event;
-use App\Model\Subscription;
+use Laravel\Cashier\Subscription;
 use PDF;
 
 class Invoice extends Model

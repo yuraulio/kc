@@ -51,6 +51,7 @@
             "Laravel\\Cashier\\": "app/Model",
             "Alexusmai\\LaravelFileManager\\Controllers\\": "app/overrides/file-manager/",
             "Laravel\\Cashier\\Concerns\\": "app/Concerns"
+            
         },
         "classmap": [
             "database/seeds",
