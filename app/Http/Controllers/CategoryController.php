@@ -76,13 +76,17 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request, Category $model)
     {
+        if($request->show_homepage == 'on'){
+            $show_homepage = 1;
+        }else{
+            $show_homepage = 0;
+        }
+
+        $request->request->add(['show_homepage' => $show_homepage]);
+
         $model = $model->create($request->all());
-        //dd($model);
         if($request->folder_name != null){
             //foreach($request->folder_name as $folder_name){
-
-
-
                 $exist_dropbox = Dropbox::where('folder_name', $request->folder_name)->first();
                 //dd($exist_dropbox);
                 if($exist_dropbox){
@@ -140,6 +144,13 @@ class CategoryController extends Controller
      */
     public function update(CategoryRequest $request, Category $category)
     {
+        if($request->show_homepage == 'on'){
+            $show_homepage = 1;
+        }else{
+            $show_homepage = 0;
+        }
+
+        $request->request->add(['show_homepage' => $show_homepage]);
         $category->update($request->all());
 
         $ids = [];

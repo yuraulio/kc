@@ -57,13 +57,26 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="exampleFormControlSelect1">Select Dropbox Folder</label>
+                                    <label class="form-control-label" for="exampleFormControlSelect1">{{ __('Select Dropbox Folder') }}</label>
                                     <select class="form-control" name="folder_name" id="folder_name">
                                         @foreach($folders as $folder)
                                             <option value="{{ $folder }}">{{ $folder }}</option>
                                         @endforeach
                                     </select>
                                     @include('alerts.feedback', ['field' => 'dropbox'])
+                                </div>
+
+                                <div class="form-group{{ $errors->has('show_homepage') ? ' has-danger' : '' }}">
+                                    <div class="status-label">
+                                        <label class="form-control-label" for="input-show_homepage">{{ __('Show Homepage') }}</label>
+                                    </div>
+                                    <div class="status-toogle">
+                                        <label class="custom-toggle">
+                                            <input type="checkbox" name="show_homepage" id="input-show_homepage">
+                                            <span class="custom-toggle-slider rounded-circle"></span>
+                                        </label>
+                                        @include('alerts.feedback', ['field' => 'show_homepage'])
+                                    </div>
                                 </div>
 
                                 <div class="text-center">

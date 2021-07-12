@@ -28,13 +28,13 @@
       endif;
       endforeach;
       endif; ?>
-      <?php //dd($eventsbycategory[0]); ?>
-   @if(isset($events))
+      <?php //dd($eventsbycategoryElearning); ?>
+   @if(isset($events) && !empty($eventsbycategory))
    @foreach($eventsbycategory as $bcatid => $bcateventids)
    {{--@if(isset($eventsbycategoryHelper) && isset($eventsbycategoryDetailsHelper) && isset($eventsbycategoryHelper[$bcatid]) &&
    ($eventsbycategoryDetailsHelper[$bcatid]->view_tpl !== 'elearning_english' && $eventsbycategoryDetailsHelper[$bcatid]->view_tpl !== 'elearning_pending' && $eventsbycategoryDetailsHelper[$bcatid]->view_tpl !== 'elearning_greek'
          && $eventsbycategoryDetailsHelper[$bcatid]->view_tpl !== 'elearning_free' && $eventsbycategoryDetailsHelper[$bcatid]->view_tpl !== 'event_free' && $eventsbycategoryDetailsHelper[$bcatid]->view_tpl !== 'event_free_coupon'))--}}
-   <section class="section-text-carousel background event-background">
+   <section class="section-text-carousel background section--blue-gradient">
       <div class="container container--md">
          <div class="row-text-carousel clearfix">
             <div class="text-column">
@@ -49,7 +49,7 @@
                          }*/
 
                         //  $until = $bcateventids->name
-                        $until = $bcateventids->name;
+                        $until = $bcateventids['cat']['name'];
                          ?>
                   <h2>{{ $until }}</h2>
                   <?php
@@ -84,12 +84,12 @@
                      endif;
                      ?>
                      <?php //dd($bcateventids); ?>
-                    @if (isset($bcateventids->description) && $bcateventids->description != '')
-                        @if(isset($bcateventids->id) && $bcateventids->hours)
-                            <span class="duration"><img src="{{ cdn('/theme/assets/images/icons/Start-Finish.svg')}}" class="replace-with-svg" alt=""/>{{ $bcateventids->hours }}</span>
+                    @if (isset($bcateventids['cat']['description']) && $bcateventids['cat']['description'] != '')
+                        @if(isset($bcateventids->id) && $bcateventids['cat']['hours'])
+                            <span class="duration"><img src="{{ cdn('/theme/assets/images/icons/Start-Finish.svg')}}" class="replace-with-svg" alt=""/>{{ $bcateventids['cat']['hours'] }}</span>
                         @endif
                     @endif
-                    <p>{!!$bcateventids->description!!}</p>
+                    <p>{!!$bcateventids['cat']['description']!!}</p>
                </div>
             </div>
             <?php //dd($events[0]); ?>
@@ -97,7 +97,7 @@
                <div class="carousel-wrapper">
                   <div class="boxes-carousel owl-carousel">
                      <?php $lastmonth = ''; ?>
-                     @foreach($events as $key => $row)
+                     @foreach($bcateventids['events'] as $key => $row)
                      @if($row->view_tpl != 'event_free' && $row->view_tpl != 'event_free_coupon')
                     <?php
                         $location = [];
@@ -150,9 +150,9 @@
 ?>
                      @if($onthiscat == $bcatid)
 
-
                      <div class="slide">
                         <?php
+                        //dd($row);
                             $string = $row->title;
                             if( strpos($string, ',') !== false ) {
                                 $until = substr($string, 0, strrpos($string, ","));
@@ -161,6 +161,7 @@
                                 $until = $string;
 
                             }
+                            //dd($until);
                         ?>
                         <?php //var_dump($until) ?>
                         @if (isset($row->media) && !empty($row->media) && !empty($row->media['path']))
@@ -292,11 +293,10 @@
 
 <?php //dd('end'); ?>
 
-   @if(isset($events))
-   @foreach($eventsbycategoryElearning as $bcatid => $bcateventids)
-   <?php //dd($bcateventids); ?>
+   @if(!isset($events) && isset($eventsbycategory))
+   @foreach($eventsbycategory as $bcatid => $bcateventids)
 
-   <section class="section-text-carousel section--blue-gradient">
+   <section class="section-text-carousel event-background">
       <div class="container container--md">
          <div class="row-text-carousel clearfix">
             <div class="text-column">
@@ -309,7 +309,7 @@
                       else {
                          $until = $string;
                          }*/
-                         $until = $bcateventids->name
+                         $until = $bcateventids['cat']['name'];
                          ?>
                   <?php
                      $location = [];
@@ -345,19 +345,22 @@
                      */
                      ?>
                   <h2>{{$until}}</h2>
-                  @if (isset($bcateventids->description) && $bcateventids->description != '')
-                  @if(isset($bcateventids) && $bcateventids->hours)<span class="duration"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""/>{!!$bcateventids->hours!!}</span>@endif
+                  @if (isset($bcateventids['cat']['description']) && $bcateventids['cat']['description'] != '')
+                  @if(isset($bcateventids) && $bcateventids['cat']['hours'])<span class="duration"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""/>{!!$bcateventids['cat']['hours']!!}</span>@endif
                   @endif
-                  <p>{!!$bcateventids->description!!}</p>
+                  <p>{!!$bcateventids['cat']['description']!!}</p>
                </div>
             </div>
             <div class="carousel-column">
                <div class="carousel-wrapper">
                   <div class="boxes-carousel owl-carousel">
                      <?php $lastmonth = ''; ?>
-                     @foreach($events as $key => $row)
-                     @if($row->view_tpl != 'elearning_free' && $row->view_tpl != 'event_free' && $row->view_tpl != 'event_free_coupon')
+                     <?php //dd('asd'); ?>
+                     @foreach($bcateventids['events'] as $key => $row)
+                     <?php //dd($row->view_tpl); ?>
+                     {{--@if($row->view_tpl != 'elearning_free' && $row->view_tpl != 'event_free' && $row->view_tpl != 'event_free_coupon')--}}
                      <?php
+                     //dd($row);
                         $location = [];
                         $eventtype = [];
                            $eventtopic = [];
@@ -365,27 +368,18 @@
                            $onthiscat = 0;
                            $advancedtagslug = '';
                            //dd($row);
-                        // if (isset($row->categories) && !empty($row->categories)) :
-                        // foreach ($row->categories as $category) :
-                        // if ($category->depth != 0 && $category->parent_id == 9) {
-                        //     $location=$category;
-                        // }
+                        if (isset($row->category) && !empty($row->category)) :
+                        foreach ($row->category as $category) :
+                            $onthiscat=$category->id;
+                            $eventtopic[]=$category->id;
 
-                        // if ($category->depth != 0 && $category->parent_id == 12) {
-                        //     $eventtype=$category;
-                        // }
-                        //            if ($category->depth != 0 && $category->parent_id == 22) {
-                        //                $eventtopic[]=$category->id;
-                        //            }
-                        //            if ($category->depth != 0 && $category->parent_id == 45) {
-                        //                $onthiscat=$category->id;
-                        //            }
-                        //            if ($category->id == 117) {
-                        //                $advancedtag = 1;
-                        //                $advancedtagslug = $category->slug;
-                        //            }
-                        // endforeach;
-                        // endif;
+
+                                    if ($category->id == 117) {
+                                        $advancedtag = 1;
+                                        $advancedtagslug = $category->slug;
+                                    }
+                        endforeach;
+                        endif;
 
                         $dont = true;
 
@@ -399,6 +393,7 @@
                         }
                            ?>
                      @if($onthiscat == $bcatid)
+                     <?php //dd('asdtest'); ?>
                      <div class="slide">
                      <?php
                            $string = $row->title;
@@ -429,7 +424,7 @@
                         </div>
                      </div>
                      @endif
-                     @endif
+                     {{--@endif--}}
                      @endforeach
                   </div>
                </div>
@@ -441,14 +436,15 @@
 
    @endforeach
    @endif
-<?php //dd($eventsbycategoryInClass[0]); ?>
-   @if(isset($events))
-   @foreach($eventsbycategoryInClass as $bcatid => $bcateventids)
+<?php //dd($inclassEventsbycategoryFree); ?>
+   @if(!isset($events) && isset($inclassEventsbycategoryFree))
+   @foreach($inclassEventsbycategoryFree as $bcatid => $bcateventids)
    <?php
-   //dd($bcateventids);
+   //dd($bcateventids[]);
     ?>
-   @if(isset($bcateventids) &&
-   ($bcateventids->view_tpl === 'event_free' || $bcateventids->view_tpl === 'event_free_coupon'))
+   {{--@if(isset($bcateventids) &&
+   ($bcateventids->view_tpl === 'event_free' || $bcateventids->view_tpl === 'event_free_coupon'))--}}
+   <?php //dd($bcateventids); ?>
    <section class="section-text-carousel background event-background">
       <div class="container container--md">
          <div class="row-text-carousel clearfix">
@@ -462,8 +458,8 @@
                       else {
                          $until = $string;
                          }*/
-
-                         $until = $bcateventids->title
+                         //dd($bcateventids);
+                         $until = $bcateventids['cat']['name'];
                          ?>
                   <?php
                      $location = [];
@@ -497,19 +493,20 @@
                             //  }
                     //      endforeach;
                     //  endif;
+                    //dd('asd');
                      ?>
                   <h2>{{$until}}</h2>
-                  @if (isset($bcateventids->description) && $bcateventids->description != '')
-                  @if(isset($bcateventids) && $bcateventids->hours)<span class="duration"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""/>{{ $bcateventids->hours }}</span>@endif
+                  @if (isset($bcateventids['cat']['description']) && $bcateventids['cat']['description'] != '')
+                  @if(isset($bcateventids) && $bcateventids['cat']['hours'])<span class="duration"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""/>{{ $bcateventids['cat']['hours'] }}</span>@endif
                   @endif
-                  <p>{!!$bcateventids->description!!}</p>
+                  <p>{!!$bcateventids['cat']['description']!!}</p>
                </div>
             </div>
             <div class="carousel-column">
                <div class="carousel-wrapper">
                   <div class="boxes-carousel owl-carousel">
                      <?php $lastmonth = ''; ?>
-                     @foreach($events as $key => $row)
+                     @foreach($bcateventids['events'] as $key => $row)
                      @if($row->view_tpl == 'event_free' || $row->view_tpl == 'event_free_coupon')
                      <?php
                         $location = [];
@@ -519,27 +516,18 @@
                         $onthiscat = 0;
                         $advancedtagslug = '';
                         $hours ='';
-                        // if (isset($row->categories) && !empty($row->categories)) :
-                        // foreach ($row->categories as $category) :
-                        // if ($category->depth != 0 && $category->parent_id == 9) {
-                        //     $location=$category;
-                        // }
-                        // if ($category->depth != 0 && $category->parent_id == 12) {
-                        //     $eventtype=$category;
-                        // }
-                        //            if ($category->depth != 0 && $category->parent_id == 22) {
-                        //                $eventtopic[]=$category->id;
-                        //            }
-                        //            if ($category->depth != 0 && $category->parent_id == 45) {
-                        //                $onthiscat=$category->id;
-                        //            }
-                        //            if ($category->id == 117) {
-                        //                $advancedtag = 1;
-                        //                $advancedtagslug = $category->slug;
+                        if (isset($row->category) && !empty($row->category)) :
+                            foreach ($row->category as $category) :
+                                $onthiscat=$category->id;
+                                $eventtopic[]=$category->id;
 
-                        //            }
-                        // endforeach;
-                        // endif;
+
+                                        if ($category->id == 117) {
+                                            $advancedtag = 1;
+                                            $advancedtagslug = $category->slug;
+                                        }
+                            endforeach;
+                            endif;
 
                         $dont = true;
 
@@ -555,26 +543,29 @@
                      @if($onthiscat == $bcatid)
                      <div class="slide">
                      <?php
-                           $string = $frontHelp->pField($row, 'title');
+                           $string = $row['title'];
                             if( strpos($string, ',') !== false ) {
                               $until = substr($string, 0, strrpos($string, ","));
                             }
                             else {
                                $until = $string;
-                               } ?>
-                        @if (!empty($row['featured']) && isset($row['featured'][0]) &&isset($row['featured'][0]['media']) && !empty($row['featured'][0]['media']))
-                        <a href="{{ $frontHelp->pSlug($row) }}"><img src="{{ cdn($frontHelp->pImg($row, 'event-card')) }}" alt="{{ $until}}"/></a>
+                               }
+
+                               //dd($row);
+                               ?>
+                        @if (isset($row['featured'][0]['media']) && !empty($row['featured'][0]['media']))
+                        <a href="{{ $row->slugable['slug'] }}"><img src="{{ $row->media['path'] }}/{{$row->media['name']}}-event-card{{$row->media['ext']}}}}" alt="{{ $until}}"/></a>
                         @endif
 
                         <div class="box-text">
-                           <h3><a href="{{ $frontHelp->pSlug($row) }}">{{ $until}}</a></h3>
+                           <h3><a href="{{ $row->slugable['slug'] }}">{{ $until}}</a></h3>
 
-                           <a href="{{$categoryType['slug']}}" class="location">{{ $categoryType['name'] }}</a>
+                           {{--<a href="{{$categoryType['slug']}}" class="location">{{ $categoryType['name'] }}</a>--}}
                            <span class="date"></span>
                            @if($row->view_tpl == 'event_free')
-                           <a href="{{ $frontHelp->pSlug($row) }}" class="btn btn--sm btn--secondary">enroll for free</a>
+                           <a href="{{ $row->slugable['slug'] }}" class="btn btn--sm btn--secondary">enroll for free</a>
                            @elseif($row->view_tpl == 'event_free_coupon')
-                           <a href="{{ $frontHelp->pSlug($row) }}" class="btn btn--sm btn--secondary">course details</a>
+                           <a href="{{ $row->slugable['slug'] }}" class="btn btn--sm btn--secondary">course details</a>
                            @endif
 
                         </div>
@@ -589,20 +580,25 @@
       </div>
       <!-- /.section-text-carousel.section--blue-gradient -->
    </section>
-   @endif
+   {{--@endif--}}
 
    @endforeach
    @endif
 
-   @if(isset($events))
+   <?php //dd($eventsbycategoryFree); ?>
+
+   @if(isset($events) && isset($eventsbycategoryFree))
    @foreach($eventsbycategoryFree as $bcatid => $bcateventids)
-   @if(isset($bcateventids) &&
-   ($bcateventids->view_tpl === 'elearning_free'))
+   <?php //dd($bcateventids); ?>
+   @if(isset($bcateventids['cat']))
    <section class="section-text-carousel background event-background">
       <div class="container container--md">
          <div class="row-text-carousel clearfix">
             <div class="text-column">
                <div class="text-area">
+               <?php
+    //dd($bcateventids);
+   ?>
                   <?php
                      /*$string = $frontHelp->pField($eventsbycategoryDetailsHelperFree[$bcatid], 'title');
                       if( strpos($string, ',') !== false ) {
@@ -612,7 +608,7 @@
                          $until = $string;
                          }*/
 
-                         $until = $bcateventids->title;
+                         $until = $bcateventids['cat']['name'];
                          //dd($until);
                          ?>
                   <?php
@@ -646,19 +642,21 @@
                     //  endif;
                      ?>
                   <h2>{{$until}}</h2>
-                  @if (isset($bcateventids) && $bcateventids->description != '')
-                  @if($bcateventids->hours)<span class="duration"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""/>{{ $bcateventids->hours }}</span>@endif
+                  <?php //dd($until); ?>
+                  @if (isset($bcateventids['cat']) && $bcateventids['cat']['description'] != '')
+                  @if($bcateventids['cat']['hours'])<span class="duration"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""/>{{ $bcateventids['cat']['hours'] }}</span>@endif
                   @endif
-                  <p>{!!$bcateventids->description!!}</p>
+                  <p>{!!$bcateventids['cat']['description']!!}</p>
                </div>
             </div>
             <div class="carousel-column">
                <div class="carousel-wrapper">
                   <div class="boxes-carousel owl-carousel">
                      <?php $lastmonth = ''; ?>
-                     @foreach($events as $key => $row)
+                     @foreach($bcateventids['events'] as $key => $row)
                      @if($row->view_tpl == 'elearning_free')
                      <?php
+                     //dd('asd');
                         $location = [];
                         $eventtype = [];
                            $eventtopic = [];
@@ -666,27 +664,18 @@
                            $onthiscat = 0;
                            $advancedtagslug = '';
                            $hours ='';
-                        // if (isset($row->categories) && !empty($row->categories)) :
-                        // foreach ($row->categories as $category) :
-                        // if ($category->depth != 0 && $category->parent_id == 9) {
-                        //     $location=$category;
-                        // }
-                        // if ($category->depth != 0 && $category->parent_id == 12) {
-                        //     $eventtype=$category;
-                        // }
-                        //            if ($category->depth != 0 && $category->parent_id == 22) {
-                        //                $eventtopic[]=$category->id;
-                        //            }
-                        //            if ($category->depth != 0 && $category->parent_id == 45) {
-                        //                $onthiscat=$category->id;
-                        //            }
-                        //            if ($category->id == 117) {
-                        //                $advancedtag = 1;
-                        //                $advancedtagslug = $category->slug;
+                           if (isset($row->category) && !empty($row->category)) :
+                            foreach ($row->category as $category) :
+                                $onthiscat=$category->id;
+                                $eventtopic[]=$category->id;
 
-                        //            }
-                        // endforeach;
-                        // endif;
+
+                                        if ($category->id == 117) {
+                                            $advancedtag = 1;
+                                            $advancedtagslug = $category->slug;
+                                        }
+                            endforeach;
+                            endif;
 
                         $dont = true;
 
@@ -700,8 +689,10 @@
                         }
                            ?>
                      @if($onthiscat == $bcatid)
+                     <?php //dd('asd'); ?>
                      <div class="slide">
                      <?php
+
                            $string = $row->title;
                             if( strpos($string, ',') !== false ) {
                               $until = substr($string, 0, strrpos($string, ","));
@@ -710,9 +701,11 @@
                                $until = $string;
                                }
 
+                               //dd($row);
+
                                ?>
                         @if (isset($row->medias) && $row->medias['name'] != '')
-                        <a href="{{ $row->slugable['slug'] }}"><img src="{{ $row->media['path'] }}/{{$row->media['name']}}-event-card{{$row->media['ext']}}}}" alt="{{ $until}}"/></a>
+                        <a href="{{ $row->slugable['slug'] }}"><img src="{{ $row->medias['path'] }}/{{$row->medias['name']}}-event-card{{$row->medias['ext']}}}}" alt="{{ $until}}"/></a>
                         @endif
 
                         <div class="box-text">
@@ -740,21 +733,31 @@
 
    <section class="section--partners hidden-xs">
       <div class="container container--md">
+      <?php //dd($homeBrands); ?>
          @if(isset($homeBrands) && count($homeBrands) > 0)
-         @if(isset($block_brands) && isset($block_brands[0]))
-         <h2 class="section-title">{{ $block_brands[0]->title }}</h2>
-         @endif
+
+         <h2 class="section-title">Knowcrunch is trusted by hundreds of companies</h2>
+
          <div class="row row-flex row-flex-0">
             <?php
-               $rand_keys = array_rand($homeBrands, 6);
+               //$rand_keys = array_rand($homeBrands, 6);
                //   echo print_r($rand_keys);
                //  echo print_r($homeBrands[7]['image']);
 
                ?>
-            @foreach ($rand_keys as $key)
+            @foreach ($homeBrands as $key)
+            <?php //dd($key);
+                if($key->medias != null){
+                   // dd($key->medias);
+                   $path = url($key['medias']['path'].$key['medias']['original_name']);
+                   //dd($path);
+                }else{
+                    $path = '';
+                }
+             ?>
             <div class="col">
                <div class="partners-set">
-                  <img alt="{{ $homeBrands[$key]['title'] }}" title="{{ $homeBrands[$key]['title'] }}" src="{{ cdn($homeBrands[$key]['image']) }}" align=""/>
+                  <img alt="{{ $key['name'] }}" title="{{ $key['name'] }}" src="{{ $path }}" width="150" height="77" align=""/>
                </div>
             </div>
             @endforeach
@@ -764,19 +767,24 @@
          </div>
          @endif
          <hr>
-         @if(isset($block_logos) && isset($block_logos[0]))
-         <h2 class="section-title">{{ $block_logos[0]->title }}</h2>
+         @if(isset($homeLogos) && isset($homeLogos[0]))
+         <h2 class="section-title">Knowcrunch mentioned in the media</h2>
          <div class="row row-flex row-flex-0">
-            <?php
-               $rand_keys = array_rand($homeLogos, 6);
-               //   echo print_r($rand_keys);
-               //  echo print_r($homeBrands[7]['image']);
 
-               ?>
-            @foreach ($rand_keys as $key)
+
+
+            @foreach ($homeLogos as $key)
+            <?php
+               if($key->medias != null){
+                $path = url($key['medias']['path'].$key['medias']['original_name']);
+             }else{
+                 $path = '';
+             }
+             ?>
+
             <div class="col">
                <div class="partners-set">
-                  <img alt="{{ $homeLogos[$key]['title'] }}" title="{{ $homeLogos[$key]['title'] }}" src="{{ cdn($homeLogos[$key]['image']) }}" align=""/>
+               <img alt="{{ $key['name'] }}" title="{{ $key['name'] }}" src="{{ $path }}" width="150" height="77" align=""/>
                </div>
             </div>
             @endforeach
