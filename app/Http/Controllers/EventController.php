@@ -133,7 +133,7 @@ class EventController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Payment Method Cannot Changed'
-            ]); 
+            ]);
         }
 
         $event->paymentMethod()->detach();
@@ -316,7 +316,7 @@ class EventController extends Controller
         $data['metas'] = $event['metable'];
 
         $data['methods'] = PaymentMethod::where('status',1)->get();
-        dd($data['methods']);
+        //dd($data['methods']);
         $data['delivery'] = Delivery::all();
         $data['isInclassCourse'] = $event->is_inclass_course();
         $data['eventFaqs'] = $event->faqs->pluck('id')->toArray();

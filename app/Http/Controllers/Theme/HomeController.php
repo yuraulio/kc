@@ -69,16 +69,25 @@ class HomeController extends Controller
             //dd($bcatid['events']);
             $data['eventsbycategory'][$key] = $bcatid;
             $data['eventsbycategoryElearning'][$key] = $bcatid;
+            $data['eventsbycategoryInClass'][$key] = $bcatid;
             foreach($bcatid['events'] as $key1 => $event){
-                if(!$event->is_elearning_course()){
+                // if(!$event->is_elearning_course()){
 
-                    $data['eventsbycategory'][$key]['events'][$key1] = $event;
-                }else{
+                //     $data['eventsbycategory'][$key]['events'][$key1] = $event;
+                // }else{
+                //     $data['eventsbycategoryElearning'][$key] = $bcatid;
+                // }
+                if($event->is_elearning_course()){
                     $data['eventsbycategoryElearning'][$key] = $bcatid;
+                }else if($event->is_inclass_course()){
+                    $data['eventsbycategoryInClass'][$key]['events'][$key1] = $event;
+                    //dd($event);
+                }else{
+                    $data['eventsbycategory'][$key]['events'][$key1] = $event;
                 }
             }
         }
-        dd($data['eventsbycategoryElearning']);
+        //dd($data['eventsbycategoryElearning']);
 
         //dd($data['eventsbycategory']);
         return view('theme.home.homepage',$data);

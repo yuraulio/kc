@@ -294,7 +294,7 @@
 
    @if(isset($events))
    @foreach($eventsbycategoryElearning as $bcatid => $bcateventids)
-   <?php dd($bcateventids); ?>
+   <?php //dd($bcateventids); ?>
 
    <section class="section-text-carousel section--blue-gradient">
       <div class="container container--md">
@@ -318,8 +318,11 @@
                      $advancedtag = 0;
                      $advancedtagslug = '';
                      $categoryType=false;
+                     /*
                      if (isset($bcateventids) && !empty($bcateventids)) :
+                        dd($bcateventids);
                          foreach ($bcateventids as $category) :
+                    */
                              /*if ($category->depth != 0 && $category->parent_id == 9) {
                                   $location=$category;
                              }
@@ -332,19 +335,20 @@
 
                              /////////////////////////////
                             //  EDWWWWWWWWWW
-
+/*
                              if ($category->id == 117) {
                                  $advancedtag = 1;
                                  $advancedtagslug = $category->slug;
                              }
                          endforeach;
                      endif;
+                     */
                      ?>
                   <h2>{{$until}}</h2>
-                  @if (isset($eventsbycategoryDetailsHelper[$bcatid]['c_fields']['simple_text'][12]) && $eventsbycategoryDetailsHelper[$bcatid]['c_fields']['simple_text'][12]['value'] != '')
-                  @if(isset($eventsbycategoryHelper[$bcatid]) && $eventsbycategoryHelper[$bcatid]->hours)<span class="duration"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""/>{!!$eventsbycategoryHelper[$bcatid]->hours!!}</span>@endif
+                  @if (isset($bcateventids->description) && $bcateventids->description != '')
+                  @if(isset($bcateventids) && $bcateventids->hours)<span class="duration"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""/>{!!$bcateventids->hours!!}</span>@endif
                   @endif
-                  <p>{!!$eventsbycategoryHelper[$bcatid]->description!!}</p>
+                  <p>{!!$bcateventids->description!!}</p>
                </div>
             </div>
             <div class="carousel-column">
@@ -360,27 +364,28 @@
                            $advancedtag = 0;
                            $onthiscat = 0;
                            $advancedtagslug = '';
-                        if (isset($row->categories) && !empty($row->categories)) :
-                        foreach ($row->categories as $category) :
-                        if ($category->depth != 0 && $category->parent_id == 9) {
-                            $location=$category;
-                        }
+                           //dd($row);
+                        // if (isset($row->categories) && !empty($row->categories)) :
+                        // foreach ($row->categories as $category) :
+                        // if ($category->depth != 0 && $category->parent_id == 9) {
+                        //     $location=$category;
+                        // }
 
-                        if ($category->depth != 0 && $category->parent_id == 12) {
-                            $eventtype=$category;
-                        }
-                                   if ($category->depth != 0 && $category->parent_id == 22) {
-                                       $eventtopic[]=$category->id;
-                                   }
-                                   if ($category->depth != 0 && $category->parent_id == 45) {
-                                       $onthiscat=$category->id;
-                                   }
-                                   if ($category->id == 117) {
-                                       $advancedtag = 1;
-                                       $advancedtagslug = $category->slug;
-                                   }
-                        endforeach;
-                        endif;
+                        // if ($category->depth != 0 && $category->parent_id == 12) {
+                        //     $eventtype=$category;
+                        // }
+                        //            if ($category->depth != 0 && $category->parent_id == 22) {
+                        //                $eventtopic[]=$category->id;
+                        //            }
+                        //            if ($category->depth != 0 && $category->parent_id == 45) {
+                        //                $onthiscat=$category->id;
+                        //            }
+                        //            if ($category->id == 117) {
+                        //                $advancedtag = 1;
+                        //                $advancedtagslug = $category->slug;
+                        //            }
+                        // endforeach;
+                        // endif;
 
                         $dont = true;
 
@@ -396,23 +401,31 @@
                      @if($onthiscat == $bcatid)
                      <div class="slide">
                      <?php
-                           $string = $frontHelp->pField($row, 'title');
+                           $string = $row->title;
                             if( strpos($string, ',') !== false ) {
                               $until = substr($string, 0, strrpos($string, ","));
                             }
                             else {
                                $until = $string;
-                               } ?>
-                        @if (!empty($row['featured']) && isset($row['featured'][0]) &&isset($row['featured'][0]['media']) && !empty($row['featured'][0]['media']))
-                        <a href="{{ $frontHelp->pSlug($row) }}"><img src="{{ cdn($frontHelp->pImg($row, 'event-card')) }}" alt="{{ $until}}"/></a>
+                               }
+                               ?>
+                        @if (isset($row->media) && !empty($row->media) && $row->media['name'] != '')
+                        <a href="{{ $row->slugable['slug'] }}"><img src="{{ $row->media['path'] }}/{{$row->media['name']}}-event-card{{$row->media['ext']}}}}" alt="{{ $until}}"/></a>
                         @endif
 
-                        <div class="box-text">
-                           <h3><a href="{{ $frontHelp->pSlug($row) }}">{{ $until}}</a></h3>
+                        <?php //dd($row->slugable['slug']); ?>
 
-                           <a href="{{$categoryType['slug']}}" class="location">{{ $categoryType['name'] }}</a>
+                        <div class="box-text">
+                        @if(isset($row->slugable) && $row->slugable['slug'] != '')
+                           <h3><a href="{{ $row->slugable['slug'] }}">{{ $until}}</a></h3>
+                        @endif
+
+                           {{--<a href="{{$categoryType['slug']}}" class="location">{{ $categoryType['name'] }}</a>--}}
                            <span class="date"> </span>
-                           <a href="{{ $frontHelp->pSlug($row) }}" class="btn btn--sm btn--secondary">course details</a>
+                        @if(isset($row->slugable) && $row->slugable['slug'] != '')
+                        <a href="{{ $row->slugable['slug'] }}" class="btn btn--sm btn--secondary">course details</a>
+                        @endif
+
                         </div>
                      </div>
                      @endif
@@ -428,11 +441,14 @@
 
    @endforeach
    @endif
-
+<?php //dd($eventsbycategoryInClass[0]); ?>
    @if(isset($events))
-   @foreach($inclassEventsbycategoryFree as $bcatid => $bcateventids)
-   @if(isset($inclassEventsbycategoryHelperFree) && isset($inclassEventsbycategoryDetailsHelperFree) && isset($inclassEventsbycategoryHelperFree[$bcatid]) &&
-   ($inclassEventsbycategoryDetailsHelperFree[$bcatid]->view_tpl === 'event_free' || $inclassEventsbycategoryDetailsHelperFree[$bcatid]->view_tpl === 'event_free_coupon'))
+   @foreach($eventsbycategoryInClass as $bcatid => $bcateventids)
+   <?php
+   //dd($bcateventids);
+    ?>
+   @if(isset($bcateventids) &&
+   ($bcateventids->view_tpl === 'event_free' || $bcateventids->view_tpl === 'event_free_coupon'))
    <section class="section-text-carousel background event-background">
       <div class="container container--md">
          <div class="row-text-carousel clearfix">
@@ -447,7 +463,7 @@
                          $until = $string;
                          }*/
 
-                         $until = $inclassEventsbycategoryHelperFree[$bcatid]->name
+                         $until = $bcateventids->title
                          ?>
                   <?php
                      $location = [];
@@ -456,8 +472,11 @@
                      $advancedtag = 0;
                      $advancedtagslug = '';
                      $categoryType= false;
-                     if (isset($inclassEventsbycategoryDetailsHelperFree[$bcatid]->categories) && !empty($inclassEventsbycategoryDetailsHelperFree[$bcatid]->categories)) :
-                         foreach ($inclassEventsbycategoryDetailsHelperFree[$bcatid]->categories as $category) :
+
+                    //  if (isset($inclassEventsbycategoryDetailsHelperFree[$bcatid]->categories) && !empty($inclassEventsbycategoryDetailsHelperFree[$bcatid]->categories)) :
+                    //      foreach ($inclassEventsbycategoryDetailsHelperFree[$bcatid]->categories as $category) :
+
+
                              /*if ($category->depth != 0 && $category->parent_id == 9) {
                                   $location=$category;
                              }
@@ -468,22 +487,22 @@
                                  $eventtopic[]=$category->id;
                              }*/
 
-                              if ($category->parent_id == 12) {
-                                 $categoryType=$category;
-                              }
+                            //   if ($category->parent_id == 12) {
+                            //      $categoryType=$category;
+                            //   }
 
-                             if ($category->id == 117) {
-                                 $advancedtag = 1;
-                                 $advancedtagslug = $category->slug;
-                             }
-                         endforeach;
-                     endif;
+                            //  if ($category->id == 117) {
+                            //      $advancedtag = 1;
+                            //      $advancedtagslug = $category->slug;
+                            //  }
+                    //      endforeach;
+                    //  endif;
                      ?>
                   <h2>{{$until}}</h2>
-                  @if (isset($inclassEventsbycategoryDetailsHelperFree[$bcatid]['c_fields']['simple_text'][12]) && $inclassEventsbycategoryDetailsHelperFree[$bcatid]['c_fields']['simple_text'][12]['value'] != '')
-                  @if(isset($inclassEventsbycategoryHelperFree[$bcatid]) && $inclassEventsbycategoryHelperFree[$bcatid]->hours)<span class="duration"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""/>{{ $inclassEventsbycategoryHelperFree[$bcatid]->hours }}</span>@endif
+                  @if (isset($bcateventids->description) && $bcateventids->description != '')
+                  @if(isset($bcateventids) && $bcateventids->hours)<span class="duration"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""/>{{ $bcateventids->hours }}</span>@endif
                   @endif
-                  <p>{!!$inclassEventsbycategoryHelperFree[$bcatid]->description!!}</p>
+                  <p>{!!$bcateventids->description!!}</p>
                </div>
             </div>
             <div class="carousel-column">
@@ -500,27 +519,27 @@
                         $onthiscat = 0;
                         $advancedtagslug = '';
                         $hours ='';
-                        if (isset($row->categories) && !empty($row->categories)) :
-                        foreach ($row->categories as $category) :
-                        if ($category->depth != 0 && $category->parent_id == 9) {
-                            $location=$category;
-                        }
-                        if ($category->depth != 0 && $category->parent_id == 12) {
-                            $eventtype=$category;
-                        }
-                                   if ($category->depth != 0 && $category->parent_id == 22) {
-                                       $eventtopic[]=$category->id;
-                                   }
-                                   if ($category->depth != 0 && $category->parent_id == 45) {
-                                       $onthiscat=$category->id;
-                                   }
-                                   if ($category->id == 117) {
-                                       $advancedtag = 1;
-                                       $advancedtagslug = $category->slug;
+                        // if (isset($row->categories) && !empty($row->categories)) :
+                        // foreach ($row->categories as $category) :
+                        // if ($category->depth != 0 && $category->parent_id == 9) {
+                        //     $location=$category;
+                        // }
+                        // if ($category->depth != 0 && $category->parent_id == 12) {
+                        //     $eventtype=$category;
+                        // }
+                        //            if ($category->depth != 0 && $category->parent_id == 22) {
+                        //                $eventtopic[]=$category->id;
+                        //            }
+                        //            if ($category->depth != 0 && $category->parent_id == 45) {
+                        //                $onthiscat=$category->id;
+                        //            }
+                        //            if ($category->id == 117) {
+                        //                $advancedtag = 1;
+                        //                $advancedtagslug = $category->slug;
 
-                                   }
-                        endforeach;
-                        endif;
+                        //            }
+                        // endforeach;
+                        // endif;
 
                         $dont = true;
 
@@ -577,8 +596,8 @@
 
    @if(isset($events))
    @foreach($eventsbycategoryFree as $bcatid => $bcateventids)
-   @if(isset($eventsbycategoryHelperFree) && isset($eventsbycategoryDetailsHelperFree) && isset($eventsbycategoryHelperFree[$bcatid]) &&
-   ($eventsbycategoryDetailsHelperFree[$bcatid]->view_tpl === 'elearning_free'))
+   @if(isset($bcateventids) &&
+   ($bcateventids->view_tpl === 'elearning_free'))
    <section class="section-text-carousel background event-background">
       <div class="container container--md">
          <div class="row-text-carousel clearfix">
@@ -593,7 +612,8 @@
                          $until = $string;
                          }*/
 
-                         $until = $eventsbycategoryHelperFree[$bcatid]->name
+                         $until = $bcateventids->title;
+                         //dd($until);
                          ?>
                   <?php
                      $location = [];
@@ -602,8 +622,8 @@
                      $advancedtag = 0;
                      $advancedtagslug = '';
                      $categoryType= false;
-                     if (isset($eventsbycategoryDetailsHelperFree[$bcatid]->categories) && !empty($eventsbycategoryDetailsHelperFree[$bcatid]->categories)) :
-                         foreach ($eventsbycategoryDetailsHelperFree[$bcatid]->categories as $category) :
+                    //  if (isset($eventsbycategoryDetailsHelperFree[$bcatid]->categories) && !empty($eventsbycategoryDetailsHelperFree[$bcatid]->categories)) :
+                    //      foreach ($eventsbycategoryDetailsHelperFree[$bcatid]->categories as $category) :
                              /*if ($category->depth != 0 && $category->parent_id == 9) {
                                   $location=$category;
                              }
@@ -614,22 +634,22 @@
                                  $eventtopic[]=$category->id;
                              }*/
 
-                              if ($category->parent_id == 12) {
-                                 $categoryType=$category;
-                              }
+                            //   if ($category->parent_id == 12) {
+                            //      $categoryType=$category;
+                            //   }
 
-                             if ($category->id == 117) {
-                                 $advancedtag = 1;
-                                 $advancedtagslug = $category->slug;
-                             }
-                         endforeach;
-                     endif;
+                            //  if ($category->id == 117) {
+                            //      $advancedtag = 1;
+                            //      $advancedtagslug = $category->slug;
+                            //  }
+                    //      endforeach;
+                    //  endif;
                      ?>
                   <h2>{{$until}}</h2>
-                  @if (isset($eventsbycategoryDetailsHelperFree[$bcatid]['c_fields']['simple_text'][12]) && $eventsbycategoryDetailsHelperFree[$bcatid]['c_fields']['simple_text'][12]['value'] != '')
-                  @if(isset($eventsbycategoryHelperFree[$bcatid]) && $eventsbycategoryHelperFree[$bcatid]->hours)<span class="duration"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""/>{{ $eventsbycategoryHelperFree[$bcatid]->hours }}</span>@endif
+                  @if (isset($bcateventids) && $bcateventids->description != '')
+                  @if($bcateventids->hours)<span class="duration"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""/>{{ $bcateventids->hours }}</span>@endif
                   @endif
-                  <p>{!!$eventsbycategoryHelperFree[$bcatid]->description!!}</p>
+                  <p>{!!$bcateventids->description!!}</p>
                </div>
             </div>
             <div class="carousel-column">
@@ -646,27 +666,27 @@
                            $onthiscat = 0;
                            $advancedtagslug = '';
                            $hours ='';
-                        if (isset($row->categories) && !empty($row->categories)) :
-                        foreach ($row->categories as $category) :
-                        if ($category->depth != 0 && $category->parent_id == 9) {
-                            $location=$category;
-                        }
-                        if ($category->depth != 0 && $category->parent_id == 12) {
-                            $eventtype=$category;
-                        }
-                                   if ($category->depth != 0 && $category->parent_id == 22) {
-                                       $eventtopic[]=$category->id;
-                                   }
-                                   if ($category->depth != 0 && $category->parent_id == 45) {
-                                       $onthiscat=$category->id;
-                                   }
-                                   if ($category->id == 117) {
-                                       $advancedtag = 1;
-                                       $advancedtagslug = $category->slug;
+                        // if (isset($row->categories) && !empty($row->categories)) :
+                        // foreach ($row->categories as $category) :
+                        // if ($category->depth != 0 && $category->parent_id == 9) {
+                        //     $location=$category;
+                        // }
+                        // if ($category->depth != 0 && $category->parent_id == 12) {
+                        //     $eventtype=$category;
+                        // }
+                        //            if ($category->depth != 0 && $category->parent_id == 22) {
+                        //                $eventtopic[]=$category->id;
+                        //            }
+                        //            if ($category->depth != 0 && $category->parent_id == 45) {
+                        //                $onthiscat=$category->id;
+                        //            }
+                        //            if ($category->id == 117) {
+                        //                $advancedtag = 1;
+                        //                $advancedtagslug = $category->slug;
 
-                                   }
-                        endforeach;
-                        endif;
+                        //            }
+                        // endforeach;
+                        // endif;
 
                         $dont = true;
 
@@ -682,23 +702,25 @@
                      @if($onthiscat == $bcatid)
                      <div class="slide">
                      <?php
-                           $string = $frontHelp->pField($row, 'title');
+                           $string = $row->title;
                             if( strpos($string, ',') !== false ) {
                               $until = substr($string, 0, strrpos($string, ","));
                             }
                             else {
                                $until = $string;
-                               } ?>
-                        @if (!empty($row['featured']) && isset($row['featured'][0]) &&isset($row['featured'][0]['media']) && !empty($row['featured'][0]['media']))
-                        <a href="{{ $frontHelp->pSlug($row) }}"><img src="{{ cdn($frontHelp->pImg($row, 'event-card')) }}" alt="{{ $until}}"/></a>
+                               }
+
+                               ?>
+                        @if (isset($row->medias) && $row->medias['name'] != '')
+                        <a href="{{ $row->slugable['slug'] }}"><img src="{{ $row->media['path'] }}/{{$row->media['name']}}-event-card{{$row->media['ext']}}}}" alt="{{ $until}}"/></a>
                         @endif
 
                         <div class="box-text">
-                           <h3><a href="{{ $frontHelp->pSlug($row) }}">{{ $until}}</a></h3>
+                           <h3><a href="{{ $row->slugable['slug'] }}">{{ $until}}</a></h3>
 
-                           <a href="{{$categoryType['slug']}}" class="location">{{ $categoryType['name'] }}</a>
+                           {{--<a href="{{$categoryType['slug']}}" class="location">{{ $categoryType['name'] }}</a>--}}
                            <span class="date"></span>
-                           <a href="{{ $frontHelp->pSlug($row) }}" class="btn btn--sm btn--secondary">enroll for free</a>
+                           <a href="{{ $row->slugable['slug'] }}" class="btn btn--sm btn--secondary">enroll for free</a>
                         </div>
                      </div>
                      @endif
