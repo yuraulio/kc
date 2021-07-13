@@ -6,10 +6,10 @@
 'elementName' => 'role-management'
 ])
 @section('content')
-@component('layouts.headers.auth') 
+@component('layouts.headers.auth')
 @component('layouts.headers.breadcrumbs')
-@slot('title') 
-{{ __('Examples') }} 
+@slot('title')
+{{ __('Examples') }}
 @endslot
 <li class="breadcrumb-item"><a href="{{ route('role.index') }}">{{ __('Role Management') }}</a></li>
 <li class="breadcrumb-item active" aria-current="page">{{ __('Add Role') }}</li>
@@ -26,18 +26,18 @@
             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#metas" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Metas</a>
          </li>
          @endif
-   
+
          @if($page->template !== 'cart')
          <li class="nav-item">
             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#media" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Media</a>
          </li>
-   
+
          <li class="nav-item">
             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#media_version" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Media Version</a>
          </li>
-   
+
          @endif
-   
+
       </ul>
    </div>
 <div class="tab-content" id="myTabContent">
@@ -64,7 +64,7 @@
                   </div>
                   <div class="card-body">
                      <h6 class="heading-small text-muted mb-4">{{ __('Page information') }}</h6>
-                     
+
                     @if($page->template != 'cart')
                      <div class="pl-lg-4">
                         <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
@@ -93,7 +93,7 @@
                            <textarea name="content" id="input-content"  class="ckeditor form-control{{ $errors->has('content') ? ' is-invalid' : '' }}" placeholder="{{ __('Page editor') }}"  required autofocus>{{ old('content',$page->content) }}</textarea>
                            @include('alerts.feedback', ['field' => 'permissions'])
                         </div>
-                       
+
                      </div>
                      @endif
                   </div>
@@ -103,7 +103,7 @@
                <div class="card">
                   <div class="card-header">
                      @if(!in_array($page->template,$noEditablePages))
-                    
+
                      @include('admin.preview.preview',['slug' => isset($slug) ? $slug : null])
 
                      <div class="form-group{{ $errors->has('template') ? ' has-danger' : '' }}">
@@ -115,11 +115,11 @@
                         </select>
                         @include('alerts.feedback', ['field' => 'template'])
                      </div>
-                    
+
                      <div class="form-group{{ $errors->has('published') ? ' has-danger' : '' }}">
                         <label class="form-control-label" for="input-category_id">{{ __('Published') }}</label>
                         <select name="published" id="input-category_id" class="form-control" placeholder="{{ __('Published') }}">
-                        
+
                         <option value="0" {{ 0 == old('published',$page->published) ? 'selected' : '' }}> Unpublished </option>
                         <option value="1" {{ 1 == old('published',$page->published) ? 'selected' : '' }}> Published </option>
                         </select>
@@ -137,7 +137,7 @@
          </div>
       </form>
    </div>
-   
+
    @if($page->name || in_array($page->template,$noEditablePages))
    <div class="tab-pane fade" id="metas" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
       <div class="row">
@@ -151,7 +151,7 @@
    <div class="tab-pane fade" id="media" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
       <div class="row">
          <div class="col-xl-12 order-xl-1">
-         @include('admin.upload.upload', ['event' => ($media != null) ? $media : null])
+         @include('admin.upload.upload', ['event' => ($media != null) ? $media : null, 'versions' => ['event-card', 'header-image', 'social-media-sharing']])
          </div>
       </div>
    </div>

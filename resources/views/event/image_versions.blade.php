@@ -72,7 +72,7 @@
                 <img class="img-fluid" id="{{$version['version']}}" data-version="{{$version['version']}}" src="
                 <?php
                     if(isset($event)) {
-                        echo url('uploads').$event['path'].$event['original_name'];
+                        echo url($event['path'].$event['original_name']);
                     }else{
                         echo '';
                     }

@@ -25,7 +25,15 @@
                                 <a href="#">
                                 <?php //dd($user->image->name); ?>
                                 @if(isset($user->image->original_name))
-                                    <img src="{{ asset('uploads/profile_user') }}/{{ $user->image->original_name }}" class="rounded-circle">
+                                <?php
+                                    if($user->image->details != null){
+                                        //dd('with details');
+                                        $details = json_decode($user->image->details, true);
+                                        //dd($details);
+                                    }
+                                ?>
+                                <?php //dd(asset($user->image->path.$user->image->name.'-crop'.$user->image->ext)); ?>
+                                    <img src="<?= asset($user->image->path.$user->image->name.'-crop'.$user->image->ext);?>" class="rounded-circle">
                                 @else
                                 <img src="" alt="{{$user['firstname']}}" class="rounded-circle">
                                 @endif

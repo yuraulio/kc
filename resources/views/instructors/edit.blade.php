@@ -129,7 +129,7 @@
                                             @include('alerts.feedback', ['field' => 'user_id'])
                                         </div>
 
-                                       
+
                                         <input type="hidden" name="creator_id" id="input-creator_id" class="form-control" value="{{$instructor->creator_id}}">
                                         <input type="hidden" name="author_id" id="input-author_id" class="form-control" value="{{$instructor->author_id}}">
 
@@ -143,7 +143,7 @@
                                 </form>
                             </div>
                             <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
-                            @include('admin.upload.upload', ['event' => ( isset($instructor) && $instructor->medias != null) ? $instructor->medias : null])
+                            @include('admin.upload.upload', ['event' => ( isset($instructor) && $instructor->medias != null) ? $instructor->medias : null, 'versions' => ['instructors-testimonials', 'instructors-small']])
                             @include('event.image_versions', ['event' => $instructor->medias, 'versions1'=>['instructors-small', 'instructors-testimonials']])
                             </div>
                         </div>

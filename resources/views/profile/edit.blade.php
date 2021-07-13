@@ -261,7 +261,7 @@
                                     <div class="custom-file">
                                         <label class="custom-file-label" for="input-picture">{{ __('Select profile photo') }}</label>
                                         <input type="file" name="photo" class="custom-file-input{{ $errors->has('photo') ? ' is-invalid' : '' }}" id="input-picture" accept="image/*">
-                                        
+
                                     </div>
 
                                     @include('alerts.feedback', ['field' => 'photo'])
@@ -383,6 +383,6 @@
                 </div>
             </div>
         </div>
-        @include('layouts.footers.auth')       
+        @include('layouts.footers.auth')
     </div>
 @endsection

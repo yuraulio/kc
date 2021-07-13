@@ -102,11 +102,13 @@
 						</div>
 
 						<ul class="main-menu">
-                        <?php $header_menus = get_header(); ?>
+                        <?php $header_menus = get_header();
+                        //dd($header_menus);?>
 
                             @if (!empty($header_menus))
-                                @foreach ($header_menus as $key => $row)
-                                <?php //dd($row['header_menus']['data']); ?>
+                                @foreach ($header_menus['Header'] as $key => $row)
+                                <?php //dd($row['header_menus']['data']);
+                                //dd($row); ?>
                                     <li>
                                         <a title="{{ $row['data']['name'] }}" href="{{ $row['data']['slugable']['slug'] }}">{{ $row['data']['name'] }}</a>
                                     </li>

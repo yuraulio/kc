@@ -23,12 +23,11 @@ class AuthAuthorsAndAbove
 
     public function handle(Request $request, Closure $next)
     {
-        
         if(!$this->auth){
             return redirect()->to('admin')->withErrors(['You must login first.']);
         }
         $roles = $this->auth->role->pluck('name')->toArray();
-     
+
         if (in_array('Super Administrator',$roles) || in_array('Administrator',$roles) || in_array('Manager',$roles) || in_array('Author',$roles)) {
             return $next($request);
         }

@@ -54,9 +54,7 @@ class MediaController extends Controller
     }
 
     public function uploadVersionImage(Request $request, Media $media){
-        //dd($request->all());
         $versions = json_decode($request->versions);
-        //dd($versions);
         $mediaKey = $request->image_upload;
         ///  test/companyAvatar.png
 
@@ -65,8 +63,9 @@ class MediaController extends Controller
 
         $folders =substr($mediaKey, 0,strrpos($mediaKey, '/'));
         $path = explode(".",$id);
+        //dd(public_path('/').$mediaKey);
 
-        $image = Image::make(public_path('uploads').$mediaKey);
+        $image = Image::make(public_path('/').$mediaKey);
 
         $media->original_name = $id;
         $media->path = $folders.'/';
@@ -83,7 +82,7 @@ class MediaController extends Controller
                 if($value['version'] == $version){
                     $image->resize($value['w'], $value['h']);
                     $image->fit($value['w'], $value['h']);
-                    $image->save(public_path('uploads').$folders.'/'.$path[0].'-'.$value['version'].'.'.$path[1], $value['q']);
+                    $image->save(public_path('/').$folders.'/'.$path[0].'-'.$value['version'].'.'.$path[1], $value['q']);
                 }
 
             }
@@ -111,10 +110,17 @@ class MediaController extends Controller
             $name = explode('profile_user/',$path_name);
             $size = getimagesize('uploads/'.$path_name);
             $media->name = $name1[0];
-            $media->ext = $content->guessClientExtension();
+            $media->ext = '.'.$content->guessClientExtension();
             $media->original_name = $name[1];
             $media->file_info = $content->getClientMimeType();
-            $media->path = $path_name;
+            $string = $path_name;
+
+            $string = explode('/', $string);
+            array_pop($string);
+            $string = implode('/', $string);
+            $media->path = '//uploads//'.$string.'/';
+
+
             $media->width = $size[0];
             $media->height = $size[1];
             $media->save();
@@ -128,6 +134,7 @@ class MediaController extends Controller
         //dd('asd');
         //dd($request->all());
         $media = Media::find($request->media_id);
+        dd($media);
         if($media['details'] != null){
             //dd('has details');
             $details = json_decode($media['details'], true);
@@ -137,7 +144,6 @@ class MediaController extends Controller
                 $details['y'] = $request->y;
                 $details['width'] = $request->width;
                 $details['height'] = $request->height;
-
 
             }else{
                 $details['x'] = $request->x;
@@ -151,6 +157,20 @@ class MediaController extends Controller
 
             Media::where('id', $request->media_id)->update(['details' => $details]);
 
+            //find image with title+prof_image
+
+            unlink($media['path'].$media['name'].'-crop'.$media['ext']);
+            //save new crop image
+
+            $image = Image::make(public_path('/').$mediaKey);
+
+            $image->resize($value['w'], $value['h']);
+            $image->fit($value['w'], $value['h']);
+            $image->save(public_path('/').$folders.'/'.$path[0].'-'.$value['version'].'.'.$path[1], $value['q']);
+
+
+
+
         }else{
             $arr = [];
             $arr['x'] = $request->x;
@@ -162,7 +182,15 @@ class MediaController extends Controller
 
             Media::where('id', $request->media_id)->update(['details' => $details]);
 
+            //save new image
+
         }
+
+        dd(public_path($media['path']));
+
+        // $image = Image::make(public_path('uploads').$path);
+        // $image->crop(intval($request->width),intval($request->height), intval($request->x), intval($request->y));
+        // $image->save(public_path('uploads').$path);
 
         return response()->json([
             'success' => __('Already image cropped.'),

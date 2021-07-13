@@ -117,7 +117,7 @@ class ProfileController extends Controller
     {
         //dd($request->all());
 
-        $user = User::find($request->user_id);
+        $user = User::with('image')->find($request->user_id);
 
         //dd($request->file('photo'));
 
@@ -128,8 +128,9 @@ class ProfileController extends Controller
             return back()->withErrors(['not_allow_profile' => __('You are not allowed to change data for a default user.')]);
         }
 
+        //dd($user);
         if($request->photo){
-            (new MediaController)->uploadProfileImage($request, $user->medias);
+            (new MediaController)->uploadProfileImage($request, $user->image);
         }
 
 
