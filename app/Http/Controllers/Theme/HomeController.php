@@ -14,7 +14,7 @@ use App\Model\Menu;
 use App\Model\Type;
 use App\Model\Category;
 use View;
-
+use App\Model\Pages;
 use Laravel\Cashier\Cashier;
 use App\Model\User;
 use App\Model\Invoice;
@@ -76,16 +76,15 @@ class HomeController extends Controller
                     $data['eventsbycategoryFree'][$bcatid['id']]['cat']['description'] = $bcatid['description'];
                     $data['eventsbycategoryFree'][$bcatid['id']]['cat']['hours'] = $bcatid['hours'];
                 }
-
-
-
             }
 
         }
 
         $data['homeBrands'] = Logos::with('medias')->where('type', 'brands')->inRandomOrder()->take(6)->get()->toArray();
         $data['homeLogos'] = Logos::with('medias')->where('type', 'logos')->inRandomOrder()->take(6)->get()->toArray();
-        $data['header_menus'] = [];
+        $data['homePage'] = Pages::where('name','home')->with('mediable')->first()->toArray();
+        //dd($data['homePage']);
+        //$data['header_menus'] = [];
         
         //dd($data['eventsbycategory'][46]['events']);
         return view('theme.home.homepage',$data);
@@ -158,7 +157,7 @@ class HomeController extends Controller
 
 
     private function event($event){
-
+        
         $data = $event->topicsLessonsInstructors();
         $data['event'] = $event;
         $data['benefits'] = $event->benefits;
@@ -167,8 +166,9 @@ class HomeController extends Controller
         $data['faqs'] = $event->getFaqs();
         $data['testimonials'] = isset($event->category->toArray()[0]) ? $event->category->toArray()[0]['testimonials'] : [];
         $data['tickets'] = $event->ticket->toArray();
+        $data['venues'] = $event->venues->toArray();
         $data['syllabus'] = $event->syllabus->toArray();
-        //dd($data['syllabus']);
+        //dd($data['venues']);
         return view('theme.event.' . $event->view_tpl,$data);
 
     }

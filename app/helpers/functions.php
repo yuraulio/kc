@@ -162,5 +162,6 @@ if (!function_exists('get_header')){
 
         }
         return $result;
+
     }
 }

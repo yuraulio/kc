@@ -11,22 +11,23 @@
    $totalcats = 0;
    ?>
 <main id="main-area" class="with-hero" role="main">
-   <?php if (isset($homeBanners) && count($homeBanners) > 0) : ?>
-   <?php foreach ($homeBanners as $key => $value) : ?>
-   <?php if(isset($value['image'])) : ?>
-   <section class="section-hero"  style="background-image:url('{{ $value['image'] }}');">
+   <?php if (isset($homePage) && count($homePage) > 0) : ?>
+   <?php $image = get_image($homePage['mediable'],'header-image');
+     // dd($image);
+   ?>
+   <section class="section-hero"  style="background-image:url('{{ $image }}');">
       <div class="overlay"></div>
       <div class="container">
          <div class="hero-message">
-            <h1>{{ $value['title'] }}</h1>
-            <h2>{{ $value['subtitle'] }}</h2>
+            <h1>{{ $homePage['title'] }}</h1>
+            <h2>{!! $homePage['content'] !!}</h2>
          </div>
       </div>
       <!-- /.section-hero -->
    </section>
    <?php
-      endif;
-      endforeach;
+      
+     
       endif; ?>
     
 

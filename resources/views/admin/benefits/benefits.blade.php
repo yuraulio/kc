@@ -103,8 +103,8 @@
                   @include('alerts.feedback', ['field' => 'description'])
                </div>
 
-               @if(isset($model->summary))
-               <?php $media = $model->summary->medias; ?>
+               @if(isset($model->summary1))
+               <?php $media = null;//$model->summary1->medias; ?>
                @else
                <?php $media = null; ?>
                @endif

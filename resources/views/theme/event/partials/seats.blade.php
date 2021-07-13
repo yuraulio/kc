@@ -12,25 +12,21 @@
 
 <section id="seats" class="section-tickets">
    
-
-     
-   
    <div class="container">
    
       <h2 class="section-title">{{$title}}</h2>
 
-      
-      
       <div class="row row-flex row-flex-15">
          
-                  
+            <?php $early = false;?>
          @foreach($tickets as $key => $ticket)
          <?php 
          
             $options = json_decode($ticket['pivot']['options'],true); 
-            $early = false;
-
-            if($ticket['type'] == 'Early' && $ticket['pivot']['quantity'] > 0){
+            
+          
+            if($ticket['type'] == 'Early Bird' ){
+               
                $early = true;
             }
 

@@ -369,7 +369,7 @@ class Event extends Model
 
 
     public function subscriptionΤransactionsByUser($user){
-
+       
         return $this->transactions()/*->has('subscription')*/->whereHas('user', function ($query) use($user) {
                 $query->where('id', $user);
             });
