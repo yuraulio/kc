@@ -21,11 +21,11 @@ class Type extends Model
 
     public function events()
     {
-        return $this->morphedByMany(Event::class, 'typeables');
+        return $this->morphedByMany(Event::class, 'typeable');
     }
 
     public function lessons()
     {
-        return $this->morphedByMany(Lesson::class, 'typeables');
+        return $this->morphedByMany(Lesson::class, 'typeable');
     }
 }

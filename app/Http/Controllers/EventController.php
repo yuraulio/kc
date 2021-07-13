@@ -182,8 +182,10 @@ class EventController extends Controller
 
         }
 
+
         if($request->type_id != null){
-            $event->type()->attach([$request->type_id]);
+            //dd($request->type_id);
+            $event->type()->sync($request->type_id);
         }
 
         if($request->delivery != null){
@@ -328,10 +330,8 @@ class EventController extends Controller
 
         $event->category()->sync([$request->category_id]);
 
-        if($request->type_id != null){
-            $event->type()->detach();
-            $event->type()->attach($request->type_id);
-        }
+        $event->type()->sync($request->type_id);
+
 
         if($request->delivery != null){
             $event->delivery()->detach();
