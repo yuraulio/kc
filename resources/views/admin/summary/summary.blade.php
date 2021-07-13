@@ -134,9 +134,11 @@
                     </select>
                   @include('alerts.feedback', ['field' => 'section_sum'])
                </div>
+               <?php //dd($model->summary1); ?>
 
-               @if(isset($model->summary))
-               <?php $media = $model->summary->medias; ?>
+               @if(isset($model->summary1))
+               <?php //$media = $model->summary->medias;
+               $media = null; ?>
                @else
                <?php $media = null; ?>
                @endif
@@ -173,6 +175,7 @@
    	    success: function (data) {
    	//console.log(data);
    	let summary = data.summary;
+       console.log(summary)
    	let newSummary =
    	`<tr>` +
    	`<td id="title-` + summary['id'] +`">` + summary['title'] + `</td>` +
@@ -185,7 +188,7 @@
                   <i class="fas fa-ellipsis-v"></i>
                   </a>
                   <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                     <a class="dropdown-item" data-toggle="modal" data-target="#editModalSummary" data-id="` + summary['id'] + `" data-title="`+summary['title'] +`" data-description="`+ summary['description']`">{{ __('Edit') }}</a>
+                     <a class="dropdown-item" data-toggle="modal" data-target="#editModalSummary" data-id="` + summary['id'] + `" data-title="`+summary['title'] +`" data-description="`+ summary['description']+`">{{ __('Edit') }}</a>
 
                   </div>
                </div>
@@ -270,8 +273,8 @@
             modal.find("#edit-section_sum").val(section)
 
             base_url = window.location.protocol + "//" + window.location.host
-            $("#img-upload-summary").attr('src', base_url+'/uploads'+media)
-            console.log(base_url+'/uploads'+media)
+            $("#img-upload-summary").attr('src', base_url+media)
+            console.log(base_url+media)
 
             }
 

@@ -148,7 +148,7 @@
    	`<tr>` +
    	`<td id="name-` + benefit['id'] +`">` + benefit['name'] + `</td>` +
    	`<td>` + benefit['created_at'] + `</td>` +
-       `<td hidden id="media_ben-` + benefit['id'] +`" data-id="` + benefit['id'] +`" class="benefit-list">`+benefit.medias['path']+`</td>`+
+       `<td hidden id="media_ben-` + benefit['id'] +`" data-id="` + benefit['id'] +`" class="benefit-list"></td>`+
 
       `<td class="text-right">
                <div class="dropdown">
@@ -242,7 +242,7 @@
             $("#image_svg_upload-benefit").val(media)
             $("#img-upload").attr('src', media)
             base_url = window.location.protocol + "//" + window.location.host
-            $("#img-upload-benefit").attr('src', base_url+'/uploads'+media)
+            $("#img-upload-benefit").attr('src', base_url+media)
          }
 
    });

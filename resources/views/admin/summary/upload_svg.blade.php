@@ -4,6 +4,8 @@
 Upload Image
 </button>
 
+<?php //dd($media); ?>
+
 <!-- Modal -->
 <div class="modal fade select_Svg_Modal-{{$template1}}" id=""  tabindex="-1" role="dialog" aria-labelledby="select_Svg_ModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -38,31 +40,35 @@ Upload Image
 
 <script>
 from = @json($template1);
+
 $(".close_svg_modal").click(function() {
-    $('#select_Svg_Modal-'+from).modal('hide')
+    $('#select_Svg_Modal-'+@json($template1)).modal('hide')
 })
 
-    $( "#select-svg-"+from ).click(function() {
+    $( "#select-svg-"+@json($template1) ).click(function() {
         path = ''
 
-        console.log("from: "+from)
+        console.log("from: "+@json($template1))
 
 
-        $.each( $('.select_Svg_Modal-'+from + ' .fm-breadcrumb li'), function(key, value) {
+        $.each( $('.select_Svg_Modal-'+@json($template1) + ' .fm-breadcrumb li'), function(key, value) {
             if(key != 0){
                 path = path+'/'+$(value).text()
             }
         })
 
-        name = $('.select_Svg_Modal-'+from+ ' .table-info .fm-content-item').text()
+        name = $('.select_Svg_Modal-'+@json($template1)+ ' .table-info .fm-content-item').text()
         name = name.replace(/\s/g, '')
-        ext = $('.select_Svg_Modal-'+from+ ' .table-info td:nth-child(3)').text()
+        ext = $('.select_Svg_Modal-'+@json($template1)+ ' .table-info td:nth-child(3)').text()
         ext = ext.replace(/\s/g, '')
-        path = path +'/'+name+'.'+ext
+        path = '/uploads'+path +'/'+name+'.'+ext
 
-        $('#image_svg_upload-'+from).val(path)
+        //alert(path)
 
-        $('.select_Svg_Modal-'+from).modal('hide')
+        $('#image_svg_upload-'+@json($template1)).val(path)
+        $('#img-upload-'+@json($template1)).attr('src', path)
+
+        $('.select_Svg_Modal-'+@json($template1)).modal('hide')
 
 
     });

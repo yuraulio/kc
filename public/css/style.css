@@ -165,3 +165,8 @@
     z-index: 1 !important;
 }
 
+#img-upload-summary,
+#img-upload-benefit {
+    width: -moz-available;
+}
+
