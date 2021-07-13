@@ -9,6 +9,8 @@ Upload Image
     }
  ?>
 
+ <?php //dd($event); ?>
+
 
 <form method="post" id="upload_form" method="POST" action="{{ route('upload.versionImage', $event) }}" autocomplete="off" enctype="multipart/form-data">
     @csrf
@@ -18,7 +20,7 @@ Upload Image
         <div class="form-group">
             <img id="img-upload" src="
             <?php if($event['path'] != null) {
-                echo url('uploads').$event['path'].$event['original_name'];
+                echo url($event['path'].$event['original_name']);
             }?>">
         </div>
         <input type="hidden" value="{{$event['path'].$event['original_name']}}" id="image_upload" name="image_upload">
@@ -60,17 +62,20 @@ Upload Image
 <script>
     $( "#select-image" ).click(function() {
         path = ''
-        $.each( $('.fm-breadcrumb li'), function(key, value) {
+        let elem = $('#select_ImageModal .table-info').parent().parent().parent().parent().parent()
+        elem = $(elem).find('.fm-breadcrumb li')
+        $.each( elem, function(key, value) {
             if(key != 0){
                 path = path+'/'+$(value).text()
             }
         })
 
-        name = $('.table-info .fm-content-item').text()
+        name = $('#select_ImageModal .table-info .fm-content-item').text()
+        //alert(name)
         name = name.replace(/\s/g, '')
-        ext = $('.table-info td:nth-child(3)').text()
+        ext = $('#select_ImageModal .table-info td:nth-child(3)').text()
         ext = ext.replace(/\s/g, '')
-        path = path +'/'+name+'.'+ext
+        path = 'uploads'+path +'/'+name+'.'+ext
         $('#image_upload').val(path)
         $('#img-upload').attr('src', path);
         $(".close").click();

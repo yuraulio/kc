@@ -153,12 +153,15 @@ if (!function_exists('get_header')){
         $menus = Menu::where('name', 'Header')->get()->toArray();
         $result = array();
         foreach ($menus as $key => $element) {
-            $result[$element['name']][] = $element;
+
+
 
             $model = app($element['menuable_type']);
+            //dd($model::with('slugable')->find($element['menuable_id']));
 
-            $element->data = $model::with('slugable')->find($element['menuable_id']);
-            //dd($element->data);
+            $element['data'] = $model::with('slugable')->find($element['menuable_id']);
+            $result[$element['name']][] = $element;
+            //dd($element);
 
         }
         return $result;

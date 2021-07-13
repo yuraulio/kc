@@ -302,4 +302,11 @@ Route::namespace('Alexusmai\\LaravelFileManager\\Controllers\\')->group(function
 
 
 
+Route::group(['middleware' => 'auth','prefix'=>'myaccount'], function () {
+    Route::get('/', ['as' => 'student.myaccount', 'uses' => 'Theme/StudentController@index']);
+});
+
+
+
+
 
