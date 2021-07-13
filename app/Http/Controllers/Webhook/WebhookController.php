@@ -10,6 +10,7 @@ use App\Model\Invoice;
 use App\Model\Event;
 use Mail;
 use \Carbon\Carbon;
+use App\Model\Transaction;
 
 class WebhookController extends BaseWebhookController
 {
@@ -17,81 +18,187 @@ class WebhookController extends BaseWebhookController
 	public function handleInvoicePaymentSucceeded(array $payload){
 
 		if ($user = $this->getUserByStripeId($payload['data']['object']['customer'])) {
-        
+			
 			$sub = $payload['data']['object']['lines']['data'][0];
-			if(!isset($sub['metadata']['installments'])){
-				return;
-			}
-			
-			$count = $sub['metadata']['installments_paid'];
-			if(isset($sub['metadata']['installments']))
-    		  $totalinst = $sub['metadata']['installments'];
-            else 
-                $totalinst = 3;
-            
-	    	$count++;
-
-			$subscription = $user->subscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first();
-			$eventId = explode('_',$subscription->stripe_price)[3];
-
-			$data = $payload['data']['object'];
-			
-			Stripe::setApiKey($user->events->where('id',$eventId)->first()->paymentMethod->first()->processor_options['secret_key']);
-			session()->put('payment_method',$user->events->where('id',$eventId)->first()->paymentMethod->first()->id);
-            $subscription->metadata = ['installments_paid' => $count, 'installments' => $totalinst];
-			$subscription->save();
-			
-			$stripeSubscription = $user->subscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first()->asStripeSubscription();
-			$stripeSubscription->metadata = ['installments_paid' => $count, 'installments' => $totalinst];
-			$stripeSubscription->save();
-
-			$invoices = $user->events->where('id',$eventId)->first()->invoicesByUser($user->id)->get();
-			if(count($invoices) > 0){
-				$invoice = $invoices->last();
-				$pdf = $invoice->generateCronjobInvoice();
-				$this->sendEmail($invoice,$pdf);
+			if(isset($sub['metadata']['installments'])){
+				$this->installments($payload,$sub,$user);
 			}else{
-				if(!Invoice::doesntHave('subscription')->latest()->first()){
-					$invoiceNumber = sprintf('%04u', 1);
-				}else{
-
-					$transaction = $user->events->where('id',$eventId)->first()->transactionsByUser($user->id)->first();
-				
-					//$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;
-					$invoiceNumber = Invoice::latest()->doesntHave('subscription')->first()->invoice;
-					$invoiceNumber = (int) $invoiceNumber + 1;
-					$invoiceNumber = sprintf('%04u', $invoiceNumber);
-
-					$elearningInvoice = new Invoice;
-                    $elearningInvoice->name = json_decode($transaction->billing_details,true)['billname'];
-                    $elearningInvoice->amount = round($transaction->amount / $totalinst, 2);
-                    $elearningInvoice->invoice = $invoiceNumber;
-                    $elearningInvoice->date = Carbon::today()->toDateString();
-                    $elearningInvoice->instalments_remaining = $totalinst;
-                    $elearningInvoice->instalments = $totalinst;
-
-                    $elearningInvoice->save();
-
-                    $elearningInvoice->user()->save($user);
-                    $elearningInvoice->event()->save($user->events->where('id',$eventId)->first());
-                    $elearningInvoice->transaction()->save($transaction);
-					
-					$pdf = $elearningInvoice->generateInvoice();
-
-		
-
-					$this->sendEmail($elearningInvoice,$pdf);
-
-				}
+				$this->subscription($payload,$user,$sub);
 			}
-
-			if ((int)$count >= (int)$totalinst) {
-				$subscription->cancelNow();
-			}
-                
+    
         }
 	}
 
+	private function installments($payload,$sub,$user){
+	
+		$count = $sub['metadata']['installments_paid'];
+		if(isset($sub['metadata']['installments']))
+    	  $totalinst = $sub['metadata']['installments'];
+        else 
+            $totalinst = 3;
+        
+	    $count++;
+
+		$subscription = $user->subscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first();
+		$eventId = explode('_',$subscription->stripe_price)[3];
+
+		$data = $payload['data']['object'];
+		
+		Stripe::setApiKey($user->events->where('id',$eventId)->first()->paymentMethod->first()->processor_options['secret_key']);
+		session()->put('payment_method',$user->events->where('id',$eventId)->first()->paymentMethod->first()->id);
+        $subscription->metadata = ['installments_paid' => $count, 'installments' => $totalinst];
+		$subscription->save();
+		
+		$stripeSubscription = $user->subscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first()->asStripeSubscription();
+		$stripeSubscription->metadata = ['installments_paid' => $count, 'installments' => $totalinst];
+		$stripeSubscription->save();
+
+		$invoices = $user->events->where('id',$eventId)->first()->invoicesByUser($user->id)->get();
+		if(count($invoices) > 0){
+			$invoice = $invoices->last();
+			$pdf = $invoice->generateCronjobInvoice();
+			$this->sendEmail($invoice,$pdf);
+		}else{
+			if(!Invoice::doesntHave('subscription')->latest()->first()){
+				$invoiceNumber = sprintf('%04u', 1);
+			}else{
+
+				$transaction = $user->events->where('id',$eventId)->first()->transactionsByUser($user->id)->first();
+			
+				//$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;
+				$invoiceNumber = Invoice::latest()->doesntHave('subscription')->first()->invoice;
+				$invoiceNumber = (int) $invoiceNumber + 1;
+				$invoiceNumber = sprintf('%04u', $invoiceNumber);
+
+				$elearningInvoice = new Invoice;
+                $elearningInvoice->name = json_decode($transaction->billing_details,true)['billname'];
+                $elearningInvoice->amount = round($transaction->amount / $totalinst, 2);
+                $elearningInvoice->invoice = $invoiceNumber;
+                $elearningInvoice->date = Carbon::today()->toDateString();
+                $elearningInvoice->instalments_remaining = $totalinst;
+                $elearningInvoice->instalments = $totalinst;
+
+                $elearningInvoice->save();
+
+                $elearningInvoice->user()->save($user);
+                $elearningInvoice->event()->save($user->events->where('id',$eventId)->first());
+                $elearningInvoice->transaction()->save($transaction);
+				
+				$pdf = $elearningInvoice->generateInvoice();
+
+	
+
+				$this->sendEmail($elearningInvoice,$pdf);
+
+			}
+		}
+
+		if ((int)$count >= (int)$totalinst) {
+			$subscription->cancelNow();
+		}
+	}
+
+	private function subscription($payload,$user,$sub){
+		
+		$subscription = $user->subscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first();
+		//$subscription = $user->subscriptions()->where('stripe_status',1)->where('stripe_price',$payload['data']['object']['lines']['data'][0]['plan']['id'])->first();
+		$eventId = $subscription->event->first()->pivot->event_id;
+		$ends_at = isset($sub['period']) ? $sub['period']['end'] : null;
+		
+		$data = $payload['data']['object'];
+		
+		Stripe::setApiKey($user->events->where('id',$eventId)->first()->paymentMethod->first()->processor_options['secret_key']);
+		session()->put('payment_method',$user->events->where('id',$eventId)->first()->paymentMethod->first()->id);
+
+		$invoices = $user->events->where('id',$eventId)->first()->subscriptionInvoicesByUser($user->id)->get();
+		
+		/*if(count($invoices) > 0){
+			
+			$invoice = $invoices->last();
+			$pdf = $invoice->generateCronjobInvoice();
+			$this->sendEmail($invoice,$pdf);
+		}else{*/
+
+			//$transaction = $user->events->where('id',$eventId)->first()->subscriptionΤransactionsByUser($user->id)->first();
+
+			$charge['status'] = 'succeeded';
+            $status_history = [];
+            $status_history[] = [
+                     'datetime' => Carbon::now()->toDateTimeString(),
+                     'status' => 1,
+                     'user' => [
+                         'id' => $user->id,
+                         'email' => $user->email
+                     ],
+                     //'pay_seats_data' => $pay_seats_data,
+                     'pay_bill_data' => $user->invoice_details,
+                     'deree_user_data' => [$user->email => ''],
+                  //   'cardtype' => $payment_cardtype,
+                     //'installments' => $installments,
+                     //'cart_data' => $cart
+ 
+                 ];
+		
+            $transaction_arr = [
+     
+                "payment_method_id" => 100,//$input['payment_method_id'],
+                "account_id" => 17,
+                "payment_status" => 2,
+                "billing_details" => $user->receipt_details,
+                "status_history" => json_encode($status_history),
+                "placement_date" => Carbon::now()->toDateTimeString(),
+                "ip_address" => \Request::ip(),
+                "status" => 1, //2 PENDING, 0 FAILED, 1 COMPLETED
+                "is_bonus" => 0,
+                "order_vat" => 0,
+                "payment_response" => json_encode($charge),
+                "surcharge_amount" => 0,
+                "discount_amount" => 0,
+                
+                "amount" => $sub['amount']/100,
+                "total_amount" => $sub['amount']/100,
+                'trial' => $sub['amount']/100 == 0 ? true : false,
+                'ends_at' => date('Y-m-d H:i:s', $ends_at),
+            ];
+			$subscription->event->first()->pivot->expiration  = date('Y-m-d', $ends_at);
+			$subscription->event->first()->pivot->save();
+
+			$transaction = Transaction::create($transaction_arr);
+			//$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;
+			if($sub['amount']/100 != 0){
+
+				if(!Invoice::latest()->has('subscription')->first()){
+					$invoiceNumber = sprintf('%04u', 1);
+				}else{
+
+					$invoiceNumber = Invoice::latest()->has('subscription')->first()->invoice;
+					$invoiceNumber = (int) $invoiceNumber + 1;
+					$invoiceNumber = sprintf('%04u', $invoiceNumber);
+				}
+
+				$elearningInvoice = new Invoice;
+				$elearningInvoice->name = json_decode($transaction->billing_details,true)['billname'];
+				$elearningInvoice->amount = $transaction->amount ;
+				$elearningInvoice->invoice = 'S' . $invoiceNumber;
+				$elearningInvoice->date = Carbon::today()->toDateString();
+				$elearningInvoice->instalments_remaining =1 ;
+				$elearningInvoice->instalments = 1;
+
+				$elearningInvoice->save();
+
+				$elearningInvoice->user()->save($user);
+				$elearningInvoice->event()->save($user->events->where('id',$eventId)->first());
+				$elearningInvoice->transaction()->save($transaction);
+				
+				$pdf = $elearningInvoice->generateInvoice();
+
+
+
+				$this->sendEmail($elearningInvoice,$pdf);
+			}
+		//}
+
+	}
 
 	private function sendEmail($elearningInvoice,$pdf){
 
