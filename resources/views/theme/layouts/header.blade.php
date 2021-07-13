@@ -105,10 +105,10 @@
                         <?php //dd($header_menus); ?>
 
                             @if (!empty($header_menus))
-                                @foreach ($header_menus as $key => $row)
-                                <?php dd($row['header_menus']['data']); ?>
+                                @foreach ($header_menus['Header'] as $key => $row)
+                                <?php //dd($row['data']); ?>
                                     <li>
-                                        <a title="{{ $row['name'] }}" href="{{ $row['slug'] }}">{{ $row['name'] }}</a>
+                                        <a title="{{ $row['data']['name'] }}" href="{{ $row['data']['slugable']['slug'] }}">{{ $row['data']['name'] }}</a>
                                     </li>
 								@endforeach
 								{{--<li>

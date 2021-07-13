@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Model\Slug;
 use App\Model\Event;
+use App\Model\Delivery;
 use App\Model\Media;
 use App\Model\Logos;
 use App\Model\Menu;
@@ -137,11 +138,8 @@ class HomeController extends Controller
 
         }
         $data['header_menus'] = $result;
-        //dd($data['header_menus']['Header'][0]['data']);
 
-        //dd($data['eventsbycategory']);
-        //dd($data['eventsbycategory'][0]);
-        return view('theme.home.homepage',$data);
+        return view('theme.home.homepage', $data);
 
     }
 
@@ -156,14 +154,31 @@ class HomeController extends Controller
 
         //dd($slug->slugable);
         //dd(get_class($slug->slugable) == Event::class);
+        //dd(get_class($slug->slugable) == Delivery::class);
 
         switch (get_class($slug->slugable)) {
             case Event::class:
+                //dd('asd');
                 return $this->event($slug->slugable);
+                break;
+
+            case Delivery::class:
+                return $this->delivery($slug->slugable);
+                //dd('test');
+                //return view('theme.pages.category', $data);
                 break;
 
         }
 
+    }
+
+    private function delivery($delivery){
+        $data['events'] = $delivery->event()->get();
+        $data['delivery'] = $delivery;
+        //dd($delivery);
+
+
+        return view('theme.pages.category' ,$data);
     }
 
 

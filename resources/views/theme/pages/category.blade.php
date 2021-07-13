@@ -1,28 +1,29 @@
 @extends('theme.layouts.master')
 @section('content')
-@inject('frontHelp', 'Library\FrontendHelperLib')
+{{--@inject('frontHelp', 'Library\FrontendHelperLib')--}}
 <main id="main-area" role="main">
    <div class="section section--dynamic-learning">
       <div class="container">
          <div class="dynamic-learning--title">
             <?php $elern = false; $diplomas = false; $certificates = false; ?>
-            
-            @if($cat_dets->parent_id == 12)
-            <?php //if($cat_dets->slug === 'e-learning-courses'){$elern = true; } 
-               if($cat_dets->slug === 'video-on-demand-courses'){$elern = true; } 
-               if($cat_dets->slug === 'diplomas'){$diplomas = true; }
-               if($cat_dets->slug === 'certificates'){$certificates = true; }
+            <?php //dd($delivery->slugable['slug']); ?>
+            @if(isset($delivery))
+            <?php //if($cat_dets->slug === 'e-learning-courses'){$elern = true; }
+               if( $delivery->slugable['slug'] === 'video-on-demand-courses'){$elern = true; }
+               if( $delivery->slugable['slug'] === 'diplomas'){$diplomas = true; }
+               if( $delivery->slugable['slug'] === 'certificates'){$certificates = true; }
+               if( $delivery->slugable['slug'] === 'diplomas'){$diplomas = true; }
                ?>
-            <h1 >{{ $cat_dets->name }}</h1>
+            <h1 >{{ $delivery->name }}</h1>
             @endif
 
-            @if($cat_dets->parent_id == 216)
-            <?php //if($cat_dets->slug === 'e-learning-courses'){$elern = true; } 
+            {{--@if($cat_dets->parent_id == 216)
+            <?php //if($cat_dets->slug === 'e-learning-courses'){$elern = true; }
                if($cat_dets->slug === 'certificates'){$certificates = true; }
                if($cat_dets->slug === 'diplomas'){$diplomas = true; }
                ?>
             <h1 >{{ $cat_dets->name }}</h1>
-            @endif
+            @endif--}}
 
             @if($cat_dets->parent_id == 9)
             <h1>Events in {{ $cat_dets->name }}</h1>
@@ -51,9 +52,9 @@
             $countsold = 0;
             ?>
          <div class="filters-wrapper">
-           
+
             <div id="upcoming" class="filter-tab active-tab">
-            
+
                @if(isset($openlist) && count($openlist) > 0)
                   <?php
                      $countopen = count($openlist);
@@ -81,7 +82,7 @@
                            </div>
                            <div class="right">
                               <?php  if (isset($eventprices[$row->id])) {
-                                 $price = $eventprices[$row->id];												
+                                 $price = $eventprices[$row->id];
 
                                  }
                                  else { $price = 0; } ?>
@@ -130,7 +131,7 @@
                            endif;
                         ?>
 
-                        @if($chmonth != $lastmonth1) 
+                        @if($chmonth != $lastmonth1)
                            <?php $lastmonth1 = $chmonth;?>
                            <div class="dynamic-learning--subtitle">
                               <h2>{{$month}}</h2>
@@ -142,25 +143,25 @@
                               <div class="left">
                                  <h2><a href="{{ $frontHelp->pSlug($row) }}">{{ $frontHelp->pField($row, 'title') }}</a></h2>
                                  <div class="bottom">
-                                    @if(isset($location->name))   
+                                    @if(isset($location->name))
                                        <a href="{{ $location->slug }}" class="location " title="{{ $location->name }}">
-                                       <img width="20" class="replace-with-svg" src="/theme/assets/images/icons/marker.svg" alt="">{{ $location->name }}</a>  
+                                       <img width="20" class="replace-with-svg" src="/theme/assets/images/icons/marker.svg" alt="">{{ $location->name }}</a>
                                     @endif
                                     @if (isset($row['c_fields']['simple_text'][0]) && $row['c_fields']['simple_text'][0]['value'] != '')
                                        <div  class="duration"><img class="replace-with-svg" width="20" src="/theme/assets/images/icons/icon-calendar.svg" alt=""> {{ $row['c_fields']['simple_text'][0]['value'] }} </div>
                                     @endif
-                                    @if($row['c_fields']['simple_text'][12] && (is_numeric(substr($row['c_fields']['simple_text'][12]['value'], 0, 1)))) 
+                                    @if($row['c_fields']['simple_text'][12] && (is_numeric(substr($row['c_fields']['simple_text'][12]['value'], 0, 1))))
                                        <div class="expire-date"><img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt="">{{ $row['c_fields']['simple_text'][12]['value'] }}</div>
                                     @endif
-                                 
+
                                  </div>
-                              </div>  
+                              </div>
                               <div class="right">
                                  <?php  if (isset($eventprices[$row->id])) {
-                                    $price = $eventprices[$row->id];												
-                                 
+                                    $price = $eventprices[$row->id];
+
                                     }
-                                    else { $price = 0; } 
+                                    else { $price = 0; }
                                  ?>
                                  <?php $etstatus = 0 ?>
                                  @if(isset($row['c_fields']['dropdown_select_status']['value']))
@@ -175,24 +176,24 @@
                                     <div class="price">free</div>
                                     <a href="{{ $frontHelp->pSlug($row) }}" class="btn btn--secondary btn--md">course details</a>
                                  @else
-                                    @if($etstatus == 0 && $price > 0) 
+                                    @if($etstatus == 0 && $price > 0)
                                     <div class="price">from €{{$price}}</div>
                                     <a href="{{ $frontHelp->pSlug($row) }}" class="btn btn--secondary btn--md">Course Details</a>
                                     @else
                                     <a href="{{ $frontHelp->pSlug($row) }}" class="btn btn--secondary btn--md btn--sold-out">sold out</a>
                                     @endif
                                  @endif
-                              </div>        
+                              </div>
                            </div>
                         </div>
 
                      @endif
                   @endforeach
 
-                 
+
                @else
 
-                  
+
                <h2> No available courses for now </h2>
                @endif
 
@@ -236,7 +237,7 @@
                         endif;
                      ?>
 
-                     @if($chmonth != $lastmonth1) 
+                     @if($chmonth != $lastmonth1)
                         <?php $lastmonth1 = $chmonth;?>
                         <div class="dynamic-learning--subtitle">
                            <h2>{{$month}}</h2>
@@ -248,29 +249,29 @@
                               <div class="left">
                                  <h2><a href="{{ $frontHelp->pSlug($row) }}">{{ $frontHelp->pField($row, 'title') }}</a></h2>
                                  <div class="bottom">
-                                    @if(isset($location->name))   
+                                    @if(isset($location->name))
                                        <a href="{{ $location->slug }}" class="location " title="{{ $location->name }}">
-                                       <img width="20" class="replace-with-svg" src="/theme/assets/images/icons/marker.svg" alt="">{{ $location->name }}</a>  
+                                       <img width="20" class="replace-with-svg" src="/theme/assets/images/icons/marker.svg" alt="">{{ $location->name }}</a>
                                     @endif
                                     @if (isset($row['c_fields']['simple_text'][0]) && $row['c_fields']['simple_text'][0]['value'] != '')
                                        <div  class="duration"><img class="replace-with-svg" width="20" src="/theme/assets/images/icons/icon-calendar.svg" alt=""> {{ $row['c_fields']['simple_text'][0]['value'] }} </div>
                                     @endif
-                                    @if($row['c_fields']['simple_text'][12] && (is_numeric(substr($row['c_fields']['simple_text'][12]['value'], 0, 1)))) 
+                                    @if($row['c_fields']['simple_text'][12] && (is_numeric(substr($row['c_fields']['simple_text'][12]['value'], 0, 1))))
                                        <div class="expire-date"><img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt="">{{ $row['c_fields']['simple_text'][12]['value'] }}</div>
                                     @endif
-                                 
+
                                  </div>
-                              </div>  
+                              </div>
                               <div class="right">
                                  <?php  if (isset($eventprices[$row->id])) {
-                                    $price = $eventprices[$row->id];												
-                                 
+                                    $price = $eventprices[$row->id];
+
                                     }
-                                    else { $price = 0; } 
+                                    else { $price = 0; }
                                  ?>
                                  <?php $etstatus = 0 ?>
                                  <a href="{{ $frontHelp->pSlug($row) }}" class="btn btn--secondary btn--md btn--completed">completed</a>
-                              </div>        
+                              </div>
                            </div>
                         </div>
 
@@ -279,15 +280,15 @@
 
                @endif
             </div>
-           
+
          </div>
 
-      
-           
-    
+
+
+
       </div>
 
-  
+
 
    </div>
 
