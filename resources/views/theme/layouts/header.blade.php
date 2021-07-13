@@ -102,11 +102,11 @@
 						</div>
 
 						<ul class="main-menu">
-                        <?php //dd($header_menus); ?>
+                        <?php $header_menus = get_header(); ?>
 
                             @if (!empty($header_menus))
                                 @foreach ($header_menus as $key => $row)
-                                <?php dd($row['header_menus']['data']); ?>
+                                <?php //dd($row['header_menus']['data']); ?>
                                     <li>
                                         <a title="{{ $row['name'] }}" href="{{ $row['slug'] }}">{{ $row['name'] }}</a>
                                     </li>

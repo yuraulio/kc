@@ -26,17 +26,8 @@ class HomeController extends Controller
 
         $data = [];
 
-        $data['events'] = Event::with('category', 'medias', 'slugable', 'ticket')->get();
-        //dd($data['events'][20]);
-
-        $data['eventsbycategory1'] = Category::with('events.slugable')->where('show_homepage', 1)->get();
-
-     //dd($data['eventsbycategory1']);
-
-
-
-
-
+        //$data['events'] = Event::with('category', 'medias', 'slugable', 'ticket')->get()->toArray();
+        $data['eventsbycategory1'] = Category::with('events.slugable','events.city','events.category')->where('show_homepage', 1)->get()->toArray();
         $data['eventsbycategory'] = [];
         $data['eventsbycategoryFree'] = [];
         $data['inclassEventsbycategoryFree'] = [];
@@ -49,33 +40,39 @@ class HomeController extends Controller
             //dd($bcatid);
 
             foreach($bcatid['events'] as $key1 => $event){
-
-                if($event->view_tpl != 'elearning_free' && $event->view_tpl != 'event_free' && $event->view_tpl != 'event_free_coupon')
+                if($event['status']!=0 && $event['status'] != 2){
+                    continue;
+                }
+                if($event['view_tpl'] != 'elearning_free' && $event['view_tpl'] != 'event_free' && $event['view_tpl'] != 'event_free_coupon' && $event['view_tpl'] != 'elearning_event')
                 {
-
+                    
                     $data['eventsbycategory'][$bcatid['id']]['events'][] =  $event;
+                    $data['eventsbycategory'][$bcatid['id']]['category'][] = $bcatid;
                     $data['eventsbycategory'][$bcatid['id']]['cat']['name'] = $bcatid['name'];
                     $data['eventsbycategory'][$bcatid['id']]['cat']['description'] = $bcatid['description'];
                     $data['eventsbycategory'][$bcatid['id']]['cat']['hours'] = $bcatid['hours'];
-                }else if($event->view_tpl == 'elearning_greek' || $event->view_tpl == 'elearning_pending' || $event->view_tpl == 'elearning_english'){
+                }else if($event['view_tpl'] == 'elearning_event' || $event['view_tpl'] == 'elearning_pending'){
 
                     $data['eventsbycategoryElearning'][$bcatid['id']]['events'][] = $event;
+                    $data['eventsbycategoryElearning'][$bcatid['id']]['category'][] = $bcatid;
                     $data['eventsbycategoryElearning'][$bcatid['id']]['cat']['name'] = $bcatid['name'];
                     $data['eventsbycategoryElearning'][$bcatid['id']]['cat']['description'] = $bcatid['description'];
                     $data['eventsbycategoryElearning'][$bcatid['id']]['cat']['hours'] = $bcatid['hours'];
-                }else if($event->view_tpl == 'elearning_free' || $event->view_tpl == 'event_free' || $event->view_tpl == 'event_free_coupon'){
+                }else if( $event['view_tpl'] == 'event_free' || $event['view_tpl'] == 'event_free_coupon'){
                     //dd('asd');
                     $data['inclassEventsbycategoryFree'][$bcatid['id']]['events'][] = $event;
+                    $data['inclassEventsbycategoryFree'][$bcatid['id']]['category'][] = $bcatid;
                     $data['inclassEventsbycategoryFree'][$bcatid['id']]['cat']['name'] = $bcatid['name'];
                     $data['inclassEventsbycategoryFree'][$bcatid['id']]['cat']['description'] = $bcatid['description'];
                     $data['inclassEventsbycategoryFree'][$bcatid['id']]['cat']['hours'] = $bcatid['hours'];
-                    if($event->view_tpl == 'elearning_free'){
-                        //dd($event);
-                        $data['eventsbycategoryFree'][$bcatid['id']]['events'][] = $event;
-                        $data['eventsbycategoryFree'][$bcatid['id']]['cat']['name'] = $bcatid['name'];
-                        $data['eventsbycategoryFree'][$bcatid['id']]['cat']['description'] = $bcatid['description'];
-                        $data['eventsbycategoryFree'][$bcatid['id']]['cat']['hours'] = $bcatid['hours'];
-                    }
+                    
+                }else if($event['view_tpl'] == 'elearning_free'){
+                    //dd($event);
+                    $data['eventsbycategoryFree'][$bcatid['id']]['events'][] = $event;
+                    $data['eventsbycategoryFree'][$bcatid['id']]['category'][] = $bcatid;
+                    $data['eventsbycategoryFree'][$bcatid['id']]['cat']['name'] = $bcatid['name'];
+                    $data['eventsbycategoryFree'][$bcatid['id']]['cat']['description'] = $bcatid['description'];
+                    $data['eventsbycategoryFree'][$bcatid['id']]['cat']['hours'] = $bcatid['hours'];
                 }
 
 
@@ -84,28 +81,11 @@ class HomeController extends Controller
 
         }
 
-        $data['homeBrands'] = Logos::with('medias')->where('type', 'brands')->inRandomOrder()->take(6)->get();
-        $data['homeLogos'] = Logos::with('medias')->where('type', 'logos')->inRandomOrder()->take(6)->get();
-        //dd($data['inclassEventsbycategoryFree']);
-        //dd($data['eventsbycategoryElearning']);
-
-
-        $menus = Menu::where('name', 'Header')->get();
-        $result = array();
-        foreach ($menus as $key => $element) {
-            $result[$element['name']][] = $element;
-
-            $model = app($element['menuable_type']);
-
-            $element->data = $model::with('slugable')->find($element['menuable_id']);
-            //dd($element->data);
-
-        }
-        $data['header_menus'] = $result;
-        //dd($data['header_menus']['Header'][0]['data']);
-
-        //dd($data['eventsbycategory']);
-        //dd($data['eventsbycategory'][0]);
+        $data['homeBrands'] = Logos::with('medias')->where('type', 'brands')->inRandomOrder()->take(6)->get()->toArray();
+        $data['homeLogos'] = Logos::with('medias')->where('type', 'logos')->inRandomOrder()->take(6)->get()->toArray();
+        $data['header_menus'] = [];
+        
+        //dd($data['eventsbycategory'][46]['events']);
         return view('theme.home.homepage',$data);
 
     }

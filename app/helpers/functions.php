@@ -3,6 +3,7 @@
 use App\Model\Slug;
 use App\Model\Media;
 use Illuminate\Support\Str;
+use App\Model\Menu;
 
 function get_split_image_path($path)
     {
@@ -144,5 +145,22 @@ if (!function_exists('get_image')){
         }
 
         return isset($media['name']) ? $media['path']  . $media['name'] . '-' . $version . $media['ext'] : '';
+    }
+}
+
+if (!function_exists('get_header')){
+    function get_header() {
+        $menus = Menu::where('name', 'Header')->get()->toArray();
+        $result = array();
+        foreach ($menus as $key => $element) {
+            $result[$element['name']][] = $element;
+
+            $model = app($element['menuable_type']);
+
+            $element->data = $model::with('slugable')->find($element['menuable_id']);
+            //dd($element->data);
+
+        }
+        return $result;
     }
 }
