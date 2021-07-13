@@ -71,8 +71,7 @@
 
                                 <div class="form-group{{ $errors->has('type_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-type_id">{{ __('Type') }}</label>
-                                    <select name="type_id" id="input-type_id" class="form-control" placeholder="{{ __('Type') }}" required>
-                                        <option value="">-</option>
+                                    <select multiple name="type_id[]" id="input-type_id" class="form-control" placeholder="{{ __('Type') }}" required>
                                         @foreach ($types as $type)
                                             <option value="{{ $type->id }}" >{{ $type->name }}</option>
                                         @endforeach

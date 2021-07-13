@@ -108,7 +108,7 @@
                                 @foreach ($header_menus as $key => $row)
                                 <?php //dd($row['header_menus']['data']); ?>
                                     <li>
-                                        <a title="{{ $row['name'] }}" href="{{ $row['slug'] }}">{{ $row['name'] }}</a>
+                                        <a title="{{ $row['data']['name'] }}" href="{{ $row['data']['slugable']['slug'] }}">{{ $row['data']['name'] }}</a>
                                     </li>
 								@endforeach
 								{{--<li>

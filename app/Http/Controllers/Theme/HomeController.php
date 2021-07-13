@@ -7,9 +7,11 @@ use Illuminate\Http\Request;
 
 use App\Model\Slug;
 use App\Model\Event;
+use App\Model\Delivery;
 use App\Model\Media;
 use App\Model\Logos;
 use App\Model\Menu;
+use App\Model\Type;
 use App\Model\Category;
 use View;
 
@@ -99,16 +101,59 @@ class HomeController extends Controller
 
     public function index(Slug $slug){
 
-        //dd($slug->slugable);
+
+        //dd($slug->slugable == Type::class);
         //dd(get_class($slug->slugable) == Event::class);
+        //dd(get_class($slug->slugable) == Delivery::class);
 
         switch (get_class($slug->slugable)) {
             case Event::class:
+                //dd('asd');
                 return $this->event($slug->slugable);
+                break;
+
+            case Delivery::class:
+                return $this->delivery($slug->slugable);
+                //dd('test');
+                //return view('theme.pages.category', $data);
+                break;
+
+            case Type::class:
+                //dd($slug);
+                return $this->types($slug->slugable);
+                //dd('test');
+                //return view('theme.pages.category', $data);
                 break;
 
         }
 
+    }
+
+    private function types($type){
+        $data['header_menus'] = $this->header();
+
+        $data['type'] = $type;
+
+        //dd($type->events()->with('category','slugable', 'city', 'ticket','summary1')->where('status', 0)->get()->toArray());
+
+        $data['openlist'] = $type->events()->with('category','slugable', 'city', 'ticket','summary1')->where('status', 0)->get();
+        $data['completedlist'] = $type->events()->with('category','slugable', 'city', 'ticket', 'summary1')->where('status', 3)->get();
+
+        return view('theme.pages.category' ,$data);
+
+    }
+
+    private function delivery($delivery){
+
+        $data['header_menus'] = $this->header();
+
+
+        $data['delivery'] = $delivery;
+        $data['openlist'] = $delivery->event()->with('category','slugable', 'city', 'ticket','summary1')->where('status', 0)->get();
+        $data['completedlist'] = $delivery->event()->with('category','slugable', 'city', 'ticket', 'summary1')->where('status', 3)->get();
+        //dd($data['completedlist']);
+
+        return view('theme.pages.category' ,$data);
     }
 
 
@@ -126,5 +171,20 @@ class HomeController extends Controller
         //dd($data['syllabus']);
         return view('theme.event.' . $event->view_tpl,$data);
 
+    }
+
+    private function header(){
+        $menus = Menu::where('name', 'Header')->get();
+        $result = array();
+        foreach ($menus as $key => $element) {
+            $result[$element['name']][] = $element;
+
+            $model = app($element['menuable_type']);
+
+            $element->data = $model::with('slugable')->find($element['menuable_id']);
+            //dd($element->data);
+
+        }
+        return $result;
     }
 }

@@ -17,7 +17,7 @@
             <li class="breadcrumb-item active" aria-current="page">{{ __('Edit Event') }}</li>
         @endcomponent
     @endcomponent
-
+    <?php //dd($event->type); ?>
     <div class="container-fluid mt--6">
         <div class="row">
             <div class="col">
@@ -88,11 +88,18 @@
 
                                 <div class="form-group{{ $errors->has('type_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-type_id">{{ __('Type') }}</label>
-                                    <select name="type_id" id="input-type_id" class="form-control" placeholder="{{ __('Type') }}" required>
+                                    <select multiple name="type_id[]" id="input-type_id" class="form-control" placeholder="{{ __('Type') }}" required>
                                         <option value="">-</option>
+
                                         @foreach ($types as $type)
+                                        <?php $found = false; ?>
                                             <option <?php if(count($event->type) != 0){
-                                                if($event->type[0]->id == $type->id){
+                                                foreach($event->type as $selected_type){
+                                                    if($selected_type['id'] == $type['id']){
+                                                        $found = true;
+                                                    }
+                                                }
+                                                if($found){
                                                     echo 'selected';
                                                 }else{
                                                     echo '';

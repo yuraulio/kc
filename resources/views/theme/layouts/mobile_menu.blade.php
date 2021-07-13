@@ -9,10 +9,10 @@
       </div>
       <div class="menu-wrapper">
          <ul class="mob-menu">
-            @if (!empty($filter_type))
-            @foreach ($filter_type as $key => $row)
+            @if (!empty($header_menus))
+            @foreach ($header_menus['Header'] as $key => $row)
             <li class="nav-item uppercase-item">
-               <a title="{{ $row->name }}" href="{{ $row->slug }}">{{ $row->name }}</a>
+            <a title="{{ $row['data']['name'] }}" href="{{ $row['data']['slugable']['slug'] }}">{{ $row['data']['name'] }}</a>
             </li>
             @endforeach
             @endif
@@ -33,17 +33,17 @@
             </li>
             @else
             <li class="account-menu">
-				   <a href="javascript:void(0)" title="Superhero Login">Account</a>				
-            </li>		  
+				   <a href="javascript:void(0)" title="Superhero Login">Account</a>
+            </li>
             <?php $cartitems = Cart::content()->count(); ?>
             @if($cartitems > 0)
                <li class="cart-menu">
                   <a href="/cart" title="Cart">Cart<span class="cart-number-mobile @if(Auth::check()) loged @endif">{{ Cart::content()->count() }}</span>
                   </a>
                </li>
-            @endif    
             @endif
-           
+            @endif
+
          </ul>
       </div>
    </div>

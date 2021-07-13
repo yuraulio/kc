@@ -19,6 +19,7 @@
                 <th scope="col"></th>
             </tr>
         </thead>
+        <?php //dd($model); ?>
         <tbody class="summary-body summaries-order">
         @if($model->summary1)
             @foreach ($model->summary1 as $summary)
@@ -124,11 +125,23 @@
                   <label class="form-control-label" for="edit-section_sum">{{ __('Section') }}</label>
                     <select name="section_sum" id="edit_section_sum" class="form-control" placeholder="{{ __('Section') }}">
                         <option value="date">Date</option>
+                        <option value="language">Language</option>
+                        <option value="duration">Duration</option>
+                        <option value="students"> Students</option>
+                        <option value="access"> Access </option>
+                        <option value="diploma"> Diploma </option>
+                        <option value="exams"> Exams</option>
                     </select>
                   @include('alerts.feedback', ['field' => 'section_sum'])
                </div>
 
-               @include('admin.summary.upload_svg', ['data' => $summary->medias, 'template1' => 'summary'])
+               @if(isset($model->summary))
+               <?php $media = $model->summary->medias; ?>
+               @else
+               <?php $media = null; ?>
+               @endif
+
+               @include('admin.summary.upload_svg', ['data' => $media, 'template1' => 'summary'])
                <input type="text" id="summary-id"  value="" hidden>
                <input type="hidden" value="" name="image_svg_upload" id="image_svg_upload-summary">
             </div>

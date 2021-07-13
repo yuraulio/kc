@@ -103,7 +103,13 @@
                   @include('alerts.feedback', ['field' => 'description'])
                </div>
 
-               @include('admin.summary.upload_svg', ['data' => $benefit->medias, 'template1' => 'benefit'])
+               @if(isset($model->summary))
+               <?php $media = $model->summary->medias; ?>
+               @else
+               <?php $media = null; ?>
+               @endif
+
+               @include('admin.summary.upload_svg', ['data' => $media, 'template1' => 'benefit'])
 
                <input type="text" id="benefit-id"  value="" hidden>
                <input type="hidden" value="" name="image_svg_upload" id="image_svg_upload-benefit" >
