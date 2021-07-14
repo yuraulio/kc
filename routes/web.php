@@ -297,7 +297,7 @@ Route::namespace('Alexusmai\\LaravelFileManager\\Controllers\\')->group(function
 
 
 Route::group(['middleware' => 'auth', 'prefix'=>'myaccount'], function () {
-    Route::get('/','Theme\StudentController@index')->name('myac');
+    Route::get('/','Theme\StudentController@index')->name('myaccount');
 });
 
 Route::group(['middleware' => ['preview','web']], function () {

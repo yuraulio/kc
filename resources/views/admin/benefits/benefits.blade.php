@@ -115,7 +115,7 @@
                <input type="hidden" value="" name="image_svg_upload" id="image_svg_upload-benefit" >
             </form>
 
-            <div class="form-group">
+            <div class="form-group" style="text-align:center;">
                 <img style="margin-top:10px;" id="img-upload-benefit" src="">
             </div>
             </div>
@@ -199,9 +199,9 @@
 
    	$("#name-"+benefit['id']).html(benefit['name'])
        $("#name-"+benefit['id']).parent().find('.dropdown-item').attr('data-description', benefit['description'])
-       $("#name-"+benefit['id']).parent().find('.dropdown-item').attr('data-media', benefit.medias['path'])
-       $("#media_ben-"+benefit['id']).text(benefit.medias['path'])
-       $("#img-upload-benefit").attr('src', benefit.medias['path'])
+       $("#name-"+benefit['id']).parent().find('.dropdown-item').attr('data-media', benefit.medias['path']+benefit.medias['original_name'])
+       $("#media_ben-"+benefit['id']).text(benefit.medias['path']+benefit.medias['original_name'])
+       $("#img-upload-benefit").attr('src', benefit.medias['path']+benefit.medias['original_name'])
        $('#benefit-form-edit').trigger('reset');
    	$(".close-modal").click();
 

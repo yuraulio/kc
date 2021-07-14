@@ -264,6 +264,7 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, User $user)
     {
+        //dd('from update');
         $hasPassword = $request->get("password");
         $user->update(
             $request->merge([
@@ -274,6 +275,7 @@ class UserController extends Controller
 
         return redirect()->route('user.index')->withStatus(__('User successfully updated.'));
     }
+
 
     /**
      * Remove the specified user from storage
