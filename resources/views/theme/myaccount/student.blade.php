@@ -2,27 +2,27 @@
 @section('content')
 <?php $bonusFiles = ['_Bonus', 'Bonus', 'Bonus Files', 'Βonus', '_Βonus', 'Βonus', 'Βonus Files'] ?>
 @inject('frontHelp', 'Library\FrontendHelperLib')
-<?php $currentuser = Sentinel::getUser(); ?>
+<?php $currentuser = $user ?>
 <main id="" role="main">
    <section class="section-hero section-hero-small section-hero-blue-bg">
       <div class="container">
          <div class="hero-message">
             <div class="account-infos">
                <div class="account-thumb">
-                  @if(isset($media))   
-                  <?php $img_src = 'portal-img/users/'.$media['path'].'/'.$media['name'].$media['ext'];?> 
-                  <img id="user-img-up" src="{{cdn($img_src)}}" alt="{{ $currentuser->first_name }} {{ $currentuser->last_name }}"/> 
+                  @if(isset($media))
+                  <?php $img_src = 'portal-img/users/'.$media['path'].'/'.$media['name'].$media['ext'];?>
+                  <img id="user-img-up" src="{{cdn($img_src)}}" alt="{{ $currentuser->first_name }} {{ $currentuser->last_name }}"/>
                   @else
-                  <img id="user-img-up" src="{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}" alt="user-profile-placeholder-image"/> 
+                  <img id="user-img-up" src="{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}" alt="user-profile-placeholder-image"/>
                   @endif
                </div>
                <div class="account-hero-info">
                   <h2>{{ $currentuser->first_name }} {{ $currentuser->last_name }}</h2>
                   <ul>
-                     @if($currentuser->kc_id != '')   
+                     @if($currentuser->kc_id != '')
                      <li>KnowCrunch alumni number: {{ $currentuser->kc_id }}</li>
                      @endif
-                     @if($currentuser->partner_id)    
+                     @if($currentuser->partner_id)
                      <li>Deree number: {{ $currentuser->partner_id }}</li>
                      @endif
                   </ul>
@@ -79,7 +79,7 @@
             <!-- /.alert-outer -->
          </div>
       </div>
-      
+
       <div class="content-wrapper">
       <div class="tabs-wrapper fixed-tab-controls">
          <div class="tab-controls">
@@ -94,7 +94,7 @@
                      <a id="myCourses"  class="active" href="#courses">My courses</a>
                      @endif
                   </li>
-                  
+
                </ul>
                <!-- /.container -->
             </div>
@@ -107,10 +107,10 @@
                      <div class="col4 col-sm-12">
                         <div class="account-image-actions"  id="logo_dropzone">
                            <div class="acc-img">
-                              @if(isset($media))   
-                              <img id="user-img" src="{{cdn($img_src)}}" alt="{{ $currentuser->first_name }} {{ $currentuser->last_name }}"/> 
+                              @if(isset($media))
+                              <img id="user-img" src="{{cdn($img_src)}}" alt="{{ $currentuser->first_name }} {{ $currentuser->last_name }}"/>
                               @else
-                              <img id="user-img" src="{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}" alt="user-profile-placeholder-image"/> 
+                              <img id="user-img" src="{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}" alt="user-profile-placeholder-image"/>
                               @endif
                            </div>
                            <div class="actions">
@@ -118,7 +118,7 @@
                                  <li class="change-photo"><a id="logoDropzone" class="custFieldMediaDrop dz-message" href="javascript:void(0)"><img src="{{cdn('/theme/assets/images/icons/icon-edit.svg')}}" alt="Change photo"/><span>Change photo</span>
                                     </a>
                                  </li>
-                                 @if(isset($media)) 
+                                 @if(isset($media))
                                  <li class="remove-photo delete_media"><a data-dp-media-id="{{ $media['id'] }}" href="javascript:void(0)"><img src="{{cdn('/theme/assets/images/icons/icon-remove.svg')}}" alt="Remove photo"/><span>Remove photo</span></a></li>
                                  @endif
                               </ul>
@@ -140,9 +140,9 @@
                                  <li class="active"><a href="#personal-data">Personal</a></li>
                                  <li><a href="#billing-data">Billing</a></li>
                                  <li><a href="#password-edit">Password</a></li>
-                                
+
                                  <li><a  href="#subscriptions" >Payment</a></li>
-                                 
+
                               </ul>
                            </div>
                            <div class="inside-tabs-wrapper">
@@ -188,7 +188,7 @@
                                  @endif
                                  @endif
                                  <div class="form-wrapper profile-form-wrapper" id="student-view-mode">
-                                    {{-- 
+                                    {{--
                                     <div class="form-action-upper">
                                        <a href="#" class="edit-fields" href="javascript:void(0)"><img src="{{cdn('/theme/assets/images/icons/icon-edit.svg')}}" alt="Edit Fields"/><span>Edit</span></a>
                                     </div>
@@ -455,7 +455,7 @@
                                              <input type="hidden" name="mobileCheck" id="mobileCheck" value="{{{ Input::old('mobile', '+'.$currentuser->country_code.$currentuser->mobile) }}}">
                                           </div>
                                        </div>
-                                       {{--   
+                                       {{--
                                        <div class="checkbox-row">
                                           <div class="custom-checkbox">
                                              <input type="checkbox" id="receive-emails" name="receive-emails" value="accept" checked="checked">
@@ -470,14 +470,14 @@
                                           </div>
                                           <label for="receive-messages">I want to receive important mobile messages from KnowCrunch.</label>
                                        </div>
-                                       --}}  
+                                       --}}
                                        <div class="form-submit-area">
                                           <button type="submit" class="btn btn--md btn--secondary">Update</button>
                                        </div>
                                     </form>
                                  </div>
                               </div>
-             
+
             <div id="subscriptions" class="in-tab-wrapper">
                <div class="container">
                   <div class="row">
@@ -503,13 +503,13 @@
                               <form action="{!!route('card.default')!!}" method="post" id="payment-form">
                                  {{ csrf_field() }}
                                  <input type="hidden" name="card_id" value="{{$card->id}}">
-                                 <button class="btn btn--secondary btn--sm">Set default</button>   
+                                 <button class="btn btn--secondary btn--sm">Set default</button>
                               </form>
                               @endif
                               <form action="{!!route('card.delete')!!}" method="post" id="payment-form">
                                  {{ csrf_field() }}
                                  <input type="hidden" name="card_id" value="{{$card->id}}">
-                                 <button id="removebtn" class="btn btn--secondary btn--sm">Remove</button>   
+                                 <button id="removebtn" class="btn btn--secondary btn--sm">Remove</button>
                               </form>
                            </td>
                         </tr>
@@ -521,17 +521,17 @@
                      <div id="addCardBtn" class="col12 text-right">
                         <button type="button" id="addCard" class="btn btn--secondary btn--sm">Add New Card</button>
                      </div>
-                     <div class="form-wrapper">  
-                        <form action="{{ route('card.addNewCard') }}" method="post">   
-                           {{csrf_field()}}                           
+                     <div class="form-wrapper">
+                        <form action="{{ route('card.addNewCard') }}" method="post">
+                           {{csrf_field()}}
                            <div id="container" class="col12"></div>
                         </form>
                      </div>
-                     
+
                   </div>
                   </div>
                </div>
-            
+
                               <div id="billing-data" class="in-tab-wrapper">
                                  <?php
                                     /*'billemail' => 'Email',
@@ -558,11 +558,11 @@
                                                 'companyemail' => 'Company email'
                                             ];
                                         $rec_data = [];
-                                    
-                                    
+
+
                                     ?>
                                  <div class="form-wrapper profile-form-wrapper">
-                                    {{-- 
+                                    {{--
                                     <div class="form-action-upper">
                                        <a href="#" class="edit-fields"><img src="/theme/assets/images/icons/icon-edit.svg" alt="Edit Fields"/><span>Edit</span></a>
                                     </div>
@@ -644,7 +644,7 @@
                                              </div>
                                              <div class="col12 col-sm-12">
                                                 <label>Confirm new password:</label>
-                                                <input type="password" autocomplete="new-password" name="password_confirm" type="password" 
+                                                <input type="password" autocomplete="new-password" name="password_confirm" type="password"
                                                    data-bv-identical="true"
                                                    data-bv-identical-field="password"
                                                    data-bv-identical-message="The password and its confirmation are not the same!" required />
@@ -681,7 +681,7 @@
 					<div class="container">
 						<div class="alert-wrapper error-alert">
 							<div class="alert-inner">
-                        
+
 								<p><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-error-alert.svg')}}" alt="Info Alert">{{\Session('stripe-error')}}.</p>
 								<a href="javascript:void(0)" class="close-alert"><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')}}" alt="Close Alert"/></a>
 							</div>
@@ -708,7 +708,7 @@
                                     @if(isset($showFiles[$keyType]) && $showFiles[$keyType])
                                     <li><a href="#c-files-inner{{$tab}}">Files</a></li>
                                     @endif
-                                    @if(isset($newlayoutExamsEvent[$keyType])) 
+                                    @if(isset($newlayoutExamsEvent[$keyType]))
                                     <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
                                     @endif
                                     {{--
@@ -788,14 +788,14 @@
                                     <div class="acc-topic-accordion">
                                        <div class="accordion-wrapper accordion-big">
                                           @foreach($folders as $catid => $dbfolder)
-                                          <?php 
+                                          <?php
                                              $folder = false;
-                                          
+
                                              if(trim($catid) == trim($catId)){
-                                                $folder = true; 
+                                                $folder = true;
                                              }
-                                             
-                                             
+
+
                                              ?>
                                           @if($folder)
                                           @if (isset($dbfolder[0]) && !empty($dbfolder[0]))
@@ -804,18 +804,18 @@
                                              $rf = strtolower($folder['dirname']);
                                              $rf1 = $folder['dirname']; //newdropbox
                                              ?>
-                                          <?php  
-                                             $topic=1; 
-                                             if($instructor_topics){ 
+                                          <?php
+                                             $topic=1;
+                                             if($instructor_topics){
                                                 $topic=0;
-                                             
+
                                                 if((trim($folder['foldername']) === '1 - Prelearning - Digital & Social Media Fundamentals')
                                                          && in_array(trim('Pre-learning: Digital & Social Media Fundamentals'), $instructor_topics)){
-                                                         
+
                                                    $topic = 1;
                                                 }else{
-                                                   $topic_name = explode( '-', $folder['foldername'] );  
-                                                   $topic=in_array(trim($topic_name[1]), $instructor_topics); 
+                                                   $topic_name = explode( '-', $folder['foldername'] );
+                                                   $topic=in_array(trim($topic_name[1]), $instructor_topics);
                                              }   }
                                              ?>
                                           @if($topic)
@@ -823,8 +823,8 @@
                                              <h3 class="accordion-title title-blue-gradient scroll-to-top"> {{ $folder['foldername'] }}</h3>
                                              <!-- Feedback 01-12 changed -->
                                              <div class="accordion-content no-padding">
-                                                <?php    
-                                                   $checkedF = []; 
+                                                <?php
+                                                   $checkedF = [];
                                                    $fs = [];
                                                    $fk = 1;
                                                    $bonus = [];
@@ -833,30 +833,30 @@
                                                 @if (isset($files[$catid][1]) && !empty($files[$catid][1]))
                                                 @foreach($files[$catid][1] as $fkey => $frow2)
                                                 @if($frow2['fid'] == $folder['id'])
-                                                <?php 
+                                                <?php
                                                    $fn = $folder['foldername'];
-                                                   
+
                                                    if(isset($dbfolder[1]) && !empty($dbfolder[1])){
                                                       foreach($dbfolder[1] as $nkey => $nfolder){
                                                          $dirname = explode('/',$nfolder['dirname']);
                                                          if($nfolder['parent'] == $folder['id'] && in_array($fn,$dirname) && !$subfolder  && !in_array($nfolder['foldername'],$bonusFiles) /*($nfolder['foldername'] !== '_Bonus' || $nfolder['foldername'] !== 'Bonus')*/){
-                                                   
+
                                                             $checkedF[] = $nfolder['id'] + 1 ;
                                                             $fs[$nfolder['id']+1]=[];
                                                             $fs[$nfolder['id']+1][] = $nfolder;
-                                                   
+
                                                          }
                                                       }
                                                    }
-                                                   
+
                                                    if(count($fs) > 0 ){
                                                       $subfolder = true;
                                                    }
-                                                   
+
                                                    ?>
                                                 @if($subfolder && in_array($fk,$checkedF))
                                                 @while(in_array($fk,$checkedF))
-                                                <?php 
+                                                <?php
                                                    $sfv = reset($checkedF);
                                                    $sfk = array_search($sfv, $checkedF);
                                                    unset($checkedF[$sfk]);
@@ -870,7 +870,7 @@
                                                    @if (isset($files[$catid][2]) && !empty($files[$catid][2]))
                                                    @foreach($files[$catid][2] as $fkey => $frow)
                                                    @if (strpos($frow['dirname'], $rf) !== false || strpos($frow['dirname'], $rf1) !== false && ( $frow['fid'] == ($sfv-1)  ))
-                                                   <?php $bonus[]= $frow['filename'] ?>    
+                                                   <?php $bonus[]= $frow['filename'] ?>
                                                    <div class="file-wrapper">
                                                       <h4 class="file-title">{{ $frow['filename'] }}</h4>
                                                       <span class="last-modified">Last modified:  {{$frow['last_mod']}}</span>
@@ -881,7 +881,7 @@
                                                    @endforeach
                                                    @endif
                                                 </div>
-                                                @endif   
+                                                @endif
                                                 @endforeach
                                                 @endif
                                                 <!-- bonus of each lesson -->
@@ -907,7 +907,7 @@
                                                 @endif
                                                 <?php
                                                    $fk += 1;
-                                                   
+
                                                    ?>
                                                 @endif
                                                 @endforeach
@@ -969,9 +969,9 @@
                                     @endif
                                  </div>
                                  @endif
-                                 @if(isset($newlayoutExamsEvent[$keyType])) 
+                                 @if(isset($newlayoutExamsEvent[$keyType]))
                                  <div id="c-exams-inner{{$tab}}" class="in-tab-wrapper">
-                                    @if(isset($newlayoutExamsEvent[$keyType])) 
+                                    @if(isset($newlayoutExamsEvent[$keyType]))
                                     <div class="dynamic-courses-wrapper dynamic-courses-wrapper--style2">
                                        <div class="bottom">
                                           @foreach($newlayoutExamsEvent[$keyType] as $p)
@@ -985,7 +985,7 @@
                                              <a target="_blank" href="{{ url('student-summary/' . $pe->id . '/' . $currentuser->id) }}?s=1" title="{{$p['title']}}" class="btn btn--secondary btn--md btn--completed">VIEW RESULT</a>
                                              @elseif($pe->islive == 1)
                                              <a target="_blank" onclick="window.open('{{ route('attempt-exam', [$pe->id]) }}', 'newwindow', 'width=1400,height=650'); return false;" title="{{$p['title']}}" class="btn btn--secondary btn--md">TAKE EXAM</a>
-                                             @elseif($pe->isupcom == 1)	
+                                             @elseif($pe->isupcom == 1)
                                              <a  title="{{$p['title'] }}" class="btn btn--secondary btn--md">{{ date('F j, Y', strtotime($pe->publish_time)) }}</a>
                                              @endif
                                           </div>
@@ -1042,25 +1042,25 @@
                                  <div id="c-subs-inner{{$tab}}" class="in-tab-wrapper">
                                     <div class="bottom">
                                        <div class="left">
-                                          
+
                                           @if($event['mySubscription'])
                                           <div class="bottom">
                                              @if($event['mySubscription']['trial_ends_at'])
-                                                <?php 
-                                                   $date_timestamp = strtotime($event['mySubscription']['trial_ends_at']); 
-                                                   $date = date('d/m/Y', $date_timestamp); 
+                                                <?php
+                                                   $date_timestamp = strtotime($event['mySubscription']['trial_ends_at']);
+                                                   $date = date('d/m/Y', $date_timestamp);
                                                    $now_date= date_create();
                                                    $now_date = date_timestamp_get($now_date);
                                                 ?>
                                                 @if($date_timestamp > $now_date )
-                                                   <?php //dd('not expired'); ?>                           
+                                                   <?php //dd('not expired'); ?>
                                                    <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/clock-coins.svg')}}" alt=""><?php echo 'Your trial expiration: '.$date; ?></div>
-                                                   @if($event['mySubscription']['active'] == 1)                                 
+                                                   @if($event['mySubscription']['active'] == 1)
                                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php $a = new DateTime($event['mySubscription']['ends_at']); echo 'You will be charged: '.$a->format('d/m/Y'); ?></div>
 
-                                                   @endif   
+                                                   @endif
                                                 @else
-                                                   
+
                                                    @if($event['mySubscription'])
                                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php $a = new DateTime($event['mySubscription']['ends_at']); echo 'You will be charged: '.$a->format('d/m/Y'); ?></div>
 
@@ -1068,21 +1068,21 @@
                                                 @endif
                                              @else
 
-                                             <?php 
-                                                   $date_timestamp = strtotime($event['mySubscription']['ends_at']); 
-                                                   $date = date('d/m/Y', $date_timestamp); 
+                                             <?php
+                                                   $date_timestamp = strtotime($event['mySubscription']['ends_at']);
+                                                   $date = date('d/m/Y', $date_timestamp);
                                                    $now_date= date_create();
                                                    $now_date = date_timestamp_get($now_date);
                                                 ?>
 
                                                 @if($date_timestamp > $now_date )
-                                                                      
-                                                   @if($event['mySubscription']['active'] == 1)                                 
+
+                                                   @if($event['mySubscription']['active'] == 1)
                                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php $a = new DateTime($event['mySubscription']['ends_at']); echo 'You will be charged: '.$a->format('d/m/Y'); ?></div>
-                                             
-                                                   @endif   
+
+                                                   @endif
                                                 @else
-                                             
+
                                                    @if($event['mySubscription'])
                                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php $a = new DateTime($event['mySubscription']['ends_at']); echo 'You will be charged: '.$a->format('d/m/Y'); ?></div>
                                                    @endif
@@ -1090,7 +1090,7 @@
 
                                              @endif
                                              @if(isset($event['mySubscription']))
-                                             <div class="status_wrapper"> 
+                                             <div class="status_wrapper">
                                                 <div class="status_label"><label> Status:  </label></div>
                                                 <?php
                                                 //dd($event['mySubscription']['active']);
@@ -1101,7 +1101,7 @@
                                                       $a = 'checked';
                                                       $status = 'Active';
                                                       //row_status = ` style="color:green;" `;
-                                          
+
                                                    }else{
                                                       $status = 'Cancel';
                                                       //row_status = ` style="color:red;" `;
@@ -1109,7 +1109,7 @@
                                                 ?>
 
                                                 <div class="status_switch">
-                  
+
                                                    <div class="onoffswitch" data-status="{{$status}}" data-id="{{$event['mySubscription']['id']}}" id="onoffswitch">
                                                       <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" tabindex="0" <?php echo $a; ?>>
                                                       <label class="onoffswitch-label" for="myonoffswitch">
@@ -1123,7 +1123,7 @@
                                              </div>
                                              @endif
                                           </div>
-                                          @endif  
+                                          @endif
                                        </div>
                                        @if(!$event['mySubscription'])
                                        <div class="left">
@@ -1132,7 +1132,7 @@
                                        @endif
                                        <div class="right">
                                           <?php //dd($event) ?>
-                                          
+
                                           @if(!$event['mySubscription'])
                                           @foreach($event['plans'] as $key => $plan)
                                           <a href="/myaccount/subscription/{{$event['title']}}/{{ $plan->name }}" class="btn btn--secondary btn--md">SUBSCRIBE NOW</a>
@@ -1157,16 +1157,16 @@
                                           <?php //dd($plan['stipe_plan']); ?>
                                           @if($sub['stripe_plan'] == $plan['stripe_plan'])
                                           @if($event['id'] == $plan['event_id'])
-                                          <?php  
+                                          <?php
                                              if(date("Y-m-d h:i:s") < $sub['ends_at']){
                                                 $expire = false;
                                              }else{
                                                 $expire = true;
-                                             }                                                                       
+                                             }
                                              ?>
                                           @endif
                                           @endif
-                                          @endforeach      
+                                          @endforeach
                                           @endforeach
                                           @if(!$event['video_access'])
                                           {{--<a style="cursor:not-allowed; opacity: 0.5; pointer-events: none;" href="/myaccount/newElearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if((isset($event['videos_progress']) && $event['videos_progress'] == 100) || count($event['cert'])>0) WATCH AGAIN @else WATCH NOW @endif</a>--}}
@@ -1187,7 +1187,7 @@
                                           <!-- Feedback 8-12 changed -->
                                           @if($p['access'])
                                           @if($pe->exstatus == 1 && $p['examsResults'][$pe->id]['view_result_expire'])
-                                          <a target="_blank" href="{{ url('student-summary/' . $pe->id . '/' . $currentuser->id) }}?s=1" title="{{$p['title']}}" class="btn btn--secondary btn--md">VIEW RESULT</a>    
+                                          <a target="_blank" href="{{ url('student-summary/' . $pe->id . '/' . $currentuser->id) }}?s=1" title="{{$p['title']}}" class="btn btn--secondary btn--md">VIEW RESULT</a>
                                           @elseif($pe->exstatus == 1 && !$p['examsResults'][$pe->id]['view_result_expire'])
                                           <a target="_blank" href="{{ url('student-summary/' . $pe->id . '/' . $currentuser->id) }}?s=1" title="{{$p['title']}}" class="btn btn--secondary btn--md btn--completed">VIEW RESULT</a>
                                           @elseif($pe->islive == 1)
@@ -1208,8 +1208,8 @@
                                  <div id="c-cert-inner{{$tab}}" class="in-tab-wrapper">
                                     <div class="bottom">
                                        <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="">@if(isset($newlayoutExamsEvent[$keyType]) && count($newlayoutExamsEvent[$keyType])>0)Certificate download after completing your exams. @else Your certification is ready @endif</div>
-                                       @foreach($event['cert'] as $certificate) 
-                                       <div class="right">  
+                                       @foreach($event['cert'] as $certificate)
+                                       <div class="right">
                                           <a  class="btn btn--secondary btn--md" target="_blank" href="/myaccount/mycertificate/{{$certificate->id}}" >DOWNLOAD </a>
                                        </div>
                                        @endforeach
@@ -1241,7 +1241,7 @@
                                     @if(isset($showFiles[$keyType]) && $showFiles[$keyType])
                                     <li><a href="#c-files-inner{{$tab}}">Files</a></li>
                                     @endif
-                                   
+
                                     {{--
                                     <li><a href="#c-subs-inner{{$tab}}">Subscription</a></li>
                                     --}}
@@ -1318,14 +1318,14 @@
                                     <div class="acc-topic-accordion">
                                        <div class="accordion-wrapper accordion-big">
                                           @foreach($folders as $catid => $dbfolder)
-                                          <?php 
+                                          <?php
                                              $folder = false;
-                                             
+
                                              if(trim($catid) == trim($catId)){
-                                                $folder = true; 
+                                                $folder = true;
                                              }
-                                             
-                                             
+
+
                                              ?>
                                           @if($folder)
                                           @if (isset($dbfolder[0]) && !empty($dbfolder[0]))
@@ -1334,18 +1334,18 @@
                                              $rf = strtolower($folder['dirname']);
                                              $rf1 = $folder['dirname']; //newdropbox
                                              ?>
-                                          <?php  
-                                             $topic=1; 
-                                             if($instructor_topics){ 
+                                          <?php
+                                             $topic=1;
+                                             if($instructor_topics){
                                                 $topic=0;
-                                             
+
                                                 if((trim($folder['foldername']) === '1 - Prelearning - Digital & Social Media Fundamentals')
                                                          && in_array(trim('Pre-learning: Digital & Social Media Fundamentals'), $instructor_topics)){
-                                                         
+
                                                    $topic = 1;
                                                 }else{
-                                                   $topic_name = explode( '-', $folder['foldername'] );  
-                                                   $topic=in_array(trim($topic_name[1]), $instructor_topics); 
+                                                   $topic_name = explode( '-', $folder['foldername'] );
+                                                   $topic=in_array(trim($topic_name[1]), $instructor_topics);
                                              }   }
                                              ?>
                                           @if($topic)
@@ -1353,8 +1353,8 @@
                                              <h3 class="accordion-title title-blue-gradient scroll-to-top"> {{ $folder['foldername'] }}</h3>
                                              <!-- Feedback 01-12 changed -->
                                              <div class="accordion-content no-padding">
-                                                <?php    
-                                                   $checkedF = []; 
+                                                <?php
+                                                   $checkedF = [];
                                                    $fs = [];
                                                    $fk = 1;
                                                    $bonus = [];
@@ -1363,30 +1363,30 @@
                                                 @if (isset($files[$catid][1]) && !empty($files[$catid][1]))
                                                 @foreach($files[$catid][1] as $fkey => $frow2)
                                                 @if($frow2['fid'] == $folder['id'])
-                                                <?php 
+                                                <?php
                                                    $fn = $folder['foldername'];
-                                                   
+
                                                    if(isset($dbfolder[1]) && !empty($dbfolder[1])){
                                                       foreach($dbfolder[1] as $nkey => $nfolder){
                                                          $dirname = explode('/',$nfolder['dirname']);
                                                          if($nfolder['parent'] == $folder['id'] && in_array($fn,$dirname) && !$subfolder  && !in_array($nfolder['foldername'],$bonusFiles) /*($nfolder['foldername'] !== '_Bonus' || $nfolder['foldername'] !== 'Bonus')*/){
-                                                   
+
                                                             $checkedF[] = $nfolder['id'] + 1 ;
                                                             $fs[$nfolder['id']+1]=[];
                                                             $fs[$nfolder['id']+1][] = $nfolder;
-                                                   
+
                                                          }
                                                       }
                                                    }
-                                                   
+
                                                    if(count($fs) > 0 ){
                                                       $subfolder = true;
                                                    }
-                                                   
+
                                                    ?>
                                                 @if($subfolder && in_array($fk,$checkedF))
                                                 @while(in_array($fk,$checkedF))
-                                                <?php 
+                                                <?php
                                                    $sfv = reset($checkedF);
                                                    $sfk = array_search($sfv, $checkedF);
                                                    unset($checkedF[$sfk]);
@@ -1400,7 +1400,7 @@
                                                    @if (isset($files[$catid][2]) && !empty($files[$catid][2]))
                                                    @foreach($files[$catid][2] as $fkey => $frow)
                                                    @if (strpos($frow['dirname'], $rf) !== false || strpos($frow['dirname'], $rf1) !== false && ( $frow['fid'] == ($sfv-1)  ))
-                                                   <?php $bonus[]= $frow['filename'] ?>    
+                                                   <?php $bonus[]= $frow['filename'] ?>
                                                    <div class="file-wrapper">
                                                       <h4 class="file-title">{{ $frow['filename'] }}</h4>
                                                       <span class="last-modified">Last modified:  {{$frow['last_mod']}}</span>
@@ -1411,7 +1411,7 @@
                                                    @endforeach
                                                    @endif
                                                 </div>
-                                                @endif   
+                                                @endif
                                                 @endforeach
                                                 @endif
                                                 <!-- bonus of each lesson -->
@@ -1437,7 +1437,7 @@
                                                 @endif
                                                 <?php
                                                    $fk += 1;
-                                                   
+
                                                    ?>
                                                 @endif
                                                 @endforeach
@@ -1499,7 +1499,7 @@
                                     @endif
                                  </div>
                                  @endif
-                               
+
                               </div>
                            </div>
                         </div>
@@ -1542,16 +1542,16 @@
                                           <?php //dd($plan['stipe_plan']); ?>
                                           @if($sub['stripe_plan'] == $plan['stripe_plan'])
                                           @if($event['id'] == $plan['event_id'])
-                                          <?php  
+                                          <?php
                                              if(date("Y-m-d h:i:s") < $sub['ends_at']){
                                                 $expire = false;
                                              }else{
                                                 $expire = true;
-                                             }                                                                       
+                                             }
                                              ?>
                                           @endif
                                           @endif
-                                          @endforeach      
+                                          @endforeach
                                           @endforeach
                                           @if(!$event['video_access'])
                                           {{--<a style="cursor:not-allowed; opacity: 0.5; pointer-events: none;" href="/myaccount/newElearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if((isset($event['videos_progress']) && $event['videos_progress'] == 100) || count($event['cert'])>0) WATCH AGAIN @else WATCH NOW @endif</a>--}}
@@ -1565,54 +1565,54 @@
                                  <div id="c-subs-inner{{$tab}}" class="in-tab-wrapper">
                                  <div class="bottom">
                                        <div class="left">
-                                          
-                                           
+
+
                                           @if($event['mySubscription'])
                                           <div class="bottom">
                                              @if($event['mySubscription']['trial_ends_at'])
-                                                <?php 
-                                                   $date_timestamp = strtotime($event['mySubscription']['trial_ends_at']); 
-                                                   $date = date('d/m/Y', $date_timestamp); 
+                                                <?php
+                                                   $date_timestamp = strtotime($event['mySubscription']['trial_ends_at']);
+                                                   $date = date('d/m/Y', $date_timestamp);
                                                    $now_date= date_create();
                                                    $now_date = date_timestamp_get($now_date);
                                                 ?>
                                                 @if($date_timestamp > $now_date )
-                                                   <?php //dd('not expired'); ?>                           
+                                                   <?php //dd('not expired'); ?>
                                                    <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/clock-coins.svg')}}" alt=""><?php echo 'Your trial expiration: '.$date; ?></div>
-                                                      @if($event['mySubscription']['active'] == 1)                                 
+                                                      @if($event['mySubscription']['active'] == 1)
                                                          <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php $a = new DateTime($event['mySubscription']['ends_at']); echo 'You will be charged: '.$a->format('d/m/Y'); ?></div>
-                                             
-                                                      @endif   
+
+                                                      @endif
                                                 @else
-                                             
+
                                                    @if($event['mySubscription'])
                                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php $a = new DateTime($event['mySubscription']['ends_at']); echo 'You will be charged: '.$a->format('d/m/Y'); ?></div>
                                                    @endif
                                                 @endif
                                              @else
 
-                                                <?php 
-                                                   $date_timestamp = strtotime($event['mySubscription']['ends_at']); 
-                                                   $date = date('d/m/Y', $date_timestamp); 
+                                                <?php
+                                                   $date_timestamp = strtotime($event['mySubscription']['ends_at']);
+                                                   $date = date('d/m/Y', $date_timestamp);
                                                    $now_date= date_create();
                                                    $now_date = date_timestamp_get($now_date);
                                                 ?>
 
                                                 @if($date_timestamp > $now_date )
-                                                                      
-                                                   @if($event['mySubscription']['active'] == 1)                                 
+
+                                                   @if($event['mySubscription']['active'] == 1)
                                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php $a = new DateTime($event['mySubscription']['ends_at']); echo 'You will be charged: '.$a->format('d/m/Y'); ?></div>
-                                             
-                                                   @endif   
+
+                                                   @endif
                                                 @else
-                                             
+
                                                    @if($event['mySubscription'])
                                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php $a = new DateTime($event['mySubscription']['ends_at']); echo 'You will be charged: '.$a->format('d/m/Y'); ?></div>
                                                    @endif
                                                 @endif
                                              @endif
                                              @if(isset($event['mySubscription']))
-                                             <div class="status_wrapper"> 
+                                             <div class="status_wrapper">
                                                 <div class="status_label"><label> Status:  </label></div>
                                                 <?php
                                                 //dd($event['mySubscription']['active']);
@@ -1623,7 +1623,7 @@
                                                       $a = 'checked';
                                                       $status = 'Active';
                                                       //row_status = ` style="color:green;" `;
-                                          
+
                                                    }else{
                                                       $status = 'Cancel';
                                                       //row_status = ` style="color:red;" `;
@@ -1631,7 +1631,7 @@
                                                 ?>
 
                                                 <div class="status_switch">
-                  
+
                                                    <div class="onoffswitch" data-status="{{$status}}" data-id="{{$event['mySubscription']['id']}}" id="onoffswitch">
                                                       <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" tabindex="0" <?php echo $a; ?>>
                                                       <label class="onoffswitch-label" for="myonoffswitch">
@@ -1645,7 +1645,7 @@
                                              </div>
                                              @endif
                                           </div>
-                                          @endif  
+                                          @endif
                                        </div>
                                        @if(!$event['mySubscription'])
                                        <div class="left">
@@ -1654,7 +1654,7 @@
                                        @endif
                                        <div class="right">
                                           <?php //dd($event) ?>
-                                          
+
                                           @if(!$event['mySubscription'])
                                           @foreach($event['plans'] as $key => $plan)
                                           <a href="/myaccount/subscription/{{$event['title']}}/{{ $plan->name }}" class="btn btn--secondary btn--md">SUBSCRIBE NOW</a>
@@ -1687,7 +1687,7 @@
                                     @if(isset($showFiles[$keyType]) && $showFiles[$keyType])
                                     <li><a href="#c-files-inner{{$tab}}">Files</a></li>
                                     @endif
-                                  
+
                                     {{--
                                     <li><a href="#c-subs-inner{{$tab}}">Subscription</a></li>
                                     --}}
@@ -1764,14 +1764,14 @@
                                     <div class="acc-topic-accordion">
                                        <div class="accordion-wrapper accordion-big">
                                           @foreach($folders as $catid => $dbfolder)
-                                          <?php 
+                                          <?php
                                              $folder = false;
-                                             
+
                                              if(trim($catid) == trim($catId)){
-                                                $folder = true; 
+                                                $folder = true;
                                              }
-                                             
-                                             
+
+
                                              ?>
                                           @if($folder)
                                           @if (isset($dbfolder[0]) && !empty($dbfolder[0]))
@@ -1780,18 +1780,18 @@
                                              $rf = strtolower($folder['dirname']);
                                              $rf1 = $folder['dirname']; //newdropbox
                                              ?>
-                                          <?php  
-                                             $topic=1; 
-                                             if($instructor_topics){ 
+                                          <?php
+                                             $topic=1;
+                                             if($instructor_topics){
                                                 $topic=0;
-                                             
+
                                                 if((trim($folder['foldername']) === '1 - Prelearning - Digital & Social Media Fundamentals')
                                                          && in_array(trim('Pre-learning: Digital & Social Media Fundamentals'), $instructor_topics)){
-                                                         
+
                                                    $topic = 1;
                                                 }else{
-                                                   $topic_name = explode( '-', $folder['foldername'] );  
-                                                   $topic=in_array(trim($topic_name[1]), $instructor_topics); 
+                                                   $topic_name = explode( '-', $folder['foldername'] );
+                                                   $topic=in_array(trim($topic_name[1]), $instructor_topics);
                                              }   }
                                              ?>
                                           @if($topic)
@@ -1799,8 +1799,8 @@
                                              <h3 class="accordion-title title-blue-gradient scroll-to-top"> {{ $folder['foldername'] }}</h3>
                                              <!-- Feedback 01-12 changed -->
                                              <div class="accordion-content no-padding">
-                                                <?php    
-                                                   $checkedF = []; 
+                                                <?php
+                                                   $checkedF = [];
                                                    $fs = [];
                                                    $fk = 1;
                                                    $bonus = [];
@@ -1809,30 +1809,30 @@
                                                 @if (isset($files[$catid][1]) && !empty($files[$catid][1]))
                                                 @foreach($files[$catid][1] as $fkey => $frow2)
                                                 @if($frow2['fid'] == $folder['id'])
-                                                <?php 
+                                                <?php
                                                    $fn = $folder['foldername'];
-                                                   
+
                                                    if(isset($dbfolder[1]) && !empty($dbfolder[1])){
                                                       foreach($dbfolder[1] as $nkey => $nfolder){
                                                          $dirname = explode('/',$nfolder['dirname']);
                                                          if($nfolder['parent'] == $folder['id'] && in_array($fn,$dirname) && !$subfolder  && !in_array($nfolder['foldername'],$bonusFiles) /*($nfolder['foldername'] !== '_Bonus' || $nfolder['foldername'] !== 'Bonus')*/){
-                                                   
+
                                                             $checkedF[] = $nfolder['id'] + 1 ;
                                                             $fs[$nfolder['id']+1]=[];
                                                             $fs[$nfolder['id']+1][] = $nfolder;
-                                                   
+
                                                          }
                                                       }
                                                    }
-                                                   
+
                                                    if(count($fs) > 0 ){
                                                       $subfolder = true;
                                                    }
-                                                   
+
                                                    ?>
                                                 @if($subfolder && in_array($fk,$checkedF))
                                                 @while(in_array($fk,$checkedF))
-                                                <?php 
+                                                <?php
                                                    $sfv = reset($checkedF);
                                                    $sfk = array_search($sfv, $checkedF);
                                                    unset($checkedF[$sfk]);
@@ -1846,7 +1846,7 @@
                                                    @if (isset($files[$catid][2]) && !empty($files[$catid][2]))
                                                    @foreach($files[$catid][2] as $fkey => $frow)
                                                    @if (strpos($frow['dirname'], $rf) !== false || strpos($frow['dirname'], $rf1) !== false && ( $frow['fid'] == ($sfv-1)  ))
-                                                   <?php $bonus[]= $frow['filename'] ?>    
+                                                   <?php $bonus[]= $frow['filename'] ?>
                                                    <div class="file-wrapper">
                                                       <h4 class="file-title">{{ $frow['filename'] }}</h4>
                                                       <span class="last-modified">Last modified:  {{$frow['last_mod']}}</span>
@@ -1857,7 +1857,7 @@
                                                    @endforeach
                                                    @endif
                                                 </div>
-                                                @endif   
+                                                @endif
                                                 @endforeach
                                                 @endif
                                                 <!-- bonus of each lesson -->
@@ -1883,7 +1883,7 @@
                                                 @endif
                                                 <?php
                                                    $fk += 1;
-                                                   
+
                                                    ?>
                                                 @endif
                                                 @endforeach
@@ -1945,7 +1945,7 @@
                                     @endif
                                  </div>
                                  @endif
-                          
+
                               </div>
                            </div>
                         </div>
@@ -1975,19 +1975,19 @@
                                  @if($subscriptionAccess)
                                  <div id="c-subs-inner{{$tab}}" class="in-tab-wrapper">
                                     <div class="bottom">
-                                       
+
                                        <div class="left">
                                        <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/checklist-graduate-hat.svg')}}" alt="">Get annual access to updated videos & files. 15 days free trial.</div>
 
                                        </div>
                                        <div class="right">
-                                         
-                                        
-                                          
+
+
+
                                           @foreach($event['plans'] as $key => $plan)
                                           <a href="/myaccount/subscription/{{$event['title']}}/{{ $plan->name }}" class="btn btn--secondary btn--md">SUBSCRIBE NOW</a>
                                           @endforeach
-                                                                                                                       
+
                                        </div>
                                     </div>
                                  </div>
@@ -2005,7 +2005,7 @@
                </div>
             </div>
             @endif
-                                                             
+
             </div>
             <!-- /#elearning-tab-child.tab-content-wrapper -->
             <!-- /.tabs-content -->
@@ -2034,15 +2034,15 @@
       </div>
       <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
          <label>Expiration month <span>*</span></label>
-       
+
             <input onblur="this.placeholder = 'MM'" onfocus="this.placeholder = ''"  placeholder='MM' onkeyup="month(this)" type='text' name="ccExpiryMonth" id="ccExpiryMonth" required>
-         
+
       </div>
       <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
          <label>Expiration year <span>*</span></label>
-         
+
             <input onblur="this.placeholder = 'YYYY'" onfocus="this.placeholder = ''" placeholder='YYYY' type='text' maxlength="4" size="4" onkeyup="year(this)"  name="ccExpiryYear" id="ccExpiryYear" required>
-   
+
          <input class='form-control ammount' type='hidden' name="amount" value="{{ Cart::instance('default')->subtotal() }}">
       </div>
       <div class="checkout-proceed-action">
@@ -2067,7 +2067,7 @@
                },
                data:{ 'card_no' : card_no, 'cvv' : cvv, 'exp_month' : exp_month, 'exp_year' : exp_year},
                success:function(data) {
-                 
+
                  data = JSON.stringify(data)
                  data = JSON.parse(data)
                  console.log(data)
@@ -2076,7 +2076,7 @@
                  $('#last4').text(data['last4'])
                  $('#exp_month').text(data['exp_month'])
                  $('#exp_year').text(data['exp_year'])
-    
+
 
                  $('#container').children().remove();
 
@@ -2091,7 +2091,7 @@
 
 
    function cvv(input) {
-      
+
 
       if(isNaN(input.value)){
          input.value = '';
@@ -2101,7 +2101,7 @@
 
 
    function cardNo(input) {
-      
+
 
       if(isNaN(input.value)){
          input.value = '';
@@ -2110,7 +2110,7 @@
    }
 
    function month(input) {
-   
+
 
       if(isNaN(input.value)){
          input.value = '';
@@ -2153,31 +2153,31 @@
 <script src="{{ cdn('theme/assets/addons/dropzone/dropzone.js') }}"></script>
 <script>
    $( document ).ready(function() {
-      if($('tr').length <= 2){         
+      if($('tr').length <= 2){
          let elem = $('tr').find('#removebtn').css('display', 'none')
-      }    
+      }
    });
 </script>
 <script type="text/javascript">
    $.ajaxSetup({headers:{'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
-   
+
    $(document).ajaxError(function(event, jqxhr, settings, exception) {
        if (exception == 'Unauthorized') {
            window.location.href = baseUrl+'/';
        }
    });
-   
+
    var settingsObj = {
        maxUploadSize: "3", // in MB
        dropzoneAcceptedFiles: "image/*",
        dropzoneAcceptImage: "image/*"
    };
-   
-   
-   
+
+
+
    var logo_dropzone = {};
    var logo_dropzoneObj = {dragenter: 0, dragleave: 0};
-   
+
    function logo_dropzoneToDropzone() {
        logo_dropzone = new Dropzone(document.getElementById("logo_dropzone"), {
        url: 'admin/media_uploader/upload',
@@ -2212,13 +2212,13 @@
            renderLogoDropzone(response, true);
        }
    });
-   
+
    logo_dropzone.on("dragenter", function(event) {
        logo_dropzoneObj.dragenter++;
        logo_dropzoneObj.dragleave = 0;
        $("#logoDropzone").addClass('acceptDrop');
    });
-   
+
    logo_dropzone.on("dragleave", function(file) {
        logo_dropzoneObj.dragleave++;
        logo_dropzoneObj.dragenter = 0;
@@ -2227,47 +2227,47 @@
        }
    });
    }
-   
+
    logo_dropzoneToDropzone();
-   
-   
-   
+
+
+
    function renderLogoDropzone(mediaObj, overwrite) {
    //    console.log(mediaObj);
-   
+
    if (mediaObj.media_id > 0) {
-       
+
        var userMedia = document.getElementById('user-media');
         var li = document.createElement('li')
         li.className = "remove-photo delete_media";
-   
+
         var a = document.createElement('a');
-   
+
         a.setAttribute('data-dp-media-id',mediaObj.media_id)
         a.setAttribute('href',"javascript:void(0)");
-   
+
      var img = document.createElement('img')
-   
+
      img.setAttribute('src','/theme/assets/images/icons/icon-remove.svg')
      img.setAttribute('alt','Remove photo')
-   
+
      var span = document.createElement('span')
      span.innerHTML = 'Remove photo';
-   
-     
-   
+
+
+
      a.append(img)
      a.append(span);
      li.append(a)
      userMedia.append(li)
-   
-   
+
+
        document.getElementById('user-img').setAttribute('src','portal-img/users/'+mediaObj.media.path+'/'+mediaObj.media.name+mediaObj.media.ext)
        document.getElementById('user-img-up').setAttribute('src','portal-img/users/'+mediaObj.media.path+'/'+mediaObj.media.name+mediaObj.media.ext)
-   
-       
+
+
    }
-   
+
    if ((typeof overwrite !== "undefined") && (overwrite === true)) {
        //console.log(html);
       // $('[data-dp-scope="logo_dropzone"] #cfMedia_logo_dropzone').html(html);
@@ -2279,9 +2279,9 @@
        return html;
    }
    }
-   
-   
-   
+
+
+
 </script>
 
 <script>
@@ -2293,9 +2293,9 @@
    let sub_id = $(this).parent().data('id')
    let status = $(this).parent().data('status')
    let set_status = '';
-   
+
    if(status == 'Active'){
-     set_status = 'Cancel'   
+     set_status = 'Cancel'
      $(this).parent().data('status', 'Cancel');
      document.getElementsByClassName("onoffswitch-checkbox")[0].removeAttribute("checked");
    }else if(status == 'Cancel'){
@@ -2303,36 +2303,36 @@
      $(this).parent().data('status', 'Active');
      $('.onoffswitch-checkbox').attr('checked', '')
    }
-     
+
    $.ajax({
      type: 'POST',
      url: 'myaccount/subscription/change_status',
      data:{'sub_id':sub_id,'status':set_status},
-     success: function(data) {               
+     success: function(data) {
            data = JSON.parse(data)
            if(data){
               if(data.cancel_at){
                  $('#status').text('Cancel')
-                 $('#status').css('color', 'red')                
+                 $('#status').css('color', 'red')
               }else{
                  $('#status').text('Active')
                  $('#status').css('color', 'green')
               }
-              $('.onoffswitch').attr('id', 'onoffswitch');              
-           }       
+              $('.onoffswitch').attr('id', 'onoffswitch');
+           }
      }
    });
-   
+
    });
 </script>
 <script>
    $("body").on("click", ".delete_media", function (event) {
-              
+
       var favDialog = document.getElementById('favDialog');
         //favDialog.showModal();
         favDialog.style.display = "block";
         $("body").css("overflow-y", "hidden")
-     
+
      // favDialog.show();
             /*if(confirm('Do you really want to remove your profile picture?')) {
                   //alert('You are very brave!');
@@ -2340,92 +2340,92 @@
               }
               else {
                   alert('Tip! Drag and Drop or click to change your profile picture');
-      
+
               }*/
           });
-   
+
           $("body").on("click", ".deleteImg", function (event) {
-              
+
                deleteMediaPromt($(this).attr("data-dp-media-id"));
-                    
+
             });
-   
-   
+
+
             $("body").on("click", ".cancelImg", function (event) {
-              
+
                var favDialog = document.getElementById('favDialog');
-             //  favDialog.close(); 
-               favDialog.style.display = "none";  
+             //  favDialog.close();
+               favDialog.style.display = "none";
                $("body").css("overflow-y", "auto")
-                   
+
            });
-      
+
           function deleteMediaPromt(media_id) {
-      
+
               $.ajax({ url: "myaccount/removeavatar", type: "post",
                   data: media_id,
                   success: function(data) {
                       if (Number(data.status) === 1) {
-      
-                        
+
+
                         document.getElementById('user-img').setAttribute('src','/theme/assets/images/icons/user-profile-placeholder-image.png')
                         document.getElementById('user-img-up').setAttribute('src','/theme/assets/images/icons/user-profile-placeholder-image.png')
-   
+
                           $('.delete_media').hide();
                       }
                   }
               });
-   
+
               var favDialog = document.getElementById('favDialog');
-              favDialog.style.display = "none";  
+              favDialog.style.display = "none";
                $("body").css("overflow-y", "auto")
           }
-      
+
           $(document).on('click', '.close-alert', function(e){
             var favDialog = document.getElementById('favDialog');
-            favDialog.style.display = "none";  
-            //favDialog.close(); 
+            favDialog.style.display = "none";
+            //favDialog.close();
             $("body").css("overflow-y", "auto")
          })
-   
+
    /*$('.getcertificate').click(function() {
-      
+
       var dir = $(this).attr('data-dirname');
       var fname = $(this).attr('data-filename');
-   
-      
-   
+
+
+
       $.ajax({ url: '/myaccount/mycertificate/' + dir, type: "get",
-   
+
           success: function(data) {
            //console.log(data);
       //      window.location.href = data;
           }
       });
-   
+
    });*/
-   
+
    $('.getdropboxlink').click(function() {
-      
+
       var dir = $(this).attr('data-dirname');
       var fname = $(this).attr('data-filename');
-   
+
       $.ajax({ url: '/getdropbox', type: "post",
           data: {dir: dir, fname:fname},
-   
+
           success: function(data) {
            //console.log(data);
             window.location.href = data;
           }
       });
-   
+
    });
-   
+
    $('#gdpr-download').click(function() {
-   
+
    window.location.href = 'myaccount/mydata';
-   
-   
+
+
    });
       $('.edit-mode').on('click', function() {
       //    $('#student-view-mode').addClass('hidden');
@@ -2439,7 +2439,7 @@
          $('#student-view-mode').show();
           $('#student-edit-mode').hide();
       });
-      
+
       $('.edit-invoice-mode').on('click', function() {
            $('#invoice_add_edit_mode').show();
            $('#edit-invoice-mode').hide('hidden');
@@ -2448,7 +2448,7 @@
            $('#invoice_add_edit_mode').hide();
            $('#edit-invoice-mode').show();
        });
-      
+
        $('.edit-receipt-mode').on('click', function() {
           // $('#static-receipt').hide();
            $('#receipt_add_edit_mode').show();
@@ -2459,9 +2459,9 @@
            //$('#static-receipt').show();
            $('#edit-receipt-mode').show();
        });
-      
-      
-      
+
+
+
        $('#save-receipt-data').on('click', function() {
            var receiptdata = $("#receipt_add_edit_mode :input").serialize();
            //console.log(receiptdata);
@@ -2469,7 +2469,7 @@
                data: receiptdata,
                success: function(data) {
                    if (Number(data.status) === 1) {
-      
+
                        window.location = 'myaccount'; //'myaccount/billing';
                    }
                    else {
@@ -2478,8 +2478,8 @@
                }
            });
        });
-      
-      
+
+
        $('#save-invoice-data').on('click', function() {
            var invoicedata = $("#invoice_add_edit_mode :input").serialize();
            //console.log(invoicedata);
@@ -2513,52 +2513,52 @@
    var tabWatching = false;
    var previousFrame = false;
    var videosPlayed = [];
-   
+
    function tabclick(videos,event,seen,statisticId,frame){
-   
+
       if(previousFrame){
-        
+
          if(playVi){
             videoPlayers[previousFrame].pause().then(function() {
-   
-         
+
+
             }).catch(function(error) {
                switch (error.name) {
                   case 'PasswordError':
                         // the video is password-protected and the viewer needs to enter the
                         // password first
                         break;
-   
+
                   case 'PrivacyError':
                         // the video is private
                         break;
-   
+
                   default:
                         // some other error occurred
                         break;
                }
             });
          }
-   
+
       }else{
          playVi = false;
       }
-   
+
       this.event = event;
       this.lastVideoSeen = seen
       this.eventStatistic = statisticId
       this.frame = frame
       previousFrame = frame;
-      
-      //console.log('videos seen = ', videosSeen)  
+
+      //console.log('videos seen = ', videosSeen)
       if(frame in this.videosSeen == false){
-         this.videos = videos;   
-      }else{           
+         this.videos = videos;
+      }else{
         //console.log(videosSeen);
         //console.log('videos seen');
         videos = videosSeen[frame];
       }
-   
+
       if(frame in this.frameVi == false){
          this.frameVi[frame] = frame;
          this.videoPlayers[frame] = '';
@@ -2566,103 +2566,103 @@
       }else{
        //  this.videoPlayers[frame].on('play');
       }
-   
+
       if(!this.previousK){
-   
+
          this.previousK = frame
-         this.previousK = this.previousK.replace('{',''); 
+         this.previousK = this.previousK.replace('{','');
          this.previousK = this.previousK.replace('}','');
-      
-      }  
+
+      }
       if(lastVideoSeen!=-1){
-         
+
          $(".active-tab").removeClass("active-tab");
          $this = $('#'+videos[lastVideoSeen]['tab']).parent().parent().children('h2')
          $this.click();
-        
+
       }
-     
+
       if(seen != -1){
-         
+
          if(tabWatching != false){
             document.getElementById(tabWatching).classList.remove('isWatching')
          }
-   
+
          previousVideo = videos[seen]['tab'];
          tabWatching = videos[seen]['tab'];
-   
+
          document.getElementById(previousVideo).classList.add('isWatching')
-   
+
          let vimeoID ='"{ video'+videos[seen]['lesson_id'] + frame + '}"';
          var cvl = document.getElementById(this.frameVi[this.frame]).cloneNode(true);;
          cvl = document.getElementById(this.frameVi[this.frame]).setAttribute('id',vimeoID);
-   
+
          $('#courses-video').append(cvl)
-         
+
          this.previousK = vimeoID;
          this.frameVi[this.frame] = this.previousK;
-        
+
          //videoPlayers[frame] = new Vimeo.Player(vimeoID);
-   
-        // if(videosPlayed[frame].includes(seen) == false){ 
-   
+
+        // if(videosPlayed[frame].includes(seen) == false){
+
             //console.log('frame = ', frame)
            // console.log(videosPlayed)
-   
-            videoPlayers[frame] = new Vimeo.Player(vimeoID); 
-          //  videosPlayed[frame].push(parseInt(seen)); 
-         
+
+            videoPlayers[frame] = new Vimeo.Player(vimeoID);
+          //  videosPlayed[frame].push(parseInt(seen));
+
        //  }
-   
+
          videoPlayers[frame].loadVideo(seen).then(function(id) {
-            
+
             videoId = id
             videoPlayers[frame].setCurrentTime(videos[id]['stop_time'])
-            
+
          }).catch(function(error) {
-   
+
             switch (error.name) {
                case 'TypeError':
                      // the id was not a number
                   //   console.log('edww');
                      break;
-   
+
                case 'PasswordError':
                      // the video is password-protected and the viewer needs to enter the
                      // password first
                      break;
-   
+
                case 'PrivacyError':
                      // the video is password-protected or private
                      break;
-   
+
                default:
                      // some other error occurred
                      break;
             }
          });
-   
+
       }
-   
+
       this.videoPlayers[this.frame].on('play', function(e) {
-   
+
          if(!playVi){
             videoPlayers[frame].setCurrentTime(videos[videoId]['stop_time'])
-   
+
          }
          playVi = true;
-   
+
       });
-      
+
       this.videoPlayers[this.frame].on('pause', function(e) {
-        
+
          @if(!$instructor_topics)
-            
+
             if(playVi){
                playVi = false;
                videos[videoId]['stop_time'] = e['seconds'];
-               videos[videoId]['percentMinutes'] = e['percent'];     
-      
+               videos[videoId]['percentMinutes'] = e['percent'];
+
                if(e['percent'] >= 0.8){
                      videos[videoId]['seen'] = 1;
                }
@@ -2672,183 +2672,183 @@
                   type: 'PUT',
                   url: '/elearning/save',
                   data:{'videos':videos,'event_statistic':eventStatistic,'lastVideoSeen':videoId,'event':event},
-                  success: function(data) {    
+                  success: function(data) {
                         if(!data['loged_in']){
                            notLogin(data)
                         }else{
-                           videosSeen[frame] = data['videos'];      
+                           videosSeen[frame] = data['videos'];
                         }
                         //playVi = true;
-                    
+
                   }
                });
             }
-   
+
          @endif
-   
+
       });
-    
+
       this.videoPlayers[this.frame].on('progress', function(e) {
-      
+
          @if(!$instructor_topics)
-         
+
             if(e['percent'] >= 0.8){
                if(videos[videoId]['seen'] == 0){
-                  
+
                   videos[videoId]['stop_time'] = e['seconds'];
                   videos[videoId]['percentMinutes'] = e['percent'];
                   videos[videoId]['seen'] = 1;
-                  
+
                   document.getElementById(previousVideo).classList.add('watched')
                   document.getElementById('play-image-account'+videos[videoId]['lesson_id']).setAttribute('src',"{{cdn('/theme/assets/images/icons/check_lesson.svg')}}")
-                          
-   
+
+
                   $.ajax({
                      type: 'PUT',
                      url: '/elearning/save',
                      data:{'videos':videos,'event_statistic':eventStatistic,'lastVideoSeen':videoId,'event':event},
-                     success: function(data) {  
+                     success: function(data) {
                         if(!data['loged_in']){
                            notLogin(data)
                         }else{
-                           videosSeen[frame] = data['videos'];    
+                           videosSeen[frame] = data['videos'];
                            checkForExam(data['exam_access'])
-                        }  
-                       
+                        }
+
                      }
                   });
-            
-         
+
+
                }
             }
-         
+
          @endif
-      
+
       });
-   
+
       this.videoPlayers[this.frame].on('fullscreenchange', function(e) {
          window.focus()
       });
-   
-   
+
+
    }
-   
+
    function play_video(video,playingVideo,vk,lesson){
       if(previousVideo !==false){
          document.getElementById(previousVideo).classList.remove('isWatching')
-      
+
       }
-              
+
       document.getElementById(playingVideo).classList.add('isWatching')
       tabWatching = playingVideo;
       previousVideo = playingVideo;
-   
-      vk = vk.replace('{',''); 
-      vk = vk.replace('}',''); 
-      let vimeoID ='"{'+ vk + this.frame + '}"';   
+
+      vk = vk.replace('{','');
+      vk = vk.replace('}','');
+      let vimeoID ='"{'+ vk + this.frame + '}"';
       var cvl = document.getElementById(previousK).cloneNode(true);;
       cvl = document.getElementById(previousK).setAttribute('id',vimeoID);
-   
+
       $('#courses-video').append(cvl)
       this.previousK = vimeoID;
       this.frameVi[this.frame] = this.previousK;
-      
+
       video = video.split('/')
       video = video[4].split('?')[0]
-   
+
       this.videoPlayers[frame] = new Vimeo.Player(vimeoID);
-   
+
       videoPlayers[frame].loadVideo(video).then(function(id) {
-     
+
          this.videoId = id
          this.videoPlayers[this.frame].setCurrentTime(videos[id]['stop_time'])
-   
+
       }).catch(function(error) {
          switch (error.name) {
             case 'TypeError':
                   // the id was not a number
                   break;
-   
+
             case 'PasswordError':
                   // the video is password-protected and the viewer needs to enter the
                   // password first
                   break;
-   
+
             case 'PrivacyError':
                   // the video is password-protected or private
                   break;
-   
+
             default:
                   // some other error occurred
                   break;
          }
       });
-   
-   
-       
+
+
+
    }
-   
+
    @if(!$instructor_topics)
    // console.log('olay = ', this.playVi)
    // if(playVi){
       window.onbeforeunload = function (ev) {
-   
+
          this.videoPlayers[this.frame].pause().then(function() {
-   
-         
+
+
          }).catch(function(error) {
             switch (error.name) {
                case 'PasswordError':
                      // the video is password-protected and the viewer needs to enter the
                      // password first
                      break;
-   
+
                case 'PrivacyError':
                      // the video is private
                      break;
-   
+
                default:
                      // some other error occurred
                      break;
             }
          });
-   
+
       };
-   
+
    // }
    @endif
-   
+
    document.body.onkeydown= function(e){
-   
-   
+
+
       if(e.keyCode == 32){
-   
+
          if(this.playVi){
-   
+
             this.playVi = false;
-   
+
             videoPlayers[frame].pause().then(function() {
-   
+
             }).catch(function(error) {
                switch (error.name) {
                   case 'PasswordError':
                         // the video is password-protected and the viewer needs to enter the
                         // password first
                         break;
-   
+
                   case 'PrivacyError':
                         // the video is private
                         break;
-   
+
                   default:
                         // some other error occurred
                         break;
                }
             });
-   
+
          }else{
             this.playVi = true;
-   
+
             videoPlayers[frame].play().then(function() {
             // the video was paused
             }).catch(function(error) {
@@ -2857,88 +2857,88 @@
                         // the video is password-protected and the viewer needs to enter the
                         // password first
                         break;
-   
+
                   case 'PrivacyError':
                         // the video is private
                         break;
-   
+
                   default:
                         // some other error occurred
                         break;
                }
             });
-   
-         
-   
+
+
+
          e.preventDefault();
-   
+
          }
-   
-      }   
+
+      }
    }
-   
+
 </script>
 <script>
    function notLogin(data){
       let p = ''
-      p = `<img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-success-alert.svg')}}" alt="Info Alert">` + data['message'];         
+      p = `<img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-success-alert.svg')}}" alt="Info Alert">` + data['message'];
       $('#message').append(p);
       var favDialog = document.getElementById('favDialog1');
       favDialog.style.display = "block";
       $("body").css("overflow-y", "hidden")
-   
+
       setTimeout( function(){
             window.location.replace(data['redirect']);
       }, 3000 );
-   
+
    }
-   
+
 </script>
 <script>
    function checkForExam(examAccess){
-     
+
       if(examAccess){
-   
+
          var d = new Date();
          d.setTime(d.getTime() + (1*24*60*60*1000));
          var expires = "expires="+ d.toUTCString();
          document.cookie = 'examMessage-' + eventStatistic + "=" + 'showmessage' + ";" + expires + ";path=/";
-   
+
          var favDialog = document.getElementById('examDialog');
          favDialog.style.display = "block";
          $("body").css("overflow-y", "hidden")
-   
+
          videoPlayers[frame].pause().then(function() {
-   
+
          }).catch(function(error) {
             switch (error.name) {
                case 'PasswordError':
                      // the video is password-protected and the viewer needs to enter the
                      // password first
                      break;
-   
+
                case 'PrivacyError':
                      // the video is private
                      break;
-   
+
                default:
                      // some other error occurred
                      break;
             }
          });
-   
+
       }
-      
+
    }
-   
+
 </script>
 <script>
    $("#close-exam-dialog").click(function(){
-   
+
       var favDialog = document.getElementById('examDialog');
          favDialog.style.display = "none";
          $("body").css("overflow-y", "auto")
-   
+
       videoPlayers[frame].play().then(function() {
             // the video was paused
             }).catch(function(error) {
@@ -2947,44 +2947,44 @@
                         // the video is password-protected and the viewer needs to enter the
                         // password first
                         break;
-   
+
                   case 'PrivacyError':
                         // the video is private
                         break;
-   
+
                   default:
                         // some other error occurred
                         break;
                }
             });
    })
-   
-   
+
+
    $(".go-to-account").click(function(){
       window.location.replace('/myaccount');
    })
-   
-   
-   
-   
+
+
+
+
 </script>--}}
 <script>
    $("#selectCountry").change(function() {
-   
+
       let mobile = $("#mobile").val()
-   
+
       $("#mobileCheck").val("+" + this.value + mobile)
    });
-   
+
    function checkPhoneNumber(phone){
-   
+
    phone = phone.value.replace(/\s/g,'')
    let validatePhone = false;
-   
+
    if(phone.length > 3){
-   
+
       if(phone.substring(0, 3) == '+30' || phone.substring(0, 2) == '30'){
-         
+
          $("#selectCountry").val("30").change();
          validatePhone = true;
       }else if(phone.substring(0, 2) == '69'){
@@ -3000,56 +3000,56 @@
          validatePhone = true;
          $("#selectCountry").val("357").change();
       }
-   
+
       /*else if(phone.substring(0, 2) == '+1' || phone.substring(0, 1) == '1'){//usa
          validatePhone = true;
-   
+
       }else if(phone.substring(0, 2) == '69'){
          phone = '+30'+phone
          validatePhone = true;
-   
+
       }*/
-   
+
       else if(phone.substring(0, 3) == '+44' || phone.substring(0, 2) == '44'){//england
          validatePhone = true;
          $("#selectCountry").val("44").change();
-      }else if(phone.substring(0, 2) == '07' /*|| phone.substring(0, 3) == '073' || phone.substring(0, 3) == '074' || phone.substring(0, 3) == '075' || phone.substring(0, 3) == '076' 
+      }else if(phone.substring(0, 2) == '07' /*|| phone.substring(0, 3) == '073' || phone.substring(0, 3) == '074' || phone.substring(0, 3) == '075' || phone.substring(0, 3) == '076'
          || phone.substring(0, 3) == '077' || phone.substring(0, 3) == '078' || phone.substring(0, 3) == '079'*/){
-         
+
             //phone = '+44'+phone
             validatePhone = true;
             $("#selectCountry").val("44").change();
       }
-   
+
       //$("#mobile").val(phone)
       let mobile = '+' + $( "#selectCountry" ).val() + $("#mobile").val()
       $("#mobileCheck").val( mobile)
-   
+
       if(!validatePhone){
-         //$("#mobile").val('')         
+         //$("#mobile").val('')
       }
-   
+
    }
-   
-   
-   
+
+
+
    }
 </script>
 <script>
    $(document).ready(function() {
-   
-      
-    
+
+
+
       $("#selectCountry").select2()
-   
+
       @if("{{ old('countryCode') }}")
-         
+
          $("#selectCountry").val("{{ old('countryCode',$currentuser->country_code) }}").change();
-      
+
       @endif
-   
+
    });
-   
+
 </script>
 
 @stop

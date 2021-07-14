@@ -128,7 +128,6 @@ class ProfileController extends Controller
             return back()->withErrors(['not_allow_profile' => __('You are not allowed to change data for a default user.')]);
         }
 
-        //dd($user);
         if($request->photo){
             (new MediaController)->uploadProfileImage($request, $user->image);
         }

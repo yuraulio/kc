@@ -288,12 +288,7 @@ Route::group([ 'prefix' => '{id}' ], function() {
 
 Route::post('webhook/stripe', [ 'as' => 'stripe.webhook', 'uses' => 'Webhook\WebhookController@handleWebhook' ]);
 
-Route::group(['middleware' => ['preview','web']], function () {
-    Route::get('/', 'Theme\HomeController@homePage');
-    Route::post('/add-payment-method', 'Theme\HomeController@addPaymentMethod')->name('add.paymentMethod');
-    Route::get('{slug}', 'Theme\HomeController@index');
 
-});
 
 Route::namespace('Alexusmai\\LaravelFileManager\\Controllers\\')->group(function () {
     Route::get('/search', 'FileManagerController@search')
@@ -301,9 +296,15 @@ Route::namespace('Alexusmai\\LaravelFileManager\\Controllers\\')->group(function
 });
 
 
+Route::group(['middleware' => 'auth', 'prefix'=>'myaccount'], function () {
+    Route::get('/','Theme\StudentController@index')->name('myac');
+});
 
-Route::group(['middleware' => 'auth','prefix'=>'myaccount'], function () {
-    Route::get('/', ['as' => 'student.myaccount', 'uses' => 'Theme/StudentController@index']);
+Route::group(['middleware' => ['preview','web']], function () {
+    Route::get('/', 'Theme\HomeController@homePage');
+    Route::post('/add-payment-method', 'Theme\HomeController@addPaymentMethod')->name('add.paymentMethod');
+    Route::get('{slug}', 'Theme\HomeController@index');
+
 });
 
 

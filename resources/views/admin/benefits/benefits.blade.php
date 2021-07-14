@@ -148,7 +148,7 @@
    	`<tr>` +
    	`<td id="name-` + benefit['id'] +`">` + benefit['name'] + `</td>` +
    	`<td>` + benefit['created_at'] + `</td>` +
-       `<td hidden id="media_ben-` + benefit['id'] +`" data-id="` + benefit['id'] +`" class="benefit-list">`+benefit.medias['path']+`</td>`+
+       `<td hidden id="media_ben-` + benefit['id'] +`" data-id="` + benefit['id'] +`" class="benefit-list"></td>`+
 
       `<td class="text-right">
                <div class="dropdown">
@@ -199,7 +199,9 @@
 
    	$("#name-"+benefit['id']).html(benefit['name'])
        $("#name-"+benefit['id']).parent().find('.dropdown-item').attr('data-description', benefit['description'])
+       $("#name-"+benefit['id']).parent().find('.dropdown-item').attr('data-media', benefit.medias['path'])
        $("#media_ben-"+benefit['id']).text(benefit.medias['path'])
+       $("#img-upload-benefit").attr('src', benefit.medias['path'])
        $('#benefit-form-edit').trigger('reset');
    	$(".close-modal").click();
 
@@ -242,7 +244,7 @@
             $("#image_svg_upload-benefit").val(media)
             $("#img-upload").attr('src', media)
             base_url = window.location.protocol + "//" + window.location.host
-            $("#img-upload-benefit").attr('src', base_url+'/uploads'+media)
+            $("#img-upload-benefit").attr('src', base_url+media)
          }
 
    });

@@ -31,9 +31,26 @@
                                         $details = json_decode($user->image->details, true);
                                         //dd($details);
                                     }
+                                    //dd(asset($user->image->path.$user->image->original_name.'-crop'.$user->image->ext));
+
+                                    //$user->image->original_name;
+                                    $name1 = explode('.',$user->image->original_name);
+                                    //dd(asset('public'.$user->image->path.$name1[0].'-crop'.$user->image->ext));
+                                    $path = $user->image->path.$name1[0].'-crop'.$user->image->ext;
+                                    //dd($path);
+                                    $path = substr_replace($path, "", 0, 1);
+                                    //dd($path);
+                                    //dd($user->image->path.$name1[0].'-crop'.$user->image->ext);
+                                    //dd(file_exists($path));
+
+                                    if(file_exists($path)){
+                                        $path = asset($path);
+                                    }else{
+                                        $path = asset($path);
+                                    }
                                 ?>
-                                <?php //dd(asset($user->image->path.$user->image->name.'-crop'.$user->image->ext)); ?>
-                                    <img src="<?= asset($user->image->path.$user->image->name.'-crop'.$user->image->ext);?>" class="rounded-circle">
+                                <?php //dd($path); ?>
+                                    <img src="{{ $path }}" class="rounded-circle">
                                 @else
                                 <img src="" alt="{{$user['firstname']}}" class="rounded-circle">
                                 @endif

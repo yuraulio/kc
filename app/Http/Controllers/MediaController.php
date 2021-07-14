@@ -39,9 +39,10 @@ class MediaController extends Controller
         $id = $pos === false ? $mediaKey : substr($mediaKey, $pos + 1);
 
         $folders =substr($mediaKey, 0,strrpos($mediaKey, '/'));
+        //dd($folders);
         $path = explode(".",$id);
 
-        $image = Image::make(public_path('uploads').$mediaKey);
+        $image = Image::make(public_path($mediaKey));
 
         $media->original_name = $id;
         $media->path = $folders.'/'.$path[0].'.'.$path[1];
@@ -114,11 +115,12 @@ class MediaController extends Controller
             $media->original_name = $name[1];
             $media->file_info = $content->getClientMimeType();
             $string = $path_name;
+            $media->details = null;
 
             $string = explode('/', $string);
             array_pop($string);
             $string = implode('/', $string);
-            $media->path = '//uploads//'.$string.'/';
+            $media->path = '/'.'uploads/'.$string.'/';
 
 
             $media->width = $size[0];
@@ -134,7 +136,7 @@ class MediaController extends Controller
         //dd('asd');
         //dd($request->all());
         $media = Media::find($request->media_id);
-        dd($media);
+        //dd($media);
         if($media['details'] != null){
             //dd('has details');
             $details = json_decode($media['details'], true);
@@ -155,18 +157,20 @@ class MediaController extends Controller
 
             $details = json_encode($details);
 
-            Media::where('id', $request->media_id)->update(['details' => $details]);
+            //Media::where('id', $request->media_id)->update(['details' => $details]);
 
             //find image with title+prof_image
+            $name = explode('.', $media['original_name']);
 
-            unlink($media['path'].$media['name'].'-crop'.$media['ext']);
+            //replace first / from path
+            $name1 = substr_replace($media['path'], "", 0, 1);
+            //dd($name1);
+
+
+            unlink($name1.$name[0].'-crop'.$media['ext']);
             //save new crop image
 
-            $image = Image::make(public_path('/').$mediaKey);
 
-            $image->resize($value['w'], $value['h']);
-            $image->fit($value['w'], $value['h']);
-            $image->save(public_path('/').$folders.'/'.$path[0].'-'.$value['version'].'.'.$path[1], $value['q']);
 
 
 
@@ -186,11 +190,14 @@ class MediaController extends Controller
 
         }
 
-        dd(public_path($media['path']));
+        //dd(public_path($media['path'].$media['original_name'].$media['ext']));
 
-        // $image = Image::make(public_path('uploads').$path);
-        // $image->crop(intval($request->width),intval($request->height), intval($request->x), intval($request->y));
-        // $image->save(public_path('uploads').$path);
+        $image = Image::make(public_path($media['path'].$media['original_name']));
+
+        $image->crop($request->width, $request->height, $request->x, $request->y);
+        $name = explode('.', $media['original_name']);
+        $image->save(public_path($media['path'].$name[0].'-crop'.$media['ext']), 50);
+
 
         return response()->json([
             'success' => __('Already image cropped.'),
