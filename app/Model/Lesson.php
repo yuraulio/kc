@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Topic;
 use App\Model\Type;
+use App\Model\Slug;
 use App\Model\Category;
 
 class Lesson extends Model
@@ -37,8 +38,8 @@ class Lesson extends Model
 
     public function instructor()
     {
-        return $this->belongsToMany(Instructor::class, 'event_topic_lesson_instructor')->select('instructors.*');
-        
+        return $this->belongsToMany(Instructor::class, 'event_topic_lesson_instructor')->select('instructors.*')->with('medias','slugable');
+
     }
 
     public function get_instructor($id)

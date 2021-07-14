@@ -34,7 +34,7 @@ class Topic extends Model
 
     public function lessons()
     {
-        return $this->belongsToMany(Lesson::class, 'event_topic_lesson_instructor')->withPivot('event_topic_lesson_instructor.priority')->orderBy('event_topic_lesson_instructor.priority','asc');
+        return $this->belongsToMany(Lesson::class, 'event_topic_lesson_instructor')->withPivot('event_topic_lesson_instructor.priority')->with('type')->orderBy('event_topic_lesson_instructor.priority','asc');
     }
 
     public function event_topic()

@@ -62,7 +62,7 @@ class Event extends Model
     {
 
         return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id')
-            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority')->orderBy('event_topic_lesson_instructor.priority','asc');
+            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.priority','asc');
     }
 
 
@@ -83,7 +83,7 @@ class Event extends Model
 
     public function summary1()
     {
-        return $this->belongsToMany(Summary::class, 'events_summaryevent', 'event_id', 'summary_event_id')->with('medias')->orderBy('priority');
+        return $this->belongsToMany(Summary::class, 'events_summaryevent', 'event_id', 'summary_event_id');
     }
 
     public function is_inclass_course()
@@ -337,7 +337,7 @@ class Event extends Model
         $videos = json_decode($videos, true);
         $sum = 0;
         foreach($videos as $video){
-            if($video['seen'] == 1){
+            if($video['seen'] == 1 || $video['seen'] == '1'){
                 $sum++;
             }
 
@@ -369,7 +369,7 @@ class Event extends Model
 
 
     public function subscriptionΤransactionsByUser($user){
-       
+
         return $this->transactions()/*->has('subscription')*/->whereHas('user', function ($query) use($user) {
                 $query->where('id', $user);
             });

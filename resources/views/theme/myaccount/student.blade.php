@@ -496,7 +496,7 @@
             <div id="subscriptions" class="in-tab-wrapper">
                <div class="container">
                   <div class="row">
-                     @if(count($cards) > 0)
+                     {{--@if(count($cards) > 0)
                      <table id="cardList" style="width:100%">
                         <tr>
                            <th>Brand</th>
@@ -532,15 +532,15 @@
                      </table>
                      @else
                         <p>You don't have any credit/debit cards available. </p>
-                     @endif
+                     @endif--}}
                      <div id="addCardBtn" class="col12 text-right">
                         <button type="button" id="addCard" class="btn btn--secondary btn--sm">Add New Card</button>
                      </div>
                      <div class="form-wrapper">
-                        <form action="{{ route('card.addNewCard') }}" method="post">
+                        {{--<form action="{{ route('card.addNewCard') }}" method="post">
                            {{csrf_field()}}
                            <div id="container" class="col12"></div>
-                        </form>
+                        </form>--}}
                      </div>
 
                   </div>
@@ -604,7 +604,7 @@
                                           </div>
                                        </div>
                                        <div id="receipt_add_edit_mode" class="hidden-fields-actions receipt-fields" style="display: block;">
-                                          @if($receipt_info != '')
+                                          {{--@if($receipt_info != '')
                                           <?php $receipt_info = json_decode($receipt_info);  ?>
                                           @foreach($receipt_info as $k => $v)
                                           @if($k != 'billing' && isset($hone[$k]))
@@ -637,7 +637,7 @@
                                           <div class="form-submit-area">
                                              <button id="save-invoice-data" type="button" class="btn btn--md btn--secondary">Update</button>
                                           </div>
-                                          @endif
+                                          @endif--}}
                                        </div>
                                     </form>
                                     <!-- /.form-wrapper.profile-form-wrapper -->
@@ -650,7 +650,7 @@
                                     <h2>Change password</h2>
                                     --}}
                                     <div class="form-wrapper profile-form-wrapper">
-                                       <form method="post" action="{{ route('account.updateme') }}" autocomplete="off" class="password-form">
+                                       <form method="post" action="{{ route('profile.update') }}" autocomplete="off" class="password-form">
                                           {!! csrf_field() !!}
                                           <div class="row">
                                              <div class="col12 col-sm-12">
@@ -664,7 +664,7 @@
                                                    data-bv-identical-field="password"
                                                    data-bv-identical-message="The password and its confirmation are not the same!" required />
                                              </div>
-                                             <input type="hidden" name='email' value="{{$currentuser->email}}">
+                                             <input type="hidden" name='email' value="{{$currentuser['email']}}">
                                           </div>
                                           <div class="form-submit-area">
                                              <button type="submit" class="btn btn--md btn--secondary">Change password</button>
@@ -682,7 +682,7 @@
                </div>
                <!-- /#my-account.tab-content-wrapper -->
             </div>
-            @if((isset($myEvents) && count($myEvents) == 0) || !$elearningAccess)
+            @if((isset($user['events']) && count($user['events']) == 0) || !$elearningAccess)
             <div id="nocourses" class="tab-content-wrapper active-tab">
                <div class="container">
                   You have no courses
@@ -709,11 +709,13 @@
                <div class="container">
                   <div class="row">
                      <?php $tab = 0; ?>
-                     @if(isset($myEvents) && count($myEvents) > 0)
-                     @foreach($myEvents as $keyType => $event)
+                     <?php //dd($user['events']); ?>
+                     @if(isset($user['events']) && count($user['events']) > 0)
+                     @foreach($user['events'] as $keyType => $event)
                      @if($event['view_tpl'] != 'elearning_english' && $event['view_tpl'] != 'elearning_greek' && $event['view_tpl'] != 'elearning_free')
                      <div class="col12 dynamic-courses-wrapper dynamic-courses-wrapper--style2">
                         <div class="item">
+                            <?php //dd($event); ?>
                            <h2>{{ $event['title'] }}</h2>
                            <div class="inside-tabs">
                               <div class="tabs-ctrl">
@@ -734,10 +736,23 @@
                               <div class="inside-tabs-wrapper">
                                  <div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
                                     <div class="bottom">
-                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/marker.svg')}}" alt=""><a href="{{$event['city']['slug']}}">{{$event['city']['name']}}</a></div>
-                                       <div class="duration"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}" alt="">{{$event['date']}}</div>
-                                       @if($event['hour'])
-                                       <div class="expire-date"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt="">{{$event['hour']}}</div>
+                                        <?php //dd($event['city']); ?>
+                                        @if(isset($event['city']) && count($event['city']) > 0)
+                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/marker.svg')}}" alt=""><a href="{{$event['city'][0]['slugable']['slug']}}">{{$event['city'][0]['name']}}</a></div>
+                                       @endif
+                                       <?php
+                                       //dd($event['summary1']);
+                                       $summaryDate = '';
+                                       foreach($event['summary1'] as $summary){
+                                           if($summary['section'] == 'date'){
+                                               $summaryDate = $summary['title'];
+                                           }
+                                           //dd($summary);
+                                       }
+                                       ?>
+                                       <div class="duration"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}" alt="">{{$summaryDate}}///</div>
+                                       @if($event['hours'])
+                                       <div class="expire-date"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt="">{{$event['hours']}}</div>
                                        @endif
                                     </div>
                                  </div>
@@ -748,17 +763,22 @@
                                           <a target="_blank" href="/print/syllabus/{{$event['slug']}}" class="btn btn--secondary btn--md"> DOWNLOAD SCHEDULE </a>
                                        </div>
                                     </div>
+                                    <?php //dd($user['events'][0]['topics']); ?>
                                     <div class="acc-topic-accordion">
                                        <div class="accordion-wrapper accordion-big">
                                           <?php $catId = -1?>
+                                          <?php //dd($event['topics']); ?>
+                                          @if(isset($event['topics']) && count($event['topics']) > 0)
                                           @foreach($event['topics'] as $keyTopic => $topic)
+                                          <?php //dd($topic); ?>
                                           <div class="accordion-item">
                                              <h3 class="accordion-title title-blue-gradient scroll-to-top">{{$keyTopic}}</h3>
                                              <div class="accordion-content no-padding">
-                                                @foreach($topic as $keyLesso => $lesso)
-                                                @foreach($lesso as $keyLesson => $lesson)
-                                                <?php $catId = $lesson['cat_id'] ?>
-                                                @if($lesson['type'])
+                                                @foreach($topic['lessons'] as $keyLesso => $lesso)
+                                                {{--@foreach($lesso as $keyLesson => $lesson)--}}
+                                                <?php //dd(); ?>
+                                                {{-- <?php $catId = $lesson['cat_id'] ?>--}}
+                                                {{--@if($lesso['type'])
                                                 <div class="topic-wrapper-big">
                                                    <div class="topic-title-meta">
                                                       <h4>{{$keyLesson}}</h4>
@@ -768,35 +788,37 @@
                                                          <div class="category">{{$lesson['type']}}</div>
                                                          @endif
                                                          <!-- Feedback 18-11 changed -->
-                                                         <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}" alt="" />{{$lesson['eldate']}}</span> <!-- Feedback 18-11 changed -->
-                                                         <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/Times.svg')}}" alt="" />{{$lesson['eltime']}} ({{$lesson['in_class_duration']}})</span> <!-- Feedback 18-11 changed -->
-                                                         <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-marker.svg')}}" alt="" />{{$lesson['room']}}</span> <!-- Feedback 18-11 changed -->
+                                                         <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}" alt="" />{{$lesso['time_starts']}}</span> <!-- Feedback 18-11 changed -->
+                                                         <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/Times.svg')}}" alt="" />{{$lesso['time_ends']}} ({{$lesso['duration']}})</span> <!-- Feedback 18-11 changed -->
+                                                         <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-marker.svg')}}" alt="" />{{$lesso['room']}}</span> <!-- Feedback 18-11 changed -->
                                                       </div>
                                                       <!-- /.topic-title-meta -->
                                                    </div>
                                                    <div class="author-img">
                                                       <!-- Feedback 18-11 changed -->
-                                                      <a href="{{$lesson['slug']}}">
-                                                      <span class="custom-tooltip">{{$lesson['inst']}}</span>
-                                                      <img src="{{cdn($lesson['inst_photo'])}}" alt="{{$lesson['inst']}}"/>
+                                                      <a href="{{$lesso['slugable']['slug']}}">
+                                                      <span class="custom-tooltip">{{$instructors[$lesso['pivot']['instructor_id']][0]['title']}} {{$instructors[$lesso['pivot']['instructor_id']][0]['subtitle']}}</span>
+                                                      <img src="{{cdn({{$instructors[$lesso['pivot']['instructor_id']][0]['path']}}{{$instructors[$lesso['pivot']['instructor_id']][0]['original_name']}})}}" alt="{{$instructors[$lesso['pivot']['instructor_id']][0]['title']}} {{$instructors[$lesso['pivot']['instructor_id']][0]['subtitle']}}"/>
                                                       </a>
                                                    </div>
                                                    <!-- /.topic-wrapper-big -->
                                                 </div>
-                                                @endif
+                                                @endif--}}
                                                 @endforeach
-                                                @endforeach
+                                                {{--@endforeach--}}
                                                 <!-- /.accordion-content -->
                                              </div>
                                              <!-- /.accordion-item -->
                                           </div>
                                           @endforeach
+                                          @endif
                                           <!-- /.accordion-wrapper -->
                                        </div>
                                        <!-- /.acc-topic-accordion -->
                                     </div>
                                  </div>
-                                 @if(!$instructor_topics && (isset($showFiles[$keyType]) && $showFiles[$keyType]))
+
+                                 {{--@if(!$instructor_topics && (isset($showFiles[$keyType]) && $showFiles[$keyType]))
 
                                  <div id="c-files-inner{{$tab}}" class="in-tab-wrapper">
                                     @if(isset($folders) && count($folders) > 0)
@@ -983,7 +1005,7 @@
                                     </div>
                                     @endif
                                  </div>
-                                 @endif
+                                 @endif--}}
                                  @if(isset($newlayoutExamsEvent[$keyType]))
                                  <div id="c-exams-inner{{$tab}}" class="in-tab-wrapper">
                                     @if(isset($newlayoutExamsEvent[$keyType]))
@@ -1020,6 +1042,7 @@
                      @else
                      <div class="col12 dynamic-courses-wrapper">
                         <div class="item">
+
                            <h2>{{ $event['title'] }}</h2>
                            <div class="inside-tabs">
                               <div class="tabs-ctrl">
@@ -1039,17 +1062,21 @@
                                     @endif
                                  </ul>
                               </div>
+                              <?php //dd($event); ?>
                               <div class="inside-tabs-wrapper">
                                  <div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
                                     <div class="bottom">
-                                       @if($event['expiration_date'])
-                                       <div class="expire-date exp-date"><img src="{{cdn('/theme/assets/images/icons/Days-Week.svg')}}" alt="">Expiration date: {{$event['expiration_date']}}</div>
+                                        <?php //dd($event); ?>
+                                       @if($event['pivot']['expiration'])
+                                       <div class="expire-date exp-date"><img src="{{cdn('/theme/assets/images/icons/Days-Week.svg')}}" alt="">Expiration date: {{$event['pivot']['expiration']}}</div>
                                        @endif
-                                       @if (isset($event['hour']))
-                                       <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""> {{$event['hour']}}h </div>
+                                       @if (isset($event['hours']))
+                                       <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""> {{$event['hours']}}h </div>
                                        @endif
-                                       @if (isset($event['videos_progress']))
-                                       <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/E-Learning.svg')}}" alt=""> {{$event['videos_progress']}}% </div>
+
+                                       @if (isset($event['video_progress']))
+                                       <?php //dd($event); ?>
+                                       <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/E-Learning.svg')}}" alt=""> {{$event['video_progress']}}% </div>
                                        @endif
                                     </div>
                                  </div>
@@ -1140,6 +1167,7 @@
                                           </div>
                                           @endif
                                        </div>
+                                       <?php //dd($event['mySubscription']); ?>
                                        @if(!$event['mySubscription'])
                                        <div class="left">
                                        <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/checklist-graduate-hat.svg')}}" alt="">Get annual access to updated videos & files. 15 days free trial.</div>
@@ -1157,6 +1185,7 @@
                                     </div>
                                  </div>
                                  @endif
+                                 <?php //dd('asd'); ?>
                                  <div id="c-watch-inner{{$tab}}" class="in-tab-wrapper">
                                     <div class="bottom">
                                        @if (isset($event['videos_progress']))
@@ -1267,8 +1296,8 @@
                                     <div class="bottom">
                                        <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/marker.svg')}}" alt=""><a href="{{$event['city']['slug']}}">{{$event['city']['name']}}</a></div>
                                        <div class="duration"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}" alt="">{{$event['date']}}</div>
-                                       @if($event['hour'])
-                                       <div class="expire-date"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt="">{{$event['hour']}}</div>
+                                       @if($event['hours'])
+                                       <div class="expire-date"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt="">{{$event['hours']}}</div>
                                        @endif
                                     </div>
                                  </div>
@@ -1534,8 +1563,8 @@
                               <div class="inside-tabs-wrapper">
                                  <div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
                                     <div class="bottom">
-                                       @if (isset($event['hour']) && $event['hour'])
-                                       <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""> {{$event['hour']}}h </div>
+                                       @if (isset($event['hours']) && $event['hours'])
+                                       <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""> {{$event['hours']}}h </div>
                                        @endif
                                        @if (isset($event['videos_progress']))
                                        <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/E-Learning.svg')}}" alt=""> {{$event['videos_progress']}}% </div>
@@ -1713,8 +1742,8 @@
                                     <div class="bottom">
                                        <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/marker.svg')}}" alt=""><a href="{{$event['city']['slug']}}">{{$event['city']['name']}}</a></div>
                                        <div class="duration"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}" alt="">{{$event['date']}}</div>
-                                       @if($event['hour'])
-                                       <div class="expire-date"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt="">{{$event['hour']}}</div>
+                                       @if($event['hours'])
+                                       <div class="expire-date"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt="">{{$event['hours']}}</div>
                                        @endif
                                     </div>
                                  </div>
@@ -1979,8 +2008,8 @@
                               <div class="inside-tabs-wrapper">
                                  <div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
                                     <div class="bottom">
-                                       @if (isset($event['hour']) && $event['hour'])
-                                       <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""> {{$event['hour']}}h </div>
+                                       @if (isset($event['hours']) && $event['hours'])
+                                       <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""> {{$event['hours']}}h </div>
                                        @endif
                                        @if (isset($event['videos_progress']))
                                        <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/E-Learning.svg')}}" alt=""> {{$event['videos_progress']}}% </div>
@@ -2358,7 +2387,7 @@
 
               }*/
           });
-
+/////EDWWWWWW
           $("body").on("click", ".deleteImg", function (event) {
 
                deleteMediaPromt($(this).attr("data-dp-media-id"));
@@ -2395,6 +2424,8 @@
               favDialog.style.display = "none";
                $("body").css("overflow-y", "auto")
           }
+
+          ///////EDWWW
 
           $(document).on('click', '.close-alert', function(e){
             var favDialog = document.getElementById('favDialog');
