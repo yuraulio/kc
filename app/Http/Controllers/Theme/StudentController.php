@@ -73,4 +73,36 @@ class StudentController extends Controller
 
         return view('theme.myaccount.student', $data);
     }
+
+    public function removeProfileImage(Request $request){
+        $user = Auth::user();
+        $media = $user->image;
+
+        $path_crop = explode('.', $media['original_name']);
+        $path_crop = $media['path'].$path_crop[0].'-crop'.$media['ext'];
+        $path_crop = substr_replace($path_crop, "", 0, 1);
+
+        $path = $media['path'].$media['original_name'];
+        $path = substr_replace($path, "", 0, 1);
+
+        if(file_exists($path_crop)){
+            //unlink crop image
+            unlink($path_crop);  
+        }
+
+        //unlink image
+        unlink($path);
+
+        //null db image
+        $media->original_name = null;
+        $media->name = null;
+        $media->path = null;
+        $media->ext = null;
+        $media->file_info = null;
+        $media->height = null;
+        $media->width = null;
+        $media->details = null;
+        $media->save();
+
+    }
 }

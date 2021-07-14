@@ -2389,8 +2389,7 @@
           });
 /////EDWWWWWW
           $("body").on("click", ".deleteImg", function (event) {
-
-               deleteMediaPromt($(this).attr("data-dp-media-id"));
+               deleteMediaPromt($('.remove-photo.delete_media a').attr('data-dp-media-id'));
 
             });
 
@@ -2405,10 +2404,11 @@
            });
 
           function deleteMediaPromt(media_id) {
-
-              $.ajax({ url: "myaccount/removeavatar", type: "post",
-                  data: media_id,
+            //alert(media_id)
+              $.ajax({ url: "myaccount/remove-avatar", type: "post",
+                  data: {'media':media_id},
                   success: function(data) {
+                     
                       if (Number(data.status) === 1) {
 
 
