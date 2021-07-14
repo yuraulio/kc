@@ -45,10 +45,12 @@ class PaymentMethodsController extends Controller
 
         $data['processor_config'] = get_processor_config($data['method']['processor_id']);
         $data['html'] = '';
+        $data['html_test'] = '';
         $data['status'] = 0;
-       
+        
         if ($data['processor_config']) {
             $data['html'] = view('admin.payment_methods.edit_processor.'.$data['processor_config']['tpl'],$data)->render();
+            $data['html_test'] = view('admin.payment_methods.edit_processor.'.$data['processor_config']['tpl'].'_test',$data)->render();
             $data['status'] = 1;
         }
         
@@ -69,6 +71,7 @@ class PaymentMethodsController extends Controller
     {
         $input = $request->except('_token');
 
+        
 
         if (isset($input['processor'])) {
             $input['processor_options'] = encrypt(json_encode($input['processor']));
@@ -76,12 +79,20 @@ class PaymentMethodsController extends Controller
             $input['processor_options'] = encrypt(json_encode([]));
         }
 
+        if(isset($input['test_processor'])){
+            $input['test_processor_options'] = encrypt(json_encode($input['test_processor']));
+        }else{
+            $input['test_processor_options'] = encrypt(json_encode([]));
+        }
+
         if ($input['processor_id']) {
             $input['processor_config'] = get_processor_config($input['processor_id']);
             $input['method_slug'] = $input['processor_config']['slug'];
             $input['processor_config'] = encrypt(json_encode($input['processor_config']));
+            //$input['test_processor_config'] = encrypt(json_encode($input['test_processor_config']));
         } else {
             $input['processor_config'] = encrypt(json_encode([]));
+            //$input['test_processor_config'] = encrypt(json_encode([]));
             $input['method_slug'] = '';
         }
 

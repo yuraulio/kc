@@ -17,6 +17,8 @@ class PaymentMethod extends Model
         'processor_id',
         'processor_config',
         'processor_options',
+        'test_processor_config',
+        'test_processor_options',
         'method_name',
         'method_slug',
         'method_description',
@@ -40,6 +42,27 @@ class PaymentMethod extends Model
     }
 
     public function getProcessorConfigAttribute($value)
+    {
+        if ($value) {
+            return json_decode(decrypt($value), true);
+            //return json_decode($value, true);
+        } else {
+            return [];
+        }
+    }
+
+    public function getTestProcessorOptionsAttribute($value)
+    {
+        
+        if ($value) {
+            return json_decode(decrypt($value), true);
+            //return json_decode($value, true);
+        } else {
+            return [];
+        }
+    }
+
+    public function getTestProcessorConfigAttribute($value)
     {
         if ($value) {
             return json_decode(decrypt($value), true);

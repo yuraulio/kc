@@ -104,11 +104,12 @@
                                           <?php
                                              $alt='';
                                              $img = get_image($syllabus[0]['mediable'],'instructors-small'); //$event->mediable->original_name;
+                                             //dd($syllabus);
                                              ?>
                                           <li>
-                                             <span class="author-icon"> <a href="{{$syllabus[0]['slugable']['slug']}}" id="syllabus-link"><img src="{{ cdn($img) }}" alt="{{$alt}}"></a></span>
+                                             <span class="author-icon"> <a href="" id="syllabus-link"><img src="{{ cdn($img) }}" alt="{{$alt}}"></a></span>
                                              <div class="info-text">
-                                                <p> {{ $syllabus[0]['title'] }} <br/><span itemprop="author" class="link-a"> 	{!! $syllabus[0]['subtitle'] !!}</span></p>
+                                                <p> Syllabus Manager <br/><span itemprop="author" class="link-a"><a href="{{$syllabus[0]['slugable']['slug']}}">{{ $syllabus[0]['title'] }} {!! $syllabus[0]['subtitle'] !!}</a></span></p>
                                              </div>
                                           </li>
                                           @endif
@@ -168,8 +169,9 @@
 @endif
 <script>
    /// set link to syllabus manager image
-   let syllabusLink = $('.ibox-text').find('a').attr('href');
+   let syllabusLink = $('.info-text').find('a').attr('href');
    document.getElementById('syllabus-link').setAttribute('href',syllabusLink);
+   
 </script>
 <script src="{{ cdn('theme/assets/js/cart.js') }}"></script>
 @stop

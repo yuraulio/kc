@@ -23,6 +23,9 @@
          <li class="nav-item">
             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#processor" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Processor</a>
          </li>
+         <li class="nav-item">
+            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#test_processor" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Test Processor</a>
+         </li>
          @endif
       </ul>
    </div>
@@ -91,6 +94,11 @@
                      @if($form_type == 'edit')
                      <div class="tab-pane fade" id="processor" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
 								{!! $html !!}
+								
+                     </div>
+
+                     <div class="tab-pane fade" id="test_processor" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
+								{!! $html_test !!}
 								
                      </div>
                      @endif

@@ -74,8 +74,8 @@ class SummaryController extends Controller
     public function orderSummaries(Request $request, Event $event){
 
         foreach($event->summary1()->get() as $summary){
-            //$summary->priority = $request->all()['summaries'][$summary['id']];
-            //$summary->save();
+            $summary->priority = $request->all()['summaries'][$summary['id']];
+            $summary->save();
 
         }
 
