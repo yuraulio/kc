@@ -225,10 +225,14 @@
    	    success: function (data) {
 
    	let summary = data.summary;
+       console.log(summary.medias['path'])
 
    	$("#title-"+summary['id']).html(summary['title'])
    	$("#section_sum-"+summary['id']).html(summary['section'])
-       $("#title-"+summary['id']).parent().find('.dropdown-item').attr('data-description', summary['description'])
+    $("#media_sum-"+summary['id']).html(summary.medias['path'])
+    $("#title-"+summary['id']).parent().find('.dropdown-item').attr('data-description', summary['description'])
+    $("#title-"+summary['id']).parent().find('.dropdown-item').attr('data-media', summary.medias['path'])
+    $("#img-upload-summary").attr('src', summary.medias['path'])
    	$(".close_modal").click();
 
    	$("#success-message p").html(data.success);

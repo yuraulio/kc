@@ -170,3 +170,8 @@
     width: -moz-available;
 }
 
+#editModalSummary,
+#editModal {
+    overflow-y:auto;
+}
+

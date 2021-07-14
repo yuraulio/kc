@@ -35,12 +35,18 @@
 
                                     //$user->image->original_name;
                                     $name1 = explode('.',$user->image->original_name);
+                                    //dd(asset('public'.$user->image->path.$name1[0].'-crop'.$user->image->ext));
+                                    $path = $user->image->path.$name1[0].'-crop'.$user->image->ext;
+                                    //dd($path);
+                                    $path = substr_replace($path, "", 0, 1);
+                                    //dd($path);
+                                    //dd($user->image->path.$name1[0].'-crop'.$user->image->ext);
+                                    //dd(file_exists($path));
 
-
-                                    if(file_exists(asset($user->image->path.$name1[0].'-crop'.$user->image->ext))){
-                                        $path = asset($user->image->path.$name1[0].'-crop'.$user->image->ext);
+                                    if(file_exists($path)){
+                                        $path = asset($path);
                                     }else{
-                                        $path = asset($user->image->path.$user->image->original_name);
+                                        $path = asset($path);
                                     }
                                 ?>
                                 <?php //dd($path); ?>

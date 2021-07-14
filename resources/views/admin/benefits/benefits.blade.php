@@ -199,7 +199,9 @@
 
    	$("#name-"+benefit['id']).html(benefit['name'])
        $("#name-"+benefit['id']).parent().find('.dropdown-item').attr('data-description', benefit['description'])
+       $("#name-"+benefit['id']).parent().find('.dropdown-item').attr('data-media', benefit.medias['path'])
        $("#media_ben-"+benefit['id']).text(benefit.medias['path'])
+       $("#img-upload-benefit").attr('src', benefit.medias['path'])
        $('#benefit-form-edit').trigger('reset');
    	$(".close-modal").click();
 
