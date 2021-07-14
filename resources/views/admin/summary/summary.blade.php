@@ -28,7 +28,7 @@
                     <td id="section_sum-{{$summary->id}}" data-id="{{$summary->id}}" class="summary-list">{{ $summary->section }}</td>
                     <td hidden id="media_sum-{{$summary->id}}" data-id="{{$summary->id}}" class="summary-list">
                     @isset($summary->medias)
-                    {{ $summary->medias['path'] }}
+                    {{ $summary->medias['path'] }}{{ $summary->medias['original_name'] }}
                     @endisset
                     </td>
                     <td class="text-right">
@@ -37,7 +37,7 @@
                                 <i class="fas fa-ellipsis-v"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                <a class="dropdown-item" data-toggle="modal" data-target="#editModalSummary" data-id="{{$summary->id}}" data-title="{{$summary->title}}" data-description="{{$summary->description}}" data-section="{{$summary->section}}" data-media="@isset($summary->medias){{$summary->medias['path']}}@endisset" >{{ __('Edit') }}</a>
+                                <a class="dropdown-item" data-toggle="modal" data-target="#editModalSummary" data-id="{{$summary->id}}" data-title="{{$summary->title}}" data-description="{{$summary->description}}" data-section="{{$summary->section}}" data-media="@isset($summary->medias){{ $summary->medias['path'] }}{{ $summary->medias['original_name'] }}@endisset" >{{ __('Edit') }}</a>
                             </div>
                         </div>
                     </td>
@@ -147,7 +147,7 @@
                <input type="text" id="summary-id"  value="" hidden>
                <input type="hidden" value="" name="image_svg_upload" id="image_svg_upload-summary">
             </div>
-            <div class="form-group">
+            <div class="form-group" style="text-align:center;">
                 <img style="margin-top:10px;" id="img-upload-summary" src="">
             </div>
          </div>
@@ -225,14 +225,14 @@
    	    success: function (data) {
 
    	let summary = data.summary;
-       console.log(summary.medias['path'])
+
 
    	$("#title-"+summary['id']).html(summary['title'])
    	$("#section_sum-"+summary['id']).html(summary['section'])
-    $("#media_sum-"+summary['id']).html(summary.medias['path'])
+    $("#media_sum-"+summary['id']).html(summary.medias['path']+summary.medias['original_name'])
     $("#title-"+summary['id']).parent().find('.dropdown-item').attr('data-description', summary['description'])
-    $("#title-"+summary['id']).parent().find('.dropdown-item').attr('data-media', summary.medias['path'])
-    $("#img-upload-summary").attr('src', summary.medias['path'])
+    $("#title-"+summary['id']).parent().find('.dropdown-item').attr('data-media', summary.medias['path']+summary.medias['original_name'])
+    $("#img-upload-summary").attr('src', summary.medias['path']+summary.medias['original_name'])
    	$(".close_modal").click();
 
    	$("#success-message p").html(data.success);

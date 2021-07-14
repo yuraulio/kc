@@ -1,7 +1,6 @@
 @extends('theme.layouts.master')
 @section('content')
 <?php $bonusFiles = ['_Bonus', 'Bonus', 'Bonus Files', 'Βonus', '_Βonus', 'Βonus', 'Βonus Files'] ?>
-@inject('frontHelp', 'Library\FrontendHelperLib')
 <?php $currentuser = $user ?>
 <main id="" role="main">
    <section class="section-hero section-hero-small section-hero-blue-bg">
@@ -9,21 +8,37 @@
          <div class="hero-message">
             <div class="account-infos">
                <div class="account-thumb">
-                  @if(isset($media))
-                  <?php $img_src = 'portal-img/users/'.$media['path'].'/'.$media['name'].$media['ext'];?>
-                  <img id="user-img-up" src="{{cdn($img_src)}}" alt="{{ $currentuser->first_name }} {{ $currentuser->last_name }}"/>
+                   <?php //dd($user->image); ?>
+                  @if(isset($user['image']))
+                  <?php
+                        $name1 = explode('.',$user['image']['original_name']);
+                        $path = $user['image']['path'].$name1[0].$user['image']['ext'];
+                        $path_crop = $user['image']['path'].$name1[0].'-crop'.$user['image']['ext'];
+                        $path_crop = substr_replace($path_crop, "", 0, 1);
+
+                        if(file_exists($path_crop)){
+                            //dd('asd');
+                            $path = asset($path_crop);
+                        }else{
+                            $path = asset($path);
+                        }
+                    ?>
+
+
+                  <?php $img_src = $path?>
+                  <img id="user-img-up" src="{{cdn($img_src)}}" alt="{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}"/>
                   @else
                   <img id="user-img-up" src="{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}" alt="user-profile-placeholder-image"/>
                   @endif
                </div>
                <div class="account-hero-info">
-                  <h2>{{ $currentuser->first_name }} {{ $currentuser->last_name }}</h2>
+                  <h2>{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}</h2>
                   <ul>
-                     @if($currentuser->kc_id != '')
-                     <li>KnowCrunch alumni number: {{ $currentuser->kc_id }}</li>
+                     @if($currentuser['kc_id'] != '')
+                     <li>KnowCrunch alumni number: {{ $currentuser['kc_id'] }}</li>
                      @endif
-                     @if($currentuser->partner_id)
-                     <li>Deree number: {{ $currentuser->partner_id }}</li>
+                     @if($currentuser['partner_id'])
+                     <li>Deree number: {{ $currentuser['partner_id'] }}</li>
                      @endif
                   </ul>
                </div>
@@ -88,7 +103,7 @@
                <ul class="clearfix tab-controls-list">
                   <li><a href="#my-account">My Account</a></li>
                   <li>
-                     @if( (isset($myEvents) && count($myEvents) == 0) || !$elearningAccess)
+                     @if( (isset($user['events']) && count($user['events']) == 0) || !$elearningAccess)
                      <a  href="#nocourses" >My courses</a>
                      @else
                      <a id="myCourses"  class="active" href="#courses">My courses</a>
@@ -107,8 +122,8 @@
                      <div class="col4 col-sm-12">
                         <div class="account-image-actions"  id="logo_dropzone">
                            <div class="acc-img">
-                              @if(isset($media))
-                              <img id="user-img" src="{{cdn($img_src)}}" alt="{{ $currentuser->first_name }} {{ $currentuser->last_name }}"/>
+                              @if(isset($user['image']))
+                              <img id="user-img" src="{{cdn($img_src)}}" alt="{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}"/>
                               @else
                               <img id="user-img" src="{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}" alt="user-profile-placeholder-image"/>
                               @endif
@@ -118,8 +133,8 @@
                                  <li class="change-photo"><a id="logoDropzone" class="custFieldMediaDrop dz-message" href="javascript:void(0)"><img src="{{cdn('/theme/assets/images/icons/icon-edit.svg')}}" alt="Change photo"/><span>Change photo</span>
                                     </a>
                                  </li>
-                                 @if(isset($media))
-                                 <li class="remove-photo delete_media"><a data-dp-media-id="{{ $media['id'] }}" href="javascript:void(0)"><img src="{{cdn('/theme/assets/images/icons/icon-remove.svg')}}" alt="Remove photo"/><span>Remove photo</span></a></li>
+                                 @if(isset($user['image']))
+                                 <li class="remove-photo delete_media"><a data-dp-media-id="{{ $user['image']['id'] }}" href="javascript:void(0)"><img src="{{cdn('/theme/assets/images/icons/icon-remove.svg')}}" alt="Remove photo"/><span>Remove photo</span></a></li>
                                  @endif
                               </ul>
                            </div>
@@ -193,22 +208,22 @@
                                        <a href="#" class="edit-fields" href="javascript:void(0)"><img src="{{cdn('/theme/assets/images/icons/icon-edit.svg')}}" alt="Edit Fields"/><span>Edit</span></a>
                                     </div>
                                     --}}
-                                    <form method="post" action="{{ route('account.updateme') }}" autocomplete="off">
+                                    <form method="post" action="{{ route('profile.update') }}" autocomplete="off">
                                        {!! csrf_field() !!}
                                        <div class="col12">
                                           <label>First name: <span>*</span></label>
                                           <div class="input-safe-wrapper">
-                                             <input class="required" type="text" name="first_name" id="first_name"  value="{{ old('first_name', $currentuser->first_name) }}" >
+                                             <input class="required" type="text" name="firstname" id="firstname"  value="{{ old('firstname', $currentuser['firstname']) }}" >
                                           </div>
                                        </div>
                                        <div class="col12">
                                           <label>Last name: <span>*</span></label>
                                           <div class="input-safe-wrapper">
-                                             <input class="required"  type="text" name="last_name" id="last_name" value="{{{ Input::old('last_name', $currentuser->last_name) }}}" >
+                                             <input class="required"  type="text" name="lastname" id="lastname" value="{{{ old('lastname', $currentuser['lastname']) }}}" >
                                           </div>
                                        </div>
                                        <div class="col12">
-                                          <?php $birthday = date('j F Y',strtotime($currentuser->birthday))?>
+                                          <?php $birthday = date('j F Y',strtotime($currentuser['birthday']))?>
                                           <label>Date of birth:</label>
                                           <div class="input-wrapper">
                                              <input type="text" class="datepicker-jqui with-arrow" name="birthday" value="{{$birthday}}">
@@ -217,19 +232,19 @@
                                        <div class="col12">
                                           <label>Company:</label>
                                           <div class="input-safe-wrapper">
-                                             <input  type="text" name="company" id="company" value="{{{ Input::old('company', $currentuser->company) }}}" >
+                                             <input  type="text" name="company" id="company" value="{{{ old('company', $currentuser['company']) }}}" >
                                           </div>
                                        </div>
                                        <div class="col12">
                                           <label>Position/Title:</label>
                                           <div class="input-safe-wrapper">
-                                             <input name="job_title" id="job_title" value="{{{ Input::old('job_title', $currentuser->job_title) }}}" >
+                                             <input name="job_title" id="job_title" value="{{{ old('job_title', $currentuser['job_title']) }}}" >
                                           </div>
                                        </div>
                                        <div class="col12">
                                           <label>Email: <span>*</span></label>
                                           <div class="input-safe-wrapper">
-                                             <input class="required" name="email" type="email" value="{{{ Input::old('email', $currentuser->email) }}}" >
+                                             <input class="required" name="email" type="email" value="{{{ old('email', $currentuser['email']) }}}" >
                                           </div>
                                        </div>
                                        <div class="col12">
@@ -451,8 +466,8 @@
                                                 <option data-countryCode="ZM" value="260">ZM (+260)</option>
                                                 <option data-countryCode="ZW" value="263">ZW (+263)</option>
                                              </select>
-                                             <input class="required" onkeyup="checkPhoneNumber(this)" type="text" name="mobile" id="mobile" value="{{{ Input::old('mobile', $currentuser->mobile) }}}" >
-                                             <input type="hidden" name="mobileCheck" id="mobileCheck" value="{{{ Input::old('mobile', '+'.$currentuser->country_code.$currentuser->mobile) }}}">
+                                             <input class="required" onkeyup="checkPhoneNumber(this)" type="text" name="mobile" id="mobile" value="{{{ old('mobile', $currentuser['mobile']) }}}" >
+                                             <input type="hidden" name="mobileCheck" id="mobileCheck" value="{{{ old('mobile', '+'.$currentuser['country_code'].$currentuser['mobile']) }}}">
                                           </div>
                                        </div>
                                        {{--

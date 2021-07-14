@@ -23,28 +23,16 @@
                         <div class="col-lg-3 order-lg-2">
                             <div class="card-profile-image">
                                 <a href="#">
-                                <?php //dd($user->image->name); ?>
                                 @if(isset($user->image->original_name))
                                 <?php
-                                    if($user->image->details != null){
-                                        //dd('with details');
-                                        $details = json_decode($user->image->details, true);
-                                        //dd($details);
-                                    }
-                                    //dd(asset($user->image->path.$user->image->original_name.'-crop'.$user->image->ext));
-
-                                    //$user->image->original_name;
                                     $name1 = explode('.',$user->image->original_name);
-                                    //dd(asset('public'.$user->image->path.$name1[0].'-crop'.$user->image->ext));
-                                    $path = $user->image->path.$name1[0].'-crop'.$user->image->ext;
-                                    //dd($path);
-                                    $path = substr_replace($path, "", 0, 1);
-                                    //dd($path);
-                                    //dd($user->image->path.$name1[0].'-crop'.$user->image->ext);
-                                    //dd(file_exists($path));
+                                    $path = $user->image->path.$name1[0].$user->image->ext;
+                                    $path_crop = $user->image->path.$name1[0].'-crop'.$user->image->ext;
+                                    $path_crop = substr_replace($path_crop, "", 0, 1);
 
-                                    if(file_exists($path)){
-                                        $path = asset($path);
+                                    if(file_exists($path_crop)){
+                                        //dd('asd');
+                                        $path = asset($path_crop);
                                     }else{
                                         $path = asset($path);
                                     }

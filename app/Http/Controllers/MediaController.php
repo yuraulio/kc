@@ -45,7 +45,7 @@ class MediaController extends Controller
         $image = Image::make(public_path($mediaKey));
 
         $media->original_name = $id;
-        $media->path = $folders.'/'.$path[0].'.'.$path[1];
+        $media->path = $folders.'/';
         $media->name = $path[0];
         $media->ext = '.'.$path[1];
         $media->width = $image->width();
