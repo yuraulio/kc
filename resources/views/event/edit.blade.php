@@ -171,11 +171,11 @@
                                     <label class="form-control-label" for="input-status">{{ __('Status') }}</label>
                                     <select name="status" id="input-status" class="form-control" placeholder="{{ __('Status') }}" >
                                         <option value="">-</option>
-                                            <option <?= ($event['status'] == 4) ? 'selected="selected"' : ''; ?> value="4">{{ __('My Account Only') }}</option>
-                                            <option <?= ($event['status'] == 2) ? 'selected="selected"' : ''; ?> value="3">{{ __('Soldout') }}</option>
-                                            <option <?= ($event['status'] == 3) ? 'selected="selected"' : ''; ?> value="2">{{ __('Completed') }}</option>
-                                            <option <?= ($event['status'] == 0) ? 'selected="selected"' : ''; ?> value="1">{{ __('Open') }}</option>
-                                            <option <?= ($event['status'] == 1) ? 'selected="selected"' : ''; ?> value="0">{{ __('Close') }}</option>
+                                            <option <?= ($event['status'] == 4) ? "selected" : ''; ?> value="4">{{ __('My Account Only') }}</option>
+                                            <option <?= ($event['status'] == 2) ? "selected" : ''; ?> value="2">{{ __('Soldout') }}</option>
+                                            <option <?= ($event['status'] == 3) ? "selected" : ''; ?> value="3">{{ __('Completed') }}</option>
+                                            <option <?= ($event['status'] == 0) ? "selected" : ''; ?> value="0">{{ __('Open') }}</option>
+                                            <option <?= ($event['status'] == 1) ? "selected" : ''; ?> value="1">{{ __('Close') }}</option>
                                     </select>
 
                                     @include('alerts.feedback', ['field' => 'status'])

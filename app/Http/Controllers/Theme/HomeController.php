@@ -18,6 +18,7 @@ use App\Model\Pages;
 use Laravel\Cashier\Cashier;
 use App\Model\User;
 use App\Model\Invoice;
+use Auth;
 
 class HomeController extends Controller
 {
@@ -157,7 +158,7 @@ class HomeController extends Controller
 
 
     private function event($event){
-        
+       
         $data = $event->topicsLessonsInstructors();
         $data['event'] = $event;
         $data['benefits'] = $event->benefits;
@@ -168,7 +169,12 @@ class HomeController extends Controller
         $data['tickets'] = $event->ticket->toArray();
         $data['venues'] = $event->venues->toArray();
         $data['syllabus'] = $event->syllabus->toArray();
-        //dd($data['venues']);
+
+        $data['is_event_paid'] = 0;
+        if(Auth::user() && count(Auth::user()->events->where('id',$event->id)) > 0){
+            $data['is_event_paid'] = 1;
+        }
+        
         return view('theme.event.' . $event->view_tpl,$data);
 
     }

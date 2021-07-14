@@ -316,7 +316,7 @@ class EventController extends Controller
             $published = 0;
         }
 
-
+        //dd($request->all());
         $request->request->add(['published' => $published,'release_date_files' => date('Y-m-d H:i:s', strtotime($request->release_date_files))]);
         $ev = $event->update($request->all());
 

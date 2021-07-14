@@ -99,7 +99,7 @@
                         $body = '' ;
 
 
-                        if(isset($sections['overview'])){
+                           if(isset($sections['overview'])){
                               $title = $sections['overview']->first()->title;
                               $body = $sections['overview']->first()->description;
                            }
