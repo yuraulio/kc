@@ -12,6 +12,7 @@ use App\Model\Media;
 use App\Model\Logos;
 use App\Model\Menu;
 use App\Model\Type;
+use App\Model\Instructor;
 use App\Model\Category;
 use View;
 use App\Model\Pages;
@@ -131,13 +132,16 @@ class HomeController extends Controller
         $data['header_menus'] = $this->header();
 
         $data['page'] = $page;
+        dd($page);
 
         if($data['page']['template'] == 'corporate_page'){
             $data['page']['template'] = 'corporate-template';
             $data['benefits'] = $page->benefits;
-            $data['corporatebrands'] = Logos::with('medias')->where('type', 'brands')->get();
-            //dd(Logos::with('medias')->get());
+            $data['corporatebrands'] = Logos::with('medias')->where('type', 'brands')->get();   
+        }else if($data['page']['template'] == 'instructors'){
+            $data['instructors'] =  Instructor::with('medias')->where('status', 1)->get();
         }
+        //dd($data['page']);
 
 
         return view('admin.static_tpls.'.$data['page']['template'].'.frontend' ,$data);

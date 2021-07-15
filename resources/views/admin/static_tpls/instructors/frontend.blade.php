@@ -1,8 +1,7 @@
 @extends('theme.layouts.master')
 
 @section('content')
-@inject('frontHelp', 'Library\FrontendHelperLib')
-@include('theme.preview.preview_warning', ["id" => $content->id, "type" => "content", "status" => $content->status])
+@include('theme.preview.preview_warning', ["id" => $page['id'], "type" => "page", "status" => $page['status']])
 
 <main id="main-area" class="with-hero" role="main">
 <section class="section-hero section-hero-small section-hero-blue-bg">
@@ -41,43 +40,45 @@
                                        $name = $lvalue['title'] . ' ' . $lvalue['subtitle'];
                                        $field1 = '';
                                        $field2 ='';
+
+                                       //dd($lvalue);
                                        
-                                       if(isset($lvalue['featured'][0]['media'])){
-                                         $img =  $frontHelp->pImg($lvalue, 'instructors-testimonials');
+                                       if(isset($lvalue['medias'])){
+                                         $img =  get_image($lvalue, 'instructors-testimonials');
                                        }
                                        
                                        if(isset($lvalue['header'])){
                                          $field1 =  $lvalue['header'];
                                        }
                                        
-                                       if(isset($lvalue['header'])){
-                                         $field2 = $lvalue['c_fields']['simple_text'][1]['value'];
-                                       }
+                                       // if(isset($lvalue['header'])){
+                                       //   $field2 = $lvalue['c_fields']['simple_text'][1]['value'];
+                                       // }
                                        
-                                       if(isset($lvalue['c_fields']['simple_text'][2]) && $lvalue['c_fields']['simple_text'][2]['value'] != ''){
-                                         $fb = $lvalue['c_fields']['simple_text'][2]['value'];
-                                       }
+                                       // if(isset($lvalue['c_fields']['simple_text'][2]) && $lvalue['c_fields']['simple_text'][2]['value'] != ''){
+                                       //   $fb = $lvalue['c_fields']['simple_text'][2]['value'];
+                                       // }
                                        
-                                       if(isset($lvalue['c_fields']['simple_text'][3]) && $lvalue['c_fields']['simple_text'][3]['value'] != ''){
+                                       // if(isset($lvalue['c_fields']['simple_text'][3]) && $lvalue['c_fields']['simple_text'][3]['value'] != ''){
                                        
-                                         $twitter = $lvalue['c_fields']['simple_text'][3]['value'];
+                                       //   $twitter = $lvalue['c_fields']['simple_text'][3]['value'];
                                        
-                                       }
+                                       // }
                                        
-                                       if(isset($lvalue['c_fields']['simple_text'][4]) && $lvalue['c_fields']['simple_text'][4]['value'] != ''){
+                                       // if(isset($lvalue['c_fields']['simple_text'][4]) && $lvalue['c_fields']['simple_text'][4]['value'] != ''){
                                        
-                                         $inst = $lvalue['c_fields']['simple_text'][4]['value'];
-                                       }
-                                       if(isset($lvalue['c_fields']['simple_text'][5]) && $lvalue['c_fields']['simple_text'][5]['value'] != ''){
+                                       //   $inst = $lvalue['c_fields']['simple_text'][4]['value'];
+                                       // }
+                                       // if(isset($lvalue['c_fields']['simple_text'][5]) && $lvalue['c_fields']['simple_text'][5]['value'] != ''){
                            
-                                          $linkedIn = $lvalue['c_fields']['simple_text'][5]['value'];
+                                       //    $linkedIn = $lvalue['c_fields']['simple_text'][5]['value'];
                                        
-                                       }
-                                       if(isset($lvalue['c_fields']['simple_text'][6]) && $lvalue['c_fields']['simple_text'][6]['value'] != ''){
+                                       // }
+                                       // if(isset($lvalue['c_fields']['simple_text'][6]) && $lvalue['c_fields']['simple_text'][6]['value'] != ''){
                                           
-                                          $yt = $lvalue['c_fields']['simple_text'][6]['value'];
+                                       //    $yt = $lvalue['c_fields']['simple_text'][6]['value'];
                                        
-                                       }
+                                       // }
                                        
                                        
                                        ?>

@@ -1,6 +1,5 @@
 @extends('theme.layouts.master')
 @section('content')
-{{--@inject('frontHelp', 'Library\FrontendHelperLib')--}}
 @include('theme.preview.preview_warning', ["id" => $page->id, "type" => "page", "status" => $page->status])
 <main id="main-area" class="with-hero" role="main">
 <script type="application/ld+json">

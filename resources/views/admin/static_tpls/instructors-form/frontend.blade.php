@@ -1,8 +1,6 @@
 @extends('theme.layouts.master')
-
 @section('content')
-@inject('frontHelp', 'Library\FrontendHelperLib')
-@include('theme.preview.preview_warning', ["id" => $content->id, "type" => "content", "status" => $content->status])
+@include('theme.preview.preview_warning', ["id" => $page['id'], "type" => "content", "status" => $page['status']])
 <script type="text/javascript">
     var errorMessages = {
         requiredError: "Please fill in all mandatory data.",
@@ -10,14 +8,14 @@
     };
 </script>
 <main id="main-area" class="with-hero" role="main">
-@if (!empty($content['featured']) && isset($content['featured'][0]) &&isset($content['featured'][0]['media']) && !empty($content['featured'][0]['media']))
-				<section class="section-hero" style="background-image:url({{ $frontHelp->pImg($content, 'header-image') }})">
+@if (!empty($page['medias']))
+				<section class="section-hero" style="background-image:url(<?= asset(get_image($page['medias'], 'header-image')); ?>)">
 
 					<div class="overlay"></div>
 					<div class="container">
 						<div class="hero-message pad-r-col-6">
-							<h1>{{ $content->title }}</h1>
-							<h2>{{ $content->subtitle }}</h2>
+							<h1>{{ $page['name'] }}</h1>
+							<h2>{{ $page['title'] }}</h2>
 						</div>
 					</div>
 					</section>
@@ -25,8 +23,8 @@
 						<section class="section-hero section-hero-small section-hero-blue-bg">
 			<div class="container">
 				<div class="hero-message">
-                    <h1>{{ $content->title }}</h1>
-                    <h2>{{ $content->subtitle }}</h2>
+                    <h1>{{ $page['name'] }}</h1>
+                    <h2>{{ $page['title'] }}</h2>
 				</div>
             </div>
 </section>
@@ -36,7 +34,7 @@
 						<div class="row">
 							<div class="col6 col-sm-12">
 								<div class="text-area">
-                                {!! $content->summary !!}
+                                {!! $page['summary'] !!}
 								</div>
 							</div>
 							<div class="col6 col-sm-12">
