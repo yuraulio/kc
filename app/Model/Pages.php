@@ -8,6 +8,7 @@ use App\Traits\SlugTrait;
 use App\Traits\MetasTrait;
 use App\Traits\BenefitTrait;
 use App\Traits\MediaTrait;
+use App\Model\Media;
 
 class Pages extends Model
 {
@@ -22,5 +23,10 @@ class Pages extends Model
     protected $fillable = [
         'title', 'content','template','status','name','summary',
     ];
+
+    public function medias()
+    {
+        return $this->morphOne(Media::class, 'mediable');
+    }
 
 }

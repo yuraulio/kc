@@ -1,0 +1,65 @@
+<?php
+
+namespace App\Http\Controllers\Theme;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
+
+class ContactUsController extends Controller
+{
+    public function sendEnquery(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'cemail' => 'required|email',
+            'cname' => 'required',
+            'csurname' => 'required',
+            'cmessage' => 'required',
+            'ctel' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return [
+                'status' => 0,
+                'errors' => $validator->errors(),
+                'message' => '',
+            ];
+        } else {
+            $mail_data = $request->all();
+
+
+
+
+
+            Mail::send('theme.emails.contact.send_us_email', ['mail_data' => $mail_data], function ($m) use ($mail_data) {
+
+            	 $fullname = $mail_data['cname'] . ' ' . $mail_data['csurname'];
+            	 $generalInfo = \Config::get('dpoptions.website_details.settings');
+
+            	$adminemail = $generalInfo['admin_email'];
+                if(isset($mail_data['eventtitle'])) {
+                    $subject = 'KnowCrunch – information about ' . $mail_data['eventtitle'];
+                }
+                else {
+                    $subject = 'Knowcrunch - Website Contact';
+                }
+
+                //$emails = ['socratous12@gmail.com', 'info@darkpony.com'];
+                $m->subject($subject);
+                $m->from($adminemail, 'Knowcrunch');
+                $m->replyTo($mail_data['cemail'], $fullname);
+               // $m->to('nathanailidis@lioncode.gr', 'Chysafis');
+                $m->to($adminemail, 'Knowcrunch');
+                //$m->cc('periklis.d@gmail.com', 'Perry D');
+                $m->bcc('info@darkpony.com', null);
+            });
+
+            return [
+                'status' => 1,
+                'message' => 'Thank you! We will contact you shortly.',
+                'mail_data' => $mail_data,
+            ];
+        }
+    }
+}

@@ -8,6 +8,7 @@
 .prevWarnTools .publishPrev { display: inline-block; width: 48%; margin: 2px; }
 .prevWarnTools .dismissPrev { display: inline-block; width: 48%; margin: 2px; }
 </style>
+<?php dd('as'); ?>
 <div class="prevWarnCont">
     <div class="prevWarnInner">
         <div class="prevWarnMess">Βλέπετε μια προεπισκόπιση του περιεχομένου</div>

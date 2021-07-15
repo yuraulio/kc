@@ -48,7 +48,7 @@ class HomeController extends Controller
                 }
                 if($event['view_tpl'] != 'elearning_free' && $event['view_tpl'] != 'event_free' && $event['view_tpl'] != 'event_free_coupon' && $event['view_tpl'] != 'elearning_event')
                 {
-                    
+
                     $data['eventsbycategory'][$bcatid['id']]['events'][] =  $event;
                     $data['eventsbycategory'][$bcatid['id']]['category'][] = $bcatid;
                     $data['eventsbycategory'][$bcatid['id']]['cat']['name'] = $bcatid['name'];
@@ -68,7 +68,7 @@ class HomeController extends Controller
                     $data['inclassEventsbycategoryFree'][$bcatid['id']]['cat']['name'] = $bcatid['name'];
                     $data['inclassEventsbycategoryFree'][$bcatid['id']]['cat']['description'] = $bcatid['description'];
                     $data['inclassEventsbycategoryFree'][$bcatid['id']]['cat']['hours'] = $bcatid['hours'];
-                    
+
                 }else if($event['view_tpl'] == 'elearning_free'){
                     //dd($event);
                     $data['eventsbycategoryFree'][$bcatid['id']]['events'][] = $event;
@@ -86,7 +86,7 @@ class HomeController extends Controller
         $data['homePage'] = Pages::where('name','home')->with('mediable')->first()->toArray();
         //dd($data['homePage']);
         //$data['header_menus'] = [];
-        
+
         //dd($data['eventsbycategory'][46]['events']);
         return view('theme.home.homepage',$data);
 
@@ -102,31 +102,45 @@ class HomeController extends Controller
     public function index(Slug $slug){
 
 
-        //dd($slug->slugable == Type::class);
+        //dd($slug->slugable);
         //dd(get_class($slug->slugable) == Event::class);
         //dd(get_class($slug->slugable) == Delivery::class);
 
         switch (get_class($slug->slugable)) {
             case Event::class:
-                //dd('asd');
                 return $this->event($slug->slugable);
                 break;
 
             case Delivery::class:
                 return $this->delivery($slug->slugable);
-                //dd('test');
-                //return view('theme.pages.category', $data);
                 break;
 
             case Type::class:
-                //dd($slug);
                 return $this->types($slug->slugable);
-                //dd('test');
-                //return view('theme.pages.category', $data);
+                break;
+
+            case Pages::class:
+                return $this->pages($slug->slugable);
                 break;
 
         }
 
+    }
+
+    private function pages($page){
+        $data['header_menus'] = $this->header();
+
+        $data['page'] = $page;
+
+        if($data['page']['template'] == 'corporate_page'){
+            $data['page']['template'] = 'corporate-template';
+            $data['benefits'] = $page->benefits;
+            $data['corporatebrands'] = Logos::with('medias')->where('type', 'brands')->get();
+            //dd(Logos::with('medias')->get());
+        }
+
+
+        return view('admin.static_tpls.'.$data['page']['template'].'.frontend' ,$data);
     }
 
     private function types($type){
@@ -158,7 +172,7 @@ class HomeController extends Controller
 
 
     private function event($event){
-       
+
         $data = $event->topicsLessonsInstructors();
         $data['event'] = $event;
         $data['benefits'] = $event->benefits;
@@ -174,7 +188,7 @@ class HomeController extends Controller
         if(Auth::user() && count(Auth::user()->events->where('id',$event->id)) > 0){
             $data['is_event_paid'] = 1;
         }
-        
+
         return view('theme.event.' . $event->view_tpl,$data);
 
     }

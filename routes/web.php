@@ -295,10 +295,21 @@ Route::namespace('Alexusmai\\LaravelFileManager\\Controllers\\')->group(function
         ->name('fm.search');
 });
 
+Route::get('contact-us', function(){
+    return redirect('contact');
+});
+
+Route::post('contact-us', [ 'as' => 'contactUs' , 'uses' => 'Theme\ContactUsController@sendEnquery' ]);
+
 
 Route::group(['middleware' => 'auth', 'prefix'=>'myaccount'], function () {
     Route::get('/','Theme\StudentController@index')->name('myaccount');
     Route::post('/remove-avatar','Theme\StudentController@removeProfileImage')->name('remove.avatar');
+    Route::post('/upload-profile-image','Theme\StudentController@uploadProfileImage')->name('add.profileImage');
+    Route::post('/update-personal-info','Theme\StudentController@updatePersonalInfo')->name('update.personalInfo');
+    Route::post('/updinvbill', [ 'as' => 'updinvbill' , 'uses' => 'Theme\StudentController@updateInvoiceBilling' ]);
+    Route::post('/updrecbill', [ 'as' => 'updrecbill' , 'uses' => 'Theme\StudentController@updateReceiptBilling' ]);
+    Route::get('/mydata', [ 'as' => 'festudent.mydata' , 'uses' => 'Theme\StudentController@downloadMyData' ]);
 });
 
 Route::group(['middleware' => ['preview','web']], function () {

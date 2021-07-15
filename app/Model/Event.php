@@ -346,6 +346,23 @@ class Event extends Model
         return ($sum/count($videos)) * 100;
     }
 
+    public function video_seen($user)
+    {
+
+        $videos = $user->statistic()->wherePivot('event_id',$this['id'])->first()->pivot['videos'];
+        $videos = json_decode($videos, true);
+        $sum = 0;
+        foreach($videos as $video){
+            if($video['seen'] == 1 || $video['seen'] == '1'){
+                $sum++;
+            }
+
+        }
+
+
+        return $sum.' of '.count($videos);
+    }
+
     public function invoices(){
         return $this->morphToMany(Invoice::class, 'invoiceable','invoiceables');
     }

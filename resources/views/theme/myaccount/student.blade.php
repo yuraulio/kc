@@ -8,7 +8,7 @@
          <div class="hero-message">
             <div class="account-infos">
                <div class="account-thumb">
-                   <?php //dd($user->image); ?>
+                   <?php //dd($user->events); ?>
                   @if(isset($user['image']))
                   <?php
                         $name1 = explode('.',$user['image']['original_name']);
@@ -208,7 +208,7 @@
                                        <a href="#" class="edit-fields" href="javascript:void(0)"><img src="{{cdn('/theme/assets/images/icons/icon-edit.svg')}}" alt="Edit Fields"/><span>Edit</span></a>
                                     </div>
                                     --}}
-                                    <form method="post" action="{{ route('profile.update') }}" autocomplete="off">
+                                    <form method="post" action="{{ route('update.personalInfo') }}" autocomplete="off">
                                        {!! csrf_field() !!}
                                        <div class="col12">
                                           <label>First name: <span>*</span></label>
@@ -603,9 +603,11 @@
                                              </div>
                                           </div>
                                        </div>
+                                       <?php //dd($receipt_info); ?>
                                        <div id="receipt_add_edit_mode" class="hidden-fields-actions receipt-fields" style="display: block;">
-                                          {{--@if($receipt_info != '')
-                                          <?php $receipt_info = json_decode($receipt_info);  ?>
+                                       <?php //dd($user['receipt_details']);?>
+                                       @if($user['receipt_details'] != '')
+                                          <?php $receipt_info = json_decode($user['receipt_details']);  ?>
                                           @foreach($receipt_info as $k => $v)
                                           @if($k != 'billing' && isset($hone[$k]))
                                           <div class="col12">
@@ -619,27 +621,28 @@
                                           <div class="form-submit-area">
                                              <button id="save-receipt-data" type="button" class="btn btn--md btn--secondary">Update</button>
                                           </div>
-                                          @endif
+                                        @endif
                                        </div>
                                        <div id="invoice_add_edit_mode" class="hidden-fields-actions invoice-fields">
-                                          @if($invoice_info != '')
-                                          <?php $invoice_info = json_decode($invoice_info);  ?>
-                                          @foreach($invoice_info as $k => $v)
-                                          @if($k != 'billing' && isset($htwo[$k]))
-                                          <div class="col12">
-                                             <label>{{$htwo[$k]}}:</label>
-                                             <div class="input-safe-wrapper">
-                                                <input  type="text" id="{{$k}}" name="{{$k}}" value="{{ $v }}" >
-                                             </div>
-                                          </div>
-                                          @endif
-                                          @endforeach
-                                          <div class="form-submit-area">
-                                             <button id="save-invoice-data" type="button" class="btn btn--md btn--secondary">Update</button>
-                                          </div>
-                                          @endif--}}
+                                        @if($user['invoice_details'] != '')
+                                            <?php $invoice_info = json_decode($user['invoice_details']);  ?>
+                                            @foreach($invoice_info as $k => $v)
+                                            @if($k != 'billing' && isset($htwo[$k]))
+                                            <div class="col12">
+                                                <label>{{$htwo[$k]}}:</label>
+                                                <div class="input-safe-wrapper">
+                                                    <input  type="text" id="{{$k}}" name="{{$k}}" value="{{ $v }}" >
+                                                </div>
+                                            </div>
+                                            @endif
+                                            @endforeach
+                                            <div class="form-submit-area">
+                                                <button id="save-invoice-data" type="button" class="btn btn--md btn--secondary">Update</button>
+                                            </div>
+                                        @endif
                                        </div>
                                     </form>
+                                    <?php //dd(); ?>
                                     <!-- /.form-wrapper.profile-form-wrapper -->
                                  </div>
                                  <!-- /#billing-data.in-tab-wrapper -->
@@ -650,7 +653,7 @@
                                     <h2>Change password</h2>
                                     --}}
                                     <div class="form-wrapper profile-form-wrapper">
-                                       <form method="post" action="{{ route('profile.update') }}" autocomplete="off" class="password-form">
+                                       <form method="post" action="{{ route('update.personalInfo') }}" autocomplete="off" class="password-form">
                                           {!! csrf_field() !!}
                                           <div class="row">
                                              <div class="col12 col-sm-12">
@@ -750,7 +753,7 @@
                                            //dd($summary);
                                        }
                                        ?>
-                                       <div class="duration"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}" alt="">{{$summaryDate}}///</div>
+                                       <div class="duration"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}" alt="">{{$summaryDate}}</div>
                                        @if($event['hours'])
                                        <div class="expire-date"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt="">{{$event['hours']}}</div>
                                        @endif
@@ -1042,6 +1045,7 @@
                      @else
                      <div class="col12 dynamic-courses-wrapper">
                         <div class="item">
+                            <?php //dd($user); ?>
 
                            <h2>{{ $event['title'] }}</h2>
                            <div class="inside-tabs">
@@ -1067,16 +1071,16 @@
                                  <div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
                                     <div class="bottom">
                                         <?php //dd($event); ?>
-                                       @if($event['pivot']['expiration'])
-                                       <div class="expire-date exp-date"><img src="{{cdn('/theme/assets/images/icons/Days-Week.svg')}}" alt="">Expiration date: {{$event['pivot']['expiration']}}</div>
+                                       @if($event->pivot['expiration'])
+                                       <div class="expire-date exp-date"><img src="{{cdn('/theme/assets/images/icons/Days-Week.svg')}}" alt="">Expiration date: {{$event->pivot['expiration']}}</div>
                                        @endif
                                        @if (isset($event['hours']))
                                        <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""> {{$event['hours']}}h </div>
                                        @endif
 
-                                       @if (isset($event['video_progress']))
+                                       @if (isset($event['videos_progress']))
                                        <?php //dd($event); ?>
-                                       <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/E-Learning.svg')}}" alt=""> {{$event['video_progress']}}% </div>
+                                       <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/E-Learning.svg')}}" alt=""> {{$event['videos_progress']}}% </div>
                                        @endif
                                     </div>
                                  </div>
@@ -1185,7 +1189,7 @@
                                     </div>
                                  </div>
                                  @endif
-                                 <?php //dd('asd'); ?>
+                                 <?php //dd($event); ?>
                                  <div id="c-watch-inner{{$tab}}" class="in-tab-wrapper">
                                     <div class="bottom">
                                        @if (isset($event['videos_progress']))
@@ -1212,10 +1216,11 @@
                                           @endif
                                           @endforeach
                                           @endforeach
+                                          <?php //dd($event); ?>
                                           @if(!$event['video_access'])
                                           {{--<a style="cursor:not-allowed; opacity: 0.5; pointer-events: none;" href="/myaccount/newElearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if((isset($event['videos_progress']) && $event['videos_progress'] == 100) || count($event['cert'])>0) WATCH AGAIN @else WATCH NOW @endif</a>--}}
                                           @else
-                                          <a href="/myaccount/newElearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if((isset($event['videos_progress']) && $event['videos_progress'] == 100) || count($event['cert'])>0) WATCH AGAIN @else WATCH NOW @endif</a>
+                                          <a href="/myaccount/newElearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if((isset($event['videos_progress']) && $event['videos_progress'] == 100) ) WATCH AGAIN @else WATCH NOW @endif</a>
                                           @endif
                                        </div>
                                     </div>
@@ -2224,7 +2229,7 @@
 
    function logo_dropzoneToDropzone() {
        logo_dropzone = new Dropzone(document.getElementById("logo_dropzone"), {
-       url: 'admin/media_uploader/upload',
+       url: 'myaccount/upload-profile-image',
        method: "post",
        maxFilesize: settingsObj.maxUploadSize,
        paramName: "dp_fileupload",
@@ -2250,9 +2255,12 @@
        },
        complete: function (file) {
        },
+       drop: function(){
+       },
        success: function (file, response, load) {
-           $('#logo_media').val(response.urls.large_thumb);
-           $('#logo_media_id').val(response.media_id);
+           $('#user-img').attr('src', response.data)
+        //    $('#logo_media').val(response.urls.large_thumb);
+        //    $('#logo_media_id').val(response.media_id);
            renderLogoDropzone(response, true);
        }
    });
@@ -2387,7 +2395,6 @@
 
               }*/
           });
-/////EDWWWWWW
           $("body").on("click", ".deleteImg", function (event) {
                deleteMediaPromt($('.remove-photo.delete_media a').attr('data-dp-media-id'));
 
@@ -2408,7 +2415,7 @@
               $.ajax({ url: "myaccount/remove-avatar", type: "post",
                   data: {'media':media_id},
                   success: function(data) {
-                     
+
                       if (Number(data.status) === 1) {
 
 
@@ -2425,7 +2432,7 @@
                $("body").css("overflow-y", "auto")
           }
 
-          ///////EDWWW
+
 
           $(document).on('click', '.close-alert', function(e){
             var favDialog = document.getElementById('favDialog');

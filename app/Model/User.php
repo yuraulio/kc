@@ -20,7 +20,7 @@ use Laravel\Passport\HasApiTokens;
 use Laravel\Cashier\Billable;
 use App\Traits\MediaTrait;
 use App\Model\Invoice;
-//use Laravel\Cashier\Subscription;
+use Laravel\Cashier\Subscription;
 
 class User extends Authenticatable
 {
@@ -188,8 +188,8 @@ class User extends Authenticatable
         //return $this->morphToMany(Invoice::class, 'invoiceable')->whereHasMorph('event',[Event::class]);
     }
 
-    /*public function subscriptions(){
+    public function subscriptions(){
         return $this->belongsToMany(Subscription::class,'subscription_user_event');
-    }*/
+    }
 
 }
