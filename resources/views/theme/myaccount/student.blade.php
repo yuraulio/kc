@@ -712,10 +712,12 @@
                <div class="container">
                   <div class="row">
                      <?php $tab = 0; ?>
-                     <?php //dd($user['events']); ?>
+                     <?php //dd($user['events'][0]); ?>
                      @if(isset($user['events']) && count($user['events']) > 0)
                      @foreach($user['events'] as $keyType => $event)
+
                      @if($event['view_tpl'] != 'elearning_english' && $event['view_tpl'] != 'elearning_greek' && $event['view_tpl'] != 'elearning_free')
+                     <?php //dd($event['title']); ?>
                      <div class="col12 dynamic-courses-wrapper dynamic-courses-wrapper--style2">
                         <div class="item">
                             <?php //dd($event); ?>
@@ -774,45 +776,51 @@
                                           @if(isset($event['topics']) && count($event['topics']) > 0)
                                           @foreach($event['topics'] as $keyTopic => $topic)
                                           <?php //dd($topic); ?>
+
+                                          @if(isset($topic[0]))
                                           <div class="accordion-item">
-                                             <h3 class="accordion-title title-blue-gradient scroll-to-top">{{$keyTopic}}</h3>
+                                             <h3 class="accordion-title title-blue-gradient scroll-to-top">{{$topic[0]['title']}}</h3>
                                              <div class="accordion-content no-padding">
-                                                @foreach($topic['lessons'] as $keyLesso => $lesso)
-                                                {{--@foreach($lesso as $keyLesson => $lesson)--}}
-                                                <?php //dd(); ?>
-                                                {{-- <?php $catId = $lesson['cat_id'] ?>--}}
-                                                {{--@if($lesso['type'])
-                                                <div class="topic-wrapper-big">
-                                                   <div class="topic-title-meta">
-                                                      <h4>{{$keyLesson}}</h4>
-                                                      <!-- Feedback 18-11 changed -->
-                                                      <div class="topic-meta">
-                                                         @if($lesson['type'])
-                                                         <div class="category">{{$lesson['type']}}</div>
-                                                         @endif
-                                                         <!-- Feedback 18-11 changed -->
-                                                         <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}" alt="" />{{$lesso['time_starts']}}</span> <!-- Feedback 18-11 changed -->
-                                                         <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/Times.svg')}}" alt="" />{{$lesso['time_ends']}} ({{$lesso['duration']}})</span> <!-- Feedback 18-11 changed -->
-                                                         <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-marker.svg')}}" alt="" />{{$lesso['room']}}</span> <!-- Feedback 18-11 changed -->
-                                                      </div>
-                                                      <!-- /.topic-title-meta -->
-                                                   </div>
-                                                   <div class="author-img">
-                                                      <!-- Feedback 18-11 changed -->
-                                                      <a href="{{$lesso['slugable']['slug']}}">
-                                                      <span class="custom-tooltip">{{$instructors[$lesso['pivot']['instructor_id']][0]['title']}} {{$instructors[$lesso['pivot']['instructor_id']][0]['subtitle']}}</span>
-                                                      <img src="{{cdn({{$instructors[$lesso['pivot']['instructor_id']][0]['path']}}{{$instructors[$lesso['pivot']['instructor_id']][0]['original_name']}})}}" alt="{{$instructors[$lesso['pivot']['instructor_id']][0]['title']}} {{$instructors[$lesso['pivot']['instructor_id']][0]['subtitle']}}"/>
-                                                      </a>
-                                                   </div>
-                                                   <!-- /.topic-wrapper-big -->
-                                                </div>
-                                                @endif--}}
-                                                @endforeach
+                                                 <?php //dd($topic[0]['lessons']); ?>
+                                                @foreach($topic[0]['lessons'] as $keyLesso => $lesso)
+
+                                                    {{--@foreach($lesso as $keyLesson => $lesson)--}}
+                                                    <?php //dd(); ?>
+                                                    <?php //dd($lesso); ?>
+
+                                                    @if($lesso['type'])
+                                                    <div class="topic-wrapper-big">
+                                                    <div class="topic-title-meta">
+                                                        {{--<h4>{{$lesso['title']}}</h4>--}}
+                                                        <!-- Feedback 18-11 changed -->
+                                                        <div class="topic-meta">
+                                                            @if($lesso['title'])
+                                                            {{--<div class="category">{{$lesso['type']}}</div>--}}
+                                                            @endif
+                                                            <!-- Feedback 18-11 changed -->
+                                                            <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}" alt="" />{{$lesso['time_starts']}}</span> <!-- Feedback 18-11 changed -->
+                                                            <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/Times.svg')}}" alt="" />{{$lesso['time_ends']}} ({{$lesso['duration']}})</span> <!-- Feedback 18-11 changed -->
+                                                            <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-marker.svg')}}" alt="" />{{$lesso['room']}}</span> <!-- Feedback 18-11 changed -->
+                                                        </div>
+                                                        <!-- /.topic-title-meta -->
+                                                    </div>
+                                                    <div class="author-img">
+                                                        <!-- Feedback 18-11 changed -->
+                                                        {{--<a href="{{$lesso['slugable']['slug']}}">--}}
+                                                            {{--<span class="custom-tooltip">{{$instructors[$lesso['pivot']['instructor_id']][0]['title']}} {{$instructors[$lesso['pivot']['instructor_id']][0]['subtitle']}}</span>--}}
+                                                            {{--<img src="{{cdn({{$instructors[$lesso['pivot']['instructor_id']][0]['path']}}{{$instructors[$lesso['pivot']['instructor_id']][0]['original_name']}})}}" alt="{{$instructors[$lesso['pivot']['instructor_id']][0]['title']}} {{$instructors[$lesso['pivot']['instructor_id']][0]['subtitle']}}"/>--}}
+                                                        </a>
+                                                    </div>
+                                                    <!-- /.topic-wrapper-big -->
+                                                    </div>
+                                                    @endif
                                                 {{--@endforeach--}}
+                                                @endforeach
                                                 <!-- /.accordion-content -->
                                              </div>
                                              <!-- /.accordion-item -->
                                           </div>
+                                          @endif
                                           @endforeach
                                           @endif
                                           <!-- /.accordion-wrapper -->
@@ -1045,7 +1053,7 @@
                      @else
                      <div class="col12 dynamic-courses-wrapper">
                         <div class="item">
-                            <?php //dd($user); ?>
+                            <?php //dd($event['title']); ?>
 
                            <h2>{{ $event['title'] }}</h2>
                            <div class="inside-tabs">
@@ -1054,13 +1062,14 @@
                                     <li class="active"><a href="#c-info-inner{{$tab}}">Info</a></li>
                                     <li><a href="#c-watch-inner{{$tab}}">Watch</a></li>
                                     @if($event['view_tpl'] != 'elearning_free')
-                                    @if(isset($newlayoutExamsEvent[$keyType]) && count($newlayoutExamsEvent[$keyType]) >0 )
-                                    <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
+                                        @if(isset($newlayoutExamsEvent[$keyType]) && count($newlayoutExamsEvent[$keyType]) >0 )
+                                        <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
+                                        @endif
+                                        @if(count($event['cert']) > 0)
+                                        <li><a href="#c-cert-inner{{$tab}}">Certificate</a></li>
+                                        @endif
                                     @endif
-                                    @if(count($event['cert']) > 0)
-                                    <li><a href="#c-cert-inner{{$tab}}">Certificate</a></li>
-                                    @endif
-                                    @endif
+
                                     @if($subscriptionAccess && count($event['plans']) > 0)
                                     <li><a href="#c-subs-inner{{$tab}}">Subscription</a></li>
                                     @endif
@@ -1070,13 +1079,14 @@
                               <div class="inside-tabs-wrapper">
                                  <div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
                                     <div class="bottom">
-                                        <?php //dd($event); ?>
+                                        <?php //dd($event['videos_progress']); ?>
                                        @if($event->pivot['expiration'])
                                        <div class="expire-date exp-date"><img src="{{cdn('/theme/assets/images/icons/Days-Week.svg')}}" alt="">Expiration date: {{$event->pivot['expiration']}}</div>
                                        @endif
                                        @if (isset($event['hours']))
                                        <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""> {{$event['hours']}}h </div>
                                        @endif
+<!-- ///////EDW -->
 
                                        @if (isset($event['videos_progress']))
                                        <?php //dd($event); ?>
@@ -1189,7 +1199,7 @@
                                     </div>
                                  </div>
                                  @endif
-                                 <?php //dd($event); ?>
+                                 <?php dd($event['videos_seen']); ?>
                                  <div id="c-watch-inner{{$tab}}" class="in-tab-wrapper">
                                     <div class="bottom">
                                        @if (isset($event['videos_progress']))

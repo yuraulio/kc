@@ -45,16 +45,15 @@ class StudentController extends Controller
         //count elearning
 
         foreach($data['user']['events'] as $key => $event){
-            // if($event['title'] == 'Professional Diploma in Digital & Social Media, Jan 2021'){
-            //     //dd($event);
-            // }
 
             //if elearning assign progress for this event
             if($event->is_elearning_course()){
-                $data['user']['events'][$key]['topics'] = $event->topicsLessonsInstructors()['topics'];
+                //dd($event->topicsLessonsInstructors());
+                $data['user']['events'][$key]['topics'] = $event['topic']->unique()->groupBy('topic_id');
                 $data['user']['events'][$key]['videos_progress'] = intval($event->progress($user));
                 $data['user']['events'][$key]['videos_seen'] = $event->video_seen($user);
                 //dd($event->video_seen($user));
+                //dd($event['topic']->unique()->groupBy('topic_id'));
 
                 $video_access = false;
                 $expiration_event = $event->pivot['expiration'];

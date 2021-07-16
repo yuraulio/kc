@@ -330,6 +330,11 @@ class Event extends Model
         return $faqs;
     }
 
+    public function statistic()
+    {
+        return $this->belongsToMany(Event::class, 'event_statistics')->withPivot('videos','lastVideoSeen', 'notes', 'event_id', 'user_id');
+    }
+
     public function progress($user)
     {
 
@@ -350,7 +355,9 @@ class Event extends Model
     {
 
         $videos = $user->statistic()->wherePivot('event_id',$this['id'])->first()->pivot['videos'];
+        //dd($user->statistic()->wherePivot('event_id',$this['id'])->first());
         $videos = json_decode($videos, true);
+        //dd($videos);
         $sum = 0;
         foreach($videos as $video){
             if($video['seen'] == 1 || $video['seen'] == '1'){

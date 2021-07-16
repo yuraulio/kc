@@ -300,6 +300,7 @@ Route::get('contact-us', function(){
 });
 
 Route::post('contact-us', [ 'as' => 'contactUs' , 'uses' => 'Theme\ContactUsController@sendEnquery' ]);
+Route::post('applyforbe', [ 'as' => 'beaninstructor', 'uses' => 'Theme\ContactUsController@beaninstructor' ]);
 
 
 Route::group(['middleware' => 'auth', 'prefix'=>'myaccount'], function () {

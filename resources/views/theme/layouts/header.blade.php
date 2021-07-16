@@ -68,7 +68,7 @@
                                         <div class="account-submenu">
                                             <ul>
                                                 <li class="account-menu"><a href="/myaccount">Account</a></li>
-                                                <li><a href="{{ url('logmeout') }}">Sign Out</a></li>
+                                                <li><a href="{{ route('logout') }}">Sign Out</a></li>
                                             </ul>
                                         </div>
 

@@ -132,17 +132,18 @@ class HomeController extends Controller
         $data['header_menus'] = $this->header();
 
         $data['page'] = $page;
-        dd($page);
 
         if($data['page']['template'] == 'corporate_page'){
             $data['page']['template'] = 'corporate-template';
             $data['benefits'] = $page->benefits;
-            $data['corporatebrands'] = Logos::with('medias')->where('type', 'brands')->get();   
+            $data['corporatebrands'] = Logos::with('medias')->where('type', 'brands')->get();
         }else if($data['page']['template'] == 'instructors'){
             $data['instructors'] =  Instructor::with('medias')->where('status', 1)->get();
+        }else if($data['page']['id'] == 800){
+            $data['brands'] = Logos::with('medias')->where('type', 'brands')->get();
+        }else if($data['page']['id'] == 801){
+            $data['logos'] = Logos::with('medias')->where('type', 'logos')->get();
         }
-        //dd($data['page']);
-
 
         return view('admin.static_tpls.'.$data['page']['template'].'.frontend' ,$data);
     }
@@ -151,8 +152,6 @@ class HomeController extends Controller
         $data['header_menus'] = $this->header();
 
         $data['type'] = $type;
-
-        //dd($type->events()->with('category','slugable', 'city', 'ticket','summary1')->where('status', 0)->get()->toArray());
 
         $data['openlist'] = $type->events()->with('category','slugable', 'city', 'ticket','summary1')->where('status', 0)->get();
         $data['completedlist'] = $type->events()->with('category','slugable', 'city', 'ticket', 'summary1')->where('status', 3)->get();

@@ -62,4 +62,54 @@ class ContactUsController extends Controller
             ];
         }
     }
+
+    public function beaninstructor(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'iform-email' => 'required|email',
+            'iform-name' => 'required',
+            'iform-surname' => 'required',
+            'iform-phone' => 'required',
+            'iform-linkedin' => 'required',
+            'iform-languages' => 'required',
+            'iform-duration' => 'required',
+            'iform-expertise' => 'required',
+            //'iform-lang' => 'required',
+
+        ]);
+
+        if ($validator->fails()) {
+            return [
+                'status' => 0,
+                'errors' => $validator->errors(),
+                'message' => 'Please check form for errors',
+            ];
+        } else {
+            $mail_data = $request->all();
+
+            //dd($mail_data);
+
+            Mail::send('theme.emails.contact.instructor_email', ['mail_data' => $mail_data], function ($m) use ($mail_data) {
+
+                 $fullname = $mail_data['iform-name'] . ' ' . $mail_data['iform-surname'];
+                 $generalInfo = \Config::get('dpoptions.website_details.settings');
+
+                $adminemail = $generalInfo['admin_email'];
+                //$emails = ['socratous12@gmail.com', 'info@darkpony.com'];
+                $m->subject('Knowcrunch - Instructor Contact');
+                $m->from($adminemail, 'Knowcrunch');
+                $m->replyTo($mail_data['iform-email'], $fullname);
+                //$m->to('p.diamantidis@darkpony.com', 'Knowcrunch');
+                $m->to($adminemail, 'Knowcrunch');
+                //$m->cc('periklis.d@gmail.com', 'Perry D');
+                $m->bcc('info@darkpony.com', null);
+            });
+
+            return [
+                'status' => 1,
+                'message' => 'Thank you! We will contact you shortly.',
+                'mail_data' => $mail_data,
+            ];
+        }
+    }
 }

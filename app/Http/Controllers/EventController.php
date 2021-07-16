@@ -73,6 +73,7 @@ class EventController extends Controller
     public function assign_store(Request $request)
     {
         $event = Event::find($request->event_id);
+
         $allLessons = Topic::with('lessonsCategory')->find($request->topic_id);
 
         foreach($allLessons->lessonsCategory as $lesson)
@@ -81,18 +82,67 @@ class EventController extends Controller
             if(count($find) == 0 && $request->status1 == true)
             {
                 $event->topic()->attach($request->topic_id,['lesson_id' => $lesson['id']]);
+                $this->assignEventStatistic($event, $lesson);
             }else{
                 $topicLesson_for_detach = $event->topic()->detach($request->topic_id);
                 break;
             }
 
         }
+        die();
 
         $data['request'] = $request->all();
         $data['lesson'] = $allLessons;
         $data['event'] = $event;
 
         echo json_encode($data);
+    }
+
+    public function assignEventStatistic($event, $lesson){
+        //dd($lesson);
+        $vimeo_id = str_replace("https://vimeo.com/", "", $lesson['vimeo_video']);
+        //539259765
+        //dd($vimeo_id);
+        $allStatistic = $event->statistic()->wherePivot('user_id', 1359)->get();
+        //dd($allStatistic);
+        $found = false;
+
+        foreach($allStatistic as $statistic){
+            $videos = json_decode($statistic->pivot['videos'], true);
+            dd($videos);
+            $notes = json_decode($statistic->pivot['notes'], true);
+
+
+            foreach($videos as $videoKey => $video){
+                //dd($videoKey);
+                if($videoKey == $vimeo_id){
+                    $found = true;
+                    //dd($videoKey);
+                }else{
+                    $found = false;
+                }
+
+            }
+
+        }
+        if($found){
+            var_dump($vimeo_id);
+
+            $videos[$vimeo_id] = ['seen' => 0, 'stop_time'=> 0, 'percentMinutes'=> 0, 'lesson_id'=> $lesson['id']];
+
+
+            $notes[$vimeo_id] = '';
+
+            //dd($notes);
+
+            $event->statistic()->updateExistingPivot($event['id'], [
+                'videos' => json_encode($videos),
+                'notes' => json_encode($notes)
+            ]);
+        }
+
+        //$event->statistic()->wherePivot('user_id', 1359)->get();
+
     }
 
     public function assignPaymentMethod(Request $request, Event $event)
@@ -230,7 +280,7 @@ class EventController extends Controller
         $user = Auth::user();
         $id = $event['id'];
         $event = $event->with('delivery','category', 'summary1', 'benefits', 'ticket', 'city', 'venues', 'topic', 'lessons', 'instructors', 'users', 'partners', 'sections','paymentMethod','slugable','metable', 'medias')->find($id);
-
+        //dd($event['topic']);
         //dd($event->summary1);
         //dd($event->medias->details);
         $categories = Category::all();
@@ -243,19 +293,24 @@ class EventController extends Controller
         }else{
             $allTopicsByCategory = Category::with('topics')->first();
         }
+        //dd($allTopicsByCategory);
 
 
-
-        $allTopicsByCategory1 = $event['lessons']->unique()->groupBy('topic_id');
+        //dd($event['lessons']->unique()->groupBy('topic_id'));
+        //$allTopicsByCategory1 = $event['lessons']->unique()->groupBy('topic_id');
+        $allTopicsByCategory1 = $event['lessons']->groupBy('topic_id');
         //dd($allTopicsByCategory1);
         $data['instructors1'] = Instructor::with('medias')->get()->groupBy('id');
         $instructors = $event['instructors']->groupBy('lesson_id');
         //dd($instructors);
         $topics = $event['topic']->unique()->groupBy('topic_id');
-
+        //dd($topics);
         $unassigned = [];
+        //dd($allTopicsByCategory->topics);
+        //dd($allTopicsByCategory1);
 
         foreach($allTopicsByCategory->topics as $key => $allTopics){
+            //dd($allTopics);
 
             $found = false;
             foreach($allTopicsByCategory1 as $key1 => $assig){
@@ -269,10 +324,11 @@ class EventController extends Controller
                 $unassigned[$allTopics['id']]['lessons'] = Topic::with('lessonsCategory')->find($allTopics['id'])->lessonsCategory;
             }
         }
-        //dd($unassigned[288]);
+        //dd($unassigned);
        // dd($event['topic']->groupBy('id'));
         //dd($allTopicsByCategory);
         $data['unassigned'] = $unassigned;
+        //dd($data['unassigned']);
         $data['event'] = $event;
         //dd($event);
         $data['categories'] = $categories;
@@ -280,6 +336,7 @@ class EventController extends Controller
         $data['user'] = $user;
         $data['allTopicsByCategory'] = $allTopicsByCategory;
         $data['lessons'] = $allTopicsByCategory1;
+        //dd($allTopicsByCategory1);
         $data['instructors'] = $instructors;
         $data['topics'] = $topics;
 

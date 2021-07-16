@@ -1,12 +1,15 @@
 <div class="accordion accord_topic" id="accordionExample">
-
+<?php //dd($topics); ?>
     @foreach($topics as $key => $topic)
-        <?php $topic = $topic->first() ?>
+    <?php //dd($topic); ?>
+        <?php $topic = $topic->first(); ?>
         <?php $status=""; ?>
+        <?php //dd($event['topic']); ?>
         @foreach($event['topic'] as $topic_db)
+        <?php //dd($topic['id'].'//'.$topic_db->id); ?>
             @if($topic['id'] == $topic_db->id)
                 <?php $status="active"; ?>
-                <?php //dd($topic); ?>
+                <?php //dd($status); ?>
             @endif
         @endforeach
     <div class="card">
@@ -17,8 +20,8 @@
 
             <div class="col-2 assign-toggle" id="toggle_{{$key}}">
                 <label class="custom-toggle">
-                    <input class="<?= ($status == 'active') ? 'active' : ''; ?>" id="assign-toogle" type="checkbox" data-event-id="{{$event['id']}}" data-topic-id="{{$topic['id']}}" <?= ($status == 'active') ? 'checked' : ''; ?> >
-                    <span class="custom-toggle-slider rounded-circle" ></span>
+                    <input data-event-status="<?= ($status == 'active') ? 'true' : 'false'; ?>" type="checkbox" data-event-id="{{$event['id']}}" data-topic-id="{{$topic['id']}}" <?= ($status == 'active') ? 'checked' : ''; ?> >
+                    <span class="topic custom-toggle-slider rounded-circle" ></span>
                 </label>
             </div>
         </div>
@@ -46,6 +49,7 @@
                         </thead>
                         <tbody id="topic_lessons"  class="lessons-order" data-event-id="{{$event['id']}}">
                             <?php $i=0; ?>
+                            <?php //dd($lessons); ?>
                                 @foreach($lessons[$key] as $key1 => $lesson)
                                 <?php //dd($lesson);?>
                                 <tr id="{{$lesson['id']}}" class="topic_{{$topic->id}} lessons-list">
@@ -115,8 +119,8 @@
 
             <div class="col-2 assign-toggle" id="toggle_{{$key}}">
                 <label class="custom-toggle">
-                    <input class="" id="assign-toogle" type="checkbox" data-event-id="{{$event['id']}}" data-topic-id="{{$topic['id']}}" <?= ($status == 'active') ? 'checked' : ''; ?> >
-                    <span class="custom-toggle-slider rounded-circle" ></span>
+                    <input data-event-status="<?= ($status == 'active') ? 'true' : 'false'; ?>" type="checkbox" data-event-id="{{$event['id']}}" data-topic-id="{{$topic['id']}}" <?= ($status == 'active') ? 'checked' : ''; ?> >
+                    <span class="topic custom-toggle-slider rounded-circle" ></span>
                 </label>
             </div>
         </div>
@@ -198,48 +202,43 @@
 
 @push('js')
 <script>
-    $(document).on('change', '#assign-toogle', function(){
-        let current_status = $(this).hasClass('active')
-        let id = $(this).data('topic-id')
-        let event_id = $(this).data('event-id')
 
-        if(current_status == true){
-            status = false
-        }else{
-            status = true
-        }
+
+    $(document).on('click', '.topic.custom-toggle-slider', function(){
+        //alert($($(this).parent().find('input')).data('topicId'))
+        let id = $($(this).parent().find('input')).data('topicId')
+        let event_id = $($(this).parent().find('input')).data('eventId')
+        console.log(id)
+
+        let status = $('#toggle_'+id).find('input').data('eventStatus')
+
 
         let data = {status1:status, topic_id : id, event_id : event_id}
 
         $.ajax({
-type: 'POST',
-headers: {
-'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-},
-Accept: 'application/json',
-url: "{{ route ('events.assign_store') }}",
-data:data,
-success: function(data) {
-    data = JSON.parse(data)
-    let event_type = data.isInclassCourse
-    console.log(event_type)
-    let e = $('#'+data.request.topic_id).find('label')
+            type: 'POST',
+            headers: {
+            'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+            },
+            Accept: 'application/json',
+            url: "{{ route ('events.assign_store') }}",
+            data:data,
+            success: function(data) {
+                data = JSON.parse(data)
+                let event_type = data.isInclassCourse
+                console.log(event_type)
+                let e = $('#'+data.request.topic_id).find('label')
 
-    let topic = data.lesson;
-    let lessons = data.lesson.lessons
+                let topic = data.lesson;
+                let lessons = data.lesson.lessons
 
-
-        if(data.request.status1 == "true")
-        {
-            $('#toggle_'+topic.id).find('input').addClass('active')
-        }
-        else if(data.request.status1 == "false")
-        {
-            $('#toggle_'+topic.id).find('input').removeClass('active')
-        }
-
+                if(data.request.status1 == "true"){
+                    $('#toggle_'+id).find('input').data('eventStatus', 'false')
+                }else{
+                    $('#toggle_'+id).find('input').data('eventStatus', 'true')
                 }
-            });
+            }
+        });
 
     })
 
