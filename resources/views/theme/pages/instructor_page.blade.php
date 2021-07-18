@@ -1,6 +1,5 @@
 @extends('theme.layouts.master')
 @section('content')
-@inject('frontHelp', 'Library\FrontendHelperLib')
 @include('theme.preview.preview_warning', ["id" => $content->id, "type" => "content", "status" => $content->status])
 
 <main id="main-area" role="main">
@@ -14,8 +13,8 @@
                                     <div class="avatar-wrapper">
 
 
-                                        <div class="avatar" alt="{{ $content->title }} {{ $content['subtitle'] }}" title="{{ $content->title }} {{ $content['subtitle'] }}"  style="background-image:url('{{ $frontHelp->pImg($content, 'instructors-testimonials') }}');"></div>
-                                        <div class="social-links">
+                                        <div class="avatar" alt="{{ $content['title'] }} {{ $content['subtitle'] }}" title="{{ $content['title'] }} {{ $content['subtitle'] }}"  style="background-image:url(<?= asset(get_image($content['medias'])); ?>);"></div>
+                                        {{--<div class="social-links">
                                 
 
                                             @if(isset($content['c_fields']['simple_text'][2]) && $content['c_fields']['simple_text'][2]['value'] != '')
@@ -38,21 +37,29 @@
                                              <a target="_blank" href="{{ $content['c_fields']['simple_text'][6]['value'] }}">
                                              <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Youtube.svg')}}" width="23" alt="Visit"></a>
                                              @endif
-                                        </div>
+                                        </div>--}}
                                     </div>
                                 </div>
                                 <div class="col8 col-xs-12">
+                                <?php 
+                                    if(isset($content['header'])){
+                                        $field2 = $content['ext_url'];
+                                        $field2 = str_replace ( "https://www.", "", $field2 );
+                                        $field2 = str_replace ( "https://.", "", $field2 );
+                                        $field2 = str_replace ( "http://www.", "", $field2 );
+                                    }
+                                ?>
                                     <div class="text-area">
 
-                                        <h1>{{ $content->title }} {{ $content->subtitle }}</h1>
-                                        <h2>{{ $content['header'] }},@if($content['c_fields']['simple_text'][1]['value'] != '') <a target="_blank" title="{{ $content['c_fields']['simple_text'][1]['value'] }}" href="{{ $content['ext_url'] }}"> {{ $content['c_fields']['simple_text'][1]['value'] }}</a> @endif</h2>
-                                        {!! $content->body !!}
+                                        <h1>{{ $content['title'] }} {{ $content['subtitle'] }}</h1>
+                                        <h2>{{ $content['header'] }},@if(isset($content['ext_url'])){{ $field2 }} <a target="_blank" title="{{ $field2 }}" href="{{ $content['ext_url'] }}"> {{ $field2 }}</a> @endif</h2>
+                                        {!! $content['body'] !!}
                                     </div>
                                 </div>
                             </div>
                         </div><!-- ./instructor-area -->
 
-                        @if(count($instructorTeaches) >0)
+                        {{--@if(count($instructorTeaches) >0)
                         <div class="instructor-area instructor-studies">
                             <h2>{{ $content->title }} {{ $content->subtitle }} teaches:</h2>
                             <ul>
@@ -62,10 +69,11 @@
                                 @endforeach
                             </ul>
                         </div><!-- ./instructor-area -->
-                        @endif
+                        @endif--}}
+                        
                         @if(isset($events) && count($events) > 0)
 
-                        <div class="instructor-area instructor-courses">
+                        {{--<div class="instructor-area instructor-courses">
                             <h2>{{ $content->title }} {{ $content->subtitle }} participates in:</h2>
 
                             <div class="dynamic-courses-wrapper">
@@ -118,7 +126,7 @@
 
                             <div class="dynamic-courses-wrapper dynamic-courses-wrapper--style2">
 
-                            @foreach($events as $key => $row)
+                            {{--@foreach($events as $key => $row)
                        
 
                         
@@ -164,10 +172,10 @@
                                 @endif
                                 {{--endif--}}
                                 @endif
-                                @endforeach
+                                @endforeach--}}
                             </div><!-- ./dynamic-courses-wrapper -->
                          
-                        </div><!-- ./instructor-area -->
+                        </div>--}}<!-- ./instructor-area -->
                         
                       @endif
                     </div>

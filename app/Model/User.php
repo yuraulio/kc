@@ -168,6 +168,7 @@ class User extends Authenticatable
     }
 
 
+
     public function ticket()
     {
         return $this->belongsToMany(Ticket::class, 'event_user_ticket')->withPivot('ticket_id');

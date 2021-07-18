@@ -716,18 +716,17 @@
                      @if(isset($user['events']) && count($user['events']) > 0)
                      @foreach($user['events'] as $keyType => $event)
 
-                     @if($event['view_tpl'] != 'elearning_english' && $event['view_tpl'] != 'elearning_greek' && $event['view_tpl'] != 'elearning_free')
-                     <?php //dd($event['title']); ?>
+                     @if($event['view_tpl'] != 'elearning_english' && $event['view_tpl'] != 'elearning_greek' && $event['view_tpl'] != 'elearning_free' && $event['view_tpl'] != 'elearning_event')
+                     <?php //var_dump($event['title']); ?>
                      <div class="col12 dynamic-courses-wrapper dynamic-courses-wrapper--style2">
                         <div class="item">
-                            <?php //dd($event); ?>
                            <h2>{{ $event['title'] }}</h2>
                            <div class="inside-tabs">
                               <div class="tabs-ctrl">
                                  <ul>
                                     <li class="active"><a href="#c-info-inner{{$tab}}">Info</a></li>
                                     <li><a href="#c-shedule-inner{{$tab}}">Schedule </a></li>
-                                    @if(isset($showFiles[$keyType]) && $showFiles[$keyType])
+                                    @if(isset($event['category'][0]['dropbox']) && count($event['category'][0]['dropbox']) != 0)
                                     <li><a href="#c-files-inner{{$tab}}">Files</a></li>
                                     @endif
                                     @if(isset($newlayoutExamsEvent[$keyType]))
@@ -741,23 +740,20 @@
                               <div class="inside-tabs-wrapper">
                                  <div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
                                     <div class="bottom">
-                                        <?php //dd($event['city']); ?>
-                                        @if(isset($event['city']) && count($event['city']) > 0)
-                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/marker.svg')}}" alt=""><a href="{{$event['city'][0]['slugable']['slug']}}">{{$event['city'][0]['name']}}</a></div>
+                                       @if(isset($event['city']) && count($event['city']) > 0)
+                                          <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/marker.svg')}}" alt=""><a href="{{$event['city'][0]['slugable']['slug']}}">{{$event['city'][0]['name']}}</a></div>
                                        @endif
                                        <?php
-                                       //dd($event['summary1']);
-                                       $summaryDate = '';
-                                       foreach($event['summary1'] as $summary){
-                                           if($summary['section'] == 'date'){
-                                               $summaryDate = $summary['title'];
-                                           }
-                                           //dd($summary);
-                                       }
+                                          $summaryDate = '';
+                                          foreach($event['summary1'] as $summary){
+                                             if($summary['section'] == 'date'){
+                                                $summaryDate = $summary['title'];
+                                             }
+                                          }
                                        ?>
                                        <div class="duration"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}" alt="">{{$summaryDate}}</div>
                                        @if($event['hours'])
-                                       <div class="expire-date"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt="">{{$event['hours']}}</div>
+                                          <div class="expire-date"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt="">{{$event['hours']}}</div>
                                        @endif
                                     </div>
                                  </div>
@@ -768,53 +764,51 @@
                                           <a target="_blank" href="/print/syllabus/{{$event['slug']}}" class="btn btn--secondary btn--md"> DOWNLOAD SCHEDULE </a>
                                        </div>
                                     </div>
-                                    <?php //dd($user['events'][0]['topics']); ?>
+                                    <?php //dd($event['topics']); ?>
                                     <div class="acc-topic-accordion">
                                        <div class="accordion-wrapper accordion-big">
                                           <?php $catId = -1?>
                                           <?php //dd($event['topics']); ?>
                                           @if(isset($event['topics']) && count($event['topics']) > 0)
                                           @foreach($event['topics'] as $keyTopic => $topic)
-                                          <?php //dd($topic); ?>
+                                          <?php //dd($keyTopic); ?>
+                                          
 
-                                          @if(isset($topic[0]))
+                                          @if(isset($topic) && count($topic) != 0 )
+                                          <?php //dd($topic); ?>
                                           <div class="accordion-item">
-                                             <h3 class="accordion-title title-blue-gradient scroll-to-top">{{$topic[0]['title']}}</h3>
+                                             <h3 class="accordion-title title-blue-gradient scroll-to-top">{{$keyTopic}}</h3>
                                              <div class="accordion-content no-padding">
                                                  <?php //dd($topic[0]['lessons']); ?>
-                                                @foreach($topic[0]['lessons'] as $keyLesso => $lesso)
-
-                                                    {{--@foreach($lesso as $keyLesson => $lesson)--}}
-                                                    <?php //dd(); ?>
-                                                    <?php //dd($lesso); ?>
-
-                                                    @if($lesso['type'])
-                                                    <div class="topic-wrapper-big">
-                                                    <div class="topic-title-meta">
-                                                        {{--<h4>{{$lesso['title']}}</h4>--}}
-                                                        <!-- Feedback 18-11 changed -->
-                                                        <div class="topic-meta">
+                                                @foreach($topic['lessons'] as $keyLesso => $lesso)
+                                                   <div class="topic-wrapper-big">
+                                                   <div class="topic-title-meta">
+                                                      <h4>{{$lesso['title']}}</h4>
+                                                      <!-- Feedback 18-11 changed -->
+                                                      <div class="topic-meta">
                                                             @if($lesso['title'])
                                                             {{--<div class="category">{{$lesso['type']}}</div>--}}
                                                             @endif
                                                             <!-- Feedback 18-11 changed -->
-                                                            <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}" alt="" />{{$lesso['time_starts']}}</span> <!-- Feedback 18-11 changed -->
-                                                            <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/Times.svg')}}" alt="" />{{$lesso['time_ends']}} ({{$lesso['duration']}})</span> <!-- Feedback 18-11 changed -->
-                                                            <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-marker.svg')}}" alt="" />{{$lesso['room']}}</span> <!-- Feedback 18-11 changed -->
-                                                        </div>
-                                                        <!-- /.topic-title-meta -->
-                                                    </div>
-                                                    <div class="author-img">
-                                                        <!-- Feedback 18-11 changed -->
-                                                        {{--<a href="{{$lesso['slugable']['slug']}}">--}}
-                                                            {{--<span class="custom-tooltip">{{$instructors[$lesso['pivot']['instructor_id']][0]['title']}} {{$instructors[$lesso['pivot']['instructor_id']][0]['subtitle']}}</span>--}}
-                                                            {{--<img src="{{cdn({{$instructors[$lesso['pivot']['instructor_id']][0]['path']}}{{$instructors[$lesso['pivot']['instructor_id']][0]['original_name']}})}}" alt="{{$instructors[$lesso['pivot']['instructor_id']][0]['title']}} {{$instructors[$lesso['pivot']['instructor_id']][0]['subtitle']}}"/>--}}
-                                                        </a>
-                                                    </div>
-                                                    <!-- /.topic-wrapper-big -->
-                                                    </div>
-                                                    @endif
-                                                {{--@endforeach--}}
+                                                            <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}" alt="" /><?= date( "l d M Y", strtotime($lesso['pivot']['time_starts']) ) ?></span> <!-- Feedback 18-11 changed -->
+                                                            <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/Times.svg')}}" alt="" /><?= date( "h:s", strtotime($lesso['pivot']['time_ends']) ) ?> ({{$lesso['pivot']['duration']}})</span> <!-- Feedback 18-11 changed -->
+                                                            <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-marker.svg')}}" alt="" />{{$lesso['pivot']['room']}}</span> <!-- Feedback 18-11 changed -->
+                                                      </div>
+                                                      <!-- /.topic-title-meta -->
+                                                   </div>
+                                                   <div class="author-img">
+                                                      <!-- Feedback 18-11 changed -->
+                                                      <a href="{{$instructors[$lesso['instructor_id']][0]['slugable']['slug']}}">
+                                                            <span class="custom-tooltip"><?= $instructors[$lesso['instructor_id']][0]['title'].' '.$instructors[$lesso['instructor_id']][0]['subtitle']; ?></span>
+                                                            <img src="<?php cdn( $instructors[$lesso['instructor_id']][0]['medias']['path'].$instructors[$lesso['instructor_id']][0]['medias']['original_name'] )?>" alt="<?= $instructors[$lesso['instructor_id']][0]['title']; $instructors[$lesso['instructor_id']][0]['subtitle']; ?>"/>
+                                                      </a>
+                                                   </div>
+                                                   <!-- /.topic-wrapper-big -->
+                                                   </div>
+
+                                                    {{--@if($lesso['type'])
+                                                    
+                                                    @endif--}}
                                                 @endforeach
                                                 <!-- /.accordion-content -->
                                              </div>
@@ -828,195 +822,76 @@
                                        <!-- /.acc-topic-accordion -->
                                     </div>
                                  </div>
+                                 <?php 
+                                    $dropbox = $event['category'][0]['dropbox'][0];
+                                    //dd($dropbox);
+                                    $folders = $dropbox['folders'][0];
+                                    
+                                    $folders_bonus = $dropbox['folders'][1];
+                                    //dd($folders_bonus);
+                                    $files = $dropbox['files'][1];
+                                    $files_bonus = $dropbox['files'][2];
 
-                                 {{--@if(!$instructor_topics && (isset($showFiles[$keyType]) && $showFiles[$keyType]))
+                                    //dd($files);
+                                    
+                                  ?>
 
+
+                                 @if(isset($dropbox) && $folders != null)
                                  <div id="c-files-inner{{$tab}}" class="in-tab-wrapper">
                                     @if(isset($folders) && count($folders) > 0)
-                                    <div class="acc-topic-accordion">
-                                       <div class="accordion-wrapper accordion-big">
-                                          @foreach($folders as $catid => $dbfolder)
-                                          <?php
-                                             $folder = false;
-
-                                             if(trim($catid) == trim($catId)){
-                                                $folder = true;
-                                             }
-
-
-                                             ?>
-                                          @if($folder)
-                                          @if (isset($dbfolder[0]) && !empty($dbfolder[0]))
-                                          @foreach($dbfolder[0] as $key => $folder)
-                                          <?php
-                                             $rf = strtolower($folder['dirname']);
-                                             $rf1 = $folder['dirname']; //newdropbox
-                                             ?>
-                                          <?php
-                                             $topic=1;
-                                             if($instructor_topics){
-                                                $topic=0;
-
-                                                if((trim($folder['foldername']) === '1 - Prelearning - Digital & Social Media Fundamentals')
-                                                         && in_array(trim('Pre-learning: Digital & Social Media Fundamentals'), $instructor_topics)){
-
-                                                   $topic = 1;
-                                                }else{
-                                                   $topic_name = explode( '-', $folder['foldername'] );
-                                                   $topic=in_array(trim($topic_name[1]), $instructor_topics);
-                                             }   }
-                                             ?>
-                                          @if($topic)
+                                       @foreach($folders as $folder)
                                           <div class="accordion-item">
                                              <h3 class="accordion-title title-blue-gradient scroll-to-top"> {{ $folder['foldername'] }}</h3>
-                                             <!-- Feedback 01-12 changed -->
                                              <div class="accordion-content no-padding">
-                                                <?php
-                                                   $checkedF = [];
-                                                   $fs = [];
-                                                   $fk = 1;
-                                                   $bonus = [];
-                                                   $subfolder = false;
-                                                   ?>
-                                                @if (isset($files[$catid][1]) && !empty($files[$catid][1]))
-                                                @foreach($files[$catid][1] as $fkey => $frow2)
-                                                @if($frow2['fid'] == $folder['id'])
-                                                <?php
-                                                   $fn = $folder['foldername'];
-
-                                                   if(isset($dbfolder[1]) && !empty($dbfolder[1])){
-                                                      foreach($dbfolder[1] as $nkey => $nfolder){
-                                                         $dirname = explode('/',$nfolder['dirname']);
-                                                         if($nfolder['parent'] == $folder['id'] && in_array($fn,$dirname) && !$subfolder  && !in_array($nfolder['foldername'],$bonusFiles) /*($nfolder['foldername'] !== '_Bonus' || $nfolder['foldername'] !== 'Bonus')*/){
-
-                                                            $checkedF[] = $nfolder['id'] + 1 ;
-                                                            $fs[$nfolder['id']+1]=[];
-                                                            $fs[$nfolder['id']+1][] = $nfolder;
-
-                                                         }
-                                                      }
-                                                   }
-
-                                                   if(count($fs) > 0 ){
-                                                      $subfolder = true;
-                                                   }
-
-                                                   ?>
-                                                @if($subfolder && in_array($fk,$checkedF))
-                                                @while(in_array($fk,$checkedF))
-                                                <?php
-                                                   $sfv = reset($checkedF);
-                                                   $sfk = array_search($sfv, $checkedF);
-                                                   unset($checkedF[$sfk]);
-                                                   ?>
-                                                @if (isset($dbfolder[1]) && !empty($dbfolder[1]))
-                                                @foreach($dbfolder[1] as $nkey => $nfolder)
-                                                @if($nfolder['id'] == $fs[$sfv][0]['id'] && $nfolder['parent'] ==  $fs[$sfv][0]['parent'] && !in_array($nfolder['foldername'],$bonusFiles) /*($nfolder['foldername'] !== '_Bonus' || $nfolder['foldername'] !== 'Bonus')*/) <!--//lioncode-->
-                                                <div class="files-wrapper bonus-files">
-                                                   <h4 class="bonus-title">{{ $nfolder['foldername'] }}</h4>
-                                                   <span><i class="icon-folder-open"></i>   </span>
-                                                   @if (isset($files[$catid][2]) && !empty($files[$catid][2]))
-                                                   @foreach($files[$catid][2] as $fkey => $frow)
-                                                   @if (strpos($frow['dirname'], $rf) !== false || strpos($frow['dirname'], $rf1) !== false && ( $frow['fid'] == ($sfv-1)  ))
-                                                   <?php $bonus[]= $frow['filename'] ?>
-                                                   <div class="file-wrapper">
-                                                      <h4 class="file-title">{{ $frow['filename'] }}</h4>
-                                                      <span class="last-modified">Last modified:  {{$frow['last_mod']}}</span>
-                                                      <a  class="download-file getdropboxlink"  data-dirname="{{ $frow['dirname'] }}" data-filename="{{ $frow['filename'] }}" href="javascript:void(0)" >
-                                                      <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
-                                                   </div>
-                                                   @endif
+                                                @if(isset($files) && count($files) > 0)
+                                                   @foreach($files as $file)
+                                                      @if($folder['id'] == $file['fid'])
+                                                      <div class="files-wrapper">
+                                                         <div class="file-wrapper">
+                                                            <h4 class="file-title">{{ $file['filename'] }}</h4>
+                                                            <span class="last-modified">Last modified:  {{ $file['last_mod'] }}</span>
+                                                            <a  class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" >
+                                                            <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
+                                                         </div>
+                                                      </div>
+                                                      @endif
                                                    @endforeach
-                                                   @endif
-                                                </div>
                                                 @endif
-                                                @endforeach
-                                                @endif
-                                                <!-- bonus of each lesson -->
-                                                <?php $fk += 1;?>
-                                                @endwhile
-                                                <div class="files-wrapper">
-                                                   <div class="file-wrapper">
-                                                      <h4 class="file-title">{{ $frow2['filename'] }}</h4>
-                                                      <span class="last-modified">Last modified:  {{$frow2['last_mod']}}</span>
-                                                      <a  class="download-file getdropboxlink"  data-dirname="{{ $frow2['dirname'] }}" data-filename="{{ $frow2['filename'] }}" href="javascript:void(0)" >
-                                                      <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
-                                                   </div>
-                                                </div>
-                                                @else
-                                                <div class="files-wrapper">
-                                                   <div class="file-wrapper">
-                                                      <h4 class="file-title">{{ $frow2['filename'] }}</h4>
-                                                      <span class="last-modified">Last modified:  {{$frow2['last_mod']}}</span>
-                                                      <a  class="download-file getdropboxlink"  data-dirname="{{ $frow2['dirname'] }}" data-filename="{{ $frow2['filename'] }}" href="javascript:void(0)" >
-                                                      <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
-                                                   </div>
-                                                </div>
-                                                @endif
-                                                <?php
-                                                   $fk += 1;
-
-                                                   ?>
-                                                @endif
-                                                @endforeach
-                                                <!-- bonus of each lesson -->
-                                                @if (isset($dbfolder[1]) && !empty($dbfolder[1]))
-                                                @foreach($dbfolder[1] as $nkey => $nfolder)
-                                                @if($nfolder['parent'] == $folder['id'] && in_array($nfolder['foldername'],$bonusFiles) /*($nfolder['foldername'] == '_Bonus' || $nfolder['foldername'] == 'Bonus')*/) <!--//lioncode-->
+                                             </div>
+                                             
+                                                @if(isset($folders_bonus) && count($folders_bonus) > 0)
                                                 <div class="files-wrapper bonus-files">
-                                                   <h4 class="bonus-title">{{ $nfolder['foldername'] }}</h4>
-                                                   <span><i class="icon-folder-open"></i>   </span>
-                                                   @if (isset($files[$catid][2]) && !empty($files[$catid][2]))
-                                                   @foreach($files[$catid][2] as $fkey => $frow)
-                                                   @if (strpos($frow['dirname'], $rf) !== false || strpos($frow['dirname'], $rf1) !== false && !in_array($frow['filename'],$bonus))
-                                                   <div class="file-wrapper">
-                                                      <h4 class="file-title">{{ $frow['filename'] }}</h4>
-                                                      <span class="last-modified">Last modified:  {{$frow['last_mod']}}</span>
-                                                      <a  class="download-file getdropboxlink"  data-dirname="{{ $frow['dirname'] }}" data-filename="{{ $frow['filename'] }}" href="javascript:void(0)" >
-                                                      <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
-                                                   </div>
-                                                   @endif
+                                                   @foreach($folders_bonus as $folder_bonus)
+                                                      @if($folder_bonus['parent'] == $folder['id'])
+                                                         <h4 class="bonus-title">{{ $folder_bonus['foldername'] }}</h4>
+                                                         <span><i class="icon-folder-open"></i>   </span>
+                                                         @if(isset($files_bonus) && count($files_bonus) > 0)
+                                                            @foreach($files_bonus as $file_bonus)
+                                                               @if($file_bonus['fid'] == $folder['id'])
+                                                                  <div class="file-wrapper">
+                                                                     <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
+                                                                     <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
+                                                                     <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
+                                                                     <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
+                                                                  </div>
+                                                               @endif
+                                                            @endforeach
+                                                         @endif
+                                                      @endif
                                                    @endforeach
-                                                   </ul>
-                                                   @endif
-                                                </div>
+                                                   </div>
                                                 @endif
-                                                @endforeach
-                                                @endif
-                                                <!-- bonus of each lesson -->
-                                                @endif
-                                                <!-- /.accordion-content -->
-                                             </div>
-                                             <!-- /.accordion-item -->
+                                             
                                           </div>
-                                          @endif
-                                          @endforeach
-                                          @endif<!-- edw -->
-                                          <!-- last files-->
-                                          @if(!$instructor_topics)
-                                          @if (isset($files[$catid][0]) && !empty($files[$catid][0]))
-                                          @foreach($files[$catid][0] as $key => $row)
-                                          <div class="files-wrapper bonus-files">
-                                             <div class="file-wrapper">
-                                                <h4 class="file-title">{{ $row['filename'] }}</h4>
-                                                <span class="last-modified">Last modified:  {{$row['last_mod']}}</span>
-                                                <a  class="download-file getdropboxlink"  data-dirname="{{ $row['dirname'] }}" data-filename="{{ $row['filename'] }}" href="javascript:void(0)" >
-                                                <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
-                                             </div>
-                                          </div>
-                                          @endforeach
-                                          @endif
-                                          @endif
-                                          <!--last files -->
-                                          @endif
-                                          @endforeach
-                                          <!-- /.accordion-wrapper -->
-                                       </div>
-                                       <!-- /.acc-topic-accordion -->
-                                    </div>
+                                       @endforeach
+                                       
                                     @endif
+                                    
                                  </div>
-                                 @endif--}}
+                                 @endif
+
+
                                  @if(isset($newlayoutExamsEvent[$keyType]))
                                  <div id="c-exams-inner{{$tab}}" class="in-tab-wrapper">
                                     @if(isset($newlayoutExamsEvent[$keyType]))
@@ -1051,6 +926,7 @@
                         </div>
                      </div>
                      @else
+
                      <div class="col12 dynamic-courses-wrapper">
                         <div class="item">
                             <?php //dd($event['title']); ?>
@@ -1062,7 +938,9 @@
                                     <li class="active"><a href="#c-info-inner{{$tab}}">Info</a></li>
                                     <li><a href="#c-watch-inner{{$tab}}">Watch</a></li>
                                     @if($event['view_tpl'] != 'elearning_free')
-                                        @if(isset($newlayoutExamsEvent[$keyType]) && count($newlayoutExamsEvent[$keyType]) >0 )
+                                    <?php //']); ?>
+                                        @if(isset($event['exam']) && count($event['exam']) >0 )
+                                        <?php //dd($event['title']); ?>
                                         <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
                                         @endif
                                         @if(count($event['cert']) > 0)
@@ -1199,7 +1077,7 @@
                                     </div>
                                  </div>
                                  @endif
-                                 <?php dd($event['videos_seen']); ?>
+                                 <?php //dd($event); ?>
                                  <div id="c-watch-inner{{$tab}}" class="in-tab-wrapper">
                                     <div class="bottom">
                                        @if (isset($event['videos_progress']))
@@ -1236,11 +1114,12 @@
                                     </div>
                                  </div>
                                  @if($event['view_tpl'] != 'elearning_free' )
-                                 @if(isset($newlayoutExamsEvent[$keyType]))
+                                 @if(isset($event['exam']))
                                  <div id="c-exams-inner{{$tab}}" class="in-tab-wrapper">
                                     <div class="bottom">
-                                       @foreach($newlayoutExamsEvent[$keyType] as $p)
-                                       @foreach($p['exams'] as $pe)
+                                       @foreach($event['exam'] as $p)
+                                       <?php //dd($p); ?>
+                                       {{--@foreach($p['exams'] as $pe)
                                        <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="">Exams activate automatically when you watch 80% </div>
                                        <div class="right">
                                           <!-- Feedback 8-12 changed -->
@@ -1258,7 +1137,7 @@
                                           </div>
                                           @endif
                                        </div>
-                                       @endforeach
+                                       @endforeach--}}
                                        @endforeach
                                     </div>
                                  </div>
@@ -1291,6 +1170,7 @@
                      @if($event['view_tpl'] != 'elearning_english' && $event['view_tpl'] != 'elearning_greek' && $event['view_tpl'] != 'elearning_free')
                      <div class="col12 dynamic-courses-wrapper dynamic-courses-wrapper--style2">
                         <div class="item">
+                           <?php //dd($event['title']); ?>
                            <h2>{{ $event['title'] }}</h2>
                            <div class="inside-tabs">
                               <div class="tabs-ctrl">
@@ -1612,6 +1492,7 @@
                                           @endif
                                           @endforeach
                                           @endforeach
+                                          <?php //dd($event); ?>
                                           @if(!$event['video_access'])
                                           {{--<a style="cursor:not-allowed; opacity: 0.5; pointer-events: none;" href="/myaccount/newElearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if((isset($event['videos_progress']) && $event['videos_progress'] == 100) || count($event['cert'])>0) WATCH AGAIN @else WATCH NOW @endif</a>--}}
                                           @else
@@ -2388,6 +2269,7 @@
    });
 </script>
 <script>
+   
    $("body").on("click", ".delete_media", function (event) {
 
       var favDialog = document.getElementById('favDialog');

@@ -304,7 +304,6 @@ class EventController extends Controller
         $instructors = $event['instructors']->groupBy('lesson_id');
         //dd($instructors);
         $topics = $event['topic']->unique()->groupBy('topic_id');
-        //dd($topics);
         $unassigned = [];
         //dd($allTopicsByCategory->topics);
         //dd($allTopicsByCategory1);

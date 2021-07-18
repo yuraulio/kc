@@ -75,11 +75,6 @@ class Category extends Model
         return $this->belongsToMany(Topic::class, 'categories_topics_lesson', 'category_id', 'topic_id');
     }
 
-    // public function dropbox()
-    // {
-    //     return $this->belongsToMany(Dropbox::class, 'dropboxcache_category', 'category_id', 'dropbox_cache_category_id');
-    // }
-
     public function dropbox()
     {
         return $this->morphToMany(Dropbox::class, 'dropboxcacheable');

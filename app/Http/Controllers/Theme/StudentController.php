@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Model\Media;
 use App\Model\User;
+use App\Model\ExamResult;
 use App\Model\Topic;
 use App\Model\Lesson;
 use App\Model\Summary;
@@ -36,8 +37,8 @@ class StudentController extends Controller
         $data['subscriptionAccess'] = [];
         $data['mySubscriptions'] = [];
 
-        $data['user'] = User::with('image', 'events.city', 'events.summary1')->find($user->id);
-        //dd($data['user']);
+        $data['user'] = User::with('image', 'events.city', 'events.summary1', 'events.exam', 'events.category')->find($user->id);
+        //dd($data['user']['events'][2]);
 
         //$paymentMethods = $user->paymentMethods();
         //dd($paymentMethods);
@@ -46,12 +47,15 @@ class StudentController extends Controller
 
         foreach($data['user']['events'] as $key => $event){
 
+            
             //if elearning assign progress for this event
             if($event->is_elearning_course()){
                 //dd($event->topicsLessonsInstructors());
                 $data['user']['events'][$key]['topics'] = $event['topic']->unique()->groupBy('topic_id');
                 $data['user']['events'][$key]['videos_progress'] = intval($event->progress($user));
                 $data['user']['events'][$key]['videos_seen'] = $event->video_seen($user);
+                $data['user']['events'][$key]['cert'] = [];
+                //$data['user']['events'][$key]['files'] = $event['category']->first()['dropbox']->first();
                 //dd($event->video_seen($user));
                 //dd($event['topic']->unique()->groupBy('topic_id'));
 
@@ -66,10 +70,11 @@ class StudentController extends Controller
                     $video_access = true;
 
                 $data['user']['events'][$key]['video_access'] = $video_access;
+                
 
-            }else{
-                //dd($event);
+            }else{           
                 $data['user']['events'][$key]['topics'] = $event->topicsLessonsInstructors()['topics'];
+                //dd($data['user']['events'][$key]['topics']);
                 $video_access = false;
                 $expiration_event = $event->pivot['expiration'];
                 $expiration_event = strtotime($expiration_event);
@@ -83,9 +88,11 @@ class StudentController extends Controller
                 $data['user']['events'][$key]['video_access'] = $video_access;
             }
 
+            
 
 
-            $data['instructors'] = Instructor::all()->groupby('id');
+
+            $data['instructors'] = Instructor::with('slugable', 'medias')->get()->groupby('id');
             $find = false;
             $view_tpl = $event['view_tpl'];
             $find = strpos($view_tpl, 'elearning');
@@ -102,7 +109,7 @@ class StudentController extends Controller
 
         }
         //dd($data['user']->toArray());
-        //dd($data['user']['events'][1]);
+        //dd($data['user']['events']);
 
 
 

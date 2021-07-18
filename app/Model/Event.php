@@ -20,6 +20,8 @@ use App\Model\Testimonial;
 use App\Model\Partner;
 use App\Model\Lesson;
 use App\Model\Faq;
+use App\Model\Exam;
+use App\Model\ExamResult;
 use App\Model\Media;
 use App\Model\Instructor;
 use App\Traits\SlugTrait;
@@ -52,6 +54,16 @@ class Event extends Model
         return $this->morphToMany(Faq::class, 'faqable')->with('category')->withPivot('priority')->orderBy('faqables.priority','asc');
     }
 
+
+    public function exam()
+    {
+        return $this->morphToMany(Exam::class, 'examable');
+    }
+    
+    public function exam_result()
+    {
+        return $this->belongsToMany(ExamResult::class, 'exam_results', 'user_id', 'exam_id');
+    }
 
     public function type()
     {
