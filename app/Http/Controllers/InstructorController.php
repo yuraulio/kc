@@ -109,6 +109,25 @@ class InstructorController extends Controller
      */
     public function update(Request $request, Instructor $instructor)
     {
+        $social_media = array();
+
+        if(isset($request->facebook))
+            $social_media['facebook'] = $request->facebook;
+
+        if(isset($request->instagram))
+            $social_media['instagram'] = $request->instagram;
+
+        if(isset($request->linkedin))
+            $social_media['linkedin'] = $request->linkedin;
+
+        if(isset($request->twitter))
+            $social_media['twitter'] = $request->twitter;
+
+        if(isset($request->youtube))
+            $social_media['youtube'] = $request->youtube;
+
+        $social_media = json_encode($social_media);
+
         if($request->status == 'on')
         {
             $status = 1;
@@ -117,7 +136,7 @@ class InstructorController extends Controller
             $status = 0;
         }
 
-        $request->request->add(['status' => $status]);
+        $request->request->add(['status' => $status, 'social_media' => $social_media]);
         $isUpdate = $instructor->update($request->all());
 
         if($isUpdate){

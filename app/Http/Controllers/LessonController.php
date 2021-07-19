@@ -113,17 +113,19 @@ class LessonController extends Controller
     {
         $lesson = $lesson->with('topic', 'category','type')->find($lesson['id']);
         $topics = Topic::with('category')->get();
-        $new_topics = [];
+        // //dd($topics);
+        // $new_topics = [];
 
-        foreach($topics as $topic)
-        {
-            //dd($topic);
-            if($topic->category[0]['id'] != $lesson->category[0]['id']){
-                array_push($new_topics, $topic);
-            }
-        }
+        // foreach($topics as $topic)
+        // {
+        //     //dd($topic);
+        //     if($topic->category[0]['id'] != $lesson->category[0]['id']){
+        //         array_push($new_topics, $topic);
+        //     }
+        // }
 
-        $topics = $new_topics;
+        // $topics = $new_topics;
+        // dd($topics);
 
 
         $types = Type::all();
@@ -207,6 +209,7 @@ class LessonController extends Controller
      */
     public function update(Request $request, Lesson $lesson)
     {
+        dd($request->all());
         if($request->status == 'on')
         {
             $status = 1;
