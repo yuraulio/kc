@@ -312,7 +312,13 @@ Route::group(['middleware' => 'auth', 'prefix'=>'myaccount'], function () {
     Route::post('/updrecbill', [ 'as' => 'updrecbill' , 'uses' => 'Theme\StudentController@updateReceiptBilling' ]);
     Route::get('/mydata', [ 'as' => 'festudent.mydata' , 'uses' => 'Theme\StudentController@downloadMyData' ]);
 
+
+
     Route::get('/enroll-for-free/{content}', 'Theme\HomeController@enrollToFreeEvent')->name('enrollForFree');
+});
+
+Route::group([ 'prefix' => 'print'], function () {
+    Route::get('syllabus/{slug}', 'Theme\HomeController@printSyllabusBySlug');
 });
 
 

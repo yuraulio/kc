@@ -209,7 +209,7 @@ class LessonController extends Controller
      */
     public function update(Request $request, Lesson $lesson)
     {
-        dd($request->all());
+        //dd($request->all());
         if($request->status == 'on')
         {
             $status = 1;
@@ -235,13 +235,7 @@ class LessonController extends Controller
             }
         }
 
-
-        if($request->type_id != null){
-            $lesson->type()->detach();
-            $type = Type::find($request->type_id);
-
-            $lesson->type()->attach([$request->type_id]);
-        }
+        $lesson->type()->sync([$request->type_id]);
 
 
         return redirect()->route('lessons.index')->withStatus(__('Lesson successfully updated.'));

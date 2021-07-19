@@ -4,6 +4,7 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Model\Event;
 
 class Slug extends Model
 {
@@ -26,4 +27,5 @@ class Slug extends Model
     {
         return $this->morphTo();
     }
+
 }

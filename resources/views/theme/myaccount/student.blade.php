@@ -761,7 +761,7 @@
                                     <div class="bottom tabs-bottom">
                                        <div class="expire-date exp-date"><img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="">Schedule available in PDF</div>
                                        <div class="right">
-                                          <a target="_blank" href="/print/syllabus/{{$event['slug']}}" class="btn btn--secondary btn--md"> DOWNLOAD SCHEDULE </a>
+                                          <a target="_blank" href="/print/syllabus/{{$event['slugable']['slug']}}" class="btn btn--secondary btn--md"> DOWNLOAD SCHEDULE </a>
                                        </div>
                                     </div>
                                     <?php //dd($event['topics']); ?>
@@ -772,7 +772,7 @@
                                           @if(isset($event['topics']) && count($event['topics']) > 0)
                                           @foreach($event['topics'] as $keyTopic => $topic)
                                           <?php //dd($keyTopic); ?>
-                                          
+
 
                                           @if(isset($topic) && count($topic) != 0 )
                                           <?php //dd($topic); ?>
@@ -786,8 +786,8 @@
                                                       <h4>{{$lesso['title']}}</h4>
                                                       <!-- Feedback 18-11 changed -->
                                                       <div class="topic-meta">
-                                                            @if($lesso['title'])
-                                                            {{--<div class="category">{{$lesso['type']}}</div>--}}
+                                                            @if(count($lesso['type']) >0)
+                                                            <div class="category">{{$lesso['type'][0]['name']}}</div>
                                                             @endif
                                                             <!-- Feedback 18-11 changed -->
                                                             <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}" alt="" /><?= date( "l d M Y", strtotime($lesso['pivot']['time_starts']) ) ?></span> <!-- Feedback 18-11 changed -->
@@ -807,7 +807,7 @@
                                                    </div>
 
                                                     {{--@if($lesso['type'])
-                                                    
+
                                                     @endif--}}
                                                 @endforeach
                                                 <!-- /.accordion-content -->
@@ -822,18 +822,18 @@
                                        <!-- /.acc-topic-accordion -->
                                     </div>
                                  </div>
-                                 <?php 
+                                 <?php
                                     $dropbox = $event['category'][0]['dropbox'][0];
                                     //dd($dropbox);
                                     $folders = $dropbox['folders'][0];
-                                    
+
                                     $folders_bonus = $dropbox['folders'][1];
                                     //dd($folders_bonus);
                                     $files = $dropbox['files'][1];
                                     $files_bonus = $dropbox['files'][2];
 
                                     //dd($files);
-                                    
+
                                   ?>
 
 
@@ -859,7 +859,7 @@
                                                    @endforeach
                                                 @endif
                                              </div>
-                                             
+
                                                 @if(isset($folders_bonus) && count($folders_bonus) > 0)
                                                 <div class="files-wrapper bonus-files">
                                                    @foreach($folders_bonus as $folder_bonus)
@@ -882,12 +882,12 @@
                                                    @endforeach
                                                    </div>
                                                 @endif
-                                             
+
                                           </div>
                                        @endforeach
-                                       
+
                                     @endif
-                                    
+
                                  </div>
                                  @endif
 
@@ -2269,7 +2269,7 @@
    });
 </script>
 <script>
-   
+
    $("body").on("click", ".delete_media", function (event) {
 
       var favDialog = document.getElementById('favDialog');

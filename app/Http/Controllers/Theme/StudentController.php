@@ -37,7 +37,7 @@ class StudentController extends Controller
         $data['subscriptionAccess'] = [];
         $data['mySubscriptions'] = [];
 
-        $data['user'] = User::with('image', 'events.city', 'events.summary1', 'events.exam', 'events.category')->find($user->id);
+        $data['user'] = User::with('image', 'events.city', 'events.summary1', 'events.exam', 'events.category', )->find($user->id);
         //dd($data['user']['events'][2]);
 
         //$paymentMethods = $user->paymentMethods();
@@ -47,7 +47,7 @@ class StudentController extends Controller
 
         foreach($data['user']['events'] as $key => $event){
 
-            
+
             //if elearning assign progress for this event
             if($event->is_elearning_course()){
                 //dd($event->topicsLessonsInstructors());
@@ -70,9 +70,9 @@ class StudentController extends Controller
                     $video_access = true;
 
                 $data['user']['events'][$key]['video_access'] = $video_access;
-                
 
-            }else{           
+
+            }else{
                 $data['user']['events'][$key]['topics'] = $event->topicsLessonsInstructors()['topics'];
                 //dd($data['user']['events'][$key]['topics']);
                 $video_access = false;
@@ -88,7 +88,7 @@ class StudentController extends Controller
                 $data['user']['events'][$key]['video_access'] = $video_access;
             }
 
-            
+
 
 
 

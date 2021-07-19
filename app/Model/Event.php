@@ -59,7 +59,7 @@ class Event extends Model
     {
         return $this->morphToMany(Exam::class, 'examable');
     }
-    
+
     public function exam_result()
     {
         return $this->belongsToMany(ExamResult::class, 'exam_results', 'user_id', 'exam_id');
@@ -82,7 +82,7 @@ class Event extends Model
     {
 
         return $this->belongsToMany(Lesson::class,'event_topic_lesson_instructor')->where('status',true)->select('lessons.*','topic_id','event_id', 'lesson_id','instructor_id')
-        ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room','priority')->orderBy('event_topic_lesson_instructor.priority','asc');
+        ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room','priority')->orderBy('event_topic_lesson_instructor.priority','asc')->with('type');
     }
 
 
