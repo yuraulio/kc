@@ -20,6 +20,8 @@ use Laravel\Cashier\Cashier;
 use App\Model\User;
 use App\Model\Invoice;
 use Auth;
+use Carbon\Carbon;
+use App\Model\Transaction;
 
 class HomeController extends Controller
 {
@@ -103,7 +105,7 @@ class HomeController extends Controller
     public function index(Slug $slug){
 
 
-        //dd($slug->slugable);
+        //dd(get_class($slug->slugable));
         //dd(get_class($slug->slugable) == Event::class);
         //dd(get_class($slug->slugable) == Delivery::class);
 
@@ -130,6 +132,95 @@ class HomeController extends Controller
 
         }
 
+    }
+
+    public function enrollToFreeEvent(Event $content){
+
+        
+        $published = $content->published;
+      // dd($estatus);
+        if($published == 0){
+            return false;
+        }
+        
+        if(Auth::user() && $user = (Auth::user())){
+      
+            $student = $user->events->where('id',$content->id)->first();  
+            if(!$student){
+                
+                //ticket
+                $eventticket = $student->ticket->first();
+               
+                $payment_method_id = 1;//intval($input["payment_method_id"]);
+                $payment_cardtype = 8; //free;
+                $amount = 0;
+                $namount = (float)$amount;
+                $transaction_arr = [
+
+                    'payment_method_id' => $payment_method_id,
+                    'account_id' => 17,
+                    'payment_status' => 2,
+                    'billing_details' => '',//serialize($billing_details),
+                    'placement_date' => Carbon::now()->toDateTimeString(),
+                    'ip_address' => '127.0.0.1',
+                    'type' => $payment_cardtype,//((Sentinel::inRole('super_admin') || Sentinel::inRole('know-crunch')) ? 1 : 0),
+                    'status' => 1, //2 PENDING, 0 FAILED, 1 COMPLETED
+                    'is_bonus' => 0, //$input['is_bonus'],
+                    'order_vat' => 0, //$input['credit'] - ($input['credit'] / (1 + Config::get('dpoptions.order_vat.value') / 100)),
+                    'surcharge_amount' => 0,
+                    'discount_amount' => 0,
+                    'amount' => $namount, //$input['credit'],
+                    'total_amount' => $namount,
+                    'trial' => false
+                ];
+
+                $transaction = Transaction::create($transaction_arr);
+
+                if ($transaction) {
+                    // set transaction id in session
+
+                    $pay_seats_data = ["names" => [Auth::user()->first_name],"surnames" => [Auth::user()->last_name],"emails" => [Auth::user()->email],
+                    "mobiles" => [Auth::user()->mobile],"addresses" => [Auth::user()->address],"addressnums" => [Auth::user()->address_num],
+                    "postcodes" => [Auth::user()->postcode],"cities" => [Auth::user()->city],"jobtitles" => [Auth::user()->job_title],
+                    "companies" => [Auth::user()->company],"students" => [""], "afms" => [Auth::user()->afm]];
+
+
+                    $deree_user_data = [Auth::user()->email => Auth::user()->partner_id];
+                    $cart_data = ["manualtransaction" => ["rowId" => "manualtransaction","id" => $eventticket->pivot->ticket_id,"name" => $content->title,"qty" => "1","price" => $amount,"options" => ["type" => "8","event"=> $content->id],"tax" => 0,"subtotal" => $amount]];
+
+                    $status_history[] = [
+                    'datetime' => Carbon::now()->toDateTimeString(),
+                    'status' => 1,
+                    'user' => [
+                        'id' => $user, //0, $this->current_user->id,
+                        'email' => Auth::user()->email,//$this->current_user->email
+                        ],
+                    'pay_seats_data' => $pay_seats_data,//$data['pay_seats_data'],
+                    'pay_bill_data' => [],
+                    'cardtype' => 8,
+                    'installments' => 1,
+                    'deree_user_data' => $deree_user_data, //$data['deree_user_data'],
+                    'cart_data' => $cart_data //$cart
+                    ];
+
+                    $transaction->update(['status_history' => json_encode($status_history)/*, 'billing_details' => $tbd*/]);
+
+                    $today = date('Y/m/d'); 
+                    $expiration_date = '';
+
+                    if($content->expiration){
+                        $monthsExp = '+' . $event->expiration .'months';
+                        $expiration_date = date('Y-m-d', strtotime($monthsExp, strtotime($today)));
+                    }
+
+                    $content->users()->save($user,['comment'=>'free','expiration'=>$expiration_date,'paid'=>true]);
+
+                }
+            }
+
+        }
+
+        return back();
     }
 
     private function instructor($page){
@@ -169,7 +260,7 @@ class HomeController extends Controller
         $data['header_menus'] = $this->header();
 
         $data['page'] = $page;
-//dd($page);
+
         if($data['page']['template'] == 'corporate_page'){
             $data['page']['template'] = 'corporate-template';
             $data['benefits'] = $page->benefits;
@@ -223,12 +314,11 @@ class HomeController extends Controller
         $data['tickets'] = $event->ticket->toArray();
         $data['venues'] = $event->venues->toArray();
         $data['syllabus'] = $event->syllabus->toArray();
-
         $data['is_event_paid'] = 0;
         if(Auth::user() && count(Auth::user()->events->where('id',$event->id)) > 0){
-            $data['is_event_paid'] = 1;
+            $data['is_event_paid'] = 0;
         }
-
+    
         return view('theme.event.' . $event->view_tpl,$data);
 
     }
@@ -247,4 +337,7 @@ class HomeController extends Controller
         }
         return $result;
     }
+
+
+
 }

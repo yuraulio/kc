@@ -311,6 +311,38 @@ Route::group(['middleware' => 'auth', 'prefix'=>'myaccount'], function () {
     Route::post('/updinvbill', [ 'as' => 'updinvbill' , 'uses' => 'Theme\StudentController@updateInvoiceBilling' ]);
     Route::post('/updrecbill', [ 'as' => 'updrecbill' , 'uses' => 'Theme\StudentController@updateReceiptBilling' ]);
     Route::get('/mydata', [ 'as' => 'festudent.mydata' , 'uses' => 'Theme\StudentController@downloadMyData' ]);
+
+    Route::get('/enroll-for-free/{content}', 'Theme\HomeController@enrollToFreeEvent')->name('enrollForFree');
+});
+
+
+Route::group([ 'prefix' => 'payment-dispatch'], function () {
+
+
+    Route::get('checkout/{trans_id?}', [
+        'as' => 'pay.dispatch.checkout', 'uses' => 'Theme\PaymentDispatch@checkout'
+    ]);
+    Route::get('validation/{payment_method_slug?}', [
+        'as' => 'pay.dispatch.validation', 'uses' => 'Theme\PaymentDispatch@validation'
+    ]);
+
+    Route::post('notok/{payment_method_slug?}', [
+        'as' => 'pay.dispatch.notok', 'uses' => 'Theme\PaymentDispatch@notok'
+    ]);
+
+    Route::post('ok/{payment_method_slug?}', [
+        'as' => 'pay.dispatch.ok', 'uses' => 'Theme\PaymentDispatch@ok'
+    ]);
+
+    Route::get('back/{payment_method_slug?}', [
+        'as' => 'pay.dispatch.back', 'uses' => 'Theme\PaymentDispatch@back'
+    ]);
+    Route::get('pay/{payment_method_slug?}', [
+        'as' => 'pay.dispatch.pay', 'uses' => 'Theme\PaymentDispatch@pay'
+    ]);
+    Route::get('confirmation/{payment_method_slug?}', [
+        'as' => 'pay.dispatch.confirmation', 'uses' => 'Theme\PaymentDispatch@confirmation'
+    ]);
 });
 
 Route::group(['middleware' => ['preview','web']], function () {

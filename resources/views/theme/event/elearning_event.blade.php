@@ -170,23 +170,20 @@
                            <div class="course-details @if(!isset($section_fullvideo)) non-video-height @endif">
                               <ul class="two-column-list">
                               
-                              @foreach($summary as $sum)
-                                 @if($sum['title'])
-                                 <li>
-                                    @if($sum['medias'])<img class="info-icon" class="replace-with-svg" src="{{cdn(get_image($sum['medias']))}}" width="30" />@endif
-                                    <div class="info-text">
+                                 @foreach($summary as $sum)
+                                    @if($sum['title'])
+                                    <li>
+                                    @if($sum['mediable'])<img class="info-icon" class="replace-with-svg" src="{{cdn(get_image($sum['mediable']))}}" width="30" />@endif
+                                       <div class="info-text">
 
-                                       <p>{{  $sum['title'] }}</br>
-                                          {{  $sum['description'] }}
-                                       </p>
-                                    </div>
-                                 </li>
-                                 @endif
-
-                              @endforeach
-                           
-
-
+                                          <p>{{  $sum['title'] }}</br>
+                                             {{  $sum['description'] }}
+                                          </p>
+                                       </div>
+                                    </li>
+                                    @endif
+                                 @endforeach
+                  
                               </ul>
                               <!-- /.course-details -->
                            </div>

@@ -62,20 +62,12 @@
                      <li><a href="#instructors">Instructors</a></li>
                      @endif
                   </ul>
-                  @if(count(Auth::user()->events->where('id',$event->id)) == 0 && !Auth::user())
-                  <a href="#" class="btn btn--lg btn--primary hidden-sm go-to-href">ENROLL FOR FREE</a>
-
-                  {{--<a href="{{ route('cart.add-item', [ $content->id,'free', 8 ]) }}" class="btn btn--lg btn--primary hidden-sm go-to-href">ENROLL FOR FREE</a>--}}
-                  @elseif(count(Auth::user()->events->where('id',$event->id)) == 0 && Auth::user())
-                  <a href="#1" class="btn btn--lg btn--primary hidden-sm go-to-href">ENROLL FOR FREE</a>
-                  {{--<a href="{{ route('enrollForFree',  $content->id) }}" class="btn btn--lg btn--primary hidden-sm go-to-href">ENROLL FOR FREE</a>--}}
+                  @if($is_event_paid==0 && !Auth::user())
+                  <a href="{{ route('cart.add-item', [ $event->id,'free', 8 ]) }}" class="btn btn--lg btn--primary hidden-sm go-to-href">ENROLL FOR FREE</a>
+                  @elseif($is_event_paid==0 && Auth::user())
+                  <a href="{{ route('enrollForFree',  $event->id) }}" class="btn btn--lg btn--primary hidden-sm go-to-href">ENROLL FOR FREE</a>
                   @endif
 
-                  @if($estatus == 0 )
-                  <a href="#seats" class="btn btn--lg btn--primary go-to-href">ENROLL NOW</a>
-                  @elseif($estatus != 3 && $estatus != 1 )
-                  <a href="#seats" class="btn btn--lg btn--primary go-to-href go-to-href soldout">SOLD OUT</a>
-                  @endif
                   <!-- /.container -->
                </div>
                <!-- /.tab-controls -->
@@ -175,9 +167,11 @@
                               <ul class="two-column-list">
                               
                               @foreach($summary as $sum)
+
+                                         
                                  @if($sum['title'])
                                  <li>
-                                    @if($sum['medias'])<img class="info-icon" class="replace-with-svg" src="{{cdn(get_image($sum['medias']))}}" width="30" />@endif
+                                    @if($sum['mediable'])<img class="info-icon" class="replace-with-svg" src="{{cdn(get_image($sum['mediable']))}}" width="30" />@endif
                                     <div class="info-text">
 
                                        <p>{{  $sum['title'] }}</br>
@@ -708,9 +702,7 @@
       </div>
       <!-- /.section-course-tabs -->
    </section>
-   {{--@if($estatus == 0 || $estatus == 2)
-   @include('theme.event.partials.seats')
-   @endif--}}
+
 </main>
 @endsection
 @section('scripts')

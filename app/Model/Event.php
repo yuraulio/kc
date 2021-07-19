@@ -95,7 +95,7 @@ class Event extends Model
 
     public function summary1()
     {
-        return $this->belongsToMany(Summary::class, 'events_summaryevent', 'event_id', 'summary_event_id');
+        return $this->belongsToMany(Summary::class, 'events_summaryevent', 'event_id', 'summary_event_id')->with('mediable');
     }
 
     public function is_inclass_course()

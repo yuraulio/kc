@@ -174,7 +174,7 @@
                               @foreach($summary as $sum)
                                  @if($sum['title'])
                                  <li>
-                                    @if($sum['medias'])<img class="info-icon" class="replace-with-svg" src="{{cdn(get_image($sum['medias']))}}" width="30" />@endif
+                                 @if($sum['mediable'])<img class="info-icon" class="replace-with-svg" src="{{cdn(get_image($sum['mediable']))}}" width="30" />@endif
                                     <div class="info-text">
 
                                        <p>{{  $sum['title'] }}</br>

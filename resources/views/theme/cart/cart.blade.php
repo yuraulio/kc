@@ -1389,6 +1389,7 @@ if(!isset($info)){
 @stop
 @section('scripts')
 
+@if($paywithstripe == 1)
 <script>
     $(document).on('click', '#addCard', function(e){
       
@@ -1436,6 +1437,8 @@ if(!isset($info)){
   
 
 </script>
+
+@endif
 
 
 

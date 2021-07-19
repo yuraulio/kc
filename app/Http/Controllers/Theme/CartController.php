@@ -299,9 +299,10 @@ class CartController extends Controller
                 if($ev->paymentMethod->first()){
                     if($ev->paymentMethod->first()->metod_slug == 'stripe'){
                         $data['paywithstripe'] = 1;
+                        session()->put('payment_method',$ev->paymentMethod->first()->id);
+                        $data['stripe_key'] = $ev->paymentMethod->first()->processor_options['key'];
                     }
-                    session()->put('payment_method',$ev->paymentMethod->first()->id);
-                    $data['stripe_key'] = $ev->paymentMethod->first()->processor_options['key'];
+                    
                 }
                 $data['pay_methods'] = $ev->paymentMethod->first();
 
@@ -337,7 +338,11 @@ class CartController extends Controller
             }
            
             else {
-                $loggedin_user->asStripeCustomer();
+               
+                if($data['paywithstripe'] == 1){
+                    $loggedin_user->asStripeCustomer();
+
+                }
                 
                 // Get user billing details in order to pre populate values
                 if(isset($data['pay_bill_data']) && empty($data['pay_bill_data'])) {
@@ -356,8 +361,9 @@ class CartController extends Controller
 
                     $data['pay_bill_data'] = array_merge($inv, $rec);
                 }
-              
-                $data['default_card'] = $loggedin_user->defaultPaymentMethod() ? $loggedin_user->defaultPaymentMethod()->card : false;
+                if($data['paywithstripe'] == 1){
+                    $data['default_card'] = $loggedin_user->defaultPaymentMethod() ? $loggedin_user->defaultPaymentMethod()->card : false;
+                }
            
                 return view('theme.cart.cart', $data);
             }
@@ -534,6 +540,8 @@ class CartController extends Controller
             
             $redurl = $this->postPaymentWithStripe($input);    
             return redirect($redurl);
+        }else{
+            $this->alphaBankPayment($input);
         }
 
     }
@@ -867,6 +875,68 @@ class CartController extends Controller
         }
         
 
+    }
+
+    public function alphaBankPayment($input){
+
+        dd($input);
+
+        $payment_cardtype = intval($input["cardtype"]);
+            
+        $amount = Cart::total();
+        $namount = (float)$amount;
+
+        function greeklish($Name){
+            $greek   = array('α','ά','Ά','Α','β','Β','γ', 'Γ', 'δ','Δ','ε','έ','Ε','Έ','ζ','Ζ','η','ή','Η','θ','Θ','ι','ί','ϊ','ΐ','Ι','Ί', 'κ','Κ','λ','Λ','μ','Μ','ν','Ν','ξ','Ξ','ο','ό','Ο','Ό','π','Π','ρ','Ρ','σ','ς', 'Σ','τ','Τ','υ','ύ','Υ','Ύ','φ','Φ','χ','Χ','ψ','Ψ','ω','ώ','Ω','Ώ',' ',"'","'",',');
+            $english = array('a', 'a','A','A','b','B','g','G','d','D','e','e','E','E','z','Z','i','i','I','th','Th', 'i','i','i','i','I','I','k','K','l','L','m','M','n','N','x','X','o','o','O','O','p','P','r','R','s','s','S','t','T','u','u','Y','Y','f','F','ch','Ch','ps','Ps','o','o','O','O','_','_','_','_');
+            $string  = str_replace($greek, $english, $Name);
+            return $string;
+        }
+        $bd = [];
+        $bd['billaddress'] = greeklish($input['billaddress']) . ' ' . $input['billaddressnum'];
+        $bd['billzip'] = $input['billpostcode'];
+        $bd['city'] = greeklish($input['billcity']);
+        $bd['billcountry'] = 'GR';
+
+        if(Auth::check()) {
+            $cuser = Auth::user();
+            $uid = $cuser->id;
+        }
+        else {
+            $uid = 0;
+        }
+
+        
+        $transaction_arr = [
+
+            "payment_method_id" => $payment_method_id,
+            "account_id" => 17,
+            "payment_status" => 2,
+            "billing_details" => json_encode($bd),//serialize($billing_details),
+            "placement_date" => Carbon::now()->toDateTimeString(),
+            "ip_address" => $request->ip(),
+            "type" => $payment_cardtype,//((Sentinel::inRole('super_admin') || Sentinel::inRole('know-crunch')) ? 1 : 0),
+            "status" => 2, //2 PENDING, 0 FAILED, 1 COMPLETED
+            "is_bonus" => 0, //$input['is_bonus'],
+            "order_vat" => 0, //$input['credit'] - ($input['credit'] / (1 + Config::get('dpoptions.order_vat.value') / 100)),
+            "surcharge_amount" => 0,
+            "discount_amount" => 0,
+            "amount" => $namount,
+            "total_amount" => $namount,
+            "trial" => false
+        ];//$input['credit']
+
+        $transaction = Transaction::create($transaction_arr);
+       // dd($transaction);
+        if ($transaction) {
+            
+            $request->session()->put('transaction_id', $transaction->id);
+            return redirect('/payment-dispatch/checkout/'.$transaction->id);
+
+        } else {
+            // there was an error
+            dd('Error');
+        }
     }
 
 }
