@@ -58,22 +58,25 @@
 
                                     @include('alerts.feedback', ['field' => 'title'])
                                 </div>
-                                <?php //dd($lesson); ?>
+                                <?php //dd($topics[1]); ?>
+                                <?php //dd($lesson->topic); ?>
 
                                 <div class="form-group{{ $errors->has('topic_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-topic_id">{{ __('Topic') }}</label>
                                     <select multiple name="topic_id[]" id="input-topic_id" class="form-control topics" placeholder="{{ __('Topic') }}" required>
                                         <option value="">-</option>
+
                                         @foreach ($topics as $topic)
-                                            <?php $selected = false; ?>
+                                        <?php $selected = false; ?>
+
                                             @foreach($lesson->topic as $selected_topic)
                                                 @if($topic->id == $selected_topic['id'])
-                                                    {{$selected = true}}
+                                                    <?php $selected = true; ?>
                                                 @endif
 
                                             @endforeach
 
-                                            <option <?php if($selected === true){echo 'selected';} ?> data-category="{{ $topic->category[0]->id }}" value="{{ $topic->id }}" > {{ $topic->title }}</option>
+                                            <option <?= ($selected) ? 'selected' : ''; ?> data-category="{{ $topic->category[0]->id }}" value="{{ $topic->id }}" > {{ $topic->title }}</option>
                                         @endforeach
                                     </select>
 
@@ -85,6 +88,8 @@
                                     <select name="type_id" id="input-type_id" class="form-control" placeholder="{{ __('Type') }}" required>
                                         <option value="">-</option>
                                         @foreach ($types as $type)
+                                            @if($type['id'] >= 150 && $type['id'] <= 161)
+
                                             <option <?php if(count($lesson->type) != 0){
                                                 if($lesson->type[0]->id == $type->id){
                                                     echo 'selected';
@@ -94,6 +99,7 @@
                                             }
                                             ?>
                                             value="{{ $type->id }}" > {{ $type->name }}</option>
+                                            @endif
                                         @endforeach
                                     </select>
 

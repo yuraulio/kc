@@ -83,7 +83,9 @@
                                     <select name="type_id" id="input-type_id" class="form-control" placeholder="{{ __('Type') }}">
                                         <option value="">-</option>
                                         @foreach ($types as $type)
-                                            <option value="{{ $type->id }}" >{{ $type->name }}</option>
+                                            @if($type['id'] >= 150 && $type['id'] <= 161)
+                                                <option value="{{ $type['id'] }}" >{{ $type['name'] }}</option>
+                                            @endif
                                         @endforeach
                                     </select>
 

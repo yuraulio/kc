@@ -136,29 +136,31 @@ class HomeController extends Controller
         $data['header_menus'] = $this->header();
 
         $data['content'] = $page;
-        // $events = array();
+        $events = array();
 
-        // $instructor = Instructor::with('event.category', 'medias')->find($page['id']);
-        // //dd($instructor['event']);
-        // foreach($instructor['event'] as $key => $event){
-        //     $category = $event['category'][0];
-        //     $events[$key] = $category;
-        //     //dd($category);
-        // }
+        $instructor = Instructor::with('event.category', 'medias')->find($page['id']);
+        //dd($instructor);
 
-        // $category = array();
+        foreach($instructor['event'] as $key => $event){
+            $category = $event['category'][0];
+            $events[$key] = $category;
+            //dd($category);
+        }
 
-        // foreach($events as $key => $event){
-        //     if($key == 0){
-        //         $category[$event['id']] = $event;
-        //     }else{
-        //         if(!isset($category[$event['id']]) ){
-        //             $category[$event['id']] = $event;
-        //         }
-        //     }
-        // }
-        // $data['instructorTeaches'] = $category;
-        //dd($category);
+
+        $category = array();
+
+        foreach($events as $key => $event){
+            if($key == 0){
+                $category[$event['id']] = $event;
+            }else{
+                if(!isset($category[$event['id']]) ){
+                    $category[$event['id']] = $event;
+                }
+            }
+        }
+        $data['instructorTeaches'] = $category;
+        dd($category);
         //dd(array_unique($events));
         //dd($instructor['event']->unique()->groupBy('id'));
 
@@ -169,7 +171,6 @@ class HomeController extends Controller
         $data['header_menus'] = $this->header();
 
         $data['page'] = $page;
-//dd($page);
         if($data['page']['template'] == 'corporate_page'){
             $data['page']['template'] = 'corporate-template';
             $data['benefits'] = $page->benefits;
