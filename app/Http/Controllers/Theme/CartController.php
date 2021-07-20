@@ -300,7 +300,8 @@ class CartController extends Controller
                     if($ev->paymentMethod->first()->metod_slug == 'stripe'){
                         $data['paywithstripe'] = 1;
                         session()->put('payment_method',$ev->paymentMethod->first()->id);
-                        $data['stripe_key'] = $ev->paymentMethod->first()->processor_options['key'];
+                        $data['stripe_key'] = env('PAYMENT_PRODUCTION') ? $ev->paymentMethod->first()->processor_options['key'] : 
+                                                                                $ev->paymentMethod->first()->test_processor_options['key'];
                     }
                     
                 }
@@ -541,7 +542,7 @@ class CartController extends Controller
             $redurl = $this->postPaymentWithStripe($input);    
             return redirect($redurl);
         }else{
-            $this->alphaBankPayment($input);
+            return $this->alphaBankPayment($input,$request);
         }
 
     }
@@ -877,10 +878,9 @@ class CartController extends Controller
 
     }
 
-    public function alphaBankPayment($input){
+    public function alphaBankPayment($input,$request){
 
-        dd($input);
-
+        $payment_method_id = intval($input["payment_method_id"]);
         $payment_cardtype = intval($input["cardtype"]);
             
         $amount = Cart::total();
@@ -927,9 +927,7 @@ class CartController extends Controller
         ];//$input['credit']
 
         $transaction = Transaction::create($transaction_arr);
-       // dd($transaction);
         if ($transaction) {
-            
             $request->session()->put('transaction_id', $transaction->id);
             return redirect('/payment-dispatch/checkout/'.$transaction->id);
 

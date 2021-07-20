@@ -4,31 +4,33 @@ namespace App\Http\Controllers\Theme;
 use Session;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use Auth;
+use App\Model\Transaction;
+use App\Model\PaymentMethod;
 //use PostRider\Http\Requests;
 //use PostRider\Http\Controllers\Controller;
 //
 //use PostRider\PaymentMethod;
 //use PostRider\Transaction;
 //
-//use Library\TransactionHelperLib;
-//
-//use Library\Processors\Default_processor;
-//use Library\Processors\Paypal_ec_processor;
-//use Library\Processors\Piraeusbank_processor;
-//use Library\Processors\Alphabank_processor;
+use Library\TransactionHelperLib;
+use Library\Processors\Default_processor;
+use Library\Processors\Paypal_ec_processor;
+use Library\Processors\Piraeusbank_processor;
+use Library\Processors\Alphabank_processor;
 //use PostRider\Option;
 
 class PaymentDispatch extends Controller
 {
-    /*public function __construct(TransactionHelperLib $transactionHelper, Default_processor $default_processor, Paypal_ec_processor $paypal_ec_processor, Piraeusbank_processor $piraeusbank_processor, Alphabank_processor $alphabank_processor)
+    public function __construct(TransactionHelperLib $transactionHelper, Default_processor $default_processor, Paypal_ec_processor $paypal_ec_processor, Piraeusbank_processor $piraeusbank_processor, Alphabank_processor $alphabank_processor)
     {
         $this->transactionHelper = $transactionHelper;
         $this->default_processor = $default_processor;
         $this->paypal_ec_processor = $paypal_ec_processor;
         $this->piraeusbank_processor = $piraeusbank_processor;
         $this->alphabank_processor = $alphabank_processor;
-    }*/
+    }
+
 
     private function getProcessorInstance($processor_class_name = "Default_processor")
     {
@@ -76,11 +78,9 @@ class PaymentDispatch extends Controller
 			//$dereelist = \Config::get('dpoptions.generator.settings');
 
 			//dd($dereelist);
-			$optionid = \Config::get('dpoptions.generator.id');
-
-			$option = Option::findOrFail($optionid);
-
-			$dereelist = json_decode($option->settings, true);
+			//$optionid = \Config::get('dpoptions.generator.id');
+			//$option = Option::findOrFail($optionid);
+			//$dereelist = json_decode($option->settings, true);
 
 
 			$data['dereecodes'] = '';
@@ -136,7 +136,7 @@ class PaymentDispatch extends Controller
 
 
 	        //dd($pay_seats_data);
-	        $seat = 0;
+	        /*$seat = 0;
 	        foreach ($pay_seats_data as $key => $value) { //key names value array of names
 	        	if($key == 'emails') {
 		        	foreach ($value as $key2 => $value2) { // value2 email1
@@ -163,7 +163,12 @@ class PaymentDispatch extends Controller
 	        $dereelist_putback = array_values($dereelist);
 
 	        $option->settings = json_encode($dereelist_putback, JSON_PRETTY_PRINT);
-	        $option->save();
+	        $option->save();*/
+
+
+
+
+
 
 	        //dd($dereelist);
 	        //NEED TO UPDATE DEREE JSON HERE
@@ -185,7 +190,7 @@ class PaymentDispatch extends Controller
             {
                 $data['order_details'] = $data['order_details']->toArray();
                 $data['payment_method_details'] = PaymentMethod::where('id', $data['order_details']['payment_method_id'])->first();
-
+                //dd($data['payment_method_details']);
                 if ($data['payment_method_details'])
                 {
                     $data['payment_method_details'] = $data['payment_method_details']->toArray();
@@ -202,6 +207,8 @@ class PaymentDispatch extends Controller
 
                     $data['payment_config'] = $data['payment_method_details']['processor_config'];
                     $data['payment_options'] = $data['payment_method_details']['processor_options'];
+                    $data['test_payment_config'] = $data['payment_method_details']['test_processor_config'];
+                    $data['test_payment_options'] = $data['payment_method_details']['test_processor_options'];
 
                     if (empty($data['payment_config']) || empty($data['payment_options']))
                     {
@@ -219,8 +226,6 @@ class PaymentDispatch extends Controller
                         */
 
                         //var_dump($payment_conn);
-
-                        //dd('asdf');
 
                         ///*
                         switch ($payment_conn)

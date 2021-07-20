@@ -315,6 +315,11 @@ Route::group(['middleware' => 'auth', 'prefix'=>'myaccount'], function () {
     Route::get('/enroll-for-free/{content}', 'Theme\HomeController@enrollToFreeEvent')->name('enrollForFree');
 });
 
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('exam-start/{exam}', 'Theme\ExamAttemptController@examStart')->name('exam-start');
+    Route::post('sync-data', 'Theme\ExamAttemptController@syncData')->name('sync-data');
+    Route::post('save-data', 'Theme\ExamAttemptController@saveData')->name('save-data');
+});
 
 Route::group([ 'prefix' => 'payment-dispatch'], function () {
 
