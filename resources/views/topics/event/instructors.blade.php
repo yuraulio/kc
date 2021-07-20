@@ -20,7 +20,7 @@
 
             <div class="col-2 assign-toggle" id="toggle_{{$key}}">
                 <label class="custom-toggle">
-                    <input data-event-status="<?= ($status == 'active') ? 'true' : 'false'; ?>" type="checkbox" data-event-id="{{$event['id']}}" data-topic-id="{{$topic['id']}}" <?= ($status == 'active') ? 'checked' : ''; ?> >
+                    <input data-event-status="<?= ($status == 'active') ? '1' : '0'; ?>" type="checkbox" data-event-id="{{$event['id']}}" data-topic-id="{{$topic['id']}}" checked >
                     <span class="topic custom-toggle-slider rounded-circle" ></span>
                 </label>
             </div>
@@ -119,7 +119,7 @@
 
             <div class="col-2 assign-toggle" id="toggle_{{$key}}">
                 <label class="custom-toggle">
-                    <input data-event-status="<?= ($status == 'active') ? 'true' : 'false'; ?>" type="checkbox" data-event-id="{{$event['id']}}" data-topic-id="{{$topic['id']}}" <?= ($status == 'active') ? 'checked' : ''; ?> >
+                    <input data-event-status="0" type="checkbox" data-event-id="{{$event['id']}}" data-topic-id="{{$topic['id']}}" <?= ($status == 'active') ? 'checked' : ''; ?> >
                     <span class="topic custom-toggle-slider rounded-circle" ></span>
                 </label>
             </div>
@@ -177,7 +177,7 @@
                                     @endif
 
                                     <td class="text-right">
-                                        <div class="dropdown">
+                                        <div class="dropdown <?= ($status == 'active') ? '' : 'd-none'; ?>">
                                             <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i class="fas fa-ellipsis-v"></i>
                                             </a>
@@ -204,13 +204,33 @@
 <script>
 
 
+
+
     $(document).on('click', '.topic.custom-toggle-slider', function(){
         //alert($($(this).parent().find('input')).data('topicId'))
         let id = $($(this).parent().find('input')).data('topicId')
         let event_id = $($(this).parent().find('input')).data('eventId')
-        console.log(id)
 
-        let status = $('#toggle_'+id).find('input').data('eventStatus')
+
+
+        let status = $('#toggle_'+id).find('input').attr('data-event-status')
+
+        let elements = $('#col_'+id).find('tr')
+
+        console.log(status)
+
+        if(status == '1'){
+
+
+            $.each(elements, function(key, value) {
+                $(value).find('.dropdown').addClass('d-none')
+            })
+        }else{
+            $.each(elements, function(key, value) {
+                $(value).find('.dropdown').removeClass('d-none')
+            })
+        }
+        //console.log(status)
 
 
         let data = {status1:status, topic_id : id, event_id : event_id}
@@ -226,16 +246,21 @@
             success: function(data) {
                 data = JSON.parse(data)
                 let event_type = data.isInclassCourse
-                console.log(event_type)
                 let e = $('#'+data.request.topic_id).find('label')
 
                 let topic = data.lesson;
                 let lessons = data.lesson.lessons
-
-                if(data.request.status1 == "true"){
-                    $('#toggle_'+id).find('input').data('eventStatus', 'false')
+                // console.log(data.request.status1)
+                // console.log(data.request.topic_id)
+                let elem = $('#toggle_'+data.request.topic_id).find('input')[0]
+                console.log(elem)
+                if(data.request.status1 == "1"){
+                    console.log('from flase')
+                    $(elem).attr("data-event-status", "1")
                 }else{
-                    $('#toggle_'+id).find('input').data('eventStatus', 'true')
+                    console.log($(elem))
+                    console.log('from truw')
+                    $(elem).attr("data-event-status", "0")
                 }
             }
         });

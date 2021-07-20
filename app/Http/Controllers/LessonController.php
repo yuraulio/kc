@@ -144,16 +144,22 @@ class LessonController extends Controller
         if($request->date != null){
             $date = date('Y-m-d H:i:s', strtotime($request->date));
             $date1 = date('d-m-Y', strtotime($request->date));
+        }else{
+            $date1 = null;
         }
 
         if($request->start != null){
             $start = date('Y-m-d H:i:s', strtotime($date1." ".$request->start));
             $start_response = date('H:i:s', strtotime($date1." ".$request->start));
+        }else{
+            $start_response = null;
         }
 
         if($request->end != null){
             $end = date('Y-m-d H:i:s', strtotime($date1." ".$request->end));
             $end_response = date('H:i:s', strtotime($date1." ".$request->end));
+        }else{
+            $end_response = null;
         }
 
 

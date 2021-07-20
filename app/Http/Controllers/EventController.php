@@ -79,71 +79,30 @@ class EventController extends Controller
         foreach($allLessons->lessonsCategory as $lesson)
         {
             $find = $event->topic()->wherePivot('event_id', '=', $request->event_id)->wherePivot('topic_id', '=', $request->topic_id)->wherePivot('lesson_id', '=', $lesson['id'])->get();
-            if(count($find) == 0 && $request->status1 == true)
+            if(count($find) == 0 )
             {
                 $event->topic()->attach($request->topic_id,['lesson_id' => $lesson['id']]);
-                $this->assignEventStatistic($event, $lesson);
             }else{
                 $topicLesson_for_detach = $event->topic()->detach($request->topic_id);
-                break;
             }
 
         }
-        die();
+        if($request->status1 == '1'){
+            $status1 = '0';
+        }else{
+            $status1 = '1';
+        }
+        //dd($request->status1);
+        $data['request']['status1'] = $status1;
+        $data['request']['topic_id'] = $request->topic_id;
+        $data['request']['event_id'] = $request->event_id;
 
-        $data['request'] = $request->all();
         $data['lesson'] = $allLessons;
         $data['event'] = $event;
 
         echo json_encode($data);
     }
 
-    public function assignEventStatistic($event, $lesson){
-        //dd($lesson);
-        $vimeo_id = str_replace("https://vimeo.com/", "", $lesson['vimeo_video']);
-        //539259765
-        //dd($vimeo_id);
-        $allStatistic = $event->statistic()->wherePivot('user_id', 1359)->get();
-        //dd($allStatistic);
-        $found = false;
-
-        foreach($allStatistic as $statistic){
-            $videos = json_decode($statistic->pivot['videos'], true);
-            dd($videos);
-            $notes = json_decode($statistic->pivot['notes'], true);
-
-
-            foreach($videos as $videoKey => $video){
-                //dd($videoKey);
-                if($videoKey == $vimeo_id){
-                    $found = true;
-                    //dd($videoKey);
-                }else{
-                    $found = false;
-                }
-
-            }
-
-        }
-        if($found){
-            var_dump($vimeo_id);
-
-            $videos[$vimeo_id] = ['seen' => 0, 'stop_time'=> 0, 'percentMinutes'=> 0, 'lesson_id'=> $lesson['id']];
-
-
-            $notes[$vimeo_id] = '';
-
-            //dd($notes);
-
-            $event->statistic()->updateExistingPivot($event['id'], [
-                'videos' => json_encode($videos),
-                'notes' => json_encode($notes)
-            ]);
-        }
-
-        //$event->statistic()->wherePivot('user_id', 1359)->get();
-
-    }
 
     public function assignPaymentMethod(Request $request, Event $event)
     {
