@@ -21,6 +21,7 @@ use Laravel\Cashier\Billable;
 use App\Traits\MediaTrait;
 use App\Model\Invoice;
 use Laravel\Cashier\Subscription;
+use App\Model\CookiesSMS;
 
 class User extends Authenticatable
 {
@@ -191,6 +192,10 @@ class User extends Authenticatable
 
     public function subscriptions(){
         return $this->belongsToMany(Subscription::class,'subscription_user_event');
+    }
+
+    public function cookiesSMS(){
+        return $this->hasMany(CookiesSMS::class);
     }
 
 }

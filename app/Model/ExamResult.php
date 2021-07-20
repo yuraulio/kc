@@ -47,9 +47,10 @@ class ExamResult extends Model
             $data['answers'] = [];
             if($examResult){
                 foreach((array) json_decode($examResult->answers,true) as $answer){
+                    
                     $answers['classname'] = 'text-danger';
                     $answers['question'] = $answer['question'];
-                    $answers['correct_answer'] = $answer['correct_answer'];
+                    $answers['correct_answer'] = $answer['correct_answer'][0];
                     $answers['given_answer'] = $answer['given_answer'];
 
                     if($answer['correct_answer'] == $answer['given_answer']){

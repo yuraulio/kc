@@ -303,7 +303,7 @@ Route::post('contact-us', [ 'as' => 'contactUs' , 'uses' => 'Theme\ContactUsCont
 Route::post('applyforbe', [ 'as' => 'beaninstructor', 'uses' => 'Theme\ContactUsController@beaninstructor' ]);
 
 
-Route::group(['middleware' => 'auth', 'prefix'=>'myaccount'], function () {
+Route::group(['middleware' => ['auth','auth.sms'], 'prefix'=>'myaccount'], function () {
     Route::get('/','Theme\StudentController@index')->name('myaccount');
     Route::post('/remove-avatar','Theme\StudentController@removeProfileImage')->name('remove.avatar');
     Route::post('/upload-profile-image','Theme\StudentController@uploadProfileImage')->name('add.profileImage');
@@ -319,6 +319,7 @@ Route::group(['middleware' => 'auth', 'prefix'=>'myaccount'], function () {
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('exam-start/{exam}', 'Theme\ExamAttemptController@examStart')->name('exam-start');
+    Route::get('exam-results/{id}', 'Theme\ExamAttemptController@examResults')->name('exam-results');
     Route::post('sync-data', 'Theme\ExamAttemptController@syncData')->name('sync-data');
     Route::post('save-data', 'Theme\ExamAttemptController@saveData')->name('save-data');
 });
@@ -356,7 +357,10 @@ Route::group([ 'prefix' => 'payment-dispatch'], function () {
     ]);
 });
 
-Route::group(['middleware' => ['preview','web']], function () {
+Route::get('/sms-verification/{slug}',['as' => 'user.sms.auth', 'uses' => 'Theme\HomeController@getSMSVerification']);
+Route::post('/smsVerification','Theme\HomeController@smsVerification');
+
+Route::group(['middleware' => ['preview','web','auth.sms']], function () {
     Route::get('/', 'Theme\HomeController@homePage');
     Route::post('/add-payment-method', 'Theme\HomeController@addPaymentMethod')->name('add.paymentMethod');
     Route::get('{slug}', 'Theme\HomeController@index');

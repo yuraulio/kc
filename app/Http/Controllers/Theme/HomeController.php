@@ -28,6 +28,10 @@ use App\Model\Transaction;
 
 class HomeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth.sms')->except('getSMSVerification','smsVerification');
+    }
 
     public function homePage(){
 
@@ -406,137 +410,89 @@ class HomeController extends Controller
         $data = array();
 
         $slug = Slug::where('slug', $slug)->first();
-        //dd($slug);
         $data['content'] = $slug->slugable;
-        //dd($event);
 
         $data['content'] = Event::with('category', 'city', 'topic',)->find($data['content']['id']);
-        //dd($data['content']->topicsLessonsInstructors());
-
         $data['eventtopics']= $data['content']->topicsLessonsInstructors()['topics'];
-        //dd($data['eventtopics']);
+
         foreach($data['eventtopics'] as $key => $topic){
             //dd($key);
             $topic = Topic::where('title', $key)->first();
             $topicDescription[$key] = $topic['summary'];
         }
-        //dd($topicDescription);
 
         $data['eventorganisers']=array();
         $data['location']= $data['content']['city'][0];
 
-        //dd($data['content']['topic']);
         $data['etax'] = $data['content']['topic'];
-        //dd($data['etax'][0]);
-
-        //$datain = $data['etax'];
-
-
+        
         $data['instructors'] = $data['content']->topicsLessonsInstructors()['instructors'];
         //dd($data['instructors']);
 
         $data['is_event_paid'] = 1;
         $data['desc'] = $topicDescription;
-        //dd($data['topicss']);
-        //dd($arr);
-
-
-        // if (isset($data['content']->categories) && !empty($data['content']->categories)) :
-
-        // $eventCategory = [];
-        // $data['eventtopics']= $data['content']->topicsLessonsInstructors()['topics'];
-        // $data['eventorganisers']=array();
-        // $data['location']= $data['content']['city'][0];
-        // $blockCategory = -1;
-
-        // endif;
-
-        //dd($data['content']);
-
-        // foreach ($data['content']->categories as $category) :
-        //     //45 block category
-        //     if ($category->depth != 0 && $category->parent_id == 45) {
-        //          $blockCategory=$category->id;
-        //          $data['blockcat'] = $blockCategory;
-        //          break;
-        //     }
-
-        // endforeach;
-
-        // if($blockCategory == '') {
-        //     $data['blockcat'] = 1;
-        //     $blockCategory = 1;
-        // }
-
-        // foreach ($data['content']->categories as $category) :
-        //         if(!in_array($category->id, $data['eventtopics'])){
-        //             if ($category->depth != 0 && $category->parent_id == $blockCategory) {
-        //                  $data['eventtopics'][]=$category->id;
-        //             }
-        //         }
-        //         //if(!in_array($category->id, $data['eventorganisers'])){
-        //             if ($category->depth != 0 && $category->parent_id == 5) {
-        //                  //$data['eventorganisers'][] = array_push($data['eventorganisers'], $category->id);
-        //                  $data['eventorganisers'][] = $category;//->allMedia;
-        //             }
-        //         //}
-
-        //             if ($category->depth != 0 && $category->parent_id == 9) {
-        //                  $data['location']=$category;
-        //             }
-        //             //22 Event Category, 12 Event Type
-
-        //             if ($category->depth != 0 && $category->parent_id == 22) {
-        //                  $eventCategory[]=$category->id;
-        //             }
-
-        //     endforeach;
-
-
-
-        //$data['topics'] = Category::where('parent_id', '=', $blockCategory)->where('status',1)->where('type',0)->whereIn('id', $data['eventtopics'])->orderBy('priority', 'asc')->orderBy('created_at', 'asc')->get();
-
-        //dd($data['topics']);
-
-        //$datain = [];
-        //$datain = EventLessonInstructor::where('event_id', $data['content']->id)->where('type', 1)->groupBy('instructor_id')->with('lesson.featured.media','instructor.featured.media')->orderBy('timestarts', 'ASC')->get()->toArray();
-
-
-
-        // $insttmp = [];
-        // foreach ($datain as $key => $value) {
-        //     //echo $value->id;
-        //     $insttmp[] = $value['instructor_id'];
-        // }
-
-        // $data['instructors'] = Content::whereIn('id', $insttmp)->with('categories','tags','author','featured.media')->orderBy('subtitle', 'ASC')->get();
-        // //->orderBy('priority', 'ASC')
-
-        // $data['is_event_paid'] = 1;
-        // $data['desc'] = $topicDescription;
-        // $topics = $this->getTopic($data['content'], $data,false);
-
-        // $data['topics'] = $topics['topicss'];
-
-
-
-        /*foreach($data['topics'] as $key => $value){
-
-            dd($key);
-
-        }*/
-
-        //$this->cFieldLib->contentCustomFields($data['instructors']);
-        //return view('theme.event.syllabus_print', $data);
+      
         $pdf = PDF::loadView('theme.event.syllabus_print', $data)->setPaper('a4', 'landscape');
         $fn = $slug . '.pdf';
         return $pdf->stream($fn);
-       /* $slug
-        $pdf = PDF::loadView('pdf.invoice', $data);
-        return $pdf->download('invoice.pdf');
-        PDF::loadHTML($html)->setPaper('a4', 'landscape')->setWarnings(false)->save('myfile.pdf')*/
+      
     }
 
+
+    public function getSMSVerification($slug){
+
+        return view('theme.layouts.sms_layout',compact('slug'));
+
+    }
+
+    public function smsVerification(Request $request){
+       
+        $user = Auth::user();
+        
+        //dd($user->cookiesSMS()->where('coockie_value',10001)->first());
+        //dd($user->cookiesSMS()->where('coockie_value',$request->cookie_value)->first());
+
+        if($user->cookiesSMS()->where('coockie_value',$request->cookie_value)->first()){
+           
+            $cookieSms = $user->cookiesSMS()->where('coockie_value',$request->cookie_value)->first();
+            $sms_code = $cookieSms->sms_code;
+            
+            $codeExpired = strtotime($cookieSms->updated_at);
+            $codeExpired  = (time() - $codeExpired) / 60;
+
+            //dd($codeExpired);
+
+            if($codeExpired >= 5){
+                $cookieSms->send = false;
+                $cookieSms->sms_code = rand(1111,9999);
+                $cookieSms->save();
+            
+                return redirect('/myaccount')->with('errors', 'We just send you a new sms');  
+                //redirect('/sms-verification/' . $cookieSms->coockie_value)->with('errors', 'We just send you a new sms');
+
+            }
+
+            if($sms_code == $request->sms){
+                
+                $smsCookies = $user->cookiesSMS()->where('coockie_value',$request->cookie_value)->first();
+
+                $smsCookies->sms_code = '';
+                $smsCookies->sms_verification = 1;
+                $smsCookies->save();
+
+                return redirect('/myaccount');
+
+            }else{
+
+                return redirect()->back()->with('errors', 'sms code is wrong');
+                ///not thes sms code
+
+            }
+        }
+
+        return redirect()->back();//->with('errors', 'sms ode is wrong');
+
+    }
 
 
 }

@@ -313,7 +313,7 @@ function finishExam() {
         data: { examJson: retrievedObject, start_time: startTime, student_id: {{$user_id}}, exam_id: {{$exam->id}} },
         success: function() {
           //  alert("Exam Completed Successfully");
-            <?php if($exam->indicate_crt_incrt_answers=='on' || $exam->display_crt_answers=='on') { 
+            <?php if($exam->indicate_crt_incrt_answers || $exam->display_crt_answers) { 
             ?>
                 window.location = "{{ route('exam-results', [$exam->id]) }}";
             <?php
@@ -350,7 +350,7 @@ function forceFinish() {
     data: { examJson: retrievedObject, start_time: startTime, student_id: {{$user_id}}, exam_id: {{$exam->id}} },
     success: function() {
        // alert("Time Over. Exam Completed Successfully");
-            <?php if($exam->indicate_crt_incrt_answers=='on' || $exam->display_crt_answers=='on') { 
+            <?php if($exam->indicate_crt_incrt_answers || $exam->display_crt_answers) { 
             ?>
             setTimeout(function(){  window.location = "{{ route('exam-results', [$exam->id]) }}"; }, 50000);
 
@@ -689,7 +689,7 @@ window.actQues = 0;
     background-color: rgba(0,0,0,.03);
     border-bottom: 1px solid rgba(0,0,0,.125);"><h4>{!!$ex_content['question_title'] !!}</h4>
          <div class="q_description">
-                                            <?php echo $ex_content['question_description']; ?>
+                                            <?php  echo $ex_content['question_description']; ?>
                                         </div>
                                         </div>
                                    

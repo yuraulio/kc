@@ -8,11 +8,22 @@ use Auth;
 use App\Model\Exam;
 use App\Model\ExamResult;
 use App\Model\ExamSyncData;
+use App\Model\User;
 use DateTime;
 use Mail;
+use App\Model\Event;
 
 class ExamAttemptController extends Controller
 {
+
+    public function attemptExam($ex_id) {       
+
+        $exam = Exam::find($ex_id);
+        $event = $event->event->first();
+        return view('exams.exam_instructions',['event' => $event, 'exam' => $exam]);
+
+    }
+
     public function examStart(Exam $exam) {  
 
         //$exam = ExamSetting::find($ex_id);
@@ -53,25 +64,22 @@ class ExamAttemptController extends Controller
 
                 array_push($options, $opt1, $opt2);                
 
-            } elseif($ex_content['question-type'] == 2) { //For Multiple Choice Type
+            } elseif($ex_content['question-type'] == 'radio buttons') { //For Multiple Choice Type
+
+                $answer_keys = array_keys($ex_content['answers']);
+                
+                if($exam->random_answers) {
+                    shuffle($answer_keys);
+                }
+
+                $opt1 = $ex_content['answers'][$answer_keys[0]];
+                $opt2 = $ex_content['answers'][$answer_keys[1]];
+                $opt3 = $ex_content['answers'][$answer_keys[2]];
+                $opt4 = $ex_content['answers'][$answer_keys[3]];         
+                array_push($options, $opt1, $opt2, $opt3, $opt4);
 
 
-
-                $unser_data = unserialize($ex_content->answer_keys);
-
-                $opt1 = $unser_data['option_1'];
-
-                $opt2 = $unser_data['option_2'];
-
-                $opt3 = $unser_data['option_3'];
-
-                $opt4 = $unser_data['option_4'];
-
-                array_push($options, $opt1, $opt2, $opt3, $opt4);               
-
-
-
-            } elseif($ex_content['question-type'] == 'radio buttons') { //For Several Answer Type
+            } elseif($ex_content['question-type'] == 3) { //For Several Answer Type
                 //dd($ex_content);
                 //$unser_data = unserialize($ex_content->answer_keys);
 
@@ -81,11 +89,8 @@ class ExamAttemptController extends Controller
                 }
 
                 $opt1 = $ex_content['answers'][$answer_keys[0]];
-
                 $opt2 = $ex_content['answers'][$answer_keys[1]];
-
                 $opt3 = $ex_content['answers'][$answer_keys[2]];
-
                 $opt4 = $ex_content['answers'][$answer_keys[3]];
 
                 array_push($options, $opt1, $opt2, $opt3, $opt4);
@@ -104,7 +109,7 @@ class ExamAttemptController extends Controller
 
             $exData =  ExamSyncData::where(['exam_id' => $exam->id, 'user_id' => $st_id])->value('data');
 
-            $ex_contents = json_decode($exData);
+            $ex_contents = json_decode($exData,true);
 
             $redata = ExamSyncData::where(['exam_id' => $exam->id, 'user_id' => $st_id])->value('started_at');
 
@@ -120,8 +125,7 @@ class ExamAttemptController extends Controller
             }
 
         }
-        
-
+  
         return view('exams.exam_start', ['event' => $event,'user_id' => $st_id, 'ex_contents' => $ex_contents, 'exam' => $exam, 'redata' => $redata,
                     'event_title' => $event->title,'first_name' => Auth::user()->firstname,'last_name'=>Auth::user()->lastname]);
 
@@ -222,16 +226,14 @@ class ExamAttemptController extends Controller
                 $exam_datas = json_decode($examJson, true);   
                 $total_credit = 0;
                 $totalCredits = 0;
-
+                $answers = [];
                 foreach($exam_datas as $exam_data) {
-
-                    dd($exam_data);
 
                     $q_id = $exam_data['q_id'];
                     $ex_id = $exam_id;
                     $q_type_id = $exam_data['question_type'];
                     $given_ans = $exam_data['given_ans'];
-
+                   
                     $credit = 0;
 
 
@@ -240,36 +242,38 @@ class ExamAttemptController extends Controller
                     if($given_ans!='') {
 
                     $getDBContents = Exam::find($exam_id)->questions;
-                    $getDBContents = json_decode($getDBContents,true);
+                    $getDB = json_decode($getDBContents,true);
 
-                    foreach($getDBContents as $getDB) {
+                    //foreach($getDBContents as $getDB) {
 
-                        $dbAns = $getDB['correct_answer'];
-                        $totalCredits +=  $getDB['answer_credit'];
+                        $dbAns = $getDB[$q_id]['correct_answer'];
+                        $totalCredits +=  $getDB[$q_id]['answer-credit'];
+
+                        $answers[] = ['question' => $getDB[$q_id]['question'],'correct_answer' => $getDB[$q_id]['correct_answer'][0],'given_answer' => $given_ans];
 
                         if($q_type_id == 1) { //For True False Type
 
                             $Ans = $dbAns;
-
+                            
                             if($given_ans == $Ans) {
 
-                                $credit =  $getDB->answer_credit;
+                                $credit =  $getDB['answer-credit'];
 
                             }
 
-                        } elseif($q_type_id == 'radio_buttons') { //For Multiple Choice
+                        } else if($q_type_id == 'radio buttons') { //For Multiple Choice
 
-                            $opSer = unserialize($getDB->answer_keys);
-
-                            $cAns = preg_replace('/\s+/', ' ', trim($opSer['option_'.$dbAns]));
-
+                            //$opSer = unserialize($getDB->answer_keys);
+                            
+                            $cAns = $dbAns[0];
+                           
                             if($given_ans == $cAns) {
 
-                                $credit = $getDB->answer_credit;
+                                $credit = $getDB[$q_id]['answer-credit'];
 
                             }
 
-                        } elseif($q_type_id == 3) { //For Several Answer
+                        } else if($q_type_id == 3) { //For Several Answer
 
                             $unSer = unserialize($dbAns);
 
@@ -307,7 +311,7 @@ class ExamAttemptController extends Controller
 
                         $total_credit+= $credit;
 
-                    }
+                    //}
 
                     }
 
@@ -320,7 +324,7 @@ class ExamAttemptController extends Controller
                 $student = User::find($st_id);
 
                 //$totalQues = count(Examcontent::where('exam_id',$ex_id)->get());
-                $totalQues = Examcontent::where('exam_id',$ex_id)->sum('answer_credit');
+                $totalQues =$totalCredits; //Exam::where('exam_id',$ex_id)->sum('answer_credit');
 
                 $examResultData = ExamResult::where('exam_id',$ex_id)->where('user_id', $st_id)->first();
 
@@ -328,9 +332,10 @@ class ExamAttemptController extends Controller
 
                     $examResultData->user_id = $st_id;
                     $examResultData->exam_id = $ex_id;
-                    $examResultData->first_name = $student->first_name;
-                    $examResultData->last_name = $student->last_name;
+                    $examResultData->first_name = $student->firstname;
+                    $examResultData->last_name = $student->lastname;
                     $examResultData->score = $total_credit;
+                    $examResultData->answers = json_encode($answers);
                     $examResultData->start_time = $start_time;
                     $examResultData->end_time = $finish;
                     $examResultData->total_time = $total_time;
@@ -345,9 +350,10 @@ class ExamAttemptController extends Controller
 
                         'user_id' => $st_id,
                         'exam_id' => $ex_id,
-                        'first_name' => $student->first_name,
-                        'last_name'=>  $student->last_name,
+                        'first_name' => $student->firstname,
+                        'last_name'=>  $student->lastname,
                         'score' => $total_credit,
+                        'answers' => json_encode($answers),
                         'start_time' => $start_time,
                         'end_time' => $finish,
                         'total_time' => $total_time,
@@ -357,8 +363,8 @@ class ExamAttemptController extends Controller
                 }
 
                 
-                $exam = ExamSetting::find($ex_id);
-                $eventType = Content::select('view_tpl')->where('id',$exam->event_id)->first();
+                $exam = Exam::find($ex_id);
+                $eventType = Event::select('view_tpl')->where('id',$exam->event->first()->id)->first();
 
                 if($eventType->view_tpl == 'elearning_event'){
                    
@@ -422,6 +428,23 @@ class ExamAttemptController extends Controller
         }
 
         return 'fail';
+
+    }
+
+
+    public function examResults($exam) {
+
+        $user = Auth::user();
+        
+        $examResult = ExamResult::where(['exam_id' => $exam, 'user_id' => $user->id])->first();
+
+        $data = $examResult->getResults($user->id);
+        $data['first_name'] = $user->firstname;
+        $data['last_name'] = $user->lastname;
+        $data['image'] = $user->image;
+        $data['showAnswers'] = true;
+        
+        return view('exams.results',$data);
 
     }
 

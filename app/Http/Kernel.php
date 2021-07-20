@@ -64,6 +64,7 @@ class Kernel extends HttpKernel
         'preview' => \App\Http\Middleware\Preview::class,
         'static_page' => \App\Http\Middleware\StaticPages::class,
         'auth.aboveauthor' => \App\Http\Middleware\AuthAuthorsAndAbove::class,
+        'auth.sms' => \App\Http\Middleware\CheckForSMSCoockie::class,
     ];
 
     /**
