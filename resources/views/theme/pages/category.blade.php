@@ -11,7 +11,7 @@
                if( $delivery['slugable']['slug'] === 'video-on-demand-courses'){$elern = true; }
                ?>
             <h1 >
-            {{ $delivery->name }}111
+            {{ $delivery->name }}
             </h1>
             <p>{{ $delivery->description }}</p>
             @elseif(isset($city))

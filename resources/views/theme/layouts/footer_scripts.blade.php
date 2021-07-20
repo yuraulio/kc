@@ -3,8 +3,8 @@
 <script>
 
 
-$(document).ready(function(){ 
-  
+$(document).ready(function(){
+
     $('.page-wrapper').removeClass('non-pointer')
    // $('.page-wrapper').css('pointer-events','all'); //activate all pointer-events on page
   //  $('.page-wrapper').css('cursor','pointer');
@@ -23,7 +23,7 @@ $(document).ready(function(){
 
 <script type="text/javascript">
     $(function() {
-        
+
         $("#terms").click(function(){
         var thec = $(this).find('input[type=checkbox]');
             if (thec.prop("checked") === false) {
@@ -46,7 +46,7 @@ $(document).ready(function(){
             }
         });
 
-   
+
 
     })
 
@@ -155,13 +155,14 @@ $(document).ready(function(){
     var email = $('#email').val();
     var password = $('#password').val();
     var remember = document.getElementById("remember-me").checked;
-   
+
     if (email.length > 4 && password.length > 4) {
     $.ajax({ url: routesObj.baseUrl+"studentlogin", type: "post",
             data: {email:email, password:password, remember:remember},
             success: function(data) {
-                //console.log(data);
-                
+
+                data = data.data
+                console.log(data.status)
                 switch (data.status) {
                     case 0:
                         if (data.message.length > 0) {
@@ -176,12 +177,12 @@ $(document).ready(function(){
                             $('.alert-outer').show()
 
                         } else {
-                          
+
 
                         }
                         break;
                     case 1:
-                      
+
                         setTimeout( function(){
                             window.location.replace(data.redirect);
                         }, 1000 );
@@ -192,9 +193,9 @@ $(document).ready(function(){
                         shakeModal();
                         break;
                 }
-                
-           
-   
+
+
+
             },
             error: function(data) {
                 //shakeModal();
@@ -225,18 +226,18 @@ function loginAjax(){
                  shakeModal();
             }
         });
-    
+
     //data: $(".newsletter_form").serialize(),
     var email = $('input#uemail').val();
     var password = $('input#upassword').val();
     var remember = document.getElementById("remember").checked;
-        
+
     if (email.length > 4 && password.length > 4) {
     $.ajax({ url: routesObj.baseUrl+"studentlogin", type: "post",
             data: {email:email, password:password, remember:remember},
             success: function(data) {
             //    console.log(data);
-                
+
                 switch (data.status) {
                     case 0:
                         if (data.message.length > 0) {
@@ -323,7 +324,7 @@ function loginAjax(){
             success: function(data) {
                 window.close();
             }
-        });    
+        });
   }
 
 };*/
@@ -337,7 +338,7 @@ function loginAjax(){
             success: function(data) {
                 window.close();
             }
-        });        
+        });
     }
 
 

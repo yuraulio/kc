@@ -8,7 +8,7 @@
                <div class="footer-form">
                <div class="newsletterReponse"></div>
                <div id="mc_embed_signup">
-             
+
 
                   <form  class="form-control" action="//knowcrunch.us15.list-manage.com/subscribe/post?u=312b4ca8015cf92c92eeb4dbb&amp;id=ec4847fa7b" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
                   <div id="mc_embed_signup_scroll">
@@ -21,12 +21,12 @@
 
                      <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_312b4ca8015cf92c92eeb4dbb_ec4847fa7b" tabindex="-1" value=""></div>
                      <button type="submit" class="btn btn--md btn--secondary">Subscribe</button>
-                   
+
                      <div id="mce-responses" class="clear">
                         <div class="response" id="mce-error-response" style="display:none"></div>
                         <div class="response" id="mce-success-response" style="display:none"></div>
                      </div>
-                   
+
                      <p>We respect your personal data. By subscribing, you accept our <a href="/data-privacy-policy" class="dark-bg">data privacy policy</a> and agree that we can contact you to share our news or for marketing purposes.</p>
                     <!-- <script type='text/javascript' src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></script>-->
                      <script type='text/javascript'>(function($) {window.fnames = new Array(); window.ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';fnames[1]='FNAME';ftypes[1]='text';fnames[2]='LNAME';ftypes[2]='text';});</script>
@@ -70,7 +70,7 @@
                   <div class="mobile-toggle">
                      <ul class="footer-menu">
                         <li> <a  href='/in-class-courses'  title = 'In-Class Courses'> in-class courses  </a> </li>
-                        <li> <a  href='/e-learning-courses'  title = 'E-Learning Courses'> e-learning courses  </a> </li>
+                        <li> <a  href='/video-on-demand-courses'  title = 'E-Learning Courses'> e-learning courses  </a> </li>
                      </ul>
                   </div>
                   <h4 class="footer-title">Certifications</h4>
@@ -86,16 +86,16 @@
                      <ul class="footer-menu">
                         <li class="account-menu">
                         @if (Auth::check())
-                        <a href="/myaccount" title = 'Manage Account'> manage your account </a> 
+                        <a href="/myaccount" title = 'Manage Account'> manage your account </a>
 
                         @else
-                        <a href="javascript:void(0)" title = 'Manage Account'> manage your account </a> 
+                        <a href="javascript:void(0)" title = 'Manage Account'> manage your account </a>
 
                         @endif
                         </li>
                         <li> <a  href='https://www.facebook.com/groups/KnowcrunchAlumni/' target='_blank' title = 'Official Alumni Group'> official alumni group </a> </li>
                         <li> <a  href='https://www.facebook.com/groups/socialmediagreece/' target='_blank' title = 'Digital Nation Group'> digital nation group </a> </li>
-                        
+
                         <!--<li> <a  href='/terms'  title = 'Terms & Conditions'> terms & conditions </a> </li>
                         <li> <a  href='/data-privacy-policy'  title = 'Data Privacy Policy'> data privacy policy </a> </li>-->
                      </ul>
@@ -138,7 +138,7 @@
                         </a>
                      </li>
                   @endif
-                 
+
                   @if($social_media[1]['pinterest']['url'] != '')
                     <li><a target="_blank" title="{{ $social_media[1]['pinterest']['title'] }}" href="{{ $social_media[1]['pinterest']['url'] }}">
                         <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Pinterest.svg')}}" width="23" alt="{{ $social_media[1]['pinterest']['title'] }}"> </a>
@@ -147,7 +147,7 @@
 
                   @if($social_media[1]['medium']['url'] != '')
                     <li><a target="_blank" title="{{ $social_media[1]['medium']['title'] }}" href="{{ $social_media[1]['medium']['url'] }}">
-                        <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Medium.svg')}}" width="23" alt="{{ $social_media[1]['medium']['title'] }}"> </a>                 
+                        <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Medium.svg')}}" width="23" alt="{{ $social_media[1]['medium']['title'] }}"> </a>
                      </li>
                   @endif--}}
                </ul>

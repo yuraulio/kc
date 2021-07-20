@@ -314,8 +314,12 @@ Route::group(['middleware' => ['auth','auth.sms'], 'prefix'=>'myaccount'], funct
 
 
 
+
+
     Route::get('/enroll-for-free/{content}', 'Theme\HomeController@enrollToFreeEvent')->name('enrollForFree');
 });
+
+Route::get('/logout', [ 'as' => 'logout' , 'uses' => 'Theme\StudentController@logout']);
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('exam-start/{exam}', 'Theme\ExamAttemptController@examStart')->name('exam-start');
@@ -366,6 +370,10 @@ Route::group(['middleware' => ['preview','web','auth.sms']], function () {
     Route::get('{slug}', 'Theme\HomeController@index');
 
 });
+
+//Authentication
+Route::post('checkoutlogin', [ 'as' => 'user.cauth'  , 'uses' => 'Auth\LoginController@checkoutauth']);
+Route::post('studentlogin', [ 'as' => 'user.sauth'  , 'uses' => 'Auth\LoginController@studentauth']);
 
 
 
