@@ -12,6 +12,8 @@ use App\Model\Media;
 use App\Model\Logos;
 use App\Model\Menu;
 use App\Model\Type;
+use App\Model\City;
+use App\Model\Topic;
 use App\Model\Instructor;
 use App\Model\Category;
 use View;
@@ -20,6 +22,7 @@ use Laravel\Cashier\Cashier;
 use App\Model\User;
 use App\Model\Invoice;
 use Auth;
+use PDF;
 use Carbon\Carbon;
 use App\Model\Transaction;
 
@@ -105,7 +108,6 @@ class HomeController extends Controller
     public function index(Slug $slug){
 
 
-        //dd(get_class($slug->slugable));
         //dd(get_class($slug->slugable) == Event::class);
         //dd(get_class($slug->slugable) == Delivery::class);
 
@@ -130,27 +132,31 @@ class HomeController extends Controller
                 return $this->instructor($slug->slugable);
                 break;
 
+            case City::class:
+                return $this->city($slug->slugable);
+                break;
+
         }
 
     }
 
     public function enrollToFreeEvent(Event $content){
 
-        
+
         $published = $content->published;
       // dd($estatus);
         if($published == 0){
             return false;
         }
-        
+
         if(Auth::user() && $user = (Auth::user())){
-      
-            $student = $user->events->where('id',$content->id)->first();  
+
+            $student = $user->events->where('id',$content->id)->first();
             if(!$student){
-                
+
                 //ticket
                 $eventticket = $student->ticket->first();
-               
+
                 $payment_method_id = 1;//intval($input["payment_method_id"]);
                 $payment_cardtype = 8; //free;
                 $amount = 0;
@@ -205,7 +211,7 @@ class HomeController extends Controller
 
                     $transaction->update(['status_history' => json_encode($status_history)/*, 'billing_details' => $tbd*/]);
 
-                    $today = date('Y/m/d'); 
+                    $today = date('Y/m/d');
                     $expiration_date = '';
 
                     if($content->expiration){
@@ -223,37 +229,91 @@ class HomeController extends Controller
         return back();
     }
 
+    private function city($page){
+        $data['header_menus'] = $this->header();
+
+        $data['content'] = $page;
+
+        $city = City::with('event')->find($page['id']);
+
+        //$data['content'] = $city;
+        $data['city'] = $city;
+        $data['openlist'] = $city->event()->with('category','slugable', 'city', 'ticket','summary1')->where('status', 0)->get();
+        $data['completedlist'] = $city->event()->with('category','slugable', 'city', 'ticket', 'summary1')->where('status', 3)->get();
+
+        return view('theme.pages.category' ,$data);
+    }
+
     private function instructor($page){
         $data['header_menus'] = $this->header();
 
         $data['content'] = $page;
         $events = array();
 
-        $instructor = Instructor::with('event.category', 'medias')->find($page['id']);
-        //dd($instructor);
-
-        foreach($instructor['event'] as $key => $event){
-            $category = $event['category'][0];
-            $events[$key] = $category;
-            //dd($category);
-        }
-
-
+        $instructor = Instructor::with('event.category', 'medias', 'event.lessons', 'event.slugable', 'event.city', 'event.summary1')->find($page['id']);
+        //dd($instructor['event'][0]);
         $category = array();
 
-        foreach($events as $key => $event){
-            if($key == 0){
-                $category[$event['id']] = $event;
-            }else{
-                if(!isset($category[$event['id']]) ){
+
+        foreach($instructor['event'] as $key => $event){
+            if(($event['status'] == 0 || $event['status'] == 2) && $event->is_inclass_course()){
+                foreach($event['lessons'] as $lesson){
+
+                    if($lesson->pivot['date'] != ''){
+                        $date = date("Y/m/d", strtotime($lesson->pivot['date']));
+                    }else{
+                        $date = date("Y/m/d", strtotime($lesson->pivot['time_starts']));
+                    }
+                    if(strtotime("now") < strtotime($date)){
+                        if($lesson['instructor_id'] == $page['id']){
+                            $lessons[] = $lesson['title'];
+                        }
+                    }
+
+
+                }
+
+            }
+        }
+        $category = array();
+
+        foreach($instructor['event'] as $key => $event){
+
+                //dd($event['status']);
+                if($key == 0){
                     $category[$event['id']] = $event;
+                }else{
+                    if(!isset($category[$event['id']])){
+                        $category[$event['id']] = $event;
+                    }
+                }
+
+        }
+
+        $new_events = array();
+
+        foreach($category as $category){
+            //dd($category['title']);
+            if(count($new_events) == 0){
+                array_push($new_events, $category);
+            }else{
+                $find = false;
+                foreach($new_events as $event){
+                    if($event['title'] == $category['title']){
+                        $find = true;
+                    }
+                }
+                if(!$find){
+                    array_push($new_events, $category);
                 }
             }
         }
-        $data['instructorTeaches'] = $category;
-        dd($category);
-        //dd(array_unique($events));
-        //dd($instructor['event']->unique()->groupBy('id'));
+
+        $data['instructorTeaches'] = array_unique($lessons);
+
+        $data['instructorEvents'] = $new_events;
+        //dd($new_events);
+
 
         return view('theme.pages.instructor_page' ,$data);
     }
@@ -319,7 +379,7 @@ class HomeController extends Controller
         if(Auth::user() && count(Auth::user()->events->where('id',$event->id)) > 0){
             $data['is_event_paid'] = 0;
         }
-    
+
         return view('theme.event.' . $event->view_tpl,$data);
 
     }
@@ -337,6 +397,144 @@ class HomeController extends Controller
 
         }
         return $result;
+    }
+
+    public function printSyllabusBySlug($slug = '')
+    {
+
+        //Request $request
+        $data = array();
+
+        $slug = Slug::where('slug', $slug)->first();
+        //dd($slug);
+        $data['content'] = $slug->slugable;
+        //dd($event);
+
+        $data['content'] = Event::with('category', 'city', 'topic',)->find($data['content']['id']);
+        //dd($data['content']->topicsLessonsInstructors());
+
+        $data['eventtopics']= $data['content']->topicsLessonsInstructors()['topics'];
+        //dd($data['eventtopics']);
+        foreach($data['eventtopics'] as $key => $topic){
+            //dd($key);
+            $topic = Topic::where('title', $key)->first();
+            $topicDescription[$key] = $topic['summary'];
+        }
+        //dd($topicDescription);
+
+        $data['eventorganisers']=array();
+        $data['location']= $data['content']['city'][0];
+
+        //dd($data['content']['topic']);
+        $data['etax'] = $data['content']['topic'];
+        //dd($data['etax'][0]);
+
+        //$datain = $data['etax'];
+
+
+        $data['instructors'] = $data['content']->topicsLessonsInstructors()['instructors'];
+        //dd($data['instructors']);
+
+        $data['is_event_paid'] = 1;
+        $data['desc'] = $topicDescription;
+        //dd($data['topicss']);
+        //dd($arr);
+
+
+        // if (isset($data['content']->categories) && !empty($data['content']->categories)) :
+
+        // $eventCategory = [];
+        // $data['eventtopics']= $data['content']->topicsLessonsInstructors()['topics'];
+        // $data['eventorganisers']=array();
+        // $data['location']= $data['content']['city'][0];
+        // $blockCategory = -1;
+
+        // endif;
+
+        //dd($data['content']);
+
+        // foreach ($data['content']->categories as $category) :
+        //     //45 block category
+        //     if ($category->depth != 0 && $category->parent_id == 45) {
+        //          $blockCategory=$category->id;
+        //          $data['blockcat'] = $blockCategory;
+        //          break;
+        //     }
+
+        // endforeach;
+
+        // if($blockCategory == '') {
+        //     $data['blockcat'] = 1;
+        //     $blockCategory = 1;
+        // }
+
+        // foreach ($data['content']->categories as $category) :
+        //         if(!in_array($category->id, $data['eventtopics'])){
+        //             if ($category->depth != 0 && $category->parent_id == $blockCategory) {
+        //                  $data['eventtopics'][]=$category->id;
+        //             }
+        //         }
+        //         //if(!in_array($category->id, $data['eventorganisers'])){
+        //             if ($category->depth != 0 && $category->parent_id == 5) {
+        //                  //$data['eventorganisers'][] = array_push($data['eventorganisers'], $category->id);
+        //                  $data['eventorganisers'][] = $category;//->allMedia;
+        //             }
+        //         //}
+
+        //             if ($category->depth != 0 && $category->parent_id == 9) {
+        //                  $data['location']=$category;
+        //             }
+        //             //22 Event Category, 12 Event Type
+
+        //             if ($category->depth != 0 && $category->parent_id == 22) {
+        //                  $eventCategory[]=$category->id;
+        //             }
+
+        //     endforeach;
+
+
+
+        //$data['topics'] = Category::where('parent_id', '=', $blockCategory)->where('status',1)->where('type',0)->whereIn('id', $data['eventtopics'])->orderBy('priority', 'asc')->orderBy('created_at', 'asc')->get();
+
+        //dd($data['topics']);
+
+        //$datain = [];
+        //$datain = EventLessonInstructor::where('event_id', $data['content']->id)->where('type', 1)->groupBy('instructor_id')->with('lesson.featured.media','instructor.featured.media')->orderBy('timestarts', 'ASC')->get()->toArray();
+
+
+
+        // $insttmp = [];
+        // foreach ($datain as $key => $value) {
+        //     //echo $value->id;
+        //     $insttmp[] = $value['instructor_id'];
+        // }
+
+        // $data['instructors'] = Content::whereIn('id', $insttmp)->with('categories','tags','author','featured.media')->orderBy('subtitle', 'ASC')->get();
+        // //->orderBy('priority', 'ASC')
+
+        // $data['is_event_paid'] = 1;
+        // $data['desc'] = $topicDescription;
+        // $topics = $this->getTopic($data['content'], $data,false);
+
+        // $data['topics'] = $topics['topicss'];
+
+
+
+        /*foreach($data['topics'] as $key => $value){
+
+            dd($key);
+
+        }*/
+
+        //$this->cFieldLib->contentCustomFields($data['instructors']);
+        //return view('theme.event.syllabus_print', $data);
+        $pdf = PDF::loadView('theme.event.syllabus_print', $data)->setPaper('a4', 'landscape');
+        $fn = $slug . '.pdf';
+        return $pdf->stream($fn);
+       /* $slug
+        $pdf = PDF::loadView('pdf.invoice', $data);
+        return $pdf->download('invoice.pdf');
+        PDF::loadHTML($html)->setPaper('a4', 'landscape')->setWarnings(false)->save('myfile.pdf')*/
     }
 
 

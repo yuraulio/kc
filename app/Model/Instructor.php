@@ -31,7 +31,7 @@ class Instructor extends Model
 
     public function event()
     {
-        return $this->belongsToMany(Event::class, 'event_topic_lesson_instructor');
+        return $this->belongsToMany(Event::class, 'event_topic_lesson_instructor')->with('slugable');
     }
 
     public function testimonials()
