@@ -54,7 +54,7 @@
 <div class="control-group">
 	<label class="control-label" for="cancelUrl">Cancellation URL</label>
 	<div class="controls">
-	  	<input type="text" name="test_processor[cancelUrl]" class="form-control" id="cancelUrl" value="<?php echo URL::to('payment-dispatch/notok/alphabank'); ?>" />
+	  	<input type="text" name="test_processor[cancelUrl]" class="form-control" id="cancelUrl" value="<?php  echo URL::to('payment-dispatch/notok/alphabank'); ?>" />
 	</div>
 </div>
 

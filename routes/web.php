@@ -319,8 +319,16 @@ Route::group(['middleware' => 'auth', 'prefix'=>'myaccount'], function () {
     Route::get('/enroll-for-free/{content}', 'Theme\HomeController@enrollToFreeEvent')->name('enrollForFree');
 });
 
+<<<<<<< HEAD
 Route::get('/logout', [ 'as' => 'logout' , 'uses' => 'Theme\StudentController@logout']);
 
+=======
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('exam-start/{exam}', 'Theme\ExamAttemptController@examStart')->name('exam-start');
+    Route::post('sync-data', 'Theme\ExamAttemptController@syncData')->name('sync-data');
+    Route::post('save-data', 'Theme\ExamAttemptController@saveData')->name('save-data');
+});
+>>>>>>> e44bed351b9ae7d0f085657e1cb5223c707953ef
 Route::group([ 'prefix' => 'print'], function () {
     Route::get('syllabus/{slug}', 'Theme\HomeController@printSyllabusBySlug');
 });
