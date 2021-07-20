@@ -22,6 +22,7 @@ use Laravel\Cashier\Cashier;
 use App\Model\User;
 use App\Model\Invoice;
 use Auth;
+use PDF;
 use Carbon\Carbon;
 use App\Model\Transaction;
 
@@ -409,7 +410,7 @@ class HomeController extends Controller
         $data['content'] = $slug->slugable;
         //dd($event);
 
-        $data['content'] = Event::with('category', 'city', 'topic')->find($data['content']['id']);
+        $data['content'] = Event::with('category', 'city', 'topic',)->find($data['content']['id']);
         //dd($data['content']->topicsLessonsInstructors());
 
         $data['eventtopics']= $data['content']->topicsLessonsInstructors()['topics'];
@@ -421,15 +422,24 @@ class HomeController extends Controller
         }
         //dd($topicDescription);
 
-        $topicDescription = $data['eventtopics'];
-        //dd($topicDescription);
-
-        //dd($data['eventtopics']);
-        //dd(Topic::where());
         $data['eventorganisers']=array();
         $data['location']= $data['content']['city'][0];
 
-        $topicDescription = [];
+        //dd($data['content']['topic']);
+        $data['etax'] = $data['content']['topic'];
+        //dd($data['etax'][0]);
+
+        //$datain = $data['etax'];
+
+
+        $data['instructors'] = $data['content']->topicsLessonsInstructors()['instructors'];
+        //dd($data['instructors']);
+
+        $data['is_event_paid'] = 1;
+        $data['desc'] = $topicDescription;
+        //dd($data['topicss']);
+        //dd($arr);
+
 
         // if (isset($data['content']->categories) && !empty($data['content']->categories)) :
 
@@ -486,33 +496,27 @@ class HomeController extends Controller
 
         //$data['topics'] = Category::where('parent_id', '=', $blockCategory)->where('status',1)->where('type',0)->whereIn('id', $data['eventtopics'])->orderBy('priority', 'asc')->orderBy('created_at', 'asc')->get();
 
-            dd($data['topics']);
-        foreach($data['topics'] as $topic){
-            $topicDescription[$topic->name] = $topic->description;
-        }
+        //dd($data['topics']);
 
-        $filterQuery = EventLessonInstructor::where('event_id', $data['content']->id)->where('type', 1)->with('lesson.featured.media', 'lesson.customFields', 'lesson.categories', 'instructor.featured.media')->orderBy('timestarts', 'ASC')->get();
-
-        $data['etax'] = $filterQuery->toArray();
-
-        $datain = [];
-        $datain = EventLessonInstructor::where('event_id', $data['content']->id)->where('type', 1)->groupBy('instructor_id')->with('lesson.featured.media','instructor.featured.media')->orderBy('timestarts', 'ASC')->get()->toArray();
+        //$datain = [];
+        //$datain = EventLessonInstructor::where('event_id', $data['content']->id)->where('type', 1)->groupBy('instructor_id')->with('lesson.featured.media','instructor.featured.media')->orderBy('timestarts', 'ASC')->get()->toArray();
 
 
-        $insttmp = [];
-        foreach ($datain as $key => $value) {
-            //echo $value->id;
-            $insttmp[] = $value['instructor_id'];
-        }
 
-        $data['instructors'] = Content::whereIn('id', $insttmp)->with('categories','tags','author','featured.media')->orderBy('subtitle', 'ASC')->get();
-        //->orderBy('priority', 'ASC')
+        // $insttmp = [];
+        // foreach ($datain as $key => $value) {
+        //     //echo $value->id;
+        //     $insttmp[] = $value['instructor_id'];
+        // }
 
-        $data['is_event_paid'] = 1;
-        $data['desc'] = $topicDescription;
-        $topics = $this->getTopic($data['content'], $data,false);
+        // $data['instructors'] = Content::whereIn('id', $insttmp)->with('categories','tags','author','featured.media')->orderBy('subtitle', 'ASC')->get();
+        // //->orderBy('priority', 'ASC')
 
-        $data['topics'] = $topics['topicss'];
+        // $data['is_event_paid'] = 1;
+        // $data['desc'] = $topicDescription;
+        // $topics = $this->getTopic($data['content'], $data,false);
+
+        // $data['topics'] = $topics['topicss'];
 
 
 
@@ -522,7 +526,7 @@ class HomeController extends Controller
 
         }*/
 
-        $this->cFieldLib->contentCustomFields($data['instructors']);
+        //$this->cFieldLib->contentCustomFields($data['instructors']);
         //return view('theme.event.syllabus_print', $data);
         $pdf = PDF::loadView('theme.event.syllabus_print', $data)->setPaper('a4', 'landscape');
         $fn = $slug . '.pdf';

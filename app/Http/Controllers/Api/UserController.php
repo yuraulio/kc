@@ -316,17 +316,21 @@ class UserController extends Controller
 
             //dd($event->topicsLessonsInstructors()[]);
             $arr = array();
+
             $data[$key]['topics'] = [];
             foreach($event->topicsLessonsInstructors()['topics'] as $key11 => $topic){
                 //dd($key11);
-
-
+                $arr_lesson = array();
+                $arr['topic_content'] = array();
+                $arr['topic_content']['lessons'] = array();
 
                 foreach($topic['lessons'] as $key_topic => $lesson1){
 
+
+
                     //dd($key11);
                         $arr['topic_name'] = $key11;
-                        $arr['topic_content'] = array();
+
                         //$data[$key]['topics'][$key11]['lessons'][$key_topic]['title'] = $lesson1['title'];
                         if($event->is_elearning_course()){
                             //$data[$key]['topics'][$key11]['topic_id'] = $lesson1['topic_id'];
@@ -336,33 +340,38 @@ class UserController extends Controller
                             $h = $hours = floor($topic['topic_duration'] / 3600);
                             $arr['topic_content']['total_duration'] = intval($h) . 'h ' . $m . 'm';
 
-                            $arr['topic_content']['lessons'][$key_topic]['vimeo_video'] = $lesson1['vimeo_video'];
-                            $arr['topic_content']['lessons'][$key_topic]['vimeo_duration'] = $lesson1['vimeo_duration'];
+
+                            $arr_lesson['vimeo_video'] = $lesson1['vimeo_video'];
+                            $arr_lesson['vimeo_duration'] = $lesson1['vimeo_duration'];
+
+                            //$arr['topic_content']['lessons'][$key_topic]['vimeo_video'] = $lesson1['vimeo_video'];
+                            //$arr['topic_content']['lessons'][$key_topic]['vimeo_duration'] = $lesson1['vimeo_duration'];
 
                             if($lesson1['vimeo_video'] != ''){
                                 $vimeo_id = explode('https://vimeo.com/', $lesson1['vimeo_video'])[1];
 
                                 if(isset($notes[$vimeo_id]))
-                                    $arr['topic_content']['lessons'][$key_topic]['note'] = $notes[$vimeo_id];
+                                    //$arr['topic_content']['lessons'][$key_topic]['note'] = $notes[$vimeo_id];
+                                    $arr_lesson['note'] = $notes[$vimeo_id];
 
                                     //dd(isset($videos[$vimeo_id]));
 
                                 if(isset($videos[$vimeo_id])){
 
-                                    $arr['topic_content']['lessons'][$key_topic]['video_info']['seen'] = $videos[$vimeo_id]['seen'];
-                                    $arr['topic_content']['lessons'][$key_topic]['video_info']['stop_time'] = $videos[$vimeo_id]['stop_time'];
-                                    $arr['topic_content']['lessons'][$key_topic]['video_info']['percentMinutes'] = $videos[$vimeo_id]['percentMinutes'];
+                                    $arr_lesson['video_info']['seen'] = $videos[$vimeo_id]['seen'];
+                                    $arr_lesson['video_info']['stop_time'] = $videos[$vimeo_id]['stop_time'];
+                                    $arr_lesson['video_info']['percentMinutes'] = $videos[$vimeo_id]['percentMinutes'];
                                 }else{
-                                    $arr['topic_content']['lessons'][$key_topic]['video_info']['seen'] = "0";
-                                    $arr['topic_content']['lessons'][$key_topic]['video_info']['stop_time'] = "0";
-                                    $arr['topic_content']['lessons'][$key_topic]['video_info']['percentMinutes'] = "0";
+                                    $arr_lesson['video_info']['seen'] = "0";
+                                    $arr_lesson['video_info']['stop_time'] = "0";
+                                    $arr_lesson['video_info']['percentMinutes'] = "0";
                                 }
 
 
 
 
                             }else{
-                                $arr['topic_content']['lessons'][$key_topic]['note'] = '';
+                                $arr_lesson['note'] = '';
                             }
 
 
@@ -370,11 +379,11 @@ class UserController extends Controller
 
                         }else if($event->is_inclass_course()){
                             //$arr['lessons'][$key_topic]['title']
-                            $arr['topic_content']['lessons'][$key_topic]['date'] = $lesson1['pivot']['date'] ?? '';
-                            $arr['topic_content']['lessons'][$key_topic]['time_starts'] = $lesson1['pivot']['time_starts'];
-                            $arr['topic_content']['lessons'][$key_topic]['time_ends'] = $lesson1['pivot']['time_ends'];
-                            $arr['topic_content']['lessons'][$key_topic]['duration'] = $lesson1['pivot']['duration'];
-                            $arr['topic_content']['lessons'][$key_topic]['room'] = $lesson1['pivot']['room'];
+                            $arr_lesson['date'] = $lesson1['pivot']['date'] ?? '';
+                            $arr_lesson['time_starts'] = $lesson1['pivot']['time_starts'];
+                            $arr_lesson['time_ends'] = $lesson1['pivot']['time_ends'];
+                            $arr_lesson['duration'] = $lesson1['pivot']['duration'];
+                            $arr_lesson['room'] = $lesson1['pivot']['room'];
                             // Calendar
 
                             //
@@ -419,7 +428,11 @@ class UserController extends Controller
 
                         $instructor['name'] = $instructors[$lesson1['instructor_id']][0]['title'].' '.$instructors[$lesson1['instructor_id']][0]['subtitle'];
                         $instructor['media'] = \Request::url().$instructors[$lesson1['instructor_id']][0]->medias['path'].$instructors[$lesson1['instructor_id']][0]->medias['original_name'];
-                        $arr['topic_content']['lessons'][$key_topic]['instructor'] = $instructor;
+                        $arr_lesson['instructor'] = $instructor;
+                        //dd($arr['topic_content']);
+
+
+
 
                         $topic1 = preg_replace('/[0-9]+/', '', $key11);
                         $topic1 = Str::slug($topic1);
@@ -440,6 +453,10 @@ class UserController extends Controller
                                 //dd($data[$key]['topics']);
                             }
                         }
+
+                        //dd($arr['topic_content']);
+
+                        array_push($arr['topic_content']['lessons'], $arr_lesson);
 
                 }
                 //dd($arr);
