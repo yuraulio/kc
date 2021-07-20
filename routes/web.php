@@ -314,8 +314,12 @@ Route::group(['middleware' => 'auth', 'prefix'=>'myaccount'], function () {
 
 
 
+
+
     Route::get('/enroll-for-free/{content}', 'Theme\HomeController@enrollToFreeEvent')->name('enrollForFree');
 });
+
+Route::get('/logout', [ 'as' => 'logout' , 'uses' => 'Theme\StudentController@logout']);
 
 Route::group([ 'prefix' => 'print'], function () {
     Route::get('syllabus/{slug}', 'Theme\HomeController@printSyllabusBySlug');
@@ -352,11 +356,15 @@ Route::group([ 'prefix' => 'payment-dispatch'], function () {
 });
 
 Route::group(['middleware' => ['preview','web']], function () {
-    Route::get('/', 'Theme\HomeController@homePage');
+    Route::get('/', 'Theme\HomeController@homePage')->name('homepage');
     Route::post('/add-payment-method', 'Theme\HomeController@addPaymentMethod')->name('add.paymentMethod');
     Route::get('{slug}', 'Theme\HomeController@index');
 
 });
+
+//Authentication
+Route::post('checkoutlogin', [ 'as' => 'user.cauth'  , 'uses' => 'Auth\LoginController@checkoutauth']);
+Route::post('studentlogin', [ 'as' => 'user.sauth'  , 'uses' => 'Auth\LoginController@studentauth']);
 
 
 

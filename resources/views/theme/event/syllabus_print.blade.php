@@ -30,8 +30,8 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12">
-                <h1>{{ $content->title or 'Event Title' }}</h1>
-                <h2>{{ $content->subtitle or 'Event Location' }}</h2>
+                <h1>{{ $content['title'] }}</h1>
+                <h2>@if(count($content['city']) > 0) In {{ $content['city'][0]['name']}}@endif, @if($content->is_inclass_course()) In-class @endif</h2>
 
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12">
@@ -40,7 +40,7 @@
                                 <?php //dd($eventtopics); ?>
                             @if(isset($eventtopics))
                             @foreach($eventtopics as $key => $value)
-                            <?php dd($value); ?>
+                            <?php //dd($value); ?>
 
                                     <div class="topic-section">
                                         <div class="panel-heading" role="tab" id="theading{{ $key }}">
@@ -64,20 +64,21 @@
                                                     </thead>
                                                     <tbody>
 
-                                                    @foreach($value['lessons'] as $lke => $lvalu)
-                                                         @foreach($lvalu as $lkey => $lvalue)
+                                                    @foreach($value['lessons'] as $lke => $lvalue)
+                                                    <?php //dd($lvalu); ?>
+                                                         {{--@foreach($lvalu as $lkey => $lvalue)--}}
 
                                                         <tr >
-                                                            <td><img height="10" src="theme/assets/img/calendar.svg" alt="Date" /> {!! $lvalue['eldate'] !!}</td>
-                                                            <td>{!! $lvalue['eltime'] !!} ({!! $lvalue['inclass_duration'] !!})</td>
-                                                            <td>{{$lvalue['room'] }}</td>
+                                                            <td><img height="10" src="theme/assets/img/calendar.svg" alt="Date" /> <?= date( "l d M Y", strtotime($lvalue['pivot']['time_starts']) ) ?></td>
+                                                            <td><?= date( "l d M Y", strtotime($lvalue['pivot']['time_ends']) ) ?> ({!! $lvalue['pivot']['duration'] !!})</td>
+                                                            <td>{{$lvalue['pivot']['room'] }}</td>
 
-                                                            <td>{{-- $level --}} {!! $lvalue['type'] !!}</td>
-                                                            <td>{{ $lkey }}</td>
-                                                            <td>{!! $lvalue['inst'] !!}</td>
+                                                            <td>{{-- $level --}} @if(count($lvalue['type']) > 0) {!! $lvalue['type'][0]['name'] !!} @endif</td>
+                                                            <td>{{ $lvalue['title'] }}</td>
+                                                            <td>{!! $instructors[$lvalue['pivot']['instructor_id']][0]['title'] !!} {!! $instructors[$lvalue['pivot']['instructor_id']][0]['subtitle'] !!}</td>
                                                         </tr>
 
-                                                        @endforeach
+                                                        {{--@endforeach--}}
                                                     @endforeach
 
 

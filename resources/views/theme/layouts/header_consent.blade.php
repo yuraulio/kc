@@ -12,30 +12,30 @@
 					<?php $cartitems = Cart::content()->count(); ?>
 					@if($cartitems > 0)
 					<span class="cart-menu xs-cart">
-						<a href="/cart" title="Cart"><img src="{{cdn('/theme/assets/images/icons/icon-cart.svg')}}" width="18" alt="Cart"> 
+						<a href="/cart" title="Cart"><img src="{{cdn('/theme/assets/images/icons/icon-cart.svg')}}" width="18" alt="Cart">
 							<!--  <span class="badge defaultCount">{{ Cart::content()->count() }}</span>-->
 						</a>
 					</span>
-						@endif  
+						@endif
 
 						<button class="hamburger hamburger--spin mob-menu-btn" type="button">
-						
+
 						  	<span class="hamburger-box">
 						    	<span class="hamburger-inner"></span>
 						  	</span>
-						</button> 
+						</button>
 
 						<div class="header-actions clearfix">
 							<ul class="actions-list">
                                 <?php $cartitems = Cart::content()->count(); ?>
                                 @if($cartitems > 0)
 								    <li class="cart-menu">
-                                        <a href="/cart" title="Cart"><img src="{{cdn('/theme/assets/images/icons/icon-cart.svg')}}" width="18" alt="Cart"> 
+                                        <a href="/cart" title="Cart"><img src="{{cdn('/theme/assets/images/icons/icon-cart.svg')}}" width="18" alt="Cart">
                                           <!--  <span class="badge defaultCount">{{ Cart::content()->count() }}</span>-->
                                         </a>
                                     </li>
 								@endif
-                                
+
                                 @if (Sentinel::check())
 
                                 <li class="account-menu">
@@ -43,21 +43,21 @@
                                         <div class="account-submenu">
                                             <ul>
                                                 <li class="account-menu"><a href="/myaccount">Account</a></li>
-                                                <li><a href="{{ url('logmeout') }}">Sign Out</a></li>
+                                                <li><a href="{{ url('logout') }}">Sign Out</a></li>
                                             </ul>
                                         </div>
-                                       
+
                                     </li>
 
                                 @else
-                                
+
                                 <li class="account-menu">
 									<a href="javascript:void(0)" title="Superhero Login"><img src="{{cdn('/theme/assets/images/icons/knowcrunch-superhero-icons-login.svg')}}" width="18" alt="Superhero Login"></a>
-								
-                                </li>						
+
+                                </li>
                                 @endif
-                                
-        
+
+
 
 
                                 <li class="header-search-area">
@@ -69,13 +69,13 @@
 										</form>
 									</div>
 
-                    
+
                                 </li>
 
 
 							</ul>
 						</div>
-						
+
 						<ul class="main-menu">
 
                             @if (!empty($filter_type))
@@ -85,7 +85,7 @@
                                     </li>
 								@endforeach
 								<li>
-								<a title="Corporate Training" href="/corporate-training">Corporate Training</a>	
+								<a title="Corporate Training" href="/corporate-training">Corporate Training</a>
 								</li>
                             @endif
 							<!--<li><a href="#">In-class courses</a></li>
@@ -94,7 +94,7 @@
 						</ul>
 					</div>
 				</div>
-		
+
 			</header>
 
 @if(Request::is('/') )

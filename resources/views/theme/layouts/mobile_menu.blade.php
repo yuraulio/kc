@@ -29,7 +29,7 @@
             @endif
 
             <li class="nav-item">
-               <a href="{{ url('logmeout') }}">Sign out</a>
+               <a href="{{ url('logout') }}">Sign out</a>
             </li>
             @else
             <li class="account-menu">

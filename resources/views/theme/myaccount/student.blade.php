@@ -839,6 +839,8 @@
 
                                  @if(isset($dropbox) && $folders != null)
                                  <div id="c-files-inner{{$tab}}" class="in-tab-wrapper">
+                                 <div class="acc-topic-accordion">
+                                       <div class="accordion-wrapper accordion-big">
                                     @if(isset($folders) && count($folders) > 0)
                                        @foreach($folders as $folder)
                                           <div class="accordion-item">
@@ -858,35 +860,38 @@
                                                       @endif
                                                    @endforeach
                                                 @endif
-                                             </div>
+
 
                                                 @if(isset($folders_bonus) && count($folders_bonus) > 0)
-                                                <div class="files-wrapper bonus-files">
-                                                   @foreach($folders_bonus as $folder_bonus)
-                                                      @if($folder_bonus['parent'] == $folder['id'])
-                                                         <h4 class="bonus-title">{{ $folder_bonus['foldername'] }}</h4>
-                                                         <span><i class="icon-folder-open"></i>   </span>
-                                                         @if(isset($files_bonus) && count($files_bonus) > 0)
-                                                            @foreach($files_bonus as $file_bonus)
-                                                               @if($file_bonus['fid'] == $folder['id'])
-                                                                  <div class="file-wrapper">
-                                                                     <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
-                                                                     <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
-                                                                     <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
-                                                                     <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
-                                                                  </div>
-                                                               @endif
-                                                            @endforeach
-                                                         @endif
-                                                      @endif
-                                                   @endforeach
-                                                   </div>
+                                                    <div class="files-wrapper bonus-files">
+                                                    @foreach($folders_bonus as $folder_bonus)
+                                                        @if($folder_bonus['parent'] == $folder['id'])
+                                                            <h4 class="bonus-title">{{ $folder_bonus['foldername'] }}</h4>
+                                                            <span><i class="icon-folder-open"></i>   </span>
+                                                            @if(isset($files_bonus) && count($files_bonus) > 0)
+                                                                @foreach($files_bonus as $file_bonus)
+                                                                @if($file_bonus['fid'] == $folder['id'])
+                                                                    <div class="file-wrapper">
+                                                                        <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
+                                                                        <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
+                                                                        <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
+                                                                        <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
+                                                                    </div>
+                                                                @endif
+                                                                @endforeach
+                                                            @endif
+                                                        @endif
+                                                    @endforeach
+                                                    </div>
+                                                    </div>
                                                 @endif
 
                                           </div>
                                        @endforeach
 
                                     @endif
+                                                    </div>
+                                                    </div>
 
                                  </div>
                                  @endif

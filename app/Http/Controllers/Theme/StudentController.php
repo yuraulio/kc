@@ -15,10 +15,16 @@ use App\Model\Subscription;
 use App\Model\Instructor;
 use Laravel\Cashier\Cashier;
 use \Stripe\Stripe;
+use URL;
 use Illuminate\Support\Facades\Hash;
 
 class StudentController extends Controller
 {
+    protected function logout(){
+        Auth::logout();
+        $url = URL::to('/');
+        return redirect($url);
+    }
     public function index(){
         //dd(getenv('STRIPE_SECRET'));
         //Stripe::setApiKey($ev->paymentMethod->first()->processor_options['secret_key']);

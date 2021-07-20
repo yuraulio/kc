@@ -3,25 +3,8 @@
         <div class="header-body text-center mb-5">
             <div class="row justify-content-center">
                 <div class="col-lg-8 col-md-9">
-                    <h1 class="text-white">{{ __('Welcome to Argon Dashboard Pro Laravel Live Preview.') }}</h1>
-
-                    <p class="text-lead text-light mt-3 mb-0">
-                        {{ __('Log in and see how you can save more than 150 hours of work with CRUDs for managing: #users, #roles, #items, #categories, #tags and more.') }}
-                        @include('alerts.migrations_check')
-                    </p>
+                    <h1 class="text-white">{{ __('Welcome to Knowcrunch Dashboard.') }}</h1>
                 </div>
-                @if (isset($infoLogin))
-                <div class="col-lg-5 col-md-6">
-                        <h3 class="text-lead text-white mt-5 mb-0">
-                            <strong>{{ __('You can log in with 3 user types:') }}</strong>
-                        </h3>
-                        <ol class="text-lead text-light mt-3 mb-0">
-                            <li>{{ __('Username') }} <b>admin@argon.com</b> {{ __('Password') }} <b>secret</b></li>
-                            <li>{{ __('Username') }} <b>creator@argon.com</b> {{ __('Password') }} <b>secret</b></li>
-                            <li>{{ __('Username') }} <b>member@argon.com</b> {{ __('Password') }} <b>secret</b></li>
-                        </ol>
-                    </div>
-                @endif
             </div>
         </div>
     </div>
