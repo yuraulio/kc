@@ -42,6 +42,36 @@ class CreatePlansTable extends Migration
          
         });*/
 
+        Schema::table('plan_events', function(Blueprint $table) {
+            $table->dropColumn('id');
+        });
+
+        Schema::table('plan_categories', function(Blueprint $table) {
+            $table->dropColumn('id');
+        });
+
+        Schema::table('plan_events', function(Blueprint $table) {
+            $table->increments('id')->first();
+        });
+
+        Schema::table('plan_categories', function(Blueprint $table) {
+            $table->increments('id')->first();
+        });
+
+        Schema::table('plans', function (Blueprint $table) {
+            $table->dropColumn('id');
+            $table->dropColumn(['published']);
+           
+        });
+
+        Schema::table('plans', function (Blueprint $table) {
+           
+            $table->id()->first();
+            $table->boolean('published')->default(false);
+        });
+
+        
+
         Schema::create('plan_noevents', function(Blueprint $table) {
 
             $table->increments('id');

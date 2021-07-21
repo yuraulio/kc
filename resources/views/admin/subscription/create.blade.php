@@ -18,13 +18,13 @@
 
 
     @if(!$plan->name)
-         <form method="post" action="{{ route('pages.store') }}" autocomplete="off" enctype="multipart/form-data">
+         <form method="post" action="{{ route('plan.store') }}" autocomplete="off" enctype="multipart/form-data">
       @else
-         <form method="post" action="{{ route('pages.update',$plan->id) }}" autocomplete="off" enctype="multipart/form-data">
+         <form method="post" action="{{ route('plan.update',$plan->id) }}" autocomplete="off" enctype="multipart/form-data">
          @method('put')
       @endif
          @csrf
-         <div class="row">
+         <div class="row plan">
             <div class="col-xl-9 order-xl-1">
                <div class="card">
                   <div class="card-header">
@@ -70,11 +70,25 @@
                                 <option value="year">Yearly</option>
                             </select>
                         </div>
+                        
+                        <div class="form-group{{ $errors->has('published') ? ' has-danger' : '' }}">
+                            <label class="custom-toggle">
+                                <input name="published" type="checkbox" @if($plan->published) checked @endif>
+                                <span class="custom-toggle-slider rounded-circle" data-label-off="unpublished" data-label-on="published"></span>
+                            </label>
+                        </div>
 
-                        <div class="form-group{{ $errors->has('price') ? ' has-danger' : '' }}">
+
+                        <div class="input-group form-group{{ $errors->has('interval_count') ? ' has-danger' : '' }}">
                            {{--<label class="form-control-label" for="input-price">{{ __('Price') }}</label>--}}
-                           <input class="form-control{{ $errors->has('interval_count') ? ' is-invalid' : '' }} col-6" id="interval_count" name='interval_count' value="{{$plan->interval_count}}" type="number" min="1"><span id="interval_count_label"> Day </span>
-                           @include('alerts.feedback', ['field' => 'price'])
+                           <input class="form-control{{ $errors->has('interval_count') ? ' is-invalid' : '' }}" id="interval_count" name='interval_count' value="{{$plan->interval_count}}" type="number" min="1"><div class="input-group-append"><span class="input-group-text" id="interval_count_label"> Day </span></div>
+                           @include('alerts.feedback', ['field' => 'interval_count'])
+                        </div>
+
+                        <div class="form-group{{ $errors->has('trial') ? ' has-danger' : '' }}">
+                           <label class="form-control-label" for="input-trial">{{ __('Trial') }}</label>
+                           <input type="number" name="trial" id="input-trial" class="form-control{{ $errors->has('trial') ? ' is-invalid' : '' }}" placeholder="{{ __('Trial') }}" value="{{ old('trial_days',isset($plan->trial_days) ? $plan->trial_days : 0) }}"  required autofocus>
+                           @include('alerts.feedback', ['field' => 'trial'])
                         </div>
                         
                         <label class="form-control-label" for="input-events">{{ __('Events') }}</label>
@@ -102,7 +116,7 @@
                                 <div class="input-group">
                                   <div class="input-group-prepend">
                                     <div class="input-group-text">
-                                      <input name='categories[]' type="checkbox" aria-label="Checkbox for following text input" @if(in_array($category->id, $category_plans)) checked @endif>
+                                      <input name='categories[]' value="{{$category->id}}" type="checkbox" aria-label="Checkbox for following text input" @if(in_array($category->id, $category_plans)) checked @endif>
                                     </div>
                                   </div>
                                   <input type="text" value="{{$category->name}}" class="form-control" aria-label="Text input with checkbox">
@@ -136,7 +150,9 @@
             <div   class="col-xl-3 order-xl-1">
                <div class="card">
                   <div class="card-header">
-                     
+                     <div class="text-center">
+                           <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
+                        </div>
                   </div>
                </div>
             </div>

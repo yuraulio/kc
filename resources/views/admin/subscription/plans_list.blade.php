@@ -68,7 +68,7 @@
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                                                           
-                                                            <a class="dropdown-item" href="{{ route('pages.edit', $plan) }}">{{ __('Edit') }}</a>
+                                                            <a class="dropdown-item" href="{{ route('plan.edit', $plan) }}">{{ __('Edit') }}</a>
                                                         
                                                         </div>
                                                     </div>
@@ -105,10 +105,6 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
 
     <script src="//cdn.ckeditor.com/4.14.1/standard/ckeditor.js"></script>
-    <script type="text/javascript">
-    $(document).ready(function () {
-        alert('asd')
-        $('.ckeditor').ckeditor();
 
-    });
+    
 @endpush

@@ -232,13 +232,12 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     //ExamsResult
     Route::get('/student-summary/{examResult}/{user_id}','Dashboard\ExamResultController@showResult');
 
-
     //Plan
     Route::get('plans', 'Dashboard\PlanController@index')->name('plan');
     Route::get('create/plan','Dashboard\PlanController@create')->name('plan.create');
-    Route::post('store/plan','Dashboard\PlanController@store');
-    Route::get('edit/plan/{plan}','Dashboard\PlanController@edit');
-    Route::post('update/plan/{plan}','Dashboard\PlanController@update');
+    Route::post('store/plan','Dashboard\PlanController@store')->name('plan.store');
+    Route::get('edit/plan/{plan}','Dashboard\PlanController@edit')->name('plan.edit');
+    Route::put('update/plan/{plan}','Dashboard\PlanController@update')->name('plan.update');
 
 
 });

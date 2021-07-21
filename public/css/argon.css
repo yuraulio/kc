@@ -15959,3 +15959,16 @@ body {
   max-height: 200px;
   overflow: auto; }
 
+.plan .custom-toggle input:checked + .custom-toggle-slider:before {
+  background: #5e72e4;
+  transform: translateX(71px); }
+
+.plan .custom-toggle input:checked + .custom-toggle-slider:after {
+  content: attr(data-label-on);
+  color: #5e72e4;
+  right: auto;
+  left: 7px; }
+
+.plan .custom-toggle {
+  width: 100px; }
+
