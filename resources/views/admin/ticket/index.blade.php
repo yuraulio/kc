@@ -34,11 +34,11 @@
         <tbody class="ticket-body ticket-order">
             @foreach ($event->ticket as $ticket)
                 <tr id="ticket_{{$ticket->id}}" data-id="{{$ticket->id}}" class="ticket-list">
-                    <td>{{ $ticket->title }}</td>
+                    <td><a id="edit-ticket-btn" href="#">{{ $ticket->title }}</a></td>
                     <td>{{ $ticket->subtitle }}</td>
                     <td>{{ $ticket->type }}</td>
 
-                    <td id="quantity-{{$ticket->id}}">{{ $ticket->pivot->quantity }}</td>
+                    <td id="quantity-{{$ticket->id}}"> {{ $ticket->pivot->quantity }}</td>
                     <td id="price-{{$ticket->id}}">{{ $ticket->pivot->price }}</td>
 
                     <td>{{ date_format($ticket->created_at, 'Y-m-d' ) }}</td>
@@ -51,7 +51,7 @@
                                 <i class="fas fa-ellipsis-v"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                <a class="dropdown-item" data-toggle="modal" data-target="#editTicketModal" data-id="{{$ticket->id}}" data-price="{{$ticket->price}}" data-quantity="{{$ticket->pivot->quantity}}">{{ __('Edit') }}</a>
+                                <a class="dropdown-item edit-to-open" data-toggle="modal" data-target="#editTicketModal" data-id="{{$ticket->id}}" data-price="{{$ticket->price}}" data-quantity="{{$ticket->pivot->quantity}}">{{ __('Edit') }}</a>
                                 <a class="dropdown-item" id="remove_ticket" data-ticket-id="{{ $ticket->id }}">{{ __('Delete') }}</a>
                             </div>
                         </div>
@@ -225,6 +225,9 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
 
     <script>
+        $(document).on('click',"#edit-ticket-btn",function(){
+            $(this).parent().parent().find('.edit-to-open').click()
+        })
         $("#addRow").click(function () {
         var html = '';
         html += '<div id="inputFormRow">';
@@ -331,7 +334,7 @@
                     let ticket = data.ticket;
                     let newTicket =
                     `<tr id="ticket_`+ticket['id'] +`">` +
-                    `<td id="title_ticket-` +ticket['id'] +`">` + ticket['title'] + `</td>` +
+                    `<td id="title_ticket-` +ticket['id'] +`"><a id="edit-ticket-btn" href="#">` + ticket['title'] + `</a></td>` +
                     `<td id="subtitle_ticket` + ticket['id'] +`">` + ticket['subtitle'] + `</td>` +
                     `<td id="type_ticket-` +ticket['id'] +`">` + ticket['type'] + `</td>` +
                     `<td id="quantity-` + ticket['id'] +`">` + ticket['quantity'] + `</td>` +
@@ -349,7 +352,7 @@
                                 <i class="fas fa-ellipsis-v"></i>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                <a class="dropdown-item" data-toggle="modal" data-target="#editTicketModal" data-id="`+ticket['id']+`" data-price="`+ticket['price']+`" data-quantity="`+ticket['quantity']+`">{{ __('Edit') }}</a>
+                                <a class="dropdown-item edit-to-open" data-toggle="modal" data-target="#editTicketModal" data-id="`+ticket['id']+`" data-price="`+ticket['price']+`" data-quantity="`+ticket['quantity']+`">{{ __('Edit') }}</a>
                                 <a class="dropdown-item" id="remove_ticket" data-ticket-id="`+ticket['id']+`">{{ __('Delete') }}</a>
 
                                 </div>
@@ -525,9 +528,9 @@
 <script>
 
    (function( $ ){
-      
+
       var el = document.getElementsByClassName('ticket-order')[0];
-         
+
       new Sortable(el, {
          group: "words",
          handle: ".my-handle",
@@ -552,7 +555,7 @@
       $( ".ticket-list" ).each(function( index ) {
         tickets[$(this).data('id')] = index
       });
-   
+
 
       $.ajax({
          type: 'POST',
@@ -563,12 +566,12 @@
          url: "{{ route ('sort-tickets', $event->id) }}",
          data:{'tickets':tickets},
          success: function(data) {
-         
-         
+
+
          }
       });
    }
-  
+
    $(document).ready( function () {
       $('.ticket-table').dataTable( {
           "ordering": false

@@ -72,16 +72,22 @@ class EventController extends Controller
 
     public function assign_store(Request $request)
     {
+        //dd($request->topic_id);
         $event = Event::find($request->event_id);
+        //dd($event);
 
         $allLessons = Topic::with('lessonsCategory')->find($request->topic_id);
+        //dd($allLessons);
 
-        foreach($allLessons->lessonsCategory as $lesson)
+        foreach($allLessons->lessonsCategory as $key => $lesson)
         {
-            $find = $event->topic()->wherePivot('event_id', '=', $request->event_id)->wherePivot('topic_id', '=', $request->topic_id)->wherePivot('lesson_id', '=', $lesson['id'])->get();
-            if(count($find) == 0 )
+            //var_dump($lesson['id']);
+            $find = $event->topic()->wherePivot('topic_id', $request->topic_id)->wherePivot('lesson_id', $lesson['id'])->first();
+            //dd($find);
+            if($find == null && $request->status1 == '0')
             {
-                $event->topic()->attach($request->topic_id,['lesson_id' => $lesson['id']]);
+                $a = $event->topic()->attach($request->topic_id,['lesson_id' => $lesson['id']]);
+
             }else{
                 $topicLesson_for_detach = $event->topic()->detach($request->topic_id);
             }

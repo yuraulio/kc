@@ -7,7 +7,7 @@
         </p>
     </div>
     <div class="col-4 text-right">
-    <button data-toggle="modal" data-target="#partnerModal" class="btn btn-sm btn-primary">{{ __('Add partner') }}</button>
+    <button data-toggle="modal" data-target="#partnerModal" class="btn btn-sm btn-primary">{{ __('Assign partner') }}</button>
     </div>
 </div>
 
@@ -32,7 +32,6 @@
                                 <i class="fas fa-ellipsis-v"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                <a class="dropdown-item" data-toggle="modal" data-target="#editPartnerModal" data-id="{{$partner->id}}" data-name="{{$partner->name}}">{{ __('Edit') }}</a>
                                 <a class="dropdown-item" id="remove_partner" data-partner-id="{{ $partner->id }}">{{ __('Remove') }}</a>
                             </div>
                         </div>

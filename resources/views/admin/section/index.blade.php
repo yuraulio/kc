@@ -31,7 +31,7 @@
             @if($model->sections)
                 @foreach ($event->sections as $section)
                     <tr id="section_{{$section->id}}">
-                        <td id="section-{{$section->id}}">{{ $section->section }}</td>
+                        <td id="section-{{$section->id}}"><a class="edit_btn_section1" href="#">{{ $section->section }}</td>
                         <td id="section-title-{{$section->id}}">{{ $section->title }}</td>
                         <td id="section-desc-{{$section->id}}">{{ $section->description }}</td>
 
@@ -146,6 +146,12 @@
 
     <script>
 
+    $(document).on('click',".edit_btn_section1",function(){
+        //alert('asd')
+        $(this).parent().parent().find('a')[2].click()
+        //$(this).parent().parent().find('.dropdown-item').click()
+    })
+
         $(document).on('shown.bs.modal', '#editSectionModal',function(e) {
             //e.preventDefault()
             var link  = e.relatedTarget,
@@ -182,7 +188,7 @@
                 let section = data.section;
                 let newSection =
                 `<tr id="section_`+section['id']+`">` +
-                `<td id="section-` + section['id'] +`">` + section['section'] + `</td>` +
+                `<td id="section-` + section['id'] +`"><a class="edit_btn_section1" href="#">` + section['section'] + `</td>` +
                 `<td id="section-title-` + section['id'] +`">` + section['title'] + `</td>` +
                 `<td id="section-desc-`+section['id']+`">` + section['description'] + `</td>` +
                 `<td>` + section['created_at'] + `</td>` +
@@ -228,7 +234,7 @@
 
                     let section = data.section;
 
-                    $("#section-"+section['id']).html(section['section'])
+                    $("#section-"+section['id']).html(`<a class="edit_btn_section1" href="#">`+section['section'])
                     $("#section-title-"+section['id']).html(section['title'])
                     $("#section-desc-"+section['id']).html(section['description'])
                     $('#section-form-edit').trigger('reset');
@@ -255,8 +261,11 @@
             id = e.relatedTarget.dataset.id
             //name = e.relatedTarget.dataset.name,
             //description =e.relatedTarget.dataset.description;
+
             section = $("#section-"+id).text(),
+
             title = $("#section-title-"+id).text();
+            console.log(section)
             description = $("#section-desc-"+id).text();
 
             modal.find("#sectionModalLabel").val(title)

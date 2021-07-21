@@ -22,7 +22,7 @@
          @if($model->benefits)
          @foreach ($model->benefits as $benefit)
          <tr>
-            <td id="name-{{$benefit->id}}" class="benefit-list" data-id ="{{$benefit->id}}">{{ $benefit->name }}</td>
+            <td id="name-{{$benefit->id}}" class="benefit-list" data-id ="{{$benefit->id}}"><a class="edit-btn" href="#">{{ $benefit->name }}</td>
             <td>{{ date_format($benefit->created_at, 'd-m-Y' ) }}</td>
             <td hidden id="media_ben-{{$benefit->id}}" data-id="{{$benefit->id}}" class="benefit-list">
                     @isset($benefit->medias)
@@ -129,6 +129,10 @@
 </div>
 @push('js')
 <script>
+    // $(document).on('click',".edit-btn",function(){
+    //     $(this).parent().parent().find('.dropdown-item').click()
+    // })
+
    $(document).on('click',"#save-benefit",function(){
 
    let modelType = "{{addslashes ( get_class($model) )}}";
@@ -146,7 +150,7 @@
    	let benefit = data.benefit;
    	let newBenefit =
    	`<tr>` +
-   	`<td id="name-` + benefit['id'] +`">` + benefit['name'] + `</td>` +
+   	`<td id="name-` + benefit['id'] +`"><a class="edit-btn" href="#">` + benefit['name'] + `</td>` +
    	`<td>` + benefit['created_at'] + `</td>` +
        `<td hidden id="media_ben-` + benefit['id'] +`" data-id="` + benefit['id'] +`" class="benefit-list"></td>`+
 
@@ -184,20 +188,19 @@
    $(document).on('click',"#edit-benefit",function(){
 
    //$benefitId = $("#benefit-id").val()
- console.log($('#image_svg_upload-benefit').val())
-   $benefitId = $("#edit-benefit").data('id')
+   benefitId = $(this).attr('data-id')
    $.ajax({
            headers: {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
            },
    	    type: 'put',
-   	    url: '/admin/benefit/' + $benefitId,
+   	    url: '/admin/benefit/' + benefitId,
             data: {'name':$('#edit-name').val(),'description':CKEDITOR.instances['edit-description1'].getData(),'svg': $('#image_svg_upload-benefit').val()},
    	    success: function (data) {
 
    	let benefit = data.benefit;
 
-   	$("#name-"+benefit['id']).html(benefit['name'])
+   	$("#name-"+benefit['id']).html(`<a class="edit-btn" href="#">`+benefit['name'])
        $("#name-"+benefit['id']).parent().find('.dropdown-item').attr('data-description', benefit['description'])
        $("#name-"+benefit['id']).parent().find('.dropdown-item').attr('data-media', benefit.medias['path']+benefit.medias['original_name'])
        $("#media_ben-"+benefit['id']).text(benefit.medias['path']+benefit.medias['original_name'])

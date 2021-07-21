@@ -408,9 +408,9 @@
 
                     <div class="modal-body">
                         <form id="lesson_details">
-                            <div class="form-group">
-                                <label for="exampleFormControlSelect1">Select instructor222</label>
-                                <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." class="form-control" id="instFormControlSelect12">
+                            <div class="form-group instFormControl">
+                                <label class="instFormControl" for="exampleFormControlSelect1">Select instructor</label>
+                                <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." class="form-control instFormControl" id="instFormControlSelect12">
                                 </select>
                             </div>
 
@@ -434,6 +434,11 @@
 
 
 <script>
+
+    $(document).on('click',".edit-btn",function(){
+        $(this).parent().parent().find('.dropdown-item').click()
+    })
+
     $( "#input-delivery" ).change(function() {
         if($(this).val() == 143){
             $('#exp_input').css('display', 'block')
@@ -470,7 +475,7 @@
             let topic_id = $('#topic_id').val()
             let event_id = $('#event_id').val()
             let lesson_id = $('#lesson_id').val()
-            let instructor_id = $('#instFormControlSelect').val()
+            let instructor_id = $('#instFormControlSelect12').val()
 
 
             data = {date:date, start:start, event_id:event_id, end:end, room:room, instructor_id:instructor_id, topic_id:topic_id, lesson_id:lesson_id}
@@ -506,7 +511,7 @@
 </script>
 <script>
 
-        $( document ).on('change',"#instFormControlSelect",function() {
+        $( document ).on('change',"#instFormControlSelect12",function() {
             if($('#instFormControlSelect').val() == '-'){
                 $('#lesson_update_btn').prop('disabled', true);
                 $('#lesson_update_btn').css('opacity', '0.4')
@@ -561,14 +566,23 @@
         });
 
         $(document).on('click','#open_modal',function(){
+            let eleme = $('#lesson_details').find('.form-group')
+            $.each(eleme, function(key, value){
+                if(key != 0){
+                    $(value).remove()
+                }
+            })
+            $("#instFormControlSelect12").html("")
+            $('#lesson_details').find('input').remove()
             //$('#lesson_details').empty()
+            //$('#lesson_details').find('*').not('.instFormControl').remove();
             let id = 0
             let elem = $(this).data('lesson-id');
             elem = elem.split("_")
             let topic_id = $(this).data('topic-id')
             topic_id = topic_id.split("_")
             const event_id = $('#topic_lessons').data('event-id')
-            let instructor_id = $('#instFormControlSelect').val()
+            let instructor_id = $('#instFormControlSelect12').val()
 
 
 
@@ -603,13 +617,13 @@
                     }
                     $('#modal-title-default').text(data.lesson[0].title)
 
-                   inst_row =  `<div class="form-group">
-                                    <label for="exampleFormControlSelect1">Select instructor</label>
-                                    <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." class="form-control" id="instFormControlSelect">
-                                    </select>
-                                </div>`
+                //    inst_row =  `<div class="form-group">
+                //                     <label for="exampleFormControlSelect1">Select instructor</label>
+                //                     <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." class="form-control" id="instFormControlSelect">
+                //                     </select>
+                //                 </div>`
 
-                    $('#lesson_details').append(inst_row)
+                    //$('#lesson_details').append(inst_row)
 
                     $.each( instructors, function( key, value ) {
                         //console.log(key+':'+value.title)
