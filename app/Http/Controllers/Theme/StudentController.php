@@ -9,6 +9,7 @@ use App\Model\Media;
 use App\Model\User;
 use App\Model\ExamResult;
 use App\Model\Topic;
+use App\Model\Event;
 use App\Model\Lesson;
 use App\Model\Summary;
 use App\Model\Subscription;
@@ -350,5 +351,53 @@ class StudentController extends Controller
             return $response;*/
             return \Response::make($content, 200, $headers);
         }
+    }
+
+    public function elearning($course){
+
+        $has_access = false;
+        $event = Event::with('topic', 'category')->where('title', $course)->first();
+
+
+        $data['details'] = $event->getAttributes();
+        $data['files'] = $event['category'][0]['dropbox'][0]->toArray();
+        //dd($data['files']);
+        //dd($data['details']);
+        $user = Auth::user();
+
+        $data['videos_progress'] = $event->progress($user);
+        $data['course'] = $event['title'];
+        //dd($data['course']);
+
+        $user = User::with('events')->find($user['id']);
+        $statistic = $user->statistic()->wherePivot('event_id',$event['id'])->first()->toArray();
+        $data['lastVideoSeen'] = $statistic['pivot']['lastVideoSeen'];
+        $data['event_id'] = $statistic['pivot']['event_id'];
+        //dd($statistic);
+        //load videos
+        $data['videos'] = $statistic['pivot']['videos'];
+        //load notes
+        $data['notes'] = $statistic['pivot']['notes'];
+        //load statistic
+        $user_event = $user->events()->wherePivot('event_id', $event['id'])->first()->toArray();
+
+        //expiration event for user
+        $expiration_event_user = $user_event['pivot']['expiration'];
+
+        if(strtotime($expiration_event_user) >= strtotime("now")){
+            $has_access = true;
+        }
+
+        if($has_access){
+            $data['topics'] = $event->topicsLessonsInstructors();
+        }else{
+            dd('Has not access!!');
+        }
+
+        //dd($data);
+
+        return view('theme.myaccount.newelearning', $data);
+
+
     }
 }

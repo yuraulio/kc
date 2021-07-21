@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<?php //dd($event); ?>
 <html lang="en">
   <head>
     <base href="{!! URL::to('/') !!}/" target="_self" />
@@ -8,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     {{--<link href="{{ cdn(elixir('theme/assets/css/style_ver.css')) }}" rel="stylesheet" media="all" />--}}
     {{--<link rel="stylesheet" href="{{ cdn('theme/assets/css/old.css') }}" />--}}
-    
+
     {{--<link rel="stylesheet" href="https://use.typekit.net/pfo3bjs.css">--}}
     <link rel="stylesheet" href="{{ cdn('theme/assets/css/new/pop_up.css') }}" />
     <link rel="stylesheet" href="{{ cdn('theme/assets/css/new/normalize.css') }}" />
@@ -16,29 +17,29 @@
     <title>{{$course}}</title>
 
     <script src="https://kit.fontawesome.com/84bbd74d3a.js" crossorigin="anonymous"></script>
-    
+
   </head>
 
-  <?php 
-  
+  <?php
+
   $notesss = json_decode($notes);
   $notesss = (array) $notesss;
   //dd($notes);
-  
+
   ?>
 
 
-  @inject('frontHelp', 'Library\FrontendHelperLib')
+
   <?php $bonusFiles = ['_Bonus', 'Bonus', 'Bonus Files', 'Βonus', '_Βonus', 'Βonus', 'Βonus Files'] ?>
-  
-  <body onload="tabclick('{{$videos}}', '{{$id}}', '{{$lastVideoSeen}}', '{{$event_statistic_id}}', '{{$course}}','{{$notes}}', '{{$videos_progress}}')">
+
+  <body onload="tabclick('<?= $videos; ?>', '<?= $details['id']; ?>', '{{$lastVideoSeen}}', '{{$course}}','{{$notes}}', '{{$videos_progress}}')">
   <div id="favDialog1" hidden>
                <div class="alert-outer" >
                      <div class="container">
                         <div class="alert-wrapper success-alert">
                            <div class="alert-inner">
                               <p id ="message"></p>
-                              
+
                            </div>
                         </div>
                      </div>
@@ -54,7 +55,7 @@
                   <a id="close-exam-dialog" href="javascript:void(0)" class="close-alert"><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')}}" alt="Close Alert"/></a>
                </div>
                <button class="btn btn-del btn--sm go-to-account">Go to my account </button>
-               
+
                <!-- /.alert-outer -->
             </div>
          </div>
@@ -78,7 +79,7 @@
             </a>
           </header>
           <!-- ./sidebar-header -->
-      
+
           <div class="searchbar-wrapper">
             <form class="searchbar" action="/">
               <label for="search">Search: </label>
@@ -95,19 +96,20 @@
           <!-- ./searchbar-wrapper -->
           <div class="sidebar-content">
             <nav>
-            <ul id="{{$id}}" class="topics-list">
+            <ul id="{{$details['id']}}" class="topics-list">
 
-            <?php 
+            <?php
               $catId = -1;
               $firstTab =true;
               $firstLesson =true;
               $count = 1;
               ?>
-                
-                @foreach($topics as $keyTopic => $topic)
+
+                @foreach($topics['topics'] as $keyTopic => $topic)
                   <?php
-                    if($count == 1) 
-                       // $count = 2;                     
+                  //dd($topic);
+                    if($count == 1)
+                       // $count = 2;
                   ?>
 
                 <li class="topic" data-count="{{$count}}">
@@ -123,14 +125,12 @@
                       </h3>
                       <span class="topic-info_duration">
                       <?php
-                          foreach($duration as $key => $item){
-                            if($key == $keyTopic){
-                              $m = floor(($item['duration'] / 60) % 60);
-                              $h = $hours = floor($item['duration'] / 3600);
-                             
-                              echo intval($h) . 'h ' . $m . 'm';
-                            }
-                          }
+
+
+                          $m = floor(($topic['topic_duration'] / 60) % 60);
+                          $h = $hours = floor($topic['topic_duration'] / 3600);
+
+                          echo intval($h) . 'h ' . $m . 'm';
                        ?>
                       </span>
                     </div>
@@ -146,17 +146,17 @@
                       alt="close topic"
                     />
                   </a>
-                  <?php 
+                  <?php
                      $frame = $course;
                      $frame = str_replace(' ','_',$frame);
                      $frame = str_replace('-','',$frame);
                      $frame = str_replace('&','',$frame);
-                     $frame = str_replace('_','',$frame);  
-                     
+                     $frame = str_replace('_','',$frame);
+
                      $frame2 = '{'.$frame.'}';
                      $frame = $frame;
 
-                     
+
 
                      ?>
                   <!-- ./topic-header -->
@@ -178,8 +178,8 @@
                       $vimeoId = str_replace('https://player.vimeo.com/video/','',$vimeoId);
                      ?>
 
-                     
-                    
+
+
                     <li class="lesson {{$vimeoId}}" data-completed="{{$lesson['seen']}}" data-links="{{$links[$vimeoId]}}" data-note="{{$notesss[$vimeoId]}}" id="{{$frame1}}">
                       <a class="" href="javascript:void(0)" onclick="play_video('{{$path}}','{{$frame1}}','{video{{$id}}}', '{{$id}}', '{{$notes}}')" tabindex="0">
                         <img
@@ -200,7 +200,7 @@
                           <h3
                             class="lesson-info_title @if($lesson['bold'])bold-topic @endif"
                             data-title="{!! $keyLesson !!}"
-                            
+
                           >
                             {!! $keyLesson !!}
                           </h3>
@@ -223,7 +223,7 @@
                         <!-- ./lesson-teacher-wrapper -->
                       </a>
                     </li>
-                    
+
                     @endforeach
                     @endforeach
                   </ul>
@@ -231,7 +231,7 @@
 
                 @endforeach
 
-                
+
               </ul>
             </nav>
           </div>
@@ -267,7 +267,7 @@
                           <div class="alert-wrapper success-alert">
                             <div class="alert-inner">
                                 <p id ="message"></p>
-                                
+
                             </div>
                           </div>
                       </div>
@@ -398,20 +398,20 @@
                   <div class="lesson-downloads">
                     <h4 class="resource-list-title">Downloads</h4>
                     <?php //dd($folders) ?>
-                    
-                    
+
+
                     @foreach($folders as $catid => $dbfolder)
                     <?php //dd($dbfolder)?>
-                    <?php 
+                    <?php
                       $folder = false;
                       if(trim($catid) == trim($catId)){
-                          $folder = true; 
+                          $folder = true;
                       }
-                      ?>                      
+                      ?>
                       @if($folder)
                         @if($current_cat_id == $catid)
-                          @if (isset($dbfolder[0]) && !empty($dbfolder[0])) 
-                          
+                          @if (isset($dbfolder[0]) && !empty($dbfolder[0]))
+
                             @foreach($dbfolder[0] as $key => $folder)
                             <?php //dd($folder);?>
                               <?php
@@ -423,36 +423,36 @@
                                 //   print_r($rf1);
                                 //   die();
                               ?>
-                              <?php  
-                                $topic=1; 
-                                if($instructor_topics){ 
+                              <?php
+                                $topic=1;
+                                if($instructor_topics){
                                     $topic=0;
 
                                     if((trim($folder['foldername']) === '1 - Prelearning - Digital & Social Media Fundamentals')
                                             && in_array(trim('Pre-learning: Digital & Social Media Fundamentals'), $instructor_topics)){
-                                            
+
                                       $topic = 1;
                                     }else{
-                                      $topic_name = explode( '-', $folder['foldername'] );  
-                                      $topic=in_array(trim($topic_name[1]), $instructor_topics); 
-                                    }   
+                                      $topic_name = explode( '-', $folder['foldername'] );
+                                      $topic=in_array(trim($topic_name[1]), $instructor_topics);
+                                    }
                                 }
                                 ?>
-                              @if($topic) 
-                              <?php 
+                              @if($topic)
+                              <?php
 
-                                $topic_name = preg_replace('/[0-9]+/', '', $folder['foldername']);  
+                                $topic_name = preg_replace('/[0-9]+/', '', $folder['foldername']);
                                 $topic_name = \Illuminate\Support\Str::slug($topic_name);
-                                
-                              
+
+
                               ?>
                               <ul class="resource-list hidden" data-folder-id="<?= $topic_name; ?>">
-                               
+
                               <!-- <li class="resource "> -->
-                        
+
                               <h3>{{--$folder['foldername']--}}</h3>
-                              <?php    
-                                $checkedF = []; 
+                              <?php
+                                $checkedF = [];
                                 $fs = [];
                                 $fk = 1;
                                 $bonus = [];
@@ -460,36 +460,36 @@
                               ?>
                               <?php //dd($files[$catid]);?>
                                 @if (isset($files[$catid][1]) && !empty($files[$catid][1]))
-                                        
+
                                   @foreach($files[$catid][1] as $fkey => $frow2)
 
                                     @if($frow2['fid'] == $folder['id'])
-                                      <?php       
-                                      //dd($frow2);            
+                                      <?php
+                                      //dd($frow2);
                                           $fn = $folder['foldername'];
-                                          
+
                                           //BONUS FILE
                                           if(isset($dbfolder[1]) && !empty($dbfolder[1])){
                                             foreach($dbfolder[1] as $nkey => $nfolder){
                                               $dirname = explode('/',$nfolder['dirname']);
                                               if($nfolder['parent'] == $folder['id'] && in_array($fn,$dirname) && !$subfolder  && !in_array($nfolder['foldername'],$bonusFiles) /*($nfolder['foldername'] !== '_Bonus' || $nfolder['foldername'] !== 'Bonus')*/){
-                                                  
+
                                                   $checkedF[] = $nfolder['id'] + 1 ;
                                                   $fs[$nfolder['id']+1]=[];
-                                                  $fs[$nfolder['id']+1][] = $nfolder;      
+                                                  $fs[$nfolder['id']+1][] = $nfolder;
                                               }
                                             }
                                           }
                                           if(count($fs) > 0 ){
                                             $subfolder = true;
-                                          }  
+                                          }
                                       ?>
                                       <!-- SUBFOLDER -->
 
                                       @if($subfolder && in_array($fk,$checkedF))
 
                                         @while(in_array($fk,$checkedF))
-                                              <?php 
+                                              <?php
 
                                                 $sfv = reset($checkedF);
                                                 $sfk = array_search($sfv, $checkedF);
@@ -501,7 +501,7 @@
                                                 @foreach($dbfolder[1] as $nkey => $nfolder)
                                                     @if($nfolder['id'] == $fs[$sfv][0]['id'] && $nfolder['parent'] ==  $fs[$sfv][0]['parent'] && !in_array($nfolder['foldername'],$bonusFiles) /*($nfolder['foldername'] !== '_Bonus' || $nfolder['foldername'] !== 'Bonus')*/) <!--//lioncode-->
 
-                                                    <li id="{{$rf1}}" class="resource bonus-files">                                                 
+                                                    <li id="{{$rf1}}" class="resource bonus-files">
                                                       {{-- $nfolder['foldername'] --}}
                                                       @if (isset($files[$catid][2]) && !empty($files[$catid][2]))
                                                             @foreach($files[$catid][2] as $fkey => $frow)
@@ -517,8 +517,8 @@
                                                                 @endif
                                                           @endforeach
                                                         @endif
-                                                    </li>                                                      
-                                                    @endif   
+                                                    </li>
+                                                    @endif
                                                 @endforeach
                                               @endif
                                               <!-- bonus of each lesson -->
@@ -544,7 +544,7 @@
                                         {{--<span class="last-modified">Last modified:  {{$frow2['last_mod']}}</span>--}}
                                       </li>
 
-                                        
+
                                       @else
                                       <li id="{{$rf1}}" class="resource">
                                         <a class="download-file getdropboxlink"  data-dirname="{{ $frow2['dirname'] }}" data-filename="{{ $frow2['filename'] }}" href="javascript:void(0)" ><img
@@ -556,23 +556,23 @@
                                       @endif
                                       <!-- END END SUBFOLDER -->
 
-                                      <?php                        
+                                      <?php
                                           $fk += 1;
                                       ?>
                                     @endif
-                            
+
                                   @endforeach
                                   <!-- bonus of each lesson -->
                                   @if (isset($dbfolder[1]) && !empty($dbfolder[1]))
                                     @foreach($dbfolder[1] as $nkey => $nfolder)
                                       @if($nfolder['parent'] == $folder['id'] && in_array($nfolder['foldername'],$bonusFiles) /*($nfolder['foldername'] == '_Bonus' || $nfolder['foldername'] == 'Bonus')*/) <!--//lioncode-->
 
-                                      <li id="{{$rf1}}" class="resource bonus-files">                                                 
+                                      <li id="{{$rf1}}" class="resource bonus-files">
                                       {{-- $nfolder['foldername'] --}}
                                       @if (isset($files[$catid][2]) && !empty($files[$catid][2]))
                                               @foreach($files[$catid][2] as $fkey => $frow)
                                                 @if (strpos($frow['dirname'], $rf) !== false || strpos($frow['dirname'], $rf1) !== false && !in_array($frow['filename'],$bonus))
-                                                    
+
                                                     <li id="{{$rf1}}" class="resource">
                                                       <a class="download-file getdropboxlink"  data-dirname="{{ $frow['dirname'] }}" data-filename="{{ $frow['filename'] }}" href="javascript:void(0)" ><img
                                                           src="theme/assets/img/new/download.svg"
@@ -585,24 +585,24 @@
                                           @endif
                                       </li>
                                       @endif
-                                        
+
                                     @endforeach
                                   @endif
 
-                                    <!--END END bonus of each lesson -->                                 
+                                    <!--END END bonus of each lesson -->
                                 @endif
                               @endif
                                         </ul>
                             @endforeach
                           @endif
-                        @endif    
-                      @endif                  
+                        @endif
+                      @endif
                     @endforeach
 
                     </ul>
                   </div>
                   @endif
-                  
+
                   <!-- ./lesson-downloads -->
                   <div class="lesson-links">
                     <h4 class="resource-list-title">Links</h4>
@@ -636,8 +636,8 @@
                     </div>
                     </a>
                     <div class="status saveDone">Your notes are <span>saved.</span></div>
-                    
-                    
+
+
 
 
                   </div>
@@ -684,12 +684,12 @@
         $('.lesson-main-title').text(title);
       });
 
-      
+
 
     </script>
 
     <script>
-      
+
     </script>
 
 
@@ -698,7 +698,7 @@
   var prev_topicId = [];
 
   var note;
-   
+
    var event = false;
    var videos = false;
    var videosSeen = [];
@@ -736,22 +736,22 @@
           type: 'PUT',
           url: '/elearning/saveNote',
           data:{'text':note,'vimeoId':vimeoId, 'event':event},
-          success: function(data) {  
+          success: function(data) {
                 if(data){
                     $('#notes').val(data['text']);
                     $('.isWatching').data("note", data['text'])
                     $('.saveDone').removeClass('saveDone');
                     checkForExam(data['exam_access'])
                 }else{
-                    console.log('Not save')    
+                    console.log('Not save')
                 }
                 //playVi = true;
-            
+
           }
         });
 
       })
-   
+
 
    function prevVideo(){
      let currTopic;
@@ -759,7 +759,7 @@
 
      this.currentWatchingVideo = $( ".isWatching" ).attr('id');
      prev = $('#'+ this.currentWatchingVideo).prev().attr('id');
-     
+
      $("#" + prev +" a:first-child").trigger("click");
      prevTitle = $('#'+ this.currentWatchingVideo).prev().find('.lesson-info_title').text();
      $('.lesson-main-title').text(prevTitle);
@@ -767,7 +767,7 @@
      if(typeof prev === 'undefined'){
         currTopic = $('#'+ this.currentWatchingVideo).parent().parent();
         let prevTopic = currTopic.prev();
-        prev = $(prevTopic).find('li:last-child');       
+        prev = $(prevTopic).find('li:last-child');
         prev = $(prev).find('a:first-child');
         prevTitle = $(prevTopic).find('li:last-child').find('.lesson-info_title').text();
         //console.log(prevTitle);
@@ -778,7 +778,7 @@
         if($( ".isWatching" ).hasClass('watched')){
           $('.isWatching').find('.lesson-progress').attr('src','theme/assets/img/new/completed_lesson_icon.svg')
         }
-   }                       
+   }
 
 
    function nextVideo(){
@@ -790,7 +790,7 @@
       nextTitle = $( "#" + this.currentWatchingVideo ).next().find('.lesson-info_title').text();
       //update title
       $('.lesson-main-title').text(nextTitle);
-     
+
     //  console.log('CUR:'+ this.currentWatchingVideo);
     //  console.log('NEXT:'+next);
 
@@ -802,38 +802,38 @@
         if($(nextTopic).next()['length'] == 0){
           //console.log('The end');
           curTitle = $("#"+this.currentWatchingVideo).find('.lesson-info_title').text();
-          $('.lesson-main-title').text(curTitle); 
+          $('.lesson-main-title').text(curTitle);
         }else{
-          next = $(nextTopic).find('li')[0]['id']; 
+          next = $(nextTopic).find('li')[0]['id'];
           nextTitle = $(nextTopic).find('li')[0];
           nextTitle = $(nextTitle).find('.lesson-info_title').text();
           //update title
-          $('.lesson-main-title').text(nextTitle);  
-        }         
+          $('.lesson-main-title').text(nextTitle);
+        }
      }
      $("#" + next +" a:first-child").trigger("click");
    }
-   
+
    function tabclick(videos,event,seen,statisticId,frame,notes,progress){
 
      $('.progress-bar').css('width', progress + '%')
-    
+
 
      notes = JSON.parse(notes)
-    
+
       videos = JSON.parse(videos)
 
       frame = frame.replace(/\s/g, '')
       frame = frame.replace(/-/g, '')
       frame = frame.replace(/&/g, '')
-      frame = '{'+frame+'}' 
+      frame = '{'+frame+'}'
 
       if(previousFrame){
-        
+
          if(playVi){
             videoPlayers[previousFrame].pause().then(function() {
 
-         
+
             }).catch(function(error) {
                switch (error.name) {
                   case 'PasswordError':
@@ -861,10 +861,10 @@
       this.eventStatistic = statisticId
       this.frame = frame
       previousFrame = frame;
-      
+
       if(frame in this.videosSeen == false){
-         this.videos = videos;   
-      }else{           
+         this.videos = videos;
+      }else{
         //console.log(videosSeen);
         //console.log('videos seen');
         videos = videosSeen[frame];
@@ -877,28 +877,28 @@
       }else{
        //  this.videoPlayers[frame].on('play');
       }
-   
+
       if(!this.previousK){
-   
+
          this.previousK = frame
-         this.previousK = this.previousK.replace('{',''); 
+         this.previousK = this.previousK.replace('{','');
          this.previousK = this.previousK.replace('}','');
-      
-      }  
-     
+
+      }
+
       if(lastVideoSeen!=-1){
-         
+
          $(".active-tab").removeClass("active-tab");
          $this = $('#'+videos[lastVideoSeen]['tab']).parent().parent().children('h2')
 
          $this.click();
-        
+
       }
 
-      
-     
+
+
       if(seen != -1){
-         
+
          if(tabWatching != false){
             document.getElementById(tabWatching).classList.remove('isWatching')
          }
@@ -923,27 +923,27 @@
         //  console.log('THIS FRAME:' + a)
 
         //console.log(this.frameVi[this.frame]);
-   
+
          let vimeoID ='"{ video'+videos[seen]['lesson_id'] + frame + '}"';
          var cvl = document.getElementById(this.frameVi[this.frame]).cloneNode(true);;
          cvl = document.getElementById(this.frameVi[this.frame]).setAttribute('id',vimeoID);
-   
+
          $('#courses-video').append(cvl)
-         
+
          this.previousK = vimeoID;
          this.frameVi[this.frame] = this.previousK;
-        
+
          //videoPlayers[frame] = new Vimeo.Player(vimeoID);
- 
-        // if(videosPlayed[frame].includes(seen) == false){ 
+
+        // if(videosPlayed[frame].includes(seen) == false){
 
             //console.log('frame = ', frame)
            // console.log(videosPlayed)
 
-            videoPlayers[frame] = new Vimeo.Player(vimeoID); 
-          //  videosPlayed[frame].push(parseInt(seen)); 
+            videoPlayers[frame] = new Vimeo.Player(vimeoID);
+          //  videosPlayed[frame].push(parseInt(seen));
 
-         videoPlayers[frame].loadVideo(seen).then(function(id) {  
+         videoPlayers[frame].loadVideo(seen).then(function(id) {
             videoId = id
             //when load video load NOTES
             let videoNote = notes[videoId];
@@ -963,22 +963,22 @@
                                     <img
                                       src="theme/assets/img/new/link.svg"
                                       alt="external resource link" />${strArray[0]}</a>
-                                </li>` 
+                                </li>`
                               )
-         
+
          });
             let prog = $('.isWatching').find('.lesson-progress').attr('src','theme/assets/img/new/current_lesson_icon.svg')
-            
+
 
             $('#notes').val(videoNote);
             videoPlayers[frame].setCurrentTime(videos[id]['stop_time'])
             // videoPlayers[frame].setLoop(false)
-            $('.status').addClass('saveDone'); 
-
-            
+            $('.status').addClass('saveDone');
 
 
-            
+
+
+
          }).catch(function(error) {
 
             switch (error.name) {
@@ -986,16 +986,16 @@
                      // the id was not a number
                   //   console.log('edww');
                      break;
-   
+
                case 'PasswordError':
                      // the video is password-protected and the viewer needs to enter the
                      // password first
                      break;
-   
+
                case 'PrivacyError':
                      // the video is password-protected or private
                      break;
-   
+
                default:
                      // some other error occurred
                      break;
@@ -1004,7 +1004,7 @@
 
       }
 
-      
+
       courseName = $('#'+ this.currentWatchingVideo).find('.lesson-info_title');
       courseName = $(courseName).text();
       $('.lesson-main-title').text(courseName);
@@ -1016,18 +1016,18 @@
             videoPlayers[frame].setLoop(false)
          }
          playVi = true;
-  
+
       });
-      
+
       this.videoPlayers[this.frame].on('pause', function(e) {
 
          @if(!$instructor_topics)
-            
+
             if(playVi){
                playVi = false;
                videos[videoId]['stop_time'] = e['seconds'];
-               videos[videoId]['percentMinutes'] = e['percent'];     
-      
+               videos[videoId]['percentMinutes'] = e['percent'];
+
                if(e['percent'] >= 0.8){
                      videos[videoId]['seen'] = 1;
                      $('.isWatching.watched').attr("data-completed", '1')
@@ -1041,55 +1041,55 @@
                   type: 'PUT',
                   url: '/elearning/save',
                   data:{'videos':videos,'event_statistic':eventStatistic,'lastVideoSeen':videoId,'event':event},
-                  success: function(data) { 
+                  success: function(data) {
                         if(!data['loged_in']){
                            notLogin(data)
                         }else{
-                           videosSeen[frame] = data['videos'];   
-                           $('.progress-bar').css('width', data['progress'] + '%') 
+                           videosSeen[frame] = data['videos'];
+                           $('.progress-bar').css('width', data['progress'] + '%')
                            checkForExam(data['exam_access'])
                         }
                         //playVi = true;
-                    
+
                   }
                });
             }
 
          @endif
-   
+
       });
       // this.videoPlayers[this.frame].on('play', function(e) {
       //   console.log(e['percent'])
       // });
 
-      
+
 
       this.videoPlayers[frame].on('ended', function(ended) {
       if(ended['percent'] == 1){
-        nextVideo(); 
-        $('.isWatching').find('.lesson-progress').attr('src','/theme/assets/img/new/completed_lesson_icon.svg')     
+        nextVideo();
+        $('.isWatching').find('.lesson-progress').attr('src','/theme/assets/img/new/completed_lesson_icon.svg')
       }
 
     });
 
-    
+
       this.videoPlayers[this.frame].on('progress', function(e) {
 
          @if(!$instructor_topics)
-         
+
             if(e['percent'] >= 0.8){
                if(videos[videoId]['seen'] == 0){
-                  
+
                   videos[videoId]['stop_time'] = e['seconds'];
                   videos[videoId]['percentMinutes'] = e['percent'];
                   videos[videoId]['seen'] = 1;
                   $('.isWatching').find('.lesson-progress').attr('src','/theme/assets/img/new/completed_lesson_icon.svg')
 
                   $('.isWatching').attr("data-completed", '1')
-                                  
+
                   document.getElementById(previousVideo).classList.add('watched')
                   document.getElementById('play-image-account'+videos[videoId]['lesson_id']).setAttribute('src',"{{cdn('/theme/assets/images/icons/check_lesson.svg')}}")
-                          
+
 
                   $.ajax({
                       headers: {
@@ -1098,29 +1098,29 @@
                      type: 'PUT',
                      url: '/elearning/save',
                      data:{'videos':videos,'event_statistic':eventStatistic,'lastVideoSeen':videoId,'event':event},
-                     success: function(data) {  
+                     success: function(data) {
                         if(!data['loged_in']){
                            notLogin(data)
                         }else{
-                          
+
                           $('.progress-bar').css('width', data['progress'] + '%')
-                           videosSeen[frame] = data['videos'];    
+                           videosSeen[frame] = data['videos'];
                            checkForExam(data['exam_access'])
-                           
-                        }  
-                       
+
+                        }
+
                      }
                   });
-            
-         
+
+
                }
             }
-         
+
          @endif
 
-      
+
       });
-   
+
       this.videoPlayers[this.frame].on('fullscreenchange', function(e) {
          window.focus()
       });
@@ -1134,27 +1134,27 @@
 
     notes = JSON.parse(notes)
       if(previousVideo !==false){
-        
+
          document.getElementById(previousVideo).classList.remove('isWatching')
-      
+
       }
-              
+
       document.getElementById(playingVideo).classList.add('isWatching')
       tabWatching = playingVideo;
       previousVideo = playingVideo;
 
-      vk = vk.replace('{',''); 
-      vk = vk.replace('}',''); 
+      vk = vk.replace('{','');
+      vk = vk.replace('}','');
       let vimeoID ='"{'+ vk + this.frame + '}"';
 
-         
+
       var cvl = document.getElementById(previousK).cloneNode(true);;
       cvl = document.getElementById(previousK).setAttribute('id',vimeoID);
 
       $('#courses-video').append(cvl)
       this.previousK = vimeoID;
       this.frameVi[this.frame] = this.previousK;
-      
+
       video = video.split('/')
       video = video[4].split('?')[0]
 
@@ -1171,7 +1171,7 @@
 
         if($('.isWatching').data("completed") == 1){
           $('.isWatching').find('.lesson-progress').attr('src','theme/assets/img/new/completed_lesson_icon.svg')
-           
+
         }else if($('.isWatching').data("completed") != 1 && !$('.isWatching').hasClass('watched')){
           $('.isWatching').find('.lesson-progress').attr('src','theme/assets/img/new/current_lesson_icon.svg')
         }
@@ -1191,19 +1191,19 @@ container.animate({
          this.videoPlayers[this.frame].setCurrentTime(videos[id]['stop_time'])
          this.videoPlayers[this.frame].setLoop(false)
 
-         //console.log('load two') 
+         //console.log('load two')
          array.push(id)
          //console.log(array[array.length - 1])
           //t/t
-          
+
           let prev_vid_id = array[array.length - 2]
           //console.log('prevvideo'+prev_vid_id)
          $('.'+prev_vid_id).find('a').removeClass('current-lesson')
 
          $('.isWatching').find('a').addClass('current-lesson')
 
-         
-         
+
+
 
          let video_link = $('.'+this.videoId).data('links')
          $('.resource-link').remove();
@@ -1217,9 +1217,9 @@ container.animate({
                                     <img
                                       src="theme/assets/img/new/link.svg"
                                       alt="external resource link" />${strArray[0]}</a>
-                                </li>` 
+                                </li>`
                               )
-         
+
          });
 
          //console.log('second load')
@@ -1234,9 +1234,9 @@ container.animate({
             $('*[data-folder-id='+last+']').addClass('hidden')
 
           }
-          
+
           $('*[data-folder-id='+topicTitle+']').removeClass('hidden')
-            
+
         prev_topicId.push(topicTitle)
         //$('.open').children('.lessons-list').css('display','block')
 
@@ -1260,19 +1260,19 @@ container.animate({
                   break;
          }
       });
-   
-   
-       
+
+
+
    }
-   
+
    @if(!$instructor_topics)
   // console.log('olay = ', this.playVi)
   // if(playVi){
       window.onbeforeunload = function (ev) {
-   
+
          this.videoPlayers[this.frame].pause().then(function() {
 
-         
+
          }).catch(function(error) {
             switch (error.name) {
                case 'PasswordError':
@@ -1294,7 +1294,7 @@ container.animate({
 
   // }
    @endif
-   
+
    document.body.onkeydown= function(e){
 
 
@@ -1345,15 +1345,15 @@ container.animate({
                }
             });
 
-         
+
 
          e.preventDefault();
 
          }
 
-      }   
+      }
    }
-   
+
 </script>
 
 <script>
@@ -1361,7 +1361,7 @@ container.animate({
    function notLogin(data){
      //console.log(data['message'])
       let p = ''
-      p = `<img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-success-alert.svg')}}" alt="Info Alert">` + data['message'];         
+      p = `<img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-success-alert.svg')}}" alt="Info Alert">` + data['message'];
       $('#message').append(p);
       var favDialog = document.getElementById('favDialog1');
       favDialog.style.display = "block";
@@ -1377,22 +1377,22 @@ container.animate({
 
 <script>
 $('.getdropboxlink').click(function() {
-      
+
       var dir = $(this).attr('data-dirname');
       var fname = $(this).attr('data-filename');
-   
+
       $.ajax({ url: '/getdropbox', type: "post",
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         data: {dir: dir, fname:fname},
-  
+
         success: function(data) {
           //console.log(data);
           window.location.href = data;
         }
       });
-   
+
    });
 </script>
 
@@ -1401,7 +1401,7 @@ $('.getdropboxlink').click(function() {
 
 
    function checkForExam(examAccess){
-     
+
       if(examAccess){
 
          var d = new Date();
@@ -1433,7 +1433,7 @@ $('.getdropboxlink').click(function() {
          });
 
       }
-      
+
    }
 
 </script>
@@ -1536,10 +1536,10 @@ $('.getdropboxlink').click(function() {
 
 
       let topicId = $('.topic.open .topic-info_title').data('topic-slug');
-       
-      
+
+
         $('*[data-folder-id='+topicId+']').removeClass('hidden')
-       
+
 });
 
 $(document).ready(function() {
@@ -1562,11 +1562,11 @@ function checkWidth(){
   }
 }
 
-   
+
 
 
 
 </script>
-    
+
   </body>
 </html>

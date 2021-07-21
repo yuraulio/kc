@@ -322,6 +322,8 @@ Route::group(['middleware' => ['auth'], 'prefix'=>'myaccount'], function () {
 
         Route::get('/enroll-for-free/{content}', 'Theme\HomeController@enrollToFreeEvent')->name('enrollForFree');
 
+        Route::get('/elearning/{course?}',  'Theme\StudentController@elearning');
+
     });
 });
 

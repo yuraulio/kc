@@ -266,6 +266,7 @@ class Event extends Model
 
 
         $instructors = $this->instructors->unique()->groupBy('instructor_id')->toArray();
+        //dd($this->topic->unique()->groupBy('topic_id'));
 
         foreach($this->topic->unique()->groupBy('topic_id') as $key => $topic){
 
@@ -273,6 +274,7 @@ class Event extends Model
 
 
                 $lessonsArray = $lessons[$t->id]->toArray();
+                //dd($lessonsArray);
                 foreach( $lessonsArray as $key => $lesson){
                     if(!$lesson['instructor_id']){
                         unset($lessonsArray[$key]);
@@ -281,6 +283,7 @@ class Event extends Model
                 if(count($lessonsArray)>0){
                     $topics[$t->title]['lessons'] = $lessonsArray;
                 }
+
             }
 
 
