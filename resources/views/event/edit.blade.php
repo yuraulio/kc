@@ -408,6 +408,11 @@
 
                     <div class="modal-body">
                         <form id="lesson_details">
+                            <div class="form-group">
+                                <label for="exampleFormControlSelect1">Select instructor222</label>
+                                <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." class="form-control" id="instFormControlSelect12">
+                                </select>
+                            </div>
 
                         </form>
                     </div>
@@ -447,13 +452,6 @@
 </script>
 
 <script>
-        $(document).ready(function() {
-            $('#instFormControlSelect').select2({
-                dropdownParent: $('#modal-default'),
-            });
-            $('.table').DataTable();
-
-        } );
 
         $(document).on('click','.close-modal',function(){
 
@@ -487,7 +485,6 @@
                 data:data,
                 success: function(data) {
                     data = JSON.parse(data)
-                    console.log(data)
 
                     $('#inst_lesson_edit_'+data.lesson_id).text(data.instructor.title+' '+data.instructor.subtitle)
                     $('#date_lesson_edit_'+data.lesson_id).text(data.date1)
@@ -564,7 +561,7 @@
         });
 
         $(document).on('click','#open_modal',function(){
-            $('#lesson_details').empty()
+            //$('#lesson_details').empty()
             let id = 0
             let elem = $(this).data('lesson-id');
             elem = elem.split("_")
@@ -607,17 +604,19 @@
                     $('#modal-title-default').text(data.lesson[0].title)
 
                    inst_row =  `<div class="form-group">
-                                <label for="exampleFormControlSelect1">Select instructor</label>
-                                <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." class="form-control" id="instFormControlSelect">
-                                </select>
-                            </div>`
+                                    <label for="exampleFormControlSelect1">Select instructor</label>
+                                    <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." class="form-control" id="instFormControlSelect">
+                                    </select>
+                                </div>`
 
                     $('#lesson_details').append(inst_row)
 
                     $.each( instructors, function( key, value ) {
                         //console.log(key+':'+value.title)
-                        $('#instFormControlSelect').append(`<option ${lesson.instructor_id == value.id ? 'selected' : ''} value="${value.id}">${value.title} ${value.subtitle}</option>`)
+                        // $('#instFormControlSelect').append(`<option ${lesson.instructor_id == value.id ? 'selected' : ''} value="${value.id}">${value.title} ${value.subtitle}</option>`)
+                        $('#instFormControlSelect12').append(`<option ${lesson.instructor_id == value.id ? 'selected' : ''} path="${value.medias.path}" original_name="${value.medias.original_name}" name="${value.medias.name}" ext="${value.medias.ext}" value="${value.id}">${value.title} ${value.subtitle}</option>`)
                     });
+
 
                     if(lesson.date != null){
                         var date = new Date(lesson.date);
@@ -782,12 +781,17 @@
         $("#input-syllabus").select2({
             templateResult: formatOptions
         });
+
+        $("#instFormControlSelect12").select2({
+                templateResult: formatOptions,
+                dropdownParent: $("#modal-default")
+            });
     });
 
+
     function formatOptions (state) {
-        //console.log(state)
     if (!state.id) { return state.text; }
-    console.log(state.text)
+    console.log(state.element)
 
     path = state.element.attributes['path'].value
     name = state.element.attributes['name'].value
@@ -804,31 +808,8 @@
     return $state;
     }
 
-    $(document).ready(function(){
-    $("#input-syllabus").select2({
-    templateResult: formatOptions
-    });
-    });
 
-    function formatOptions (state) {
-        //console.log(state)
-    if (!state.id) { return state.text; }
-    console.log(state.text)
 
-    path = state.element.attributes['path'].value
-    name = state.element.attributes['name'].value
-    plus_name = '-instructors-small'
-    ext = state.element.attributes['ext'].value
-
-    var $state = $(
-    '<span class="rounded-circle"><img class="avatar-sm rounded-circle" sytle="display: inline-block;" src="' +path + name + plus_name + ext +'" /> ' + state.text + '</span>'
-    );
-
-    var $state1 = $(
-    '<span class="avatar avatar-sm rounded-circle"><img class="rounded-circle" sytle="display: inline-block;" src="' +path + name + plus_name + ext +'"/></span>'
-    );
-    return $state;
-    }
 </script>
 
 @endpush
