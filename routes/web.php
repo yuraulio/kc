@@ -233,6 +233,14 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::get('/student-summary/{examResult}/{user_id}','Dashboard\ExamResultController@showResult');
 
 
+    //Plan
+    Route::get('plans', 'Dashboard\PlanController@index')->name('plan');
+    Route::get('create/plan','Dashboard\PlanController@create')->name('plan.create');
+    Route::post('store/plan','Dashboard\PlanController@store');
+    Route::get('edit/plan/{plan}','Dashboard\PlanController@edit');
+    Route::post('update/plan/{plan}','Dashboard\PlanController@update');
+
+
 });
 
 
@@ -240,7 +248,7 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
 
 Route::group(['prefix' => 'cart','middleware' => ['web']], function () {
 //Route::group(['prefix' => 'cart', 'middleware' => 'free.event' ], function() {
-//    Route::group(['middleware' => 'auth.sms' ], function () {
+    Route::group(['middleware' => 'auth.sms' ], function () {
 
         Route::get('/', [ 'as' => 'cart', 'uses' => 'Theme\CartController@index' ]);
         Route::post('/', [ 'as' => 'cart.update', 'uses' => 'Theme\CartController@update' ]);
@@ -260,7 +268,7 @@ Route::group(['prefix' => 'cart','middleware' => ['web']], function () {
         //    //Route::get('move', [ 'as' => 'cart.move-item', 'uses' => 'Theme\CartController@move']);
 
         //});
-   // });
+    });
 //});
 });
 
@@ -303,20 +311,19 @@ Route::post('contact-us', [ 'as' => 'contactUs' , 'uses' => 'Theme\ContactUsCont
 Route::post('applyforbe', [ 'as' => 'beaninstructor', 'uses' => 'Theme\ContactUsController@beaninstructor' ]);
 
 
-Route::group(['middleware' => ['auth','auth.sms'], 'prefix'=>'myaccount'], function () {
-    Route::get('/','Theme\StudentController@index')->name('myaccount');
-    Route::post('/remove-avatar','Theme\StudentController@removeProfileImage')->name('remove.avatar');
-    Route::post('/upload-profile-image','Theme\StudentController@uploadProfileImage')->name('add.profileImage');
-    Route::post('/update-personal-info','Theme\StudentController@updatePersonalInfo')->name('update.personalInfo');
-    Route::post('/updinvbill', [ 'as' => 'updinvbill' , 'uses' => 'Theme\StudentController@updateInvoiceBilling' ]);
-    Route::post('/updrecbill', [ 'as' => 'updrecbill' , 'uses' => 'Theme\StudentController@updateReceiptBilling' ]);
-    Route::get('/mydata', [ 'as' => 'festudent.mydata' , 'uses' => 'Theme\StudentController@downloadMyData' ]);
+Route::group(['middleware' => ['auth'], 'prefix'=>'myaccount'], function () {
+    Route::group(['middleware' => 'auth.sms' ], function () {
+        Route::get('/','Theme\StudentController@index')->name('myaccount');
+        Route::post('/remove-avatar','Theme\StudentController@removeProfileImage')->name('remove.avatar');
+        Route::post('/upload-profile-image','Theme\StudentController@uploadProfileImage')->name('add.profileImage');
+        Route::post('/update-personal-info','Theme\StudentController@updatePersonalInfo')->name('update.personalInfo');
+        Route::post('/updinvbill', [ 'as' => 'updinvbill' , 'uses' => 'Theme\StudentController@updateInvoiceBilling' ]);
+        Route::post('/updrecbill', [ 'as' => 'updrecbill' , 'uses' => 'Theme\StudentController@updateReceiptBilling' ]);
+        Route::get('/mydata', [ 'as' => 'festudent.mydata' , 'uses' => 'Theme\StudentController@downloadMyData' ]);
 
+        Route::get('/enroll-for-free/{content}', 'Theme\HomeController@enrollToFreeEvent')->name('enrollForFree');
 
-
-
-
-    Route::get('/enroll-for-free/{content}', 'Theme\HomeController@enrollToFreeEvent')->name('enrollForFree');
+    });
 });
 
 Route::get('/logout', [ 'as' => 'logout' , 'uses' => 'Theme\StudentController@logout']);
@@ -367,7 +374,7 @@ Route::post('/smsVerification','Theme\HomeController@smsVerification');
 Route::group(['middleware' => ['preview','web','auth.sms']], function () {
     Route::get('/', 'Theme\HomeController@homePage');
     Route::post('/add-payment-method', 'Theme\HomeController@addPaymentMethod')->name('add.paymentMethod');
-    Route::get('{slug}', 'Theme\HomeController@index');
+    Route::get('{slug?}', 'Theme\HomeController@index');
 
 });
 

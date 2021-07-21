@@ -137,10 +137,6 @@
     padding:  20px 0;
 }
 
-.ElementsApp>* {
-    font-size: 18px!important;
-    text-align: center;
-}
 
 @media (min-width:981px) {
    

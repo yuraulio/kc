@@ -26,6 +26,11 @@ use Laravel\Cashier\Payment;
 class CartController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('cart');
+    }
+
     public function checkoutcheck(Request $request)
     {
     	$data = array();
@@ -296,8 +301,9 @@ class CartController extends Controller
                 
                 $data['stripe_key'] = '';
                 $data['paywithstripe'] = 0;
+              
                 if($ev->paymentMethod->first()){
-                    if($ev->paymentMethod->first()->metod_slug == 'stripe'){
+                    if($ev->paymentMethod->first()->method_slug == 'stripe'){
                         $data['paywithstripe'] = 1;
                         session()->put('payment_method',$ev->paymentMethod->first()->id);
                         $data['stripe_key'] = env('PAYMENT_PRODUCTION') ? $ev->paymentMethod->first()->processor_options['key'] : 
@@ -935,6 +941,47 @@ class CartController extends Controller
             // there was an error
             dd('Error');
         }
+    }
+
+    public function dpremove(Request $request)
+    {
+        //dd('edww');
+        //dd('sex');
+        /*$t = Cart::get($id);
+        $t->remove($id);*/
+        $id = $request->get('id');
+        Cart::remove($id);
+
+        //UPDATE SAVED CART IF USER LOGGED
+        if($user = Auth::user()) {
+            
+           // dd($user->cart);
+            $existingcheck = ShoppingCart::where('identifier', $user->id)->first();
+
+            if($existingcheck) {
+                $existingcheck->delete($user->id);
+
+            }
+
+            if($user->cart){
+               $user->cart->delete();
+            }
+        }
+
+
+        $isAjax = $request->ajax();
+
+        if ($isAjax) {
+            return response([ 'message' => 'success', 'id' => $id ]);
+        }
+
+        return Redirect::to('/cart')->with('success',
+            "{$product->name} was successfully removed from the shopping cart."
+        );
+
+        /*return redirect()->route('cart')->with('success',
+            "{$product->name} was successfully removed from the shopping cart."
+        );*/
     }
 
 }

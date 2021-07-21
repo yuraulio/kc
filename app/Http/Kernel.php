@@ -64,7 +64,13 @@ class Kernel extends HttpKernel
         'preview' => \App\Http\Middleware\Preview::class,
         'static_page' => \App\Http\Middleware\StaticPages::class,
         'auth.aboveauthor' => \App\Http\Middleware\AuthAuthorsAndAbove::class,
+        'cart' => \App\Http\Middleware\TicketCheck::class,
+        'free.event' => \App\Http\Middleware\CheckForFreeEvent::class,
+        'code.event' => \App\Http\Middleware\CheckCodeEvent::class,
+        'auth.elearning' => \App\Http\Middleware\CheckUserLogeinForElearning::class,
         'auth.sms' => \App\Http\Middleware\CheckForSMSCoockie::class,
+        'event.check' => \App\Http\Middleware\CheckForEvent::class,
+        'event.subscription' => \App\Http\Middleware\CheckForSubscription::class,
     ];
 
     /**

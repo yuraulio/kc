@@ -48,19 +48,14 @@ class CheckForSMSCoockie
         require_once("../app/Apifon/Model/MessageContent.php");
         require_once("../app/Apifon/Model/SmsRequest.php");
         require_once("../app/Apifon/Model/SubscriberInformation.php");
-
-        
-        if (Auth::guest() || env('APP_ENV') == 'development') {
+       
+        if (Auth::guest() || env('APP_DEBUG') == true) {
             return $next($request);
         }
 
         $roles = Auth::user()->role->pluck('name')->toArray();
-
-        if(in_array('super_admin',$roles) || in_array('administrator',$roles) ||
-        in_array('manager',$roles) || in_array('author',$roles)) {
-
-            return $next($request);   
-
+        if (in_array('Super Administrator',$roles) || in_array('Administrator',$roles) || in_array('Manager',$roles) || in_array('Author',$roles)) {
+            return $next($request);
         }else{
    
             $user = Auth::user();
@@ -84,7 +79,7 @@ class CheckForSMSCoockie
                     }
 
                 }else{
-                   
+                  
                     $cookieValue = base64_encode($user->id . date("H:i"));
                     setcookie('auth-'.$user->id, $cookieValue, time() + (1 * 365 * 86400), "/"); // 86400 = 1 day
                 
@@ -103,7 +98,7 @@ class CheckForSMSCoockie
                 //dd($user->cookiesSMS()->where('coockie_value',$cookie)->first());
                 //dd($cookie);
                 $cookieSms = $user->cookiesSMS()->where('coockie_value',$cookie)->first();
-               
+                
                 if(!$cookieSms->sms_verification && $user->mobile != ''){
                 
                     $codeExpired = strtotime($cookieSms->updated_at);

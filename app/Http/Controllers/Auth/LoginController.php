@@ -25,7 +25,7 @@ use URL;
 use \Cart as Cart;
 use App\Model\ShoppingCart;
 use \Carbon\Carbon;
-
+use App\Model\CookiesSMS;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
@@ -95,13 +95,13 @@ class LoginController extends Controller
                     $cookieValue = base64_encode($user->id . date("H:i"));
                     setcookie('auth-'.$user->id, $cookieValue, time() + (1 * 365 * 86400), "/"); // 86400 = 1 day
 
-                    // $coockie = new CookiesSMS;
-                    // $coockie->coockie_name = 'auth-'.$user->id;
-                    // $coockie->coockie_value = $cookieValue;
-                    // $coockie->user_id = $user->id;
-                    // $coockie->sms_code = rand(1111,9999);
+                    $coockie = new CookiesSMS;
+                    $coockie->coockie_name = 'auth-'.$user->id;
+                    $coockie->coockie_value = $cookieValue;
+                    $coockie->user_id = $user->id;
+                    $coockie->sms_code = rand(1111,9999);
 
-                    // $coockie->save();
+                    $coockie->save();
 
                 }
 
