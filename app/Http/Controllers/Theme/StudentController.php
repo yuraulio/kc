@@ -356,10 +356,11 @@ class StudentController extends Controller
     public function elearning($course){
 
         $has_access = false;
-        $event = Event::with('topic', 'category')->where('title', $course)->first();
+        $event = Event::with('topic', 'category', 'slugable')->where('title', $course)->first();
 
 
         $data['details'] = $event->getAttributes();
+        $data['details']['slug'] = $event['slugable']['slug'];
         $data['files'] = $event['category'][0]['dropbox'][0]->toArray();
         //dd($data['files']);
         //dd($data['details']);

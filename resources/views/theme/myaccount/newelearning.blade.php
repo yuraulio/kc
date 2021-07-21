@@ -159,16 +159,32 @@
 
 
                      ?>
+                     <?php 
+                     $video_seen = json_decode($videos, true);
+                     $notes = json_decode($notes, true);
+                     //dd($notes);
+                     //dd($video_seen); 
+                     ?>
                   <!-- ./topic-header -->
+
                   <ul class="lessons-list">
-                  @foreach($topic as $keyLesso => $lesso)
-                    @foreach($lesso as $keyLesson => $lesson)
+                  @foreach($topic['lessons'] as $keyLesso => $lesson)
+                  <?php //dd($keyLesso);
+                  if($keyLesso >= 6)
+                    break; ?>
+                  <?php 
+                  $vimeoVideo = explode('https://vimeo.com/', $lesson['vimeo_video']);
+                  //dd($notes);
+                   ?>
+                   {{-- @foreach($lesso as $keyLesson => $lesson)--}}
                     <?php
-                    $current_cat_id = $lesson['cat_id'];
-                    $catId = $lesson['cat_id'];
+                    //$current_cat_id = $lesson['cat_id'];
+                    //$catId = $lesson['cat_id'];
                     $frame1 = '';
-                      $path = $lesson['vimeo'];
+                      $path = $lesson['vimeo_video'];
+                      //dd($path);
                       $frame1 = $frame.''. $keyLesso;
+                      //dd($lesson);
                     ?>
 
                     <?php
@@ -176,17 +192,18 @@
                       //$vimeoId = str_replace($path, '?title=false');
                       $vimeoId = str_replace('?title=false','',$path);
                       $vimeoId = str_replace('https://player.vimeo.com/video/','',$vimeoId);
+                      //dd($vimeoId);
                      ?>
 
 
 
-                    <li class="lesson {{$vimeoId}}" data-completed="{{$lesson['seen']}}" data-links="{{$links[$vimeoId]}}" data-note="{{$notesss[$vimeoId]}}" id="{{$frame1}}">
-                      <a class="" href="javascript:void(0)" onclick="play_video('{{$path}}','{{$frame1}}','{video{{$id}}}', '{{$id}}', '{{$notes}}')" tabindex="0">
+                    <li class="lesson {{$vimeoId}}" data-completed="{{$video_seen[$vimeoVideo[1]]['seen']}}" id="{{$frame1}}">
+                      <a class="" href="javascript:void(0)" onclick="play_video('{{$path}}','{{$frame1}}','{video{{$lesson['id']}}}', '{{$lesson['id']}}')" tabindex="0">
                         <img
                           class="lesson-progress"
                           src="
                           <?php
-                          if($lesson['seen'] == 1){
+                          if($video_seen[$vimeoVideo[1]]['seen'] == 1){
                             echo 'theme/assets/img/new/completed_lesson_icon.svg';
                           }else{
                             echo 'theme/assets/img/new/lesson_icon.svg';
@@ -198,13 +215,14 @@
 
                         <div class="lesson-info">
                           <h3
-                            class="lesson-info_title @if($lesson['bold'])bold-topic @endif"
-                            data-title="{!! $keyLesson !!}"
+                            class="lesson-info_title {{--@if($lesson['bold'])bold-topic @endif--}}"
+                            data-title="{!! $lesson['title'] !!}"
 
                           >
-                            {!! $keyLesson !!}
+                            {!! $lesson['title'] !!}
                           </h3>
-                          <span class="lesson-info_duration">{{$lesson['duration']}}</span>
+                          
+                          <span class="lesson-info_duration">{{$lesson['vimeo_duration']}}</span>
 							<span class="white-separator"> | </span>
                           <span class="lesson-info_topic-type"
                             >Live Tutorial</span
@@ -212,19 +230,22 @@
                         </div>
                         <!-- ./lesson-info -->
 						<div class="lesson-teacher-wrapper">
+            <?php $instructor = $topics['instructors'][$lesson['instructor_id']][0]; 
+            //dd($instructor);?>
+            <?php //dd(get_image($instructor)); ?>
                         <img
                           class="lesson-teacher"
-                          src="{{cdn($lesson['inst_photo'])}}"
-                          alt="{{$lesson['inst']}}"
-                          title="{{$lesson['inst']}}"
-                          data-slug="{{$lesson['slug']}}"
+                          src="{{cdn(get_image($instructor))}}"
+                          alt="{{$instructor['title']}} {{$instructor['subtitle']}}"
+                          title="{{$instructor['title']}} {{$instructor['subtitle']}}"
+                          data-slug="{{$instructor['slugable']['slug']}}"
                         />
               </div>
                         <!-- ./lesson-teacher-wrapper -->
                       </a>
                     </li>
 
-                    @endforeach
+                    {{--@endforeach--}}
                     @endforeach
                   </ul>
                 </li>
@@ -277,7 +298,7 @@
               </div>
           </header>
           <!-- ./lesson-header -->
-          <div id='{{$id}}' class="video-wrapper">
+          <div id="{{$lesson['event_id']}}" class="video-wrapper">
             <div id='{{$frame2}}'>
               <iframe
                 aria-label="lesson video"
@@ -297,7 +318,7 @@
           <!-- ./video-wrapper -->
           <div class="lesson-main">
             <div class="lesson-main-title-wrapper">
-              <h2 class="lesson-main-title">{!! $keyLesson !!}</h2>
+              <h2 class="lesson-main-title">{!! $lesson['title'] !!}</h2>
               <!--<div class="lesson-main-info">
                 <img src="theme/assets/img/new/info-information.svg" alt="lesson information" />
                 <span>Live Tutorial</span>
@@ -364,7 +385,7 @@
                   <div class="share-options">
                     <ul>
                       <li>
-                      <a href="https://www.facebook.com/sharer/sharer.php?u=<?= URL('/').'/'. $slug .'?utm_source=Facebook&utm_medium=User_Share&utm_campaign=DIGITAL_DIPLOMA_ELEARNING_GR'; ?>&quote=<?= 'Παρακολουθώ το '. urlencode($course);?>" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank" title="Share on Facebook">
+                      <a href="https://www.facebook.com/sharer/sharer.php?u=<?= URL('/').'/'. $details['slug'] .'?utm_source=Facebook&utm_medium=User_Share&utm_campaign=DIGITAL_DIPLOMA_ELEARNING_GR'; ?>&quote=<?= 'Παρακολουθώ το '. urlencode($course);?>" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank" title="Share on Facebook">
                       <img tabindex="0" src="theme/assets/img/new/facebook1.svg" alt="facebook"
                         />
                         </a>
@@ -377,7 +398,7 @@
                         /></a>
                       </li>
                       <li>
-                      <a href="https://twitter.com/share?url=<?= URL('/').'/'. $slug.'?utm_source=Twitter&utm_medium=User_Share&utm_campaign=DIGITAL_DIPLOMA_ELEARNING_GR'; ?>&text=<?= 'Παρακολουθώ το '. urlencode($course);?>" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank" title="Share on Twitter"><img tabindex="0" src="theme/assets/img/new/twitter1.svg" alt="twitter"
+                      <a href="https://twitter.com/share?url=<?= URL('/').'/'. $details['slug'].'?utm_source=Twitter&utm_medium=User_Share&utm_campaign=DIGITAL_DIPLOMA_ELEARNING_GR'; ?>&text=<?= 'Παρακολουθώ το '. urlencode($course);?>" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank" title="Share on Twitter"><img tabindex="0" src="theme/assets/img/new/twitter1.svg" alt="twitter"
                         /></a>
                       </li>
                     </ul>
@@ -601,7 +622,7 @@
 
                     </ul>
                   </div>
-                  @endif
+                  @endif--}}
 
                   <!-- ./lesson-downloads -->
                   <div class="lesson-links">
@@ -610,7 +631,7 @@
                     </ul>
                   </div>
                   <!-- ./lesson-links -->
-                </div>
+                </div>}
                 <!-- ./lesson-resources -->
               </div>
               <!-- ./lesson-misc -->

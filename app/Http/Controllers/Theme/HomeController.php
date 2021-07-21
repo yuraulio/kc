@@ -111,7 +111,7 @@ class HomeController extends Controller
 
     public function index(Slug $slug){
 
-        dd($slug);
+        //dd($slug);
         //dd(get_class($slug->slugable) == Event::class);
         //dd(get_class($slug->slugable) == Delivery::class);
 
