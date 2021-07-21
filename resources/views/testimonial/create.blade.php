@@ -165,6 +165,7 @@
             //console.log(state)
         if (!state.id) { return state.text; }
         //console.log(state.text)
+        console.log(state.element)
 
         path = state.element.attributes['path'].value
         name = state.element.attributes['name'].value

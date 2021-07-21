@@ -341,6 +341,7 @@ class UserController extends Controller
                             $arr['topic_content']['total_duration'] = intval($h) . 'h ' . $m . 'm';
 
 
+                            $arr_lesson['title'] = $lesson1['title'];
                             $arr_lesson['vimeo_video'] = $lesson1['vimeo_video'];
                             $arr_lesson['vimeo_duration'] = $lesson1['vimeo_duration'];
 
