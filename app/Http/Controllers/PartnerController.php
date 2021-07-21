@@ -68,6 +68,8 @@ class PartnerController extends Controller
 
         $partner = Partner::find($request->partner_id);
 
+        $model->partners()->sync($request->partner_id);
+
         return response()->json([
             'success' => __('Partner successfully assigned.'),
             'partner' => $partner,

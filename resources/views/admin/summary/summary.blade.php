@@ -24,7 +24,7 @@
         @if($model->summary1)
             @foreach ($model->summary1 as $summary)
                 <tr>
-                    <td id="title-{{$summary->id}}" data-id="{{$summary->id}}" class="summary-list">{{ $summary->title }}</td>
+                    <td id="title-{{$summary->id}}" data-id="{{$summary->id}}" class="summary-list"><a class="edit-btn" href="#"> {{ $summary->title }} </a></td>
                     <td id="section_sum-{{$summary->id}}" data-id="{{$summary->id}}" class="summary-list">{{ $summary->section }}</td>
                     <td hidden id="media_sum-{{$summary->id}}" data-id="{{$summary->id}}" class="summary-list">
                     @isset($summary->medias)
@@ -161,6 +161,10 @@
 
 @push('js')
 <script>
+
+
+
+
    $(document).on('click',"#save_summary",function(){
    let modelType = "{{addslashes ( get_class($model) )}}";
    let modelId = "{{ $model->id }}";
@@ -178,7 +182,7 @@
        console.log(summary)
    	let newSummary =
    	`<tr>` +
-   	`<td id="title-` + summary['id'] +`">` + summary['title'] + `</td>` +
+   	`<td id="title-` + summary['id'] +`"><a class="edit-btn" href="#">` + summary['title'] + `</a></td>` +
     `<td id="section_sum-` + summary['id'] +`">` + summary['section'] + `</td>` +
     `<td hidden id="media_sum-` + summary['id'] +`" data-id="` + summary['id'] +`" class="summary-list"></td>`+
 
@@ -214,20 +218,21 @@
 </script>
 <script>
    $(document).on('click',"#edit-summary",function(){
-   $summaryId = $("#edit-summary").data('id')
+   summaryId = $(this).attr('data-id')
+   console.log(summaryId)
    $.ajax({
            headers: {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
            },
    	    type: 'post',
-   	    url: '/admin/summary/update/' + $summaryId,
+   	    url: '/admin/summary/update/' + summaryId,
             data: {'title':$('#edit-title').val(),'description':CKEDITOR.instances['edit-description2'].getData(), 'section': $('#editModalSummary #edit_section_sum').val(),'svg': $('#image_svg_upload-summary').val()},
    	    success: function (data) {
 
    	let summary = data.summary;
 
 
-   	$("#title-"+summary['id']).html(summary['title'])
+   	$("#title-"+summary['id']).html(`<a class="edit-btn" href="#">`+summary['title'])
    	$("#section_sum-"+summary['id']).html(summary['section'])
     $("#media_sum-"+summary['id']).html(summary.medias['path']+summary.medias['original_name'])
     $("#title-"+summary['id']).parent().find('.dropdown-item').attr('data-description', summary['description'])

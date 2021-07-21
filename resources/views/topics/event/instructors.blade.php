@@ -1,15 +1,10 @@
 <div class="accordion accord_topic" id="accordionExample">
-<?php //dd($topics); ?>
     @foreach($topics as $key => $topic)
-    <?php //dd($topic); ?>
         <?php $topic = $topic->first(); ?>
         <?php $status=""; ?>
-        <?php //dd($event['topic']); ?>
         @foreach($event['topic'] as $topic_db)
-        <?php //dd($topic['id'].'//'.$topic_db->id); ?>
             @if($topic['id'] == $topic_db->id)
                 <?php $status="active"; ?>
-                <?php //dd($status); ?>
             @endif
         @endforeach
     <div class="card">
@@ -30,7 +25,6 @@
                 <div class="table-responsive py-4">
                     <table class="table align-items-center table-flush lessons-table" >
                         <thead class="thead-light">
-                            <?php //dd($isInclassCourse); ?>
                             <tr>
                                 <th scope="col">{{ __('Lesson') }}</th>
                                 <th scope="col">{{ __('Instructor') }}</th>
@@ -53,7 +47,7 @@
                                 @foreach($lessons[$key] as $key1 => $lesson)
                                 <?php //dd($lesson);?>
                                 <tr id="{{$lesson['id']}}" class="topic_{{$topic->id}} lessons-list">
-                                <td>{{ $lesson->title }}</td>
+                                <td><a class="edit_btn_topic1" href="#">{{ $lesson->title }}</td>
 
                                 <td id="inst_lesson_edit_{{$lesson['id']}}"><?php if(isset($instructors[$lesson->id]) && $instructors[$lesson->id]->first() != null)
                                 {
@@ -152,7 +146,7 @@
                                 @foreach($topic->lessons as $key1 => $lesson)
                                 <?php //dd($lesson);?>
                                 <tr id="{{$lesson['id']}}" class="topic_{{$topic->id}}">
-                                <td>{{ $lesson->title }}</td>
+                                <td><a class="edit_btn_topic1" href="#">{{ $lesson->title }}</a></td>
 
                                 <td id="inst_lesson_edit_{{$lesson['id']}}"><?php if(isset($instructors[$lesson->id]) && $instructors[$lesson->id]->first() != null)
                                 {
@@ -203,6 +197,10 @@
 @push('js')
 <script>
 
+    $(document).on('click',".edit_btn_topic1",function(){
+        let a = $(this).parent().parent().find('.open_modal').click()
+    })
+
 
 
 
@@ -224,10 +222,12 @@
 
             $.each(elements, function(key, value) {
                 $(value).find('.dropdown').addClass('d-none')
+                $(value).find('.open_modal').addClass('d-none')
             })
         }else{
             $.each(elements, function(key, value) {
                 $(value).find('.dropdown').removeClass('d-none')
+                $(value).find('.open_modal').addClass('d-none')
             })
         }
         //console.log(status)
