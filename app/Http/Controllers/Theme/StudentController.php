@@ -372,16 +372,20 @@ class StudentController extends Controller
 
         $user = User::with('events')->find($user['id']);
         $statistic = $user->statistic()->wherePivot('event_id',$event['id'])->first()->toArray();
+        //dd($statistic);
         $data['lastVideoSeen'] = $statistic['pivot']['lastVideoSeen'];
+        $data['event_statistic_id'] = $statistic['pivot']['id'];
         $data['event_id'] = $statistic['pivot']['event_id'];
         //dd($statistic);
         //load videos
         $data['videos'] = $statistic['pivot']['videos'];
         //load notes
         $data['notes'] = $statistic['pivot']['notes'];
+        //dd($data['notes']);
         //load statistic
         $user_event = $user->events()->wherePivot('event_id', $event['id'])->first()->toArray();
 
+        $data['instructor_topics'] = false;
         //expiration event for user
         $expiration_event_user = $user_event['pivot']['expiration'];
 
@@ -399,6 +403,157 @@ class StudentController extends Controller
 
         return view('theme.myaccount.newelearning', $data);
 
+
+    }
+
+    public function saveNote(Request $request){
+        $user = Auth::user();
+        $user = User::find($user['id']);
+
+        //dd($user->statistic()->wherePivot('event_id', $request->event)->get());
+        $notess = $user->statistic()->wherePivot('event_id', $request->event)->first();
+        if($notess != ""){
+            $notes = json_decode($notess->pivot['notes'],true);
+            //dd($notes);
+            foreach($notes as $key => $note){
+                if($key == $request->vimeoId){
+                    $note =  preg_replace( "/\r|\n/", "||", $request->text );
+                    //dd($note);
+
+                    $notes[$key] = $note;
+                }
+            }
+        }
+
+
+        $user->statistic()->wherePivot('event_id', $request->event)->updateExistingPivot($request->event,['notes' => json_encode($notes)], false);
+
+
+
+        return response()->json([
+            'success' => true,
+            'text' => $request->text,
+            'vimeoId' =>$request->vimeoId
+        ]);
+
+    }
+
+    public function saveElearning(Request $request){
+
+        //dd($request->all());
+
+        $user = Auth::user();
+        $user = User::find($user['id']);
+
+        $examAccess = false;
+
+        if($user->statistic()->wherePivot('event_id',$request->event)->first()){
+
+          $videos = $user->statistic()->wherePivot('event_id',$request->event)->first()->pivot['videos'];
+          $videos = json_decode($videos,true);
+          foreach($request->videos as $key=> $video){
+
+
+            $videos[$key]['stop_time'] = $video['stop_time'];
+            $videos[$key]['percentMinutes'] = $video['percentMinutes'];
+
+            if( (int) $video['seen'] == 1 && (int) $videos[$key]['seen'] == 0){
+                $videos[$key]['seen'] = $video['seen'];
+
+            }
+
+          }
+
+            $user->statistic()->wherePivot('event_id',$request->event)->updateExistingPivot($request->event,[
+                'lastVideoSeen' => $request->lastVideoSeen,
+                'videos' => json_encode($videos)
+            ], false);
+
+            // if($user->events()->where('event_id',2068)->first() && $user->events()->where('event_id',2068)->first()->trans_id != '0'){
+            //     $user->videos()->where('event_id',$request->event)->first()->certification($request->event);
+            // }
+
+
+           /* if(isset($_COOKIE['examMessage-'.$request->event_statistic])){
+
+                $examAccess = false;
+
+            }else if($request->event != 2068){
+
+                $examAccess = $user->videos()->where('event_id',$request->event)->first()->examAccess();
+
+                if($examAccess){
+
+                    $generalInfo = \Config::get('dpoptions.website_details.settings');
+                    $adminemail = $generalInfo['admin_email'];
+
+                    $event = Content::find($request->event);
+
+                    $muser['name'] = $user->first_name . ' ' . $user->last_name;
+                    $muser['first'] = $user->first_name;
+                    $muser['eventTitle'] =  $event->title;
+                    $muser['email'] = $user->email;
+
+                    $data['firstName'] = $user->first_name;
+                    $data['eventTitle'] = $event->title;
+
+                    $sent = Mail::send('emails.student.exam_activate', $data, function ($m) use ($adminemail, $muser) {
+
+                        $fullname = $muser['name'];
+                        $first = $muser['first'];
+                        $sub =  $first . ' – Your exams on the ' . $muser['eventTitle'] . 'have been activated!';
+                        $m->from($adminemail, 'Knowcrunch');
+                        $m->to($muser['email'], $fullname);
+                        //$m->cc($adminemail);
+                        $m->subject($sub);
+
+                    });
+
+                }
+
+
+
+            }*/
+
+        }
+/*
+        $destinationPath = public_path().'/elearning_stats';
+        if(!File::exists($destinationPath)) {
+            //dd('ddd');
+            File::makeDirectory($destinationPath, $mode = 0777, true, true);
+        }
+        $browser = $this->getBrowser();
+        //$textName = 'elearning_stats/' . date('d_m_Y') . '_' . $user->id . '.txt';
+        $textName = 'elearning_stats/' . date('d_m_Y') . '_' . $user->id . '.json';
+        $file = fopen($textName, "a+");
+        $json = [];
+        $json[date('h:i:s')] = [];
+        $json[date('h:i:s')]['videos'] = $videos;
+        $json[date('h:i:s')]['browser_name'] = $browser['name'];
+        $json[date('h:i:s')]['browser_platform'] = $browser['platform'];
+        $json[date('h:i:s')]['browser_version'] = $browser['version'];
+
+        if(filesize($textName)){
+            fwrite($file, '++');
+        }
+
+        fwrite($file, json_encode($json));
+        fclose($file);
+
+        if(User::find($user->id)->videos()->where('event_id',$request->event)->first()){
+            $progress =  User::find($user->id)->videos()->where('event_id',$request->event)->first()->videosSeenPer();
+        }else{
+            $progress = 0;
+        }*/
+
+
+        return response()->json([
+            'success' => true,
+            'videos' => $request->videos,
+            // 'loged_in' => true,
+            // 'exam_access' => $examAccess,
+            // 'progress' => $progress
+        ]);
 
     }
 }

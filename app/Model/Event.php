@@ -261,8 +261,8 @@ class Event extends Model
 
         }
 
-
         }
+        //die();
 
 
         $instructors = $this->instructors->unique()->groupBy('instructor_id')->toArray();
@@ -352,9 +352,11 @@ class Event extends Model
 
     public function progress($user)
     {
-
+        //dd($user->statistic()->wherePivot('event_id',$this['id'])->first()->pivot['videos']);
         $videos = $user->statistic()->wherePivot('event_id',$this['id'])->first()->pivot['videos'];
+
         $videos = json_decode($videos, true);
+        //dd($videos);
         $sum = 0;
         foreach($videos as $video){
             if($video['seen'] == 1 || $video['seen'] == '1'){

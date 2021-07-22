@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<?php //dd($event); ?>
 <html lang="en">
   <head>
     <base href="{!! URL::to('/') !!}/" target="_self" />
@@ -32,7 +31,7 @@
 
   <?php $bonusFiles = ['_Bonus', 'Bonus', 'Bonus Files', 'Βonus', '_Βonus', 'Βonus', 'Βonus Files'] ?>
 
-  <body onload="tabclick('<?= $videos; ?>', '<?= $details['id']; ?>', '{{$lastVideoSeen}}', '{{$course}}','{{$notes}}', '{{$videos_progress}}')">
+  <body onload="tabclick('{{ $videos }}', '{{$details['id']}}', '{{$lastVideoSeen}}', '{{$event_statistic_id}}','{{$course}}','{{$notes}}', '{{$videos_progress}}')">
   <div id="favDialog1" hidden>
                <div class="alert-outer" >
                      <div class="container">
@@ -104,10 +103,10 @@
               $firstLesson =true;
               $count = 1;
               ?>
+              <?php $count1 = 0; ?>
 
                 @foreach($topics['topics'] as $keyTopic => $topic)
                   <?php
-                  //dd($topic);
                     if($count == 1)
                        // $count = 2;
                   ?>
@@ -159,46 +158,50 @@
 
 
                      ?>
-                     <?php 
-                     $video_seen = json_decode($videos, true);
-                     $notes = json_decode($notes, true);
-                     //dd($notes);
-                     //dd($video_seen); 
+                     <?php
+                        $video_seen = json_decode($videos, true);
+                        //$notes = json_decode($notes, true);
+                        //dd($video_seen);
+                     //dd($video_seen);
                      ?>
                   <!-- ./topic-header -->
 
                   <ul class="lessons-list">
+
                   @foreach($topic['lessons'] as $keyLesso => $lesson)
                   <?php //dd($keyLesso);
                   if($keyLesso >= 6)
                     break; ?>
-                  <?php 
+                  <?php
                   $vimeoVideo = explode('https://vimeo.com/', $lesson['vimeo_video']);
                   //dd($notes);
                    ?>
-                   {{-- @foreach($lesso as $keyLesson => $lesson)--}}
+
                     <?php
                     //$current_cat_id = $lesson['cat_id'];
                     //$catId = $lesson['cat_id'];
                     $frame1 = '';
                       $path = $lesson['vimeo_video'];
+                      $path = str_replace('https://vimeo.com/','https://player.vimeo.com/video/',$path);
+
                       //dd($path);
-                      $frame1 = $frame.''. $keyLesso;
-                      //dd($lesson);
+
+                      $frame1 = $frame.''. $count1;
+                      $count1++;
+                      //dd($frame1);
                     ?>
 
                     <?php
-                      //print_r($path);
-                      //$vimeoId = str_replace($path, '?title=false');
+
                       $vimeoId = str_replace('?title=false','',$path);
-                      $vimeoId = str_replace('https://player.vimeo.com/video/','',$vimeoId);
+                      $vimeoId = str_replace('https://player.vimeo.com/video/','',$vimeoVideo[1]);
                       //dd($vimeoId);
                      ?>
 
 
 
-                    <li class="lesson {{$vimeoId}}" data-completed="{{$video_seen[$vimeoVideo[1]]['seen']}}" id="{{$frame1}}">
-                      <a class="" href="javascript:void(0)" onclick="play_video('{{$path}}','{{$frame1}}','{video{{$lesson['id']}}}', '{{$lesson['id']}}')" tabindex="0">
+                    <li class="lesson {{$vimeoVideo[1]}}" data-completed="{{$video_seen[$vimeoVideo[1]]['seen']}}" data-note="{{$notesss[$vimeoVideo[1]]}}" id="{{$frame1}}">
+                      <a class="" href="javascript:void(0)" onclick="play_video('{{$path}}','{{$frame1}}','{video{{$lesson['id']}}}', '{{$lesson['id']}}', '{{$notes}}')" tabindex="0">
                         <img
                           class="lesson-progress"
                           src="
@@ -221,7 +224,7 @@
                           >
                             {!! $lesson['title'] !!}
                           </h3>
-                          
+
                           <span class="lesson-info_duration">{{$lesson['vimeo_duration']}}</span>
 							<span class="white-separator"> | </span>
                           <span class="lesson-info_topic-type"
@@ -230,7 +233,7 @@
                         </div>
                         <!-- ./lesson-info -->
 						<div class="lesson-teacher-wrapper">
-            <?php $instructor = $topics['instructors'][$lesson['instructor_id']][0]; 
+            <?php $instructor = $topics['instructors'][$lesson['instructor_id']][0];
             //dd($instructor);?>
             <?php //dd(get_image($instructor)); ?>
                         <img
@@ -244,8 +247,6 @@
                         <!-- ./lesson-teacher-wrapper -->
                       </a>
                     </li>
-
-                    {{--@endforeach--}}
                     @endforeach
                   </ul>
                 </li>
@@ -414,215 +415,63 @@
               <div class="lesson-misc resources active">
                 <!--<h3 class="lesson-misc-title">Lesson resources</h3>-->
                 <div class="lesson-resources">
-                @if(!$instructor_topics && isset($folders) && count($folders) > 0 && $showFiles)
-                <?php //dd($folders); ?>
+                    <?php //dd($files); ?>
+                @if(isset($files) && count($files) > 0)
+                <?php
+                    $folders = $files['folders'][0];
+                    if(isset($files['folders'][1])){
+                        $folder_bonus = $files['folders'][1];
+                    }
+
+                    $files = $files['files'][1];
+                    //dd($files);
+
+                    if(isset($files['files'][2])){
+                        $files_bonus = $files['files'][2];
+                    }
+
+                ?>
                   <div class="lesson-downloads">
                     <h4 class="resource-list-title">Downloads</h4>
                     <?php //dd($folders) ?>
 
-
-                    @foreach($folders as $catid => $dbfolder)
-                    <?php //dd($dbfolder)?>
-                    <?php
-                      $folder = false;
-                      if(trim($catid) == trim($catId)){
-                          $folder = true;
-                      }
-                      ?>
-                      @if($folder)
-                        @if($current_cat_id == $catid)
-                          @if (isset($dbfolder[0]) && !empty($dbfolder[0]))
-
-                            @foreach($dbfolder[0] as $key => $folder)
-                            <?php //dd($folder);?>
-                              <?php
-
-                                //dd($folder);
-                                $rf = strtolower($folder['dirname']);
-                                $rf1 = $folder['dirname']; //newdropbox
-                                //   print_r('asd');
-                                //   print_r($rf1);
-                                //   die();
-                              ?>
-                              <?php
-                                $topic=1;
-                                if($instructor_topics){
-                                    $topic=0;
-
-                                    if((trim($folder['foldername']) === '1 - Prelearning - Digital & Social Media Fundamentals')
-                                            && in_array(trim('Pre-learning: Digital & Social Media Fundamentals'), $instructor_topics)){
-
-                                      $topic = 1;
-                                    }else{
-                                      $topic_name = explode( '-', $folder['foldername'] );
-                                      $topic=in_array(trim($topic_name[1]), $instructor_topics);
-                                    }
-                                }
-                                ?>
-                              @if($topic)
-                              <?php
-
-                                $topic_name = preg_replace('/[0-9]+/', '', $folder['foldername']);
-                                $topic_name = \Illuminate\Support\Str::slug($topic_name);
-
-
-                              ?>
-                              <ul class="resource-list hidden" data-folder-id="<?= $topic_name; ?>">
-
-                              <!-- <li class="resource "> -->
-
-                              <h3>{{--$folder['foldername']--}}</h3>
-                              <?php
-                                $checkedF = [];
-                                $fs = [];
-                                $fk = 1;
-                                $bonus = [];
-                                $subfolder = false;
-                              ?>
-                              <?php //dd($files[$catid]);?>
-                                @if (isset($files[$catid][1]) && !empty($files[$catid][1]))
-
-                                  @foreach($files[$catid][1] as $fkey => $frow2)
-
-                                    @if($frow2['fid'] == $folder['id'])
-                                      <?php
-                                      //dd($frow2);
-                                          $fn = $folder['foldername'];
-
-                                          //BONUS FILE
-                                          if(isset($dbfolder[1]) && !empty($dbfolder[1])){
-                                            foreach($dbfolder[1] as $nkey => $nfolder){
-                                              $dirname = explode('/',$nfolder['dirname']);
-                                              if($nfolder['parent'] == $folder['id'] && in_array($fn,$dirname) && !$subfolder  && !in_array($nfolder['foldername'],$bonusFiles) /*($nfolder['foldername'] !== '_Bonus' || $nfolder['foldername'] !== 'Bonus')*/){
-
-                                                  $checkedF[] = $nfolder['id'] + 1 ;
-                                                  $fs[$nfolder['id']+1]=[];
-                                                  $fs[$nfolder['id']+1][] = $nfolder;
-                                              }
-                                            }
-                                          }
-                                          if(count($fs) > 0 ){
-                                            $subfolder = true;
-                                          }
-                                      ?>
-                                      <!-- SUBFOLDER -->
-
-                                      @if($subfolder && in_array($fk,$checkedF))
-
-                                        @while(in_array($fk,$checkedF))
-                                              <?php
-
-                                                $sfv = reset($checkedF);
-                                                $sfk = array_search($sfv, $checkedF);
-                                                unset($checkedF[$sfk]);
-                                              ?>
-
-
-                                              @if (isset($dbfolder[1]) && !empty($dbfolder[1]))
-                                                @foreach($dbfolder[1] as $nkey => $nfolder)
-                                                    @if($nfolder['id'] == $fs[$sfv][0]['id'] && $nfolder['parent'] ==  $fs[$sfv][0]['parent'] && !in_array($nfolder['foldername'],$bonusFiles) /*($nfolder['foldername'] !== '_Bonus' || $nfolder['foldername'] !== 'Bonus')*/) <!--//lioncode-->
-
-                                                    <li id="{{$rf1}}" class="resource bonus-files">
-                                                      {{-- $nfolder['foldername'] --}}
-                                                      @if (isset($files[$catid][2]) && !empty($files[$catid][2]))
-                                                            @foreach($files[$catid][2] as $fkey => $frow)
-                                                                @if (strpos($frow['dirname'], $rf) !== false || strpos($frow['dirname'], $rf1) !== false && ( $frow['fid'] == ($sfv-1)  ))
-                                                                  <?php $bonus[]= $frow['filename'] ?>
-                                                                  <li id="{{$rf1}}" class="resource">
-                                                                    <a class="download-file getdropboxlink"  data-dirname="{{ $frow['dirname'] }}" data-filename="{{ $frow['filename'] }}" href="javascript:void(0)" ><img
-                                                                        src="theme/assets/img/new/download.svg"
-                                                                        alt="download resource" />{{ $frow['filename'] }}</a
-                                                                    >
-                                                                    {{--<span class="last-modified">Last modified:  {{$frow['last_mod']}}</span>--}}
-                                                                  </li>
-                                                                @endif
-                                                          @endforeach
-                                                        @endif
-                                                    </li>
-                                                    @endif
-                                                @endforeach
-                                              @endif
-                                              <!-- bonus of each lesson -->
-
-                                          <?php $fk += 1;?>
-
-                                        @endwhile
-                                        <!-- <div class="files-wrapper">
-                                          <div class="file-wrapper">
-                                              <h4 class="file-title">{{ $frow2['filename'] }}</h4>
-                                              <span class="last-modified">Last modified:  {{$frow2['last_mod']}}</span>
-                                              <a class="download-file getdropboxlink"  data-dirname="{{ $frow2['dirname'] }}" data-filename="{{ $frow2['filename'] }}" href="javascript:void(0)" >
-                                              <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
-                                          </div>
-                                        </div> -->
-
-
-                                        <li id="{{$rf1}}" class="resource">
-                                        <a class="download-file getdropboxlink"  data-dirname="{{ $frow2['dirname'] }}" data-filename="{{ $frow2['filename'] }}" href="javascript:void(0)" ><img
-                                            src="theme/assets/img/new/download.svg"
-                                            alt="download resource" />{{ $frow2['filename'] }}</a
-                                        >
-                                        {{--<span class="last-modified">Last modified:  {{$frow2['last_mod']}}</span>--}}
-                                      </li>
-
-
-                                      @else
-                                      <li id="{{$rf1}}" class="resource">
-                                        <a class="download-file getdropboxlink"  data-dirname="{{ $frow2['dirname'] }}" data-filename="{{ $frow2['filename'] }}" href="javascript:void(0)" ><img
-                                            src="theme/assets/img/new/download.svg"
-                                            alt="download resource" />{{ $frow2['filename'] }}</a
-                                        >
-                                        {{--<span class="last-modified">Last modified:  {{$frow2['last_mod']}}</span>--}}
-                                      </li>
-                                      @endif
-                                      <!-- END END SUBFOLDER -->
-
-                                      <?php
-                                          $fk += 1;
-                                      ?>
-                                    @endif
-
-                                  @endforeach
-                                  <!-- bonus of each lesson -->
-                                  @if (isset($dbfolder[1]) && !empty($dbfolder[1]))
-                                    @foreach($dbfolder[1] as $nkey => $nfolder)
-                                      @if($nfolder['parent'] == $folder['id'] && in_array($nfolder['foldername'],$bonusFiles) /*($nfolder['foldername'] == '_Bonus' || $nfolder['foldername'] == 'Bonus')*/) <!--//lioncode-->
-
-                                      <li id="{{$rf1}}" class="resource bonus-files">
-                                      {{-- $nfolder['foldername'] --}}
-                                      @if (isset($files[$catid][2]) && !empty($files[$catid][2]))
-                                              @foreach($files[$catid][2] as $fkey => $frow)
-                                                @if (strpos($frow['dirname'], $rf) !== false || strpos($frow['dirname'], $rf1) !== false && !in_array($frow['filename'],$bonus))
-
-                                                    <li id="{{$rf1}}" class="resource">
-                                                      <a class="download-file getdropboxlink"  data-dirname="{{ $frow['dirname'] }}" data-filename="{{ $frow['filename'] }}" href="javascript:void(0)" ><img
-                                                          src="theme/assets/img/new/download.svg"
-                                                          alt="download resource" />{{ $frow['filename'] }}</a
-                                                      >
-                                                      {{--<span class="last-modified">Last modified:  {{$frow['last_mod']}}</span>--}}
-                                                    </li>
-                                                  @endif
-                                            @endforeach
-                                          @endif
-                                      </li>
-                                      @endif
-
-                                    @endforeach
-                                  @endif
-
-                                    <!--END END bonus of each lesson -->
-                                @endif
-                              @endif
-                                        </ul>
-                            @endforeach
-                          @endif
-                        @endif
-                      @endif
+                    @foreach($folders as $key => $folder)
+                    <?php //var_dump($key); ?>
+                    <ul class="resource-list">
+                        @foreach($files as $key11 => $file)
+                            @if($folder['id'] == $file['fid'])
+                            <?php //dd($key); ?>
+                            <li id="{{$folder['dirname']}}" data-topic-count="{{$key}}" class="resource hidden">
+                                <a class="download-file getdropboxlink"  data-dirname="{{ $folder['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" ><img
+                                    src="theme/assets/img/new/download.svg"
+                                    alt="download resource" />{{ $file['filename'] }}</a
+                                >
+                                {{--<span class="last-modified">Last modified:  {{$file['last_mod']}}</span>--}}
+                            </li>
+                            @endif
+                        @endforeach
                     @endforeach
+
+                    @if(isset($folders_bonus) && count($folders_bonus) > 0)
+                        @foreach($folders_bonus as $folder_bonus)
+                            @if($folder_bonus['parent'] == $folder['id'])
+                                @foreach($files_bonus as $file_bonus)
+                                    <li id="{{$folder_bonus['dirname']}}" class="resource bonus-files">
+                                        <a class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" ><img
+                                            src="theme/assets/img/new/download.svg"
+                                            alt="download resource" />{{ $file_bonus['filename'] }}</a>
+                                    </li>
+                                @endforeach
+                            @endif
+                        @endforeach
+                    @endif
+
+
+
 
                     </ul>
                   </div>
-                  @endif--}}
+                  @endif
 
                   <!-- ./lesson-downloads -->
                   <div class="lesson-links">
@@ -631,7 +480,7 @@
                     </ul>
                   </div>
                   <!-- ./lesson-links -->
-                </div>}
+                </div>
                 <!-- ./lesson-resources -->
               </div>
               <!-- ./lesson-misc -->
@@ -742,10 +591,12 @@
    $(".save-button").click(function() {
         let note = $("#notes").val();
         let vimeoId = $('.isWatching').attr('class');
+        vimeoId=vimeoId.replace(" ", "");
 
         vimeoId=vimeoId.replace("isWatching", "");
         vimeoId=vimeoId.replace("lesson", "");
-        vimeoId=vimeoId.replace(" ", "");
+
+
 
         let event = $('.topics-list').attr('id');
         //console.log(event)
@@ -771,7 +622,8 @@
           }
         });
 
-      })
+    })
+
 
 
    function prevVideo(){
@@ -807,6 +659,7 @@
       let nextTitle;
 
       this.currentWatchingVideo = $( ".isWatching" ).attr('id');
+
       next = $( "#" + this.currentWatchingVideo ).next().attr('id');
       nextTitle = $( "#" + this.currentWatchingVideo ).next().find('.lesson-info_title').text();
       //update title
@@ -821,7 +674,6 @@
         //console.log($(nextTopic).next()['length']);
 
         if($(nextTopic).next()['length'] == 0){
-          //console.log('The end');
           curTitle = $("#"+this.currentWatchingVideo).find('.lesson-info_title').text();
           $('.lesson-main-title').text(curTitle);
         }else{
@@ -832,15 +684,18 @@
           $('.lesson-main-title').text(nextTitle);
         }
      }
+     console.log('on next video')
      $("#" + next +" a:first-child").trigger("click");
    }
 
    function tabclick(videos,event,seen,statisticId,frame,notes,progress){
+       //console.log('my first load')
+       console.log('seen'+ seen)
+       console.log('statisticId'+ statisticId)
 
      $('.progress-bar').css('width', progress + '%')
 
-
-     notes = JSON.parse(notes)
+        notes = JSON.parse(notes)
 
       videos = JSON.parse(videos)
 
@@ -848,6 +703,9 @@
       frame = frame.replace(/-/g, '')
       frame = frame.replace(/&/g, '')
       frame = '{'+frame+'}'
+
+      console.log('frame:'+frame)
+      console.log('prev frame:' + previousFrame)
 
       if(previousFrame){
 
@@ -883,6 +741,7 @@
       this.frame = frame
       previousFrame = frame;
 
+
       if(frame in this.videosSeen == false){
          this.videos = videos;
       }else{
@@ -899,6 +758,7 @@
        //  this.videoPlayers[frame].on('play');
       }
 
+
       if(!this.previousK){
 
          this.previousK = frame
@@ -907,10 +767,14 @@
 
       }
 
+
+
       if(lastVideoSeen!=-1){
 
          $(".active-tab").removeClass("active-tab");
-         $this = $('#'+videos[lastVideoSeen]['tab']).parent().parent().children('h2')
+         $this = $('#'+videos[lastVideoSeen]['tab']).parent().parent().children('h3')
+
+         console.log($this)
 
          $this.click();
 
@@ -925,6 +789,8 @@
          }
 
          previousVideo = videos[seen]['tab'];
+         console.log(previousVideo)
+         //console.log(videos[seen])
          tabWatching = videos[seen]['tab'];
 
 
@@ -952,6 +818,7 @@
          $('#courses-video').append(cvl)
 
          this.previousK = vimeoID;
+
          this.frameVi[this.frame] = this.previousK;
 
          //videoPlayers[frame] = new Vimeo.Player(vimeoID);
@@ -966,8 +833,10 @@
 
          videoPlayers[frame].loadVideo(seen).then(function(id) {
             videoId = id
+            //alert(id)
             //when load video load NOTES
             let videoNote = notes[videoId];
+            console.log('My note:'+videoNote)
             videoNote = videoNote.replace("||", "\n");
             //console.log('first load video'+videoId)
             array.push(id)
@@ -977,20 +846,21 @@
 
             let video_link = $('.'+this.videoId).data('links')
 
-         video_link.forEach(function(e) {
-         let strArray = e.split("|")
-          $('#links').append( `<li id="linkitem" class="resource linkitem">
-                                  <a target="_blank" href="${strArray[1]}">
-                                    <img
-                                      src="theme/assets/img/new/link.svg"
-                                      alt="external resource link" />${strArray[0]}</a>
-                                </li>`
-                              )
+        //  video_link.forEach(function(e) {
+        //  let strArray = e.split("|")
+        //   $('#links').append( `<li id="linkitem" class="resource linkitem">
+        //                           <a target="_blank" href="${strArray[1]}">
+        //                             <img
+        //                               src="theme/assets/img/new/link.svg"
+        //                               alt="external resource link" />${strArray[0]}</a>
+        //                         </li>`
+        //                       )
 
-         });
+        //  });
             let prog = $('.isWatching').find('.lesson-progress').attr('src','theme/assets/img/new/current_lesson_icon.svg')
 
 
+            console.log(videoNote)
             $('#notes').val(videoNote);
             videoPlayers[frame].setCurrentTime(videos[id]['stop_time'])
             // videoPlayers[frame].setLoop(false)
@@ -1063,13 +933,13 @@
                   url: '/elearning/save',
                   data:{'videos':videos,'event_statistic':eventStatistic,'lastVideoSeen':videoId,'event':event},
                   success: function(data) {
-                        if(!data['loged_in']){
-                           notLogin(data)
-                        }else{
-                           videosSeen[frame] = data['videos'];
-                           $('.progress-bar').css('width', data['progress'] + '%')
-                           checkForExam(data['exam_access'])
-                        }
+                        // if(!data['loged_in']){
+                        //    notLogin(data)
+                        // }else{
+                        //    videosSeen[frame] = data['videos'];
+                        //    $('.progress-bar').css('width', data['progress'] + '%')
+                        //    checkForExam(data['exam_access'])
+                        // }
                         //playVi = true;
 
                   }
@@ -1095,6 +965,8 @@
 
 
       this.videoPlayers[this.frame].on('progress', function(e) {
+
+        //console.log('no progress')
 
          @if(!$instructor_topics)
 
@@ -1152,15 +1024,21 @@
    let array = [];
 
    function play_video(video,playingVideo,vk,lesson,notes){
-
-    notes = JSON.parse(notes)
+       video = video + '?title=false'
+       //console.log('asds:'+previousVideo)
+        console.log('prev'+previousVideo)
+    // notes = JSON.parse(notes)
       if(previousVideo !==false){
 
          document.getElementById(previousVideo).classList.remove('isWatching')
 
       }
 
+      //alert(playingVideo)
+      console.log('play:'+playingVideo)
+
       document.getElementById(playingVideo).classList.add('isWatching')
+
       tabWatching = playingVideo;
       previousVideo = playingVideo;
 
@@ -1182,10 +1060,13 @@
       this.videoPlayers[frame] = new Vimeo.Player(vimeoID);
 
       videoPlayers[frame].loadVideo(video).then(function(id) {
+          console.log('ON LOAD')
         //console.log($('.isWatching').data("completed"))
         $( ".isWatching" ).parent().parent().addClass('open');
         $( ".isWatching" ).parent().css('display', 'block')
+
          let videoNote = $('.isWatching').data('note')
+
          videoNote = videoNote.replace("||", "\n");
          $('#notes').val(videoNote)
          $('.status').addClass('saveDone');
@@ -1201,18 +1082,17 @@
 //   scrollTop: $(".isWatching").offset().top
 // });
 
-var container = $('.sidebar-wrapper'),
-    scrollTo = $('.isWatching');
+        var container = $('.sidebar-wrapper'),
+            scrollTo = $('.isWatching');
 
-container.animate({
-    scrollTop: scrollTo.offset().top - container.offset().top + container.scrollTop()
-});
+        container.animate({
+            scrollTop: scrollTo.offset().top - container.offset().top + container.scrollTop()
+        });
          this.videoId = id
-         //console.log('curr vid'+id)
+         console.log('curr vid'+id)
          this.videoPlayers[this.frame].setCurrentTime(videos[id]['stop_time'])
          this.videoPlayers[this.frame].setLoop(false)
 
-         //console.log('load two')
          array.push(id)
          //console.log(array[array.length - 1])
           //t/t
@@ -1226,39 +1106,53 @@ container.animate({
 
 
 
-         let video_link = $('.'+this.videoId).data('links')
+        //  let video_link = $('.'+this.videoId).data('links')
          $('.resource-link').remove();
          //console.log(video_link)
          $('.linkitem').remove();
          //console.log(video_link)
-         video_link.forEach(function(e) {
-         let strArray = e.split("|")
-          $('#links').append( `<li id="linkitem" class="resource linkitem">
-                                  <a target="_blank" href="${strArray[1]}">
-                                    <img
-                                      src="theme/assets/img/new/link.svg"
-                                      alt="external resource link" />${strArray[0]}</a>
-                                </li>`
-                              )
+        //  video_link.forEach(function(e) {
+        //  let strArray = e.split("|")
+        //   $('#links').append( `<li id="linkitem" class="resource linkitem">
+        //                           <a target="_blank" href="${strArray[1]}">
+        //                             <img
+        //                               src="theme/assets/img/new/link.svg"
+        //                               alt="external resource link" />${strArray[0]}</a>
+        //                         </li>`
+        //                       )
 
-         });
+        //  });
 
          //console.log('second load')
 
          let topicId = $('.isWatching').parent().parent().data('count')
          let topicTitle = $('.topic.open .topic-info_title').data('topic-slug');
 
+         console.log('topic:'+topicId)
 
-        let last = prev_topicId[prev_topicId.length - 1]
+         console.log($('.lesson-downloads ul li'))
+         $('.lesson-downloads ul li').addClass('hidden')
 
-          if(topicTitle != last){
-            $('*[data-folder-id='+last+']').addClass('hidden')
+         $.each($('.lesson-downloads ul li'), function(key, value) {
+             if(topicId-1 == key){
+                 $(value).removeClass('hidden')
+             }
+         })
 
-          }
 
-          $('*[data-folder-id='+topicTitle+']').removeClass('hidden')
+        //let last = prev_topicId[prev_topicId.length - 1]
+        //console.log(last)
 
-        prev_topicId.push(topicTitle)
+
+
+        //   if(topicTitle != last){
+        //     $('*[data-folder-id='+last+']').addClass('hidden')
+
+        //   }
+
+        //   $('*[data-folder-id='+topicTitle+']').removeClass('hidden')
+
+        // prev_topicId.push(topicTitle)
         //$('.open').children('.lessons-list').css('display','block')
 
       }).catch(function(error) {
@@ -1591,3 +1485,7 @@ function checkWidth(){
 
   </body>
 </html>
+
+@push('js')
+<script src="{{ asset('theme/assets') }}/js/new_js1/app1.js"></script>
+@endpush

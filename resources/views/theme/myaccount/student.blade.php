@@ -826,6 +826,7 @@
                                     $dropbox = $event['category'][0]['dropbox'][0];
                                     //dd($dropbox);
                                     $folders = $dropbox['folders'][0];
+                                    //dd($folders);
 
                                     $folders_bonus = $dropbox['folders'][1];
                                     //dd($folders_bonus);

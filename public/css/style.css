@@ -182,3 +182,15 @@
     color: #ffffff;
     border: none;
 }
+
+.isWatching{
+    background: #eff7dc !important;
+}
+
+#dynamic-link {
+    margin-top: 20px;
+}
+
+#dynamic-link input {
+    margin-top: 10px;
+}

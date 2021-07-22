@@ -131,6 +131,13 @@
 
                                     @include('alerts.feedback', ['field' => 'vimeo_duration'])
                                 </div>
+
+                                <div class="form-group">
+                                    <button class="btn btn-primary add-dynamic-link" type="button">Add Link</button>
+                                    <div id="dynamic-link">
+
+                                    </div>
+                                </div>
                                     <input type="hidden" name="creator_id" id="input-creator_id" class="form-control" value="{{$user->id}}">
                                     <input type="hidden" name="author_id" id="input-author_id" class="form-control" value="{{$user->id}}">
 
@@ -153,6 +160,17 @@
 
 @push('js')
 <script>
+    let count = 0;
+    $(document).on('click', '.add-dynamic-link', function() {
+        row = `
+        <input type="text" name="link-${count}" id="link-${count}" class="form-control" placeholder="Enter Link ${count}" value="">
+        `
+
+        console.log(row)
+
+        $('#dynamic-link').append(row)
+        count++
+    })
 
 
 </script>
