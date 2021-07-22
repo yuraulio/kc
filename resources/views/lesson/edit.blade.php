@@ -154,6 +154,25 @@
                                     @include('alerts.feedback', ['field' => 'vimeo_duration'])
                                 </div>
 
+
+                                <div class="form-group">
+                                    <button class="btn btn-primary add-dynamic-link" type="button">Add Link</button>
+                                    <div id="dynamic-link">
+                                        @if(!empty($lesson['links']))
+                                            <?php $links = json_decode($lesson['links'], true); ?>
+                                            @foreach($links as $key => $link)
+                                            <div class="lesson-links-admin">
+                                                <input type="text" name="links[]" class="form-control links" placeholder="Enter Link {{$key + 1}}" value="{{$link}}">
+                                                <button type="button" class="btn btn-danger remove-link">Remove</button>
+                                            </div>
+                                            @endforeach
+
+                                        @endif
+
+                                    </div>
+
+                                </div>
+
                                     <input type="hidden" name="creator_id" id="input-creator_id" class="form-control" value="{{$lesson->creator_id}}">
                                     <input type="hidden" name="author_id" id="input-author_id" class="form-control" value="{{$lesson->author_id}}">
 
@@ -177,6 +196,29 @@
 @push('js')
 
 <script>
+    $(document).on('click', '.add-dynamic-link', function() {
+        
+        count = $('.links').length + 1
+
+        row = `
+        <div class="lesson-links-admin">
+            <input type="text" name="links[]" class="form-control links" placeholder="Enter Link ${count}" value="">
+            <button type="button" class="btn btn-danger remove-link">Remove</button>
+        </div>
+        `
+
+        $('#dynamic-link').append(row)
+    })
+
+    $(document).on('click', '.remove-link', function() {
+        $(this).parent().remove()
+        
+        $.each($('.links'), function(key, value) {
+            key = key + 1
+            $(value).attr('placeholder', 'Enter Link '+key)
+        })
+    })
+
 let a = [];
     $( "#input-topic_id" ).change(function(e) {
         //alert( "Handler for .change() called." );

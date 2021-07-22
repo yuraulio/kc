@@ -183,7 +183,7 @@
     border: none;
 }
 
-.isWatching{
+.isWatching {
     background: #eff7dc !important;
 }
 
@@ -193,4 +193,13 @@
 
 #dynamic-link input {
     margin-top: 10px;
+}
+
+.lesson-links-admin input {
+    display: inline-block;
+    width: 20%;
+}
+
+.lesson-links-admin button {
+    display: inline-block;
 }

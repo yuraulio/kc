@@ -49,15 +49,18 @@ class LessonController extends Controller
      */
     public function store(LessonRequest $request, Lesson $model)
     {
-        if($request->status == 'on')
-        {
+
+        if(!empty($request->links)){
+            $links = json_encode($request->links);
+        }
+
+        if($request->status == 'on'){
             $status = 1;
-        }else
-        {
+        }else{
             $status = 0;
         }
 
-        $request->request->add(['status' => $status]);
+        $request->request->add(['status' => $status, 'links' => $links]);
 
         $lesson = $model->create($request->all());
 

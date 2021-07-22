@@ -135,8 +135,9 @@
                                 <div class="form-group">
                                     <button class="btn btn-primary add-dynamic-link" type="button">Add Link</button>
                                     <div id="dynamic-link">
+                                        
 
-                                    </div>
+                                </div>
                                 </div>
                                     <input type="hidden" name="creator_id" id="input-creator_id" class="form-control" value="{{$user->id}}">
                                     <input type="hidden" name="author_id" id="input-author_id" class="form-control" value="{{$user->id}}">
@@ -160,16 +161,28 @@
 
 @push('js')
 <script>
-    let count = 0;
+
     $(document).on('click', '.add-dynamic-link', function() {
+        
+        count = $('.links').length + 1
+
         row = `
-        <input type="text" name="link-${count}" id="link-${count}" class="form-control" placeholder="Enter Link ${count}" value="">
+        <div class="lesson-links-admin">
+            <input type="text" name="links[]" class="form-control links" placeholder="Enter Link ${count}" value="">
+            <button type="button" class="btn btn-danger remove-link">Remove</button>
+        </div>
         `
 
-        console.log(row)
-
         $('#dynamic-link').append(row)
-        count++
+    })
+
+    $(document).on('click', '.remove-link', function() {
+        $(this).parent().remove()
+        
+        $.each($('.links'), function(key, value) {
+            key = key + 1
+            $(value).attr('placeholder', 'Enter Link '+key)
+        })
     })
 
 
