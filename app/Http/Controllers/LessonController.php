@@ -49,9 +49,23 @@ class LessonController extends Controller
      */
     public function store(LessonRequest $request, Lesson $model)
     {
+        //dd($request->all());
+
+        $arr = array();
+
+
 
         if(!empty($request->links)){
-            $links = json_encode($request->links);
+            foreach($request->links as $key => $link){
+                $arr1 = array();
+                $arr1['name'] = $request->names[$key];
+                $arr1['link'] = $link;
+                array_push($arr, $arr1);
+            }
+            //dd($arr);
+            $links = json_encode($arr);
+
+            //dd($links);
         }
 
         if($request->status == 'on'){
