@@ -320,10 +320,16 @@ Route::group(['middleware' => ['auth'], 'prefix'=>'myaccount'], function () {
         Route::post('/updrecbill', [ 'as' => 'updrecbill' , 'uses' => 'Theme\StudentController@updateReceiptBilling' ]);
         Route::get('/mydata', [ 'as' => 'festudent.mydata' , 'uses' => 'Theme\StudentController@downloadMyData' ]);
 
+
         Route::get('/enroll-for-free/{content}', 'Theme\HomeController@enrollToFreeEvent')->name('enrollForFree');
+
+        Route::get('/elearning/{course?}',  'Theme\StudentController@elearning');
 
     });
 });
+
+Route::put('/elearning/saveNote', 'Theme\StudentController@saveNote');
+Route::put('/elearning/save', 'Theme\StudentController@saveElearning');
 
 Route::get('/logout', [ 'as' => 'logout' , 'uses' => 'Theme\StudentController@logout']);
 

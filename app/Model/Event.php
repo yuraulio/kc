@@ -266,11 +266,12 @@ class Event extends Model
 
         }
 
-
         }
+        //die();
 
 
         $instructors = $this->instructors->unique()->groupBy('instructor_id')->toArray();
+        //dd($this->topic->unique()->groupBy('topic_id'));
 
         foreach($this->topic->unique()->groupBy('topic_id') as $key => $topic){
 
@@ -286,6 +287,8 @@ class Event extends Model
                 if(count($lessonsArray)>0){
                     $topics[$t->title]['lessons'] = $lessonsArray;
                 }
+                //dd($topics);
+
             }
 
 
@@ -294,10 +297,18 @@ class Event extends Model
         $data['topics'] = $topics;
         $data['instructors'] = $instructors;
         foreach($data['topics'] as $key => $topics){
-            $topic_id = $topics['lessons'][0]['topic_id'];
+            //dd($topics['lessons']);
+            if(isset($topics['lessons'][0])){
+                $topic_id = $topics['lessons'][0]['topic_id'];
+            }else{
+                $topic_id = $topics['lessons'][1]['topic_id'];
+            }
+
             $data['topics'][$key]['topic_duration'] = $data['keys'][$topic_id];
 
         }
+
+        //dd($data);
 
         return $data;
     }
@@ -354,18 +365,24 @@ class Event extends Model
 
     public function progress($user)
     {
-
+        //dd($user->statistic()->wherePivot('event_id',$this['id'])->first()->pivot['videos']);
         $videos = $user->statistic()->wherePivot('event_id',$this['id'])->first()->pivot['videos'];
-        $videos = json_decode($videos, true);
-        $sum = 0;
-        foreach($videos as $video){
-            if($video['seen'] == 1 || $video['seen'] == '1'){
-                $sum++;
-            }
 
+
+        //dd($videos);
+        $sum = 0;
+        if($videos != ''){
+            $videos = json_decode($videos, true);
+            foreach($videos as $video){
+                if($video['seen'] == 1 || $video['seen'] == '1'){
+                    $sum++;
+                }
+
+            }
+            return ($sum/count($videos)) * 100;
         }
 
-        return ($sum/count($videos)) * 100;
+        return 0 * 100;
     }
 
     public function video_seen($user)
@@ -373,18 +390,21 @@ class Event extends Model
 
         $videos = $user->statistic()->wherePivot('event_id',$this['id'])->first()->pivot['videos'];
         //dd($user->statistic()->wherePivot('event_id',$this['id'])->first());
-        $videos = json_decode($videos, true);
-        //dd($videos);
-        $sum = 0;
-        foreach($videos as $video){
-            if($video['seen'] == 1 || $video['seen'] == '1'){
-                $sum++;
-            }
+        if($videos != ''){
+            $videos = json_decode($videos, true);
+            //dd($videos);
+            $sum = 0;
+            foreach($videos as $video){
+                if($video['seen'] == 1 || $video['seen'] == '1'){
+                    $sum++;
+                }
 
+            }
+            return $sum.' of '.count($videos);
         }
 
+        return '0 of 0';
 
-        return $sum.' of '.count($videos);
     }
 
     public function invoices(){

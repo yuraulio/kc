@@ -27,19 +27,19 @@ class CreatePlansTable extends Migration
         });*/
 
         /*Schema::create('plan_events', function(Blueprint $table) {
-           
+
             $table->increments('id');
             $table->integer('plan_id')->unsigned()->index();
             $table->integer('event_id')->unsigned()->index();
-           
+
         });
 
         Schema::create('plan_categories', function(Blueprint $table) {
 
             $table->increments('id');
-            $table->integer('plan_id')->unsigned()->index();            
+            $table->integer('plan_id')->unsigned()->index();
             $table->integer('category_id')->unsigned()->index();
-         
+
         });*/
 
         Schema::table('plan_events', function(Blueprint $table) {
@@ -59,25 +59,25 @@ class CreatePlansTable extends Migration
         });
 
         Schema::table('plans', function (Blueprint $table) {
-            $table->dropColumn('id');
-            $table->dropColumn(['published']);
-           
+            // $table->dropColumn('id');
+            // $table->dropColumn('published');
+
         });
 
         Schema::table('plans', function (Blueprint $table) {
-           
+
             $table->id()->first();
             $table->boolean('published')->default(false);
         });
 
-        
+
 
         Schema::create('plan_noevents', function(Blueprint $table) {
 
             $table->increments('id');
-            $table->integer('plan_id')->unsigned()->index();        
+            $table->integer('plan_id')->unsigned()->index();
             $table->bigInteger('event_id')->unsigned()->index();
-    
+
         });
 
     }

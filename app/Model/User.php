@@ -186,7 +186,7 @@ class User extends Authenticatable
 
     public function statistic()
     {
-        return $this->belongsToMany(User::class, 'event_statistics')->withPivot('videos','lastVideoSeen', 'notes', 'event_id');
+        return $this->belongsToMany(Event::class, 'event_statistics')->withPivot('id','videos','lastVideoSeen', 'notes', 'event_id');
     }
 
     public function invoices(){

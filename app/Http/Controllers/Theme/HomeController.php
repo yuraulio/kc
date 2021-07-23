@@ -111,7 +111,7 @@ class HomeController extends Controller
 
     public function index(Slug $slug){
 
-
+        //dd($slug);
         //dd(get_class($slug->slugable) == Event::class);
         //dd(get_class($slug->slugable) == Delivery::class);
 
@@ -425,17 +425,17 @@ class HomeController extends Controller
         $data['location']= $data['content']['city'][0];
 
         $data['etax'] = $data['content']['topic'];
-        
+
         $data['instructors'] = $data['content']->topicsLessonsInstructors()['instructors'];
         //dd($data['instructors']);
 
         $data['is_event_paid'] = 1;
         $data['desc'] = $topicDescription;
-      
+
         $pdf = PDF::loadView('theme.event.syllabus_print', $data)->setPaper('a4', 'landscape');
         $fn = $slug . '.pdf';
         return $pdf->stream($fn);
-      
+
     }
 
 
@@ -446,17 +446,17 @@ class HomeController extends Controller
     }
 
     public function smsVerification(Request $request){
-       
+
         $user = Auth::user();
-        
+
         //dd($user->cookiesSMS()->where('coockie_value',10001)->first());
         //dd($user->cookiesSMS()->where('coockie_value',$request->cookie_value)->first());
 
         if($user->cookiesSMS()->where('coockie_value',$request->cookie_value)->first()){
-           
+
             $cookieSms = $user->cookiesSMS()->where('coockie_value',$request->cookie_value)->first();
             $sms_code = $cookieSms->sms_code;
-            
+
             $codeExpired = strtotime($cookieSms->updated_at);
             $codeExpired  = (time() - $codeExpired) / 60;
 
@@ -466,14 +466,14 @@ class HomeController extends Controller
                 $cookieSms->send = false;
                 $cookieSms->sms_code = rand(1111,9999);
                 $cookieSms->save();
-            
-                return redirect('/myaccount')->with('errors', 'We just send you a new sms');  
+
+                return redirect('/myaccount')->with('errors', 'We just send you a new sms');
                 //redirect('/sms-verification/' . $cookieSms->coockie_value)->with('errors', 'We just send you a new sms');
 
             }
 
             if($sms_code == $request->sms){
-                
+
                 $smsCookies = $user->cookiesSMS()->where('coockie_value',$request->cookie_value)->first();
 
                 $smsCookies->sms_code = '';

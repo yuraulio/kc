@@ -6,6 +6,7 @@
 
 @section('content')
     @component('layouts.headers.auth')
+    @include('pages.layouts.cards')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
                 {{ __('Examples') }}
@@ -14,6 +15,7 @@
             <li class="breadcrumb-item"><a href="{{ route('notification.show') }}">{{ __('Pages') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
         @endcomponent
+        @include('pages.layouts.cards')
     @endcomponent
 
     <div class="container-fluid mt--6">

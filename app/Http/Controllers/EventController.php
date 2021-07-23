@@ -30,8 +30,11 @@ class EventController extends Controller
         $this->authorize('manage-users', User::class);
         $user = Auth::user();
 
+        $data['live_courses'] = count(Event::where('status', '0')->orwhere('status', '2')->get());
+        $data['completed_courses'] = count(Event::where('status', '0')->orwhere('status', '3')->get());
+        $data['total_courses'] = count(Event::all());
 
-        return view('event.index', ['events' => $model->with('category', 'type')->get(), 'user' => $user]);
+        return view('event.index', ['events' => $model->with('category', 'type')->get(), 'user' => $user, 'data' => $data]);
     }
 
     public function assign_ticket(Request $request)

@@ -827,6 +827,7 @@
                                     $dropbox = $event['category'][0]['dropbox'][0];
                                     //dd($dropbox);
                                     $folders = $dropbox['folders'][0];
+                                    //dd($folders);
 
                                     $folders_bonus = $dropbox['folders'][1];
                                     //dd($folders_bonus);
@@ -1112,9 +1113,9 @@
                                           @endforeach
                                           <?php //dd($event); ?>
                                           @if(!$event['video_access'])
-                                          {{--<a style="cursor:not-allowed; opacity: 0.5; pointer-events: none;" href="/myaccount/newElearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if((isset($event['videos_progress']) && $event['videos_progress'] == 100) || count($event['cert'])>0) WATCH AGAIN @else WATCH NOW @endif</a>--}}
+                                          {{--<a style="cursor:not-allowed; opacity: 0.5; pointer-events: none;" href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if((isset($event['videos_progress']) && $event['videos_progress'] == 100) || count($event['cert'])>0) WATCH AGAIN @else WATCH NOW @endif</a>--}}
                                           @else
-                                          <a href="/myaccount/newElearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if((isset($event['videos_progress']) && $event['videos_progress'] == 100) ) WATCH AGAIN @else WATCH NOW @endif</a>
+                                          <a href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if((isset($event['videos_progress']) && $event['videos_progress'] == 100) ) WATCH AGAIN @else WATCH NOW @endif</a>
                                           @endif
                                        </div>
                                     </div>
@@ -1227,7 +1228,7 @@
                                           @endforeach
                                          
                                           @if(!$event['video_access'])
-                                          {{--<a style="cursor:not-allowed; opacity: 0.5; pointer-events: none;" href="/myaccount/newElearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if((isset($event['videos_progress']) && $event['videos_progress'] == 100) || count($event['cert'])>0) WATCH AGAIN @else WATCH NOW @endif</a>--}}
+                                          {{--<a style="cursor:not-allowed; opacity: 0.5; pointer-events: none;" href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if((isset($event['videos_progress']) && $event['videos_progress'] == 100) || count($event['cert'])>0) WATCH AGAIN @else WATCH NOW @endif</a>--}}
                                           @else
                                           <a href="/myaccount/newElearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if((isset($event['videos_progress']) && $event['videos_progress'] == 100))>0) WATCH AGAIN @else WATCH NOW @endif</a>
                                           @endif
