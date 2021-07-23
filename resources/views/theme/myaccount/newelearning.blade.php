@@ -1,3 +1,6 @@
+<?php
+use Illuminate\Support\Str;
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -111,7 +114,7 @@
                      //dd($video_seen);
 
                      $videoss = json_decode($videos,true);
-                    
+
                      ?>
                 @foreach($topics['topics'] as $keyTopic => $topic)
                   <?php
@@ -166,7 +169,7 @@
 
 
                      ?>
-                    
+
                   <!-- ./topic-header -->
 
                   <ul class="lessons-list">
@@ -188,7 +191,7 @@
                       $path = str_replace('https://vimeo.com/','https://player.vimeo.com/video/',$path);
 
                       //dd($path);
-                     
+
                       if(isset($videoss[$vimeoVideo[1]])){
                         $frame1 = $videoss[$vimeoVideo[1]]['tab'];
                       }
@@ -426,6 +429,7 @@
                 @if(isset($files) && count($files) > 0)
                 <?php
                     $folders = $files['folders'][0];
+                    //dd($folders);
                     if(isset($files['folders'][1])){
                         $folder_bonus = $files['folders'][1];
                     }
@@ -443,11 +447,22 @@
                     <?php //dd($folders) ?>
                     <ul class="resource-list">
                     @foreach($folders as $key => $folder)
-                    <?php //var_dump($key); ?>
+                    <?php
+
+                    $topic_name = preg_replace('/[0-9]+/', '', $folder['foldername']);
+                    $topic_name = Str::slug($topic_name, '-');
+                    //dd($topic_name);
+
+                    $id = explode('/',$folder['dirname']);
+                    //dd($id[2]);
+                    $str=substr($id[2], 0, strrpos($id[2], '-'));
+                    $str = intval($str);
+                    //dd($str);
+                    ?>
 
                         @foreach($files as $key11 => $file)
                             @if($folder['id'] == $file['fid'])
-                            <li id="{{$folder['dirname']}}" data-topic-count="{{$key}}" class="resource hidden">
+                            <li id="{{$folder['dirname']}}" data-folder-id="{{$topic_name}}" class="resource hidden">
                                 <a class="download-file getdropboxlink"  data-dirname="{{ $folder['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" ><img
                                     src="theme/assets/img/new/download.svg"
                                     alt="download resource" />{{ $file['filename'] }}</a
@@ -694,6 +709,18 @@
      $("#" + next +" a:first-child").trigger("click");
    }
 
+    function viewDownloads(){
+        console.log('from view')
+        $('.lesson-downloads ul li').addClass('hidden')
+        topicId = $('.isWatching').parent().parent().data('count') - 1
+        $.each($('.lesson-downloads li'), function(key,value){
+
+            if($(value).data('count') == topicId){
+                $(value).removeClass('hidden')
+            }
+        })
+    }
+
    function tabclick(videos,event,seen,statisticId,frame,notes,progress){
        //console.log('my first load')
        console.log('seen'+ seen)
@@ -828,6 +855,16 @@
 
          this.frameVi[this.frame] = this.previousK;
 
+
+
+         //viewDownloads()
+
+
+         //console.log('//||!!'+topicId)
+
+
+
+
          //videoPlayers[frame] = new Vimeo.Player(vimeoID);
 
         // if(videosPlayed[frame].includes(seen) == false){
@@ -840,23 +877,29 @@
 
          videoPlayers[frame].loadVideo(seen).then(function(id) {
             videoId = id
-            //alert(id)
             //when load video load NOTES
             let videoNote = notes[videoId];
             console.log('My note:'+videoNote)
             videoNote = videoNote.replace("||", "\n");
             //console.log('first load video'+videoId)
             array.push(id)
+            console.log('----------------')
+            console.log(prev_topicId)
             prev_topicId.push($('.topic.open .topic-info_title').data('topic-slug'))
+            console.log('----------------')
+            console.log(prev_topicId)
             $('.isWatching').find('a').addClass('current-lesson')
             $('#links').empty();
 
             let video_link = $('.'+this.videoId).data('link')
 
+console.log(video_link)
+
          video_link.forEach(function(e) {
-         let strArray = e.split("|")
+
+         //let strArray = e.split("|")
           $('#links').append( `<li class="resource linkitem">
-                                  <a target="_blank" href="${strArray[1]}">
+                                  <a target="_blank" href="${e}">
                                     <img
                                       src="theme/assets/img/new/link.svg"
                                       alt="external resource link" />${strArray[0]}</a>
@@ -870,13 +913,6 @@
             console.log('my topic'+topicId)
             //edw
 
-            $('.lesson-downloads ul li').addClass('hidden')
-
-            $.each($('.lesson-downloads ul li'), function(key, value) {
-                if(topicId-1 == key){
-                    $(value).removeClass('hidden')
-                }
-            })
 
 
             console.log(videoNote)
@@ -1078,8 +1114,32 @@
 
       this.videoPlayers[frame] = new Vimeo.Player(vimeoID);
 
+      let topicId = $('.isWatching').parent().parent().data('count')
+         //alert(topicId)
+         let topicTitle = $('.topic.open .topic-info_title').data('topic-slug');
+         console.log('TOPIC_ID'+topicId)
+         console.log('TOPIC TITLE'+topicTitle)
+
+         let last = prev_topicId[prev_topicId.length - 1]
+        console.log('LAST:::::'+last)
+
+
+
+          if(topicTitle != last){
+            $('*[data-folder-id='+last+']').addClass('hidden')
+
+          }
+
+          $('*[data-folder-id='+topicTitle+']').removeClass('hidden')
+
+        prev_topicId.push(topicTitle)
+        $('.open').children('.lessons-list').css('display','block')
+
+
+
       videoPlayers[frame].loadVideo(video).then(function(id) {
           console.log('ON LOAD')
+         //viewDownloads()
         //console.log($('.isWatching').data("completed"))
         $( ".isWatching" ).parent().parent().addClass('open');
         $( ".isWatching" ).parent().css('display', 'block')
@@ -1124,7 +1184,7 @@
 
 
 
-
+console.log($('.'+this.videoId).data('link'))
         let video_link = $('.'+this.videoId).data('link')
          $('.resource-link').remove();
          //console.log(video_link)
@@ -1145,34 +1205,26 @@
          //console.log('second load')
 
          let topicId = $('.isWatching').parent().parent().data('count')
+         alert(topicId)
          let topicTitle = $('.topic.open .topic-info_title').data('topic-slug');
 
-         console.log('topic:'+topicId)
-
-         console.log($('.lesson-downloads ul li'))
-         $('.lesson-downloads ul li').addClass('hidden')
-
-         $.each($('.lesson-downloads ul li'), function(key, value) {
-             if(topicId-1 == key){
-                 $(value).removeClass('hidden')
-             }
-         })
-
-
-        //let last = prev_topicId[prev_topicId.length - 1]
-        //console.log(last)
 
 
 
-        //   if(topicTitle != last){
-        //     $('*[data-folder-id='+last+']').addClass('hidden')
+        let last = prev_topicId[prev_topicId.length - 1]
+        console.log('LAST:::::'+last)
 
-        //   }
 
-        //   $('*[data-folder-id='+topicTitle+']').removeClass('hidden')
 
-        // prev_topicId.push(topicTitle)
-        //$('.open').children('.lessons-list').css('display','block')
+          if(topicTitle != last){
+            $('*[data-folder-id='+last+']').addClass('hidden')
+
+          }
+
+          $('*[data-folder-id='+topicTitle+']').removeClass('hidden')
+
+        prev_topicId.push(topicTitle)
+        $('.open').children('.lessons-list').css('display','block')
 
       }).catch(function(error) {
          switch (error.name) {
