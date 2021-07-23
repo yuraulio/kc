@@ -15,6 +15,7 @@ use App\Model\Subscription;
 use App\Model\Instructor;
 use Laravel\Cashier\Cashier;
 use \Stripe\Stripe;
+use App\Model\Event;
 use URL;
 use Illuminate\Support\Facades\Hash;
 
@@ -25,45 +26,256 @@ class StudentController extends Controller
         $url = URL::to('/');
         return redirect($url);
     }
+
+
+    private function getSubscriptionEvents($data,$subcriptionList){
+        
+        $currentuser = Auth::user();
+        
+        
+        $uid = $currentuser->id;
+        $dpuser = $currentuser;
+
+
+        
+        $eventStudent = StudentSubscription::where('student_id', '=', $uid)->whereIn('event_id',$subcriptionList)->get();
+        
+        $uevents = [];
+        if($eventStudent && !empty($eventStudent)) {
+           
+            foreach ($eventStudent as $key => $value) {
+                //$uevents[] = $value->event_id;
+                $subcriptionList[] = $value->event_id;
+
+            }
+        }
+
+        $uevents = $subcriptionList;               
+        $uevents = array_unique($uevents);
+        
+        $data['subEvents'] = Content::whereIn('id', $uevents)->filterContent([
+                    'status' => 1,
+                    'type' => 33,
+                    'lang' => $data['lang'],
+                    'sort' => 'published_at',
+                    'sort_direction' => 'asc',
+                    'on_categories' => []
+                ])->with('contentLinksTicket','categories','featured.media','customFields')->get();
+        $this->cFieldLib->contentCustomFields($data['subEvents']);
+
+
+        
+        $myEvents = [];
+        $eventsType=[];
+        foreach($data['subEvents'] as $event){
+
+            //dd($event);
+          
+            $location['name'] = 'City';
+            $location['slug'] = 'javascript:void(0)';
+            if (isset($event->categories) && !empty($event->categories)){
+                foreach ($event->categories as $category) {
+                    if ($category->depth != 0 && $category->parent_id == 9) {
+                        $location['name']=$category->name;
+                        $location['slug']='/'.$category->slug;
+
+                    }
+                }
+            }
+            
+            $date='Date';
+            $hour = false;
+          
+            $date = $event['c_fields']['simple_text'][0]['value'];
+           
+            if(isset($event['c_fields']['simple_text'][12]) /*&& is_numeric($event['c_fields']['simple_text'][12]['value'])*/){    
+                $hour = $event['c_fields']['simple_text'][12]['value'];
+                $hour = preg_replace('/[^0-9.]+/', '', $hour);
+            }
+
+            $category = trim($event->title);
+
+            if(strrpos($event->title, ",") !== false){
+                $category = substr($event->title, 0, strrpos($event->title, ","));
+            }
+           
+            if($event->view_tpl == 'elearning_english' || $event->view_tpl =='elearning_free'){
+                $alltopics = false;//$this->getTopics($event,$category);
+                //dd($alltopics);
+            }else{
+                $alltopics = $this->getTopics1($event,$category);
+					
+            }
+            if(count($plans = $dpuser->checkUserPlans($event->plans)) == 0){
+                continue;
+            }
+            $eventTypes[]=$category;
+            $myEvents[$category]=[];
+            $myEvents[$category]['title']=$event->title;
+            $myEvents[$category]['id']= $event->id; 
+            $myEvents[$category]['city']=$location;
+            $myEvents[$category]['subscription']=$event->subscription;    
+            $myEvents[$category]['status']=$event['c_fields']['dropdown_select_status']['value'];
+            $myEvents[$category]['slug']=$event->slug;
+            $myEvents[$category]['date']=$date;
+            $myEvents[$category]['exam']=false;
+            $myEvents[$category]['hour']=$hour;
+            $myEvents[$category]['view_tpl']=$event->view_tpl;
+            
+            $myEvents[$category]['plans'] = $plans;
+
+
+
+            $video_access = false;
+            //$p = EventStudent::select('event_id','created_at','comment')->where('student_id', Sentinel::getUser()->id)->where('event_id', $event->id)->first();
+            $p = StudentSubscription::where('student_id', Sentinel::getUser()->id)->where('event_id', $event->id)->first();
+            if(!$p){
+                continue;
+            }
+            $today = date('Y/m/d');
+        
+            if(strtotime($today) <= strtotime($p->expiration_date) || !$p->expiration_date){   
+                $video_access = true;
+                
+            }else if($event->view_tpl == 'elearning_english' || $event->view_tpl == 'elearning_greek' || $event->view_tpl == 'elearning_free'){
+               //$data['elearningAccess'] += 1;
+            }
+            $myEvents[$category]['video_access'] = $video_access;
+           
+            $myEvents[$category]['videos_seen'] = User::find($currentuser->id)->videos()->where('event_id',$event->id)->first()?
+                    User::find($currentuser->id)->videos()->where('event_id',$event->id)->first()->videosSeen():'0/0';
+
+            $myEvents[$category]['videos_progress'] = User::find($currentuser->id)->videos()->where('event_id',$event->id)->first()?
+                    User::find($currentuser->id)->videos()->where('event_id',$event->id)->first()->videosSeenPer(): 0;
+            
+            $myEvents[$category]['expiration_date'] = '';
+            //dd($p->expiration_date);
+            if($p->expiration_date){
+                $myEvents[$category]['expiration_date'] = date('d-m-Y', strtotime($p->expiration_date)); //date('d-m-Y', strtotime($expMonth, strtotime($p->created_at)));
+            }
+
+          
+
+        }
+        
+         
+        $data['subscriptionEvents'] = $myEvents;
+
+        //dd($data);
+        
+        return $data;
+        
+    }
+
     public function index(){
-        //dd(getenv('STRIPE_SECRET'));
-        //Stripe::setApiKey($ev->paymentMethod->first()->processor_options['secret_key']);
-        //Stripe::setApiKey(getenv("STRIPE_SECRET"));
-       //session()->put('payment_method',2);
-        //$stripe = new \Stripe\StripeClient(getenv("STRIPE_KEY"));
 
-        //dd('from student controller');
         $user = Auth::user();
+        
+        if(count($user->instructor) > 0){
+            $data = $this->instructorEvents();
+        }else{
+            $data = $this->studentsEvent();
+        }
+      
+        $data['instructor'] = count($user->instructor) > 0;
+        return view('theme.myaccount.student', $data);
+    }
 
-        //$paymentMethods = $user->paymentMethods();
-        //dd($paymentMethods);
+    public function instructorEvents(){
+        
+        $user = Auth::user();
+        $instructor = $user->instructor->first();
+        
+        $data['elearningAccess'] = 0;
+        $data['cards'] = [];
+        $data['subscriptionAccess'] = [];
+        $data['mySubscriptions'] = [];
+
+        $data['user'] = User::with('image')->find($user->id);
+        //[$subscriptionAccess, $subscriptionEvents] = $user->checkUserSubscriptionByEvent();
+        $data['subscriptionAccess'] =  false;//$subscriptionAccess;
+        $data['mySubscriptionEvents'] = [];
+       
+        $eventSubscriptions = [];
+        $data['user']['events'] = $instructor['event'];
+    
+        foreach($data['user']['events'] as $key => $event){
+            
+            //if elearning assign progress for this event
+            if($event->is_elearning_course()){
+               
+                //$data['user']['events'][$key]['topics'] = $event['topic']->unique()->groupBy('topic_id')->toArray();
+                $data['user']['events'][$key]['videos_progress'] = 0;//intval($event->progress($user));
+                $data['user']['events'][$key]['videos_seen'] = '0/0';//$event->video_seen($user);
+                $data['user']['events'][$key]['cert'] = [];
+
+                $data['user']['events'][$key]['mySubscription'] = [];
+                $data['user']['events'][$key]['plans'] = [];
+               
+                $eventSubscriptions[] = [];
+                $video_access = true;
+                $data['user']['events'][$key]['video_access'] = $video_access;
+                
+
+            }else{
+              
+                $data['user']['events'][$key]['topics'] = $event->topicsLessonsInstructors()['topics'];
+                //dd($data['user']['events'][$key]['topics']);
+                $video_access = false;
+                $video_access = true;
+                $data['user']['events'][$key]['video_access'] = $video_access;
+            }
+
+            $data['instructors'] = Instructor::with('slugable', 'medias')->get()->groupby('id');
+            $find = false;
+            $view_tpl = $event['view_tpl'];
+            $find = strpos($view_tpl, 'elearning');
+            //dd($find);
+
+            if($find !== false){
+                $find = true;
+                $data['elearningAccess'] = $find;
+            }
+
+        }
+        
+        $data['mySubscriptionEvents'] = [];
+        $data['subscriptionEvents'] = [];
+        
+        return $data;
+    }
+
+    public function studentsEvent(){
+
+        $user = Auth::user();
 
         $data['elearningAccess'] = 0;
         $data['cards'] = [];
         $data['subscriptionAccess'] = [];
         $data['mySubscriptions'] = [];
 
-        $data['user'] = User::with('image', 'events.city', 'events.summary1', 'events.exam', 'events.category', )->find($user->id);
-        //dd($data['user']['events'][2]);
-
-        //$paymentMethods = $user->paymentMethods();
-        //dd($paymentMethods);
-
-        //count elearning
+        $data['user'] = User::with('image', 'events.city', 'events.exam', 'events.category', 'events.plans')->find($user->id);
+        [$subscriptionAccess, $subscriptionEvents] = $user->checkUserSubscriptionByEvent();
+        $data['subscriptionAccess'] =  $subscriptionAccess;
+        $data['mySubscriptionEvents'] = [];
+       
+        $eventSubscriptions = [];
 
         foreach($data['user']['events'] as $key => $event){
 
-
             //if elearning assign progress for this event
             if($event->is_elearning_course()){
-                //dd($event->topicsLessonsInstructors());
+
                 $data['user']['events'][$key]['topics'] = $event['topic']->unique()->groupBy('topic_id');
                 $data['user']['events'][$key]['videos_progress'] = intval($event->progress($user));
                 $data['user']['events'][$key]['videos_seen'] = $event->video_seen($user);
                 $data['user']['events'][$key]['cert'] = [];
-                //$data['user']['events'][$key]['files'] = $event['category']->first()['dropbox']->first();
-                //dd($event->video_seen($user));
-                //dd($event['topic']->unique()->groupBy('topic_id'));
+
+                $data['user']['events'][$key]['mySubscription'] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first();
+                $data['user']['events'][$key]['plans'] = $event['plans'];
+
+                $eventSubscriptions[] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first() ? 
+                                            $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first()->id : -1;
 
                 $video_access = false;
                 $expiration_event = $event->pivot['expiration'];
@@ -94,10 +306,6 @@ class StudentController extends Controller
                 $data['user']['events'][$key]['video_access'] = $video_access;
             }
 
-
-
-
-
             $data['instructors'] = Instructor::with('slugable', 'medias')->get()->groupby('id');
             $find = false;
             $view_tpl = $event['view_tpl'];
@@ -109,17 +317,50 @@ class StudentController extends Controller
                 $data['elearningAccess'] = $find;
             }
 
-            //dd($event->topic);
+        }
+        
+        foreach($user->eventSubscriptions()->whereNotIn('id',$eventSubscriptions)->get() as $key => $subEvent){
+            $event = $subEvent['event']->first();
+            if($event->is_elearning_course()){
+                $data['mySubscriptionEvents'][$key]['topics'] = $event['topic']->unique()->groupBy('topic_id');
+                $data['mySubscriptionEvents'][$key]['title'] = $event['title'];
+                $data['mySubscriptionEvents'][$key]['videos_progress'] = intval($event->progress($user));
+                $data['mySubscriptionEvents'][$key]['videos_seen'] = $event->video_seen($user);
+                $data['mySubscriptionEvents'][$key]['view_tpl'] = $event['view_tpl'];
+                
+                $data['mySubscriptionEvents'][$key]['mySubscription'] = $user->subscriptions()->where('id',$subEvent['id'])->first();
+                $data['mySubscriptionEvents'][$key]['plans'] = $event['plans'];
+                $video_access = false;
+                $expiration_event = $event->pivot['expiration'];
+                $expiration_event = strtotime($expiration_event);
+                $now = strtotime("now");
 
-            //dd($data);
+                //dd($expiration_event >= $now);
+                if($expiration_event >= $now)
+                    $video_access = true;
+
+                $data['mySubscriptionEvents'][$key]['video_access'] = $video_access;
+            
+            }else{
+
+            }
+
+            $find = false;
+            $view_tpl = $event['view_tpl'];
+            $find = strpos($view_tpl, 'elearning');
+            //dd($find);
+
+            if($find !== false){
+                $find = true;
+                $data['elearningAccess'] = $find;
+            }
 
         }
-        //dd($data['user']->toArray());
-        //dd($data['user']['events']);
 
+        $data['subscriptionEvents'] = Event::whereIn('id',$subscriptionEvents)->with('slugable')->get();
 
+        return $data;
 
-        return view('theme.myaccount.student', $data);
     }
 
     public function removeProfileImage(){

@@ -56,7 +56,7 @@
                             <tbody>
                                 @foreach ($plans as $plan)
                                     <tr>
-                                        <td>{{ $plan->name }}</td>
+                                        <td><a href="{{ route('plan.edit', $plan->id) }}"> {{ $plan->name }} </a></td>
                                         <td>{{ $plan->created_at->format('d/m/Y H:i') }}</td>
                                         
 					                        <td class="text-right">
@@ -68,7 +68,7 @@
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                                                           
-                                                            <a class="dropdown-item" href="{{ route('plan.edit', $plan) }}">{{ __('Edit') }}</a>
+                                                            <a class="dropdown-item" href="{{ route('plan.edit', $plan->id) }}">{{ __('Edit') }}</a>
                                                         
                                                         </div>
                                                     </div>

@@ -31,7 +31,7 @@ class Instructor extends Model
 
     public function event()
     {
-        return $this->belongsToMany(Event::class, 'event_topic_lesson_instructor')->with('slugable');
+        return $this->belongsToMany(Event::class, 'event_topic_lesson_instructor')->whereIn('status',[0,2])->where('published',true)->with('slugable','category','city')->distinct();
     }
 
     public function testimonials()

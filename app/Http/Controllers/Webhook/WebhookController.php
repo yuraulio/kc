@@ -100,7 +100,7 @@ class WebhookController extends BaseWebhookController
 
 	private function subscription($payload,$user,$sub){
 		
-		$subscription = $user->subscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first();
+		$subscription = $user->eventSubscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first();
 		//$subscription = $user->subscriptions()->where('stripe_status',1)->where('stripe_price',$payload['data']['object']['lines']['data'][0]['plan']['id'])->first();
 		$eventId = $subscription->event->first()->pivot->event_id;
 		$ends_at = isset($sub['period']) ? $sub['period']['end'] : null;

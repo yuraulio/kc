@@ -233,7 +233,7 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::get('/student-summary/{examResult}/{user_id}','Dashboard\ExamResultController@showResult');
 
     //Plan
-    Route::get('plans', 'Dashboard\PlanController@index')->name('plan');
+    Route::get('plans', 'Dashboard\PlanController@index')->name('plans');
     Route::get('create/plan','Dashboard\PlanController@create')->name('plan.create');
     Route::post('store/plan','Dashboard\PlanController@store')->name('plan.store');
     Route::get('edit/plan/{plan}','Dashboard\PlanController@edit')->name('plan.edit');

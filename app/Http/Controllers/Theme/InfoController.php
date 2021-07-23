@@ -48,9 +48,7 @@ class InfoController extends Controller
 
         $data['pay_methods'] = array();
     	$data['pay_methods'] = PaymentMethod::whereIn('status', [1,2])->get();
-
-        
-                       
+               
         if (Session::has('transaction_id')) {
          	 $transaction = Transaction::where('id', Session::get('transaction_id'))->first();
                 

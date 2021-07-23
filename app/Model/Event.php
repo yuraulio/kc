@@ -29,6 +29,7 @@ use App\Traits\MetasTrait;
 use App\Traits\BenefitTrait;
 use App\Traits\MediaTrait;
 use App\Traits\Invoices;
+use App\Model\Plan;
 
 class Event extends Model
 {
@@ -83,6 +84,10 @@ class Event extends Model
 
         return $this->belongsToMany(Lesson::class,'event_topic_lesson_instructor')->where('status',true)->select('lessons.*','topic_id','event_id', 'lesson_id','instructor_id')
         ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room','priority')->orderBy('event_topic_lesson_instructor.priority','asc')->with('type');
+    }
+
+    public function plans(){
+        return $this->belongsToMany(Plan::class,'plan_events')->where('published',true);
     }
 
 

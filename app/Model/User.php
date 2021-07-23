@@ -22,6 +22,7 @@ use App\Traits\MediaTrait;
 use App\Model\Invoice;
 use Laravel\Cashier\Subscription;
 use App\Model\CookiesSMS;
+use App\Model\Plan;
 
 class User extends Authenticatable
 {
@@ -98,7 +99,7 @@ class User extends Authenticatable
 
     public function instructor()
     {
-        return $this->belongsToMany(Instructor::class, 'instructors_user');
+        return $this->belongsToMany(Instructor::class, 'instructors_user')->with('event');
     }
 
     public function statusAccount()
@@ -165,10 +166,13 @@ class User extends Authenticatable
 
     public function events()
     {
-        return $this->belongsToMany(Event::class, 'event_user')->withPivot('paid', 'expiration')->with('summary1');
+        return $this->belongsToMany(Event::class, 'event_user')->withPivot('paid', 'expiration')->with('summary1','category');
     }
 
-
+    public function subscriptionEvents()
+    {
+        return $this->belongsToMany(Event::class, 'subscription_user_event')->withPivot('expiration','event_id');
+    }
 
     public function ticket()
     {
@@ -190,12 +194,412 @@ class User extends Authenticatable
         //return $this->morphToMany(Invoice::class, 'invoiceable')->whereHasMorph('event',[Event::class]);
     }
 
-    public function subscriptions(){
+    /*public function subscriptions(){
         return $this->belongsToMany(Subscription::class,'subscription_user_event');
+    }*/
+
+    public function eventSubscriptions(){
+        return $this->belongsToMany(Subscription::class,'subscription_user_event')->with('event');
     }
 
     public function cookiesSMS(){
         return $this->hasMany(CookiesSMS::class);
+    }
+
+    public function checkUserSubscriptionByEvent(){
+        
+        $plans = Plan::has('events')->get();
+        $eventPlans = [];
+        $categoryPlans = [];
+        $nonEventPlans = [];
+        $nonEventsCategory = [];
+        $categories = [];
+        $categoryEvents = [];
+        $events = []; 
+        $eventCategories = [];
+
+        if(count($plans) == 0){
+            return [false,[]];
+        }
+
+        foreach($plans as $key => $plan){
+
+            $nonEventPlans = array_merge($plan->noEvents()->pluck('event_id')->toArray(),$nonEventPlans);
+            if(!key_exists($key,$categoryPlans)){
+                $categoryPlans[$key] = [];
+            }
+            $categoryPlans[$key] = array_merge($plan->categories()->pluck('category_id')->toArray(),$categoryPlans[$key]);
+
+            foreach($plan->noEvents as $event){
+                $category = $event->categories->where('parent_id',45)->first()->id;
+                $nonEventsCategory[$key][$category][] = $event->id;   
+            }   
+        }
+      
+        foreach($this->events as $event){
+
+            $categoryIndex = false;
+            $categoryIndexDelete = 0;
+            //dd($event);
+            $events[] = $event->pivot->event_id;
+            //dd($event);
+            $category = $event->category->first() ? $event->category->first()->first()->id : -1;
+
+            $eventCategories[] = $category;
+           
+            $categoryEvents[$category][] = $event->pivot->event_id;
+            
+            foreach($categoryPlans as $key => $categoryPlan){    
+                $categoryIndexDelete += 1;
+                if(!in_array($category,$categoryPlan)){
+                    $key1 = array_search($category, $categoryPlan);
+                    unset($categoryPlan[$key1]);
+                    $categoryIndex += 1;
+                }
+            }
+            
+            if(count($categoryPlans[$key]) == 0){
+                unset($plans[$key]);
+                unset($nonEventsCategory[$key]);
+            }
+            
+        }
+
+        foreach($this->subscriptionEvents as $event){
+
+            $categoryIndex = false;
+            $categoryIndexDelete = 0;
+            //dd($event);
+            $events[] = $event->pivot->event_id;
+            //dd($event);
+            $category = $event->category->first() ? $event->category->first()->first()->id : -1;
+
+            $eventCategories[] = $category;
+           
+            $categoryEvents[$category][] = $event->pivot->event_id;
+            
+            foreach($categoryPlans as $key => $categoryPlan){    
+                $categoryIndexDelete += 1;
+                if(!in_array($category,$categoryPlan)){
+                    $key1 = array_search($category, $categoryPlan);
+                    unset($categoryPlan[$key1]);
+                    $categoryIndex += 1;
+                }
+            }
+            
+            if(count($categoryPlans[$key]) == 0){
+                unset($plans[$key]);
+                unset($nonEventsCategory[$key]);
+            }
+            
+        }
+        
+        if(count(array_diff($events, $nonEventPlans)) == 0){
+            return [false,[]];
+        }
+
+        foreach($nonEventsCategory as $key => $plan){
+            $planIndex = 0;
+            foreach($plan as $category => $event){
+               
+               
+
+                if(key_exists($category,$categoryEvents) && count(array_diff($categoryEvents[$category], $event)) == 0){
+                    $planIndex += 1;
+                    
+                    unset($plans[$key]);
+                }
+            }
+      
+   
+
+            if($planIndex == count($categoryPlans[$key])){
+                unset($plans[$key]);
+            }
+
+           
+        }
+ 
+         /************
+         * NEWW
+         *************/
+        foreach($plans as $plan){
+            $index = 0;
+            
+            foreach($plan->categories as $key => $planCat){
+                if(!in_array($planCat->id, $eventCategories)){
+                    $index += 1;
+                }
+            }
+            
+            if($index === count($plan->categories)){
+
+                unset($plans[$key]);
+            }
+
+        }
+        
+        if(count($plans) == 0){
+            return [false,[]];
+        }
+        /************
+         * NEWW
+         *************/
+        
+        foreach($plans as $plan){
+            $eventPlans = array_merge($plan->events()->pluck('event_id')->toArray(),$eventPlans);
+        }
+        //dd($eventPlans);
+       
+        $eventPlans = array_diff($eventPlans,$events);
+        $eventPlans = array_diff($eventPlans,$this->subscriptionEvents->pluck('event_id')->toArray());
+        
+        return [true,$eventPlans];
+  
+    }
+
+    public function checkUserSubscriptionByEventId($eventId){
+        
+        $plans = Plan::has('events')->get();
+        $eventPlans = [];
+        $categoryPlans = [];
+        $nonEventPlans = [];
+        $nonEventsCategory = [];
+        $categories = [];
+        $categoryEvents = [];
+        $events = []; 
+        $eventCategories = [];
+
+        if(count($plans) == 0){
+            return false;
+        }
+
+        foreach($plans as $key => $plan){
+
+            $nonEventPlans = array_merge($plan->noEvents()->pluck('event_id')->toArray(),$nonEventPlans);
+            if(!key_exists($key,$categoryPlans)){
+                $categoryPlans[$key] = [];
+            }
+            $categoryPlans[$key] = array_merge($plan->categories()->pluck('category_id')->toArray(),$categoryPlans[$key]);
+
+            foreach($plan->noEvents as $event){
+                $category = $event->categories->where('parent_id',45)->first()->id;
+                $nonEventsCategory[$key][$category][] = $event->id;   
+            }   
+        }
+        
+        foreach($this->events as $event){
+
+            $categoryIndex = 0;
+            $categoryIndexDelete = 0;
+            $events[] = $event->pivot->event_id;
+            $category = $event->event->categories->where('parent_id',45)->first()->id;
+           
+            $categoryEvents[$category][] = $event->pivot->event_id;
+            $eventCategories[] = $category;
+
+            foreach($categoryPlans as $key => $categoryPlan){
+                
+                $categoryIndexDelete += 1;
+                if(!in_array($category,$categoryPlan)){
+
+                    $key1 = array_search($category, $categoryPlan);
+                    unset($categoryPlan[$key1]);
+                    $categoryIndex += 1;
+                }
+            }
+
+            if(count($categoryPlans[$key]) == 0){
+                unset($plans[$key]);
+                unset($nonEventsCategory[$key]);
+            }
+            
+        }
+        
+        if(count(array_diff($events, $nonEventPlans)) == 0){
+            return false;
+        }
+
+        foreach($nonEventsCategory as $key => $plan){
+            $planIndex = 0;
+            foreach($plan as $category => $event){
+               
+               
+
+                if(key_exists($category,$categoryEvents) && count(array_diff($categoryEvents[$category], $event)) == 0){
+                    $planIndex += 1;
+                    
+                    unset($plans[$key]);
+                }
+            }
+      
+   
+
+            if($planIndex == count($categoryPlans[$key])){
+                unset($plans[$key]);
+            }
+
+        }
+
+         /************
+         * NEWW
+         *************/
+        foreach($plans as $key => $plan){
+            $index = 0;
+
+            foreach($plan->categories as $key2 => $planCat){
+                if(!in_array($planCat->id, $eventCategories)){
+                    $index += 1;
+                }
+            }
+            
+            if($index === count($plan->categories)){
+                unset($plans[$key]);
+            }
+
+        }
+        if(count($plans) == 0){
+            return false;
+        }
+        /************
+         * NEWW
+         *************/
+ 
+        foreach($plans as $plan){
+            $eventPlans = array_merge($plan->events()->pluck('event_id')->toArray(),$eventPlans);
+        }
+        
+        return in_array($eventId,$eventPlans);
+  
+    }
+
+
+    public function checkUserPlans($plans){
+        
+        //$plans = Plan::all();
+        $eventPlans = [];
+        $categoryPlans = [];
+        $nonEventPlans = [];
+        $nonEventsCategory = [];
+        $categories = [];
+        $categoryEvents = [];
+        $events = []; 
+        $eventCategories = [];
+
+        if(count($plans) == 0){
+            return [];
+        }
+
+        foreach($plans as $key => $plan){
+
+            $nonEventPlans = array_merge($plan->noEvents()->pluck('event_id')->toArray(),$nonEventPlans);
+            if(!key_exists($key,$categoryPlans)){
+                $categoryPlans[$key] = [];
+            }
+            $categoryPlans[$key] = array_merge($plan->categories()->pluck('category_id')->toArray(),$categoryPlans[$key]);
+
+            foreach($plan->noEvents as $event){
+                $category = $event->categories->where('parent_id',45)->first()->id;
+                $nonEventsCategory[$key][$category][] = $event->id;   
+            }   
+        }
+        
+        foreach($this->events as $event){
+
+            $categoryIndex = 0;
+            $categoryIndexDelete = 0;
+            $events[] = $event->pivot->event_id;
+            $category = $event->event->categories->where('parent_id',45)->first() ? $event->event->categories->where('parent_id',45)->first()->id : -1;
+           
+            $categoryEvents[$category][] = $event->pivot->event_id;
+            $eventCategories[] = $category;
+
+            foreach($categoryPlans as $key => $categoryPlan){
+                
+                $categoryIndexDelete += 1;
+                if(!in_array($category,$categoryPlan)){
+
+                    $key1 = array_search($category, $categoryPlan);
+                    unset($categoryPlan[$key1]);
+                    $categoryIndex += 1;
+                }
+            }
+
+            if(count($categoryPlans[$key]) == 0){
+                unset($plans[$key]);
+                unset($nonEventsCategory[$key]);
+            }
+            
+        }
+        
+        if(count(array_diff($events, $nonEventPlans)) == 0){
+            return [];
+        }
+
+        foreach($nonEventsCategory as $key => $plan){
+            $planIndex = 0;
+            foreach($plan as $category => $event){
+               
+               
+
+                if(key_exists($category,$categoryEvents) && count(array_diff($categoryEvents[$category], $event)) == 0){
+                    $planIndex += 1;
+                    
+                    unset($plans[$key]);
+                }
+            }
+      
+   
+
+            if($planIndex == count($categoryPlans[$key])){
+                unset($plans[$key]);
+            }
+
+        }
+
+         /************
+         * NEWW
+         *************/
+        foreach($plans as $key => $plan){
+            $index = 0;
+
+            foreach($plan->categories as $key2 => $planCat){
+                if(!in_array($planCat->id, $eventCategories)){
+                    $index += 1;
+                }
+            }
+            
+            if($index === count($plan->categories)){
+                unset($plans[$key]);
+            }
+
+        }
+        if(count($plans) == 0){
+            return [];
+        }
+        /************
+         * NEWW
+         *************/
+ 
+        foreach($plans as $plan){
+            $eventPlans = array_merge($plan->events()->pluck('event_id')->toArray(),$eventPlans);
+        }
+        
+        return $plans;
+  
+    }
+
+    public function checkUserPlansById($plans,$planId){
+        
+        $plans = $this->checkUserPlans($plans);
+        $eventPlans = [];
+
+        foreach($plans as $plan){
+            $eventPlans = array_merge($plan->events()->pluck('plan_id')->toArray(),$eventPlans);
+        }
+      
+        return in_array($planId,array_unique($eventPlans));
+  
     }
 
 }
