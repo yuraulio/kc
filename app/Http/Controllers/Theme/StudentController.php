@@ -21,6 +21,16 @@ use Illuminate\Support\Facades\Hash;
 
 class StudentController extends Controller
 {
+
+
+    public function __construct()
+    {
+       
+        $this->middleware('event.check')->only('elearning');
+
+    }
+
+
     protected function logout(){
         Auth::logout();
         $url = URL::to('/');
@@ -621,21 +631,11 @@ class StudentController extends Controller
         //dd($data['notes']);
         //load statistic
     
-        $data['instructor_topics'] = false;
+        $data['instructor_topics'] = count($user->instructor) > 0;
         //expiration event for user
         $expiration_event_user = $event['pivot']['expiration'];
-
-        if(strtotime($expiration_event_user) >= strtotime("now")){
-            $has_access = true;
-        }else if(count($user->instructor) > 0){
-            $has_access = true;
-        }
-
-        if($has_access){
-            $data['topics'] = $event->topicsLessonsInstructors();
-        }else{
-            dd('Has not access!!');
-        }
+        $data['topics'] = $event->topicsLessonsInstructors();
+    
 
         //dd($data);
 

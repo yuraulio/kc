@@ -320,10 +320,13 @@ Route::group(['middleware' => ['auth'], 'prefix'=>'myaccount'], function () {
         Route::post('/updrecbill', [ 'as' => 'updrecbill' , 'uses' => 'Theme\StudentController@updateReceiptBilling' ]);
         Route::get('/mydata', [ 'as' => 'festudent.mydata' , 'uses' => 'Theme\StudentController@downloadMyData' ]);
 
-
         Route::get('/enroll-for-free/{content}', 'Theme\HomeController@enrollToFreeEvent')->name('enrollForFree');
-
         Route::get('/elearning/{course?}',  'Theme\StudentController@elearning');
+
+
+        Route::get('/subscription/{event}/{plan}',  'Theme\SubscriptionController@index');
+        Route::post('/subscription/store/{event}/{plan}',  'Theme\SubscriptionController@store')->name('subscription.store');
+
 
     });
 });

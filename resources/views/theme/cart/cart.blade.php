@@ -1509,16 +1509,7 @@ if(!isset($info)){
                      
 
                   },
-                  /*error:function(data){
-
-                     let message = `<img src="{{cdn('theme/assets/images/icons/alert-icons/icon-error-alert.svg')}}" alt="Info Alert">` + data.responseJSON['message'];
-                     $("#card-message").html( message)
-                  
-                     var favDialogCard = document.getElementById('favDialogCardNumberFailed');
-                     favDialogCard.style.display = "block";
-                     $('#addCard').prop('disabled', false);
-                     $('button').prop('disabled', false);
-                  }*/
+           
                });
             }
          });

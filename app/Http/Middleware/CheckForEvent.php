@@ -1,14 +1,12 @@
 <?php
 
-namespace PostRider\Http\Middleware;
+namespace App\Http\Middleware;
 
 use Closure;
-use PostRider\Content; 
-use PostRider\EventStudent;
-use PostRider\StudentSubscription;
-use PostRider\EventLessonInstructor;
-use Sentinel;
-use PostRider\User as DPUser;
+use App\Model\Event; 
+use App\Model\EventStudent;
+use Auth;
+
 
 class CheckForEvent
 {
@@ -27,39 +25,37 @@ class CheckForEvent
         }
 
         $slug = $request->route()->parameters['course'];
-        $event = Content::where('title',$slug)->first();
+        $event = Event::where('title',$slug)->first();
        
         if(!$event){
             abort(404);
         }
 
         $eventId = $event->id;
-        $user = Sentinel::getUser()->id;
-        
-        $dpuser = DPUser::find($user);
+        $user = Auth::user();
 
-        $dpuser = $dpuser->instructor ? $dpuser->instructor->id : null;
+        [$user,$instructor] = $user->instructor->first() ? [$user->instructor->first(),true] : [$user,false];
 
-        if(EventLessonInstructor::where('instructor_id',$dpuser)->where('event_id',$eventId)->first()){
+        if($instructor && $user->event->where('id',$eventId)->first()){
 
             return $next($request);
         }
 
-        $event = EventStudent::where('student_id',$user)->where('event_id',$eventId)->first();
-        $eventSub = StudentSubscription::where('student_id',$user)->where('event_id',$eventId)->first();
+        $event = $user->events->where('id',$eventId)->first();
+        $eventSub = $user->subscriptionEvents->where('event_id',$eventId)->first();
 
-      
         if(!$event && !$eventSub){
             //return redirect('/myaccount');
             abort(404);
         }
-
+        
         $event = isset($event) ? $event : $eventSub;
 
         $today = date('Y/m/d'); 
         $video_access = false;
+        
         //dd($event->expiration_date);
-        if(strtotime($today) <= strtotime($event->expiration_date) || !$event->expiration_date){
+        if(strtotime($today) <= strtotime($event->pivot->expiration) || !$event->pivot->expiration){
             $video_access = true;
         }
         if(!$video_access){
