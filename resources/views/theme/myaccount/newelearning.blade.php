@@ -23,7 +23,7 @@
 
   $notesss = json_decode($notes);
   $notesss = (array) $notesss;
-  //dd($notes);
+  //dd($lastVideoSeen);
 
   ?>
 
@@ -185,9 +185,14 @@
                       $path = str_replace('https://vimeo.com/','https://player.vimeo.com/video/',$path);
 
                       //dd($path);
+                      $videoss = json_decode($videos,true);
+                      if(isset($videoss[$vimeoVideo[1]])){
+                        $frame1 = $videoss[$vimeoVideo[1]]['tab'];
+                      }
 
-                      $frame1 = $frame.''. $count1;
-                      $count1++;
+
+                      //$frame1 = $frame.''. $count1;
+                      //$count1++;
                       //dd($frame1);
                     ?>
 
@@ -765,19 +770,20 @@
          this.previousK = this.previousK.replace('}','');
 
       }
+      console.log('//////')
 
 
+      if(lastVideoSeen!=-1){
+          console.log('last Tab:'+ videos[lastVideoSeen]['tab'])
 
-    //   if(lastVideoSeen!=-1){
+         $(".active-tab").removeClass("active-tab");
+         $this = $('#'+videos[lastVideoSeen]['tab']).parent().parent().children('h2')
 
-    //      $(".active-tab").removeClass("active-tab");
-    //      $this = $('#'+videos[lastVideoSeen]['tab']).parent().parent().children('h2')
+         console.log($this)
 
-    //      console.log($this)
+         $this.click();
 
-    //      $this.click();
-
-    //   }
+      }
 
 
 

@@ -29,20 +29,20 @@ class StudentController extends Controller
 
 
     private function getSubscriptionEvents($data,$subcriptionList){
-        
+
         $currentuser = Auth::user();
-        
-        
+
+
         $uid = $currentuser->id;
         $dpuser = $currentuser;
 
 
-        
+
         $eventStudent = StudentSubscription::where('student_id', '=', $uid)->whereIn('event_id',$subcriptionList)->get();
-        
+
         $uevents = [];
         if($eventStudent && !empty($eventStudent)) {
-           
+
             foreach ($eventStudent as $key => $value) {
                 //$uevents[] = $value->event_id;
                 $subcriptionList[] = $value->event_id;
@@ -50,9 +50,9 @@ class StudentController extends Controller
             }
         }
 
-        $uevents = $subcriptionList;               
+        $uevents = $subcriptionList;
         $uevents = array_unique($uevents);
-        
+
         $data['subEvents'] = Content::whereIn('id', $uevents)->filterContent([
                     'status' => 1,
                     'type' => 33,
@@ -64,13 +64,13 @@ class StudentController extends Controller
         $this->cFieldLib->contentCustomFields($data['subEvents']);
 
 
-        
+
         $myEvents = [];
         $eventsType=[];
         foreach($data['subEvents'] as $event){
 
             //dd($event);
-          
+
             $location['name'] = 'City';
             $location['slug'] = 'javascript:void(0)';
             if (isset($event->categories) && !empty($event->categories)){
@@ -82,13 +82,13 @@ class StudentController extends Controller
                     }
                 }
             }
-            
+
             $date='Date';
             $hour = false;
-          
+
             $date = $event['c_fields']['simple_text'][0]['value'];
-           
-            if(isset($event['c_fields']['simple_text'][12]) /*&& is_numeric($event['c_fields']['simple_text'][12]['value'])*/){    
+
+            if(isset($event['c_fields']['simple_text'][12]) /*&& is_numeric($event['c_fields']['simple_text'][12]['value'])*/){
                 $hour = $event['c_fields']['simple_text'][12]['value'];
                 $hour = preg_replace('/[^0-9.]+/', '', $hour);
             }
@@ -98,13 +98,13 @@ class StudentController extends Controller
             if(strrpos($event->title, ",") !== false){
                 $category = substr($event->title, 0, strrpos($event->title, ","));
             }
-           
+
             if($event->view_tpl == 'elearning_english' || $event->view_tpl =='elearning_free'){
                 $alltopics = false;//$this->getTopics($event,$category);
                 //dd($alltopics);
             }else{
                 $alltopics = $this->getTopics1($event,$category);
-					
+
             }
             if(count($plans = $dpuser->checkUserPlans($event->plans)) == 0){
                 continue;
@@ -112,16 +112,16 @@ class StudentController extends Controller
             $eventTypes[]=$category;
             $myEvents[$category]=[];
             $myEvents[$category]['title']=$event->title;
-            $myEvents[$category]['id']= $event->id; 
+            $myEvents[$category]['id']= $event->id;
             $myEvents[$category]['city']=$location;
-            $myEvents[$category]['subscription']=$event->subscription;    
+            $myEvents[$category]['subscription']=$event->subscription;
             $myEvents[$category]['status']=$event['c_fields']['dropdown_select_status']['value'];
             $myEvents[$category]['slug']=$event->slug;
             $myEvents[$category]['date']=$date;
             $myEvents[$category]['exam']=false;
             $myEvents[$category]['hour']=$hour;
             $myEvents[$category]['view_tpl']=$event->view_tpl;
-            
+
             $myEvents[$category]['plans'] = $plans;
 
 
@@ -133,55 +133,55 @@ class StudentController extends Controller
                 continue;
             }
             $today = date('Y/m/d');
-        
-            if(strtotime($today) <= strtotime($p->expiration_date) || !$p->expiration_date){   
+
+            if(strtotime($today) <= strtotime($p->expiration_date) || !$p->expiration_date){
                 $video_access = true;
-                
+
             }else if($event->view_tpl == 'elearning_english' || $event->view_tpl == 'elearning_greek' || $event->view_tpl == 'elearning_free'){
                //$data['elearningAccess'] += 1;
             }
             $myEvents[$category]['video_access'] = $video_access;
-           
+
             $myEvents[$category]['videos_seen'] = User::find($currentuser->id)->videos()->where('event_id',$event->id)->first()?
                     User::find($currentuser->id)->videos()->where('event_id',$event->id)->first()->videosSeen():'0/0';
 
             $myEvents[$category]['videos_progress'] = User::find($currentuser->id)->videos()->where('event_id',$event->id)->first()?
                     User::find($currentuser->id)->videos()->where('event_id',$event->id)->first()->videosSeenPer(): 0;
-            
+
             $myEvents[$category]['expiration_date'] = '';
             //dd($p->expiration_date);
             if($p->expiration_date){
                 $myEvents[$category]['expiration_date'] = date('d-m-Y', strtotime($p->expiration_date)); //date('d-m-Y', strtotime($expMonth, strtotime($p->created_at)));
             }
 
-          
+
 
         }
-        
+
         $data['subscriptionEvents'] = $myEvents;
         return $data;
-        
+
     }
 
     public function index(){
 
         $user = Auth::user();
-        
+
         if(count($user->instructor) > 0){
             $data = $this->instructorEvents();
         }else{
             $data = $this->studentsEvent();
         }
-      
+
         $data['instructor'] = count($user->instructor) > 0;
         return view('theme.myaccount.student', $data);
     }
 
     public function instructorEvents(){
-        
+
         $user = Auth::user();
         $instructor = $user->instructor->first();
-        
+
         $data['elearningAccess'] = 0;
         $data['cards'] = [];
         $data['subscriptionAccess'] = [];
@@ -191,15 +191,15 @@ class StudentController extends Controller
         //[$subscriptionAccess, $subscriptionEvents] = $user->checkUserSubscriptionByEvent();
         $data['subscriptionAccess'] =  false;//$subscriptionAccess;
         $data['mySubscriptionEvents'] = [];
-       
+
         $eventSubscriptions = [];
         $data['user']['events'] = $instructor['event'];
-    
+
         foreach($data['user']['events'] as $key => $event){
-            
+
             //if elearning assign progress for this event
             if($event->is_elearning_course()){
-               
+
                 //$data['user']['events'][$key]['topics'] = $event['topic']->unique()->groupBy('topic_id')->toArray();
                 $data['user']['events'][$key]['videos_progress'] = 0;//intval($event->progress($user));
                 $data['user']['events'][$key]['videos_seen'] = '0/0';//$event->video_seen($user);
@@ -207,14 +207,14 @@ class StudentController extends Controller
 
                 $data['user']['events'][$key]['mySubscription'] = [];
                 $data['user']['events'][$key]['plans'] = [];
-               
+
                 $eventSubscriptions[] = [];
                 $video_access = true;
                 $data['user']['events'][$key]['video_access'] = $video_access;
-                
+
 
             }else{
-              
+
                 $data['user']['events'][$key]['topics'] = $event->topicsLessonsInstructors()['topics'];
                 //dd($data['user']['events'][$key]['topics']);
                 $video_access = false;
@@ -234,10 +234,10 @@ class StudentController extends Controller
             }
 
         }
-        
+
         $data['mySubscriptionEvents'] = [];
         $data['subscriptionEvents'] = [];
-        
+
         return $data;
     }
 
@@ -254,7 +254,7 @@ class StudentController extends Controller
         [$subscriptionAccess, $subscriptionEvents] = $user->checkUserSubscriptionByEvent();
         $data['subscriptionAccess'] =  $subscriptionAccess;
         $data['mySubscriptionEvents'] = [];
-       
+
         $eventSubscriptions = [];
 
         foreach($data['user']['events'] as $key => $event){
@@ -270,7 +270,7 @@ class StudentController extends Controller
                 $data['user']['events'][$key]['mySubscription'] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first();
                 $data['user']['events'][$key]['plans'] = $event['plans'];
 
-                $eventSubscriptions[] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first() ? 
+                $eventSubscriptions[] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first() ?
                                             $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first()->id : -1;
 
                 $video_access = false;
@@ -314,7 +314,7 @@ class StudentController extends Controller
             }
 
         }
-        
+
         foreach($user->eventSubscriptions()->whereNotIn('id',$eventSubscriptions)->get() as $key => $subEvent){
             $event = $subEvent['event']->first();
             if($event->is_elearning_course()){
@@ -323,7 +323,7 @@ class StudentController extends Controller
                 $data['mySubscriptionEvents'][$key]['videos_progress'] = intval($event->progress($user));
                 $data['mySubscriptionEvents'][$key]['videos_seen'] = $event->video_seen($user);
                 $data['mySubscriptionEvents'][$key]['view_tpl'] = $event['view_tpl'];
-                
+
                 $data['mySubscriptionEvents'][$key]['mySubscription'] = $user->subscriptions()->where('id',$subEvent['id'])->first();
                 $data['mySubscriptionEvents'][$key]['plans'] = $event['plans'];
                 $video_access = false;
@@ -336,7 +336,7 @@ class StudentController extends Controller
                     $video_access = true;
 
                 $data['mySubscriptionEvents'][$key]['video_access'] = $video_access;
-            
+
             }else{
 
             }
@@ -675,7 +675,6 @@ class StudentController extends Controller
 
     public function saveElearning(Request $request){
 
-        dd($request->all());
 
         $user = Auth::user();
         $user = User::find($user['id']);
