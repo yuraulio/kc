@@ -104,7 +104,15 @@
               $count = 1;
               ?>
               <?php $count1 = 0; ?>
+              <?php
+                        $video_seen = json_decode($videos, true);
+                        //$notes = json_decode($notes, true);
+                        //dd($video_seen);
+                     //dd($video_seen);
 
+                     $videoss = json_decode($videos,true);
+                    
+                     ?>
                 @foreach($topics['topics'] as $keyTopic => $topic)
                   <?php
                     if($count == 1)
@@ -158,12 +166,7 @@
 
 
                      ?>
-                     <?php
-                        $video_seen = json_decode($videos, true);
-                        //$notes = json_decode($notes, true);
-                        //dd($video_seen);
-                     //dd($video_seen);
-                     ?>
+                    
                   <!-- ./topic-header -->
 
                   <ul class="lessons-list">
@@ -185,11 +188,10 @@
                       $path = str_replace('https://vimeo.com/','https://player.vimeo.com/video/',$path);
 
                       //dd($path);
-                      $videoss = json_decode($videos,true);
+                     
                       if(isset($videoss[$vimeoVideo[1]])){
                         $frame1 = $videoss[$vimeoVideo[1]]['tab'];
                       }
-
 
                       //$frame1 = $frame.''. $count1;
                       //$count1++;
