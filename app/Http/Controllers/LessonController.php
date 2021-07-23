@@ -233,6 +233,22 @@ class LessonController extends Controller
     public function update(Request $request, Lesson $lesson)
     {
         //dd($request->all());
+        $arr = array();
+
+        if(!empty($request->links)){
+            foreach($request->links as $key => $link){
+                $arr1 = array();
+                $arr1['name'] = $request->names[$key];
+                $arr1['link'] = $link;
+                array_push($arr, $arr1);
+            }
+            //dd($arr);
+            $links = json_encode($arr);
+
+            dd($links);
+        }
+
+        //dd($request->all());
         if($request->status == 'on')
         {
             $status = 1;
