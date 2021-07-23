@@ -194,7 +194,7 @@ class StudentController extends Controller
        
         $eventSubscriptions = [];
         $data['user']['events'] = $instructor['event'];
-    
+ 
         foreach($data['user']['events'] as $key => $event){
             
             //if elearning assign progress for this event
@@ -590,24 +590,26 @@ class StudentController extends Controller
     }
     public function elearning($course){
 
+        $user = Auth::user();
+
         $has_access = false;
-        $event = Event::with('topic', 'category', 'slugable')->where('title', $course)->first();
+        $event = Event::where('title', $course)->first();
 
-
-        $data['details'] = $event->getAttributes();
+        $event = $user->events()->wherePivot('event_id', $event['id'])->first();
+        
+        $data['details'] = $event->toArray();
         $data['details']['slug'] = $event['slugable']['slug'];
         $data['files'] = $event['category'][0]['dropbox'][0]->toArray();
         //dd($data['files']);
         //dd($data['details']);
-        $user = Auth::user();
+        
 
         $data['videos_progress'] = $event->progress($user);
         $data['course'] = $event['title'];
         //dd($data['course']);
-
-        $user = User::with('events')->find($user['id']);
+        
         $statistic = $user->statistic()->wherePivot('event_id',$event['id'])->first()->toArray();
-        //dd($statistic);
+       
         $data['lastVideoSeen'] = $statistic['pivot']['lastVideoSeen'];
         $data['event_statistic_id'] = $statistic['pivot']['id'];
         $data['event_id'] = $statistic['pivot']['event_id'];
@@ -618,13 +620,14 @@ class StudentController extends Controller
         $data['notes'] = $statistic['pivot']['notes'];
         //dd($data['notes']);
         //load statistic
-        $user_event = $user->events()->wherePivot('event_id', $event['id'])->first()->toArray();
-
+    
         $data['instructor_topics'] = false;
         //expiration event for user
-        $expiration_event_user = $user_event['pivot']['expiration'];
+        $expiration_event_user = $event['pivot']['expiration'];
 
         if(strtotime($expiration_event_user) >= strtotime("now")){
+            $has_access = true;
+        }else if(count($user->instructor) > 0){
             $has_access = true;
         }
 
@@ -751,7 +754,7 @@ class StudentController extends Controller
             }*/
 
         }
-/*
+        /*
         $destinationPath = public_path().'/elearning_stats';
         if(!File::exists($destinationPath)) {
             //dd('ddd');
