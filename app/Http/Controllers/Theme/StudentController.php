@@ -44,8 +44,12 @@ class StudentController extends Controller
         $data['subscriptionAccess'] = [];
         $data['mySubscriptions'] = [];
 
-        $data['user'] = User::with('image', 'events.city', 'events.summary1', 'events.exam', 'events.category', )->find($user->id);
+        $data['user'] = User::with('image', 'events.city', 'events.summary1', 'events.exam', 'events.category' )->find($user->id);
         //dd($data['user']['events'][2]);
+
+        $statistics = $user->statistic()->get()->groupBy('id');
+
+        //dd($user->statistic()->get());
 
         //$paymentMethods = $user->paymentMethods();
         //dd($paymentMethods);
@@ -53,10 +57,49 @@ class StudentController extends Controller
         //count elearning
 
         foreach($data['user']['events'] as $key => $event){
+            $count = 0;
+
+            // if($event['id'] == 2304){
+            //     //dd($event->topicsLessonsInstructors());
+            //     foreach($event->topicsLessonsInstructors()['topics'] as $topic){
+            //         foreach($topic['lessons'] as $lesson){
+            //             $count++;
+
+            //         }
+            //     }
+            // }
+
+
+
 
 
             //if elearning assign progress for this event
             if($event->is_elearning_course()){
+
+                $tab = $event['title'];
+                $tab = str_replace(' ','_',$tab);
+                $tab = str_replace('-','',$tab);
+                $tab = str_replace('&','',$tab);
+                $tab = str_replace('_','',$tab);
+
+                //dd($tab);
+
+
+
+
+                //dd($event['title']);
+                $statistic = $statistics[$event['id']];
+                //dd($statistic);
+
+                if($statistic[0]->pivot['videos'] != ''){
+                    $notes = json_decode($statistic[0]->pivot['notes'], true);
+                    $videos = json_decode($statistic[0]->pivot['videos'], true);
+                }
+
+                //dd($videos);
+
+
+
                 //dd($event->topicsLessonsInstructors());
                 $data['user']['events'][$key]['topics'] = $event['topic']->unique()->groupBy('topic_id');
                 $data['user']['events'][$key]['videos_progress'] = intval($event->progress($user));
@@ -78,10 +121,63 @@ class StudentController extends Controller
 
                 $data['user']['events'][$key]['video_access'] = $video_access;
 
+                //dd($statistic);
+
+                $count_lesson = 0;
+                //update all statistic video
+
+
+                foreach($event->topicsLessonsInstructors()['topics'] as $key => $topic){
+                   //dd($topic);
+
+                    foreach($topic['lessons'] as $key1 => $lesson){
+                        // if(isset($lesson) && $lesson['vimeo_video'] != null){
+                            //dd($lesson);
+
+                            $vimeo_id = str_replace('https://vimeo.com/', '', $lesson['vimeo_video']);
+
+                            if($statistic[0]->pivot['videos'] != ''){
+                                if(!isset($videos[$vimeo_id])){
+                                    //append new vimeo id
+                                    $videos[$vimeo_id] = [];
+                                    $videos[$vimeo_id]['seen'] = 0;
+                                    $videos[$vimeo_id]['tab'] =
+                                    $videos[$vimeo_id]['lesson_id'] = $lesson['id'];
+                                    $videos[$vimeo_id]['stop_time'] = 0;
+                                    $videos[$vimeo_id]['percentMinutes'] = 0;
+                                    $videos[$vimeo_id]['tab'] = $tab.$count_lesson;
+
+                                    $notes[$vimeo_id] = '';
+
+                                }
+                            }else{
+                                $videos[$vimeo_id] = [];
+                                $videos[$vimeo_id]['seen'] = 0;
+                                $videos[$vimeo_id]['tab'] =
+                                $videos[$vimeo_id]['lesson_id'] = $lesson['id'];
+                                $videos[$vimeo_id]['stop_time'] = 0;
+                                $videos[$vimeo_id]['percentMinutes'] = 0;
+                                $videos[$vimeo_id]['tab'] = $tab.$count_lesson;
+
+                                $notes[$vimeo_id] = '';
+                            }
+                            //var_dump($vimeo_id);
+
+
+                        // }
+                        $count_lesson++;
+
+                    }
+
+                }
+
+                //dd($videos);
+                    $user->statistic()->wherePivot('event_id', $event['id'])->updateExistingPivot($event['id'],['videos' => $videos, 'notes' => $notes], false);
+
 
             }else{
                 $data['user']['events'][$key]['topics'] = $event->topicsLessonsInstructors()['topics'];
-                //dd($data['user']['events'][$key]['topics']);
+                //dd($event);
                 $video_access = false;
                 $expiration_event = $event->pivot['expiration'];
                 $expiration_event = strtotime($expiration_event);
@@ -113,8 +209,14 @@ class StudentController extends Controller
             //dd($event->topic);
 
             //dd($data);
+            // if($event['id'] == 2304){
+            //     //dd($event->topicsLessonsInstructors());
+            //     dd($count);
+            // }
 
         }
+
+
         //dd($data['user']->toArray());
         //dd($data['user']['events']);
 
@@ -440,7 +542,7 @@ class StudentController extends Controller
 
     public function saveElearning(Request $request){
 
-        //dd($request->all());
+        dd($request->all());
 
         $user = Auth::user();
         $user = User::find($user['id']);

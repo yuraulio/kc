@@ -26,6 +26,7 @@ use App\Model\Testimonial;
 use App\Model\Faq;
 use Illuminate\Database\Eloquent\Model;
 
+
 class Category extends Model
 {
     protected $table = 'categories';

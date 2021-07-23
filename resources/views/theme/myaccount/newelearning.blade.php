@@ -168,10 +168,10 @@
 
                   <ul class="lessons-list">
 
+                  <?php //dd($topic); ?>
+
                   @foreach($topic['lessons'] as $keyLesso => $lesson)
-                  <?php //dd($keyLesso);
-                  if($keyLesso >= 6)
-                    break; ?>
+
                   <?php
                   $vimeoVideo = explode('https://vimeo.com/', $lesson['vimeo_video']);
                   //dd($notes);
@@ -198,9 +198,9 @@
                       //dd($vimeoId);
                      ?>
 
+                        <?php// var_dump($lesson['vimeo_video']); ?>
 
-
-                    <li class="lesson {{$vimeoVideo[1]}}" data-completed="{{$video_seen[$vimeoVideo[1]]['seen']}}" data-note="{{$notesss[$vimeoVideo[1]]}}" id="{{$frame1}}">
+                    <li class="lesson {{$vimeoVideo[1]}}" data-completed="{{$video_seen[$vimeoVideo[1]]['seen']}}" data-link="{{$lesson['links']}}" data-note="{{$notesss[$vimeoVideo[1]]}}" id="{{$frame1}}">
                       <a class="" href="javascript:void(0)" onclick="play_video('{{$path}}','{{$frame1}}','{video{{$lesson['id']}}}', '{{$lesson['id']}}', '{{$notes}}')" tabindex="0">
                         <img
                           class="lesson-progress"
@@ -434,13 +434,12 @@
                   <div class="lesson-downloads">
                     <h4 class="resource-list-title">Downloads</h4>
                     <?php //dd($folders) ?>
-
+                    <ul class="resource-list">
                     @foreach($folders as $key => $folder)
                     <?php //var_dump($key); ?>
-                    <ul class="resource-list">
+
                         @foreach($files as $key11 => $file)
                             @if($folder['id'] == $file['fid'])
-                            <?php //dd($key); ?>
                             <li id="{{$folder['dirname']}}" data-topic-count="{{$key}}" class="resource hidden">
                                 <a class="download-file getdropboxlink"  data-dirname="{{ $folder['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" ><img
                                     src="theme/assets/img/new/download.svg"
@@ -769,16 +768,16 @@
 
 
 
-      if(lastVideoSeen!=-1){
+    //   if(lastVideoSeen!=-1){
 
-         $(".active-tab").removeClass("active-tab");
-         $this = $('#'+videos[lastVideoSeen]['tab']).parent().parent().children('h3')
+    //      $(".active-tab").removeClass("active-tab");
+    //      $this = $('#'+videos[lastVideoSeen]['tab']).parent().parent().children('h2')
 
-         console.log($this)
+    //      console.log($this)
 
-         $this.click();
+    //      $this.click();
 
-      }
+    //   }
 
 
 
@@ -796,7 +795,7 @@
 
          //console.log('pre vid'+previousVideo);
 
-         //console.log(previousVideo);
+         console.log('testprev::'+previousVideo);
 
          document.getElementById(previousVideo).classList.add('isWatching')
          var watchingTab = $( ".isWatching" ).parent().parent().addClass('open');
@@ -842,22 +841,34 @@
             array.push(id)
             prev_topicId.push($('.topic.open .topic-info_title').data('topic-slug'))
             $('.isWatching').find('a').addClass('current-lesson')
-            $('.linkitem').remove();
+            $('#links').empty();
 
-            let video_link = $('.'+this.videoId).data('links')
+            let video_link = $('.'+this.videoId).data('link')
 
-        //  video_link.forEach(function(e) {
-        //  let strArray = e.split("|")
-        //   $('#links').append( `<li id="linkitem" class="resource linkitem">
-        //                           <a target="_blank" href="${strArray[1]}">
-        //                             <img
-        //                               src="theme/assets/img/new/link.svg"
-        //                               alt="external resource link" />${strArray[0]}</a>
-        //                         </li>`
-        //                       )
+         video_link.forEach(function(e) {
+         let strArray = e.split("|")
+          $('#links').append( `<li class="resource linkitem">
+                                  <a target="_blank" href="${strArray[1]}">
+                                    <img
+                                      src="theme/assets/img/new/link.svg"
+                                      alt="external resource link" />${strArray[0]}</a>
+                                </li>`
+                              )
 
-        //  });
+         });
             let prog = $('.isWatching').find('.lesson-progress').attr('src','theme/assets/img/new/current_lesson_icon.svg')
+
+            topicId = $('.isWatching').parent().parent().data(count)
+            console.log('my topic'+topicId)
+            //edw
+
+            $('.lesson-downloads ul li').addClass('hidden')
+
+            $.each($('.lesson-downloads ul li'), function(key, value) {
+                if(topicId-1 == key){
+                    $(value).removeClass('hidden')
+                }
+            })
 
 
             console.log(videoNote)
@@ -1047,7 +1058,7 @@
       let vimeoID ='"{'+ vk + this.frame + '}"';
 
 
-      var cvl = document.getElementById(previousK).cloneNode(true);;
+      var cvl = document.getElementById(previousK).cloneNode(true);
       cvl = document.getElementById(previousK).setAttribute('id',vimeoID);
 
       $('#courses-video').append(cvl)
@@ -1106,22 +1117,22 @@
 
 
 
-        //  let video_link = $('.'+this.videoId).data('links')
+        let video_link = $('.'+this.videoId).data('link')
          $('.resource-link').remove();
          //console.log(video_link)
          $('.linkitem').remove();
          //console.log(video_link)
-        //  video_link.forEach(function(e) {
-        //  let strArray = e.split("|")
-        //   $('#links').append( `<li id="linkitem" class="resource linkitem">
-        //                           <a target="_blank" href="${strArray[1]}">
-        //                             <img
-        //                               src="theme/assets/img/new/link.svg"
-        //                               alt="external resource link" />${strArray[0]}</a>
-        //                         </li>`
-        //                       )
+         video_link.forEach(function(e) {
+         let strArray = e.split("|")
+          $('#links').append( `<li class="resource linkitem">
+                                  <a target="_blank" href="${strArray[1]}">
+                                    <img
+                                      src="theme/assets/img/new/link.svg"
+                                      alt="external resource link" />${strArray[0]}</a>
+                                </li>`
+                              )
 
-        //  });
+         });
 
          //console.log('second load')
 
