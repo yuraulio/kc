@@ -85,7 +85,7 @@
                                 <?php //dd(count($lesson->type) == 0); ?>
                                 <div class="form-group{{ $errors->has('type_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-type_id">{{ __('Type') }}</label>
-                                    <select name="type_id" id="input-type_id" class="form-control" placeholder="{{ __('Type') }}" required>
+                                    <select name="type_id" id="input-type_id" class="form-control" placeholder="{{ __('Type') }}">
                                         <option value="">-</option>
                                         @foreach ($types as $type)
                                             @if($type['id'] >= 150 && $type['id'] <= 161)
@@ -158,9 +158,11 @@
                                 <div class="form-group">
                                     <button class="btn btn-primary add-dynamic-link" type="button">Add Link</button>
                                     <div id="dynamic-link">
+                                        <?php //dd($lesson); ?>
                                         @if(!empty($lesson['links']))
                                             <?php
                                             $links = json_decode($lesson['links'], true);
+                                            //dd($links);
                                              ?>
                                             @foreach($links as $key => $link)
                                             <div class="lesson-links-admin">

@@ -59,8 +59,8 @@ class CreatePlansTable extends Migration
         });
 
         Schema::table('plans', function (Blueprint $table) {
-            // $table->dropColumn('id');
-            // $table->dropColumn('published');
+            $table->dropColumn('id');
+            $table->dropColumn('published');
 
         });
 

@@ -276,6 +276,7 @@ class Event extends Model
         foreach($this->topic->unique()->groupBy('topic_id') as $key => $topic){
 
             foreach($topic as $t){
+                //var_dump($t->title);
 
 
                 $lessonsArray = $lessons[$t->id]->toArray();
@@ -293,6 +294,7 @@ class Event extends Model
 
 
         }
+        //die();
 
         $data['topics'] = $topics;
         $data['instructors'] = $instructors;

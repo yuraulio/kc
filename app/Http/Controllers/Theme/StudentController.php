@@ -25,7 +25,7 @@ class StudentController extends Controller
 
     public function __construct()
     {
-       
+
         $this->middleware('event.check')->only('elearning');
 
     }
@@ -204,7 +204,7 @@ class StudentController extends Controller
 
         $eventSubscriptions = [];
         $data['user']['events'] = $instructor['event'];
- 
+
         foreach($data['user']['events'] as $key => $event){
 
             //if elearning assign progress for this event
@@ -251,6 +251,74 @@ class StudentController extends Controller
         return $data;
     }
 
+    public function updateUserStatistic($event,$statistics,$user){
+
+        $tab = $event['title'];
+                $tab = str_replace(' ','_',$tab);
+                $tab = str_replace('-','',$tab);
+                $tab = str_replace('&','',$tab);
+                $tab = str_replace('_','',$tab);
+
+
+                $statistic = $statistics[$event['id']];
+                //dd($statistic);
+
+                if($statistic[0]->pivot['videos'] != ''){
+                    $notes = json_decode($statistic[0]->pivot['notes'], true);
+                    $videos = json_decode($statistic[0]->pivot['videos'], true);
+                }
+
+                $count_lesson = 0;
+
+                foreach($event->topicsLessonsInstructors()['topics'] as $key => $topic){
+                    //dd($topic);
+
+                     foreach($topic['lessons'] as $key1 => $lesson){
+                         // if(isset($lesson) && $lesson['vimeo_video'] != null){
+                             //dd($lesson);
+
+                             $vimeo_id = str_replace('https://vimeo.com/', '', $lesson['vimeo_video']);
+
+                             if($statistic[0]->pivot['videos'] != ''){
+                                 if(!isset($videos[$vimeo_id])){
+                                     //append new vimeo id
+                                     $videos[$vimeo_id] = [];
+                                     $videos[$vimeo_id]['seen'] = 0;
+                                     $videos[$vimeo_id]['tab'] =
+                                     $videos[$vimeo_id]['lesson_id'] = $lesson['id'];
+                                     $videos[$vimeo_id]['stop_time'] = 0;
+                                     $videos[$vimeo_id]['percentMinutes'] = 0;
+                                     $videos[$vimeo_id]['tab'] = $tab.$count_lesson;
+
+                                     $notes[$vimeo_id] = '';
+
+                                 }
+                             }else{
+                                 $videos[$vimeo_id] = [];
+                                 $videos[$vimeo_id]['seen'] = 0;
+                                 $videos[$vimeo_id]['tab'] =
+                                 $videos[$vimeo_id]['lesson_id'] = $lesson['id'];
+                                 $videos[$vimeo_id]['stop_time'] = 0;
+                                 $videos[$vimeo_id]['percentMinutes'] = 0;
+                                 $videos[$vimeo_id]['tab'] = $tab.$count_lesson;
+
+                                 $notes[$vimeo_id] = '';
+                             }
+                             //var_dump($vimeo_id);
+
+
+                         // }
+                         $count_lesson++;
+
+                     }
+
+                 }
+
+                 //dd($videos);
+                $user->statistic()->wherePivot('event_id', $event['id'])->updateExistingPivot($event['id'],['videos' => $videos, 'notes' => $notes], false);
+
+    }
+
     public function studentsEvent(){
 
         $user = Auth::user();
@@ -261,6 +329,7 @@ class StudentController extends Controller
         $data['mySubscriptions'] = [];
 
         $data['user'] = User::with('image', 'events.city', 'events.exam', 'events.category', 'events.plans')->find($user->id);
+        $statistics = $user->statistic()->get()->groupBy('id');
         [$subscriptionAccess, $subscriptionEvents] = $user->checkUserSubscriptionByEvent();
         $data['subscriptionAccess'] =  $subscriptionAccess;
         $data['mySubscriptionEvents'] = [];
@@ -294,6 +363,8 @@ class StudentController extends Controller
                     $video_access = true;
 
                 $data['user']['events'][$key]['video_access'] = $video_access;
+
+                $this->updateUserStatistic($event,$statistics,$user);
 
 
             }else{
@@ -606,20 +677,20 @@ class StudentController extends Controller
         $event = Event::where('title', $course)->first();
 
         $event = $user->events()->wherePivot('event_id', $event['id'])->first();
-        
+
         $data['details'] = $event->toArray();
         $data['details']['slug'] = $event['slugable']['slug'];
         $data['files'] = $event['category'][0]['dropbox'][0]->toArray();
         //dd($data['files']);
         //dd($data['details']);
-        
+
 
         $data['videos_progress'] = $event->progress($user);
         $data['course'] = $event['title'];
         //dd($data['course']);
-        
+
         $statistic = $user->statistic()->wherePivot('event_id',$event['id'])->first()->toArray();
-       
+
         $data['lastVideoSeen'] = $statistic['pivot']['lastVideoSeen'];
         $data['event_statistic_id'] = $statistic['pivot']['id'];
         $data['event_id'] = $statistic['pivot']['event_id'];
@@ -630,12 +701,12 @@ class StudentController extends Controller
         $data['notes'] = $statistic['pivot']['notes'];
         //dd($data['notes']);
         //load statistic
-    
+
         $data['instructor_topics'] = count($user->instructor) > 0;
         //expiration event for user
         $expiration_event_user = $event['pivot']['expiration'];
         $data['topics'] = $event->topicsLessonsInstructors();
-    
+
 
         //dd($data);
 
