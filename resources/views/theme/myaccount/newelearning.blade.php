@@ -875,6 +875,8 @@ use Illuminate\Support\Str;
             videoPlayers[frame] = new Vimeo.Player(vimeoID);
           //  videosPlayed[frame].push(parseInt(seen));
 
+
+
          videoPlayers[frame].loadVideo(seen).then(function(id) {
             videoId = id
             //when load video load NOTES
@@ -889,20 +891,21 @@ use Illuminate\Support\Str;
             console.log('----------------')
             console.log(prev_topicId)
             $('.isWatching').find('a').addClass('current-lesson')
-            $('#links').empty();
+            //$('#links').empty();
 
-            let video_link = $('.'+this.videoId).data('link')
+            let video_link = $('.isWatching').data('link')
 
 console.log(video_link)
 
-         video_link.forEach(function(e) {
+         $.each(video_link,function(key, value) {
+             //console.log(value)
 
          //let strArray = e.split("|")
           $('#links').append( `<li class="resource linkitem">
-                                  <a target="_blank" href="${e}">
+                                  <a target="_blank" href="/${value.link}">
                                     <img
                                       src="theme/assets/img/new/link.svg"
-                                      alt="external resource link" />${strArray[0]}</a>
+                                      alt="external resource link" />${value.name}</a>
                                 </li>`
                               )
 
@@ -1139,6 +1142,24 @@ console.log(video_link)
 
       videoPlayers[frame].loadVideo(video).then(function(id) {
           console.log('ON LOAD')
+          let video_link = $('.isWatching').data('link')
+
+console.log(video_link)
+$('#links').empty()
+
+         $.each(video_link,function(key, value) {
+             //console.log(value)
+
+         //let strArray = e.split("|")
+          $('#links').append( `<li class="resource linkitem">
+                                  <a target="_blank" href="/${value.link}">
+                                    <img
+                                      src="theme/assets/img/new/link.svg"
+                                      alt="external resource link" />${value.name}</a>
+                                </li>`
+                              )
+
+         });
          //viewDownloads()
         //console.log($('.isWatching').data("completed"))
         $( ".isWatching" ).parent().parent().addClass('open');
@@ -1184,23 +1205,7 @@ console.log(video_link)
 
 
 
-console.log($('.'+this.videoId).data('link'))
-        let video_link = $('.'+this.videoId).data('link')
-         $('.resource-link').remove();
-         //console.log(video_link)
-         $('.linkitem').remove();
-         //console.log(video_link)
-         video_link.forEach(function(e) {
-         let strArray = e.split("|")
-          $('#links').append( `<li class="resource linkitem">
-                                  <a target="_blank" href="${strArray[1]}">
-                                    <img
-                                      src="theme/assets/img/new/link.svg"
-                                      alt="external resource link" />${strArray[0]}</a>
-                                </li>`
-                              )
 
-         });
 
          //console.log('second load')
 

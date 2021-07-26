@@ -53,20 +53,15 @@ class LessonController extends Controller
 
         $arr = array();
 
-
-
         if(!empty($request->links)){
             foreach($request->links as $key => $link){
-                $arr1 = array();
-                $arr1['name'] = $request->names[$key];
-                $arr1['link'] = $link;
-                array_push($arr, $arr1);
+                $arr1[$key] = ['name'=> $request->names[$key], 'link'=>$link];
             }
-            //dd($arr);
-            $links = json_encode($arr);
-
             //dd($links);
+        }else{
+            $arr1 = [];
         }
+        $links = json_encode($arr1);
 
         if($request->status == 'on'){
             $status = 1;
@@ -232,6 +227,17 @@ class LessonController extends Controller
      */
     public function update(Request $request, Lesson $lesson)
     {
+        $arr = array();
+
+        if(!empty($request->links)){
+            foreach($request->links as $key => $link){
+                $arr1[$key] = ['name'=> $request->names[$key], 'link'=>$link];
+            }
+        }else{
+            $arr1 = [];
+        }
+        $links = json_encode($arr1);
+
         //dd($request->all());
         if($request->status == 'on')
         {
@@ -241,7 +247,7 @@ class LessonController extends Controller
             $status = 0;
         }
 
-        $request->request->add(['status' => $status]);
+        $request->request->add(['status' => $status, 'links' => $links]);
 
         $lesson_id = $lesson['id'];
         $lesson->update($request->all());
