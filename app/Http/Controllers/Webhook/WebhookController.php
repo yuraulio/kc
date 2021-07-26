@@ -17,12 +17,15 @@ class WebhookController extends BaseWebhookController
 
 	public function handleInvoicePaymentSucceeded(array $payload){
 
+
 		if ($user = $this->getUserByStripeId($payload['data']['object']['customer'])) {
 			
 			$sub = $payload['data']['object']['lines']['data'][0];
 			if(isset($sub['metadata']['installments'])){
+		
 				$this->installments($payload,$sub,$user);
 			}else{
+		
 				$this->subscription($payload,$user,$sub);
 			}
     
@@ -44,7 +47,11 @@ class WebhookController extends BaseWebhookController
 
 		$data = $payload['data']['object'];
 		
-		Stripe::setApiKey($user->events->where('id',$eventId)->first()->paymentMethod->first()->processor_options['secret_key']);
+		if(env('PAYMENT_PRODUCTION')){
+            Stripe::setApiKey($user->events->where('id',$eventId)->first()->paymentMethod->first()->processor_options['secret_key']);
+        }else{
+            Stripe::setApiKey($user->events->where('id',$eventId)->first()->paymentMethod->first()->test_processor_options['secret_key']);
+        }
 		session()->put('payment_method',$user->events->where('id',$eventId)->first()->paymentMethod->first()->id);
         $subscription->metadata = ['installments_paid' => $count, 'installments' => $totalinst];
 		$subscription->save();
@@ -107,7 +114,11 @@ class WebhookController extends BaseWebhookController
 		
 		$data = $payload['data']['object'];
 		
-		Stripe::setApiKey($user->events->where('id',$eventId)->first()->paymentMethod->first()->processor_options['secret_key']);
+		if(env('PAYMENT_PRODUCTION')){
+            Stripe::setApiKey($user->events->where('id',$eventId)->first()->paymentMethod->first()->processor_options['secret_key']);
+        }else{
+            Stripe::setApiKey($user->events->where('id',$eventId)->first()->paymentMethod->first()->test_processor_options['secret_key']);
+        }
 		session()->put('payment_method',$user->events->where('id',$eventId)->first()->paymentMethod->first()->id);
 
 		$invoices = $user->events->where('id',$eventId)->first()->subscriptionInvoicesByUser($user->id)->get();
@@ -162,6 +173,8 @@ class WebhookController extends BaseWebhookController
             ];
 			$subscription->event->first()->pivot->expiration  = date('Y-m-d', $ends_at);
 			$subscription->event->first()->pivot->save();
+
+			
 
 			$transaction = Transaction::create($transaction_arr);
 			//$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;

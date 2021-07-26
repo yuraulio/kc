@@ -93,7 +93,6 @@ class Cashier
     {
     
         $stripeId = $stripeId instanceof StripeCustomer ? $stripeId->id : $stripeId;
-        dd($stripeId);
         //return $stripeId ? (new static::$customerModel)->where('stripe_id', $stripeId)->first() : null;
         return $stripeId ? (new static::$customerModel)->whereRaw('json_contains(stripe_ids, \'["'.$stripeId.'"]\')')->first() : null;
         

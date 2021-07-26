@@ -326,6 +326,7 @@ Route::group(['middleware' => ['auth'], 'prefix'=>'myaccount'], function () {
 
         Route::get('/subscription/{event}/{plan}',  'Theme\SubscriptionController@index');
         Route::post('/subscription/store/{event}/{plan}',  'Theme\SubscriptionController@store')->name('subscription.store');
+        Route::get('/subscription-success', 'Theme\SubscriptionController@orderSuccess');
 
 
     });
