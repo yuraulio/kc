@@ -208,8 +208,6 @@ use Illuminate\Support\Str;
                       //dd($vimeoId);
                      ?>
 
-                        <?php// var_dump($lesson['vimeo_video']); ?>
-
                     <li class="lesson {{$vimeoVideo[1]}}" data-completed="{{$video_seen[$vimeoVideo[1]]['seen']}}" data-link="{{$lesson['links']}}" data-note="{{$notesss[$vimeoVideo[1]]}}" id="{{$frame1}}">
                       <a class="" href="javascript:void(0)" onclick="play_video('{{$path}}','{{$frame1}}','{video{{$lesson['id']}}}', '{{$lesson['id']}}', '{{$notes}}')" tabindex="0">
                         <img

@@ -38,141 +38,6 @@ class StudentController extends Controller
     }
 
 
-    private function getSubscriptionEvents($data,$subcriptionList){
-
-        $currentuser = Auth::user();
-
-
-        $uid = $currentuser->id;
-        $dpuser = $currentuser;
-
-
-
-        $eventStudent = StudentSubscription::where('student_id', '=', $uid)->whereIn('event_id',$subcriptionList)->get();
-
-        $uevents = [];
-        if($eventStudent && !empty($eventStudent)) {
-
-            foreach ($eventStudent as $key => $value) {
-                //$uevents[] = $value->event_id;
-                $subcriptionList[] = $value->event_id;
-
-            }
-        }
-
-        $uevents = $subcriptionList;
-        $uevents = array_unique($uevents);
-
-        $data['subEvents'] = Content::whereIn('id', $uevents)->filterContent([
-                    'status' => 1,
-                    'type' => 33,
-                    'lang' => $data['lang'],
-                    'sort' => 'published_at',
-                    'sort_direction' => 'asc',
-                    'on_categories' => []
-                ])->with('contentLinksTicket','categories','featured.media','customFields')->get();
-        $this->cFieldLib->contentCustomFields($data['subEvents']);
-
-
-
-        $myEvents = [];
-        $eventsType=[];
-        foreach($data['subEvents'] as $event){
-
-            //dd($event);
-
-            $location['name'] = 'City';
-            $location['slug'] = 'javascript:void(0)';
-            if (isset($event->categories) && !empty($event->categories)){
-                foreach ($event->categories as $category) {
-                    if ($category->depth != 0 && $category->parent_id == 9) {
-                        $location['name']=$category->name;
-                        $location['slug']='/'.$category->slug;
-
-                    }
-                }
-            }
-
-            $date='Date';
-            $hour = false;
-
-            $date = $event['c_fields']['simple_text'][0]['value'];
-
-            if(isset($event['c_fields']['simple_text'][12]) /*&& is_numeric($event['c_fields']['simple_text'][12]['value'])*/){
-                $hour = $event['c_fields']['simple_text'][12]['value'];
-                $hour = preg_replace('/[^0-9.]+/', '', $hour);
-            }
-
-            $category = trim($event->title);
-
-            if(strrpos($event->title, ",") !== false){
-                $category = substr($event->title, 0, strrpos($event->title, ","));
-            }
-
-            if($event->view_tpl == 'elearning_english' || $event->view_tpl =='elearning_free'){
-                $alltopics = false;//$this->getTopics($event,$category);
-                //dd($alltopics);
-            }else{
-                $alltopics = $this->getTopics1($event,$category);
-
-            }
-            if(count($plans = $dpuser->checkUserPlans($event->plans)) == 0){
-                continue;
-            }
-            $eventTypes[]=$category;
-            $myEvents[$category]=[];
-            $myEvents[$category]['title']=$event->title;
-            $myEvents[$category]['id']= $event->id;
-            $myEvents[$category]['city']=$location;
-            $myEvents[$category]['subscription']=$event->subscription;
-            $myEvents[$category]['status']=$event['c_fields']['dropdown_select_status']['value'];
-            $myEvents[$category]['slug']=$event->slug;
-            $myEvents[$category]['date']=$date;
-            $myEvents[$category]['exam']=false;
-            $myEvents[$category]['hour']=$hour;
-            $myEvents[$category]['view_tpl']=$event->view_tpl;
-
-            $myEvents[$category]['plans'] = $plans;
-
-
-
-            $video_access = false;
-            //$p = EventStudent::select('event_id','created_at','comment')->where('student_id', Sentinel::getUser()->id)->where('event_id', $event->id)->first();
-            $p = StudentSubscription::where('student_id', Sentinel::getUser()->id)->where('event_id', $event->id)->first();
-            if(!$p){
-                continue;
-            }
-            $today = date('Y/m/d');
-
-            if(strtotime($today) <= strtotime($p->expiration_date) || !$p->expiration_date){
-                $video_access = true;
-
-            }else if($event->view_tpl == 'elearning_english' || $event->view_tpl == 'elearning_greek' || $event->view_tpl == 'elearning_free'){
-               //$data['elearningAccess'] += 1;
-            }
-            $myEvents[$category]['video_access'] = $video_access;
-
-            $myEvents[$category]['videos_seen'] = User::find($currentuser->id)->videos()->where('event_id',$event->id)->first()?
-                    User::find($currentuser->id)->videos()->where('event_id',$event->id)->first()->videosSeen():'0/0';
-
-            $myEvents[$category]['videos_progress'] = User::find($currentuser->id)->videos()->where('event_id',$event->id)->first()?
-                    User::find($currentuser->id)->videos()->where('event_id',$event->id)->first()->videosSeenPer(): 0;
-
-            $myEvents[$category]['expiration_date'] = '';
-            //dd($p->expiration_date);
-            if($p->expiration_date){
-                $myEvents[$category]['expiration_date'] = date('d-m-Y', strtotime($p->expiration_date)); //date('d-m-Y', strtotime($expMonth, strtotime($p->created_at)));
-            }
-
-
-
-        }
-
-        $data['subscriptionEvents'] = $myEvents;
-        return $data;
-
-    }
-
     public function index(){
 
         $user = Auth::user();
@@ -251,7 +116,7 @@ class StudentController extends Controller
         return $data;
     }
 
-    public function updateUserStatistic($event,$statistics,$user){
+    /*public function updateUserStatistic($event,$statistics,$user){
 
         $tab = $event['title'];
                 $tab = str_replace(' ','_',$tab);
@@ -317,12 +182,12 @@ class StudentController extends Controller
                  //dd($videos);
                 $user->statistic()->wherePivot('event_id', $event['id'])->updateExistingPivot($event['id'],['videos' => $videos, 'notes' => $notes], false);
 
-    }
+    }*/
 
     public function studentsEvent(){
 
         $user = Auth::user();
-
+        
         $data['elearningAccess'] = 0;
         $data['cards'] = [];
         $data['subscriptionAccess'] = [];
@@ -349,6 +214,9 @@ class StudentController extends Controller
 
                 $data['user']['events'][$key]['mySubscription'] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first();
                 $data['user']['events'][$key]['plans'] = $event['plans'];
+                $data['user']['events'][$key]['exams'] = $event->getExams();
+                $data['user']['events'][$key]['exam_access'] = $user->examAccess(0.8,$event->id);
+                //$data['user']['events'][$key]['exam_results'] = $user->examAccess(0.8,$event->id);
 
                 $eventSubscriptions[] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first() ?
                                             $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first()->id : -1;
@@ -693,7 +561,8 @@ class StudentController extends Controller
         //dd($data['course']);
 
         $statistic = $user->statistic()->wherePivot('event_id',$event['id'])->first()->toArray();
-        $this->updateUserStatistic($event,$statistic['pivot'],$user);
+        //$this->updateUserStatistic($event,$statistic['pivot'],$user);
+        $user->updateUserStatistic($event,$statistic['pivot']);
         $data['lastVideoSeen'] = $statistic['pivot']['lastVideoSeen'];
         $data['event_statistic_id'] = $statistic['pivot']['id'];
         $data['event_id'] = $statistic['pivot']['event_id'];

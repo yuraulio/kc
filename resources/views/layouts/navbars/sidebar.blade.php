@@ -262,6 +262,10 @@
                                     <a href="{{ route('plans') }}" class="nav-link">{{ __('Plans') }}</a>
                                 </li>
 
+                                <li class="nav-item {{ $elementName == 'deliveries-management' ? 'active' : '' }}">
+                                    <a href="{{ route('coupons') }}" class="nav-link">{{ __('Coupons') }}</a>
+                                </li>
+
                             </ul>
                         </div>
                     </li>

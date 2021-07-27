@@ -26,8 +26,8 @@ class TicketCheck
         if($user){
             if($user->cart){
                 
-                $event = Event::where('id',$user->cart->event)->with('contentLinksTicket')->first();
-                $stock = $event->contentLinksTicket->where('ticket_id',$user->cart->ticket_id)->first()->stock;
+                $event = Event::where('id',$user->cart->event)->with('ticket')->first();
+                $stock = $event->ticket->where('ticket_id',$user->cart->ticket_id)->first()->quantity;
                 if($stock <= 0){
                     $user->cart->delete();
                     Cart::instance('default')->destroy();

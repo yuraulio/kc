@@ -12,6 +12,7 @@ use App\Model\User;
 use DateTime;
 use Mail;
 use App\Model\Event;
+use \Carbon\Carbon;
 
 class ExamAttemptController extends Controller
 {
@@ -19,8 +20,9 @@ class ExamAttemptController extends Controller
     public function attemptExam($ex_id) {       
 
         $exam = Exam::find($ex_id);
-        $event = $event->event->first();
-        return view('exams.exam_instructions',['event' => $event, 'exam' => $exam]);
+        $event = $exam->event->first();
+        return view('exams.exam_instructions',['event' => $event, 'exam' => $exam,'event_title' => $event->title,
+                        'first_name' => Auth::user()->firstname,'last_name'=>Auth::user()->lastname]);
 
     }
 
@@ -247,9 +249,10 @@ class ExamAttemptController extends Controller
                     //foreach($getDBContents as $getDB) {
 
                         $dbAns = $getDB[$q_id]['correct_answer'];
+                        //dd($getDB[$q_id]['correct_answer']);
                         $totalCredits +=  $getDB[$q_id]['answer-credit'];
 
-                        $answers[] = ['question' => $getDB[$q_id]['question'],'correct_answer' => $getDB[$q_id]['correct_answer'][0],'given_answer' => $given_ans];
+                        $answers[] = ['question' => $getDB[$q_id]['question'],'correct_answer' => $getDB[$q_id]['correct_answer'],'given_answer' => $given_ans];
 
                         if($q_type_id == 1) { //For True False Type
 
@@ -265,9 +268,9 @@ class ExamAttemptController extends Controller
 
                             //$opSer = unserialize($getDB->answer_keys);
                             
-                            $cAns = $dbAns[0];
+                            $cAns = $dbAns;
                            
-                            if($given_ans == $cAns) {
+                            if($given_ans == $cAns[0]) {
 
                                 $credit = $getDB[$q_id]['answer-credit'];
 
@@ -366,7 +369,7 @@ class ExamAttemptController extends Controller
                 $exam = Exam::find($ex_id);
                 $eventType = Event::select('view_tpl')->where('id',$exam->event->first()->id)->first();
 
-                if($eventType->view_tpl == 'elearning_event'){
+                /*if($eventType->view_tpl == 'elearning_event'){
                    
                    $successLimit = round(($total_credit*100 / $totalQues), 2);
                    $success = false;
@@ -412,7 +415,7 @@ class ExamAttemptController extends Controller
                         
                     });
 
-                }
+                }*/
 
                 
                 if($examResultData) {
@@ -434,15 +437,15 @@ class ExamAttemptController extends Controller
 
     public function examResults($exam) {
 
-        $user = Auth::user();
-        
-        $examResult = ExamResult::where(['exam_id' => $exam, 'user_id' => $user->id])->first();
+        $nowTime = Carbon::now();
 
+        $user = Auth::user();
+        $examResult = ExamResult::where(['exam_id' => $exam, 'user_id' => $user->id])->first();
         $data = $examResult->getResults($user->id);
         $data['first_name'] = $user->firstname;
         $data['last_name'] = $user->lastname;
         $data['image'] = $user->image;
-        $data['showAnswers'] = true;
+        $data['showAnswers'] = $nowTime->diffInHours($examResult->end_time) < 48;
         
         return view('exams.results',$data);
 

@@ -717,7 +717,6 @@
                      @foreach($user['events'] as $keyType => $event)
 
                      @if($event['view_tpl'] != 'elearning_free' && $event['view_tpl'] != 'elearning_event')
-                     <?php //var_dump($event['title']); ?>
                      <div class="col12 dynamic-courses-wrapper dynamic-courses-wrapper--style2">
                         <div class="item">
                            <h2>{{ $event['title'] }}</h2>
@@ -741,9 +740,7 @@
                               <div class="inside-tabs-wrapper">
                                  <div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
                                     <div class="bottom">
-                                       @if(isset($event['city']) && count($event['city']) > 0)
-                                          <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/marker.svg')}}" alt=""><a href="{{$event['city'][0]['slugable']['slug']}}">{{$event['city'][0]['name']}}</a></div>
-                                       @endif
+                                      
                                        <?php
                                           $summaryDate = '';
                                           foreach($event['summary1'] as $summary){
@@ -765,7 +762,6 @@
                                           <a target="_blank" href="/print/syllabus/{{$event['slugable']['slug']}}" class="btn btn--secondary btn--md"> DOWNLOAD SCHEDULE </a>
                                        </div>
                                     </div>
-                                    <?php //dd($event['topics']); ?>
                                     <div class="acc-topic-accordion">
                                        <div class="accordion-wrapper accordion-big">
                                           <?php $catId = -1?>
@@ -826,13 +822,13 @@
                                  <?php
                                     $dropbox = $event['category'][0]['dropbox'][0];
                                     //dd($dropbox);
-                                    $folders = $dropbox['folders'][0];
+                                    $folders = isset($dropbox['folders'][0]) ? $dropbox['folders'][0] : [];
                                     //dd($folders);
 
-                                    $folders_bonus = $dropbox['folders'][1];
+                                    $folders_bonus = isset($dropbox['folders'][1]) ? $dropbox['folders'][1] : [];
                                     //dd($folders_bonus);
-                                    $files = $dropbox['files'][1];
-                                    $files_bonus = $dropbox['files'][2];
+                                    $files = isset($dropbox['files'][1]) ? $dropbox['files'][1] : [];
+                                    $files_bonus = isset($dropbox['files'][2]) ? $dropbox['files'][2] : [];
 
                                     //dd($files);
 
@@ -946,7 +942,7 @@
                                     <li><a href="#c-watch-inner{{$tab}}">Watch</a></li>
                                     @if($event['view_tpl'] != 'elearning_free')
                                     <?php //']); ?>
-                                        @if(isset($event['exam']) && count($event['exam']) >0 )
+                                        @if(isset($event['exams']) && count($event['exams']) >0 )
                                         <?php //dd($event['title']); ?>
                                         <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
                                         @endif
@@ -971,7 +967,6 @@
                                        @if (isset($event['hours']))
                                        <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""> {{$event['hours']}}h </div>
                                        @endif
-<!-- ///////EDW -->
 
                                        @if (isset($event['videos_progress']))
                                        <?php //dd($event); ?>
@@ -1121,30 +1116,37 @@
                                     </div>
                                  </div>
                                  @if($event['view_tpl'] != 'elearning_free' )
-                                 @if(isset($event['exam']))
+                                 @if(isset($event['exams']))
+                                 <?php $nowTime = \Carbon\Carbon::now(); ?>
                                  <div id="c-exams-inner{{$tab}}" class="in-tab-wrapper">
                                     <div class="bottom">
-                                       @foreach($event['exam'] as $p)
-                                       <?php //dd($p); ?>
-                                       {{--@foreach($p['exams'] as $pe)
+                                       @foreach($event['exams'] as $p)
+                              
+                                       
                                        <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="">Exams activate automatically when you watch 80% </div>
                                        <div class="right">
                                           <!-- Feedback 8-12 changed -->
-                                          @if($p['access'])
-                                          @if($pe->exstatus == 1 && $p['examsResults'][$pe->id]['view_result_expire'])
-                                          <a target="_blank" href="{{ url('student-summary/' . $pe->id . '/' . $currentuser->id) }}?s=1" title="{{$p['title']}}" class="btn btn--secondary btn--md">VIEW RESULT</a>
-                                          @elseif($pe->exstatus == 1 && !$p['examsResults'][$pe->id]['view_result_expire'])
-                                          <a target="_blank" href="{{ url('student-summary/' . $pe->id . '/' . $currentuser->id) }}?s=1" title="{{$p['title']}}" class="btn btn--secondary btn--md btn--completed">VIEW RESULT</a>
-                                          @elseif($pe->islive == 1)
-                                          <a target="_blank" onclick="window.open('{{ route('attempt-exam', [$pe->id]) }}', 'newwindow', 'width=1400,height=650'); return false;" title="{{$p['title']}}" class="btn btn--secondary btn--md">TAKE EXAM</a>
-                                          @endif
+                                          
+                                          @if($event['exam_access'] && !$user->hasExamResults($p->id))
+                                        
+                                             @if($p->islive == 1)
+                                                <a target="_blank" onclick="window.open('{{ route('attempt-exam', [$p->id]) }}', 'newwindow', 'width=1400,height=650'); return false;" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">TAKE EXAM</a>
+                                             @endif
+
+                                          @elseif($userExam = $user->hasExamResults($p->id))
+                                             
+                                             @if($nowTime->diffInHours($userExam->end_time) < 48)
+                                             <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">VIEW RESULT</a>
+                                             @else
+                                             <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md btn--completed">VIEW RESULT</a>
+                                             @endif   
                                           @else
                                           <div class="right">
-                                             <a href="javascript:void(0)" title="{{$p['title']}}" class="btn btn--secondary btn--md btn--completed">TAKE EXAM</a>
+                                             <a href="javascript:void(0)" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md btn--completed">TAKE EXAM</a>
                                           </div>
                                           @endif
                                        </div>
-                                       @endforeach--}}
+                                     
                                        @endforeach
                                     </div>
                                  </div>

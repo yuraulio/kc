@@ -53,7 +53,7 @@
 																
 																<div class="lesson-list-quickbar">
 
-									                            	 @if($content->view_tpl == 'elearning_english' || $content->view_tpl == 'elearning_greek')
+									                            	 @if($content->view_tpl == 'elearning_event' || $content->view_tpl == 'elearning_greek')
 									                            	   @if(isset($lvalue['lesson']['vimeo_video']) && ($lvalue['lesson']['vimeo_video'] != "") )
 										                            	   @if($is_event_paid==0 )
 										                            	 	<img class="vimeo_locked" src="{{ URL::to('/assets/colorbox/images/locked_video.png') }}" alt="Enroll to unlock video"  title="Enroll to unlock video" />

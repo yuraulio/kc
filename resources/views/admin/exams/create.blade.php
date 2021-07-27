@@ -34,9 +34,16 @@
          <div class="row">
             <div class="col-xl-12 order-xl-1">
                <div class="card-body">
+                  @if($edit)
+                  <form method="post" action="{{ route('exams.update',$exam->id) }}" autocomplete="off"
+                        enctype="multipart/form-data">
+                        @method('put')
+                  @else
                   <form method="post" action="{{ route('exams.store') }}" autocomplete="off"
-                     enctype="multipart/form-data">
-                     @csrf
+                        enctype="multipart/form-data">
+                       
+                  @endif
+                  @csrf
                      <h6 class="heading-small text-muted mb-4">{{ __('Exam information') }}</h6>
                      <div class="pl-lg-4">
                         <div class ="row">
@@ -100,8 +107,8 @@
                                  <label class="form-control-label" for="input-examMethods">{{ __('Exam Methods') }}</label>
                                  <select name="examMethods" id="input-examMethods" class="form-control" placeholder="{{ __('Choose Method') }}">
                                     <option value="">Choose Method</option>
-                                    <option @if(old("examMethods",$exam->examMethods) == "percentage" ) selected @endif value="Percentage">Percentage</option>
-                                    <option @if(old("examMethods",$exam->examMethods) == "point" ) selected @endif>Point</option>
+                                    <option @if(old("examMethods",$exam->examMethods) == "percentage" ) selected @endif value="percentage">Percentage</option>
+                                    <option @if(old("examMethods",$exam->examMethods) == "point" ) selected @endif value="point">Point</option>
                                  </select>
                                  @include('alerts.feedback', ['field' => 'examMethods'])
                               </div>

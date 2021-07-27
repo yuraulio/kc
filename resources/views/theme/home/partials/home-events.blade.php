@@ -14,7 +14,7 @@ $totalcats = 0;
     @if(isset($events))
         @foreach($eventsbycategory as $bcatid => $bcateventids)
         @if(isset($eventsbycategoryHelper) && isset($eventsbycategoryDetailsHelper) && isset($eventsbycategoryHelper[$bcatid]) && 
-                                                                            ($eventsbycategoryDetailsHelper[$bcatid]->view_tpl !== 'elearning_english' && $eventsbycategoryDetailsHelper[$bcatid]->view_tpl !== 'elearning_greek'))
+                                                                            ($eventsbycategoryDetailsHelper[$bcatid]->view_tpl !== 'elearning_event' && $eventsbycategoryDetailsHelper[$bcatid]->view_tpl !== 'elearning_greek'))
 
         <div class="dok-back">
         <div class="container">
@@ -260,7 +260,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='{{ $eventtype
     @if(isset($events))
         @foreach($eventsbycategory as $bcatid => $bcateventids)
         @if(isset($eventsbycategoryHelper) && isset($eventsbycategoryDetailsHelper) && isset($eventsbycategoryHelper[$bcatid]) && 
-                                                                            ($eventsbycategoryDetailsHelper[$bcatid]->view_tpl === 'elearning_english' || $eventsbycategoryDetailsHelper[$bcatid]->view_tpl === 'elearning_greek'))
+                                                                            ($eventsbycategoryDetailsHelper[$bcatid]->view_tpl === 'elearning_event' || $eventsbycategoryDetailsHelper[$bcatid]->view_tpl === 'elearning_greek'))
 
         <div class="elearning-homepage">
         <div class="container">

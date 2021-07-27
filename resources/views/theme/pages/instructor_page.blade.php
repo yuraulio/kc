@@ -84,7 +84,7 @@
 
                                         @if($estatus == 0 || $estatus == 2)
 
-                                            @if($row['view_tpl'] =='elearning_english' || $row['view_tpl'] =='elearning_greek' || $row['view_tpl'] =='elearning_event')
+                                            @if($row['view_tpl'] =='elearning_event' || $row['view_tpl'] =='elearning_greek' || $row['view_tpl'] =='elearning_event')
 
                                             <div class="item">
                                                 <div class="left">
@@ -110,7 +110,7 @@
 
                                         @if($estatus == 0 || $estatus == 2)
                                         <?php //dd($row); ?>
-                                            @if($row['view_tpl'] !='elearning_english' && $row['view_tpl'] !='elearning_greek')
+                                            @if($row['view_tpl'] !='elearning_event' && $row['view_tpl'] !='elearning_greek')
                                             <div class="item">
                                                 <div class="left">
                                                     <h2>{{ $row['title'] }}</h2>

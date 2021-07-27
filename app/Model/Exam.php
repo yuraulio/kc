@@ -14,7 +14,7 @@ class Exam extends Model
     protected $table = 'exams';
 
     protected $fillable = [
-        'status', 'exam_name', 'duration', 'indicate_crt_incrt_answers', 'random_questions', 'random_answers', 'q_limit', 'intro_text', 'end_of_time_text', 'success_text','failure_text', 'creator_id', 'publish_time', 'examCheckbox', 'examMethods'
+        'status', 'exam_name', 'duration','display_crt_answers', 'indicate_crt_incrt_answers', 'random_questions', 'random_answers', 'q_limit', 'intro_text', 'end_of_time_text', 'success_text','failure_text', 'creator_id', 'publish_time', 'examCheckbox', 'examMethods'
     ];
 
     public function event()

@@ -41,8 +41,8 @@ class ExamResult extends Model
         public function getResults($user_id){
 
             $examSettings = $this->examSettings->toArray();
-           
-            $examResult = $this->where('user_id',$user_id)->first();
+            $examResult = $this->where('exam_id',$this->exam_id)->where('user_id',$user_id)->first();
+            
             $answers = [];
             $data['answers'] = [];
             if($examResult){
@@ -50,10 +50,13 @@ class ExamResult extends Model
                     
                     $answers['classname'] = 'text-danger';
                     $answers['question'] = $answer['question'];
-                    $answers['correct_answer'] = $answer['correct_answer'][0];
+                    $answers['correct_answer'] = is_array($answer['correct_answer']) ? $answer['correct_answer'][0] : $answer['correct_answer'];
                     $answers['given_answer'] = $answer['given_answer'];
+                   
 
-                    if($answer['correct_answer'] == $answer['given_answer']){
+                    if(is_array($answer['correct_answer']) && $answer['correct_answer'][0] == $answer['given_answer']){
+                        $answers['classname'] = 'text-success';
+                    }else if(!is_array($answer['correct_answer']) && $answer['correct_answer'] == $answer['given_answer'] ) {
                         $answers['classname'] = 'text-success';
                     }
 
@@ -62,10 +65,9 @@ class ExamResult extends Model
                 }
             }
 
-            
             $data['displayCorrectAnswer'] = $examSettings['display_crt_answers'];
             $data['indicate_crt_incrt_answers'] = $examSettings['indicate_crt_incrt_answers'];
-            $data['success'] = $examResult->score >= $examSettings['q_limit'];
+            $data['success'] = ($examResult->score/$examResult->total_score) * 100 >= $examSettings['q_limit'];
             $data['end_time'] = date('d/m/Y H:i',strtotime($examResult['end_time']));
             $data['event_title'] =  isset($examSettings['event'][0]) ? $examSettings['event'][0]['title'] : '';
             $data['score'] = round($examResult->score * 100 / $examResult->total_score,2);

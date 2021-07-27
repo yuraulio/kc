@@ -21,13 +21,15 @@ use \Stripe\Plan;
 use \Stripe\Stripe;
 use \Stripe\StripeClient;
 use Laravel\Cashier\Payment;
+use App\Model\CartCache;
+use Mail;
 
 class CartController extends Controller
 {
 
     public function __construct()
     {
-        $this->middleware('cart')->except('cartIndex','completeRegistration');
+        $this->middleware('cart')->except('cartIndex','completeRegistration','validation','checkCode');
         $this->middleware('code.event')->only('cartIndex','completeRegistration');
 
     }
@@ -1070,14 +1072,14 @@ class CartController extends Controller
 
                 $cartCache = new CartCache;
 
-                $cartCache->ticket_id = 'coupon code ' . $code->event->id;
-                $cartCache->product_title = $code->event->title;
+                $cartCache->ticket_id = 0;//'coupon code ' . $event->id;
+                $cartCache->product_title = $event->title;
                 $cartCache->quantity = 1;
                 $cartCache->price = (float) 0;
                 $cartCache->type = 9;
-                $cartCache->event = $code->event->id;
+                $cartCache->event = $event->id;
                 $cartCache->user_id =Auth::user()->id;
-                $cartCache->slug =  base64_encode('coupon code ' . $code->event->id . Auth::user()->id . $code->event->id);
+                $cartCache->slug =  base64_encode('coupon code ' . $event->id . Auth::user()->id . $event->id);
 
                 $cartCache->save();
 
@@ -1092,8 +1094,8 @@ class CartController extends Controller
 
     }
 
-    public function cartIndex(Content $event){
-       
+    public function cartIndex(Event $event){
+        
         $c = Cart::content()->count();
         $data = [];
         $data['city'] = null;
@@ -1116,7 +1118,7 @@ class CartController extends Controller
             $ev = Event::find($event_id);
             if($ev) {
               
-                if($ev->view_tpl != 'elearning_english'){
+                if($ev->view_tpl != 'elearning_event'){
                     if($ev->city->first()){
                         $data['city'] = $ev->city->first()->name;
 
@@ -1200,9 +1202,9 @@ class CartController extends Controller
         ]);
 
         $data = [];
-        $optionid = \Config::get('dpoptions.generator.id');
-		$option = Option::findOrFail($optionid);
-        $dereelist = json_decode($option->settings, true);
+        //$optionid = \Config::get('dpoptions.generator.id');
+		//$option = Option::findOrFail($optionid);
+        //$dereelist = json_decode($option->settings, true);
         $code = 0;
         
         //dd($dereelist);
@@ -1210,7 +1212,7 @@ class CartController extends Controller
         $c = Cart::content()->count();
         $user = Auth::user();
         
-
+        
         if ($c > 0) {
             $cart_contents = Cart::content();
             foreach ($cart_contents as $item) {
@@ -1221,7 +1223,6 @@ class CartController extends Controller
 
                 break;
             }
-
             $content = Event::find($event_id);
         }
 
@@ -1230,16 +1231,15 @@ class CartController extends Controller
         $amount = 0;
         $namount = (float)$amount;
 
-        $code = Code::where('id', $codeId)->first();
+        $code = $content->coupons->where('id', $codeId)->first();
 
         if($code){
-            $code = $code->code;
+            $code = $code->code_coupon;
         }
 
         $transaction_arr = [
 
             'payment_method_id' => $payment_method_id,
-            'user_id' => Auth::user()->id,
             'account_id' => 17,
             'payment_status' => 1,
             'billing_details' => '',//serialize($billing_details),
@@ -1295,8 +1295,7 @@ class CartController extends Controller
 
             $user->cart->delete();
             Cart::instance('default')->destroy();
-           
-            $content->codes()->where('id', $codeId)->first()->update(['used' => true]);
+            $content->coupons->where('id', $codeId)->first()->update(['used' => true]);
 
             $KC = "KC-";
             $time = strtotime($transaction->placement_date);

@@ -90,13 +90,13 @@
                            @if(isset($myEvents) && count($myEvents) > 0)
                            <?php $tab = 0; ?>
                            @foreach($myEvents as $key => $event)
-                           @if($event['view_tpl'] != 'elearning_greek' && $event['view_tpl'] != 'elearning_english' && $event['view_tpl'] != 'elearning_free')
+                           @if($event['view_tpl'] != 'elearning_greek' && $event['view_tpl'] != 'elearning_event' && $event['view_tpl'] != 'elearning_free')
                            <li><a href="#topics-tab{{$tab}}">{{$key}}</a></li>
                            <?php $tab += 1; ?>
                            @endif
                            @endforeach
                            @foreach($myEvents as $key => $event)
-                           @if($event['view_tpl'] == 'elearning_greek' || $event['view_tpl'] == 'elearning_english' || $event['view_tpl'] == 'elearning_free')
+                           @if($event['view_tpl'] == 'elearning_greek' || $event['view_tpl'] == 'elearning_event' || $event['view_tpl'] == 'elearning_free')
                            {{--if(event['video_access'])--}}
                            <?php 
                               $frame = $key;
@@ -645,7 +645,7 @@
                <?php $firstCourse = true; ?>
                <?php $tab=0; ?>
                @foreach($myEvents as $keyType => $event)
-               @if($event['view_tpl'] != 'elearning_english' && $event['view_tpl'] != 'elearning_greek' && $event['view_tpl'] != 'elearning_free')
+               @if($event['view_tpl'] != 'elearning_event' && $event['view_tpl'] != 'elearning_greek' && $event['view_tpl'] != 'elearning_free')
                <?php 
                   if($firstCourse){
                      $hrf = '#topics-tab'.$tab;
@@ -906,7 +906,7 @@
                @endforeach
               
                @foreach($myEvents as $keyType => $event)
-               @if($event['view_tpl'] == 'elearning_english' || $event['view_tpl'] == 'elearning_greek' || $event['view_tpl'] == 'elearning_free')
+               @if($event['view_tpl'] == 'elearning_event' || $event['view_tpl'] == 'elearning_greek' || $event['view_tpl'] == 'elearning_free')
                
                   <?php 
                      $frame = $keyType;

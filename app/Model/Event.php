@@ -32,6 +32,7 @@ use App\Traits\Invoices;
 use App\Model\Plan;
 use App\Model\Coupon;
 
+
 class Event extends Model
 {
     use HasFactory;
@@ -189,6 +190,7 @@ class Event extends Model
     {
         return $this->morphOne(Media::class, 'mediable');
     }
+
 
     public function topicsLessonsInstructors(){
 
@@ -458,5 +460,35 @@ class Event extends Model
         });*/
     }
 
+    public function getExams(){
+        
+        $curr_date_time = date('Y-m-d G:i:00');
+        $curr_date = date('Y-m-d');
+        
+        $exams = $this->exam->where('status',true);
+        $examsArray = [];
+
+        foreach($exams as $exam){
+            
+            if($exam->publish_time >  $curr_date_time){
+                $exam->exstatus = 0;
+                $exam->islive = 0;
+                $exam->isupcom = 1;
+            }else if($exam->publish_time <  $curr_date && $this->view_tpl != 'elearning_event'){
+                $exam->exstatus = 0;
+                $exam->islive = 0;
+                $exam->isupcom = 0;
+            }else{
+                $exam->exstatus = 0;
+                $exam->islive = 1;
+                $exam->isupcom = 0;
+            }
+            
+            $examsArray[] = $exam;
+        }
+
+        return $examsArray;
+    }
+   
 
 }

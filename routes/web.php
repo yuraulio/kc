@@ -243,38 +243,45 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::get('edit/plan/{plan}','Dashboard\PlanController@edit')->name('plan.edit');
     Route::put('update/plan/{plan}','Dashboard\PlanController@update')->name('plan.update');
 
+    //Coupons
+    Route::get('coupons', 'Dashboard\CouponController@index')->name('coupons');
+    Route::get('create/coupon','Dashboard\CouponController@create')->name('coupon.create');
+    Route::post('store/coupon','Dashboard\CouponController@store')->name('coupon.store');
+    Route::get('edit/coupon/{coupon}','Dashboard\CouponController@edit')->name('coupon.edit');
+    Route::put('update/coupon/{coupon}','Dashboard\CouponController@update')->name('coupon.update');
+
 
 });
 
 
 
 
-Route::group(['prefix' => 'cart','middleware' => ['web']], function () {
-//Route::group(['prefix' => 'cart', 'middleware' => 'free.event' ], function() {
-    Route::group(['middleware' => 'auth.sms' ], function () {
+//Route::group(['prefix' => 'cart','middleware' => ['web']], function () {
+    Route::group(['prefix' => 'cart', 'middleware' => 'free.event' ], function() {
+        Route::group(['middleware' => 'auth.sms' ], function () {
 
-        Route::get('/', [ 'as' => 'cart', 'uses' => 'Theme\CartController@index' ]);
-        Route::post('/', [ 'as' => 'cart.update', 'uses' => 'Theme\CartController@update' ]);
-        Route::get('count', [ 'as' => 'cart.count', 'uses' => 'Theme\CartController@count' ]);
-        Route::get('destroy', [ 'as' => 'cart.destroy', 'uses' => 'Theme\CartController@destroy' ]);
-        Route::get('checkout', [ 'as' => 'cart.checkout', 'uses' => 'Theme\CartController@checkout' ]);
-        Route::post('checkDereeId', [ 'as' => 'cart.dereeid', 'uses' => 'Theme\CartController@checkDereeId' ]);
-        Route::post('checkCoupon','Theme\CartController@checkCoupon');
-        Route::post('/checkKnocrunchId', [ 'as' => 'cart.knowcrunchid', 'uses' => 'Theme\CartController@checkKnowcrunchId' ]);
-        Route::post('checkoutcheck', [ 'as' => 'cart.checkout', 'uses' => 'Theme\CartController@checkoutcheck' ]);
-        Route::post('/remove', [ 'as' => 'cart.remove-item', 'uses' => 'Theme\CartController@dpremove']);
-        Route::post('checkCoupon/{event}','Theme\CartController@checkCoupon');
+            Route::get('/', [ 'as' => 'cart', 'uses' => 'Theme\CartController@index' ]);
+            Route::post('/', [ 'as' => 'cart.update', 'uses' => 'Theme\CartController@update' ]);
+            Route::get('count', [ 'as' => 'cart.count', 'uses' => 'Theme\CartController@count' ]);
+            Route::get('destroy', [ 'as' => 'cart.destroy', 'uses' => 'Theme\CartController@destroy' ]);
+            Route::get('checkout', [ 'as' => 'cart.checkout', 'uses' => 'Theme\CartController@checkout' ]);
+            Route::post('checkDereeId', [ 'as' => 'cart.dereeid', 'uses' => 'Theme\CartController@checkDereeId' ]);
+            Route::post('checkCoupon','Theme\CartController@checkCoupon');
+            Route::post('/checkKnocrunchId', [ 'as' => 'cart.knowcrunchid', 'uses' => 'Theme\CartController@checkKnowcrunchId' ]);
+            Route::post('checkoutcheck', [ 'as' => 'cart.checkout', 'uses' => 'Theme\CartController@checkoutcheck' ]);
+            Route::post('/remove', [ 'as' => 'cart.remove-item', 'uses' => 'Theme\CartController@dpremove']);
+            Route::post('checkCoupon/{event}','Theme\CartController@checkCoupon');
 
-        //Route::group([ 'prefix' => '{id}' ], function() {
-        //    /*Route::post('/dpremove', [ 'as' => 'cart.remove-item', 'uses' => 'Theme\CartController@dpremove']);*/
-        //    Route::get('/{ticket}/{type}/add', [ 'as' => 'cart.add-item', 'uses' => 'Theme\CartController@add']);
+            //Route::group([ 'prefix' => '{id}' ], function() {
+            //    /*Route::post('/dpremove', [ 'as' => 'cart.remove-item', 'uses' => 'Theme\CartController@dpremove']);*/
+            //    Route::get('/{ticket}/{type}/add', [ 'as' => 'cart.add-item', 'uses' => 'Theme\CartController@add']);
 
-        //    //Route::get('move', [ 'as' => 'cart.move-item', 'uses' => 'Theme\CartController@move']);
+            //    //Route::get('move', [ 'as' => 'cart.move-item', 'uses' => 'Theme\CartController@move']);
 
-        //});
+            //});
+        });
     });
 //});
-});
 
 Route::post('checkCode', 'Theme\CartController@checkCode');
 Route::get('/free-event-cart', 'Theme\CartController@cartIndex');
@@ -350,6 +357,7 @@ Route::put('/elearning/save', 'Theme\StudentController@saveElearning');
 Route::get('/logout', [ 'as' => 'logout' , 'uses' => 'Theme\StudentController@logout']);
 
 Route::group(['middleware' => 'auth'], function () {
+    Route::get('attempt-exam/{ex_id}', 'Theme\ExamAttemptController@attemptExam')->name('attempt-exam');
     Route::get('exam-start/{exam}', 'Theme\ExamAttemptController@examStart')->name('exam-start');
     Route::get('exam-results/{id}', 'Theme\ExamAttemptController@examResults')->name('exam-results');
     Route::post('sync-data', 'Theme\ExamAttemptController@syncData')->name('sync-data');

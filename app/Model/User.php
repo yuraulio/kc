@@ -24,6 +24,7 @@ use Laravel\Cashier\Subscription;
 use App\Model\CookiesSMS;
 use App\Model\Plan;
 use App\Model\CartCache;
+use App\Model\ExamResult;
 
 class User extends Authenticatable
 {
@@ -189,6 +190,72 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Event::class, 'event_statistics')->withPivot('id','videos','lastVideoSeen', 'notes', 'event_id');
     }
+
+    public function examAccess($successPer = 0.8, $event){
+        $seenPercent =  $this->videosSeenPercent($event);
+        $studentsEx = [1353,1866,1753,1882,1913,1923];
+        
+        if(in_array($this->user_id, $studentsEx)){
+            return true;
+        }
+
+        //$event = EventStudent::where('student_id',$this->user_id)->where('event_id',$this->event_id)->first()->created_at;
+        $event = $this->events->where('id',$event)->first();
+        if(!$event->created_at || $event->comment == 'enroll' || $event->view_tpl == 'elearning_free'){
+             return false;
+        }
+
+       
+        return $seenPercent >=  $successPer;
+
+    }
+
+    public function videosSeen($event){
+        if(!($videos = $this->statistic->where('id',$event)->first())){
+            return 0;
+        }
+
+        $videos = json_decode($videos->pivot->videos,true);
+        $sumSeen = 0;
+
+        if(count($videos) == 0 ){
+            return 0;
+        }
+
+        foreach($videos as $video){
+            if($video['seen']){
+                $sumSeen += 1;
+            }
+            
+        }
+
+        return $sumSeen .' / '. count($videos);
+    }
+
+    public function videosSeenPercent($event){
+
+        if(!($videos = $this->statistic->where('id',$event)->first())){
+            return 0;
+        }
+
+        $videos = json_decode($videos->pivot->videos,true);
+        $sumSeen = 0;
+
+        if(count($videos) == 0 ){
+            return 0;
+        }
+
+        foreach($videos as $video){
+            if($video['seen']){
+                $sumSeen += 1;
+            }
+            
+        }
+        
+        return round ($sumSeen / count($videos),2) * 100 ;
+
+    }
+
 
     public function invoices(){
         return $this->morphToMany(Invoice::class, 'invoiceable');
@@ -605,6 +672,78 @@ class User extends Authenticatable
 
     public function cart(){
         return $this->hasOne(CartCache::class);
+    }
+
+    public function updateUserStatistic($event,$statistics){
+
+        $tab = $event['title'];
+        $tab = str_replace(' ','_',$tab);
+        $tab = str_replace('-','',$tab);
+        $tab = str_replace('&','',$tab);
+        $tab = str_replace('_','',$tab);
+
+
+        $statistic = $statistics;
+        
+
+        if($statistic['videos'] != ''){
+            $notes = json_decode($statistic['notes'], true);
+            $videos = json_decode($statistic['videos'], true);
+        }
+
+        $count_lesson = 0;
+
+        foreach($event->topicsLessonsInstructors()['topics'] as $key => $topic){
+            //dd($topic);
+
+             foreach($topic['lessons'] as $key1 => $lesson){
+                 // if(isset($lesson) && $lesson['vimeo_video'] != null){
+                     //dd($lesson);
+
+                     $vimeo_id = str_replace('https://vimeo.com/', '', $lesson['vimeo_video']);
+
+                     if($statistic['videos'] != ''){
+                         if(!isset($videos[$vimeo_id])){
+                             //append new vimeo id
+                             $videos[$vimeo_id] = [];
+                             $videos[$vimeo_id]['seen'] = 0;
+                             $videos[$vimeo_id]['tab'] =
+                             $videos[$vimeo_id]['lesson_id'] = $lesson['id'];
+                             $videos[$vimeo_id]['stop_time'] = 0;
+                             $videos[$vimeo_id]['percentMinutes'] = 0;
+                             $videos[$vimeo_id]['tab'] = $tab.$count_lesson;
+
+                             $notes[$vimeo_id] = '';
+
+                         }
+                     }else{
+                         $videos[$vimeo_id] = [];
+                         $videos[$vimeo_id]['seen'] = 0;
+                         $videos[$vimeo_id]['tab'] =
+                         $videos[$vimeo_id]['lesson_id'] = $lesson['id'];
+                         $videos[$vimeo_id]['stop_time'] = 0;
+                         $videos[$vimeo_id]['percentMinutes'] = 0;
+                         $videos[$vimeo_id]['tab'] = $tab.$count_lesson;
+
+                         $notes[$vimeo_id] = '';
+                     }
+                     //var_dump($vimeo_id);
+
+
+                 // }
+                 $count_lesson++;
+
+             }
+
+         }
+
+         //dd($videos);
+        $this->statistic()->wherePivot('event_id', $event['id'])->updateExistingPivot($event['id'],['videos' => $videos, 'notes' => $notes], false);
+
+    }
+
+    public function hasExamResults($exam){
+        return $this->hasMany(ExamResult::class)->where('exam_id',$exam)->first();
     }
 
 }

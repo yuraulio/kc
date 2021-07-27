@@ -54,6 +54,9 @@ class ExamController extends Controller
        
         $exam = $model->create($request->all());
         $exam->event()->attach($request->event_id);
+
+        return redirect('admin/exams/'. $exam->id .'/edit');
+
     }
 
     /**
@@ -109,7 +112,7 @@ class ExamController extends Controller
         $averageHour = 0 . ' hours '. 0 . ' minutes';         
         if($count==0){
                      
-            $average = $seconds/$count;
+            $average = $count > 0 ? $seconds/$count : 0;
             $avg_hr = floor($average/3600);
             $avg_min = floor(($average%3600)/60);
             $avg_sec = ($average%3600)%60;
@@ -138,9 +141,13 @@ class ExamController extends Controller
      * @param  \App\Model\Exam  $exam
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Exam $exam)
+    public function update(ExamRequest $request, Exam $exam)
     {
-        //
+        $exam->update($request->all());
+        $exam->event()->detach();
+        $exam->event()->attach($request->event_id);
+
+        return redirect('admin/exams/'. $exam->id .'/edit');
     }
 
     /**

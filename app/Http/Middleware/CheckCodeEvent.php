@@ -1,6 +1,6 @@
 <?php
 
-namespace PostRider\Http\Middleware;
+namespace App\Http\Middleware;
 
 use Closure;
 use Auth;
@@ -18,12 +18,13 @@ class CheckCodeEvent
      */
     public function handle($request, Closure $next)
     {
+
         $user = Auth::user();
         if($user){
-            dd('fdsa');
+            
             if($user->cart){
                 
-                $event = Content::where('id',$user->cart->event)->with('contentLinksTicket')->first();
+                $event = Event::where('id',$user->cart->event)->first();
                 if( $event->view_tpl === 'event_free_coupon' ){
                     return $next($request);
                 }

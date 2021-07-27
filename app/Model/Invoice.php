@@ -69,7 +69,7 @@ class Invoice extends Model
                     ->orWhere('id', 'like', $search_term_str)
                     ->orWhere('meta_title', 'like', $search_term_str)
                     ->orWhere('meta_keywords', 'like', $search_term_str)
-                    ->where('view_tpl','elearning_english')->pluck('id');
+                    ->where('view_tpl','elearning_event')->pluck('id');
 
                     $query->whereIn('event_id', $events);
 

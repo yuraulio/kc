@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Auth;
-use App\Model\User as DPUser;
 use App\Model\Event;
 use \Cart as Cart;
 
@@ -19,24 +18,21 @@ class CheckForFreeEvent
      */
     public function handle($request, Closure $next)
     {
-       
+        
         $user = Auth::user();
         if($user){
-            
             
             if($user->cart){
                 
                 $event = Event::where('id',$user->cart->event)->first();
-            
                 //$stock = $event->contentLinksTicket->where('ticket_id',$user->cart->ticket_id)->first()->stock;
                 if($event->view_tpl == 'elearning_free'|| $event->view_tpl == 'event_free'){
-                    
                     $user->cart->delete();
                     Cart::instance('default')->destroy();
                     return redirect($event->slug);
                     
                 }elseif( $event->view_tpl == 'event_free_coupon' ){
-                   
+                    
                     return redirect('free-event-cart');
                 }
             }

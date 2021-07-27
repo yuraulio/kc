@@ -44,7 +44,7 @@
       <div class="section section--dynamic-learning">
         
          @foreach($list as $key => $row)
-         @if($row->view_tpl != 'elearning_english' && $row->view_tpl != 'elearning_greek')
+         @if($row->view_tpl != 'elearning_event' && $row->view_tpl != 'elearning_greek')
          <?php
             
                 $chmonth = date('m', strtotime($row->published_at));
