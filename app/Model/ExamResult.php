@@ -72,7 +72,7 @@ class ExamResult extends Model
             $data['event_title'] =  isset($examSettings['event'][0]) ? $examSettings['event'][0]['title'] : '';
             $data['score'] = round($examResult->score * 100 / $examResult->total_score,2);
 
-            if($examResult->score >= $examSettings['q_limit']){
+            if($data['success'] >= $examSettings['q_limit']){
                 $data['text'] = $examSettings['success_text'];
             }else{
                 $data['text'] = $examSettings['failure_text'];

@@ -234,7 +234,7 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::post('/exams/order-question/{exam}', 'ExamController@orderQuestion')->name('exam.order-questions');
 
     //ExamsResult
-    Route::get('/student-summary/{examResult}/{user_id}','Dashboard\ExamResultController@showResult');
+    Route::get('/student-summary/{exam_id}/{user_id}','Dashboard\ExamResultController@showResult');
 
     //Plan
     Route::get('plans', 'Dashboard\PlanController@index')->name('plans');

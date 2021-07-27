@@ -29,15 +29,15 @@
             
             <div class="col-md-6 success-fail-text @if($success) pass @else fail @endif">
                 <?php
-                    if (!isset($_GET['s'])) {
-
+                
+                    if (isset($_GET['s'])) {
+                       
                         $shortcodes = [
                             '[student_first_name]' => $first_name,
                             '[student_last_name]' => $last_name,
                             '[student_marks]' => 100,
                         ];
 
-                    
                         echo $text;
                         											
                                                         
