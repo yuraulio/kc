@@ -180,12 +180,13 @@
                                     //dd($transaction);
                                     //dd($transaction->user[0]->statistic);
                                         $found = false;
-
+                                        $sum = 0;
                                         if(isset($transaction->user[0]) && count($transaction->user[0]->statistic) != 0){
-
-                                        foreach($transaction->user[0]->statistic as $key => $val){
+                                            //dd($transaction->event[0]['id']);
+                                        //dd($transaction->user[0]->statistic->where('id',$transaction->event[0]['id']));
+                                        foreach($transaction->user[0]->statistic->where('id',$transaction->event[0]['id']) as $key => $val){
                                             //dd($val->pivot['event_id']);
-
+                                            $videos = [];
                                             if($transaction->event != null && isset($transaction->event[0]) && $val->pivot['event_id'] == $transaction->event[0]['id'] ){
                                                 $found = true;
                                             }

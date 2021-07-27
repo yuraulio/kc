@@ -211,4 +211,32 @@ class SubscriptionController extends Controller
     }
 
 
+    public function change_status(Request $request){
+        
+        $user = Auth::user();
+
+        $subscription = $user->subscriptions()->where('id',$request->sub_id)->first();//Subscription::where(['id' => $request->sub_id, 'user_id' => $currentuser->id])->first();
+
+        $sub_id_stripe = $subscription['stripe_id'];
+
+        if($request->status == 'Cancel'){
+            $subscription->status = false;
+            $subscription->save();
+            $subscription = $subscription->cancel();
+         
+
+        }else if($request->status == 'Active'){
+            $subscription->status = true;
+            $subscription->save();
+            $subscription = $subscription->resume();
+           
+        }
+
+        echo json_encode($subscription);
+
+
+
+    }
+
+
 }

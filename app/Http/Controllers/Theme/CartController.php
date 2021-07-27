@@ -22,13 +22,14 @@ use \Stripe\Stripe;
 use \Stripe\StripeClient;
 use Laravel\Cashier\Payment;
 
-
 class CartController extends Controller
 {
 
     public function __construct()
     {
-        $this->middleware('cart');
+        $this->middleware('cart')->except('cartIndex','completeRegistration');
+        $this->middleware('code.event')->only('cartIndex','completeRegistration');
+
     }
 
     public function checkoutcheck(Request $request)
@@ -287,7 +288,7 @@ class CartController extends Controller
             
             $ev = Event::find($event_id);
             if($ev) {
-                
+                $data['eventId'] = $event_id;
                 if($ev->view_tpl == 'event_free_coupon'){
                     $data['couponEvent'] = true;
                 }
@@ -315,7 +316,8 @@ class CartController extends Controller
 
               
                 $data['duration'] = $ev->summary1->where('section','date')->first() ? $ev->summary1->where('section','date')->first()->title:'';
-
+                $data['coupons'] = $ev->coupons->where('price','>',0)->toArray();
+                //dd($data['coupons']);
                 /*if($ev->customFields) {
                     foreach ($ev->customFields as $key => $cfield) {
                        if($cfield->name == 'simple_text' && $cfield->priority == 0) {
@@ -387,7 +389,7 @@ class CartController extends Controller
                     
                    // if($cartCache){
                      //  Cart::add($cartCache->ticket_id, $cartCache->product_title, $cartCache->quantity, $cartCache->price, 
-                    //    ['type' => $cartCache->type, 'event' => $cartCache->event])->associate('PostRider\Content');
+                    //    ['type' => $cartCache->type, 'event' => $cartCache->event])->associate(Ticket::class);
                   //  }
 
                 
@@ -559,7 +561,7 @@ class CartController extends Controller
         Session::forget('dperror');
         Session::forget('error');
 
-        //$current_user = Sentinel::getUser();
+        //$current_user = Auth::user();
         $dpuser = Auth::user();
         $cart = Cart::content();
         $ev_title = '';
@@ -609,13 +611,14 @@ class CartController extends Controller
             
             $amount = Cart::total();
             $coupon = [];
-            /*if (isset($input['coupon'])){
-                $coupon = Coupon::where('coupon_code',$input['coupon'])->where('status', true)->get();
-            }*/
+            $eventC = Event::find($eventId);
+            if ($eventC && isset($input['coupon'])){
+                $coupon = $eventC->coupons()->where('status', true)->get();
+            }
 
-            /*if(isset($input['coupon']) && count($coupon) > 1){
+            if(isset($input['coupon']) && count($coupon) > 1){
                 foreach($coupon as $key => $c){
-                    if(!($c->coupon_code === $input['coupon'])){
+                    if(!($c->code_coupon === $input['coupon'])){
                         unset($coupon[$key]);
                     }
                 }
@@ -625,12 +628,12 @@ class CartController extends Controller
             if(count($coupon) > 0){
                 $coupon = $coupon->first();
                 if (isset($input['coupon'])){
-                    if($input['coupon'] && trim($input['coupon']) != '' && trim($coupon->coupon_code)!= '' && $coupon->status && trim($input['coupon']) == trim($coupon->coupon_code)){
+                    if($input['coupon'] && trim($input['coupon']) != '' && trim($coupon->code_coupon)!= '' && $coupon->status && trim($input['coupon']) == trim($coupon->code_coupon)){
                         $amount = $coupon->price * $qty;
                         $couponCode = $input['coupon'];
                     }
                 }
-            }*/
+            }
             $namount = (float)$amount;
 
             $temp = [];
@@ -663,11 +666,16 @@ class CartController extends Controller
                 }
             }
 
-            
+            if(env('PAYMENT_PRODUCTION')){
+                Stripe::setApiKey($dpuser->events->where('id',$eventC->id)->first()->paymentMethod->first()->processor_options['secret_key']);
+            }else{
+                Stripe::setApiKey($dpuser->events->where('id',$eventC->id)->first()->paymentMethod->first()->test_processor_options['secret_key']);
+            }
+            session()->put('payment_method',$dpuser->events->where('id',$eventC->id)->first()->paymentMethod->first()->id);
+            $dpuser->asStripeCustomer();
 
              if($installments > 1) {
                
-                Stripe::setApiKey($ev->paymentMethod->first()->processor_options['secret_key']);
                 $instamount = round($namount / $installments, 2);
                
                 if($instamount - floor($instamount)>0){
@@ -714,15 +722,18 @@ class CartController extends Controller
                         $charge->metadata = json_encode(['installments_paid' => 0, 'installments' => $installments]);
                         $charge->price = $instamount;
                         $charge->save();
+
+                        $namount = $instamount;
              }
 
-
+             
             if($dpuser && $installments > 1) {
 
                 $charge['status'] = 'succeeded';
                 $charge['type'] = $installments . ' Installments';
             }
             else {
+                
                 if($namount - floor($namount)>0){
                     $stripeAmount = str_replace('.','',$namount);
                 }else{
@@ -739,10 +750,10 @@ class CartController extends Controller
                     'address' => ['line1' => $st_line1,'postal_code' => $st_postal_code,'city' => $st_city,'country' => 'GR'],
 
                 ]);
-            
+              
                 $temp['customer'] = $dpuser->email;
                 $nevent = $ev_title . ' ' . $ev_date_help;
-                
+                $dpuser->stripe_id;
                  $charge = $dpuser->charge(
                     $stripeAmount,
                     $dpuser->defaultPaymentMethod()->id,
@@ -783,7 +794,6 @@ class CartController extends Controller
                     'cart_data' => $cart
 
                 ];
-
                 $transaction_arr = [
 
                     "payment_method_id" => 100,//$input['payment_method_id'],
@@ -799,13 +809,14 @@ class CartController extends Controller
                     "payment_response" => json_encode($charge),
                     "surcharge_amount" => 0,
                     "discount_amount" => 0,
-                    //"coupon_code" => $couponCode,
+                    "coupon_code" => $couponCode,
                     "amount" => $namount,
-                    "total_amount" => $namount
+                    "total_amount" => $namount,
+                    'trial' => false,
                 ];
-
+                
                 $transaction = Transaction::create($transaction_arr);
-
+               
                 if($transaction) {
 
                     $transaction->user()->save($dpuser);
@@ -833,6 +844,7 @@ class CartController extends Controller
 
                         $elearningInvoice->save();
 
+                        
                         $elearningInvoice->user()->save($dpuser);
                         $elearningInvoice->event()->save($ev);
                         $elearningInvoice->transaction()->save($transaction);
@@ -982,6 +994,401 @@ class CartController extends Controller
         /*return redirect()->route('cart')->with('success',
             "{$product->name} was successfully removed from the shopping cart."
         );*/
+    }
+
+
+    public function checkCoupon(Request $request, $event){
+    
+        //$coupon = Coupon::where('code_coupon',$request->coupon)->where('status',true)->get();
+
+        $event = Event::find($event);
+        $coupon = $event->coupons()->where('status',true)->get();
+        if(count($coupon) > 1){
+            foreach($coupon as $key => $c){
+              
+                if($c->code_coupon === $request->coupon){
+                    //$coupon = $c->get();
+                }else{
+                    unset($coupon[$key]);
+                }
+            }
+        }
+
+        if(count($coupon) > 0){
+            $coupon = $coupon->first();
+            
+            if(trim($request->coupon) === trim($coupon->code_coupon) && $coupon->status && trim($request->coupon) != ''){
+                return response()->json([
+                    'success' => true,
+                    'new_price' => $coupon->price,
+                    'newPriceInt2' => round($coupon->price / 2, 2),
+                    'newPriceInt3' => round($coupon->price / 3, 2),
+                    'message' => 'Success! Your coupon has been accepted.'
+                ]);
+            }
+            
+            
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Your coupon has been declined. Please try again.'
+        ]);
+
+    }
+
+
+    public function checkCode(Request $request){
+    
+        $event = Event::find($request->event);
+
+        $code = $event->coupons()->where('code_coupon',$request->eventCode)->first();
+        
+        if(!$code){
+            return response()->json([
+                'success' => false,
+                'message' => 'The code you have entered is incorrect. Please try again.'
+            ]);
+        }else if($code->used == 1){
+            return response()->json([
+                'success' => false,
+                'message' => 'The code you have entered is already taken. Please try another code.'
+            ]);
+        }else{
+            
+            Cart::instance('default')->destroy();
+            $item = Cart::add('free_code', $event->title, 1, (float)0, ['type' => 'free_code', 'event' => $event->id, 'code_id' => $code->id])->associate(Ticket::class);
+            //$code->used = true;
+            $code->save();
+
+            if($user = Auth::user()) {
+               
+                
+                if($user->cart){
+                    $user->cart->delete();
+                }
+
+                $cartCache = new CartCache;
+
+                $cartCache->ticket_id = 'coupon code ' . $code->event->id;
+                $cartCache->product_title = $code->event->title;
+                $cartCache->quantity = 1;
+                $cartCache->price = (float) 0;
+                $cartCache->type = 9;
+                $cartCache->event = $code->event->id;
+                $cartCache->user_id =Auth::user()->id;
+                $cartCache->slug =  base64_encode('coupon code ' . $code->event->id . Auth::user()->id . $code->event->id);
+
+                $cartCache->save();
+
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'To event προστεθηκε στο καλάθι',
+                'redirect' => '/cart'
+            ]);
+        }
+
+    }
+
+    public function cartIndex(Content $event){
+       
+        $c = Cart::content()->count();
+        $data = [];
+        $data['city'] = null;
+        $data['duration'] = null;
+        $categoryScript ='';
+        
+        $user = Auth::user();
+        
+        $data['cur_user'] = $user;
+        
+        if ($c > 0) {
+            $cart_contents = Cart::content();
+            foreach ($cart_contents as $item) {
+                $event_id = $item->options->event;
+                $event_type = $item->options->type;
+
+                break;
+            }
+
+            $ev = Event::find($event_id);
+            if($ev) {
+              
+                if($ev->view_tpl != 'elearning_english'){
+                    if($ev->city->first()){
+                        $data['city'] = $ev->city->first()->name;
+
+                    }
+                }
+
+                if ($ev->category->first()) {
+                    $categoryScript = 'Event > ' . $ev->category->first()->name;
+                }
+                    
+                       
+                $data['ev_date_help'] = 'test'; 
+                $data['duration'] = 'tst3';
+              
+            }
+        }
+       
+        $data['eventId'] = $event_id;
+        $data['categoryScript'] = $categoryScript;
+
+        
+
+        return view('theme.cart.cart_code_event',$data);
+    }
+
+    public function validation(Request $request){
+        $validatorArray = [];
+
+        $validatorArray['email.*'] = 'required|email';
+        $validatorArray['name.*'] = 'required';
+        $validatorArray['surname.*'] = 'required';
+        $validatorArray['mobile.*'] = 'required';
+        $validatorArray['city.*'] = 'required';
+        $validatorArray['address.*'] = 'required';
+        $validatorArray['addressnum.*'] = 'required';
+        $validatorArray['postcode.*'] = 'required';
+
+        $validator = Validator::make($request->all(), $validatorArray);
+
+        if ($validator->fails()) {
+            return [
+                'status' => 0,
+                'errors' => $validator->errors(),
+                'message' => '',
+            ];
+
+        }else{
+        
+            $seats_data = array();
+            $seats_data['names'] = $request->get('name');
+        	$seats_data['surnames'] = $request->get('surname');
+        	$seats_data['emails'] = $request->get('email');
+            $seats_data['mobiles'] = $request->get('mobile');
+            $seats_data['mobileCheck'] = $request->get('mobileCheck');
+            $seats_data['countryCodes'] = $request->get('countryCodes');            
+        	$seats_data['addresses'] = $request->get('address');
+        	$seats_data['addressnums'] = $request->get('addressnum');
+        	$seats_data['postcodes'] = $request->get('postcode');
+        	$seats_data['cities'] = $request->get('city');
+        	$seats_data['jobtitles'] = $request->get('jobtitle');
+        	$seats_data['companies'] = $request->get('company');
+            $seats_data['students'] = $request->get('student');
+            $seats_data['afms'] = $request->get('afm');
+            $seats_data['studentId'] = $request->get('studentId');
+            Session::put('pay_seats_data', $seats_data);
+            
+            return [
+                'status' => 1,
+                'message' => 'Done go checkout',
+            ];
+
+        }
+
+           
+    }
+
+    public function completeRegistration(Request $request){
+
+        $this->validate($request, [
+            'mobileCheck.*' => 'phone:AUTO',
+        ]);
+
+        $data = [];
+        $optionid = \Config::get('dpoptions.generator.id');
+		$option = Option::findOrFail($optionid);
+        $dereelist = json_decode($option->settings, true);
+        $code = 0;
+        
+        //dd($dereelist);
+
+        $c = Cart::content()->count();
+        $user = Auth::user();
+        
+
+        if ($c > 0) {
+            $cart_contents = Cart::content();
+            foreach ($cart_contents as $item) {
+            
+                $event_id = $item->options->event;
+                $event_type = $item->options->type;
+                $codeId = $item->options->code_id;
+
+                break;
+            }
+
+            $content = Event::find($event_id);
+        }
+
+        $payment_method_id = 1;//intval($input["payment_method_id"]);
+        $payment_cardtype = 9; //free;
+        $amount = 0;
+        $namount = (float)$amount;
+
+        $code = Code::where('id', $codeId)->first();
+
+        if($code){
+            $code = $code->code;
+        }
+
+        $transaction_arr = [
+
+            'payment_method_id' => $payment_method_id,
+            'user_id' => Auth::user()->id,
+            'account_id' => 17,
+            'payment_status' => 1,
+            'billing_details' => '',//serialize($billing_details),
+            'placement_date' => Carbon::now()->toDateTimeString(),
+            'ip_address' => '127.0.0.1',
+            'type' => $payment_cardtype,//((Sentinel::inRole('super_admin') || Sentinel::inRole('know-crunch')) ? 1 : 0),
+            'status' => 1, //2 PENDING, 0 FAILED, 1 COMPLETED
+            'coupon_code' =>  $code,
+            'is_bonus' => 0, //$input['is_bonus'],
+            'order_vat' => 0, //$input['credit'] - ($input['credit'] / (1 + Config::get('dpoptions.order_vat.value') / 100)),
+            'surcharge_amount' => 0,
+            'discount_amount' => 0,
+            'amount' => $namount, //$input['credit'],
+            'total_amount' => $namount,
+            'trial' => false,
+        ];
+
+        $transaction = Transaction::create($transaction_arr);
+
+        if ($transaction) {
+            // set transaction id in session
+            
+            $pay_seats_data = ["names" => [$request->name[0]],"surnames" => [$request->surname[0]],"emails" => [$request->email[0]],
+            "mobiles" => [$request->mobile[0]],"addresses" => [Auth::user()->address],"addressnums" => [Auth::user()->address_num],
+            "postcodes" => [Auth::user()->postcode],"cities" => [Auth::user()->city],"jobtitles" => [Auth::user()->job_title],
+            "companies" => [Auth::user()->company],"students" => [""], "afms" => [Auth::user()->afm]];
+
+
+            $deree_user_data = [Auth::user()->email => Auth::user()->partner_id];
+
+            //dd($ticket->event->title);
+            $cart_data = ["manualtransaction" => ["rowId" => "manualtransaction","id" => 'coupon code ' . $content->id,"name" => $content->title,"qty" => "1","price" => $amount,"options" => ["type" => "9","event"=> $content->id],"tax" => 0,"subtotal" => $amount]];
+
+            $status_history[] = [
+            'datetime' => Carbon::now()->toDateTimeString(),
+            'status' => 1,
+            'user' => [
+                'id' => Auth::user()->id, //0, $this->current_user->id,
+                'email' => Auth::user()->email,//$this->current_user->email
+                ],
+            'pay_seats_data' => $pay_seats_data,//$data['pay_seats_data'],
+            'pay_bill_data' => [],
+            'cardtype' => 9,
+            'installments' => 1,
+            'deree_user_data' => $deree_user_data, //$data['deree_user_data'],
+            'cart_data' => $cart_data //$cart
+            ];
+
+            //Transaction::where('id', $transaction['id'])
+            $transaction->update(['status_history' => json_encode($status_history)/*, 'billing_details' => $tbd*/]);
+
+            $user->events()->attach($content->id,['comment' => 'upon coupon']);
+
+            $user->cart->delete();
+            Cart::instance('default')->destroy();
+           
+            $content->codes()->where('id', $codeId)->first()->update(['used' => true]);
+
+            $KC = "KC-";
+            $time = strtotime($transaction->placement_date);
+            $MM = date("m",$time);
+            $YY = date("y",$time);
+    
+            /*$optionid = \Config::get('dpoptions.ncgenerator.id');
+            $option = Option::findOrFail($optionid);
+            // next number available up to 9999
+            $next = $option->value;
+
+            if($user->kc_id == '') {
+
+                $next_kc_id = str_pad($next, 4, '0', STR_PAD_LEFT);
+                $knowcrunch_id = $KC.$YY.$MM.$next_kc_id;
+                $user->kc_id = $knowcrunch_id;
+
+                $user->save();
+               
+            }*/
+            $this->sendEmails($transaction,$content);
+            
+            $data['info']['success'] = true;
+            $data['info']['title'] = '<h1>Booking successful</h1>';
+            $data['info']['message'] = '<h2>Thank you and congratulations!<br/>We are very excited about you joining us. We hope you are too!</h2>
+            <p>An email with more information is on its way to your inbox.</p>';
+            $data['info']['transaction'] = $transaction;
+            $data['info']['statusClass'] = 'success';
+
+        }
+
+
+        return view('theme.cart.cart_code_event',$data);
+        //return redirect('/myaccount');
+    }
+
+    public function sendEmails($transaction,$content)
+    {
+     
+        $user = Auth::user();
+
+        $muser = [];
+        $muser['name'] = $user->first_name . ' ' . $user->last_name;
+        $muser['first'] = $user->first_name;
+        $muser['email'] = $user->email;
+
+        $tickettypedrop = 'Upon Coupon';
+        $tickettypename = 'Upon Coupon';
+        $eventname = $content->title;
+        $date = '';
+        $eventcity = '';
+
+
+        $extrainfo = [$tickettypedrop, $tickettypename, $eventname, $date, '-', '-', $eventcity];
+        $helperdetails[$user->email] = ['kcid' => $user->kc_id, 'deid' => $user->partner_id, 'stid' => $user->student_type_id, 'jobtitle' => $user->job_title, 'company' => $user->company, 'mobile' => $user->mobile];
+
+        $adminemail = 'info@knowcrunch.com';
+
+        $data = [];
+        $data['user'] = $muser;
+        $data['trans'] = $transaction;
+        $data['extrainfo'] = $extrainfo;
+        $data['helperdetails'] = $helperdetails;
+        $data['eventslug'] = $content->slug;
+            
+        $sent = Mail::send('emails.admin.info_new_registration', $data, function ($m) use ($adminemail,$muser) {
+
+            $fullname = $muser['name'];
+            $first = $muser['first'];
+            $sub = 'Knowcrunch - ' . $first . ' your registration has been completed.';
+            $m->from($adminemail, 'Knowcrunch');
+            $m->to($muser['email'], $fullname);
+            $m->subject($sub);
+        });
+            
+
+        //send elearning Invoice
+        $transdata = [];
+        $transdata['trans'] = $transaction;
+        
+        $transdata['user'] = $muser;
+        $transdata['trans'] = $transaction;
+        $transdata['extrainfo'] = $extrainfo;
+        $transdata['helperdetails'] = $helperdetails;
+        $transdata['coupon'] = $transaction->coupon_code;
+        
+        $sentadmin = Mail::send('emails.admin.admin_info_new_registration', $transdata, function ($m) use ($adminemail) {
+            $m->from($adminemail, 'Knowcrunch');
+            $m->to($adminemail, 'Knowcrunch');
+            $m->subject('Knowcrunch - New Registration');
+        });
+
     }
 
 }

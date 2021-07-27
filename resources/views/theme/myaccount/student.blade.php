@@ -996,7 +996,7 @@
                                                 @if($date_timestamp > $now_date )
                                                    <?php //dd('not expired'); ?>
                                                    <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/clock-coins.svg')}}" alt=""><?php echo 'Your trial expiration: '.$date; ?></div>
-                                                   @if($event['mySubscription']['stripe_status'] == 1)
+                                                   @if($event['mySubscription']['status'])
                                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php $a = new DateTime($event['mySubscription']['ends_at']); echo 'You will be charged: '.$a->format('d/m/Y'); ?></div>
 
                                                    @endif
@@ -1018,7 +1018,7 @@
 
                                                 @if($date_timestamp > $now_date )
 
-                                                   @if($event['mySubscription']['stripe_status'] == 1)
+                                                   @if($event['mySubscription']['status'])
                                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php $a = new DateTime($event['mySubscription']['ends_at']); echo 'You will be charged: '.$a->format('d/m/Y'); ?></div>
 
                                                    @endif
@@ -1038,7 +1038,7 @@
                                                    $a = '';
                                                    $status = '';
                                                    $row_status = '';
-                                                   if($event['mySubscription']['stripe_status'] == 1){
+                                                   if($event['mySubscription']['status']){
                                                       $a = 'checked';
                                                       $status = 'Active';
                                                       //row_status = ` style="color:green;" `;
@@ -1253,7 +1253,7 @@
                                                 @if($date_timestamp > $now_date )
                                                    <?php //dd('not expired'); ?>
                                                    <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/clock-coins.svg')}}" alt=""><?php echo 'Your trial expiration: '.$date; ?></div>
-                                                      @if($event['mySubscription']['stripe_status'] == 1)
+                                                      @if($event['mySubscription']['status'])
                                                          <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php $a = new DateTime($event['mySubscription']['ends_at']); echo 'You will be charged: '.$a->format('d/m/Y'); ?></div>
 
                                                       @endif
@@ -1274,7 +1274,7 @@
 
                                                 @if($date_timestamp > $now_date )
 
-                                                   @if($event['mySubscription']['stripe_status'] == 1)
+                                                   @if($event['mySubscription']['status'])
                                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php $a = new DateTime($event['mySubscription']['ends_at']); echo 'You will be charged: '.$a->format('d/m/Y'); ?></div>
 
                                                    @endif
@@ -1294,7 +1294,7 @@
                                                    $a = '';
                                                    $status = '';
                                                    $row_status = '';
-                                                   if($event['mySubscription']['stripe_status'] == 1){
+                                                   if($event['mySubscription']['status']){
                                                       $a = 'checked';
                                                       $status = 'Active';
                                                       //row_status = ` style="color:green;" `;

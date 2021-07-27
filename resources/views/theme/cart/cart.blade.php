@@ -1252,7 +1252,7 @@ if(!isset($info)){
                      <form method="post" id='sbt-pay' action="/pay-sbt">
                         {{csrf_field()}}
 
-                        @if(isset($paywithstripe) && $paywithstripe == 1)
+                        @if(isset($paywithstripe) && $paywithstripe == 1 && count($coupons) > 0)
                            @if($item->options->has('type'))
                               {{-- if(item->options->type == 0) --}}
                               <div class="col6 col-sm-12 coupon-pad-bottom">
@@ -1984,7 +1984,7 @@ $( document ).ready(function() {
             //success-alert
             //error-alert
 
-            $.ajax({ url: '/cart/checkCoupon', type: "post",
+            $.ajax({ url: '/cart/checkCoupon/{{$eventId}}', type: "post",
             data:{'coupon': $("#coupon").val()} ,
             success: function(data) {
                if(data['success']){

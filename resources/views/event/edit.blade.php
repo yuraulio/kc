@@ -254,7 +254,9 @@
                                         <li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-11-tab_inside" data-toggle="tab" href="#tabs-icons-text-11_inside" role="tab" aria-controls="tabs-icons-text-11_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Image version</a>
                                         </li>
-
+                                        <li class="nav-item">
+                                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab_inside" data-toggle="tab" href="#coupons" role="tab" aria-controls="metas" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Coupons</a>
+                                        </li>
                                         <li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab_inside" data-toggle="tab" href="#metas" role="tab" aria-controls="metas" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Metas</a>
                                         </li>
@@ -341,6 +343,53 @@
                                             <div class="tab-pane fade" id="metas" role="tabpanel" aria-labelledby="tabs-icons-text-8-tab_inside">
                                                 @include('admin.metas.metas',['metas' => $metas])
                                             </div>
+
+                                            <div class="tab-pane fade" id="coupons" role="tabpanel" aria-labelledby="tabs-icons-text-8-tab_inside">
+                                           
+                                                <div class="table-responsive py-4">
+                                                    <table class="table align-items-center table-flush"  id="datatable-coupon">
+                                                        <thead class="thead-light">
+                                                            <tr>
+                                                                <th scope="col">{{ __('Code') }}</th>
+                                                                <th scope="col">{{ __('Price') }}</th>
+                                                                <th scope="col">{{ __('Status') }}</th>
+                                                                <th scope="col">{{ __('Used') }}</th>
+                                                                <th scope="col">{{ __('Assigned') }}</th>
+
+
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <?php //dd($allTopicsByCategory); 
+                                                            $eventCoupons = $event['coupons']->pluck('id')->toArray();
+                                                            //dd($eventCoupons);
+                                                        ?>
+
+                                                            @foreach ($coupons as $key => $coupon)
+                                                                <tr>
+                                                                    <td>{{ $coupon['code_coupon'] }}</td>
+                                                                    <td>{{ $coupon['price'] }}</td>
+                                                                    <td>{{ $coupon['status'] }}</td>
+                                                                    <td>{{ $coupon['used'] }}</td>
+
+                                                                    <td>
+                                                                        <div class="col-2 assign-toggle" id="toggle_{{$key}}">
+                                                                            <label class="custom-toggle">
+                                                                                <input class="coupon-input" type="checkbox" data-status="{{in_array($coupon['id'],$eventCoupons)}}" data-event-id="{{$event['id']}}" data-coupon-id="{{$coupon['id']}}" @if(in_array($coupon['id'],$eventCoupons)) checked @endif>
+                                                                                <span class="coupon custom-toggle-slider rounded-circle" ></span>
+                                                                            </label>
+                                                                        </div>
+                                                                    </td>
+
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                            </div>
+
                                             <div class="tab-pane fade" id="tabs-icons-text-3_inside" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab_inside">
                                                 @include('admin.benefits.benefits',['model' => $event])
                                             </div>
@@ -822,6 +871,35 @@
     return $state;
     }
 
+
+    $(document).on('click', '.coupon.custom-toggle-slider', function(){
+
+        let event_id = ($(this).parent().find('.coupon-input')).data('event-id')
+        let coupon_id = ($(this).parent().find('.coupon-input')).data('coupon-id')
+        let status = ($(this).parent().find('.coupon-input')).data('status')
+
+        if (status) {
+            $(this).parent().find('.coupon-input').data('status',0)
+        }else{
+            $(this).parent().find('.coupon-input').data('status',1)
+        }
+
+        let data = {'event':event_id, 'coupon' : coupon_id,'status':status}
+
+        $.ajax({
+            type: 'POST',
+            headers: {
+            'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+            },
+            Accept: 'application/json',
+            url: "/admin/events/assing-coupon/" + event_id +"/" + coupon_id,
+            data:data,
+            success: function(data) {
+               
+            }
+        });
+
+    })
 
 
 </script>

@@ -121,7 +121,7 @@ class InfoController extends Controller
 	        }
 
 	        if ($transaction) {
-
+                
 	    		$this->createUsersFromTransaction($transaction);
 
 			}
@@ -263,7 +263,6 @@ class InfoController extends Controller
                 $eventcity  = 'EventCity';
             }
         }
-
 
         //Collect all users from seats
         $newmembersdetails = [];
@@ -488,7 +487,7 @@ class InfoController extends Controller
             }
         }*/
 
-       
+        
         $this->sendEmails($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug);
 
     }
@@ -592,15 +591,15 @@ class InfoController extends Controller
             $pathFile = str_replace(' ','%20',$pathFile);
             $sent = Mail::send('emails.admin.elearning_after_register', $data, function ($m) use ($adminemail, $muser,$pathFile) {
 
-                    $fullname = $muser['name'];
-                    $first = $muser['first'];
-                    $sub = 'KnowCrunch |' . $first . ', welcome to ' . $muser['event_title'].'!';
-                    $m->from($adminemail, 'Knowcrunch');
-                    $m->to($muser['email'], $fullname);
-                    $m->subject($sub);
-                    $m->attach($pathFile);
+                $fullname = $muser['name'];
+                $first = $muser['first'];
+                $sub = 'KnowCrunch |' . $first . ', welcome to ' . $muser['event_title'].'!';
+                $m->from($adminemail, 'Knowcrunch');
+                $m->to($muser['email'], $fullname);
+                $m->subject($sub);
+                $m->attach($pathFile);
                     
-                    });
+            });
 
             
 

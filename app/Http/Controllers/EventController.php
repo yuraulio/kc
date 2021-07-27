@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\EventRequest;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\ImageManagerStatic as Image;
+use App\Model\Coupon;
 
 class EventController extends Controller
 {
@@ -112,6 +113,15 @@ class EventController extends Controller
         echo json_encode($data);
     }
 
+    public function assignCoupon(Request $request, Event $event, Coupon $coupon){
+        
+        if(!$request->status){
+            $event->coupons()->detach($coupon->id);
+            $event->coupons()->attach($coupon->id);
+        }else{
+            $event->coupons()->detach($coupon->id);
+        }
+    }
 
     public function assignPaymentMethod(Request $request, Event $event)
     {
@@ -247,7 +257,7 @@ class EventController extends Controller
 
         $user = Auth::user();
         $id = $event['id'];
-        $event = $event->with('delivery','category', 'summary1', 'benefits', 'ticket', 'city', 'venues', 'topic', 'lessons', 'instructors', 'users', 'partners', 'sections','paymentMethod','slugable','metable', 'medias')->find($id);
+        $event = $event->with('coupons','delivery','category', 'summary1', 'benefits', 'ticket', 'city', 'venues', 'topic', 'lessons', 'instructors', 'users', 'partners', 'sections','paymentMethod','slugable','metable', 'medias')->find($id);
         //dd($event['topic']);
         //dd($event->summary1);
         //dd($event->medias->details);
@@ -316,6 +326,7 @@ class EventController extends Controller
         $data['isInclassCourse'] = $event->is_inclass_course();
         $data['eventFaqs'] = $event->faqs->pluck('id')->toArray();
         $data['eventUsers'] = $event->users->toArray();
+        $data['coupons'] = Coupon::all();
 
         //dd($data['topics']);
 

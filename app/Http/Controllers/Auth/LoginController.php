@@ -146,7 +146,7 @@ class LoginController extends Controller
         if($dpuser->cart && Cart::content()->count() == 0){
 
             $cart = $dpuser->cart;
-            Cart::add($cart->ticket_id, $cart->product_title, $cart->quantity, $cart->price, ['type' => $cart->type, 'event' => $cart->event])->associate('PostRider\Content');
+            Cart::add($cart->ticket_id, $cart->product_title, $cart->quantity, $cart->price, ['type' => $cart->type, 'event' => $cart->event])->associate(Ticket::class);
             //Cart::store($dpuser->id);
 
         }else if(Cart::content()->count() > 0){

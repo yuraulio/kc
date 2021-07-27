@@ -30,6 +30,7 @@ use App\Traits\BenefitTrait;
 use App\Traits\MediaTrait;
 use App\Traits\Invoices;
 use App\Model\Plan;
+use App\Model\Coupon;
 
 class Event extends Model
 {
@@ -76,6 +77,10 @@ class Event extends Model
 
         return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id')
             ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.priority','asc');
+    }
+
+    public function coupons(){
+        return $this->belongsToMany(Coupon::class,'event_coupons');
     }
 
 

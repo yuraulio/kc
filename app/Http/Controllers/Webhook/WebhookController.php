@@ -22,10 +22,8 @@ class WebhookController extends BaseWebhookController
 			
 			$sub = $payload['data']['object']['lines']['data'][0];
 			if(isset($sub['metadata']['installments'])){
-		
 				$this->installments($payload,$sub,$user);
 			}else{
-		
 				$this->subscription($payload,$user,$sub);
 			}
     
@@ -106,7 +104,6 @@ class WebhookController extends BaseWebhookController
 	}
 
 	private function subscription($payload,$user,$sub){
-		
 		$subscription = $user->eventSubscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first();
 		//$subscription = $user->subscriptions()->where('stripe_status',1)->where('stripe_price',$payload['data']['object']['lines']['data'][0]['plan']['id'])->first();
 		$eventId = $subscription->event->first()->pivot->event_id;
@@ -132,6 +129,7 @@ class WebhookController extends BaseWebhookController
 
 			//$transaction = $user->events->where('id',$eventId)->first()->subscriptionΤransactionsByUser($user->id)->first();
 
+			
 			$charge['status'] = 'succeeded';
             $status_history = [];
             $status_history[] = [
@@ -171,9 +169,25 @@ class WebhookController extends BaseWebhookController
                 'trial' => $sub['amount']/100 == 0 ? true : false,
                 'ends_at' => date('Y-m-d H:i:s', $ends_at),
             ];
+
+			
+			
 			$subscription->event->first()->pivot->expiration  = date('Y-m-d', $ends_at);
 			$subscription->event->first()->pivot->save();
 
+			$subscription->must_be_updated = $ends_at;
+			$subscription->email_send = false;
+			$subscription->status = true;
+			$subscription->ends_at = date('Y-m-d H:i:s', $ends_at);
+			$subscription->save();
+			
+			if($user->events()->wherePivot('event_id',$eventId)->first()){
+				
+				$user->events()->updateExistingPivot($eventId,['expiration' => date('Y-m-d', $ends_at)]);
+				//$user->events()->where('event_id',$eventId)->first()->pivot->expiration  = date('Y-m-d', $ends_at);
+				//$user->events()->where('event_id',$eventId)->first()->pivot->comment  = 'hello';
+				//$user->events()->where('event_id',$eventId)->first()->pivot->save();
+			}
 			
 
 			$transaction = Transaction::create($transaction_arr);
@@ -185,6 +199,7 @@ class WebhookController extends BaseWebhookController
 				}else{
 
 					$invoiceNumber = Invoice::latest()->has('subscription')->first()->invoice;
+					$invoiceNumber = preg_replace('/[^0-9.]+/', '', $invoiceNumber);
 					$invoiceNumber = (int) $invoiceNumber + 1;
 					$invoiceNumber = sprintf('%04u', $invoiceNumber);
 				}
@@ -202,6 +217,7 @@ class WebhookController extends BaseWebhookController
 				$elearningInvoice->user()->save($user);
 				$elearningInvoice->event()->save($user->events->where('id',$eventId)->first());
 				$elearningInvoice->transaction()->save($transaction);
+				$elearningInvoice->subscription()->save($subscription);
 				
 				$pdf = $elearningInvoice->generateInvoice();
 

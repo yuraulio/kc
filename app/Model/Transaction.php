@@ -54,7 +54,7 @@ class Transaction extends Model
 
     public function invoice()
     {
-        return $this->morphedByMany(Invoice::class, 'invoiceable','invoiceables');
+        return $this->morphToMany(Invoice::class, 'invoiceable','invoiceables');
     }
 
     /*public function subscription()

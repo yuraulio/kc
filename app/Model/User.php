@@ -23,6 +23,7 @@ use App\Model\Invoice;
 use Laravel\Cashier\Subscription;
 use App\Model\CookiesSMS;
 use App\Model\Plan;
+use App\Model\CartCache;
 
 class User extends Authenticatable
 {
@@ -166,7 +167,7 @@ class User extends Authenticatable
 
     public function events()
     {
-        return $this->belongsToMany(Event::class, 'event_user')->withPivot('paid', 'expiration')->with('summary1','category','slugable');
+        return $this->belongsToMany(Event::class, 'event_user')->withPivot('paid', 'expiration','comment')->with('summary1','category','slugable');
     }
 
     public function subscriptionEvents()
@@ -600,6 +601,10 @@ class User extends Authenticatable
       
         return in_array($planId,array_unique($eventPlans));
   
+    }
+
+    public function cart(){
+        return $this->hasOne(CartCache::class);
     }
 
 }

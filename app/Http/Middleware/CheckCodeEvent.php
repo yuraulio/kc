@@ -3,9 +3,8 @@
 namespace PostRider\Http\Middleware;
 
 use Closure;
-use Sentinel;
-use PostRider\User as DPUser;
-use PostRider\Content;
+use Auth;
+use App\Model\Event;
 use \Cart as Cart;
 
 class CheckCodeEvent
@@ -19,9 +18,9 @@ class CheckCodeEvent
      */
     public function handle($request, Closure $next)
     {
-        $user = Sentinel::check();
+        $user = Auth::user();
         if($user){
-            $user = DPUser::find($user->id);
+            dd('fdsa');
             if($user->cart){
                 
                 $event = Content::where('id',$user->cart->event)->with('contentLinksTicket')->first();

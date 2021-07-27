@@ -28,8 +28,11 @@ class LessonController extends Controller
 
         $db_note = json_encode($db_note);
 
+        /*$user->statistic()->updateExistingPivot($user['id'], [
+            'notes' => $db_note,
+        ]);*/
 
-        $user->statistic()->updateExistingPivot($user['id'], [
+        $user->statistic()->updateExistingPivot($event_id, [
             'notes' => $db_note,
         ]);
 
@@ -85,7 +88,11 @@ class LessonController extends Controller
             $message = 'Create video info successfully';
         }
 
-        $user->statistic()->updateExistingPivot($user['id'], [
+        /*$user->statistic()->updateExistingPivot($user['id'], [
+            'videos' => $db_video,
+        ]);*/
+
+        $user->statistic()->updateExistingPivot($event_id, [
             'videos' => $db_video,
         ]);
 

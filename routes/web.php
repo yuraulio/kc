@@ -176,6 +176,10 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     //Event assign method
     Route::post('events/assing-method/{event}','EventController@assignPaymentMethod')->name('event.assing-method');
 
+    //EventAssingCoupon
+    Route::post('events/assing-coupon/{event}/{coupon}','EventController@assignCoupon')->name('event.assign_coupon');
+
+
     Route::post('/events/fetchTopics', ['as' => 'events.fetchTopics', 'uses' => 'EventController@fetchTopics']);
 
 
@@ -259,6 +263,7 @@ Route::group(['prefix' => 'cart','middleware' => ['web']], function () {
         Route::post('/checkKnocrunchId', [ 'as' => 'cart.knowcrunchid', 'uses' => 'Theme\CartController@checkKnowcrunchId' ]);
         Route::post('checkoutcheck', [ 'as' => 'cart.checkout', 'uses' => 'Theme\CartController@checkoutcheck' ]);
         Route::post('/remove', [ 'as' => 'cart.remove-item', 'uses' => 'Theme\CartController@dpremove']);
+        Route::post('checkCoupon/{event}','Theme\CartController@checkCoupon');
 
         //Route::group([ 'prefix' => '{id}' ], function() {
         //    /*Route::post('/dpremove', [ 'as' => 'cart.remove-item', 'uses' => 'Theme\CartController@dpremove']);*/
@@ -270,6 +275,12 @@ Route::group(['prefix' => 'cart','middleware' => ['web']], function () {
     });
 //});
 });
+
+Route::post('checkCode', 'Theme\CartController@checkCode');
+Route::get('/free-event-cart', 'Theme\CartController@cartIndex');
+Route::post('/complete-registration', 'Theme\CartController@completeRegistration');
+Route::post('/complete-registration-validation', 'Theme\CartController@validation');
+Route::post('/free-event-cart/remove',  'Theme\CartController@dpremove');
 
 Route::post('/card/store_from_payment',  'Theme\CardController@store_from_payment');
 Route::post('pay-sbt', [
@@ -327,6 +338,7 @@ Route::group(['middleware' => ['auth'], 'prefix'=>'myaccount'], function () {
         Route::get('/subscription/{event}/{plan}',  'Theme\SubscriptionController@index');
         Route::post('/subscription/store/{event}/{plan}',  'Theme\SubscriptionController@store')->name('subscription.store');
         Route::get('/subscription-success', 'Theme\SubscriptionController@orderSuccess');
+        Route::post('/subscription/change_status',  'Theme\SubscriptionController@change_status')->name('subscription.change_status');
 
 
     });
