@@ -27,6 +27,7 @@ use App\Model\ShoppingCart;
 use \Carbon\Carbon;
 use App\Model\CookiesSMS;
 use Illuminate\Support\Facades\Auth;
+use App\Model\CartCache;
 
 class LoginController extends Controller
 {
@@ -48,7 +49,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/admin';
+    protected $redirectTo = '/myaccount';
 
     /**
      * Create a new controller instance.
@@ -64,11 +65,17 @@ class LoginController extends Controller
     {
         $credentials = $request->only('email', 'password');
         //dd($credentials);
+        
         if (Auth::attempt($credentials)) {
+            auth()->user()->AauthAcessToken()->delete();
+            Auth::logoutOtherDevices($request->password);
             //dd('match');
             // Authentication passed...
             $data['status'] = 1;
-            $data['redirect'] = URL::to('/');
+            $data['redirect'] = URL::to('/myaccount');
+
+            $this->checkForCacheItems(Auth::user());
+
             return response()->json([
                 'success' => true,
                 'data' => $data
@@ -89,6 +96,8 @@ class LoginController extends Controller
         try{
 
             if (Auth::attempt($credentials)) {
+                auth()->user()->AauthAcessToken()->delete();
+                Auth::logoutOtherDevices($request->password);
                 $user = Auth::user();
                 if(!isset($_COOKIE['auth-'.$user->id])){
 
@@ -122,7 +131,7 @@ class LoginController extends Controller
                     $timecheck->updated_at = Carbon::now();
                     $timecheck->save();
                 }
-                $this->checkForCacheItems($user);
+                //$this->checkForCacheItems($user);
 
                 return redirect('/cart');
             }
@@ -159,34 +168,34 @@ class LoginController extends Controller
 
             if(!$dpuser->cart){
 
-                // $cartCache = new CartCache;
+                $cartCache = new CartCache;
 
-                // $cartCache->ticket_id = $tid;
-                // $cartCache->product_title = $cart->first()->name;
-                // $cartCache->quantity = $cart->first()->qty;
-                // $cartCache->price = $cart->first()->price;
-                // $cartCache->type = $cart->first()->options->type;
-                // $cartCache->event = $event;
-                // $cartCache->user_id = $dpuser->id;
-                // $cartCache->slug =  base64_encode($tid. $dpuser->id . $event);
-                // $cartCache->save();
+                $cartCache->ticket_id = $tid;
+                $cartCache->product_title = $cart->first()->name;
+                $cartCache->quantity = $cart->first()->qty;
+                $cartCache->price = $cart->first()->price;
+                $cartCache->type = $cart->first()->options->type;
+                $cartCache->event = $event;
+                $cartCache->user_id = $dpuser->id;
+                $cartCache->slug =  base64_encode($tid. $dpuser->id . $event);
+                $cartCache->save();
 
             }else if(($dpuser->cart->ticket_id !== $tid) && ($dpuser->cart->event !== $event)){
 
                 $dpuser->cart->delete();
 
-                // $cartCache = new CartCache;
+                $cartCache = new CartCache;
 
-                // $cartCache->ticket_id = $tid;
-                // $cartCache->product_title = $cart->first()->name;
-                // $cartCache->quantity = $cart->first()->qty;
-                // $cartCache->price = $cart->first()->price;
-                // $cartCache->type = $cart->first()->options->type;
-                // $cartCache->event = $event;
-                // $cartCache->user_id = $dpuser->id;
-                // $cartCache->slug =  base64_encode($tid. $dpuser->id . $event);
+                $cartCache->ticket_id = $tid;
+                $cartCache->product_title = $cart->first()->name;
+                $cartCache->quantity = $cart->first()->qty;
+                $cartCache->price = $cart->first()->price;
+                $cartCache->type = $cart->first()->options->type;
+                $cartCache->event = $event;
+                $cartCache->user_id = $dpuser->id;
+                $cartCache->slug =  base64_encode($tid. $dpuser->id . $event);
 
-                // $cartCache->save();
+                $cartCache->save();
 
             }
 

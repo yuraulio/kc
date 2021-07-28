@@ -25,6 +25,7 @@ use App\Model\CookiesSMS;
 use App\Model\Plan;
 use App\Model\CartCache;
 use App\Model\ExamResult;
+use App\Model\OauthAccessToken;
 
 class User extends Authenticatable
 {
@@ -744,6 +745,10 @@ class User extends Authenticatable
 
     public function hasExamResults($exam){
         return $this->hasMany(ExamResult::class)->where('exam_id',$exam)->first();
+    }
+
+    public function AauthAcessToken(){
+        return $this->hasMany(OauthAccessToken::class);
     }
 
 }

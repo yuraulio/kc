@@ -4,7 +4,7 @@ namespace PostRider\Http\Middleware;
 
 use Closure;
 use Session;
-use Cartalyst\Sentinel\Sentinel;
+use Auth;
 
 class CheckUserLogeinForElearning
 {
@@ -22,10 +22,7 @@ class CheckUserLogeinForElearning
      * @param  \Cartalyst\Sentinel\Sentinel  $auth
      * @return void
      */
-    public function __construct(Sentinel $auth)
-    {
-        $this->auth = $auth;
-    }
+  
 
     /**
      * Handle an incoming request.
@@ -37,7 +34,7 @@ class CheckUserLogeinForElearning
     public function handle($request, Closure $next)
     {
 
-        if ($this->auth->guest()) {
+        if (!Auth::check()) {
 
             return response()->json([
                 'loged_in' => false,

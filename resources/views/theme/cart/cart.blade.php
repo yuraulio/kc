@@ -1389,7 +1389,7 @@ if(!isset($info)){
 @stop
 @section('scripts')
 
-@if($paywithstripe == 1)
+@if($paywithstripe == 1 && Auth::check())
 <script>
     $(document).on('click', '#addCard', function(e){
       

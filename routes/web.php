@@ -256,9 +256,9 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
 
 
 
-//Route::group(['prefix' => 'cart','middleware' => ['web']], function () {
-    Route::group(['prefix' => 'cart', 'middleware' => 'free.event' ], function() {
-        Route::group(['middleware' => 'auth.sms' ], function () {
+Route::group(['prefix' => 'cart','middleware' => ['web']], function () {
+    //Route::group(['middleware' => 'free.event' ], function() {
+        //Route::group(['middleware' => 'auth.sms' ], function () {
 
             Route::get('/', [ 'as' => 'cart', 'uses' => 'Theme\CartController@index' ]);
             Route::post('/', [ 'as' => 'cart.update', 'uses' => 'Theme\CartController@update' ]);
@@ -279,9 +279,9 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
             //    //Route::get('move', [ 'as' => 'cart.move-item', 'uses' => 'Theme\CartController@move']);
 
             //});
-        });
-    });
-//});
+        //});
+    //});
+});
 
 Route::post('checkCode', 'Theme\CartController@checkCode');
 Route::get('/free-event-cart', 'Theme\CartController@cartIndex');
@@ -401,7 +401,7 @@ Route::get('/sms-verification/{slug}',['as' => 'user.sms.auth', 'uses' => 'Theme
 Route::post('/smsVerification','Theme\HomeController@smsVerification');
 
 Route::group(['middleware' => ['preview','web','auth.sms']], function () {
-    Route::get('/', 'Theme\HomeController@homePage');
+    Route::get('/', 'Theme\HomeController@homePage')->name('homepage');
     Route::post('/add-payment-method', 'Theme\HomeController@addPaymentMethod')->name('add.paymentMethod');
     Route::get('{slug?}', 'Theme\HomeController@index');
 
