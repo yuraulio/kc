@@ -1,1 +1,1 @@
-Reset your password by clicking <a href="{{ URL::to("reset/{$user->getUserId()}/{$code}") }}">here</a><br /><br />
+Reset your password by clicking <a href="{{ URL::to("reset/{$user->id}/{$code}") }}">here</a><br /><br />
