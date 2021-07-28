@@ -80,7 +80,7 @@
                                             {{$role['name']}}
                                         @endforeach
                                         </td>
-                                        <?php //dd($user->statusAccount['completed'] == 1); ?>
+                                       
                                         <td>
 
                                         @if($user['status_account'] != null)

@@ -347,13 +347,18 @@ Route::group(['middleware' => ['auth'], 'prefix'=>'myaccount'], function () {
         Route::get('/subscription-success', 'Theme\SubscriptionController@orderSuccess');
         Route::post('/subscription/change_status',  'Theme\SubscriptionController@change_status')->name('subscription.change_status');
 
+        Route::put('/elearning/saveNote', 'Theme\StudentController@saveNote');
+        Route::put('/elearning/save', 'Theme\StudentController@saveElearning');
 
     });
 });
 
-Route::put('/elearning/saveNote', 'Theme\StudentController@saveNote');
-Route::put('/elearning/save', 'Theme\StudentController@saveElearning');
 
+
+//Authentication
+Route::post('checkoutlogin', [ 'as' => 'user.cauth'  , 'uses' => 'Auth\LoginController@checkoutauth']);
+Route::post('studentlogin', [ 'as' => 'user.sauth'  , 'uses' => 'Auth\LoginController@studentauth']);
+Route::post('kcregister', [ 'as' => 'user.kcregister', 'uses' => 'Auth\RegisterController@kcRegister' ]);
 Route::get('/logout', [ 'as' => 'logout' , 'uses' => 'Theme\StudentController@logout']);
 
 Route::group(['middleware' => 'auth'], function () {
@@ -397,6 +402,8 @@ Route::group([ 'prefix' => 'payment-dispatch'], function () {
     ]);
 });
 
+
+
 Route::get('/sms-verification/{slug}',['as' => 'user.sms.auth', 'uses' => 'Theme\HomeController@getSMSVerification']);
 Route::post('/smsVerification','Theme\HomeController@smsVerification');
 
@@ -407,9 +414,7 @@ Route::group(['middleware' => ['preview','web','auth.sms']], function () {
 
 });
 
-//Authentication
-Route::post('checkoutlogin', [ 'as' => 'user.cauth'  , 'uses' => 'Auth\LoginController@checkoutauth']);
-Route::post('studentlogin', [ 'as' => 'user.sauth'  , 'uses' => 'Auth\LoginController@studentauth']);
+
 
 
 

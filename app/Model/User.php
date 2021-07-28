@@ -107,7 +107,6 @@ class User extends Authenticatable
 
     public function statusAccount()
     {
-        //dd('asd');
         return $this->hasOne(Activation::class);
     }
 
@@ -688,15 +687,17 @@ class User extends Authenticatable
        
         $videos = [];
         $notes = [];
+        $lastVideoSeen = '';
         $firstTime = true;
         if(isset($statistic['videos']) && $statistic['videos'] != ''){
             $notes = json_decode($statistic['notes'], true);
             $videos = json_decode($statistic['videos'], true);
+            $lastVideoSeen = $statistic['lastVideoSeen'];
             $firstTime = false;
         }
       
         $countVideos = 1;
-       
+        $oldVideos = [];
         $change = 0;
         foreach($event->topicsLessonsInstructors()['topics'] as $key => $topic){
             //dd($topic);
@@ -706,6 +707,7 @@ class User extends Authenticatable
                     //dd($lesson);
 
                     $vimeo_id = str_replace('https://vimeo.com/', '', $lesson['vimeo_video']);
+                    $oldVideos[] = $vimeo_id;
                     if($firstTime){
                         $firstTime = false;
                         $lastVideoSeen = $vimeo_id;
@@ -713,7 +715,7 @@ class User extends Authenticatable
                     if(!isset($videos[$vimeo_id])){
                        $change+=1;
                        $videos[$vimeo_id] = ['seen' => 0, 'tab' =>$tab.$countVideos, 'lesson' => $lesson['id'], 'stop_time' => 0,
-                                               'percentsMinutes' => 0];
+                                               'percentMinutes' => 0];
                        $notes[$vimeo_id] = '';
                     }
                    
@@ -722,12 +724,17 @@ class User extends Authenticatable
             $countVideos += 1;
 
          }
+
+         if(!in_array($lastVideoSeen,$oldVideos) && isset($oldVideos[0])){
+             $lastVideoSeen =$oldVideos[0];
+         }
         
         if(!$this->statistic()->wherePivot('event_id', $event['id'])->first()){
-            $this->statistic()->attach($event['id'],['videos'=>json_encode($videos), 'notes' => json_encode($notes), 'lastVideoSeen' => $lastVideoSeen]);
+            $this->statistic()->attach($event['id'],['videos'=>json_encode($videos), 'notes' => json_encode($notes), 'lastVideoSeen' => $lastVideoSeen,
+                                        'created_at' => Carbon::now(),'updated_at' => Carbon::now()]);
         }else{
             $this->statistic()->wherePivot('event_id', $event['id'])->updateExistingPivot($event['id'],['videos' => json_encode($videos), 
-                                            'notes' => json_encode($notes)], false);
+                                            'notes' => json_encode($notes),'lastVideoSeen' => $lastVideoSeen], false);
 
         }
 
