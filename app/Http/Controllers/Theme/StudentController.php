@@ -83,18 +83,17 @@ class StudentController extends Controller
                 $data['user']['events'][$key]['mySubscription'] = [];
                 $data['user']['events'][$key]['plans'] = [];
 
+                $data['user']['events'][$key]['exams'] = [];
+                $data['user']['events'][$key]['exam_access'] = false;
+
                 $eventSubscriptions[] = [];
-                $video_access = true;
-                $data['user']['events'][$key]['video_access'] = $video_access;
+                $data['user']['events'][$key]['video_access'] = true;
 
 
             }else{
 
                 $data['user']['events'][$key]['topics'] = $event->topicsLessonsInstructors()['topics'];
-                //dd($data['user']['events'][$key]['topics']);
-                $video_access = false;
-                $video_access = true;
-                $data['user']['events'][$key]['video_access'] = $video_access;
+                $data['user']['events'][$key]['exams'] = [];
             }
 
             $data['instructors'] = Instructor::with('slugable', 'medias')->get()->groupby('id');
@@ -215,7 +214,7 @@ class StudentController extends Controller
                 $data['user']['events'][$key]['mySubscription'] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first();
                 $data['user']['events'][$key]['plans'] = $event['plans'];
                 $data['user']['events'][$key]['exams'] = $event->getExams();
-                $data['user']['events'][$key]['exam_access'] = $user->examAccess(0.8,$event->id);
+                $data['user']['events'][$key]['exam_access'] = $event->examAccess(0.8,$user);//$user->examAccess(0.8,$event->id);
                 //$data['user']['events'][$key]['exam_results'] = $user->examAccess(0.8,$event->id);
 
                 $eventSubscriptions[] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first() ?
@@ -230,7 +229,7 @@ class StudentController extends Controller
                 $now = strtotime("now");
 
                 //dd($expiration_event >= $now);
-                if($expiration_event >= $now)
+                if($expiration_event >= $now || !$expiration_event)
                     $video_access = true;
 
                 $data['user']['events'][$key]['video_access'] = $video_access;
@@ -244,14 +243,9 @@ class StudentController extends Controller
                 $video_access = false;
                 $expiration_event = $event->pivot['expiration'];
                 $expiration_event = strtotime($expiration_event);
-
-                $now = strtotime("now");
-
-                //dd($expiration_event >= $now);
-                if($expiration_event >= $now)
-                    $video_access = true;
-
-                $data['user']['events'][$key]['video_access'] = $video_access;
+                $data['user']['events'][$key]['exams'] = $event->getExams();
+                //$data['user']['events'][$key]['exam_access'] = $user->examAccess(0.8,$event->id);
+               
             }
 
             $data['instructors'] = Instructor::with('slugable', 'medias')->get()->groupby('id');
@@ -560,9 +554,11 @@ class StudentController extends Controller
         $data['course'] = $event['title'];
         //dd($data['course']);
 
-        $statistic = $user->statistic()->wherePivot('event_id',$event['id'])->first()->toArray();
+        $statistic =  ($statistic = $user->statistic()->wherePivot('event_id',$event['id'])->first()) ? 
+                            $statistic->toArray() : ['pivot' => [], 'videos' => ''];
+        
         //$this->updateUserStatistic($event,$statistic['pivot'],$user);
-        $user->updateUserStatistic($event,$statistic['pivot']);
+        $statistic = $user->updateUserStatistic($event,$statistic['pivot']);
         $data['lastVideoSeen'] = $statistic['pivot']['lastVideoSeen'];
         $data['event_statistic_id'] = $statistic['pivot']['id'];
         $data['event_id'] = $statistic['pivot']['event_id'];

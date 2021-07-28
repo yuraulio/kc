@@ -192,7 +192,7 @@ class User extends Authenticatable
         return $this->belongsToMany(Event::class, 'event_statistics')->withPivot('id','videos','lastVideoSeen', 'notes', 'event_id');
     }
 
-    public function examAccess($successPer = 0.8, $event){
+    /*public function examAccess($successPer = 0.8, $event){
         $seenPercent =  $this->videosSeenPercent($event);
         $studentsEx = [1353,1866,1753,1882,1913,1923];
         
@@ -255,7 +255,7 @@ class User extends Authenticatable
         
         return round ($sumSeen / count($videos),2) * 100 ;
 
-    }
+    }*/
 
 
     public function invoices(){
@@ -685,62 +685,54 @@ class User extends Authenticatable
 
 
         $statistic = $statistics;
-        
-
-        if($statistic['videos'] != ''){
+       
+        $videos = [];
+        $notes = [];
+        $firstTime = true;
+        if(isset($statistic['videos']) && $statistic['videos'] != ''){
             $notes = json_decode($statistic['notes'], true);
             $videos = json_decode($statistic['videos'], true);
+            $firstTime = false;
         }
-
-        $count_lesson = 0;
-
+      
+        $countVideos = 1;
+       
+        $change = 0;
         foreach($event->topicsLessonsInstructors()['topics'] as $key => $topic){
             //dd($topic);
 
-             foreach($topic['lessons'] as $key1 => $lesson){
-                 // if(isset($lesson) && $lesson['vimeo_video'] != null){
-                     //dd($lesson);
+            foreach($topic['lessons'] as $key1 => $lesson){
+                // if(isset($lesson) && $lesson['vimeo_video'] != null){
+                    //dd($lesson);
 
-                     $vimeo_id = str_replace('https://vimeo.com/', '', $lesson['vimeo_video']);
+                    $vimeo_id = str_replace('https://vimeo.com/', '', $lesson['vimeo_video']);
+                    if($firstTime){
+                        $firstTime = false;
+                        $lastVideoSeen = $vimeo_id;
+                    }
+                    if(!isset($videos[$vimeo_id])){
+                       $change+=1;
+                       $videos[$vimeo_id] = ['seen' => 0, 'tab' =>$tab.$countVideos, 'lesson' => $lesson['id'], 'stop_time' => 0,
+                                               'percentsMinutes' => 0];
+                       $notes[$vimeo_id] = '';
+                    }
+                   
+            }
 
-                     if($statistic['videos'] != ''){
-                         if(!isset($videos[$vimeo_id])){
-                             //append new vimeo id
-                             $videos[$vimeo_id] = [];
-                             $videos[$vimeo_id]['seen'] = 0;
-                             $videos[$vimeo_id]['tab'] =
-                             $videos[$vimeo_id]['lesson_id'] = $lesson['id'];
-                             $videos[$vimeo_id]['stop_time'] = 0;
-                             $videos[$vimeo_id]['percentMinutes'] = 0;
-                             $videos[$vimeo_id]['tab'] = $tab.$count_lesson;
-
-                             $notes[$vimeo_id] = '';
-
-                         }
-                     }else{
-                         $videos[$vimeo_id] = [];
-                         $videos[$vimeo_id]['seen'] = 0;
-                         $videos[$vimeo_id]['tab'] =
-                         $videos[$vimeo_id]['lesson_id'] = $lesson['id'];
-                         $videos[$vimeo_id]['stop_time'] = 0;
-                         $videos[$vimeo_id]['percentMinutes'] = 0;
-                         $videos[$vimeo_id]['tab'] = $tab.$count_lesson;
-
-                         $notes[$vimeo_id] = '';
-                     }
-                     //var_dump($vimeo_id);
-
-
-                 // }
-                 $count_lesson++;
-
-             }
+            $countVideos += 1;
 
          }
+        
+        if(!$this->statistic()->wherePivot('event_id', $event['id'])->first()){
+            $this->statistic()->attach($event['id'],['videos'=>json_encode($videos), 'notes' => json_encode($notes), 'lastVideoSeen' => $lastVideoSeen]);
+        }else{
+            $this->statistic()->wherePivot('event_id', $event['id'])->updateExistingPivot($event['id'],['videos' => json_encode($videos), 
+                                            'notes' => json_encode($notes)], false);
 
-         //dd($videos);
-        $this->statistic()->wherePivot('event_id', $event['id'])->updateExistingPivot($event['id'],['videos' => $videos, 'notes' => $notes], false);
+        }
 
+        return $this->statistic()->wherePivot('event_id', $event['id'])->first();
+        
     }
 
     public function hasExamResults($exam){

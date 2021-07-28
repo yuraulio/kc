@@ -52,7 +52,10 @@ class ExamController extends Controller
     public function store(ExamRequest $request, Exam $model)
     {   
        
-        $exam = $model->create($request->all());
+        $input =  $request->all();
+        $input['publish_time'] = date('Y-m-d H:i',strtotime($request->publish_time));
+        $input['status'] = $request->status && $request->status ='on' ? true : false;
+        $exam = $model->create($input);
         $exam->event()->attach($request->event_id);
 
         return redirect('admin/exams/'. $exam->id .'/edit');
@@ -143,7 +146,10 @@ class ExamController extends Controller
      */
     public function update(ExamRequest $request, Exam $exam)
     {
-        $exam->update($request->all());
+        $input =  $request->all();
+        $input['status'] = $request->status && $request->status ='on' ? true : false;
+        $input['publish_time'] = date('Y-m-d H:i',strtotime($request->publish_time));
+        $exam->update($input);
         $exam->event()->detach();
         $exam->event()->attach($request->event_id);
 

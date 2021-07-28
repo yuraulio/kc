@@ -4,6 +4,7 @@
 'elementName' => 'exams-management'
 ])
 @section('content')
+
 @component('layouts.headers.auth')
 @component('layouts.headers.breadcrumbs')
 @slot('title')
@@ -72,13 +73,24 @@
                                  <input type="number" name="duration" id="input-duration" class="form-control{{ $errors->has('duration') ? ' is-invalid' : '' }}" placeholder="{{ __('Enter exam duration') }}" value="{{ old('duration',$exam->duration) }}" required autofocus>
                                  @include('alerts.feedback', ['field' => 'duration'])
                               </div>
-                              <div class="form-group{{ $errors->has('publish_time') ? ' has-danger' : '' }}">
-                                 <label for="example-date-input" class="form-control-label">{{ __('Publish time') }}</label>
-                                 <input class="form-control{{ $errors->has('publish_time') ? ' is-invalid' : '' }}" placeholder="{{ __('DD/MM/YYYY') }}" value="{{ old('publish_time',$exam->publish_time) }}" name="publish_time" type="date" id="publish_time">
-                                 @include('alerts.feedback', ['field' => 'publish_time'])
+                              
+                              <div class="form-group">
+                                  <label class="form-control-label" for="input-q_limit">{{ __('Date') }}</label>
+                                  <div class='input-group date' id='datetimepicker1'>
+                                      <input name="publish_time" type='text' class="form-control" value="{{ old('publish_time',date('d-m-Y H:i',strtotime($exam->publish_time))) }}"/>
+                                      <span class="input-group-addon input-group-append">
+                              
+                                          <button class="btn btn-outline-primary" type="button" id="button-addon2">  <span class="fa fa-calendar"></span></button>
+                                      </span>
+                                  </div>
+                              </div>
+                              <div class="form-group{{ $errors->has('examCheckbox') ? ' has-danger' : '' }}">
+                                 <label class="form-control-label" for="input-examCheckbox">{{ __('Exam Checkbox Text') }}</label>
+                                 <input type="text" name="examCheckbox" id="input-examCheckbox" class="form-control{{ $errors->has('examCheckbox') ? ' is-invalid' : '' }}" placeholder="{{ __('Exam Checkbox Text') }}" value="{{ old('examCheckbox',$exam->examCheckbox) }}" autofocus>
+                                 @include('alerts.feedback', ['field' => 'examCheckbox'])
                               </div>
                            </div>
-                           <div class="col-md-6">
+                           <div class="col-md-6 plan">
                               <div class="form-group{{ $errors->has('event_id') ? ' has-danger' : '' }}">
                                  <label class="form-control-label" for="input-event_id">{{ __('Event') }}</label>
                                  <select name="event_id" id="input-event_id" class="form-control" placeholder="{{ __('Event') }}">
@@ -117,13 +129,19 @@
                                  <input type="number" name="q_limit" id="input-q_limit" class="form-control{{ $errors->has('q_limit') ? ' is-invalid' : '' }}" placeholder="{{ __('Qualification Limit') }}" value="{{ old('q_limit',$exam->q_limit) }}" required autofocus>
                                  @include('alerts.feedback', ['field' => 'q_limit'])
                               </div>
+                              <label class="form-control-label" for="status">{{ __('Status') }}</label>
+                              <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
+                              
+                                  <label class="custom-toggle">
+                                      <input name="status" type="checkbox" @if($exam->status) checked @endif>
+                                      <span class="custom-toggle-slider rounded-circle" data-label-off="unpublished" data-label-on="published"></span>
+                                  </label>
+                              </div>
+
                            </div>
+                           
                         </div>
-                        <div class="form-group{{ $errors->has('examCheckbox') ? ' has-danger' : '' }}">
-                           <label class="form-control-label" for="input-examCheckbox">{{ __('Exam Checkbox Text') }}</label>
-                           <input type="text" name="examCheckbox" id="input-examCheckbox" class="form-control{{ $errors->has('examCheckbox') ? ' is-invalid' : '' }}" placeholder="{{ __('Exam Checkbox Text') }}" value="{{ old('examCheckbox',$exam->examCheckbox) }}" required autofocus>
-                           @include('alerts.feedback', ['field' => 'examCheckbox'])
-                        </div>
+                        
                         <div class="form-group{{ $errors->has('intro_text') ? ' has-danger' : '' }}">
                            <label class="form-control-label" for="input-intro_text">{{ __('Exam Introduction Text') }}</label>
                            <textarea name="intro_text" id="input-intro_text"  class="ckeditor form-control{{ $errors->has('intro_text') ? ' is-invalid' : '' }}" placeholder="{{ __('Replace this text as exam introduction text') }}"  required autofocus> {{old('intro_text',$exam->intro_text)}} </textarea>
@@ -361,6 +379,26 @@
 </div>
 @endsection
 @push('js')
+<script src="{{ asset('assets/vendor/moment.min.js') }}"></script>
+<script src="{{ asset('assets/vendor/bootstrap-datetimepicker.js') }}"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker1').datetimepicker({
+          icons: {
+            time: "fa fa-clock",
+            date: "fa fa-calendar-day",
+            up: "fa fa-chevron-up",
+            down: "fa fa-chevron-down",
+            previous: 'fa fa-chevron-left',
+            next: 'fa fa-chevron-right',
+            today: 'fa fa-screenshot',
+            clear: 'fa fa-trash',
+            close: 'fa fa-remove'
+          },
+          format: 'DD-MM-YYYY HH:mm',
+        });
+    });
+</script>
 <script src="{{ asset('js/sortable/Sortable.js') }}"></script>
 <script>
    $(document).ready(function(){
@@ -526,7 +564,7 @@
 	}else if($(this).val() == 'radio buttons'){
 		 $('.edit-answer-types').empty();
 		 $('.edit-answer-types').append(
-			  `<div class="col-6">
+			  `<div class="col-12">
 					<div class="form-group">
 						 <div class="input-group answers">
 							<div class="input-group-prepend">
@@ -534,12 +572,12 @@
 								 <input data-id='1' class="answer-check" type="radio" aria-label="Checkbox for following text input">
 							  </div>
 							</div>
-							<input type="text" class="form-control answer-input" aria-label="Text input with checkbox">
+							<textarea type="text" class="form-control answer-input" aria-label="Text input with checkbox"></textarea>
 						 </div>
 					</div>
 			  </div>
 
-			  <div class="col-6">
+			  <div class="col-12">
 					<div class="form-group">
 						 <div class="input-group answers">
 							<div class="input-group-prepend">
@@ -547,12 +585,12 @@
 								 <input data-id='2' class="answer-check" type="radio" aria-label="Checkbox for following text input">
 							  </div>
 							</div>
-							<input type="text" class="form-control answer-input" aria-label="Text input with checkbox">
+							<textarea type="text" class="form-control answer-input" aria-label="Text input with checkbox"></textarea>
 						 </div>
 					</div>
 			  </div>
 
-			  <div class="col-6">
+			  <div class="col-12">
 					<div class="form-group">
 						 <div class="input-group answers">
 							<div class="input-group-prepend">
@@ -560,12 +598,12 @@
 								 <input data-id='3' class="answer-check" type="radio" aria-label="Checkbox for following text input">
 							  </div>
 							</div>
-							<input type="text" class="form-control answer-input" aria-label="Text input with checkbox">
+							<textarea type="text" class="form-control answer-input" aria-label="Text input with checkbox"></textarea>
 						 </div>
 					</div>
 			  </div>
 
-			  <div class="col-6">
+			  <div class="col-12">
 					<div class="form-group">
 						 <div class="input-group answers">
 							<div class="input-group-prepend">
@@ -573,7 +611,7 @@
 								 <input data-id='4' class="answer-check" type="radio" aria-label="Checkbox for following text input">
 							  </div>
 							</div>
-							<input type="text" class="form-control answer-input" aria-label="Text input with checkbox">
+							<textarea type="text" class="form-control answer-input" aria-label="Text input with checkbox"></textarea>
 						 </div>
 					</div>
 			  </div>`)
@@ -905,5 +943,7 @@
 
 
 </script>
+
+
 
 @endpush

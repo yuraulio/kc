@@ -729,7 +729,7 @@
                                     @if(!$instructor && isset($event['category'][0]['dropbox']) && count($event['category'][0]['dropbox']) != 0)
                                     <li><a href="#c-files-inner{{$tab}}">Files</a></li>
                                     @endif
-                                    @if(isset($newlayoutExamsEvent[$keyType]))
+                                    @if(isset($event['exams']) && count($event['exams']) >0 )
                                     <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
                                     @endif
                                     {{--
@@ -772,7 +772,7 @@
 
 
                                           @if(isset($topic) && count($topic) != 0 )
-                                          <?php //dd($topic); ?>
+                                        
                                           <div class="accordion-item">
                                              <h3 class="accordion-title title-blue-gradient scroll-to-top">{{$keyTopic}}</h3>
                                              <div class="accordion-content no-padding">
@@ -895,33 +895,33 @@
                                  @endif
 
 
-                                 @if(isset($newlayoutExamsEvent[$keyType]))
+                                 @if(isset($event['exams']) && count($event['exams']) >0 )
                                  <div id="c-exams-inner{{$tab}}" class="in-tab-wrapper">
-                                    @if(isset($newlayoutExamsEvent[$keyType]))
+                                    
                                     <div class="dynamic-courses-wrapper dynamic-courses-wrapper--style2">
                                        <div class="bottom">
-                                          @foreach($newlayoutExamsEvent[$keyType] as $p)
-                                          @foreach($p['exams'] as $pe)
-                                          <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="">Exams will activate in the end of your course.</div>
+                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="">Exams will activate in the end of your course.</div>
+                                          @foreach($event['exams'] as $p)
+                                          
                                           <div class="right">
                                              <!-- Feedback 8-12 changed -->
-                                             @if($pe->exstatus == 1 && $p['examsResults'][$pe->id]['view_result_expire'])
-                                             <a target="_blank" href="{{ url('student-summary/' . $pe->id . '/' . $currentuser->id) }}?s=1" title="{{$p['title']}}" class="btn btn--secondary btn--md">VIEW RESULT</a>
-                                             @elseif($pe->exstatus == 1 && !$p['examsResults'][$pe->id]['view_result_expire'])
-                                             <a target="_blank" href="{{ url('student-summary/' . $pe->id . '/' . $currentuser->id) }}?s=1" title="{{$p['title']}}" class="btn btn--secondary btn--md btn--completed">VIEW RESULT</a>
-                                             @elseif($pe->islive == 1)
-                                             <a target="_blank" onclick="window.open('{{ route('attempt-exam', [$pe->id]) }}', 'newwindow', 'width=1400,height=650'); return false;" title="{{$p['title']}}" class="btn btn--secondary btn--md">TAKE EXAM</a>
-                                             @elseif($pe->isupcom == 1)
-                                             <a  title="{{$p['title'] }}" class="btn btn--secondary btn--md">{{ date('F j, Y', strtotime($pe->publish_time)) }}</a>
+                                             @if(($userExam = $user->hasExamResults($p->id)) && $nowTime->diffInHours($userExam->end_time) < 48)
+                                             <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['title']}}" class="btn btn--secondary btn--md">VIEW RESULT</a>
+                                             @elseif($user->hasExamResults($p->id) )
+                                             <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['title']}}" class="btn btn--secondary btn--md btn--completed">VIEW RESULT</a>
+                                             @elseif($p->islive == 1)
+                                             <a target="_blank" onclick="window.open('{{ route('attempt-exam', [$p->id]) }}', 'newwindow', 'width=1400,height=650'); return false;" title="{{$p['title']}}" class="btn btn--secondary btn--md">TAKE EXAM</a>
+                                             @elseif($p->isupcom == 1)
+                                             <a  title="{{$p['title'] }}" class="btn btn--secondary btn--md">{{ date('F j, Y', strtotime($p->publish_time)) }}</a>
                                              @endif
                                           </div>
                                           <!-- ./item -->
                                           @endforeach
-                                          @endforeach
+                                         
                                        </div>
                                     </div>
                                     <!-- ./dynamic-courses-wrapper -->
-                                    @endif
+                                   
                                  </div>
                                  @endif
                               </div>
@@ -943,7 +943,7 @@
                                     @if($event['view_tpl'] != 'elearning_free')
                                     <?php //']); ?>
                                         @if(isset($event['exams']) && count($event['exams']) >0 )
-                                        <?php //dd($event['title']); ?>
+                                       
                                         <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
                                         @endif
                                         @if(count($event['cert']) > 0)

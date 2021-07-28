@@ -180,7 +180,9 @@ use Illuminate\Support\Str;
 
                   <?php
                   $vimeoVideo = explode('https://vimeo.com/', $lesson['vimeo_video']);
-                  //dd($notes);
+                  if(!isset($vimeoVideo[1])){
+                    continue;
+                  }
                    ?>
 
                     <?php
@@ -191,8 +193,8 @@ use Illuminate\Support\Str;
                       $path = str_replace('https://vimeo.com/','https://player.vimeo.com/video/',$path);
 
                       //dd($path);
-
-                      if(isset($videoss[$vimeoVideo[1]])){
+                     
+                      if(isset($vimeoVideo[1])&& isset($videoss[$vimeoVideo[1]])){
                         $frame1 = $videoss[$vimeoVideo[1]]['tab'];
                       }
 
@@ -202,9 +204,10 @@ use Illuminate\Support\Str;
                     ?>
 
                     <?php
-
-                      $vimeoId = str_replace('?title=false','',$path);
-                      $vimeoId = str_replace('https://player.vimeo.com/video/','',$vimeoVideo[1]);
+                      if(isset($vimeoVideo[1])){
+                        $vimeoId = str_replace('?title=false','',$path);
+                        $vimeoId = str_replace('https://player.vimeo.com/video/','',$vimeoVideo[1]);
+                      }
                       //dd($vimeoId);
                      ?>
 
@@ -241,9 +244,7 @@ use Illuminate\Support\Str;
                         </div>
                         <!-- ./lesson-info -->
 						<div class="lesson-teacher-wrapper">
-            <?php $instructor = $topics['instructors'][$lesson['instructor_id']][0];
-            //dd($instructor);?>
-            <?php //dd(get_image($instructor)); ?>
+            <?php $instructor = $topics['instructors'][$lesson['instructor_id']][0];?>
                         <img
                           class="lesson-teacher"
                           src="{{cdn(get_image($instructor))}}"

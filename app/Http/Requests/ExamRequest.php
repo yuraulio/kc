@@ -30,9 +30,7 @@ class ExamRequest extends FormRequest
             'duration' => [
                 'numeric'
             ],
-            'date' => [
-                'date_format:"DD/MM/YYYY H:i"'
-            ],
+            
             'event_id' => [
                 'required'
             ],
@@ -42,9 +40,7 @@ class ExamRequest extends FormRequest
             'q_limit' => [
                 'numeric'
             ],
-            'examCheckbox' => [
-                'required', 'min:3'
-            ],
+       
             'intro_text' => [
                 'required', 'min:3'
             ],

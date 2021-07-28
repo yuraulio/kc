@@ -291,6 +291,9 @@ class Event extends Model
                     if(!$lesson['instructor_id']){
                         unset($lessonsArray[$key]);
                     }
+                    if(($this->view_tpl=='elearning_event' || $this->view_tpl == 'elearnig_free') && $lesson['vimeo_video'] ==''){
+                        unset($lessonsArray[$key]);
+                    }
                 }
                 if(count($lessonsArray)>0){
                     $topics[$t->title]['lessons'] = $lessonsArray;
@@ -317,7 +320,6 @@ class Event extends Model
 
         }
 
-        //dd($data);
 
         return $data;
     }
@@ -372,10 +374,34 @@ class Event extends Model
         return $this->belongsToMany(Event::class, 'event_statistics')->withPivot('videos','lastVideoSeen', 'notes', 'event_id', 'user_id');
     }
 
+    public function examAccess($successPer = 0.8, $user){
+        $seenPercent =  $this->progress($user);
+        $studentsEx = [1353,1866,1753,1882,1913,1923];
+        
+        if(in_array($user->id, $studentsEx)){
+            return true;
+        }
+
+        //$event = EventStudent::where('student_id',$this->user_id)->where('event_id',$this->event_id)->first()->created_at;
+        $event = $this;
+        if(!$event->created_at || $event->comment == 'enroll' || $event->view_tpl == 'elearning_free'){
+             return false;
+        }
+
+       
+        return $seenPercent >=  $successPer;
+
+    }
+
     public function progress($user)
     {
         //dd($user->statistic()->wherePivot('event_id',$this['id'])->first()->pivot['videos']);
-        $videos = $user->statistic()->wherePivot('event_id',$this['id'])->first()->pivot['videos'];
+
+        if(!$videos = $user->statistic()->wherePivot('event_id',$this['id'])->first()){
+            return 0 * 100;
+        }
+
+        $videos = $videos->pivot['videos'];
 
 
         //dd($videos);
@@ -388,7 +414,7 @@ class Event extends Model
                 }
 
             }
-            return ($sum/count($videos)) * 100;
+            return count($videos) > 0 ? ($sum/count($videos)) * 100 : 0;
         }
 
         return 0 * 100;
@@ -397,7 +423,11 @@ class Event extends Model
     public function video_seen($user)
     {
 
-        $videos = $user->statistic()->wherePivot('event_id',$this['id'])->first()->pivot['videos'];
+        if(!$videos = $user->statistic()->wherePivot('event_id',$this['id'])->first()){
+            return '0 of 0';
+        }
+
+        $videos = $videos->pivot['videos'];
         //dd($user->statistic()->wherePivot('event_id',$this['id'])->first());
         if($videos != ''){
             $videos = json_decode($videos, true);
