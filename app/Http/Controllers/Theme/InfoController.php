@@ -16,6 +16,7 @@ use App\Model\ShoppingCart;
 use Session;
 use App\Model\User;
 use PDF;
+use App\Model\Option;
 
 class InfoController extends Controller
 {
@@ -175,10 +176,10 @@ class InfoController extends Controller
 		$MM = date("m",$time);
 		$YY = date("y",$time);
 
-		//$optionid = \Config::get('dpoptions.ncgenerator.id');
-		//$option = Option::findOrFail($optionid);
+		
+		$option = Option::where('abbr','website_details')->first();
 		// next number available up to 9999
-		//$next = $option->value;
+		$next = $option->value;
         
         $pay_seats_data = $transaction['status_history'][0]['pay_seats_data'];
         if(isset($transaction['status_history'][0]['deree_user_data'])) {

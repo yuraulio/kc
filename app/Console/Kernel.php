@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
        Commands\MakePhotoVersions::class,
        Commands\InitPages::class,
+       Commands\AddOption::class,
     ];
 
     /**

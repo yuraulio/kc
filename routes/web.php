@@ -250,7 +250,11 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::get('edit/coupon/{coupon}','Dashboard\CouponController@edit')->name('coupon.edit');
     Route::put('update/coupon/{coupon}','Dashboard\CouponController@update')->name('coupon.update');
 
-
+    //Options
+    Route::get('options', 'Dashboard\OptionsController@index')->name('options');
+    Route::get('create/option','Dashboard\OptionsController@create')->name('option.create');
+    Route::get('edit/option/{option}','Dashboard\OptionsController@edit')->name('option.edit');
+    Route::put('update/option/{option}','Dashboard\OptionsController@update')->name('option.update');
 });
 
 
