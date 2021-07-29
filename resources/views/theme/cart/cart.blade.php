@@ -1344,7 +1344,7 @@ if(!isset($info)){
                               </div>
                               
                          
-                              <input type="hidden" id="payment_method_id" name="payment_method_id" value="1">
+                              <input type="hidden" id="payment_method_id" name="payment_method_id" value="{{$pay_methods['id']}}">
                          
                               <!-- /.col12.hidden-fields-actions.installments-fields -->
                            </div> 
@@ -1389,7 +1389,7 @@ if(!isset($info)){
 @stop
 @section('scripts')
 
-@if($paywithstripe == 1 && Auth::check())
+@if(isset($paywithstripe) && $paywithstripe == 1 && Auth::check())
 <script>
     $(document).on('click', '#addCard', function(e){
       

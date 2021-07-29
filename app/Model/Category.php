@@ -25,10 +25,11 @@ use App\Model\Lesson;
 use App\Model\Testimonial;
 use App\Model\Faq;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Traits\SlugTrait;
 
 class Category extends Model
 {
+    use SlugTrait;
     protected $table = 'categories';
     /**
      * The attributes that are mass assignable.
@@ -128,7 +129,7 @@ class Category extends Model
 
 
         }
-        dd($faqs);
+        
         return $this->morphToMany(Faq::class, 'faqable')->with('category');
     }
 

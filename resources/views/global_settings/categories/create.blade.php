@@ -42,6 +42,7 @@
 
                                     @include('alerts.feedback', ['field' => 'name'])
                                 </div>
+                                @include('admin.slug.slug',['slug' => isset($slug) ? $slug : null])
                                 <div class="form-group{{ $errors->has('description') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-description">{{ __('Description') }}</label>
                                     <textarea name="description" id="input-description" cols="30" rows="10" class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}" value="{{ old('description') }}"></textarea>

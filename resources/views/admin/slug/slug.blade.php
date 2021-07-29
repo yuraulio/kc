@@ -1,5 +1,6 @@
 
 @if(!$slug)
+
 <div class="form-group{{ $errors->has('slug') ? ' has-danger' : '' }}">
    <label class="form-control-label" for="input-title">{{ __('Slug') }}</label>
    <input type="text" name="slug" id="input-slug" class="form-control{{ $errors->has('slug') ? ' is-invalid' : '' }}" placeholder="{{ __('Slug') }}" value="{{ old('slug') }}"  required autofocus readonly>

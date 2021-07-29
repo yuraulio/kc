@@ -18,6 +18,9 @@ use \Stripe\Stripe;
 use App\Model\Event;
 use URL;
 use Illuminate\Support\Facades\Hash;
+use App\Model\Activation;
+use \Carbon\Carbon;
+use Session;
 
 class StudentController extends Controller
 {
@@ -32,7 +35,10 @@ class StudentController extends Controller
 
 
     protected function logout(){
+        
         Auth::logout();
+        Session::invalidate();
+        Session::regenerateToken();
         $url = URL::to('/');
         return redirect($url);
     }
@@ -41,7 +47,6 @@ class StudentController extends Controller
     public function index(){
 
         $user = Auth::user();
-
         if(count($user->instructor) > 0){
             $data = $this->instructorEvents();
         }else{
@@ -732,4 +737,35 @@ class StudentController extends Controller
         ]);
 
     }
+
+    public function activate($code)
+    {
+        $activation = Activation::where('code',$code)->first();
+        if (!$activation) {
+        	
+        	Session::flash('opmessage', 'Invalid or expired activation code.');
+            Session::flash('opstatus', 0);
+            return redirect('/')->withErrors('Invalid or expired activation code.');
+
+        }
+        
+        $user = $activation->user;
+        $input = $user->only('email','password');
+        Auth::login($user);
+        if(Auth::check()){
+
+            $activation->completed = true;
+            $activation->completed_at = Carbon::now();
+            $activation->save();
+
+            Session::flash('opmessage', 'Your account is now activated. You may login now!');
+            Session::flash('opstatus', 1);
+    
+            return redirect('/cart?reg=1')->withInput()->with('message','Your account is now activated. You may login now!');
+        }
+
+        return redirect('/')->withErrors('Invalid or expired activation code.');
+
+    }
+
 }

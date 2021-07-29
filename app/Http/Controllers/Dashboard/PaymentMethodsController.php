@@ -80,6 +80,7 @@ class PaymentMethodsController extends Controller
         }
 
         if(isset($input['test_processor'])){
+            //dd($input['test_processor']);
             $input['test_processor_options'] = encrypt(json_encode($input['test_processor']));
         }else{
             $input['test_processor_options'] = encrypt(json_encode([]));
@@ -99,7 +100,7 @@ class PaymentMethodsController extends Controller
         unset($input['processor']);
         unset($input['tmp_processor_str']);
         unset($input['form_type']);
-
+        //dd($input);
         return $input;
     }
 

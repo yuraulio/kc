@@ -257,8 +257,8 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
 
 
 Route::group(['prefix' => 'cart','middleware' => ['web']], function () {
-    //Route::group(['middleware' => 'free.event' ], function() {
-        //Route::group(['middleware' => 'auth.sms' ], function () {
+    Route::group(['middleware' => 'free.event' ], function() {
+        Route::group(['middleware' => 'auth.sms' ], function () {
 
             Route::get('/', [ 'as' => 'cart', 'uses' => 'Theme\CartController@index' ]);
             Route::post('/', [ 'as' => 'cart.update', 'uses' => 'Theme\CartController@update' ]);
@@ -279,8 +279,8 @@ Route::group(['prefix' => 'cart','middleware' => ['web']], function () {
             //    //Route::get('move', [ 'as' => 'cart.move-item', 'uses' => 'Theme\CartController@move']);
 
             //});
-        //});
-    //});
+        });
+    });
 });
 
 Route::post('checkCode', 'Theme\CartController@checkCode');
@@ -354,13 +354,13 @@ Route::group(['middleware' => ['auth'], 'prefix'=>'myaccount'], function () {
 });
 
 
-
-//Authentication
-Route::post('checkoutlogin', [ 'as' => 'user.cauth'  , 'uses' => 'Auth\LoginController@checkoutauth']);
-Route::post('studentlogin', [ 'as' => 'user.sauth'  , 'uses' => 'Auth\LoginController@studentauth']);
-Route::post('kcregister', [ 'as' => 'user.kcregister', 'uses' => 'Auth\RegisterController@kcRegister' ]);
-Route::get('/logout', [ 'as' => 'logout' , 'uses' => 'Theme\StudentController@logout']);
-
+Route::group(['middleware' => ['web']], function () {
+    //Authentication
+    Route::post('checkoutlogin', 'Auth\LoginController@checkoutauth');
+    Route::post('studentlogin','Auth\LoginController@studentauth');
+    Route::post('kcregister', 'Auth\RegisterController@kcRegister');
+    Route::get('/logout', [ 'as' => 'logout' , 'uses' => 'Theme\StudentController@logout']);
+});
 Route::group(['middleware' => 'auth'], function () {
     Route::get('attempt-exam/{ex_id}', 'Theme\ExamAttemptController@attemptExam')->name('attempt-exam');
     Route::get('exam-start/{exam}', 'Theme\ExamAttemptController@examStart')->name('exam-start');
@@ -406,6 +406,8 @@ Route::group([ 'prefix' => 'payment-dispatch'], function () {
 
 Route::get('/sms-verification/{slug}',['as' => 'user.sms.auth', 'uses' => 'Theme\HomeController@getSMSVerification']);
 Route::post('/smsVerification','Theme\HomeController@smsVerification');
+Route::get('myaccount/activate/{code}', 'Theme\StudentController@activate');
+
 
 Route::group(['middleware' => ['preview','web','auth.sms']], function () {
     Route::get('/', 'Theme\HomeController@homePage')->name('homepage');
@@ -413,10 +415,4 @@ Route::group(['middleware' => ['preview','web','auth.sms']], function () {
     Route::get('{slug?}', 'Theme\HomeController@index');
 
 });
-
-
-
-
-
-
-
+/// tipota apo edw katw

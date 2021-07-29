@@ -21,20 +21,24 @@ class TicketCheck
     public function handle($request, Closure $next)
     {
         
-
+        
         $user = Auth::user();
         if($user){
             if($user->cart){
-                
+               
                 $event = Event::where('id',$user->cart->event)->with('ticket')->first();
-                $stock = $event->ticket->where('ticket_id',$user->cart->ticket_id)->first()->quantity;
+               
+                $stock = $event->ticket->where('ticket_id',$user->cart->ticket_id)->first()->pivot->quantity;
+               
                 if($stock <= 0){
                     $user->cart->delete();
                     Cart::instance('default')->destroy();
-                    return redirect($event->slug);
+                    
+                    return redirect($event->slugable->slug);
                 }
             }
         }
+        
       //  dd('edw');
         return $next($request);
     }

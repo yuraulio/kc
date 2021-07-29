@@ -33,9 +33,9 @@ class HomeController extends Controller
         $this->middleware('auth.sms')->except('getSMSVerification','smsVerification');
     }
 
-    public function homePage(){
+    /*public function homePage(){
 
-        //dd($slug->slugable);*/
+        
 
         $data = [];
 
@@ -100,15 +100,103 @@ class HomeController extends Controller
         //dd($data['eventsbycategory'][46]['events']);
         return view('theme.home.homepage',$data);
 
-    }
+    }*/
 
-    public function addPaymentMethod(Request $request){
-        $user = User::find(1359);
-        //dd($request->all());
-        $user->updateDefaultPaymentMethod($request->payment_method);
-        dd($user->paymentMethods());
-    }
 
+    public function homePage(){
+
+        
+        $data = [];
+
+        //$data['events'] = Event::with('category', 'medias', 'slugable', 'ticket')->get()->toArray();
+        //$data['eventsbycategory1'] = Category::with('events.slugable','events.city','events.category')->where('show_homepage', 1)->get()->toArray();
+        $data['nonElearningEvents'] = [];
+        $data['elearningEvents'] = [];
+        $data['elearningFree'] = [];
+        $data['inclassFree'] = [];
+        
+        $categories =Category::with('slugable','events.slugable','events.city','events')->where('show_homepage', 1)->get()->toArray();
+
+        
+        foreach($categories as $category){
+            
+            if(!key_exists($category['id'],$data['nonElearningEvents'])){
+
+                $data['nonElearningEvents'][$category['id']]['name'] = $category['name'];
+                $data['nonElearningEvents'][$category['id']]['slug'] = isset($category['slugable']) ? $category['slugable']['slug'] : '';
+                $data['nonElearningEvents'][$category['id']]['description'] = $category['description'];
+                $data['nonElearningEvents'][$category['id']]['hours'] = $category['hours'];
+                $data['nonElearningEvents'][$category['id']]['events'] = [];
+
+                $data['elearningEvents'][$category['id']]['name'] = $category['name'];
+                $data['elearningEvents'][$category['id']]['slug'] = isset($category['slugable']) ? $category['slugable']['slug'] : '';
+                $data['elearningEvents'][$category['id']]['description'] = $category['description'];
+                $data['elearningEvents'][$category['id']]['hours'] = $category['hours'];
+                $data['elearningEvents'][$category['id']]['events'] = [];
+
+                $data['elearningFree'][$category['id']]['name'] = $category['name'];
+                $data['elearningFree'][$category['id']]['slug'] = isset($category['slugable']) ? $category['slugable']['slug'] : '';
+                $data['elearningFree'][$category['id']]['description'] = $category['description'];
+                $data['elearningFree'][$category['id']]['hours'] = $category['hours'];
+                $data['elearningFree'][$category['id']]['events'] = [];
+
+                $data['inclassFree'][$category['id']]['name'] = $category['name'];
+                $data['inclassFree'][$category['id']]['slug'] = isset($category['slugable']) ? $category['slugable']['slug'] : '';
+                $data['inclassFree'][$category['id']]['description'] = $category['description'];
+                $data['inclassFree'][$category['id']]['hours'] = $category['hours'];
+                $data['inclassFree'][$category['id']]['events'] = [];
+
+            }
+
+            foreach($category['events'] as $event){
+                
+                if($event['status'] == 1 || $event['status'] == 3 || $event['status'] == 4 || !$event['published'] ){
+                    continue;
+                }
+
+                if($event['view_tpl'] == 'elearning_event' || $event['view_tpl'] == 'elearning_pending'){
+
+                    $data['elearningEvents'][$category['id']]['events'][] = $event;
+
+                }else if( $event['view_tpl'] == 'event_free' || $event['view_tpl'] == 'event_free_coupon'){
+
+                    $data['inclassFree'][$category['id']]['events'][] = $event;
+
+                }else if( $event['view_tpl'] == 'elearning_free'){
+
+                    $data['elearningFree'][$category['id']]['events'][] = $event;
+
+                }else{
+                    $data['nonElearningEvents'][$category['id']]['events'][] = $event;
+                }
+
+            }
+        }
+
+        foreach($data as $key => $categories){
+            foreach($categories as $key2 => $category){
+               
+                if(count($category['events']) == 0){
+                    unset($data[$key][$key2]);
+                }
+            }
+
+            if(count($categories) == 0){
+                unset($data[$key]);
+            }
+        }
+
+        $data['homeBrands'] = Logos::with('medias')->where('type', 'brands')->inRandomOrder()->take(6)->get()->toArray();
+        $data['homeLogos'] = Logos::with('medias')->where('type', 'logos')->inRandomOrder()->take(6)->get()->toArray();
+        $data['homePage'] = Pages::where('name','home')->with('mediable')->first()->toArray();
+        //dd($data['homePage']);
+        //$data['header_menus'] = [];
+
+        //dd($data['eventsbycategory'][46]['events']);
+        return view('theme.home.homepage',$data);
+
+    }
+   
     public function index(Slug $slug){
 
         //dd(get_class($slug->slugable) == Event::class);

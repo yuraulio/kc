@@ -51,7 +51,8 @@ class CategoryController extends Controller
     public function create()
     {
         $li = Storage::disk('dropbox');
-
+        
+        $data['folders'] = [];
         if($li) {
 
             $folders = $li->listContents();
@@ -85,6 +86,7 @@ class CategoryController extends Controller
         $request->request->add(['show_homepage' => $show_homepage]);
 
         $model = $model->create($request->all());
+        $model->createSlug($request->slug);
         if($request->folder_name != null){
             //foreach($request->folder_name as $folder_name){
                 $exist_dropbox = Dropbox::where('folder_name', $request->folder_name)->first();
@@ -112,7 +114,10 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
+        $data['folders'] = [];
         //dd($category->dropbox()->get());
+       
+        $data['slug'] = $category->slugable;
         $li = Storage::disk('dropbox');
 
         if($li) {
@@ -131,7 +136,7 @@ class CategoryController extends Controller
             //dd($already_assign);
 
         }
-
+       
         return view('global_settings.categories.edit', compact('category', 'data', 'already_assign'));
     }
 

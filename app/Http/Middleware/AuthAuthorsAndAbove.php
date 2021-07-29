@@ -26,6 +26,15 @@ class AuthAuthorsAndAbove
         if(!$this->auth){
             return redirect()->to('admin')->withErrors(['You must login first.']);
         }
+       
+        if(!$this->auth->statusAccount->completed){
+            Auth::logout();
+            Session::invalidate();
+            Session::regenerateToken();
+
+            return redirect('/');
+        }
+
         $roles = $this->auth->role->pluck('name')->toArray();
 
         if (in_array('Super Administrator',$roles) || in_array('Administrator',$roles) || in_array('Manager',$roles) || in_array('Author',$roles)) {

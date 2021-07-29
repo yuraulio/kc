@@ -839,12 +839,12 @@
                                  <div id="c-files-inner{{$tab}}" class="in-tab-wrapper">
                                  <div class="acc-topic-accordion">
                                        <div class="accordion-wrapper accordion-big">
-                                    @if(isset($folders) && count($folders) > 0)
-                                       @foreach($folders as $folder)
-                                          <div class="accordion-item">
-                                             <h3 class="accordion-title title-blue-gradient scroll-to-top"> {{ $folder['foldername'] }}</h3>
-                                             <div class="accordion-content no-padding">
-                                                @if(isset($files) && count($files) > 0)
+                                       @if(isset($folders) && count($folders) > 0)
+                                          @foreach($folders as $folder)
+                                             <div class="accordion-item">
+                                                <h3 class="accordion-title title-blue-gradient scroll-to-top"> {{ $folder['foldername'] }}</h3>
+                                                <div class="accordion-content no-padding">
+                                                   @if(isset($files) && count($files) > 0)
                                                    @foreach($files as $file)
                                                       @if($folder['id'] == $file['fid'])
                                                       <div class="files-wrapper">
@@ -857,10 +857,10 @@
                                                       </div>
                                                       @endif
                                                    @endforeach
-                                                @endif
-
-
-                                                @if(isset($folders_bonus) && count($folders_bonus) > 0)
+                                                   @endif
+                                                      
+                                                      
+                                                   @if(isset($folders_bonus) && count($folders_bonus) > 0)
                                                     <div class="files-wrapper bonus-files">
                                                     @foreach($folders_bonus as $folder_bonus)
                                                         @if($folder_bonus['parent'] == $folder['id'])
@@ -881,13 +881,13 @@
                                                         @endif
                                                     @endforeach
                                                     </div>
-                                                    </div>
-                                                @endif
-
-                                          </div>
-                                       @endforeach
-
-                                    @endif
+                                                    
+                                                   @endif
+                                                   </div>
+                                             </div>
+                                          @endforeach
+                                                      
+                                       @endif
                                                     </div>
                                                     </div>
 

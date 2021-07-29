@@ -47,28 +47,28 @@
 <div class="control-group">
 	<label class="control-label" for="confirmUrl">Confirmation URL</label>
 	<div class="controls">
-	  	<input type="text" name="processor[confirmUrl]" class="form-control" id="confirmUrl" value="<?php echo URL::to('payment-dispatch/ok/alphabank'); ?>" />
+	  	<input type="text" name="processor[confirmUrl]" class="form-control" id="confirmUrl" value="{{$method['processor_options']['confirmUrl']}}" />
 	</div>
 </div>
 
 <div class="control-group">
 	<label class="control-label" for="cancelUrl">Cancellation URL</label>
 	<div class="controls">
-	  	<input type="text" name="processor[cancelUrl]" class="form-control" id="cancelUrl" value="<?php echo URL::to('payment-dispatch/notok/alphabank'); ?>" />
+	  	<input type="text" name="processor[cancelUrl]" class="form-control" id="cancelUrl" value="{{$method['processor_options']['cancelUrl']}}" />
 	</div>
 </div>
 
 <div class="control-group">
 	<label class="control-label" for="developmentURL">Development URL</label>
 	<div class="controls">
-	  	<input type="text" name="processor[developmentURL]" class="form-control" id="developmentURL" value="https://alpha.test.modirum.com/vpos/shophandlermpi" />
+	  	<input type="text" name="processor[developmentURL]" class="form-control" id="developmentURL" value="{{$method['processor_options']['developmentURL']}}" />
 	</div>
 </div>
 
 <div class="control-group">
 	<label class="control-label" for="productionURL">Production URL</label>
 	<div class="controls">
-	  	<input type="text" name="processor[productionURL]" class="form-control" id="productionURL" value="https://www.alphaecommerce.gr/vpos/shophandlermpi" />
+	  	<input type="text" name="processor[productionURL]" class="form-control" id="productionURL" value="{{$method['processor_options']['productionURL']}}" />
 	</div>
 </div>
 </div>

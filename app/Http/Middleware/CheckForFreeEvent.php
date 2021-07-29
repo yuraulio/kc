@@ -29,7 +29,7 @@ class CheckForFreeEvent
                 if($event->view_tpl == 'elearning_free'|| $event->view_tpl == 'event_free'){
                     $user->cart->delete();
                     Cart::instance('default')->destroy();
-                    return redirect($event->slug);
+                    return redirect($event->slugable->slug);
                     
                 }elseif( $event->view_tpl == 'event_free_coupon' ){
                     

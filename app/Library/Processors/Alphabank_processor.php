@@ -4,10 +4,9 @@ namespace Library\Processors;
 
 use URL;
 use Session;
-use PostRider\Account;
-use PostRider\Transaction;
-use PostRider\CreditRequest;
 
+use App\Model\Transaction;
+use App\Model\PaymentMethod;
 use Library\TransactionHelperLib;
 
 Class Alphabank_processor
@@ -81,7 +80,7 @@ Class Alphabank_processor
 
     	$response['status'] = 1;
     	$response['website_response'] = "redirect"; // or redirect
-    	$response['redirect_url'] = 'dev.knowcrunch.com/'.'payment-dispatch/pay/'.$data['payment_config']['slug'];//URL::to('payment-dispatch/pay/'.$data['payment_config']['slug']);
+    	$response['redirect_url'] = URL::to('payment-dispatch/pay/'.$data['payment_config']['slug']);
     	//dd($response);
         //$response['html'] = $this->load->view('admin/payment_methods/processor_submit_tpls/'.$data['payment_config']['submit_tpl'], $data, TRUE);
 
@@ -220,7 +219,7 @@ Class Alphabank_processor
         if ($order_details) {
             $order_details = $order_details->toArray();
             $payment_method_details = $order_details['payment_method_id'];
-           // $payment_method_details = PaymentMethod::where('id', $order_details['payment_method_id'])->first();
+            $payment_method_details = PaymentMethod::where('id', $order_details['payment_method_id'])->first();
             // = ;
         } else {
             $order_details = [];
@@ -233,8 +232,8 @@ Class Alphabank_processor
 		}
 		else
 		{
-            //dd($payment_method_details);
-            $payment_options = $payment_method_details['processor_options'];
+        
+            $payment_options = env('PAYMENT_PRODUCTION') ? $payment_method_details['processor_options'] : $payment_method_details['test_processor_options'];
            // dd($payment_options);
             $posted_data = $_POST; // submitted by the paycenter
             $order_id = $transaction_id;//$posted_data['mid'];

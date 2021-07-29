@@ -17,6 +17,7 @@ class PaymentMethod extends Model
         'processor_id',
         'processor_config',
         'processor_options',
+        //'test_processor',
         'test_processor_config',
         'test_processor_options',
         'method_name',

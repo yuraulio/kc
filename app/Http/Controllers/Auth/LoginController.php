@@ -28,7 +28,8 @@ use \Carbon\Carbon;
 use App\Model\CookiesSMS;
 use Illuminate\Support\Facades\Auth;
 use App\Model\CartCache;
-
+use App\Model\Ticket;
+use Session;
 class LoginController extends Controller
 {
     /*
@@ -67,19 +68,50 @@ class LoginController extends Controller
         //dd($credentials);
         
         if (Auth::attempt($credentials)) {
+            
             auth()->user()->AauthAcessToken()->delete();
             Auth::logoutOtherDevices($request->password);
-            //dd('match');
-            // Authentication passed...
-            $data['status'] = 1;
-            $data['redirect'] = URL::to('/myaccount');
+            $user = Auth::user();
+            if(!isset($_COOKIE['auth-'.$user->id])){
+                $cookieValue = base64_encode($user->id . date("H:i"));
+                setcookie('auth-'.$user->id, $cookieValue, time() + (1 * 365 * 86400), "/"); // 86400 = 1 day
+            
+                $coockie = new CookiesSMS;
+                $coockie->coockie_name = 'auth-'.$user->id;
+                $coockie->coockie_value = $cookieValue;
+                $coockie->user_id = $user->id;
+                $coockie->sms_code = rand(1111,9999);
 
+                $coockie->save();
+            
+            }
+
+        
             $this->checkForCacheItems(Auth::user());
+
+            $c = Cart::content()->count();
+            if ($c > 0) {
+
+
+                $data['status'] = 1;
+                $data['redirect'] = Url::to('/cart');
+                $data['message'] = 'Welcome back ' . $user->firstname . ' ' . $user->lastname . '.';
+
+            }
+            else {
+
+                $data['status'] = 1;
+                $data['redirect'] = Url::to('/myaccount');
+                $data['message'] = 'Welcome back ' . $user->firstname . ' ' . $user->lastname . '. Redirecting you to your profile page.';
+
+    
+            }
 
             return response()->json([
                 'success' => true,
                 'data' => $data
             ]);
+
         }else{
             $data['status'] = 0;
             $data['message'] = "We're having trouble finding this username or password. Try again.";
@@ -96,6 +128,15 @@ class LoginController extends Controller
         try{
 
             if (Auth::attempt($credentials)) {
+
+                if(!Auth::user()->statusAccount->completed){
+                    Auth::logout();
+                    return redirect()->back()->with('message',
+                        'Account is not activated!'
+                    );
+
+                }
+
                 auth()->user()->AauthAcessToken()->delete();
                 Auth::logoutOtherDevices($request->password);
                 $user = Auth::user();
@@ -131,9 +172,9 @@ class LoginController extends Controller
                     $timecheck->updated_at = Carbon::now();
                     $timecheck->save();
                 }
-                //$this->checkForCacheItems($user);
-
-                return redirect('/cart');
+                $this->checkForCacheItems($user);
+               
+                return redirect('cart');
             }
             $errors = 'Invalid login or password.';
             return redirect('/cart')->with('dperror', 'Invalid login or password.');
@@ -152,8 +193,9 @@ class LoginController extends Controller
 
     private function checkForCacheItems($dpuser){
 
-        if($dpuser->cart && Cart::content()->count() == 0){
 
+        if($dpuser->cart && Cart::content()->count() == 0){
+            
             $cart = $dpuser->cart;
             Cart::add($cart->ticket_id, $cart->product_title, $cart->quantity, $cart->price, ['type' => $cart->type, 'event' => $cart->event])->associate(Ticket::class);
             //Cart::store($dpuser->id);

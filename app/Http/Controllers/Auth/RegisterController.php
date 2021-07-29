@@ -121,9 +121,7 @@ class RegisterController extends Controller
                 
     
             ]);
-            
-
-                
+    
             //$input['mobile'] = (string) PhoneNumber::make($input['mobile']);
             $input['mobile'] = preg_replace("/\s+/", "", PhoneNumber::make($input['mobileCheck'])->formatNational());
             // Register the user

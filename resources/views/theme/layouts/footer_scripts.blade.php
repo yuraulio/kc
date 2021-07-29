@@ -157,12 +157,17 @@ $(document).ready(function(){
     var remember = document.getElementById("remember-me").checked;
 
     if (email.length > 4 && password.length > 4) {
-    $.ajax({ url: routesObj.baseUrl+"studentlogin", type: "post",
+        
+    $.ajax({ 
+            headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+            url: "/studentlogin", type: "post",
             data: {email:email, password:password, remember:remember},
             success: function(data) {
 
                 data = data.data
-                console.log(data.status)
+                
                 switch (data.status) {
                     case 0:
                         if (data.message.length > 0) {

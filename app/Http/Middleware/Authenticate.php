@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
+use Session;
 
 class Authenticate extends Middleware
 {
@@ -27,6 +28,34 @@ class Authenticate extends Middleware
             }
             
         }
+
+        
         
     }
+
+
+    protected function authenticate($request, array $guards)
+    {
+        if (empty($guards)) {
+            $guards = [null];
+        }
+
+        foreach ($guards as $guard) {
+            if ($this->auth->guard($guard)->check()) {
+                if(!$this->auth->user()->statusAccount->completed){
+                    $this->auth->logout();
+                    Session::invalidate();
+                    Session::regenerateToken();
+        
+                    return redirect()->back()->with('message',
+                        'Account is not activated!'
+                    );
+                }
+                return $this->auth->shouldUse($guard);
+            }
+        }
+
+        $this->unauthenticated($request, $guards);
+    }
+
 }
