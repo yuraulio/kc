@@ -178,7 +178,7 @@ class LessonController extends Controller
 
 
         $topic->event_topic()->wherePivot('lesson_id', '=', $request->lesson_id)->wherePivot('event_id', '=', $request->event_id)->updateExistingPivot($request->topic_id,[
-            'priority' => $request->priority,
+            //'priority' => $request->priority,
             'date' => $date,
             'room' => $request->room,
             'duration' => $request->duration,
