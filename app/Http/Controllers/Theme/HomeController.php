@@ -189,10 +189,7 @@ class HomeController extends Controller
         $data['homeBrands'] = Logos::with('medias')->where('type', 'brands')->inRandomOrder()->take(6)->get()->toArray();
         $data['homeLogos'] = Logos::with('medias')->where('type', 'logos')->inRandomOrder()->take(6)->get()->toArray();
         $data['homePage'] = Pages::where('name','home')->with('mediable')->first()->toArray();
-        //dd($data['homePage']);
-        //$data['header_menus'] = [];
-
-        //dd($data['eventsbycategory'][46]['events']);
+        
         return view('theme.home.homepage',$data);
 
     }
