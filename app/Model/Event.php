@@ -374,7 +374,7 @@ class Event extends Model
         return $this->belongsToMany(Event::class, 'event_statistics')->withPivot('videos','lastVideoSeen', 'notes', 'event_id', 'user_id');
     }
 
-    public function examAccess($successPer = 0.8, $user){
+    public function examAccess( $user,$successPer = 0.8){
         $seenPercent =  $this->progress($user);
         $studentsEx = [1353,1866,1753,1882,1913,1923];
         
