@@ -226,6 +226,14 @@ class HomeController extends Controller
             case City::class:
                 return $this->city($slug->slugable);
                 break;
+            
+            case Category::class:
+                return $this->category($slug->slugable);
+                break;
+
+            default:
+                abort(404);
+                break;
 
         }
 
@@ -432,6 +440,18 @@ class HomeController extends Controller
 
         $data['openlist'] = $type->events()->has('slugable')->with('category','slugable', 'city', 'ticket','summary1')->where('published',true)->where('status', 0)->orderBy('created_at','desc')->get();
         $data['completedlist'] = $type->events()->has('slugable')->with('category','slugable', 'city', 'ticket', 'summary1')->where('published',true)->where('status', 3)->orderBy('published_at','desc')->get();
+
+        return view('theme.pages.category' ,$data);
+
+    }
+
+    private function category($category){
+        
+
+        $data['type'] = $category;
+
+        $data['openlist'] = $category->events()->has('slugable')->with('category','slugable', 'city', 'ticket','summary1')->where('published',true)->where('status', 0)->orderBy('created_at','desc')->get();
+        $data['completedlist'] = $category->events()->has('slugable')->with('category','slugable', 'city', 'ticket', 'summary1')->where('published',true)->where('status', 3)->orderBy('published_at','desc')->get();
 
         return view('theme.pages.category' ,$data);
 
