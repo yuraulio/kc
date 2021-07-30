@@ -32,8 +32,8 @@ Registration information: <br /><br />
 
 
  Student: <strong>{{ $user['name'] }}</strong><br />
- @if(isset($helperdetails[$user['email']]) && $helperdetails[$user['email']]['deid'] != '')
- Student ID: <strong>{{ $helperdetails[$user['email']]['deid'] }}</strong><br />
+ @if(isset($helperdetails[$user['email']]) && $helperdetails[$user['email']]['kcid'] != '')
+ Student ID: <strong>{{ $helperdetails[$user['email']]['kcid'] }}</strong><br />
  @endif
  Ticket Type: <strong>{{ $extrainfo[1] }}</strong><br />
  Ticket Price: @if($trans->total_amount == 0) <strong> Free </strong> @else <strong>{{ $trans->total_amount }}</strong>@endif<br />

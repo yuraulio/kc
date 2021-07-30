@@ -37,6 +37,10 @@ class CreateOptionsTable extends Migration
             $table->boolean('indicate_crt_incrt_answers')->change();
         });
 
+        Schema::table('transactions', function (Blueprint $table) {
+            $table->longText('status_history')->change();
+        });
+
     }
 
     /**

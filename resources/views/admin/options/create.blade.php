@@ -20,7 +20,7 @@
     {{--@if(!$option->code_option)
          <form method="post" action="{{ route('option.store') }}" autocomplete="off" enctype="multipart/form-data">
       @else--}}
-         <form method="post" action="{{ route('option.update',$option->id) }}" autocomplete="off" enctype="multipart/form-data">
+         <form id="sbt-option" method="post" action="{{ route('option.update',$option->id) }}" autocomplete="off" enctype="multipart/form-data">
          @method('put')
       {{--@endif--}}
          @csrf
@@ -43,11 +43,10 @@
                    
                      <div class="pl-lg-4">
                         <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
-                           <textarea class="ckeditor form-control" name="settings" id="settingsEditor">{{ json_decode($option->settings,true) }}</textarea>
+                            <textarea rows="20" class="form-control" name="settings" id="settingsEditor">{!!$codes!!}</textarea>
                         </div>
                      </div>
 
-                    
                   </div>
                </div>
             </div>

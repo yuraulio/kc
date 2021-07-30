@@ -73,18 +73,14 @@
                                         $slug = '';
                                     }
                                 ?>
-                              <h2><a href="{{ $slug }}">{{ $row['slugable']['name'] }}</a></h2>
+                              <h2><a href="{{ $slug }}">{{ $row->title}}</a></h2>
                               <div class="bottom">
                                  @if (isset($row['expiration']) && $row['expiration'] != null)
                                  <div class="duration"><img width="20" src="/theme/assets/images/icons/icon-calendar.svg" alt=""> {{ $row['expiration'] }} months access to videos & files  </div>
                                  @endif
-                                 @if(isset($row['summary1']['section']) && $row['summary1']['section'] == 'date')
-                                        @foreach($row['summary1'] as $date)
-                                            @if($date['section'] == 'date')
-                                            <div class="expire-date"><img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt="">{{ $date['section'] }}</div>
-                                            @endif
-                                        @endforeach
-                                    @endif
+                                 @if(isset($row['hours']))
+                                 <div class="expire-date"><img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt="">{{ $row['hours'] }}</div>
+                                 @endif
                               </div>
                            </div>
                            <div class="right">
@@ -124,9 +120,6 @@
                               <h2>{{$month}}</h2>
                            </div>
                         @endif
-
-                        <?php //var_dump(!isset($row['slugable'])); ?>
-                           <?php //dd($elern); ?>
                         <div class="dynamic-courses-wrapper <?= (!$elern) ? 'dynamic-courses-wrapper--style2' : ''; ?>">
                            <div class="item">
                               <div class="left">
@@ -141,8 +134,7 @@
                                  <div class="bottom">
                                     @if(isset($row['city']))
                                         @foreach($row['city'] as $city)
-
-                                            <a href="{{ $city->slug }}" class="city " title="{{ $city->name }}">
+                                            <a href="{{ $city->slugable->slug }}" class="city " title="{{ $city->name }}">
                                             <img width="20" class="replace-with-svg" src="/theme/assets/images/icons/marker.svg" alt="">{{ $city->name }}</a>
                                         @endforeach
                                     @endif
@@ -152,7 +144,7 @@
                                     @endif
 
                                     @if(isset($row['summary1']) )
-                                    <?php //dd('asd'); ?>
+            
                                         @foreach($row['summary1'] as $sum)
                                             @if($sum['section'] == 'duration')
                                             <div class="expire-date"><img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt="">{{ $sum['title'] }}</div>
@@ -253,7 +245,7 @@
                                     @if(isset($row['city']))
                                         @foreach($row['city'] as $city)
 
-                                            <a href="{{ $city->slug }}" class="city " title="{{ $city->name }}">
+                                            <a href="{{$city->slugable->slug}}" class="city " title="{{ $city->name }}">
                                             <img width="20" class="replace-with-svg" src="/theme/assets/images/icons/marker.svg" alt="">{{ $city->name }}</a>
                                         @endforeach
                                     @endif

@@ -32,7 +32,7 @@ class CouponController extends Controller
 
         $coupon = new Coupon;
 
-        $data['events'] = $this->getEvents();
+        $data['events'] = $this->getEvents('elearning_event');
         $data['coupon'] = $coupon;
         $data['event_coupons'] = $coupon->event->pluck('id')->toArray();
 
@@ -62,7 +62,7 @@ class CouponController extends Controller
 
     public function edit(Coupon $coupon){
         
-        $data['events'] = $this->getEvents();
+        $data['events'] = $this->getEvents('elearning_event');
         $data['coupon'] = $coupon;
         $data['event_coupons'] = $coupon->event->pluck('id')->toArray();
 

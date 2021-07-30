@@ -205,7 +205,7 @@ class StudentController extends Controller
         $data['mySubscriptionEvents'] = [];
 
         $eventSubscriptions = [];
-
+        
         foreach($data['user']['events'] as $key => $event){
 
             //if elearning assign progress for this event
@@ -305,7 +305,7 @@ class StudentController extends Controller
         }
 
         $data['subscriptionEvents'] = Event::whereIn('id',$subscriptionEvents)->with('slugable')->get();
-
+        
         return $data;
 
     }

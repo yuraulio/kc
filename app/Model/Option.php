@@ -10,6 +10,6 @@ class Option extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title','type','name','status','settings','value'
+        'title','type','name','status','settings','value','abbr'
     ];
 }

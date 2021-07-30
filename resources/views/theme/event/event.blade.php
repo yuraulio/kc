@@ -69,9 +69,9 @@
                      @endif
                   </ul>
 
-                  @if($estatus == 0 )
+                  @if($estatus == 0 && !$is_event_paid)
                   <a href="#seats" class="btn btn--lg btn--primary go-to-href">ENROLL NOW</a>
-                  @elseif($estatus != 3 && $estatus != 1 )
+                  @elseif($estatus != 3 && $estatus != 1 && !$is_event_paid)
                   <a href="#seats" class="btn btn--lg btn--primary go-to-href go-to-href soldout">SOLD OUT</a>
                   @endif
                   <!-- /.container -->
@@ -742,7 +742,7 @@
       <!-- /.section-course-tabs -->
    </section>
 
-   @if($estatus == 0 || $estatus == 2)
+   @if(($estatus == 0 || $estatus == 2) && !$is_event_paid)
    @include('theme.event.partials.seats')
    @endif
 </main>

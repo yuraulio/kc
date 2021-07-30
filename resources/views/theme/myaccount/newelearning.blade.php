@@ -626,7 +626,7 @@ use Illuminate\Support\Str;
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               },
           type: 'PUT',
-          url: '/elearning/saveNote',
+          url: '/myaccount/elearning/saveNote',
           data:{'text':note,'vimeoId':vimeoId, 'event':event},
           success: function(data) {
                 if(data){
@@ -987,7 +987,7 @@ console.log(video_link)
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                       },
                   type: 'PUT',
-                  url: '/elearning/save',
+                  url: '/myaccount/elearning/save',
                   data:{'videos':videos,'event_statistic':eventStatistic,'lastVideoSeen':videoId,'event':event},
                   success: function(data) {
                         // if(!data['loged_in']){
@@ -1046,7 +1046,7 @@ console.log(video_link)
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                       },
                      type: 'PUT',
-                     url: '/elearning/save',
+                     url: '/myaccount/elearning/save',
                      data:{'videos':videos,'event_statistic':eventStatistic,'lastVideoSeen':videoId,'event':event},
                      success: function(data) {
                         if(!data['loged_in']){

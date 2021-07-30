@@ -165,13 +165,11 @@ class TicketController extends Controller
     public function update(Request $request, Ticket $ticket)
     {
 
-        //dd($request->all());
         $ticket_id = $ticket['id'];
         $event = Event::find($request->model_id);
 
-        $features = json_encode($request->features);
-
-
+        $features = $request->features;
+        
         $options['featured'] = ($request->option1 == 1 ? true : false);
         $options['dropdown'] = ($request->option2 == 1 ? true : false);
         $options['alumni'] = ($request->option3 == 1 ? true : false);

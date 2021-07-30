@@ -202,8 +202,11 @@ class HomeController extends Controller
         //dd(get_class($slug->slugable) == Event::class);
         //dd(get_class($slug->slugable) == Delivery::class);
 
+        //dd(get_class($slug->slugable));
+
         switch (get_class($slug->slugable)) {
             case Event::class:
+                
                 return $this->event($slug->slugable);
                 break;
 
@@ -246,7 +249,7 @@ class HomeController extends Controller
             if(!$student){
 
                 //ticket
-                $eventticket = $student->ticket->first();
+                $eventticket = 'free';
 
                 $payment_method_id = 1;//intval($input["payment_method_id"]);
                 $payment_cardtype = 8; //free;
@@ -283,7 +286,7 @@ class HomeController extends Controller
 
 
                     $deree_user_data = [Auth::user()->email => Auth::user()->partner_id];
-                    $cart_data = ["manualtransaction" => ["rowId" => "manualtransaction","id" => $eventticket->pivot->ticket_id,"name" => $content->title,"qty" => "1","price" => $amount,"options" => ["type" => "8","event"=> $content->id],"tax" => 0,"subtotal" => $amount]];
+                    $cart_data = ["manualtransaction" => ["rowId" => "manualtransaction","id" => 'free',"name" => $content->title,"qty" => "1","price" => $amount,"options" => ["type" => "8","event"=> $content->id],"tax" => 0,"subtotal" => $amount]];
 
                     $status_history[] = [
                     'datetime' => Carbon::now()->toDateTimeString(),
@@ -321,8 +324,7 @@ class HomeController extends Controller
     }
 
     private function city($page){
-        $data['header_menus'] = $this->header();
-
+       
         $data['content'] = $page;
 
         $city = City::with('event')->find($page['id']);
@@ -336,8 +338,7 @@ class HomeController extends Controller
     }
 
     private function instructor($page){
-        $data['header_menus'] = $this->header();
-
+        
         $data['content'] = $page;
         $events = array();
 
@@ -410,8 +411,7 @@ class HomeController extends Controller
     }
 
     private function pages($page){
-        $data['header_menus'] = $this->header();
-
+       
         $data['page'] = $page;
         if($data['page']['template'] == 'corporate_page'){
             $data['page']['template'] = 'corporate-template';
@@ -429,12 +429,12 @@ class HomeController extends Controller
     }
 
     private function types($type){
-        $data['header_menus'] = $this->header();
+        
 
         $data['type'] = $type;
 
-        $data['openlist'] = $type->events()->with('category','slugable', 'city', 'ticket','summary1')->where('status', 0)->get();
-        $data['completedlist'] = $type->events()->with('category','slugable', 'city', 'ticket', 'summary1')->where('status', 3)->get();
+        $data['openlist'] = $type->events()->has('slugable')->with('category','slugable', 'city', 'ticket','summary1')->where('published',true)->where('status', 0)->orderBy('created_at','desc')->get();
+        $data['completedlist'] = $type->events()->has('slugable')->with('category','slugable', 'city', 'ticket', 'summary1')->where('published',true)->where('status', 3)->orderBy('published_at','desc')->get();
 
         return view('theme.pages.category' ,$data);
 
@@ -442,14 +442,13 @@ class HomeController extends Controller
 
     private function delivery($delivery){
 
-        $data['header_menus'] = $this->header();
-
+        
 
         $data['delivery'] = $delivery;
-        $data['openlist'] = $delivery->event()->with('category','slugable', 'city', 'ticket','summary1')->where('status', 0)->get();
-        $data['completedlist'] = $delivery->event()->with('category','slugable', 'city', 'ticket', 'summary1')->where('status', 3)->get();
+        $data['openlist'] = $delivery->event()->has('slugable')->with('category', 'city', 'ticket')->where('published',true)->where('status', 0)->orderBy('created_at','desc')->get();
+        $data['completedlist'] = $delivery->event()->has('slugable')->with('category','slugable', 'city', 'ticket')->where('published',true)->where('status', 3)->orderBy('created_at','desc')->get();
         //dd($data['completedlist']);
-
+        //dd($data['openlist']);
         return view('theme.pages.category' ,$data);
     }
 
@@ -467,29 +466,16 @@ class HomeController extends Controller
         $data['venues'] = $event->venues->toArray();
         $data['syllabus'] = $event->syllabus->toArray();
         $data['is_event_paid'] = 0;
+
         if(Auth::user() && count(Auth::user()->events->where('id',$event->id)) > 0){
-            $data['is_event_paid'] = 0;
+            $data['is_event_paid'] = 1;
         }
 
         return view('theme.event.' . $event->view_tpl,$data);
 
     }
 
-    private function header(){
-        $menus = Menu::where('name', 'Header')->get();
-        $result = array();
-        foreach ($menus as $key => $element) {
-            $result[$element['name']][] = $element;
-
-            $model = app($element['menuable_type']);
-
-            $element->data = $model::with('slugable')->find($element['menuable_id']);
-            //dd($element->data);
-
-        }
-        return $result;
-    }
-
+   
     public function printSyllabusBySlug($slug = '')
     {
 

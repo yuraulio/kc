@@ -23,6 +23,7 @@ use \Stripe\StripeClient;
 use Laravel\Cashier\Payment;
 use App\Model\CartCache;
 use Mail;
+use App\Model\Option;
 
 class CartController extends Controller
 {
@@ -417,7 +418,6 @@ class CartController extends Controller
     public function add($id, $ticket, $type, Request $request)
     {
 
-        //dd('dfsafdas');
         // Determine if this is an ajax request
         //dd($ticket);
         $isAjax = $request->ajax();
@@ -432,18 +432,17 @@ class CartController extends Controller
             return redirect()->to('/');
         }
        
-        $ticketob = $product->ticket->groupBy('ticket_id')[$ticket]->first();
-        
         if($ticket == 'free'){
             $this->addFreeToCart($product, $ticket, $ticket);
         }else{
+            $ticketob = $product->ticket->groupBy('ticket_id')[$ticket]->first();
             $item = $this->addToCart($product, $ticketob, $type);
         }
 
         if ($isAjax) {
             return response($item->toArray());
         }
-
+    
         if($ticket == 'free'){
             return Redirect::to('/cart')->with('success',
                 "Free ticket was successfully added to your bag."
@@ -534,6 +533,28 @@ class CartController extends Controller
        }
 
        return $item;
+
+    }
+
+
+    protected function addFreeToCart(Event $product, $ticket, $type)
+    {
+        // Let only one event in the cart added on 5/6/2018
+
+        Cart::instance('default')->destroy();
+
+
+        $price = (float)0;
+        $quantity = 1;
+        $eventid = $product->id;
+        
+        $item = Cart::add('free', $product->title, $quantity, $price, ['type' => 'free', 'event' => $eventid])->associate(Ticket::class);
+
+       
+        return $item;
+
+        //return redirect('cart')->withSuccessMessage('Item was added to your cart!');
+
 
     }
 
@@ -1202,8 +1223,8 @@ class CartController extends Controller
         ]);
 
         $data = [];
-        //$optionid = \Config::get('dpoptions.generator.id');
-		//$option = Option::findOrFail($optionid);
+        
+        $option = Option::where('abbr','deree-codes')->first();
         //$dereelist = json_decode($option->settings, true);
         $code = 0;
         
@@ -1302,11 +1323,10 @@ class CartController extends Controller
             $MM = date("m",$time);
             $YY = date("y",$time);
     
-            /*$optionid = \Config::get('dpoptions.ncgenerator.id');
-            $option = Option::findOrFail($optionid);
-            // next number available up to 9999
-            $next = $option->value;
-
+            $option = Option::where('abbr','website_details')->first();
+		    //next number available up to 9999
+		    $next = $option->value;
+          
             if($user->kc_id == '') {
 
                 $next_kc_id = str_pad($next, 4, '0', STR_PAD_LEFT);
@@ -1314,8 +1334,15 @@ class CartController extends Controller
                 $user->kc_id = $knowcrunch_id;
 
                 $user->save();
-               
-            }*/
+
+                if($next == 9999){
+                    $next = 1;
+                }else{
+                    $next += 1;
+                }
+                $option->value = $next;
+                $option->save();
+            }
             $this->sendEmails($transaction,$content);
             
             $data['info']['success'] = true;

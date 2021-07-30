@@ -14,9 +14,13 @@ use App\Model\Event;
 use Flash;
 use App\Model\ShoppingCart;
 use Session;
-use App\Model\User;
 use PDF;
 use App\Model\Option;
+use App\Model\User;
+use App\Model\Activation;
+use App\Model\Role;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class InfoController extends Controller
 {
@@ -83,33 +87,29 @@ class InfoController extends Controller
 	        	$stockHelper = $thisevent->ticket->where('ticket_id', $item->id)->first();
 	        	$newstock = $stockHelper->pivot->quantity - $item->qty;
 	        	$stockHelper->pivot->quantity = $newstock;
-	        	$stockHelper->save();
+	        	$stockHelper->pivot->save();
                
                 //check for active and stockable tickets
 
                 if ($newstock == 0) {
 
-                    /*$eventStockHelper = Eventticket::where('event_id', $item->options['event'])->get();
+                    $eventStockHelper = $thisevent->ticket;
 
                     $globalSoldOut = 1;
 
-                    foreach ($eventStockHelper as $ekey => $evalue) {
-                        $ticketstock = $evalue->stock;
-                        if ($ticketstock > 0 && $evalue->type == 1) {
-
+                    foreach ($eventStockHelper as $evalue) {
+                        $ticketstock = $evalue->pivot->quantity;
+                        if ($ticketstock > 0) {
                             $globalSoldOut = 0;
                         }
-                    }*/
+                    }
 
                     //Update event status to soldout if no ticket stock
                     //$newstock == 0
-                    /*if ($globalSoldOut == 1) {
-                        $ev_status = CustomFields::where('content_id', $item->options['event'])->where('c_field_name', 'dropdown_select_status')->first();
-                        if ($ev_status) {
-                            $ev_status->value = 2;
-                            $ev_status->save();
-                        }
-                    }*/
+                    if ($globalSoldOut == 1) {
+                        $thisevent->status = 2;
+                        $thisevent->save();
+                    }
                 }
             
                 if($this->transaction['amount'] - floor($this->transaction['amount'])>0){
@@ -267,12 +267,12 @@ class InfoController extends Controller
 
         //Collect all users from seats
         $newmembersdetails = [];
-       
+        //dd($pay_seats_data['emails']);
         foreach ($pay_seats_data['emails'] as $key => $value) {
 
     		$thismember = [];
-    		$thismember['first_name'] = $pay_seats_data['names'][$key];
-    		$thismember['last_name'] = $pay_seats_data['surnames'][$key];
+    		$thismember['firstname'] = $pay_seats_data['names'][$key];
+    		$thismember['lastname'] = $pay_seats_data['surnames'][$key];
     		$thismember['email'] = $pay_seats_data['emails'][$key];
         
             if(isset($deree_user_data[$value])) {
@@ -298,89 +298,79 @@ class InfoController extends Controller
 
     		if ($checkemailuser) {
               
-                //if ($key == 0) { 
-                //REMOVED 22/10/2018
+                if ($evid && $evid > 0) {
 
-                    /*$transaction->user_id = $checkemailuser->id;
-                    $transaction->save();*/
+                    $today = date('Y/m/d'); 
+                    $expiration_date = '';
 
-                    
+                    if($thisevent->expiration){
+                        $monthsExp = '+' . $thisevent->expiration .'months';
+                        $expiration_date = date('Y-m-d', strtotime($monthsExp, strtotime($today)));
+                    }
 
-                    if ($evid && $evid > 0) {
+                    if($tickettypedrop == 7){
+                        //$tmp = EventStudent::firstOrCreate(['event_id' => $evid, 'student_id' => $checkemailuser->id, 'trans_id' => $transaction->id,'comment'=>'unilever']);
+                        $thisevent->users()->save($checkemailuser,['comment'=>'unilever','expiration'=>$expiration_date,'paid'=>true]);
+                    }else{
 
-                        $today = date('Y/m/d'); 
-                        $expiration_date = '';
-
-                        if($thisevent->expiration){
-                            $monthsExp = '+' . $thisevent->expiration .'months';
-                            $expiration_date = date('Y-m-d', strtotime($monthsExp, strtotime($today)));
-                        }
-
-                        if($tickettypedrop == 7){
-                            //$tmp = EventStudent::firstOrCreate(['event_id' => $evid, 'student_id' => $checkemailuser->id, 'trans_id' => $transaction->id,'comment'=>'unilever']);
-                            $thisevent->users()->save($checkemailuser,['comment'=>'unilever','expiration'=>$expiration_date,'paid'=>true]);
+                        if($transaction->coupon_code != ''){
+                            //$tmp = EventStudent::firstOrCreate(['event_id' => $evid, 'student_id' => $checkemailuser->id, 'trans_id' => $transaction->id,'comment'=>'coupon']);
+                            $thisevent->users()->save($checkemailuser,['comment'=>'coupon','expiration'=>$expiration_date,'paid'=>true]);
                         }else{
-
-                            if($transaction->coupon_code != ''){
-                                //$tmp = EventStudent::firstOrCreate(['event_id' => $evid, 'student_id' => $checkemailuser->id, 'trans_id' => $transaction->id,'comment'=>'coupon']);
-                                $thisevent->users()->save($checkemailuser,['comment'=>'coupon','expiration'=>$expiration_date,'paid'=>true]);
-                            }else{
-                                $thisevent->users()->save($checkemailuser,['expiration'=>$expiration_date,'paid'=>true]);
-                            }
-
+                            $thisevent->users()->save($checkemailuser,['expiration'=>$expiration_date,'paid'=>true]);
                         }
 
-                        
-                       
                     }
-                    //SHOULD but back used deree id?
-                    
+                
+                }
 
-                    $fullname = $checkemailuser->first_name . ' ' . $checkemailuser->last_name;
-                    $firstname = $checkemailuser->first_name;
+                //SHOULD but back used deree id?
+                
+                $fullname = $checkemailuser->firstname . ' ' . $checkemailuser->lastname;
+                $firstname = $checkemailuser->firstname;
 
-                    $emailsCollector[] = ['email' => $checkemailuser->email, 'name' => $fullname, 'first' => $firstname];
+                $emailsCollector[] = ['email' => $checkemailuser->email, 'name' => $fullname, 'first' => $firstname];
 
-                    //Update user details with the given ones
+                //Update user details with the given ones
 
-                    $checkemailuser->firstname = $thismember['first_name'];
-                    $checkemailuser->lastname = $thismember['last_name'];
-                    $checkemailuser->mobile = $thismember['mobile'];
-                    $checkemailuser->country_code = $thismember['country_code'];
-                    $checkemailuser->job_title = $thismember['job_title'];
-                    if(isset($thismember['company']))
-                        $checkemailuser->company = $thismember['company'];
-                    
-                    if(isset($thismember['afm']))
-                        $checkemailuser->afm = $thismember['afm'];
+                $checkemailuser->firstname = $thismember['firstname'];
+                $checkemailuser->lastname = $thismember['lastname'];
+                $checkemailuser->mobile = $thismember['mobile'];
+                $checkemailuser->country_code = $thismember['country_code'];
+                $checkemailuser->job_title = $thismember['job_title'];
+                if(isset($thismember['company']))
+                    $checkemailuser->company = $thismember['company'];
+                
+                if(isset($thismember['afm']))
+                    $checkemailuser->afm = $thismember['afm'];
 
-                    if($checkemailuser->partner_id == '' && isset($deree_user_data[$value]))
-                        $checkemailuser->partner_id = $deree_user_data[$value];
-                    
-                    if($checkemailuser->kc_id == '') {
-                        $next_kc_id = str_pad($next, 4, '0', STR_PAD_LEFT);
-                        $knowcrunch_id = $KC.$YY.$MM.$next_kc_id;
-                        $checkemailuser->kc_id = $knowcrunch_id;
-                        $checkemailuser->save();
-                        $thismember['password'] =  $knowcrunch_id;
-                        
-                        if ($next == 9999) {
-                            $next = 1;
-                        }
-                        else {
-                            $next = $next + 1;
-                        }
-                    }
-
-
+                if($checkemailuser->partner_id == '' && isset($deree_user_data[$value]))
+                    $checkemailuser->partner_id = $deree_user_data[$value];
+                
+                if($checkemailuser->kc_id == '') {
+                    $next_kc_id = str_pad($next, 4, '0', STR_PAD_LEFT);
+                    $knowcrunch_id = $KC.$YY.$MM.$next_kc_id;
+                    $checkemailuser->kc_id = $knowcrunch_id;
                     $checkemailuser->save();
-	        	//}
+                    //$thismember['password'] =  $knowcrunch_id;
+                    
+                    if ($next == 9999) {
+                        $next = 1;
+                    }
+                    else {
+                        $next = $next + 1;
+                    }
+                }
+
+
+                $checkemailuser->save();
+	        
     		}
-    		else {
+    		else{
                
     			$newmembersdetails[] = $thismember;
-    			$fullname = $thismember['first_name'] . ' ' . $thismember['last_name'];
-    			$firstname = $thismember['first_name'];
+    			$fullname = $thismember['firstname'] . ' ' . $thismember['lastname'];
+    			$firstname = $thismember['firstname'];
                 $emailsCollector[] = ['email' => $thismember['email'], 'name' => $fullname, 'first' => $firstname];
                 
 
@@ -399,17 +389,20 @@ class InfoController extends Controller
 
         $helperdetails = [];
 
-        /*foreach ($newmembersdetails as $key => $member) {
+        foreach ($newmembersdetails as $key => $member) {
           
             $next_kc_id = str_pad($next, 4, '0', STR_PAD_LEFT);
             $knowcrunch_id = $KC.$YY.$MM.$next_kc_id;
-            $member['password'] = $KC.$YY.$MM.$next_kc_id;
-            $user = Sentinel::register($member);
+            $member['password'] = Hash::make($KC.$YY.$MM.$next_kc_id);
+            $user = User::create($member);
           
-        	$code = Activation::create($user)->code;
-        	$role = Sentinel::findRoleBySlug('know-crunch');
-            $user->roles()->attach($role);
-
+        	$code = Activation::create([
+                'user_id' => $user->id,
+                'code' => Str::random(40),
+                'completed' => false,
+            ])->code;
+        	//$role = Role::findRoleBySlug('know-crunch');
+            $user->role()->attach(7);
 
             //CHECK FOR NON REQUIRED FIELDS
             $user->mobile = $member['mobile'];
@@ -443,41 +436,41 @@ class InfoController extends Controller
             $user->save();
             
             // Send the activation email
-            $sent = Mail::send('sentinel.emails.activate_groupof2+', compact('user', 'code'), function ($m) use ($user) {
+            $sent = Mail::send('activation.emails.activate_groupof2+', compact('user', 'code'), function ($m) use ($user) {
                 $m->to($user->email)->subject('Activate Your Account');
             });  
 
             $helperdetails[$user->email] = ['kcid' => $user->kc_id, 'deid' => $user->partner_id, 'stid' => $user->student_type_id, 'jobtitle' => $user->job_title, 'company' => $user->company, 'mobile' => $user->mobile];
 
     		//Associate first user with transaction
-            if ($key == 0) {
+            /*if ($key == 0) {
                 $transaction->user_id = $user->id;
                 $transaction->save();
-        	}
+        	}*/
 
             //Save taxonomy Event_student
             if ($evid && $evid > 0) {
+
+                $today = date('Y/m/d'); 
+                $expiration_date = '';
+
+                if($thisevent->expiration){
+                    $monthsExp = '+' . $thisevent->expiration .'months';
+                    $expiration_date = date('Y-m-d', strtotime($monthsExp, strtotime($today)));
+                }
+
                 if($tickettypedrop == 7){
-                    $tmp = EventStudent::firstOrCreate(['event_id' => $evid, 'student_id' => $user->id, 'trans_id' => $transaction->id,'comment'=>'unilever']);
-
+                        $thisevent->users()->save($user,['comment'=>'unilever','expiration'=>$expiration_date,'paid'=>true]);
                 }else{
-                    $tmp = EventStudent::firstOrCreate(['event_id' => $evid, 'student_id' => $user->id, 'trans_id' => $transaction->id]);
-                }
 
-                if($elearning){
-                    $today = date('Y/m/d');
-                    $monthsExp = '+4 months';
-                    if($evid !== 1350 ){
-                        $monthsExp = '+6 months';
+                    if($transaction->coupon_code != ''){
+                        $thisevent->users()->save($user,['comment'=>'coupon','expiration'=>$expiration_date,'paid'=>true]);
                     }else{
-                       // $expDate = date('Y-m-d', strtotime("+6 months", strtotime($today)));
-                       // $tmp1 = EventStudent::firstOrCreate(['event_id' => 2068, 'student_id' => $user->id, 'trans_id' => 0,'expiration_date' => $expDate]);
+                        $thisevent->users()->save($user,['expiration'=>$expiration_date,'paid'=>true]);
                     }
-                    
-                    $tmp->expiration_date = date('Y-m-d', strtotime($monthsExp, strtotime($today)));  
-                    $tmp->save();
-                }
 
+                }
+        
             }
 
             if ($next == 9999) {
@@ -486,8 +479,10 @@ class InfoController extends Controller
             else {
                 $next = $next + 1;
             }
-        }*/
+        }
 
+        $option->value=$next;
+        $option->save();
         
         $this->sendEmails($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug);
 

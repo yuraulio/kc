@@ -18,6 +18,7 @@ use Library\Processors\Default_processor;
 use Library\Processors\Paypal_ec_processor;
 use Library\Processors\Piraeusbank_processor;
 use Library\Processors\Alphabank_processor;
+use App\Model\Option;
 //use PostRider\Option;
 
 class PaymentDispatch extends Controller
@@ -75,14 +76,8 @@ class PaymentDispatch extends Controller
 
 			//GENERATE DEREE IDs HERE??? We need to send to submit
 
-			//$dereelist = \Config::get('dpoptions.generator.settings');
-
-			//dd($dereelist);
-			//$optionid = \Config::get('dpoptions.generator.id');
-			//$option = Option::findOrFail($optionid);
-			//$dereelist = json_decode($option->settings, true);
-
-
+			$option = Option::where('abbr','deree-codes')->first();
+			$dereelist = json_decode($option->settings, true);
 			$data['dereecodes'] = '';
             $data['namestobank'] = '';
 
@@ -127,16 +122,11 @@ class PaymentDispatch extends Controller
                 $nseat++;
             }
 
-            //dd($data['namestobank']);
-
-
-
 
 	        $deree_user  = [];
 
-
 	        //dd($pay_seats_data);
-	        /*$seat = 0;
+	        $seat = 0;
 	        foreach ($pay_seats_data as $key => $value) { //key names value array of names
 	        	if($key == 'emails') {
 		        	foreach ($value as $key2 => $value2) { // value2 email1
@@ -148,43 +138,25 @@ class PaymentDispatch extends Controller
 		        		}
 
 		        		$deree_user[$value2] = $dereelist[$seat];
-
+                        
 		        		$seat++;
 		        	}
 		        	break;
 	        	}
 	        }
 
-	        for ($i=0; $i < $seat; $i++) {
-	        	 unset($dereelist[$i]);
+            for ($i=0; $i < $seat; $i++) {
+                unset($dereelist[$i]);
+            }
+            //dd(json_encode(array_values($dereelist)));
 
-	        }
+	        $option->settings = json_encode(array_values($dereelist));
+	        $option->save();
 
-	        $dereelist_putback = array_values($dereelist);
-
-	        $option->settings = json_encode($dereelist_putback, JSON_PRETTY_PRINT);
-	        $option->save();*/
-
-
-
-
-
-
-	        //dd($dereelist);
-	        //NEED TO UPDATE DEREE JSON HERE
-	        //setSettingsAttribute
-	        //$option = Option::findOrFail($id)->update($request->all());
-
-	        //$this->optionHelper->exportToConfig();
 
 	        Session::put('deree_user_data', $deree_user);
-	        //dd($deree_user);
-			//dd($data['dereecodes']);
-                   // $generalInfo['title'] }}
-
-
-           /* $data['order_details'] = Transaction::where('id', $trans_id)->with('user','account')->first();*/
-            $data['order_details'] = Transaction::where('id', $trans_id)->first();//->with('user')
+	       
+            $data['order_details'] = Transaction::where('id', $trans_id)->first();
 
             if ($data['order_details'])
             {

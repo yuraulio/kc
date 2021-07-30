@@ -154,12 +154,15 @@ class LoginController extends Controller
                     $coockie->save();
 
                 }
-
+                
                 $existingcheck = ShoppingCart::where('identifier', $user->id)->first();
-
+               
                 if($existingcheck) {
                     $existingcheck->delete($user->id);
                     Cart::store($user->id);
+               
+                   // dd('fdafd');
+
                     $timecheck = ShoppingCart::where('identifier', $user->id)->first();
                     $timecheck->created_at = Carbon::now();
                     $timecheck->updated_at = Carbon::now();
@@ -212,11 +215,11 @@ class LoginController extends Controller
 
                 $cartCache = new CartCache;
 
-                $cartCache->ticket_id = $tid;
+                $cartCache->ticket_id = ($tid == 'free') ? 0 : $tid;
                 $cartCache->product_title = $cart->first()->name;
                 $cartCache->quantity = $cart->first()->qty;
                 $cartCache->price = $cart->first()->price;
-                $cartCache->type = $cart->first()->options->type;
+                $cartCache->type = ($cart->first()->options->type == 'free') ? 0 : $cart->first()->options->type;
                 $cartCache->event = $event;
                 $cartCache->user_id = $dpuser->id;
                 $cartCache->slug =  base64_encode($tid. $dpuser->id . $event);
@@ -228,11 +231,11 @@ class LoginController extends Controller
 
                 $cartCache = new CartCache;
 
-                $cartCache->ticket_id = $tid;
+                $cartCache->ticket_id = ($tid == 'free') ? 0 : $tid;
                 $cartCache->product_title = $cart->first()->name;
                 $cartCache->quantity = $cart->first()->qty;
                 $cartCache->price = $cart->first()->price;
-                $cartCache->type = $cart->first()->options->type;
+                $cartCache->type = ($cart->first()->options->type == 'free') ? 0 : $cart->first()->options->type;
                 $cartCache->event = $event;
                 $cartCache->user_id = $dpuser->id;
                 $cartCache->slug =  base64_encode($tid. $dpuser->id . $event);

@@ -171,7 +171,7 @@
 
                                 <div class="form-group{{ $errors->has('hours') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-hours">{{ __('Hours') }}</label>
-                                    <input type="number" name="hours" id="input-hours" class="form-control{{ $errors->has('hours') ? ' is-invalid' : '' }}" placeholder="{{ __('Hours') }}" value="{{ old('hours') }}"autofocus>
+                                    <input type="text" name="hours" id="input-hours" class="form-control{{ $errors->has('hours') ? ' is-invalid' : '' }}" placeholder="{{ __('Hours') }}" value="{{ old('hours') }}"autofocus>
 
                                     @include('alerts.feedback', ['field' => 'hours'])
                                 </div>

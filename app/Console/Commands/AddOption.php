@@ -40,7 +40,7 @@ class AddOption extends Command
         /*Option::create([
             'type' => 'config',
             'title' => 'Deree IDs',
-            'name' => 'Deree IDs',
+            'name' => 'deree_ids',
             'status' => true,
             'abbr' => 'deree-codes',
             'settings' => json_encode([]),

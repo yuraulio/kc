@@ -417,10 +417,9 @@
          quantity = $("#quantity-"+id).text();
          options = $("#options-"+id).text();
          features = $("#features-"+id).text();
-         features = JSON.parse(features)
-         options = JSON.parse(options)
-         //console.log(features)
-
+         features = features ? JSON.parse(features) : [];
+         options = options ? JSON.parse(options) : [];
+         
          $.each(options, function(key,value){
 
              let val = 0
