@@ -37,15 +37,15 @@ class AddOption extends Command
      */
     public function handle()
     {
-        /*Option::create([
+        Option::create([
             'type' => 'config',
             'title' => 'Deree IDs',
             'name' => 'deree_ids',
             'status' => true,
-            'abbr' => 'deree-codes',
+            'abbr' => 'deree_codes',
             'settings' => json_encode([]),
 
-        ]);*/
+        ]);
 
         Option::create([
             'type' => 'config',

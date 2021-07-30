@@ -690,16 +690,16 @@ class CartController extends Controller
             }
 
             if(env('PAYMENT_PRODUCTION')){
-                Stripe::setApiKey($dpuser->events->where('id',$eventC->id)->first()->paymentMethod->first()->processor_options['secret_key']);
+                Stripe::setApiKey($eventC->paymentMethod->first()->processor_options['secret_key']);
             }else{
-                Stripe::setApiKey($dpuser->events->where('id',$eventC->id)->first()->paymentMethod->first()->test_processor_options['secret_key']);
+                Stripe::setApiKey($eventC->paymentMethod->first()->test_processor_options['secret_key']);
             }
-            session()->put('payment_method',$dpuser->events->where('id',$eventC->id)->first()->paymentMethod->first()->id);
+            session()->put('payment_method',$eventC->paymentMethod->first()->id);
             $dpuser->asStripeCustomer();
 
              if($installments > 1) {
                
-                $instamount = round($namount / $installments, 2);
+                $instamount =  round($namount / $installments, 2);
                
                 if($instamount - floor($instamount)>0){
                     $planAmount = str_replace('.','',$instamount);
@@ -714,7 +714,7 @@ class CartController extends Controller
                         //./ngrok authtoken 69hUuQ1DgonuoGjunLYJv_3PVuHFueuq5Kiuz7S1t21
                         // Create the plan to subscribe
                         $desc = $installments . ' installments';
-                        $planid = 'plan_'.$dpuser->id.'_E_'.$ev->id.'_T_'.$ticket_id.'_x'.$installments;
+                        $planid = 'plan_'.$dpuser->id.'_rdE_'.$ev->id.'_T_'.$ticket_id.'_x'.$installments;
                         $name = $ev_title . ' ' . $ev_date_help . ' | ' . $desc;
                         //dd(str_replace('.','',$instamount) . '00');
                         
@@ -746,7 +746,7 @@ class CartController extends Controller
                         $charge->price = $instamount;
                         $charge->save();
 
-                        $namount = $instamount;
+                        //$namount = $instamount;
              }
 
              
@@ -871,6 +871,8 @@ class CartController extends Controller
                         $elearningInvoice->user()->save($dpuser);
                         $elearningInvoice->event()->save($ev);
                         $elearningInvoice->transaction()->save($transaction);
+                    }else{
+                        //$transaction->subscription()->save($dpuser->subscriptions->where('id',$charge['id'])->first());
                     }
 
                     \Session::put('transaction_id', $transaction->id);

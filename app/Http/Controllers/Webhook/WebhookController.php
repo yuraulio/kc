@@ -191,6 +191,7 @@ class WebhookController extends BaseWebhookController
 			
 
 			$transaction = Transaction::create($transaction_arr);
+			$transaction->subscription()->save($subscription);
 			//$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;
 			if($sub['amount']/100 != 0){
 
