@@ -163,22 +163,22 @@
                               @foreach($topic['lessons'] as $keyLesso => $lesson)
                               <?php
                                   $vimeoVideo = explode('https://vimeo.com/', $lesson['vimeo_video']);
-                                  //if(!isset($vimeoVideo[1])){
-                                  //  continue;
-                                  //}
+                                  if(!isset($vimeoVideo[1])){
+                                    continue;
+                                  }
 
                                   $frame1 = '';
                                   $path = $lesson['vimeo_video'];
                                   $path = str_replace('https://vimeo.com/','https://player.vimeo.com/video/',$path);
 
-                                  //if(isset($vimeoVideo[1])&& isset($videoss[$vimeoVideo[1]])){
+                                  if(isset($vimeoVideo[1])&& isset($videoss[$vimeoVideo[1]])){
                                     $frame1 = $videoss[$vimeoVideo[1]]['tab'];
-                                 // }
+                                  }
 
-                                  //if(isset($vimeoVideo[1])){
+                                  if(isset($vimeoVideo[1])){
                                     $vimeoId = str_replace('?title=false','',$path);
                                     $vimeoId = str_replace('https://player.vimeo.com/video/','',$vimeoVideo[1]);
-                                  //}
+                                  }
 
                                 ?>
                               <li class="lesson {{$vimeoVideo[1]}}" data-completed="{{$video_seen[$vimeoVideo[1]]['seen']}}" data-link="{{$lesson['links']}}" data-note="{{$notesss[$vimeoVideo[1]]}}" id="{{$frame1}}">
