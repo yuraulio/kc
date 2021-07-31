@@ -133,7 +133,7 @@ class Invoice extends Model
         $data=[];
         $remainingInst=0;
         $date = '-';
-        $billing = json_decode($this->transaction->first()->billing_details,true);
+        $billing = json_decode($this->transaction()->first()->billing_details,true);
 
         //dd($this->transaction);
 
@@ -175,6 +175,8 @@ class Invoice extends Model
         $newInvoice->save();
 
         $newInvoice->event()->save($this->event()->first());
+        $newInvoice->user()->save($this->user()->first());
+        $newInvoice->transaction($this->transaction()->first());
 
         if($this->amount - floor($this->amount)>0){
             $data['amount'] = number_format ($newInvoice->amount , 2 , ',', '.');

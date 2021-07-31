@@ -56,7 +56,7 @@ class WebhookController extends BaseWebhookController
 		
 		$stripeSubscription = $user->subscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first()->asStripeSubscription();
 		$stripeSubscription->metadata = ['installments_paid' => $count, 'installments' => $totalinst];
-		$stripeSubscription->save();
+		$stripeSubscription->save(); 
 
 		$invoices = $user->events->where('id',$eventId)->first()->invoicesByUser($user->id)->get();
 		if(count($invoices) > 0){
