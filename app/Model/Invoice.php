@@ -133,6 +133,7 @@ class Invoice extends Model
         $data=[];
         $remainingInst=0;
         $date = '-';
+       
         $billing = json_decode($this->transaction()->first()->billing_details,true);
 
         //dd($this->transaction);
