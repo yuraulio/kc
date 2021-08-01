@@ -163,7 +163,10 @@ class Invoice extends Model
             $invoiceNumber = sprintf('%04u', $invoiceNumber);
         }
 
-        
+        $user = $this->user()->first();
+        $event = $this->event()->first();
+        $transaction = $this->transaction()->first();
+
         $newInvoice = new Invoice;
 
         $newInvoice->name = $this->name;
@@ -175,9 +178,13 @@ class Invoice extends Model
 
         $newInvoice->save();
 
-        $newInvoice->event()->save($this->event()->first());
-        $newInvoice->user()->save($this->user()->first());
-        $newInvoice->transaction($this->transaction()->first());
+        //$newInvoice->event()->save($this->event()->first());
+        //$newInvoice->user()->save($this->user()->first());
+        //$newInvoice->transaction()->save($this->transaction()->first());
+
+        $newInvoice->event()->save($event);
+        $newInvoice->user()->save($user);
+        $newInvoice->transaction()->save($transaction);
 
         if($this->amount - floor($this->amount)>0){
             $data['amount'] = number_format ($newInvoice->amount , 2 , ',', '.');

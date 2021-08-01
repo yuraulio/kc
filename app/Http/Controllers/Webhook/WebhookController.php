@@ -60,8 +60,8 @@ class WebhookController extends BaseWebhookController
 
 		$invoices = $user->events->where('id',$eventId)->first()->invoicesByUser($user->id)->get();
 		if(count($invoices) > 0){
-			//$invoice = $invoices->last();
-			$invoice = $invoices->first();
+			$invoice = $invoices->last();
+			//$invoice = $invoices->first();
 			$pdf = $invoice->generateCronjobInvoice();
 			$this->sendEmail($invoice,$pdf);
 		}else{
