@@ -65,7 +65,7 @@ class UserController extends Controller
 
                 return response()->json([
                     'success' => false,
-                    'code' => 415,
+                    'code' => 701,
                     'message' => 'Your SMS code has expired! '
                 ]);
 
@@ -89,7 +89,7 @@ class UserController extends Controller
 
                 return response()->json([
                     'success' => false,
-                    'code' => 415,
+                    'code' => 702,
                     'message' => 'SMS code is not correct'
                 ]);
 
@@ -98,8 +98,8 @@ class UserController extends Controller
 
         return response()->json([
             'success' => false,
-            'code' => 415,
-            'message' => 'SMS verifacation is required2'
+            'code' => 700,
+            'message' => 'SMS verifacation is required'
         ]);
 
     }

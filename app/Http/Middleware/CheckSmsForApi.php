@@ -109,28 +109,19 @@ class CheckSmsForApi
                         $cookieSms->sms_code = rand(1111,9999);
                         $cookieSms->save();
                     }
-                    //dd($cookie);
 
                     if(!$cookieSms->send){
-                        session()->reflash();
-                        //dd($user);
+                                            
                         Mookee::addCredentials("sms",$this->token, $this->secretId);
                         Mookee::setActiveCredential("sms");
                 
                         $smsResource = new SMSResource();
                         $smsRequest = new SmsRequest();
                         
-                        //$mobile = "*******";
                         $mob = trim($user->mobile);
                         $mob = trim($user->country_code) . trim($user->mobile);
-                        //$mobile .=substr($mob, 7, 3);
-                        //$pos = strpos($mob, '6');
-                        //dd(substr($user->mobile, $pos));
-                        //dd($mobile);
-                        //$mobileNumber = substr($mob, $pos);
-                        //$mobileNumber = substr($mob, 1);
+                       
                         $mobileNumber = trim($mob);
-                        //$nums = ["30" . $mobileNumber];
                         $nums = [$mobileNumber];
                 
                         $message = new MessageContent();
@@ -142,7 +133,7 @@ class CheckSmsForApi
                         $smsRequest->setMessage($message);
                 
                         $response = $smsResource->send($smsRequest);
-                    // var_dump($response);
+                   
                         $cookieSms->send = true;
                         $cookieSms->save();
 
@@ -150,7 +141,7 @@ class CheckSmsForApi
                     
                     return response()->json([
                         'success' => false,
-                        'code' => 415,
+                        'code' => 700,
                         'message' => 'SMS verifacation is required'
                     ]);
 
