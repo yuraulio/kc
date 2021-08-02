@@ -31,8 +31,8 @@ class EventController extends Controller
         $this->authorize('manage-users', User::class);
         $user = Auth::user();
 
-        $data['live_courses'] = count(Event::where('status', '0')->orwhere('status', '2')->get());
-        $data['completed_courses'] = count(Event::where('status', '0')->orwhere('status', '3')->get());
+        $data['live_courses'] = count(Event::where('published', 1)->where('status', '0')->orwhere('status', '2')->get());
+        $data['completed_courses'] = count(Event::where('published', 1)->where('status', '0')->orwhere('status', '3')->get());
         $data['total_courses'] = count(Event::all());
 
         return view('event.index', ['events' => $model->with('category', 'type')->get(), 'user' => $user, 'data' => $data]);
@@ -114,7 +114,7 @@ class EventController extends Controller
     }
 
     public function assignCoupon(Request $request, Event $event, Coupon $coupon){
-        
+
         if(!$request->status){
             $event->coupons()->detach($coupon->id);
             $event->coupons()->attach($coupon->id);
@@ -171,12 +171,14 @@ class EventController extends Controller
         if($request->published == 'on')
         {
             $published = 1;
+            $published_at = date("Y-m-d H:i:s");
         }else
         {
             $published = 0;
+            $published_at = null;
         }
 
-        $request->request->add(['published' => $published,'release_date_files' => date('Y-m-d H:i:s', strtotime($request->release_date_files))]);
+        $request->request->add(['published' => $published, 'published_at' => $published_at, 'release_date_files' => date('Y-m-d H:i:s', strtotime($request->release_date_files))]);
         $event = $model->create($request->all());
 
         /*if($event && $request->image_upload){
@@ -346,13 +348,15 @@ class EventController extends Controller
         if($request->published == 'on')
         {
             $published = 1;
+            $published_at = date("Y-m-d H:i:s");
         }else
         {
             $published = 0;
+            $published_at = null;
         }
 
         //dd($request->all());
-        $request->request->add(['published' => $published,'release_date_files' => date('Y-m-d H:i:s', strtotime($request->release_date_files))]);
+        $request->request->add(['published' => $published, 'published_at' => $published_at, 'release_date_files' => date('Y-m-d H:i:s', strtotime($request->release_date_files))]);
         $ev = $event->update($request->all());
 
         /*if($request->image_upload != null && $ev){

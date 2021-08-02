@@ -264,7 +264,6 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, User $user)
     {
-        //dd('from update');
         $hasPassword = $request->get("password");
         $user->update(
             $request->merge([

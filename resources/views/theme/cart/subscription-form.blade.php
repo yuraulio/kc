@@ -1,7 +1,6 @@
 @extends('theme.layouts.master')
 @section('content')
-@inject('frontHelp', 'Library\FrontendHelperLib')
-@inject('cFieldLib', 'Library\CustomFieldHelperLib')
+
 
 <main id="main-area" role="main">
 <div id="favDialog" hidden>

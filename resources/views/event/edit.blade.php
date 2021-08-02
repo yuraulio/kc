@@ -132,7 +132,11 @@
                                     @include('alerts.feedback', ['field' => 'delivery'])
                                 </div>
 
-                                <div class="form-group{{ $errors->has('published') ? ' has-danger' : '' }}">
+                                <div class="row">
+
+                                    <div class="col-md-6 col-sm-6">
+                                        <div class="form-group{{ $errors->has('published') ? ' has-danger' : '' }}">
+
                                             <div class="status-label">
                                                 <label class="form-control-label" for="input-published">{{ __('Published') }}</label>
                                             </div>
@@ -143,7 +147,19 @@
                                                 </label>
                                                 @include('alerts.feedback', ['field' => 'published'])
                                             </div>
+
+
                                         </div>
+                                    </div>
+                                    @if($event['published_at'] != null)
+                                    <div class="col-md-6 col-sm-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="input-published">{{ __('Published at') }}</label>
+                                            <input type="text" placeholder="{{$event['published_at']}}" class="form-control" disabled />
+                                        </div>
+                                    </div>
+                                    @endif
+                                </div>
 
                                 <div id="exp_input" class="form-group{{ $errors->has('expiration') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-expiration">{{ __('Months access') }}</label>
@@ -345,7 +361,7 @@
                                             </div>
 
                                             <div class="tab-pane fade" id="coupons" role="tabpanel" aria-labelledby="tabs-icons-text-8-tab_inside">
-                                           
+
                                                 <div class="table-responsive py-4">
                                                     <table class="table align-items-center table-flush"  id="datatable-coupon">
                                                         <thead class="thead-light">
@@ -361,7 +377,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                        <?php //dd($allTopicsByCategory); 
+                                                        <?php //dd($allTopicsByCategory);
                                                             $eventCoupons = $event['coupons']->pluck('id')->toArray();
                                                             //dd($eventCoupons);
                                                         ?>
@@ -895,7 +911,7 @@
             url: "/admin/events/assing-coupon/" + event_id +"/" + coupon_id,
             data:data,
             success: function(data) {
-               
+
             }
         });
 

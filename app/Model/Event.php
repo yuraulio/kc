@@ -44,7 +44,7 @@ class Event extends Model
     protected $table = 'events';
 
     protected $fillable = [
-        'published', 'release_date_files', 'expiration' ,'status', 'title', 'htmlTitle', 'subtitle', 'header', 'summary', 'body', 'hours','author_id', 'creator_id', 'view_tpl', 'view_counter'
+        'published', 'published_at', 'release_date_files', 'expiration' ,'status', 'title', 'htmlTitle', 'subtitle', 'header', 'summary', 'body', 'hours','author_id', 'creator_id', 'view_tpl', 'view_counter'
     ];
 
     public function category()
@@ -374,10 +374,10 @@ class Event extends Model
         return $this->belongsToMany(Event::class, 'event_statistics')->withPivot('videos','lastVideoSeen', 'notes', 'event_id', 'user_id');
     }
 
-    public function examAccess($successPer = 0.8, $user){
+    public function examAccess( $user,$successPer = 0.8){
         $seenPercent =  $this->progress($user);
         $studentsEx = [1353,1866,1753,1882,1913,1923];
-        
+
         if(in_array($user->id, $studentsEx)){
             return true;
         }
@@ -388,7 +388,7 @@ class Event extends Model
              return false;
         }
 
-       
+
         return $seenPercent >=  $successPer;
 
     }
@@ -491,15 +491,15 @@ class Event extends Model
     }
 
     public function getExams(){
-        
+
         $curr_date_time = date('Y-m-d G:i:00');
         $curr_date = date('Y-m-d');
-        
+
         $exams = $this->exam->where('status',true);
         $examsArray = [];
 
         foreach($exams as $exam){
-            
+
             if($exam->publish_time >  $curr_date_time){
                 $exam->exstatus = 0;
                 $exam->islive = 0;
@@ -513,12 +513,12 @@ class Event extends Model
                 $exam->islive = 1;
                 $exam->isupcom = 0;
             }
-            
+
             $examsArray[] = $exam;
         }
 
         return $examsArray;
     }
-   
+
 
 }

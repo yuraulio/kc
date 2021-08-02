@@ -115,8 +115,6 @@ class ProfileController extends Controller
      */
     public function update(ProfileRequest $request)
     {
-        //dd($request->all());
-
         $user = User::with('image')->find($request->user_id);
 
         //dd($request->file('photo'));

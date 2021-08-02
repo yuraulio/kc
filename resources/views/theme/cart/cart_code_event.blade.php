@@ -1,7 +1,6 @@
 @extends('theme.layouts.master')
 @section('content')
-@inject('frontHelp', 'Library\FrontendHelperLib')
-@inject('cFieldLib', 'Library\CustomFieldHelperLib')
+
 <?php $thetype =0;
 //$info=null;  
 if(!isset($info)){

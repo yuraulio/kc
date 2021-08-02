@@ -1,7 +1,5 @@
 @extends('theme.layouts.master')
 @section('content')
-@inject('frontHelp', 'Library\FrontendHelperLib')
-@inject('cFieldLib', 'Library\CustomFieldHelperLib')
 
 <main id="main-area" class="no-pad-top" role="main">
    <section class="section-text-img-blue">

@@ -181,7 +181,8 @@
                                     //dd($transaction->user[0]->statistic);
                                         $found = false;
                                         $sum = 0;
-                                        if(isset($transaction->user[0]) && count($transaction->user[0]->statistic) != 0){
+                                        $videos = [];
+                                        if(isset($transaction->user[0]) && count($transaction->user[0]->statistic) != 0 && count($transaction->event) != 0){
                                             //dd($transaction->event[0]['id']);
                                         //dd($transaction->user[0]->statistic->where('id',$transaction->event[0]['id']));
                                         foreach($transaction->user[0]->statistic->where('id',$transaction->event[0]['id']) as $key => $val){
@@ -191,6 +192,7 @@
                                                 $found = true;
                                             }
                                             if($found){
+                                                //dd($val);
                                                 if($val->pivot['videos'] != null){
                                                     $videos = $val->pivot['videos'];
 
@@ -212,46 +214,33 @@
 
                                     }
                                     ?>
-                                    <?php //dd($transaction->event[0]['expiration']); ?>
+
                                 </td>
 
                                 <td>{{ date_format($transaction->created_at, 'm/d/Y' )}}</td>
-                                <?php //dd($transaction->event); ?>
-                                {{--<td class="exp_{{$transaction['id']}}" class="participant_elearning none">
-                                    <?php
-                                        $exp = '';
-                                    ?>
-                                        @if($transaction->event[0]['expiration'] != null)
-                                            <?php
-                                                $expMonth = '+'.$transaction->event[0]['expiration'].' months';
-                                                $exp = date('Y-m-d', strtotime($expMonth, strtotime($transaction->created_at)));
-                                            ?>
-                                            {{$exp}}
-                                        @else
-                                            {{$exp}}
-                                        @endif
-                                </td>--}}
-                                <?php //dd($transaction->event[0]->users[0]->pivot->expiration); ?>
+
                                 <td class="exp_{{$transaction['id']}} participant_elearning none" >
 
                                     <?php
-                                       //$date = strtotime($transaction->event[0]->users[0]->pivot->expiration);
-                                       //$newformat = date('d/m/Y',$date);
-                                       //echo $newformat;
-                                       //echo 'asd';
-                                       //echo $transaction->event[0]->users[0]->pivot->expiration;
-                                       $date = strtotime($transaction->event[0]->users[0]->pivot->expiration);
+
+                                    if(isset($transaction->event[0])){
+                                        //dd($transaction->event);
+                                        $date = strtotime($transaction->event[0]->users[0]->pivot->expiration);
                                         $newformat = date('d/m/Y',$date);
                                         echo $newformat;
+
+                                    }else{
+                                        $newformat = null;
+                                    }
+
                                     ?>
 
                                 </td>
                                 <?php
-                                $date = strtotime($transaction->event[0]->users[0]->pivot->expiration);
-                                $newformat = date('m/d/Y',$date);
+
                                 ?>
                                 <td class="participant_elearning none">
-                                    <input id="{{$transaction['id']}}" class="form-control datepicker" placeholder="Select date" type="text" value="<?= $newformat; ?>">
+                                    <input id="{{$transaction['id']}}" class="form-control datepicker" placeholder="Select date" type="text" value="<?= ($newformat != null) ? $newformat : ''; ?>">
                                     <button class="update_exp btn btn-info btn-sm" style="margin-top:10px;" type="button" data-id="{{$transaction['id']}}" >Update</button>
                                 </td>
                             </tr>
@@ -384,9 +373,7 @@ $(document).ready(function() {
                 //console.log(data)
                 if(data){
                     data = data.data
-                    alert(data.id)
-                    date = data.date.split(' ')
-                    $('.exp_'+data.id).text(date[0])
+                    $('.exp_'+data.id).text(data.date)
                 }
 
             }

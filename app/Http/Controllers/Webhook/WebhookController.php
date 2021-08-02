@@ -56,11 +56,12 @@ class WebhookController extends BaseWebhookController
 		
 		$stripeSubscription = $user->subscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first()->asStripeSubscription();
 		$stripeSubscription->metadata = ['installments_paid' => $count, 'installments' => $totalinst];
-		$stripeSubscription->save();
+		$stripeSubscription->save(); 
 
 		$invoices = $user->events->where('id',$eventId)->first()->invoicesByUser($user->id)->get();
 		if(count($invoices) > 0){
 			$invoice = $invoices->last();
+			//$invoice = $invoices->first();
 			$pdf = $invoice->generateCronjobInvoice();
 			$this->sendEmail($invoice,$pdf);
 		}else{
@@ -191,6 +192,9 @@ class WebhookController extends BaseWebhookController
 			
 
 			$transaction = Transaction::create($transaction_arr);
+			$transaction->subscription()->save($subscription);
+			$transaction->user()->save($user);
+			$transaction->event()->save($user->events->where('id',$eventId)->first());
 			//$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;
 			if($sub['amount']/100 != 0){
 
