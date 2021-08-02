@@ -11,7 +11,7 @@
                 {{ __('Create video') }}
             @endslot
 
-            <li class="breadcrumb-item"><a href="{{ route('role.index') }}">{{ __('Video Management') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('video.index') }}">{{ __('Video Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('Add video') }}</li>
         @endcomponent
     @endcomponent
@@ -33,7 +33,7 @@
                            <h3 class="mb-0">{{ __('Video Management') }}</h3>
                         </div>
                         <div class="col-4 text-right">
-                           <a href="{{ route('role.index') }}" class="btn btn-sm btn-primary">{{ __('Back to list') }}</a>
+                           <a href="{{ route('video.index') }}" class="btn btn-sm btn-primary">{{ __('Back to list') }}</a>
                         </div>
                      </div>
                   </div>
