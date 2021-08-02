@@ -17,6 +17,11 @@ use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
+
+    public function __construct(){
+        $this->middleware('auth.sms.api')->except('smsVerification');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -31,6 +36,72 @@ class UserController extends Controller
             'success' => true,
             'data' => $user
         ]);
+    }
+
+    public function smsVerification(Request $request){
+       
+        $user = Auth::user();
+        $cookie_value = '-11111111';
+        if($request->hasHeader('auth-sms')){
+            $cookie_value = base64_encode('auth-api-' . decrypt($request->header('auth-sms')));
+        }
+
+        //dd($cookie_value);
+
+        if($user->cookiesSMS()->where('coockie_value',$cookie_value)->first()){
+           
+            $cookieSms = $user->cookiesSMS()->where('coockie_value',$cookie_value)->first();
+            $sms_code = $cookieSms->sms_code;
+
+            $codeExpired = strtotime($cookieSms->updated_at);
+            $codeExpired  = (time() - $codeExpired) / 60;
+
+            //dd($codeExpired);
+
+            if($codeExpired >= 5){
+                $cookieSms->send = false;
+                $cookieSms->sms_code = rand(1111,9999);
+                $cookieSms->save();
+
+                return response()->json([
+                    'success' => false,
+                    'code' => 415,
+                    'message' => 'Your SMS code has expired! '
+                ]);
+
+            }
+           
+            if($sms_code == $request->sms_code){
+
+                $smsCookies = $user->cookiesSMS()->where('coockie_value',$cookie_value)->first();
+
+                $smsCookies->sms_code = '';
+                $smsCookies->sms_verification = 1;
+                $smsCookies->save();
+
+                return response()->json([
+                    'success' => true,
+                    'code' => 200,
+                    'message' => 'SMS code is correct'
+                ]);
+
+            }else{
+
+                return response()->json([
+                    'success' => false,
+                    'code' => 415,
+                    'message' => 'SMS code is not correct'
+                ]);
+
+            }
+        }
+
+        return response()->json([
+            'success' => false,
+            'code' => 415,
+            'message' => 'SMS verifacation is required2'
+        ]);
+
     }
 
     public function events()

@@ -42,6 +42,7 @@ class Authenticate extends Middleware
 
         foreach ($guards as $guard) {
             if ($this->auth->guard($guard)->check()) {
+                $this->auth->shouldUse($guard);
                 if(!$this->auth->user()->statusAccount->completed){
                     $this->auth->logout();
                     Session::invalidate();

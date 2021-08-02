@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class PassportAuthController extends Controller
 {
@@ -26,7 +27,7 @@ class PassportAuthController extends Controller
             $token_ = auth()->user()->createToken('LaravelAuthApp');
             $token = $token_->accessToken;
             $expire = $token_->token->expires_at->diffForHumans();
-            return response()->json(['token' => $token, 'expire' => $expire], 200);
+            return response()->json(['token' => $token, 'expire' => $expire,'sms'=>encrypt(Auth::user()->id.'-'.date("H:i:s"))], 200);
         } else {
             return response()->json(['error' => 'Unauthorised'], 401);
         }

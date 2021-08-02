@@ -69,6 +69,7 @@ class Kernel extends HttpKernel
         'code.event' => \App\Http\Middleware\CheckCodeEvent::class,
         'auth.elearning' => \App\Http\Middleware\CheckUserLogeinForElearning::class,
         'auth.sms' => \App\Http\Middleware\CheckForSMSCoockie::class,
+        'auth.sms.api' => \App\Http\Middleware\CheckSmsForApi::class,
         'event.check' => \App\Http\Middleware\CheckForEvent::class,
         'event.subscription' => \App\Http\Middleware\CheckForSubscription::class,
     ];

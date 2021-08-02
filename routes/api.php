@@ -32,7 +32,13 @@ Route::middleware('auth:api')->group(function () {
     Route::post('lesson/save_video_progress', [LessonController::class, 'saveVideoProgress']);
 
 
+    //SMS
+    Route::post('smsVerification',[UserController::class, 'smsVerification']);
+
     // Logout
     Route::post('logout', [PassportAuthController::class, 'logout']);
 
+   
+
 });
+ 
