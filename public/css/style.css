@@ -203,3 +203,7 @@
 .lesson-links-admin button {
     display: inline-block;
 }
+
+#collapseExample {
+    margin-bottom: 30px;
+}

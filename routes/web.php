@@ -50,8 +50,12 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
 
     Route::post('/summary/update/{summary}', 'SummaryController@update')->name('summary.update');
 
+    //Participants
     Route::get('Transaction/participants', ['as' => 'transaction.participants', 'uses' => 'TransactionController@participants']);
     Route::post('transaction/updateExpirationDate', ['as' => 'transaction.updateExpirationDate', 'uses' => 'TransactionController@updateExpirationDate']);
+
+    //Subscriptions
+    Route::get('subscriptions', ['as' => 'subscriptions.index', 'uses' => 'SubscriptionController@index']);
 
     //Menu item
     Route::get('menu/add_item', ['as' => 'menu.add_item', 'uses' => 'MenuController@add_item']);
@@ -141,7 +145,7 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     //Profile
     Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
     Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
-    Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
+    Route::post('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
     Route::put('profile/update_billing', ['as' => 'profile.update_billing', 'uses' => 'ProfileController@update_billing']);
 
     //Edit Instructor

@@ -10,7 +10,7 @@ class TransactionController extends Controller
 {
     public function participants()
     {
-        $data['transactions'] = Transaction::with('user.statistic', 'event.users',)->orderBy('created_at', 'DESC')->has('event')->get();
+        $data['transactions'] = Transaction::with('user.statistic', 'event.users',)->orderBy('created_at', 'DESC')->doesnthave('subscription')->get();
         //dd($data['transactions'][0]);
 
         return view('admin.transaction.participants', $data);
@@ -43,6 +43,7 @@ class TransactionController extends Controller
             //dd($new_date);
             $new_date = date('Y-m-d H:i:s', strtotime($new_date));
             $res_new_date = date('d/m/Y', strtotime($new_date));
+            //dd($res_new_date);
 
             $event->users()->wherePivot('user_id',$user)->updateExistingPivot($user,[
                 'expiration' => $new_date

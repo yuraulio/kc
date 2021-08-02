@@ -86,29 +86,12 @@ class UserController extends Controller
                             //dd($folder_bonus1);
                             $folder_bonus1 = Str::slug($folder_bonus1);
 
-                            //dd($folder_bonus1);
-                            //how-to-use-urls-with-utms-how-to-work-with-utmsbonus-files
-                            //$folder_bonus1 = explode('-', $folder_bonus['dirname']);
-
-
-                            //dd($files[2]);
                             foreach($files[2] as $key1 => $file){
-                                //dd($key1);
-                               //dd($file);
                                 $file11 = explode($file['filename'], $file['dirname']);
                                 //dd($file11);
                                 $file2 = preg_replace('/[0-9]+/', '', $file11[0]);
                                 $file2 = str_replace('/', '', $file2);
-                            //dd($file);
                                 $file2 = Str::slug($file2);
-                                //dd($file2);
-
-                                //$file2 = explode('-', $file['dirname']);
-                                //"/How to use URLs with UTMs/1 - How to work with UTMs/Bonus Files"
-                                ///How to use URLs with UTMs/1
-                                //dd($folder_bonus1[0] == $file2[0]);
-                                //dd($folder_bonus1[0] == $file2[0]);
-                                //dd($folder_bonus1);
                                 if($folder_bonus1 == $file2){
                                     //dd('found');
                                     //dd($folder_bonus);
@@ -137,9 +120,6 @@ class UserController extends Controller
                                 foreach($folder as $key22 => $folder){
                                     //dd($folder);
                                     $data1['folders'][$key22] = $folder;
-                                    //dd($data1['folders'][$key22]);
-                                    //$folder2 = explode('-', $folder['dirname']);
-                                    //dd($folder);
 
                                     // "dirname" => "/Diploma in Digital & Social Media 2020/0 - Check First"
                                     // "foldername" => "0 - Check First"
@@ -151,20 +131,8 @@ class UserController extends Controller
 
                                     $folder2 = str_replace('/', '', $folder2);
                                     $folder2 = Str::slug($folder2);
-                                    //dd($folder2);
-                                    //      ///
-                                    //diploma-in-digital-social-media-check-first
-                                    //diploma-in-digital-social-media-check-first
-                                    //      ///
-                                    //dd($folder2[0] == $file2[0]);
-                                    //dd($folder2);
-                                    //dd($file);
                                     $data1['folders'][$key22]['files'] = array();
                                     foreach($file as $key0 => $file1){
-                                        //dd($file1);
-                                        //dd($key0);
-                                        //dd($file1);
-                                        //$file2 = explode('-', $file1['dirname']);
 
                                         $file222 = explode($file1['filename'], $file1['dirname']);
                                         //dd($file222);
@@ -176,8 +144,6 @@ class UserController extends Controller
                                         //dd($file2);
 
                                         if($folder2 == $file2){
-                                            //dd("Word Found!");
-                                            //$data1['folders'][$key22]['files'][$key0] = $file1;
                                             array_push($data1['folders'][$key22]['files'], $file1);
                                         }
                                     }
@@ -188,11 +154,6 @@ class UserController extends Controller
                     }
                 }
 
-                //dd($data1['bonus']);
-
-                //dd($data1['bonus']);
-                //EDWWWWWWWWWWWWWW
-                //dd($data1);
                 foreach($data1['folders'] as $key_folder => $folder){
                     //dd($folder);
 
@@ -220,16 +181,6 @@ class UserController extends Controller
                             //dd($file3333);
                             $file3333 = Str::slug($file3333);
                             $file3333 = str_replace('bonus-files','',$file3333);
-                            //dd($folder_dir);
-                            //dd($file3333);
-                            //e-learning-masterclass-in-digital-social-media-marketing-working-in-the-digital-marketing-industrybonus-files
-
-
-                            //$bonus1 = explode('-', $bonus['dirname']);
-                            // if(strpos($folder_dir,  $file3333) !== false){
-                            //     $data1['folders'][$key_folder]['bonus_files'] = $bonus;
-                            // }
-
                             if($folder_dir == $file3333){
                                // dd("Word Found!");
                                 $data1['folders'][$key_folder]['bonus_files'][] = $bonus1;
@@ -324,6 +275,8 @@ class UserController extends Controller
                 $arr['topic_content'] = array();
                 $arr['topic_content']['lessons'] = array();
 
+                $calendar_count = 0;
+
                 foreach($topic['lessons'] as $key_topic => $lesson1){
 
 
@@ -380,7 +333,16 @@ class UserController extends Controller
 
                         }else if($event->is_inclass_course()){
                             //$arr['lessons'][$key_topic]['title']
-                            $arr_lesson['date'] = $lesson1['pivot']['date'] ?? '';
+                            //dd($lesson1['pivot']['date']);
+                            if($lesson1['pivot']['date'] != ''){
+                                $arr_lesson['date'] = date_format(date_create($lesson1['pivot']['date']),"d/m/Y");
+
+
+                            }else{
+                                $arr_lesson['date'] = date_format(date_create($lesson1['pivot']['time_starts']),"d/m/Y");
+                                //dd($arr_lesson['time_starts']);
+                            }
+
                             $arr_lesson['time_starts'] = $lesson1['pivot']['time_starts'];
                             $arr_lesson['time_ends'] = $lesson1['pivot']['time_ends'];
                             $arr_lesson['duration'] = $lesson1['pivot']['duration'];
@@ -404,8 +366,9 @@ class UserController extends Controller
 
                                 $date = strtotime($date_split[0]);
                                 //1593378000
-                                //dd($date_split[1]);
+                                //dd($date_split[0]);
 
+                                //dd($date_split[1]);
                                 $time = strtotime($date_split[1]);
                                 //dd($time);
                                 //1624564800
@@ -415,13 +378,15 @@ class UserController extends Controller
                                 //key einai to ==>> $date
                                 //var_dump($time);
 
-                                $data[$key]['calendar'][$date]['time'] = $time ?? '';
-                                $data[$key]['calendar'][$date]['date_time'] = $date_time ?? '';
-                                $data[$key]['calendar'][$date]['title'] = $lesson1['title'];
-                                $data[$key]['calendar'][$date]['room'] = $lesson1['pivot']['room'];
-                                $data[$key]['calendar'][$date]['instructor_image'] = \Request::url().$instructors[$lesson1['instructor_id']][0]->medias['path'].$instructors[$lesson1['instructor_id']][0]->medias['original_name'];
-                                $data[$key]['calendar'][$date]['instructor_name'] = $instructors[$lesson1['instructor_id']][0]['title'].' '.$instructors[$lesson1['instructor_id']][0]['subtitle'];
 
+                                $data[$key]['calendar'][$calendar_count]['time'] = $date_lesson ?? '';
+                                $data[$key]['calendar'][$calendar_count]['date_time'] = date_format(date_create($date_lesson), 'd/m/Y');
+                                $data[$key]['calendar'][$calendar_count]['title'] = $lesson1['title'];
+                                $data[$key]['calendar'][$calendar_count]['room'] = $lesson1['pivot']['room'];
+                                $data[$key]['calendar'][$calendar_count]['instructor_image'] = \Request::url().$instructors[$lesson1['instructor_id']][0]->medias['path'].$instructors[$lesson1['instructor_id']][0]->medias['original_name'];
+                                $data[$key]['calendar'][$calendar_count]['instructor_name'] = $instructors[$lesson1['instructor_id']][0]['title'].' '.$instructors[$lesson1['instructor_id']][0]['subtitle'];
+
+                                $calendar_count++;
                             }
 
                         }

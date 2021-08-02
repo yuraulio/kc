@@ -284,7 +284,7 @@
                     <hr class="my-4" />
                     <form method="post" action="{{ route('profile.password') }}" autocomplete="off">
                         @csrf
-                        @method('put')
+                        @method('post')
 
                         <h6 class="heading-small text-muted mb-4">{{ __('Password') }}</h6>
 
@@ -292,12 +292,6 @@
                         @include('alerts.error_self_update', ['key' => 'not_allow_password'])
 
                         <div class="pl-lg-4">
-                            <div class="form-group{{ $errors->has('old_password') ? ' has-danger' : '' }}">
-                                <label class="form-control-label" for="input-current-password">{{ __('Current Password') }}</label>
-                                <input type="password" name="old_password" id="input-current-password" class="form-control{{ $errors->has('old_password') ? ' is-invalid' : '' }}" placeholder="{{ __('Current Password') }}" value="" required>
-
-                                @include('alerts.feedback', ['field' => 'old_password'])
-                            </div>
                             <div class="form-group{{ $errors->has('password') ? ' has-danger' : '' }}">
                                 <label class="form-control-label" for="input-password">{{ __('New Password') }}</label>
                                 <input type="password" name="password" id="input-password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" placeholder="{{ __('New Password') }}" value="" required>

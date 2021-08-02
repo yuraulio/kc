@@ -149,6 +149,9 @@
                                     <li class="nav-item  {{ $elementName == 'role-management' ? 'active' : '' }}">
                                         <a href="{{ route('transaction.participants') }}" class="nav-link">{{ __('Participants') }}</a>
                                     </li>
+                                    <li class="nav-item  {{ $elementName == 'subscriptions-management' ? 'active' : '' }}">
+                                        <a href="{{ route('subscriptions.index') }}" class="nav-link">{{ __('Subscriptions') }}</a>
+                                    </li>
                                 @endcan
                             </ul>
                         </div>
