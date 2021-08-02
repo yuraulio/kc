@@ -108,6 +108,13 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::get('user/store_ticket', ['as' => 'user.store_ticket', 'uses' => 'UserController@store_ticket']);
 
 
+    //Videos
+    Route::get('video/index', ['as' => 'video.index', 'uses' => 'VideoController@index']);
+    Route::get('video/edit/{video}', ['as' => 'video.edit', 'uses' => 'VideoController@edit']);
+    Route::get('video/create', ['as' => 'video.create', 'uses' => 'VideoController@create']);
+    Route::post('video/store', ['as' => 'video.store', 'uses' => 'VideoController@store']);
+    Route::put('video/update/{video}', ['as' => 'video.update', 'uses' => 'VideoController@update']);
+    
     //Custom Ticket
     //ticket.edit
     Route::get('ticket/edit', ['as' => 'ticket.edit', 'uses' => 'TicketController@edit']);

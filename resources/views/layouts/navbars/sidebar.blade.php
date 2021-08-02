@@ -260,6 +260,9 @@
                                         <a href="{{ route('delivery.index') }}" class="nav-link">{{ __('Deliveries') }}</a>
                                     </li>
                                 @endcan
+                                <li class="nav-item {{ $elementName == 'videos-management' ? 'active' : '' }}">
+                                    <a href="{{ route('video.index') }}" class="nav-link">{{ __('Videos') }}</a>
+                                </li>
 
                                 <li class="nav-item {{ $elementName == 'deliveries-management' ? 'active' : '' }}">
                                     <a href="{{ route('plans') }}" class="nav-link">{{ __('Plans') }}</a>

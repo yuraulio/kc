@@ -12,8 +12,9 @@ class SubscriptionController extends Controller
         // $data['subscriptions'] = Subscriptions::with('user.statistic', 'event.users',)->orderBy('created_at', 'DESC')->doesnthave('subscription')->get();
         //dd($data['transactions'][0]);
         //$subs = new Subscription;
-        $data['subscriptions'] = Transaction::with('user', 'event', 'subscription.event')->has('subscription')->get();
-        //dd($data['subscriptions'][0]);
+        $data['subscriptions'] = Transaction::with('user', 'event')->has('subscription')->get();
+
+        dd($data['subscriptions'][1]);
 
         return view('admin.subscription.subscription_list', $data);
     }
