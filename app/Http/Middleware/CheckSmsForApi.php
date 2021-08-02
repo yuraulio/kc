@@ -54,7 +54,9 @@ class CheckSmsForApi
         
 
         $roles = Auth::user()->role->pluck('name')->toArray();
-       
+        /*if (in_array('Super Administrator',$roles) || in_array('Administrator',$roles) || in_array('Manager',$roles) || in_array('Author',$roles)) {
+            return $next($request);
+        }else{*/
             $user = Auth::user();
             
             if($user){
@@ -156,7 +158,7 @@ class CheckSmsForApi
 
             }
         
-
+        //}
         return $next($request);
     }
 }
