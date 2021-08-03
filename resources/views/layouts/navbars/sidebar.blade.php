@@ -152,6 +152,9 @@
                                     <li class="nav-item  {{ $elementName == 'subscriptions-management' ? 'active' : '' }}">
                                         <a href="{{ route('subscriptions.index') }}" class="nav-link">{{ __('Subscriptions') }}</a>
                                     </li>
+                                    <li class="nav-item  {{ $elementName == 'abandoned-management' ? 'active' : '' }}">
+                                        <a href="{{ route('abandoned.index') }}" class="nav-link">{{ __('Abandoned') }}</a>
+                                    </li>
                                 @endcan
                             </ul>
                         </div>

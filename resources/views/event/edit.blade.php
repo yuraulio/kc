@@ -134,8 +134,8 @@
 
                                 <div class="row">
 
-                                    <div class="col-md-6 col-sm-6">
-                                        <div class="form-group{{ $errors->has('published') ? ' has-danger' : '' }}">
+                                    <div style="margin: auto;" class="col-md-6 col-sm-6">
+                                        <div style="margin: auto;" class="form-group{{ $errors->has('published') ? ' has-danger' : '' }}">
 
                                             <div class="status-label">
                                                 <label class="form-control-label" for="input-published">{{ __('Published') }}</label>

@@ -347,7 +347,8 @@
                             </div>
                         </form>
                         <hr class="my-4" />
-                        <form method="post" action="{{ route('profile.password') }}" autocomplete="off">
+                        <?php dd($user); ?>
+                        <form method="post" action="{{ route('profile.password', $user->id) }}" autocomplete="off">
                             @csrf
                             @method('put')
 

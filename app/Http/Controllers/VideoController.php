@@ -110,4 +110,34 @@ class VideoController extends Controller
     {
         //
     }
+
+    public function fetchAllVideos(){
+
+        $videos = Video::all();
+
+        return response()->json([
+            'success' => __('Videos successfully fetched.'),
+            'data' => $videos,
+        ]);
+
+    }
+
+    public function store_event(Request $request)
+    {
+
+        //dd($request->all());
+
+        $model = app($request->model_type);
+        $model = $model::find($request->model_id);
+
+        $model->videos()->sync($request->video_id);
+
+        $video = Video::find($request->video_id);
+
+
+        return response()->json([
+            'success' => __('Video successfully assigned.'),
+            'data' => $video->toArray(),
+        ]);
+    }
 }

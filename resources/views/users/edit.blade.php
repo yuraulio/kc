@@ -48,12 +48,12 @@
                     </div>
 
                     <div class="card-body pt-0">
-                        <div class="text-center">
+                        <div class="text-center personal-info">
                             <h5 class="h3">
                                 {{ $user['fisrtname'] . ' '.  $user['lastname']}}<span class="font-weight-light">, 27</span>
                             </h5>
                             <div class="h5 font-weight-300">
-                                <i class="ni location_pin mr-2"></i>Bucharest, Romania
+                                <i class="ni location_pin mr-2"></i>{{auth()->user()->company}}
                             </div>
                             <div class="h5 mt-4">
                                 <i class="ni business_briefcase-24 mr-2"></i>{{auth()->user()->job_title}} - {{auth()->user()->company}}
@@ -302,6 +302,8 @@
                                 <label class="form-control-label" for="input-password-confirmation">{{ __('Confirm New Password') }}</label>
                                 <input type="password" name="password_confirmation" id="input-password-confirmation" class="form-control" placeholder="{{ __('Confirm New Password') }}" value="" required>
                             </div>
+
+                            <input type="hidden" name="user" value="{{ $user->id }}">
 
                             <div class="text-center">
                                 <button type="submit" class="btn btn-success mt-4">{{ __('Change password') }}</button>

@@ -114,7 +114,9 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::get('video/create', ['as' => 'video.create', 'uses' => 'VideoController@create']);
     Route::post('video/store', ['as' => 'video.store', 'uses' => 'VideoController@store']);
     Route::put('video/update/{video}', ['as' => 'video.update', 'uses' => 'VideoController@update']);
-    
+    Route::get('video/fetchAllVideos', ['as' => 'video.fetchAllVideos', 'uses' => 'VideoController@fetchAllVideos']);
+    Route::post('video/store_event', ['as' => 'video.store_event', 'uses' => 'VideoController@store_event']);
+
     //Custom Ticket
     //ticket.edit
     Route::get('ticket/edit', ['as' => 'ticket.edit', 'uses' => 'TicketController@edit']);
@@ -266,6 +268,10 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::get('create/option','Dashboard\OptionsController@create')->name('option.create');
     Route::get('edit/option/{option}','Dashboard\OptionsController@edit')->name('option.edit');
     Route::put('update/option/{option}','Dashboard\OptionsController@update')->name('option.update');
+
+    //Abandoned
+    Route::get('abandoned', 'Dashboard\AbandonedController@index')->name('abandoned.index');
+    Route::post('abandoned/remove/{id}', ['as' => 'abandoned.remove', 'uses' => 'Dashboard\AbandonedController@remove']);
 });
 
 
