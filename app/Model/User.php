@@ -718,10 +718,10 @@ class User extends Authenticatable
                                                'percentMinutes' => 0];
                        $notes[$vimeo_id] = '';
                     }
-                   
+                    $countVideos += 1;
             }
 
-            $countVideos += 1;
+            //$countVideos += 1;
 
          }
 

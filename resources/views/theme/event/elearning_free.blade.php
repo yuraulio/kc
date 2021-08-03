@@ -208,7 +208,7 @@
                      </div>
                      <?php break;
                         } ?>
-                     {{--@if($estatus == 0 || $estatus == 2)
+                     @if($estatus == 0 || $estatus == 2)
                      @if(isset($section_fullvideo) && $section_fullvideo->body != '')
                      <div class="video-wrapper">
                         <div class="responsive-fb-video">
@@ -216,7 +216,7 @@
                         </div>
                      </div>
                      @endif
-                     @endif--}}
+                     @endif
                      <!-- /.container -->
                   </div>
                   <!-- /.tab-content-wrapper -->
@@ -241,100 +241,19 @@
                         <div class="benefits-list">
                            <div class="row-flex row-flex-17">
 
-                              <?php  $category = 'freepresentations';  ;
+                              @foreach($benefits as $key => $benefit)
+                                 <div class="col-3 col-sm-6 col-xs-12">
+                                    <div class="benefit-box">
+                                       <div class="box-icon">
+                                          <img class="replace-with-svg" src="{{cdn(get_image($benefit['medias']))}}" width="40" alt="">
+                                       </div>
+                                       <h3>{{ $benefit['name'] }}</h3>
+                                       {!! $benefit['description'] !!}
+                                       <!-- /.benefit-box -->
+                                    </div>
+                                 </div>
 
-                                 if (isset($benefits[0]) && $benefits[0]['name'] != '') : ?>
-                              <div class="col-3 col-sm-6 col-xs-12">
-                                 <div class="benefit-box">
-                                    <div class="box-icon">
-                                       <img class="replace-with-svg" src="{{cdn('theme/assets/images/icons/Access-Files.svg')}}" width="40" alt="">
-                                    </div>
-                                    <h3>{{ $benefits[0]['name'] }}</h3>
-                                    {!! $benefits[0]['description'] !!}
-                                    <!-- /.benefit-box -->
-                                 </div>
-                              </div>
-                              <?php endif ?>
-                              <?php $category = 'e-learning';  ;
-                                 if (isset($benefits[1]) && $benefits[1]['name'] != '') :  ?>
-                              <div class="col-3 col-sm-6 col-xs-12">
-                                 <div class="benefit-box">
-                                    <div class="box-icon">
-                                       <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/E-Learning.svg')}}" width="40" alt="">
-                                    </div>
-                                    <h3>{{ $benefits[1]['name'] }}</h3>
-                                    {!! $benefits[1]['description'] !!}
-                                    <!-- /.benefit-box -->
-                                 </div>
-                              </div>
-                              <?php endif ?>
-                              <?php $category = 'support group';
-                                 if (isset($benefits[2]) && $benefits[2]['name'] != '') :  ?>
-                              <div class="col-3 col-sm-6 col-xs-12">
-                                 <div class="benefit-box">
-                                    <div class="box-icon">
-                                       <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Support-Group.svg')}}" width="40" alt="">
-                                    </div>
-                                    <h3>{{ $benefits[2]['name'] }}</h3>
-                                    {!! $benefits[2]['description'] !!}
-                                    <!-- /.benefit-box -->
-                                 </div>
-                              </div>
-                              <?php endif ?>
-                              <?php $category = 'jobs access';
-                                 if (isset($benefits[3]) && $benefits[3]['name'] != '') :  ?>
-                              <div class="col-3 col-sm-6 col-xs-12">
-                                 <div class="benefit-box">
-                                    <div class="box-icon">
-                                       <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Jobs_access.svg')}}" width="40" alt="">
-                                    </div>
-                                    <h3>{{ $benefits[3]['name'] }}</h3>
-                                    {!! $benefits[3]['description'] !!}
-                                    <!-- /.benefit-box -->
-                                 </div>
-                              </div>
-                              <?php endif ?>
-                              <?php $category = 'events access';
-                                 if (isset($benefits[4]) && $benefits[4]['name'] != '') :  ?>
-                              <div class="col-3 col-sm-6 col-xs-12">
-                                 <div class="benefit-box">
-                                    <div class="box-icon">
-                                       <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Events_Access.svg')}}" width="40" alt="">
-                                    </div>
-                                    <h3>{{ $benefits[4]['name'] }}</h3>
-                                    {!! $benefits[4]['description'] !!}
-                                    <!-- /.benefit-box -->
-                                 </div>
-                              </div>
-                              <?php endif ?>
-                              <?php $category = 'free recaps';
-                                 if (isset($benefits[5]) && $benefits[5]['name'] != '') :  ?>
-                              <div class="col-3 col-sm-6 col-xs-12">
-                                 <div class="benefit-box">
-                                    <div class="box-icon">
-                                       <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Recap-Events.svg')}}" width="40" alt="">
-                                    </div>
-                                    <h3>{{ $benefits[5]['name'] }}</h3>
-                                    {!! $benefits[5]['description'] !!}
-                                    <!-- /.benefit-box -->
-                                 </div>
-                              </div>
-                              <?php endif ?>
-
-                              <?php $category = 'projects info';
-
-                                 if (isset($benefits[6]) && $benefits[6]['name'] != '') :  ?>
-                              <div class="col-3 col-sm-6 col-xs-12">
-                                 <div class="benefit-box">
-                                    <div class="box-icon">
-                                       <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" width="40" alt="">
-                                    </div>
-                                    <h3>{{ $benefits[6]['name'] }}</h3>
-                                    {!! $benefits[6]['description'] !!}
-                                    <!-- /.benefit-box -->
-                                 </div>
-                              </div>
-                              <?php endif ?>
+                              @endforeach
                            </div>
                         </div>
                      </div>

@@ -93,7 +93,7 @@
 @push('js')
 <script>
 
-
+CKEDITOR.config.allowedContent = true;
    $( "#submit-btn-video" ).click(function() {
       $('#form-video').submit()
    });

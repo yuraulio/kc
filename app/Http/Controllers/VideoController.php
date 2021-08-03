@@ -47,6 +47,7 @@ class VideoController extends Controller
         $video->title = $request->title;
         $video->description = $request->description;
         $video->url = $request->url;
+        $video->body = $request->body;
         $video->save();
 
         return redirect('/admin/video/edit/'.$video->id);
@@ -92,6 +93,7 @@ class VideoController extends Controller
 
             $video->description = $request->description;
             $video->url = $request->url;
+            $video->body = $request->body;
 
             $video->save();
 
