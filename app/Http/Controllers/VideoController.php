@@ -48,6 +48,8 @@ class VideoController extends Controller
         $video->description = $request->description;
         $video->url = $request->url;
         $video->save();
+
+        return redirect('/admin/video/edit/'.$video->id);
     }
 
     /**
@@ -83,15 +85,16 @@ class VideoController extends Controller
      */
     public function update(Request $request, Video $video)
     {
+        dd($video);
         if($video){
 
             $video->title = $request->title;
-    
+
             $video->description = $request->description;
             $video->url = $request->url;
 
             $video->save();
-           
+
             return redirect('admin/video/edit/'.$video->id);
 
         }

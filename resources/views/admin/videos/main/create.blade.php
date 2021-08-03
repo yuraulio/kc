@@ -16,11 +16,15 @@
         @endcomponent
     @endcomponent
 
-    @if(!$video)
+    <?php dd(isset($video->id)); ?>
+
+    @if(isset($video->id))
+    <?php dd('has not video'); ?>
          <form id="form-video" method="post" action="{{ route('video.store') }}" autocomplete="off" enctype="multipart/form-data">
          <?php $video->id = 0; ?>
       @else
-         <form method="post" action="{{ route('video.update',$video->id) }}" autocomplete="off" enctype="multipart/form-data">
+      <?php dd('has video'); ?>
+         <form method="post" action="{{ route('video.update', $video->id) }}" autocomplete="off" enctype="multipart/form-data">
          @method('put')
       @endif
          @csrf
@@ -40,7 +44,7 @@
                   <div class="card-body">
                      <h6 class="heading-small text-muted mb-4">{{ __('Video information') }}</h6>
 
-                   
+
                      <div class="pl-lg-4">
                         <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
                            <label class="form-control-label" for="input-name">{{ __('Title') }}</label>
@@ -59,11 +63,11 @@
                            <input type="text" name="url" id="input-url" class="form-control{{ $errors->has('url') ? ' is-invalid' : '' }}" placeholder="{{ __('Url') }}" value="{{ old('url',$video->url) }}"  required autofocus>
                            @include('alerts.feedback', ['field' => 'url'])
                         </div>
-                        
+
 
 
                      </div>
-                    
+
                   </div>
                </div>
             </div>
@@ -92,7 +96,7 @@
          clickToCancel: { title: 'Cancel' }
       });
 
-      
+
    });
 
    $( "#submit-btn-video" ).click(function() {
