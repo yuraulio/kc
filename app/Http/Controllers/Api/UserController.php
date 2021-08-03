@@ -104,7 +104,7 @@ class UserController extends Controller
         return response()->json([
             'success' => false,
             'code' => 700,
-            'message' => 'SMS verifacation is required'
+            'message' => 'SMS verification is required'
         ]);
 
     }
@@ -127,8 +127,9 @@ class UserController extends Controller
         if($request->hasHeader('auth-sms')){
             $cookie_value = base64_encode('auth-api-' . decrypt($request->header('auth-sms')));
         }
-
-        $cookieSms = $user->cookiesSMS()->where('coockie_value',$cookie)->first();
+        $this->token = env('token');
+        $this->secretId = env('secret_key');
+        $cookieSms = $user->cookiesSMS()->where('coockie_value',$cookie_value)->first();
                 
         if(!$cookieSms->sms_verification && $user->mobile != ''){
         
@@ -172,7 +173,7 @@ class UserController extends Controller
             return response()->json([
                 'success' => false,
                 'code' => 700,
-                'message' => 'SMS verifacation is required'
+                'message' => 'SMS verification is required'
             ]);
 
         }
