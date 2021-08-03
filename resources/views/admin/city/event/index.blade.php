@@ -122,10 +122,10 @@
     $(document).on('shown.bs.modal', '#cityModal',function(e) {
 
         $('#cityFormControlSelect option').each(function(key, value) {
-                    $(value).remove()
-            });
+            $(value).remove()
+        });
 
-            $('#cityFormControlSelect').append(`<option>-</option>`)
+        $('#cityFormControlSelect').append(`<option>-</option>`)
 
         $.ajax({
             headers: {

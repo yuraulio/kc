@@ -231,6 +231,12 @@ class LessonController extends Controller
 
         if(!empty($request->links)){
             foreach($request->links as $key => $link){
+
+                $correct_link = strpos($link, 'https://');
+
+                if(!$correct_link){
+                    $link = 'https://'.$link;
+                }
                 $arr1[$key] = ['name'=> $request->names[$key], 'link'=>$link];
             }
         }else{

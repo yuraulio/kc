@@ -58,31 +58,11 @@
                                     <label>Status</label>
                                     <select data-toggle="select" data-live-search="true" class="column_filter" id="col4_filter" placeholder="Status">
                                         <option selected value> -- All -- </option>
-                                        <option value="approved"> APPROVED </option>
-                                        <option value="canceled"> CANCELLED/REFUSED </option>
-                                        <option value="abandonded"> ABANDONDED </option>
+                                        <option value="1"> ACTIVE </option>
+                                        <option value="0"> INACTIVE </option>
                                     </select>
                                 </div>
-                                <div class="col" id="filter_col5" data-column="5">
-                                    <label>Select Type</label>
-                                    <select data-toggle="select" name="type" class="column_filter" id="col5_filter" placeholder="Select Type">
-                                        <option selected value> -- All -- </option>
-                                        <option value="user"> USER </option>
-                                        <option value="admin"> ADMIN </option>
-                                    </select>
-                                </div>
-                                {{--<div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label>Min</label>
-                                        <input type="text" id="min" name="min">
-                                    </div>
 
-                                    <div class="form-group">
-                                        <label>Max</label>
-                                        <input type="text" id="max" name="max">
-                                    </div>
-                                </div>--}}
-                                <Button type="button" onclick="ClearFields();" class="btn btn-secondary btn-lg "> Clear Filter</Button>
                             </div>
                         </div>
                     </div>
@@ -99,10 +79,6 @@
                                 <div class="col-sm">
                                     <h4 class="card-title text-white">Total Amount:</h4>
                                     <div class="text-white" id="total"></div>
-                                </div>
-                                <div class="col-sm">
-                                    <h4 class="card-title text-white"><div id="count_early"></div> Seats:</h4>
-                                    <div class="text-white" id="early"></div>
                                 </div>
 
                                 <hr id="participantHr">
@@ -123,7 +99,7 @@
                                     <th scope="col">{{ __('Student') }}</th>
                                     <th scope="col">{{ __('Plan') }}</th>
                                     <th scope="col">{{ __('Event Name') }}</th>
-                                    <th scope="col">{{ __('Payment Status') }}</th>
+                                    <th scope="col">{{ __('Status') }}</th>
                                     <th scope="col">{{ __('Trials Sub end at') }}</th>
                                     <th scope="col">{{ __('Sub end at') }}</th>
                                     <th class="d-none">{{ __('Amount') }}</th>
@@ -135,38 +111,39 @@
                                     <th>{{ __('Student') }}</th>
                                     <th>{{ __('Plan') }}</th>
                                     <th>{{ __('Event Name') }}</th>
-                                    <th>{{ __('Payment Status') }}</th>
+                                    <th>{{ __('Status') }}</th>
                                     <th>{{ __('Trials Sub end at') }}</th>
                                     <th>{{ __('Sub end at') }}</th>
                                     <th class="d-none">{{ __('Amount') }}</th>
                                 </tr>
                             </tfoot>
                             <tbody>
-                            <?php //dd($transactions[100]); ?>
+                            <?php //dd($subscriptions[0]); ?>
                                 @foreach ($subscriptions as $item)
-                                <?php //dd($item['subscription']->first()['owner']); ?>
+                                <?php dd($item['user']); ?>
                                     <tr>
                                         <td>
                                             {{ $item['id'] }}
                                         </td>
                                         <td>
-                                            {{ $item['user']->first()['firstname']}} {{ $item['user']->first()['lastname']}}
+                                            <?php
+                                                $user = $item['user']->first();
+                                            ?>
+                                            {{ $user['firstname']}} {{ $user['lastname']}}
                                         </td>
                                         <td>
-                                            {{--<?php if(count($item['subscription']) > 0){
-                                                        echo $item['subscription']->first()['event']->first()['plans']->first()['name'];
-                                                    }
-                                            ?>--}}
+                                            <?php
+                                            $subscription = $subscription;
+                                                if(count($item['subscription']) > 0 && count($subscription['event']->first()['plans']) > 0){
+                                                    echo $subscription['event']->first()['plans']->first()['name'];
+                                                }
+                                            ?>
                                         </td>
-                                        <td>{{ $item['subscription']->first()['event']->first()['title'] }}</td>
+                                        <td>{{ $subscription['event']->first()['title'] }}</td>
 
-                                        <td>@if($item['payment_status'] == 0)
-                                                {{ __('FAILED') }}
-                                            @elseif($item['payment_status'] == 1)
-                                                {{ __('COMPLETED') }}
-                                            @elseif($item['payment_status'] == 2)
-                                                {{ __('PENDING') }}
-                                            @endif
+                                        <td>
+                                                {{ $subscription['status'] }}
+
                                         </td>
                                         <td>{{ $item['trial'] }}</td>
 
@@ -231,12 +208,8 @@
 
         function filterColumn ( i ) {
             if(i == 4){ //Status filter
-                if($('#col'+i+'_filter').val() == 'approved'){
-                    status = 'COMPLETED'
-                }else if($('#col'+i+'_filter').val() == 'canceled'){
-                    status = 'FAILED'
-                }else if($('#col'+i+'_filter').val() == 'abandonded'){
-                    status = 'PENDING'
+                if($('#col'+i+'_filter').val() != ''){
+                    status = $('#col'+i+'_filter').val()
                 }else{
                     status = ''
                 }

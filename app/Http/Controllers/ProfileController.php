@@ -117,6 +117,7 @@ class ProfileController extends Controller
     {
         $user = User::with('image')->find($request->user_id);
 
+
         //dd($request->file('photo'));
 
 
@@ -147,13 +148,22 @@ class ProfileController extends Controller
      */
     public function password(PasswordRequest $request)
     {
+
         if (Gate::denies('update', auth()->user())) {
             return back()->withErrors([
                 'not_allow_password' => __('You are not allowed to change the password for a default user.')
             ]);
         }
 
-        auth()->user()->update(['password' => Hash::make($request->get('password'))]);
+
+        if($request->user == Auth::user()['id']){
+            auth()->user()->update(['password' => Hash::make($request->get('password'))]);
+        }else{
+            $user = User::find($request->user);
+            $user->update(['password' => Hash::make($request->get('password'))]);
+        }
+
+
 
         return back()->withPasswordStatus(__('Password successfully updated.'));
     }

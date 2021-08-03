@@ -6,7 +6,7 @@
         </p>
     </div>
     <div class="col-4 text-right">
-        <button data-toggle="modal" data-target="#videoModal" class="btn btn-sm btn-primary">{{ __('Assign videos') }}</button>
+        <button data-toggle="modal" data-target="#videoModal" class="btn btn-sm btn-primary">{{ __('Assign video') }}</button>
     </div>
 </div>
 <div class="table-responsive py-4">
@@ -16,7 +16,7 @@
                 <th scope="col">{{ __('Title') }}</th>                <th scope="col"></th>
             </tr>
         </thead>
-        <?php //dd($model->video); ?>
+        <?php //dd($model->videos); ?>
         <tbody class="video-body summaries-order">
  
         @if($model->sectionVideos)
@@ -80,12 +80,7 @@
 
 @push('js')
 <script>
-
-
-
-
     $(document).on('click', '#video_save_btn',function(e) {
-        alert('asd')
 
         let modelType = "{{addslashes ( get_class($model) )}}";
         let modelId = "{{ $model->id }}";
@@ -97,22 +92,22 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             type: 'post',
-            url: '{{route("city.store")}}',
-            data: {'city_id':$(selected_option).val(), 'model_type':modelType,'model_id':modelId},
+            url: '{{route("video.store_event")}}',
+            data: {'video_id':$(selected_option).val(), 'model_type':modelType,'model_id':modelId},
             success: function (data) {
-                let city = data.city
+                let video = data.data
 
-                $('.city-body tr').remove();
+                $('.video-body tr').remove();
 
 
-                let newCity =
+                let newVideo =
                 `<tr>` +
-                `<td id="name-` + city['id'] +`">` + city['name'] + `</td>` +
+                `<td>` + video['title'] + `</td>` +
+                `<td>` + video['url'] + `</td>` +
                 `
-
                 </tr>`;
 
-                $(".city-body").append(newCity);
+                $(".video-body").append(newVideo);
                 $(".close-modal").click();
                 $("#success-message p").html(data.success);
                 $("#success-message").show();
@@ -121,138 +116,39 @@
             }
         });
 
-})
+    })
 </script>
+
 <script>
-   $(document).on('click',"#edit-summary",function(){
-   summaryId = $(this).attr('data-id')
-   console.log(summaryId)
-   $.ajax({
-           headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-           },
-   	    type: 'post',
-   	    url: '/admin/summary/update/' + summaryId,
-            data: {'title':$('#edit-title').val(),'description':CKEDITOR.instances['edit-description2'].getData(), 'section': $('#editModalSummary #edit_section_sum').val(),'svg': $('#image_svg_upload-summary').val()},
-   	    success: function (data) {
+   $(document).on('shown.bs.modal', '#videoModal',function(e) {
 
-   	let summary = data.summary;
+    $('#videoFormControlSelect option').each(function(key, value) {
+        $(value).remove()
+    });
 
-
-   	$("#title-"+summary['id']).html(`<a class="edit-btn" href="#">`+summary['title'])
-   	$("#section_sum-"+summary['id']).html(summary['section'])
-    $("#media_sum-"+summary['id']).html(summary.medias['path']+summary.medias['original_name'])
-    $("#title-"+summary['id']).parent().find('.dropdown-item').attr('data-description', summary['description'])
-    $("#title-"+summary['id']).parent().find('.dropdown-item').attr('data-media', summary.medias['path']+summary.medias['original_name'])
-    $("#img-upload-summary").attr('src', summary.medias['path']+summary.medias['original_name'])
-   	$(".close_modal").click();
-
-   	$("#success-message p").html(data.success);
-   	$("#success-message").show();
-
-   	    },
-   	    error: function() {
-   	         //console.log(data);
-   	    }
-   	});
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type: 'get',
+        url: '/admin/video/fetchAllVideos',
+        success: function (data) {
+            let videos = data.data
 
 
-
-   })
-</script>
-<script>
-   $(document).on('shown.bs.modal', '#editModalSummary',function(e) {
-       alert('asd')
-    $("#sum_create").trigger('reset')
-
-
-
-   	var link  = e.relatedTarget,
-        	modal    = $(this),
-            id = e.relatedTarget.dataset.id
-
-            // if open first modal with id pass data
-            // if open second modal(file-manager) no pass data
-            if(id != null){
-
-            //title = e.relatedTarget.dataset.title,
-            //description =e.relatedTarget.dataset.description;
-            title = $("#title-"+id).text(),
-            section = e.relatedTarget.dataset.section
-            description = e.relatedTarget.dataset.description
-            media = e.relatedTarget.dataset.media
-            modal.find("#edit-title").val(title);
-            CKEDITOR.instances['edit-description2'].setData(description)
-                modal.find("#summary-id").val(id)
-            //$("#summary-id").val('asd')
-            $("#edit-summary").attr('data-id', id)
-            $("#image_svg_upload-summary").val(media)
-            modal.find("#edit-section_sum").val(section)
-
-            base_url = window.location.protocol + "//" + window.location.host
-            $("#img-upload-summary").attr('src', base_url+media)
-            console.log(base_url+media)
-
-            }
-
-
-
+            $.each( videos, function( key, value ) {
+                row =`
+                    <option value="${value.id}">${value.title}</option>
+                `
+                $('#videoFormControlSelect').append(row)
+            });
+        }
+    });
 
    });
 
 </script>
-<script src="{{ asset('js/sortable/Sortable.js') }}"></script>
 
-<script>
-
-   (function( $ ){
-
-      var el = document.getElementsByClassName('summaries-order')[0];
-
-      new Sortable(el, {
-         group: "words",
-         handle: ".my-handle",
-         draggable: ".item",
-         ghostClass: "sortable-ghost",
-
-      });
-
-      new Sortable(el, {
-
-          // Element dragging ended
-          onEnd: function ( /**Event*/ evt) {
-            orderSummary()
-          },
-      });
-
-   })( jQuery );
-
-   function orderSummary(){
-      let summaries={}
-
-      $( ".summary-list" ).each(function( index ) {
-            summaries[$(this).data('id')] = index
-      });
-
-
-      $.ajax({
-         type: 'POST',
-         headers: {
-         'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-         },
-         Accept: 'application/json',
-         url: "{{ route ('sort-summaries', $event->id) }}",
-         data:{'summaries':summaries},
-         success: function(data) {
-
-
-         }
-      });
-   }
-
-
-
-</script>
 
 @endpush
 
