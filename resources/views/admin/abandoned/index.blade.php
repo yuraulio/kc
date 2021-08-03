@@ -71,8 +71,8 @@
                                         ?>
 
                                         <tr>
-                                            <?php dd($events[$ucart->options['event']]); ?>
-                                            <td><a href="mailto:{{$abcart[$user_id]['user']->first()['email']}}">{{$abcart[$user_id]['user']->first()['email']}}</a><br />{{$abcart[$user_id]['user']->first()['firstname']}} {{$abcart[$user_id]['user']->first()['lastname']}}<br /><a target="_blank" href="admin/student/{{$user_id}}"><i class="fa fa-external-link"></i></a> </td>
+                                            <?php //dd($events[$ucart->options['event']]['title']); ?>
+                                            <td>@if($abcart[$user_id]['user']->first() != null)<a href="mailto:{{$abcart[$user_id]['user']->first()['email']}}">{{$abcart[$user_id]['user']->first()['email']}}</a><br />{{$abcart[$user_id]['user']->first()['firstname']}} {{$abcart[$user_id]['user']->first()['lastname']}}<br /><a target="_blank" href="admin/student/{{$user_id}}"><i class="fa fa-external-link"></i></a> @endif</td>
                                             <td class="text-center">{{$events[$ucart->options['event']]['title']}} <br /> {{$evdate}}<br /><a class="small" target="_blank" href="{{$events[$ucart->options['event']]->slug}}">{{$events[$ucart->options['event']]->slug}} <i class="fa fa-external-link"></i></a></td>
                                             <td class="text-center">{{$tickets[$ucart->id]->title}}</td>
                                             <td class="text-center">{{$ucart->qty}}</td>

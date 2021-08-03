@@ -2,15 +2,15 @@
 @section('content')
 
 <?php $thetype =0;
-//$info=null;  
+//$info=null;
 if(!isset($info)){
-   
-   $info['success'] = 'true';    
+
+   $info['success'] = 'true';
 }else{
-   $info = $info; 
+   $info = $info;
 }
 ?>
-   
+
 @if((isset($info) && isset($info['success'])) && $info['success'] === true)
 <main id="main-area" class="no-pad-top" role="main">
    <section class="section-text-img-blue">
@@ -22,7 +22,7 @@ if(!isset($info)){
                      <?php echo ((isset($info) && isset($info['title'])) ? $info['title'] : 'Info') ?>
                      <?php $res = json_decode($info['transaction']['payment_response'], true); ?>
                      {!! $info['message'] !!}
-                     
+
                      <p>Proceed to <a href="/myaccount" class="dark-bg">your account</a>.</p>
                   </div>
                </div>
@@ -108,7 +108,7 @@ if(!isset($info)){
                            <div class="alert alert-success alert-dismissable"></div>
                         @endif
 
-                        
+
 
 
                               <form action="{{ URL::to('checkoutlogin') }}" method="post" class="login-form" id="loginf"
@@ -153,7 +153,7 @@ if(!isset($info)){
                            </div>
                         </div>
                         <div id="new-customer" class="tab-content-wrapper @if(session()->has('create_tab') || (isset($couponEvent) && $couponEvent )) ) active-tab @endif">
-                        
+
                         <div id="favDialog" hidden>
 
                            <div class="alert-wrapper error-alert">
@@ -164,7 +164,7 @@ if(!isset($info)){
 
                            <!-- /.alert-outer -->
                            </div>
-                           </div> 
+                           </div>
                            <div class="form-wrapper">
                            @if($errors->any())
                         <div class="alert-outer">
@@ -203,10 +203,10 @@ if(!isset($info)){
                                     <div class="col6 col-sm-12">
                                        <label for="r-mobile-phone">Mobile phone <span>*</span></label>
                                        <div class="input-safe-wrapper is-flex full-width">
-                                       
+
                                           <select name="countryCode" id="selectCountry-reg" class="select2 form-control mb-3 custom-select country-select-reg">
-         
-                                   
+
+
                                                 <option data-countryCode="DZ" value="213">DZ (+213)</option>
                                                 <option data-countryCode="AD" value="376">AD (+376)</option>
                                                 <option data-countryCode="AO" value="244">AO (+244)</option>
@@ -421,7 +421,7 @@ if(!isset($info)){
                                                 <option data-countryCode="YE" value="967">YE (South)(+967)</option>
                                                 <option data-countryCode="ZM" value="260">ZM (+260)</option>
                                                 <option data-countryCode="ZW" value="263">ZW (+263)</option>
-                                             
+
                                           </select>
                                           <input class="required" id="mobile" onkeyup="checkPhoneNumber(this)" type="text"  name="mobile" value="{{old('mobile')}}"/>
                                           <input type="hidden" name="mobileCheck" id="mobileCheck" value="{{ old('mobile') }}">
@@ -458,7 +458,7 @@ if(!isset($info)){
                               </form>
                            </div>
                         </div>
-                      
+
                      </div>
                   </div>
                </div>
@@ -530,9 +530,9 @@ if(!isset($info)){
 <div id="couponDialog" hidden>
    <div class="alert-wrapper">
       <div class="alert-inner">
-         
+
       </div>
-			
+
 				<!-- /.alert-outer -->
 	</div>
 </div>
@@ -541,7 +541,7 @@ if(!isset($info)){
 					<div class="container">
 						<div class="alert-wrapper error-alert">
 							<div class="alert-inner">
-                        
+
 								<p><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-error-alert.svg')}}" alt="Info Alert">{{$info['message']}}.</p>
 								<a href="javascript:void(0)" class="close-alert"><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')}}" alt="Close Alert"/></a>
 							</div>
@@ -555,7 +555,7 @@ if(!isset($info)){
 					<div class="container">
 						<div class="alert-wrapper error-alert">
 							<div class="alert-inner">
-                        
+
 								<p><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-error-alert.svg')}}" alt="Info Alert">{{\Session('dperror')}}.</p>
 								<a href="javascript:void(0)" class="close-alert"><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')}}" alt="Close Alert"/></a>
 							</div>
@@ -570,11 +570,11 @@ if(!isset($info)){
       <div class="container">
          <h1 class="page-title">Checkout</h1>
          <h2>Your selection</h2>
-         <?php 
+         <?php
             $totalitems = 0;?>
          @foreach (Cart::content() as $item)
-         <?php 
-            $mod = $item->model; 
+         <?php
+            $mod = $item->model;
             //dd($item);
             			//get stock of this ticket
             			$curStock = 1;
@@ -583,9 +583,9 @@ if(!isset($info)){
             				if ($tvalue->pivot->event_id == $item->options->event && $tvalue->ticket_id == $item->id) {
             					$curStock = $tvalue->pivot->quantity;
                            $price = $tvalue->pivot->price;
-                          
+
             				}
-            
+
             			}
             if(isset($maxseats)) {
             	$themax = $maxseats;
@@ -628,25 +628,25 @@ if(!isset($info)){
             				$type ='GROUP OF 2+';
             				$placeid = '';
                         break;
-                        
+
                      case 7:
                         $type ='';
             				$placeid = '';
                         break;
-            
-            
+
+
             default:
             $type ='';
             				$placeid = '';
             				break;
             		}
-            
+
             	}
             	else {
             $type ='';
             		$placeid = '';
             }
-            
+
             ?>
          <div class="your-selection">
             <div class="item">
@@ -666,7 +666,7 @@ if(!isset($info)){
                   <ul class="checkout-infos">
                      <li>
                         <span class="label">Ticket:</span>
-                        
+
                         <span class="value">{{ $item->model->type }}</span>
                      </li>
                      <li>
@@ -691,7 +691,7 @@ if(!isset($info)){
             <!-- ./item -->
          </div>
          @endforeach
-        
+
       </div>
    </section>
    <section class="section-checkout checkout-participant">
@@ -977,7 +977,7 @@ if(!isset($info)){
                                        <option data-countryCode="YE" value="967">YE (South)(+967)</option>
                                        <option data-countryCode="ZM" value="260">ZM (+260)</option>
                                        <option data-countryCode="ZW" value="263">ZW (+263)</option>
-                                          
+
                                     </select>
                                     <input class="required"type="text"  onkeyup="checkPhoneNumberParticipant(this,<?php echo $i; ?>)" id="mobile<?php echo $i; ?>" name="mobile[]" placeholder="Mobile*" value="@if(isset($pay_seats_data) && isset($pay_seats_data['mobiles'][$i])){{$pay_seats_data['mobiles'][$i]}}@elseif(isset($cur_user) && $i == 0){{$cur_user->mobile}}@endif" required />
                                     <input class="required"type="hidden" id="mobileCheck<?php echo $i; ?>" name="mobileCheck[]" placeholder="Mobile*" value="@if(isset($pay_seats_data) && isset($pay_seats_data['mobileCheck'][$i])){{$pay_seats_data['mobileCheck'][$i]}}@elseif(isset($cur_user) && $i == 0)+{{$cur_user->country_code}}{{$cur_user->mobile}}@endif" required />
@@ -986,7 +986,7 @@ if(!isset($info)){
                               <div class="col6 col-sm-12">
                                  <label>Company </label>
                                     <input type="text" id="company<?php echo $i; ?>" name="company[]" placeholder="Company (if any)" value="@if(isset($pay_seats_data) && isset($pay_seats_data['companies'][$i])){{$pay_seats_data['companies'][$i]}}@elseif(isset($cur_user) && $i == 0){{$cur_user->company}}@endif" />
-                                
+
                               </div>
                               <div class="col6 col-sm-12">
                                  <label>Position title </label>
@@ -994,8 +994,8 @@ if(!isset($info)){
                                           <input class="" type="text" id="jobtitle<?php echo $i; ?>" name="jobtitle[]" placeholder="Title or Job Position" value="@if(isset($pay_seats_data) && isset($pay_seats_data['jobtitles'][$i])){{$pay_seats_data['jobtitles'][$i]}}@elseif(isset($cur_user) && $i == 0){{$cur_user->job_title}}@endif" required />
                                  </div>
                               </div>
-                              @if($item->options->has('type')) 
-                              @switch ( $item->options->type) 
+                              @if($item->options->has('type'))
+                              @switch ( $item->options->type)
                               @case(0)
                               <div class="form-group endrow" id="student" hidden>
                               <div class="input-safe-wrapper">
@@ -1030,7 +1030,7 @@ if(!isset($info)){
                               <div class="col6 col-sm-12">
                               <label>Knowcrunch Id* / Deree Id* </label>
                               <div class="input-safe-wrapper">
-                                 <input class="required" type="text"  id="studentId" name="studentId[]" placeholder="Knowcrunch Id* / Deree Id*" value="@if(Sentinel::check()->partner_id){{Sentinel::check()->partner_id}}@endif" required>
+                                 <input class="required" type="text"  id="studentId" name="studentId[]" placeholder="Knowcrunch Id* / Deree Id*" value="@if(Auth::check()){{Auth::user()->id}}@endif" required>
                               </div>
                               </div>
                               @break
@@ -1057,7 +1057,7 @@ if(!isset($info)){
                      </form>
                      @if($thetype==5)
                      <a href="#" class="btn btn--lg btn--secondary btn-add-participant" data-ticket-max = "{{$themax}}" data-participant-number="{{ $item->qty }}"><img src="{{cdn('/theme/assets/images/icons/icon-add-user.svg')}}" alt="Add another participant">Add another participant</a>
-                     @endif 
+                     @endif
                   </div>
                </div>
             </div>
@@ -1112,7 +1112,7 @@ if(!isset($info)){
                               </div>
 
                               @else
-                              <label>Name or Company <span>*</span></label> 
+                              <label>Name or Company <span>*</span></label>
                                  <div class="input-safe-wrapper">
                                     <input class="required" type="text" id="billname" name="billname" placeholder="Name" value="@if(isset($pay_bill_data) && isset($pay_bill_data['billname'])){{$pay_bill_data['billname']}}@endif" oninput="billsurname.value = billname.value; return true;" required />
                                  </div>
@@ -1226,14 +1226,14 @@ if(!isset($info)){
                                           <input class="required" type="text"id="companyemail" name="companyemail" placeholder="Email αποστολής τιμολογίου" value="@if(isset($pay_bill_data) && isset($pay_bill_data['companyemail'])){{$pay_bill_data['companyemail']}}@endif"required />
                                     </div>
                                  </div>
-                           
+
                               </div>
                            </div>
 
                         </div>
 
-                       
-                        
+
+
                      </form>
                   </div>
                </div>
@@ -1263,9 +1263,9 @@ if(!isset($info)){
                                        <input class="mar-right" onkeyup="convertToUppercase(this)" onblur="this.placeholder = 'Type here'" onfocus="this.placeholder = ''"  type="text" id="coupon" name="coupon" placeholder="Type here" value />
                                        <input class="btn1 btn--sm btn--secondary coupon-submit" type="button" value="Apply">
                                     </div>
-                               
+
                                  </div>
-                               
+
                               </div>
                               {{-- endif --}}
                            @endif
@@ -1322,12 +1322,12 @@ if(!isset($info)){
                                  <div class="custom-radio-box children-radio">
                                     <div class="crb-wrapper">
                                        <input id="radio-installment-2-control" name='installments' value='2' type="radio" data-fieldset-target="installments-fields" >
-                                      
+
                                        <span></span>
                                     </div>
                                     <div class="label-wrapper">
                                        <label for="radio-installment-2-control">2 installments: <span>2x €{{$instTwo}}</span>.</label>
-                                       
+
                                     </div>
                                  </div>
                                  <div class="custom-radio-box children-radio">
@@ -1337,20 +1337,20 @@ if(!isset($info)){
                                     </div>
                                     <div class="label-wrapper">
                                        <label for="radio-installment-3-control">3 installments: <span>3x €{{$instThree}}</span>.</label>
-                                       
+
 
                                     </div>
                                  </div>
                               </div>
-                              
-                         
+
+
                               <input type="hidden" id="payment_method_id" name="payment_method_id" value="{{$pay_methods['id']}}">
-                         
+
                               <!-- /.col12.hidden-fields-actions.installments-fields -->
-                           </div> 
+                           </div>
                            @endif
 
-                           
+
 
                            <div class="col12">
                               <div class="custom-checkbox-wrapper text-align-left extra-top-margin clearfix">
@@ -1369,7 +1369,7 @@ if(!isset($info)){
 
                            </div>
                         </div>
-                       
+
                      </form>
                   </div>
                </div>
@@ -1392,14 +1392,14 @@ if(!isset($info)){
 @if(isset($paywithstripe) && $paywithstripe == 1 && Auth::check())
 <script>
     $(document).on('click', '#addCard', function(e){
-      
+
       /*$('<script>')
        .attr('src', 'https://js.stripe.com/v3/')
        .attr('id', 'stripe-js')
        .appendTo('head');*/
 
-   
-      
+
+
       $('#addCard').prop('disabled', true);
       $('.msg_save_card').remove();
       $('#container').append(`
@@ -1417,9 +1417,9 @@ if(!isset($info)){
                var cardElement = elements.create('card',{
                   style: {
                      base: {
-      
+
                         fontSize: '18px',
-      
+
                      },
                   },
                   hidePostalCode: true,
@@ -1429,12 +1429,12 @@ if(!isset($info)){
        .attr('id', 'stripe-form')
        .appendTo('head');
 
-     
 
-      
+
+
    })
 
-  
+
 
 </script>
 
@@ -1474,7 +1474,7 @@ if(!isset($info)){
                   },
                   data:{ 'payment_method' : paymentMethod},
                   success:function(data) {
-                 
+
                      if(data['success']){
                         data = JSON.stringify(data['card'])
                         data = JSON.parse(data)
@@ -1506,16 +1506,16 @@ if(!isset($info)){
                      $("#stripe-js").remove();
                      }
 
-                     
+
 
                   },
-           
+
                });
             }
          });
-               
+
    })
-  
+
 
 
 
@@ -1540,7 +1540,7 @@ if(!isset($info)){
          // favDialog.showModal();
          favDialog.style.display = "block";
           $("body").css("overflow-y", "hidden")
-   
+
        // favDialog.show();
       }else{
         var form = document.getElementById('new-customer-form');
@@ -1555,25 +1555,25 @@ if(!isset($info)){
       var favDialog = document.getElementById('favDialog');
       var favDialogCard = document.getElementById('favDialogCard');
       var favDialogCardNumberFailed = document.getElementById('favDialogCardNumberFailed');
-     // favDialog.close(); 
+     // favDialog.close();
      favDialog.style.display = "none";
      favDialogCard.style.display = "none";
      favDialogCardNumberFailed.style.display = "none";
       $("body").css("overflow-y", "auto")
    })
-   
+
 </script>
 <script>
    $(document).on('click', '#forgot-pass2', function(e){
        $('#loginf').hide()
-       $('#forgotf').show()    
+       $('#forgotf').show()
    })
-   
+
    $(document).on('click', '.close-btn', function(e){
       $('#loginf').show()
-       $('#forgotf').hide()   
+       $('#forgotf').hide()
    })
-   
+
 </script>
 @if(Cart::instance('default')->subtotal() >  0)
 <script type="text/javascript">var type = "<?= $item->options->type ?>";</script>
@@ -1588,7 +1588,7 @@ if(!isset($info)){
            var addRemove = "#field" + (next);
            next = next + 1;
            var newIn = '<div id="field' + next + '" class="acfield"><div class="row"><div class="col-lg-3 col-md-3 col-sm-6 col-xs-12"><div class="form-group startrow"><input type="text" class="form-control" id="name' + next + '" name="name[]" placeholder="Name"></div></div><div class="col-lg-3 col-md-3 col-sm-6 col-xs-12"><div class="form-group startrow"><input type="text" class="form-control" id="surname' + next + '" name="surname[]" placeholder="Surname"></div></div><div class="col-lg-3 col-md-3 col-sm-6 col-xs-12"><div class="form-group startrow"><input type="text" class="form-control" id="email' + next + '" name="email[]" placeholder="Email"></div></div><div class="col-lg-3 col-md-3 col-sm-6 col-xs-12"><div class="form-group endrow"><input type="text" class="form-control" id="mobile' + next + '" name="mobile[]" placeholder="Email"></div></div></div><div class="row"><div class="col-lg-3 col-md-3 col-sm-6 col-xs-12"><div class="form-group startrow"><input type="text" class="form-control" id="address' + next + '" name="address[]" placeholder="Street Name"></div></div><div class="col-lg-3 col-md-3 col-sm-6 col-xs-12"><div class="form-group startrow"><input type="text" class="form-control" id="addressnum' + next + '" name="addressnum[]" placeholder="Street Address"></div></div><div class="col-lg-3 col-md-3 col-sm-6 col-xs-12"><div class="form-group startrow"><input type="text" class="form-control" id="postcode' + next + '" name="postcode[]" placeholder="Post Code"></div></div><div class="col-lg-3 col-md-3 col-sm-6 col-xs-12"><div class="form-group endrow"><input type="text" class="form-control" id="city' + next + '" name="city[]" placeholder="City"></div></div></div></div>';
-   
+
            var newInput = $(newIn);
            var removeBtn = '<button id="remove' + (next - 1) + '" class="btn btn-booknow andnormal remove-me" >-</button>';
            var removeButton = $(removeBtn);
@@ -1596,7 +1596,7 @@ if(!isset($info)){
            $(addRemove).after(removeButton);
            $("#field" + next).attr('data-source',$(addto).attr('data-source'));
            $("#count").val(next);
-   
+
                $('.remove-me').click(function(e){
                    e.preventDefault();
                    var fieldNum = this.id.charAt(this.id.length-1);
@@ -1609,17 +1609,17 @@ if(!isset($info)){
 </script>
 <script>
    $(".btn-add-participant").on("click", function() {
-   
+
    var number = $(this).attr('data-participant-number');
          var maxticket = $(this).attr('data-ticket-max');
          maxticket = parseInt(maxticket);
          var newNumber = parseInt(number)+1;
    document.getElementById('item-quantity').setAttribute('value',newNumber)
-   
+
    	  $.ajax({ url: '/cart', type: "post",
              data: $(".small-form ").serialize(),
              success: function(data) {
-   
+
              	ajaxCount('default');
    		window.location.replace('cart/');
              }
@@ -1628,13 +1628,13 @@ if(!isset($info)){
 </script>
 <script>
    $(".remove-participant").on("click", function() {
-   
+
    var number = $(this).parent().parent().parent('.participant-form-group').next('.btn-add-participant').attr('data-participant-number');
          var maxticket = $(this).attr('data-ticket-max');
          maxticket = parseInt(maxticket);
          var newNumber = parseInt(number)-1;
    document.getElementById('item-quantity').setAttribute('value',newNumber)
-   
+
    	  $.ajax({ url: '/cart', type: "post",
              data: $(".small-form ").serialize(),
              success: function(data) {
@@ -1648,11 +1648,11 @@ if(!isset($info)){
 @if(request()->has('reg') &&request()->get('reg') == 10 )
 <script type="text/javascript">
    $( document ).ready(function() {
-      
+
       fbq('track', 'CompleteRegistration');
-        
+
        $('#billing input[type=radio]').on('change', function() {
-   
+
        	if (this.value == 1) {
        		$('#billing-form').slideDown();
        		$('#invoice-form').slideUp();
@@ -1666,19 +1666,19 @@ if(!isset($info)){
        		$('#invoice-form').slideUp();
        	}
    	});
-   
-   
+
+
    	$('#cardtype input[type=radio]').on('change', function() {
        	//console.log(this.value);
        	if (this.value == 2) {
        		$('#installments-form').slideDown();
        	} else {
        		$('#installments-form').slideUp();
-   
+
        	}
    	});
-   
-   
+
+
    });
 
 </script>
@@ -1687,10 +1687,10 @@ if(!isset($info)){
 $( document ).ready(function() {
 
    @if((isset($info) && isset($info['success'])) && $info['success'] !== true && isset($item))
-   
+
    if(<?php echo Cart::instance('default')->subtotal() ?> > 0){
 
-      fbq('track', 'AddToCart', {    
+      fbq('track', 'AddToCart', {
          content_name: '<?php echo  $item->name ?>',
          content_category: '<?php echo $categoryScript; ?>',
          content_ids: ['{{$eventId}}'],
@@ -1715,7 +1715,7 @@ $( document ).ready(function() {
    	{
    		form_post.submit();
    	} else {
-   	
+
    		alert("Please accept the Terms of use (I Agree)");
    	}
    }
@@ -1738,7 +1738,7 @@ $( document ).ready(function() {
    'transaction_id': '{{$tigran['transid']}}'
    });
 
-   
+
    gtag('event', 'purchase', {
   'transaction_id': '{{$tigran['transid']}}',
   'affiliation': 'Knowcrunch',
@@ -1763,7 +1763,7 @@ $( document ).ready(function() {
    'currency': 'EUR'
    });
    }, 1000);
-   
+
 </script>
 @endif
 @else
@@ -1771,7 +1771,7 @@ $( document ).ready(function() {
    // setTimeout(function(){
    //   		fbq('track', 'FailedPayment');
    //   	}, 1000);
-     
+
 </script>
 @endif
 @endif
@@ -1788,28 +1788,28 @@ $( document ).ready(function() {
       $(".select2").select2()
 
       @if("{{ old('countryCode') }}")
-         
+
          $("#selectCountry").val("{{ old('countryCode') }}").change();
-      
+
       @endif
 
       @if(isset($totalitems))
-         
-         @for($i =0; $i < $totalitems; $i++) 
-       
+
+         @for($i =0; $i < $totalitems; $i++)
+
             @if(isset($pay_seats_data) && !isset($pay_seats_data['countryCodes'][$i]) && $i == 0)
-               
+
                $("#selectCountry"+"{{$i}}").val("{{$cur_user->country_code}}").change();
 
             @elseif( isset($pay_seats_data) && isset($pay_seats_data['countryCodes'][$i]) )
-         
+
                $("#selectCountry"+"{{$i}}").val("{{ old('countryCodes[$i]',$pay_seats_data['countryCodes'][$i])}}").change();
 
             @endif
 
          @endfor
       @endif
-      
+
    });
 
 </script>
@@ -1818,22 +1818,22 @@ $( document ).ready(function() {
 <script>
 
    function selectCountryCode(code,index){
-      
+
       let mobile = $("#mobile"+index).val()
       $("#mobileCheck"+index).val("+" + code.value + mobile)
 
    }
-     
+
 
    function checkPhoneNumberParticipant(phone,index){
-     
+
       phone = phone.value.replace(/\s/g,'')
       let validatePhone = false;
 
       if(phone.length > 3){
 
          if(phone.substring(0, 3) == '+30' || phone.substring(0, 2) == '30'){
-            
+
             $("#selectCountry"+index).val("30").change();
             $("#selectCountry-reg"+index).val("30").change();
             validatePhone = true;
@@ -1867,9 +1867,9 @@ $( document ).ready(function() {
             validatePhone = true;
             $("#selectCountry"+index).val("44").change();
             $("#selectCountry-reg"+index).val("44").change();
-         }else if(phone.substring(0, 2) == '07' /*|| phone.substring(0, 3) == '073' || phone.substring(0, 3) == '074' || phone.substring(0, 3) == '075' || phone.substring(0, 3) == '076' 
+         }else if(phone.substring(0, 2) == '07' /*|| phone.substring(0, 3) == '073' || phone.substring(0, 3) == '074' || phone.substring(0, 3) == '075' || phone.substring(0, 3) == '076'
             || phone.substring(0, 3) == '077' || phone.substring(0, 3) == '078' || phone.substring(0, 3) == '079'*/){
-            
+
                //phone = '+44'+phone
                validatePhone = true;
                $("#selectCountry"+index).val("44").change();
@@ -1884,7 +1884,7 @@ $( document ).ready(function() {
 
       }
 
-     
+
 
    }
 </script>
@@ -1906,14 +1906,14 @@ $( document ).ready(function() {
 
 
    function checkPhoneNumber(phone){
-     
+
       phone = phone.value.replace(/\s/g,'')
       let validatePhone = false;
 
       if(phone.length > 3){
 
          if(phone.substring(0, 3) == '+30' || phone.substring(0, 2) == '30'){
-            
+
             $("#selectCountry").val("30").change();
             $("#selectCountry-reg").val("30").change();
             validatePhone = true;
@@ -1947,9 +1947,9 @@ $( document ).ready(function() {
             validatePhone = true;
             $("#selectCountry").val("44").change();
             $("#selectCountry-reg").val("44").change();
-         }else if(phone.substring(0, 2) == '07' /*|| phone.substring(0, 3) == '073' || phone.substring(0, 3) == '074' || phone.substring(0, 3) == '075' || phone.substring(0, 3) == '076' 
+         }else if(phone.substring(0, 2) == '07' /*|| phone.substring(0, 3) == '073' || phone.substring(0, 3) == '074' || phone.substring(0, 3) == '075' || phone.substring(0, 3) == '076'
             || phone.substring(0, 3) == '077' || phone.substring(0, 3) == '078' || phone.substring(0, 3) == '079'*/){
-            
+
                //phone = '+44'+phone
                validatePhone = true;
                $("#selectCountry").val("44").change();
@@ -1963,7 +1963,7 @@ $( document ).ready(function() {
 
       }
 
-     
+
 
    }
 </script>
@@ -1974,7 +1974,7 @@ $( document ).ready(function() {
       <script>
 
          function convertToUppercase(value){
-         
+
             value = (value.value).toUpperCase()
             $("#coupon").val(value)
          }
@@ -2022,7 +2022,7 @@ $( document ).ready(function() {
                   $("#couponDialog .alert-wrapper").removeClass('success-alert')
                   $("body").css("overflow-y", "auto")
                 }, 2000);
-               
+
             }
          });
 

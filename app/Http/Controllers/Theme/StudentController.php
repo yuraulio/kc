@@ -35,7 +35,7 @@ class StudentController extends Controller
 
 
     protected function logout(){
-        
+
         Auth::logout();
         Session::invalidate();
         Session::regenerateToken();
@@ -47,25 +47,25 @@ class StudentController extends Controller
     public function index(){
 
         $user = Auth::user();
-       
+
         if(count($user->instructor) > 0){
             $data = $this->instructorEvents();
         }else{
             $data = $this->studentsEvent();
         }
-        
+
         $data['instructor'] = count($user->instructor) > 0;
         return view('theme.myaccount.student', $data);
     }
 
     public function instructorEvents(){
-       
+
 
         $user = Auth::user();
         $data['user'] = User::with('image', 'instructor')->find($user->id);
 
         $instructor = $user->instructor->first();
-     
+
         $data['elearningAccess'] = 0;
         $data['cards'] = [];
         $data['subscriptionAccess'] = [];
@@ -134,7 +134,7 @@ class StudentController extends Controller
 
 
                 $statistic = $statistics;
-                
+
 
                 if($statistic['videos'] != ''){
                     $notes = json_decode($statistic['notes'], true);
@@ -195,7 +195,7 @@ class StudentController extends Controller
     public function studentsEvent(){
 
         $user = Auth::user();
-        
+
         $data['elearningAccess'] = 0;
         $data['cards'] = [];
         $data['subscriptionAccess'] = [];
@@ -209,7 +209,7 @@ class StudentController extends Controller
         $data['mySubscriptionEvents'] = [];
 
         $eventSubscriptions = [];
-        
+
         foreach($data['user']['events'] as $key => $event){
 
             //if elearning assign progress for this event
@@ -254,7 +254,7 @@ class StudentController extends Controller
                 $expiration_event = strtotime($expiration_event);
                 $data['user']['events'][$key]['exams'] = $event->getExams();
                 //$data['user']['events'][$key]['exam_access'] = $user->examAccess(0.8,$event->id);
-               
+
             }
 
             $data['instructors'] = Instructor::with('slugable', 'medias')->get()->groupby('id');
@@ -269,7 +269,7 @@ class StudentController extends Controller
             }
 
         }
-        
+
         foreach($user['eventSubscriptions']->whereNotIn('id',$eventSubscriptions) as $key => $subEvent){
             $event = $subEvent['event']->first();
             if($event->is_elearning_course()){
@@ -309,7 +309,7 @@ class StudentController extends Controller
         }
 
         $data['subscriptionEvents'] = Event::whereIn('id',$subscriptionEvents)->with('slugable')->get();
-        
+
         return $data;
 
     }
@@ -563,9 +563,9 @@ class StudentController extends Controller
         $data['course'] = $event['title'];
         //dd($data['course']);
 
-        $statistic =  ($statistic = $user->statistic()->wherePivot('event_id',$event['id'])->first()) ? 
+        $statistic =  ($statistic = $user->statistic()->wherePivot('event_id',$event['id'])->first()) ?
                             $statistic->toArray() : ['pivot' => [], 'videos' => ''];
-        
+
         //$this->updateUserStatistic($event,$statistic['pivot'],$user);
         $statistic = $user->updateUserStatistic($event,$statistic['pivot']);
         $data['lastVideoSeen'] = $statistic['pivot']['lastVideoSeen'];
@@ -625,7 +625,6 @@ class StudentController extends Controller
     }
 
     public function saveElearning(Request $request){
-
 
         $user = Auth::user();
         $user = User::find($user['id']);
@@ -701,7 +700,7 @@ class StudentController extends Controller
             }*/
 
         }
-     
+
         return response()->json([
             'success' => true,
             'videos' => $request->videos,
@@ -716,13 +715,13 @@ class StudentController extends Controller
     {
         $activation = Activation::where('code',$code)->first();
         if (!$activation) {
-        	
+
         	Session::flash('opmessage', 'Invalid or expired activation code.');
             Session::flash('opstatus', 0);
             return redirect('/')->withErrors('Invalid or expired activation code.');
 
         }
-        
+
         $user = $activation->user;
         $input = $user->only('email','password');
         Auth::login($user);
@@ -734,7 +733,7 @@ class StudentController extends Controller
 
             Session::flash('opmessage', 'Your account is now activated. You may login now!');
             Session::flash('opstatus', 1);
-    
+
             return redirect('/cart?reg=1')->withInput()->with('message','Your account is now activated. You may login now!');
         }
 
