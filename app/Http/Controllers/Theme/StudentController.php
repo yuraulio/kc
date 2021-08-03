@@ -222,6 +222,7 @@ class StudentController extends Controller
 
                 $data['user']['events'][$key]['mySubscription'] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first();
                 $data['user']['events'][$key]['plans'] = $event['plans'];
+                $data['user']['events'][$key]['certificates'] = $event->certificatesByUser($user->id);
                 $data['user']['events'][$key]['exams'] = $event->getExams();
                 $data['user']['events'][$key]['exam_access'] = $event->examAccess($user,0.8);//$user->examAccess(0.8,$event->id);
                 //$data['user']['events'][$key]['exam_results'] = $user->examAccess(0.8,$event->id);
@@ -550,19 +551,24 @@ class StudentController extends Controller
         $has_access = false;
         $event = Event::where('title', $course)->with('slugable','category')->first();
 
-        $event = $user->events()->wherePivot('event_id', $event['id'])->first();
-
+        if($user->instructor->first()){
+            $event = $user->instructor->first()->event()->wherePivot('event_id', $event['id'])->first();
+            
+        }else{
+            $event = $user->events()->wherePivot('event_id', $event['id'])->first();
+        }
+       
         $data['details'] = $event->toArray();
         $data['details']['slug'] = $event['slugable']['slug'];
-        $data['files'] = $event['category'][0]['dropbox'][0]->toArray();
+      
+        $data['files'] = !$user->instructor->first() ? $event['category'][0]['dropbox'][0]->toArray() : [];
         //dd($data['files']);
         //dd($data['details']);
-
-
+     
         $data['videos_progress'] = $event->progress($user);
         $data['course'] = $event['title'];
         //dd($data['course']);
-
+       
         $statistic =  ($statistic = $user->statistic()->wherePivot('event_id',$event['id'])->first()) ?
                             $statistic->toArray() : ['pivot' => [], 'videos' => ''];
 
@@ -653,32 +659,29 @@ class StudentController extends Controller
                 'videos' => json_encode($videos)
             ], false);
 
-            /*if($user->events()->where('event_id',2068)->first() && $user->events()->where('event_id',2068)->first()->trans_id != '0'){
+            /*if($user->events()->where('event_id',2068)->first()){
                 $user->videos()->where('event_id',$request->event)->first()->certification($request->event);
             }*/
 
 
-           /* if(isset($_COOKIE['examMessage-'.$request->event_statistic])){
+            /*if(isset($_COOKIE['examMessage-'.$request->event_statistic])){
 
                 $examAccess = false;
 
-            }else if($request->event != 2068){
+            }else if($request->event != 2068 && ($event=$user->events()->where('event_id',$request->event)->first())){
 
                 $examAccess = $user->videos()->where('event_id',$request->event)->first()->examAccess();
 
                 if($examAccess){
 
-                    $generalInfo = \Config::get('dpoptions.website_details.settings');
-                    $adminemail = $generalInfo['admin_email'];
+                    $adminemail = 'info@knowcrunch.com';
 
-                    $event = Content::find($request->event);
-
-                    $muser['name'] = $user->first_name . ' ' . $user->last_name;
-                    $muser['first'] = $user->first_name;
+                    $muser['name'] = $user->firstname . ' ' . $user->lastname;
+                    $muser['first'] = $user->firstname;
                     $muser['eventTitle'] =  $event->title;
                     $muser['email'] = $user->email;
 
-                    $data['firstName'] = $user->first_name;
+                    $data['firstName'] = $user->firstname;
                     $data['eventTitle'] = $event->title;
 
                     $sent = Mail::send('emails.student.exam_activate', $data, function ($m) use ($adminemail, $muser) {
@@ -694,8 +697,6 @@ class StudentController extends Controller
                     });
 
                 }
-
-
 
             }*/
 
