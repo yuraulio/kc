@@ -1,7 +1,7 @@
 @extends('layouts.app', [
-    'title' => __('User Management'),
+    'title' => __('Subscription Management'),
     'parentSection' => 'laravel',
-    'elementName' => 'subscription-management'
+    'elementName' => 'subscriptions-management'
 ])
 
 @section('content')
@@ -121,12 +121,10 @@
                             <?php //dd($subscriptions[0]); ?>
                                 @foreach ($subscriptions as $item)
                                 <?php
-                                dd($item);
-                                if($item['subscription']->first()['event']->first()['title'] == ''){
-                                    dd('asd');
-                                }
+                                //dd($item);
+                              
                                 ?>
-                                <?php dd($item['subscription']->first()['event']->first()['title']); ?>
+
                                     <tr>
                                         <td>
                                             {{ $item['id'] }}
@@ -138,17 +136,12 @@
                                             {{ $user['firstname']}} {{ $user['lastname']}}
                                         </td>
                                         <td>
-                                            <?php
-
-                                                if(count($item['subscription']) > 0 && count($item['event']->first()['plans']) > 0){
-                                                    echo $item['subscription']->first()['event']->first()['plans']->first()['name'];
-                                                }
-                                            ?>
+                                            
                                         </td>
-                                        <td>{{ $item['subscription']->first()['event']->first()['title'] }}</td>
+                                        <td></td>
 
                                         <td>
-                                                {{ $item['status'] }}
+                                            {{ $item['status'] }}
 
                                         </td>
                                         <td>{{ $item['trial'] }}</td>
@@ -246,8 +239,6 @@
                 filterColumn( $(this).parents('div').attr('data-column') );
 
             } );
-
-
 
         });
     </script>

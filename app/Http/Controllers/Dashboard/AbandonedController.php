@@ -8,6 +8,10 @@ use App\Model\Abandoned;
 use App\Model\Shoppingcart;
 use App\Model\Event;
 use App\Model\Ticket;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\AbandonedExport;
+
+
 
 class AbandonedController extends Controller
 {
@@ -54,4 +58,12 @@ class AbandonedController extends Controller
 
         return redirect('admin/abandoned');
     }
+
+    public function exportCsv()
+    {
+
+        return Excel::download(new AbandonedExport, 'users.xlsx');
+
+    }
+
 }

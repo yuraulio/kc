@@ -272,6 +272,7 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     //Abandoned
     Route::get('abandoned', 'Dashboard\AbandonedController@index')->name('abandoned.index');
     Route::post('abandoned/remove/{id}', ['as' => 'abandoned.remove', 'uses' => 'Dashboard\AbandonedController@remove']);
+    Route::get('abandoned/exportcsv', ['as' => 'abandoned.exportcsv', 'uses' => 'Dashboard\AbandonedController@exportCsv']);
 });
 
 

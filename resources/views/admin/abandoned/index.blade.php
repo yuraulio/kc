@@ -10,6 +10,11 @@
             @slot('title')
                 {{ __('Examples') }}
             @endslot
+            @slot('filter')
+                <!-- <a href="#" class="btn btn-sm btn-neutral">{{ __('Filters') }}</a> -->
+                <a class="btn btn-sm btn-neutral" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">{{ __('Filters') }}</a>
+
+            @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('abandoned.index') }}">{{ __('Abandoned Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
@@ -40,7 +45,23 @@
                     </div>
 
                     <div class="table-responsive py-4">
-                        <table class="table align-items-center table-flush"  id="datatable-basic">
+                        
+                        <div class="collapse" id="collapseExample">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-4" id="filter_col1" data-column="1">
+                                        <label>Event</label>
+                                        <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="event" class="column_filter" id="col1_filter">
+                                            <option selected value> -- All -- </option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <button id="exportAbandoned" style="margin-left:1.2rem;" type="button" class="btn btn-primary btn-sm">Export csv</button>
+                        <hr>
+                        <table class="table align-items-center table-flush"  id="abandoned_table">
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col">{{ __('User') }}</th>
@@ -73,7 +94,7 @@
                                         <tr>
                                             <?php //dd($events[$ucart->options['event']]['title']); ?>
                                             <td>@if($abcart[$user_id]['user']->first() != null)<a href="mailto:{{$abcart[$user_id]['user']->first()['email']}}">{{$abcart[$user_id]['user']->first()['email']}}</a><br />{{$abcart[$user_id]['user']->first()['firstname']}} {{$abcart[$user_id]['user']->first()['lastname']}}<br /><a target="_blank" href="admin/student/{{$user_id}}"><i class="fa fa-external-link"></i></a> @endif</td>
-                                            <td class="text-center">{{$events[$ucart->options['event']]['title']}} <br /> {{$evdate}}<br /><a class="small" target="_blank" href="{{$events[$ucart->options['event']]->slug}}">{{$events[$ucart->options['event']]->slug}} <i class="fa fa-external-link"></i></a></td>
+                                            <td class="text-center">{{$events[$ucart->options['event']]['title']}}</td>
                                             <td class="text-center">{{$tickets[$ucart->id]->title}}</td>
                                             <td class="text-center">{{$ucart->qty}}</td>
                                             <td class="text-right">&euro;{{$ucart->qty*$ucart->price}}</td>
@@ -131,4 +152,51 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
+
+    <script>
+        function fillSelectedBox(){
+            events = table.column(1).data().unique().sort()
+            $.each(events, function(key, value){
+                console.log(value)
+                $('#col1_filter').append('<option value="'+value+'">'+value+'</option>')
+            })
+        }
+
+        function filterColumn ( i ) {           
+            table.column( i ).search($('#col'+i+'_filter').val()).draw();
+        }
+
+        // DataTables initialisation
+        var table = $('#abandoned_table').DataTable();
+
+        $(document).ready(function() {
+            fillSelectedBox()
+
+            $('select.column_filter').on('change', function () {
+                filterColumn( $(this).parents('div').attr('data-column') );
+
+            } );
+
+            $( "#exportAbandoned" ).click(function() {
+
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: 'get',
+                    url: '{{route("abandoned.exportcsv")}}',
+                    success: function (data) {
+                //console.log(data);
+                
+                    },
+                    error: function() {
+                        //console.log(data);
+                    }
+                });
+
+
+            });
+
+        });
+    </script>
 @endpush
