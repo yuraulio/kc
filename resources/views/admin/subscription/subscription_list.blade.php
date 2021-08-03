@@ -172,7 +172,7 @@
 
 
                                         <td>{{ $item['ends_at'] }}</td>
-                                        <td class="d-none">{{ $item['total_amount'] }}</td>
+                                        <td class="d-none">{{ intval($item['total_amount']) }}</td>
 
 
                                     </tr>
@@ -206,6 +206,54 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
 
     <script>
+        
+
+        function initStats(){
+            amount = $('#subscriptions_table').DataTable().column( 7 ).data();
+            let sum = 0;
+
+            $.each(amount, function(key, value) {
+                sum = sum + parseInt(value)
+                //console.log(value)
+            })
+
+            $('#total').text(sum)
+
+        }
+
+        function fillSelectedBox(){
+            events = table.column(3).data().unique().sort()
+            $.each(events, function(key, value){
+                console.log(value)
+                $('#col3_filter').append('<option value="'+value+'">'+value+'</option>')
+            })
+        }
+
+        function filterColumn ( i ) {           
+            if(i == 4){ //Status filter
+                if($('#col'+i+'_filter').val() == 'approved'){
+                    status = 'COMPLETED'
+                }else if($('#col'+i+'_filter').val() == 'canceled'){
+                    status = 'FAILED'
+                }else if($('#col'+i+'_filter').val() == 'abandonded'){
+                    status = 'PENDING'
+                }else{
+                    status = ''
+                }
+                value = status
+                console.log('select status'+value)
+
+            }else if(i == 3){ // Event filter
+                if($('#col'+i+'_filter').val() != ''){
+                    value = $('#col'+i+'_filter').val()
+                }else{
+                    value = ''
+                }
+                
+            }
+            table.column( i ).search(value).draw();
+        }
+
 
         // DataTables initialisation
         var table = $('#subscriptions_table').DataTable();
@@ -213,75 +261,11 @@
 
         let status = '';
 
-        function initStats(){
-            price = $('#participants_table').DataTable().column( 3 ).data();
-            let sum = 0;
-
-                $.each(price, function(key, value){
-                //console.log($('#participants_table').DataTable().column( i ).data()[key] == $('#col'+i+'_filter').val())
-                    //console.log('asd')
-                    //console.log($('#participants_table').DataTable().column( 3 ).data()[key])
-                    sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key])
-
-                    if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Alumni'){
-                        alumni = alumni + parseInt(value)
-                        count_alumni++
-                    }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Regular'){
-                        regular = regular + parseInt(value)
-                        count_regular++
-                    }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Special'){
-                        special = special + parseInt(value)
-                        count_special++
-                    }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Sponsored'){
-                        sponsored = sponsored + parseInt(value)
-                        count_sponsored++
-                    }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early birds'){
-                        early = early + parseInt(value)
-                        count_early++
-                    }
-
-
-
-            })
-            $('#total').text(sum)
-
-        }
-
-        function fillSelecteBox(){
-            events = table.column(3).data().unique().sort()
-            $.each(events, function(key, value){
-                console.log(value)
-                $('#col1_filter').append('<option value="'+value+'">'+value+'</option>')
-            })
-        }
-
-        function filterColumn ( i ) {
-            if(i == 4){
-                console.log('from column status')
-                if($('#col'+i+'_filter').val() == 'approved'){
-                    status = 'COMPLETED'
-                }else if($('#col'+i+'_filter').val() == 'canceled'){
-                    status = 'FAILED'
-                }else{
-                    status = 'PENDING'
-                }
-                value = status
-                console.log('select status'+value)
-
-            }else{
-                value = $('#col'+i+'_filter').val()
-            }
-
-            table.column( i ).search(value).draw();
-        }
-
         $(document).ready(function() {
-            fillSelecteBox()
+            fillSelectedBox()
 
             $('select.column_filter').on('change', function () {
                 filterColumn( $(this).parents('div').attr('data-column') );
-
-                //console.log($(this).parents('div').attr('data-column'))
 
             } );
 

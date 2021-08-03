@@ -276,6 +276,9 @@
                                         <li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab_inside" data-toggle="tab" href="#metas" role="tab" aria-controls="metas" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Metas</a>
                                         </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-9-tab_inside" data-toggle="tab" href="#videos" role="tab" aria-controls="videos" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Videos</a>
+                                        </li>
 
                                     </ul>
                                 </div>
@@ -404,6 +407,10 @@
                                                     </table>
                                                 </div>
 
+                                            </div>
+
+                                            <div class="tab-pane fade" id="videos" role="tabpanel" aria-labelledby="tabs-icons-text-9-tab_inside">
+                                                @include('admin.videos.event.index',['model' => $event])
                                             </div>
 
                                             <div class="tab-pane fade" id="tabs-icons-text-3_inside" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab_inside">
