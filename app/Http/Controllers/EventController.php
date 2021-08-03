@@ -259,7 +259,7 @@ class EventController extends Controller
 
         $user = Auth::user();
         $id = $event['id'];
-        $event = $event->with('coupons','delivery','category', 'summary1', 'benefits', 'ticket', 'city', 'venues', 'topic', 'lessons', 'instructors', 'users', 'partners', 'sections','paymentMethod','slugable','metable', 'medias')->find($id);
+        $event = $event->with('coupons','delivery','category', 'summary1', 'benefits', 'ticket', 'city', 'venues', 'topic', 'lessons', 'instructors', 'users', 'partners', 'sections','paymentMethod','slugable','metable', 'medias', 'videos')->find($id);
         //dd($event['topic']);
         //dd($event->summary1);
         //dd($event->medias->details);
@@ -376,6 +376,10 @@ class EventController extends Controller
             $event->delivery()->detach();
 
             $event->delivery()->attach($request->delivery);
+        }
+
+        if($request->video != null){
+            $event->video()->attach($request->video);
         }
 
         return back()->withStatus(__('Event successfully updated.'));

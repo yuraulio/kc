@@ -31,6 +31,7 @@ use App\Traits\MediaTrait;
 use App\Traits\Invoices;
 use App\Model\Plan;
 use App\Model\Coupon;
+use App\Model\Video;
 
 
 class Event extends Model
@@ -55,6 +56,11 @@ class Event extends Model
     public function faqs()
     {
         return $this->morphToMany(Faq::class, 'faqable')->with('category')->withPivot('priority')->orderBy('faqables.priority','asc');
+    }
+
+    public function videos()
+    {
+        return $this->belongsToMany(Video::class, 'event_video', 'event_id', 'video_id');
     }
 
 
