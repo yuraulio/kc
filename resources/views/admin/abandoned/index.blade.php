@@ -56,7 +56,7 @@
                             <?php //dd($abcart); ?>
                                 @if(isset($list))
                                     @foreach($list as $user_id => $ucart)
-                                    <?php dd($abcart); ?>
+                                    <?php //dd($abcart); ?>
                                         @if(isset($abcart[$user_id]->user) && isset($tickets[$ucart->id]))
                                         <?php
                                             $evdate = 'No Date';
@@ -71,9 +71,9 @@
                                         ?>
 
                                         <tr>
-                                            <?php //dd($abcart); ?>
-                                            <td><a href="mailto:{{$abcart[$user_id]->user->first()->email}}">{{$abcart[$user_id]->user->first()->email}}</a><br />{{$abcart[$user_id]->user->first()->firstname}} {{$abcart[$user_id]->user->first()->lastname}}<br /><a target="_blank" href="admin/student/{{$user_id}}"><i class="fa fa-external-link"></i></a> </td>
-                                            <td class="text-center">{{$events[$ucart->options['event']]->title}} <br /> {{$evdate}}<br /><a class="small" target="_blank" href="{{$events[$ucart->options['event']]->slug}}">{{$events[$ucart->options['event']]->slug}} <i class="fa fa-external-link"></i></a></td>
+                                            <?php dd($events[$ucart->options['event']]); ?>
+                                            <td><a href="mailto:{{$abcart[$user_id]['user']->first()['email']}}">{{$abcart[$user_id]['user']->first()['email']}}</a><br />{{$abcart[$user_id]['user']->first()['firstname']}} {{$abcart[$user_id]['user']->first()['lastname']}}<br /><a target="_blank" href="admin/student/{{$user_id}}"><i class="fa fa-external-link"></i></a> </td>
+                                            <td class="text-center">{{$events[$ucart->options['event']]['title']}} <br /> {{$evdate}}<br /><a class="small" target="_blank" href="{{$events[$ucart->options['event']]->slug}}">{{$events[$ucart->options['event']]->slug}} <i class="fa fa-external-link"></i></a></td>
                                             <td class="text-center">{{$tickets[$ucart->id]->title}}</td>
                                             <td class="text-center">{{$ucart->qty}}</td>
                                             <td class="text-right">&euro;{{$ucart->qty*$ucart->price}}</td>
@@ -89,7 +89,7 @@
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
 
-                                                    <form action="{{ route('abandoned.remove', $abcart[$user_id]->id) }}" method="post">
+                                                    <form action="{{ route('abandoned.remove', $abcart[$user_id]->identifier) }}" method="post">
                                                         @csrf
                                                         @method('post')
 

@@ -4,17 +4,17 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Model\User;
 
 class ShoppingCart extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'identifier';
     protected $table = 'shoppingcart';
     public $incrementing = false;
 
     protected $fillable = [
-        'id',
         'identifier',
         'instance',
         'content',
@@ -23,7 +23,7 @@ class ShoppingCart extends Model
 
     public function user()
     {
-        return $this->belongsToMany(User::class, 'shoppingcart' , 'identifier','identifier');
+        return $this->belongsToMany(User::class, 'shoppingcart' , 'identifier', 'identifier');
     }
 
 }

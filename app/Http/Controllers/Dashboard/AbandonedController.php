@@ -29,25 +29,23 @@ class AbandonedController extends Controller
 
             foreach ($cart as $cartItem) {
                 if(!in_array($cartItem->options['event'],$freeEvents)){
+                    //dd($cartItem);
                     $data['list'][$user_id] = $cartItem;
                     $evids[] = $cartItem->options['event'];
                 }
 
             }
 
-            //dd($cart);
-
 
         }
-        //dd($data['list']);
 
         $events = Event::whereIn('id', $evids)->get()->getDictionary();
         $data['events'] = $events;
-        //dd($events);
         $data['tickets'] = $ticks->getDictionary();
-        $data['abcart'] = $list->getDictionary();
+        $data['abcart'] = Shoppingcart::with('user')->get()->keyBy('identifier');
+        //dd($data['abcart']);
 
-        dd($data);
+        //dd($data);
         return view('admin.abandoned.index', $data);
     }
 
