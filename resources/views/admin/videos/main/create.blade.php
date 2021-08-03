@@ -55,10 +55,16 @@
                            @include('alerts.feedback', ['field' => 'description'])
                         </div>
 
-                        <div class="form-group{{ $errors->has('url') ? ' has-danger' : '' }}">
+                        {{--<div class="form-group{{ $errors->has('url') ? ' has-danger' : '' }}">
                            <label class="form-control-label" for="input-name">{{ __('Url') }}</label>
-                           <input type="text" name="url" id="input-url" class="form-control{{ $errors->has('url') ? ' is-invalid' : '' }}" placeholder="{{ __('Url') }}" value="{{ old('url',$video->url) }}"  required autofocus>
+                           <input type="text" name="url" id="input-url" class="form-control{{ $errors->has('url') ? ' is-invalid' : '' }}" placeholder="{{ __('Url') }}" value="{{ old('url',$video->url) }}"  autofocus>
                            @include('alerts.feedback', ['field' => 'url'])
+                        </div>--}}
+
+                        <div class="form-group{{ $errors->has('body') ? ' has-danger' : '' }}">
+                           <label class="form-control-label" for="input-name">{{ __('Body') }}</label>
+                           <textarea name="body" id="input-body"  class="ckeditor form-control{{ $errors->has('body') ? ' is-invalid' : '' }}" placeholder="{{ __('Body') }}" required autofocus>{{ old('body', $video->body) }}</textarea>
+                           @include('alerts.feedback', ['field' => 'body'])
                         </div>
 
 
@@ -87,14 +93,6 @@
 @push('js')
 <script>
 
-   $(function() {
-      $('#content_summary').redactor({
-         clickToEdit: true,
-         clickToCancel: { title: 'Cancel' }
-      });
-
-
-   });
 
    $( "#submit-btn-video" ).click(function() {
       $('#form-video').submit()

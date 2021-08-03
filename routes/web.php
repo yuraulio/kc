@@ -376,6 +376,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('kcregister', 'Auth\RegisterController@kcRegister');
     Route::get('/logout', [ 'as' => 'logout' , 'uses' => 'Theme\StudentController@logout']);
 });
+
 Route::group(['middleware' => 'auth'], function () {
     Route::get('attempt-exam/{ex_id}', 'Theme\ExamAttemptController@attemptExam')->name('attempt-exam');
     Route::get('exam-start/{exam}', 'Theme\ExamAttemptController@examStart')->name('exam-start');
@@ -417,14 +418,20 @@ Route::group([ 'prefix' => 'payment-dispatch'], function () {
     ]);
 });
 
-
-
 Route::get('/sms-verification/{slug}',['as' => 'user.sms.auth', 'uses' => 'Theme\HomeController@getSMSVerification']);
 Route::post('/smsVerification','Theme\HomeController@smsVerification');
 Route::get('myaccount/activate/{code}', 'Theme\StudentController@activate');
 
-
 Route::group(['middleware' => ['preview','web','auth.sms']], function () {
+
+    Route::get('/regularly-mentioned-in-media', function(){
+        return redirect('/in-the-media');
+    });
+
+    Route::get('/they-trust-us', function(){
+        return redirect('/brands-trained');
+    });
+
     Route::get('/', 'Theme\HomeController@homePage')->name('homepage');
     Route::post('/add-payment-method', 'Theme\HomeController@addPaymentMethod')->name('add.paymentMethod');
     Route::get('{slug?}', 'Theme\HomeController@index');

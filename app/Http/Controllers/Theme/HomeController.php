@@ -115,7 +115,7 @@ class HomeController extends Controller
         $data['elearningFree'] = [];
         $data['inclassFree'] = [];
         
-        $categories =Category::with('slugable','events.slugable','events.city','events')->where('show_homepage', 1)->get()->toArray();
+        $categories =Category::with('slugable','events.slugable','events.city','events','events.mediable')->where('show_homepage', 1)->get()->toArray();
 
         
         foreach($categories as $category){
@@ -347,7 +347,7 @@ class HomeController extends Controller
         $data['content'] = $page;
         $events = array();
 
-        $instructor = Instructor::with('event.category', 'medias', 'event.lessons', 'event.slugable', 'event.city', 'event.summary1')->find($page['id']);
+        $instructor = Instructor::with('event.category', 'mediable', 'event.lessons', 'event.slugable', 'event.city', 'event.summary1')->find($page['id']);
         //dd($instructor['event'][0]);
         $category = array();
 
@@ -424,7 +424,7 @@ class HomeController extends Controller
             $data['corporatebrands'] = Logos::with('medias')->where('type', 'brands')->get();
         }else if($data['page']['template'] == 'instructors'){
             $data['instructors'] =  Instructor::with('medias')->where('status', 1)->get();
-        }else if($data['page']['id'] == 800){
+        }else if($data['page']['id'] == 800){           
             $data['brands'] = Logos::with('medias')->where('type', 'brands')->get();
         }else if($data['page']['id'] == 801){
             $data['logos'] = Logos::with('medias')->where('type', 'logos')->get();

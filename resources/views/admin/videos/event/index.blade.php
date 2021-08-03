@@ -13,27 +13,22 @@
     <table class="table align-items-center table-flush video-table" id="datatable-basic-video">
         <thead class="thead-light">
             <tr>
-                <th scope="col">{{ __('Title') }}</th>
-                <th scope="col">{{ __('Url') }}</th>
-                <th scope="col"></th>
+                <th scope="col">{{ __('Title') }}</th>                <th scope="col"></th>
             </tr>
         </thead>
         <?php //dd($model->video); ?>
         <tbody class="video-body summaries-order">
-        @if($model->video)
-            @foreach ($model->video as $video)
+ 
+        @if($model->sectionVideos)
+            @foreach ($model->sectionVideos as $video)
                 <tr>
                     <td id="title-{{$video->id}}" data-id="{{$video->id}}" class="video-list"><a class="edit-btn" href="#"> {{ $video->title }} </a></td>
-                    <td id="description-{{$video->id}}" data-id="{{$video->id}}" class="video-list">{{ $video->description }}</td>
-                    <td id="url-{{$video->id}}" data-id="{{$video->id}}" class="video-list">{{ $video->url }}</td>
+                    
                     <td class="text-right">
                         <div class="dropdown">
                             <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-ellipsis-v"></i>
                             </a>
-                            {{--<div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                <a class="dropdown-item" data-toggle="modal" data-target="#editModalSummary" data-id="{{$summary->id}}" data-title="{{$summary->title}}" data-description="{{$summary->description}}" data-section="{{$summary->section}}" data-media="@isset($summary->medias){{ $summary->medias['path'] }}{{ $summary->medias['original_name'] }}@endisset" >{{ __('Edit') }}</a>
-                            </div>--}}
                         </div>
                     </td>
                 </tr>
@@ -66,6 +61,7 @@
                             <label for="exampleFormControlSelect1">Select Video</label>
                             <select class="form-control" id="videoFormControlSelect">
                                 <option>-</option>
+
                             </select>
                         </div>
                     </div>

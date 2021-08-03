@@ -56,31 +56,27 @@
                                             $field2 = str_replace ( "https://.", "", $field2 );
                                             $field2 = str_replace ( "http://www.", "", $field2 );
                                        }
+                                       $socialMedia = json_decode($lvalue['social_media'],true);
+                                    
+                                       if(isset($socialMedia['facebook'])){
+                                          $fb = $socialMedia['facebook'];
+                                       }
 
-                                       // if(isset($lvalue['c_fields']['simple_text'][2]) && $lvalue['c_fields']['simple_text'][2]['value'] != ''){
-                                       //   $fb = $lvalue['c_fields']['simple_text'][2]['value'];
-                                       // }
+                                       if(isset($socialMedia['twitter'])){
+                                          $twitter = $socialMedia['twitter'];
+                                       }
 
-                                       // if(isset($lvalue['c_fields']['simple_text'][3]) && $lvalue['c_fields']['simple_text'][3]['value'] != ''){
+                                       if(isset($socialMedia['instagram'])){
+                                          $inst = $socialMedia['instagram'];
+                                       }
 
-                                       //   $twitter = $lvalue['c_fields']['simple_text'][3]['value'];
+                                       if(isset($socialMedia['linkedin'])){
+                                          $linkedIn = $socialMedia['linkedin'];
+                                       }
 
-                                       // }
-
-                                       // if(isset($lvalue['c_fields']['simple_text'][4]) && $lvalue['c_fields']['simple_text'][4]['value'] != ''){
-
-                                       //   $inst = $lvalue['c_fields']['simple_text'][4]['value'];
-                                       // }
-                                       // if(isset($lvalue['c_fields']['simple_text'][5]) && $lvalue['c_fields']['simple_text'][5]['value'] != ''){
-
-                                       //    $linkedIn = $lvalue['c_fields']['simple_text'][5]['value'];
-
-                                       // }
-                                       // if(isset($lvalue['c_fields']['simple_text'][6]) && $lvalue['c_fields']['simple_text'][6]['value'] != ''){
-
-                                       //    $yt = $lvalue['c_fields']['simple_text'][6]['value'];
-
-                                       // }
+                                       if(isset($socialMedia['youtube'])){
+                                          $yt = $socialMedia['youtube'];
+                                       }
 
 
                                        ?>

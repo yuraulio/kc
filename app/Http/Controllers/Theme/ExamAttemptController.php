@@ -367,9 +367,9 @@ class ExamAttemptController extends Controller
 
                 
                 $exam = Exam::find($ex_id);
-                $eventType = Event::select('view_tpl')->where('id',$exam->event->first()->id)->first();
+                $eventType = Event::select('id','view_tpl')->where('id',$exam->event->first()->id)->first();
 
-                /*if($eventType->view_tpl == 'elearning_event'){
+                if($eventType->view_tpl == 'elearning_event'){
                    
                    $successLimit = round(($total_credit*100 / $totalQues), 2);
                    $success = false;
@@ -380,21 +380,26 @@ class ExamAttemptController extends Controller
 
                     $cert = new Certificate;
                     $cert->success = $success;
-                    $cert->content_id = $exam->event_id;
-                    $cert->exam_id = $examResultData->id;
-                    $cert->user_id = $st_id;
+                    //$cert->content_id = $exam->event_id;
+                    //$cert->exam_id = $examResultData->id;
+                    //$cert->user_id = $st_id;
+                    $cert->create_date = strtotime(date('Y-m-d'));
+                    $cert->expiration_date = strtotime(date('Y-m-d', strtotime('+24 months', strtotime(date('Y-m-d')))));
                     $cert->certification_date = date('F') . ' ' . date('Y');
                     $cert->save();
 
-                    $generalInfo = \Config::get('dpoptions.website_details.settings');
-                    $adminemail = $generalInfo['admin_email'];
+                    $cert->event()->save($eventType);
+                    $cert->user()->save($student);
+                    $cert->exam()->save($exam);
+                   
+                    $adminemail = 'info@knocrunch.com';
 
                     $muser = [];
                     $muser['email'] = $examResultData->user->email;
-                    $muser['fullname'] = $examResultData->user->first_name . ' ' . $examResultData->user->last_name;
-                    $muser['first'] = $examResultData->user->first_name;
+                    $muser['fullname'] = $examResultData->user->firstname . ' ' . $examResultData->user->lastname;
+                    $muser['first'] = $examResultData->user->firstname;
 
-                    $data['firstName'] = $examResultData->user->first_name;
+                    $data['firstName'] = $examResultData->user->firstname;
                     
                     if($exam->event_id === 1350){
                         $view_email = 'emails.student.after_exam_old';
@@ -415,7 +420,7 @@ class ExamAttemptController extends Controller
                         
                     });
 
-                }*/
+                }
 
                 
                 if($examResultData) {

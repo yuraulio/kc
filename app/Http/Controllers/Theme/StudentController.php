@@ -47,21 +47,25 @@ class StudentController extends Controller
     public function index(){
 
         $user = Auth::user();
+       
         if(count($user->instructor) > 0){
             $data = $this->instructorEvents();
         }else{
             $data = $this->studentsEvent();
         }
-
+        
         $data['instructor'] = count($user->instructor) > 0;
         return view('theme.myaccount.student', $data);
     }
 
     public function instructorEvents(){
        
-        $user = Auth::user()->with('image');
-        $instructor = $user->instructor->first();
 
+        $user = Auth::user();
+        $data['user'] = User::with('image', 'instructor')->find($user->id);
+
+        $instructor = $user->instructor->first();
+     
         $data['elearningAccess'] = 0;
         $data['cards'] = [];
         $data['subscriptionAccess'] = [];
@@ -650,9 +654,9 @@ class StudentController extends Controller
                 'videos' => json_encode($videos)
             ], false);
 
-            // if($user->events()->where('event_id',2068)->first() && $user->events()->where('event_id',2068)->first()->trans_id != '0'){
-            //     $user->videos()->where('event_id',$request->event)->first()->certification($request->event);
-            // }
+            /*if($user->events()->where('event_id',2068)->first() && $user->events()->where('event_id',2068)->first()->trans_id != '0'){
+                $user->videos()->where('event_id',$request->event)->first()->certification($request->event);
+            }*/
 
 
            /* if(isset($_COOKIE['examMessage-'.$request->event_statistic])){
@@ -697,41 +701,11 @@ class StudentController extends Controller
             }*/
 
         }
-        /*
-        $destinationPath = public_path().'/elearning_stats';
-        if(!File::exists($destinationPath)) {
-            //dd('ddd');
-            File::makeDirectory($destinationPath, $mode = 0777, true, true);
-        }
-        $browser = $this->getBrowser();
-        //$textName = 'elearning_stats/' . date('d_m_Y') . '_' . $user->id . '.txt';
-        $textName = 'elearning_stats/' . date('d_m_Y') . '_' . $user->id . '.json';
-        $file = fopen($textName, "a+");
-        $json = [];
-        $json[date('h:i:s')] = [];
-        $json[date('h:i:s')]['videos'] = $videos;
-        $json[date('h:i:s')]['browser_name'] = $browser['name'];
-        $json[date('h:i:s')]['browser_platform'] = $browser['platform'];
-        $json[date('h:i:s')]['browser_version'] = $browser['version'];
-
-        if(filesize($textName)){
-            fwrite($file, '++');
-        }
-
-        fwrite($file, json_encode($json));
-        fclose($file);
-
-        if(User::find($user->id)->videos()->where('event_id',$request->event)->first()){
-            $progress =  User::find($user->id)->videos()->where('event_id',$request->event)->first()->videosSeenPer();
-        }else{
-            $progress = 0;
-        }*/
-
-
+     
         return response()->json([
             'success' => true,
             'videos' => $request->videos,
-            // 'loged_in' => true,
+            'loged_in' => true,
             // 'exam_access' => $examAccess,
             // 'progress' => $progress
         ]);

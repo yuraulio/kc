@@ -63,8 +63,9 @@
                                $until = $string;
                            }
                         ?>
-                        @if (isset($row['media']) && !empty($row['media']) && $row['media']['name'] != '')
-                        <a href="{{ $row['slugable']['slug'] }}"><img src="{{ $row['media']['path'] }}/{{$row['media']['name']}}-event-card{{$row['media']['ext']}}}}" alt="{{ $until}}"/></a>
+                       
+                        @if (isset($row['mediable']))
+                        <a href="{{ $row['slugable']['slug'] }}"><img src="{{ cdn(get_image($row['mediable'],'event-card')) }}" alt="{{ $until}}"/></a>
                         @endif
 
                         <?php //dd($row->slugable['slug']); ?>
@@ -146,9 +147,8 @@
                             //dd($until);
                         ?>
                         <?php //var_dump($until) ?>
-                        @if (isset($row['media']) && !empty($row['media']) && !empty($row['media']['path']))
-
-                            <a href="{{ $row['slugable']['slug'] }}"><img src="{{ $row['media']['path'] }}/{{$row['media']['name']}}-event-card{{$row['media']['ext']}}}}" alt="{{$until}}"/></a>
+                        @if (isset($row['mediable']))
+                        <a href="{{ $row['slugable']['slug'] }}"><img src="{{ cdn(get_image($row['mediable'],'event-card')) }}" alt="{{ $until}}"/></a>
                         @endif
                         <div class="box-text">
                            <?php
@@ -234,8 +234,8 @@
 
                                //dd($row);
                                ?>
-                        @if (isset($row['featured'][0]['media']) && !empty($row['featured'][0]['media']))
-                        <a href="{{ $row['slugable']['slug'] }}"><img src="{{ $row['media']['path'] }}/{{$row->media['name']}}-event-card{{$row['media']['ext']}}}}" alt="{{ $until}}"/></a>
+                        @if (isset($row['mediable']))
+                        <a href="{{ $row['slugable']['slug'] }}"><img src="{{ cdn(get_image($row['mediable'],'event-card')) }}" alt="{{ $until}}"/></a>
                         @endif
 
                         <div class="box-text">
@@ -303,8 +303,8 @@
                                //dd($row);
 
                                ?>
-                        @if (isset($row['medias']) && $row->medias['name'] != '')
-                        <a href="{{ $row['slugable']['slug'] }}"><img src="{{ $row->medias['path'] }}/{{$row->medias['name']}}-event-card{{$row->medias['ext']}}}}" alt="{{ $until}}"/></a>
+                        @if (isset($row['mediable']))
+                        <a href="{{ $row['slugable']['slug'] }}"><img src="{{ cdn(get_image($row['mediable'],'event-card')) }}" alt="{{ $until}}"/></a>
                         @endif
 
                         <div class="box-text">

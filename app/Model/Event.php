@@ -58,7 +58,7 @@ class Event extends Model
         return $this->morphToMany(Faq::class, 'faqable')->with('category')->withPivot('priority')->orderBy('faqables.priority','asc');
     }
 
-    public function videos()
+    public function sectionVideos()
     {
         return $this->belongsToMany(Video::class, 'event_video', 'event_id', 'video_id');
     }
@@ -526,5 +526,15 @@ class Event extends Model
         return $examsArray;
     }
 
+    public function certificates(){
+        return $this->morphToMany(Certificate::class, 'certificatable');
+    }
+
+    public function certificatesByUser($user){
+
+        return $this->certificates()->whereHas('user', function ($query) use($user) {
+                $query->where('id', $user);
+            })->withPivot('certificatable_id','certificatable_type');
+    }
 
 }

@@ -133,35 +133,35 @@
 
                                         <div class="form-group{{ $errors->has('facebook') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-facebook">{{ __('Facebook') }}</label>
-                                            <input type="text" name="facebook" id="input-facebook" class="form-control{{ $errors->has('facebook') ? ' is-invalid' : '' }}" placeholder="{{ __('Facebook link') }}" value="<?= ($social_media['facebook'] != null) ? $social_media['facebook'] : ''; ?>"autofocus>
+                                            <input type="text" name="facebook" id="input-facebook" class="form-control{{ $errors->has('facebook') ? ' is-invalid' : '' }}" placeholder="{{ __('Facebook link') }}" value="<?= (isset($social_media['facebook'])) ? $social_media['facebook'] : ''; ?>"autofocus>
 
                                             @include('alerts.feedback', ['field' => 'facebook'])
                                         </div>
 
                                         <div class="form-group{{ $errors->has('instagram') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-instagram">{{ __('Instagram') }}</label>
-                                            <input type="text" name="instagram" id="input-instagram" class="form-control{{ $errors->has('instagram') ? ' is-invalid' : '' }}" placeholder="{{ __('Instagram link') }}" value="<?= ($social_media['instagram'] != null) ? $social_media['instagram'] : ''; ?>"autofocus>
+                                            <input type="text" name="instagram" id="input-instagram" class="form-control{{ $errors->has('instagram') ? ' is-invalid' : '' }}" placeholder="{{ __('Instagram link') }}" value="<?= isset($social_media['instagram']) ? $social_media['instagram'] : ''; ?>"autofocus>
 
                                             @include('alerts.feedback', ['field' => 'instagram'])
                                         </div>
 
                                         <div class="form-group{{ $errors->has('linkedin') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-linkedin">{{ __('Linkedin') }}</label>
-                                            <input type="text" name="linkedin" id="input-linkedin" class="form-control{{ $errors->has('linkedin') ? ' is-invalid' : '' }}" placeholder="{{ __('Linkedin link') }}" value="<?= ($social_media['linkedin'] != null) ? $social_media['linkedin'] : ''; ?>"autofocus>
+                                            <input type="text" name="linkedin" id="input-linkedin" class="form-control{{ $errors->has('linkedin') ? ' is-invalid' : '' }}" placeholder="{{ __('Linkedin link') }}" value="<?= isset($social_media['linkedin']) ? $social_media['linkedin'] : ''; ?>"autofocus>
 
                                             @include('alerts.feedback', ['field' => 'linkedin'])
                                         </div>
 
                                         <div class="form-group{{ $errors->has('twitter') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-twitter">{{ __('Twitter') }}</label>
-                                            <input type="text" name="twitter" id="input-twitter" class="form-control{{ $errors->has('twitter') ? ' is-invalid' : '' }}" placeholder="{{ __('Twitter link') }}" value="<?= ($social_media['twitter'] != null) ? $social_media['twitter'] : ''; ?>"autofocus>
+                                            <input type="text" name="twitter" id="input-twitter" class="form-control{{ $errors->has('twitter') ? ' is-invalid' : '' }}" placeholder="{{ __('Twitter link') }}" value="<?= isset($social_media['twitter']) ? $social_media['twitter'] : ''; ?>"autofocus>
 
                                             @include('alerts.feedback', ['field' => 'twitter'])
                                         </div>
 
                                         <div class="form-group{{ $errors->has('youtube') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-youtube">{{ __('Youtube') }}</label>
-                                            <input type="text" name="youtube" id="input-youtube" class="form-control{{ $errors->has('youtube') ? ' is-invalid' : '' }}" placeholder="{{ __('Youtube link') }}" value="<?= ($social_media['youtube'] != null) ? $social_media['youtube'] : ''; ?>"autofocus>
+                                            <input type="text" name="youtube" id="input-youtube" class="form-control{{ $errors->has('youtube') ? ' is-invalid' : '' }}" placeholder="{{ __('Youtube link') }}" value="<?= isset($social_media['youtube']) ? $social_media['youtube'] : ''; ?>"autofocus>
 
                                             @include('alerts.feedback', ['field' => 'youtube'])
                                         </div>
