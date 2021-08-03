@@ -206,7 +206,7 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
 
     <script>
-        
+
 
         function initStats(){
             amount = $('#subscriptions_table').DataTable().column( 7 ).data();
@@ -229,7 +229,7 @@
             })
         }
 
-        function filterColumn ( i ) {           
+        function filterColumn ( i ) {
             if(i == 4){ //Status filter
                 if($('#col'+i+'_filter').val() == 'approved'){
                     status = 'COMPLETED'
@@ -241,7 +241,6 @@
                     status = ''
                 }
                 value = status
-                console.log('select status'+value)
 
             }else if(i == 3){ // Event filter
                 if($('#col'+i+'_filter').val() != ''){
@@ -249,7 +248,7 @@
                 }else{
                     value = ''
                 }
-                
+
             }
             table.column( i ).search(value).draw();
         }
