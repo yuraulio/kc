@@ -16,14 +16,11 @@
         @endcomponent
     @endcomponent
 
-    <?php dd(isset($video->id)); ?>
+    <?php //dd(isset($video->id)); ?>
 
-    @if(isset($video->id))
-    <?php dd('has not video'); ?>
+    @if(!isset($video->id))
          <form id="form-video" method="post" action="{{ route('video.store') }}" autocomplete="off" enctype="multipart/form-data">
-         <?php $video->id = 0; ?>
       @else
-      <?php dd('has video'); ?>
          <form method="post" action="{{ route('video.update', $video->id) }}" autocomplete="off" enctype="multipart/form-data">
          @method('put')
       @endif

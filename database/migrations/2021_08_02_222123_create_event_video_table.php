@@ -14,10 +14,8 @@ class CreateEventVideoTable extends Migration
     public function up()
     {
         Schema::create('event_video', function (Blueprint $table) {
-            $table->id();
-            $table->integer('event_id');
-            $table->integer('video_id');
-            $table->timestamps();
+            $table->integer('event_id')->unsigned();
+            $table->integer('video_id')->unsigned();
         });
     }
 

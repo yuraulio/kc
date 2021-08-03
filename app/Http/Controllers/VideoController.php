@@ -85,7 +85,7 @@ class VideoController extends Controller
      */
     public function update(Request $request, Video $video)
     {
-        dd($video);
+        //dd($video);
         if($video){
 
             $video->title = $request->title;
