@@ -15,11 +15,16 @@ use App\Model\Testimonial;
 use App\Model\Instructor;
 use Illuminate\Support\Str;
 
+use \Apifon\Mookee;
+use \Apifon\Model\SmsRequest;
+use \Apifon\Model\MessageContent;
+use \Apifon\Resource\SMSResource;
+
 class UserController extends Controller
 {
 
     public function __construct(){
-        $this->middleware('auth.sms.api')->except('smsVerification');
+        $this->middleware('auth.sms.api')->except('smsVerification','getSMSVerification');
     }
 
     /**
@@ -101,6 +106,77 @@ class UserController extends Controller
             'code' => 700,
             'message' => 'SMS verifacation is required'
         ]);
+
+    }
+
+    public function getSMSVerification(Request $request){
+
+        require_once("../app/Apifon/Model/IRequest.php");
+        require_once("../app/Apifon/Model/SubscribersViewRequest.php");
+        require_once("../app/Apifon/Mookee.php");
+        require_once("../app/Apifon/Security/Hmac.php");
+        require_once("../app/Apifon/Resource/AbstractResource.php");
+        require_once("../app/Apifon/Resource/SMSResource.php");
+        require_once("../app/Apifon/Response/GatewayResponse.php");
+        require_once("../app/Apifon/Model/MessageContent.php");
+        require_once("../app/Apifon/Model/SmsRequest.php");
+        require_once("../app/Apifon/Model/SubscriberInformation.php");
+       
+        $user = Auth::user();
+        $cookie_value = '-11111111';
+        if($request->hasHeader('auth-sms')){
+            $cookie_value = base64_encode('auth-api-' . decrypt($request->header('auth-sms')));
+        }
+
+        $cookieSms = $user->cookiesSMS()->where('coockie_value',$cookie)->first();
+                
+        if(!$cookieSms->sms_verification && $user->mobile != ''){
+        
+            $codeExpired = strtotime($cookieSms->updated_at);
+            $codeExpired  = (time() - $codeExpired) / 60;
+            if($codeExpired >= 5){
+                $cookieSms->send = false;
+                $cookieSms->sms_code = rand(1111,9999);
+                $cookieSms->save();
+            }
+
+            if(!$cookieSms->send){
+                                    
+                Mookee::addCredentials("sms",$this->token, $this->secretId);
+                Mookee::setActiveCredential("sms");
+        
+                $smsResource = new SMSResource();
+                $smsRequest = new SmsRequest();
+                
+                $mob = trim($user->mobile);
+                $mob = trim($user->country_code) . trim($user->mobile);
+               
+                $mobileNumber = trim($mob);
+                $nums = [$mobileNumber];
+        
+                $message = new MessageContent();
+                $messageText = 'Knowcrunch code: '. $cookieSms->sms_code . ' Valid for 5 minutes';
+                $message->setText($messageText);
+                $message->setSenderId("Knowcrunch");
+        
+                $smsRequest->setStrSubscribers($nums);
+                $smsRequest->setMessage($message);
+        
+                $response = $smsResource->send($smsRequest);
+           
+                $cookieSms->send = true;
+                $cookieSms->save();
+
+            }
+            
+            return response()->json([
+                'success' => false,
+                'code' => 700,
+                'message' => 'SMS verifacation is required'
+            ]);
+
+        }
+       
 
     }
 
