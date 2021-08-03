@@ -25,11 +25,6 @@ class AbandonedController extends Controller
         foreach ($list as $key => $item) {
             $user_id = $item->identifier;
             $cart = unserialize($item->content);
-            if($user_id == 1359){
-                dd($cart);
-            }
-
-
 
             foreach ($cart as $cartItem) {
                 if(!in_array($cartItem->options['event'],$freeEvents)){

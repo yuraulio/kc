@@ -120,7 +120,13 @@
                             <tbody>
                             <?php //dd($subscriptions[0]); ?>
                                 @foreach ($subscriptions as $item)
-                                <?php dd($item['user']); ?>
+                                <?php
+                                dd($item);
+                                if($item['subscription']->first()['event']->first()['title'] == ''){
+                                    dd('asd');
+                                }
+                                ?>
+                                <?php dd($item['subscription']->first()['event']->first()['title']); ?>
                                     <tr>
                                         <td>
                                             {{ $item['id'] }}
@@ -133,16 +139,16 @@
                                         </td>
                                         <td>
                                             <?php
-                                            $subscription = $subscription;
-                                                if(count($item['subscription']) > 0 && count($subscription['event']->first()['plans']) > 0){
-                                                    echo $subscription['event']->first()['plans']->first()['name'];
+
+                                                if(count($item['subscription']) > 0 && count($item['event']->first()['plans']) > 0){
+                                                    echo $item['subscription']->first()['event']->first()['plans']->first()['name'];
                                                 }
                                             ?>
                                         </td>
-                                        <td>{{ $subscription['event']->first()['title'] }}</td>
+                                        <td>{{ $item['subscription']->first()['event']->first()['title'] }}</td>
 
                                         <td>
-                                                {{ $subscription['status'] }}
+                                                {{ $item['status'] }}
 
                                         </td>
                                         <td>{{ $item['trial'] }}</td>
