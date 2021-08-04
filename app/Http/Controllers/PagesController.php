@@ -26,7 +26,7 @@ class PagesController extends Controller
         $data['pages'] = Pages::all();
         $data['user'] = Auth::user();
         //dd($data);
-        return view('pages.index', ['pages' => $model->all(), 'user' => $data['user']]);
+        return view('pages.index', ['pages' => $model->all(), 'user' => $data['user'], 'pages' => $data['pages']]);
     }
 
 
@@ -57,7 +57,7 @@ class PagesController extends Controller
         $input = $request->all();
         unset($input['slug']);
         $model = $model->create($input);
-         
+
         $model->createSlug($request->slug);
         $model->createMetas($input);
         $model->createMedia();
@@ -66,7 +66,7 @@ class PagesController extends Controller
         //return redirect()->route('pages.index')->withStatus(__('Page successfully created.'));
     }
 
-   
+
 
     /**
      * Show the form for editing the specified resource.
@@ -82,11 +82,11 @@ class PagesController extends Controller
         $data['slug'] = $page->slugable;
         $data['metas'] = $page->metable;
         $data['media'] = $page->mediable;
-        
+
         if($page->template == 'corporate_page'){
             return view('admin.pages.create_corporate',$data);
         }else{
-            return view('admin.pages.create',$data);            
+            return view('admin.pages.create',$data);
         }
     }
 
@@ -101,7 +101,7 @@ class PagesController extends Controller
     {
         $page->update($request->all());
 
-        
+
         return redirect()->route('pages.index')->withStatus(__('Page successfully updated.'));
     }
 

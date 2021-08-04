@@ -27,7 +27,7 @@
                                  <div class="instructor-inner">
                                     <?php
                                        $img = '';
-                                       $inst_url = $lvalue->slug;
+                                       $inst_url = $lvalue['slugable']['slug'];
                                        $ext_url = $lvalue['ext_url'];
                                        $fb = '';
                                        $inst = '';
@@ -57,7 +57,7 @@
                                             $field2 = str_replace ( "http://www.", "", $field2 );
                                        }
                                        $socialMedia = json_decode($lvalue['social_media'],true);
-                                    
+
                                        if(isset($socialMedia['facebook'])){
                                           $fb = $socialMedia['facebook'];
                                        }
@@ -78,7 +78,7 @@
                                           $yt = $socialMedia['youtube'];
                                        }
 
-
+                                       //dd($inst_url);
                                        ?>
                                     <div class="profile-img">
                                        <a href="{{$lvalue['slugable']['slug']}}"><img src="{{$img}}"  title="{{$name}}" alt="{{$name}}"></a>

@@ -118,20 +118,19 @@
                                 </tr>
                             </tfoot>
                             <tbody>
-                            <?php //dd($subscriptions[0]); ?>
-                                @foreach ($subscriptions as $item)
+                                @foreach ($new_sub as $item)
                                     <tr>
                                         <td>
                                             {{ $item['id'] }}
                                         </td>
                                         <td>
                                             <?php
-                                                $user = $item['user']->first();
+                                                $user = $item['user'][0];
                                             ?>
                                             {{ $user['firstname']}} {{ $user['lastname']}}
                                         </td>
-                                        <td>{{$item['subscription']->first()['plan_name']}}</td>
-                                        <td>{{ $item['subscription']->first()['event']->first()['title'] }}</td>
+                                        <td>{{$item['subscription'][0]['plan_name']}}</td>
+                                        <td>{{ $item['subscription'][0]['event'][0]['title'] }}</td>
 
                                         <td>{{ $item['status'] }}</td>
                                         <td>{{ $item['trial'] }}</td>

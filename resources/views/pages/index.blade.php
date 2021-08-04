@@ -6,7 +6,6 @@
 
 @section('content')
     @component('layouts.headers.auth')
-    @include('pages.layouts.cards')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
                 {{ __('Examples') }}

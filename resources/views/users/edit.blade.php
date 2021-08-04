@@ -9,10 +9,9 @@
 @section('content')
     @include('forms.header', [
         'title' => __('Hello') . ' '. $user['firstname'] . ' '. $user['lastname'],
-        'description' => __('This is your profile page. You can see the progress you\'ve made with your work and manage your projects or assigned tasks'),
+        'description' => __(''),
         'class' => 'col-lg-7'
     ])
-
 
     <div class="container-fluid mt--6">
         <div class="row">
@@ -46,19 +45,17 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="card-body pt-0">
                         <div class="text-center personal-info">
                             <h5 class="h3">
-                                {{ $user['fisrtname'] . ' '.  $user['lastname']}}<span class="font-weight-light">, 27</span>
+                                {{ $user['firstname'] }} {{ $user['lastname'] }}
                             </h5>
                             <div class="h5 font-weight-300">
-                                <i class="ni location_pin mr-2"></i>{{auth()->user()->company}}
+                                <i class="ni location_pin mr-2"></i>{{$user['company']}}
                             </div>
                             <div class="h5 mt-4">
-                                <i class="ni business_briefcase-24 mr-2"></i>{{auth()->user()->job_title}} - {{auth()->user()->company}}
+                                <i class="ni business_briefcase-24 mr-2"></i>{{$user['job_title']}} - {{$user['company']}}
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -349,6 +346,7 @@
 
                                     @include('alerts.feedback', ['field' => 'role_id'])
                                 </div>
+                                <input type="hidden" name="userId" value="{{$user->id}}">
 
 
 
@@ -511,7 +509,6 @@
 
                     @include('alerts.error_self_update', ['key' => 'not_allow_profile'])
 
-                    <?php //dd($user); ?>
 
 
                     <div class="pl-lg-4">
@@ -677,7 +674,6 @@
             $(".close_modal").click();
             $("#success-message p").html(data.success);
             $("#success-message").show();
-            console.log($("#success-message"))
 
         }
     });
@@ -698,7 +694,6 @@
                 url: '/admin/ticket/fetchTicketsById',
                 data:{'eventId': event_id},
                 success: function (data) {
-                    console.log(data)
 
                     let tickets = data.data
 
@@ -793,8 +788,6 @@ $(document).on('click', '.ticket-card', function () {
     })
     $img = @json($user->image);
 
-    console.log($img['details'])
-
 
     if($img != null && $img['details'] != null){
         image_details = JSON.parse($img['details'].split(','))
@@ -858,7 +851,6 @@ $(document).on('click', '.ticket-card', function () {
             url: '/admin/media/crop_profile_image',
             data: {'media_id': media.id,'path':path, 'x':cropper.getData({rounded: true}).x, 'y':cropper.getData({rounded: true}).y, 'width':cropper.getData({rounded: true}).width, 'height':cropper.getData({rounded: true}).height},
             success: function (data) {
-                //console.log(data)
                 if(data){
                     $('#profile_image_msg').append(data.success)
                     $('#profile_image_msg').css('display', 'inline-block')

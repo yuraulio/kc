@@ -9,7 +9,6 @@
             <a class="contentTypeHeader pull-right">
                 {{ $custType['title'] }}
             </a>
-
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="cmain">
                     <div class="form-horizontal">
@@ -37,7 +36,7 @@
                                     <div class="form-group">
                                        <label class="col-sm-2 control-label no-bor"> Title </label>
                                        <div class="col-sm-10">
-                                          <input id = 'benefits-title' name='titles[]' class= 'form-control' value="{{$content->titles()->where('category','benefits')->first()->title}}"  > 
+                                          <input id = 'benefits-title' name='titles[]' class= 'form-control' value="{{$content->titles()->where('category','benefits')->first()->title}}"  >
                                        </div>
                                        <label class="col-sm-2 control-label no-bor"> Description </label>
                                        <div class="col-sm-10">
@@ -50,15 +49,15 @@
                         </div>
                     <div class="form-horizontal">
                         <h3>Benefits icon fields</h3>
-                      
-                       
+
+
                         <div class="icons-helper-wrap">
                             <div class="theforms">
                                 <div class="fieldCont">
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label no-bor"> Title </label>
                                     <div class="col-sm-10">
-                                        <input id = 'Grow_your_business-title', class= 'form-control' value="{{$content->benefit()->where('category','Grow your business')->first()->title}}"  > 
+                                        <input id = 'Grow_your_business-title', class= 'form-control' value="{{$content->benefit()->where('category','Grow your business')->first()->title}}"  >
                                     </div>
                                     <label class="col-sm-2 control-label no-bor"> Description </label>
                                     <div class="col-sm-10">
@@ -77,7 +76,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label no-bor"> Title </label>
                                     <div class="col-sm-10">
-                                        <input id = 'Learn_from_the_best-title', class= 'form-control' value="{{$content->benefit()->where('category','Learn from the best')->first()->title}}"  > 
+                                        <input id = 'Learn_from_the_best-title', class= 'form-control' value="{{$content->benefit()->where('category','Learn from the best')->first()->title}}"  >
                                     </div>
                                     <label class="col-sm-2 control-label no-bor"> Description </label>
                                     <div class="col-sm-10">
@@ -96,7 +95,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label no-bor"> Title </label>
                                     <div class="col-sm-10">
-                                        <input id = 'Promote_Leadership-title', class= 'form-control' value="{{$content->benefit()->where('category','Promote Leadership')->first()->title}}"  > 
+                                        <input id = 'Promote_Leadership-title', class= 'form-control' value="{{$content->benefit()->where('category','Promote Leadership')->first()->title}}"  >
                                     </div>
                                     <label class="col-sm-2 control-label no-bor"> Description </label>
                                     <div class="col-sm-10">
@@ -115,7 +114,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label no-bor"> Title </label>
                                     <div class="col-sm-10">
-                                        <input id = 'Inspire_your_executives-title', class= 'form-control' value="{{$content->benefit()->where('category','Inspire your executives')->first()->title}}"  > 
+                                        <input id = 'Inspire_your_executives-title', class= 'form-control' value="{{$content->benefit()->where('category','Inspire your executives')->first()->title}}"  >
                                     </div>
                                     <label class="col-sm-2 control-label no-bor"> Description </label>
                                     <div class="col-sm-10">
@@ -134,7 +133,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label no-bor"> Title </label>
                                     <div class="col-sm-10">
-                                        <input id = 'Be_competitive-title', class= 'form-control' value="{{$content->benefit()->where('category','Be competitive')->first()->title}}"  > 
+                                        <input id = 'Be_competitive-title', class= 'form-control' value="{{$content->benefit()->where('category','Be competitive')->first()->title}}"  >
                                     </div>
                                     <label class="col-sm-2 control-label no-bor"> Description </label>
                                     <div class="col-sm-10">
@@ -153,7 +152,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label no-bor"> Title </label>
                                     <div class="col-sm-10">
-                                        <input id = 'Thrive-title' class= 'form-control' value="{{$content->benefit()->where('category','Thrive')->first()->title}}"  > 
+                                        <input id = 'Thrive-title' class= 'form-control' value="{{$content->benefit()->where('category','Thrive')->first()->title}}"  >
                                     </div>
                                     <label class="col-sm-2 control-label no-bor"> Description </label>
                                     <div class="col-sm-10">
@@ -190,23 +189,23 @@ $('#Thrive').redactor({
        clickToEdit: true,
        clickToCancel: { title: 'Cancel' }
    });
-   
+
    $('#Grow_your_business').redactor({
        clickToEdit: true,
        clickToCancel: { title: 'Cancel' }
    });
-   
+
    $('#Learn_from_the_best').redactor({
        clickToEdit: true,
        clickToCancel: { title: 'Cancel' }
    });
-   
+
    $('#Promote_Leadership').redactor({
        clickToEdit: true,
        clickToCancel: { title: 'Cancel' }
    });
  ;
-   
+
    $('#Inspire_your_executives').redactor({
        clickToEdit: true,
        clickToCancel: { title: 'Cancel' }

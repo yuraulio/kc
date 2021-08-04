@@ -10,7 +10,7 @@ class TransactionController extends Controller
 {
     public function participants()
     {
-        $data['transactions'] = Transaction::with('user.statistic', 'event.users',)->orderBy('created_at', 'DESC')->doesnthave('subscription')->get();
+        $data['transactions'] = Transaction::with('user.statistic', 'event.users',)->orderBy('created_at', 'DESC')->doesnthave('subscription')->has('user')->get();
         //dd($data['transactions'][0]);
 
         return view('admin.transaction.participants', $data);

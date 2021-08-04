@@ -97,16 +97,16 @@
                            $title = '' ;
                            $body = '' ;
                            $cont = $content->titles()->where('category','benefits');
-                           
+
                            if($cont->first() && ($cont->first()->title!=null || $cont->first()->title!='')){
                                  $title = $cont->first()->title;
                                  $body = $cont->first()->body;
                               }
-                           
+
                            ?>
 						@if($title != '')<h2 class="section-title">{{$title}}</h2>@endif
 						<div class="row row-flex row-flex-50">
-							
+
 							<?php $category = 'Grow your business';  $benefit = $content->benefit()->where('category',$category)->first();
 								if (isset($benefit) && $benefit->title != '') : ?>
 								<div class="col-4 col-sm-6 col-xs-12">
@@ -118,7 +118,7 @@
 										{!!$benefit->description!!}
 									</div>
 								<!-- /.col-4.col-sm-6 col-xs-12 -->
-								</div>	
+								</div>
 							<?php endif ?>
 							<?php $category = 'Learn from the best';  $benefit = $content->benefit()->where('category',$category)->first();
 								if (isset($benefit) && $benefit->title != '') : ?>
@@ -131,7 +131,7 @@
 										{!!$benefit->description!!}
 									</div>
 								<!-- /.col-4.col-sm-6 col-xs-12 -->
-								</div>	
+								</div>
 							<?php endif ?>
 							<?php $category = 'Promote Leadership';  $benefit = $content->benefit()->where('category',$category)->first();
 								if (isset($benefit) && $benefit->title != '') : ?>
@@ -144,8 +144,8 @@
 										{!!$benefit->description!!}
 									</div>
 								<!-- /.col-4.col-sm-6 col-xs-12 -->
-								</div>	
-							<?php endif ?>	
+								</div>
+							<?php endif ?>
 							<?php $category = 'Inspire your executives';  $benefit = $content->benefit()->where('category',$category)->first();
 								if (isset($benefit) && $benefit->title != '') : ?>
 								<div class="col-4 col-sm-6 col-xs-12">
@@ -157,8 +157,8 @@
 										{!!$benefit->description!!}
 									</div>
 								<!-- /.col-4.col-sm-6 col-xs-12 -->
-								</div>	
-							<?php endif ?>		
+								</div>
+							<?php endif ?>
 							<?php $category = 'Be competitive';  $benefit = $content->benefit()->where('category',$category)->first();
 								if (isset($benefit) && $benefit->title != '') : ?>
 								<div class="col-4 col-sm-6 col-xs-12">
@@ -170,7 +170,7 @@
 										{!!$benefit->description!!}
 									</div>
 								<!-- /.col-4.col-sm-6 col-xs-12 -->
-								</div>	
+								</div>
 							<?php endif ?>
 							<?php $category = 'Thrive';  $benefit = $content->benefit()->where('category',$category)->first();
 								if (isset($benefit) && $benefit->title != '') : ?>
@@ -183,7 +183,7 @@
 										{!!$benefit->description!!}
 									</div>
 								<!-- /.col-4.col-sm-6 col-xs-12 -->
-								</div>	
+								</div>
 							<?php endif ?>
 						</div>
 					</div>
@@ -267,8 +267,9 @@
 						<div class="logos-carousel-wrapper">
 							<div class="logos-carousel owl-carousel">
                             @foreach ($corporatebrands as $key => $value)
-                                    @if(isset($value['image']))  
+                                    @if(isset($value['image']))
 								<div class="slide">
+                                    <?php //dd($value); ?>
 									<img alt="{{ $value['title'] }}" title="{{ $value['title'] }}" src="{{ $value['image'] }}"/>
 								</div>
 								@endif
@@ -292,12 +293,12 @@
 /*@if (!empty($content['featured']) && isset($content['featured'][0]) &&isset($content['featured'][0]['media']) && !empty($content['featured'][0]['media']))
 $('.section-hero').css({background:url({{ $frontHelp->pImg($content, 'header-image') }})})
 @endif*/
-    
+
 </script>
 
 
 <script type="text/javascript">
-   
+
 $.fn.inputFilter = function(inputFilter) {
     return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function() {
       if (inputFilter(this.value)) {
@@ -338,7 +339,7 @@ alert("Please Fill Required Fields");
 $.ajax({
             type: "POST",
             url: "corpkc.php",
-            
+
             data: {
 //'cname': name,
 'csurname': firstname + ' ' + surname,

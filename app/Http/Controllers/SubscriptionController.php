@@ -3,27 +3,33 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Laravel\Cashier\Subscription;
 use App\Model\Transaction;
+
 use App\Model\Plan;
 
 class SubscriptionController extends Controller
 {
-    public function index()
+
+
+
+public function index()
     {
-        $data['subscriptions'] = Transaction::with('user', 'subscription.event')->has('subscription')->get();
-        //dd($data['subscriptions'][0]);
+        $data['subscriptions'] = Transaction::with('user', 'subscription.event')->get()->toArray();
         $plans = Plan::all()->groupby('stripe_plan');
-        //dd($plans);
         foreach($data['subscriptions'] as $key => $sub){
 
-            $planId = $sub['subscription']->first()['stripe_price'];
-            //$plan = Plan::where('stripe_plan', $planId)->first();
-            dd($plans[$planId]);
-            $data['subscriptions'][$key]['subscription']->first()['plan_name'] = $plans[$planId]['name'];
-        }
+            if(count($sub['subscription']) != 0){
+                $planId = $sub['subscription'][0]['stripe_price'];
+                $data['new_sub'][$key] = $sub;
 
-        //dd($data['subscriptions'][0]);
+                $data['new_sub'][$key]['subscription'][0]['plan_name'] = $plans[$planId]->first()['name'];
+            }
+
+
+        }
 
         return view('admin.subscription.subscription_list', $data);
     }
+
 }

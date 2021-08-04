@@ -27,6 +27,7 @@ class Subscription extends Model
     use InteractsWithPaymentBehavior;
     use Prorates;
 
+
     /**
      * The attributes that are not mass assignable.
      *
