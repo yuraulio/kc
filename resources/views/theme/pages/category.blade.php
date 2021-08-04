@@ -75,11 +75,11 @@
                                 ?>
                               <h2><a href="{{ $slug }}">{{ $row->title}}</a></h2>
                               <div class="bottom">
-                                 @if (isset($row['expiration']) && $row['expiration'] != null)
-                                 <div class="duration"><img width="20" src="/theme/assets/images/icons/icon-calendar.svg" alt=""> {{ $row['expiration'] }} months access to videos & files  </div>
+                                 @if ($row->summary1->where('section','date')->first())
+                                 <div class="duration"><img width="20" src="/theme/assets/images/icons/icon-calendar.svg" alt=""> {{$row->summary1->where('section','date')->first()->title}}  </div>
                                  @endif
-                                 @if(isset($row['hours']))
-                                 <div class="expire-date"><img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt="">{{ $row['hours'] }}</div>
+                                 @if($row->summary1->where('section','duration')->first())
+                                 <div class="expire-date"><img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt="">{{ $row->summary1->where('section','duration')->first()->title }}</div>
                                  @endif
                               </div>
                            </div>
@@ -139,18 +139,12 @@
                                         @endforeach
                                     @endif
 
-                                    @if (isset($row['expiration']) && $row['expiration'] != null)
-                                        <div class="duration"><img width="20" src="/theme/assets/images/icons/icon-calendar.svg" alt=""> {{ $row['expiration'] }} months access to videos & files  </div>
-                                    @endif
-
-                                    @if(isset($row['summary1']) )
-            
-                                        @foreach($row['summary1'] as $sum)
-                                            @if($sum['section'] == 'duration')
-                                            <div class="expire-date"><img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt="">{{ $sum['title'] }}</div>
-                                            @endif
-                                        @endforeach
-                                    @endif
+                                    @if ($row->summary1->where('section','date')->first())
+                                 <div class="duration"><img width="20" src="/theme/assets/images/icons/icon-calendar.svg" alt=""> {{$row->summary1->where('section','date')->first()->title}}  </div>
+                                 @endif
+                                 @if($row->summary1->where('section','duration')->first())
+                                 <div class="expire-date"><img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt="">{{ $row->summary1->where('section','duration')->first()->title }}</div>
+                                 @endif
 
 
 
@@ -242,39 +236,19 @@
                                 ?>
                                  <h2><a href="{{ $slug }}">{{ $row->title}}</a></h2>
                                  <div class="bottom">
-                                    @if(isset($row['city']))
+                                 @if(isset($row['city']))
                                         @foreach($row['city'] as $city)
-
-                                            <a href="{{$city->slugable->slug}}" class="city " title="{{ $city->name }}">
+                                            <a href="{{ $city->slugable->slug }}" class="city " title="{{ $city->name }}">
                                             <img width="20" class="replace-with-svg" src="/theme/assets/images/icons/marker.svg" alt="">{{ $city->name }}</a>
                                         @endforeach
                                     @endif
 
-                                    @if(isset($row['description']) && $row['description'] != '')
-                                        <div  class="duration"><img class="replace-with-svg" width="20" src="/theme/assets/images/icons/icon-calendar.svg" alt=""> {{ $row['description'] }} </div>
-                                    @endif
-
-                                    {{--@if(isset($location->name))
-                                       <a href="{{ $location->slug }}" class="location " title="{{ $location->name }}">
-                                       <img width="20" class="replace-with-svg" src="/theme/assets/images/icons/marker.svg" alt="">{{ $location->name }}</a>
-                                    @endif
-                                    @if (isset($row['c_fields']['simple_text'][0]) && $row['c_fields']['simple_text'][0]['value'] != '')
-                                       <div  class="duration"><img class="replace-with-svg" width="20" src="/theme/assets/images/icons/icon-calendar.svg" alt=""> {{ $row['c_fields']['simple_text'][0]['value'] }} </div>
-                                    @endif--}}
-
-
-
-                                    @if(isset($row['summary1']))
-
-
-                                        @foreach($row['summary1'] as $sum)
-
-                                            @if($sum['section'] == 'date')
-                                            <?php //dd($date); ?>
-                                            <div class="expire-date"><img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt="">{{ $sum['title'] }}</div>
-                                            @endif
-                                        @endforeach
-                                    @endif
+                                    @if ($row->summary1->where('section','date')->first())
+                                 <div class="duration"><img width="20" src="/theme/assets/images/icons/icon-calendar.svg" alt=""> {{$row->summary1->where('section','date')->first()->title}}  </div>
+                                 @endif
+                                 @if($row->summary1->where('section','duration')->first())
+                                 <div class="expire-date"><img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt="">{{ $row->summary1->where('section','duration')->first()->title }}</div>
+                                 @endif
 
                                  </div>
                               </div>
