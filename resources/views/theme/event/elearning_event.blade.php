@@ -356,6 +356,21 @@
                         <div class="instructors-wrapper row row-flex row-flex-23">
                            @foreach($instructors as $instructor)
                            @foreach($instructor as $inst)
+
+                           
+                           <?php
+                           
+                           $socialMedia = json_decode($inst['social_media'],true);
+                           $fb = isset($socialMedia['facebook']) ? $socialMedia['facebook'] : ''; 
+                           $twitter = isset($socialMedia['twitter']) ? $socialMedia['twitter'] : ''; 
+                           $instagram = isset($socialMedia['instagram']) ? $socialMedia['instagram'] : '';
+                           $linkedIn = isset($socialMedia['linkedin']) ? $socialMedia['linkedin']: '';
+                           $yt = isset($socialMedia['youtube']) ? $socialMedia['youtube'] : '';
+
+                           
+
+                           ?>
+
                            <div class="col-3 col-md-4 col-sm-6 col-xs-12">
                               <div class="instructor-box">
                                  <div class="instructor-inner">
@@ -372,19 +387,15 @@
                                     @else
                                        <h3>{{$inst['title']}}</h3>
                                     @endif
-                                    <p>{{$inst['header']}}, <a target="_blank" title="{{$inst['header']}}" @if($inst['ext_url'] != '') href="{{$inst['ext_url']}}" @endif > test</a>.</p>
-                                    {{--<ul class="social-wrapper">
+                                    <ul class="social-wrapper">
                                        @if($fb != '')
                                        <li><a target="_blank" href="{{$fb}}"><img class="replace-with-svg"  src="/theme/assets/images/icons/social/Facebook.svg" width="16" alt="Visit"></a></li>
                                        @endif
-                                       @if($inst !='')
-                                       <li><a target="_blank" href="{{$inst}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Instagram.svg')}}" width="16" alt="Visit"></a></li>
+                                       @if($instagram !='')
+                                       <li><a target="_blank" href="{{$instagram}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Instagram.svg')}}" width="16" alt="Visit"></a></li>
                                        @endif
                                        @if($linkedIn !='')
                                        <li><a target="_blank" href="{{$linkedIn}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Linkedin.svg')}}" width="16" alt="Visit"></a></li>
-                                       @endif
-                                       @if($pint !='')
-                                       <li><a target="_blank" href="{{$pint}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Pinterest.svg')}}" width="16" alt="Visit"></a></li>
                                        @endif
                                        @if($twitter !='')
                                        <li><a target="_blank" href="{{$twitter}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Twitter.svg')}}" width="16" alt="Visit"></a></li>
@@ -392,10 +403,8 @@
                                        @if($yt !='')
                                        <li><a target="_blank" href="{{$yt}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Youtube.svg')}}" width="16" alt="Visit"></a></li>
                                        @endif
-                                       @if($med !='')
-                                       <li><a target="_blank" href="#"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Medium.svg')}}" width="16" alt="Visit"></a></li>
-                                       @endif
-                                    </ul>--}}
+                                      
+                                    </ul>
                                     <!-- /.instructor-inner -->
                                  </div>
                                  <!-- /.instructor-box -->

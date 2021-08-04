@@ -48,9 +48,22 @@ class MakePhotoVersions extends Command
             }
 
             $details = json_decode($media['details'],true);
-            
+           
+            if(!$details){
+                continue;
+            }
             foreach(get_image_versions() as $value){
                 
+
+                if(isset($details['img_align'][$value['version']]) && $details['img_align'][$value['version']]['x'] > 0 && $details['img_align'][$value['version']]['y'] > 0){
+                    $edit = $details['img_align'][$value['version']];
+                    
+                    $image_resize = Image::make(public_path($media['path'] . $media['original_name']));
+                    $image_resize->crop(intval($edit['width']),intval($edit['height']), intval($edit['x']), intval($edit['y']));
+                    $image_resize->save(public_path($media['path'] .$media['name'].'-'.$value['version'] . $media['ext']), $value['q']);
+
+                }
+
                 /*if(!isset($details[$value['version']])){
                     continue;
                 }*/
@@ -107,9 +120,15 @@ class MakePhotoVersions extends Command
                     $image_resize->crop($value['w'], $value['h'],intval($details[$value['version']]['x']),intval($details[$value['version']]['y']));
                 }*/
                 
-                $image_resize = Image::make(public_path($media['path'] . $media['original_name']));
-                $image_resize->resize($value['w'], $value['h']);              
-                $image_resize->save(public_path($media['path'] .$media['name'].'-'.$value['version'] . $media['ext']), $value['q']);
+                //$image_resize = Image::make(public_path($media['path'] . $media['original_name']));
+
+     
+                /*$image->crop(intval($request->width),intval($request->height), intval($request->x), intval($request->y));
+                $image->save(public_path('/uploads').$word.$path[0].'-'.$request->version.'.'.$path[1], 50);
+                $data['version'] = $request->version;*/
+
+                //$image_resize->resize($value['w'], $value['h']);              
+                //$image_resize->save(public_path($media['path'] .$media['name'].'-'.$value['version'] . $media['ext']), $value['q']);
             }
         }
         

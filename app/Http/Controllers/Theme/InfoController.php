@@ -321,7 +321,7 @@ class InfoController extends Controller
                         }
 
                     }
-                
+                    $thisevent->tickets()->save($thisticket,['user_id' => $checkemailuser->id]);
                 }
 
                 //SHOULD but back used deree id?
@@ -470,7 +470,7 @@ class InfoController extends Controller
                     }
 
                 }
-        
+                $thisevent->tickets()->save($thisticket,['user_id' => $user->id]);
             }
 
             if ($next == 9999) {

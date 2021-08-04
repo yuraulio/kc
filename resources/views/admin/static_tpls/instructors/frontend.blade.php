@@ -43,7 +43,7 @@
                                        //dd($lvalue);
 
                                        if(isset($lvalue['medias'])){
-                                         $img =  get_image($lvalue, 'instructors-testimonials');
+                                         $img =  get_image($lvalue['medias'], 'instructors-testimonials');
                                        }
 
                                        if(isset($lvalue['header'])){
@@ -81,9 +81,9 @@
 
                                        ?>
                                     <div class="profile-img">
-                                       <a href="{{$inst_url}}"><img src="{{$img}}"  title="{{$name}}" alt="{{$name}}"></a>
+                                       <a href="{{$inst['slugable']['slug']}}"><img src="{{$img}}"  title="{{$name}}" alt="{{$name}}"></a>
                                     </div>
-                                    <h3><a href="{{$inst_url}}">{{$name}}</a></h3>
+                                    <h3><a href="{{$inst['slugable']['slug']}}">{{$name}}</a></h3>
                                     <p>{{$field1}}, <a target="_blank" title="{{$field1}}" @if($ext_url!='') href="{{$ext_url}}"@endif>{{$field2}}</a>.</p>
                                     <ul class="social-wrapper">
                                        @if($fb != '')
