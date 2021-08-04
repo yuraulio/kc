@@ -42,6 +42,8 @@ class MediaController extends Controller
         //dd($folders);
         $path = explode(".",$id);
 
+        Image::configure(array('driver' => 'imagick'));
+
         $image = Image::make(public_path($mediaKey));
 
         $media->original_name = $id;
@@ -133,15 +135,15 @@ class MediaController extends Controller
 
     public function crop_profile_image(Request $request)
     {
-        //dd('asd');
         //dd($request->all());
         $media = Media::find($request->media_id);
         //dd($media);
         if($media['details'] != null){
             //dd('has details');
-            $details = json_decode($media['details'], true);
-
-            if($details != null || $details != ''){
+            $arr = json_decode($media['details'], true);
+            //dd($details);
+            $details = [];
+            if($arr != null || $arr != ''){
                 $details['x'] = $request->x;
                 $details['y'] = $request->y;
                 $details['width'] = $request->width;
@@ -152,10 +154,10 @@ class MediaController extends Controller
                 $details['y'] = $request->y;
                 $details['width'] = $request->width;
                 $details['height'] = $request->height;
-
             }
 
-            $details = json_encode($details);
+            //$details = json_encode($details);
+            //dd($details);
 
             //Media::where('id', $request->media_id)->update(['details' => $details]);
 
@@ -165,9 +167,11 @@ class MediaController extends Controller
             //replace first / from path
             $name1 = substr_replace($media['path'], "", 0, 1);
             //dd($name1);
+            //dd($name1.$name[0].'-crop'.$media['ext']);
+            if(file_exists($name1.$name[0].'-crop'.$media['ext'])){
+                unlink($name1.$name[0].'-crop'.$media['ext']);
+            }
 
-
-            unlink($name1.$name[0].'-crop'.$media['ext']);
             //save new crop image
 
 
@@ -176,19 +180,20 @@ class MediaController extends Controller
 
 
         }else{
-            $arr = [];
-            $arr['x'] = $request->x;
-            $arr['y'] = $request->y;
-            $arr['width'] = $request->width;
-            $arr['height'] = $request->height;
+            $details = [];
+            $details['x'] = $request->x;
+            $details['y'] = $request->y;
+            $details['width'] = $request->width;
+            $details['height'] = $request->height;
 
-            $details = json_encode($arr);
-
-            Media::where('id', $request->media_id)->update(['details' => $details]);
 
             //save new image
 
         }
+
+        $details = json_encode($details);
+
+        Media::where('id', $request->media_id)->update(['details' => $details]);
 
         //dd(public_path($media['path'].$media['original_name'].$media['ext']));
 
@@ -197,11 +202,11 @@ class MediaController extends Controller
         $image->crop($request->width, $request->height, $request->x, $request->y);
         $name = explode('.', $media['original_name']);
         $image->save(public_path($media['path'].$name[0].'-crop'.$media['ext']), 50);
-
+        //dd(public_path($media['path'].$name[0].'-crop'.$media['ext']));
 
         return response()->json([
             'success' => __('Already image cropped.'),
-            'data' => 'profile_image',
+            'data' => asset($media['path'].$name[0].'-crop'.$media['ext']),
         ]);
     }
 

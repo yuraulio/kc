@@ -56,7 +56,7 @@
 
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title itemprop="name">{{ $metaTitle ?? 'Argon Dashboard PRO Laravel - Premium Frontend Preset for Laravel' }}</title>
+        <title itemprop="name">{{ $metaTitle ?? 'Knowcrunch Admin Dashboard' }}</title>
 
         @if (env('IS_DEMO'))
 
@@ -94,7 +94,7 @@
         @endif
 
         <!-- Favicon -->
-        <link href="{{ asset('argon') }}/img/brand/favicon.png" rel="icon" type="image/png">
+        <link href="{{ asset('') }}/favicon/favicon-32x32.png" rel="icon" type="image/png">
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">

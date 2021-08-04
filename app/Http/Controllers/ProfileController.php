@@ -43,8 +43,9 @@ class ProfileController extends Controller
 
     public function updateRole(Request $request)
     {
-        $user = Auth::user();
-        $user = User::with('role')->find($user['id']);
+        //dd($request->all());
+        $updateUser = $request->userId;
+        $user = User::with('role')->find($updateUser);
         $user->role()->sync($request->role_id);
 
         return back()->withStatus(__('Profile role successfully updated.'));

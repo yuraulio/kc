@@ -149,6 +149,7 @@ class UserController extends Controller
        $transaction->billing_details = $person_details;
        $transaction->total_amount = $price;
        $transaction->amount = $price;
+       $transaction->trial = 0;
 
        $transaction->save();
 
@@ -205,13 +206,17 @@ class UserController extends Controller
      */
     public function store(UserRequest $request, User $model)
     {
+        //dd($request->all());
         $user = $model->create($request->merge([
             'password' => Hash::make($request->get('password')),
         ])->all());
 
         $user->createMedia();
 
-        return redirect()->route('user.index')->withStatus(__('User successfully created.'));
+        $user = User::find($user['id']);
+        $user->role()->sync($request->role_id);
+
+        return redirect()->route('user.edit', $user->id)->withStatus(__('User successfully created.'));
     }
 
     /**

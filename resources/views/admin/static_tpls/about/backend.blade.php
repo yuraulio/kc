@@ -8,7 +8,6 @@
             <a class="contentTypeHeader pull-right">
                 {{ $custType['title'] }}
             </a>
-
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="cmain">
                     <div class="form-horizontal">

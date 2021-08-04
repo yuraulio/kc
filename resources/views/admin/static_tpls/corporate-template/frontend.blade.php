@@ -191,8 +191,9 @@
 							<div class="logos-carousel owl-carousel">
                             @foreach ($corporatebrands as $key => $value)
                                     @if(isset($value['medias']))
+                                    <?php //dd($value); ?>
 								<div class="slide">
-									<img alt="{{ $value['name'] }}" title="{{ $value['name'] }}" src="<?php asset(get_image($page['medias'])); ?>"/>
+									<img alt="{{ $value['name'] }}" title="{{ $value['name'] }}" src="<?php get_image($page['medias']); ?>"/>
 								</div>
 								@endif
                             @endforeach

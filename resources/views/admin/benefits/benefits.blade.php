@@ -21,6 +21,7 @@
       <tbody class="benefit-body benefits-order">
          @if($model->benefits)
          @foreach ($model->benefits as $benefit)
+         <?php //dd($benefit); ?>
          <tr>
             <td id="name-{{$benefit->id}}" class="benefit-list" data-id ="{{$benefit->id}}"><a class="edit-btn" href="#">{{ $benefit->name }}</td>
             <td>{{ date_format($benefit->created_at, 'd-m-Y' ) }}</td>
@@ -35,7 +36,7 @@
                   <i class="fas fa-ellipsis-v"></i>
                   </a>
                   <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                     <a class="dropdown-item" data-toggle="modal" data-target="#editModal" data-id="{{$benefit->id}}" data-name="{{$benefit->name}}" data-description="{{$benefit->description}}" data-media="@isset($benefit->medias){{$benefit->medias['path']}}@endisset">{{ __('Edit') }}</a>
+                     <a class="dropdown-item" data-toggle="modal" data-target="#editModal" data-id="{{$benefit->id}}" data-name="{{$benefit->name}}" data-description="{{$benefit->description}}" data-media="@isset($benefit->medias){{$benefit->medias['path']}}{{$benefit->medias['original_name']}}@endisset">{{ __('Edit') }}</a>
                   </div>
                </div>
             </td>
@@ -239,6 +240,7 @@
             modal.find("#benefitModalLabel").val(name)
             description = e.relatedTarget.dataset.description
             media = e.relatedTarget.dataset.media
+            console.log(media)
 
             modal.find("#edit-name").val(name);
             CKEDITOR.instances['edit-description1'].setData(description)

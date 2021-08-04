@@ -35,7 +35,7 @@ class HomeController extends Controller
 
     /*public function homePage(){
 
-        
+
 
         $data = [];
 
@@ -105,7 +105,7 @@ class HomeController extends Controller
 
     public function homePage(){
 
-        
+
         $data = [];
 
         //$data['events'] = Event::with('category', 'medias', 'slugable', 'ticket')->get()->toArray();
@@ -114,12 +114,12 @@ class HomeController extends Controller
         $data['elearningEvents'] = [];
         $data['elearningFree'] = [];
         $data['inclassFree'] = [];
-        
+
         $categories =Category::with('slugable','events.slugable','events.city','events','events.mediable')->where('show_homepage', 1)->get()->toArray();
 
-        
+
         foreach($categories as $category){
-            
+
             if(!key_exists($category['id'],$data['nonElearningEvents'])){
 
                 $data['nonElearningEvents'][$category['id']]['name'] = $category['name'];
@@ -149,7 +149,7 @@ class HomeController extends Controller
             }
 
             foreach($category['events'] as $event){
-                
+
                 if($event['status'] == 1 || $event['status'] == 3 || $event['status'] == 4 || !$event['published'] ){
                     continue;
                 }
@@ -175,7 +175,7 @@ class HomeController extends Controller
 
         foreach($data as $key => $categories){
             foreach($categories as $key2 => $category){
-               
+
                 if(count($category['events']) == 0){
                     unset($data[$key][$key2]);
                 }
@@ -189,11 +189,11 @@ class HomeController extends Controller
         $data['homeBrands'] = Logos::with('medias')->where('type', 'brands')->inRandomOrder()->take(6)->get()->toArray();
         $data['homeLogos'] = Logos::with('medias')->where('type', 'logos')->inRandomOrder()->take(6)->get()->toArray();
         $data['homePage'] = Pages::where('name','home')->with('mediable')->first()->toArray();
-        
+
         return view('theme.home.homepage',$data);
 
     }
-   
+
     public function index(Slug $slug){
 
         //dd(get_class($slug->slugable) == Event::class);
@@ -203,7 +203,7 @@ class HomeController extends Controller
 
         switch (get_class($slug->slugable)) {
             case Event::class:
-                
+
                 return $this->event($slug->slugable);
                 break;
 
@@ -226,7 +226,7 @@ class HomeController extends Controller
             case City::class:
                 return $this->city($slug->slugable);
                 break;
-            
+
             case Category::class:
                 return $this->category($slug->slugable);
                 break;
@@ -329,7 +329,7 @@ class HomeController extends Controller
     }
 
     private function city($page){
-       
+
         $data['content'] = $page;
 
         $city = City::with('event')->find($page['id']);
@@ -343,7 +343,7 @@ class HomeController extends Controller
     }
 
     private function instructor($page){
-        
+
         $data['content'] = $page;
         $events = array();
 
@@ -416,15 +416,15 @@ class HomeController extends Controller
     }
 
     private function pages($page){
-       
+
         $data['page'] = $page;
         if($data['page']['template'] == 'corporate_page'){
             $data['page']['template'] = 'corporate-template';
             $data['benefits'] = $page->benefits;
             $data['corporatebrands'] = Logos::with('medias')->where('type', 'brands')->get();
         }else if($data['page']['template'] == 'instructors'){
-            $data['instructors'] =  Instructor::with('medias')->where('status', 1)->get();
-        }else if($data['page']['id'] == 800){           
+            $data['instructors'] =  Instructor::with('medias', 'slugable')->where('status', 1)->get();
+        }else if($data['page']['id'] == 800){
             $data['brands'] = Logos::with('medias')->where('type', 'brands')->get();
         }else if($data['page']['id'] == 801){
             $data['logos'] = Logos::with('medias')->where('type', 'logos')->get();
@@ -434,7 +434,7 @@ class HomeController extends Controller
     }
 
     private function types($type){
-        
+
 
         $data['type'] = $type;
 
@@ -446,7 +446,7 @@ class HomeController extends Controller
     }
 
     private function category($category){
-        
+
 
         $data['type'] = $category;
 
@@ -459,7 +459,7 @@ class HomeController extends Controller
 
     private function delivery($delivery){
 
-        
+
 
         $data['delivery'] = $delivery;
         $data['openlist'] = $delivery->event()->has('slugable')->with('category', 'city', 'ticket')->where('published',true)->where('status', 0)->orderBy('created_at','desc')->get();
@@ -493,7 +493,7 @@ class HomeController extends Controller
 
     }
 
-   
+
     public function printSyllabusBySlug($slug = '')
     {
 

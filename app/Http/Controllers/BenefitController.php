@@ -51,6 +51,7 @@ class BenefitController extends Controller
      */
     public function update(Request $request, Benefit $benefit)
     {
+        //dd($request->all());
         $benefit->update($request->all());
 
         if($request->svg){

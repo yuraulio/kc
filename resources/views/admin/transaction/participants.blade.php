@@ -154,7 +154,7 @@
                             <tr>
                                 <td>
                                     <?php if(count($transaction->user) > 0){
-                                                echo $transaction->user->first()['firstname'].$transaction->user->first()['lastname'];
+                                                echo $transaction->user->first()['firstname'].' '.$transaction->user->first()['lastname'];
                                             }else{
                                                 echo "";
                                             }?>
@@ -223,8 +223,8 @@
 
                                     <?php
 
-                                    if(isset($transaction->event[0])){
-                                        //dd($transaction->event);
+                                    if(isset($transaction->event[0]) && isset($transaction->event[0]->users[0])){
+                                        //dd($transaction->event[0]);
                                         $date = strtotime($transaction->event[0]->users[0]->pivot->expiration);
                                         $newformat = date('d/m/Y',$date);
                                         echo $newformat;
@@ -232,7 +232,6 @@
                                     }else{
                                         $newformat = null;
                                     }
-
                                     ?>
 
                                 </td>
@@ -311,30 +310,6 @@ var minDate, maxDate;
 
 // Custom filtering function which will search data in column four between two values
 $.fn.dataTable.ext.search.push(
-
-    // function( settings, data, dataIndex ) {
-    //     //console.log('asd'+data[6])
-    //     var min = minDate.val();
-    //     var max = maxDate.val();
-    //     var date = new Date( data[6] );
-    //     console.log(date.getTime())
-    //     // console.log('min:'+min)
-    //     // console.log('max:'+max)
-    //     // console.log('date:'+date)
-
-
-
-    //     if (
-    //         ( min === null && max === null ) ||
-    //         ( min === null && date.getTime() <= max.getTime() ) ||
-    //         ( min.getTime() <= date.getTime()   && max === null ) ||
-    //         ( min.getTime() <= date.getTime()   && date.getTime() <= max.getTime() )
-    //     ) {
-    //         return true;
-    //     }
-    //     return false;
-    // }
-
 
     function( settings, data, dataIndex ) {
         var min = minDate.val();
@@ -444,12 +419,9 @@ $(document).ready(function() {
     })
 
     function getStatsByDate(min, max, key, value){
-        console.log('min: '+min+' ///// '+max)
         if(min != 'Invalid date' && max == 'Invalid date'){
             if(moment(datatable_date).isAfter(min)){
-                console.log('true1')
                 sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key])
-                console.log('SUM: '+sum+'coupon: '+$('#participants_table').DataTable().column( 2 ).data()[key])
 
 
                 if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Alumni'){
@@ -471,10 +443,7 @@ $(document).ready(function() {
             }
         }else if(min !='Invalid date' && max != 'Invalid date'){
             if(moment(datatable_date).isAfter(min) && moment(datatable_date).isBefore(max)){
-                console.log('true2')
                 sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key])
-
-
 
                 if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Alumni'){
                     alumni = alumni + parseInt(value)
@@ -495,10 +464,7 @@ $(document).ready(function() {
             }
         }else if(min == 'Invalid date' && max != 'Invalid date'){
             if(moment(datatable_date).isBefore(max)){
-                console.log('true3')
                 sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key])
-
-
 
                 if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Alumni'){
                     alumni = alumni + parseInt(value)
@@ -521,13 +487,6 @@ $(document).ready(function() {
 
     }
 
-
-
-   // let sum = 0;
-
-
-
-
     //Refilter the table
     $('#min, #max').on('change', function () {
         //console.log('from change min!!')
@@ -536,7 +495,6 @@ $(document).ready(function() {
         price = $('#participants_table').DataTable().column( 3 ).data();
 
         initCounters()
-        alert(count_early)
 
         let min = new Date($('#min').val());
         let max = new Date($('#max').val());
@@ -556,15 +514,9 @@ $(document).ready(function() {
 
         //initCounters()
         $.each(price, function(key, value){
-            console.log('key'+key)
-            // console.log('pre if')
-            // console.log('selected min:'+min.getTime())
             datatable_date = $('#participants_table').DataTable().column( 6 ).data()[key]
-            //console.log('--|:  '+datatable_date)
             datatable_date = new Date(datatable_date);
             datatable_date = moment(datatable_date).format('MM/DD/YYYY')
-            console.log(min+' ||| '+datatable_date)
-           //console.log(moment(min).isAfter(datatable_date) || moment(max).isBefore(datatable_date))
 
            getStatsByDate(min, max, key, value)
         })
@@ -611,7 +563,6 @@ function filterGlobal () {
 
             if($('.participant_elearning').hasClass('none')){
                 $('.participant_elearning').removeClass('none')
-                console.log($('.participant_elearning'))
             }
         }else{
             $('.participant_elearning').addClass('none')

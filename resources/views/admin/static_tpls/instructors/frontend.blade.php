@@ -27,7 +27,7 @@
                                  <div class="instructor-inner">
                                     <?php
                                        $img = '';
-                                       $inst_url = $lvalue->slug;
+                                       $inst_url = $lvalue['slugable']['slug'];
                                        $ext_url = $lvalue['ext_url'];
                                        $fb = '';
                                        $inst = '';
@@ -57,7 +57,7 @@
                                             $field2 = str_replace ( "http://www.", "", $field2 );
                                        }
                                        $socialMedia = json_decode($lvalue['social_media'],true);
-                                    
+
                                        if(isset($socialMedia['facebook'])){
                                           $fb = $socialMedia['facebook'];
                                        }
@@ -78,12 +78,12 @@
                                           $yt = $socialMedia['youtube'];
                                        }
 
-
+                                       //dd($inst_url);
                                        ?>
                                     <div class="profile-img">
-                                       <a href="{{$inst['slugable']['slug']}}"><img src="{{$img}}"  title="{{$name}}" alt="{{$name}}"></a>
+                                       <a href="{{$inst_url}}"><img src="{{$img}}"  title="{{$name}}" alt="{{$name}}"></a>
                                     </div>
-                                    <h3><a href="{{$inst['slugable']['slug']}}">{{$name}}</a></h3>
+                                    <h3><a href="{{$inst_url}}">{{$name}}</a></h3>
                                     <p>{{$field1}}, <a target="_blank" title="{{$field1}}" @if($ext_url!='') href="{{$ext_url}}"@endif>{{$field2}}</a>.</p>
                                     <ul class="social-wrapper">
                                        @if($fb != '')
