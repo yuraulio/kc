@@ -390,7 +390,7 @@
                                       @endif
                                     </div>
                                     @if($inst['status'])
-                                       <h3><a href="{{$inst['slugable']['slug']}}">{{$inst['title']}}</a></h3>
+                                       <h3><a href="{{$inst['slugable']['slug']}}">{{$inst['title']}} {{$inst['subtitle']}}</a></h3>
                                     @else
                                        <h3>{{$inst['title']}}</h3>
                                     @endif
