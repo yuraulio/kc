@@ -59,7 +59,7 @@ class Transaction extends Model
 
     public function subscription()
     {
-        return $this->morphedByMany(Sub::class, 'transactionable');
+        return $this->morphedByMany(Sub::class, 'transactionable','transactionables');
     }
 
     // public function events()
