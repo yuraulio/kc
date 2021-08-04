@@ -60,6 +60,12 @@ return [
             'url' => env('APP_URL'),
             'visibility' => 'public',
         ],
+        'export' => [
+            'driver' => 'local',
+            'root' => public_path('/uploads/tmp/exports'),
+            'url' => env('APP_URL'),
+            'visibility' => 'public',
+        ],
 
         's3' => [
             'driver' => 's3',

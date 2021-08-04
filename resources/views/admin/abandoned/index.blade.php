@@ -45,7 +45,7 @@
                     </div>
 
                     <div class="table-responsive py-4">
-                        
+
                         <div class="collapse" id="collapseExample">
                             <div class="container">
                                 <div class="row">
@@ -59,7 +59,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button id="exportAbandoned" style="margin-left:1.2rem;" type="button" class="btn btn-primary btn-sm">Export csv</button>
+                        <a href="abandoned/exportcsv" style="margin-left:1.2rem;" class="btn btn-primary btn-sm">Export csv</a>
                         <hr>
                         <table class="table align-items-center table-flush"  id="abandoned_table">
                             <thead class="thead-light">
@@ -162,7 +162,7 @@
             })
         }
 
-        function filterColumn ( i ) {           
+        function filterColumn ( i ) {
             table.column( i ).search($('#col'+i+'_filter').val()).draw();
         }
 
@@ -176,26 +176,6 @@
                 filterColumn( $(this).parents('div').attr('data-column') );
 
             } );
-
-            $( "#exportAbandoned" ).click(function() {
-
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    type: 'get',
-                    url: '{{route("abandoned.exportcsv")}}',
-                    success: function (data) {
-                //console.log(data);
-                
-                    },
-                    error: function() {
-                        //console.log(data);
-                    }
-                });
-
-
-            });
 
         });
     </script>

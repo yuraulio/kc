@@ -57,12 +57,18 @@ class AbandonedExport implements FromArray
                     }
                 }
             }
-//dd($ucart->options['event']);
+
+            if($ucart->id == 'free'){
+                $ticket_title = 'Free';
+            }else{
+                $ticket_title = $tickets[$ucart->id]->title;
+            }
+
             $subs[] = [
                 $abcart[$user_id]->user->first()['email'],
                 $fn,
                 $events[$ucart->options['event']]->title . ' - ' . $evdate,
-                //$tickets[$ucart->id]->title,
+                $ticket_title,
                 $ucart->qty,
                 $ucart->qty*$ucart->price,
                 'C:'.$abcart[$user_id]->created_at->format('d/m/Y H:i').' | U:'.$abcart[$user_id]->updated_at->format('d/m/Y H:i')
@@ -73,23 +79,12 @@ class AbandonedExport implements FromArray
 
         endforeach;
 
-        dd($subs);
-        return $subs;
+        if(count($subs) > 0){
+            return $subs;
+        }else{
+            return redirect()->route('abandoned.index');
+        }
 
-        // if (count($subs) > 0) {
-        //     //$subs = $subs->toArray();
-        //     Excel::create('Knowcrunch Abandonded Cart list', function($excel) use ($subs) {
-        //         $excel->setTitle('AbandonedCart');
-        //         $excel->setCreator('Darkpony')->setCompany('Darkpony');
-        //         $excel->setDescription('AbandondedCart Exported');
-        //         $excel->sheet('Sheetname', function($sheet) use ($subs) {
-        //             $sheet->fromArray($subs, null, 'A1', false, false);
-        //         });
-        //     })->download('csv');
-        // } else {
-        //     Flash::error('No data found matching your criteria');
-        //     return redirect()->route('listAbandoned');
-        // }
     }
 
     public function createDir($dir, $permision = 0755, $recursive = true)
