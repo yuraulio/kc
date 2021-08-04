@@ -23,7 +23,8 @@
         "laravel/ui": "^3.0",
         "propaganistas/laravel-phone": "^4.3",
         "spatie/flysystem-dropbox": "^1.0",
-        "stripe/stripe-php": "^7.87"
+        "stripe/stripe-php": "^7.87",
+        "maatwebsite/excel": "^3.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5",
@@ -52,7 +53,7 @@
             "Alexusmai\\LaravelFileManager\\Controllers\\": "app/overrides/file-manager/",
             "Laravel\\Cashier\\Concerns\\": "app/Concerns",
             "Library\\": "app/Library/"
-            
+
         },
         "classmap": [
             "database/seeds",

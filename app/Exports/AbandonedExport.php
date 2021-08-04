@@ -45,6 +45,7 @@ class AbandonedExport implements FromArray
         $abcart = Shoppingcart::with('user')->get()->keyBy('identifier');
 
         foreach($list as $user_id => $ucart) :
+            if($abcart[$user_id]->user != null){
             $fn = $abcart[$user_id]->user->first()['firstname'] . ' ' .$abcart[$user_id]->user->first()['lastname'];
 
             $evdate = 'No Date';
@@ -56,21 +57,23 @@ class AbandonedExport implements FromArray
                     }
                 }
             }
-
+//dd($ucart->options['event']);
             $subs[] = [
                 $abcart[$user_id]->user->first()['email'],
                 $fn,
                 $events[$ucart->options['event']]->title . ' - ' . $evdate,
-                $tickets[$ucart->id]->title,
+                //$tickets[$ucart->id]->title,
                 $ucart->qty,
                 $ucart->qty*$ucart->price,
                 'C:'.$abcart[$user_id]->created_at->format('d/m/Y H:i').' | U:'.$abcart[$user_id]->updated_at->format('d/m/Y H:i')
 
             ];
 
+        }
+
         endforeach;
 
-        //dd($subs);
+        dd($subs);
         return $subs;
 
         // if (count($subs) > 0) {

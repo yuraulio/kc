@@ -120,11 +120,6 @@
                             <tbody>
                             <?php //dd($subscriptions[0]); ?>
                                 @foreach ($subscriptions as $item)
-                                <?php
-                                //dd($item);
-                              
-                                ?>
-
                                     <tr>
                                         <td>
                                             {{ $item['id'] }}
@@ -136,7 +131,7 @@
                                             {{ $user['firstname']}} {{ $user['lastname']}}
                                         </td>
                                         <td>
-                                            
+
                                         </td>
                                         <td></td>
 
