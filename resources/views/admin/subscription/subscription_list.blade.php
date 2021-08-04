@@ -130,15 +130,10 @@
                                             ?>
                                             {{ $user['firstname']}} {{ $user['lastname']}}
                                         </td>
-                                        <td>
+                                        <td>{{$item['subscription']->first()['plan_name']}}</td>
+                                        <td>{{ $item['subscription']->first()['event']->first()['title'] }}</td>
 
-                                        </td>
-                                        <td></td>
-
-                                        <td>
-                                            {{ $item['status'] }}
-
-                                        </td>
+                                        <td>{{ $item['status'] }}</td>
                                         <td>{{ $item['trial'] }}</td>
 
 
