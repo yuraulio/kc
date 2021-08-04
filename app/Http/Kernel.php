@@ -72,6 +72,8 @@ class Kernel extends HttpKernel
         'auth.sms.api' => \App\Http\Middleware\CheckSmsForApi::class,
         'event.check' => \App\Http\Middleware\CheckForEvent::class,
         'event.subscription' => \App\Http\Middleware\CheckForSubscription::class,
+        'cert.owner' => \App\Http\Middleware\CertificateOwner::class,
+        'exam.check' => \App\Http\Middleware\ExamCheck::class,
     ];
 
     /**

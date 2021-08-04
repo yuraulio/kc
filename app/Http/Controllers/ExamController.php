@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ExamRequest;
 use App\Model\ExamResult;
 
+
 class ExamController extends Controller
 {
     /**

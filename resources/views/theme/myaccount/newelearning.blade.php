@@ -562,23 +562,20 @@
 
 
                let event = $('.topics-list').attr('id');
-               //console.log(event)
 
                $.ajax({
                headers: {
                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                      },
                  type: 'PUT',
-                 url: '/myaccount/elearning/saveNote',
+                 url: '/elearning/saveNote',
                  data:{'text':note,'vimeoId':vimeoId, 'event':event},
                  success: function(data) {
                        if(data){
                            $('#notes').val(data['text']);
                            $('.isWatching').data("note", data['text'])
                            $('.saveDone').removeClass('saveDone');
-                           checkForExam(data['exam_access'])
                        }else{
-                           console.log('Not save')
                        }
                        //playVi = true;
 
@@ -606,7 +603,6 @@
                prev = $(prevTopic).find('li:last-child');
                prev = $(prev).find('a:first-child');
                prevTitle = $(prevTopic).find('li:last-child').find('.lesson-info_title').text();
-               //console.log(prevTitle);
                $('.lesson-main-title').text(prevTitle);
                    $(prev[0]).trigger("click");
                }
@@ -628,13 +624,11 @@
              //update title
              $('.lesson-main-title').text(nextTitle);
 
-           //  console.log('CUR:'+ this.currentWatchingVideo);
-           //  console.log('NEXT:'+next);
+         
 
             if(typeof next === 'undefined'){
                let currTopic = $('#'+ this.currentWatchingVideo).parent().parent();
                let nextTopic = currTopic.next();
-               //console.log($(nextTopic).next()['length']);
 
                if($(nextTopic).next()['length'] == 0){
                  curTitle = $("#"+this.currentWatchingVideo).find('.lesson-info_title').text();
@@ -647,12 +641,10 @@
                  $('.lesson-main-title').text(nextTitle);
                }
             }
-            console.log('on next video')
             $("#" + next +" a:first-child").trigger("click");
           }
 
            function viewDownloads(){
-               console.log('from view')
                $('.lesson-downloads ul li').addClass('hidden')
                topicId = $('.isWatching').parent().parent().data('count') - 1
                $.each($('.lesson-downloads li'), function(key,value){
@@ -664,10 +656,7 @@
            }
 
           function tabclick(videos,event,seen,statisticId,frame,notes,progress){
-              //console.log('my first load')
-              console.log('seen'+ seen)
-              console.log('statisticId'+ statisticId)
-
+              
             $('.progress-bar').css('width', progress + '%')
 
                notes = JSON.parse(notes)
@@ -678,9 +667,6 @@
              frame = frame.replace(/-/g, '')
              frame = frame.replace(/&/g, '')
              frame = '{'+frame+'}'
-
-             console.log('frame:'+frame)
-             console.log('prev frame:' + previousFrame)
 
              if(previousFrame){
 
@@ -720,8 +706,7 @@
              if(frame in this.videosSeen == false){
                 this.videos = videos;
              }else{
-               //console.log(videosSeen);
-               //console.log('videos seen');
+             
                videos = videosSeen[frame];
              }
 
@@ -741,19 +726,14 @@
                 this.previousK = this.previousK.replace('}','');
 
              }
-             console.log('//////')
+            
 
 
              if(lastVideoSeen!=-1){
-                 //console.log('last Tab:'+ videos[lastVideoSeen]['tab'])
+           
 
                 $(".active-tab").removeClass("active-tab");
-//                 $this = $('#'+videos[lastVideoSeen]['tab']).parent().parent().children('h2')
-// console.log('asd')
 
-//                 console.log($this)
-
-//                 $this.click();
 
              }
 
@@ -766,27 +746,19 @@
                 }
 
                 previousVideo = videos[seen]['tab'];
-                console.log(previousVideo)
-                //console.log(videos[seen])
+             
+ 
                 tabWatching = videos[seen]['tab'];
 
 
-                //console.log('pre vid'+previousVideo);
-
-                console.log('testprev::'+previousVideo);
+              
 
                 document.getElementById(previousVideo).classList.add('isWatching')
                 var watchingTab = $( ".isWatching" ).parent().parent().addClass('open');
                 this.currentWatchingVideo = $( ".isWatching" ).attr('id');
                 this.nextWatchingVideo = $( ".isWatching" ).next().attr('id');
 
-               //$(".next-video-button").attr("href",nextWatchingVideo);
-
-                //console.log('next vid'+ nextWatchingLesson);
-               //  let a = '"\\"' + this.frameVi[this.frame] + '\\';
-               //  console.log('THIS FRAME:' + a)
-
-               //console.log(this.frameVi[this.frame]);
+              
 
                 let vimeoID ='"{ video'+videos[seen]['lesson_id'] + frame + '}"';
                 var cvl = document.getElementById(this.frameVi[this.frame]).cloneNode(true);;
@@ -800,23 +772,9 @@
 
 
 
-                //viewDownloads()
-
-
-                //console.log('//||!!'+topicId)
-
-
-
-
-                //videoPlayers[frame] = new Vimeo.Player(vimeoID);
-
-               // if(videosPlayed[frame].includes(seen) == false){
-
-                   //console.log('frame = ', frame)
-                  // console.log(videosPlayed)
+             
 
                    videoPlayers[frame] = new Vimeo.Player(vimeoID);
-                 //  videosPlayed[frame].push(parseInt(seen));
 
 
 
@@ -824,15 +782,11 @@
                    videoId = id
                    //when load video load NOTES
                    let videoNote = notes[videoId];
-                   console.log('My note:'+videoNote)
                    videoNote = videoNote.replace("||", "\n");
-                   //console.log('first load video'+videoId)
                    array.push(id)
-                   console.log('----------------')
-                   console.log(prev_topicId)
+                 
                    prev_topicId.push($('.topic.open .topic-info_title').data('topic-slug'))
-                   console.log('----------------')
-                   console.log(prev_topicId)
+                  
                    $('.isWatching').find('a').addClass('current-lesson')
                    //$('#links').empty();
 
@@ -840,7 +794,7 @@
 
 
                 $.each(video_link,function(key, value) {
-                    //console.log(value)
+                  
 
                 //let strArray = e.split("|")
                  $('#links').append( `<li class="resource linkitem">
@@ -854,14 +808,12 @@
                 });
 
                    let prog = $('.isWatching').find('.lesson-progress').attr('src','theme/assets/img/new/current_lesson_icon.svg')
-                   console.log('edw')
-                   //topicId = $('.isWatching').parent().parent().data(count)
-
-                   //edw
+                  
+                   
 
 
 
-                   console.log(videos)
+                   
                    $('#notes').val(videoNote);
                    videoPlayers[frame].setCurrentTime(videos[id]['stop_time'])
                    // videoPlayers[frame].setLoop(false)
@@ -904,7 +856,7 @@
              this.videoPlayers[this.frame].on('play', function(e) {
 
                 if(!playVi){
-                    console.log('edw1')
+                   
                    videoPlayers[frame].setCurrentTime(videos[videoId]['stop_time'])
                    videoPlayers[frame].setLoop(false)
                 }
@@ -925,23 +877,24 @@
                             videos[videoId]['seen'] = 1;
                             $('.isWatching.watched').attr("data-completed", '1')
                       }
-                     //console.log('edww');
-                   //   this.videoPlayers[this.frame].off('play');;
+                   
                       $.ajax({
                        headers: {
                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                              },
                          type: 'PUT',
-                         url: '/myaccount/elearning/save',
+                         url: '/elearning/save',
                          data:{'videos':videos,'event_statistic':eventStatistic,'lastVideoSeen':videoId,'event':event},
                          success: function(data) {
-                               // if(!data['loged_in']){
-                               //    notLogin(data)
-                               // }else{
-                               //    videosSeen[frame] = data['videos'];
-                               //    $('.progress-bar').css('width', data['progress'] + '%')
-                               //    checkForExam(data['exam_access'])
-                               // }
+                            console.log(data)
+                                if(!data['loged_in']){
+                                   notLogin(data)
+                                }else{
+                                   
+                                   videosSeen[frame] = data['videos'];
+                                   //$('.progress-bar').css('width', data['progress'] + '%')
+                                   checkForExam(data['exam_access'])
+                                }
                                //playVi = true;
 
                          }
@@ -968,7 +921,6 @@
 
              this.videoPlayers[this.frame].on('progress', function(e) {
 
-               //console.log('no progress')
 
                 @if(!$instructor_topics)
 
@@ -991,9 +943,10 @@
                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                              },
                             type: 'PUT',
-                            url: '/myaccount/elearning/save',
+                            url: '/elearning/save',
                             data:{'videos':videos,'event_statistic':eventStatistic,'lastVideoSeen':videoId,'event':event},
                             success: function(data) {
+                               console.log(data);
                                if(!data['loged_in']){
                                   notLogin(data)
                                }else{
@@ -1027,17 +980,14 @@
 
           function play_video(video,playingVideo,vk,lesson){
               video = video + '?title=false'
-              //console.log('asds:'+previousVideo)
-               console.log('prev'+previousVideo)
-           // notes = JSON.parse(notes)
+      
              if(previousVideo !==false){
 
                 document.getElementById(previousVideo).classList.remove('isWatching')
 
              }
 
-             //alert(playingVideo)
-             console.log('play:'+playingVideo)
+      
 
              document.getElementById(playingVideo).classList.add('isWatching')
 
@@ -1064,11 +1014,10 @@
              let topicId = $('.isWatching').parent().parent().data('count')
                 //alert(topicId)
                 let topicTitle = $('.topic.open .topic-info_title').data('topic-slug');
-                console.log('TOPIC_ID'+topicId)
-                console.log('TOPIC TITLE'+topicTitle)
+              
 
                 let last = prev_topicId[prev_topicId.length - 1]
-               console.log('LAST:::::'+last)
+              
 
 
 
@@ -1085,13 +1034,13 @@
 
 
              videoPlayers[frame].loadVideo(video).then(function(id) {
-                 console.log('ON LOAD')
+                
                  let video_link = $('.isWatching').data('link')
 
          $('#links').empty()
 
                 $.each(video_link,function(key, value) {
-                    //console.log(value)
+                  
 
                 //let strArray = e.split("|")
                  $('#links').append( `<li class="resource linkitem">
@@ -1104,7 +1053,7 @@
 
                 });
                 //viewDownloads()
-               //console.log($('.isWatching').data("completed"))
+     
                $( ".isWatching" ).parent().parent().addClass('open');
                $( ".isWatching" ).parent().css('display', 'block')
 
@@ -1129,25 +1078,16 @@
                    scrollTop: scrollTo.offset().top - container.offset().top + container.scrollTop()
                });
                 this.videoId = id
-                console.log('curr vid'+id)
                 this.videoPlayers[this.frame].setCurrentTime(videos[id]['stop_time'])
                 this.videoPlayers[this.frame].setLoop(false)
 
                 array.push(id)
-                //console.log(array[array.length - 1])
-                 //t/t
-
+             
                  let prev_vid_id = array[array.length - 2]
-                 //console.log('prevvideo'+prev_vid_id)
                 $('.'+prev_vid_id).find('a').removeClass('current-lesson')
 
                 $('.isWatching').find('a').addClass('current-lesson')
 
-
-
-
-
-                //console.log('second load')
 
                 let topicId = $('.isWatching').parent().parent().data('count')
                 let topicTitle = $('.topic.open .topic-info_title').data('topic-slug');
@@ -1156,7 +1096,6 @@
 
 
                let last = prev_topicId[prev_topicId.length - 1]
-               console.log('LAST:::::'+last)
 
 
 
@@ -1196,8 +1135,7 @@
           }
 
           @if(!$instructor_topics)
-         // console.log('olay = ', this.playVi)
-         // if(playVi){
+        
              window.onbeforeunload = function (ev) {
 
                 this.videoPlayers[this.frame].pause().then(function() {
@@ -1287,7 +1225,7 @@
       </script>
       <script>
          function notLogin(data){
-           //console.log(data['message'])
+           
             let p = ''
             p = `<img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-success-alert.svg')}}" alt="Info Alert">` + data['message'];
             $('#message').append(p);
@@ -1315,7 +1253,6 @@
                  data: {dir: dir, fname:fname},
 
                  success: function(data) {
-                   //console.log(data);
                    window.location.href = data;
                  }
                });
@@ -1429,7 +1366,6 @@
               if($('.'+ array[array.length - 1]).attr("data-completed") != 1){
                 $('.'+array[array.length - 1]).find('.lesson-progress').attr('src','theme/assets/img/new/lesson_icon.svg')
                }
-               //console.log(array[array.length - 1])
             })
 
             $('.lesson-teacher-wrapper').click(function(e) {
@@ -1441,7 +1377,6 @@
               if($('.'+ array[array.length - 1]).attr("data-completed") != 1){
                 $('.'+array[array.length - 1]).find('.lesson-progress').attr('src','theme/assets/img/new/lesson_icon.svg')
                }
-               //console.log(array[array.length - 1])
             })
 
             $(window).on('load', function() {

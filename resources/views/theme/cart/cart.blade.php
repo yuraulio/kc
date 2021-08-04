@@ -471,8 +471,8 @@ if(!isset($info)){
                         <div class="ticket-infos">
                            <ul>
                               @if($city)<li><img src="{{cdn('/theme/assets/images/icons/icon-marker.svg')}}" width="16" alt="" class="icon" />{{$city}}</li>@endif
-                              @if(isset($ev_date_help)) <li><img src="{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}" width="16" alt="" class="icon" /> {{$ev_date_help}}</li>@endif
                               @if($duration)<li><img src="{{ cdn('/theme/assets/images/icons/Start-Finish.svg')}}" width="16" alt="" class="icon" />{{$duration}}</li>@endif
+                              @if($hours)<li><img src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt="">{{$hours}}</li>@endif
 
                            </ul>
                         </div>
@@ -656,9 +656,9 @@ if(!isset($info)){
                <div class="left">
                   <h3>{{ $item->name }}</h3>
                   <div class="bottom">
-                     <div class="location"><img src="{{cdn('/theme/assets/images/icons/marker.svg')}}" alt="">{{$city}}</div>
-                     <div class="duration"><img src="{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}" alt="">@if(isset($ev_date_help)) {{$ev_date_help}}@endif</div>
-                     @if($duration)<div class="expire-date"><img src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt="">{{$duration}}</div>@endif
+                     @if($city)<div class="location"><img src="{{cdn('/theme/assets/images/icons/marker.svg')}}" alt="">{{$city}}</div>@endif
+                     @if($duration)<div class="duration"><img src="{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}" alt="">{{$duration}}</div>@endif
+                     @if($hours)<div class="expire-date"><img src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt="">{{$hours}}</div>@endif
 
                   </div>
                </div>

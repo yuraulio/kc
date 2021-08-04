@@ -369,10 +369,17 @@ Route::group(['middleware' => ['auth'], 'prefix'=>'myaccount'], function () {
         Route::get('/subscription-success', 'Theme\SubscriptionController@orderSuccess');
         Route::post('/subscription/change_status',  'Theme\SubscriptionController@change_status')->name('subscription.change_status');
 
-        Route::put('/elearning/saveNote', 'Theme\StudentController@saveNote');
-        Route::put('/elearning/save', 'Theme\StudentController@saveElearning');
+        //Route::put('/elearning/saveNote', 'Theme\StudentController@saveNote');
+        //Route::put('/elearning/save', 'Theme\StudentController@saveElearning');
+
+        Route::get('/mycertificate/{certificate}', 'Theme\CertificateController@getCertificate');
 
     });
+});
+
+Route::group(['middleware' => 'auth.elearning' ], function () {
+    Route::put('/elearning/saveNote', 'Theme\StudentController@saveNote');
+    Route::put('/elearning/save', 'Theme\StudentController@saveElearning');
 });
 
 

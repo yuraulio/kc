@@ -13,9 +13,16 @@ use DateTime;
 use Mail;
 use App\Model\Event;
 use \Carbon\Carbon;
+use App\Model\Certificate;
 
 class ExamAttemptController extends Controller
 {
+
+
+    public function __construct(){
+        //$this->middleware('exam.check');
+    }
+
 
     public function attemptExam($ex_id) {       
 

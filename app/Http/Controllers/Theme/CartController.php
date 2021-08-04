@@ -317,8 +317,10 @@ class CartController extends Controller
                 }
                 $data['pay_methods'] = $ev->paymentMethod->first();
 
-              
+               
                 $data['duration'] = $ev->summary1->where('section','date')->first() ? $ev->summary1->where('section','date')->first()->title:'';
+                $data['hours'] = $ev->summary1->where('section','duration')->first() ? $ev->summary1->where('section','duration')->first()->title:'';
+                $data['city'] = $ev->city->first() ? $ev->city->first()->name : '';
                 $data['coupons'] = $ev->coupons->where('price','>',0)->toArray();
                 //dd($data['coupons']);
                 /*if($ev->customFields) {
@@ -376,7 +378,7 @@ class CartController extends Controller
                 if($data['paywithstripe'] == 1){
                     $data['default_card'] = $loggedin_user->defaultPaymentMethod() ? $loggedin_user->defaultPaymentMethod()->card : false;
                 }
-           
+               
                 return view('theme.cart.cart', $data);
             }
             

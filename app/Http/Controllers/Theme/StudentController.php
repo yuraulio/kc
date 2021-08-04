@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Model\Activation;
 use \Carbon\Carbon;
 use Session;
+use Mail;
 
 class StudentController extends Controller
 {
@@ -201,7 +202,7 @@ class StudentController extends Controller
         $data['subscriptionAccess'] = [];
         $data['mySubscriptions'] = [];
 
-        $data['user'] = User::with('image', 'events.city', 'events.exam', 'events.category', 'events.plans','events.topic','events.slugable','subscriptionEvents','statistic')->find($user->id);
+        $data['user'] = User::find($user->id);
         $statistics = $data['user']['statistic']->groupBy('id');//$user->statistic()->get()->groupBy('id');
         //dd($statistics);
         [$subscriptionAccess, $subscriptionEvents] = $user->checkUserSubscriptionByEvent();
@@ -258,7 +259,7 @@ class StudentController extends Controller
 
             }
 
-            $data['instructors'] = Instructor::with('slugable', 'medias')->get()->groupby('id');
+            
             $find = false;
             $view_tpl = $event['view_tpl'];
             $find = strpos($view_tpl, 'elearning');
@@ -308,7 +309,7 @@ class StudentController extends Controller
             }
 
         }
-
+        $data['instructors'] = Instructor::with('slugable', 'medias')->get()->groupby('id');
         $data['subscriptionEvents'] = Event::whereIn('id',$subscriptionEvents)->with('slugable')->get();
 
         return $data;
@@ -644,8 +645,8 @@ class StudentController extends Controller
           foreach($request->videos as $key=> $video){
 
 
-            $videos[$key]['stop_time'] = $video['stop_time'];
-            $videos[$key]['percentMinutes'] = $video['percentMinutes'];
+            $videos[$key]['stop_time'] = isset($video['stop_time']) ? $video['stop_time'] : 0;
+            $videos[$key]['percentMinutes'] = isset($video['stop_time']) ? $video['percentMinutes'] : 0;
 
             if( (int) $video['seen'] == 1 && (int) $videos[$key]['seen'] == 0){
                 $videos[$key]['seen'] = $video['seen'];
@@ -659,18 +660,22 @@ class StudentController extends Controller
                 'videos' => json_encode($videos)
             ], false);
 
-            /*if($user->events()->where('event_id',2068)->first()){
-                $user->videos()->where('event_id',$request->event)->first()->certification($request->event);
-            }*/
+
+            if($user->events()->where('event_id',2068)->first() && $user->events()->where('event_id',2068)->first() && 
+                $user->events()->where('event_id',2068)->first()->tickets()->wherePivot('user_id',$user->id)->first()){
+            
+                    $user->events()->where('event_id',2068)->first()->certification($user);
+            
+            }
 
 
-            /*if(isset($_COOKIE['examMessage-'.$request->event_statistic])){
+            if(isset($_COOKIE['examMessage-'.$request->event_statistic])){
 
                 $examAccess = false;
 
             }else if($request->event != 2068 && ($event=$user->events()->where('event_id',$request->event)->first())){
-
-                $examAccess = $user->videos()->where('event_id',$request->event)->first()->examAccess();
+                
+                $examAccess = $event->examAccess($user);
 
                 if($examAccess){
 
@@ -698,7 +703,7 @@ class StudentController extends Controller
 
                 }
 
-            }*/
+            }
 
         }
 
@@ -706,7 +711,7 @@ class StudentController extends Controller
             'success' => true,
             'videos' => $request->videos,
             'loged_in' => true,
-            // 'exam_access' => $examAccess,
+            'exam_access' => $examAccess,
             // 'progress' => $progress
         ]);
 

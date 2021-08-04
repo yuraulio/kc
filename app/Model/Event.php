@@ -32,6 +32,7 @@ use App\Traits\Invoices;
 use App\Model\Plan;
 use App\Model\Coupon;
 use App\Model\Video;
+use App\Model\Certificate;
 
 
 class Event extends Model
@@ -394,8 +395,8 @@ class Event extends Model
              return false;
         }
 
-
-        return $seenPercent >=  $successPer;
+        
+        return $seenPercent >=  ($successPer * 100);
 
     }
 
@@ -535,6 +536,30 @@ class Event extends Model
         return $this->certificates()->whereHas('user', function ($query) use($user) {
                 $query->where('id', $user);
             })->withPivot('certificatable_id','certificatable_type')->get();
+    }
+
+
+    public function certification(User $user){
+
+    
+        $certification = count($this->certificatesByUser($user->id)) > 0;
+
+        if($this->examAccess($user,$successPer = 0.9) && !$certification){
+           
+            $cert = new Certificate;
+            $cert->success = true;
+            $cert->create_date = strtotime(date('Y-m-d'));
+            $cert->expiration_date = strtotime(date('Y-m-d', strtotime('+24 months', strtotime(date('Y-m-d')))));
+            $cert->certification_date = date('F') . ' ' . date('Y');
+            $cert->save();
+
+            $cert->event()->save($this);
+            $cert->user()->save($user);
+            
+
+
+        }
+
     }
 
 }
