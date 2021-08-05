@@ -19,7 +19,7 @@
 
 
 <div class="table-responsive py-4">
-    <table class="table align-items-center table-flush ticket-table"  id="datatable-basic">
+    <table class="table align-items-center table-flush ticket-table"  id="datatable-basic19">
         <thead class="thead-light">
             <tr>
                 <th scope="col">{{ __('Title') }}</th>

@@ -181,7 +181,7 @@
                <div id="questions-list" class="collapse" aria-labelledby="questions-list" data-parent="#accordionExample">
                   <div class="card-body">
                      <div class="table-responsive py-4">
-                        <table class="table align-items-center table-flush"  id="datatable-basic">
+                        <table class="table align-items-center table-flush"  id="datatable-basic6">
                            <thead class="thead-light">
                               <tr>
                                  <th scope="col">{{ __('Title') }}</th>
@@ -903,7 +903,7 @@
 
    $(document).ready( function () {
        questionOrder();
-       $('#datatable-basic').dataTable( {
+       $('#datatable-basic6').dataTable( {
            "ordering": false,
            "paging": false
        });

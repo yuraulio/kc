@@ -130,7 +130,7 @@
         <div id="col_{{$key}}" class="collapse" aria-labelledby="{{$key}}" data-parent="#accordionExample">
             <div class="card-body">
                 <div class="table-responsive py-4">
-                    <table class="table align-items-center table-flush"  id="datatable-basic">
+                    <table class="table align-items-center table-flush"  id="datatable-basic42">
                         <thead class="thead-light">
                             <?php //dd($isInclassCourse); ?>
                             <tr>

@@ -30,7 +30,7 @@
             <div id="catt_{{\Illuminate\Support\Str::slug($key)}}" class="collapse" aria-labelledby="catt_{{\Illuminate\Support\Str::slug($key)}}" data-parent="#accordionTopicMain1">
                 <div class="card-body">
                     <div class="table-responsive py-4">
-                        <table class="table align-items-center table-flush"  id="datatable-basic">
+                        <table class="table align-items-center table-flush"  id="datatable-basic9">
                             <thead class="thead-light">
                                 <tr>
                                 <th scope="col">{{ __('Title') }}</th>
@@ -207,7 +207,7 @@
                                     <div id="accordion_topic` + index +`" class="collapse" aria-labelledby="accordion_topic` + index +`" data-parent="#accordionTopicMain1">
                                         <div class="card-body">
                                             <div class="table-responsive py-4">
-                                                <table class="table align-items-center table-flush"  id="datatable-basic">
+                                                <table class="table align-items-center table-flush"  id="datatable-basic10">
                                                     <thead class="thead-light">
                                                         <tr>
                                                         <th scope="col">{{ __('Title') }}</th>
@@ -280,7 +280,7 @@
                                     <div id="accordion_topic` + index +`" class="collapse" aria-labelledby="accordion_topic` + index +`" data-parent="#accordionTopicMain1">
                                         <div class="card-body">
                                             <div class="table-responsive py-4">
-                                                <table class="table align-items-center table-flush"  id="datatable-basic">
+                                                <table class="table align-items-center table-flush"  id="datatable-basic11">
                                                     <thead class="thead-light">
                                                         <tr>
                                                         <th scope="col">{{ __('Title') }}</th>

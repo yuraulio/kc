@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
        Commands\MakePhotoVersions::class,
        Commands\InitPages::class,
        Commands\AddOption::class,
+       Commands\AttachEvent::class,
     ];
 
     /**

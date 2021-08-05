@@ -18,7 +18,7 @@
                     </div>
                     <?php ?>
                     <div class="table-responsive py-4">
-                        <table class="table align-items-center table-flush"  id="datatable-basic">
+                        <table class="table align-items-center table-flush"  id="datatable-basic40">
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col">{{ __('Status') }}</th>
@@ -142,7 +142,7 @@
                                         <div id="col_${topic.id}" class="collapse" aria-labelledby="${topic.id}" data-parent="#accordionExample">
                                         <div class="card-body">
                                             <div class="table-responsive py-4">
-                                                <table class="table align-items-center table-flush"  id="datatable-basic">
+                                                <table class="table align-items-center table-flush"  id="datatable-basic41">
                                                     <thead class="thead-light">
                                                         <tr>
                                                             <th scope="col">{{ __('Lesson') }}</th>

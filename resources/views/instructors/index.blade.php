@@ -40,7 +40,7 @@
                     </div>
 
                     <div class="table-responsive py-4">
-                        <table class="table align-items-center table-flush"  id="datatable-basic">
+                        <table class="table align-items-center table-flush"  id="datatable-basic30">
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col">{{ __('Image') }}</th>
