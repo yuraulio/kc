@@ -787,9 +787,10 @@ $(document).on('click', '.ticket-card', function () {
             })
     })
     $img = @json($user->image);
+    console.log($img)
 
 
-    if($img != null && $img['details'] != null){
+    if($img['name'] != '' && $img['details'] != null){
         image_details = JSON.parse($img['details'].split(','))
         width = image_details.width
         height = image_details.height
@@ -864,10 +865,14 @@ $(document).on('click', '.ticket-card', function () {
 
     $( document ).ready(function() {
 
+        if($img['name'] != ''){
+            $('.custom-file-label').text($img['name']+$img['ext'])
+        }
+
         $("#input-picture").on("input", function() {
             let filename = $(this).val()
             filename = filename.replace('C:\\fakepath\\','')
-            alert(filename)
+            //alert(filename)
             $('.custom-file-label').text(filename)
         });
     });

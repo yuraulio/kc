@@ -39,7 +39,7 @@
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link active" href="#navbar-accounts" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-accounts">
-                            <i class="fab fa-laravel" style="color: #f4645f;"></i>
+                            <i class="far fa-user-circle" style="color: #f4645f;"></i>
                             <span class="nav-link-text" style="color: #f4645f;">{{ __('Accounts') }}</span>
                         </a>
                         <div class="collapse show" id="navbar-accounts">
@@ -120,7 +120,7 @@
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link active" href="#navbar-pages" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-pages">
-                            <i class="fab fa-laravel" style="color: #f4645f;"></i>
+                            <i class="fas fa-columns" style="color: #f4645f;"></i>
                             <span class="nav-link-text" style="color: #f4645f;">{{ __('Pages') }}</span>
                         </a>
                         <div class="collapse show" id="navbar-pages">

@@ -165,7 +165,7 @@
                                         {{ $transaction['type'] }}
 
                                 </td>
-                                <td><?=number_format($transaction['amount'], 2, '.', ''); ?></td>
+                                <td><?= '€'.number_format($transaction['amount'], 2, '.', ''); ?></td>
 
                                 <td>{{ $transaction['coupon_code'] }}</td>
                                 <td class="participant_elearning none">
@@ -319,7 +319,14 @@ $(document).ready(function() {
     });
 
     // DataTables initialisation
-    var table = $('#participants_table').DataTable();
+    var table = $('#participants_table').DataTable({
+        language: {
+            paginate: {
+            next: '&#187;', // or '→'
+            previous: '&#171;' // or '←' 
+            }
+        }
+    });
 
 
     // $('#min, #max').on('change', function () {
@@ -346,11 +353,16 @@ $(document).ready(function() {
     coupons = table.column(4).data().unique().sort()
     prices = table.column(3).data()
     //console.log(prices)
+    let sum = 0
+    $.each(prices, function(key, value) {
+        value = value.replace("€", "")
+        sum = sum + parseInt(value)
+    })
 
-    var sum = prices.reduce(function(a, b){
-        return parseInt(a) + parseInt(b);
-    }, 0);
-    $('#total').text(sum)
+    // var sum = prices.reduce(function(a, b){
+    //     return parseInt(a) + parseInt(b);
+    // }, 0);
+    $('#total').text('€'+sum)
 
     //let sum = 0;
 
@@ -467,12 +479,12 @@ $(document).ready(function() {
 
 
         //alert(sum)
-        $('#total').text(sum)
-        $('#special').text(special)
-        $('#regular').text(regular)
-        $('#alumni').text(alumni)
-        $('#early').text(early)
-        $('#sponsored').text(sponsored)
+        $('#total').text('€'+sum)
+        $('#special').text('€'+special)
+        $('#regular').text('€'+regular)
+        $('#alumni').text('€'+alumni)
+        $('#early').text('€'+early)
+        $('#sponsored').text('€'+sponsored)
         $('#count_special').text(count_special)
         $('#count_regular').text(count_regular)
         $('#count_alumni').text(count_alumni)
@@ -530,10 +542,13 @@ function filterGlobal () {
 
             let coupons = []
         $.each(price, function(key, value){
+            value = value.replace("€", "")
+
+
             //console.log(removeSpecial($('#participants_table').DataTable().column( i ).data()[key]))
 
             if(removeSpecial($('#participants_table').DataTable().column( i ).data()[key]) == removeSpecial($('#col'+i+'_filter').val())){
-                sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key])
+                sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key].replace("€", ""))
 
                 if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Alumni'){
                     alumni = alumni + parseInt(value)
@@ -573,7 +588,7 @@ function filterGlobal () {
             }else if($('#col'+i+'_filter').val() == ''){
                 //if select all
                 //alert('select all')
-                sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key])
+                sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key].replace("€", ""))
 
                 if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Alumni'){
                     alumni = alumni + parseInt(value)
@@ -637,10 +652,11 @@ function filterGlobal () {
             var sum1 = 0
             var count1 = 0
             $.each(value, function(key1, value1){
-                //console.log(value1.name)
+                val = value1.price
+                value = val.replace('€','')
                 count1++
 
-                 sum1 = sum1 + parseInt(value1.price)
+                 sum1 = sum1 + parseInt(value)
             })
             //console.log(key+'::'+sum)
 
@@ -651,7 +667,7 @@ function filterGlobal () {
                                 <div class="row">
                                     <div class="col">
                                         <h5 class="card-title text-uppercase text-muted mb-0"><div id="count_sponsored">${count1}x ${key}:</div></h5>
-                                        <span id="total" class="h2 font-weight-bold mb-0">${sum1}</span>
+                                        <span id="total" class="h2 font-weight-bold mb-0">${'€'+sum1}</span>
                                     </div>
                                 </div>
                             </div>
@@ -662,12 +678,12 @@ function filterGlobal () {
                     $('#participants_info').append(elem)
 
         })
-        $('#total').text(sum)
-        $('#special').text(special)
-        $('#regular').text(regular)
-        $('#alumni').text(alumni)
-        $('#early').text(early)
-        $('#sponsored').text(sponsored)
+        $('#total').text('€'+sum)
+        $('#special').text('€'+special)
+        $('#regular').text('€'+regular)
+        $('#alumni').text('€'+alumni)
+        $('#early').text('€'+early)
+        $('#sponsored').text('€'+sponsored)
         $('#count_special').text(count_special)
         $('#count_regular').text(count_regular)
         $('#count_alumni').text(count_alumni)
@@ -697,10 +713,12 @@ function filterGlobal () {
         let count_early = 0;
 
             $.each(price, function(key, value){
+                //console.log(value)
+                value = value.replace("€", "")
             //console.log($('#participants_table').DataTable().column( i ).data()[key] == $('#col'+i+'_filter').val())
                 //console.log('asd')
                 //console.log($('#participants_table').DataTable().column( 3 ).data()[key])
-                sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key])
+                sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key].replace("€", ""))
 
                 if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Alumni'){
                     alumni = alumni + parseInt(value)
@@ -722,12 +740,12 @@ function filterGlobal () {
 
 
         })
-        $('#total').text(sum)
-        $('#special').text(special)
-        $('#regular').text(regular)
-        $('#alumni').text(alumni)
-        $('#early').text(early)
-        $('#sponsored').text(sponsored)
+        $('#total').text('€'+sum)
+        $('#special').text('€'+special)
+        $('#regular').text('€'+regular)
+        $('#alumni').text('€'+alumni)
+        $('#early').text('€'+early)
+        $('#sponsored').text('€'+sponsored)
         $('#count_special').text(count_special)
         $('#count_regular').text(count_regular)
         $('#count_alumni').text(count_alumni)

@@ -161,7 +161,14 @@
         }
 
         // DataTables initialisation
-        var table = $('#abandoned_table').DataTable();
+        var table = $('#abandoned_table').DataTable({
+            language: {
+                paginate: {
+                next: '&#187;', // or '→'
+                previous: '&#171;' // or '←' 
+                }
+            }
+        });
 
         $(document).ready(function() {
             fillSelectedBox()
