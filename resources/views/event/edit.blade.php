@@ -205,8 +205,8 @@
                                 </div>
                                 <?php //dd($event->instructors); ?>
                                 <div class="form-group{{ $errors->has('syllabus') ? ' has-danger' : '' }}">
-                                            <label class="form-control-label" for="input-syllabus">{{ __('Syllabus Manager') }}</label>
-                                            <select name="syllabus" data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." id="input-syllabus" class="form-control" placeholder="{{ __('Syllabus Manager') }}">
+                                            <label class="form-control-label" for="input-syllabus1">{{ __('Syllabus Manager') }}</label>
+                                            <select name="syllabus" data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." id="input-syllabus1" class="form-control" placeholder="{{ __('Syllabus Manager') }}">
                                                 <option value=""></option>
 
 
@@ -439,6 +439,18 @@
                                                 @include('admin.faq.index', ['model' => $event])
                                             </div>
                                             <div class="tab-pane fade" id="tabs-icons-text-11_inside" role="tabpanel" aria-labelledby="tabs-icons-text-11-tab_inside">
+                                                <?php
+
+                                                // if($event->medias != null){
+                                                //     dd('has image');
+                                                // }else{
+                                                //     dd($event);
+                                                // }
+
+                                                //dd($event->medias != null);
+
+
+                                                ?>
 
                                                 @include('admin.upload.upload', ['event' => ($event->medias != null) ? $event->medias : null, 'versions' => ['event-card', 'header-image', 'social-media-sharing']])
 
@@ -538,6 +550,11 @@
 
             $('#instFormControlSelect').append(`<option value="" disabled selected>Choose instructor</option>`)
         });
+        var getLocation = function(href) {
+            var l = document.createElement("a");
+            l.href = href;
+            return l;
+        };
 
         $(document).on('click','#lesson_update_btn',function(e){
             let start = $('#time_starts').val()
@@ -563,7 +580,20 @@
                 success: function(data) {
                     data = JSON.parse(data)
 
-                    $('#inst_lesson_edit_'+data.lesson_id).text(data.instructor.title+' '+data.instructor.subtitle)
+                    inst_media = data.instructor.medias
+
+                    var base_url = window.location.origin
+
+                    console.log(window.location.origin + inst_media.path + inst_media.original_name)
+
+                    row =`
+                        <span style="display:inline-block" class="avatar avatar-sm rounded-circle">
+                            <img src="${window.location.origin + inst_media.path + inst_media.name + '-instructors-small' + inst_media.ext}" alt="${data.instructor.title+' '+data.instructor.subtitle}" style="max-width: 100px; max-height: 40px; border-radius: 25px" draggable="false">
+
+                        </span>
+                        <div style="display:inline-block">${data.instructor.title+' '+data.instructor.subtitle}</div>
+                    `
+                    $('#inst_lesson_edit_'+data.lesson_id).html(row)
                     $('#date_lesson_edit_'+data.lesson_id).text(data.date1)
                     $('#start_lesson_edit_'+data.lesson_id).text(data.start)
                     $('#end_lesson_edit_'+data.lesson_id).text(data.end)
@@ -864,20 +894,24 @@
     instructors = @json($instructors1);
 
     $(document).ready(function(){
-        $("#input-syllabus").select2({
-            templateResult: formatOptions
+        $("#input-syllabus1").select2({
+            templateResult: formatOptions,
+            templateSelection: formatOptions
         });
 
         $("#instFormControlSelect12").select2({
                 templateResult: formatOptions,
+                templateSelection: formatOptions,
                 dropdownParent: $("#modal-default")
             });
     });
 
 
     function formatOptions (state) {
-    if (!state.id) { return state.text; }
-    console.log(state.element)
+    if (!state.id) {
+        return state.text;
+        }
+
 
     path = state.element.attributes['path'].value
     name = state.element.attributes['name'].value
@@ -891,6 +925,7 @@
     var $state1 = $(
     '<span class="avatar avatar-sm rounded-circle"><img class="rounded-circle" sytle="display: inline-block;" src="' +path + name + plus_name + ext +'"/></span>'
     );
+
     return $state;
     }
 

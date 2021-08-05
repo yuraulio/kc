@@ -241,14 +241,16 @@
 
     $(document).ready(function(){
         $("#input-syllabus").select2({
-        templateResult: formatOptions
-        });
+            templateResult: formatOptions,
+            templateSelection: formatOptions
+            });
         });
 
         function formatOptions (state) {
-            //console.log(state)
-        if (!state.id) { return state.text; }
-        console.log(state.text)
+        if (!state.id) {
+            return state.text;
+        }
+
 
         path = state.element.attributes['path'].value
         name = state.element.attributes['name'].value
@@ -262,6 +264,7 @@
         var $state1 = $(
         '<span class="avatar avatar-sm rounded-circle"><img class="rounded-circle" sytle="display: inline-block;" src="' +path + name + plus_name + ext +'"/></span>'
         );
+
         return $state;
         }
 </script>

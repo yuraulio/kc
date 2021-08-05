@@ -234,6 +234,14 @@
     margin-right: 1rem;
 }
 
+#select2-instFormControlSelect12-container, #select2-input-syllabus1-container, #select2-input-syllabus-container {
+    margin: -5px
+}
+
+#file-man-main .col-auto {
+    margin-bottom: 0.5rem;
+}
+
 @media (min-height: 693px) {
     #file-man-main {
         height: 100% !important;

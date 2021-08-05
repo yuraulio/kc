@@ -259,7 +259,7 @@ class StudentController extends Controller
 
             }
 
-            
+
             $find = false;
             $view_tpl = $event['view_tpl'];
             $find = strpos($view_tpl, 'elearning');
@@ -554,22 +554,22 @@ class StudentController extends Controller
 
         if($user->instructor->first()){
             $event = $user->instructor->first()->event()->wherePivot('event_id', $event['id'])->first();
-            
+
         }else{
             $event = $user->events()->wherePivot('event_id', $event['id'])->first();
         }
-       
+
         $data['details'] = $event->toArray();
         $data['details']['slug'] = $event['slugable']['slug'];
-      
+
         $data['files'] = !$user->instructor->first() ? $event['category'][0]['dropbox'][0]->toArray() : [];
         //dd($data['files']);
         //dd($data['details']);
-     
+
         $data['videos_progress'] = $event->progress($user);
         $data['course'] = $event['title'];
         //dd($data['course']);
-       
+
         $statistic =  ($statistic = $user->statistic()->wherePivot('event_id',$event['id'])->first()) ?
                             $statistic->toArray() : ['pivot' => [], 'videos' => ''];
 
@@ -643,6 +643,7 @@ class StudentController extends Controller
           $videos = $user->statistic()->wherePivot('event_id',$request->event)->first()->pivot['videos'];
           $videos = json_decode($videos,true);
           foreach($request->videos as $key=> $video){
+              //dd($videos[$key]);
 
 
             $videos[$key]['stop_time'] = isset($video['stop_time']) ? $video['stop_time'] : 0;
@@ -661,11 +662,11 @@ class StudentController extends Controller
             ], false);
 
 
-            if($user->events()->where('event_id',2068)->first() && $user->events()->where('event_id',2068)->first() && 
+            if($user->events()->where('event_id',2068)->first() && $user->events()->where('event_id',2068)->first() &&
                 $user->events()->where('event_id',2068)->first()->tickets()->wherePivot('user_id',$user->id)->first()){
-            
+
                     $user->events()->where('event_id',2068)->first()->certification($user);
-            
+
             }
 
 
@@ -674,7 +675,7 @@ class StudentController extends Controller
                 $examAccess = false;
 
             }else if($request->event != 2068 && ($event=$user->events()->where('event_id',$request->event)->first())){
-                
+
                 $examAccess = $event->examAccess($user);
 
                 if($examAccess){

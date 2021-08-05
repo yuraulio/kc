@@ -624,7 +624,7 @@
              //update title
              $('.lesson-main-title').text(nextTitle);
 
-         
+
 
             if(typeof next === 'undefined'){
                let currTopic = $('#'+ this.currentWatchingVideo).parent().parent();
@@ -656,7 +656,7 @@
            }
 
           function tabclick(videos,event,seen,statisticId,frame,notes,progress){
-              
+
             $('.progress-bar').css('width', progress + '%')
 
                notes = JSON.parse(notes)
@@ -706,7 +706,7 @@
              if(frame in this.videosSeen == false){
                 this.videos = videos;
              }else{
-             
+
                videos = videosSeen[frame];
              }
 
@@ -726,11 +726,11 @@
                 this.previousK = this.previousK.replace('}','');
 
              }
-            
+
 
 
              if(lastVideoSeen!=-1){
-           
+
 
                 $(".active-tab").removeClass("active-tab");
 
@@ -746,19 +746,19 @@
                 }
 
                 previousVideo = videos[seen]['tab'];
-             
- 
+
+
                 tabWatching = videos[seen]['tab'];
 
 
-              
+
 
                 document.getElementById(previousVideo).classList.add('isWatching')
                 var watchingTab = $( ".isWatching" ).parent().parent().addClass('open');
                 this.currentWatchingVideo = $( ".isWatching" ).attr('id');
                 this.nextWatchingVideo = $( ".isWatching" ).next().attr('id');
 
-              
+
 
                 let vimeoID ='"{ video'+videos[seen]['lesson_id'] + frame + '}"';
                 var cvl = document.getElementById(this.frameVi[this.frame]).cloneNode(true);;
@@ -772,7 +772,7 @@
 
 
 
-             
+
 
                    videoPlayers[frame] = new Vimeo.Player(vimeoID);
 
@@ -784,9 +784,9 @@
                    let videoNote = notes[videoId];
                    videoNote = videoNote.replace("||", "\n");
                    array.push(id)
-                 
+
                    prev_topicId.push($('.topic.open .topic-info_title').data('topic-slug'))
-                  
+
                    $('.isWatching').find('a').addClass('current-lesson')
                    //$('#links').empty();
 
@@ -794,7 +794,7 @@
 
 
                 $.each(video_link,function(key, value) {
-                  
+
 
                 //let strArray = e.split("|")
                  $('#links').append( `<li class="resource linkitem">
@@ -808,12 +808,12 @@
                 });
 
                    let prog = $('.isWatching').find('.lesson-progress').attr('src','theme/assets/img/new/current_lesson_icon.svg')
-                  
-                   
 
 
 
-                   
+
+
+
                    $('#notes').val(videoNote);
                    videoPlayers[frame].setCurrentTime(videos[id]['stop_time'])
                    // videoPlayers[frame].setLoop(false)
@@ -856,7 +856,7 @@
              this.videoPlayers[this.frame].on('play', function(e) {
 
                 if(!playVi){
-                   
+
                    videoPlayers[frame].setCurrentTime(videos[videoId]['stop_time'])
                    videoPlayers[frame].setLoop(false)
                 }
@@ -877,7 +877,7 @@
                             videos[videoId]['seen'] = 1;
                             $('.isWatching.watched').attr("data-completed", '1')
                       }
-                   
+
                       $.ajax({
                        headers: {
                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -890,7 +890,7 @@
                                 if(!data['loged_in']){
                                    notLogin(data)
                                 }else{
-                                   
+
                                    videosSeen[frame] = data['videos'];
                                    //$('.progress-bar').css('width', data['progress'] + '%')
                                    checkForExam(data['exam_access'])
@@ -980,14 +980,14 @@
 
           function play_video(video,playingVideo,vk,lesson){
               video = video + '?title=false'
-      
+
              if(previousVideo !==false){
 
                 document.getElementById(previousVideo).classList.remove('isWatching')
 
              }
 
-      
+
 
              document.getElementById(playingVideo).classList.add('isWatching')
 
@@ -1014,10 +1014,10 @@
              let topicId = $('.isWatching').parent().parent().data('count')
                 //alert(topicId)
                 let topicTitle = $('.topic.open .topic-info_title').data('topic-slug');
-              
+
 
                 let last = prev_topicId[prev_topicId.length - 1]
-              
+
 
 
 
@@ -1034,13 +1034,13 @@
 
 
              videoPlayers[frame].loadVideo(video).then(function(id) {
-                
+
                  let video_link = $('.isWatching').data('link')
 
          $('#links').empty()
 
                 $.each(video_link,function(key, value) {
-                  
+
 
                 //let strArray = e.split("|")
                  $('#links').append( `<li class="resource linkitem">
@@ -1053,7 +1053,7 @@
 
                 });
                 //viewDownloads()
-     
+
                $( ".isWatching" ).parent().parent().addClass('open');
                $( ".isWatching" ).parent().css('display', 'block')
 
@@ -1082,7 +1082,7 @@
                 this.videoPlayers[this.frame].setLoop(false)
 
                 array.push(id)
-             
+
                  let prev_vid_id = array[array.length - 2]
                 $('.'+prev_vid_id).find('a').removeClass('current-lesson')
 
@@ -1135,7 +1135,7 @@
           }
 
           @if(!$instructor_topics)
-        
+
              window.onbeforeunload = function (ev) {
 
                 this.videoPlayers[this.frame].pause().then(function() {
@@ -1225,7 +1225,7 @@
       </script>
       <script>
          function notLogin(data){
-           
+
             let p = ''
             p = `<img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-success-alert.svg')}}" alt="Info Alert">` + data['message'];
             $('#message').append(p);

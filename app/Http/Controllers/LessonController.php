@@ -189,7 +189,7 @@ class LessonController extends Controller
 
         //dd(date_format($start,"H:i:sa"));
 
-        $data['instructor'] = Instructor::find($request->instructor_id);
+        $data['instructor'] = Instructor::with('medias')->find($request->instructor_id);
         $data['lesson_id'] = $request->lesson_id;
         $data['date1'] = $date1;
         $data['start'] = $start_response;
