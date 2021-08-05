@@ -19,6 +19,7 @@
             <li class="breadcrumb-item"><a href="{{ route('subscriptions.index') }}">{{ __('Subscriptions List') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
         @endcomponent
+        @include('admin.subscription.layouts.cards')
     @endcomponent
 
     <div class="container-fluid mt--6">
@@ -64,7 +65,7 @@
                         </div>
                     </div>
 
-                    <div class="card bg-gradient-default">
+                    {{--<div class="card bg-gradient-default">
                     <div class="card-body">
                         <!-- <h3 class="card-title text-white">Testimonial</h3>
                         <blockquote class="blockquote text-white mb-0">
@@ -87,7 +88,7 @@
                         </div>
                         </div>
                     </div>
-                </div>
+                </div>--}}
 
                         <table class="table align-items-center table-flush"  id="subscriptions_table">
                             <thead class="thead-light">

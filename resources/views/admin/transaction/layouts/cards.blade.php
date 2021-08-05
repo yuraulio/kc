@@ -6,7 +6,7 @@
                 <div class="row">
                     <div class="col">
                         <h5 class="card-title text-uppercase text-muted mb-0">Total Amount:</h5>
-                        <span id="total" class="h2 font-weight-bold mb-0">&euro;66666</span>
+                        <span id="total" class="h2 font-weight-bold mb-0"></span>
                     </div>
                 </div>
             </div>
@@ -19,8 +19,8 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                        <h5 class="card-title text-uppercase text-muted mb-0">Early birds:</h5>
-                        <span id="early" class="h2 font-weight-bold mb-0">5555</span>
+                        <h5 class="card-title text-uppercase text-muted mb-0"><div id="count_early"></div> Early birds:</h5>
+                        <span id="early" class="h2 font-weight-bold mb-0"></span>
                     </div>
                 </div>
             </div>
@@ -32,8 +32,8 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                        <h5 class="card-title text-uppercase text-muted mb-0">Regular:</h5>
-                        <span id="regular" class="h2 font-weight-bold mb-0">5555</span>
+                        <h5 class="card-title text-uppercase text-muted mb-0"><div id="count_regular"></div> Regular:</h5>
+                        <span id="regular" class="h2 font-weight-bold mb-0"></span>
                     </div>
                 </div>
             </div>
@@ -45,8 +45,8 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                        <h5 class="card-title text-uppercase text-muted mb-0">Alumni:</h5>
-                        <span id="alumni" class="h2 font-weight-bold mb-0">5555</span>
+                        <h5 class="card-title text-uppercase text-muted mb-0"><div id="count_alumni"></div> Alumni:</h5>
+                        <span id="alumni" class="h2 font-weight-bold mb-0"></span>
                     </div>
                 </div>
             </div>
@@ -58,8 +58,8 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                        <h5 class="card-title text-uppercase text-muted mb-0">Special:</h5>
-                        <span id="special" class="h2 font-weight-bold mb-0">5555</span>
+                        <h5 class="card-title text-uppercase text-muted mb-0"><div id="count_special"></div> Special:</h5>
+                        <span id="special" class="h2 font-weight-bold mb-0"></span>
                     </div>
                 </div>
             </div>
@@ -71,8 +71,8 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                        <h5 class="card-title text-uppercase text-muted mb-0">Sponsored:</h5>
-                        <span id="sponsored" class="h2 font-weight-bold mb-0">5555</span>
+                        <h5 class="card-title text-uppercase text-muted mb-0"><div id="count_sponsored"></div> Sponsored:</h5>
+                        <span id="sponsored" class="h2 font-weight-bold mb-0"></span>
                     </div>
                 </div>
             </div>

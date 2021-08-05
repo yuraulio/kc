@@ -215,3 +215,7 @@
 #tab_inside_tab .nav-item {
     padding-right: 1rem;
 }
+
+.card.card-stats {
+    min-height: 101px;
+}

@@ -1,14 +1,14 @@
 @extends('layouts.app', [
-    'title' => __('User Management'),
+    'title' => __('Participant List'),
     'parentSection' => 'laravel',
-    'elementName' => 'user-management'
+    'elementName' => 'participants-management'
 ])
 
 @section('content')
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Examples') }}
+                {{ __('') }}
             @endslot
             @slot('filter')
                 <!-- <a href="#" class="btn btn-sm btn-neutral">{{ __('Filters') }}</a> -->
@@ -16,9 +16,10 @@
 
             @endslot
 
-            <li class="breadcrumb-item"><a href="{{ route('city.index') }}">{{ __('Cities Management') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('transaction.participants') }}">{{ __('Participant List') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
         @endcomponent
+        @include('admin.transaction.layouts.cards')
     @endcomponent
 
     <div class="container-fluid mt--6">
@@ -29,9 +30,6 @@
                         <div class="row align-items-center">
                             <div class="col-8">
                                 <h3 class="mb-0">{{ __('Participants') }}</h3>
-                                <p class="text-sm mb-0">
-                                        {{ __('This is an example of Booking Participants.') }}
-                                    </p>
                             </div>
                         </div>
                     </div>
@@ -76,7 +74,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card bg-gradient-default">
+                {{--<div class="card bg-gradient-default">
                     <div class="card-body">
                         <!-- <h3 class="card-title text-white">Testimonial</h3>
                         <blockquote class="blockquote text-white mb-0">
@@ -118,7 +116,7 @@
                         </div>
                         </div>
                     </div>
-                </div>
+                </div>--}}
 
                 <table class="table align-items-center table-flush"  id="participants_table">
                     <thead class="thead-light">
@@ -153,21 +151,21 @@
                         <?php //dd($transaction); ?>
                             <tr>
                                 <td>
-                                   
+
                                     {{$transaction['name']}}
-                                         
+
                                 </td>
                                 <td>
-                                    
+
                                 {{$transaction['event_title']}};
-                                         
+
                                 </td>
                                 <td>
-                                   
+
                                         {{ $transaction['type'] }}
-                                   
+
                                 </td>
-                                <td>{{ $transaction['amount'] }}</td>
+                                <td><?=number_format($transaction['amount'], 2, '.', ''); ?></td>
 
                                 <td>{{ $transaction['coupon_code'] }}</td>
                                 <td class="participant_elearning none">
@@ -552,7 +550,7 @@ function filterGlobal () {
             $('#col'+i+'_filter').val()
         ).draw();
 
-        $('#participants_info').empty()
+        $('.participants_info').empty()
         event = removeSpecial($('#col'+i+'_filter').val())
 
         if(event.search('E-Learning') != -1){
@@ -696,10 +694,20 @@ function filterGlobal () {
             })
             //console.log(key+'::'+sum)
 
-            elem =`<div class="col-sm-2">
-                    <h4 class="card-title text-white"><div id="count_sponsored">${count1}x ${key}:</div></h4>
-                    <div class="text-white" id="sponsored">${sum1}</div>
-                    </div>`
+            elem =`
+                    <div class="participants_info col-xl-3 col-md-6">
+                        <div class="card card-stats">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <h5 class="card-title text-uppercase text-muted mb-0"><div id="count_sponsored">${count1}x ${key}:</div></h5>
+                                        <span id="total" class="h2 font-weight-bold mb-0">${sum1}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
 
                     $('#participants_info').append(elem)
 
