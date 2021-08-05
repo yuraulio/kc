@@ -452,6 +452,7 @@ class Event extends Model
         return '0 of 0';
 
     }
+    
 
     public function invoices(){
         return $this->morphToMany(Invoice::class, 'invoiceable','invoiceables');

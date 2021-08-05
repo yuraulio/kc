@@ -14,18 +14,16 @@ class TransactionController extends Controller
         //$data['transactions'] = $data['transactions']/*->has('user')*/->doesntHave('subscription');
         //$data['transactions'] = $data['transactions']->get();
 
-        $transactions = Transaction::with('user.statistic','subscription','event')->get();
+        $transactions = Transaction::with('user.statisticGroupByEvent','subscription','event')->get();
         $data['transactions'] = [];
         foreach($transactions as $transaction){
             if(!$transaction->subscription->first() && $transaction->user->first() && $transaction->event->first()){
-                //$transaction->event[0]->video_seen($transaction->user[0])
-//                if(count($transaction->user[0]->statistic)>1){
-                    $transaction->user[0]->statistic->where('event_id' , $transaction->event->first()->id)->first();
-
- //               }
+                $videos = isset($user->statisticGroupByEvent[$transaction->event->first()->id]) ? 
+                                        json_decode($user->statisticGroupByEvent[$transaction->event->first()->id]->pivot->videos,true) : null;
+                
                 $data['transactions'][] = ['id' => $transaction['id'],'name' => $transaction->user[0]['firstname'].' '.$transaction->user[0]['lastname'],'event_title' => $transaction->event[0]['title'],
                                             'type' => $transaction['type'] ? $transaction['type'] : '', 'date' => date_format($transaction['created_at'], 'm/d/Y'), 'amount' => $transaction['amount'],
-                                            'coupon_code' => $transaction['coupon_code'],'videos_seen' => 'dfsa','expiration'=>null];
+                                            'coupon_code' => $transaction['coupon_code'],'videos_seen' => $this->getVideosSeen($videos),'expiration'=>null];
             }
         }
         
@@ -83,4 +81,20 @@ class TransactionController extends Controller
 
 
     }
+
+    public function getVideosSeen($videos){
+        if(!$videos){
+            return' 0 of 0';
+        }
+
+        $sum = 0;
+        foreach($videos as $video){
+            if($video['seen'] == 1 || $video['seen'] == '1'){
+                $sum++;
+            }
+
+        }
+        return $sum.' of '.count($videos);
+    }
+
 }

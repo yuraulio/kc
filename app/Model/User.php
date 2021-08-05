@@ -197,8 +197,10 @@ class User extends Authenticatable
 
     public function statisticGroupByEvent()
     {
-        return $this->belongsToMany(Event::class, 'event_statistics')->select('event_id')->withPivot('id','videos','lastVideoSeen', 'notes', 'event_id')->groupBy('event_id');
+        return $this->belongsToMany(Event::class, 'event_statistics')->select('user_id','event_id')->withPivot('id','videos','lastVideoSeen', 'notes', 'event_id');
     }
+
+
 
     /*public function examAccess($successPer = 0.8, $event){
         $seenPercent =  $this->videosSeenPercent($event);
