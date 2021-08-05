@@ -51,7 +51,7 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::post('/summary/update/{summary}', 'SummaryController@update')->name('summary.update');
 
     //Participants
-    Route::get('Transaction/participants', ['as' => 'transaction.participants', 'uses' => 'TransactionController@participants']);
+    Route::get('transaction/participants', 'TransactionController@participants')->name('transaction.participants');
     Route::post('transaction/updateExpirationDate', ['as' => 'transaction.updateExpirationDate', 'uses' => 'TransactionController@updateExpirationDate']);
 
     //Subscriptions

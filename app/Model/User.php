@@ -131,11 +131,15 @@ class User extends Authenticatable
      */
     public function isAdmin()
     {
+
+        /*dd($this->role);
         //dd($this->id);
         $role = DB::table('role_users')->where('user_id', $this->id)->first();
         //dd($role->role_id);
         $role = Role::where('id', $role->role_id)->first();
-        return $role['id'] == 1;
+        return $role['id'] == 1;*/
+    
+        return $this->role->where('id',1)->first();
     }
 
     /**
@@ -189,6 +193,11 @@ class User extends Authenticatable
     public function statistic()
     {
         return $this->belongsToMany(Event::class, 'event_statistics')->withPivot('id','videos','lastVideoSeen', 'notes', 'event_id');
+    }
+
+    public function statisticGroupByEvent()
+    {
+        return $this->belongsToMany(Event::class, 'event_statistics')->select('event_id')->withPivot('id','videos','lastVideoSeen', 'notes', 'event_id')->groupBy('event_id');
     }
 
     /*public function examAccess($successPer = 0.8, $event){

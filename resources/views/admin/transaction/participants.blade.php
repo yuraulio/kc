@@ -153,27 +153,23 @@
                         <?php //dd($transaction); ?>
                             <tr>
                                 <td>
-                                    <?php if(count($transaction->user) > 0){
-                                                echo $transaction->user->first()['firstname'].' '.$transaction->user->first()['lastname'];
-                                            }else{
-                                                echo "";
-                                            }?>
+                                   
+                                    {{$transaction['name']}}
+                                         
                                 </td>
                                 <td>
-                                    <?php if(count($transaction->event) > 0){
-                                                echo $transaction->event->first()['title'];
-                                            }else{
-                                                echo "";
-                                            }?>
+                                    
+                                {{$transaction['event_title']}};
+                                         
                                 </td>
                                 <td>
-                                    @if($transaction['type'] != null )
+                                   
                                         {{ $transaction['type'] }}
-                                    @endif
+                                   
                                 </td>
-                                <td>{{ $transaction->amount }}</td>
+                                <td>{{ $transaction['amount'] }}</td>
 
-                                <td>{{ $transaction->coupon_code }}</td>
+                                <td>{{ $transaction['coupon_code'] }}</td>
                                 <td class="participant_elearning none">
 
                                     <?php
@@ -217,29 +213,13 @@
 
                                 </td>
 
-                                <td>{{ date_format($transaction->created_at, 'm/d/Y' )}}</td>
+                                <td>{{ $transaction['date']}}</td>
 
                                 <td class="exp_{{$transaction['id']}} participant_elearning none" >
-
-                                    <?php
-
-                                    if(isset($transaction->event[0]) && isset($transaction->event[0]->users[0])){
-                                        //dd($transaction->event[0]);
-                                        $date = strtotime($transaction->event[0]->users[0]->pivot->expiration);
-                                        $newformat = date('d/m/Y',$date);
-                                        echo $newformat;
-
-                                    }else{
-                                        $newformat = null;
-                                    }
-                                    ?>
-
-                                </td>
-                                <?php
-
-                                ?>
+                                    {{$transaction['expiration']}}
+                                   
                                 <td class="participant_elearning none">
-                                    <input id="{{$transaction['id']}}" class="form-control datepicker" placeholder="Select date" type="text" value="<?= ($newformat != null) ? $newformat : ''; ?>">
+                                    <input id="{{$transaction['id']}}" class="form-control datepicker" placeholder="Select date" type="text" value="<?= ($transaction['expiration'] != null) ?$transaction['expiration'] : ''; ?>">
                                     <button class="update_exp btn btn-info btn-sm" style="margin-top:10px;" type="button" data-id="{{$transaction['id']}}" >Update</button>
                                 </td>
                             </tr>

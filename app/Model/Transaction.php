@@ -44,22 +44,22 @@ class Transaction extends Model
 
     public function user()
     {
-        return $this->morphedByMany(User::class, 'transactionable','transactionables');
+        return $this->morphedByMany(User::class, 'transactionable');
     }
 
     public function event()
     {
-        return $this->morphedByMany(Event::class, 'transactionable','transactionables');
+        return $this->morphedByMany(Event::class, 'transactionable');
     }
 
     public function invoice()
     {
-        return $this->morphToMany(Invoice::class, 'invoiceable','invoiceables');
+        return $this->morphToMany(Invoice::class, 'invoiceable');
     }
 
     public function subscription()
     {
-        return $this->morphedByMany(Sub::class, 'transactionable','transactionables');
+        return $this->morphedByMany(Sub::class, 'transactionable');
     }
 
     // public function events()

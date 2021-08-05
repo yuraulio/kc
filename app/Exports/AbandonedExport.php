@@ -4,7 +4,7 @@ namespace App\Exports;
 
 use App\Model\Abandoned;
 use Maatwebsite\Excel\Concerns\FromArray;
-use App\Model\Shoppingcart;
+use App\Model\ShoppingCart;
 use App\Model\Event;
 use App\Model\Ticket;
 
@@ -20,7 +20,7 @@ class AbandonedExport implements FromArray
 
 
         $data = [];
-        $alist = Shoppingcart::with('user')->get();
+        $alist = ShoppingCart::with('user')->get();
 
         $tickets = [];
         $ticks = Ticket::where('status', 1)->get();
@@ -42,7 +42,7 @@ class AbandonedExport implements FromArray
         //$data['events'] = $events;
         //dd($events);
         $tickets = $ticks->getDictionary();
-        $abcart = Shoppingcart::with('user')->get()->keyBy('identifier');
+        $abcart = ShoppingCart::with('user')->get()->keyBy('identifier');
 
         foreach($list as $user_id => $ucart) :
             if($abcart[$user_id]->user != null){

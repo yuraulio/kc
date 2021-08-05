@@ -10,7 +10,7 @@
    .content-wrapper .tabs-wrapper{  }
    .content-wrapper .tabs-wrapper.fixed-tab-controls{ padding-top: 53px; position: relative; }
    .content-wrapper .tabs-wrapper.fixed-tab-controls .tab-controls{ position: absolute; top: 0; z-index: 10; left: 0; width: 100%; border-top: 1px solid transparent; }
-   .content-wrapper .tabs-wrapper.fixed-tab-controls .tab-controls.sticky-sub{ position: fixed; top:97px;/*top: 94px;*//*lioncode*/ border-top: 1px solid #fff; }.content-wrapper .tabs-wrapper .tab-controls{ background-color: #3f6fb6; }
+   .content-wrapper .tabs-wrapper.fixed-tab-controls .tab-controls.sticky-sub{ position: fixed; top:94px;/*top: 94px;*//*lioncode*/ border-top: 1px solid #fff; }.content-wrapper .tabs-wrapper .tab-controls{ background-color: #3f6fb6; }
    .content-wrapper .tabs-wrapper .tab-controls .mobile-tabs-menu{ display: none; }
    .content-wrapper .tabs-wrapper .tab-controls ul{ padding: 0 35px; }
    .content-wrapper .tabs-wrapper .tab-controls ul li{ float: left; position: relative; }

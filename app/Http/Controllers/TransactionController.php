@@ -10,11 +10,26 @@ class TransactionController extends Controller
 {
     public function participants()
     {
-        $data['transactions'] = Transaction::with('user.statistic', 'event.users')->orderBy('created_at', 'desc')->has('user');
-        $data['transactions'] = $data['transactions']->doesntHave('subscription');
-        $data['transactions'] = $data['transactions']->get();
-        //dd($data['transactions']->get());
+        //$data['transactions'] = Transaction::has('user')->has('event')/*doesntHave('subscription')*/;
+        //$data['transactions'] = $data['transactions']/*->has('user')*/->doesntHave('subscription');
+        //$data['transactions'] = $data['transactions']->get();
 
+        $transactions = Transaction::with('user.statistic','subscription','event')->get();
+        $data['transactions'] = [];
+        foreach($transactions as $transaction){
+            if(!$transaction->subscription->first() && $transaction->user->first() && $transaction->event->first()){
+                //$transaction->event[0]->video_seen($transaction->user[0])
+//                if(count($transaction->user[0]->statistic)>1){
+                    $transaction->user[0]->statistic->where('event_id' , $transaction->event->first()->id)->first();
+
+ //               }
+                $data['transactions'][] = ['id' => $transaction['id'],'name' => $transaction->user[0]['firstname'].' '.$transaction->user[0]['lastname'],'event_title' => $transaction->event[0]['title'],
+                                            'type' => $transaction['type'] ? $transaction['type'] : '', 'date' => date_format($transaction['created_at'], 'm/d/Y'), 'amount' => $transaction['amount'],
+                                            'coupon_code' => $transaction['coupon_code'],'videos_seen' => 'dfsa','expiration'=>null];
+            }
+        }
+        
+        //dd($data['transactions']);
         return view('admin.transaction.participants', $data);
     }
 
