@@ -47,15 +47,20 @@
                                 <tr id="{{$lesson['id']}}" class="topic_{{$topic->id}} lessons-list">
                                 <td><a class="edit_btn_topic1" href="#">{{ $lesson->title }}</td>
                                 <?php //dd($instructors[$lesson->id]->first()); ?>
-                                <td id="inst_lesson_edit_{{$lesson['id']}}"><?php
-                                if(isset($instructors[$lesson->id]) && $instructors[$lesson->id]->first() != null)
-                                {
-                                    //dd($instructors[$lesson->id]->first()['mediable'][]);
-                               ?>
-                                    <span class="avatar avatar-sm rounded-circle">
+                                <td id="inst_lesson_edit_{{$lesson['id']}}">
+
+                                    <?php
+                                        if(isset($instructors[$lesson->id]) && $instructors[$lesson->id]->first() != null)
+                                        {
+                                            //dd($instructors[$lesson->id]->first()['mediable'][]);
+                                    ?>
+                                    <span style="display:inline-block" class="avatar avatar-sm rounded-circle">
                                         <img src="<?= asset(get_image($instructors[$lesson->id]->first()['mediable'], 'instructors-small')); ?>" alt="{{ $user['firstname'] }}" style="max-width: 100px; max-height: 40px; border-radius: 25px">
-                                </span>
-                                    <?= $instructors[$lesson->id]->first()['title'].' '.$instructors[$lesson->id]->first()['subtitle'];
+
+                                    </span>
+
+                                    <div style="display:inline-block">{{$instructors[$lesson->id]->first()['title']}} {{$instructors[$lesson->id]->first()['subtitle']}}</div>
+<?php
                                 }else{
                                     echo '-';
                                 } ?></td>

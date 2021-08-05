@@ -862,6 +862,16 @@ $(document).on('click', '.ticket-card', function () {
 
 
 
+    $( document ).ready(function() {
+
+        $("#input-picture").on("input", function() {
+            let filename = $(this).val()
+            filename = filename.replace('C:\\fakepath\\','')
+            alert(filename)
+            $('.custom-file-label').text(filename)
+        });
+    });
+
 
 
 
