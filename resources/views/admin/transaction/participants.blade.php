@@ -170,44 +170,7 @@
                                 <td>{{ $transaction['coupon_code'] }}</td>
                                 <td class="participant_elearning none">
 
-                                    <?php
-                                    //dd($transaction);
-                                    //dd($transaction->user[0]->statistic);
-                                        $found = false;
-                                        $sum = 0;
-                                        $videos = [];
-                                        if(isset($transaction->user[0]) && count($transaction->user[0]->statistic) != 0 && count($transaction->event) != 0){
-                                            //dd($transaction->event[0]['id']);
-                                        //dd($transaction->user[0]->statistic->where('id',$transaction->event[0]['id']));
-                                        foreach($transaction->user[0]->statistic->where('id',$transaction->event[0]['id']) as $key => $val){
-                                            //dd($val->pivot['event_id']);
-                                            $videos = [];
-                                            if($transaction->event != null && isset($transaction->event[0]) && $val->pivot['event_id'] == $transaction->event[0]['id'] ){
-                                                $found = true;
-                                            }
-                                            if($found){
-                                                //dd($val);
-                                                if($val->pivot['videos'] != null){
-                                                    $videos = $val->pivot['videos'];
-
-                                                    $videos = json_decode($videos, true);
-                                                    //dd($videos);
-                                                    $sum = 0;
-                                                    foreach($videos as $video){
-
-                                                        if($video['seen'] == 1){
-                                                            //dd($video);
-                                                            $sum++;
-                                                        }
-                                                    }
-                                                }
-                                            }
-
-                                        }
-                                        echo $sum.'/'.count($videos);
-
-                                    }
-                                    ?>
+                                   {{$transaction['videos_seen']}}
 
                                 </td>
 
@@ -215,25 +178,12 @@
 
                                 <td class="exp_{{$transaction['id']}} participant_elearning none" >
                                     {{$transaction['expiration']}}
-                                    <?php
-
-                                    if(isset($transaction->event[0]['statistic'][0]) ){
-                                        //dd($transaction->event[0]);
-                                        //$date = strtotime($transaction['event'][0][users[0]->pivot->expiration);
-                                        $newformat = null;
-                                        echo $newformat;
-
-                                    }else{
-                                        $newformat = null;
-                                    }
-                                    ?>
+                                   
 
                                 </td>
-                                <?php
-
-                                ?>
+                               
                                 <td class="participant_elearning none">
-                                    <input id="{{$transaction['id']}}" class="form-control datepicker" placeholder="Select date" type="text" value="<?= ($newformat != null) ? $newformat : ''; ?>">
+                                    <input id="{{$transaction['id']}}" class="form-control datepicker" placeholder="Select date" type="text" value="<?= ($transaction['expiration'] != null) ? $transaction['expiration'] : ''; ?>">
                                     <button class="update_exp btn btn-info btn-sm" style="margin-top:10px;" type="button" data-id="{{$transaction['id']}}" >Update</button>
                                 </td>
                             </tr>

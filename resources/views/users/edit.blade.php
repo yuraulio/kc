@@ -188,13 +188,13 @@
                             </div>
                             <div class="form-group{{ $errors->has('company') ? ' has-danger' : '' }}">
                                 <label class="form-control-label" for="input-company">{{ __('Company') }}</label>
-                                <input type="text" name="company" id="input-company" class="form-control{{ $errors->has('company') ? ' is-invalid' : '' }}" placeholder="{{ __('Company') }}" value="{{ old('company', $user['company']) }}" required autofocus>
+                                <input type="text" name="company" id="input-company" class="form-control{{ $errors->has('company') ? ' is-invalid' : '' }}" placeholder="{{ __('Company') }}" value="{{ old('company', $user['company']) }}" autofocus>
 
                                 @include('alerts.feedback', ['field' => 'company'])
                             </div>
                             <div class="form-group{{ $errors->has('job_title') ? ' has-danger' : '' }}">
                                 <label class="form-control-label" for="input-job_title">{{ __('Job title') }}</label>
-                                <input type="text" name="job_title" id="input-job_title" class="form-control{{ $errors->has('job_title') ? ' is-invalid' : '' }}" placeholder="{{ __('Job title') }}" value="{{ old('job_title', $user['job_title']) }}" required autofocus>
+                                <input type="text" name="job_title" id="input-job_title" class="form-control{{ $errors->has('job_title') ? ' is-invalid' : '' }}" placeholder="{{ __('Job title') }}" value="{{ old('job_title', $user['job_title']) }}"  autofocus>
 
                                 @include('alerts.feedback', ['field' => 'job_title'])
                             </div>
@@ -210,7 +210,7 @@
                                     <?php $birthday = ''; ?>
                                     @endif
                                     <?php //dd($birthday); ?>
-                                    <input name="birthday" id="input-birthday" class="form-control datepicker{{ $errors->has('birthday') ? ' is-invalid' : '' }}" placeholder="Select date" type="text" value="{{ old('birthday', $user['birthday']) }}" required autofocus>
+                                    <input name="birthday" id="input-birthday" class="form-control datepicker{{ $errors->has('birthday') ? ' is-invalid' : '' }}" placeholder="Select date" type="text" value="{{ old('birthday', $user['birthday']) }}"  autofocus>
 
                                     @include('alerts.feedback', ['field' => 'birthday'])
 
@@ -221,7 +221,7 @@
 
                             <div class="form-group{{ $errors->has('mobile') ? ' has-danger' : '' }}">
                                 <label class="form-control-label" for="input-mobile">{{ __('Mobile') }}</label>
-                                <input type="number" name="mobile" id="input-mobile" class="form-control{{ $errors->has('mobile') ? ' is-invalid' : '' }}" placeholder="{{ __('Mobile') }}" value="{{ old('mobile', $user['mobile']) }}" required autofocus>
+                                <input type="number" name="mobile" id="input-mobile" class="form-control{{ $errors->has('mobile') ? ' is-invalid' : '' }}" placeholder="{{ __('Mobile') }}" value="{{ old('mobile', $user['mobile']) }}"  autofocus>
 
                                 @include('alerts.feedback', ['field' => 'mobile'])
                             </div>
@@ -237,28 +237,28 @@
 
                             <div class="form-group{{ $errors->has('address') ? ' has-danger' : '' }}">
                                 <label class="form-control-label" for="input-address">{{ __('Address') }}</label>
-                                <input type="text" name="address" id="input-address" class="form-control{{ $errors->has('address') ? ' is-invalid' : '' }}" placeholder="{{ __('Address') }}" value="{{ old('address', $user['address']) }}" required autofocus>
+                                <input type="text" name="address" id="input-address" class="form-control{{ $errors->has('address') ? ' is-invalid' : '' }}" placeholder="{{ __('Address') }}" value="{{ old('address', $user['address']) }}"  autofocus>
 
                                 @include('alerts.feedback', ['field' => 'address'])
                             </div>
                             <div class="form-row">
                                 <div class="form-group{{ $errors->has('address_num') ? ' has-danger' : '' }} col-md-4">
                                     <label class="form-control-label" for="input-address_num">{{ __('Address No') }}</label>
-                                    <input type="number" name="address_num" id="input-address_num" class="form-control{{ $errors->has('address_num') ? ' is-invalid' : '' }}" placeholder="{{ __('Address No') }}" value="{{ old('address_num', $user['address_num']) }}" required autofocus>
+                                    <input type="number" name="address_num" id="input-address_num" class="form-control{{ $errors->has('address_num') ? ' is-invalid' : '' }}" placeholder="{{ __('Address No') }}" value="{{ old('address_num', $user['address_num']) }}"  autofocus>
 
                                     @include('alerts.feedback', ['field' => 'address_num'])
                                 </div>
 
                                 <div class="form-group{{ $errors->has('postcode') ? ' has-danger' : '' }} col-md-4">
                                     <label class="form-control-label" for="input-postcode">{{ __('Postcode') }}</label>
-                                    <input type="number" name="postcode" id="input-postcode" class="form-control{{ $errors->has('postcode') ? ' is-invalid' : '' }}" placeholder="{{ __('Postcode') }}" value="{{ old('postcode', $user['postcode']) }}" required autofocus>
+                                    <input type="number" name="postcode" id="input-postcode" class="form-control{{ $errors->has('postcode') ? ' is-invalid' : '' }}" placeholder="{{ __('Postcode') }}" value="{{ old('postcode', $user['postcode']) }}"  autofocus>
 
                                     @include('alerts.feedback', ['field' => 'postcode'])
                                 </div>
 
                                 <div class="form-group{{ $errors->has('city') ? ' has-danger' : '' }} col-md-4">
                                     <label class="form-control-label" for="input-city">{{ __('City') }}</label>
-                                    <input type="text" name="city" id="input-city" class="form-control{{ $errors->has('city') ? ' is-invalid' : '' }}" placeholder="{{ __('City') }}" value="{{ old('city', $user['city']) }}" required autofocus>
+                                    <input type="text" name="city" id="input-city" class="form-control{{ $errors->has('city') ? ' is-invalid' : '' }}" placeholder="{{ __('City') }}" value="{{ old('city', $user['city']) }}"  autofocus>
 
                                     @include('alerts.feedback', ['field' => 'city'])
                                 </div>
@@ -266,7 +266,7 @@
 
                             <div class="form-group{{ $errors->has('afm') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-afm">{{ __('VAT Number') }}</label>
-                                    <input type="number" name="afm" id="input-afm" class="form-control{{ $errors->has('afm') ? ' is-invalid' : '' }}" placeholder="{{ __('VAT Number') }}" value="{{ old('afm', $user['afm']) }}" required autofocus>
+                                    <input type="number" name="afm" id="input-afm" class="form-control{{ $errors->has('afm') ? ' is-invalid' : '' }}" placeholder="{{ __('VAT Number') }}" value="{{ old('afm', $user['afm']) }}" autofocus>
 
                                     @include('alerts.feedback', ['field' => 'afm'])
                                 </div>

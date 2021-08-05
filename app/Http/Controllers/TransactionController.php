@@ -14,16 +14,25 @@ class TransactionController extends Controller
         //$data['transactions'] = $data['transactions']/*->has('user')*/->doesntHave('subscription');
         //$data['transactions'] = $data['transactions']->get();
 
-        $transactions = Transaction::with('user.statisticGroupByEvent','subscription','event')->get();
+        $transactions = Transaction::with('user.statisticGroupByEvent','user.events','subscription','event')->get();
         $data['transactions'] = [];
         foreach($transactions as $transaction){
             if(!$transaction->subscription->first() && $transaction->user->first() && $transaction->event->first()){
-                $videos = isset($user->statisticGroupByEvent[$transaction->event->first()->id]) ? 
-                                        json_decode($user->statisticGroupByEvent[$transaction->event->first()->id]->pivot->videos,true) : null;
+               
+                $statistic = $transaction->user->first()->statisticGroupByEvent->groupBy('event_id');
+               
+
+                
+                $videos = isset($statistic[$transaction->event->first()->id]) ? 
+                    $statistic[$transaction->event->first()->id]->first()->pivot : null;
+
+                $events = $transaction->user->first()->events->groupBy('id');
+                $expiration = isset($events[$transaction->event->first()->id]) ? $events[$transaction->event->first()->id]->first()->pivot->expiration : null;
+                $videos = isset($videos) ? json_decode($videos->videos,true) : null;
                 
                 $data['transactions'][] = ['id' => $transaction['id'],'name' => $transaction->user[0]['firstname'].' '.$transaction->user[0]['lastname'],'event_title' => $transaction->event[0]['title'],
                                             'type' => $transaction['type'] ? $transaction['type'] : '', 'date' => date_format($transaction['created_at'], 'm/d/Y'), 'amount' => $transaction['amount'],
-                                            'coupon_code' => $transaction['coupon_code'],'videos_seen' => $this->getVideosSeen($videos),'expiration'=>null];
+                                            'coupon_code' => $transaction['coupon_code'],'videos_seen' => $this->getVideosSeen($videos),'expiration'=>$expiration];
             }
         }
         
@@ -56,7 +65,7 @@ class TransactionController extends Controller
 
             $new_date = $date.' '.$old_date;
             //dd($new_date);
-            $new_date = date('Y-m-d H:i:s', strtotime($new_date));
+            $new_date = date('Y-m-d', strtotime($new_date));
             $res_new_date = date('d/m/Y', strtotime($new_date));
             //dd($res_new_date);
 

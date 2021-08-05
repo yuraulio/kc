@@ -98,7 +98,7 @@
                                     <th scope="col">{{ __('Plan') }}</th>
                                     <th scope="col">{{ __('Event Name') }}</th>
                                     <th scope="col">{{ __('Status') }}</th>
-                                    <th scope="col">{{ __('Trials Sub end at') }}</th>
+                                    {{--<th scope="col">{{ __('Trials Sub end at') }}</th>--}}
                                     <th scope="col">{{ __('Sub end at') }}</th>
                                     <th scope="col">{{ __('Amount') }}</th>
                                 </tr>
@@ -110,7 +110,6 @@
                                     <th>{{ __('Plan') }}</th>
                                     <th>{{ __('Event Name') }}</th>
                                     <th>{{ __('Status') }}</th>
-                                    <th>{{ __('Trials Sub end at') }}</th>
                                     <th>{{ __('Sub end at') }}</th>
                                     <th>{{ __('Amount') }}</th>
                                 </tr>
@@ -131,7 +130,7 @@
                                         <td>{{ $item['subscription'][0]['event'][0]['title'] }}</td>
 
                                         <td>{{ $item['status'] }}</td>
-                                        <td>{{ $item['trial'] }}</td>
+                                       
 
 
                                         <td>{{ $item['ends_at'] }}</td>

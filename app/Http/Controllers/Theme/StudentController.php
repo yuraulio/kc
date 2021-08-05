@@ -88,7 +88,7 @@ class StudentController extends Controller
                 //$data['user']['events'][$key]['topics'] = $event['topic']->unique()->groupBy('topic_id')->toArray();
                 $data['user']['events'][$key]['videos_progress'] = 0;//intval($event->progress($user));
                 $data['user']['events'][$key]['videos_seen'] = '0/0';//$event->video_seen($user);
-                $data['user']['events'][$key]['cert'] = [];
+                $data['user']['events'][$key]['certs'] = [];
 
                 $data['user']['events'][$key]['mySubscription'] = [];
                 $data['user']['events'][$key]['plans'] = [];
@@ -223,7 +223,7 @@ class StudentController extends Controller
 
                 $data['user']['events'][$key]['mySubscription'] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first();
                 $data['user']['events'][$key]['plans'] = $event['plans'];
-                $data['user']['events'][$key]['certificates'] = $event->certificatesByUser($user->id);
+                $data['user']['events'][$key]['certs'] = $event->certificatesByUser($user->id);
                 $data['user']['events'][$key]['exams'] = $event->getExams();
                 $data['user']['events'][$key]['exam_access'] = $event->examAccess($user,0.8);//$user->examAccess(0.8,$event->id);
                 //$data['user']['events'][$key]['exam_results'] = $user->examAccess(0.8,$event->id);
