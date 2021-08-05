@@ -1,14 +1,14 @@
 @extends('layouts.app', [
     'title' => __('Deliveries Management'),
     'parentSection' => 'laravel',
-    'elementName' => 'delivery-management'
+    'elementName' => 'deliveries-management'
 ])
 
 @section('content')
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Examples') }}
+                {{ __('') }}
             @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('delivery.index') }}">{{ __('Deliveries Management') }}</a></li>

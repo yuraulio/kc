@@ -1,7 +1,7 @@
 @extends('layouts.app', [
-    'title' => __('Role Management'),
+    'title' => __('Event Management'),
     'parentSection' => 'laravel',
-    'elementName' => 'role-management'
+    'elementName' => 'events-management'
 ])
 
 
@@ -10,7 +10,7 @@
     @component('layouts.headers.auth')
     @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Events') }}
+                {{ __('') }}
             @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('events.index') }}">{{ __('Events Management') }}</a></li>

@@ -5,10 +5,10 @@
 ])
 
 @section('content')
-    @component('layouts.headers.auth') 
+    @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
-            @slot('title') 
-                {{ __('Examples') }} 
+            @slot('title')
+                {{ __('') }}
             @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('role.index') }}">{{ __('Role Management') }}</a></li>
@@ -33,7 +33,7 @@
                     <div class="card-body">
                         <form method="post" action="{{ route('role.store') }}" autocomplete="off">
                             @csrf
-                            
+
                             <h6 class="heading-small text-muted mb-4">{{ __('Role information') }}</h6>
                             <div class="pl-lg-4">
                                 <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
@@ -58,7 +58,7 @@
                 </div>
             </div>
         </div>
-        
+
         @include('layouts.footers.auth')
     </div>
 @endsection

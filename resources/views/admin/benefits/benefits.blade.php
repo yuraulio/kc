@@ -1,9 +1,6 @@
 <div class="row align-items-center">
    <div class="col-8">
       <h3 class="mb-0">{{ __('Benefits') }}</h3>
-      <p class="text-sm mb-0">
-         {{ __('This is an example of Benefits management.') }}
-      </p>
    </div>
    <div class="col-4 text-right">
       <button data-toggle="modal" data-target="#myModal" class="btn btn-sm btn-primary">{{ __('Add benefit') }}</button>

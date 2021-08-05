@@ -1,14 +1,14 @@
 @extends('layouts.app', [
     'title' => __('Partner Management'),
     'parentSection' => 'laravel',
-    'elementName' => 'partner-management'
+    'elementName' => 'partners-management'
 ])
 
 @section('content')
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Examples') }}
+                {{ __('') }}
             @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('partner.index') }}">{{ __('Partner Management') }}</a></li>

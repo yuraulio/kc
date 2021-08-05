@@ -1,14 +1,14 @@
 @extends('layouts.app', [
-    'title' => __('User Management'),
+    'title' => __('Faqs Edit Category Management'),
     'parentSection' => 'laravel',
-    'elementName' => 'user-management'
+    'elementName' => 'faqs-category-management'
 ])
 
 @section('content')
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Examples') }}
+                {{ __('') }}
             @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('faqs.categories') }}">{{ __('Faqs Category Management') }}</a></li>
@@ -23,7 +23,7 @@
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col-8">
-                                <h3 class="mb-0">{{ __('Faqs Category Management') }}</h3>
+                                <h3 class="mb-0">{{ __('Faqs Edit Category Management') }}</h3>
                             </div>
                             <div class="col-4 text-right">
                                 <a href="{{ route('faqs.categories') }}" class="btn btn-sm btn-primary">{{ __('Back to list') }}</a>

@@ -1,14 +1,14 @@
 @extends('layouts.app', [
-    'title' => __('User Management'),
+    'title' => __('Pages Management'),
     'parentSection' => 'laravel',
-    'elementName' => 'user-management'
+    'elementName' => 'pages-management'
 ])
 
 @section('content')
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Examples') }}
+                {{ __('') }}
             @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('pages.index') }}">{{ __('Pages Management') }}</a></li>
@@ -52,9 +52,9 @@
                                     @include('alerts.feedback', ['field' => 'content'])
                                 </div>
 
-                                
-                                
-                               
+
+
+
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
                                 </div>
@@ -67,14 +67,14 @@
 
         @include('layouts.footers.auth')
     </div>
-    
+
 @endsection
 
 @push('js')
-    
+
     <script type="text/javascript">
         $(document).ready(function () {
-            $('.ckeditor').ckeditor();            
+            $('.ckeditor').ckeditor();
         });
     </script>
 @endpush

@@ -1,18 +1,18 @@
 @extends('layouts.app', [
-    'title' => __('User Management'),
+    'title' => __('Career Edit'),
     'parentSection' => 'laravel',
-    'elementName' => 'user-management'
+    'elementName' => 'careers-management'
 ])
 
 @section('content')
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Examples') }}
+                {{ __('') }}
             @endslot
 
-            <li class="breadcrumb-item"><a href="{{ route('career.index') }}">{{ __('Instructors Management') }}</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ __('Edit Instructor') }}</li>
+            <li class="breadcrumb-item"><a href="{{ route('career.index') }}">{{ __('Career Management') }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ __('Edit Career') }}</li>
         @endcomponent
     @endcomponent
 
@@ -23,7 +23,7 @@
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col-8">
-                                <h3 class="mb-0">{{ __('Instructors Management') }}</h3>
+                                <h3 class="mb-0">{{ __('Career Management') }}</h3>
                             </div>
                             <div class="col-4 text-right">
                                 <a href="{{ route('career.index') }}" class="btn btn-sm btn-primary">{{ __('Back to list') }}</a>
@@ -36,7 +36,7 @@
                             @csrf
                             @method('put')
 
-                            <h6 class="heading-small text-muted mb-4">{{ __('Instructor information') }}</h6>
+                            <h6 class="heading-small text-muted mb-4">{{ __('Career information') }}</h6>
                             <div class="pl-lg-4">
 
                                 <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">

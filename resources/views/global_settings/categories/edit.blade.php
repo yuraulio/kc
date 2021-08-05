@@ -1,17 +1,17 @@
 @extends('layouts.app', [
-    'title' => __('Role Management'),
+    'title' => __('Category Management'),
     'parentSection' => 'laravel',
-    'elementName' => 'role-management'
+    'elementName' => 'categories-management'
 ])
 
 @section('content')
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Examples') }}
+                {{ __('') }}
             @endslot
 
-            <li class="breadcrumb-item"><a href="{{ route('global.index') }}">{{ __('Global Management') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('global.index') }}">{{ __('Category Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('Edit Category') }}</li>
         @endcomponent
     @endcomponent
@@ -42,7 +42,7 @@
 
                                     @include('alerts.feedback', ['field' => 'name'])
                                 </div>
-                                
+
                                 @include('admin.slug.slug',['slug' => isset($data['slug']) ? $data['slug'] : null])
                                 <div class="form-group{{ $errors->has('description') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-description">{{ __('Description') }}</label>

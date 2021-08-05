@@ -1,18 +1,18 @@
 @extends('layouts.app', [
 'title' => __('Create coupon'),
 'parentSection' => 'laravel',
-'elementName' => 'role-management'
+'elementName' => 'coupons-management'
 ])
 
 @section('content')
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Create coupon') }}
+                {{ __('') }}
             @endslot
 
-            <li class="breadcrumb-item"><a href="{{ route('role.index') }}">{{ __('coupon Management') }}</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ __('Add coupon') }}</li>
+            <li class="breadcrumb-item"><a href="{{ route('coupons') }}">{{ __('Coupon Management') }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ __('Add Coupon') }}</li>
         @endcomponent
     @endcomponent
 
@@ -30,24 +30,24 @@
                   <div class="card-header">
                      <div class="row align-items-center">
                         <div class="col-8">
-                           <h3 class="mb-0">{{ __('coupon Management') }}</h3>
+                           <h3 class="mb-0">{{ __('Coupon Management') }}</h3>
                         </div>
                         <div class="col-4 text-right">
-                           <a href="{{ route('role.index') }}" class="btn btn-sm btn-primary">{{ __('Back to list') }}</a>
+                           <a href="{{ route('coupons') }}" class="btn btn-sm btn-primary">{{ __('Back to list') }}</a>
                         </div>
                      </div>
                   </div>
                   <div class="card-body">
                      <h6 class="heading-small text-muted mb-4">{{ __('coupon information') }}</h6>
 
-                   
+
                      <div class="pl-lg-4">
                         <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
                            <label class="form-control-label" for="input-name">{{ __('Name') }}</label>
                            <input type="text" name="name" id="input-name" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" placeholder="{{ __('Name') }}" value="{{ old('name',$coupon->code_coupon) }}"  required autofocus>
                            @include('alerts.feedback', ['field' => 'name'])
                         </div>
-                        
+
 
 
                         <div class="form-group{{ $errors->has('price') ? ' has-danger' : '' }}">
@@ -56,8 +56,8 @@
                            @include('alerts.feedback', ['field' => 'price'])
                         </div>
 
-                       
-                        
+
+
                         <div class="form-group{{ $errors->has('published') ? ' has-danger' : '' }}">
                             <label class="custom-toggle">
                                 <input name="published" type="checkbox" @if($coupon->status) checked @endif>
@@ -66,13 +66,13 @@
                         </div>
 
 
-                       
 
-                       
-                        
+
+
+
                         <label class="form-control-label" for="input-events">{{ __('Events') }}</label>
                         <div class="checkbox-overflow">
-                            
+
                             @foreach($events as $event)
                             <div class="form-group">
                                 <div class="input-group">
@@ -87,10 +87,10 @@
                             @endforeach
                         </div>
 
-                       
+
 
                      </div>
-                    
+
                   </div>
                </div>
             </div>

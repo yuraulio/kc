@@ -8,10 +8,10 @@
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Examples') }}
+                {{ __('') }}
             @endslot
 
-            <li class="breadcrumb-item"><a href="{{ route('venue.index_main') }}">{{ __('Videos Management') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('video.index') }}">{{ __('Videos Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
         @endcomponent
     @endcomponent
@@ -24,9 +24,6 @@
                         <div class="row align-items-center">
                             <div class="col-8">
                                 <h3 class="mb-0">{{ __('Videos') }}</h3>
-                                <p class="text-sm mb-0">
-                                        {{ __('This is an example of Videos management.') }}
-                                    </p>
                             </div>
                             <div class="col-4 text-right">
                                 <a href="{{ route('video.create') }}" class="btn btn-sm btn-primary">{{ __('Add Video') }}</a>
@@ -44,7 +41,6 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col">{{ __('Title') }}</th>
-                                    <th scope="col">{{ __('Link') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
                                     <th scope="col"></th>
                                 </tr>
@@ -53,7 +49,6 @@
                                 @foreach ($videos as $video)
                                     <tr>
                                         <td><a href="{{ route('video.edit', $video) }}">{{ $video->title }}</a></td>
-                                        <td>{{ $video->link }}</td>
                                         <td>{{ date_format($video->created_at, 'Y-m-d' ) }}</td>
 
 					                        <td class="text-right">

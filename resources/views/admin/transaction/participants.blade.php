@@ -1,14 +1,14 @@
 @extends('layouts.app', [
-    'title' => __('User Management'),
+    'title' => __('Participant Management'),
     'parentSection' => 'laravel',
-    'elementName' => 'user-management'
+    'elementName' => 'participants-management'
 ])
 
 @section('content')
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Examples') }}
+                {{ __('') }}
             @endslot
             @slot('filter')
                 <!-- <a href="#" class="btn btn-sm btn-neutral">{{ __('Filters') }}</a> -->
@@ -16,9 +16,10 @@
 
             @endslot
 
-            <li class="breadcrumb-item"><a href="{{ route('city.index') }}">{{ __('Cities Management') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('transaction.participants') }}">{{ __('Participant Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
         @endcomponent
+        @include('admin.transaction.layouts.cards')
     @endcomponent
 
     <div class="container-fluid mt--6">
@@ -29,9 +30,6 @@
                         <div class="row align-items-center">
                             <div class="col-8">
                                 <h3 class="mb-0">{{ __('Participants') }}</h3>
-                                <p class="text-sm mb-0">
-                                        {{ __('This is an example of Booking Participants.') }}
-                                    </p>
                             </div>
                         </div>
                     </div>
@@ -171,7 +169,7 @@
                                         {{ $transaction['type'] }}
                                     @endif
                                 </td>
-                                <td>{{ $transaction->amount }}</td>
+                                <td><?= number_format($transaction->amount, 2, '.', ''); ?></td>
 
                                 <td>{{ $transaction->coupon_code }}</td>
                                 <td class="participant_elearning none">

@@ -3,7 +3,7 @@
     'title' => __('User Profile'),
     'navClass' => 'bg-default',
     'parentSection' => 'laravel',
-    'elementName' => 'profile'
+    'elementName' => 'user-management'
 ])
 
 @section('content')
@@ -265,8 +265,8 @@
                             </div>
 
                             <div class="form-group{{ $errors->has('afm') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-afm">{{ __('Afm') }}</label>
-                                    <input type="number" name="afm" id="input-afm" class="form-control{{ $errors->has('afm') ? ' is-invalid' : '' }}" placeholder="{{ __('Afm') }}" value="{{ old('afm', $user['afm']) }}" required autofocus>
+                                    <label class="form-control-label" for="input-afm">{{ __('VAT Number') }}</label>
+                                    <input type="number" name="afm" id="input-afm" class="form-control{{ $errors->has('afm') ? ' is-invalid' : '' }}" placeholder="{{ __('VAT Number') }}" value="{{ old('afm', $user['afm']) }}" required autofocus>
 
                                     @include('alerts.feedback', ['field' => 'afm'])
                                 </div>

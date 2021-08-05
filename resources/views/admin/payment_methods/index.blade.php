@@ -1,14 +1,14 @@
 @extends('layouts.app', [
-    'title' => __('User Management'),
+    'title' => __('Payment Management'),
     'parentSection' => 'laravel',
-    'elementName' => 'user-management'
+    'elementName' => 'payment-management'
 ])
 
 @section('content')
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Examples') }}
+                {{ __('') }}
             @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('payments.index') }}">{{ __('Payments Methods Management') }}</a></li>
@@ -24,9 +24,6 @@
                         <div class="row align-items-center">
                             <div class="col-8">
                                 <h3 class="mb-0">{{ __('Payments Methods') }}</h3>
-                                <p class="text-sm mb-0">
-                                        {{ __('This is an example of Event management.') }}
-                                    </p>
                             </div>
                             @can('create', App\Model\User::class)
                                 <div class="col-4 text-right">
@@ -50,40 +47,40 @@
                                     <th scope="col">{{ __('Slug') }}</th>
                                     <th scope="col">{{ __('Status') }}</th>
                                     <th scope="col">{{ __('Options') }}</th>
-                                  
+
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($paymentMethods as $method)
                                     <tr>
-                                        <td> 
+                                        <td>
                                             {{$method->id}}
                                         </td>
-                                        <td> 
+                                        <td>
                                             {{$method->method_name}}
                                         </td>
-                                        <td> 
+                                        <td>
                                             {{$method->method_slug}}
                                         </td>
-                                        <td> 
+                                        <td>
                                             {{$method->status}}
-                                        </td>                                            
+                                        </td>
 					                    @can('manage-users', App\Model\User::class)
 					                        <td class="">
-                                                
+
                                                 <div class="dropdown">
                                                     <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         <i class="fas fa-ellipsis-v"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
 
-                                                           
+
                                                         <a class="dropdown-item" href="{{ route('payments.edit', $method->id) }}">{{ __('Edit') }}</a>
-                                                            
-    							                           
+
+
                                                     </div>
                                                 </div>
-                                             
+
                                             </td>
 					                    @endcan
                                     </tr>

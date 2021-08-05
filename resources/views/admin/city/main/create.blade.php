@@ -1,17 +1,17 @@
 @extends('layouts.app', [
     'title' => __('Cities Management'),
     'parentSection' => 'laravel',
-    'elementName' => 'city-management'
+    'elementName' => 'cities-management'
 ])
 
 @section('content')
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Examples') }}
+                {{ __('') }}
             @endslot
 
-            <li class="breadcrumb-item"><a href="{{ route('city.index') }}">{{ __('Cities Management') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('city.index_main') }}">{{ __('Cities Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="type">{{ __('Add Cities') }}</li>
         @endcomponent
     @endcomponent
@@ -26,7 +26,7 @@
                                 <h3 class="mb-0">{{ __('Cities Management') }}</h3>
                             </div>
                             <div class="col-4 text-right">
-                                <a href="{{ route('city.index') }}" class="btn btn-sm btn-primary">{{ __('Back to list') }}</a>
+                                <a href="{{ route('city.index_main') }}" class="btn btn-sm btn-primary">{{ __('Back to list') }}</a>
                             </div>
                         </div>
                     </div>

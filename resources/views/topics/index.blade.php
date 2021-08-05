@@ -1,14 +1,14 @@
 @extends('layouts.app', [
-    'title' => __('User Management'),
+    'title' => __('Topics Management'),
     'parentSection' => 'laravel',
-    'elementName' => 'user-management'
+    'elementName' => 'topics-management'
 ])
 
 @section('content')
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Examples') }}
+                {{ __('') }}
             @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('topics.index') }}">{{ __('Topics Management') }}</a></li>
@@ -24,9 +24,6 @@
                         <div class="row align-items-center">
                             <div class="col-8">
                                 <h3 class="mb-0">{{ __('Topics') }}</h3>
-                                <p class="text-sm mb-0">
-                                        {{ __('This is an example of Topic management.') }}
-                                    </p>
                             </div>
                             @can('create', App\Model\User::class)
                                 <div class="col-4 text-right">

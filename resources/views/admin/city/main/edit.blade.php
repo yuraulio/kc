@@ -1,17 +1,17 @@
 @extends('layouts.app', [
-    'title' => __('User Management'),
+    'title' => __('City Edit'),
     'parentSection' => 'laravel',
-    'elementName' => 'user-management'
+    'elementName' => 'cities-management'
 ])
 
 @section('content')
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Examples') }}
+                {{ __('') }}
             @endslot
 
-            <li class="breadcrumb-item"><a href="{{ route('city.index') }}">{{ __('Cities Management') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('city.index_main') }}">{{ __('Cities Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="type">{{ __('Edit City') }}</li>
         @endcomponent
     @endcomponent

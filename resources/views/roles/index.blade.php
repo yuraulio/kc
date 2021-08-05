@@ -8,7 +8,7 @@
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Examples') }}
+                {{ __('') }}
             @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('role.index') }}">{{ __('Role Management') }}</a></li>
@@ -24,9 +24,6 @@
                         <div class="row align-items-center">
                             <div class="col-8">
                                 <h3 class="mb-0">{{ __('Roles') }}</h3>
-                                <p class="text-sm mb-0">
-                                    {{ __('This is an example of role management. This is a minimal setup in order to get started fast.') }}
-                                </p>
                             </div>
                             @can('create', App\Model\Role::class)
                                 <div class="col-4 text-right">

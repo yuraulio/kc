@@ -211,3 +211,7 @@
 .personal-info {
     margin-top: 80px;
 }
+
+#tab_inside_tab .nav-item {
+    padding-right: 1rem;
+}

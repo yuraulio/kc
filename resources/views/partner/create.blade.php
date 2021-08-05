@@ -1,7 +1,7 @@
 @extends('layouts.app', [
     'title' => __('Partner Management'),
     'parentSection' => 'laravel',
-    'elementName' => 'item-management'
+    'elementName' => 'partners-management'
 ])
 
 @section('content')

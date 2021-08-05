@@ -1,17 +1,17 @@
 @extends('layouts.app', [
-    'title' => __('Role Management'),
+    'title' => __('Category Management'),
     'parentSection' => 'laravel',
-    'elementName' => 'role-management'
+    'elementName' => 'categories-management'
 ])
 
 @section('content')
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Examples') }}
+                {{ __('') }}
             @endslot
 
-            <li class="breadcrumb-item"><a href="{{ route('role.index') }}">{{ __('Global Settings') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('global.index') }}">{{ __('Category Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
         @endcomponent
     @endcomponent

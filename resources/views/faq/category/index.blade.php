@@ -1,17 +1,17 @@
 @extends('layouts.app', [
-    'title' => __('User Management'),
+    'title' => __('Faqs Category Management'),
     'parentSection' => 'laravel',
-    'elementName' => 'user-management'
+    'elementName' => 'faqs-category-management'
 ])
 
 @section('content')
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Examples') }}
+                {{ __('') }}
             @endslot
 
-            <li class="breadcrumb-item"><a href="{{ route('faqs.index') }}">{{ __('Faqs Category Management') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('faqs.categories') }}">{{ __('Faqs Category Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
         @endcomponent
     @endcomponent
@@ -24,9 +24,6 @@
                         <div class="row align-items-center">
                             <div class="col-8">
                                 <h3 class="mb-0">{{ __('Faqs Category') }}</h3>
-                                <p class="text-sm mb-0">
-                                        {{ __('This is an example of Faq management.') }}
-                                    </p>
                             </div>
                             @can('create', App\Model\User::class)
                                 <div class="col-4 text-right">
