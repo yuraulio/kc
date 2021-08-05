@@ -8,7 +8,7 @@
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Examples') }}
+                {{ __('') }}
             @endslot
             @slot('filter')
                 <!-- <a href="#" class="btn btn-sm btn-neutral">{{ __('Filters') }}</a> -->
@@ -29,13 +29,7 @@
                         <div class="row align-items-center">
                             <div class="col-8">
                                 <h3 class="mb-0">{{ __('Abandoned') }}</h3>
-                                <p class="text-sm mb-0">
-                                        {{ __('This is an example of Abandoned management.') }}
-                                    </p>
                             </div>
-                            {{--<div class="col-4 text-right">
-                                <a href="{{ route('video.create') }}" class="btn btn-sm btn-primary">{{ __('Add Video') }}</a>
-                            </div>--}}
                         </div>
                     </div>
 

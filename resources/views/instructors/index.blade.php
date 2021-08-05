@@ -1,14 +1,14 @@
 @extends('layouts.app', [
-    'title' => __('User Management'),
+    'title' => __('Instructor Management'),
     'parentSection' => 'laravel',
-    'elementName' => 'user-management'
+    'elementName' => 'instructors-management'
 ])
 
 @section('content')
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Examples') }}
+                {{ __('') }}
             @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('instructors.index') }}">{{ __('Insctructors Management') }}</a></li>
@@ -25,9 +25,6 @@
                         <div class="row align-items-center">
                             <div class="col-8">
                                 <h3 class="mb-0">{{ __('Instructors') }}</h3>
-                                <p class="text-sm mb-0">
-                                        {{ __('This is an example of Instructor management.') }}
-                                    </p>
                             </div>
                             @can('create', App\Model\User::class)
                                 <div class="col-4 text-right">
@@ -65,7 +62,7 @@
                                         @endif
                                          </span> </td>
                                         <td><?= ($instructor->status == 0) ? 'Inactive' : 'Active';  ?></td>
-                                        <td>{{ $instructor->title }}</td>
+                                        <td><a href="{{ route('instructors.edit', $instructor) }}">{{ $instructor->title }}</a></td>
                                         <td>{{ $instructor->subtitle }}</td>
                                         <td>{{ date_format($instructor->created_at, 'Y-m-d' ) }}</td>
 

@@ -1,14 +1,14 @@
 @extends('layouts.app', [
-    'title' => __('User Management'),
+    'title' => __('Type Management'),
     'parentSection' => 'laravel',
-    'elementName' => 'user-management'
+    'elementName' => 'types-management'
 ])
 
 @section('content')
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Examples') }}
+                {{ __('') }}
             @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('types.index') }}">{{ __('Types Management') }}</a></li>
@@ -24,15 +24,10 @@
                         <div class="row align-items-center">
                             <div class="col-8">
                                 <h3 class="mb-0">{{ __('Types') }}</h3>
-                                <p class="text-sm mb-0">
-                                        {{ __('This is an example of Type management.') }}
-                                    </p>
                             </div>
-                            @can('create', App\Model\User::class)
-                                <div class="col-4 text-right">
-                                    <a href="{{ route('types.create') }}" class="btn btn-sm btn-primary">{{ __('Add Type') }}</a>
-                                </div>
-                            @endcan
+                            <div class="col-4 text-right">
+                                <a href="{{ route('types.create') }}" class="btn btn-sm btn-primary">{{ __('Add Type') }}</a>
+                            </div>
                         </div>
                     </div>
 

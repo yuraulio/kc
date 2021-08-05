@@ -1,17 +1,17 @@
 @extends('layouts.app', [
-    'title' => __('User Management'),
+    'title' => __('Venue Management'),
     'parentSection' => 'laravel',
-    'elementName' => 'user-management'
+    'elementName' => 'venues-management'
 ])
 
 @section('content')
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Examples') }}
+                {{ __('') }}
             @endslot
 
-            <li class="breadcrumb-item"><a href="{{ route('city.index_main') }}">{{ __('Venues Management') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('venue.index_main') }}">{{ __('Venues Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="type">{{ __('Edit Venue') }}</li>
         @endcomponent
     @endcomponent
@@ -26,7 +26,7 @@
                                 <h3 class="mb-0">{{ __('Venues Management') }}</h3>
                             </div>
                             <div class="col-4 text-right">
-                                <a href="{{ route('city.index_main') }}" class="btn btn-sm btn-primary">{{ __('Back to list') }}</a>
+                                <a href="{{ route('venue.index_main') }}" class="btn btn-sm btn-primary">{{ __('Back to list') }}</a>
                             </div>
                         </div>
                     </div>

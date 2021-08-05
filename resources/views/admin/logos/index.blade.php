@@ -1,17 +1,17 @@
 @extends('layouts.app', [
-    'title' => __('Role Management'),
+    'title' => __('Logo Management'),
     'parentSection' => 'laravel',
-    'elementName' => 'role-management'
+    'elementName' => 'logo-management'
 ])
 
 @section('content')
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Examples') }}
+                {{ __('') }}
             @endslot
 
-            <li class="breadcrumb-item"><a href="{{ route('notification.show') }}">{{ __('Pages') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('notification.show') }}">{{ __('Logos') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
         @endcomponent
     @endcomponent
@@ -24,9 +24,6 @@
                         <div class="row align-items-center">
                             <div class="col-8">
                                 <h3 class="mb-0">{{ __('Logos') }}</h3>
-                                <p class="text-sm mb-0">
-                                    {{ __('This is an example of pages management. This is a minimal setup in order to get started fast.') }}
-                                </p>
                             </div>
                             @can('create', App\Model\User::class)
                                 <div class="col-4 text-right">
@@ -53,7 +50,7 @@
                             <tbody>
                                 @foreach ($logos as $logo)
                                     <tr>
-                                        <td>{{ $logo->name }}</td>
+                                        <td><a href="{{ route('logos.edit', $logo) }}">{{ $logo->name }}</td>
                                         <td>{{ $logo->created_at->format('d/m/Y H:i') }}</td>
                                         <td class="text-right">
                                         <?php //dd($user); ?>

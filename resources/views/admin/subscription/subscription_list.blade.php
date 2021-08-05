@@ -8,7 +8,7 @@
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Examples') }}
+                {{ __('') }}
             @endslot
             @slot('filter')
                 <!-- <a href="#" class="btn btn-sm btn-neutral">{{ __('Filters') }}</a> -->
@@ -16,7 +16,7 @@
 
             @endslot
 
-            <li class="breadcrumb-item"><a href="{{ route('city.index') }}">{{ __('Subscriptions List') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('subscriptions.index') }}">{{ __('Subscriptions List') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
         @endcomponent
     @endcomponent
@@ -29,9 +29,6 @@
                         <div class="row align-items-center">
                             <div class="col-8">
                                 <h3 class="mb-0">{{ __('Subscriptions') }}</h3>
-                                <p class="text-sm mb-0">
-                                        {{ __('This is an example of Subscriptions.') }}
-                                    </p>
                             </div>
                         </div>
                     </div>
@@ -102,7 +99,7 @@
                                     <th scope="col">{{ __('Status') }}</th>
                                     <th scope="col">{{ __('Trials Sub end at') }}</th>
                                     <th scope="col">{{ __('Sub end at') }}</th>
-                                    <th class="d-none">{{ __('Amount') }}</th>
+                                    <th scope="col">{{ __('Amount') }}</th>
                                 </tr>
                             </thead>
                             <tfoot>
@@ -114,7 +111,7 @@
                                     <th>{{ __('Status') }}</th>
                                     <th>{{ __('Trials Sub end at') }}</th>
                                     <th>{{ __('Sub end at') }}</th>
-                                    <th class="d-none">{{ __('Amount') }}</th>
+                                    <th>{{ __('Amount') }}</th>
                                 </tr>
                             </tfoot>
                             <tbody>
@@ -137,7 +134,7 @@
 
 
                                         <td>{{ $item['ends_at'] }}</td>
-                                        <td class="d-none">{{ intval($item['total_amount']) }}</td>
+                                        <td><?= number_format(intval($item['total_amount']), 2, '.', ''); ?></td>
 
 
                                     </tr>

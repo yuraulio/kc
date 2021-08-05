@@ -1,14 +1,14 @@
 @extends('layouts.app', [
-    'title' => __('User Management'),
+    'title' => __('Delivery Management'),
     'parentSection' => 'laravel',
-    'elementName' => 'user-management'
+    'elementName' => 'deliveries-management'
 ])
 
 @section('content')
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Examples') }}
+                {{ __('') }}
             @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('delivery.index') }}">{{ __('Deliveries Management') }}</a></li>
@@ -24,9 +24,6 @@
                         <div class="row align-items-center">
                             <div class="col-8">
                                 <h3 class="mb-0">{{ __('Deliveries') }}</h3>
-                                <p class="text-sm mb-0">
-                                        {{ __('This is an example of Delivery management.') }}
-                                    </p>
                             </div>
                             <div class="col-4 text-right">
                                 <a href="{{ route('delivery.create') }}" class="btn btn-sm btn-primary">{{ __('Add Delivery') }}</a>

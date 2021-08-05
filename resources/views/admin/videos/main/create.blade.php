@@ -1,14 +1,14 @@
 @extends('layouts.app', [
 'title' => __('Create video'),
 'parentSection' => 'laravel',
-'elementName' => 'video-management'
+'elementName' => 'videos-management'
 ])
 
 @section('content')
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Create video') }}
+                {{ __('') }}
             @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('video.index') }}">{{ __('Video Management') }}</a></li>

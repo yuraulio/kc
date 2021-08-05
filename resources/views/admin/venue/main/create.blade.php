@@ -1,14 +1,14 @@
 @extends('layouts.app', [
     'title' => __('Venues Management'),
     'parentSection' => 'laravel',
-    'elementName' => 'venue-management'
+    'elementName' => 'venues-management'
 ])
 
 @section('content')
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Examples') }}
+                {{ __('') }}
             @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('venue.index_main') }}">{{ __('Venues Management') }}</a></li>

@@ -1,18 +1,18 @@
 <?php $noEditablePages = ['home','cart']; ?>
 
 @extends('layouts.app', [
-'title' => __('Role Management'),
+'title' => __('Pages Management'),
 'parentSection' => 'laravel',
-'elementName' => 'role-management'
+'elementName' => 'pages-management'
 ])
 @section('content')
 @component('layouts.headers.auth')
 @component('layouts.headers.breadcrumbs')
 @slot('title')
-{{ __('Examples') }}
+{{ __('') }}
 @endslot
-<li class="breadcrumb-item"><a href="{{ route('role.index') }}">{{ __('Role Management') }}</a></li>
-<li class="breadcrumb-item active" aria-current="page">{{ __('Add Role') }}</li>
+<li class="breadcrumb-item"><a href="{{ route('pages.index') }}">{{ __('Page Management') }}</a></li>
+<li class="breadcrumb-item active" aria-current="page">{{ __('Add Page') }}</li>
 @endcomponent
 @endcomponent
 <div class="container-fluid mt--6">
@@ -58,7 +58,7 @@
                            <h3 class="mb-0">{{ __('Page Management') }}</h3>
                         </div>
                         <div class="col-4 text-right">
-                           <a href="{{ route('role.index') }}" class="btn btn-sm btn-primary">{{ __('Back to list') }}</a>
+                           <a href="{{ route('pages.index') }}" class="btn btn-sm btn-primary">{{ __('Back to list') }}</a>
                         </div>
                      </div>
                   </div>

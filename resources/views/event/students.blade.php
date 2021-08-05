@@ -2,15 +2,7 @@
     <div class="row align-items-center">
         <div class="col-8">
             <h3 class="mb-0">{{ __('Students') }}</h3>
-            <p class="text-sm mb-0">
-                    {{ __('This is an example of Students management.') }}
-                </p>
         </div>
-        {{--@can('create', App\Model\User::class)
-            <div class="col-4 text-right">
-                <a href="{{ route('topics.create_event', ['event_id' => $event['id']]) }}" class="btn btn-sm btn-primary">{{ __('Assign Topic') }}</a>
-            </div>
-        @endcan--}}
     </div>
 </div>
 
@@ -24,9 +16,9 @@
             <tr>
                 <th scope="col">{{ __('Name') }}</th>
                 <th scope="col">{{ __('Lastname') }}</th>
-                
 
-        
+
+
             </tr>
         </thead>
         <tbody>
@@ -36,7 +28,7 @@
                 <tr>
                     <td>{{ $user['firstname'] }}</td>
                     <td>{{ $user['lastname'] }}</td>
-                    
+
 
                 </tr>
             @endforeach

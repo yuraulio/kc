@@ -1,13 +1,13 @@
 @extends('layouts.app', [
-'title' => __('User Management'),
+'title' => __('Payment Method Management'),
 'parentSection' => 'laravel',
-'elementName' => 'user-management'
+'elementName' => 'payment-management'
 ])
 @section('content')
 @component('layouts.headers.auth')
 @component('layouts.headers.breadcrumbs')
 @slot('title')
-{{ __('Examples') }}
+{{ __('') }}
 @endslot
 <li class="breadcrumb-item"><a href="{{ route('payments.index') }}">{{ __('Payments Management') }}</a></li>
 <li class="breadcrumb-item active" aria-current="page">{{ __('Add Payment Method') }}</li>
@@ -94,12 +94,12 @@
                      @if($form_type == 'edit')
                      <div class="tab-pane fade" id="processor" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
 								{!! $html !!}
-								
+
                      </div>
 
                      <div class="tab-pane fade" id="test_processor" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
 								{!! $html_test !!}
-								
+
                      </div>
                      @endif
                      <div class="text-center">
@@ -107,7 +107,7 @@
                      </div>
 							</div>
 						</form>
-               
+
             </div>
          </div>
       </div>

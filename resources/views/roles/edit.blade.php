@@ -5,16 +5,16 @@
 ])
 
 @section('content')
-    @component('layouts.headers.auth') 
+    @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
-            @slot('title') 
-                {{ __('Examples') }} 
+            @slot('title')
+                {{ __('') }}
             @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('role.index') }}">{{ __('Role Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('Edit Role') }}</li>
         @endcomponent
-    @endcomponent   
+    @endcomponent
 
     <div class="container-fluid mt--6">
         <div class="row">
@@ -59,7 +59,7 @@
                 </div>
             </div>
         </div>
-        
+
         @include('layouts.footers.auth')
     </div>
 @endsection

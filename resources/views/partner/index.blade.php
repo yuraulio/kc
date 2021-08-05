@@ -1,14 +1,14 @@
 @extends('layouts.app', [
     'title' => __('Partner Management'),
     'parentSection' => 'laravel',
-    'elementName' => 'item-management'
+    'elementName' => 'partners-management'
 ])
 
 @section('content')
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Examples') }}
+                {{ __('') }}
             @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('partner.index') }}">{{ __('Partner Management') }}</a></li>
@@ -24,9 +24,6 @@
                         <div class="row align-items-center">
                             <div class="col-8">
                                 <h3 class="mb-0">{{ __('Partners') }}</h3>
-                                <p class="text-sm mb-0">
-                                    {{ __('This is an example of partner management. This is a minimal setup in order to get started fast.') }}
-                                </p>
                             </div>
                             <div class="col-4 text-right">
                                 <a href="{{ route('partner.create') }}" class="btn btn-sm btn-primary">{{ __('Add partner') }}</a>

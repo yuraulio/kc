@@ -8,7 +8,7 @@
 @component('layouts.headers.auth')
 @component('layouts.headers.breadcrumbs')
 @slot('title')
-{{ __('Examples') }}
+{{ __('') }}
 @endslot
 <li class="breadcrumb-item"><a href="{{ route('exams.index') }}">{{ __('Exams Management') }}</a></li>
 <li class="breadcrumb-item active" aria-current="page">{{ __('Add Exam') }}</li>
@@ -42,7 +42,7 @@
                   @else
                   <form method="post" action="{{ route('exams.store') }}" autocomplete="off"
                         enctype="multipart/form-data">
-                       
+
                   @endif
                   @csrf
                      <h6 class="heading-small text-muted mb-4">{{ __('Exam information') }}</h6>
@@ -73,13 +73,13 @@
                                  <input type="number" name="duration" id="input-duration" class="form-control{{ $errors->has('duration') ? ' is-invalid' : '' }}" placeholder="{{ __('Enter exam duration') }}" value="{{ old('duration',$exam->duration) }}" required autofocus>
                                  @include('alerts.feedback', ['field' => 'duration'])
                               </div>
-                              
+
                               <div class="form-group">
                                   <label class="form-control-label" for="input-q_limit">{{ __('Date') }}</label>
                                   <div class='input-group date' id='datetimepicker1'>
                                       <input name="publish_time" type='text' class="form-control" value="{{ old('publish_time',date('d-m-Y H:i',strtotime($exam->publish_time))) }}"/>
                                       <span class="input-group-addon input-group-append">
-                              
+
                                           <button class="btn btn-outline-primary" type="button" id="button-addon2">  <span class="fa fa-calendar"></span></button>
                                       </span>
                                   </div>
@@ -131,7 +131,7 @@
                               </div>
                               <label class="form-control-label" for="status">{{ __('Status') }}</label>
                               <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
-                              
+
                                   <label class="custom-toggle">
                                       <input name="status" type="checkbox" @if($exam->status) checked @endif>
                                       <span class="custom-toggle-slider rounded-circle" data-label-off="unpublished" data-label-on="published"></span>
@@ -139,9 +139,9 @@
                               </div>
 
                            </div>
-                           
+
                         </div>
-                        
+
                         <div class="form-group{{ $errors->has('intro_text') ? ' has-danger' : '' }}">
                            <label class="form-control-label" for="input-intro_text">{{ __('Exam Introduction Text') }}</label>
                            <textarea name="intro_text" id="input-intro_text"  class="ckeditor form-control{{ $errors->has('intro_text') ? ' is-invalid' : '' }}" placeholder="{{ __('Replace this text as exam introduction text') }}"  required autofocus> {{old('intro_text',$exam->intro_text)}} </textarea>

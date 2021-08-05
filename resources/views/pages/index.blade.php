@@ -1,14 +1,14 @@
 @extends('layouts.app', [
-    'title' => __('Role Management'),
+    'title' => __('Pages Management'),
     'parentSection' => 'laravel',
-    'elementName' => 'role-management'
+    'elementName' => 'pages-management'
 ])
 
 @section('content')
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Examples') }}
+                {{ __('') }}
             @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('notification.show') }}">{{ __('Pages') }}</a></li>
@@ -25,9 +25,6 @@
                         <div class="row align-items-center">
                             <div class="col-8">
                                 <h3 class="mb-0">{{ __('Pages') }}</h3>
-                                <p class="text-sm mb-0">
-                                    {{ __('This is an example of pages management. This is a minimal setup in order to get started fast.') }}
-                                </p>
                             </div>
                             @can('create', App\Model\User::class)
                                 <div class="col-4 text-right">
@@ -48,45 +45,42 @@
                                 <tr>
                                     <th scope="col">{{ __('Title') }}</th>
                                     <th scope="col">{{ __('Created') }}</th>
-                                    @can('manage-users', App\Model\User::class)
                                     <th scope="col"></th>
-                                    @endcan
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($pages as $page)
                                     <tr>
-                                        <td>{{ $page->name }}</td>
+                                        <td><a href="{{ route('pages.edit', $page) }}">{{ $page->name }}</a></td>
                                         <td>{{ $page->created_at->format('d/m/Y H:i') }}</td>
                                         @can('manage-users', App\Model\User::class)
 					                        <td class="text-right">
                                             <?php //dd($user); ?>
-                                                @if (auth()->user()->can('update', $user) || auth()->user()->can('delete', $user))
-                                                    <div class="dropdown">
-                                                        <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                            <i class="fas fa-ellipsis-v"></i>
-                                                        </a>
-                                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                            @if ($user->id != auth()->id())
-                                                                @can('update', $user)
-                                                                    <a class="dropdown-item" href="{{ route('pages.edit', $page) }}">{{ __('Edit') }}</a>
-                                                                @endcan
-    							                                @can('delete', $user)
-        							                                <form action="{{ route('user.destroy', $user) }}" method="post">
-                                                                        @csrf
-                                                                        @method('delete')
+                                            <div class="dropdown">
+                                                <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fas fa-ellipsis-v"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                                    @if ($user->id != auth()->id())
+                                                        @can('update', $user)
+                                                            <a class="dropdown-item" href="{{ route('pages.edit', $page) }}">{{ __('Edit') }}</a>
+                                                        @endcan
+                                                        @can('delete', $user)
+                                                            <form action="{{ route('user.destroy', $user) }}" method="post">
+                                                                @csrf
+                                                                @method('delete')
 
-                                                                        <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
-                                                                            {{ __('Delete') }}
-                                                                        </button>
-                                                                    </form>
-    						                                    @endcan
-                                                            @else
-                                                                <a class="dropdown-item" href="{{ route('pages.edit', $page) }}">{{ __('Edit') }}</a>
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                @endif
+                                                                <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
+                                                                    {{ __('Delete') }}
+                                                                </button>
+                                                            </form>
+                                                        @endcan
+                                                    @else
+                                                        <a class="dropdown-item" href="{{ route('pages.edit', $page) }}">{{ __('Edit') }}</a>
+                                                    @endif
+                                                </div>
+                                            </div>
+
                                             </td>
 					                    @endcan
                                     </tr>

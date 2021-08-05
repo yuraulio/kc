@@ -1,17 +1,17 @@
 @extends('layouts.app', [
-    'title' => __('User Management'),
+    'title' => __('Career Create'),
     'parentSection' => 'laravel',
-    'elementName' => 'user-management'
+    'elementName' => 'careers-management'
 ])
 
 @section('content')
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Examples') }}
+                {{ __('') }}
             @endslot
 
-            <li class="breadcrumb-item"><a href="{{ route('user.index') }}">{{ __('Career Paths Management') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('career.index') }}">{{ __('Career Paths Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('Add Career Path') }}</li>
         @endcomponent
     @endcomponent

@@ -3,9 +3,6 @@
         <div class="row align-items-center">
             <div class="col-8">
                 <h3 class="mb-0">{{ __('Categories') }}</h3>
-                <p class="text-sm mb-0">
-                    {{ __('This is an example of categories management.') }}
-                </p>
             </div>
             @can('create', App\Model\Role::class)
                 <div class="col-4 text-right">

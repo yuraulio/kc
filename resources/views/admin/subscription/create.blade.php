@@ -1,17 +1,17 @@
 @extends('layouts.app', [
 'title' => __('Create Plan'),
 'parentSection' => 'laravel',
-'elementName' => 'role-management'
+'elementName' => 'plans-management'
 ])
 
 @section('content')
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Create Plan') }}
+                {{ __('') }}
             @endslot
 
-            <li class="breadcrumb-item"><a href="{{ route('role.index') }}">{{ __('Plan Management') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('plans') }}">{{ __('Plan Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('Add Plan') }}</li>
         @endcomponent
     @endcomponent
@@ -40,14 +40,14 @@
                   <div class="card-body">
                      <h6 class="heading-small text-muted mb-4">{{ __('Plan information') }}</h6>
 
-                   
+
                      <div class="pl-lg-4">
                         <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
                            <label class="form-control-label" for="input-name">{{ __('Name') }}</label>
                            <input type="text" name="name" id="input-name" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" placeholder="{{ __('Name') }}" value="{{ old('name',$plan->name) }}"  required autofocus>
                            @include('alerts.feedback', ['field' => 'name'])
                         </div>
-                        
+
 
                         <div class="form-group{{ $errors->has('description') ? ' has-danger' : '' }}">
                            <label class="form-control-label" for="input-title">{{ __('Description') }}</label>
@@ -70,7 +70,7 @@
                                 <option value="year">Yearly</option>
                             </select>
                         </div>
-                        
+
                         <div class="form-group{{ $errors->has('published') ? ' has-danger' : '' }}">
                             <label class="custom-toggle">
                                 <input name="published" type="checkbox" @if($plan->published) checked @endif>
@@ -90,10 +90,10 @@
                            <input type="number" name="trial" id="input-trial" class="form-control{{ $errors->has('trial') ? ' is-invalid' : '' }}" placeholder="{{ __('Trial') }}" value="{{ old('trial_days',isset($plan->trial_days) ? $plan->trial_days : 0) }}"  required autofocus>
                            @include('alerts.feedback', ['field' => 'trial'])
                         </div>
-                        
+
                         <label class="form-control-label" for="input-events">{{ __('Events') }}</label>
                         <div class="checkbox-overflow">
-                            
+
                             @foreach($events as $event)
                             <div class="form-group">
                                 <div class="input-group">
@@ -110,7 +110,7 @@
 
                         <label class="form-control-label" for="input-title">{{ __('Categories') }}</label>
                         <div class="checkbox-overflow">
-                            
+
                             @foreach($categories as $category)
                             <div class="form-group">
                                 <div class="input-group">
@@ -127,7 +127,7 @@
 
                         <label class="form-control-label" for="input-title">{{ __('No Events') }}</label>
                         <div class="checkbox-overflow">
-                            
+
                             @foreach($noevents as $event)
                             <div class="form-group">
                                 <div class="input-group">
@@ -143,7 +143,7 @@
                         </div>
 
                      </div>
-                    
+
                   </div>
                </div>
             </div>
@@ -174,7 +174,7 @@
     });
 
     $(document).ready(function(){
-       
+
 
         let interval = $("#interval").val();
         let interval_count = $("#interval_count").val();
@@ -184,7 +184,7 @@
         }
 
         $("#interval_count_label").text(interval);
-        
+
         if($("#interval_count").val() < 1){
             $("#interval_count").val(1);
         }
@@ -223,7 +223,7 @@
                 $("#interval_count").val(12);
             }
 
-            
+
         }
 
         if(interval == 'week'){
@@ -237,7 +237,7 @@
 
         }
 
-        
+
        interval_count = $("#interval_count").val();
 
         if(interval_count > 1){

@@ -217,9 +217,25 @@
 
                                 <td class="exp_{{$transaction['id']}} participant_elearning none" >
                                     {{$transaction['expiration']}}
-                                   
+                                    <?php
+
+                                    if(isset($transaction->event[0]['statistic'][0]) ){
+                                        //dd($transaction->event[0]);
+                                        //$date = strtotime($transaction['event'][0][users[0]->pivot->expiration);
+                                        $newformat = null;
+                                        echo $newformat;
+
+                                    }else{
+                                        $newformat = null;
+                                    }
+                                    ?>
+
+                                </td>
+                                <?php
+
+                                ?>
                                 <td class="participant_elearning none">
-                                    <input id="{{$transaction['id']}}" class="form-control datepicker" placeholder="Select date" type="text" value="<?= ($transaction['expiration'] != null) ?$transaction['expiration'] : ''; ?>">
+                                    <input id="{{$transaction['id']}}" class="form-control datepicker" placeholder="Select date" type="text" value="<?= ($newformat != null) ? $newformat : ''; ?>">
                                     <button class="update_exp btn btn-info btn-sm" style="margin-top:10px;" type="button" data-id="{{$transaction['id']}}" >Update</button>
                                 </td>
                             </tr>
