@@ -1,9 +1,9 @@
 <nav class="sidenav navbar navbar-vertical fixed-left navbar-expand-xs navbar-light bg-white" id="sidenav-main">
     <div class="scrollbar-inner scroll-scrollx_visible">
         <div class="sidenav-header d-flex align-items-center">
-            <a class="navbar-brand" href="{{ route('home') }}">
-                <img src="{{ asset('uploads') }}/img/brand/blue.png" class="navbar-brand-img" alt="...">
-            </a>
+        <div class="logo-area">
+            <a href="/" class="logo">Know Crunch</a>
+        </div>
             <div class="ml-auto">
                 <!-- Sidenav toggler -->
                 <div class="sidenav-toggler d-none d-xl-block" data-action="sidenav-unpin" data-target="#sidenav-main">

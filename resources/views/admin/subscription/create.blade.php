@@ -16,7 +16,7 @@
         @endcomponent
     @endcomponent
 
-
+    <div class="container-fluid mt--6">
     @if(!$plan->name)
          <form method="post" action="{{ route('plan.store') }}" autocomplete="off" enctype="multipart/form-data">
       @else
@@ -158,6 +158,7 @@
             </div>
          </div>
       </form>
+</div>
 
 
 

@@ -62,7 +62,7 @@
                                             @if($user['image'] != null)
                                                 <img src="{{ asset('uploads/profile_user') }}/{{ $user['image']['original_name'] }}" alt="{{ $user['firstname'] }}" style="max-width: 100px; border-radiu: 25px">
                                             @else
-                                            <img src="" alt="{{ $user['firstname'] }}" style="max-width: 100px; border-radiu: 25px">
+                                            <img src="" alt="{{ $user['firstname'] }}" style="max-width: 100px; border-radius: 25px">
                                             @endif
                                             </span>
                                         </td>

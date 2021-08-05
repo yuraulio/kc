@@ -17,6 +17,7 @@
     @endcomponent
 
     <?php //dd(isset($video->id)); ?>
+    <div class="container-fluid mt--6">
 
     @if(!isset($video->id))
          <form id="form-video" method="post" action="{{ route('video.store') }}" autocomplete="off" enctype="multipart/form-data">
@@ -85,6 +86,7 @@
             </div>
          </div>
       </form>
+</div>
 
 
 

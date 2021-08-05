@@ -233,6 +233,7 @@
                            </select>
                         </div>
                         <div class="col-6">
+                        <label class="form-control-label" for="question">{{ __('Answer Credit') }}</label>
                            <div class="form-group">
                               <div class="input-group">
                                  <div class="input-group-prepend">

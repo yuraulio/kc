@@ -174,5 +174,9 @@
 
         });
 
+        $('#datatable-basic').DataTable({
+                        "ordering" : false,
+                    });
+
       </script>
 @endpush
