@@ -63,7 +63,7 @@
                                             @if($user['image'] != null)
                                                 <img src="{{ get_image($user['image']) }}" alt="{{ $user['firstname'] }}" style="max-width: 100px; border-radiu: 25px">
                                             @else
-                                            <img src="" alt="{{ $user['firstname'] }}" style="max-width: 100px; border-radiu: 25px">
+                                            <img src="" alt="{{ $user['firstname'] }}" style="max-width: 100px; border-radius: 25px">
                                             @endif
                                             </span>
                                         </td>

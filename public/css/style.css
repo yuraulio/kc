@@ -219,3 +219,25 @@
 .card.card-stats {
     min-height: 101px;
 }
+
+.logo-area{ float: left; padding-top: 10px; }
+.logo-area .logo{ width: 157px; height: 54px; position: relative; display: block; text-indent: -9999px; }
+.logo-area .logo:before{ content: ''; display: block; position: absolute; width: 100%; height: 100%; display: block; background: url('/theme/assets/images/logo-knowcrunch-seminars-admin-panel.svg') no-repeat center; background-size: contain; transition: 300ms all ease; opacity: 1; visibility: visible; }
+
+
+
+.logo {
+    text-shadow: none !important;
+}
+
+.answer-types .custom-radio {
+    margin-right: 1rem;
+}
+
+@media (min-height: 693px) {
+    #file-man-main {
+        height: 100% !important;
+    }
+}
+
+

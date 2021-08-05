@@ -18,7 +18,7 @@
     <div id="file_manager" class="container-fluid mt--6">
         <div class="row">
             <div class="col">
-            <div style="height: 600px;">
+            <div id="file-man-main" style="height: 600px;">
                 <div id="fm"></div>
             </div>
             </div>
@@ -1036,12 +1036,27 @@
 
 
         //console.log( "ready!" );
-        search = `<div role="group" class="btn-group"><div class="p-4 bg-secondary">
-                        <input type="text" class="form-control form-control-alternative search_input" placeholder="Search">
-                        <button class="btn btn-primary btn-sm" id="search_btn" type="button">Button</button>
+        search = `<div class="col-auto"><div role="group" class="btn-group">
+                        <input id="inpuy-search" type="text" class="form-control form-control-alternative search_input" placeholder="Search">
+                        <button class="btn btn-primary btn-sm" id="search_btn" type="button">Search</button>
                     </div></div>`
-        $('#file_manager .fm-navbar .col-auto.text-right').append(search)
-    });
+        $('#file_manager .fm-navbar .justify-content-between').append(search)
+
+
+        var input = document.getElementById("inpuy-search");
+
+        // Execute a function when the user releases a key on the keyboard
+        input.addEventListener("keyup", function(event) {
+            // Number 13 is the "Enter" key on the keyboard
+            if (event.keyCode === 13) {
+                // Cancel the default action, if needed
+                event.preventDefault();
+                // Trigger the button element with a click
+                document.getElementById("search_btn").click();
+            }
+            });
+        });
+
 
 
 

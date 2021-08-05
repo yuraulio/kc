@@ -16,7 +16,7 @@
         @endcomponent
     @endcomponent
 
-
+    <div class="container-fluid mt--6">
     @if(!$coupon->code_coupon)
          <form method="post" action="{{ route('coupon.store') }}" autocomplete="off" enctype="multipart/form-data">
       @else
@@ -105,6 +105,7 @@
             </div>
          </div>
       </form>
+</div>
 
 
 
