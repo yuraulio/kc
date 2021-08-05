@@ -716,7 +716,7 @@ class CartController extends Controller
                         //./ngrok authtoken 69hUuQ1DgonuoGjunLYJv_3PVuHFueuq5Kiuz7S1t21
                         // Create the plan to subscribe
                         $desc = $installments . ' installments';
-                        $planid = 'plan_'.$dpuser->id.'_dssxxddE_'.$ev->id.'_T_'.$ticket_id.'_x'.$installments;
+                        $planid = 'plan_'.$dpuser->id.'_E_'.$ev->id.'_T_'.$ticket_id.'_x'.$installments;
                         $name = $ev_title . ' ' . $ev_date_help . ' | ' . $desc;
                         //dd(str_replace('.','',$instamount) . '00');
                         

@@ -50,11 +50,11 @@ class SubscriptionController extends Controller
         $event = Event::where('title',$event)->first();
 
         if(env('PAYMENT_PRODUCTION')){
-            Stripe::setApiKey($user->events->where('id',$event->id)->first()->paymentMethod->first()->processor_options['secret_key']);
+            Stripe::setApiKey($event->paymentMethod->first()->processor_options['secret_key']);
         }else{
-            Stripe::setApiKey($user->events->where('id',$event->id)->first()->paymentMethod->first()->test_processor_options['secret_key']);
+            Stripe::setApiKey($event->paymentMethod->first()->test_processor_options['secret_key']);
         }
-		session()->put('payment_method',$user->events->where('id',$event->id)->first()->paymentMethod->first()->id);
+		session()->put('payment_method',$event->paymentMethod->first()->id);
 
     
         if (Session::has('pay_bill_data')) {

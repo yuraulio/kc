@@ -946,7 +946,7 @@
                                        
                                         <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
                                         @endif
-                                        @if(count($event['certs']) > 0)
+                                        @if(count($event['certificates']) > 0)
                                         <li><a href="#c-cert-inner{{$tab}}">Certificate</a></li>
                                         @endif
                                     @endif
@@ -983,44 +983,42 @@
                                           <div class="bottom">
                                              @if($event['mySubscription']['trial_ends_at'])
                                                 <?php
-                                                   $date_timestamp = strtotime($event['mySubscription']['trial_ends_at']);
-                                                   $date = date('d/m/Y', $date_timestamp);
-                                                   $now_date= date_create();
-                                                   $now_date = date_timestamp_get($now_date);
+                                                  $date_timestamp = strtotime($event['mySubscription']['trial_ends_at']);
+                                                  $now_date = strtotime(date('d/m/Y'));
+                                                  $date = date('d-m-Y',$date_timestamp);
                                                 ?>
                                                 @if($date_timestamp > $now_date )
                                                    <?php //dd('not expired'); ?>
                                                    <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/clock-coins.svg')}}" alt=""><?php echo 'Your trial expiration: '.$date; ?></div>
                                                    @if($event['mySubscription']['status'])
-                                                      <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php $a = new DateTime($event['mySubscription']['ends_at']); echo 'You will be charged: '.$a->format('d/m/Y'); ?></div>
+                                                      <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
 
                                                    @endif
                                                 @else
 
                                                    @if($event['mySubscription'])
-                                                      <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php $a = new DateTime($event['mySubscription']['ends_at']); echo 'You will be charged: '.$a->format('d/m/Y'); ?></div>
+                                                      <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
 
                                                    @endif
                                                 @endif
                                              @else
 
                                              <?php
-                                                   $date_timestamp = strtotime($event['mySubscription']['ends_at']);
-                                                   $date = date('d/m/Y', $date_timestamp);
-                                                   $now_date= date_create();
-                                                   $now_date = date_timestamp_get($now_date);
+                                                   $date_timestamp = strtotime($event['mySubscription']['trial_ends_at']);
+                                                   $now_date = strtotime(date('d/m/Y'));
+                                                   $date = date('d-m-Y',$date_timestamp);
                                                 ?>
 
                                                 @if($date_timestamp > $now_date )
 
                                                    @if($event['mySubscription']['status'])
-                                                      <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php $a = new DateTime($event['mySubscription']['ends_at']); echo 'You will be charged: '.$a->format('d/m/Y'); ?></div>
+                                                      <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
 
                                                    @endif
                                                 @else
 
                                                    @if($event['mySubscription'])
-                                                      <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php $a = new DateTime($event['mySubscription']['ends_at']); echo 'You will be charged: '.$a->format('d/m/Y'); ?></div>
+                                                      <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
                                                    @endif
                                                 @endif
 
@@ -1096,7 +1094,7 @@
                                           @if($sub['stripe_plan'] == $plan['stripe_plan'])
                                           @if($event['id'] == $plan['event_id'])
                                           <?php
-                                             if(date("Y-m-d h:i:s") < $sub['ends_at']){
+                                             if(date("Y-m-d h:i:s") < $sub['must_be_updated']){
                                                 $expire = false;
                                              }else{
                                                 $expire = true;
@@ -1151,11 +1149,11 @@
                                     </div>
                                  </div>
                                  @endif
-                                 @if(count($event['certs']) > 0)
+                                 @if(count($event['certificates']) > 0)
                                  <div id="c-cert-inner{{$tab}}" class="in-tab-wrapper">
                                     <div class="bottom">
                                        <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="">@if(isset($newlayoutExamsEvent[$keyType]) && count($newlayoutExamsEvent[$keyType])>0)Certificate download after completing your exams. @else Your certification is ready @endif</div>
-                                       @foreach($event['certs'] as $certificate)
+                                       @foreach($event['certificates'] as $certificate)
                                        <div class="right">
                                           <a  class="btn btn--secondary btn--md" target="_blank" href="/myaccount/mycertificate/{{$certificate->id}}" >DOWNLOAD </a>
                                        </div>
@@ -1218,7 +1216,7 @@
                                                 @if($sub['stripe_plan'] == $plan['stripe_plan'])
                                                    @if($event['id'] == $plan['event_id'])
                                                       <?php
-                                                         if(date("Y-m-d h:i:s") < $sub['ends_at']){
+                                                         if(date("Y-m-d h:i:s") < $sub['must_be_updated']){
                                                             $expire = false;
                                                          }else{
                                                             $expire = true;
@@ -1248,42 +1246,41 @@
                                              @if($event['mySubscription']['trial_ends_at'])
                                                 <?php
                                                    $date_timestamp = strtotime($event['mySubscription']['trial_ends_at']);
-                                                   $date = date('d/m/Y', $date_timestamp);
-                                                   $now_date= date_create();
-                                                   $now_date = date_timestamp_get($now_date);
+                                                   $now_date = strtotime(date('d/m/Y'));
+                                                   $date = date('d-m-Y',$date_timestamp);
+                                                  
                                                 ?>
                                                 @if($date_timestamp > $now_date )
                                                    <?php //dd('not expired'); ?>
                                                    <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/clock-coins.svg')}}" alt=""><?php echo 'Your trial expiration: '.$date; ?></div>
                                                       @if($event['mySubscription']['status'])
-                                                         <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php $a = new DateTime($event['mySubscription']['ends_at']); echo 'You will be charged: '.$a->format('d/m/Y'); ?></div>
+                                                         <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php  echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
 
                                                       @endif
                                                 @else
 
                                                    @if($event['mySubscription'])
-                                                      <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php $a = new DateTime($event['mySubscription']['ends_at']); echo 'You will be charged: '.$a->format('d/m/Y'); ?></div>
+                                                      <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
                                                    @endif
                                                 @endif
                                              @else
 
                                                 <?php
-                                                   $date_timestamp = strtotime($event['mySubscription']['ends_at']);
-                                                   $date = date('d/m/Y', $date_timestamp);
-                                                   $now_date= date_create();
-                                                   $now_date = date_timestamp_get($now_date);
+                                                  $date_timestamp = strtotime($event['mySubscription']['trial_ends_at']);
+                                                  $now_date = strtotime(date('d/m/Y'));
+                                                  $date = date('d-m-Y',$date_timestamp);
                                                 ?>
 
                                                 @if($date_timestamp > $now_date )
 
                                                    @if($event['mySubscription']['status'])
-                                                      <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php $a = new DateTime($event['mySubscription']['ends_at']); echo 'You will be charged: '.$a->format('d/m/Y'); ?></div>
+                                                      <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
 
                                                    @endif
                                                 @else
 
                                                    @if($event['mySubscription'])
-                                                      <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php $a = new DateTime($event['mySubscription']['ends_at']); echo 'You will be charged: '.$a->format('d/m/Y'); ?></div>
+                                                      <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
                                                    @endif
                                                 @endif
                                              @endif

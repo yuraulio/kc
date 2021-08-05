@@ -115,13 +115,13 @@
                               <div class="col6 col-sm-12">
                                  <label>First name <span>*</span></label>
                                  <div class="input-safe-wrapper">
-                                    <input class="required" type="text" id="name<?php echo $i; ?>" name="name[]" placeholder="Name*" value="@if(isset($pay_seats_data) && isset($pay_seats_data['names'][$i])){{$pay_seats_data['names'][$i]}}@elseif(isset($cur_user) && $i == 0){{$cur_user->first_name}}@endif" required />
+                                    <input class="required" type="text" id="name<?php echo $i; ?>" name="name[]" placeholder="Name*" value="@if(isset($pay_seats_data) && isset($pay_seats_data['names'][$i])){{$pay_seats_data['names'][$i]}}@elseif(isset($cur_user) && $i == 0){{$cur_user->firstname}}@endif" required />
                                  </div>
                               </div>
                               <div class="col6 col-sm-12">
                                  <label>Last name <span>*</span></label>
                                  <div class="input-safe-wrapper">
-                                          <input class="required" type="text" id="surname<?php echo $i; ?>" name="surname[]" placeholder="Surname*" value="@if(isset($pay_seats_data) && isset($pay_seats_data['surnames'][$i])){{$pay_seats_data['surnames'][$i]}}@elseif(isset($cur_user) && $i == 0){{$cur_user->last_name}}@endif" required />
+                                          <input class="required" type="text" id="surname<?php echo $i; ?>" name="surname[]" placeholder="Surname*" value="@if(isset($pay_seats_data) && isset($pay_seats_data['surnames'][$i])){{$pay_seats_data['surnames'][$i]}}@elseif(isset($cur_user) && $i == 0){{$cur_user->lastname}}@endif" required />
                                  </div>
                               </div>
                               <div class="col6 col-sm-12">

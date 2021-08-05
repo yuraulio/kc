@@ -220,7 +220,7 @@ class StudentController extends Controller
                 $data['user']['events'][$key]['videos_progress'] = intval($event->progress($user));
                 $data['user']['events'][$key]['videos_seen'] = $event->video_seen($user);
                 $data['user']['events'][$key]['cert'] = [];
-
+               
                 $data['user']['events'][$key]['mySubscription'] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first();
                 $data['user']['events'][$key]['plans'] = $event['plans'];
                 $data['user']['events'][$key]['certs'] = $event->certificatesByUser($user->id);

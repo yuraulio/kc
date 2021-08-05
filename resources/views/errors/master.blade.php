@@ -88,16 +88,20 @@
                      </ul>
                   </div>
                   <ul class="main-menu">
-                     @if (!empty($data['filter_type']))
-                     @foreach ($data['filter_type'] as $key => $row)
-                     <li>
-                        <a title="{{ $row->name }}" href="{{ $row->slug }}">{{ $row->name }}</a>
-                     </li>
-                     @endforeach
-                     @endif
-                     <!--<li><a href="#">In-class courses</a></li>
-                        <li><a href="#">E-learning Courses</a></li>
-                        <li><a href="#">Corporate training</a></li>-->
+                     
+                     <?php $header_menus = get_header();?>
+
+                        @if (!empty($header_menus))
+                           @foreach ($header_menus['Header'] as $key => $row)
+                           
+                               <li>
+                                   <a title="{{ $row['data']['name'] }}" href="{{ $row['data']['slugable']['slug'] }}">{{ $row['data']['name'] }}</a>
+                               </li>
+								   @endforeach
+								
+                        @endif
+                    
+                    
                   </ul>
                </div>
 			</div>

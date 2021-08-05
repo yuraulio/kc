@@ -335,12 +335,9 @@ Route::group([ 'prefix' => '{id}' ], function() {
 
 Route::post('webhook/stripe', [ 'as' => 'stripe.webhook', 'uses' => 'Webhook\WebhookController@handleWebhook' ]);
 
-
-
-Route::namespace('Alexusmai\\LaravelFileManager\\Controllers\\')->group(function () {
-    Route::get('/search', 'FileManagerController@search')
+Route::get('/file-manager/search', '\Alexusmai\LaravelFileManager\Controllers\FileManagerController@search')
         ->name('fm.search');
-});
+
 
 Route::get('contact-us', function(){
     return redirect('contact');

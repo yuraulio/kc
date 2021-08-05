@@ -113,13 +113,13 @@ class WebhookController extends BaseWebhookController
 		$data = $payload['data']['object'];
 		
 		if(env('PAYMENT_PRODUCTION')){
-            Stripe::setApiKey($user->events->where('id',$eventId)->first()->paymentMethod->first()->processor_options['secret_key']);
+            Stripe::setApiKey($subscription->event->first()->paymentMethod->first()->processor_options['secret_key']);
         }else{
-            Stripe::setApiKey($user->events->where('id',$eventId)->first()->paymentMethod->first()->test_processor_options['secret_key']);
+            Stripe::setApiKey($subscription->event->first()->paymentMethod->first()->test_processor_options['secret_key']);
         }
-		session()->put('payment_method',$user->events->where('id',$eventId)->first()->paymentMethod->first()->id);
+		session()->put('payment_method',$subscription->event->first()->paymentMethod->first()->id);
 
-		$invoices = $user->events->where('id',$eventId)->first()->subscriptionInvoicesByUser($user->id)->get();
+		//$invoices = $subscription->event->first()->subscriptionInvoicesByUser($user->id)->get();
 		
 		/*if(count($invoices) > 0){
 			
@@ -179,6 +179,7 @@ class WebhookController extends BaseWebhookController
 			$subscription->must_be_updated = $ends_at;
 			$subscription->email_send = false;
 			$subscription->status = true;
+			
 			$subscription->ends_at = date('Y-m-d H:i:s', $ends_at);
 			$subscription->save();
 			
@@ -194,7 +195,7 @@ class WebhookController extends BaseWebhookController
 			$transaction = Transaction::create($transaction_arr);
 			$transaction->subscription()->save($subscription);
 			$transaction->user()->save($user);
-			$transaction->event()->save($user->events->where('id',$eventId)->first());
+			$transaction->event()->save($subscription->event->first());
 			//$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;
 			if($sub['amount']/100 != 0){
 
@@ -219,7 +220,7 @@ class WebhookController extends BaseWebhookController
 				$elearningInvoice->save();
 
 				$elearningInvoice->user()->save($user);
-				$elearningInvoice->event()->save($user->events->where('id',$eventId)->first());
+				$elearningInvoice->event()->save($subscription->event->first());
 				$elearningInvoice->transaction()->save($transaction);
 				$elearningInvoice->subscription()->save($subscription);
 				
