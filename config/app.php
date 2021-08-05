@@ -181,7 +181,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         Barryvdh\Debugbar\ServiceProvider::class,
-        Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
+        Gloudemans\ShoppingCart\ShoppingcartServiceProvider::class,
         //Barryvdh\DomPDF\ServiceProvider::class,
 
     ],
@@ -234,7 +234,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
 
-        'Cart' => Gloudemans\Shoppingcart\Facades\Cart::class,
+        'Cart' => Gloudemans\ShoppingCart\Facades\Cart::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
 

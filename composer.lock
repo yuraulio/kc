@@ -1816,16 +1816,16 @@
             "extra": {
                 "laravel": {
                     "providers": [
-                        "Gloudemans\\Shoppingcart\\ShoppingcartServiceProvider"
+                        "Gloudemans\\ShoppingCart\\ShoppingcartServiceProvider"
                     ],
                     "aliases": {
-                        "Cart": "Gloudemans\\Shoppingcart\\Facades\\Cart"
+                        "Cart": "Gloudemans\\ShoppingCart\\Facades\\Cart"
                     }
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Gloudemans\\Shoppingcart\\": "src/"
+                    "Gloudemans\\ShoppingCart\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1838,7 +1838,7 @@
                     "email": "info@robgloudemans.nl"
                 }
             ],
-            "description": "Laravel Shoppingcart",
+            "description": "Laravel ShoppingCart",
             "keywords": [
                 "laravel",
                 "shoppingcart"

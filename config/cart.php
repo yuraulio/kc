@@ -16,7 +16,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Shoppingcart database settings
+    | ShoppingCart database settings
     |--------------------------------------------------------------------------
     |
     | Here you can set the connection that the shoppingcart should use when

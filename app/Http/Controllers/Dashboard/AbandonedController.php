@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Model\Abandoned;
-use App\Model\Shoppingcart;
+use App\Model\ShoppingCart;
 use App\Model\Event;
 use App\Model\Ticket;
 use Maatwebsite\Excel\Facades\Excel;
@@ -17,7 +17,7 @@ class AbandonedController extends Controller
 {
     public function index(){
         $data = [];
-        $list = Shoppingcart::with('user')->get();
+        $list = ShoppingCart::with('user')->get();
 
         $tickets = [];
         $ticks = Ticket::where('status', 1)->get();
@@ -48,7 +48,7 @@ class AbandonedController extends Controller
         $events = Event::whereIn('id', $evids)->get()->getDictionary();
         $data['events'] = $events;
         $data['tickets'] = $ticks->getDictionary();
-        $data['abcart'] = Shoppingcart::with('user')->get()->keyBy('identifier');
+        $data['abcart'] = ShoppingCart::with('user')->get()->keyBy('identifier');
         //dd($data['abcart']);
 
         //dd($data);
@@ -56,7 +56,7 @@ class AbandonedController extends Controller
     }
 
     public function remove($id){
-        $item = Shoppingcart::find(intval($id));
+        $item = ShoppingCart::find(intval($id));
         $item->delete();
 
         return redirect('admin/abandoned');
