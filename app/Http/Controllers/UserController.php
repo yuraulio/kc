@@ -25,6 +25,7 @@ use App\Model\Transaction;
 use \Cart as Cart;
 use Carbon\Carbon;
 use App\Model\Media;
+use App\Model\Certificate;
 use Session;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
@@ -51,7 +52,7 @@ class UserController extends Controller
         $user = Auth::user();
 
         $data['all_users'] = $model::count();
-        $data['total_graduates'] = 0;
+        $data['total_graduates'] = Certificate::where('success', 1)->count();
 
         //dd($model->with('role', 'image')->get()[0]);
 

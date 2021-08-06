@@ -9,7 +9,7 @@
 @component('layouts.headers.auth')
 @component('layouts.headers.breadcrumbs')
 @slot('title')
-{{ __('Examples') }}
+{{ __('') }}
 @endslot
 <li class="breadcrumb-item"><a href="{{ route('logos.index') }}">{{ __('Logos Management') }}</a></li>
 <li class="breadcrumb-item active" aria-current="page">{{ __('Add Logo') }}</li>

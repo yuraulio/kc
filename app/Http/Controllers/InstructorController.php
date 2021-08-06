@@ -50,6 +50,7 @@ class InstructorController extends Controller
      */
     public function store(InstructorRequest $request, Instructor $model)
     {
+        //dd($request->all());
         if($request->status == 'on')
         {
             $status = 1;

@@ -99,12 +99,5 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
-
-    <script src="//cdn.ckeditor.com/4.14.1/standard/ckeditor.js"></script>
-    <script type="text/javascript">
-    $(document).ready(function () {
-
-        $('.ckeditor').ckeditor();
-
-    });
+  
 @endpush

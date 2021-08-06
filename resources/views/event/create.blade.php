@@ -43,18 +43,14 @@
 
                                     @include('alerts.feedback', ['field' => 'priority'])
                                 </div>
-
                                 <div class="form-group{{ $errors->has('published') ? ' has-danger' : '' }}">
-                                    <div class="status-label">
-                                        <label class="form-control-label" for="input-published">{{ __('Published') }}</label>
-                                    </div>
-                                    <div class="status-toogle">
-                                        <label class="custom-toggle">
+                                  
+                                        <label class="custom-toggle custom-published">
                                             <input type="checkbox" name="published" id="input-published">
-                                            <span class="custom-toggle-slider rounded-circle"></span>
+                                            <span class="custom-toggle-slider rounded-circle" data-label-off="unpublished" data-label-on="published"></span>
                                         </label>
                                         @include('alerts.feedback', ['field' => 'published'])
-                                    </div>
+                                    
                                 </div>
 
                                 <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">

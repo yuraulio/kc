@@ -40,16 +40,14 @@
                             <div class="pl-lg-4">
 
                                 <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
-                                    <div class="status-label">
-                                        <label class="form-control-label" for="input-status">{{ __('Status') }}</label>
-                                    </div>
-                                    <div class="status-toogle">
-                                        <label class="custom-toggle">
-                                            <input type="checkbox" name="status" id="input-status" <?= ($topic['status'] == 1) ? 'checked' : ''; ?>>
-                                            <span class="custom-toggle-slider rounded-circle"></span>
+                                    
+
+                                    <label class="custom-toggle custom-published">
+                                            <input type="checkbox" name="status" id="input-status" @if($topic['status'] == '1') checked @endif>
+                                            <span class="custom-toggle-slider rounded-circle" data-label-off="unpublished" data-label-on="published"></span>
                                         </label>
                                         @include('alerts.feedback', ['field' => 'status'])
-                                    </div>
+                                    
                                 </div>
 
                                 <div class="form-group{{ $errors->has('comment_status') ? ' has-danger' : '' }}">

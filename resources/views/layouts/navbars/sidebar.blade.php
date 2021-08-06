@@ -59,7 +59,7 @@
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link active" href="#navbar-menus" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-accounts">
-                            <i class="fab fa-laravel" style="color: #f4645f;"></i>
+                            <i class="fas fa-bars" style="color: #f4645f;"></i>
                             <span class="nav-link-text" style="color: #f4645f;">{{ __('Menus') }}</span>
                         </a>
                         <div class="collapse show" id="navbar-menus">
@@ -74,7 +74,7 @@
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link active" href="#navbar-sites" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-sites">
-                            <i class="fab fa-laravel" style="color: #f4645f;"></i>
+                            <i class="fas fa-sliders-h" style="color: #f4645f;"></i>
                             <span class="nav-link-text" style="color: #f4645f;">{{ __('Site') }}</span>
                         </a>
                         <div class="collapse show" id="navbar-sites">
@@ -140,7 +140,7 @@
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link active" href="#navbar-booking" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-booking">
-                            <i class="fab fa-laravel" style="color: #f4645f;"></i>
+                            <i class="far fa-list-alt" style="color: #f4645f;"></i>
                             <span class="nav-link-text" style="color: #f4645f;">{{ __('Booking') }}</span>
                         </a>
                         <div class="collapse show" id="navbar-booking">
@@ -161,7 +161,7 @@
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link active" href="#navbar-faqs" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-faqs">
-                            <i class="fab fa-laravel" style="color: #f4645f;"></i>
+                            <i class="far fa-question-circle" style="color: #f4645f;"></i>
                             <span class="nav-link-text" style="color: #f4645f;">{{ __('Faqs') }}</span>
                         </a>
                         <div class="collapse show" id="navbar-faqs">
@@ -181,7 +181,7 @@
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link active" href="#navbar-courses" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-courses">
-                            <i class="fab fa-laravel" style="color: #f4645f;"></i>
+                            <i class="fas fa-book-reader" style="color: #f4645f;"></i>
                             <span class="nav-link-text" style="color: #f4645f;">{{ __('Courses') }}</span>
                         </a>
                         <div class="collapse show" id="navbar-courses">

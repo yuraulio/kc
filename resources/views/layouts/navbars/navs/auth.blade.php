@@ -120,9 +120,7 @@
 
         })
     })
-</script>
 
-    <script>
         $(document).on('keyup',"#search-user",function(){
 
             if(!$(this).val()){

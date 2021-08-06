@@ -137,16 +137,14 @@
                                     <div style="margin: auto;" class="col-md-6 col-sm-6">
                                         <div style="margin: auto;" class="form-group{{ $errors->has('published') ? ' has-danger' : '' }}">
 
-                                            <div class="status-label">
-                                                <label class="form-control-label" for="input-published">{{ __('Published') }}</label>
-                                            </div>
-                                            <div class="status-toogle">
-                                                <label class="custom-toggle">
-                                                    <input type="checkbox" name="published" id="input-published" <?= ($event['published'] == 1) ? 'checked' : ''; ?>>
-                                                    <span class="custom-toggle-slider rounded-circle"></span>
-                                                </label>
-                                                @include('alerts.feedback', ['field' => 'published'])
-                                            </div>
+                                            
+                                            
+                                        <label class="custom-toggle custom-published">
+                                            <input type="checkbox" name="published" id="input-published" @if($event['published']) checked @endif>
+                                            <span class="custom-toggle-slider rounded-circle" data-label-off="unpublished" data-label-on="published"></span>
+                                        </label>
+                                        @include('alerts.feedback', ['field' => 'published'])
+                                            
 
 
                                         </div>
