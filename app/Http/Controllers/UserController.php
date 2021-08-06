@@ -52,7 +52,7 @@ class UserController extends Controller
         $user = Auth::user();
 
         $data['all_users'] = $model::count();
-        $data['total_graduates'] = Certificate::where('success', 1)->count();
+        $data['total_graduates'] = total_graduate();
 
         //dd($model->with('role', 'image')->get()[0]);
 

@@ -108,7 +108,7 @@
 
 
                                 <div class="table-responsive py-4">
-                                        <table class="table align-items-center table-flush"  id="datatable-basic39">
+                                        <table class="table align-items-center table-flush datatable-basic39">
                                             <thead class="thead-light">
                                                 <tr>
                                                     <th scope="col">{{ __('Status') }}</th>
@@ -193,4 +193,15 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
+
+    <script type="text/javascript">
+        var table = $('.datatable-basic39').DataTable({
+                language: {
+                    paginate: {
+                    next: '&#187;', // or '→'
+                    previous: '&#171;' // or '←'
+                    }
+                }
+            });
+    </script>
 @endpush

@@ -1,6 +1,5 @@
 
 {{-- Navigation {{ !Request::is('/') ? "top-nav-collapse short" : "" }}--}}
-
 <header id="header" >
 				<div class="container clearfix">
 					<div class="logo-area">

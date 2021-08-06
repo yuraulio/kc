@@ -167,12 +167,7 @@
 @push('js')
 <script>
 
-    $(function() {
-        $('#content_summary').redactor({
-            clickToEdit: true,
-            clickToCancel: { title: 'Cancel' }
-        });
-    });
+
 
     $(document).ready(function(){
 

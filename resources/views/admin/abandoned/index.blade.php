@@ -151,7 +151,6 @@
         function fillSelectedBox(){
             events = table.column(1).data().unique().sort()
             $.each(events, function(key, value){
-                console.log(value)
                 $('#col1_filter').append('<option value="'+value+'">'+value+'</option>')
             })
         }
@@ -165,7 +164,7 @@
             language: {
                 paginate: {
                 next: '&#187;', // or '→'
-                previous: '&#171;' // or '←' 
+                previous: '&#171;' // or '←'
                 }
             }
         });

@@ -217,6 +217,7 @@
 
         // DataTables initialisation
         var table = $('#subscriptions_table').DataTable({
+            "order": [[ 4, "desc" ]],
             language: {
                 paginate: {
                 next: '&#187;', // or '→'

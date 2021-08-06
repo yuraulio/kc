@@ -69,11 +69,6 @@
 
 @push('js')
 
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('.ckeditor').ckeditor();
-        });
-    </script>
 @endpush
 
 

@@ -42,8 +42,6 @@ class MediaController extends Controller
         //dd($folders);
         $path = explode(".",$id);
 
-        Image::configure(array('driver' => 'imagick'));
-
         $image = Image::make(public_path($mediaKey));
 
         $media->original_name = $id;
