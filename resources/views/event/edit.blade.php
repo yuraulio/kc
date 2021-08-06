@@ -137,14 +137,14 @@
                                     <div style="margin: auto;" class="col-md-6 col-sm-6">
                                         <div style="margin: auto;" class="form-group{{ $errors->has('published') ? ' has-danger' : '' }}">
 
-                                            
-                                            
+
+
                                         <label class="custom-toggle custom-published">
                                             <input type="checkbox" name="published" id="input-published" @if($event['published']) checked @endif>
                                             <span class="custom-toggle-slider rounded-circle" data-label-off="unpublished" data-label-on="published"></span>
                                         </label>
                                         @include('alerts.feedback', ['field' => 'published'])
-                                            
+
 
 
                                         </div>
@@ -512,10 +512,31 @@
 
 @endsection
 
+@push('css')
+    <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">
+    <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css">
+    <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables-datetime/datetime.min.css">
+@endpush
+
 @push('js')
+    <script src="{{ asset('argon') }}/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('argon') }}/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="{{ asset('argon') }}/vendor/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+
 
 
 <script>
+
+    var table = $('#datatable-coupon').DataTable({
+        language: {
+            paginate: {
+            next: '&#187;', // or '→'
+            previous: '&#171;' // or '←'
+            }
+        }
+    });
 
     $(document).on('click',".edit-btn",function(){
         $(this).parent().parent().find('.dropdown-item').click()

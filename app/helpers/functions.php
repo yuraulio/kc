@@ -4,6 +4,7 @@ use App\Model\Slug;
 use App\Model\Media;
 use Illuminate\Support\Str;
 use App\Model\Menu;
+use App\Model\Exam;
 
 function get_split_image_path($path)
     {
@@ -137,7 +138,6 @@ if (!function_exists('cdnPath')){
     }
 }
 
-
 if (!function_exists('get_image')){
     function get_image($media, $version = null) {
         if(!$version){
@@ -166,5 +166,27 @@ if (!function_exists('get_header')){
         }
         return $result;
 
+    }
+}
+
+if(!function_exists('total_graduate')){
+    function total_graduate() {
+
+        $sum = 0;
+        $exams = Exam::with('results')->get()->toArray();
+        foreach($exams as $key => $item){
+            $success_percent = $item['q_limit'];
+            foreach($item['results'] as $res){
+                $total_score = $res['total_score'];
+                $score = $res['score'];
+                $percent = ($score/$total_score) * 100;
+
+                if($percent >= $success_percent){
+                    $sum++;
+                }
+            }
+        }
+
+        return $sum;
     }
 }

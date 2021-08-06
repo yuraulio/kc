@@ -220,7 +220,7 @@ class StudentController extends Controller
                 $data['user']['events'][$key]['videos_progress'] = intval($event->progress($user));
                 $data['user']['events'][$key]['videos_seen'] = $event->video_seen($user);
                 $data['user']['events'][$key]['cert'] = [];
-               
+
                 $data['user']['events'][$key]['mySubscription'] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first();
                 $data['user']['events'][$key]['plans'] = $event['plans'];
                 $data['user']['events'][$key]['certs'] = $event->certificatesByUser($user->id);
@@ -632,7 +632,6 @@ class StudentController extends Controller
     }
 
     public function saveElearning(Request $request){
-
         $user = Auth::user();
         $user = User::find($user['id']);
 
@@ -642,15 +641,19 @@ class StudentController extends Controller
 
           $videos = $user->statistic()->wherePivot('event_id',$request->event)->first()->pivot['videos'];
           $videos = json_decode($videos,true);
-          foreach($request->videos as $key=> $video){
-              //dd($videos[$key]);
+          foreach($request->videos as $key => $video){
 
 
-            $videos[$key]['stop_time'] = isset($video['stop_time']) ? $video['stop_time'] : 0;
-            $videos[$key]['percentMinutes'] = isset($video['stop_time']) ? $video['percentMinutes'] : 0;
+            if(!isset( $videos[$key])){
+                continue;
+            }
+
+            //$videos[$key]['seen'] = isset($video['seen']) ? $video['seen'] : 0;
+            //$videos[$key]['stop_time'] = isset($video['stop_time']) ? $video['stop_time'] : 0;
+           // $videos[$key]['percentMinutes'] = isset($video['stop_time']) ? $video['percentMinutes'] : 0;
 
             if( (int) $video['seen'] == 1 && (int) $videos[$key]['seen'] == 0){
-                $videos[$key]['seen'] = $video['seen'];
+                $videos[$key]['seen'] = (int) $video['seen'];
 
             }
 

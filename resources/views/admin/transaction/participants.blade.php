@@ -178,10 +178,10 @@
 
                                 <td class="exp_{{$transaction['id']}} participant_elearning none" >
                                     {{$transaction['expiration']}}
-                                   
+
 
                                 </td>
-                               
+
                                 <td class="participant_elearning none">
                                     <input id="{{$transaction['id']}}" class="form-control datepicker" placeholder="Select date" type="text" value="<?= ($transaction['expiration'] != null) ? $transaction['expiration'] : ''; ?>">
                                     <button class="update_exp btn btn-info btn-sm" style="margin-top:10px;" type="button" data-id="{{$transaction['id']}}" >Update</button>
@@ -320,11 +320,11 @@ $(document).ready(function() {
 
     // DataTables initialisation
     var table = $('#participants_table').DataTable({
-       
+        "order": [[ 4, "desc" ]],
         language: {
             paginate: {
             next: '&#187;', // or '→'
-            previous: '&#171;' // or '←' 
+            previous: '&#171;' // or '←'
             }
         }
     });

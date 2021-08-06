@@ -56,8 +56,8 @@
                                 <?php //dd($instructor); ?>
                                     <tr>
                                         <td><span class="avatar avatar-sm rounded-circle">
-                                        @if($instructor->medias != null)
-                                            <img src="{{$instructor->medias['path']}}/{{$instructor->medias['name']}}-instructors-small{{$instructor->medias['ext']}}"
+                                        @if($instructor->medias != null && $instructor->medias['name'] != '')
+                                            <img src="{{$instructor->medias['path']}}{{$instructor->medias['name']}}-instructors-small{{$instructor->medias['ext']}}"
                                             class="rounded-circle" alt="{{$instructor['title']}} {{$instructor['subtitle']}}">
                                         @endif
                                          </span> </td>
