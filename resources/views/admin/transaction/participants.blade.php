@@ -320,6 +320,7 @@ $(document).ready(function() {
 
     // DataTables initialisation
     var table = $('#participants_table').DataTable({
+       
         language: {
             paginate: {
             next: '&#187;', // or '→'
@@ -792,8 +793,6 @@ function filterGlobal () {
 
 
     }
-
-
 
 
     </script>

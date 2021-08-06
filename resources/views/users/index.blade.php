@@ -59,9 +59,9 @@
                                         <td>
                                         <?php //dd(asset('profile_user').'/'.$user['image']['name'] ); ?>
                                             <span class="avatar avatar-sm rounded-circle">
-
+                                               
                                             @if($user['image'] != null)
-                                                <img src="{{ get_image($user['image']) }}" alt="{{ $user['firstname'] }}" style="max-width: 100px; border-radiu: 25px">
+                                                <img src="{{ cdn(get_image($user['image'])) }}" alt="{{ $user['firstname'] }}" style="max-width: 100px; border-radiu: 25px">
                                             @else
                                             <img src="" alt="{{ $user['firstname'] }}" style="max-width: 100px; border-radius: 25px">
                                             @endif
@@ -142,14 +142,15 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
 
     <script>
-        // DataTables initialisation
-        var table = $('#datatable-basic45').DataTable({
-                language: {
-                    paginate: {
-                    next: '&#187;', // or '→'
-                    previous: '&#171;' // or '←'
-                    }
-                }
-            });
-    </script>
+ $('#datatable-basic45').DataTable({
+        'order':false,
+        language: {
+            paginate: {
+            next: '&#187;', // or '→'
+            previous: '&#171;' // or '←'
+            }
+        }
+    });
+
+        </script>
 @endpush

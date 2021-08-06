@@ -26,6 +26,7 @@ use App\Model\Plan;
 use App\Model\CartCache;
 use App\Model\ExamResult;
 use App\Model\OauthAccessToken;
+use App\Model\Transaction;
 
 class User extends Authenticatable
 {
@@ -182,7 +183,7 @@ class User extends Authenticatable
 
     public function ticket()
     {
-        return $this->belongsToMany(Ticket::class, 'event_user_ticket')->withPivot('ticket_id');
+        return $this->belongsToMany(Ticket::class, 'event_user_ticket')->select('tickets.*','event_id','ticket_id')->withPivot('ticket_id','event_id');
     }
 
     public function getCreatedAtAttribute($date)
@@ -198,6 +199,10 @@ class User extends Authenticatable
     public function statisticGroupByEvent()
     {
         return $this->belongsToMany(Event::class, 'event_statistics')->select('user_id','event_id')->withPivot('id','videos','lastVideoSeen', 'notes', 'event_id');
+    }
+
+    public function transactions(){
+        return $this->morphToMany(Transaction::class,'transactionable');
     }
 
 
