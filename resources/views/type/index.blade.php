@@ -103,4 +103,14 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
+    <script>
+         var table = $('#datatable-basic43').DataTable({
+        language: {
+            paginate: {
+            next: '&#187;', // or '→'
+            previous: '&#171;' // or '←'
+            }
+        }
+    });
+    </script>
 @endpush

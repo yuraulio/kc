@@ -130,11 +130,11 @@
                                         <td>{{ $item['subscription'][0]['event'][0]['title'] }}</td>
 
                                         <td>{{ $item['status'] }}</td>
-                                       
+
 
 
                                         <td>{{ $item['ends_at'] }}</td>
-                                        <td><?= number_format(intval($item['total_amount']), 2, '.', ''); ?></td>
+                                        <td><?= '€'.number_format(intval($item['total_amount']), 2, '.', ''); ?></td>
 
 
                                     </tr>
@@ -171,22 +171,25 @@
 
 
         function initStats(){
-            amount = $('#subscriptions_table').DataTable().column( 7 ).data();
+            amount = $('#subscriptions_table').DataTable().column( 6 ).data();
             let sum = 0;
 
+
             $.each(amount, function(key, value) {
+                value = value.replace("€", "")
                 sum = sum + parseInt(value)
-                //console.log(value)
+
             })
 
-            $('#total').text(sum)
+
+
+            $('#total').text('€'+sum)
 
         }
 
         function fillSelectedBox(){
             events = table.column(3).data().unique().sort()
             $.each(events, function(key, value){
-                console.log(value)
                 $('#col3_filter').append('<option value="'+value+'">'+value+'</option>')
             })
         }
@@ -213,7 +216,14 @@
 
 
         // DataTables initialisation
-        var table = $('#subscriptions_table').DataTable();
+        var table = $('#subscriptions_table').DataTable({
+            language: {
+                paginate: {
+                next: '&#187;', // or '→'
+                previous: '&#171;' // or '←'
+                }
+            }
+        });
         initStats()
 
         let status = '';

@@ -105,5 +105,16 @@
 
     <script src="//cdn.ckeditor.com/4.14.1/standard/ckeditor.js"></script>
 
+    <script>
+        var table = $('#datatable-basic3').DataTable({
+            language: {
+                paginate: {
+                next: '&#187;', // or '→'
+                previous: '&#171;' // or '←'
+                }
+            }
+        });
+    </script>
+
 
 @endpush

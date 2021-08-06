@@ -147,5 +147,14 @@
 
         });
 
+        var table = $('#datatable-basic38').DataTable({
+        language: {
+            paginate: {
+            next: '&#187;', // or '→'
+            previous: '&#171;' // or '←'
+            }
+        }
+    });
+
       </script>
 @endpush
