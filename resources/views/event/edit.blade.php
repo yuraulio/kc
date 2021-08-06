@@ -705,8 +705,6 @@
             const event_id = $('#topic_lessons').data('event-id')
             let instructor_id = $('#instFormControlSelect12').val()
 
-
-
             data = {lesson_id:elem[1], topic_id:topic_id[1], event_id:event_id}
             $.ajax({
                 type: 'POST',
@@ -720,13 +718,13 @@
                     date = ''
 
                     data = JSON.parse(data)
+                    console.log(data)
                     let instructors = data.instructors
 
                     let event_type = data.isInclassCourse
                     let event_id = data.event
 
-                    lesson = data.lesson[0].pivot
-
+                    lesson = data.lesson.pivot
 
                     if(lesson.instructor_id == null){
 
@@ -736,7 +734,7 @@
                         $('#lesson_update_btn').prop('disabled', false);
                         $('#lesson_update_btn').css('opacity', '1')
                     }
-                    $('#modal-title-default').text(data.lesson[0].title)
+                    $('#modal-title-default').text(lesson.title)
 
                 //    inst_row =  `<div class="form-group">
                 //                     <label for="exampleFormControlSelect1">Select instructor</label>
@@ -753,7 +751,7 @@
                     });
 
 
-                    if(lesson.date != null){
+                    if(lesson.date != ''){
                         var date = new Date(lesson.date);
                             date =((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + date.getFullYear()
                     }else{

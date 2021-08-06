@@ -116,6 +116,7 @@ class ProfileController extends Controller
      */
     public function update(ProfileRequest $request)
     {
+        //dd($request->all());
         $user = User::with('image')->find($request->user_id);
 
 
@@ -132,9 +133,16 @@ class ProfileController extends Controller
             (new MediaController)->uploadProfileImage($request, $user->image);
         }
 
-
-
+        if(isset($request->status)){
+            $status = 1;
+        }else{
+            $status = 0;
+        }
+        $user->statusAccount->completed = $status;
+        $user->push();
         $user->update($request->all());
+
+
 
 
 

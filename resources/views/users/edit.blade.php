@@ -63,56 +63,14 @@
             </div>
             <div class="col-xl-8 order-xl-1">
                 <div class="row">
-                    <div class="col-lg-6">
-                        <div class="card bg-gradient-info border-0">
-                            <!-- Card body -->
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col">
-                                        <h5 class="card-title text-uppercase text-muted mb-0 text-white">Total traffic</h5>
-                                        <span class="h2 font-weight-bold mb-0 text-white">350,897</span>
-                                    </div>
-                                    <div class="col-auto">
-                                        <div class="icon icon-shape bg-white text-dark rounded-circle shadow">
-                                            <i class="ni ni-active-40"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <p class="mt-3 mb-0 text-sm">
-                                    <span class="text-white mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
-                                    <span class="text-nowrap text-light">Since last month</span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="card bg-gradient-danger border-0">
-                            <!-- Card body -->
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col">
-                                        <h5 class="card-title text-uppercase text-muted mb-0 text-white">Performance</h5>
-                                        <span class="h2 font-weight-bold mb-0 text-white">49,65%</span>
-                                    </div>
-                                    <div class="col-auto">
-                                        <div class="icon icon-shape bg-white text-dark rounded-circle shadow">
-                                            <i class="ni ni-spaceship"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <p class="mt-3 mb-0 text-sm">
-                                    <span class="text-white mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
-                                    <span class="text-nowrap text-light">Since last month</span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+
+
                 </div>
 
 
 
 <!-- wrappertabs -->
-<div class="nav-wrapper">
+<div id="nav-wrapper-user" class="nav-wrapper">
     <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
         <li class="nav-item">
             <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i>Personal Data</a>
@@ -158,6 +116,24 @@
                         @include('alerts.error_self_update', ['key' => 'not_allow_profile'])
 
                         <div class="pl-lg-4">
+                            @if(Auth::user()->isAdmin())
+                            <?php //dd($user->statusAccount()->first()['completed']); ?>
+                                <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
+                                    <div style="display:inline-flex;">
+                                        <label class="form-control-label" for="input-firstname">{{ __('Status') }}</label>
+                                    </div>
+                                    <div style="display:inline-flex; margin-left:1rem;">
+                                        <label class="custom-toggle custom-published-user">
+                                            <input name="status" id="user-status" type="checkbox" @if($user->statusAccount()->first()['completed'] == 1) checked @endif>
+                                            <span class="custom-toggle-slider rounded-circle" data-label-off="inactive" data-label-on="active"></span>
+                                        </label>
+                                        @include('alerts.feedback', ['field' => 'status'])
+                                    </div>
+
+
+                                </div>
+                            @endif
+
                             <div class="form-group{{ $errors->has('firstname') ? ' has-danger' : '' }}">
                                 <label class="form-control-label" for="input-firstname">{{ __('Firstname') }}</label>
                                 <input type="text" name="firstname" id="input-firstname" class="form-control{{ $errors->has('firstname') ? ' is-invalid' : '' }}" placeholder="{{ __('firstname') }}" value="{{ old('firstname', $user['firstname']) }}" required autofocus>
@@ -787,7 +763,6 @@ $(document).on('click', '.ticket-card', function () {
             })
     })
     $img = @json($user->image);
-    console.log($img)
 
 
     if($img['name'] != '' && $img['details'] != null){

@@ -248,6 +248,24 @@
     visibility: visible;
 }
 
+
+
+.custom-toggle.custom-published-user {
+    width: 80px;
+}
+
+.custom-toggle.custom-published-user input:checked+.custom-toggle-slider::before {
+    background: #5e72e4;
+    transform: translateX(51px);
+}
+
+.custom-toggle.custom-published-user input:checked+.custom-toggle-slider::after {
+    content: attr(data-label-on);
+    color: #5e72e4;
+    right: auto;
+    left: 7px;
+}
+
 .custom-toggle.custom-published {
     width: 100px;
 }
@@ -290,3 +308,11 @@
         height: 100% !important;
     }
 }
+
+@media (min-width: 1200px) {
+    #nav-wrapper-user{
+        margin-top: 5rem;
+    }
+}
+
+

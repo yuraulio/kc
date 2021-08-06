@@ -37,41 +37,48 @@
                             </ul>
                         </div>
                     </li>
+
                     <li class="nav-item active">
                         <a class="nav-link active" href="#navbar-accounts" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-accounts">
-                            <i class="far fa-user-circle" style="color: #f4645f;"></i>
-                            <span class="nav-link-text" style="color: #f4645f;">{{ __('Accounts') }}</span>
+                            <i class="far fa-user" style="color: #f4645f;"></i>
+                            <span class="nav-link-text" style="color: #f4645f;">{{ __('My Account') }}</span>
                         </a>
                         <div class="collapse show" id="navbar-accounts">
                             <ul class="nav nav-sm flex-column">
-                                @can('manage-users', App\Model\User::class)
-                                    <li class="nav-item  {{ $elementName == 'role-management' ? 'active' : '' }}">
-                                        <a href="{{ route('role.index') }}" class="nav-link">{{ __('Role Management') }}</a>
-                                    </li>
-                                @endcan
-                                @can('manage-users', App\Model\User::class)
-                                    <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
-                                        <a href="{{ route('user.index') }}" class="nav-link">{{ __('User Management') }}</a>
-                                    </li>
-                                @endcan
+
+                                <li class="nav-item  {{ $elementName == 'profile-management' ? 'active' : '' }}">
+                                    <a href="{{ route('user.edit', auth()->user()->id) }}" class="nav-link">{{ __('User Profile') }}</a>
+                                </li>
+                                <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
+                                    <a href="{{ route('user.index') }}" class="nav-link">{{ __('Users') }}</a>
+                                </li>
+
+
                             </ul>
                         </div>
                     </li>
+
                     <li class="nav-item active">
-                        <a class="nav-link active" href="#navbar-menus" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-accounts">
-                            <i class="fas fa-bars" style="color: #f4645f;"></i>
-                            <span class="nav-link-text" style="color: #f4645f;">{{ __('Menus') }}</span>
+                        <a class="nav-link active" href="#navbar-users" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-users">
+                            <i class="fas fa-users" style="color: #f4645f;"></i>
+                            <span class="nav-link-text" style="color: #f4645f;">{{ __('Users') }}</span>
                         </a>
-                        <div class="collapse show" id="navbar-menus">
+                        <div class="collapse show" id="navbar-users">
                             <ul class="nav nav-sm flex-column">
-                                @can('manage-users', App\Model\User::class)
-                                    <li class="nav-item {{ $elementName == 'menu-management' ? 'active' : '' }}">
-                                        <a href="{{ route('menu.index') }}" class="nav-link">{{ __('Menus') }}</a>
-                                    </li>
-                                @endcan
+
+                                <li class="nav-item {{ $elementName == 'user-management' ? 'active' : '' }}">
+                                    <a href="{{ route('user.index') }}" class="nav-link">{{ __('Users') }}</a>
+                                </li>
+
+                                <li class="nav-item  {{ $elementName == 'role-management' ? 'active' : '' }}">
+                                    <a href="{{ route('role.index') }}" class="nav-link">{{ __('Roles') }}</a>
+                                </li>
+
+
                             </ul>
                         </div>
                     </li>
+
                     <li class="nav-item active">
                         <a class="nav-link active" href="#navbar-sites" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-sites">
                             <i class="fas fa-sliders-h" style="color: #f4645f;"></i>
@@ -79,42 +86,36 @@
                         </a>
                         <div class="collapse show" id="navbar-sites">
                             <ul class="nav nav-sm flex-column">
-                                @can('manage-users', App\Model\User::class)
                                     <li class="nav-item  {{ $elementName == 'role1-management' ? 'active' : '' }}">
-                                        <a href="{{ route('notification.show') }}" class="nav-link">{{ __('Notification Messages') }}</a>
+                                        <a href="{{ route('notification.show') }}" class="nav-link">{{ __('Notifications') }}</a>
                                     </li>
-                                @endcan
-                                @can('manage-users', App\Model\User::class)
                                     <li class="nav-item {{ $elementName == 'user1-management' ? 'active' : '' }}">
                                         <a href="{{ route('user.index') }}" class="nav-link">{{ __('Site map settings') }}</a>
                                     </li>
-                                @endcan
-                                @can('manage-users', App\Model\User::class)
                                     <li class="nav-item {{ $elementName == 'user1-management' ? 'active' : '' }}">
-                                        <a href="{{ route('user.index') }}" class="nav-link">{{ __('Sharing settings') }}</a>
+                                        <a href="{{ route('user.index') }}" class="nav-link">{{ __('Social sharing settings') }}</a>
                                     </li>
-                                @endcan
-                                @can('manage-users', App\Model\User::class)
                                     <li class="nav-item {{ $elementName == 'user1-management' ? 'active' : '' }}">
-                                        <a href="{{ route('user.index') }}" class="nav-link">{{ __('Search engines settings') }}</a>
+                                        <a href="{{ route('user.index') }}" class="nav-link">{{ __('Search engines settings (META)') }}</a>
                                     </li>
-                                @endcan
-
-                                @can('manage-users', App\Model\User::class)
+                                    <li class="nav-item {{ $elementName == 'user1-management' ? 'active' : '' }}">
+                                        <a href="{{ route('user.index') }}" class="nav-link">{{ __('Error log') }}</a>
+                                    </li>
                                     <li class="nav-item {{ $elementName == 'media-management' ? 'active' : '' }}">
                                         <a href="{{ route('media2.index') }}" class="nav-link">{{ __('Media library') }}</a>
                                     </li>
-                                @endcan
-                                @can('manage-users', App\Model\User::class)
+                                    <li class="nav-item {{ $elementName == 'menu-management' ? 'active' : '' }}">
+                                        <a href="{{ route('menu.index') }}" class="nav-link">{{ __('Menus') }}</a>
+                                    </li>
+
+
                                     <li class="nav-item {{ $elementName == 'payment-management' ? 'active' : '' }}">
                                         <a href="{{ route('payments.index') }}" class="nav-link">{{ __('Payment Methods') }}</a>
                                     </li>
-                                @endcan
-                                @can('manage-users', App\Model\User::class)
                                     <li class="nav-item {{ $elementName == 'logo-management' ? 'active' : '' }}">
-                                        <a href="{{ route('logos.index') }}" class="nav-link">{{ __('Logos') }}</a>
+                                        <a href="{{ route('logos.index') }}" class="nav-link">{{ __('Logos (Temp)') }}</a>
                                     </li>
-                                @endcan
+
                             </ul>
                         </div>
                     </li>
@@ -125,16 +126,13 @@
                         </a>
                         <div class="collapse show" id="navbar-pages">
                             <ul class="nav nav-sm flex-column">
-                                @can('manage-users', App\Model\User::class)
                                     <li class="nav-item  {{ $elementName == 'pages-management' ? 'active' : '' }}">
                                         <a href="{{ route('pages.index') }}" class="nav-link">{{ __('Pages') }}</a>
                                     </li>
-                                @endcan
-                                @can('manage-users', App\Model\User::class)
                                     <li class="nav-item {{ $elementName == 'user2-management' ? 'active' : '' }}">
-                                        <a href="{{ route('user.index') }}" class="nav-link">{{ __('Blog') }}</a>
+                                        <a href="{{ route('user.index') }}" class="nav-link">{{ __('Blog posts') }}</a>
                                     </li>
-                                @endcan
+
                             </ul>
                         </div>
                     </li>
@@ -159,26 +157,7 @@
                             </ul>
                         </div>
                     </li>
-                    <li class="nav-item active">
-                        <a class="nav-link active" href="#navbar-faqs" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-faqs">
-                            <i class="far fa-question-circle" style="color: #f4645f;"></i>
-                            <span class="nav-link-text" style="color: #f4645f;">{{ __('Faqs') }}</span>
-                        </a>
-                        <div class="collapse show" id="navbar-faqs">
-                            <ul class="nav nav-sm flex-column">
-                                @can('manage-users', App\Model\User::class)
-                                    <li class="nav-item  {{ $elementName == 'faqs-category-management' ? 'active' : '' }}">
-                                        <a href="{{ route('faqs.categories') }}" class="nav-link">{{ __('Category') }}</a>
-                                    </li>
-                                @endcan
-                                @can('manage-users', App\Model\User::class)
-                                    <li class="nav-item {{ $elementName == 'faqs-management' ? 'active' : '' }}">
-                                        <a href="{{ route('faqs.index') }}" class="nav-link">{{ __('Faqs') }}</a>
-                                    </li>
-                                @endcan
-                            </ul>
-                        </div>
-                    </li>
+
                     <li class="nav-item active">
                         <a class="nav-link active" href="#navbar-courses" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-courses">
                             <i class="fas fa-book-reader" style="color: #f4645f;"></i>
@@ -186,83 +165,48 @@
                         </a>
                         <div class="collapse show" id="navbar-courses">
                             <ul class="nav nav-sm flex-column">
-                                @can('manage-users', App\Model\User::class)
                                     <li class="nav-item  {{ $elementName == 'categories-management' ? 'active' : '' }}">
                                         <a href="{{ route('global.index') }}" class="nav-link">{{ __('Categories') }}</a>
                                     </li>
-                                @endcan
-                                @can('manage-users', App\Model\User::class)
                                     <li class="nav-item {{ $elementName == 'events-management' ? 'active' : '' }}">
                                         <a href="{{ route('events.index') }}" class="nav-link">{{ __('Events') }}</a>
                                     </li>
-                                @endcan
-                                @can('manage-users', App\Model\User::class)
                                     <li class="nav-item {{ $elementName == 'instructors-management' ? 'active' : '' }}">
                                         <a href="{{ route('instructors.index') }}" class="nav-link">{{ __('Instructors') }}</a>
                                     </li>
-                                @endcan
-                                @can('manage-users', App\Model\User::class)
                                     <li class="nav-item {{ $elementName == 'topics-management' ? 'active' : '' }}">
                                         <a href="{{ route('topics.index') }}" class="nav-link">{{ __('Topics') }}</a>
                                     </li>
-                                @endcan
-                                @can('manage-users', App\Model\User::class)
                                     <li class="nav-item {{ $elementName == 'lessons-management' ? 'active' : '' }}">
                                         <a href="{{ route('lessons.index') }}" class="nav-link">{{ __('Lessons') }}</a>
                                     </li>
-                                @endcan
-
-                                @can('manage-users', App\Model\User::class)
                                     <li class="nav-item {{ $elementName == 'types-management' ? 'active' : '' }}">
                                         <a href="{{ route('types.index') }}" class="nav-link">{{ __('Types') }}</a>
                                     </li>
-                                @endcan
-                                @can('manage-users', App\Model\User::class)
                                     <li class="nav-item {{ $elementName == 'testimonials-management' ? 'active' : '' }}">
                                         <a href="{{ route('testimonials.index') }}" class="nav-link">{{ __('Testimonials') }}</a>
                                     </li>
-                                @endcan
-                                {{--@can('manage-users', App\Model\User::class)
-                                    <li class="nav-item {{ $elementName == 'faqs-management' ? 'active' : '' }}">
-                                        <a href="{{ route('faqs.index') }}" class="nav-link">{{ __('Faqs') }}</a>
-                                    </li>
-                                @endcan--}}
-                                @can('manage-users', App\Model\User::class)
                                     <li class="nav-item {{ $elementName == 'careers-management' ? 'active' : '' }}">
-                                        <a href="{{ route('career.index') }}" class="nav-link">{{ __('Career') }}</a>
+                                        <a href="{{ route('career.index') }}" class="nav-link">{{ __('Career Paths') }}</a>
                                     </li>
-                                @endcan
-                                @can('manage-users', App\Model\User::class)
                                     <li class="nav-item {{ $elementName == 'cities-management' ? 'active' : '' }}">
                                         <a href="{{ route('city.index_main') }}" class="nav-link">{{ __('Cities') }}</a>
                                     </li>
-                                @endcan
-                                @can('manage-users', App\Model\User::class)
                                     <li class="nav-item {{ $elementName == 'venues-management' ? 'active' : '' }}">
                                         <a href="{{ route('venue.index_main') }}" class="nav-link">{{ __('Venues') }}</a>
                                     </li>
-                                @endcan
-
-                                @can('manage-users', App\Model\User::class)
                                     <li class="nav-item {{ $elementName == 'tickets-management' ? 'active' : '' }}">
                                         <a href="{{ route('ticket.index') }}" class="nav-link">{{ __('Tickets') }}</a>
                                     </li>
-                                @endcan
-                                @can('manage-users', App\Model\User::class)
                                     <li class="nav-item {{ $elementName == 'partners-management' ? 'active' : '' }}">
                                         <a href="{{ route('partner.index') }}" class="nav-link">{{ __('Partners') }}</a>
                                     </li>
-                                @endcan
-                                @can('manage-users', App\Model\User::class)
                                     <li class="nav-item {{ $elementName == 'exams-management' ? 'active' : '' }}">
                                         <a href="{{ route('exams.index') }}" class="nav-link">{{ __('Exams') }}</a>
                                     </li>
-                                @endcan
-                                @can('manage-users', App\Model\User::class)
                                     <li class="nav-item {{ $elementName == 'deliveries-management' ? 'active' : '' }}">
                                         <a href="{{ route('delivery.index') }}" class="nav-link">{{ __('Deliveries') }}</a>
                                     </li>
-                                @endcan
                                 <li class="nav-item {{ $elementName == 'videos-management' ? 'active' : '' }}">
                                     <a href="{{ route('video.index') }}" class="nav-link">{{ __('Videos') }}</a>
                                 </li>
@@ -271,13 +215,69 @@
                                     <a href="{{ route('plans') }}" class="nav-link">{{ __('Plans') }}</a>
                                 </li>
 
-                                <li class="nav-item {{ $elementName == 'coupons-management' ? 'active' : '' }}">
-                                    <a href="{{ route('coupons') }}" class="nav-link">{{ __('Coupons') }}</a>
+
+
+
+
+
+                                <li class="nav-item active">
+                                    <a class="nav-link active" href="#navbar-faqs" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-faqs">
+                                        <i class="far fa-question-circle" style="color: #f4645f;"></i>
+                                        <span class="nav-link-text" style="color: #f4645f;">{{ __('Questions & Answers') }}</span>
+                                    </a>
+                                    <div class="collapse" id="navbar-faqs">
+                                        <ul class="nav nav-sm flex-column">
+                                                <li class="nav-item  {{ $elementName == 'faqs-category-management' ? 'active' : '' }}">
+                                                    <a href="{{ route('faqs.categories') }}" class="nav-link">{{ __('Category') }}</a>
+                                                </li>
+                                                <li class="nav-item {{ $elementName == 'faqs-management' ? 'active' : '' }}">
+                                                    <a href="{{ route('faqs.index') }}" class="nav-link">{{ __('Questions & Answers') }}</a>
+                                                </li>
+                                        </ul>
+                                    </div>
                                 </li>
 
                             </ul>
                         </div>
                     </li>
+
+                    <li class="nav-item active">
+                        <a class="nav-link active" href="#navbar-revenue" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-revenue">
+                            <i class="far fa-question-circle" style="color: #f4645f;"></i>
+                            <span class="nav-link-text" style="color: #f4645f;">{{ __('Revenue') }}</span>
+                        </a>
+                        <div class="collapse show" id="navbar-revenue">
+                            <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item  {{ $elementName == 'subscription-management' ? 'active' : '' }}">
+                                        <a href="{{ route('faqs.categories') }}" class="nav-link">{{ __('Subscriptions') }}</a>
+                                    </li>
+                                    <li class="nav-item {{ $elementName == 'coupons-management' ? 'active' : '' }}">
+                                        <a href="{{ route('coupons') }}" class="nav-link">{{ __('Coupons') }}</a>
+                                    </li>
+                                    <li class="nav-item {{ $elementName == 'discounts-management' ? 'active' : '' }}">
+                                        <a href="{{ route('coupons') }}" class="nav-link">{{ __('Discounts') }}</a>
+                                    </li>
+                                    <li class="nav-item {{ $elementName == 'affiliates-management' ? 'active' : '' }}">
+                                        <a href="{{ route('coupons') }}" class="nav-link">{{ __('Affiliates') }}</a>
+                                    </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="nav-item active">
+                        <a class="nav-link active" href="#navbar-messages" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-messages">
+                            <i class="far fa-question-circle" style="color: #f4645f;"></i>
+                            <span class="nav-link-text" style="color: #f4645f;">{{ __('Messages') }}</span>
+                        </a>
+                        <div class="collapse show" id="navbar-messages">
+                            <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item  {{ $elementName == 'api-management' ? 'active' : '' }}">
+                                        <a href="{{ route('faqs.categories') }}" class="nav-link">{{ __('API Settings') }}</a>
+                                    </li>
+                            </ul>
+                        </div>
+                    </li>
+
 
                 </ul>
 

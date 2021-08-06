@@ -45,18 +45,13 @@
                                     <h6 class="heading-small text-muted mb-4">{{ __('Testimonial information') }}</h6>
                                     <div class="pl-lg-4">
 
-                                        <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
-                                            <div class="status-label">
-                                                <label class="form-control-label" for="input-status">{{ __('Status') }}</label>
-                                            </div>
-                                            <div class="status-toogle">
-                                                <label class="custom-toggle">
-                                                    <input type="checkbox" name="status" id="input-status" <?= ($testimonial['status'] == 1) ? 'checked' : ''; ?>>
-                                                    <span class="custom-toggle-slider rounded-circle"></span>
-                                                </label>
-                                                @include('alerts.feedback', ['field' => 'status'])
-                                            </div>
-                                        </div>
+                                    <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
+                                        <label class="custom-toggle custom-published">
+                                            <input name="status" id="input-status" type="checkbox" @if($testimonial->status) checked @endif>
+                                            <span class="custom-toggle-slider rounded-circle" data-label-off="unpublished" data-label-on="published"></span>
+                                        </label>
+                                        @include('alerts.feedback', ['field' => 'status'])
+                                    </div>
 
                                         <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-name">{{ __('Name') }}</label>

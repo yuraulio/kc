@@ -21,6 +21,7 @@ use App\Model\Role;
 use App\Model\User;
 use App\Model\Event;
 use App\Model\Ticket;
+use App\Model\Activation;
 use App\Model\Transaction;
 use \Cart as Cart;
 use Carbon\Carbon;
@@ -234,11 +235,11 @@ class UserController extends Controller
 
         //dd($data['events']);
         $data['user'] = $user::with('ticket','role','events','image','transactions')->find($user['id']);
-        
+
         $data['transactions'] = [];
 
         foreach($user->events as $key => $value){
-            
+
             $user_id = $value->pivot->user_id;
             $event_id = $value->pivot->event_id;
             $event = Event::find($event_id);
@@ -266,7 +267,7 @@ class UserController extends Controller
         }else{
             $data['invoice'] = null;
         }
-        
+
         return view('users.edit', ['transactions'=>$data['transactions'],'events' => $data['events'] ,'user' => $data['user'],'receipt' => $data['receipt'],'invoice' => $data['invoice'] ,'roles' => $model->all()]);
     }
 

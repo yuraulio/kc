@@ -139,8 +139,8 @@ class User extends Authenticatable
         //dd($role->role_id);
         $role = Role::where('id', $role->role_id)->first();
         return $role['id'] == 1;*/
-    
-        return $this->role->where('id',1)->first();
+
+        return $this->role->where('id',1)->first() ? true : false;
     }
 
     /**
@@ -210,7 +210,7 @@ class User extends Authenticatable
     /*public function examAccess($successPer = 0.8, $event){
         $seenPercent =  $this->videosSeenPercent($event);
         $studentsEx = [1353,1866,1753,1882,1913,1923];
-        
+
         if(in_array($this->user_id, $studentsEx)){
             return true;
         }
@@ -221,7 +221,7 @@ class User extends Authenticatable
              return false;
         }
 
-       
+
         return $seenPercent >=  $successPer;
 
     }
@@ -242,7 +242,7 @@ class User extends Authenticatable
             if($video['seen']){
                 $sumSeen += 1;
             }
-            
+
         }
 
         return $sumSeen .' / '. count($videos);
@@ -265,9 +265,9 @@ class User extends Authenticatable
             if($video['seen']){
                 $sumSeen += 1;
             }
-            
+
         }
-        
+
         return round ($sumSeen / count($videos),2) * 100 ;
 
     }*/
@@ -291,7 +291,7 @@ class User extends Authenticatable
     }
 
     public function checkUserSubscriptionByEvent(){
-        
+
         $plans = Plan::has('events')->get();
         $eventPlans = [];
         $categoryPlans = [];
@@ -299,7 +299,7 @@ class User extends Authenticatable
         $nonEventsCategory = [];
         $categories = [];
         $categoryEvents = [];
-        $events = []; 
+        $events = [];
         $eventCategories = [];
 
         if(count($plans) == 0){
@@ -316,10 +316,10 @@ class User extends Authenticatable
 
             foreach($plan->noEvents as $event){
                 $category = $event->categories->where('parent_id',45)->first()->id;
-                $nonEventsCategory[$key][$category][] = $event->id;   
-            }   
+                $nonEventsCategory[$key][$category][] = $event->id;
+            }
         }
-      
+
         foreach($this->events as $event){
 
             $categoryIndex = false;
@@ -330,10 +330,10 @@ class User extends Authenticatable
             $category = $event->category->first() ? $event->category->first()->first()->id : -1;
 
             $eventCategories[] = $category;
-           
+
             $categoryEvents[$category][] = $event->pivot->event_id;
-            
-            foreach($categoryPlans as $key => $categoryPlan){    
+
+            foreach($categoryPlans as $key => $categoryPlan){
                 $categoryIndexDelete += 1;
                 if(!in_array($category,$categoryPlan)){
                     $key1 = array_search($category, $categoryPlan);
@@ -341,12 +341,12 @@ class User extends Authenticatable
                     $categoryIndex += 1;
                 }
             }
-            
+
             if(count($categoryPlans[$key]) == 0){
                 unset($plans[$key]);
                 unset($nonEventsCategory[$key]);
             }
-            
+
         }
 
         foreach($this->subscriptionEvents as $event){
@@ -359,10 +359,10 @@ class User extends Authenticatable
             $category = $event->category->first() ? $event->category->first()->first()->id : -1;
 
             $eventCategories[] = $category;
-           
+
             $categoryEvents[$category][] = $event->pivot->event_id;
-            
-            foreach($categoryPlans as $key => $categoryPlan){    
+
+            foreach($categoryPlans as $key => $categoryPlan){
                 $categoryIndexDelete += 1;
                 if(!in_array($category,$categoryPlan)){
                     $key1 = array_search($category, $categoryPlan);
@@ -370,14 +370,14 @@ class User extends Authenticatable
                     $categoryIndex += 1;
                 }
             }
-            
+
             if(count($categoryPlans[$key]) == 0){
                 unset($plans[$key]);
                 unset($nonEventsCategory[$key]);
             }
-            
+
         }
-        
+
         if(count(array_diff($events, $nonEventPlans)) == 0){
             return [false,[]];
         }
@@ -385,65 +385,65 @@ class User extends Authenticatable
         foreach($nonEventsCategory as $key => $plan){
             $planIndex = 0;
             foreach($plan as $category => $event){
-               
-               
+
+
 
                 if(key_exists($category,$categoryEvents) && count(array_diff($categoryEvents[$category], $event)) == 0){
                     $planIndex += 1;
-                    
+
                     unset($plans[$key]);
                 }
             }
-      
-   
+
+
 
             if($planIndex == count($categoryPlans[$key])){
                 unset($plans[$key]);
             }
 
-           
+
         }
- 
+
          /************
          * NEWW
          *************/
         foreach($plans as $plan){
             $index = 0;
-            
+
             foreach($plan->categories as $key => $planCat){
                 if(!in_array($planCat->id, $eventCategories)){
                     $index += 1;
                 }
             }
-            
+
             if($index === count($plan->categories)){
 
                 unset($plans[$key]);
             }
 
         }
-        
+
         if(count($plans) == 0){
             return [false,[]];
         }
         /************
          * NEWW
          *************/
-        
+
         foreach($plans as $plan){
             $eventPlans = array_merge($plan->events()->pluck('event_id')->toArray(),$eventPlans);
         }
         //dd($eventPlans);
-       
+
         $eventPlans = array_diff($eventPlans,$events);
         $eventPlans = array_diff($eventPlans,$this->subscriptionEvents->pluck('event_id')->toArray());
-        
+
         return [true,$eventPlans];
-  
+
     }
 
     public function checkUserSubscriptionByEventId($eventId){
-        
+
         $plans = Plan::has('events')->get();
         $eventPlans = [];
         $categoryPlans = [];
@@ -451,7 +451,7 @@ class User extends Authenticatable
         $nonEventsCategory = [];
         $categories = [];
         $categoryEvents = [];
-        $events = []; 
+        $events = [];
         $eventCategories = [];
 
         if(count($plans) == 0){
@@ -468,22 +468,22 @@ class User extends Authenticatable
 
             foreach($plan->noEvents as $event){
                 $category = $event->categories->where('parent_id',45)->first()->id;
-                $nonEventsCategory[$key][$category][] = $event->id;   
-            }   
+                $nonEventsCategory[$key][$category][] = $event->id;
+            }
         }
-        
+
         foreach($this->events as $event){
 
             $categoryIndex = 0;
             $categoryIndexDelete = 0;
             $events[] = $event->pivot->event_id;
             $category = $event->event->categories->where('parent_id',45)->first()->id;
-           
+
             $categoryEvents[$category][] = $event->pivot->event_id;
             $eventCategories[] = $category;
 
             foreach($categoryPlans as $key => $categoryPlan){
-                
+
                 $categoryIndexDelete += 1;
                 if(!in_array($category,$categoryPlan)){
 
@@ -497,9 +497,9 @@ class User extends Authenticatable
                 unset($plans[$key]);
                 unset($nonEventsCategory[$key]);
             }
-            
+
         }
-        
+
         if(count(array_diff($events, $nonEventPlans)) == 0){
             return false;
         }
@@ -507,17 +507,17 @@ class User extends Authenticatable
         foreach($nonEventsCategory as $key => $plan){
             $planIndex = 0;
             foreach($plan as $category => $event){
-               
-               
+
+
 
                 if(key_exists($category,$categoryEvents) && count(array_diff($categoryEvents[$category], $event)) == 0){
                     $planIndex += 1;
-                    
+
                     unset($plans[$key]);
                 }
             }
-      
-   
+
+
 
             if($planIndex == count($categoryPlans[$key])){
                 unset($plans[$key]);
@@ -536,7 +536,7 @@ class User extends Authenticatable
                     $index += 1;
                 }
             }
-            
+
             if($index === count($plan->categories)){
                 unset($plans[$key]);
             }
@@ -548,18 +548,18 @@ class User extends Authenticatable
         /************
          * NEWW
          *************/
- 
+
         foreach($plans as $plan){
             $eventPlans = array_merge($plan->events()->pluck('event_id')->toArray(),$eventPlans);
         }
-        
+
         return in_array($eventId,$eventPlans);
-  
+
     }
 
 
     public function checkUserPlans($plans){
-        
+
         //$plans = Plan::all();
         $eventPlans = [];
         $categoryPlans = [];
@@ -567,7 +567,7 @@ class User extends Authenticatable
         $nonEventsCategory = [];
         $categories = [];
         $categoryEvents = [];
-        $events = []; 
+        $events = [];
         $eventCategories = [];
 
         if(count($plans) == 0){
@@ -584,22 +584,22 @@ class User extends Authenticatable
 
             foreach($plan->noEvents as $event){
                 $category = $event->categories->where('parent_id',45)->first()->id;
-                $nonEventsCategory[$key][$category][] = $event->id;   
-            }   
+                $nonEventsCategory[$key][$category][] = $event->id;
+            }
         }
-        
+
         foreach($this->events as $event){
 
             $categoryIndex = 0;
             $categoryIndexDelete = 0;
             $events[] = $event->pivot->event_id;
             $category = $event->event->categories->where('parent_id',45)->first() ? $event->event->categories->where('parent_id',45)->first()->id : -1;
-           
+
             $categoryEvents[$category][] = $event->pivot->event_id;
             $eventCategories[] = $category;
 
             foreach($categoryPlans as $key => $categoryPlan){
-                
+
                 $categoryIndexDelete += 1;
                 if(!in_array($category,$categoryPlan)){
 
@@ -613,9 +613,9 @@ class User extends Authenticatable
                 unset($plans[$key]);
                 unset($nonEventsCategory[$key]);
             }
-            
+
         }
-        
+
         if(count(array_diff($events, $nonEventPlans)) == 0){
             return [];
         }
@@ -623,17 +623,17 @@ class User extends Authenticatable
         foreach($nonEventsCategory as $key => $plan){
             $planIndex = 0;
             foreach($plan as $category => $event){
-               
-               
+
+
 
                 if(key_exists($category,$categoryEvents) && count(array_diff($categoryEvents[$category], $event)) == 0){
                     $planIndex += 1;
-                    
+
                     unset($plans[$key]);
                 }
             }
-      
-   
+
+
 
             if($planIndex == count($categoryPlans[$key])){
                 unset($plans[$key]);
@@ -652,7 +652,7 @@ class User extends Authenticatable
                     $index += 1;
                 }
             }
-            
+
             if($index === count($plan->categories)){
                 unset($plans[$key]);
             }
@@ -664,26 +664,26 @@ class User extends Authenticatable
         /************
          * NEWW
          *************/
- 
+
         foreach($plans as $plan){
             $eventPlans = array_merge($plan->events()->pluck('event_id')->toArray(),$eventPlans);
         }
-        
+
         return $plans;
-  
+
     }
 
     public function checkUserPlansById($plans,$planId){
-        
+
         $plans = $this->checkUserPlans($plans);
         $eventPlans = [];
 
         foreach($plans as $plan){
             $eventPlans = array_merge($plan->events()->pluck('plan_id')->toArray(),$eventPlans);
         }
-      
+
         return in_array($planId,array_unique($eventPlans));
-  
+
     }
 
     public function cart(){
@@ -700,7 +700,7 @@ class User extends Authenticatable
 
 
         $statistic = $statistics;
-       
+
         $videos = [];
         $notes = [];
         $lastVideoSeen = '';
@@ -711,7 +711,7 @@ class User extends Authenticatable
             $lastVideoSeen = $statistic['lastVideoSeen'];
             $firstTime = false;
         }
-      
+
         $countVideos = 1;
         $oldVideos = [];
         $change = 0;
@@ -744,18 +744,18 @@ class User extends Authenticatable
          if(!in_array($lastVideoSeen,$oldVideos) && isset($oldVideos[0])){
              $lastVideoSeen =$oldVideos[0];
          }
-        
+
         if(!$this->statistic()->wherePivot('event_id', $event['id'])->first()){
             $this->statistic()->attach($event['id'],['videos'=>json_encode($videos), 'notes' => json_encode($notes), 'lastVideoSeen' => $lastVideoSeen,
                                         'created_at' => Carbon::now(),'updated_at' => Carbon::now()]);
         }else{
-            $this->statistic()->wherePivot('event_id', $event['id'])->updateExistingPivot($event['id'],['videos' => json_encode($videos), 
+            $this->statistic()->wherePivot('event_id', $event['id'])->updateExistingPivot($event['id'],['videos' => json_encode($videos),
                                             'notes' => json_encode($notes),'lastVideoSeen' => $lastVideoSeen], false);
 
         }
 
         return $this->statistic()->wherePivot('event_id', $event['id'])->first();
-        
+
     }
 
     public function hasExamResults($exam){

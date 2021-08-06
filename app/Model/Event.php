@@ -87,6 +87,13 @@ class Event extends Model
             ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.priority','asc');
     }
 
+    public function topic_edit_instructor()
+    {
+
+        return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id')
+            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority');
+    }
+
     public function coupons(){
         return $this->belongsToMany(Coupon::class,'event_coupons');
     }
@@ -395,7 +402,7 @@ class Event extends Model
              return false;
         }
 
-        
+
         return $seenPercent >=  ($successPer * 100);
 
     }
@@ -452,7 +459,7 @@ class Event extends Model
         return '0 of 0';
 
     }
-    
+
 
     public function invoices(){
         return $this->morphToMany(Invoice::class, 'invoiceable','invoiceables');
@@ -542,11 +549,11 @@ class Event extends Model
 
     public function certification(User $user){
 
-    
+
         $certification = count($this->certificatesByUser($user->id)) > 0;
 
         if($this->examAccess($user,$successPer = 0.9) && !$certification){
-           
+
             $cert = new Certificate;
             $cert->success = true;
             $cert->create_date = strtotime(date('Y-m-d'));
@@ -556,7 +563,7 @@ class Event extends Model
 
             $cert->event()->save($this);
             $cert->user()->save($user);
-            
+
 
 
         }

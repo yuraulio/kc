@@ -34,6 +34,7 @@ class MediaController extends Controller
 
     public function uploadSvg(Request $request, Media $media){
         $mediaKey = $request->svg;
+        //dd($mediaKey);
 
         $pos = strrpos($mediaKey, '/');
         $id = $pos === false ? $mediaKey : substr($mediaKey, $pos + 1);
@@ -42,14 +43,12 @@ class MediaController extends Controller
         //dd($folders);
         $path = explode(".",$id);
 
-        $image = Image::make(public_path($mediaKey));
-
         $media->original_name = $id;
         $media->path = $folders.'/';
         $media->name = $path[0];
         $media->ext = '.'.$path[1];
-        $media->width = $image->width();
-        $media->height = $image->height();
+        // $media->width = $image->width();
+        // $media->height = $image->height();
 
         $media->save();
     }

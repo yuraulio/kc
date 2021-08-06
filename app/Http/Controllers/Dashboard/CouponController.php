@@ -16,14 +16,14 @@ class CouponController extends Controller
         }else{
             $events = Event::where('view_tpl',$view_tpl)->where('published',true)->get();
         }
- 
+
         return $events;
     }
 
 
     public function index()
     {
-    
+
         $data['coupons'] = Coupon::all();
         return view('admin/coupon/coupons_list', $data);
     }
@@ -42,7 +42,7 @@ class CouponController extends Controller
 
     public function store(Request $request){
 
-       
+
         $coupon = new Coupon;
 
         $coupon->code_coupon = $request->name;
@@ -55,13 +55,13 @@ class CouponController extends Controller
                 $coupon->event()->attach($event);
             }
         }
-    
+
         return redirect('/admin/edit/coupon/'.$coupon->id);
 
     }
 
     public function edit(Coupon $coupon){
-        
+
         $data['events'] = $this->getEvents('elearning_event');
         $data['coupon'] = $coupon;
         $data['event_coupons'] = $coupon->event->pluck('id')->toArray();
@@ -75,13 +75,13 @@ class CouponController extends Controller
         if($coupon){
 
             $coupon->code_coupon = $request->name;
-    
+
             $coupon->price = $request->price;
             $coupon->status = $request->published == 'on' ? true : false;
 
             $coupon->save();
             $coupon->event()->detach();
-            
+
             if($request->events){
                 foreach($request->events as $event){
                     $coupon->event()->attach($event);

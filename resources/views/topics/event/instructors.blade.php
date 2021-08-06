@@ -14,9 +14,9 @@
             </div>
 
             <div class="col-2 assign-toggle" id="toggle_{{$key}}">
-                <label class="custom-toggle">
+                <label class="custom-toggle custom-published">
                     <input data-event-status="<?= ($status == 'active') ? '1' : '0'; ?>" type="checkbox" data-event-id="{{$event['id']}}" data-topic-id="{{$topic['id']}}" checked >
-                    <span class="topic custom-toggle-slider rounded-circle" ></span>
+                    <span class="topic custom-toggle-slider rounded-circle" data-label-off="unassign" data-label-on="assigned" ></span>
                 </label>
             </div>
         </div>

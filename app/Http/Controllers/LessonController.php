@@ -204,7 +204,7 @@ class LessonController extends Controller
     {
         $event = Event::with('type')->find($request->event_id);
 
-        $lesson = $event->topic()->wherePivot('topic_id', '=', $request->topic_id)->wherePivot('lesson_id', '=', $request->lesson_id)->get();
+        $lesson = $event->topic_edit_instructor()->wherePivot('lesson_id', $request->lesson_id)->first();
         $instructors = Instructor::where('status', 1)->with('medias')->get();
 
         $data['lesson'] = $lesson;

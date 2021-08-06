@@ -26,20 +26,20 @@
       <!-- /.section-hero -->
    </section>
    <?php
-      
-     
+
+
       endif; ?>
-    
+
 
    @if(isset($nonElearningEvents))
    @foreach($nonElearningEvents as $bcatid => $category)
-      
+
    <section class="section-text-carousel event-background">
       <div class="container container--md">
          <div class="row-text-carousel clearfix">
             <div class="text-column">
                <div class="text-area">
-                  
+
                   <h2>{{$category['name']}}</h2>
                   @if ($category['description'] != '')
                   @if($category['hours'])<span class="duration"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""/>{!!$category['hours']!!}</span>@endif
@@ -52,7 +52,7 @@
                   <div class="boxes-carousel owl-carousel">
 
                      @foreach($category['events'] as $key => $row)
-               
+
                      <div class="slide">
                         <?php
                            $string = $row['title'];
@@ -63,7 +63,7 @@
                                $until = $string;
                            }
                         ?>
-                       
+
                         @if (isset($row['mediable']))
                         <a href="{{ $row['slugable']['slug'] }}"><img src="{{ cdn(get_image($row['mediable'],'event-card')) }}" alt="{{ $until}}"/></a>
                         @endif
@@ -75,7 +75,7 @@
                               <h3><a href="{{ $row['slugable']['slug'] }}">{{ $until}}</a></h3>
                            @endif
                            @if(isset($row['city']) && count($row['city']) > 0)
-                           
+
                            <a href="{{ $row['city'][0]['slugable']['slug'] }}" class="location">{{ $row['city'][0]['name'] }}</a>
                            @endif
                               <span class="date">{{date('F Y', strtotime($row['published_at']))}} </span>
@@ -90,8 +90,8 @@
 
                         </div>
                      </div>
-                  
-                   
+
+
                      @endforeach
                   </div>
                </div>
@@ -106,15 +106,15 @@
 
    @if(!empty($elearningEvents))
    @foreach($elearningEvents as $bcatid => $category)
- 
+
    <section class="section-text-carousel background section--blue-gradient">
       <div class="container container--md">
          <div class="row-text-carousel clearfix">
             <div class="text-column">
                <div class="text-area">
-                  
+
                   <h2>{{ $category['name'] }}</h2>
-               
+
                     @if ($category['description'] != '')
                         @if($category['hours'])
                             <span class="duration"><img src="{{ cdn('/theme/assets/images/icons/Start-Finish.svg')}}" class="replace-with-svg" alt=""/>{{ $category['hours'] }}</span>
@@ -127,12 +127,12 @@
             <div class="carousel-column">
                <div class="carousel-wrapper">
                   <div class="boxes-carousel owl-carousel">
-                     <?php $lastmonth = ''; 
-                        
+                     <?php $lastmonth = '';
+
                      ?>
                      @foreach($category['events'] as $key => $row)
-                    
-                   
+
+
                      <div class="slide">
                         <?php
                         //dd($row);
@@ -174,15 +174,15 @@
                              ?>
                            <?php $url = url($slug); ?>
 
-                           <h3><a href="{{$url}}">{{ $until }}</a></h3>                            
-                           <a href="{{ $category['slug'] }}" class="location">{{ $category['name'] }}</a>      
-                           <span class="date"> </span>                  
+                           <h3><a href="{{$url}}">{{ $until }}</a></h3>
+                           <a href="{{ $category['slug'] }}" class="location">{{ $category['name'] }}</a>
+                           <span class="date"> </span>
                            <a href="{{$url}}" class="btn btn--sm btn--secondary">course details</a>
-                           
+
                         </div>
                      </div>
-              
-               
+
+
                      @endforeach
                   </div>
                </div>
@@ -200,15 +200,15 @@
    <?php
    //dd($bcateventids[]);
     ?>
-   
+
    <?php //dd($bcateventids); ?>
    <section class="section-text-carousel background event-background">
       <div class="container container--md">
          <div class="row-text-carousel clearfix">
             <div class="text-column">
                <div class="text-area">
-                 
-                 
+
+
                   <h2>{{$category['name']}}</h2>
                   @if ($category['description'] != '')
                   @if($category['hours'])<span class="duration"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""/>{{ $category['hours'] }}</span>@endif
@@ -221,7 +221,7 @@
                   <div class="boxes-carousel owl-carousel">
                      <?php $lastmonth = ''; ?>
                      @foreach($category['events'] as $key => $row)
-                    
+
                      <div class="slide">
                      <?php
                            $string = $row['title'];
@@ -249,7 +249,7 @@
 
                         </div>
                      </div>
-                     
+
                      @endforeach
                   </div>
                </div>
@@ -267,13 +267,13 @@
    @if(isset($elearningFree))
    @foreach($elearningFree as $bcatid => $category)
    <?php //dd($bcateventids); ?>
-   
+
    <section class="section-text-carousel background event-background">
       <div class="container container--md">
          <div class="row-text-carousel clearfix">
             <div class="text-column">
                <div class="text-area">
-           
+
                   <h2>{{$category['name']}}</h2>
                   <?php //dd($until); ?>
                   @if ($category['description'] != '')
@@ -287,8 +287,8 @@
                   <div class="boxes-carousel owl-carousel">
                      <?php $lastmonth = ''; ?>
                      @foreach($category['events'] as $key => $row)
-  
-                     
+
+
                      <div class="slide">
                      <?php
 
@@ -315,7 +315,7 @@
                            <a href="{{ $row['slugable']['slug'] }}" class="btn btn--sm btn--secondary">enroll for free</a>
                         </div>
                      </div>
-              
+
                      @endforeach
                   </div>
                </div>

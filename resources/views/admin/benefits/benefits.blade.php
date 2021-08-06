@@ -195,8 +195,8 @@
    	    url: '/admin/benefit/' + benefitId,
             data: {'name':$('#edit-name').val(),'description':CKEDITOR.instances['edit-description1'].getData(),'svg': $('#image_svg_upload-benefit').val()},
    	    success: function (data) {
-
    	let benefit = data.benefit;
+
 
    	$("#name-"+benefit['id']).html(`<a class="edit-btn" href="#">`+benefit['name'])
        $("#name-"+benefit['id']).parent().find('.dropdown-item').attr('data-description', benefit['description'])
