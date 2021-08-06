@@ -115,8 +115,18 @@
     <script src="//cdn.ckeditor.com/4.14.1/standard/ckeditor.js"></script>
     <script type="text/javascript">
     $(document).ready(function () {
-        alert('asd')
         $('.ckeditor').ckeditor();
 
     });
+
+    // DataTables initialisation
+    var table = $('#datatable-basic34').DataTable({
+                language: {
+                    paginate: {
+                    next: '&#187;', // or '→'
+                    previous: '&#171;' // or '←'
+                    }
+                }
+            });
+    </script>
 @endpush

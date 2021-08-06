@@ -59,7 +59,7 @@
                                         <td>
                                         <?php //dd(asset('profile_user').'/'.$user['image']['name'] ); ?>
                                             <span class="avatar avatar-sm rounded-circle">
-                                               
+
                                             @if($user['image'] != null)
                                                 <img src="{{ get_image($user['image']) }}" alt="{{ $user['firstname'] }}" style="max-width: 100px; border-radiu: 25px">
                                             @else
@@ -140,4 +140,16 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
+
+    <script>
+        // DataTables initialisation
+        var table = $('#datatable-basic45').DataTable({
+                language: {
+                    paginate: {
+                    next: '&#187;', // or '→'
+                    previous: '&#171;' // or '←'
+                    }
+                }
+            });
+    </script>
 @endpush

@@ -178,5 +178,15 @@
                         "ordering" : false,
                     });
 
+    var table = $('#datatable-basic26').DataTable({
+        language: {
+            paginate: {
+            next: '&#187;', // or '→'
+            previous: '&#171;' // or '←'
+            }
+        }
+    });
+
       </script>
+
 @endpush

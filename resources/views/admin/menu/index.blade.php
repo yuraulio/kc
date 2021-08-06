@@ -148,5 +148,15 @@
 
         });
 
+        // DataTables initialisation
+        var table = $('#datatable-basic14').DataTable({
+                language: {
+                    paginate: {
+                    next: '&#187;', // or '→'
+                    previous: '&#171;' // or '←'
+                    }
+                }
+            });
+
       </script>
 @endpush
