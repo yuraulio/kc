@@ -48,7 +48,11 @@ class StudentController extends Controller
     public function activationInform(Request $request)
     {
         $user_id = $request->input("content_id");
-        if ($this->emailNotify->userActivationLink($user_id)) {
+
+        $notification = new NotificationController;
+        dd($notification->userActivationLink($user_id));
+
+        if ($notification->userActivationLink($user_id)) {
             return [
                 'status' => 1,
                 'message' => 'The email has been sent',

@@ -1,5 +1,4 @@
 <?php
-use Option;
 $social_media =  \Config::get('dpoptions.social_media.settings');?>
 <footer id="footer">
    <div class="container">
@@ -108,12 +107,7 @@ $social_media =  \Config::get('dpoptions.social_media.settings');?>
          <div class="footer-col-3">
             <div class="clearfix">
                <ul class="footer-social-menu">
-                   <?php
 
-
-                   $check = Option::exists('website_details');
-                   dd($check);
-                    ?>
 
                   {{--@if($social_media[1]['facebook']['url'] != '')
                     <li><a target="_blank" title="{{ $social_media[1]['facebook']['title'] }}" href="{{ $social_media[1]['facebook']['url'] }}">

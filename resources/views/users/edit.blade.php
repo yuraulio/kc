@@ -485,13 +485,13 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Email the user a link to create/change password .</h5>
-                        <a href="javascript:void(0);" class="btn btn-sm btn-primary email_user_change_password">Email Reset Password Link</a>
+                        <a href="javascript:void(0);" data-id="{{$user['id']}}" class="btn btn-sm btn-primary email_user_change_password">Email Reset Password Link</a>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Reset activation and Email the user informing how to activate account using a link .</h5>
-                        <a href="javascript:void(0);" class="btn btn-sm btn-primary email_user_activation_link">Email Activation Link</a>
+                        <a href="javascript:void(0);" data-id="{{$user['id']}}" class="btn btn-sm btn-primary email_user_activation_link">Email Activation Link</a>
                     </div>
                 </div>
 
@@ -895,20 +895,21 @@ $(document).on('click', '.ticket-card', function () {
         });
 	}
 
-    function filterScopeUserActivationLink(obj) {
-	    vex.dialog.confirm({
-	        message: 'Do you really want to reset user activation and send the user a link to activate the account',
-	        callback: function(value) {
-	            if (value) {
-	                $.ajax({ url: routesObj.baseUrl+"admin/student/activation-inform", type: "post",
-	                    data: { content_id: obj.dpContentId },
-	                    success: function(data) {
-	                    	toggleNotyMessage(data.status, data.message);
-	                    }
-	                });
-	            } else {}
-	        }
-	    });
+    function filterScopeUserActivationLink(id) { 
+        user_id = $(id).data('id')
+	    $.ajax({ url: '/admin/activation-inform',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: "post",
+            data: { content_id: user_id },
+            beforeSend:function(){
+                return confirm("Do you really want to reset user activation and send the user a link to activate the account?");
+            },
+            success: function(data) {
+                toggleNotyMessage(data.status, data.message);
+            }
+        });
 	}
 
 
