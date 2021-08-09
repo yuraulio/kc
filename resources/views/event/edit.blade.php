@@ -4,13 +4,11 @@
     'elementName' => 'events-management'
 ])
 
-
-
 @section('content')
     @component('layouts.headers.auth')
     @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('') }}
+                {{ __($event['title']) }}
             @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('events.index') }}">{{ __('Events Management') }}</a></li>

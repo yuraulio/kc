@@ -153,6 +153,31 @@ class UserController extends Controller
        $transaction->amount = $price;
        $transaction->trial = 0;
 
+       $cart_data = ["manualtransaction" => [
+           "rowId" => "manualtransaction",
+           //"id" => 'coupon code ' . $content->id,
+           "name" => $data['event']['title'],"qty" => "1",
+           "price" => $price,
+           //"options" => ["type" => "9","event"=> $content->id],
+           "tax" => 0,"subtotal" => $price
+           ]];
+
+       $status_history[] = [
+        'datetime' => Carbon::now()->toDateTimeString(),
+        'status' => 1,
+        'user' => [
+            'id' => $user->id, //0, $this->current_user->id,
+            'email' => $user->email,//$this->current_user->email
+            ],
+        //'pay_seats_data' => $pay_seats_data,//$data['pay_seats_data'],
+        'pay_bill_data' => [],
+        //'cardtype' => 9,
+        //'installments' => 1,
+        //'deree_user_data' => $deree_user_data, //$data['deree_user_data'],
+        'cart_data' => $cart_data //$cart
+        ];
+        $transaction->status_history = json_encode($status_history);
+
        $transaction->save();
 
         //attach transaction with user
@@ -189,10 +214,33 @@ class UserController extends Controller
 
     public function remove_ticket_user(Request $request)
     {
+
         $user = User::find($request->user_id);
+        $event = Event::find($request->event_id);
+        //dd($event);
         $user->ticket()->wherePivot('event_id', '=', $request->event_id)->wherePivot('ticket_id', '=', $request->ticket_id)->detach($request->ticket_id);
         $user->events()->wherePivot('event_id', '=', $request->event_id)->detach($request->event_id);
+        //dd($user->transactions()->get());
+        $found = 0;
+        foreach($user->transactions()->get() as $key => $tran){
+            if(count($tran->status_history) != 0){
+
+                $title = $tran->status_history[0]['cart_data']['manualtransaction']['name'];
+                //dd($title);
+                if($event['title'] == $title){
+                    $found = $tran['id'];
+                }
+                //dd($tran->status_history['cart_data']['manualtransaction']['name']);
+            }
+
+        }
+        if($found != 0){
+            Transaction::find($found)->delete();
+        }
         //$user->ticket()->attach($ticket_id, ['event_id' => $event_id]);
+        //dd($user->transactions()->get());
+        $user->events()->wherePivot('event_id', '=', $request->event_id)->detach();
+        //$user->transactions()->wherePivot('event_id', '=', $request->event_id)->updateExistingPivot($event_id,['paid' => 0], false);
         return response()->json([
             'success' => 'Ticket assigned removed from user',
             'data' => $request->event_id

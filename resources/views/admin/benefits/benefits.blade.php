@@ -18,8 +18,17 @@
       <tbody class="benefit-body benefits-order">
          @if($model->benefits)
          @foreach ($model->benefits as $benefit)
-         <?php //dd($benefit); ?>
          <tr>
+            <td>
+                <img
+                    class="sum_ben_icon"
+                    src="@isset($benefit->medias)
+                            {{ asset('') }}{{$benefit->medias['path']}}{{$benefit->medias['original_name'] }}
+                        @endisset"
+                    alt=""
+                    onerror="this.src='https://via.placeholder.com/35'"
+                >
+            </td>
             <td id="name-{{$benefit->id}}" class="benefit-list" data-id ="{{$benefit->id}}"><a class="edit-btn" href="#">{{ $benefit->name }}</td>
             <td>{{ date_format($benefit->created_at, 'd-m-Y' ) }}</td>
             <td hidden id="media_ben-{{$benefit->id}}" data-id="{{$benefit->id}}" class="benefit-list">

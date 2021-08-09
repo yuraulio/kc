@@ -14,6 +14,7 @@
     <table class="table align-items-center table-flush summary-table" id="datatable-basic-summary">
         <thead class="thead-light">
             <tr>
+                <th scope="col">{{ __('Icon') }}</th>
                 <th scope="col">{{ __('Title') }}</th>
                 <th scope="col">{{ __('Section') }}</th>
                 <th scope="col"></th>
@@ -24,6 +25,15 @@
         @if($model->summary1)
             @foreach ($model->summary1 as $summary)
                 <tr>
+                    <td>
+                        <img
+                            class="sum_ben_icon"
+                            src="@isset($summary->medias)
+                                    {{ asset('') }}{{$summary->medias['path']}}{{$summary->medias['original_name'] }}
+                                @endisset"
+                            onerror="this.src='https://via.placeholder.com/35'"
+                        >
+                    </td>
                     <td id="title-{{$summary->id}}" data-id="{{$summary->id}}" class="summary-list"><a class="edit-btn" href="#"> {{ $summary->title }} </a></td>
                     <td id="section_sum-{{$summary->id}}" data-id="{{$summary->id}}" class="summary-list">{{ $summary->section }}</td>
                     <td hidden id="media_sum-{{$summary->id}}" data-id="{{$summary->id}}" class="summary-list">

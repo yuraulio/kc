@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Model\Notification;
+use Notification;
 use Illuminate\Http\Request;
+use App\Notifications\userStatusChange;
+use App\Model\Activation;
 
 class NotificationController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -85,5 +91,86 @@ class NotificationController extends Controller
     public function destroy(Notification $notification)
     {
         //
+    }
+
+    public function userStatusChange($user) {
+        //$a = Notification::send($user, new userStatusChange($user));
+
+        $user->notify(new userStatusChange($user));
+
+        return true;
+
+    }
+
+    public function userChangePassword($user_id = 0)
+    {
+        //$user = User::where('id', $user_id)->with('activation')->first();
+        $user = User::find($user_id);
+        $reminderRep = Sentinel::getReminderRepository();
+        if ($user) {
+            $emailSystem = Config::get('dpoptions.email_accounts.settings.system');
+
+            // send the user
+           //$loadForm = 'sentinel.emails.re-activate';
+
+           $reminder = $reminderRep->exists($user) ?: $reminderRep->create($user);
+
+            $code = $reminder->code;
+
+            $sent = Mail::send('sentinel.emails.student-reminder', compact('user', 'code'), function ($m) use ($user) {
+                $m->to($user['email'])->subject('Create your account password.'); //$user->email
+            });
+
+            /*$code = Activation::create($user)->code;
+
+            $sent = Mail::send($loadForm, compact('user', 'code'), function ($m) use ($emailSystem, $user) {
+                 $fn = $user['first_name'] . ' ' . $user['last_name'];
+                $m->from($emailSystem['email'], $emailSystem['name']);
+                $m->to($user['email'], $fn);
+                $m->subject('Create a password for your Student Account');
+            });*/
+             return 1;
+
+            /*if ($sent) {
+                return 1;
+            } else {
+                return 0;
+            }*/
+        } else {
+            return 0;
+        }
+    }
+
+    public function userActivationLink($user_id = 0)
+    {
+        $user = SentinelUser::find($user_id);
+        //echo $user['email'];
+        //User::where('id', $user_id)->with('activation')->first();
+        if ($user) {
+            $emailSystem = Config::get('dpoptions.email_accounts.settings.system');
+            $loadForm = 'sentinel.emails.re-activate';
+
+            //$code = Activation::firstOrCreate($user)->code;
+            $activation = Activation::exists($user) ?: Activation::create($user);
+
+            $code = $activation->code;
+
+            // Send the activation email
+            $sent = Mail::send($loadForm, compact('user', 'code'), function ($m) use ($emailSystem, $user) {
+                $fn = $user['first_name'] . ' ' . $user['last_name'];
+                 $m->from($emailSystem['email'], $emailSystem['name']);
+                 $m->to($user['email'], $fn);//$user['email']
+                 $m->subject('Activate Your Student Account');
+            });
+
+             return 1;
+            /*if ($sent) {
+                return 1;
+            } else {
+                return 0;
+            }*/
+        } else {
+            return 0;
+        }
     }
 }

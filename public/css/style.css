@@ -302,6 +302,22 @@
     margin-bottom: 0.5rem;
 }
 
+.sum_ben_icon {
+    height: 30%;
+    width: 40%;
+}
+
+.topic-header .topic-title {
+    display: inline-block;
+    width:50%;
+}
+
+.topic-header .topic-action-btn {
+    display: inline-block;
+    width:40%;
+    text-align: end;
+}
+
 
 @media (min-height: 693px) {
     #file-man-main {

@@ -473,7 +473,29 @@
                 <p class="description">TAB 5  Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth.</p>
             </div>
             <div class="tab-pane fade" id="tabs-icons-text-6" role="tabpanel" aria-labelledby="tabs-icons-text-6-tab">
-                <p class="description">TAB 6 Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth.</p>
+
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Email the user informing about his current status.</h5>
+                        <a href="javascript:void(0);" data-id="{{$user['id']}}" class="btn btn-sm btn-primary email_user_status">Email Account Status</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Email the user a link to create/change password .</h5>
+                        <a href="javascript:void(0);" class="btn btn-sm btn-primary email_user_change_password">Email Reset Password Link</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Reset activation and Email the user informing how to activate account using a link .</h5>
+                        <a href="javascript:void(0);" class="btn btn-sm btn-primary email_user_activation_link">Email Activation Link</a>
+                    </div>
+                </div>
+
+
             </div>
             <div class="tab-pane fade" id="tabs-icons-text-7" role="tabpanel" aria-labelledby="tabs-icons-text-7-tab">
                 <form method="post" action="{{ route('profile.update_billing') }}" autocomplete="off"
@@ -836,6 +858,59 @@ $(document).on('click', '.ticket-card', function () {
 
     });
 
+    function filterScopeUserEmailStatus(id){
+        user_id = $(id).data('id')
+        $.ajax({ url: '/admin/status-inform',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+        type: "post",
+            data: { content_id: user_id },
+            beforeSend:function(){
+                return confirm("Do you really want to inform the user about his current status?");
+            },
+            success: function(data) {
+                toggleNotyMessage(data.status, data.message);
+            }
+        });
+    }
+
+
+
+
+    function filterScopeUserChangePassword(id) {
+        user_id = $(id).data('id')
+	    $.ajax({ url: '/admin/password-inform',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: "post",
+            data: { content_id: user_id },
+            beforeSend:function(){
+                return confirm("Do you really want to inform the user to change/create password?");
+            },
+            success: function(data) {
+                toggleNotyMessage(data.status, data.message);
+            }
+        });
+	}
+
+    function filterScopeUserActivationLink(obj) {
+	    vex.dialog.confirm({
+	        message: 'Do you really want to reset user activation and send the user a link to activate the account',
+	        callback: function(value) {
+	            if (value) {
+	                $.ajax({ url: routesObj.baseUrl+"admin/student/activation-inform", type: "post",
+	                    data: { content_id: obj.dpContentId },
+	                    success: function(data) {
+	                    	toggleNotyMessage(data.status, data.message);
+	                    }
+	                });
+	            } else {}
+	        }
+	    });
+	}
+
 
 
     $( document ).ready(function() {
@@ -850,6 +925,18 @@ $(document).on('click', '.ticket-card', function () {
             //alert(filename)
             $('.custom-file-label').text(filename)
         });
+
+        $("body").on("click", '.email_user_status', function () {
+	        filterScopeUserEmailStatus($(this));
+	    });
+
+	    $("body").on("click", '.email_user_change_password', function () {
+	        filterScopeUserChangePassword($(this));
+	    });
+
+	    $("body").on("click", '.email_user_activation_link', function () {
+	        filterScopeUserActivationLink($(this));
+	    });
     });
 
 
