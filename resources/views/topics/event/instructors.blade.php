@@ -9,7 +9,7 @@
         @endforeach
     <div class="card">
         <div class="row">
-            <div class="card-header col-10" id="{{$key}}" data-toggle="collapse" data-target="#col_{{$key}}" aria-expanded="true" aria-controls="collapseOne">
+            <div class="card-header col-10" id="{{$key}}" data-toggle="collapse" data-target="#col_{{$key}}" aria-expanded="false" aria-controls="collapseOne">
                 <h5 class="mb-0">{{$topic->title}}</h5>
             </div>
 
@@ -116,7 +116,7 @@
         <?php $status=""; ?>
     <div class="card">
         <div class="row">
-            <div class="card-header col-10" id="{{$key}}" data-toggle="collapse" data-target="#col_{{$key}}" aria-expanded="true" aria-controls="collapseOne">
+            <div class="card-header col-10" id="{{$key}}" data-toggle="collapse" data-target="#col_{{$key}}" aria-expanded="false" aria-controls="collapseOne">
                 <h5 class="mb-0">{{$topic->title}}</h5>
             </div>
 

@@ -176,6 +176,7 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
 
     //Events
     Route::put('profile/updateRole', ['as' => 'profile.updateRole', 'uses' => 'ProfileController@updateRole']);
+    Route::get('events/fetchAllEvents', ['as' => 'events.fetchAllEvents', 'uses' => 'EventController@fetchAllEvents']);
 
     //Notification
     Route::get('notification', ['as' => 'notification.show', 'uses' => 'NotificationController@index']);

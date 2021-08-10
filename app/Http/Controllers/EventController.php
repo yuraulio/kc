@@ -280,7 +280,7 @@ class EventController extends Controller
         //$allTopicsByCategory1 = $event['lessons']->unique()->groupBy('topic_id');
         $allTopicsByCategory1 = $event['lessons']->groupBy('topic_id');
         //dd($allTopicsByCategory1);
-        $data['instructors1'] = Instructor::with('medias')->get()->groupBy('id');
+        $data['instructors1'] = Instructor::with('medias')->where('status', 1)->get()->groupBy('id');
         $instructors = $event['instructors']->groupBy('lesson_id');
         //dd($instructors);
         $topics = $event['topic']->unique()->groupBy('topic_id');
@@ -402,5 +402,13 @@ class EventController extends Controller
         $event->delete();
 
         return redirect()->route('events.index')->withStatus(__('Event successfully deleted.'));
+    }
+
+    public function fetchAllEvents(){
+        $data['events'] = Event::with('coupons')->select('id', 'title')->get()->groupby('id')->toArray();
+        //dd($data['events']);
+
+        return $data['events'];
+
     }
 }

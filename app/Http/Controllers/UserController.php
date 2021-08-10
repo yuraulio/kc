@@ -31,6 +31,8 @@ use Session;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\TransactionController;
 
 use Illuminate\Http\Request;
 
@@ -55,11 +57,24 @@ class UserController extends Controller
         $data['all_users'] = $model::count();
         $data['total_graduates'] = total_graduate();
 
+        $data['events'] = (new EventController)->fetchAllEvents();
+        $data['transactions'] = (new TransactionController)->participants();
+
+        //groupby user_id(level1)
+        $data['transactions'] = group_by('user_id', $data['transactions']['transactions']);
+
+        //groupby event_id(level2)
+        foreach($data['transactions'] as $key => $item){
+            $data['transactions'][$key] = group_by('event_id', $item);
+        }
+
+
+        //dd($data['transactions']);
         //dd($model->with('role', 'image')->get()[0]);
 
         //dd($model->with('role', 'image')->get()->toArray()[0]['image']);
 
-        return view('users.index', ['users' => $model->with('role', 'image','statusAccount')->get()->toArray(), 'data' => $data]);
+        return view('users.index', ['users' => $model->with('role', 'image','statusAccount', 'events_for_user_list')->get()->toArray(), 'data' => $data]);
     }
 
     /**

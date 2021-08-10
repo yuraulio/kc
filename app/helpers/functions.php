@@ -190,3 +190,19 @@ if(!function_exists('total_graduate')){
         return $sum;
     }
 }
+
+if(!function_exists('group_by')){
+    function group_by($key, $data) {
+        $result = array();
+
+        foreach($data as $val) {
+            if(array_key_exists($key, $val)){
+                $result[$val[$key]][] = $val;
+            }else{
+                $result[""][] = $val;
+            }
+        }
+
+        return $result;
+    }
+}

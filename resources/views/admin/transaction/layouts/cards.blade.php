@@ -1,4 +1,4 @@
-<div id="participants_info" class="row">
+<div id="participants_info" class="row d-none">
     <div class="col-xl-3 col-md-6">
         <div class="card card-stats">
             <!-- Card body -->

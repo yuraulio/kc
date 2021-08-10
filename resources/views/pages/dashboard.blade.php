@@ -3,17 +3,17 @@
     'elementName' => 'dashboard'
 ])
 
-@section('content') 
-    @component('layouts.headers.auth') 
+@section('content')
+    @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
-            @slot('title') 
-                {{ __('Default') }} 
+            @slot('title')
+                {{ __('Default') }}
             @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('home') }}">{{ __('Dashboards') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('Default') }}</li>
         @endcomponent
-        @include('layouts.headers.cards') 
+        @include('layouts.headers.cards')
     @endcomponent
 
     <div class="container-fluid mt--6">
@@ -68,7 +68,7 @@
                     <div class="card-body">
                         <!-- Chart -->
                         <div class="chart">
-                            <canvas id="chart-bars" class="chart-canvas"></canvas>
+                            <canvas id="chart-bars1" class="chart-canvas"></canvas>
                         </div>
                     </div>
                 </div>
@@ -1288,4 +1288,65 @@
 @push('js')
     <script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.extension.js"></script>
+
+    <script>
+
+
+
+        var BarsChart = (function() {
+            $revenueByYear = @json($revenueByYear)
+
+        //
+        // Variables
+        //
+
+        var $chart = $('#chart-bars1');
+
+
+        //
+        // Methods
+        //
+
+        // Init chart
+        function initChart($chart, $revenueByYear) {
+            console.log($revenueByYear)
+
+            let months = []
+
+            $.each($revenueByYear, function(key, value) {
+                //console.log(value)
+                let amount = 0;
+                $.each(value, function(key1, value1) {
+                    //console.log(value1.amount)
+                    amount = amount + parseInt(value1.amount)
+                })
+                months.push(amount)
+            })
+
+
+
+            // Create chart
+            var ordersChart = new Chart($chart, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Income',
+                        data: months
+                    }]
+                }
+            });
+
+            // Save to jQuery object
+            $chart.data('chart', ordersChart);
+        }
+
+
+        // Init chart
+        if ($chart.length) {
+            initChart($chart, $revenueByYear);
+        }
+
+        })();
+    </script>
 @endpush

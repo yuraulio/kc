@@ -78,7 +78,7 @@
 
                         <a href="{{ route('user.edit', auth()->user()->id) }}" class="dropdown-item">
                             <i class="ni ni-single-02"></i>
-                            <span>{{ __('My profile') }}</span>
+                            <span>{{ __('My account') }}</span>
                         </a>
                         <a href="javascript:void(0)" id="update-btn" class="dropdown-item">
                             <i class="fab fa-dropbox"></i>

@@ -16,6 +16,7 @@
 
 */
 namespace App\Http\Controllers;
+use App\Model\Transaction;
 
 class HomeController extends Controller
 {
@@ -36,6 +37,26 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('pages.dashboard');
+        $transactions = (new TransactionController)->participants()['transactions'];
+
+        $current_year = strtotime("now");
+        $current_year = date('Y',$current_year);
+
+        $revenueByYear = [];
+
+        foreach($transactions as $key => $item){
+            $time = strtotime($item['date']);
+            $year = date('Y',$time);
+            if($year == $current_year){
+                $revenueByYear[$key] = $item;
+                $revenueByYear[$key]['month'] = $year = date('m',$time);
+            }
+        }
+
+        $data['revenueByYear'] = group_by('month', $revenueByYear);
+
+        //dd($data['transactions']);
+
+        return view('pages.dashboard', $data);
     }
 }

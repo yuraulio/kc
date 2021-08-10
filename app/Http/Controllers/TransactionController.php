@@ -15,31 +15,34 @@ class TransactionController extends Controller
         //$data['transactions'] = $data['transactions']->get();
 
         $transactions = Transaction::with('user.statisticGroupByEvent','user.events','user.ticket','subscription','event')->get();
+        //dd($transactions[0]);
         $data['transactions'] = [];
         foreach($transactions as $transaction){
             if(!$transaction->subscription->first() && $transaction->user->first() && $transaction->event->first()){
-               
+
                 $statistic = $transaction->user->first()->statisticGroupByEvent->groupBy('event_id');
-               
+
                 $tickets = $transaction->user->first()['ticket']->groupBy('event_id');
                 $ticketType = isset($tickets[$transaction->event->first()->id]) ? $tickets[$transaction->event->first()->id]->first()->type : '-';
 
-                $videos = isset($statistic[$transaction->event->first()->id]) ? 
+                $videos = isset($statistic[$transaction->event->first()->id]) ?
                     $statistic[$transaction->event->first()->id]->first()->pivot : null;
 
                 $events = $transaction->user->first()->events->groupBy('id');
                 $expiration = isset($events[$transaction->event->first()->id]) ? $events[$transaction->event->first()->id]->first()->pivot->expiration : null;
                 $videos = isset($videos) ? json_decode($videos->videos,true) : null;
-                
-                $data['transactions'][] = ['id' => $transaction['id'],'name' => $transaction->user[0]['firstname'].' '.$transaction->user[0]['lastname'],
-                                            'event_title' => $transaction->event[0]['title'], 'type' => $ticketType, 
+
+                $data['transactions'][] = ['id' => $transaction['id'], 'user_id' => $transaction->user[0]['id'],'name' => $transaction->user[0]['firstname'].' '.$transaction->user[0]['lastname'],
+                                            'event_id' => $transaction->event[0]['id'],'event_title' => $transaction->event[0]['title'], 'type' => $ticketType,
                                             'date' => date_format($transaction['created_at'], 'm/d/Y'), 'amount' => $transaction['amount'],
                                             'coupon_code' => $transaction['coupon_code'],'videos_seen' => $this->getVideosSeen($videos),'expiration'=>$expiration];
             }
+
         }
-        
+        return $data;
+
         //dd($data['transactions']);
-        return view('admin.transaction.participants', $data);
+        //return view('admin.transaction.participants', $data);
     }
 
     public function updateExpirationDate(Request $request)

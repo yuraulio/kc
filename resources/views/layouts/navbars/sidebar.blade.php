@@ -38,7 +38,7 @@
                         </div>
                     </li>
 
-                    <li class="nav-item active">
+                    <!-- <li class="nav-item active">
                         <a class="nav-link active" href="#navbar-accounts" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-accounts">
                             <i class="far fa-user" style="color: #f4645f;"></i>
                             <span class="nav-link-text" style="color: #f4645f;">{{ __('My Account') }}</span>
@@ -56,7 +56,7 @@
 
                             </ul>
                         </div>
-                    </li>
+                    </li> -->
 
                     <li class="nav-item active">
                         <a class="nav-link active" href="#navbar-users" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-users">
@@ -94,9 +94,6 @@
                                     </li>
                                     <li class="nav-item {{ $elementName == 'user1-management' ? 'active' : '' }}">
                                         <a href="{{ route('user.index') }}" class="nav-link">{{ __('Social sharing settings') }}</a>
-                                    </li>
-                                    <li class="nav-item {{ $elementName == 'user1-management' ? 'active' : '' }}">
-                                        <a href="{{ route('user.index') }}" class="nav-link">{{ __('Search engines settings (META)') }}</a>
                                     </li>
                                     <li class="nav-item {{ $elementName == 'user1-management' ? 'active' : '' }}">
                                         <a href="{{ route('user.index') }}" class="nav-link">{{ __('Error log') }}</a>

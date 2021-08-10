@@ -104,44 +104,44 @@ class NotificationController extends Controller
 
     }
 
-    // public function userChangePassword($user_id = 0)
-    // {
-    //     //$user = User::where('id', $user_id)->with('activation')->first();
-    //     $user = User::find($user_id);
-    //     $reminderRep = Sentinel::getReminderRepository();
-    //     if ($user) {
-    //         $emailSystem = Config::get('dpoptions.email_accounts.settings.system');
+    public function userChangePassword($user_id = 0)
+    {
+        //$user = User::where('id', $user_id)->with('activation')->first();
+        $user = User::find($user_id);
+        $reminderRep = Sentinel::getReminderRepository();
+        if ($user) {
+            $emailSystem = Config::get('dpoptions.email_accounts.settings.system');
 
-    //         // send the user
-    //        //$loadForm = 'sentinel.emails.re-activate';
+            // send the user
+           //$loadForm = 'sentinel.emails.re-activate';
 
-    //        $reminder = $reminderRep->exists($user) ?: $reminderRep->create($user);
+           $reminder = $reminderRep->exists($user) ?: $reminderRep->create($user);
 
-    //         $code = $reminder->code;
+            $code = $reminder->code;
 
-    //         $sent = Mail::send('sentinel.emails.student-reminder', compact('user', 'code'), function ($m) use ($user) {
-    //             $m->to($user['email'])->subject('Create your account password.'); //$user->email
-    //         });
+            $sent = Mail::send('sentinel.emails.student-reminder', compact('user', 'code'), function ($m) use ($user) {
+                $m->to($user['email'])->subject('Create your account password.'); //$user->email
+            });
 
-    //         /*$code = Activation::create($user)->code;
+            /*$code = Activation::create($user)->code;
 
-    //         $sent = Mail::send($loadForm, compact('user', 'code'), function ($m) use ($emailSystem, $user) {
-    //              $fn = $user['first_name'] . ' ' . $user['last_name'];
-    //             $m->from($emailSystem['email'], $emailSystem['name']);
-    //             $m->to($user['email'], $fn);
-    //             $m->subject('Create a password for your Student Account');
-    //         });*/
-    //          return 1;
+            $sent = Mail::send($loadForm, compact('user', 'code'), function ($m) use ($emailSystem, $user) {
+                 $fn = $user['first_name'] . ' ' . $user['last_name'];
+                $m->from($emailSystem['email'], $emailSystem['name']);
+                $m->to($user['email'], $fn);
+                $m->subject('Create a password for your Student Account');
+            });*/
+             return 1;
 
-    //         /*if ($sent) {
-    //             return 1;
-    //         } else {
-    //             return 0;
-    //         }*/
-    //     } else {
-    //         return 0;
-    //     }
-    // }
+            /*if ($sent) {
+                return 1;
+            } else {
+                return 0;
+            }*/
+        } else {
+            return 0;
+        }
+    }
 
     public function userActivationLink($user_id = 0)
     {
@@ -168,7 +168,7 @@ class NotificationController extends Controller
             //      $m->subject('Activate Your Student Account');
             // });
 
-             
+
             /*if ($sent) {
                 return 1;
             } else {
