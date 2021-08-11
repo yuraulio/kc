@@ -104,7 +104,7 @@
                                             @endif--}}
                                             </span>
                                         </td>
-                                        <td>{{ $user['firstname'] }}</td>
+                                        <td><a href="{{ route('user.edit', $user['id']) }}">{{ $user['firstname'] }}</a></td>
                                         <td>{{ $user['lastname'] }}</td>
                                         <td>{{ $user['mobile'] }}</td>
                                         <td><a href="mailto:{{ $user['email'] }}">{{ $user['email'] }}</a></td>
@@ -239,15 +239,15 @@
                     //console.log(found_eve)
                     $.each(found_eve, function(key1, value1) {
                         a = value1.split('--')
-                        console.log('////////')
-                        console.log(value1)
+                        //console.log('////////')
                         //console.log(a)
-                        if(a[key1] == selected_event){
-                            console.log('_________')
-                            ticket_type = a[key1 + 1]
-                            ticket_amount = a[key1 + 2]
-                            console.log(ticket_type)
-                            console.log(ticket_amount)
+                        if(a[0] == selected_event){
+                            // console.log('_________')
+                            // console.log(value1)
+                            ticket_type = a[1]
+                            ticket_amount = parseInt(a[2])
+                            //console.log(ticket_type)
+                            //console.log(ticket_amount)
                         }
                         //console.log(value_without_spec)
                         // if(selected_event == value1){
@@ -261,8 +261,12 @@
                 }
 
 
-
-                sum = sum + parseInt(ticket_amount)
+                console.log(ticket_amount)
+                if(typeof ticket_amount !== "undefined" && !isNaN(ticket_amount)){
+                    sum = sum + ticket_amount
+                    //console.log(sum)
+                }
+                    
 
                 if(ticket_type == 'Alumni'){
                     alumni = alumni + parseInt(ticket_amount)
@@ -302,7 +306,7 @@
 
         function filterColumn ( i ) {
             $('#datatable-basic45').DataTable().column( i ).search(
-                $('#col'+i+'_filter').val()
+                $('#col'+i+'_filter').val(), true,false
             ).draw();
 
             if(i == 9) {

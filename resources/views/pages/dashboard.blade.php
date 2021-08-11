@@ -95,7 +95,7 @@
                             <div class="col">
                                 <select id="elearning-filter-by-event" class="custom-select custom-select-sm">
                                     <?php //dd($revenueByEvent); ?>
-                                    <option value="" selected="selected">All</option>
+                                    <option value="" selected="selected">All</option>                                 
                                     @foreach($elearningByEvent as $key => $item)
                                         <option value="{{$key}}">{{$item[0]['event_title']}}</option>
                                     @endforeach
@@ -222,7 +222,7 @@
                                     </thead>
                                     <tbody class="list">
                                         <?php $count = 0; ?>
-                                        @foreach($booking as $key => $item)
+                                        {{--@foreach($booking as $key => $item)
                                         @if($count == 10)
                                         <?php break; ?>
                                         @endif
@@ -234,7 +234,7 @@
                                                 <th>€{{ number_format($item['amount'], 2, '.', ''); }}</th>
                                             </tr>
                                             <?php $count++; ?>
-                                        @endforeach
+                                        @endforeach--}}
 
 
                                     </tbody>
@@ -755,7 +755,8 @@
                         labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                         datasets: [{
                             label: 'Income',
-                            data: months
+                            data: months,
+                            backgroundColor: 'rgb(255, 99, 10)',
                         }]
                     }
                 });
@@ -802,7 +803,8 @@
                         labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                         datasets: [{
                             label: 'Income',
-                            data: months
+                            data: months,                         
+                            backgroundColor: '#5603ad',
                         }]
                     }
                 });
@@ -842,7 +844,8 @@
                         labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                         datasets: [{
                             label: 'Income',
-                            data: months
+                            data: months,
+                            backgroundColor: '#ffd600',                         
                         }]
                     }
                 });

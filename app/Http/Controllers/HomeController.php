@@ -70,11 +70,12 @@ class HomeController extends Controller
 
         }
 
+        
 
 
 
 
-        //$data['elearningByYear']
+        
         $data['revenueByYear'] = group_by('month', $revenueByYear);
         $data['revenueByEvent'] = group_by('event_id', $revenueByYear);
         //dd($data['revenueByEvent']);
@@ -82,7 +83,9 @@ class HomeController extends Controller
 
 
         $data['elearningByYear'] = group_by('month', $elearningByYear);
-        $data['elearningByEvent'] = group_by('event_id', $revenueByYear);
+        //dd($data['elearningByYear']);
+        $data['elearningByEvent'] = group_by('event_id', $elearningByYear);
+        //dd($elearningByYear);
 
         $data['alumniByYear'] = group_by('month', $alumniByYear);
         $data['alumniByEvent'] = group_by('event_id', $alumniByYear);
@@ -91,7 +94,7 @@ class HomeController extends Controller
         //dd($ticketNam);
 
 
-        $data['booking'] = (new SubscriptionController)->subs_for_dashboard();
+        //$data['booking'] = (new SubscriptionController)->subs_for_dashboard();
 
 
         //$data['e_learning'] = group_by()
