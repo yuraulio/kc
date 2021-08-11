@@ -55,27 +55,27 @@ class CheckSmsForApi
         require_once("../app/Apifon/Model/SmsRequest.php");
         require_once("../app/Apifon/Model/SubscriberInformation.php");
 
-        
+
 
         if (Auth::guest() || env('APP_DEBUG') == true) {
             //return $next($request);
         }
 
-        
+
 
         $roles = Auth::user()->role->pluck('name')->toArray();
         /*if (in_array('Super Administrator',$roles) || in_array('Administrator',$roles) || in_array('Manager',$roles) || in_array('Author',$roles)) {
             return $next($request);
         }else{*/
             $user = Auth::user();
-            
+
             if($user){
 
                 if($request->hasHeader('auth-sms')){
-                    
+
                     $coockie = $request->header('auth-sms');
                     $coockieValue = base64_encode('auth-api-' . decrypt($request->header('auth-sms')));
-                
+
                     if(!$user->cookiesSMS()->where('coockie_value',$coockieValue)->first()){
                        // dd($coockie);
                         $coockie = new CookiesSMS;
@@ -83,19 +83,19 @@ class CheckSmsForApi
                         $coockie->coockie_value = $coockieValue;
                         $coockie->user_id = $user->id;
                         $coockie->sms_code = rand(1111,9999);
-                        
+
                         $coockie->save();
 
                         $cookie = $coockie->coockie_value;
-                        
+
 
                     }else{
                         $cookie = $user->cookiesSMS()->where('coockie_value',$coockieValue)->first()->coockie_value;
                     }
 
-                    
+
                 }else{
-                  
+
                     $coockie = new CookiesSMS;
                     $coockie->coockie_name = 'auth-api-'.$user->id;
                     $coockie->coockie_value = base64_encode('auth-api-'.$user->id.'-'.date("H:i:s"));
@@ -106,12 +106,12 @@ class CheckSmsForApi
 
                     $cookie = $coockie->coockie_value;
                 }
-               
+
 
                 $cookieSms = $user->cookiesSMS()->where('coockie_value',$cookie)->first();
-                
+
                 if(!$cookieSms->sms_verification && $user->mobile != ''){
-                
+
                     $codeExpired = strtotime($cookieSms->updated_at);
                     $codeExpired  = (time() - $codeExpired) / 60;
                     if($codeExpired >= 5){
@@ -121,34 +121,34 @@ class CheckSmsForApi
                     }
 
                     if(!$cookieSms->send){
-                                            
+
                         Mookee::addCredentials("sms",$this->token, $this->secretId);
                         Mookee::setActiveCredential("sms");
-                
+
                         $smsResource = new SMSResource();
                         $smsRequest = new SmsRequest();
-                        
+
                         $mob = trim($user->mobile);
                         $mob = trim($user->country_code) . trim($user->mobile);
-                       
+
                         $mobileNumber = trim($mob);
                         $nums = [$mobileNumber];
-                
+
                         $message = new MessageContent();
                         $messageText = 'Knowcrunch code: '. $cookieSms->sms_code . ' Valid for 5 minutes';
                         $message->setText($messageText);
                         $message->setSenderId("Knowcrunch");
-                
+
                         $smsRequest->setStrSubscribers($nums);
                         $smsRequest->setMessage($message);
-                
+
                         $response = $smsResource->send($smsRequest);
-                   
+
                         $cookieSms->send = true;
                         $cookieSms->save();
 
                     }
-                    
+
                     return response()->json([
                         'success' => false,
                         'code' => 700,
@@ -158,7 +158,7 @@ class CheckSmsForApi
                 }
 
             }
-        
+
         //}
         return $next($request);
     }

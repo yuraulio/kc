@@ -782,7 +782,7 @@
                    videoId = id
                    //when load video load NOTES
                    let videoNote = notes[videoId];
-                   videoNote = videoNote.replace("||", "\n");
+                   //videoNote = videoNote.replace("||", "\n");
                    array.push(id)
 
                    prev_topicId.push($('.topic.open .topic-info_title').data('topic-slug'))
@@ -1059,7 +1059,7 @@
 
                 let videoNote = $('.isWatching').data('note')
 
-                videoNote = videoNote.replace("||", "\n");
+                //videoNote = videoNote.replace("||", "\n");
                 $('#notes').val(videoNote)
                 $('.status').addClass('saveDone');
 

@@ -25,6 +25,14 @@ class TransactionController extends Controller
                 $tickets = $transaction->user->first()['ticket']->groupBy('event_id');
                 $ticketType = isset($tickets[$transaction->event->first()->id]) ? $tickets[$transaction->event->first()->id]->first()->type : '-';
 
+                if(isset($tickets[$transaction->event->first()->id])){
+                    $ticketType = $tickets[$transaction->event->first()->id]->first()->type;
+                    $ticketName = $tickets[$transaction->event->first()->id]->first()->title;
+
+                }else{
+                    $ticketType = '-';
+                }
+
                 $videos = isset($statistic[$transaction->event->first()->id]) ?
                     $statistic[$transaction->event->first()->id]->first()->pivot : null;
 
@@ -33,12 +41,14 @@ class TransactionController extends Controller
                 $videos = isset($videos) ? json_decode($videos->videos,true) : null;
 
                 $data['transactions'][] = ['id' => $transaction['id'], 'user_id' => $transaction->user[0]['id'],'name' => $transaction->user[0]['firstname'].' '.$transaction->user[0]['lastname'],
-                                            'event_id' => $transaction->event[0]['id'],'event_title' => $transaction->event[0]['title'], 'type' => $ticketType,
+                                            'event_id' => $transaction->event[0]['id'],'event_title' => $transaction->event[0]['title'], 'type' => $ticketType,'ticketName' => $ticketName,
                                             'date' => date_format($transaction['created_at'], 'm/d/Y'), 'amount' => $transaction['amount'],
+                                            'is_elearning' => $transaction->event->first()->is_elearning_course(),
                                             'coupon_code' => $transaction['coupon_code'],'videos_seen' => $this->getVideosSeen($videos),'expiration'=>$expiration];
             }
 
         }
+        //dd($data['transactions'][0]);
         return $data;
 
         //dd($data['transactions']);

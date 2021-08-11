@@ -61,7 +61,16 @@
                         <div class="row align-items-center">
                             <div class="col">
                                 <h6 class="text-uppercase text-muted ls-1 mb-1">Performance</h6>
-                                <h5 class="h3 mb-0">Total orders</h5>
+                                <h5 class="h3 mb-0">Revenue report</h5>
+                            </div>
+                            <div class="col">
+                                <select id="revenue-filter-by-event" class="custom-select custom-select-sm">
+                                    <?php //dd($revenueByEvent); ?>
+                                    <option value="" selected="selected">All</option>
+                                    @foreach($revenueByEvent as $key => $item)
+                                        <option value="{{$key}}">{{$item[0]['event_title']}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -75,925 +84,159 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-xl-4">
-                <!-- Members list group card -->
+        <div class="col-xl-6">
                 <div class="card">
-                    <!-- Card header -->
-                    <div class="card-header">
-                        <!-- Title -->
-                        <h5 class="h3 mb-0">Team members</h5>
+                    <div class="card-header bg-transparent">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h6 class="text-uppercase text-muted ls-1 mb-1">Performance</h6>
+                                <h5 class="h3 mb-0">Elearning Users report</h5>
+                            </div>
+                            <div class="col">
+                                <select id="elearning-filter-by-event" class="custom-select custom-select-sm">
+                                    <?php //dd($revenueByEvent); ?>
+                                    <option value="" selected="selected">All</option>
+                                    @foreach($elearningByEvent as $key => $item)
+                                        <option value="{{$key}}">{{$item[0]['event_title']}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <!-- Card body -->
                     <div class="card-body">
-                        <!-- List group -->
-                        <ul class="list-group list-group-flush list my--3">
-                            <li class="list-group-item px-0">
-                                <div class="row align-items-center">
-                                    <div class="col-auto">
-                                        <!-- Avatar -->
-                                        <a href="#" class="avatar rounded-circle">
-                                            <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-1.jpg">
-                                        </a>
-                                    </div>
-                                    <div class="col ml--2">
-                                        <h4 class="mb-0">
-                                            <a href="#!">John Michael</a>
-                                        </h4>
-                                        <span class="text-success">●</span>
-                                        <small>Online</small>
-                                    </div>
-                                    <div class="col-auto">
-                                        <button type="button" class="btn btn-sm btn-primary">Add</button>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="list-group-item px-0">
-                                <div class="row align-items-center">
-                                    <div class="col-auto">
-                                        <!-- Avatar -->
-                                        <a href="#" class="avatar rounded-circle">
-                                            <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-2.jpg">
-                                        </a>
-                                    </div>
-                                    <div class="col ml--2">
-                                        <h4 class="mb-0">
-                                            <a href="#!">Alex Smith</a>
-                                        </h4>
-                                        <span class="text-warning">●</span>
-                                        <small>In a meeting</small>
-                                    </div>
-                                    <div class="col-auto">
-                                        <button type="button" class="btn btn-sm btn-primary">Add</button>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="list-group-item px-0">
-                                <div class="row align-items-center">
-                                    <div class="col-auto">
-                                        <!-- Avatar -->
-                                        <a href="#" class="avatar rounded-circle">
-                                            <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-3.jpg">
-                                        </a>
-                                    </div>
-                                    <div class="col ml--2">
-                                        <h4 class="mb-0">
-                                            <a href="#!">Samantha Ivy</a>
-                                        </h4>
-                                        <span class="text-danger">●</span>
-                                        <small>Offline</small>
-                                    </div>
-                                    <div class="col-auto">
-                                        <button type="button" class="btn btn-sm btn-primary">Add</button>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="list-group-item px-0">
-                                <div class="row align-items-center">
-                                    <div class="col-auto">
-                                        <!-- Avatar -->
-                                        <a href="#" class="avatar rounded-circle">
-                                            <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-4.jpg">
-                                        </a>
-                                    </div>
-                                    <div class="col ml--2">
-                                        <h4 class="mb-0">
-                                            <a href="#!">John Michael</a>
-                                        </h4>
-                                        <span class="text-success">●</span>
-                                        <small>Online</small>
-                                    </div>
-                                    <div class="col-auto">
-                                        <button type="button" class="btn btn-sm btn-primary">Add</button>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
+                        <!-- Chart -->
+                        <div class="chart">
+                            <canvas id="elearning-bars" class="chart-canvas"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-xl-4">
-                <!-- Checklist -->
+            <div class="col-xl-6">
                 <div class="card">
-                    <!-- Card header -->
-                    <div class="card-header">
-                        <!-- Title -->
-                        <h5 class="h3 mb-0">To do list</h5>
+                    <div class="card-header bg-transparent">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h6 class="text-uppercase text-muted ls-1 mb-1">Performance</h6>
+                                <h5 class="h3 mb-0">Alumni Ticket report</h5>
+                            </div>
+                            <div class="col">
+                                <select id="alumni-filter-by-event" class="custom-select custom-select-sm">
+                                    <?php //dd($revenueByEvent); ?>
+                                    <option value="" selected="selected">All</option>
+                                    @foreach($alumniByEvent as $key => $item)
+                                        <option value="{{$key}}">{{$item[0]['event_title']}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <!-- Card body -->
-                    <div class="card-body p-0">
-                        <!-- List group -->
-                        <ul class="list-group list-group-flush" data-toggle="checklist">
-                            <li class="checklist-entry list-group-item flex-column align-items-start py-4 px-4">
-                                <div class="checklist-item checklist-item-success">
-                                    <div class="checklist-info">
-                                        <h5 class="checklist-title mb-0">Call with Dave</h5>
-                                        <small>10:30 AM</small>
-                                    </div>
-                                    <div>
-                                        <div class="custom-control custom-checkbox custom-checkbox-success">
-                                            <input class="custom-control-input" id="chk-todo-task-1" type="checkbox" checked>
-                                            <label class="custom-control-label" for="chk-todo-task-1"></label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="checklist-entry list-group-item flex-column align-items-start py-4 px-4">
-                                <div class="checklist-item checklist-item-warning">
-                                    <div class="checklist-info">
-                                        <h5 class="checklist-title mb-0">Lunch meeting</h5>
-                                        <small>10:30 AM</small>
-                                    </div>
-                                    <div>
-                                        <div class="custom-control custom-checkbox custom-checkbox-warning">
-                                            <input class="custom-control-input" id="chk-todo-task-2" type="checkbox">
-                                            <label class="custom-control-label" for="chk-todo-task-2"></label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="checklist-entry list-group-item flex-column align-items-start py-4 px-4">
-                                <div class="checklist-item checklist-item-info">
-                                    <div class="checklist-info">
-                                        <h5 class="checklist-title mb-0">Argon Dashboard Launch</h5>
-                                        <small>10:30 AM</small>
-                                    </div>
-                                    <div>
-                                        <div class="custom-control custom-checkbox custom-checkbox-info">
-                                            <input class="custom-control-input" id="chk-todo-task-3" type="checkbox">
-                                            <label class="custom-control-label" for="chk-todo-task-3"></label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="checklist-entry list-group-item flex-column align-items-start py-4 px-4">
-                                <div class="checklist-item checklist-item-danger">
-                                    <div class="checklist-info">
-                                        <h5 class="checklist-title mb-0">Winter Hackaton</h5>
-                                        <small>10:30 AM</small>
-                                    </div>
-                                    <div>
-                                        <div class="custom-control custom-checkbox custom-checkbox-danger">
-                                            <input class="custom-control-input" id="chk-todo-task-4" type="checkbox" checked>
-                                            <label class="custom-control-label" for="chk-todo-task-4"></label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-4">
-                <!-- Progress track -->
-                <div class="card">
-                    <!-- Card header -->
-                    <div class="card-header">
-                        <!-- Title -->
-                        <h5 class="h3 mb-0">Progress track</h5>
-                    </div>
-                    <!-- Card body -->
                     <div class="card-body">
-                        <!-- List group -->
-                        <ul class="list-group list-group-flush list my--3">
-                            <li class="list-group-item px-0">
-                                <div class="row align-items-center">
-                                    <div class="col-auto">
-                                        <!-- Avatar -->
-                                        <a href="#" class="avatar rounded-circle">
-                                            <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/bootstrap.jpg">
-                                        </a>
-                                    </div>
-                                    <div class="col">
-                                        <h5>Argon Design System</h5>
-                                        <div class="progress progress-xs mb-0">
-                                            <div class="progress-bar bg-orange" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="list-group-item px-0">
-                                <div class="row align-items-center">
-                                    <div class="col-auto">
-                                        <!-- Avatar -->
-                                        <a href="#" class="avatar rounded-circle">
-                                            <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/angular.jpg">
-                                        </a>
-                                    </div>
-                                    <div class="col">
-                                        <h5>Angular Now UI Kit PRO</h5>
-                                        <div class="progress progress-xs mb-0">
-                                            <div class="progress-bar bg-green" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="list-group-item px-0">
-                                <div class="row align-items-center">
-                                    <div class="col-auto">
-                                        <!-- Avatar -->
-                                        <a href="#" class="avatar rounded-circle">
-                                            <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/sketch.jpg">
-                                        </a>
-                                    </div>
-                                    <div class="col">
-                                        <h5>Black Dashboard</h5>
-                                        <div class="progress progress-xs mb-0">
-                                            <div class="progress-bar bg-red" role="progressbar" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100" style="width: 72%;"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="list-group-item px-0">
-                                <div class="row align-items-center">
-                                    <div class="col-auto">
-                                        <!-- Avatar -->
-                                        <a href="#" class="avatar rounded-circle">
-                                            <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/react.jpg">
-                                        </a>
-                                    </div>
-                                    <div class="col">
-                                        <h5>React Material Dashboard</h5>
-                                        <div class="progress progress-xs mb-0">
-                                            <div class="progress-bar bg-teal" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%;"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
+                        <!-- Chart -->
+                        <div class="chart">
+                            <canvas id="alumni-bars" class="chart-canvas"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
         <div class="row">
-            <div class="col-xl-5">
+            <div class="col-xl-6">
                 <div class="card">
-                    <div class="card-header">
-                        <h5 class="h3 mb-0">Activity feed</h5>
-                    </div>
-                    <div class="card-header d-flex align-items-center">
-                        <div class="d-flex align-items-center">
-                            <a href="#">
-                                <img src="{{ asset('argon') }}/img/theme/team-1.jpg" class="avatar">
-                            </a>
-                            <div class="mx-3">
-                                <a href="#" class="text-dark font-weight-600 text-sm">John Snow</a>
-                                <small class="d-block text-muted">3 days ago</small>
+                    <div class="card-header bg-transparent">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h6 class="text-uppercase text-muted ls-1 mb-1">Ticket Stats</h6>
+                                <h5 class="h3 mb-0"># of tickets / ticket type</h5>
                             </div>
-                        </div>
-                        <div class="text-right ml-auto">
-                            <button type="button" class="btn btn-sm btn-primary btn-icon">
-                                <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
-                                <span class="btn-inner--text">Follow</span>
-                            </button>
+                            <div class="col">
+                                <select id="ticket-num-filter-by-event" class="custom-select custom-select-sm">
+                                    <?php //dd($revenueByEvent); ?>
+                                    <option value="" selected="selected">All</option>
+                                    @foreach($alumniByEvent as $key => $item)
+                                        <option value="{{$key}}">{{$item[0]['event_title']}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        <p class="mb-4">
-                            Personal profiles are the perfect way for you to grab their attention and persuade recruiters to continue reading your CV
-                            because you’re telling them from the off exactly why they should hire you.
-                        </p>
-                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/img-1-1000x600.jpg" class="img-fluid rounded">
-                        <div class="row align-items-center my-3 pb-3 border-bottom">
-                            <div class="col-sm-6">
-                                <div class="icon-actions">
-                                    <a href="#" class="like active">
-                                        <i class="ni ni-like-2"></i>
-                                        <span class="text-muted">150</span>
-                                    </a>
-                                    <a href="#">
-                                        <i class="ni ni-chat-round"></i>
-                                        <span class="text-muted">36</span>
-                                    </a>
-                                    <a href="#">
-                                        <i class="ni ni-curved-next"></i>
-                                        <span class="text-muted">12</span>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 d-none d-sm-block">
-                                <div class="d-flex align-items-center justify-content-sm-end">
-                                    <div class="avatar-group">
-                                        <a href="#" class="avatar avatar-xs rounded-circle" data-toggle="tooltip" data-original-title="Jessica Rowland">
-                                            <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-1.jpg" class="">
-                                        </a>
-                                        <a href="#" class="avatar avatar-xs rounded-circle" data-toggle="tooltip" data-original-title="Audrey Love">
-                                            <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-2.jpg" class="rounded-circle">
-                                        </a>
-                                        <a href="#" class="avatar avatar-xs rounded-circle" data-toggle="tooltip" data-original-title="Michael Lewis">
-                                            <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-3.jpg" class="rounded-circle">
-                                        </a>
-                                    </div>
-                                    <small class="pl-2 font-weight-bold">and 30+ more</small>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Comments -->
-                        <div class="mb-1">
-                            <div class="media media-comment">
-                                <img alt="Image placeholder" class="avatar avatar-lg media-comment-avatar rounded-circle" src="{{ asset('argon') }}/img/theme/team-1.jpg">
-                                <div class="media-body">
-                                    <div class="media-comment-text">
-                                        <h6 class="h5 mt-0">Michael Lewis</h6>
-                                        <p class="text-sm lh-160">Cras sit amet nibh libero nulla vel metus scelerisque ante sollicitudin. Cras purus odio
-                                            vestibulum in vulputate viverra turpis.</p>
-                                        <div class="icon-actions">
-                                            <a href="#" class="like active">
-                                                <i class="ni ni-like-2"></i>
-                                                <span class="text-muted">3 likes</span>
-                                            </a>
-                                            <a href="#">
-                                                <i class="ni ni-curved-next"></i>
-                                                <span class="text-muted">2 shares</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="media media-comment">
-                                <img alt="Image placeholder" class="avatar avatar-lg media-comment-avatar rounded-circle" src="{{ asset('argon') }}/img/theme/team-2.jpg">
-                                <div class="media-body">
-                                    <div class="media-comment-text">
-                                        <h6 class="h5 mt-0">Jessica Stones</h6>
-                                        <p class="text-sm lh-160">Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin.
-                                            Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.</p>
-                                        <div class="icon-actions">
-                                            <a href="#" class="like active">
-                                                <i class="ni ni-like-2"></i>
-                                                <span class="text-muted">10 likes</span>
-                                            </a>
-                                            <a href="#">
-                                                <i class="ni ni-curved-next"></i>
-                                                <span class="text-muted">1 share</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <hr />
-                            <div class="media align-items-center">
-                                <img alt="Image placeholder" class="avatar avatar-lg rounded-circle mr-4" src="{{ asset('argon') }}/img/theme/team-3.jpg">
-                                <div class="media-body">
-                                    <form>
-                                        <textarea class="form-control" placeholder="Write your comment" rows="1"></textarea>
-                                    </form>
-                                </div>
-                            </div>
+                        <!-- Chart -->
+                        <div class="chart">
+                            <canvas id="ticket-type-pie" class="chart-canvas"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-xl-7">
+
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-header bg-transparent">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h6 class="text-uppercase text-muted ls-1 mb-1">Ticket Stats</h6>
+                                <h5 class="h3 mb-0">Sales / ticket type</h5>
+                            </div>
+                            <div class="col">
+                                <select id="ticket-filter-by-event" class="custom-select custom-select-sm">
+                                    <?php //dd($revenueByEvent); ?>
+                                    <option value="" selected="selected">All</option>
+                                    @foreach($elearningByEvent as $key => $item)
+                                        <option value="{{$key}}">{{$item[0]['event_title']}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- Chart -->
+                        <div class="chart">
+                            <canvas id="ticket-sales-pie" class="chart-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+        <div class="row">
+
+            <div class="col-xl-12">
                 <div class="row">
                     <div class="col">
                         <div class="card">
                             <!-- Card header -->
                             <div class="card-header border-0">
-                                <h3 class="mb-0">Light table</h3>
+                                <h3 class="mb-0">BOOKINGS</h3>
                             </div>
                             <div class="table-responsive">
                                 <table class="table align-items-center table-flush">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th scope="col" class="sort" data-sort="name">Project</th>
-                                            <th scope="col" class="sort" data-sort="budget">Budget</th>
-                                            <th scope="col" class="sort" data-sort="status">Status</th>
-                                            <th scope="col">Users</th>
-                                            <th scope="col" class="sort" data-sort="completion">Completion</th>
-                                            <th scope="col"></th>
+                                            <th scope="col" class="sort" data-sort="id">ID</th>
+                                            <th scope="col" class="sort" data-sort="user">User</th>
+                                            <th scope="col" class="sort" data-sort="event">Event</th>
+                                            <th scope="col">Amount</th>
                                         </tr>
                                     </thead>
                                     <tbody class="list">
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <a href="#" class="avatar rounded-circle mr-3">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/bootstrap.jpg">
-                                                    </a>
-                                                    <div class="media-body">
-                                                        <span class="name mb-0 text-sm">Argon Design System</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td class="budget">
-                                                $2500 USD
-                                            </td>
-                                            <td>
-                                                <span class="badge badge-dot mr-4">
-                                                    <i class="bg-warning"></i>
-                                                    <span class="status">pending</span>
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <div class="avatar-group">
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Ryan Tompson">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-1.jpg">
-                                                    </a>
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Romina Hadid">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-2.jpg">
-                                                    </a>
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Alexander Smith">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-3.jpg">
-                                                    </a>
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Jessica Doe">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-4.jpg">
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <span class="completion mr-2">60%</span>
-                                                    <div>
-                                                        <div class="progress">
-                                                            <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="text-right">
-                                                <div class="dropdown">
-                                                    <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i class="fas fa-ellipsis-v"></i>
-                                                    </a>
-                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                        <a class="dropdown-item" href="#">Action</a>
-                                                        <a class="dropdown-item" href="#">Another action</a>
-                                                        <a class="dropdown-item" href="#">Something else here</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <a href="#" class="avatar rounded-circle mr-3">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/angular.jpg">
-                                                    </a>
-                                                    <div class="media-body">
-                                                        <span class="name mb-0 text-sm">Angular Now UI Kit PRO</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td class="budget">
-                                                $1800 USD
-                                            </td>
-                                            <td>
-                                                <span class="badge badge-dot mr-4">
-                                                    <i class="bg-success"></i>
-                                                    <span class="status">completed</span>
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <div class="avatar-group">
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Ryan Tompson">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-1.jpg">
-                                                    </a>
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Romina Hadid">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-2.jpg">
-                                                    </a>
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Alexander Smith">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-3.jpg">
-                                                    </a>
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Jessica Doe">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-4.jpg">
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <span class="completion mr-2">100%</span>
-                                                    <div>
-                                                        <div class="progress">
-                                                            <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="text-right">
-                                                <div class="dropdown">
-                                                    <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i class="fas fa-ellipsis-v"></i>
-                                                    </a>
-                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                        <a class="dropdown-item" href="#">Action</a>
-                                                        <a class="dropdown-item" href="#">Another action</a>
-                                                        <a class="dropdown-item" href="#">Something else here</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <a href="#" class="avatar rounded-circle mr-3">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/sketch.jpg">
-                                                    </a>
-                                                    <div class="media-body">
-                                                        <span class="name mb-0 text-sm">Black Dashboard</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td class="budget">
-                                                $3150 USD
-                                            </td>
-                                            <td>
-                                                <span class="badge badge-dot mr-4">
-                                                    <i class="bg-danger"></i>
-                                                    <span class="status">delayed</span>
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <div class="avatar-group">
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Ryan Tompson">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-1.jpg">
-                                                    </a>
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Romina Hadid">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-2.jpg">
-                                                    </a>
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Alexander Smith">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-3.jpg">
-                                                    </a>
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Jessica Doe">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-4.jpg">
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <span class="completion mr-2">72%</span>
-                                                    <div>
-                                                        <div class="progress">
-                                                            <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100" style="width: 72%;"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="text-right">
-                                                <div class="dropdown">
-                                                    <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i class="fas fa-ellipsis-v"></i>
-                                                    </a>
-                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                        <a class="dropdown-item" href="#">Action</a>
-                                                        <a class="dropdown-item" href="#">Another action</a>
-                                                        <a class="dropdown-item" href="#">Something else here</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <a href="#" class="avatar rounded-circle mr-3">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/react.jpg">
-                                                    </a>
-                                                    <div class="media-body">
-                                                        <span class="name mb-0 text-sm">React Material Dashboard</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td class="budget">
-                                                $4400 USD
-                                            </td>
-                                            <td>
-                                                <span class="badge badge-dot mr-4">
-                                                    <i class="bg-info"></i>
-                                                    <span class="status">on schedule</span>
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <div class="avatar-group">
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Ryan Tompson">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-1.jpg">
-                                                    </a>
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Romina Hadid">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-2.jpg">
-                                                    </a>
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Alexander Smith">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-3.jpg">
-                                                    </a>
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Jessica Doe">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-4.jpg">
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <span class="completion mr-2">90%</span>
-                                                    <div>
-                                                        <div class="progress">
-                                                            <div class="progress-bar bg-info" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%;"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="text-right">
-                                                <div class="dropdown">
-                                                    <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i class="fas fa-ellipsis-v"></i>
-                                                    </a>
-                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                        <a class="dropdown-item" href="#">Action</a>
-                                                        <a class="dropdown-item" href="#">Another action</a>
-                                                        <a class="dropdown-item" href="#">Something else here</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <a href="#" class="avatar rounded-circle mr-3">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/vue.jpg">
-                                                    </a>
-                                                    <div class="media-body">
-                                                        <span class="name mb-0 text-sm">Vue Paper UI Kit PRO</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td class="budget">
-                                                $2200 USD
-                                            </td>
-                                            <td>
-                                                <span class="badge badge-dot mr-4">
-                                                    <i class="bg-success"></i>
-                                                    <span class="status">completed</span>
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <div class="avatar-group">
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Ryan Tompson">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-1.jpg">
-                                                    </a>
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Romina Hadid">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-2.jpg">
-                                                    </a>
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Alexander Smith">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-3.jpg">
-                                                    </a>
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Jessica Doe">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-4.jpg">
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <span class="completion mr-2">100%</span>
-                                                    <div>
-                                                        <div class="progress">
-                                                            <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="text-right">
-                                                <div class="dropdown">
-                                                    <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i class="fas fa-ellipsis-v"></i>
-                                                    </a>
-                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                        <a class="dropdown-item" href="#">Action</a>
-                                                        <a class="dropdown-item" href="#">Another action</a>
-                                                        <a class="dropdown-item" href="#">Something else here</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <a href="#" class="avatar rounded-circle mr-3">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/bootstrap.jpg">
-                                                    </a>
-                                                    <div class="media-body">
-                                                        <span class="name mb-0 text-sm">Argon Design System</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td class="budget">
-                                                $2500 USD
-                                            </td>
-                                            <td>
-                                                <span class="badge badge-dot mr-4">
-                                                    <i class="bg-warning"></i>
-                                                    <span class="status">pending</span>
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <div class="avatar-group">
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Ryan Tompson">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-1.jpg">
-                                                    </a>
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Romina Hadid">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-2.jpg">
-                                                    </a>
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Alexander Smith">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-3.jpg">
-                                                    </a>
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Jessica Doe">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-4.jpg">
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <span class="completion mr-2">60%</span>
-                                                    <div>
-                                                        <div class="progress">
-                                                            <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="text-right">
-                                                <div class="dropdown">
-                                                    <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i class="fas fa-ellipsis-v"></i>
-                                                    </a>
-                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                        <a class="dropdown-item" href="#">Action</a>
-                                                        <a class="dropdown-item" href="#">Another action</a>
-                                                        <a class="dropdown-item" href="#">Something else here</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <a href="#" class="avatar rounded-circle mr-3">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/angular.jpg">
-                                                    </a>
-                                                    <div class="media-body">
-                                                        <span class="name mb-0 text-sm">Angular Now UI Kit PRO</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td class="budget">
-                                                $1800 USD
-                                            </td>
-                                            <td>
-                                                <span class="badge badge-dot mr-4">
-                                                    <i class="bg-success"></i>
-                                                    <span class="status">completed</span>
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <div class="avatar-group">
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Ryan Tompson">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-1.jpg">
-                                                    </a>
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Romina Hadid">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-2.jpg">
-                                                    </a>
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Alexander Smith">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-3.jpg">
-                                                    </a>
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Jessica Doe">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-4.jpg">
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <span class="completion mr-2">100%</span>
-                                                    <div>
-                                                        <div class="progress">
-                                                            <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="text-right">
-                                                <div class="dropdown">
-                                                    <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i class="fas fa-ellipsis-v"></i>
-                                                    </a>
-                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                        <a class="dropdown-item" href="#">Action</a>
-                                                        <a class="dropdown-item" href="#">Another action</a>
-                                                        <a class="dropdown-item" href="#">Something else here</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <a href="#" class="avatar rounded-circle mr-3">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/sketch.jpg">
-                                                    </a>
-                                                    <div class="media-body">
-                                                        <span class="name mb-0 text-sm">Black Dashboard</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td class="budget">
-                                                $3150 USD
-                                            </td>
-                                            <td>
-                                                <span class="badge badge-dot mr-4">
-                                                    <i class="bg-danger"></i>
-                                                    <span class="status">delayed</span>
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <div class="avatar-group">
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Ryan Tompson">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-1.jpg">
-                                                    </a>
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Romina Hadid">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-2.jpg">
-                                                    </a>
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Alexander Smith">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-3.jpg">
-                                                    </a>
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Jessica Doe">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-4.jpg">
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <span class="completion mr-2">72%</span>
-                                                    <div>
-                                                        <div class="progress">
-                                                            <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100" style="width: 72%;"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="text-right">
-                                                <div class="dropdown">
-                                                    <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i class="fas fa-ellipsis-v"></i>
-                                                    </a>
-                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                        <a class="dropdown-item" href="#">Action</a>
-                                                        <a class="dropdown-item" href="#">Another action</a>
-                                                        <a class="dropdown-item" href="#">Something else here</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <a href="#" class="avatar rounded-circle mr-3">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/angular.jpg">
-                                                    </a>
-                                                    <div class="media-body">
-                                                        <span class="name mb-0 text-sm">Angular Now UI Kit PRO</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td class="budget">
-                                                $1800 USD
-                                            </td>
-                                            <td>
-                                                <span class="badge badge-dot mr-4">
-                                                    <i class="bg-success"></i>
-                                                    <span class="status">completed</span>
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <div class="avatar-group">
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Ryan Tompson">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-1.jpg">
-                                                    </a>
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Romina Hadid">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-2.jpg">
-                                                    </a>
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Alexander Smith">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-3.jpg">
-                                                    </a>
-                                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Jessica Doe">
-                                                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-4.jpg">
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <span class="completion mr-2">100%</span>
-                                                    <div>
-                                                        <div class="progress">
-                                                            <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="text-right">
-                                                <div class="dropdown">
-                                                    <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i class="fas fa-ellipsis-v"></i>
-                                                    </a>
-                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                        <a class="dropdown-item" href="#">Action</a>
-                                                        <a class="dropdown-item" href="#">Another action</a>
-                                                        <a class="dropdown-item" href="#">Something else here</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                        <?php $count = 0; ?>
+                                        @foreach($booking as $key => $item)
+                                        @if($count == 10)
+                                        <?php break; ?>
+                                        @endif
+                                        <?php //dd($item); ?>
+                                            <tr>
+                                                <th>{{ $item['id'] }}</th>
+                                                <th>{{ $item['user'][0]['firstname'] }} {{ $item['user'][0]['lastname'] }}</th>
+                                                <th>{{ $item['subscription'][0]['event'][0]['title'] }}</th>
+                                                <th>€{{ number_format($item['amount'], 2, '.', ''); }}</th>
+                                            </tr>
+                                            <?php $count++; ?>
+                                        @endforeach
+
+
                                     </tbody>
                                 </table>
                             </div>
@@ -1290,63 +533,435 @@
     <script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.extension.js"></script>
 
     <script>
+            //Data for charts
+            $revenueByYear = @json($revenueByYear);
+            $elearningByYear = @json($elearningByYear);
+            $alumniByYear = @json($alumniByYear);
+            $elearningByEvent = @json($elearningByEvent);
+            let pieChart1;
+            let pieChart2;
+
+            $ticketNameByYear = @json($ticketName);
 
 
+            var $ticketNameChart = $('#ticket-type-pie');
+            var $ticketSalesChart = $('#ticket-sales-pie');
 
-        var BarsChart = (function() {
-            $revenueByYear = @json($revenueByYear)
+            // Init pie chart
+            function initTicketChart($ticketNameChart, $ticketNameByYear) {
 
-        //
-        // Variables
-        //
+                const counts = {};
+                const sampleArray = $ticketNameByYear;
+                sampleArray.forEach(function (x) { counts[x.name] = (counts[x.name] || 0) + 1; });
 
-        var $chart = $('#chart-bars1');
+                let labels = []
+                let data = []
 
-
-        //
-        // Methods
-        //
-
-        // Init chart
-        function initChart($chart, $revenueByYear) {
-            console.log($revenueByYear)
-
-            let months = []
-
-            $.each($revenueByYear, function(key, value) {
-                //console.log(value)
-                let amount = 0;
-                $.each(value, function(key1, value1) {
-                    //console.log(value1.amount)
-                    amount = amount + parseInt(value1.amount)
+                $.each(counts, function(key,value) {
+                    labels.push(key)
+                    data.push(value)
                 })
-                months.push(amount)
+
+                pieChart2 = new Chart($ticketNameChart, {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: data,
+                            backgroundColor: [
+                                'rgb(255, 99, 10)',
+                                'rgb(54, 30, 20)',
+                                'rgb(255, 205, 40)',
+                                'rgb(50, 99, 132)',
+                                'rgb(54, 60, 235)',
+                                'rgb(255, 70, 86)',
+                                'rgb(255, 80, 132)',
+                                'rgb(54, 90, 235)',
+                                'rgb(255, 205, 100)',
+                                'rgb(255, 99, 110)',
+                                'rgb(54, 130, 235)',
+                                'rgb(120, 205, 86)'
+                            ],
+                            label: 'Dataset 1'
+                        }],
+                    },
+                    options: {
+                        responsive: true,
+                        legend: {
+                            position: 'top',
+                        },
+                        animation: {
+                            animateScale: true,
+                            animateRotate: true
+                        }
+                    }
+                });
+
+                // Save to jQuery object
+                $ticketNameChart.data('chart', pieChart2);
+            }
+
+            function initTicketByEvent(ticketNameChart, $elearningByEvent, $event_id){
+                let tickets = []
+                let labels = []
+                let sum = 0
+                $.each($elearningByEvent, function(key, value) {
+                    //console.log(value)
+                    if(key == $event_id){
+                        $.each(value, function(key1, value1) {
+                            console.log(value1)
+                            if(tickets[value1.ticketName] !== undefined){
+                                tickets[value1.ticketName] = tickets[value1.ticketName]+1;
+                            }else{
+                                tickets[value1.ticketName] = sum;
+                            }
+                        })
+                        labels = Object.keys(tickets)
+                        data = Object.values(tickets)
+                    }
+                })
+
+                pieChart2.data.labels = labels
+                pieChart2.data.datasets[0].data = data
+                pieChart2.update();
+
+            }
+
+            function initTicketSalesChart($ticketSalesChart, $ticketNameByYear) {
+                let arr = [];
+                let labels1 = [];
+                let data1 = [];
+                $.each($ticketNameByYear, function(key, value) {
+                    if(arr[value.name] !== undefined){
+                        arr[value.name] = arr[value.name] + parseInt(value.amount)
+                    }else{
+                        arr[value.name] = parseInt(value.amount)
+                    }
+                })
+
+                pieChart1 = new Chart($ticketSalesChart, {
+                    type: 'pie',
+                    data: {
+                        labels: Object.keys(arr),
+                        datasets: [{
+                            data: Object.values(arr),
+                            backgroundColor: [
+                                'rgb(255, 99, 10)',
+                                'rgb(54, 30, 20)',
+                                'rgb(255, 205, 40)',
+                                'rgb(50, 99, 132)',
+                                'rgb(54, 60, 235)',
+                                'rgb(255, 70, 86)',
+                                'rgb(255, 80, 132)',
+                                'rgb(54, 90, 235)',
+                                'rgb(255, 205, 100)',
+                                'rgb(255, 99, 110)',
+                                'rgb(54, 130, 235)',
+                                'rgb(120, 205, 86)'
+                            ],
+                            label: 'Dataset 1'
+                        }],
+                    },
+                    options: {
+                        responsive: true,
+                        legend: {
+                            position: 'top',
+                        },
+                        animation: {
+                            animateScale: true,
+                            animateRotate: true
+                        }
+                    }
+                });
+
+                // Save to jQuery object
+                $ticketSalesChart.data('chart', pieChart1);
+            }
+
+            function initTicketSalesByEvent(ticketSalesChart, $elearningByEvent, $event_id){
+                let tickets = []
+                let labels = []
+                $.each($elearningByEvent, function(key, value) {
+                    //console.log(value)
+                    if(key == $event_id){
+                        $.each(value, function(key1, value1) {
+                            if(tickets[value1.ticketName] !== undefined){
+                                tickets[value1.ticketName] = tickets[value1.ticketName] + parseInt(value1.amount)
+                            }else{
+                                tickets[value1.ticketName] = 0;
+                            }
+                        })
+                        labels = Object.keys(tickets)
+                        data = Object.values(tickets)
+                    }
+                })
+
+                pieChart1.data.labels = labels
+                pieChart1.data.datasets[0].data = data
+                pieChart1.update();
+            }
+
+
+
+            if ($ticketNameChart.length) {
+                initTicketChart($ticketNameChart, $ticketNameByYear);
+            }
+            if ($ticketSalesChart.length) {
+                initTicketSalesChart($ticketSalesChart, $ticketNameByYear);
+            }
+
+
+
+
+
+            //
+            // Variables
+            //
+
+            var $chart = $('#chart-bars1');
+            var $elearningChart = $('#elearning-bars');
+            var $alumniChart = $('#alumni-bars');
+            let ordersChart;
+            let ordersChart1;
+            let ordersChart2;
+
+
+
+
+            //
+            // Methods
+            //
+
+            // Init chart
+            function initChart($chart, $revenueByYear) {
+
+                let months = []
+
+                $.each($revenueByYear, function(key, value) {
+                    let amount = 0;
+                    $.each(value, function(key1, value1) {
+                        //console.log(value1.amount)
+                        amount = amount + parseInt(value1.amount)
+                    })
+                    months.push(amount)
+                })
+
+
+
+                // Create chart
+                ordersChart = new Chart($chart, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                        datasets: [{
+                            label: 'Income',
+                            data: months
+                        }]
+                    }
+                });
+
+                // Save to jQuery object
+                $chart.data('chart', ordersChart);
+            }
+
+            function initChartByEvent(chart, $revenueByYear, $event_id){
+                let months = []
+
+                $.each($revenueByYear, function(key, value) {
+                    let sum = 0;
+
+                    $.each(value, function(key1, value1) {
+                        if(value1.event_id == $event_id){
+                            sum = sum + parseInt(value1.amount)
+                        }
+                    })
+                    months.push(sum)
+                })
+
+
+                chart.data().chart.data.datasets[0].data = months
+                ordersChart.update();
+
+
+            }
+
+            function initElearningChart($elearningChart, $elearningByYear){
+
+                let months = []
+
+                $.each($elearningByYear, function(key, value) {
+                    months.push(value.length)
+                })
+
+
+
+                // Create chart
+                ordersChart1 = new Chart($elearningChart, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                        datasets: [{
+                            label: 'Income',
+                            data: months
+                        }]
+                    }
+                });
+
+                // Save to jQuery object
+                $elearningChart.data('chart', ordersChart1);
+            }
+
+            function initElearningByEvent(elearningChart, $elearningByYear, $event_id){
+                let months = []
+
+                $.each($elearningByYear, function(key, value) {
+                    let sum = 0
+                    $.each(value, function(key1, value1) {
+                        if($event_id == value1.event_id){
+                            sum++
+                        }
+                    })
+                    months.push(sum)
+                })
+
+                elearningChart.data().chart.data.datasets[0].data = months
+                ordersChart1.update();
+            }
+
+            function initAlumniChart($alumniChart, $alumniByYear) {
+                let months = []
+
+                $.each($alumniByYear, function(key, value) {
+                    months.push(value.length)
+                })
+
+                // Create chart
+                ordersChart2 = new Chart($alumniChart, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                        datasets: [{
+                            label: 'Income',
+                            data: months
+                        }]
+                    }
+                });
+
+                // Save to jQuery object
+                $alumniChart.data('chart', ordersChart2);
+            }
+
+            function initAlumniByEvent(alumniChart, $alumniByYear, $event_id){
+                let months = []
+
+                $.each($alumniByYear, function(key, value) {
+                    let sum = 0
+                    $.each(value, function(key1, value1) {
+                        if($event_id == value1.event_id){
+                            sum++
+                        }
+                    })
+                    months.push(sum)
+                })
+                alumniChart.data().chart.data.datasets[0].data = months
+                ordersChart2.update();
+            }
+
+
+            // Init chart
+            if ($chart.length) {
+                initChart($chart, $revenueByYear);
+            }
+            if ($elearningChart.length) {
+                initElearningChart($elearningChart, $elearningByYear);
+            }
+
+            if ($alumniChart.length) {
+                initAlumniChart($alumniChart, $alumniByYear);
+            }
+
+
+
+
+
+
+        $(function() {
+
+
+
+            $("#ticket-num-filter-by-event").change(function() {
+                let event_id = $(this).val()
+                if(event_id != ''){
+                    initTicketByEvent($ticketNameChart, $elearningByEvent, event_id)
+                }else{
+                    //destroy
+                    pieChart2.destroy();
+                    //create new chart
+                    initTicketChart($ticketNameChart, $ticketNameByYear)
+
+                }
             })
 
 
+            $("#ticket-filter-by-event").change(function() {
+                let event_id = $(this).val()
+                if(event_id != ''){
+                    initTicketSalesByEvent($ticketSalesChart, $elearningByEvent, event_id)
+                }else{
+                    //destroy
+                    pieChart1.destroy();
+                    //create new chart
+                    initTicketSalesChart($ticketSalesChart, $ticketNameByYear)
 
-            // Create chart
-            var ordersChart = new Chart($chart, {
-                type: 'bar',
-                data: {
-                    labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                    datasets: [{
-                        label: 'Income',
-                        data: months
-                    }]
                 }
+            })
+
+            $("#alumni-filter-by-event").change(function() {
+                let event_id = $(this).val()
+                if(event_id != ''){
+                    initAlumniByEvent($alumniChart,$alumniByYear,event_id)
+                }else{
+                    //destroy
+                    ordersChart2.destroy();
+                    //create new chart
+                    initAlumniChart($alumniChart, $alumniByYear)
+
+                }
+            })
+
+
+            $("#elearning-filter-by-event").change(function() {
+                let event_id = $(this).val()
+                if(event_id != ''){
+                    initElearningByEvent($elearningChart,$elearningByYear,event_id)
+                }else{
+                    //destroy
+                    ordersChart1.destroy();
+                    //create new chart
+                    initElearningChart($elearningChart, $elearningByYear)
+
+                }
+            })
+
+
+            $( "#revenue-filter-by-event" ).change(function() {
+                let event_id = $(this).val()
+                if(event_id != ''){
+                    initChartByEvent($chart, $revenueByYear, event_id)
+                }else{
+                    //destroy
+                    ordersChart.destroy();
+                    //create new chart
+                    initChart($chart, $revenueByYear)
+
+                }
+
+
             });
 
-            // Save to jQuery object
-            $chart.data('chart', ordersChart);
-        }
+        });
 
 
-        // Init chart
-        if ($chart.length) {
-            initChart($chart, $revenueByYear);
-        }
 
-        })();
     </script>
 @endpush

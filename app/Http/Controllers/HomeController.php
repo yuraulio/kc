@@ -38,22 +38,63 @@ class HomeController extends Controller
     public function index()
     {
         $transactions = (new TransactionController)->participants()['transactions'];
+        //dd($transactions);
 
         $current_year = strtotime("now");
         $current_year = date('Y',$current_year);
 
         $revenueByYear = [];
+        $elearningByYear = [];
+        $alumniByYear = [];
+        $ticketName = [];
 
         foreach($transactions as $key => $item){
             $time = strtotime($item['date']);
             $year = date('Y',$time);
             if($year == $current_year){
                 $revenueByYear[$key] = $item;
-                $revenueByYear[$key]['month'] = $year = date('m',$time);
+                $revenueByYear[$key]['month'] = date('m',$time);
+                if($item['is_elearning']){
+                    $elearningByYear[$key] = $item;
+                    $elearningByYear[$key]['month'] = date('m',$time);
+                }
+                if($item['type'] == 'Alumni'){
+                    $alumniByYear[$key] = $item;
+                    $alumniByYear[$key]['month'] = date('m',$time);
+                }
+                array_push($ticketName,[
+                    'name' => $item['ticketName'],
+                    'amount'=> $item['amount']
+                ]);
             }
+
         }
 
+
+
+
+
+        //$data['elearningByYear']
         $data['revenueByYear'] = group_by('month', $revenueByYear);
+        $data['revenueByEvent'] = group_by('event_id', $revenueByYear);
+        //dd($data['revenueByEvent']);
+
+
+
+        $data['elearningByYear'] = group_by('month', $elearningByYear);
+        $data['elearningByEvent'] = group_by('event_id', $revenueByYear);
+
+        $data['alumniByYear'] = group_by('month', $alumniByYear);
+        $data['alumniByEvent'] = group_by('event_id', $alumniByYear);
+
+        $data['ticketName'] = $ticketName;
+        //dd($ticketNam);
+
+
+        $data['booking'] = (new SubscriptionController)->subs_for_dashboard();
+
+
+        //$data['e_learning'] = group_by()
 
         //dd($data['transactions']);
 

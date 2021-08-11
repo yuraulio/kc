@@ -20,7 +20,6 @@ class PassportAuthController extends Controller
             'password' => $request->password
         ];
 
-
         if (auth()->attempt($data)) {
             auth()->user()->AauthAcessToken()->delete();
             Auth::logoutOtherDevices($request->password);
