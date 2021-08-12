@@ -218,24 +218,84 @@
         } );
 
         var minDate, maxDate;
+        let min, max;
+        min = new Date($('#min').val());
+        max = new Date($('#max').val());
+
+        // minDate = new DateTime($('#min'), {
+        // format: 'L'
+        // });
+        // //console.log('--min: '+minDate.val())
+        // maxDate = new DateTime($('#max'), {
+        //     format: 'L'
+        // });
+
+        min = moment($('#min').val()).format('MM/DD/YYYY')
+        max = moment($('#max').val()).format('MM/DD/YYYY')
+
+
 
 
         // Custom filtering function which will search data in column four between two values
         $.fn.dataTable.ext.search.push(
+            
 
             function( settings, data, dataIndex ) {
-                var min = minDate.val();
-                var max = maxDate.val();
-                var date = new Date( data[6] );
-                if (
-                    ( min === null && max === null ) ||
-                    ( min === null && date <= max ) ||
-                    ( min <= date   && max === null ) ||
-                    ( min <= date   && date <= max )
-                ) {
+                let find = false
+
+                //console.log('mindate::'+min)
+        //console.log('max'+max)
+
+                
+                //console.log(data[9])
+                //row = data[9]
+                row = data[9].split('||')
+                //console.log(row)
+                $.each(row, function(key1, value1) {
+                    //console.log(value1)
+                    if(value1 != ''){
+                        event = value1.split('--')
+                        date1 = event[4]
+                        if(date1 !== undefined){
+                            var date = moment(date1).format('MM/DD/YYYY')
+                            console.log(date)
+                        }
+                        
+                        //var date = new Date( date1 );
+                        
+                        //console.log('inside row:'+date >= min)
+                        if (
+                            ( min === null && max === null ) ||
+                            ( min === null && date <= max ) ||
+                            ( min <= date   && max === null ) ||
+                            ( min <= date   && date <= max )
+                        ) {
+                            find = true
+                            
+                        }  
+                                   
+                    }
+                    
+                            
+                    //console.log('false')
+                        //return false;
+                })
+                if(find){
                     return true;
                 }
                 return false;
+                
+                    //console.log(value)
+                    // val = value.split('||')
+                    // $.each(val, function(key1, value1) {
+                    //     console.log(value1)
+                    //     ev = value1.split('--')
+                    //     // if(ev.length > 2){
+                    //     //     //console.log(ev)
+                    //     // }
+                    // })
+                //})
+                
             }
 
         );
@@ -446,81 +506,98 @@
 
 
 
-        function getStatsByDate(min, max, key, value){
-            console.log('min:'+min)
-            console.log('max:'+max)
-            console.log('key:'+key)
-            console.log('value:'+value)
-        if(min != 'Invalid date' && max == 'Invalid date'){
-            if(moment(datatable_date).isAfter(min)){
-                sum = sum + parseInt(table.column( 3 ).data()[key])
+        function getStatsByDate(min, max, details){
+
+            if(details.length > 2){
+
+                // console.log(details)
+                // console.log('min:'+min)
+                // console.log('max:'+max)
+                title = details[0]
+                type = details[1]
+                amount = parseInt(details[2])
+                datatable_date = details[4]
+                datatable_date = new Date(datatable_date);
+                datatable_date = moment(datatable_date).format('MM/DD/YYYY')
+               
+                if(type != ''){
+                if(min != 'Invalid date' && max == 'Invalid date'){
+                    if(moment(datatable_date).isAfter(min)){
+                        sum = sum + amount
 
 
-                if(table.column( 2 ).data()[key] == 'Alumni'){
-                    alumni = alumni + parseInt(value)
-                    count_alumni++
-                }else if(table.column( 2 ).data()[key] == 'Regular'){
-                    regular = regular + parseInt(value)
-                    count_regular++
-                }else if(table.column( 2 ).data()[key] == 'Special'){
-                    special = special + parseInt(value)
-                    count_special++
-                }else if(table.column( 2 ).data()[key] == 'Sponsored'){
-                    sponsored = sponsored + parseInt(value)
-                    count_sponsored++
-                }else if(table.column( 2 ).data()[key] == 'Early birds'){
-                    early = early + parseInt(value)
-                    count_early++
+                        if(type == 'Alumni'){
+                            alumni = alumni + amount
+                            count_alumni++
+                        }else if(type == 'Regular'){
+                            regular = regular + amount
+                            count_regular++
+                        }else if(type == 'Special'){
+                            special = special + amount
+                            count_special++
+                        }else if(type == 'Sponsored'){
+                            sponsored = sponsored + amount
+                            count_sponsored++
+                        }else if(type == 'Early birds'){
+                            early = early + amount
+                            count_early++
+                        }
+                    }
+                }else if(min !='Invalid date' && max != 'Invalid date'){
+                    if(moment(datatable_date).isAfter(min) && moment(datatable_date).isBefore(max)){
+                        sum = sum + amount
+
+                        if(type == 'Alumni'){
+                            alumni = alumni + amount
+                            count_alumni++
+                        }else if(type == 'Regular'){
+                            regular = regular + amount
+                            count_regular++
+                        }else if(type == 'Special'){
+                            special = special + amount
+                            count_special++
+                        }else if(type == 'Sponsored'){
+                            sponsored = sponsored + amount
+                            count_sponsored++
+                        }else if(type == 'Early birds'){
+                            early = early + amount
+                            count_early++
+                        }
+                    }
+                }else if(min == 'Invalid date' && max != 'Invalid date'){
+                    if(moment(datatable_date).isBefore(max)){
+                        sum = sum + amount
+
+                        if(type == 'Alumni'){
+                            alumni = alumni + amount
+                            count_alumni++
+                        }else if(type == 'Regular'){
+                            regular = regular + amount
+                            count_regular++
+                        }else if(type == 'Special'){
+                            special = special + amount
+                            count_special++
+                        }else if(type == 'Sponsored'){
+                            sponsored = sponsored + amount
+                            count_sponsored++
+                        }else if(type == 'Early birds'){
+                            early = early + amount
+                            count_early++
+                        }
+                    }
                 }
             }
-        }else if(min !='Invalid date' && max != 'Invalid date'){
-            if(moment(datatable_date).isAfter(min) && moment(datatable_date).isBefore(max)){
-                sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key])
 
-                if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Alumni'){
-                    alumni = alumni + parseInt(value)
-                    count_alumni++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Regular'){
-                    regular = regular + parseInt(value)
-                    count_regular++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Special'){
-                    special = special + parseInt(value)
-                    count_special++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Sponsored'){
-                    sponsored = sponsored + parseInt(value)
-                    count_sponsored++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early birds'){
-                    early = early + parseInt(value)
-                    count_early++
-                }
             }
-        }else if(min == 'Invalid date' && max != 'Invalid date'){
-            if(moment(datatable_date).isBefore(max)){
-                sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key])
-
-                if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Alumni'){
-                    alumni = alumni + parseInt(value)
-                    count_alumni++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Regular'){
-                    regular = regular + parseInt(value)
-                    count_regular++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Special'){
-                    special = special + parseInt(value)
-                    count_special++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Sponsored'){
-                    sponsored = sponsored + parseInt(value)
-                    count_sponsored++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early birds'){
-                    early = early + parseInt(value)
-                    count_early++
-                }
-            }
-        }
+            
+            
+        
 
     }
 
     //Refilter the table
     $('#min, #max').on('change', function () {
+        $('#participants_info').removeClass('d-none')
         alert('change date')
         //console.log('from change min!!')
         table.draw();
@@ -530,41 +607,57 @@
 
         initCounters()
 
-        let min = new Date($('#min').val());
-        let max = new Date($('#max').val());
-        console.log('min:'+min)
-        console.log('max:'+max)
+        min = new Date($('#min').val());
+        max = new Date($('#max').val());
+        console.log('+min:'+min)
+        console.log('+max:'+max)
 
         minDate = new DateTime($('#min'), {
             format: 'L'
         });
 
+        
+
         //console.log(minDate.getTime())
        // moment()
 
         min = moment(min).format('MM/DD/YYYY')
-        //console.log('Min:'+min)
         max = moment(max).format('MM/DD/YYYY')
+        
 
         //console.log(moment(min).isBefore(max))
         //EDW
         //initCounters()
         $.each(events, function(key, value){
-
+            //console.log('KEY:'+key)
+            //console.log('row:')
             //console.log(value)
-            value = value.split('||')
-            $.each(value, function(key1, value1) {
-                a = value1.split('--')
-                console.log('----------')
-                console.log(a)
-                datatable_date = new Date(a[4]);
-                datatable_date = moment(datatable_date).format('MM/DD/YYYY')
-                //console.log(datatable_date)
-                //console.log('PRICE:')
-                //console.log(a[3])
-                getStatsByDate(min, max, key, a[3])
+            if(value != ''){
+                value = value.split('||')
+                    $.each(value, function(key1, value1) {
+                        //console.log('events inside row:')
+                        //console.log(value1)
+                        if(value1 != ''){
+                            details = value1.split('--')
+                            //console.log('pre')
+                            //console.log(details)
+                            //console.log('STOP')
+                            getStatsByDate(min, max, details)
+                        }
+                        //a = value1.split('--')
+                        
+                        ///console.log('----------')
+                        //console.log(a)
+                        //datatable_date = new Date(a[4]);
+                        //datatable_date = moment(datatable_date).format('MM/DD/YYYY')
+                        //console.log(datatable_date)
+                        //console.log('PRICE:')
+                        //console.log(a[3])
+                        //
 
-            })
+                    })
+            }
+            
             //datatable_date = table.column( 9 ).data()[key]
             //datatable_date = new Date(datatable_date);
             //datatable_date = moment(datatable_date).format('MM/DD/YYYY')
