@@ -230,8 +230,9 @@
         //     format: 'L'
         // });
 
-        min = moment($('#min').val()).format('MM/DD/YYYY')
-        max = moment($('#max').val()).format('MM/DD/YYYY')
+        //min = moment($('#min').val()).format('MM/DD/YYYY')
+        max = null
+
 
 
 
@@ -242,6 +243,7 @@
 
             function( settings, data, dataIndex ) {
                 let find = false
+                var min = new Date($('#min').val());
 
                 //console.log('mindate::'+min)
         //console.log('max'+max)
@@ -252,28 +254,37 @@
                 row = data[9].split('||')
                 //console.log(row)
                 $.each(row, function(key1, value1) {
+                    max = null
                     //console.log(value1)
                     if(value1 != ''){
                         event = value1.split('--')
                         date1 = event[4]
                         if(date1 !== undefined){
-                            var date = moment(date1).format('MM/DD/YYYY')
-                            console.log(date)
+                            var date = new Date(date1)
+                            console.log('my date:'+date)
+                            console.log('min:'+ min)
+                            console.log('max:'+ max)
+                            console.log('has:'+(min <= date   && max === null))
+                            
+                            if (( min === null && max === null ) ||
+                            ( min === null && date <= max ) ||
+                            ( min <= date   && max === null ) ||
+                            ( min <= date   && date <= max )) {
+                                console.log('true')
+                                find = true
+                                    return true
+                                }
+                                
                         }
                         
                         //var date = new Date( date1 );
                         
                         //console.log('inside row:'+date >= min)
-                        if (
-                            ( min === null && max === null ) ||
-                            ( min === null && date <= max ) ||
-                            ( min <= date   && max === null ) ||
-                            ( min <= date   && date <= max )
-                        ) {
-                            find = true
-                            
-                        }  
+                         
                                    
+                    }
+                    if(find){
+                        return true;
                     }
                     
                             
