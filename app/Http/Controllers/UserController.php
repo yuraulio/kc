@@ -33,6 +33,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\Dashboard\CouponController;
 
 use Illuminate\Http\Request;
 
@@ -59,6 +60,7 @@ class UserController extends Controller
 
         $data['events'] = (new EventController)->fetchAllEvents();
         $data['transactions'] = (new TransactionController)->participants();
+        $data['coupons'] = (new CouponController)->fetchAllCoupons();
 
         //groupby user_id(level1)
         $data['transactions'] = group_by('user_id', $data['transactions']['transactions']);
@@ -73,6 +75,7 @@ class UserController extends Controller
         //dd($model->with('role', 'image')->get()[0]);
 
         //dd($model->with('role', 'image')->get()->toArray()[0]['image']);
+        //dd($model->with('role', 'image','statusAccount', 'events_for_user_list')->get()->toArray()[10]);
 
         return view('users.index', ['users' => $model->with('role', 'image','statusAccount', 'events_for_user_list')->get()->toArray(), 'data' => $data]);
     }

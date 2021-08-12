@@ -12,7 +12,7 @@ class ExamResult extends Model
 {
     use HasFactory;
 
-    
+
         protected $fillable = [
             'user_id',
             'exam_id',
@@ -25,11 +25,11 @@ class ExamResult extends Model
             'total_score',
             'answers',
         ];
-    
+
         /*public function certificate(){
             return $this->hasOne('PostRider\Certificate');
         }*/
-    
+
         public function user(){
             return $this->belongsTo(User::class);
         }
@@ -42,17 +42,17 @@ class ExamResult extends Model
 
             $examSettings = $this->examSettings->toArray();
             $examResult = $this->where('exam_id',$this->exam_id)->where('user_id',$user_id)->first();
-            
+
             $answers = [];
             $data['answers'] = [];
             if($examResult){
                 foreach((array) json_decode($examResult->answers,true) as $answer){
-                    
+
                     $answers['classname'] = 'text-danger';
                     $answers['question'] = $answer['question'];
                     $answers['correct_answer'] = is_array($answer['correct_answer']) ? $answer['correct_answer'][0] : $answer['correct_answer'];
                     $answers['given_answer'] = $answer['given_answer'];
-                   
+
 
                     if(is_array($answer['correct_answer']) && $answer['correct_answer'][0] == $answer['given_answer']){
                         $answers['classname'] = 'text-success';

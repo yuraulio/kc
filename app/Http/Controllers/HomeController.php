@@ -38,7 +38,6 @@ class HomeController extends Controller
     public function index()
     {
         $transactions = (new TransactionController)->participants()['transactions'];
-        //dd($transactions);
 
         $current_year = strtotime("now");
         $current_year = date('Y',$current_year);
@@ -70,12 +69,6 @@ class HomeController extends Controller
 
         }
 
-        
-
-
-
-
-        
         $data['revenueByYear'] = group_by('month', $revenueByYear);
         $data['revenueByEvent'] = group_by('event_id', $revenueByYear);
         //dd($data['revenueByEvent']);
@@ -91,15 +84,9 @@ class HomeController extends Controller
         $data['alumniByEvent'] = group_by('event_id', $alumniByYear);
 
         $data['ticketName'] = $ticketName;
-        //dd($ticketNam);
 
 
-        //$data['booking'] = (new SubscriptionController)->subs_for_dashboard();
-
-
-        //$data['e_learning'] = group_by()
-
-        //dd($data['transactions']);
+        $data['booking'] = (new SubscriptionController)->subs_for_dashboard();
 
         return view('pages.dashboard', $data);
     }

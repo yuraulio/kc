@@ -318,7 +318,9 @@
     text-align: end;
 }
 
-
+.custom-select {
+    width: 25rem;
+}
 @media (min-height: 693px) {
     #file-man-main {
         height: 100% !important;

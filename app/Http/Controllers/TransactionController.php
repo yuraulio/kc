@@ -33,6 +33,12 @@ class TransactionController extends Controller
                     $ticketType = '-';
                 }
 
+                if($transaction['coupon_code'] != ''){
+                    $coupon_code = $transaction['coupon_code'];
+                }else{
+                    $coupon_code = '-';
+                }
+
                 $videos = isset($statistic[$transaction->event->first()->id]) ?
                     $statistic[$transaction->event->first()->id]->first()->pivot : null;
 
@@ -41,7 +47,7 @@ class TransactionController extends Controller
                 $videos = isset($videos) ? json_decode($videos->videos,true) : null;
 
                 $data['transactions'][] = ['id' => $transaction['id'], 'user_id' => $transaction->user[0]['id'],'name' => $transaction->user[0]['firstname'].' '.$transaction->user[0]['lastname'],
-                                            'event_id' => $transaction->event[0]['id'],'event_title' => $transaction->event[0]['title'], 'type' => $ticketType,'ticketName' => $ticketName,
+                                            'event_id' => $transaction->event[0]['id'],'event_title' => $transaction->event[0]['title'],'coupon_code' => $coupon_code, 'type' => $ticketType,'ticketName' => $ticketName,
                                             'date' => date_format($transaction['created_at'], 'm/d/Y'), 'amount' => $transaction['amount'],
                                             'is_elearning' => $transaction->event->first()->is_elearning_course(),
                                             'coupon_code' => $transaction['coupon_code'],'videos_seen' => $this->getVideosSeen($videos),'expiration'=>$expiration];

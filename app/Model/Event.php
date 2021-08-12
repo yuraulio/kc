@@ -72,7 +72,7 @@ class Event extends Model
 
     public function exam_result()
     {
-        return $this->belongsToMany(ExamResult::class, 'exam_results', 'user_id', 'exam_id');
+        return $this->belongsToMany(ExamResult::class, 'exam_results', 'user_id', 'exam_id')->withPivot('total_score');
     }
 
     public function type()

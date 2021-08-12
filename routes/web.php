@@ -96,6 +96,9 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::post('city/store_main', ['as' => 'city.store_main', 'uses' => 'CityController@store_main']);
     Route::get('city/fetchAllCities', ['as' => 'city.fetchAllCities', 'uses' => 'CityController@fetchAllCities']);
 
+    //Events
+    Route::post('events/fetchElearningInfos', ['as' => 'events.fetchElearningInfos', 'uses' => 'EventController@elearning_infos_user_table']);
+
 
     //Faqs
     Route::post('faqs/fetchAllFaqs', ['as' => 'faqs.fetchAllFaqs', 'uses' => 'FaqController@fetchAllFaqs']);

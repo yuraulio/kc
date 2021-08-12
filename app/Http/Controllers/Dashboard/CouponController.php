@@ -92,4 +92,10 @@ class CouponController extends Controller
         }
     }
 
+    public function fetchAllCoupons(){
+        $coupons = Coupon::all();
+
+        return $coupons;
+    }
+
 }

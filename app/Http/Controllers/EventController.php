@@ -12,6 +12,7 @@ use App\Model\Partner;
 use App\Model\PaymentMethod;
 use App\Model\Delivery;
 use App\Model\Media;
+use App\Model\User;
 use App\Model\CategoriesFaqs;
 use Illuminate\Http\Request;
 use App\Http\Requests\EventRequest;
@@ -409,6 +410,37 @@ class EventController extends Controller
         //dd($data['events']);
 
         return $data['events'];
+
+    }
+
+    public function elearning_infos_user_table(Request $request){
+        $ids = [];
+        $event = Event::where('title', $request->event)->first();
+        $num = $request->page;
+        if($num != 0){
+            $str = $num.'0';
+            $num = (int)$str;
+        }
+
+        $count = 0;
+
+        foreach(array_slice($request->ids, $num) as $key => $item){
+            $user = User::find($item);
+            //$exam = $event->exam_result()->get();
+
+
+            //dd($event->video_seen($user));
+            $ids[$count]['id'] = $user['id'];
+            $ids[$count]['video_seen'] = $event->video_seen($user);
+            if($count == 9){
+                break;
+            }
+            $count++;
+
+        }
+
+        echo json_encode($ids);
+
 
     }
 }
