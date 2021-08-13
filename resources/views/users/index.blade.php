@@ -99,11 +99,11 @@
                                         <?php //dd(asset('profile_user').'/'.$user['image']['name'] ); ?>
                                             <span class="avatar avatar-sm rounded-circle">
 
-                                            {{--@if($user['image'] != null && $user['image']['name'] != '')
+                                            @if($user['image'] != null && $user['image']['name'] != '')
                                                 <img src="{{ cdn(get_image($user['image'])) }}" alt="{{ $user['firstname'] }}" style="max-width: 100px; border-radiu: 25px">
                                             @else
                                             <img src="" alt="{{ $user['firstname'] }}" style="max-width: 100px; border-radius: 25px">
-                                            @endif--}}
+                                            @endif
                                             </span>
                                         </td>
                                         <td><a href="{{ route('user.edit', $user['id']) }}">{{ $user['firstname'] }}</a></td>
@@ -239,7 +239,7 @@
 
         // Custom filtering function which will search data in column four between two values
         $.fn.dataTable.ext.search.push(
-            
+
 
             function( settings, data, dataIndex ) {
                 let find = false
@@ -248,7 +248,7 @@
                 //console.log('mindate::'+min)
         //console.log('max'+max)
 
-                
+
                 //console.log(data[9])
                 //row = data[9]
                 row = data[9].split('||')
@@ -265,7 +265,7 @@
                             console.log('min:'+ min)
                             console.log('max:'+ max)
                             console.log('has:'+(min <= date   && max === null))
-                            
+
                             if (( min === null && max === null ) ||
                             ( min === null && date <= max ) ||
                             ( min <= date   && max === null ) ||
@@ -274,20 +274,20 @@
                                 find = true
                                     return true
                                 }
-                                
+
                         }
-                        
+
                         //var date = new Date( date1 );
-                        
+
                         //console.log('inside row:'+date >= min)
-                         
-                                   
+
+
                     }
                     if(find){
                         return true;
                     }
-                    
-                            
+
+
                     //console.log('false')
                         //return false;
                 })
@@ -295,7 +295,7 @@
                     return true;
                 }
                 return false;
-                
+
                     //console.log(value)
                     // val = value.split('||')
                     // $.each(val, function(key1, value1) {
@@ -306,7 +306,7 @@
                     //     // }
                     // })
                 //})
-                
+
             }
 
         );
@@ -530,7 +530,7 @@
                 datatable_date = details[4]
                 datatable_date = new Date(datatable_date);
                 datatable_date = moment(datatable_date).format('MM/DD/YYYY')
-               
+
                 if(type != ''){
                 if(min != 'Invalid date' && max == 'Invalid date'){
                     if(moment(datatable_date).isAfter(min)){
@@ -600,9 +600,9 @@
             }
 
             }
-            
-            
-        
+
+
+
 
     }
 
@@ -627,14 +627,14 @@
             format: 'L'
         });
 
-        
+
 
         //console.log(minDate.getTime())
        // moment()
 
         min = moment(min).format('MM/DD/YYYY')
         max = moment(max).format('MM/DD/YYYY')
-        
+
 
         //console.log(moment(min).isBefore(max))
         //EDW
@@ -656,7 +656,7 @@
                             getStatsByDate(min, max, details)
                         }
                         //a = value1.split('--')
-                        
+
                         ///console.log('----------')
                         //console.log(a)
                         //datatable_date = new Date(a[4]);
@@ -668,7 +668,7 @@
 
                     })
             }
-            
+
             //datatable_date = table.column( 9 ).data()[key]
             //datatable_date = new Date(datatable_date);
             //datatable_date = moment(datatable_date).format('MM/DD/YYYY')

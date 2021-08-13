@@ -264,7 +264,7 @@
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-10-tab_inside" data-toggle="tab" href="#tabs-icons-text-10_inside" role="tab" aria-controls="tabs-icons-text-10_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Faqs</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-11-tab_inside" data-toggle="tab" href="#tabs-icons-text-11_inside" role="tab" aria-controls="tabs-icons-text-11_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Image version</a>
+                                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-11-tab_inside" data-toggle="tab" href="#tabs-icons-text-11_inside" role="tab" aria-controls="tabs-icons-text-11_inside" aria-selected="false"><i class="far fa-images mr-2"></i>Image</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab_inside" data-toggle="tab" href="#coupons" role="tab" aria-controls="metas" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Coupons</a>
@@ -435,27 +435,19 @@
                                                 @include('admin.faq.index', ['model' => $event])
                                             </div>
                                             <div class="tab-pane fade" id="tabs-icons-text-11_inside" role="tabpanel" aria-labelledby="tabs-icons-text-11-tab_inside">
-                                                <?php
-
-                                                // if($event->medias != null){
-                                                //     dd('has image');
-                                                // }else{
-                                                //     dd($event);
-                                                // }
-
-                                                //dd($event->medias != null);
-
-
-                                                ?>
 
                                                 @include('admin.upload.upload', ['event' => ($event->medias != null) ? $event->medias : null, 'versions' => ['event-card', 'header-image', 'social-media-sharing']])
 
                                                 <input type="hidden" name="creator_id" id="input-creator_id" class="form-control" value="{{$event->creator_id}}">
                                                 <input type="hidden" name="author_id" id="input-author_id" class="form-control" value="{{$event->author_id}}">
 
+                                                <div id="version-btn" style="margin-bottom:20px" class="col">
+                                                    <a href="{{ route('media2.eventImage', $event->medias) }}" target="_blank" class="btn btn-primary">{{ __('Versions') }}</a>
+                                                </div>
                                                 @include('alerts.feedback', ['field' => 'ext_url'])
 
-                                                @include('event.image_versions', ['event' => $event->medias,'versions1'=> ['event-card', 'header-image', 'social-media-sharing']])
+                                                {{--@include('event.image_versions', ['event' => $event->medias,'versions1'=> ['event-card', 'header-image', 'social-media-sharing']])--}}
+                                                {{--@include('event.image_versions_new', ['event' => $event->medias,'versions1'=> ['social-media-sharing','instructors-testimonials', 'event-card', 'users' ,'header-image', 'instructors-small' ,'feed-image']])--}}
                                             </div>
                                         </div>
                                     </div>

@@ -96,10 +96,6 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::post('city/store_main', ['as' => 'city.store_main', 'uses' => 'CityController@store_main']);
     Route::get('city/fetchAllCities', ['as' => 'city.fetchAllCities', 'uses' => 'CityController@fetchAllCities']);
 
-    //Events
-    Route::post('events/fetchElearningInfos', ['as' => 'events.fetchElearningInfos', 'uses' => 'EventController@elearning_infos_user_table']);
-
-
     //Faqs
     Route::post('faqs/fetchAllFaqs', ['as' => 'faqs.fetchAllFaqs', 'uses' => 'FaqController@fetchAllFaqs']);
     Route::post('faqs/store_event', ['as' => 'faqs.store_event', 'uses' => 'FaqController@store_event']);
@@ -180,6 +176,8 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     //Events
     Route::put('profile/updateRole', ['as' => 'profile.updateRole', 'uses' => 'ProfileController@updateRole']);
     Route::get('events/fetchAllEvents', ['as' => 'events.fetchAllEvents', 'uses' => 'EventController@fetchAllEvents']);
+    Route::post('events/fetchElearningInfos', ['as' => 'events.fetchElearningInfos', 'uses' => 'EventController@elearning_infos_user_table']);
+
 
     //Notification
     Route::get('notification', ['as' => 'notification.show', 'uses' => 'NotificationController@index']);
@@ -224,6 +222,7 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
 
     //media2
     Route::get('media2/index', ['as' => 'media2.index', 'uses' => 'MediaController@index']);
+    Route::get('media2/{id}', ['as' => 'media2.eventImage', 'uses' => 'MediaController@eventImage']);
 
     //Lessons
     Route::post('/sort-lessons/{event}', 'LessonController@orderLesson')->name('sort-lessons');

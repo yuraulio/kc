@@ -1,10 +1,18 @@
 <?php
 
 use App\Model\Slug;
+use App\Model\Option;
 use App\Model\Media;
 use Illuminate\Support\Str;
 use App\Model\Menu;
 use App\Model\Exam;
+
+function get_social_media(){
+    $social_media = Option::where('name', 'social_media')->get();
+    $social_media = json_encode($social_media[0]['settings'], true);
+    dd($social_media);
+
+}
 
 function get_split_image_path($path)
     {

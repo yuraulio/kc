@@ -15,6 +15,17 @@
 <li class="breadcrumb-item active" aria-current="page">{{ __('Add Page') }}</li>
 @endcomponent
 @endcomponent
+    <?php //dd($page->id);
+        if($page['id'] == 800){
+            $tab_title = 'Brands';
+            $title = 'Brand';
+            $data = $brands;
+        }else{
+            $tab_title = 'Logos';
+            $title = 'Logo';
+            $data = $logos;
+        }
+    ?>
 <div class="container-fluid mt--6">
    <div class="nav-wrapper" style="margin-top: 65px;">
       <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
@@ -23,16 +34,14 @@
          </li>
          @if($page->name || in_array($page->template,$noEditablePages))
          <li class="nav-item">
-            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-1-tab" data-toggle="tab" href="#metas" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Metas</a>
+            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#metas" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Metas</a>
          </li>
          @endif
 
-         @if($page->template !== 'cart')
          <li class="nav-item">
-            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#media" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="far fa-images mr-2"></i>Media</a>
+            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-3-tab" data-toggle="tab" href="#images" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="far fa-images mr-2"></i>{{$tab_title}}</a>
          </li>
 
-         @endif
 
       </ul>
    </div>
@@ -74,7 +83,7 @@
 
                         <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
                            <label class="form-control-label" for="input-title">{{ __('Title') }}</label>
-                           <input type="text" name="title" id="input-title" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title',$page->title) }}"  autofocus>
+                           <input type="text" name="title" id="input-title" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title',$page->title) }}"  required autofocus>
                            @include('alerts.feedback', ['field' => 'title'])
                         </div>
 
@@ -134,6 +143,8 @@
       </form>
    </div>
 
+
+
    @if($page->name || in_array($page->template,$noEditablePages))
    <div class="tab-pane fade" id="metas" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
       <div class="row">
@@ -143,30 +154,98 @@
       </div>
    </div>
    @endif
-   @if($page->name && $page->template != 'cart')
-   <div class="tab-pane fade" id="media" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
-      <div class="row">
-         <div class="col-xl-12 order-xl-1">
-         @include('admin.upload.upload', ['event' => ($media != null) ? $media : null, 'versions' => ['event-card', 'header-image', 'social-media-sharing']])
-         </div>
+   <div class="tab-pane fade" id="images" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
 
-      </div>
-        @if($media != null && $media['name'] != '')
-            <div id="version-btn" style="margin-bottom:20px" class="col">
-                <a href="{{ route('media2.eventImage', $media) }}" target="_blank" class="btn btn-primary">{{ __('Versions') }}</a>
+    <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row align-items-center">
+                            <div class="col-8">
+                                <h3 class="mb-0">{{ __($title) }}</h3>
+                            </div>
+                                <div class="col-4 text-right">
+                                    <a href="{{ route('logos.create') }}" class="btn btn-sm btn-primary">{{ __('Add') }} {{ __($title) }}</a>
+                                </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 mt-2">
+                        @include('alerts.success')
+                        @include('alerts.errors')
+                    </div>
+
+                    <div class="table-responsive py-4">
+                        <table class="table table-flush"  id="datatable-basic100">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">{{ __('Title') }}</th>
+                                    <th scope="col">{{ __('Created') }}</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($data as $item)
+                                    <tr>
+                                        <td><a href="{{ route('logos.edit', $item) }}">{{ $item->name }}</td>
+                                        <td>{{ $item->created_at->format('d/m/Y H:i') }}</td>
+                                        <td class="text-right">
+                                        <?php //dd($user); ?>
+                                            <div class="dropdown">
+                                                <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fas fa-ellipsis-v"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                                    <a class="dropdown-item" href="{{ route('logos.edit', $item) }}">{{ __('Edit') }}</a>
+                                                    {{--<form action="{{ route('user.destroy', $user) }}" method="post">
+                                                        @csrf
+                                                        @method('delete')
+
+                                                        <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
+                                                            {{ __('Delete') }}
+                                                        </button>
+                                                    </form>--}}
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-        @endif
-   </div>
-
-   {{--<div class="tab-pane fade" id="media_version" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
-      <div class="row">
-         <div class="col-xl-12 order-xl-1">
-            @include('event.image_versions', ['event' => $media,'versions1'=> ['event-card', 'header-image', 'social-media-sharing']])
-         </div>
-      </div>
-   </div>--}}
-   @endif
+        </div>
+        </div>
 
    @include('layouts.footers.auth')
 </div>
 @endsection
+
+@push('css')
+    <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">
+    <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css">
+@endpush
+
+@push('js')
+<script src="{{ asset('argon') }}/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('argon') }}/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="{{ asset('argon') }}/vendor/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+    <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
+<script>
+    var table = $('#datatable-basic100').DataTable({
+        language: {
+            paginate: {
+            next: '&#187;', // or '→'
+            previous: '&#171;' // or '←'
+            }
+        }
+    });
+</script>
+
+@endpush

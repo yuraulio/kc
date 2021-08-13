@@ -15,10 +15,10 @@ class OptionsController extends Controller
 
     public function edit(Option $option){
         $data['option'] = $option;
-        
+
         $codes = $option->settings;
         $codes = explode(',', $codes);
-        
+
         $codes = implode(",\n", $codes);
 
         $data['codes'] = $codes;

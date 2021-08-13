@@ -91,10 +91,10 @@
             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-5-tab" data-toggle="tab" href="#tabs-icons-text-5" role="tab" aria-controls="tabs-icons-text-5" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Activity Timeline</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-6-tab" data-toggle="tab" href="#tabs-icons-text-6" role="tab" aria-controls="tabs-icons-text-6" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Messages</a>
+            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-6-tab" data-toggle="tab" href="#tabs-icons-text-6" role="tab" aria-controls="tabs-icons-text-6" aria-selected="false"><i class="fas fa-envelope mr-2"></i>Messages</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab" data-toggle="tab" href="#tabs-icons-text-8" role="tab" aria-controls="tabs-icons-text-8" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Profile image</a>
+            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab" data-toggle="tab" href="#tabs-icons-text-8" role="tab" aria-controls="tabs-icons-text-8" aria-selected="false"><i class="fas fa-images mr-2"></i>Profile image</a>
         </li>
     </ul>
 </div>
@@ -619,18 +619,28 @@
             </div>
             <div class="tab-pane fade" id="tabs-icons-text-8" role="tabpanel" aria-labelledby="tabs-icons-text-8-tab">
                 <div class="col-12 img_version">
-                    <h3>Profile Image</h3>
-                    <img class="img-fluid" id="profile_image" src="
-                    <?php
-                        if(isset($user) && $user->image != null) {
 
-                            echo asset('uploads/profile_user').'/'.$user->image->original_name;
-                        }else{
-                            echo '';
-                        }
-                    ?>" alt="">
 
-                    <button class="btn btn-primary crop_profile" type="button">Crop</button>
+                        @if(isset($user->image) && $user->image['name'] != '')
+                        <h3>Profile Image</h3>
+                        <img class="img-fluid" id="profile_image" src="
+                        <?php
+                            if(isset($user) && $user->image != null) {
+
+                                echo asset('uploads/profile_user').'/'.$user->image->original_name;
+                            }else{
+                                echo '';
+                            }
+                        ?>" alt="">
+                        <div id="version-btn" style="margin-bottom:20px" class="col">
+                            <a href="{{ route('media2.eventImage', $user->image) }}" target="_blank" class="btn btn-primary">{{ __('Versions') }}</a>
+                        </div>
+                        @else
+                            {{__('No Image')}}
+                        @endif
+
+
+                    {{--<button class="btn btn-primary crop_profile" type="button">Crop</button>--}}
                     <div class="crop-msg" id="profile_image_msg"></div>
                 </div>
 
@@ -804,7 +814,7 @@ $(document).on('click', '.ticket-card', function () {
 
 
 
-    const cropper = new Cropper(document.getElementById(`profile_image`), {
+    const cropper = new Cropper(document.getElementById(`profileimage`), {
         aspectRatio: Number((width/height), 4),
         viewMode: 0,
         dragMode: "crop",
@@ -895,7 +905,7 @@ $(document).on('click', '.ticket-card', function () {
         });
 	}
 
-    function filterScopeUserActivationLink(id) { 
+    function filterScopeUserActivationLink(id) {
         user_id = $(id).data('id')
 	    $.ajax({ url: '/admin/activation-inform',
             headers: {

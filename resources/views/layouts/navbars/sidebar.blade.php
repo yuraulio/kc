@@ -109,9 +109,6 @@
                                     <li class="nav-item {{ $elementName == 'payment-management' ? 'active' : '' }}">
                                         <a href="{{ route('payments.index') }}" class="nav-link">{{ __('Payment Methods') }}</a>
                                     </li>
-                                    <li class="nav-item {{ $elementName == 'logo-management' ? 'active' : '' }}">
-                                        <a href="{{ route('logos.index') }}" class="nav-link">{{ __('Logos (Temp)') }}</a>
-                                    </li>
 
                             </ul>
                         </div>

@@ -14,7 +14,6 @@ class MediaController extends Controller
 
     public function index()
     {
-
         return view('admin.media2.index');
     }
 
@@ -299,6 +298,13 @@ class MediaController extends Controller
             'success' => __('Already image cropped.'),
             'data' => $data,
         ]);
+    }
+
+    public function eventImage($id){
+        $data['media'] = Media::find($id);
+        //dd($data['media']);
+
+        return view('layouts.media_versions', $data);
     }
 
     // public function createFolder($event = null){

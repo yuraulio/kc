@@ -1,5 +1,5 @@
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#select_ImageModal">
+<button type="button" class="btn btn-primary upload-img" data-toggle="modal" data-target="#select_ImageModal">
 Upload Image
 </button>
 

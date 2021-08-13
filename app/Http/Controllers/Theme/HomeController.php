@@ -105,7 +105,7 @@ class HomeController extends Controller
 
     public function homePage(){
 
-
+        get_social_media();
         $data = [];
 
         //$data['events'] = Event::with('category', 'medias', 'slugable', 'ticket')->get()->toArray();
@@ -426,8 +426,10 @@ class HomeController extends Controller
             $data['instructors'] =  Instructor::with('medias', 'slugable')->where('status', 1)->get();
         }else if($data['page']['id'] == 800){
             $data['brands'] = Logos::with('medias')->where('type', 'brands')->get();
+            return view('admin.static_tpls.logos.backend' ,$data);
         }else if($data['page']['id'] == 801){
             $data['logos'] = Logos::with('medias')->where('type', 'logos')->get();
+            return view('admin.static_tpls.logos.backend' ,$data);
         }
 
         return view('admin.static_tpls.'.$data['page']['template'].'.frontend' ,$data);

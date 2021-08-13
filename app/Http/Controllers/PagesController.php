@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Model\Pages;
+use App\Model\Logos;
 use Illuminate\Http\Request;
 use App\Http\Requests\PagesRequest;
 use Illuminate\Support\Facades\Auth;
@@ -76,7 +77,6 @@ class PagesController extends Controller
      */
     public function edit(Pages $page)
     {
-
         $data['page'] = $page;
         $data['templates'] = get_templates();
         $data['slug'] = $page->slugable;
@@ -85,6 +85,13 @@ class PagesController extends Controller
 
         if($page->template == 'corporate_page'){
             return view('admin.pages.create_corporate',$data);
+        }else if($page->template == 'logos_page'){
+            if($page['id'] == 800){
+                $data['brands'] = Logos::with('medias')->where('type', 'brands')->get();
+            }else if($page['id'] == 801){
+                $data['logos'] = Logos::with('medias')->where('type', 'logos')->get();
+            }
+            return view('admin.pages.create_logos',$data);
         }else{
             return view('admin.pages.create',$data);
         }

@@ -9,7 +9,7 @@ return[
             'q' => 50,
             'fit' => 'crop',
             'version' => 'instructors-testimonials',
-            'description' => 'Applies to : Instructor tile in grid layout',
+            'description' => 'Applies to : Our Instructor Page (Footer) & Event -> Instructors',
 
         ],
         [
@@ -18,7 +18,8 @@ return[
             'q' => 50,
             'fit' => 'crop',
             'version' => 'event-card',
-            'description' => 'Applies to : Event version in grid layout',
+            'description' => 'Applies to : Homepage Events list',
+            // 'description' => 'Applies to : Event version in grid layout',
         ],
         [
             'w' => 470,
@@ -34,7 +35,7 @@ return[
             'q' => 50,
             'fit' => 'crop',
             'version' => 'header-image',
-            'description' => 'Applies to home header carousel',
+            'description' => 'Applies to: Event header carousel (Main event page)',
         ],
         [
             'w' => 90,
@@ -42,7 +43,7 @@ return[
             'q' => 50,
             'fit' => 'crop',
             'version' => 'instructors-small',
-            'description' => 'Applies to syllabus-block',
+            'description' => 'Applies to : Event -> Topics (syllabus-block)',
         ],
         [
             'w' => 300,

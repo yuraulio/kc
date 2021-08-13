@@ -1,6 +1,5 @@
 @extends('theme.layouts.master')
 @section('content')
-{{--@inject('frontHelp', 'Library\FrontendHelperLib')--}}
 <?php
    if(Session::has('scopeone')){
        $fone = Session::get('scopeone');

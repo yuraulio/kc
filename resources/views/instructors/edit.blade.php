@@ -25,7 +25,7 @@
                             <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i>Edit</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#tabs-icons-text-2" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Image Version</a>
+                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#tabs-icons-text-2" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="far fa-images mr-2"></i>Image</a>
                         </li>
 
                     </ul>
@@ -44,17 +44,17 @@
 
                                     <h6 class="heading-small text-muted mb-4">{{ __('Instructor information') }}</h6>
                                     <div class="pl-lg-4">
-                                        
+
 
                                         <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
-                                            
+
 
                                             <label class="custom-toggle custom-published">
                                                 <input type="checkbox" name="status" id="input-status" @if($instructor['status'] == '1') checked @endif>
                                                 <span class="custom-toggle-slider rounded-circle" data-label-off="unpublished" data-label-on="published"></span>
                                             </label>
                                                 @include('alerts.feedback', ['field' => 'status'])
-     
+
                                         </div>
 
                                         <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
@@ -178,8 +178,13 @@
                             </div>
                             <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
                             @include('admin.upload.upload', ['event' => ( isset($instructor) && $instructor->medias != null) ? $instructor->medias : null, 'versions' => ['instructors-testimonials', 'instructors-small']])
-                            @include('event.image_versions', ['event' => $instructor->medias, 'versions1'=>['instructors-small', 'instructors-testimonials']])
-                            </div>
+
+                            @if($instructor->medias != null && $instructor->medias['name'] != '')
+                                <div id="version-btn" style="margin-bottom:20px" class="col">
+                                    <a href="{{ route('media2.eventImage', $instructor->medias) }}" target="_blank" class="btn btn-primary">{{ __('Versions') }}</a>
+                                </div>
+                            @endif
+                        </div>
                         </div>
                     </div>
                 </div>

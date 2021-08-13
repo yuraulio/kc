@@ -57,6 +57,15 @@ class AddOption extends Command
             'value' => 1532,
         ]);
 
+        Option::create([
+            'type' => 'config',
+            'title' => 'Social Media',
+            'name' => 'social_media',
+            'status' => true,
+            'abbr' => 'social_media',
+            'settings' => json_encode("{\r\n    \"1\": {\r\n        \"facebook\": {\r\n            \"title\": \"Facebook\",\r\n            \"url\": \"https:\/\/www.facebook.com\/KnowCrunch\/\",\r\n            \"target\": \"_blank\"\r\n        },\r\n        \"twitter\": {\r\n            \"title\": \"Twitter\",\r\n            \"url\": \"https:\/\/twitter.com\/knowcrunch\",\r\n            \"target\": \"_blank\"\r\n        },\r\n        \"googleplus\": {\r\n            \"title\": \"Google Plus\",\r\n            \"url\": \"\",\r\n            \"target\": \"_blank\"\r\n        },\r\n        \"instagram\": {\r\n            \"title\": \"Instagram\",\r\n            \"url\": \"https:\/\/www.instagram.com\/knowcrunch\/\",\r\n            \"target\": \"_blank\"\r\n        },\r\n        \"medium\": {\r\n            \"title\": \"Medium\",\r\n            \"url\": \"\",\r\n            \"target\": \"_blank\"\r\n        },\r\n        \"pinterest\": {\r\n            \"title\": \"Pinterest\",\r\n            \"url\": \"\",\r\n            \"target\": \"_blank\"\r\n        },\r\n        \"behance\": {\r\n            \"title\": \"Behance\",\r\n            \"url\": \"https:\/\/www.behance.com\",\r\n            \"target\": \"_blank\"\r\n        },\r\n        \"linkedin\": {\r\n            \"title\": \"LinkedIn\",\r\n            \"url\": \"https:\/\/www.linkedin.com\/company\/knowcrunch\",\r\n            \"target\": \"_blank\"\r\n        },\r\n        \"youtube\": {\r\n            \"title\": \"Youtube\",\r\n            \"url\": \"https:\/\/www.youtube.com\/channel\/UCU5p3dauJLrdMpuLwB_mX1A\",\r\n            \"target\": \"_blank\"\r\n        }\r\n    }\r\n}"),
+        ]);
+
         return 0;
     }
 }

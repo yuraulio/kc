@@ -12,6 +12,7 @@ return[
         'Give Away' => 'give_away_page',
         'Subscription Page' => 'subscription_page',
         'Trained-Media Page' => 'trained_media_page',
+        'Logos Page' => 'logos_page'
     ],
 
     'events' => [

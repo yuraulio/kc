@@ -26,7 +26,7 @@
                         <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i>Edit</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#tabs-icons-text-2" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Image Version</a>
+                        <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#tabs-icons-text-2" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="far fa-images mr-2"></i>Image</a>
                     </li>
 
                 </ul>
@@ -205,8 +205,12 @@
                             </div>
                             <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
                             @include('admin.upload.upload', ['event' => ( isset($testimonial) && $testimonial->medias != null) ? $testimonial->medias : null, 'versions' => ['instructors-small']])
-                            @include('event.image_versions', ['event' => $testimonial->medias, 'versions1'=>['instructors-testimonials']])
-                            </div>
+                            @if($testimonial->medias != null && $testimonial->medias['name'] != '')
+                                <div id="version-btn" style="margin-bottom:20px" class="col">
+                                    <a href="{{ route('media2.eventImage', $testimonial->medias) }}" target="_blank" class="btn btn-primary">{{ __('Versions') }}</a>
+                                </div>
+                            @endif
+                        </div>
 
 
 
