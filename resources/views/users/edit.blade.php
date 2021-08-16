@@ -900,7 +900,7 @@ $(document).on('click', '.ticket-card', function () {
                         heading: 'Information',
                         text: data.message,
                         position: 'top-right',    // Change it to false to disable loader
-                        bgColor: '#03fc7f',
+                        bgColor: '#0da825',
                         textColor: 'white'// To change the background
                     })
                 }
@@ -925,7 +925,17 @@ $(document).on('click', '.ticket-card', function () {
                 return confirm("Do you really want to inform the user to change/create password?");
             },
             success: function(data) {
-                toggleNotyMessage(data.status, data.message);
+                if(data.status == 1){
+                    //toastr.info(data.message);
+
+                    $.toast({
+                        heading: 'Information',
+                        text: data.message,
+                        position: 'top-right',    // Change it to false to disable loader
+                        bgColor: '#0da825',
+                        textColor: 'white'// To change the background
+                    })
+                }
             }
         });
 	}
@@ -942,7 +952,17 @@ $(document).on('click', '.ticket-card', function () {
                 return confirm("Do you really want to reset user activation and send the user a link to activate the account?");
             },
             success: function(data) {
-                toggleNotyMessage(data.status, data.message);
+                if(data.status == 1){
+                    //toastr.info(data.message);
+
+                    $.toast({
+                        heading: 'Information',
+                        text: data.message,
+                        position: 'top-right',    // Change it to false to disable loader
+                        bgColor: '#0da825',
+                        textColor: 'white'// To change the background
+                    })
+                }
             }
         });
 	}
