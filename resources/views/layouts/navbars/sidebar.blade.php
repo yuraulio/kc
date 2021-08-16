@@ -92,8 +92,8 @@
                                     <li class="nav-item {{ $elementName == 'user1-management' ? 'active' : '' }}">
                                         <a href="{{ route('user.index') }}" class="nav-link">{{ __('Site map settings') }}</a>
                                     </li>
-                                    <li class="nav-item {{ $elementName == 'user1-management' ? 'active' : '' }}">
-                                        <a href="{{ route('user.index') }}" class="nav-link">{{ __('Social sharing settings') }}</a>
+                                    <li class="nav-item {{ $elementName == 'social-management' ? 'active' : '' }}">
+                                        <a href="{{ route('social.index') }}" class="nav-link">{{ __('Social sharing settings') }}</a>
                                     </li>
                                     <li class="nav-item {{ $elementName == 'user1-management' ? 'active' : '' }}">
                                         <a href="{{ route('user.index') }}" class="nav-link">{{ __('Error log') }}</a>
@@ -138,12 +138,12 @@
                         <div class="collapse show" id="navbar-booking">
                             <ul class="nav nav-sm flex-column">
                                 @can('manage-users', App\Model\User::class)
-                                    <li class="nav-item  {{ $elementName == 'participants-management' ? 'active' : '' }}">
+                                    {{--<li class="nav-item  {{ $elementName == 'participants-management' ? 'active' : '' }}">
                                         <a href="{{ route('transaction.participants') }}" class="nav-link">{{ __('Participants') }}</a>
-                                    </li>
-                                    <li class="nav-item  {{ $elementName == 'subscriptions-management' ? 'active' : '' }}">
+                                    </li>--}}
+                                    {{--<li class="nav-item  {{ $elementName == 'subscriptions-management' ? 'active' : '' }}">
                                         <a href="{{ route('subscriptions.index') }}" class="nav-link">{{ __('Subscriptions') }}</a>
-                                    </li>
+                                    </li>--}}
                                     <li class="nav-item  {{ $elementName == 'abandoned-management' ? 'active' : '' }}">
                                         <a href="{{ route('abandoned.index') }}" class="nav-link">{{ __('Abandoned') }}</a>
                                     </li>
@@ -237,13 +237,13 @@
 
                     <li class="nav-item active">
                         <a class="nav-link active" href="#navbar-revenue" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-revenue">
-                            <i class="far fa-question-circle" style="color: #f4645f;"></i>
+                            <i class="fas fa-euro-sign" style="color: #f4645f;"></i>
                             <span class="nav-link-text" style="color: #f4645f;">{{ __('Revenue') }}</span>
                         </a>
                         <div class="collapse show" id="navbar-revenue">
                             <ul class="nav nav-sm flex-column">
-                                    <li class="nav-item  {{ $elementName == 'subscription-management' ? 'active' : '' }}">
-                                        <a href="{{ route('faqs.categories') }}" class="nav-link">{{ __('Subscriptions') }}</a>
+                                    <li class="nav-item  {{ $elementName == 'subscriptions-management' ? 'active' : '' }}">
+                                        <a href="{{ route('subscriptions.index') }}" class="nav-link">{{ __('Subscriptions') }}</a>
                                     </li>
                                     <li class="nav-item {{ $elementName == 'coupons-management' ? 'active' : '' }}">
                                         <a href="{{ route('coupons') }}" class="nav-link">{{ __('Coupons') }}</a>
@@ -260,7 +260,7 @@
 
                     <li class="nav-item active">
                         <a class="nav-link active" href="#navbar-messages" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-messages">
-                            <i class="far fa-question-circle" style="color: #f4645f;"></i>
+                            <i class="fas fa-envelope" style="color: #f4645f;"></i>
                             <span class="nav-link-text" style="color: #f4645f;">{{ __('Messages') }}</span>
                         </a>
                         <div class="collapse show" id="navbar-messages">

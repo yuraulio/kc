@@ -41,7 +41,7 @@
                @if($page['id'] == 800 && isset($brands))
                   @foreach ($brands as $key => $value)
                      @if(isset($value['medias']))
-                    
+
                      <div class="col-3 col-sm-4 col-xs-6 self-align-center logo-column">
                         <a class="logo-img-wrapper" target="{{ $value['target'] }}" rel="nofollow" href="{{ $value['ext_url'] }}" title="{{ $value['name'] }}">
                         <img   alt="{{ $value['name'] }}" title="{{ $value['name'] }}" src="{{ cdn(get_image($value['medias']))}}" />
@@ -52,7 +52,7 @@
                @elseif($page['id'] == 801 && isset($logos))
                      @foreach ($logos as $key => $value)
                         @if(isset($value['medias']))
-                        
+
                         <div class="col-3 col-sm-4 col-xs-6 self-align-center logo-column">
                            <a  class="logo-img-wrapper" target="{{ $value['target'] }}" href="{{ $value['ext_url'] }}" title="{{ $value['name'] }}">
                            <img   alt="{{ $value['name'] }}" title="{{ $value['name'] }}" src="{{ cdn(get_image($value['medias']))}}" />

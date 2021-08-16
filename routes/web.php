@@ -227,6 +227,13 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     //Lessons
     Route::post('/sort-lessons/{event}', 'LessonController@orderLesson')->name('sort-lessons');
 
+    //Social
+    Route::get('/social', 'Dashboard\SocialController@index')->name('social.index');
+    Route::get('/social/create', 'Dashboard\SocialController@create')->name('social.create');
+    Route::post('/social/store', 'Dashboard\SocialController@store')->name('social.store');
+    Route::get('/social/edit', 'Dashboard\SocialController@edit')->name('social.edit');
+    Route::put('/logos/update', 'Dashboard\SocialController@update')->name('social.update');
+
     //Benefits
     Route::post('/benefits', 'BenefitController@orderBenefits')->name('sort-benefits');
 

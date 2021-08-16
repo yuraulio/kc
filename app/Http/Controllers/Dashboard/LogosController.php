@@ -22,10 +22,11 @@ class LogosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
 
         $data['logo'] = new Logos;
+        $data['template'] = $request->template;
 
 
         return view('admin.logos.create', $data);
@@ -39,7 +40,6 @@ class LogosController extends Controller
      */
     public function store(Request $request, Logos $model)
     {
-
         $input = $request->all();
         $model = $model->create($input);
         $model->createMedia();
@@ -78,7 +78,7 @@ class LogosController extends Controller
         $logo->update($request->all());
 
 
-        return redirect()->route('logos.index')->withStatus(__('Logo successfully updated.'));
+        return redirect()->back();
     }
 
     /**

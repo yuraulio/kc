@@ -1,5 +1,7 @@
 <?php
-$social_media =  \Config::get('dpoptions.social_media.settings');?>
+$social_media = get_social_media();
+?>
+
 <footer id="footer">
    <div class="container">
       <div class="footer-row">
@@ -109,53 +111,53 @@ $social_media =  \Config::get('dpoptions.social_media.settings');?>
                <ul class="footer-social-menu">
 
 
-                  {{--@if($social_media[1]['facebook']['url'] != '')
-                    <li><a target="_blank" title="{{ $social_media[1]['facebook']['title'] }}" href="{{ $social_media[1]['facebook']['url'] }}">
-                           <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Facebook.svg')}}" width="23" alt="{{ $social_media[1]['facebook']['title'] }}">
+                  @if($social_media['facebook']['url'] != '')
+                    <li><a target="_blank" title="{{ $social_media['facebook']['title'] }}" href="{{ $social_media['facebook']['url'] }}">
+                           <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Facebook.svg')}}" width="23" alt="{{ $social_media['facebook']['title'] }}">
                         </a>
                      </li>
                   @endif
 
-                  @if($social_media[1]['twitter']['url'] != '')
-                    <li><a target="_blank" title="{{ $social_media[1]['twitter']['title'] }}" href="{{ $social_media[1]['twitter']['url'] }}">
-                           <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Twitter.svg')}}" width="23" alt="{{ $social_media[1]['twitter']['title'] }}">
+                  @if($social_media['twitter']['url'] != '')
+                    <li><a target="_blank" title="{{ $social_media['twitter']['title'] }}" href="{{ $social_media['twitter']['url'] }}">
+                           <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Twitter.svg')}}" width="23" alt="{{ $social_media['twitter']['title'] }}">
                         </a>
                      </li>
                   @endif
-                  @if($social_media[1]['instagram']['url'] != '')
-                    <li><a target="_blank" title="{{ $social_media[1]['instagram']['title'] }}" href="{{ $social_media[1]['instagram']['url'] }}">
-                           <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Instagram.svg')}}" width="23" alt="{{ $social_media[1]['instagram']['title'] }}">
+                  @if($social_media['instagram']['url'] != '')
+                    <li><a target="_blank" title="{{ $social_media['instagram']['title'] }}" href="{{ $social_media['instagram']['url'] }}">
+                           <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Instagram.svg')}}" width="23" alt="{{ $social_media['instagram']['title'] }}">
                         </a>
                      </li>
                   @endif
-                  @if($social_media[1]['linkedin']['url'] != '')
-                    <li><a target="_blank" title="{{ $social_media[1]['linkedin']['title'] }}" href="{{ $social_media[1]['linkedin']['url'] }}">
-                           <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Linkedin.svg')}}" width="23" alt="{{ $social_media[1]['linkedin']['title'] }}">
+                  @if($social_media['linkedin']['url'] != '')
+                    <li><a target="_blank" title="{{ $social_media['linkedin']['title'] }}" href="{{ $social_media['linkedin']['url'] }}">
+                           <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Linkedin.svg')}}" width="23" alt="{{ $social_media['linkedin']['title'] }}">
                         </a>
                      </li>
                   @endif
-                  @if($social_media[1]['youtube']['url'] != '')
-                    <li><a target="_blank" title="{{ $social_media[1]['youtube']['title'] }}" href="{{ $social_media[1]['youtube']['url'] }}">
-                           <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Youtube.svg')}}" width="23" alt="{{ $social_media[1]['youtube']['title'] }}">
+                  @if($social_media['youtube']['url'] != '')
+                    <li><a target="_blank" title="{{ $social_media['youtube']['title'] }}" href="{{ $social_media['youtube']['url'] }}">
+                           <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Youtube.svg')}}" width="23" alt="{{ $social_media['youtube']['title'] }}">
                         </a>
                      </li>
                   @endif
 
-                  @if($social_media[1]['pinterest']['url'] != '')
-                    <li><a target="_blank" title="{{ $social_media[1]['pinterest']['title'] }}" href="{{ $social_media[1]['pinterest']['url'] }}">
-                        <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Pinterest.svg')}}" width="23" alt="{{ $social_media[1]['pinterest']['title'] }}"> </a>
+                  @if($social_media['pinterest']['url'] != '')
+                    <li><a target="_blank" title="{{ $social_media['pinterest']['title'] }}" href="{{ $social_media['pinterest']['url'] }}">
+                        <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Pinterest.svg')}}" width="23" alt="{{ $social_media['pinterest']['title'] }}"> </a>
                      </li>
                   @endif
 
-                  @if($social_media[1]['medium']['url'] != '')
-                    <li><a target="_blank" title="{{ $social_media[1]['medium']['title'] }}" href="{{ $social_media[1]['medium']['url'] }}">
-                        <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Medium.svg')}}" width="23" alt="{{ $social_media[1]['medium']['title'] }}"> </a>
+                  @if($social_media['medium']['url'] != '')
+                    <li><a target="_blank" title="{{ $social_media['medium']['title'] }}" href="{{ $social_media['medium']['url'] }}">
+                        <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Medium.svg')}}" width="23" alt="{{ $social_media['medium']['title'] }}"> </a>
                      </li>
-                  @endif--}}
+                  @endif
                </ul>
             </div>
             <div class="copyright-wrapper">
-					{{--<p>Copyright © 2019, <br/>KnowCrunch Inc., <br/>2035 Sunset Lake Road, <br/>Delaware, USA.</p>--}}
+					<p>Copyright © 2019, <br/>KnowCrunch Inc., <br/>2035 Sunset Lake Road, <br/>Delaware, USA.</p>
                <p>KnowCrunch Inc. © <?php echo date('Y')?></p>
 
 				</div>

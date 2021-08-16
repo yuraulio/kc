@@ -8,9 +8,10 @@ use App\Model\Menu;
 use App\Model\Exam;
 
 function get_social_media(){
-    //$social_media = Option::where('name', 'social_media')->get();
-    //$social_media = json_encode($social_media[0]['settings'], true);
-    //dd($social_media);
+    $social_media = Option::where('name', 'social_media')->get();
+    $social_media = json_decode($social_media[0]['settings'], true);
+
+    return $social_media;
 
 }
 

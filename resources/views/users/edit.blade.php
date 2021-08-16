@@ -474,26 +474,33 @@
             </div>
             <div class="tab-pane fade" id="tabs-icons-text-6" role="tabpanel" aria-labelledby="tabs-icons-text-6-tab">
 
+            <div class="table-responsive py-4">
+                    <table class="table align-items-center table-flush"  id="datatable-basic102">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">{{ __('Info') }}</th>
+                                <th scope="col">{{ __('Action') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Email the user informing about his current status.</td>
+                                <td><a href="javascript:void(0);" data-id="{{$user['id']}}" class="btn btn-sm btn-primary email_user_status">Email Account Status</a></td>
+                            </tr>
+                            <tr>
+                                <td>Email the user a link to create/change password .</td>
+                                <td><a href="javascript:void(0);" data-id="{{$user['id']}}" class="btn btn-sm btn-primary email_user_change_password">Email Reset Password Link</a></td>
+                            </tr>
+                            <tr>
+                                <td>Reset activation and Email the user informing how to activate account using a link.</td>
+                                <td><a href="javascript:void(0);" data-id="{{$user['id']}}" class="btn btn-sm btn-primary email_user_activation_link">Email Activation Link</a></td>
+                            </tr>
 
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Email the user informing about his current status.</h5>
-                        <a href="javascript:void(0);" data-id="{{$user['id']}}" class="btn btn-sm btn-primary email_user_status">Email Account Status</a>
-                    </div>
+                        </tbody>
+                    </table>
                 </div>
 
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Email the user a link to create/change password .</h5>
-                        <a href="javascript:void(0);" data-id="{{$user['id']}}" class="btn btn-sm btn-primary email_user_change_password">Email Reset Password Link</a>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Reset activation and Email the user informing how to activate account using a link .</h5>
-                        <a href="javascript:void(0);" data-id="{{$user['id']}}" class="btn btn-sm btn-primary email_user_activation_link">Email Activation Link</a>
-                    </div>
-                </div>
+
 
 
             </div>
