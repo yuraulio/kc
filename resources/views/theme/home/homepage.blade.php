@@ -146,7 +146,7 @@
                             //dd($until);
                         ?>
                         <?php //var_dump($until) ?>
-                        @if (isset($row['mediable']))
+                        @if ( isset($row['mediable']) && isset($row['slugable']))
                         <a href="{{ $row['slugable']['slug'] }}"><img src="{{ cdn(get_image($row['mediable'],'event-card')) }}" alt="{{ $until}}"/></a>
                         @endif
                         <div class="box-text">
