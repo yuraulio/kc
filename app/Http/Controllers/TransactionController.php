@@ -14,7 +14,7 @@ class TransactionController extends Controller
         //$data['transactions'] = $data['transactions']/*->has('user')*/->doesntHave('subscription');
         //$data['transactions'] = $data['transactions']->get();
 
-        $transactions = Transaction::with('user.statisticGroupByEvent','user.events','user.ticket','subscription','event')->get();
+        $transactions = Transaction::with('user.statisticGroupByEvent','user.events','user.ticket','subscription','event','event.delivery')->get();
         //dd($transactions[0]);
         $data['transactions'] = [];
         foreach($transactions as $transaction){
@@ -46,10 +46,12 @@ class TransactionController extends Controller
                 $expiration = isset($events[$transaction->event->first()->id]) ? $events[$transaction->event->first()->id]->first()->pivot->expiration : null;
                 $videos = isset($videos) ? json_decode($videos->videos,true) : null;
 
+                $isElearning = $transaction->event->first()->delivery->first() && $transaction->event->first()->delivery->first()->id == 143;
+
                 $data['transactions'][] = ['id' => $transaction['id'], 'user_id' => $transaction->user[0]['id'],'name' => $transaction->user[0]['firstname'].' '.$transaction->user[0]['lastname'],
                                             'event_id' => $transaction->event[0]['id'],'event_title' => $transaction->event[0]['title'],'coupon_code' => $coupon_code, 'type' => $ticketType,'ticketName' => $ticketName,
                                             'date' => date_format($transaction['created_at'], 'm/d/Y'), 'amount' => $transaction['amount'],
-                                            'is_elearning' => $transaction->event->first()->is_elearning_course(),
+                                            'is_elearning' => $isElearning,
                                             'coupon_code' => $transaction['coupon_code'],'videos_seen' => $this->getVideosSeen($videos),'expiration'=>$expiration];
             }
 
