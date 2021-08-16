@@ -318,9 +318,9 @@
     text-align: end;
 }
 
-.custom-select {
+/* .custom-select {
     width: 25rem;
-}
+} */
 
 .card-version-image{
     display: inline-flex;
@@ -343,6 +343,10 @@
 }
 
 #version-btn {
+    text-align: end;
+}
+
+.crop-wrap-btn {
     text-align: end;
 }
 

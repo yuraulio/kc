@@ -137,11 +137,11 @@ class Event extends Model
     {
 
         return $this->view_tpl == 'elearning_event';
-        if($this->delivery->first() && $this->delivery->first()->id == 143){
-            return true;
-        }else{
-            return false;
-        }
+        // if($this->delivery->first() && $this->delivery->first()->id == 143){
+        //     return true;
+        // }else{
+        //     return false;
+        // }
     }
 
     public function delivery()

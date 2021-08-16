@@ -15,6 +15,7 @@
 <li class="breadcrumb-item active" aria-current="page">{{ __('Add Logo') }}</li>
 @endcomponent
 @endcomponent
+<?php //dd($template); ?>
 <div class="container-fluid mt--6">
     <div class="nav-wrapper" style="margin-top: 65px;">
         @if($logo->name)
@@ -70,23 +71,24 @@
                            @include('alerts.feedback', ['field' => 'ext_url'])
                         </div>
 
-                        <div class="form-group{{ $errors->has('type') ? ' has-danger' : '' }}">
+                        {{--<div class="d-none form-group{{ $errors->has('type') ? ' has-danger' : '' }}">
                             <label class="form-control-label" for="input-type">{{ __('Type') }}</label>
-                            <select name="type" id="input-type" class="form-control" placeholder="{{ __('Type') }}" required>
+                            <select name="type" id="input-type" class="form-control" placeholder="{{ __('Type') }}">
                                 <option value="">-</option>
                                 @if(!$logo->name)
                                 <option value="logos" >Logo</option>
                                 <option value="brands" >Brands</option>
                                 @else
                                 <option value="logos" <?= ($logo->type == 'logos') ? 'selected' : ''; ?>>Logos</option>
-                                <option value="brands" <?= ($logo->type == 'brands') ? 'selected' : ''; ?>>Brands</option>
+                                <option value="brands" <?= ($logo->type == 'Brand') ? 'selected' : ''; ?>>Brands</option>
                                 @endif
 
 
                             </select>
+                            <input type="hidden" name="type" value="{{$template}}">
 
                             @include('alerts.feedback', ['field' => 'type'])
-                        </div>
+                        </div>--}}
 
 
                         <div class="form-group{{ $errors->has('summary') ? ' has-danger' : '' }}">

@@ -44,36 +44,36 @@
                     </div>
 
                     <div class="table-responsive py-4">
-                    <div class="collapse" id="collapseExample">
-                <div class="container">
-                        <div class="row">
-                            <div class="col-sm-4" id="filter_col1" data-column="9">
-                                <label>Event</label>
-                                <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="col9_filter">
-                                <option selected value> -- All -- </option>
-                                </select>
-                            </div>
-                            <div class="col-sm-4" id="filter_col4" data-column="10">
-                                <label>Coupon</label>
-                                <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col10_filter" placeholder="Coupon">
-                                <option selected value> -- All -- </option>
-                                </select>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label>Min</label>
-                                    <input type="text" id="min" name="min">
-                                </div>
+                        <div class="collapse" id="collapseExample">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-sm-4" id="filter_col1" data-column="9">
+                                        <label>Event</label>
+                                        <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="col9_filter">
+                                        <option selected value> -- All -- </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-4" id="filter_col4" data-column="10">
+                                        <label>Coupon</label>
+                                        <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col10_filter" placeholder="Coupon">
+                                        <option selected value> -- All -- </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label>Min</label>
+                                            <input type="text" id="min" name="min">
+                                        </div>
 
-                                <div class="form-group">
-                                    <label>Max</label>
-                                    <input type="text" id="max" name="max">
+                                        <div class="form-group">
+                                            <label>Max</label>
+                                            <input type="text" id="max" name="max">
+                                        </div>
+                                    </div>
+                                    <Button type="button" onclick="ClearFields();" class="btn btn-secondary btn-lg "> Clear Filter</Button>
                                 </div>
                             </div>
-                            <Button type="button" onclick="ClearFields();" class="btn btn-secondary btn-lg "> Clear Filter</Button>
                         </div>
-                    </div>
-                </div>
                         <table class="table align-items-center table-flush"  id="datatable-basic45">
                             <thead class="thead-light">
                                 <tr>
@@ -99,11 +99,11 @@
                                         <?php //dd(asset('profile_user').'/'.$user['image']['name'] ); ?>
                                             <span class="avatar avatar-sm rounded-circle">
 
-                                            @if($user['image'] != null && $user['image']['name'] != '')
+                                            {{--@if($user['image'] != null && $user['image']['name'] != '')
                                                 <img src="{{ cdn(get_image($user['image'])) }}" alt="{{ $user['firstname'] }}" style="max-width: 100px; border-radiu: 25px">
                                             @else
                                             <img src="" alt="{{ $user['firstname'] }}" style="max-width: 100px; border-radius: 25px">
-                                            @endif
+                                            @endif--}}
                                             </span>
                                         </td>
                                         <td><a href="{{ route('user.edit', $user['id']) }}">{{ $user['firstname'] }}</a></td>
@@ -231,7 +231,8 @@
         // });
 
         //min = moment($('#min').val()).format('MM/DD/YYYY')
-        max = null
+
+        initCounters()
 
 
 
@@ -244,6 +245,14 @@
             function( settings, data, dataIndex ) {
                 let find = false
                 var min = new Date($('#min').val());
+                var max = new Date($('#max').val());
+
+                if(min == 'Invalid Date'){
+                    min = null
+                }
+                if(max == 'Invalid Date'){
+                    max = null
+                }
 
                 //console.log('mindate::'+min)
         //console.log('max'+max)
@@ -252,28 +261,30 @@
                 //console.log(data[9])
                 //row = data[9]
                 row = data[9].split('||')
+                selected_event = removeSpecial($('#select2-col9_filter-container').attr('title'))
+                console.log('MY EVENT'+selected_event)
                 //console.log(row)
                 $.each(row, function(key1, value1) {
-                    max = null
                     //console.log(value1)
                     if(value1 != ''){
                         event = value1.split('--')
                         date1 = event[4]
                         if(date1 !== undefined){
                             var date = new Date(date1)
-                            console.log('my date:'+date)
-                            console.log('min:'+ min)
-                            console.log('max:'+ max)
-                            console.log('has:'+(min <= date   && max === null))
 
-                            if (( min === null && max === null ) ||
+                            if (selected_event == removeSpecial(event[0]) && (( min === null && max === null ) ||
                             ( min === null && date <= max ) ||
                             ( min <= date   && max === null ) ||
-                            ( min <= date   && date <= max )) {
-                                console.log('true')
+                            ( min <= date   && date <= max ))) {
                                 find = true
                                     return true
-                                }
+                                }else if(selected_event == '--All--' && (( min === null && max === null ) ||
+                            ( min === null && date <= max ) ||
+                            ( min <= date   && max === null ) ||
+                            ( min <= date   && date <= max ))){
+                                find = true
+                                    return true
+                            }
 
                         }
 
@@ -362,8 +373,6 @@
                         //console.log('////////')
                         if(removeSpecial(a[0]) == selected_event){
                             user_ids.push($('#datatable-basic45').DataTable().column( 5 ).data()[key])
-                            // console.log('_________')
-                            // console.log(value1)
                             ticket_type = a[1]
                             ticket_amount = parseInt(a[2])
 
@@ -381,19 +390,7 @@
 
                                 }
                             }
-
-
-
-                            //console.log(ticket_type)
-                            //console.log(ticket_amount)
                         }
-                        //console.log(value_without_spec)
-                        // if(selected_event == value1){
-                        //     alert('has found')
-                        //     ticket_type = value1[key1 + 1]
-                        //     ticket_amount = value1[key1 + 2]
-                        //     console.log(ticket_amount)
-                        // }
 
                     })
 
@@ -468,10 +465,6 @@
 
                         sum1 = sum1 + parseInt(value1.price)
                     })
-                    //console.log(key+'::'+sum)
-
-
-
 
                     elem =`
                             <div class="elearning-coupons col-xl-3 col-md-6">
@@ -521,9 +514,6 @@
 
             if(details.length > 2){
 
-                // console.log(details)
-                // console.log('min:'+min)
-                // console.log('max:'+max)
                 title = details[0]
                 type = details[1]
                 amount = parseInt(details[2])
@@ -646,33 +636,17 @@
             if(value != ''){
                 value = value.split('||')
                     $.each(value, function(key1, value1) {
-                        //console.log('events inside row:')
-                        //console.log(value1)
+
                         if(value1 != ''){
                             details = value1.split('--')
-                            //console.log('pre')
-                            //console.log(details)
-                            //console.log('STOP')
+
                             getStatsByDate(min, max, details)
                         }
-                        //a = value1.split('--')
 
-                        ///console.log('----------')
-                        //console.log(a)
-                        //datatable_date = new Date(a[4]);
-                        //datatable_date = moment(datatable_date).format('MM/DD/YYYY')
-                        //console.log(datatable_date)
-                        //console.log('PRICE:')
-                        //console.log(a[3])
-                        //
 
                     })
             }
 
-            //datatable_date = table.column( 9 ).data()[key]
-            //datatable_date = new Date(datatable_date);
-            //datatable_date = moment(datatable_date).format('MM/DD/YYYY')
-            //console.log(datatable_date)
 
         })
 
@@ -722,15 +696,12 @@
         }
 
         function filterColumn ( i ) {
-
-            //console.log('event:'+$('#col9_filter').val())
-            //console.log('coupon:'+$('#col10_filter').val())
             if(i == 9) {
                 table = $('#datatable-basic45').DataTable().column( 9 ).search(
                     $('#col9_filter').val(), true,false
                 ).draw();
 
-                stats()
+                //stats()
 
                 //updateElearningInfos($('#col9_filter').val())
 

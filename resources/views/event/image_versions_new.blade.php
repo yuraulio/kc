@@ -93,7 +93,9 @@
 
 
                 @endforeach
+                <div class="col crop-wrap-btn">
                 <button class="btn btn-primary crop" data-version="{{$version['version']}}" type="button">Crop</button>
+                    </div>
                 @else
                 <div class="col-12">
 
@@ -114,7 +116,10 @@
                     </div>
                     </div>
                     </div>
-                    <button class="btn btn-primary crop_profile" type="button">Crop</button>
+                    <div class="col crop-wrap-btn">
+                        <button class="btn btn-primary crop_profile" type="button">Crop</button>
+                    </div>
+
                 @endif
 
 

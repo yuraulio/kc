@@ -20,10 +20,12 @@
             $tab_title = 'Brands';
             $title = 'Brand';
             $data = $brands;
+            $var = 'brands';
         }else{
             $tab_title = 'Logos';
             $title = 'Logo';
             $data = $logos;
+            $var = 'logos';
         }
     ?>
 <div class="container-fluid mt--6">
@@ -165,7 +167,11 @@
                                 <h3 class="mb-0">{{ __($title) }}</h3>
                             </div>
                                 <div class="col-4 text-right">
-                                    <a href="{{ route('logos.create') }}" class="btn btn-sm btn-primary">{{ __('Add') }} {{ __($title) }}</a>
+                                    <?php
+                                    $arr = [];
+                                    $arr['template'] = $var;
+                                    ?>
+                                    <a href="{{ route('logos.create', $arr) }}" class="btn btn-sm btn-primary">{{ __('Add') }} {{ __($title) }}</a>
                                 </div>
                         </div>
                     </div>
@@ -176,7 +182,7 @@
                     </div>
 
                     <div class="table-responsive py-4">
-                        <table class="table table-flush"  id="datatable-basic100">
+                        <table class="table table-flush"  id="datatable-basic101">
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col">{{ __('Title') }}</th>
@@ -238,7 +244,15 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
 <script>
-    var table = $('#datatable-basic100').DataTable({
+    var table = $('#datatable-basic101').DataTable({
+        language: {
+            paginate: {
+            next: '&#187;', // or '→'
+            previous: '&#171;' // or '←'
+            }
+        }
+    });
+    var table1 = $('#datatable-basic12').DataTable({
         language: {
             paginate: {
             next: '&#187;', // or '→'
