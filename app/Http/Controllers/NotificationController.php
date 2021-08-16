@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Notification;
+//use Notification;
 use Illuminate\Http\Request;
 use App\Notifications\userStatusChange;
 use App\Notifications\userActivationLink;
 use App\Model\Activation;
 use App\Model\User;
+use App\Model\Notification;
 
 class NotificationController extends Controller
 {
@@ -25,7 +26,6 @@ class NotificationController extends Controller
         //
         $data = [];
         $data['notifications'] = Notification::all();
-        //dd($data);
         return view('notification.index', $data);
     }
 
@@ -96,7 +96,6 @@ class NotificationController extends Controller
     }
 
     public function userStatusChange($user) {
-        //$a = Notification::send($user, new userStatusChange($user));
 
         $user->notify(new userStatusChange($user));
 
