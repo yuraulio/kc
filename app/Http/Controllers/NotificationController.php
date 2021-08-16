@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Notifications\userStatusChange;
 use App\Notifications\userActivationLink;
+use App\Notifications\userChangePassword;
 use App\Model\Activation;
 use App\Model\User;
 use App\Model\Notification;
