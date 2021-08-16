@@ -453,6 +453,15 @@ Route::get('/sms-verification/{slug}',['as' => 'user.sms.auth', 'uses' => 'Theme
 Route::post('/smsVerification','Theme\HomeController@smsVerification');
 Route::get('myaccount/activate/{code}', 'Theme\StudentController@activate');
 
+//passwordReset
+Route::group(['middleware' => ['web']], function () {
+    Route::post('/myaccount/reset','Auth\ForgotPasswordController@sendResetLinkEmail');
+    Route::get('/myaccount/reset/{id}/{code}','Auth\ForgotPasswordController@getChangePass');
+    Route::post('myaccount/reset/{id}/{code}', 'Auth\ForgotPasswordController@changePass');
+
+});
+
+
 Route::group(['middleware' => ['preview','web','auth.sms']], function () {
 
     Route::get('/regularly-mentioned-in-media', function(){

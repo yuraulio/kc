@@ -6,19 +6,22 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Str;
+use DB;
+use Carbon\Carbon;
 
 class userChangePassword extends Notification
 {
     use Queueable;
-
+    private $user;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($user)
     {
-        //
+        $this->user = $user;
     }
 
     /**
@@ -29,7 +32,7 @@ class userChangePassword extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -40,10 +43,18 @@ class userChangePassword extends Notification
      */
     public function toMail($notifiable)
     {
+
+        $token = Str::random(64);
+  
+        DB::table('password_resets')->insert([
+            'email' => $this->user->email, 
+            'token' => $token, 
+            'created_at' => Carbon::now()
+        ]);
+
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+                    ->subject('Reset or Create your account password.')
+                    ->view( 'activation.emails.student-reminder', ['user'=> $this->user, 'code' => $token]);
     }
 
     /**

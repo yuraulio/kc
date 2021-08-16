@@ -29,6 +29,7 @@ use App\Model\Activation;
 use Illuminate\Support\Str;
 use \Carbon\Carbon;
 use Mail;
+use App\Notifications\userActivationLink;
 
 class RegisterController extends Controller
 {
@@ -137,11 +138,11 @@ class RegisterController extends Controller
 
             if ($user) {
                 // Create the activation entry and retrieve the code
-                $code = Activation::create([
+                /*$code = Activation::create([
                     'user_id' => $user->id,
                     'code' => Str::random(40),
                     'completed' => false,
-                ])->code;
+                ])->code;*/
 
                 $user->role()->attach(7);
 
@@ -160,16 +161,18 @@ class RegisterController extends Controller
                 }
 
                 // Send the activation email
-                $sent = Mail::send('activation.emails.activate', compact('user', 'code'), function ($m) use ($user) {
+                /*$sent = Mail::send('activation.emails.activate', compact('user', 'code'), function ($m) use ($user) {
                     $m->to($user->email)->subject('Activate Your Account');
-                });
+                });*/
 
                 // Was the email successfully sent?
-                if ($sent === 0) {
+                /*if ($sent === 0) {
                     return redirect(route('/cart'))->withErrors(
                         'Failed to send activation email.'
                     );
-                }
+                }*/
+
+                $dpuser->notify(new userActivationLink($dpuser,'activate'));
 
                 /*return redirect(route('user.login'))->withSuccess(
                     'Your accout was successfully created. Please check your email to activate your account.'

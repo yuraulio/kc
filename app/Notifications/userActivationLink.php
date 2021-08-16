@@ -8,20 +8,23 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\Model\User;
 use App\Model\Activation;
+use Illuminate\Support\Str;
 
 class userActivationLink extends Notification
 {
     use Queueable;
     private $user;
+    private $template;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($user)
+    public function __construct($user,$template)
     {
         $this->user = $user;
+        $this->template = $template;
     }
 
     /**
@@ -49,8 +52,16 @@ class userActivationLink extends Notification
         //$activation = Activation::exists($user) ?: Activation::create($user);
 
         //$code = $activation->code;
-        $loadForm = 'activation.emails.re-activate';
-        $activation = Activation::firstOrCreate(array('id' => $this->user['id']));
+        $loadForm = 'activation.emails.' . $this->template;
+       
+        $activation = Activation::firstOrCreate(array('user_id' => $this->user['id']));
+
+        
+        if($activation->code == ''){
+            $activation->code = Str::random(40);
+            $activation->completed = false;
+            $activation->save();
+        }
 
         //dd(Activation::exists(array('id' => $this->user['id'])));
         $code = $activation->code;

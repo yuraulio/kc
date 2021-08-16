@@ -20,6 +20,11 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Support\Facades\Password;
+use App\Model\User;
+use App\Notifications\userChangePassword;
+use Illuminate\Support\Facades\Validator;
+use DB;
+use Illuminate\Support\Facades\Hash;
 
 class ForgotPasswordController extends Controller
 {
@@ -52,7 +57,7 @@ class ForgotPasswordController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
      */
-    public function sendResetLinkEmail(\Illuminate\Http\Request $request)
+    /*public function sendResetLinkEmail(\Illuminate\Http\Request $request)
     {
         $this->validateEmail($request);
         if (env('IS_DEMO')){
@@ -69,5 +74,90 @@ class ForgotPasswordController extends Controller
         return $response == Password::RESET_LINK_SENT
                     ? $this->sendResetLinkResponse($request, $response)
                     : $this->sendResetLinkFailedResponse($request, $response);
+    }*/
+
+    public function sendResetLinkEmail(\Illuminate\Http\Request $request)
+    {
+        $this->validateEmail($request);
+        
+        
+        $user = User::where('email',$request->email)->first();
+        if($user){
+            $user->notify(new userChangePassword($user));
+
+            return response()->json([
+                'success' => true,
+                'message' => "We just sent you a link to your email so you can update your password"
+            ]);
+        }
+
+       
+
+        return response()->json([
+            'success' => false,
+            'message' => "No student found with this email address"
+        ]);
+        
     }
+
+    public function getChangePass(){
+        return view('auth.passwords.complete');
+    }
+
+    public function changePass(\Illuminate\Http\Request $request, $id, $code){
+
+        if (! $user = User::find($id)) {
+            return response()->json([
+
+                'success' => false,
+                'pass_confirm' => true,
+                'message' => 'The user no longer exists.',
+                'redirect' =>'/'
+
+            ]);
+        }
+
+        $val =Validator::make($request->all(), [
+            'password' => 'required|confirmed',
+
+         ]);
+
+         if($val->fails()){
+            return response()->json([
+                'success' => false,
+                'pass_confirm' => false,
+                'message' => $val->errors()->first()
+            ]);
+        }
+
+        $updatePassword = DB::table('password_resets')
+        ->where([
+          'email' => $user->email, 
+          'token' => $code
+        ])
+        ->first();
+
+        if(!$updatePassword){
+            return response()->json([
+                'success' => false,
+                'pass_confirm' => false,
+                'message' => 'Invalid token!'
+            ]);
+            
+        }
+
+        $user->password = Hash::make($request->password);
+        $user->save();
+        DB::table('password_resets')->where(['email'=> $user->email])->delete();
+
+        return response()->json([
+
+            'success' => true,
+            'pass_confirm' => true,
+            'message' => 'Password was successfully resetted.',
+            'redirect' =>'/'
+
+        ]);
+    }
+
 }
