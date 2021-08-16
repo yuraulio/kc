@@ -40,4 +40,5 @@ class OptionsController extends Controller
         $option->save();
         return back();
     }
+
 }

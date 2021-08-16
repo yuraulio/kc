@@ -92,8 +92,8 @@
                                     <li class="nav-item {{ $elementName == 'user1-management' ? 'active' : '' }}">
                                         <a href="{{ route('user.index') }}" class="nav-link">{{ __('Site map settings') }}</a>
                                     </li>
-                                    <li class="nav-item {{ $elementName == 'user1-management' ? 'active' : '' }}">
-                                        <a href="{{ route('user.index') }}" class="nav-link">{{ __('Social sharing settings') }}</a>
+                                    <li class="nav-item {{ $elementName == 'social-management' ? 'active' : '' }}">
+                                        <a href="{{ route('social.index') }}" class="nav-link">{{ __('Social sharing settings') }}</a>
                                     </li>
                                     <li class="nav-item {{ $elementName == 'user1-management' ? 'active' : '' }}">
                                         <a href="{{ route('user.index') }}" class="nav-link">{{ __('Error log') }}</a>
