@@ -664,9 +664,13 @@
     </div>
 @endsection
 
+@push('css')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css" integrity="sha512-wJgJNTBBkLit7ymC6vvzM1EcSWeM9mmOu+1USHaRBbHkm6W9EgM0HY27+UtUaprntaYQJF75rc8gjxllKs5OIQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+@endpush
+
 @push('js')
 
-<script src="{{ asset('argon') }}/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('argon') }}/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
@@ -674,6 +678,7 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js" integrity="sha512-zlWWyZq71UMApAjih4WkaRpikgY9Bz1oXIW5G0fED4vk14JjGlQ1UmkGM392jEULP8jbNMiwLWdM8Z87Hu88Fw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     $(document).on('click', '#remove_ticket_user',function(e) {
     $.ajax({
@@ -821,7 +826,7 @@ $(document).on('click', '.ticket-card', function () {
 
 
 
-    const cropper = new Cropper(document.getElementById(`profileimage`), {
+    const cropper = new Cropper(document.getElementById(`profile_image`), {
         aspectRatio: Number((width/height), 4),
         viewMode: 0,
         dragMode: "crop",
@@ -887,7 +892,20 @@ $(document).on('click', '.ticket-card', function () {
                 return confirm("Do you really want to inform the user about his current status?");
             },
             success: function(data) {
-                toggleNotyMessage(data.status, data.message);
+                console.log(data)
+                if(data.status == 1){
+                    //toastr.info(data.message);
+
+                    $.toast({
+                        heading: 'Information',
+                        text: data.message,
+                        position: 'top-right',    // Change it to false to disable loader
+                        bgColor: '#0da825',
+                        textColor: 'white'// To change the background
+                    })
+                }
+
+                //toggleNotyMessage(data.status, data.message);
             }
         });
     }
@@ -907,7 +925,17 @@ $(document).on('click', '.ticket-card', function () {
                 return confirm("Do you really want to inform the user to change/create password?");
             },
             success: function(data) {
-                toggleNotyMessage(data.status, data.message);
+                if(data.status == 1){
+                    //toastr.info(data.message);
+
+                    $.toast({
+                        heading: 'Information',
+                        text: data.message,
+                        position: 'top-right',    // Change it to false to disable loader
+                        bgColor: '#0da825',
+                        textColor: 'white'// To change the background
+                    })
+                }
             }
         });
 	}
@@ -924,7 +952,17 @@ $(document).on('click', '.ticket-card', function () {
                 return confirm("Do you really want to reset user activation and send the user a link to activate the account?");
             },
             success: function(data) {
-                toggleNotyMessage(data.status, data.message);
+                if(data.status == 1){
+                    //toastr.info(data.message);
+
+                    $.toast({
+                        heading: 'Information',
+                        text: data.message,
+                        position: 'top-right',    // Change it to false to disable loader
+                        bgColor: '#0da825',
+                        textColor: 'white'// To change the background
+                    })
+                }
             }
         });
 	}
@@ -940,7 +978,6 @@ $(document).on('click', '.ticket-card', function () {
         $("#input-picture").on("input", function() {
             let filename = $(this).val()
             filename = filename.replace('C:\\fakepath\\','')
-            //alert(filename)
             $('.custom-file-label').text(filename)
         });
 

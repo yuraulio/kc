@@ -89,7 +89,7 @@
                                     <th class="" scope="col">{{ __('Events') }}</th>
                                     <th class="elearning-infos d-none" scope="col">{{ __('Video Seen') }}</th>
                                     <th class="elearning-infos d-none" scope="col">{{ __('Exams') }}</th>
-                                    <th class="elearning-infos" scope="col"></th>
+                                    <th scope="col"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -413,7 +413,6 @@
                             ( min === null && date <= max ) ||
                             ( min <= date   && max === null ) ||
                             ( min <= date   && date <= max ))) {
-
                                 find = true
                                     return true
                                 }else if(selected_event == '--All--' && (( min === null && max === null ) ||
@@ -441,9 +440,6 @@
                         //return false;
                 })
                 if(find){
-                    console.log('after all')
-
-
                     return true;
                 }
                 return false;
@@ -755,8 +751,8 @@
 
         min = new Date($('#min').val());
         max = new Date($('#max').val());
-        console.log('+min:'+min)
-        console.log('+max:'+max)
+        //console.log('+min:'+min)
+        //console.log('+max:'+max)
 
         minDate = new DateTime($('#min'), {
             format: 'L'
@@ -951,6 +947,7 @@
         }
 
         function stats_non_elearning(){
+
             let sum = 0
 
             //returns 'filtered' or visible rows
@@ -996,10 +993,95 @@
                                 }
                             }
 
-
-
-
                         }
+                    }
+
+
+                })
+                $('.elearning-infos').addClass('d-none')
+
+                //console.log('type'+ early)
+                if($('.elearning-infos').hasClass('d-none')){
+
+                }else{
+                    //$('.elearning-infos').addClass('d-none')
+                    $('#participants_info').removeClass('d-none')
+                    $('.elearning-coupons').addClass('d-none')
+                }
+
+                // $('.elearning-infos').addClass('d-none')
+                // $('#participants_info').removeClass('d-none')
+
+                $('#total').text('€'+sum)
+                $('#special').text('€'+special)
+                $('#regular').text('€'+regular)
+                $('#alumni').text('€'+alumni)
+                $('#early').text('€'+early)
+                $('#sponsored').text('€'+sponsored)
+                $('#count_special').text(count_special)
+                $('#count_regular').text(count_regular)
+                $('#count_alumni').text(count_alumni)
+                $('#count_early').text(count_early)
+                $('#count_sponsored').text(count_sponsored)
+
+
+            } );
+
+
+        }
+
+        function stats_coupon(){
+            let sum = 0
+            selected_coupon = $('#select2-col10_filter-container').attr('title')
+
+            //returns 'filtered' or visible rows
+            table.rows({filter: 'applied'}).every( function ( rowIdx, tableLoop, rowLoop ) {
+                var data = this.data()[9];
+                //console.log(data)
+                events = data.split('||')
+
+                $.each(events, function(key, value) {
+                    let type = ''
+                    let amount = 0;
+
+
+
+                    if(value != ''){
+                        event = value.split('--')
+                        // if(removeSpecial(selected_event) == removeSpecial(event[0])){
+                            title = event[0]
+                            type = event[1]
+                            amount = parseInt(event[2])
+                            coupon = event[3]
+                            date = event[4]
+
+                            if(coupon == selected_coupon){
+                                if(typeof type !== "undefined" && typeof amount !== "undefined" && !isNaN(amount)){
+                                    sum = sum + amount
+
+                                    if(type == 'Alumni'){
+                                        alumni = alumni + parseInt(amount)
+                                        count_alumni++
+                                    }else if(type == 'Regular'){
+                                        regular = regular + parseInt(amount)
+                                        count_regular++
+                                    }else if(type == 'Special'){
+                                        special = special + parseInt(amount)
+                                        count_special++
+                                    }else if(type == 'Sponsored'){
+                                        sponsored = sponsored + parseInt(amount)
+                                        count_sponsored++
+                                    }else if(type == 'Early birds' || type == 'Early Bird'){
+                                        //console.log('has early bird')
+                                        early = early + parseInt(amount)
+                                        count_early++
+                                    }
+                                }
+                            }
+
+
+
+                        /////////////////////}
                     }
 
 
@@ -1030,11 +1112,10 @@
 
 
             } );
-
-
         }
 
         function filterColumn ( i ) {
+            //alert(i)
             initCounters()
             if(i == 9) {
                 table = $('#datatable-basic45').DataTable().column( 9 ).search(
@@ -1058,10 +1139,11 @@
 
 
             }else{
-                alert('coupons')
                 $('#datatable-basic45').DataTable().column( 9 ).search(
                     $('#col10_filter').val(), true,false
                 ).draw();
+
+                stats_coupon()
             }
 
 
