@@ -213,13 +213,16 @@ class MediaController extends Controller
             $details = json_decode($media['details'], true);
 
             $found = false;
-            foreach($details['img_align'] as $key => $value){
-                //dd($request->version);
-                if($key == $request->version){
-                    $found = true;
+            if(isset($details['img_align'])){
+                foreach($details['img_align'] as $key => $value){
+                    //dd($request->version);
+                    if($key == $request->version){
+                        $found = true;
+                    }
+    
                 }
-
             }
+            
 
 
             if($found){
