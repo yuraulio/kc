@@ -665,6 +665,7 @@
 @endsection
 
 @push('css')
+<link rel="stylesheet" href="{{ asset('argon') }}/vendor/sweetalert2/dist/sweetalert2.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css" integrity="sha512-wJgJNTBBkLit7ymC6vvzM1EcSWeM9mmOu+1USHaRBbHkm6W9EgM0HY27+UtUaprntaYQJF75rc8gjxllKs5OIQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 @endpush
 
@@ -678,6 +679,7 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
+    <script src="{{ asset('argon') }}/vendor/sweetalert2/dist/sweetalert2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js" integrity="sha512-zlWWyZq71UMApAjih4WkaRpikgY9Bz1oXIW5G0fED4vk14JjGlQ1UmkGM392jEULP8jbNMiwLWdM8Z87Hu88Fw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     $(document).on('click', '#remove_ticket_user',function(e) {
@@ -816,12 +818,33 @@ $(document).on('click', '.ticket-card', function () {
         x = image_details.x
         y = image_details.y
 
+        const cropper = new Cropper(document.getElementById(`profile_image`), {
+        aspectRatio: Number((width/height), 4),
+        viewMode: 0,
+        dragMode: "crop",
+        responsive: false,
+        autoCropArea: 1,
+        restore: false,
+        movable: false,
+        rotatable: false,
+        scalable: false,
+        zoomable: false,
+        cropBoxMovable: true,
+        cropBoxResizable: true,
+        minContainerWidth: 300,
+        minContainerHeight: 300,
+        // minCanvasWidth: 350,
+        // minCanvasHeight: 350,
 
-    }else{
-        width = 800
-        height = 800
-        x = 0;
-        y = 0;
+        data:{
+            x:parseInt(x),
+            y:parseInt(y),
+            width: parseInt(width),
+            height: parseInt(height)
+        }
+    });
+
+
     }
 
 
@@ -858,33 +881,49 @@ $(document).on('click', '.ticket-card', function () {
 
     function filterScopeUserEmailStatus(id){
         user_id = $(id).data('id')
-        alert(user_id)
-        $.ajax({ url: '/admin/status-inform',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-        type: "post",
-            data: { content_id: user_id },
-            beforeSend:function(){
-                return confirm("Do you really want to inform the user about his current status?");
-            },
-            success: function(data) {
-                console.log(data)
-                if(data.status == 1){
-                    //toastr.info(data.message);
 
-                    $.toast({
-                        heading: 'Information',
-                        text: data.message,
-                        position: 'top-right',    // Change it to false to disable loader
-                        bgColor: '#0da825',
-                        textColor: 'white'// To change the background
-                    })
+        Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you really want to inform the user about his current status?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!',
+                closeOnConfirm: false
+                }).then((result) => {
+                    console.log(result)
+                if (result.value) {
+                    $.ajax({
+                        url: '/admin/status-inform',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                    type: "post",
+                        data: { content_id: user_id },
+                        success: function(data) {
+                            console.log(data)
+                            if(data.status == 1){
+                                //toastr.info(data.message);
+                                Swal.fire(
+                                    'Notification!',
+                                    data.message,
+                                    'success'
+                                )
+                                // $.toast({
+                                //     heading: 'Information',
+                                //     text: data.message,
+                                //     position: 'top-right',    // Change it to false to disable loader
+                                //     bgColor: '#0da825',
+                                //     textColor: 'white'// To change the background
+                                // })
+                            }
+
+                        }
+                    });
                 }
+                })
 
-                //toggleNotyMessage(data.status, data.message);
-            }
-        });
     }
 
 
@@ -892,87 +931,105 @@ $(document).on('click', '.ticket-card', function () {
 
     function filterScopeUserChangePassword(id) {
         user_id = $(id).data('id')
-	    $.ajax({ url: '/admin/password-inform',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            type: "post",
-            data: { content_id: user_id },
-            beforeSend:function(){
-                return confirm("Do you really want to inform the user to change/create password?");
-            },
-            success: function(data) {
-                if(data.status == 1){
-                    //toastr.info(data.message);
+        Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you really want to inform the user to change/create password?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!'
+                }).then((result) => {
+                if (result.value) {
 
-                    $.toast({
-                        heading: 'Information',
-                        text: data.message,
-                        position: 'top-right',    // Change it to false to disable loader
-                        bgColor: '#0da825',
-                        textColor: 'white'// To change the background
-                    })
+                    $.ajax({
+                        url: '/admin/password-inform',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        type: "post",
+                        data: { content_id: user_id },
+                        success: function(data) {
+                            if(data.status == 1){
+
+                                Swal.fire(
+                                    'Information!',
+                                    data.message,
+                                    'success'
+                                )
+                                //toastr.info(data.message);
+
+                                // $.toast({
+                                //     heading: 'Information',
+                                //     text: data.message,
+                                //     position: 'top-right',    // Change it to false to disable loader
+                                //     bgColor: '#0da825',
+                                //     textColor: 'white'// To change the background
+                                // })
+                            }
+                        }
+                    });
+
                 }
-            }
-        });
+                })
+
+
+
 	}
 
     function filterScopeUserActivationLink(id) {
         user_id = $(id).data('id')
-	    $.ajax({ url: '/admin/activation-inform',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            type: "post",
-            data: { content_id: user_id },
-            beforeSend:function(){
-                return confirm("Do you really want to reset user activation and send the user a link to activate the account?");
-            },
-            success: function(data) {
-                if(data.status == 1){
-                    //toastr.info(data.message);
+        Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you really want to reset user activation and send the user a link to activate the account?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!'
+                }).then((result) => {
+                if (result.value) {
 
-                    $.toast({
-                        heading: 'Information',
-                        text: data.message,
-                        position: 'top-right',    // Change it to false to disable loader
-                        bgColor: '#0da825',
-                        textColor: 'white'// To change the background
-                    })
+                    $.ajax({
+                        url: '/admin/activation-inform',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        type: "post",
+                        data: { content_id: user_id },
+                        success: function(data) {
+                            console.log(data)
+                            if(data.status == 1){
+                                //toastr.info(data.message);
+
+                                Swal.fire(
+                                    'Information!',
+                                    data.message,
+                                    'success'
+                                )
+
+                                // $.toast({
+                                //     heading: 'Information',
+                                //     text: data.message,
+                                //     position: 'top-right',    // Change it to false to disable loader
+                                //     bgColor: '#0da825',
+                                //     textColor: 'white'// To change the background
+                                // })
+                            }
+                        }
+                    });
+
                 }
-            }
-        });
+        })
+
+
+
+
 	}
 
 
 
     $( document ).ready(function() {
-
-        const cropper = new Cropper(document.getElementById(`profile_image`), {
-        aspectRatio: Number((width/height), 4),
-        viewMode: 0,
-        dragMode: "crop",
-        responsive: false,
-        autoCropArea: 1,
-        restore: false,
-        movable: false,
-        rotatable: false,
-        scalable: false,
-        zoomable: false,
-        cropBoxMovable: true,
-        cropBoxResizable: true,
-        minContainerWidth: 300,
-        minContainerHeight: 300,
-        // minCanvasWidth: 350,
-        // minCanvasHeight: 350,
-
-        data:{
-            x:parseInt(x),
-            y:parseInt(y),
-            width: parseInt(width),
-            height: parseInt(height)
-        }
-    });
 
         if($img['name'] != ''){
             $('.custom-file-label').text($img['name']+$img['ext'])
@@ -985,7 +1042,7 @@ $(document).on('click', '.ticket-card', function () {
         });
 
         $("body").on("click", '.email_user_status', function () {
-            alert('asd')
+
 	        filterScopeUserEmailStatus($(this));
 	    });
 

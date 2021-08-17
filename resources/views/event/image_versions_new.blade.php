@@ -263,8 +263,7 @@
 
     $(".crop").click(function(){
         let media = @json($event);
-        let path = $(this).parent().find('img').attr('src')
-        //let version = $(this).data('version')
+        let path = $(this).parent().parent().find('img').attr('src')
 
 
         $.each($('.card'), function(key, value) {

@@ -293,6 +293,8 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::post('activation-inform', [ 'as' => 'student.activation.inform', 'uses' => 'Dashboard\StudentController@activationInform' ]);
 
 
+
+
 });
 
 
@@ -358,6 +360,12 @@ Route::post('webhook/stripe', [ 'as' => 'stripe.webhook', 'uses' => 'Webhook\Web
 Route::get('/file-manager/search', '\Alexusmai\LaravelFileManager\Controllers\FileManagerController@search')
         ->name('fm.search');
 
+Route::get('/file-manager/fetchAlt', '\Alexusmai\LaravelFileManager\Controllers\FileManagerController@fetchAlt')
+        ->name('fm.fetchAltText');
+Route::post('/file-manager/saveAlt', '\Alexusmai\LaravelFileManager\Controllers\FileManagerController@saveAlt')
+        ->name('fm.saveAltText');
+
+
 Route::group(['middleware' => ['auth'], 'prefix'=>'myaccount'], function () {
     Route::group(['middleware' => 'auth.sms' ], function () {
         Route::get('/','Theme\StudentController@index')->name('myaccount');
@@ -388,6 +396,9 @@ Route::group(['middleware' => ['auth'], 'prefix'=>'myaccount'], function () {
 Route::group(['middleware' => 'auth.elearning' ], function () {
     Route::put('/elearning/saveNote', 'Theme\StudentController@saveNote');
     Route::put('/elearning/save', 'Theme\StudentController@saveElearning');
+
+    //Dropbox Link
+    Route::post('getdropbox', [ 'as' => 'getDropbox' , 'uses' => 'Theme\StudentController@getDownloadLink' ]);
 });
 
 
