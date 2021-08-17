@@ -229,8 +229,8 @@
                                         <?php //dd($item); ?>
                                             <tr>
                                                 <th>{{ $item['id'] }}</th>
-                                                <th>{{ $item['user'][0]['firstname'] }} {{ $item['user'][0]['lastname'] }}</th>
-                                                <th>{{ $item['subscription'][0]['event'][0]['title'] }}</th>
+                                                <th>{{ $item['name'] }}</th>
+                                                <th>{{ $item['event_title']}}</th>
                                                 <th>€{{ number_format($item['amount'], 2, '.', ''); }}</th>
                                             </tr>
                                             <?php $count++; ?>
@@ -811,7 +811,7 @@
                     data: {
                         labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                         datasets: [{
-                            label: 'Income',
+                            label: 'Users',
                             data: months,
                             backgroundColor: '#5603ad',
                         }]
@@ -863,7 +863,7 @@
                     data: {
                         labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                         datasets: [{
-                            label: 'Income',
+                            label: 'Alumni Tickets',
                             data: months,
                             backgroundColor: '#ffd600',
                         }]

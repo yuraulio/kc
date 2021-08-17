@@ -39,6 +39,8 @@ class HomeController extends Controller
     {
         $transactions = (new TransactionController)->participants()['transactions'];
 
+        //dd($transactions);
+
         $current_year = strtotime("now");
         $current_year = date('Y',$current_year);
 
@@ -86,7 +88,7 @@ class HomeController extends Controller
         $data['ticketName'] = $ticketName;
 
 
-        $data['booking'] = (new SubscriptionController)->subs_for_dashboard();
+        $data['booking'] = $transactions;// (new SubscriptionController)->subs_for_dashboard();
 
         return view('pages.dashboard', $data);
     }
