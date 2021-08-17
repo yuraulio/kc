@@ -826,31 +826,7 @@ $(document).on('click', '.ticket-card', function () {
 
 
 
-    const cropper = new Cropper(document.getElementById(`profile_image`), {
-        aspectRatio: Number((width/height), 4),
-        viewMode: 0,
-        dragMode: "crop",
-        responsive: false,
-        autoCropArea: 1,
-        restore: false,
-        movable: false,
-        rotatable: false,
-        scalable: false,
-        zoomable: false,
-        cropBoxMovable: true,
-        cropBoxResizable: true,
-        minContainerWidth: 300,
-        minContainerHeight: 300,
-        // minCanvasWidth: 350,
-        // minCanvasHeight: 350,
 
-        data:{
-            x:parseInt(x),
-            y:parseInt(y),
-            width: parseInt(width),
-            height: parseInt(height)
-        }
-    });
 
     $(".crop_profile").click(function(){
         let media = @json($user->image);
@@ -882,6 +858,7 @@ $(document).on('click', '.ticket-card', function () {
 
     function filterScopeUserEmailStatus(id){
         user_id = $(id).data('id')
+        alert(user_id)
         $.ajax({ url: '/admin/status-inform',
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -971,6 +948,32 @@ $(document).on('click', '.ticket-card', function () {
 
     $( document ).ready(function() {
 
+        const cropper = new Cropper(document.getElementById(`profile_image`), {
+        aspectRatio: Number((width/height), 4),
+        viewMode: 0,
+        dragMode: "crop",
+        responsive: false,
+        autoCropArea: 1,
+        restore: false,
+        movable: false,
+        rotatable: false,
+        scalable: false,
+        zoomable: false,
+        cropBoxMovable: true,
+        cropBoxResizable: true,
+        minContainerWidth: 300,
+        minContainerHeight: 300,
+        // minCanvasWidth: 350,
+        // minCanvasHeight: 350,
+
+        data:{
+            x:parseInt(x),
+            y:parseInt(y),
+            width: parseInt(width),
+            height: parseInt(height)
+        }
+    });
+
         if($img['name'] != ''){
             $('.custom-file-label').text($img['name']+$img['ext'])
         }
@@ -982,6 +985,7 @@ $(document).on('click', '.ticket-card', function () {
         });
 
         $("body").on("click", '.email_user_status', function () {
+            alert('asd')
 	        filterScopeUserEmailStatus($(this));
 	    });
 
