@@ -23,6 +23,8 @@ use Alexusmai\LaravelFileManager\Services\Zip;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Model\Image_alt;
+use App\Model\Media;
 
 class FileManagerController extends Controller
 {
@@ -175,16 +177,28 @@ class FileManagerController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function upload(RequestValidator $request)
+    public function upload(Request $request)
     {
+        //dd($request->file('files')[0]->getClientOriginalName());
         event(new FilesUploading($request));
 
         $uploadResponse = $this->fm->upload(
             $request->input('disk'),
             $request->input('path'),
             $request->file('files'),
-            $request->input('overwrite')
+            $request->input('overwrite'),
         );
+
+        if($uploadResponse['result']['status'] == 'success'){
+            $name = substr($request->file('files')[0]->getClientOriginalName(), 0,strrpos($request->file('files')[0]->getClientOriginalName(), '.'));
+
+            $alt = new Image_alt();
+            $alt->name = $name;
+            $alt->alt = explode(',',$request->input('overwrite'))[1];
+
+            $alt->save();
+
+        }
 
         event(new FilesUploaded($request));
 
@@ -245,6 +259,29 @@ class FileManagerController extends Controller
     {
         //dd($request->all());
         event(new Rename($request));
+
+        //update all media rows on db
+        if(!strstr($request->oldName, '/')){
+            $split = explode('.',$request->newName);
+            Media::where('original_name',$request->oldName)->update(['original_name' => $request->newName, 'name' => $split[0]]);
+
+            $oldName = substr($request->oldName, 0,strrpos($request->oldName, '.'));
+            $newName = substr($request->newName, 0,strrpos($request->newName, '.'));
+            Image_alt::where('name',$oldName)->update(['name' => $newName]);
+
+        }else{
+            $oldName = substr($request->oldName, strrpos($request->oldName, '/') + 1);
+            $newName = substr($request->newName, strrpos($request->newName, '/') + 1);
+            $split_new = explode('.',$newName);
+            $split_old = explode('.',$oldName);
+            Media::where('original_name', $oldName)->update(['original_name' => $newName, 'name' => $split_new[0]]);
+
+            Image_alt::where('name',$split_old[0])->update(['name' => $split_new[0]]);
+
+        }
+
+
+
 
         return response()->json(
 
@@ -490,5 +527,29 @@ class FileManagerController extends Controller
     public function fmButton()
     {
         return view('file-manager::fmButton');
+    }
+
+    public function fetchAlt(Request $request)
+    {
+        //dd($request->all());
+        $name = $request->media_name;
+        $name = substr($name, 0,strrpos($name, '.'));
+        $alt = Image_alt::where('name', $name)->first();
+        
+        return response()->json([
+            'success' => __('Alt text is here!!'),
+            'data' => $alt,
+        ]);
+    }
+
+    public function saveAlt(Request $request)
+    {
+        //dd($request->obj['id']);
+        $alt = Image_alt::where('id',$request->obj['id'])->update(['alt' => $request->obj['alt']]);
+
+        return response()->json([
+            'success' => __('Alt text successfull updated.'),
+            'data' => $alt,
+        ]);
     }
 }

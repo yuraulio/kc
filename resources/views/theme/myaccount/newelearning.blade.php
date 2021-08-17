@@ -1401,6 +1401,25 @@
 
          checkWidth();
 
+         $('.getdropboxlink').click(function() {
+
+            var dir = $(this).attr('data-dirname');
+            var fname = $(this).attr('data-filename');
+
+            $.ajax({ url: '/getdropbox', type: "post",
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {dir: dir, fname:fname},
+
+                success: function(data) {
+                //console.log(data);
+                window.location.href = data;
+                }
+            });
+
+        });
+
 
          });
 
@@ -1416,6 +1435,8 @@
           $('.sidebar-wrapper').addClass('open')
          }
          }
+
+
 
 
 

@@ -715,7 +715,7 @@
                      <?php //dd($user['events'][0]); ?>
                      @if(isset($user['events']) && count($user['events']) > 0)
                      @foreach($user['events'] as $keyType => $event)
-                                 
+
                      @if($event['view_tpl'] != 'elearning_free' && $event['view_tpl'] != 'elearning_event')
                      <div class="col12 dynamic-courses-wrapper dynamic-courses-wrapper--style2">
                         <div class="item">
@@ -725,7 +725,7 @@
                                  <ul>
                                     <li class="active"><a href="#c-info-inner{{$tab}}">Info</a></li>
                                     <li><a href="#c-shedule-inner{{$tab}}">Schedule </a></li>
-                                   
+
                                     @if(!$instructor && isset($event['category'][0]['dropbox']) && count($event['category'][0]['dropbox']) != 0)
                                     <li><a href="#c-files-inner{{$tab}}">Files</a></li>
                                     @endif
@@ -740,7 +740,7 @@
                               <div class="inside-tabs-wrapper">
                                  <div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
                                     <div class="bottom">
-                                      
+
                                        <?php
                                           $summaryDate = '';
                                           foreach($event['summary1'] as $summary){
@@ -772,7 +772,7 @@
 
 
                                           @if(isset($topic) && count($topic) != 0 )
-                                        
+
                                           <div class="accordion-item">
                                              <h3 class="accordion-title title-blue-gradient scroll-to-top">{{$keyTopic}}</h3>
                                              <div class="accordion-content no-padding">
@@ -858,8 +858,8 @@
                                                       @endif
                                                    @endforeach
                                                    @endif
-                                                      
-                                                      
+
+
                                                    @if(isset($folders_bonus) && count($folders_bonus) > 0)
                                                     <div class="files-wrapper bonus-files">
                                                     @foreach($folders_bonus as $folder_bonus)
@@ -881,12 +881,12 @@
                                                         @endif
                                                     @endforeach
                                                     </div>
-                                                    
+
                                                    @endif
                                                    </div>
                                              </div>
                                           @endforeach
-                                                      
+
                                        @endif
                                                     </div>
                                                     </div>
@@ -897,12 +897,12 @@
 
                                  @if(isset($event['exams']) && count($event['exams']) >0 )
                                  <div id="c-exams-inner{{$tab}}" class="in-tab-wrapper">
-                                    
+
                                     <div class="dynamic-courses-wrapper dynamic-courses-wrapper--style2">
                                        <div class="bottom">
                                        <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="">Exams will activate in the end of your course.</div>
                                           @foreach($event['exams'] as $p)
-                                          
+
                                           <div class="right">
                                              <!-- Feedback 8-12 changed -->
                                              @if(($userExam = $user->hasExamResults($p->id)) && $nowTime->diffInHours($userExam->end_time) < 48)
@@ -917,11 +917,11 @@
                                           </div>
                                           <!-- ./item -->
                                           @endforeach
-                                         
+
                                        </div>
                                     </div>
                                     <!-- ./dynamic-courses-wrapper -->
-                                   
+
                                  </div>
                                  @endif
                               </div>
@@ -943,7 +943,7 @@
                                     @if($event['view_tpl'] != 'elearning_free')
                                     <?php //']); ?>
                                         @if(isset($event['exams']) && count($event['exams']) >0 )
-                                       
+
                                         <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
                                         @endif
                                         @if(count($event['certificates']) > 0)
@@ -1119,32 +1119,32 @@
                                  <div id="c-exams-inner{{$tab}}" class="in-tab-wrapper">
                                     <div class="bottom">
                                        @foreach($event['exams'] as $p)
-                              
-                                       
+
+
                                        <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="">Exams activate automatically when you watch 80% </div>
                                        <div class="right">
                                           <!-- Feedback 8-12 changed -->
-                                          
+
                                           @if($event['exam_access'] && !$user->hasExamResults($p->id))
-                                        
+
                                              @if($p->islive == 1)
                                                 <a target="_blank" onclick="window.open('{{ route('attempt-exam', [$p->id]) }}', 'newwindow', 'width=1400,height=650'); return false;" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">TAKE EXAM</a>
                                              @endif
 
                                           @elseif($userExam = $user->hasExamResults($p->id))
-                                             
+
                                              @if($nowTime->diffInHours($userExam->end_time) < 48)
                                              <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">VIEW RESULT</a>
                                              @else
                                              <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md btn--completed">VIEW RESULT</a>
-                                             @endif   
+                                             @endif
                                           @else
                                           <div class="right">
                                              <a href="javascript:void(0)" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md btn--completed">TAKE EXAM</a>
                                           </div>
                                           @endif
                                        </div>
-                                     
+
                                        @endforeach
                                     </div>
                                  </div>
@@ -1175,9 +1175,9 @@
                      <!-- subs -->
                      @foreach($mySubscriptionEvents as $keyType => $event)
                      @if($event['view_tpl'] != 'elearning_event' && $event['view_tpl'] != 'elearning_free')
-                     
+
                      @else
-                    
+
                      <div class="col12 dynamic-courses-wrapper">
                         <div class="item">
                            <h2>{{ $event['title'] }}</h2>
@@ -1212,7 +1212,7 @@
                                           <?php $expire = false; ?>
                                           @foreach($mySubscriptions as $key => $sub)
                                              @foreach($plans as $key1 => $plan)
-                                          
+
                                                 @if($sub['stripe_plan'] == $plan['stripe_plan'])
                                                    @if($event['id'] == $plan['event_id'])
                                                       <?php
@@ -1226,7 +1226,7 @@
                                                 @endif
                                              @endforeach
                                           @endforeach
-                                         
+
                                           @if(!$event['video_access'])
                                           {{--<a style="cursor:not-allowed; opacity: 0.5; pointer-events: none;" href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if((isset($event['videos_progress']) && $event['videos_progress'] == 100) || count($event['cert'])>0) WATCH AGAIN @else WATCH NOW @endif</a>--}}
                                           @else
@@ -1248,7 +1248,7 @@
                                                    $date_timestamp = strtotime($event['mySubscription']['trial_ends_at']);
                                                    $now_date = strtotime(date('d/m/Y'));
                                                    $date = date('d-m-Y',$date_timestamp);
-                                                  
+
                                                 ?>
                                                 @if($date_timestamp > $now_date )
                                                    <?php //dd('not expired'); ?>
@@ -1285,7 +1285,7 @@
                                                 @endif
                                              @endif
                                              @if(isset($event['mySubscription']))
-                                             
+
                                              <div class="status_wrapper">
                                                 <div class="status_label"><label> Status:  </label></div>
                                                 <?php
@@ -1321,14 +1321,14 @@
                                           </div>
                                           @endif
 
-                                         
+
                                        </div>
                                        @if(!$event['mySubscription'])
                                        <div class="left">
                                           <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/checklist-graduate-hat.svg')}}" alt="">Get annual access to updated videos & files. 15 days free trial.</div>
                                        </div>
                                        @endif
-                                       <div class="right"> 
+                                       <div class="right">
                                           @if(!$event['mySubscription'])
                                           @foreach($event['plans'] as $key => $plan)
                                           <a href="/myaccount/subscription/{{$event['title']}}/{{ $plan->name }}" class="btn btn--secondary btn--md">SUBSCRIBE NOW</a>

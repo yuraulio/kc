@@ -261,12 +261,13 @@ class MediaController extends Controller
 
 
         $mediaKey = $request->path;
-        //dd($mediaKey);
+        //dd($request->all());
         $pos = strrpos($mediaKey, '/');
         $id = $pos === false ? $mediaKey : substr($mediaKey, $pos + 1);
 
         $folders = substr($mediaKey, 0,strrpos($mediaKey, '/'));
         $path = explode(".",$id);
+
 
         $name = $path[0];
         $ext = $path[1];

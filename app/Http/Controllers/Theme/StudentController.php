@@ -23,6 +23,7 @@ use \Carbon\Carbon;
 use Session;
 use Mail;
 
+
 class StudentController extends Controller
 {
 
@@ -750,6 +751,16 @@ class StudentController extends Controller
 
         return redirect('/')->withErrors('Invalid or expired activation code.');
 
+    }
+
+    public static function getDownloadLink(Request $request)
+    {
+        $data = $request->all();
+        $dropboxPath = $data['dir'];
+        $fileName = $data['fname'];
+        $accessToken = env('DROPBOX_TOKEN');
+        $client = new \Spatie\Dropbox\Client($accessToken);
+        return $client->getTemporaryLink($dropboxPath);
     }
 
 }
