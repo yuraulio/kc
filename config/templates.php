@@ -4,12 +4,12 @@ return[
 
     'pages' => [
         'Generic Static Page' => 'generic_page',
-        'About Page' => 'about_page',
+        'About Page' => 'about',
         'Contact Page' => 'contact_page',
         'Become Instructor' => 'become_instructor',
         'Instructors Page' => 'instructors_page',
         'Corporate Page' => 'corporate_page',
-        'Give Away' => 'give_away_page',
+        'Give Away' => 'give_away',
         'Subscription Page' => 'subscription_page',
         'Trained-Media Page' => 'trained_media_page',
         'Logos Page' => 'logos_page'

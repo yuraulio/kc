@@ -1421,4 +1421,44 @@ class CartController extends Controller
 
     }
 
+    public function update(Request $request)
+    {
+        //return $request->all();
+    	$updates = $request->get('update');
+    	foreach ($updates as $key => $value) {
+    		Cart::update($key, $value['quantity']);
+    	}
+
+        //UPDATE SAVED CART IF USER LOGGED
+        if($user = Auth::user()) {
+            
+            $existingcheck = ShoppingCart::where('identifier', $user->id)->first();
+            
+            if($user->cart){
+                $user->cart->delete();
+            }
+
+            //Cart::restore($user->id
+            if($existingcheck) {
+                $existingcheck->delete($user->id);
+                Cart::store($user->id);
+                $timecheck = ShoppingCart::where('identifier', $user->id)->first();
+                $timecheck->created_at = Carbon::now();
+                $timecheck->updated_at = Carbon::now();
+                $timecheck->save();
+            }
+            else {
+                Cart::store($user->id);
+                $timecheck = ShoppingCart::where('identifier', $user->id)->first();
+                $timecheck->created_at = Carbon::now();
+                $timecheck->updated_at = Carbon::now();
+                $timecheck->save();
+            }
+        }
+
+        //Cart::update();
+        return Redirect::to('/cart')->with('success', 'Shopping cart was successfully updated.');
+        /*return redirect()->route('cart')->with('success', 'Shopping cart was successfully updated.');*/
+    }
+
 }

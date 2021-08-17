@@ -24,7 +24,10 @@
         "propaganistas/laravel-phone": "^4.3",
         "spatie/flysystem-dropbox": "^1.0",
         "stripe/stripe-php": "^7.87",
-        "maatwebsite/excel": "^3.1"
+        "maatwebsite/excel": "^3.1",
+        "jenssegers/agent": "^2.6",
+        "vimeo/vimeo-api": "^3.0",
+        "embed/embed": "^3.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5",

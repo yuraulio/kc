@@ -14,7 +14,7 @@ class TransactionController extends Controller
         //$data['transactions'] = $data['transactions']/*->has('user')*/->doesntHave('subscription');
         //$data['transactions'] = $data['transactions']->get();
 
-        $transactions = Transaction::with('user.statisticGroupByEvent','user.events','user.ticket','subscription','event','event.delivery')->get();
+        $transactions = Transaction::with('user.statisticGroupByEvent','user.events','user.ticket','subscription','event','event.delivery')->orderBy('created_at','desc')->get();
         //dd($transactions[0]);
         $data['transactions'] = [];
         foreach($transactions as $transaction){

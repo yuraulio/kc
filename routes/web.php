@@ -358,15 +358,6 @@ Route::post('webhook/stripe', [ 'as' => 'stripe.webhook', 'uses' => 'Webhook\Web
 Route::get('/file-manager/search', '\Alexusmai\LaravelFileManager\Controllers\FileManagerController@search')
         ->name('fm.search');
 
-
-Route::get('contact-us', function(){
-    return redirect('contact');
-});
-
-Route::post('contact-us', [ 'as' => 'contactUs' , 'uses' => 'Theme\ContactUsController@sendEnquery' ]);
-Route::post('applyforbe', [ 'as' => 'beaninstructor', 'uses' => 'Theme\ContactUsController@beaninstructor' ]);
-
-
 Route::group(['middleware' => ['auth'], 'prefix'=>'myaccount'], function () {
     Route::group(['middleware' => 'auth.sms' ], function () {
         Route::get('/','Theme\StudentController@index')->name('myaccount');
@@ -452,6 +443,20 @@ Route::group([ 'prefix' => 'payment-dispatch'], function () {
 Route::get('/sms-verification/{slug}',['as' => 'user.sms.auth', 'uses' => 'Theme\HomeController@getSMSVerification']);
 Route::post('/smsVerification','Theme\HomeController@smsVerification');
 Route::get('myaccount/activate/{code}', 'Theme\StudentController@activate');
+
+//ContactUS
+Route::group(['middleware' => ['web']], function () {
+    Route::get('contact-us', function(){
+        return redirect('contact');
+    });
+    Route::post('contact-us', [ 'as' => 'contactUs' , 'uses' => 'Theme\ContactUsController@sendEnquery' ]);
+    Route::post('applyforbe', [ 'as' => 'beaninstructor', 'uses' => 'Theme\ContactUsController@beaninstructor' ]);
+
+});
+
+Route::group(['middleware' => ['web']], function () {
+    Route::post('/give-away', 'Theme\HomeController@giveAway'); 
+});
 
 //passwordReset
 Route::group(['middleware' => ['web']], function () {

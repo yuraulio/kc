@@ -23,7 +23,7 @@ class Metas extends Model
             '<meta property="og:title" content="' . $this->meta_title .'">'.
             '<meta property="og:type" content="website">' .
             '<meta property="og:url" content="' . url('/') . $this->metable->slugable->slug .'">' .
-            '<meta property="og:image" content="' . 'image' .'">'.
+            '<meta property="og:image" content="' . url('/') . '/' . get_image($this->metable->mediable,'social-media-sharing') .'">'.
             '<meta property="og:site_name" content="' . $this->meta_title .'">'.
             '<meta property="og:description" content="' . $this->meta_description .'">'.
             '<meta name="twitter:card" content="summary">'.

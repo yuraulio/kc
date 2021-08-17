@@ -81,7 +81,7 @@ if (!function_exists('get_status_by_slug')){
             return $slug->slugable->published;
         }
 
-        return false;
+        return true;
 
     }
 

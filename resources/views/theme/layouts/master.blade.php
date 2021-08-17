@@ -54,6 +54,7 @@ src="https://www.facebook.com/tr?id=1745172385734431&amp;ev=PageView&amp;noscrip
 {{-- DO NOT MODIFY --}}
 {{-- End Facebook Pixel Code --}}
 @endif
+
 <script type="text/javascript">
 function timer11(){ga('send', 'event', 'TimeOnPage', '1', '11-30 seconds', { 'nonInteraction': 1 });}
 function timer31(){ga('send', 'event', 'TimeOnPage', '2', '31-60 seconds', { 'nonInteraction': 1 });}
@@ -73,8 +74,7 @@ setTimeout(timer1801,1801000);
 
 
 <!-- OneTrust Cookies Consent Notice (Production CDN, knowcrunch.com, en-GB) start -->
-{{--@if(Agent::isDesktop())
-
+@if(Agent::isDesktop())
 
 <script type="text/javascript">
 var _iub = _iub || [];
@@ -88,7 +88,7 @@ function OptanonWrapper() { }
 
 </script>
 
-@endif--}}
+@endif
 
 {{-- Linkedin Code --}}
 <script type="text/javascript">

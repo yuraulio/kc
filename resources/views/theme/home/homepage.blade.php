@@ -1,4 +1,10 @@
 @extends('theme.layouts.master')
+
+@section('metas')
+
+   {!! $homePage->metable->getMetas() !!}
+
+@endsection
 @section('content')
 <?php
    if(Session::has('scopeone')){
@@ -10,7 +16,7 @@
    $totalcats = 0;
    ?>
 <main id="main-area" class="with-hero" role="main">
-   <?php if (isset($homePage) && count($homePage) > 0) : ?>
+   <?php if (isset($homePage) ) : ?>
    <?php $image = get_image($homePage['mediable'],'header-image');
      // dd($image);
    ?>
@@ -63,7 +69,7 @@
                            }
                         ?>
 
-                        @if (isset($row['mediable']))
+                        @if ( isset($row['mediable']) && isset($row['slugable']))
                         <a href="{{ $row['slugable']['slug'] }}"><img src="{{ cdn(get_image($row['mediable'],'event-card')) }}" alt="{{ $until}}"/></a>
                         @endif
 
@@ -233,7 +239,7 @@
 
                                //dd($row);
                                ?>
-                        @if (isset($row['mediable']))
+                        @if ( isset($row['mediable']) && isset($row['slugable']))
                         <a href="{{ $row['slugable']['slug'] }}"><img src="{{ cdn(get_image($row['mediable'],'event-card')) }}" alt="{{ $until}}"/></a>
                         @endif
 
@@ -302,7 +308,7 @@
                                //dd($row);
 
                                ?>
-                        @if (isset($row['mediable']))
+                        @if ( isset($row['mediable']) && isset($row['slugable']))
                         <a href="{{ $row['slugable']['slug'] }}"><img src="{{ cdn(get_image($row['mediable'],'event-card')) }}" alt="{{ $until}}"/></a>
                         @endif
 

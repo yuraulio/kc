@@ -25,6 +25,9 @@ use Auth;
 use PDF;
 use Carbon\Carbon;
 use App\Model\Transaction;
+use Mail;
+use Validator;
+use App\Model\GiveAway;
 
 class HomeController extends Controller
 {
@@ -105,7 +108,6 @@ class HomeController extends Controller
 
     public function homePage(){
 
-        get_social_media();
         $data = [];
 
         //$data['events'] = Event::with('category', 'medias', 'slugable', 'ticket')->get()->toArray();
@@ -188,7 +190,7 @@ class HomeController extends Controller
 
         $data['homeBrands'] = Logos::with('medias')->where('type', 'brands')->inRandomOrder()->take(6)->get()->toArray();
         $data['homeLogos'] = Logos::with('medias')->where('type', 'logos')->inRandomOrder()->take(6)->get()->toArray();
-        $data['homePage'] = Pages::where('name','home')->with('mediable')->first()->toArray();
+        $data['homePage'] = Pages::where('name','Home')->with('mediable','metable')->first();
 
         return view('theme.home.homepage',$data);
 
@@ -418,6 +420,7 @@ class HomeController extends Controller
     private function pages($page){
 
         $data['page'] = $page;
+        //dd($page);
         if($data['page']['template'] == 'corporate_page'){
             $data['page']['template'] = 'corporate-template';
             $data['benefits'] = $page->benefits;
@@ -430,6 +433,14 @@ class HomeController extends Controller
         }else if($data['page']['id'] == 801){
             $data['logos'] = Logos::with('medias')->where('type', 'logos')->get();
             return view('admin.static_tpls.logos.backend' ,$data);
+        }else if($data['page']['template'] == 'subscription-template'){
+            $data['event'] = Event::find(2304);
+            $data['testimonials'] = isset($data['event']->category->toArray()[0]) ? $data['event']->category->toArray()[0]['testimonials'] : [];
+            if($data['event']->plans->first()){
+                $data['plan'] = $data['event']->plans->first()->name;
+            }
+
+            $data['event'] = $data['event']->title;
         }
 
         return view('admin.static_tpls.'.$data['page']['template'].'.frontend' ,$data);
@@ -460,8 +471,6 @@ class HomeController extends Controller
     }
 
     private function delivery($delivery){
-
-
 
         $data['delivery'] = $delivery;
         $data['openlist'] = $delivery->event()->has('slugable')->with('category', 'city', 'ticket')->where('published',true)->where('status', 0)->orderBy('created_at','desc')->get();
@@ -585,6 +594,60 @@ class HomeController extends Controller
 
         return redirect()->back();//->with('errors', 'sms ode is wrong');
 
+    }
+
+     public function giveAway(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'cemail' => 'required|email',
+            'cname' => 'required',
+            'csurname' => 'required',
+            'ctel' => 'required',
+            'cemail' => 'unique:give_aways,email'
+        ]);
+
+        if ($validator->fails()) {
+
+            return [
+                'success' => false,
+                'status' => 0,
+                'errors' => $validator->errors()->first(),
+                'message' => '',
+            ];
+        }
+        
+        $giveAway = new GiveAway;
+
+        $giveAway->email = $request->cemail;
+        $giveAway->firstname = $request->cname;
+        $giveAway->lastname = $request->csurname;
+        $giveAway->phone = $request->ctel;
+        $giveAway->position = $request->cjob;
+        $giveAway->company = $request->ccompany;
+
+        $giveAway->save();
+        $mail_data = $request->all();
+       
+        Mail::send('theme.emails.give_away.give_away_email', ['mail_data' => $mail_data], function ($m) use ($mail_data) {
+
+            $fullname = $mail_data['cname'] . ' ' . $mail_data['csurname'];
+            $adminemail = 'info@knowcrunch.com';
+            $subject = 'Knowcrunch - Give Away';
+           
+            //$emails = ['socratous12@gmail.com', 'info@darkpony.com'];
+            $m->subject($subject);
+            $m->from($adminemail, 'Knowcrunch');
+            $m->replyTo($mail_data['cemail'], $fullname);
+             // $m->to('nathanailidis@lioncode.gr', 'Chysafis');
+            $m->to($adminemail, 'Knowcrunch');
+        });
+
+       return [
+           'success' => true,
+           'status' => 1,
+           'message' => 'Τhank you for your participation',
+       ];
+        
     }
 
 

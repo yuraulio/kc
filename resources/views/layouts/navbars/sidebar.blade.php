@@ -87,16 +87,16 @@
                         <div class="collapse show" id="navbar-sites">
                             <ul class="nav nav-sm flex-column">
                                     <li class="nav-item  {{ $elementName == 'role1-management' ? 'active' : '' }}">
-                                        <a href="{{ route('notification.show') }}" class="nav-link">{{ __('Notifications') }}</a>
+                                        <a href="#" class="nav-link">{{ __('Notifications') }}</a>
                                     </li>
                                     <li class="nav-item {{ $elementName == 'user1-management' ? 'active' : '' }}">
-                                        <a href="{{ route('user.index') }}" class="nav-link">{{ __('Site map settings') }}</a>
+                                        <a href="#" class="nav-link">{{ __('Site map settings') }}</a>
                                     </li>
                                     <li class="nav-item {{ $elementName == 'social-management' ? 'active' : '' }}">
                                         <a href="{{ route('social.index') }}" class="nav-link">{{ __('Social sharing settings') }}</a>
                                     </li>
                                     <li class="nav-item {{ $elementName == 'user1-management' ? 'active' : '' }}">
-                                        <a href="{{ route('user.index') }}" class="nav-link">{{ __('Error log') }}</a>
+                                        <a href="#" class="nav-link">{{ __('Error log') }}</a>
                                     </li>
                                     <li class="nav-item {{ $elementName == 'media-management' ? 'active' : '' }}">
                                         <a href="{{ route('media2.index') }}" class="nav-link">{{ __('Media library') }}</a>
@@ -124,7 +124,7 @@
                                         <a href="{{ route('pages.index') }}" class="nav-link">{{ __('Pages') }}</a>
                                     </li>
                                     <li class="nav-item {{ $elementName == 'user2-management' ? 'active' : '' }}">
-                                        <a href="{{ route('user.index') }}" class="nav-link">{{ __('Blog posts') }}</a>
+                                        <a href="#" class="nav-link">{{ __('Blog posts') }}</a>
                                     </li>
 
                             </ul>
@@ -137,7 +137,7 @@
                         </a>
                         <div class="collapse show" id="navbar-booking">
                             <ul class="nav nav-sm flex-column">
-                                @can('manage-users', App\Model\User::class)
+                                
                                     {{--<li class="nav-item  {{ $elementName == 'participants-management' ? 'active' : '' }}">
                                         <a href="{{ route('transaction.participants') }}" class="nav-link">{{ __('Participants') }}</a>
                                     </li>--}}
@@ -147,7 +147,7 @@
                                     <li class="nav-item  {{ $elementName == 'abandoned-management' ? 'active' : '' }}">
                                         <a href="{{ route('abandoned.index') }}" class="nav-link">{{ __('Abandoned') }}</a>
                                     </li>
-                                @endcan
+                              
                             </ul>
                         </div>
                     </li>
@@ -249,10 +249,10 @@
                                         <a href="{{ route('coupons') }}" class="nav-link">{{ __('Coupons') }}</a>
                                     </li>
                                     <li class="nav-item {{ $elementName == 'discounts-management' ? 'active' : '' }}">
-                                        <a href="{{ route('coupons') }}" class="nav-link">{{ __('Discounts') }}</a>
+                                        <a href="#" class="nav-link">{{ __('Discounts') }}</a>
                                     </li>
                                     <li class="nav-item {{ $elementName == 'affiliates-management' ? 'active' : '' }}">
-                                        <a href="{{ route('coupons') }}" class="nav-link">{{ __('Affiliates') }}</a>
+                                        <a href="#" class="nav-link">{{ __('Affiliates') }}</a>
                                     </li>
                             </ul>
                         </div>
@@ -266,7 +266,7 @@
                         <div class="collapse show" id="navbar-messages">
                             <ul class="nav nav-sm flex-column">
                                     <li class="nav-item  {{ $elementName == 'api-management' ? 'active' : '' }}">
-                                        <a href="{{ route('faqs.categories') }}" class="nav-link">{{ __('API Settings') }}</a>
+                                        <a href="#" class="nav-link">{{ __('API Settings') }}</a>
                                     </li>
                             </ul>
                         </div>

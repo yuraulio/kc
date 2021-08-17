@@ -34,6 +34,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\Dashboard\CouponController;
+use App\Notifications\userActivationLink;
 
 use Illuminate\Http\Request;
 
@@ -283,6 +284,8 @@ class UserController extends Controller
 
         $user = User::find($user['id']);
         $user->role()->sync($request->role_id);
+
+        $user->notify(new userActivationLink($user,'activate'));
 
         return redirect()->route('user.edit', $user->id)->withStatus(__('User successfully created.'));
     }

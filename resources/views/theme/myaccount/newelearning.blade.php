@@ -1399,13 +1399,13 @@
 
          $(document).ready(function() {
 
-         checkWidth();
+         //checkWidth();
 
 
          });
 
          $(window).on("resize", function(){
-         checkWidth()
+         //checkWidth()
          });
 
          function checkWidth(){
@@ -1424,6 +1424,4 @@
       </script>
    </body>
 </html>
-@push('js')
-<script src="{{ asset('theme/assets') }}/js/new_js1/app1.js"></script>
-@endpush
+

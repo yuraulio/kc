@@ -35,9 +35,8 @@ class ContactUsController extends Controller
             Mail::send('theme.emails.contact.send_us_email', ['mail_data' => $mail_data], function ($m) use ($mail_data) {
 
             	 $fullname = $mail_data['cname'] . ' ' . $mail_data['csurname'];
-            	 $generalInfo = \Config::get('dpoptions.website_details.settings');
 
-            	$adminemail = $generalInfo['admin_email'];
+            	$adminemail = 'info@knowcrunch.com';
                 if(isset($mail_data['eventtitle'])) {
                     $subject = 'KnowCrunch – information about ' . $mail_data['eventtitle'];
                 }
@@ -52,7 +51,7 @@ class ContactUsController extends Controller
                // $m->to('nathanailidis@lioncode.gr', 'Chysafis');
                 $m->to($adminemail, 'Knowcrunch');
                 //$m->cc('periklis.d@gmail.com', 'Perry D');
-                $m->bcc('info@darkpony.com', null);
+                //$m->bcc('info@darkpony.com', null);
             });
 
             return [
@@ -92,9 +91,9 @@ class ContactUsController extends Controller
             Mail::send('theme.emails.contact.instructor_email', ['mail_data' => $mail_data], function ($m) use ($mail_data) {
 
                  $fullname = $mail_data['iform-name'] . ' ' . $mail_data['iform-surname'];
-                 $generalInfo = \Config::get('dpoptions.website_details.settings');
+                
 
-                $adminemail = $generalInfo['admin_email'];
+                $adminemail = 'info@knowcrunch.com';
                 //$emails = ['socratous12@gmail.com', 'info@darkpony.com'];
                 $m->subject('Knowcrunch - Instructor Contact');
                 $m->from($adminemail, 'Knowcrunch');
@@ -102,7 +101,7 @@ class ContactUsController extends Controller
                 //$m->to('p.diamantidis@darkpony.com', 'Knowcrunch');
                 $m->to($adminemail, 'Knowcrunch');
                 //$m->cc('periklis.d@gmail.com', 'Perry D');
-                $m->bcc('info@darkpony.com', null);
+                //$m->bcc('info@darkpony.com', null);
             });
 
             return [

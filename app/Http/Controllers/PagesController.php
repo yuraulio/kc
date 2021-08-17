@@ -107,9 +107,8 @@ class PagesController extends Controller
     public function update(Request $request, Pages $page)
     {
         $page->update($request->all());
-
-
-        return redirect()->route('pages.index')->withStatus(__('Page successfully updated.'));
+        return redirect()->route('pages.edit',$page->id)->withStatus(__('Page successfully updated.'));
+        //return redirect()->route('pages.index')->withStatus(__('Page successfully updated.'));
     }
 
     /**

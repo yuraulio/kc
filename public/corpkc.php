@@ -30,6 +30,7 @@ $sendmessage = wordwrap($sendmessage, 70);
 // Send mail by PHP Mail Function.
 //mail("nathanailidis@lioncode.gr", $subject, $sendmessage, $Headers1);
 mail("info@knowcrunch.com", $subject, $sendmessage, $Headers1);
+//mail("moulopoulos@lioncode.gr", $subject, $sendmessage, $Headers1);
 //mail("lina@knowcrunch.com", $subject, $sendmessage, $Headers1);
 echo "Your message has been received, We will contact you soon.";
 } else {

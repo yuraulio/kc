@@ -242,7 +242,7 @@ class StudentController extends Controller
                 //dd($expiration_event >= $now);
                 if($expiration_event >= $now || !$expiration_event)
                     $video_access = true;
-
+                
                 $data['user']['events'][$key]['video_access'] = $video_access;
 
                 //$this->updateUserStatistic($event,$statistics,$user);
@@ -311,7 +311,7 @@ class StudentController extends Controller
         }
         $data['instructors'] = Instructor::with('slugable', 'medias')->get()->groupby('id');
         $data['subscriptionEvents'] = Event::whereIn('id',$subscriptionEvents)->with('slugable')->get();
-
+        //dd($data['user']['events'][0]);
         return $data;
 
     }

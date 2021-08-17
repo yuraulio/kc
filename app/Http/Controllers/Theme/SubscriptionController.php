@@ -15,7 +15,7 @@ class SubscriptionController extends Controller
 {
     public function __construct()
     {
-        //$this->middleware('event.subscription')->only(['index','store']);
+        $this->middleware('event.subscription')->only(['index','store']);
     }
 
 

@@ -1,6 +1,11 @@
 @extends('theme.layouts.master_consent')
+@section('metas')
+
+   {!! $page->metable->getMetas() !!}
+
+@endsection
 @section('content')
-@inject('frontHelp', 'Library\FrontendHelperLib')
+
 @include('theme.preview.preview_warning', ["id" => $content->id, "type" => "content", "status" => $content->status])
 <main id="" role="main">
    <section class="section-hero section-hero-small section-hero-blue-bg">

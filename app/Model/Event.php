@@ -126,17 +126,19 @@ class Event extends Model
     public function is_inclass_course()
     {
 
-        if($this->delivery->first() && $this->delivery->first()->id == 139){
-            return true;
-        }else{
-            return false;
-        }
+        return $this->view_tpl !== 'elearning_event' && $this->view_tpl !== 'elearning_free';
+
+        //if($this->delivery->first() && $this->delivery->first()->id == 139){
+        //    return true;
+        //}else{
+        //    return false;
+        //}
     }
 
     public function is_elearning_course()
     {
 
-        return $this->view_tpl == 'elearning_event';
+        return $this->view_tpl == 'elearning_event' || $this->view_tpl == 'elearning_free';
         // if($this->delivery->first() && $this->delivery->first()->id == 143){
         //     return true;
         // }else{

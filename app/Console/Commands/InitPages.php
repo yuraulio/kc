@@ -41,7 +41,7 @@ class InitPages extends Command
      */
     public function handle()
     {
-        $page = new Pages;
+        /*$page = new Pages;
 
         $page->name = 'Home';
         $page->title = 'Professional educational courses & training';
@@ -63,7 +63,7 @@ class InitPages extends Command
 
         $page->metable()->save($metas);
         $page->mediable()->save($media);
-        $page->slugable()->save($slug);
+        $page->slugable()->save($slug);*/
 
         ///cart
         $page = new Pages;

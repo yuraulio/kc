@@ -1609,11 +1609,14 @@ if(!isset($info)){
 </script>
 <script>
    $(".btn-add-participant").on("click", function() {
-
+      
    var number = $(this).attr('data-participant-number');
          var maxticket = $(this).attr('data-ticket-max');
          maxticket = parseInt(maxticket);
          var newNumber = parseInt(number)+1;
+
+         console.log(newNumber);
+
    document.getElementById('item-quantity').setAttribute('value',newNumber)
 
    	  $.ajax({ url: '/cart', type: "post",

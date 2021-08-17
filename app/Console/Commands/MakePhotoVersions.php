@@ -46,7 +46,9 @@ class MakePhotoVersions extends Command
             if(!$media['original_name']){
                 continue;
             }
-
+            if($media['mediable_type'] == 'App\\Model\\Logos'){
+                continue;
+            }
             $details = json_decode($media['details'],true);
            
             if(!$details){

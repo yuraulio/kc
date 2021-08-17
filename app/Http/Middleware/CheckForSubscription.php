@@ -1,13 +1,12 @@
 <?php
 
-namespace PostRider\Http\Middleware;
+namespace App\Http\Middleware;
 
 use Closure;
-use PostRider\Content; 
-use PostRider\EventStudent;
-use PostRider\Plan;
-use Sentinel;
-use PostRider\User as DPUser;
+use App\Model\Event; 
+use App\Model\Plan;
+use App\Model\User;
+use Auth;
 
 class CheckForSubscription
 {
@@ -21,8 +20,8 @@ class CheckForSubscription
     public function handle($request, Closure $next)
     {
     
-        $user = Sentinel::getUser()->id;
-        $dpuser = DPUser::find($user);
+        $user = Auth::user();
+        $dpuser = $user;
    
         if(!isset($request->route()->parameters['plan']) || !isset($request->route()->parameters['event'])){
             abort(404);
@@ -33,7 +32,7 @@ class CheckForSubscription
         //$plan = Plan::find($plan);
 
         $event = $request->route()->parameters['event'];
-        $event = Content::where('title',$event)->first();
+        $event = Event::where('title',$event)->first();
         //$event = Content::find($event);
 
         if(!$plan || !$event){
@@ -41,8 +40,8 @@ class CheckForSubscription
         }
         
         $plans = $plan->events->where('id',$event->id);
-
-        if(!$event->hasPlan() || count($plans) == 0){
+        
+        if($event->plans->count() <= 0 || count($plans) == 0){
             abort(404);
         }
 

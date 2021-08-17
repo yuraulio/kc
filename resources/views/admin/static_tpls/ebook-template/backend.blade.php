@@ -8,6 +8,7 @@
             <a class="contentTypeHeader pull-right">
                 {{ $custType['title'] }}
             </a>
+
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="cmain">
                     <div class="form-horizontal">
@@ -24,6 +25,7 @@
                         @include('admin.content_fields.meta', ["showLabel" => true])
                     </div>
                 </div>
+               
             </div>
         </div>
     </div>
@@ -41,4 +43,40 @@
 $(function() {
     loadContentFor(contentObj.scope, "get_featured");
 });
+
+$('#Thrive').redactor({
+       clickToEdit: true,
+       clickToCancel: { title: 'Cancel' }
+   });
+   
+   $('#Grow_your_business').redactor({
+       clickToEdit: true,
+       clickToCancel: { title: 'Cancel' }
+   });
+   
+   $('#Learn_from_the_best').redactor({
+       clickToEdit: true,
+       clickToCancel: { title: 'Cancel' }
+   });
+   
+   $('#Promote_Leadership').redactor({
+       clickToEdit: true,
+       clickToCancel: { title: 'Cancel' }
+   });
+ ;
+   
+   $('#Inspire_your_executives').redactor({
+       clickToEdit: true,
+       clickToCancel: { title: 'Cancel' }
+   });
+   $('#Be_competitive').redactor({
+       clickToEdit: true,
+       clickToCancel: { title: 'Cancel' }
+   });
+
+   $('#benefits-body').redactor({
+       clickToEdit: true,
+       clickToCancel: { title: 'Cancel' }
+   });
+
 </script>

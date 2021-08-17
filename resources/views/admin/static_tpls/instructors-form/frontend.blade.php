@@ -1,4 +1,10 @@
 @extends('theme.layouts.master')
+
+@section('metas')
+
+   {!! $page->metable->getMetas() !!}
+@endsection
+
 @section('content')
 @include('theme.preview.preview_warning', ["id" => $page['id'], "type" => "content", "status" => $page['status']])
 <script type="text/javascript">

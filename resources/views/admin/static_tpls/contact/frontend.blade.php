@@ -1,4 +1,9 @@
 @extends('theme.layouts.master')
+@section('metas')
+
+   {!! $page->metable->getMetas() !!}
+
+@endsection
 @section('content')
 @include('theme.preview.preview_warning', ["id" => $page->id, "type" => "page", "status" => $page->status])
 <main id="main-area" class="with-hero" role="main">
@@ -168,13 +173,13 @@ $(document).ready(function() {
                         });
 
                     } else {
-						var p = document.getElementById('contact-success').textpage = data['message'];
+						var p = document.getElementById('contact-success').textContent = data['message'];
+						
 						var img = document.createElement('img');
 						img.setAttribute('src',"/theme/assets/images/icons/alert-icons/icon-success-alert.svg" )
 						img.setAttribute('alt',"Info Alert" )
 
 						$('#contact-success').append(img);
-					//	console.log(p);
                         $('.alert-outer').show()
                         $('.contactUsForm').find('input[type=text], input[type=email], textarea').val('');
                         $(".contactUsForm").slideUp();

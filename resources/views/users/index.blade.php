@@ -86,7 +86,6 @@
                                     <th scope="col">{{ __('Role') }}</th>
                                     <th scope="col">{{ __('Status') }}</th>
                                     <th scope="col">{{ __('Creation Date') }}</th>
-                                    <th class="" scope="col">{{ __('Events') }}</th>
                                     <th class="elearning-infos d-none" scope="col">{{ __('Video Seen') }}</th>
                                     <th class="elearning-infos d-none" scope="col">{{ __('Exams') }}</th>
                                     <th scope="col"></th>
@@ -130,12 +129,7 @@
                                         </td>
 
                                         <td>{{ $user['created_at'] }}</td>
-                                        <td class="">
-                                            <?php //dd($user['events_for_user_list']); ?>
-                                            @foreach($user['events_for_user_list'] as $event){{ $event['title'] }}--@if(isset($data['transactions'][$user['id']]))@if(isset($data['transactions'][$user['id']][$event['id']])){{$data['transactions'][$user['id']][$event['id']][0]['type']}}--{{$data['transactions'][$user['id']][$event['id']][0]['amount']}}--{{$data['transactions'][$user['id']][$event['id']][0]['coupon_code']}}--{{$data['transactions'][$user['id']][$event['id']][0]['date']}}||@else||@endif
-                                            @endif
-                                            @endforeach
-                                        </td>
+                                        
 
                                         <td class="elearning-infos d-none videoSeen"></td>
                                         <td class="elearning-infos d-none"></td>
