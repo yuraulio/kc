@@ -349,7 +349,7 @@ class HomeController extends Controller
         $data['content'] = $page;
         $events = array();
         $lessons = [];
-        $instructor = Instructor::with('event.category', 'mediable', 'event.lessons', 'event.slugable', 'event.city', 'event.summary1')->where('status',true)->find($page['id']);
+        $instructor = Instructor::with('event.category', 'mediable', 'event.lessons', 'event.slugable', 'event.city', 'event.summary1')->where('status',1)->find($page['id']);
         //dd($instructor['event'][0]);
         $category = array();
 
