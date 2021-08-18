@@ -24309,7 +24309,7 @@
                 name: "Properties",
                 mixins: [fe.a, Y.a, ie.a],
                 data: function () {
-                    return { 
+                    return {
                         url: null,
                         alt: null,
                         id: null,
@@ -24330,7 +24330,20 @@
                               media_name: this.selectedItem.basename
                           }
                       })
-                      .then(response => (this.alt = response.data.data))
+                      .then(response => {
+                          if(response.data.data != null){
+                            this.alt = response.data.data;
+                          }else{
+                              let name = this.selectedItem.basename.split('.');
+                              this.alt = {
+                                  id: 0,
+                                  name: name[0],
+                                  alt: '',
+                              }
+                          }
+
+
+                    })
                   },
                 methods: {
                     getUrl: function () {
@@ -24353,10 +24366,18 @@
                         axios({
                             method: 'post',
                             url: '/file-manager/saveAlt',
-                            data: {
-                              obj: this.alt
+                            data: this.alt,
+
+                          }).then(response => {
+
+                            this.alt = {
+                                id: response.data.data.id,
+                                name: response.data.data.name,
+                                alt: response.data.data.alt
                             }
-                          });
+
+                            console.log(this.alt)
+                          })
                     }
                 },
             },
@@ -24395,7 +24416,7 @@
                                             },
                                         }),
                                     ]),
-                                    n("div", { staticClass: "col-2" }, [
+                                    n("div", { staticClass: "col-2 save-alt-btn" }, [
                                         n("button", { staticClass: "btn btn-sm btn-light", attrs: { type: "button" }, on: { click: e.saveAlt } }, [n("i", { staticClass: "fas fa-save" }), e._v(" Save ")]),
                                     ]),
                                     //n("button", { staticClass: "col-2" }, [e._v(e.alt)]),

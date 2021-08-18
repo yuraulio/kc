@@ -7,16 +7,43 @@
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
-                {{ __('Default') }}
+                {{ __('') }}
             @endslot
 
-            <li class="breadcrumb-item"><a href="{{ route('home') }}">{{ __('Dashboards') }}</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ __('Default') }}</li>
+            <li class="breadcrumb-item active" aria-current="page">{{ __('Dashboard') }}</li>
         @endcomponent
         @include('layouts.headers.cards')
     @endcomponent
 
-    <div class="container-fluid mt--6">
+    <div class="container-fluid mt--10">
+        <div class="row">
+            <div class="col">
+            <div class="input-daterange datepicker row justify-content-md-center">
+                <div class="col-4">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
+                            </div>
+                            <input class="form-control" id="start_date" placeholder="Start date" type="text" value="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
+                            </div>
+                            <input class="form-control" id="end_date" placeholder="End date" type="text" value="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            </div>
+        </div>
         <div class="row">
             {{--<div class="col-xl-8">
                 <div class="card bg-default">
@@ -214,9 +241,8 @@
                                 <table class="table align-items-center table-flush">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th scope="col" class="sort" data-sort="id">ID</th>
-                                            <th scope="col" class="sort" data-sort="user">User</th>
-                                            <th scope="col" class="sort" data-sort="event">Event</th>
+                                            <th scope="col">User</th>
+                                            <th scope="col">Event</th>
                                             <th scope="col">Amount</th>
                                         </tr>
                                     </thead>
@@ -228,7 +254,6 @@
                                         @endif
                                         <?php //dd($item); ?>
                                             <tr>
-                                                <th>{{ $item['id'] }}</th>
                                                 <th>{{ $item['name'] }}</th>
                                                 <th>{{ $item['event_title']}}</th>
                                                 <th>€{{ number_format($item['amount'], 2, '.', ''); }}</th>
@@ -533,13 +558,23 @@
     <script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.extension.js"></script>
 
     <script>
+
             //Data for charts
             $revenueByYear = @json($revenueByYear);
+            //console.log($revenueByYear);
             $elearningByYear = @json($elearningByYear);
             $alumniByYear = @json($alumniByYear);
             $elearningByEvent = @json($elearningByEvent);
             let pieChart1;
             let pieChart2;
+            let start_date = null;
+            let end_date = null;
+
+            let revenueByDate = null
+            let elearningByDate = null
+            let alumniByDate = null
+            let elearningByEventDate = null
+            let ticketNameByDate = null
 
             $ticketNameByYear = @json($ticketName);
 
@@ -915,10 +950,6 @@
             }
 
 
-
-
-
-
         $(function() {
 
 
@@ -993,7 +1024,44 @@
 
             });
 
+
+            $("#start_date").change(function(e){
+                start_date = e.target.value
+
+                //calculate_charts_by_selected_dates()
+
+            });
+
+            $("#end_date").change(function(e){
+                end_date = e.target.value
+
+                calculate_charts_by_selected_dates()
+
+            });
+
+            function calculate_charts_by_selected_dates(){
+                console.log('start_date:'+ start_date)
+                console.log('end_date:' + end_date)
+
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: 'post',
+                    url: '/admin/home/fetchDashboardData',
+                    data: {'start': start_date, 'end':end_date},
+                    success: function (data) {
+                        console.log(data)
+
+
+                    }
+                });
+
+            }
+
         });
+
+
 
 
 

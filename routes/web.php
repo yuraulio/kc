@@ -55,6 +55,7 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     //Participants
     Route::get('transaction/participants', 'TransactionController@participants')->name('transaction.participants');
     Route::post('transaction/updateExpirationDate', ['as' => 'transaction.updateExpirationDate', 'uses' => 'TransactionController@updateExpirationDate']);
+    Route::post('home/fetchDashboardData', ['as' => 'home.fetchData', 'uses' => 'HomeController@fetchByDate']);
 
     //Subscriptions
     Route::get('subscriptions', ['as' => 'subscriptions.index', 'uses' => 'SubscriptionController@index']);
@@ -467,7 +468,7 @@ Route::group(['middleware' => ['web']], function () {
 });
 
 Route::group(['middleware' => ['web']], function () {
-    Route::post('/give-away', 'Theme\HomeController@giveAway'); 
+    Route::post('/give-away', 'Theme\HomeController@giveAway');
 });
 
 //passwordReset

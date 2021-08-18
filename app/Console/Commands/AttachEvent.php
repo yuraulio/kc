@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use App\Model\Media;
 use App\Model\Metas;
 use App\Model\Event;
+use App\Model\Pages;
 
 class AttachEvent extends Command
 {
@@ -42,6 +43,20 @@ class AttachEvent extends Command
     {
 
         $events = Event::all();
+
+        foreach($events as $event){
+            if(!$event->mediable){
+                $media = new Media;
+                $event->mediable()->save($media);
+            }
+
+            if(!$event->metable){
+                $media = new Metas;
+                $event->metable()->save($media);
+            }
+        }
+
+        $events = Pages::all();
 
         foreach($events as $event){
             if(!$event->mediable){
