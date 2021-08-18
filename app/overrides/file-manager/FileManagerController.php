@@ -531,11 +531,14 @@ class FileManagerController extends Controller
 
     public function fetchAlt(Request $request)
     {
-        //dd($request->all());
         $name = $request->media_name;
-        $name = substr($name, 0,strrpos($name, '.'));
+        if(strpos($name, '.')){
+            $name = substr($name, 0,strrpos($name, '.'));
+        }
+
         $alt = Image_alt::where('name', $name)->first();
-        
+
+
         return response()->json([
             'success' => __('Alt text is here!!'),
             'data' => $alt,
@@ -544,8 +547,21 @@ class FileManagerController extends Controller
 
     public function saveAlt(Request $request)
     {
-        //dd($request->obj['id']);
-        $alt = Image_alt::where('id',$request->obj['id'])->update(['alt' => $request->obj['alt']]);
+        //dd($request->all());
+        if($request->id != 0){
+            $alt = Image_alt::where('id',$request->id)->update(['alt' => $request->alt]);
+            //dd($alt->id);
+            $alt = Image_alt::find($request->id);
+        }else{
+            $alt = new Image_alt;
+
+            $alt->name = $request->name;
+            $alt->alt = $request->alt;
+
+            $alt->save();
+
+            $alt = Image_alt::find($alt->id);
+        }
 
         return response()->json([
             'success' => __('Alt text successfull updated.'),

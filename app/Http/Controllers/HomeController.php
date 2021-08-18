@@ -17,6 +17,7 @@
 */
 namespace App\Http\Controllers;
 use App\Model\Transaction;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -92,4 +93,56 @@ class HomeController extends Controller
 
         return view('pages.dashboard', $data);
     }
+
+    public function fetchByDate(Request $request)
+    {
+        $transactions = (new TransactionController)->participants_for_select_date($request->start,$request->end)['transactions'];
+
+
+        $revenueByDate = [];
+        $elearningByDate = [];
+        $alumniByDate = [];
+        $ticketName = [];
+
+        foreach($transactions as $key => $item){
+            $time = strtotime($item['date']);
+            $revenueByDate[$key] = $item;
+            $revenueByDate[$key]['month'] = date('m',$time);
+            if($item['is_elearning']){
+                $elearningByDate[$key] = $item;
+                $elearningByDate[$key]['month'] = date('m',$time);
+            }
+            if($item['type'] == 'Alumni'){
+                $alumniByDate[$key] = $item;
+                $alumniByDate[$key]['month'] = date('m',$time);
+            }
+            array_push($ticketName,[
+                'name' => $item['ticketName'],
+                'amount'=> $item['amount']
+            ]);
+        }
+
+        $data['revenueByDate'] = group_by('month', $revenueByDate);
+        $data['revenueByEventDate'] = group_by('event_id', $revenueByDate);
+        //dd($data['revenueByEvent']);
+
+
+
+        $data['elearningByDate'] = group_by('month', $elearningByDate);
+        //dd($data['elearningByDate']);
+        $data['elearningByEventDate'] = group_by('event_id', $elearningByDate);
+        //dd($elearningByDate);
+
+        $data['alumniByDate'] = group_by('month', $alumniByDate);
+        $data['alumniByEventDate'] = group_by('event_id', $alumniByDate);
+
+        $data['ticketNameDate'] = $ticketName;
+
+        return response()->json([
+            'success' => __('Already fetched chart data.'),
+            'data' => $data,
+        ]);
+    }
+
+
 }

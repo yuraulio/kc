@@ -8,7 +8,7 @@
 
 @section('content')
     @include('forms.header', [
-        'title' => __('Hello') . ' '. $user['firstname'] . ' '. $user['lastname'],
+        'title' => $user['firstname'] . ' '. $user['lastname'],
         'description' => __(''),
         'class' => 'col-lg-7'
     ])
@@ -21,7 +21,7 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-3 order-lg-2">
                             <div class="card-profile-image">
-                                <a href="#">
+
                                 @if(isset($user->image->original_name))
                                 <?php
                                     $name1 = explode('.',$user->image->original_name);
@@ -37,11 +37,11 @@
                                     }
                                 ?>
                                 <?php //dd($path); ?>
-                                    <img src="{{ $path }}" class="rounded-circle">
+                                    <img src="{{ $path }}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image1.png')}}'" class="rounded-circle">
                                 @else
-                                <img src="" alt="{{$user['firstname']}}" class="rounded-circle">
+                                <img src="" alt="{{$user['firstname']}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image1.png')}}'" class="rounded-circle">
                                 @endif
-                                </a>
+
                             </div>
                         </div>
                     </div>

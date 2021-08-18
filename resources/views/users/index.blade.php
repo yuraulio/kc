@@ -47,19 +47,42 @@
                         <div class="collapse" id="collapseExample">
                             <div class="container">
                                 <div class="row">
-                                    <div class="col-sm-4" id="filter_col1" data-column="9">
+                                    <div class="col-sm-3" id="filter_col1" data-column="9">
                                         <label>Event</label>
                                         <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="col9_filter">
                                         <option selected value> -- All -- </option>
                                         </select>
                                     </div>
-                                    <div class="col-sm-4" id="filter_col4" data-column="10">
+                                    <div class="col-sm-3" id="filter_col4" data-column="10">
                                         <label>Coupon</label>
                                         <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col10_filter" placeholder="Coupon">
                                         <option selected value> -- All -- </option>
                                         </select>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3" id="filter_col7" data-column="7">
+                                        <label>Status</label>
+                                        <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col7_filter">
+                                        <option value=""></option>
+                                        <option value="active"> Active </option>
+                                        <option value="inactive"> Inactive </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3" id="filter_col6" data-column="6">
+                                        <label>Roles</label>
+                                        <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col6_filter">
+                                            <option value=""></option>
+                                            <option value="Administrator"> Administrator </option>
+                                            <option value="Author"> Author </option>
+                                            <option value="Collaborator"> Collaborator </option>
+                                            <option value="KnowCrunch Partner"> KnowCrunch Partner </option>
+                                            <option value="KnowCrunch Payer"> KnowCrunch Payer </option>
+                                            <option value="KnowCrunch Student"> KnowCrunch Student </option>
+                                            <option value="Manager"> Manager </option>
+                                            <option value="Member"> Member </option>
+                                            <option value="Super Administrator"> Super Administrator </option>
+                                        </select>
+                                    </div>
+                                    <!-- <div class="col-sm-3">
                                         <div class="form-group">
                                             <label>Min</label>
                                             <input type="text" id="min" name="min">
@@ -69,7 +92,7 @@
                                             <label>Max</label>
                                             <input type="text" id="max" name="max">
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <Button type="button" onclick="ClearFields();" class="btn btn-secondary btn-lg "> Clear Filter</Button>
                                 </div>
                             </div>
@@ -86,6 +109,7 @@
                                     <th scope="col">{{ __('Role') }}</th>
                                     <th scope="col">{{ __('Status') }}</th>
                                     <th scope="col">{{ __('Creation Date') }}</th>
+                                    <th class="d-none" scope="col">{{ __('Event') }}</th>
                                     <th class="elearning-infos d-none" scope="col">{{ __('Video Seen') }}</th>
                                     <th class="elearning-infos d-none" scope="col">{{ __('Exams') }}</th>
                                     <th scope="col"></th>
@@ -129,7 +153,12 @@
                                         </td>
 
                                         <td>{{ $user['created_at'] }}</td>
-                                        
+
+                                        <td class="d-none">
+                                            @foreach($user['events_for_user_list'] as $event){{ $event['title'] }}--@if(isset($data['transactions'][$user['id']]))@if(isset($data['transactions'][$user['id']][$event['id']])){{$data['transactions'][$user['id']][$event['id']][0]['type']}}--{{$data['transactions'][$user['id']][$event['id']][0]['amount']}}--{{$data['transactions'][$user['id']][$event['id']][0]['coupon_code']}}--{{$data['transactions'][$user['id']][$event['id']][0]['date']}}||@else||@endif
+                                            @endif
+                                            @endforeach
+                                        </td>
 
                                         <td class="elearning-infos d-none videoSeen"></td>
                                         <td class="elearning-infos d-none"></td>
@@ -189,13 +218,17 @@
     <script>
         let user_ids = []
         var table = $('#datatable-basic45').DataTable({
-            'order':false,
+            'ordering':true,
             language: {
                 paginate: {
                 next: '&#187;', // or '→'
                 previous: '&#171;' // or '←'
                 }
-            }
+            },
+            dom: 'Bfrtip',
+            buttons: [
+                'csvHtml5',
+            ]
         });
 
         $('#datatable-basic45').on( 'page.dt', function () {
@@ -992,34 +1025,30 @@
 
 
                 })
-                $('.elearning-infos').addClass('d-none')
 
-                //console.log('type'+ early)
-                if($('.elearning-infos').hasClass('d-none')){
-
-                }else{
-                    //$('.elearning-infos').addClass('d-none')
-                    $('#participants_info').removeClass('d-none')
-                    $('.elearning-coupons').addClass('d-none')
-                }
-
-                // $('.elearning-infos').addClass('d-none')
-                // $('#participants_info').removeClass('d-none')
-
-                $('#total').text('€'+sum)
-                $('#special').text('€'+special)
-                $('#regular').text('€'+regular)
-                $('#alumni').text('€'+alumni)
-                $('#early').text('€'+early)
-                $('#sponsored').text('€'+sponsored)
-                $('#count_special').text(count_special)
-                $('#count_regular').text(count_regular)
-                $('#count_alumni').text(count_alumni)
-                $('#count_early').text(count_early)
-                $('#count_sponsored').text(count_sponsored)
 
 
             } );
+
+            if($('#participants_info').hasClass('d-none')){
+                $('#participants_info').removeClass('d-none')
+            }
+
+            if(!$('.elearning-coupons').hasClass('d-none')){
+                $('.elearning-coupons').addClass('d-none')
+            }
+
+            $('#total').text('€'+sum)
+            $('#special').text('€'+special)
+            $('#regular').text('€'+regular)
+            $('#alumni').text('€'+alumni)
+            $('#early').text('€'+early)
+            $('#sponsored').text('€'+sponsored)
+            $('#count_special').text(count_special)
+            $('#count_regular').text(count_regular)
+            $('#count_alumni').text(count_alumni)
+            $('#count_early').text(count_early)
+            $('#count_sponsored').text(count_sponsored)
 
 
         }
@@ -1109,10 +1138,10 @@
         }
 
         function filterColumn ( i ) {
-            //alert(i)
+
             initCounters()
             if(i == 9) {
-                table = $('#datatable-basic45').DataTable().column( 9 ).search(
+                $('#datatable-basic45').DataTable().column( 9 ).search(
                     $('#col9_filter').val(), true,false
                 ).draw();
 
@@ -1132,12 +1161,20 @@
                 //updateElearningInfos($('#col9_filter').val())
 
 
-            }else{
+            }else if(i == 10){
                 $('#datatable-basic45').DataTable().column( 9 ).search(
                     $('#col10_filter').val(), true,false
                 ).draw();
 
                 stats_coupon()
+            }else if(i == 7){
+                $('#datatable-basic45').DataTable().column( 7 ).search(
+                    $('#col7_filter').val(), true,false
+                ).draw();
+            }else if( i == 6){
+                $('#datatable-basic45').DataTable().column( 6 ).search(
+                    $('#col6_filter').val(), true,false
+                ).draw();
             }
 
 

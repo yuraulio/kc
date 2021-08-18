@@ -90,32 +90,6 @@
 
                                             @include('alerts.feedback', ['field' => 'category_id'])
                                         </div>
-
-                                        <?php //dd($testimonial); ?>
-
-                                        {{--<div class="form-group{{ $errors->has('instructor_id') ? ' has-danger' : '' }}">
-                                            <label class="form-control-label" for="input-instructor_id">{{ __('Instructor') }}</label>
-                                            <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="instructor_id" id="input-instructor_id" class="form-control" placeholder="{{ __('Instructor') }}" required>
-                                                <option value="">-</option>
-                                                @foreach ($instructors as $instructor)
-                                                    <option value="{{ $instructor->id }}"
-                                                    <?php if(count($testimonial->instructors) != 0){
-                                                        if($instructor->id == $testimonial->instructors[0]->id){
-                                                            echo 'selected';
-                                                        }else{
-                                                            echo '';
-                                                        }
-                                                    }
-                                                    ?>
-
-                                                        >{{ $instructor->title }}</option>
-                                                @endforeach
-                                            </select>
-
-                                            @include('alerts.feedback', ['field' => 'instructor_id'])
-                                        </div>--}}
-
-                                        <?php //dd($testimonial->instructors[0]['id']); ?>
                                         <div class="form-group{{ $errors->has('instructor_id') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-instructor_id">{{ __('Instructor') }}</label>
                                             <select name="instructor_id" data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." id="input-instructor_id" class="form-control" placeholder="{{ __('Instructor') }}">
@@ -191,11 +165,6 @@
 
                                             @include('alerts.feedback', ['field' => 'youtube'])
                                         </div>
-
-                    >
-
-
-
 
                                         <div class="text-center">
                                             <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>

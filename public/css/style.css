@@ -350,6 +350,14 @@
     text-align: end;
 }
 
+.save-alt-btn {
+    margin: auto 0;
+}
+
+.mt--10 {
+    margin-top: 1.3rem !important;
+}
+
 
 @media (min-height: 693px) {
     #file-man-main {

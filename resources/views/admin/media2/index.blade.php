@@ -294,6 +294,16 @@
 
 
                 <div class="modal-body">
+                <div class="row">
+                        <div class="col-2">Alt Text:</div>
+                        <div class="col-7">
+                            <input type="text" id="image-alt" class="form-control" placeholder="Enter Alt Text" value="">
+                            <input type="hidden" id="image-alt-id" class="form-control" value="">
+                        </div>
+                        <div class="col-2 save-alt-btn">
+                            <button id="save-alt-btn1" class="btn btn-sm btn-light" type="button"><i class="fas fa-save"></i>Save</button>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-2">Disk:</div>
                         <div class="col-9">uploads</div>
@@ -410,13 +420,36 @@
 
             })
 
-            $( document ).on('click', '#scale-Y', function() {
-                let y = $('#dataScaleY').val()
-                if(y == -1){
-                    cropper.scaleY(1);
-                }else{
-                    cropper.scaleY(-1);
+            $( document ).on('click', '#save-alt-btn1', function() {
+                let elem = $(this).parent().parent().find('input')
+                let alt_text = $(elem).val()
+                let image_name = $('#properties-name').text()
+                let image_alt_id = $('#image-alt-id').val()
+
+                if(image_alt_id == ''){
+                    image_alt_id = 0;
                 }
+
+                image_name = image_name.split('.')[0]
+
+                console.log('alt:'+alt_text)
+
+                data = {id: image_alt_id, name: image_name, alt: alt_text}
+
+                $.ajax({
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "/file-manager/saveAlt",
+                    data: data,
+                    success: function(data) {
+
+                        $('#image-alt-id').val(data.data.id)
+
+
+                    }
+                });
             })
 
 
@@ -444,6 +477,10 @@
 
                     }
                 });
+            })
+
+            $( document ).on('click', '#move-left', function() {
+                cropper.move(-15,0);
             })
 
 
@@ -667,6 +704,8 @@
                                 })
 
                             }else if(key == 'properties'){
+                                $('#image-alt-id').val('0')
+                                $('#image-alt').val('')
                                 $('#propertiesModal').modal('show');
                                 details = name.split(' ')
                                 $('#properties-name').text(details[1])
@@ -674,6 +713,26 @@
                                 $('#properties-path').text(path)
                                 $('#properties-mod').text(details[3]+details[4]+details[5])
                                 //console.log('name: '+name + 'path:  '+ path)
+
+                                let name1 = details[1].split('.')
+                                console.log('name:'+name1)
+                                data = { media_name: name1[0]}
+
+                                $.ajax({
+                                    type: 'GET',
+                                    headers: {
+                                        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                                    },
+                                    contentType: "application/json; charset=utf-8",
+                                    dataType: "json",
+                                    url: "/file-manager/fetchAlt",
+                                    data: data,
+                                    success: function(data) {
+                                        $('#image-alt-id').val(data.data.id)
+                                        $('#image-alt').val(data.data.alt)
+
+                                    }
+                                });
                             }
 
 
@@ -737,6 +796,9 @@
                     }
                 }
             });
+
+
+
         });
 
     </script>

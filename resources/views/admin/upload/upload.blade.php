@@ -18,7 +18,7 @@ Upload Image
 
     @if($event)
         <div class="form-group">
-            <img id="img-upload" src="
+            <img id="img-upload"  onerror="this.src='https://via.placeholder.com/400x250'" src="
             <?php if($event['path'] != null) {
                 echo url($event['path'].$event['original_name']);
             }?>">

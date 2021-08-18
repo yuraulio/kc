@@ -39,7 +39,6 @@
                 </li>
 
 
-
             </ul>
             <ul class="navbar-nav align-items-center ml-auto ml-md-0">
                 <li class="nav-item dropdown">
@@ -60,9 +59,9 @@
                                         $path = asset($path);
                                     }
                                 ?>
-                                    <img src="{{ $path }}" class="rounded-circle">
+                                    <img src="{{ $path }}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image1.png')}}'" class="rounded-circle">
                                 @else
-                                <img src="" alt="{{auth()->user()->firstname}}" class="rounded-circle">
+                                <img src="" alt="{{auth()->user()->firstname}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image1.png')}}'" class="rounded-circle">
                                 @endif
 
                             </span>

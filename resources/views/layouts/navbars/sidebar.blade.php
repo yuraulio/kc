@@ -73,6 +73,9 @@
                                 <li class="nav-item  {{ $elementName == 'role-management' ? 'active' : '' }}">
                                     <a href="{{ route('role.index') }}" class="nav-link">{{ __('Roles') }}</a>
                                 </li>
+                                <li class="nav-item  {{ $elementName == 'abandoned-management' ? 'active' : '' }}">
+                                    <a href="{{ route('abandoned.index') }}" class="nav-link">{{ __('Abandoned') }}</a>
+                                </li>
 
 
                             </ul>
@@ -130,27 +133,6 @@
                             </ul>
                         </div>
                     </li>
-                    <li class="nav-item active">
-                        <a class="nav-link active" href="#navbar-booking" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-booking">
-                            <i class="far fa-list-alt" style="color: #f4645f;"></i>
-                            <span class="nav-link-text" style="color: #f4645f;">{{ __('Booking') }}</span>
-                        </a>
-                        <div class="collapse show" id="navbar-booking">
-                            <ul class="nav nav-sm flex-column">
-                                
-                                    {{--<li class="nav-item  {{ $elementName == 'participants-management' ? 'active' : '' }}">
-                                        <a href="{{ route('transaction.participants') }}" class="nav-link">{{ __('Participants') }}</a>
-                                    </li>--}}
-                                    {{--<li class="nav-item  {{ $elementName == 'subscriptions-management' ? 'active' : '' }}">
-                                        <a href="{{ route('subscriptions.index') }}" class="nav-link">{{ __('Subscriptions') }}</a>
-                                    </li>--}}
-                                    <li class="nav-item  {{ $elementName == 'abandoned-management' ? 'active' : '' }}">
-                                        <a href="{{ route('abandoned.index') }}" class="nav-link">{{ __('Abandoned') }}</a>
-                                    </li>
-                              
-                            </ul>
-                        </div>
-                    </li>
 
                     <li class="nav-item active">
                         <a class="nav-link active" href="#navbar-courses" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-courses">
@@ -201,13 +183,13 @@
                                     <li class="nav-item {{ $elementName == 'deliveries-management' ? 'active' : '' }}">
                                         <a href="{{ route('delivery.index') }}" class="nav-link">{{ __('Deliveries') }}</a>
                                     </li>
-                                <li class="nav-item {{ $elementName == 'videos-management' ? 'active' : '' }}">
-                                    <a href="{{ route('video.index') }}" class="nav-link">{{ __('Videos') }}</a>
-                                </li>
+                                    <li class="nav-item {{ $elementName == 'videos-management' ? 'active' : '' }}">
+                                        <a href="{{ route('video.index') }}" class="nav-link">{{ __('Videos') }}</a>
+                                    </li>
 
-                                <li class="nav-item {{ $elementName == 'plans-management' ? 'active' : '' }}">
-                                    <a href="{{ route('plans') }}" class="nav-link">{{ __('Plans') }}</a>
-                                </li>
+                                    <li class="nav-item {{ $elementName == 'plans-management' ? 'active' : '' }}">
+                                        <a href="{{ route('plans') }}" class="nav-link">{{ __('Plans') }}</a>
+                                    </li>
 
 
 
