@@ -642,11 +642,11 @@
                 let labels = []
                 let sum = 0
                 $.each($elearningByEvent, function(key, value) {
-                    //console.log(value)
-                    if(key == $event_id){
+                    console.log(value)
+                    if($event_id != '' && key == $event_id){
                         $.each(value, function(key1, value1) {
-                            console.log(value1)
-                            if(tickets[value1.ticketName] !== undefined){
+                            //console.log(value1)
+                            if(tickets[value1.ticketName] !== undefined ){
                                 tickets[value1.ticketName] = tickets[value1.ticketName]+1;
                             }else{
                                 tickets[value1.ticketName] = sum;
@@ -654,9 +654,12 @@
                         })
                         labels = Object.keys(tickets)
                         data = Object.values(tickets)
+                        console.log(labels)
+                        console.log(data)
                     }
                 })
 
+                console.log('length:'+labels.length)
                 pieChart2.data.labels = labels
                 pieChart2.data.datasets[0].data = data
                 pieChart2.update();
@@ -957,12 +960,33 @@
             $("#ticket-num-filter-by-event").change(function() {
                 let event_id = $(this).val()
                 if(event_id != ''){
-                    initTicketByEvent($ticketNameChart, $elearningByEvent, event_id)
+
+                    console.log('start:'+start_date)
+                    console.log('end:'+end_date)
+
+                    if(start_date == null && end_date == null){
+                        //console.log($elearningByEvent)
+                        initTicketByEvent($ticketNameChart, $elearningByEvent, event_id)
+                    }else{
+                        console.log('between dates')
+                        //console.log(elearningByEventDate)
+                        initTicketByEvent($ticketNameChart, elearningByEventDate, event_id)
+                    }
+
                 }else{
                     //destroy
                     pieChart2.destroy();
+
+
                     //create new chart
-                    initTicketChart($ticketNameChart, $ticketNameByYear)
+                    if(start_date == null && end_date == null){
+                        initTicketChart($ticketNameChart, $ticketNameByYear)
+                    }else{
+                        console.log('between dates')
+                        initTicketChart($ticketNameChart, ticketNameByDate)
+                    }
+
+
 
                 }
             })
@@ -1051,7 +1075,14 @@
                     url: '/admin/home/fetchDashboardData',
                     data: {'start': start_date, 'end':end_date},
                     success: function (data) {
-                        console.log(data)
+                        let data1 = data.data
+                        if(data1){
+                            revenueByDate = data1.revenueByDate
+                            elearningByDate = data1.elearningByDate
+                            alumniByDate = data1.alumniByDate
+                            elearningByEventDate = data1.elearningByEventDate
+                            ticketNameByDate = data1.ticketNameDate
+                        }
 
 
                     }
