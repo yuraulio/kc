@@ -753,41 +753,6 @@
                                                     
                                                 </div>
 
-                                                <div class="tab-pane " id="subscription-{{$index}}" role="tabpanel" aria-labelledby="subscription-{{$index}}">
-                                                   
-                                                       @if(isset($subscriptions['$key1']))
-
-                                                       <div class="table-responsive py-4">
-                                                        <table class="table align-items-center table-flush"  id="datatable-basic42">
-                                                            <thead class="thead-light">
-                                                                <tr>
-                                                                    <th scope="col">{{ __('ID') }}</th>
-                                                                    <th scope="col">{{ __('Amount') }}</th>
-                                                                    <th scope="col">{{ __('Created At') }}</th>
-                                                                    
-                                                                    <th scope="col">{{ __('View Invoice') }}</th>
-                                                                    <th scope="col"></th>
-                                                                </tr>
-                                                            </thead>
-                                                            
-                                                                @foreach($subscriptions['$key1']['invoice'] as $invoice)
-                                                                <tbody>
-
-                                                                        <th scope="col"> {{$invoice['id']}} </th>
-                                                                        <th scope="col"> {{$tra['amount']}} </th>
-                                                                        <th scope="col"> {{date('d-m-y H:i',strtotime($invoice['created_at']))}} </th>
-                                                                        <th scope="col"> <a href="/admin/invoice/{{ $invoice['id'] }}" target="_blank">view </a> </th>
-                                                                       
-                                                                </tbody>
-                                                                @endforeach
-                                                            
-                                                        </table>
-                                                    </div>
-
-                                                       @endif
-                                                    
-                                                </div>
-
                                             </div>
                                         </div>
                                     </div>
