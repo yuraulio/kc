@@ -434,7 +434,7 @@ class InfoController extends Controller
 
            
             $user->save();
-            
+            $transaction->user()->save($user);
             // Send the activation email
             $sent = Mail::send('activation.emails.activate_groupof2+', compact('user', 'code'), function ($m) use ($user) {
                 $m->to($user->email)->subject('Activate Your Account');

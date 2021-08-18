@@ -25,7 +25,7 @@
       <div class="container">
          <div class="hero-message">
             <h1>{{ $homePage['title'] }}</h1>
-            <h2>{!! $homePage['content'] !!}</h2>
+            <h2>{!! $homePage['summary'] !!}</h2>
          </div>
       </div>
       <!-- /.section-hero -->

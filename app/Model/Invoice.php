@@ -213,10 +213,9 @@ class Invoice extends Model
 
     public function getInvoice(){
 
-
         $data=[];
        
-        $billing = $this->transaction->billing_details;
+        $billing = json_decode($this->transaction->first()->billing_details,true);
 
         $billInfo = $billing['billaddress'] . ' ' . $billing['billaddressnum'] . ', ' .  $billing['billpostcode'] . ', ' . $billing['billcity'];
     
@@ -226,7 +225,7 @@ class Invoice extends Model
             $data['amount'] = number_format ($this->amount , 0 , ',', '.');
         }
         $data['date'] = $this->created_at->format('d-F-Y');//date('d') . '-' . date('F') . '-' . date('Y');
-        $data['title'] = $this->event->title;
+        $data['title'] = $this->event->first()->title;
         $data['name'] = $this->name;
         $data['billInfo'] = $billInfo ;
         $data['invoice'] = $this->invoice ;

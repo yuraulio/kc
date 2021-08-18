@@ -69,6 +69,17 @@ class LoginController extends Controller
         
         if (Auth::attempt($credentials)) {
             
+            if(!Auth::user()->statusAccount->completed){
+                Auth::logout();
+                $data['status'] = 0;
+                $data['message'] = "Account is not activated!";
+                return response()->json([
+                    'success' => false,
+                    'data' => $data
+                ]);
+                
+            }
+
             auth()->user()->AauthAcessToken()->delete();
             Auth::logoutOtherDevices($request->password);
             $user = Auth::user();

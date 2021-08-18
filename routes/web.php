@@ -287,13 +287,14 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::get('abandoned/exportcsv', ['as' => 'abandoned.exportcsv', 'uses' => 'Dashboard\AbandonedController@exportCsv']);
 
     //Notification Messages
-
     Route::post('status-inform', [ 'as' => 'student.status.inform', 'uses' => 'Dashboard\StudentController@statusInform' ]);
     Route::post('password-inform', [ 'as' => 'student.password.inform', 'uses' => 'Dashboard\StudentController@passwordInform' ]);
     Route::post('activation-inform', [ 'as' => 'student.activation.inform', 'uses' => 'Dashboard\StudentController@activationInform' ]);
 
+    //Transaction Update
+    Route::post('transaction/update', 'TransactionController@update');
 
-
+    Route::get('invoice/{invoice}', 'Theme\InvoiceController@getInvoice');
 
 });
 

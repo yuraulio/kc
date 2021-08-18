@@ -488,7 +488,7 @@ class Event extends Model
 
     public function subscriptionΤransactionsByUser($user){
 
-        return $this->transactions()->has('subscription')->whereHas('user', function ($query) use($user) {
+        return $this->transactions()->has('subscription')->with('invoice','user')->whereHas('user', function ($query) use($user) {
                 $query->where('id', $user);
             });
 
@@ -499,7 +499,7 @@ class Event extends Model
 
     public function transactionsByUser($user){
 
-        return $this->transactions()->doesntHave('subscription')->whereHas('user', function ($query) use($user) {
+        return $this->transactions()->doesntHave('subscription')->with('invoice','user')->whereHas('user', function ($query) use($user) {
                 $query->where('id', $user);
             });
 

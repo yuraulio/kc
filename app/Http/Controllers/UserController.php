@@ -300,7 +300,7 @@ class UserController extends Controller
     public function edit(User $user, Role $model)
     {
         //dd($user);
-        $data['events'] = Event::has('ticket')->get();
+        $data['events'] = Event::has('ticket')->whereIn('status',[0,2])->get();
 
         //dd($data['events']);
         $data['user'] = $user::with('ticket','role','events','image','transactions')->find($user['id']);
@@ -324,6 +324,11 @@ class UserController extends Controller
             $data['transactions'][$value['title']] = $value->transactionsByUser($user_id)->get();
 
         }
+        $data['subscriptions']=[];
+        foreach($user->subscriptionEvents as $key => $value){
+            $data['subscriptions'][$value['title']] = $value->subscriptionΤransactionsByUser($user_id)->get();
+
+        }
 
         if($data['user']['receipt_details'] != null){
             $data['receipt'] = json_decode($data['user']['receipt_details'], true);
@@ -336,8 +341,8 @@ class UserController extends Controller
         }else{
             $data['invoice'] = null;
         }
-
-        return view('users.edit', ['transactions'=>$data['transactions'],'events' => $data['events'] ,'user' => $data['user'],'receipt' => $data['receipt'],'invoice' => $data['invoice'] ,'roles' => $model->all()]);
+        //dd($data['subscriptions']);
+        return view('users.edit', ['subscriptions'=>$data['subscriptions'], 'transactions'=>$data['transactions'],'events' => $data['events'] ,'user' => $data['user'],'receipt' => $data['receipt'],'invoice' => $data['invoice'] ,'roles' => $model->all()]);
     }
 
 

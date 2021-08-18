@@ -15972,3 +15972,9 @@ body {
 .plan .custom-toggle {
   width: 100px; }
 
+.is-flex {
+  display: flex; }
+
+.text-right {
+  text-align: right; }
+

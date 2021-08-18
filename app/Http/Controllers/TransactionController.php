@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Model\Transaction;
 use App\Model\Event;
+use App\Model\User;
 
 class TransactionController extends Controller
 {
@@ -127,6 +128,42 @@ class TransactionController extends Controller
 
         }
         return $sum.' of '.count($videos);
+    }
+
+    public function update(Request $request){
+
+        //dd($request->all());
+
+        $data['id'] = $request->input('transaction');
+        $data['status'] = $request->input('statusTr');
+        $data['newevent'] = $request->input('newevent');
+
+        $transaction = Transaction::find($data['id']);
+
+        if($transaction){
+            $transaction->status =  $data['status'];
+            $transaction->save();
+        }
+
+        foreach($request->users as $key => $user){
+            $us = User::find($user);
+
+            if($data['status'] > 0){
+                $us->events()->detach($request->oldevents[$key]);
+                $us->events()->attach($request->newevents[$key]);
+    
+                $transaction->event()->detach($request->oldevents[$key]);
+                $transaction->event()->attach($request->newevents[$key]);
+            }else{
+               //dd($transaction);
+                $us->events()->detach($request->oldevents[$key]);
+                $transaction->event()->detach($request->oldevents[$key]);
+                $transaction->user()->detach($us);
+            }
+           
+        }
+
+        return back();
     }
 
 }
