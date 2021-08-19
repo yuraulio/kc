@@ -325,6 +325,16 @@
                     </div>
 
                     <div class="row">
+                        <div class="col-2">Versions:</div>
+                        <div id="properties-size" class="col-9">
+                            <span>
+                                <button id="version-btn" class="btn btn-sm btn-light" type="button"><i class=""></i>Enter</button>
+                            </span>
+                        </div>
+                        <div class="col-1 text-right"><i title="Copy" class="far fa-copy"></i></div>
+                    </div>
+
+                    <div class="row">
                         <div class="col-2">Modified:</div>
                         <div id="properties-mod" class="col-9 properties"></div>
                     </div>
@@ -418,6 +428,24 @@
                     cropper.scaleX(-1);
                 }
 
+            })
+
+            $( document ).on('click', '#version-btn', function() {
+
+                $.ajax({
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "/admin/media2_image",
+                    data: {name: $('#properties-name').text()},
+                    success: function(data) {
+
+                        window.location = '/admin/media2/' + data.data;
+
+
+                    }
+                });
             })
 
             $( document ).on('click', '#save-alt-btn1', function() {

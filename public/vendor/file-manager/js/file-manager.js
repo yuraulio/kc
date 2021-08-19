@@ -24346,6 +24346,17 @@
                     })
                   },
                 methods: {
+                    getVersion: function(){
+                        axios({
+                            method: 'post',
+                            url: '/admin/media2_image',
+                            data: {'name': this.selectedItem.basename}
+                          }).then(response => {
+                              console.log(response)
+                            window.location = '/admin/media2/' + response.data.data;
+                          })
+
+                    },
                     getUrl: function () {
                         var e = this;
                         this.$store.dispatch("fm/url", { disk: this.selectedDisk, path: this.selectedItem.path }).then(function (t) {
@@ -24375,8 +24386,6 @@
                                 name: response.data.data.name,
                                 alt: response.data.data.alt
                             }
-
-                            console.log(this.alt)
                           })
                     }
                 },
@@ -24506,6 +24515,29 @@
                                                     ])
                                                   : e._e(),
                                           ]),
+                                          n("div", { staticClass: "row" }, [
+                                            n("div", { staticClass: "col-2" }, [e._v(e._s('Verions') + ":")]),
+                                            n("div", { staticClass: "col-9" }, [
+                                                e.url
+                                                    ? n("span", [e._v(e._s(e.url))])
+                                                    : n("span", [
+                                                          n("button", { staticClass: "btn btn-sm btn-light", attrs: { type: "button" }, on: { click: e.getVersion } }, [n("i", { staticClass: "" }), e._v(" Enter ")]),
+                                                      ]),
+                                            ]),
+                                            e.url
+                                                ? n("div", { staticClass: "col-1 text-right" }, [
+                                                      n("i", {
+                                                          staticClass: "far fa-copy",
+                                                          attrs: { title: e.lang.clipboard.copy },
+                                                          on: {
+                                                              click: function (t) {
+                                                                  return e.copyToClipboard(e.url);
+                                                              },
+                                                          },
+                                                      }),
+                                                  ])
+                                                : e._e(),
+                                        ]),
                                       ]
                                     : e._e(),
                                 e.selectedItem.hasOwnProperty("timestamp")

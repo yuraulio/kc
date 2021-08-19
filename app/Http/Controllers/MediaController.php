@@ -219,10 +219,10 @@ class MediaController extends Controller
                     if($key == $request->version){
                         $found = true;
                     }
-    
+
                 }
             }
-            
+
 
 
             if($found){
@@ -309,6 +309,16 @@ class MediaController extends Controller
         //dd($data['media']);
 
         return view('layouts.media_versions', $data);
+    }
+
+    public function mediaImage(Request $request) {
+        $data['medias'] = Media::where('original_name', $request->name)->first();
+
+
+        return response()->json([
+            'success' => __('Already image cropped.'),
+            'data' => $data['medias']['id'],
+        ]);
     }
 
     // public function createFolder($event = null){

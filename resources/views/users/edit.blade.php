@@ -37,9 +37,9 @@
                                     }
                                 ?>
                                 <?php //dd($path); ?>
-                                    <img src="{{ $path }}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image1.png')}}'" class="rounded-circle">
+                                    <img src="{{ $path }}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" class="rounded-circle">
                                 @else
-                                <img src="" alt="{{$user['firstname']}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image1.png')}}'" class="rounded-circle">
+                                <img src="" alt="{{$user['firstname']}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" class="rounded-circle">
                                 @endif
 
                             </div>
@@ -117,7 +117,7 @@
                         <h6 class="heading-small text-muted mb-4">{{ __('User information') }}</h6>
 
                         @include('alerts.error_self_update', ['key' => 'not_allow_profile'])
-
+<?php //dd($user->statusAccount()->first()); ?>
                         <div class="pl-lg-4">
                             @if(Auth::user()->isAdmin())
                             <?php //dd($user->statusAccount()->first()['completed']); ?>
@@ -127,7 +127,7 @@
                                     </div>
                                     <div style="display:inline-flex; margin-left:1rem;">
                                         <label class="custom-toggle custom-published-user">
-                                            <input name="status" id="user-status" type="checkbox" @if($user->statusAccount()->first()['completed'] == 1) checked @endif>
+                                            <input name="status" id="user-status" type="checkbox" @if($user->statusAccount()->first() != null && $user->statusAccount()->first()['completed'] == 1) checked @endif>
                                             <span class="custom-toggle-slider rounded-circle" data-label-off="inactive" data-label-on="active"></span>
                                         </label>
                                         @include('alerts.feedback', ['field' => 'status'])
@@ -496,7 +496,7 @@
                                             </thead>
                                             @foreach($transaction as $tra)
                                             <tbody>
-                                                
+
                                                     <th scope="col"> {{$tra['id']}} </th>
                                                     <th scope="col"> {{$tra['amount']}} </th>
                                                     <th scope="col"> {{$tra['created_at']}} </th>
@@ -512,11 +512,11 @@
                                             <li class="nav-item">
                                                 <a class="nav-link mb-sm-3 mb-md-0 active"  data-toggle="tab" href="#transaction-info-{{$index}}" role="tab"  aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i>Personal Data</a>
                                             </li>
-                                           
+
                                             <li class="nav-item">
                                                 <a class="nav-link mb-sm-3 mb-md-0"  data-toggle="tab" href="#invoices-{{$index}}" role="tab"  aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Invoices</a>
                                             </li>
-                                                                     
+
                                         </ul>
                                     </div>
 
@@ -529,11 +529,11 @@
                                                         @csrf
                                                         @foreach($transaction as  $tran)
                                                         <input name="transaction" value="{{$tran['id']}}" hidden>
-                                                        <div class="row"> 
-                                                        
+                                                        <div class="row">
+
                                                             <div class="col-lg-4">
                                                                 <h6 class="heading-small text-muted mb-4">{{ __('Transaction Details') }}</h6>
-                                                            
+
                                                                 <div class="form-group">
                                                                     <label class="form-control-label" for="input-method">{{ __('Status') }}</label>
                                                                     <select name="statusTr" id="input-method" class="form-control" placeholder="{{ __('Status') }}">
@@ -542,14 +542,14 @@
                                                                         <option value="2" @if($tran['status'] == 2)  selected @endif>Abandonded</option>
                                                                     </select>
                                                                 </div>
-                                                           
+
 
                                                                 <div>
                                                                     <label class="form-control-label" for="input-method">{{ __('Total Amount') }}: </label> {{$tran['amount']}}
                                                                 </div>
 
                                                                 <div>
-                                                                    <label class="form-control-label" for="input-method">{{ __('Associated user') }}: </label> 
+                                                                    <label class="form-control-label" for="input-method">{{ __('Associated user') }}: </label>
                                                                     <p> {{$tran['user']->first()->firstname}} {{$tran['user']->first()->lastname}} </p>
                                                                     <p> {{$tran['user']->first()->email}} </p>
                                                                 </div>
@@ -567,7 +567,7 @@
                                                                     <p><label class="form-control-label" for="input-method">{{ __('Address') }}: </label> {{$billing['billaddress']}} {{$billing['billaddressnum']}}</p>
                                                                     <p><label class="form-control-label" for="input-method">{{ __('PostCode') }}: </label> {{$billing['billpostcode']}} </p>
                                                                     <p><label class="form-control-label" for="input-method">{{ __('City') }}: </label> {{$billing['billcity']}} </p>
-                                                                    <p><label class="form-control-label" for="input-method">{{ __('Vat number') }}: </label> {{$billing['billafm']}} </p> 
+                                                                    <p><label class="form-control-label" for="input-method">{{ __('Vat number') }}: </label> {{$billing['billafm']}} </p>
                                                                     @elseif($billing['billing'] == 2)
                                                                     <h6 class="heading-small text-muted mb-4">{{ __('Invoice Details') }}</h6>
 
@@ -593,11 +593,11 @@
 
                                                                 @if(isset($tran['status_history']))
 
-                                                                    <?php $resp = json_decode($tran['payment_response'],true); 
+                                                                    <?php $resp = json_decode($tran['payment_response'],true);
                                                                         $status_history = $tran['status_history'];
 
                                                                     ?>
-                                                            
+
                                                                     @if($tran['payment_method_id'] == 100)
 
                                                                         <span><strong>via STRIPE</strong>
@@ -657,12 +657,12 @@
                                                             <div class="col-lg-12" style="border:1px solid">
                                                             @if($tran['status'] == 1 || $tran['status'] == 0)
 
-                                                            
+
                                                                 <h3>Booking Seats Details</h3>
                                                                 @foreach($tran['user'] as $key => $value)
 
                                                                     <input name="users[]" value="{{$value['id']}}" hidden>
-                                                                    
+
                                                                     <h4><strong>Seat #{{ $key+1 }}</strong></h4>
                                                                     <div class="is-flex">
                                                                         <div class="col-lg-6">
@@ -674,11 +674,11 @@
                                                                             <div class="form-group">
                                                                                 <label class="form-control-label" for="input-topic_id">{{ __('Select Event to transfer to') }}</label>
                                                                                 <select name="newevents[]" class="form-control" name="cardtype" id="cardtype">
-                                                                                    
+
                                                                                     @foreach($events as $event)
                                                                                     <option value="{{$event['id']}}" @if( $event['title'] == $key1 ) selected @endif>{{$event['title']}}</option>
                                                                                     @endforeach
-                                                                                    
+
                                                                                 </select>
                                                                             </div>
 
@@ -687,7 +687,7 @@
                                                                             <strong>Email:&nbsp;</strong> <a class="pUpdate" data-name="email" data-title="Change Email" data-pk="{{ $value['id'] }}">{{ $value['email'] }}</a><br />
                                                                             <strong>Mobile:&nbsp;</strong> <a class="pUpdate" data-name="mobile" data-title="Change Mobile" data-pk="{{ $value['id'] }}">{{ $value['mobile'] }}</a><br />
                                                                             <strong>PostCode:&nbsp;</strong> <a class="pUpdate" data-name="postcode" data-title="Change Postcode" data-pk="{{ $value['id'] }}">{{ $value['postcode'] }}</a> <br />
-                                                                            <strong>City: </strong> <a class="pUpdate" data-name="city" data-title="Change City" data-pk="{{ $value['id'] }}">{{ $value['city'] }}</a><br /> 
+                                                                            <strong>City: </strong> <a class="pUpdate" data-name="city" data-title="Change City" data-pk="{{ $value['id'] }}">{{ $value['city'] }}</a><br />
                                                                             <strong>Title or Job Title:&nbsp;</strong> <a class="pUpdate" data-name="job_title" data-title="Change Job Title" data-pk="{{ $value['id'] }}">{{ $value['job_title'] }}</a> <br />
 
 
@@ -696,23 +696,23 @@
                                                                         <div class="col-lg-6">
 
                                                                             <div class="text-right"><strong>Deree ID:</strong>
-                                                                   
+
                                                                                 {{ $value['partner_id'] }}
                                                                                  <br/>
-                                                                                                              
-                                                                                <strong>KC ID:</strong>                                                                     
+
+                                                                                <strong>KC ID:</strong>
                                                                                     {{ $value['kc_id'] }}
                                                                             </div>
 
                                                                         </div>
                                                                     </div>
 
-                                                                   
+
                                                                 @endforeach
-                                                         
+
                                                             @endif
                                                             </div>
-                                                        
+
                                                         </div>
                                                         @endforeach
                                                         <div class="text-center">
@@ -723,7 +723,7 @@
 
 
                                                 <div class="tab-pane " id="invoices-{{$index}}" role="tabpanel" aria-labelledby="invoices-{{$index}}">
-                                                   
+
                                                     <div class="table-responsive py-4">
                                                         <table class="table align-items-center table-flush"  id="datatable-basic42">
                                                             <thead class="thead-light">
@@ -731,7 +731,7 @@
                                                                     <th scope="col">{{ __('ID') }}</th>
                                                                     <th scope="col">{{ __('Amount') }}</th>
                                                                     <th scope="col">{{ __('Created At') }}</th>
-                                                                    
+
                                                                     <th scope="col">{{ __('View Invoice') }}</th>
                                                                     <th scope="col"></th>
                                                                 </tr>
@@ -744,13 +744,13 @@
                                                                         <th scope="col"> {{$tra['amount']}} </th>
                                                                         <th scope="col"> {{date('d-m-y H:i',strtotime($invoice['created_at']))}} </th>
                                                                         <th scope="col"> <a href="/admin/invoice/{{ $invoice['id'] }}">view </a> </th>
-                                                                       
+
                                                                 </tbody>
                                                                 @endforeach
                                                             @endforeach
                                                         </table>
                                                     </div>
-                                                    
+
                                                 </div>
 
                                             </div>
@@ -796,9 +796,9 @@
                                                 </tr>
                                             </thead>
                                             @foreach($subscription as $tra)
-                                              
+
                                             <tbody>
-                                                
+
                                                     <th scope="col"> {{$tra['id']}} </th>
                                                     <th scope="col"> {{$tra['amount']}} </th>
                                                     <th scope="col"> {{date('d-m-Y H:i',strtotime($tra['created_at']))}} </th>
@@ -810,7 +810,7 @@
                                         </table>
                                     </div>
 
-                
+
                                 </div>
                             </div>
                         </div>

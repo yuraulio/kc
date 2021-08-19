@@ -138,9 +138,19 @@ class ProfileController extends Controller
         }else{
             $status = 0;
         }
-        $user->statusAccount->completed = $status;
-        $user->push();
-        $user->update($request->all());
+
+
+        if($user->statusAccount != null){
+            $user->statusAccount->completed = $status;
+            $user->push();
+            $user->update($request->all());
+        }else{
+            $activation = new Activation;
+            $activation->user_id = $user['id'];
+            $activation->completed = 1;
+            dd('profile controller');
+        }
+
 
 
 
