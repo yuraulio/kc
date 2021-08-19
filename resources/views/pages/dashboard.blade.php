@@ -659,7 +659,10 @@
                     }
                 })
 
-                console.log('length:'+labels.length)
+                if(labels.length == 0){
+                    labels = ['null']
+                    data = [0]
+                }
                 pieChart2.data.labels = labels
                 pieChart2.data.datasets[0].data = data
                 pieChart2.update();
@@ -958,6 +961,7 @@
 
 
             $("#ticket-num-filter-by-event").change(function() {
+                console.log('triggered')
                 let event_id = $(this).val()
                 if(event_id != ''){
 
