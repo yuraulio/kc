@@ -21,25 +21,10 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-3 order-lg-2">
                             <div class="card-profile-image">
-
-                                @if(isset($user->image->original_name))
-                                <?php
-                                    $name1 = explode('.',$user->image->original_name);
-                                    $path = $user->image->path.$name1[0].$user->image->ext;
-                                    $path_crop = $user->image->path.$name1[0].'-crop'.$user->image->ext;
-                                    $path_crop = substr_replace($path_crop, "", 0, 1);
-
-                                    if(file_exists($path_crop)){
-                                        //dd('asd');
-                                        $path = asset($path_crop);
-                                    }else{
-                                        $path = asset($path);
-                                    }
-                                ?>
-                                <?php //dd($path); ?>
-                                    <img src="{{ $path }}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" class="rounded-circle">
+                                @if($path = get_image($user->image,'users'))
+                                    <img src="{{ cdn($path) }}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" class="rounded-circle">
                                 @else
-                                <img src="" alt="{{$user['firstname']}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" class="rounded-circle">
+                                    <img src="" alt="{{$user['firstname']}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" class="rounded-circle">
                                 @endif
 
                             </div>
