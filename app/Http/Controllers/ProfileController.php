@@ -20,6 +20,7 @@ namespace App\Http\Controllers;
 use Gate;
 use App\Model\User;
 use App\Model\Media;
+use App\Model\Activation;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\ProfileRequest;
 use Illuminate\Http\Request;
@@ -147,8 +148,9 @@ class ProfileController extends Controller
         }else{
             $activation = new Activation;
             $activation->user_id = $user['id'];
-            $activation->completed = 1;
-            dd('profile controller');
+            $activation->completed = $status;
+
+            $activation->save();
         }
 
 
