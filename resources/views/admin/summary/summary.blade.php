@@ -269,13 +269,14 @@
    	    url: '/admin/summary/update/' + summaryId,
             data: {'title':$('#edit-title').val(),'description':CKEDITOR.instances['edit-description2'].getData(), 'section': $('#editModalSummary #edit_section_sum').val(),'svg': $('#image_svg_upload-summary').val()},
    	    success: function (data) {
+               console.log('/////////')
+               console.log(data)
 
    	let summary = data.summary;
-       console.log(summary)
+
 
        if(data.summary.medias !== undefined){
-           let media = data.summary.medias
-           console.log(media)
+           let media = summary.medias
        }
 
 
@@ -286,10 +287,12 @@
    	$("#section_sum-"+summary['id']).html(summary['section'])
 
     if(media !== undefined){
-        $("#media_sum-"+summary['id']).text(media['path']+media['original_name'])
-        $("#sum_ben_icon-"+summary['id']).attr('src',media['path']+media['original_name'])[0]
-        $("#title-"+summary['id']).parent().find('.dropdown-item').attr('data-media', media['path']+media['original_name'])
-        $("#img-upload-summary").attr('src', media['path']+media['original_name'])
+        console.log('-----')
+        console.log(media)
+        $("#media_sum-"+summary['id']).text(media)
+        $("#sum_ben_icon-"+summary['id']).attr('src',media)[0]
+        $("#title-"+summary['id']).parent().find('.dropdown-item').attr('data-media', media)
+        $("#img-upload-summary").attr('src', media)
     }
 
     $("#title-"+summary['id']).parent().find('.dropdown-item').attr('data-description', summary['description'])
