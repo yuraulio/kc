@@ -27,6 +27,7 @@
                 <tr>
                     <td>
                         <img
+                            id="sum_ben_icon-{{$summary->id}}"
                             class="sum_ben sum_ben_icon-{{$summary->id}}"
                             src="@isset($summary->medias)
                                     {{ asset('') }}{{$summary->medias['path']}}{{$summary->medias['original_name'] }}
@@ -211,6 +212,7 @@
    	`<tr>` +
     `<td>
         <img
+            id="sum_ben_icon-${summary['id']}"
             class="sum_ben sum_ben_icon-${summary['id']}"
             src=""
             onerror="this.src='https://via.placeholder.com/35'"
@@ -268,12 +270,14 @@
             data: {'title':$('#edit-title').val(),'description':CKEDITOR.instances['edit-description2'].getData(), 'section': $('#editModalSummary #edit_section_sum').val(),'svg': $('#image_svg_upload-summary').val()},
    	    success: function (data) {
 
-   	let summary = data.summary.summary;
-
-       if(summary.medias)
-
+   	let summary = data.summary;
        console.log(summary)
-       console.log(media)
+
+       if(data.summary.medias !== undefined){
+           let media = data.summary.medias
+           console.log(media)
+       }
+
 
 
 
@@ -282,12 +286,14 @@
    	$("#section_sum-"+summary['id']).html(summary['section'])
 
     if(media !== undefined){
-        $(".sum_ben_icon-"+summary['id']).attr('src',media['path']+media['original_name'])[0]
+        $("#media_sum-"+summary['id']).text(media['path']+media['original_name'])
+        $("#sum_ben_icon-"+summary['id']).attr('src',media['path']+media['original_name'])[0]
+        $("#title-"+summary['id']).parent().find('.dropdown-item').attr('data-media', media['path']+media['original_name'])
+        $("#img-upload-summary").attr('src', media['path']+media['original_name'])
     }
 
     $("#title-"+summary['id']).parent().find('.dropdown-item').attr('data-description', summary['description'])
-    $("#title-"+summary['id']).parent().find('.dropdown-item').attr('data-media', summary.medias['path']+summary.medias['original_name'])
-    $("#img-upload-summary").attr('src', summary.medias['path']+summary.medias['original_name'])
+
    	$(".close_modal").click();
 
    	$("#success-message p").html(data.success);
