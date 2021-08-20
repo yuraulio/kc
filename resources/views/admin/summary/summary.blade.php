@@ -20,41 +20,39 @@
                 <th scope="col"></th>
             </tr>
         </thead>
-        <?php //dd($model); ?>
         <tbody class="summary-body summaries-order">
-        @if($model->summary1)
-            @foreach ($model->summary1 as $summary)
-                <tr>
-                    <td>
-                        <img
-                            id="sum_ben_icon-{{$summary->id}}"
-                            class="sum_ben sum_ben_icon-{{$summary->id}}"
-                            src="@isset($summary->medias)
-                                    {{ asset('') }}{{$summary->medias['path']}}{{$summary->medias['original_name'] }}
-                                @endisset"
-                            onerror="this.src='https://via.placeholder.com/35'"
-                        >
-                    </td>
-                    <td id="title-{{$summary->id}}" data-id="{{$summary->id}}" class="summary-list"><a class="edit-btn" href="#"> {{ $summary->title }} </a></td>
-                    <td id="section_sum-{{$summary->id}}" data-id="{{$summary->id}}" class="summary-list">{{ $summary->section }}</td>
-                    <td hidden id="media_sum-{{$summary->id}}" data-id="{{$summary->id}}" class="summary-list">
-                    @isset($summary->medias)
-                    {{ $summary->medias['path'] }}{{ $summary->medias['original_name'] }}
-                    @endisset
-                    </td>
-                    <td class="text-right">
-                        <div class="dropdown">
-                            <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-ellipsis-v"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                <a class="dropdown-item" data-toggle="modal" data-target="#editModalSummary" data-id="{{$summary->id}}" data-title="{{$summary->title}}" data-description="{{$summary->description}}" data-section="{{$summary->section}}" data-media="@isset($summary->medias){{ $summary->medias['path'] }}{{ $summary->medias['original_name'] }}@endisset" >{{ __('Edit') }}</a>
+            @if($model->summary1)
+                @foreach ($model->summary1 as $summary)
+                    <tr>
+                        <td>
+                            <img
+                                id="sum_ben_icon-{{$summary->id}}"
+                                class="sum_ben_icon sum_ben_icon-{{$summary->id}}"
+                                src="@if(isset($summary->medias))
+                                        {{ asset('') }}{{$summary->medias['path']}}{{$summary->medias['original_name'] }}
+                                    @endif"
+                                onerror="this.src='https://via.placeholder.com/60'">
+                        </td>
+                        <td id="title-{{$summary->id}}" data-id="{{$summary->id}}" class="summary-list"><a class="edit-btn" href="#"> {{ $summary->title }} </a></td>
+                        <td id="section_sum-{{$summary->id}}" data-id="{{$summary->id}}" class="summary-list">{{ $summary->section }}</td>
+                        <td hidden id="media_sum-{{$summary->id}}" data-id="{{$summary->id}}" class="summary-list">
+                        @if(isset($summary->medias))
+                        {{ $summary->medias['path'] }}{{ $summary->medias['original_name'] }}
+                        @endif
+                        </td>
+                        <td class="text-right">
+                            <div class="dropdown">
+                                <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                    <a class="dropdown-item" data-toggle="modal" data-target="#editModalSummary" data-id="{{$summary->id}}" data-title="{{$summary->title}}" data-description="{{$summary->description}}" data-section="{{$summary->section}}" data-media="@isset($summary->medias){{ $summary->medias['path'] }}{{ $summary->medias['original_name'] }}@endisset" >{{ __('Edit') }}</a>
+                                </div>
                             </div>
-                        </div>
-                    </td>
-                </tr>
-            @endforeach
-        @endif
+                        </td>
+                    </tr>
+                @endforeach
+            @endif
         </tbody>
     </table>
 </div>
@@ -159,7 +157,7 @@
                <input type="hidden" value="" name="image_svg_upload" id="image_svg_upload-summary">
             </div>
             <div class="form-group" style="text-align:center;">
-                <img style="margin-top:10px;" id="img-upload-summary" onerror="this.src='https://via.placeholder.com/35'" src="">
+                <img style="margin-top:10px;" id="img-upload-summary" onerror="this.src='https://via.placeholder.com/60'" src="">
             </div>
          </div>
          <div class="modal-footer">
@@ -191,116 +189,112 @@
         }
     });
 
-
-
-
-   $(document).on('click',"#save_summary",function(){
-   let modelType = "{{addslashes ( get_class($model) )}}";
-   let modelId = "{{ $model->id }}";
+    $(document).on('click',"#save_summary",function(){
+        console.log('from save summary')
+        let modelType = "{{addslashes ( get_class($model) )}}";
+        let modelId = "{{ $model->id }}";
 
         $.ajax({
            headers: {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
            },
-   	    type: 'post',
-   	    url: '{{route("summary.store")}}',
-            data: {'title':$('#input-title-summary').val(),'section':$('#input-section_sum').val(),'description':CKEDITOR.instances['input-description4'].getData(),'model_type':modelType,'model_id':modelId},
-   	    success: function (data) {
-   	console.log(data);
-   	let summary = data.summary;
-   	let newSummary =
-   	`<tr>` +
-    `<td>
-        <img
-            id="sum_ben_icon-${summary['id']}"
-            class="sum_ben sum_ben_icon-${summary['id']}"
-            src=""
-            onerror="this.src='https://via.placeholder.com/35'"
-        >
-    </td>`+
-   	`<td id="title-` + summary['id'] +`"><a class="edit-btn" href="#">` + summary['title'] + `</a></td>` +
-    `<td id="section_sum-` + summary['id'] +`">` + summary['section'] + `</td>` +
-    `<td hidden id="media_sum-` + summary['id'] +`" data-id="` + summary['id'] +`" class="summary-list"></td>`+
+            type: 'post',
+            url: '{{route("summary.store")}}',
+                data: {'title':$('#input-title-summary').val(),'section':$('#input-section_sum').val(),'description':CKEDITOR.instances['input-description4'].getData(),'model_type':modelType,'model_id':modelId},
+            success: function (data) {
+                console.log(data);
+                let summary = data.summary;
+                let newSummary =
+                `<tr>` +
+                `<td>
+                    <img
+                        id="sum_ben_icon-${summary['id']}"
+                        class="sum_ben_icon sum_ben_icon-${summary['id']}"
+                        src=""
+                        onerror="this.src='https://via.placeholder.com/60'"
+                    >
+                </td>`+
+                `<td id="title-` + summary['id'] +`"><a class="edit-btn" href="#">` + summary['title'] + `</a></td>` +
+                `<td id="section_sum-` + summary['id'] +`">` + summary['section'] + `</td>` +
+                `<td hidden id="media_sum-` + summary['id'] +`" data-id="` + summary['id'] +`" class="summary-list"></td>`+
 
-      `<td class="text-right">
-               <div class="dropdown">
-                  <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i class="fas fa-ellipsis-v"></i>
-                  </a>
-                  <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                     <a class="dropdown-item" data-toggle="modal" data-target="#editModalSummary" data-id="` + summary['id'] + `" data-title="`+summary['title'] +`" data-description="`+ summary['description']+`">{{ __('Edit') }}</a>
+                `<td class="text-right">
+                        <div class="dropdown">
+                            <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                <a class="dropdown-item" data-toggle="modal" data-target="#editModalSummary" data-id="` + summary['id'] + `" data-title="`+summary['title'] +`" data-description="`+ summary['description']+`">{{ __('Edit') }}</a>
 
-                  </div>
-               </div>
-            </td>
+                            </div>
+                        </div>
+                        </td>
 
-   	</tr>`;
-
-
-
-    if($('.summary-body').find('.dataTables_empty').length == 1){
-        let elem = $('.summary-body').find('.dataTables_empty')[0]
-        $(elem).parent().remove()
-    }
-
-   	$(".summary-body").append(newSummary);
-   	$(".close_modal").click();
-   	$("#success-message p").html(data.success);
-   	$("#success-message").show();
-    $("#sum_create").trigger('reset')
-   	    },
-   	    error: function() {
-   	         //console.log(data);
-   	    }
-   	});
+                </tr>`;
 
 
 
-   })
+
+
+                $(".summary-body").append(newSummary);
+                $(".close_modal").click();
+                $("#success-message p").html(data.success);
+                $("#success-message").show();
+                $("#sum_create").trigger('reset')
+            },
+            error: function() {
+                //console.log(data);
+            }
+        });
+
+
+
+    })
+
+
+
+
+
 </script>
 <script>
    $(document).on('click',"#edit-summary",function(){
-   summaryId = $(this).attr('data-id')
-   $.ajax({
+        summaryId = $(this).attr('data-id')
+        $.ajax({
            headers: {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
            },
-   	    type: 'post',
-   	    url: '/admin/summary/update/' + summaryId,
+   	        type: 'post',
+   	        url: '/admin/summary/update/' + summaryId,
             data: {'title':$('#edit-title').val(),'description':CKEDITOR.instances['edit-description2'].getData(), 'section': $('#editModalSummary #edit_section_sum').val(),'svg': $('#image_svg_upload-summary').val()},
    	    success: function (data) {
-               console.log('/////////')
-               console.log(data)
 
-   	let summary = data.summary;
+            let summary = data.summary;
 
-
-       if(data.summary.medias !== undefined){
-           let media = summary.medias
-       }
+            if(data.summary.medias !== undefined){
+                let media = data.summary.medias
+            }
 
 
 
 
 
-   	$("#title-"+summary['id']).html(`<a class="edit-btn" href="#">`+summary['title'])
-   	$("#section_sum-"+summary['id']).html(summary['section'])
+   	        $("#title-"+summary['id']).html(`<a class="edit-btn" href="#">`+summary['title'])
+   	        $("#section_sum-"+summary['id']).html(summary['section'])
 
-    if(media !== undefined){
-        console.log('-----')
-        console.log(media)
-        $("#media_sum-"+summary['id']).text(media)
-        $("#sum_ben_icon-"+summary['id']).attr('src',media)[0]
-        $("#title-"+summary['id']).parent().find('.dropdown-item').attr('data-media', media)
-        $("#img-upload-summary").attr('src', media)
-    }
+            if(summary.medias !== undefined){
+                media = summary.medias.path+summary.medias.original_name
+                $("#media_sum-"+summary['id']).text(media)
+                $("#sum_ben_icon-"+summary['id']).attr('src',media)[0]
+                $("#title-"+summary['id']).parent().find('.dropdown-item').attr('data-media', media)
+                $("#img-upload-summary").attr('src', media)
+            }
 
-    $("#title-"+summary['id']).parent().find('.dropdown-item').attr('data-description', summary['description'])
+            $("#title-"+summary['id']).parent().find('.dropdown-item').attr('data-description', summary['description'])
 
-   	$(".close_modal").click();
+            $(".close_modal").click();
 
-   	$("#success-message p").html(data.success);
-   	$("#success-message").show();
+            $("#success-message p").html(data.success);
+            $("#success-message").show();
 
    	    },
    	    error: function() {
@@ -315,8 +309,6 @@
 <script>
    $(document).on('shown.bs.modal', '#editModalSummary',function(e) {
     $("#sum_create").trigger('reset')
-
-
 
    	var link  = e.relatedTarget,
         	modal    = $(this),
@@ -345,9 +337,6 @@
             console.log(base_url+media)
 
             }
-
-
-
 
    });
 

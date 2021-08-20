@@ -482,7 +482,6 @@ class HomeController extends Controller
 
 
     private function event($event){
-
         $data = $event->topicsLessonsInstructors();
         $data['event'] = $event;
         $data['benefits'] = $event->benefits->toArray();
@@ -615,7 +614,7 @@ class HomeController extends Controller
                 'message' => '',
             ];
         }
-        
+
         $giveAway = new GiveAway;
 
         $giveAway->email = $request->cemail;
@@ -627,13 +626,13 @@ class HomeController extends Controller
 
         $giveAway->save();
         $mail_data = $request->all();
-       
+
         Mail::send('theme.emails.give_away.give_away_email', ['mail_data' => $mail_data], function ($m) use ($mail_data) {
 
             $fullname = $mail_data['cname'] . ' ' . $mail_data['csurname'];
             $adminemail = 'info@knowcrunch.com';
             $subject = 'Knowcrunch - Give Away';
-           
+
             //$emails = ['socratous12@gmail.com', 'info@darkpony.com'];
             $m->subject($subject);
             $m->from($adminemail, 'Knowcrunch');
@@ -647,7 +646,7 @@ class HomeController extends Controller
            'status' => 1,
            'message' => 'Τhank you for your participation',
        ];
-        
+
     }
 
 

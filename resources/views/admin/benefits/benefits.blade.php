@@ -10,6 +10,7 @@
    <table class="table align-items-center table-flush benefits-table"  id="datatable-basic-benefits">
       <thead class="thead-light">
          <tr>
+            <th scope="col">{{ __('Icon') }}</th>
             <th scope="col">{{ __('Name') }}</th>
             <th scope="col">{{ __('Created at') }}</th>
             <th scope="col"></th>
@@ -21,12 +22,12 @@
          <tr>
             <td>
                 <img
-                    class="sum_ben_icon"
+                    class="sum_ben_icon sum_ben_icon-{{$benefit->id}}"
                     src="@isset($benefit->medias)
                             {{ asset('') }}{{$benefit->medias['path']}}{{$benefit->medias['original_name'] }}
                         @endisset"
                     alt=""
-                    onerror="this.src='https://via.placeholder.com/35'"
+                    onerror="this.src='https://via.placeholder.com/60'"
                 >
             </td>
             <td id="name-{{$benefit->id}}" class="benefit-list" data-id ="{{$benefit->id}}"><a class="edit-btn" href="#">{{ $benefit->name }}</td>
@@ -46,7 +47,7 @@
                   </div>
                </div>
             </td>
-         </tr>
+        </tr>
          @endforeach
          @endif
       </tbody>
@@ -123,7 +124,7 @@
             </form>
 
             <div class="form-group" style="text-align:center;">
-                <img style="margin-top:10px;" id="img-upload-benefit" src="">
+                <img style="margin-top:10px;" id="img-upload-benefit" onerror="this.src='https://via.placeholder.com/60'" src="">
             </div>
             </div>
          </div>
@@ -153,10 +154,20 @@
    	    url: '{{route("benefit.store")}}',
             data: {'name':$('#input-name').val(),'description':CKEDITOR.instances['input-description'].getData(),'model_type':modelType,'model_id':modelId},
    	    success: function (data) {
-   	//console.log(data);
+   	console.log(data);
    	let benefit = data.benefit;
    	let newBenefit =
    	`<tr>` +
+       `<td>
+       <img
+            class="sum_ben_icon sum_ben_icon-${benefit.id}"
+            src="@isset($benefit->medias)
+                    {{ asset('') }}{{$benefit->medias['path']}}{{$benefit->medias['original_name'] }}
+                @endisset"
+            alt=""
+            onerror="this.src='https://via.placeholder.com/60'"
+                >
+       </td>`+
    	`<td id="name-` + benefit['id'] +`"><a class="edit-btn" href="#">` + benefit['name'] + `</td>` +
    	`<td>` + benefit['created_at'] + `</td>` +
        `<td hidden id="media_ben-` + benefit['id'] +`" data-id="` + benefit['id'] +`" class="benefit-list"></td>`+
@@ -192,39 +203,46 @@
    })
 </script>
 <script>
-   $(document).on('click',"#edit-benefit",function(){
+    $(document).on('click',"#edit-benefit",function(){
 
-   //$benefitId = $("#benefit-id").val()
-   benefitId = $(this).attr('data-id')
-   $.ajax({
-           headers: {
+        //$benefitId = $("#benefit-id").val()
+        benefitId = $(this).attr('data-id')
+        $.ajax({
+            headers: {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-           },
-   	    type: 'put',
-   	    url: '/admin/benefit/' + benefitId,
+            },
+            type: 'put',
+            url: '/admin/benefit/' + benefitId,
             data: {'name':$('#edit-name').val(),'description':CKEDITOR.instances['edit-description1'].getData(),'svg': $('#image_svg_upload-benefit').val()},
-   	    success: function (data) {
-   	let benefit = data.benefit;
+            success: function (data) {
+                let benefit = data.benefit;
+                console.log(benefit)
 
+                if(data.benefit.medias !== undefined){
+                    let media = data.benefit.medias
+                    media = media.path+media.original_name
 
-   	$("#name-"+benefit['id']).html(`<a class="edit-btn" href="#">`+benefit['name'])
-       $("#name-"+benefit['id']).parent().find('.dropdown-item').attr('data-description', benefit['description'])
-       $("#name-"+benefit['id']).parent().find('.dropdown-item').attr('data-media', benefit.medias['path']+benefit.medias['original_name'])
-       $("#media_ben-"+benefit['id']).text(benefit.medias['path']+benefit.medias['original_name'])
-       $("#img-upload-benefit").attr('src', benefit.medias['path']+benefit.medias['original_name'])
-       $('#benefit-form-edit').trigger('reset');
-   	$(".close-modal").click();
+                    $(".sum_ben_icon-"+benefit['id']).attr('src',media)[0]
 
-   	$("#success-message p").html(data.success);
-   	$("#success-message").show();
+                    $("#name-"+benefit['id']).parent().find('.dropdown-item').attr('data-media', media)
+                    $("#media_ben-"+benefit['id']).text(media)
+                    $("#img-upload-benefit").attr('src', media)
+                }
 
-   	    },
-   	    error: function() {
-   	         //console.log(data);
-   	    }
-   	});
+                $("#name-"+benefit['id']).html(`<a class="edit-btn" href="#">`+benefit['name'])
+                $("#name-"+benefit['id']).parent().find('.dropdown-item').attr('data-description', benefit['description'])
 
+                $('#benefit-form-edit').trigger('reset');
+                $(".close-modal").click();
 
+                $("#success-message p").html(data.success);
+                $("#success-message").show();
+
+            },
+            error: function() {
+                //console.log(data);
+            }
+   	    });
 
    })
 

@@ -127,12 +127,12 @@ class VideoController extends Controller
     public function store_event(Request $request)
     {
 
-        //dd($request->all());
+
 
         $model = app($request->model_type);
         $model = $model::find($request->model_id);
 
-        $model->videos()->sync($request->video_id);
+        $model->sectionVideos()->sync($request->video_id);
 
         $video = Video::find($request->video_id);
 

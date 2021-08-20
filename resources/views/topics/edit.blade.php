@@ -15,7 +15,6 @@
             <li class="breadcrumb-item active" aria-current="page">{{ __('Edit Topic') }}</li>
         @endcomponent
     @endcomponent
-
     <div class="container-fluid mt--6">
         <div class="row">
             <div class="col-xl-12 order-xl-1">
@@ -40,14 +39,14 @@
                             <div class="pl-lg-4">
 
                                 <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
-                                    
+
 
                                     <label class="custom-toggle custom-published">
                                             <input type="checkbox" name="status" id="input-status" @if($topic['status'] == '1') checked @endif>
                                             <span class="custom-toggle-slider rounded-circle" data-label-off="unpublished" data-label-on="published"></span>
                                         </label>
                                         @include('alerts.feedback', ['field' => 'status'])
-                                    
+
                                 </div>
 
                                 <div class="form-group{{ $errors->has('comment_status') ? ' has-danger' : '' }}">
