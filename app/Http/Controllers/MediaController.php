@@ -50,6 +50,8 @@ class MediaController extends Controller
         // $media->height = $image->height();
 
         $media->save();
+
+        return $media;
     }
 
     public function uploadVersionImage(Request $request, Media $media){

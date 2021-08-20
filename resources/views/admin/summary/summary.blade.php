@@ -27,7 +27,7 @@
                 <tr>
                     <td>
                         <img
-                            class="sum_ben_icon"
+                            class="sum_ben sum_ben_icon-{{$summary->id}}"
                             src="@isset($summary->medias)
                                     {{ asset('') }}{{$summary->medias['path']}}{{$summary->medias['original_name'] }}
                                 @endisset"
@@ -158,7 +158,7 @@
                <input type="hidden" value="" name="image_svg_upload" id="image_svg_upload-summary">
             </div>
             <div class="form-group" style="text-align:center;">
-                <img style="margin-top:10px;" id="img-upload-summary" src="">
+                <img style="margin-top:10px;" id="img-upload-summary" onerror="this.src='https://via.placeholder.com/35'" src="">
             </div>
          </div>
          <div class="modal-footer">
@@ -205,11 +205,17 @@
    	    url: '{{route("summary.store")}}',
             data: {'title':$('#input-title-summary').val(),'section':$('#input-section_sum').val(),'description':CKEDITOR.instances['input-description4'].getData(),'model_type':modelType,'model_id':modelId},
    	    success: function (data) {
-   	//console.log(data);
+   	console.log(data);
    	let summary = data.summary;
-       console.log(summary)
    	let newSummary =
    	`<tr>` +
+    `<td>
+        <img
+            class="sum_ben sum_ben_icon-${summary['id']}"
+            src=""
+            onerror="this.src='https://via.placeholder.com/35'"
+        >
+    </td>`+
    	`<td id="title-` + summary['id'] +`"><a class="edit-btn" href="#">` + summary['title'] + `</a></td>` +
     `<td id="section_sum-` + summary['id'] +`">` + summary['section'] + `</td>` +
     `<td hidden id="media_sum-` + summary['id'] +`" data-id="` + summary['id'] +`" class="summary-list"></td>`+
@@ -229,6 +235,12 @@
    	</tr>`;
 
 
+
+    if($('.summary-body').find('.dataTables_empty').length == 1){
+        let elem = $('.summary-body').find('.dataTables_empty')[0]
+        $(elem).parent().remove()
+    }
+
    	$(".summary-body").append(newSummary);
    	$(".close_modal").click();
    	$("#success-message p").html(data.success);
@@ -247,7 +259,6 @@
 <script>
    $(document).on('click',"#edit-summary",function(){
    summaryId = $(this).attr('data-id')
-   console.log(summaryId)
    $.ajax({
            headers: {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -257,12 +268,23 @@
             data: {'title':$('#edit-title').val(),'description':CKEDITOR.instances['edit-description2'].getData(), 'section': $('#editModalSummary #edit_section_sum').val(),'svg': $('#image_svg_upload-summary').val()},
    	    success: function (data) {
 
-   	let summary = data.summary;
+   	let summary = data.summary.summary;
+
+       if(summary.medias)
+
+       console.log(summary)
+       console.log(media)
+
+
 
 
    	$("#title-"+summary['id']).html(`<a class="edit-btn" href="#">`+summary['title'])
    	$("#section_sum-"+summary['id']).html(summary['section'])
-    $("#media_sum-"+summary['id']).html(summary.medias['path']+summary.medias['original_name'])
+
+    if(media !== undefined){
+        $(".sum_ben_icon-"+summary['id']).attr('src',media['path']+media['original_name'])[0]
+    }
+
     $("#title-"+summary['id']).parent().find('.dropdown-item').attr('data-description', summary['description'])
     $("#title-"+summary['id']).parent().find('.dropdown-item').attr('data-media', summary.medias['path']+summary.medias['original_name'])
     $("#img-upload-summary").attr('src', summary.medias['path']+summary.medias['original_name'])

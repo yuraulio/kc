@@ -16,6 +16,8 @@ trait MediaTrait
         $media->save();
 
         $this->mediable()->save($media);
+
+        return $media;
     }
 
     /*public function createMedia($mediaKey){

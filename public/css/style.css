@@ -380,6 +380,15 @@
     transition: all 0.15s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
+.search-list-css {
+    overflow: scroll;
+    max-height: 13rem;
+}
+
+.sum_ben {
+    width: 20%;
+}
+
 
 @media (min-height: 693px) {
     #file-man-main {

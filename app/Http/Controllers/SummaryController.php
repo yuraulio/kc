@@ -50,6 +50,8 @@ class SummaryController extends Controller
     {
         $summary->update($request->all());
 
+        $data['summary'] = $summary;
+
         if($request->svg){
             (new MediaController)->uploadSvg($request, $summary->medias);
         }
