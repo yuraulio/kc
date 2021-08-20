@@ -303,8 +303,7 @@
 }
 
 .sum_ben_icon {
-    height: 30%;
-    width: 40%;
+    max-width: 20%;
 }
 
 .topic-header .topic-title {
@@ -385,8 +384,9 @@
     max-height: 13rem;
 }
 
-.sum_ben {
-    width: 20%;
+
+#accordionTopicMain .row {
+    margin-left: 5px !important;
 }
 
 

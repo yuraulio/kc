@@ -3,10 +3,10 @@
     <div class="col-8">
         <h3 class="mb-0">{{ __('Faqs') }}</h3>
         <p class="text-sm mb-0">
-                {{ __('This is an example of Faq management.') }}
+                {{ __('') }}
             </p>
     </div>
-   
+
         {{--<div class="col-4 text-right">
         <button data-toggle="modal" data-target="#faqModal" class="btn btn-sm btn-primary">{{ __('Assign Faqs') }}</button>
         </div>--}}
@@ -17,7 +17,6 @@
     @include('alerts.success')
     @include('alerts.errors')
 </div>
-
 <div class="accordion"  id="accordionTopicMain1">
     @foreach ($event->getFaqsByCategoryEvent() as $key => $faqs)
 
@@ -43,8 +42,8 @@
                                     <td>{{ $faq['question'] }}</td>
 
 
-                                    <td> 
-                                        @if(!in_array($faq['id'],$eventFaqs)) 
+                                    <td>
+                                        @if(!in_array($faq['id'],$eventFaqs))
                                             <button class="btn btn-primary assing" data-faq = '{{$faq["id"]}}' type="button">Assign</button>
                                         @else
                                             <button class="btn btn-primary unsing" data-faq = '{{$faq["id"]}}' type="button">Unsign</button>
@@ -62,7 +61,7 @@
                 </div>
             </div>
 
-        
+
         </div>
 
     @endforeach
@@ -156,18 +155,18 @@
                         $('#faq-body tr').remove();
 
                         $.each(faq, function(key,val){
-                           
+
                             let newFaq =
                             `<tr id="faq-`+val.id+`">` +
                             `<td id="title-` + val.id +`">` + val.title + `</td>` +
-                          
+
                             `<td id="category-` + val.id +`">` + val.category[0]['name'] + `</td>` +
 
                             ` <td><button class="btn btn-primary assing" data-faq = '` + val.id +`' type="button">Unsign</button></td>` +
                             `
-                           
+
                             </tr>`;
-                            
+
                             $("#faq-body").append(newFaq);
                         })
 
@@ -196,9 +195,9 @@
                             let index = 0;
 
                             $.each(faq, function(key,val){
-                               
-                                accordion +=           
-                                
+
+                                accordion +=
+
                                 `<div class="card">
                                     <div class="card-header" id="accordion_topicc` + index +`" data-toggle="collapse" data-target="#accordion_topic` + index +`" aria-expanded="false" aria-controls="collapseOne">
                                         <h5 class="mb-0">` + key + `</h5>
@@ -223,12 +222,12 @@
 
                                                             if(assignedFaqs.indexOf(val1.id) !== -1){
                                                                 accordion += `<td>
-                                                                            <button class="btn btn-primary unsing" data-faq = '` + val1.id +`' type="button">unsign</button> 
+                                                                            <button class="btn btn-primary unsing" data-faq = '` + val1.id +`' type="button">unsign</button>
                                                                              </td>`
                                                             }else{
-                                                                accordion += ` <td><button class="btn btn-primary assing" data-faq = '` + val1.id +`' type="button">assign</button></td>` 
+                                                                accordion += ` <td><button class="btn btn-primary assing" data-faq = '` + val1.id +`' type="button">assign</button></td>`
                                                             }
-                                                         
+
                                                     });
                                                 accordion +=`
                                                     </tr></tbody>
@@ -247,7 +246,7 @@
                             $("#accordionTopicMain1").empty();
                             $("#accordionTopicMain1").append(accordion)
                             faqOrder();
-                            
+
                             $(".assing").unbind("click");
                             $("#success-message p").html(data.success);
                             $("#success-message").show();
@@ -269,9 +268,9 @@
                             let index = 0;
 
                             $.each(faq, function(key,val){
-                               
-                                accordion +=           
-                                
+
+                                accordion +=
+
                                 `<div class="card">
                                     <div class="card-header" id="accordion_topicc` + index +`" data-toggle="collapse" data-target="#accordion_topic` + index +`" aria-expanded="false" aria-controls="collapseOne">
                                         <h5 class="mb-0">` + key + `</h5>
@@ -296,12 +295,12 @@
 
                                                             if(assignedFaqs.indexOf(val1.id) !== -1){
                                                                 accordion += `<td>
-                                                                            <button class="btn btn-primary unsing" data-faq = '` + val1.id +`' type="button">unsign</button> 
+                                                                            <button class="btn btn-primary unsing" data-faq = '` + val1.id +`' type="button">unsign</button>
                                                                              </td>`
                                                             }else{
-                                                                accordion += ` <td><button class="btn btn-primary assing" data-faq = '` + val1.id +`' type="button">assign</button></td>` 
+                                                                accordion += ` <td><button class="btn btn-primary assing" data-faq = '` + val1.id +`' type="button">assign</button></td>`
                                                             }
-                                                         
+
                                                     });
                                                 accordion +=`
                                                     </tr></tbody>
@@ -320,7 +319,7 @@
                             $("#accordionTopicMain1").empty();
                             $("#accordionTopicMain1").append(accordion)
                             faqOrder();
-     
+
                             $(".unsing").unbind("click");
                             $("#success-message p").html(data.success);
                             $("#success-message").show();
@@ -341,10 +340,10 @@
     function faqOrder(){
 
         var el;
-         
-        
+
+
         $( ".faq-order" ).each(function( index ) {
-    
+
             el = document.getElementsByClassName('faq-order')[index];
             new Sortable(el, {
                 group: "words",
@@ -384,7 +383,7 @@
             },
         });
     }
-   
+
 
    function orderFaqs(){
       let faqs={}
@@ -392,8 +391,8 @@
       $( ".faq-list" ).each(function( index ) {
         faqs[$(this).data('id')] = index
       });
-   
-    
+
+
         $.ajax({
          type: 'POST',
          headers: {
@@ -403,12 +402,12 @@
          url: "{{ route ('sort-faqs', $event->id) }}",
          data:{'faqs':faqs},
          success: function(data) {
-         
-         
+
+
          }
         });
    }
-  
+
    $(document).ready( function () {
       $('.faq-table').dataTable( {
           "ordering": false,

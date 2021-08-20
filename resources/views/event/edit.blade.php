@@ -734,6 +734,7 @@
                     //$('#lesson_details').append(inst_row)
 
                     $.each( instructors, function( key, value ) {
+                        console.log(value)
                         //console.log(key+':'+value.title)
                         // $('#instFormControlSelect').append(`<option ${lesson.instructor_id == value.id ? 'selected' : ''} value="${value.id}">${value.title} ${value.subtitle}</option>`)
                         $('#instFormControlSelect12').append(`<option ${lesson.instructor_id == value.id ? 'selected' : ''} path="${value.medias.path}" original_name="${value.medias.original_name}" name="${value.medias.name}" ext="${value.medias.ext}" value="${value.id}">${value.title} ${value.subtitle}</option>`)

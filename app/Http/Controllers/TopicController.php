@@ -142,7 +142,7 @@ class TopicController extends Controller
     public function edit(Topic $topic, Category $categories)
     {
         $categories = Category::all();
-        $topic = $topic->with('category')->first();
+        //$topic = $topic->with('category')->first();
 
         return view('topics.edit', compact('topic', 'categories'));
     }

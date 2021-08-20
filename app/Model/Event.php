@@ -368,8 +368,6 @@ class Event extends Model
             $faqs[$key] = [];
         }
 
-        //dd($faqs);
-
         if($this->category->first()){
             $categoryFaqs = $this->category->first()->faqs;
 
