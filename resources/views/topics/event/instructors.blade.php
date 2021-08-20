@@ -121,9 +121,10 @@
             </div>
 
             <div class="col-2 assign-toggle" id="toggle_{{$key}}">
-                <label class="custom-toggle">
-                    <input data-event-status="0" type="checkbox" data-event-id="{{$event['id']}}" data-topic-id="{{$topic['id']}}" <?= ($status == 'active') ? 'checked' : ''; ?> >
-                    <span class="topic custom-toggle-slider rounded-circle" ></span>
+                <label class="custom-toggle custom-published">
+
+                    <input data-event-status="0" type="checkbox" data-event-id="{{$event['id']}}" data-topic-id="{{$topic['id']}}"  >
+                    <span class="topic custom-toggle-slider rounded-circle" data-label-off="unassign" data-label-on="assigned" ></span>
                 </label>
             </div>
         </div>

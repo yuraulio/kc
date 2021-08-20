@@ -421,8 +421,8 @@ class HomeController extends Controller
 
         $data['page'] = $page;
         //dd($page);
-        if($data['page']['template'] == 'corporate_page'){
-            $data['page']['template'] = 'corporate-template';
+        if($data['page']['template'] == 'corporate-template'){
+            //$data['page']['template'] = 'corporate-template';
             $data['benefits'] = $page->benefits;
             $data['corporatebrands'] = Logos::with('medias')->where('type', 'brands')->get();
         }else if($data['page']['template'] == 'instructors'){

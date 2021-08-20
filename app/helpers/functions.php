@@ -76,8 +76,8 @@ if (!function_exists('get_status_by_slug')){
     function get_status_by_slug($slug){
 
         $slug = Slug::where('slug',$slug)->first();
-        
-        if($slug && (get_class($slug->slugable) == 'App\\Model\\Page') || get_class($slug->slugable) == 'App\\Model\\Event'){
+
+        if(isset($slug) && (get_class($slug->slugable) == 'App\\Model\\Pages' || get_class($slug->slugable) == 'App\\Model\\Event')){
             return $slug->slugable->published;
         }
 

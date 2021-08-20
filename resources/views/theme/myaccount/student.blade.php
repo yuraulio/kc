@@ -2,7 +2,7 @@
 @section('content')
 <?php $bonusFiles = ['_Bonus', 'Bonus', 'Bonus Files', 'Βonus', '_Βonus', 'Βonus', 'Βonus Files'] ?>
 <?php $currentuser = $user ?>
-<main id="" role="main">
+<main  id="" role="main">
    <section class="section-hero section-hero-small section-hero-blue-bg">
       <div class="container">
          <div class="hero-message">
@@ -494,55 +494,73 @@
                               </div>
 
             <div id="subscriptions" class="in-tab-wrapper">
-               <div class="container">
+               <div id="container" class="container">
                   <div class="row">
-                     {{--@if(count($cards) > 0)
-                     <table id="cardList" style="width:100%">
-                        <tr>
-                           <th>Brand</th>
-                           <th>Default</th>
-                           <th>Last four</th>
-                           <th>Expire Month</th>
-                           <th>Expire Year</th>
-                           <th>Actions</th>
-                        </tr>
-                        @foreach($cards as $card)
-                        <tr>
-                           <td>{{$card->brand}}</td>
-                           <td><i class="far fa-check-circle"></i><?= ($card->default == 1) ? 'Yes' : 'No' ?></td>
-                           <td>{{$card->last_four}}</td>
-                           <td>{{$card->exp_month}}</td>
-                           <td>{{$card->exp_year}}</td>
-                           <td>
-                              @if($card->default != 1)
-                              <form action="{!!route('card.default')!!}" method="post" id="payment-form">
+
+                     @if(count($defaultPaymetnt) > 0)
+                     
+                        <table id="cardList" style="width:100%">
+                           <tr>
+                              <th>Brand</th>
+                              <th>Default</th>
+                              <th>Last four</th>
+                              <th>Expire Month</th>
+                              <th>Expire Year</th>
+                              <th>Actions</th>
+                           </tr>
+                           @foreach($defaultPaymetnt as $card)
+                          
+                           
+                           <tr id="defalt-card">
+                              <td>{{$card['brand']}}</td>
+                              <td><i class="far fa-check-circle"></i>Yes</td>
+                              <td>{{$card['last4']}}</td>
+                              <td>{{$card['exp_month']}}</td>
+                              <td>{{$card['exp_year']}}</td>
+                              
+                           </tr>
+                          
+                           @endforeach
+
+
+                        @if(count($cards) > 1)
+                       
+                           @foreach($cards as $card)
+                           
+                           @if($card['id'] != $defaultPaymetntId)
+                           <tr id="all-cards">
+                              <td>{{$card['card']['brand']}}</td>
+                              <td><i class="far fa-check-circle"></i>No</td>
+                              <td>{{$card['card']['last4']}}</td>
+                              <td>{{$card['card']['exp_month']}}</td>
+                              <td>{{$card['card']['exp_year']}}</td>
+                              <td>
+                              
+                              <form action="{{route('payment_method.update')}}" method="post" id="payment-form">
                                  {{ csrf_field() }}
-                                 <input type="hidden" name="card_id" value="{{$card->id}}">
+                                 <input type="hidden" name="card_id" value="{{$card['id']}}">
                                  <button class="btn btn--secondary btn--sm">Set default</button>
                               </form>
-                              @endif
-                              <form action="{!!route('card.delete')!!}" method="post" id="payment-form">
-                                 {{ csrf_field() }}
-                                 <input type="hidden" name="card_id" value="{{$card->id}}">
-                                 <button id="removebtn" class="btn btn--secondary btn--sm">Remove</button>
-                              </form>
-                           </td>
-                        </tr>
-                        @endforeach
-                     </table>
+                              
+                                 <form action="{{route('payment_method.remove')}}" method="post" id="payment-form">
+                                    {{ csrf_field() }}
+                                    <input type="hidden" name="card_id" value="{{$card['id']}}">
+                                    <button id="removebtn" class="btn btn--secondary btn--sm">Remove</button>
+                                 </form>
+                              </td>
+                           </tr>
+                           @endif
+                           @endforeach
+                       
+                        @endif
+                        </table>
                      @else
                         <p>You don't have any credit/debit cards available. </p>
-                     @endif--}}
+                     @endif
                      <div id="addCardBtn" class="col12 text-right">
                         <button type="button" id="addCard" class="btn btn--secondary btn--sm">Add New Card</button>
                      </div>
-                     <div class="form-wrapper">
-                        {{--<form action="{{ route('card.addNewCard') }}" method="post">
-                           {{csrf_field()}}
-                           <div id="container" class="col12"></div>
-                        </form>--}}
-                     </div>
-
+                    
                   </div>
                   </div>
                </div>
@@ -797,7 +815,7 @@
                                                       <!-- Feedback 18-11 changed -->
                                                       <a href="{{$instructors[$lesso['instructor_id']][0]['slugable']['slug']}}">
                                                             <span class="custom-tooltip"><?= $instructors[$lesso['instructor_id']][0]['title'].' '.$instructors[$lesso['instructor_id']][0]['subtitle']; ?></span>
-                                                            <img src="<?php cdn( $instructors[$lesso['instructor_id']][0]['medias']['path'].$instructors[$lesso['instructor_id']][0]['medias']['original_name'] )?>" alt="<?= $instructors[$lesso['instructor_id']][0]['title']; $instructors[$lesso['instructor_id']][0]['subtitle']; ?>"/>
+                                                            <img src="{{cdn( get_image($instructors[$lesso['instructor_id']][0]['mediable'],'instructors-small') )}}" alt="<?= $instructors[$lesso['instructor_id']][0]['title']; $instructors[$lesso['instructor_id']][0]['subtitle']; ?>"/>
                                                       </a>
                                                    </div>
                                                    <!-- /.topic-wrapper-big -->
@@ -946,7 +964,7 @@
 
                                         <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
                                         @endif
-                                        @if(count($event['certificates']) > 0)
+                                        @if(count($event['certs']) > 0)
                                         <li><a href="#c-cert-inner{{$tab}}">Certificate</a></li>
                                         @endif
                                     @endif
@@ -1149,11 +1167,11 @@
                                     </div>
                                  </div>
                                  @endif
-                                 @if(count($event['certificates']) > 0)
+                                 @if(count($event['certs']) > 0)
                                  <div id="c-cert-inner{{$tab}}" class="in-tab-wrapper">
                                     <div class="bottom">
                                        <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="">@if(isset($newlayoutExamsEvent[$keyType]) && count($newlayoutExamsEvent[$keyType])>0)Certificate download after completing your exams. @else Your certification is ready @endif</div>
-                                       @foreach($event['certificates'] as $certificate)
+                                       @foreach($event['certs'] as $certificate)
                                        <div class="right">
                                           <a  class="btn btn--secondary btn--md" target="_blank" href="/myaccount/mycertificate/{{$certificate->id}}" >DOWNLOAD </a>
                                        </div>
@@ -1414,7 +1432,7 @@
                                                       <!-- Feedback 18-11 changed -->
                                                       <a href="{{$lesson['slug']}}">
                                                       <span class="custom-tooltip">{{$lesson['inst']}}</span>
-                                                      <img src="{{cdn($lesson['inst_photo'])}}" alt="{{$lesson['inst']}}"/>
+                                                      <img src="{{cdn( get_image($instructors[$lesso['instructor_id']][0]['mediable'],'instructors-small') )}}" alt="{{$lesson['inst']}}"/>
                                                       </a>
                                                    </div>
                                                    <!-- /.topic-wrapper-big -->
@@ -1692,38 +1710,171 @@
 </main>
 @endsection
 @section('scripts')
+<script src="https://js.stripe.com/v3/"></script>
 <script>
     $(document).on('click', '#addCard', function(e){
+
+      /*$('<script>')
+       .attr('src', 'https://js.stripe.com/v3/')
+       .attr('id', 'stripe-js')
+       .appendTo('head');*/
+
+
+
       $('#addCard').prop('disabled', true);
       $('.msg_save_card').remove();
-      $('#container').append(`<div class="row cardForm">
-      <h4>Add New Card</h4>
-      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-         <label> Card number <span>*</span></label>
-         <input onblur="this.placeholder = 'Card Number'" autocomplete='off' onfocus="this.placeholder = ''" placeholder="Card Number" onkeyup="cardNo(this)"  type='text' name="card_no" id="card_no" required>
-      </div>
-      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-         <label>CVV <span>*</span></label>
-         <input onblur="this.placeholder = 'e.g. 311'" autocomplete='off' onfocus="this.placeholder = ''" placeholder='e.g. 311' onkeyup="cvv(this)"  type='text' name="cvvNumber" id="cvvNumber" required>
-      </div>
-      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-         <label>Expiration month <span>*</span></label>
+      $('#container').append(`<div id="paymentMethodAdd">
+         <input id="card-holder-name" type="text">
+         <!-- Stripe Elements Placeholder -->
+         <div id="card-element"></div>
+         <button id="card-button" type="button" class="btn btn--secondary btn--sm" data-secret="{{ Auth::user()->createSetupIntent()->client_secret }}">
+             Update Payment Method
+         </button></div>`)
 
-            <input onblur="this.placeholder = 'MM'" onfocus="this.placeholder = ''"  placeholder='MM' onkeyup="month(this)" type='text' name="ccExpiryMonth" id="ccExpiryMonth" required>
 
-      </div>
-      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-         <label>Expiration year <span>*</span></label>
+         $('<script>')
+       .text(`var stripe = Stripe('{{$stripe_key}}',{locale: 'en'});
+               var elements = stripe.elements();
+               var cardElement = elements.create('card',{
+                  style: {
+                     base: {
 
-            <input onblur="this.placeholder = 'YYYY'" onfocus="this.placeholder = ''" placeholder='YYYY' type='text' maxlength="4" size="4" onkeyup="year(this)"  name="ccExpiryYear" id="ccExpiryYear" required>
+                        fontSize: '18px',
 
-         <input class='form-control ammount' type='hidden' name="amount" value="{{ Cart::instance('default')->subtotal() }}">
-      </div>
-      <div class="checkout-proceed-action">
-         <button  id="checkout-button" type="submit" class="btn btn--secondary btn--sm">Save Card</button>
-      </div>
-   </div>`)
+                     },
+                  },
+                  hidePostalCode: true,
+                  });
+               cardElement.mount('#card-element');`)
+
+       .attr('id', 'stripe-form')
+       .appendTo('head');
+
+
+
+
    })
+
+</script>
+
+<script>
+
+
+   $(document).on('click',"#card-button",async (e) => {
+      var cardHolderName = document.getElementById('card-holder-name');
+      var cardButton = document.getElementById('card-button');
+      var clientSecret = cardButton.dataset.secret;
+      let { setupIntent, error } = await stripe.confirmCardSetup(
+           clientSecret, {
+               payment_method: {
+                   card: cardElement,
+                   billing_details: { name: cardHolderName.value }
+               }
+           }
+       ).then(function (result) {
+            if (result.error) {
+               console.log('error = ', result.error)
+                //$('#card-errors').text(result.error.message)
+                //$('button.pay').removeAttr('disabled')
+            } else {
+               paymentMethod = result.setupIntent.payment_method
+               console.log(paymentMethod)
+               $('button').prop('disabled', true);
+               $.ajax({
+                  type:'POST',
+                  url:'myaccount/card/store_from_payment_myaccount',
+                  headers: {
+                   'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                  },
+                  data:{ 'payment_method' : paymentMethod},
+                  success:function(data) {
+
+                     if(data['success']){
+
+                        let defaultPaymetntID = data['defaultPaymetntId'];
+                        let defaultCard = data['default_card'];
+                        let cards = data['cards'];
+                        
+                        let html = `<tr>
+                              <th>Brand</th>
+                              <th>Default</th>
+                              <th>Last four</th>
+                              <th>Expire Month</th>
+                              <th>Expire Year</th>
+                              <th>Actions</th>
+                           </tr>`;
+
+                        $.each( defaultCard, function( key, value ) {
+
+                           html +=`<tr><td>` + value['brand'] + `</td>` +
+                           `<td><i class="far fa-check-circle"></i>Yes</td>`+
+                                 `<td>` + value['last4'] + `</td>` +
+                                 `<td>` + value['exp_month'] + `</td>` +
+                                 `<td>` + value['exp_year'] + `</td></tr>` ;
+                        });
+
+                        $.each( cards, function( key, value ) {
+                           if(value['id'] != defaultPaymetntID){
+                              html +=`<tr><td>` + value['card']['brand'] + `</td>` +
+                              `<td><i class="far fa-check-circle"></i>no</td>`+
+                                 `<td>` + value['card']['last4'] + `</td>` +
+                                 `<td>` + value['card']['exp_month'] + `</td>` +
+                                 `<td>` + value['card']['exp_year'] + `</td>` +
+                                 `<td>
+                              
+                                       <form action="{{route('payment_method.update')}}" method="post" id="payment-form">
+                                          {{ csrf_field() }}
+                                          <input type="hidden" name="card_id" value="`+ value['id'] +`">
+                                          <button class="btn btn--secondary btn--sm">Set default</button>
+                                       </form>
+                              
+                                       <form action="{{route('payment_method.remove')}}" method="post" id="payment-form">
+                                          {{ csrf_field() }}
+                                          <input type="hidden" name="card_id" value="`+ value['id'] +`">
+                                          <button id="removebtn" class="btn btn--secondary btn--sm">Remove</button>
+                                       </form>
+                                 </td></tr>`;
+                           }
+                           
+                        });
+
+                        $("#cardList").empty();
+                        $("#cardList").append(html);
+
+                        $("#stripe-form").remove();
+                        $("#stripe-js").remove();
+
+                        $('#paymentMethodAdd').children().remove();
+
+                        $('#container').append(`<p class="normal msg_save_card"> Successfully added card!!</p>`)
+                        $('#addCard').prop('disabled', false);
+                        $('button').prop('disabled', false);
+                     }else{
+                        let message = `<img src="{{cdn('theme/assets/images/icons/alert-icons/icon-error-alert.svg')}}" alt="Info Alert">` + data['message'];
+                        $("#card-message").html( message)
+
+                        var favDialogCard = document.getElementById('favDialogCardNumberFailed');
+                        favDialogCard.style.display = "block";
+
+                        $('#addCard').prop('disabled', false);
+                        $('button').prop('disabled', false);
+                        $("#stripe-form").remove();
+                     $("#stripe-js").remove();
+                     }
+
+
+
+                  },
+
+               });
+            }
+         });
+
+   })
+
+
+
+
 </script>
 
 <!-- <script>

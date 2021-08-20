@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel
        Commands\InitPages::class,
        Commands\AddOption::class,
        Commands\AttachEvent::class,
+       Commands\OrderInclassLessons::class,
     ];
 
     /**

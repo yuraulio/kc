@@ -214,7 +214,7 @@
                                        <?php $instructor = $topics['instructors'][$lesson['instructor_id']][0];?>
                                        <img
                                           class="lesson-teacher"
-                                          src="{{cdn(get_image($instructor))}}"
+                                          src="{{cdn(get_image($instructor['mediable'],'instructors-small'))}}"
                                           alt="{{$instructor['title']}} {{$instructor['subtitle']}}"
                                           title="{{$instructor['title']}} {{$instructor['subtitle']}}"
                                           data-slug="{{$instructor['slugable']['slug']}}"

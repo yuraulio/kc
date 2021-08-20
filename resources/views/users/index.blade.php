@@ -33,7 +33,7 @@
                                 <h3 class="mb-0">{{ __('Users') }}</h3>
                             </div>
                             <div class="col-4 text-right">
-                                <a href="{{ route('user.create') }}" class="btn btn-sm btn-primary">{{ __('Add user') }}</a>
+                                <a href="{{ route('user.create') }}" class="btn btn-sm btn-primary">{{ __('New') }}</a>
                             </div>
                         </div>
                     </div>
@@ -47,19 +47,19 @@
                         <div class="collapse" id="collapseExample">
                             <div class="container">
                                 <div class="row">
-                                    <div class="col-sm-3" id="filter_col1" data-column="9">
-                                        <label>Event</label>
+                                    <div class="col-sm-3 filter_col" id="filter_col1" data-column="9">
+                                        <label>Courses</label>
                                         <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="col9_filter">
                                         <option selected value> -- All -- </option>
                                         </select>
                                     </div>
-                                    <div class="col-sm-3" id="filter_col4" data-column="10">
+                                    <div class="col-sm-3 filter_col" id="filter_col4" data-column="10">
                                         <label>Coupon</label>
                                         <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col10_filter" placeholder="Coupon">
                                         <option selected value> -- All -- </option>
                                         </select>
                                     </div>
-                                    <div class="col-sm-3" id="filter_col7" data-column="7">
+                                    <div class="col-sm-3 filter_col" id="filter_col7" data-column="7">
                                         <label>Status</label>
                                         <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col7_filter">
                                         <option value=""></option>
@@ -67,7 +67,7 @@
                                         <option value="inactive"> Inactive </option>
                                         </select>
                                     </div>
-                                    <div class="col-sm-3" id="filter_col6" data-column="6">
+                                    <div class="col-sm-3 filter_col" id="filter_col6" data-column="6">
                                         <label>Roles</label>
                                         <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col6_filter">
                                             <option value=""></option>
@@ -82,18 +82,19 @@
                                             <option value="Super Administrator"> Super Administrator </option>
                                         </select>
                                     </div>
-                                    <!-- <div class="col-sm-3">
+                                    <div class="col-sm-3">
                                         <div class="form-group">
-                                            <label>Min</label>
-                                            <input type="text" id="min" name="min">
+                                            <label>From:</label>
+                                            <input class="select2-css" type="text" id="min" name="min">
                                         </div>
-
+                                    </div>
+                                    <div class="col-sm-3">
                                         <div class="form-group">
-                                            <label>Max</label>
-                                            <input type="text" id="max" name="max">
+                                            <label>To:</label>
+                                            <input class="select2-css" type="text" id="max" name="max">
                                         </div>
-                                    </div> -->
-                                    <Button type="button" onclick="ClearFields();" class="btn btn-secondary btn-lg "> Clear Filter</Button>
+                                    </div>
+                                    <!-- <Button type="button" onclick="ClearFields();" class="btn btn-secondary btn-lg "> Clear Filter</Button> -->
                                 </div>
                             </div>
                         </div>

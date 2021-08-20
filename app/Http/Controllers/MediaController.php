@@ -219,10 +219,10 @@ class MediaController extends Controller
                     if($key == $request->version){
                         $found = true;
                     }
-    
+
                 }
             }
-            
+
 
 
             if($found){
@@ -284,7 +284,7 @@ class MediaController extends Controller
                 $word = $word.'/'.$folder.'/';
             }
         }
-
+        //dd($mediaKey);
         $image = Image::make($mediaKey);
         $image->crop(intval($request->width),intval($request->height), intval($request->x), intval($request->y));
         if($request->version != 'profile_image'){
@@ -311,18 +311,15 @@ class MediaController extends Controller
         return view('layouts.media_versions', $data);
     }
 
-    // public function createFolder($event = null){
-    //     $event = new Event;
-    //     //dd($event);
-    //     \Event::listen('Alexusmai\LaravelFileManager\Events\BeforeInitialization',
-    //     function ($event) {
-    //         var_dump('from listener');
-    //         \Log::info('Download:', [
-    //             $event->t(),
-    //             // $event->path(),
-    //         ]);
-    //     }
-    // );
-    // }
+    public function mediaImage(Request $request) {
+        $data['medias'] = Media::where('original_name', $request->name)->first();
+
+
+        return response()->json([
+            'success' => __('Already image cropped.'),
+            'data' => $data['medias']['id'],
+        ]);
+    }
+
 
 }

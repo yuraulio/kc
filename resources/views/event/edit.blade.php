@@ -413,7 +413,6 @@
                                                 @include('admin.benefits.benefits',['model' => $event])
                                             </div>
                                             <div class="tab-pane fade show" id="tabs-icons-text-4_inside" role="tabpanel" aria-labelledby="tabs-icons-text-4-tab_inside">
-                                                {{--@include('topics.event.index')--}}
                                                 @include('topics.event.instructors')
                                             </div>
                                             <div class="tab-pane fade" id="tabs-icons-text-5_inside" role="tabpanel" aria-labelledby="tabs-icons-text-5-tab_inside">

@@ -29,9 +29,13 @@ class OptionsController extends Controller
     public function update(Request $request, Option $option){
 
         //dd(json_decode($request->settings,true));
-        $codes = [];
-       // dd($request->settings);
-        foreach((array) json_decode($request->settings) as $code){
+        $codes = (array) json_decode($request->settings);
+
+        if(empty($codes)){
+            $codes = preg_split('/\n|\r\n?/',  $request->settings);
+        }
+
+        foreach( $codes as $code){
             //dd($code);
             $codes[] = $code;
         }

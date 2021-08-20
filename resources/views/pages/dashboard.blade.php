@@ -597,44 +597,57 @@
                     data.push(value)
                 })
 
-                pieChart2 = new Chart($ticketNameChart, {
-                    type: 'pie',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            data: data,
-                            backgroundColor: [
-                                'rgb(255, 99, 10)',
-                                'rgb(54, 30, 20)',
-                                'rgb(255, 205, 40)',
-                                'rgb(50, 99, 132)',
-                                'rgb(54, 60, 235)',
-                                'rgb(255, 70, 86)',
-                                'rgb(255, 80, 132)',
-                                'rgb(54, 90, 235)',
-                                'rgb(255, 205, 100)',
-                                'rgb(255, 99, 110)',
-                                'rgb(54, 130, 235)',
-                                'rgb(120, 205, 86)'
-                            ],
-                            label: 'Dataset 1'
-                        }],
-                    },
-                    options: {
-                        responsive: true,
-                        legend: {
-                            position: 'top',
-                        },
-                        animation: {
-                            animateScale: true,
-                            animateRotate: true
-                        },
-                        maintainAspectRatio: false
-                    }
-                });
+                //log(labels)
+                //console.log(data)
 
-                // Save to jQuery object
-                $ticketNameChart.data('chart', pieChart2);
+                if(start_date == null && end_date == null){
+                    console.log('new CHART')
+                    pieChart2 = new Chart($ticketNameChart, {
+                        type: 'pie',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                data: data,
+                                backgroundColor: [
+                                    'rgb(255, 99, 10)',
+                                    'rgb(54, 30, 20)',
+                                    'rgb(255, 205, 40)',
+                                    'rgb(50, 99, 132)',
+                                    'rgb(54, 60, 235)',
+                                    'rgb(255, 70, 86)',
+                                    'rgb(255, 80, 132)',
+                                    'rgb(54, 90, 235)',
+                                    'rgb(255, 205, 100)',
+                                    'rgb(255, 99, 110)',
+                                    'rgb(54, 130, 235)',
+                                    'rgb(120, 205, 86)'
+                                ],
+                                label: 'Dataset 1'
+                            }],
+                        },
+                        options: {
+                            responsive: true,
+                            legend: {
+                                position: 'top',
+                            },
+                            animation: {
+                                animateScale: true,
+                                animateRotate: true
+                            },
+                            maintainAspectRatio: false
+                        }
+                    });
+
+                    // Save to jQuery object
+                    $ticketNameChart.data('chart', pieChart2);
+                }else{
+                    //UPDATE CHART
+                    pieChart2.data.labels = labels
+                    pieChart2.data.datasets[0].data = data
+                    pieChart2.update();
+                }
+
+
             }
 
             function initTicketByEvent(ticketNameChart, $elearningByEvent, $event_id){
@@ -642,7 +655,7 @@
                 let labels = []
                 let sum = 0
                 $.each($elearningByEvent, function(key, value) {
-                    console.log(value)
+                    //console.log(value)
                     if($event_id != '' && key == $event_id){
                         $.each(value, function(key1, value1) {
                             //console.log(value1)
@@ -654,8 +667,8 @@
                         })
                         labels = Object.keys(tickets)
                         data = Object.values(tickets)
-                        console.log(labels)
-                        console.log(data)
+                        // console.log(labels)
+                        // console.log(data)
                     }
                 })
 
@@ -681,59 +694,74 @@
                     }
                 })
 
-                pieChart1 = new Chart($ticketSalesChart, {
-                    type: 'pie',
-                    data: {
-                        labels: Object.keys(arr),
-                        datasets: [{
-                            data: Object.values(arr),
-                            backgroundColor: [
-                                'rgb(255, 99, 10)',
-                                'rgb(54, 30, 20)',
-                                'rgb(255, 205, 40)',
-                                'rgb(50, 99, 132)',
-                                'rgb(54, 60, 235)',
-                                'rgb(255, 70, 86)',
-                                'rgb(255, 80, 132)',
-                                'rgb(54, 90, 235)',
-                                'rgb(255, 205, 100)',
-                                'rgb(255, 99, 110)',
-                                'rgb(54, 130, 235)',
-                                'rgb(120, 205, 86)'
-                            ],
-                            label: 'Dataset 1'
-                        }],
-                    },
-                    options: {
-                        responsive: true,
-                        legend: {
-                            position: 'top',
-                        },
-                        animation: {
-                            animateScale: true,
-                            animateRotate: true
-                        },
-                        maintainAspectRatio: false
-                    }
-                });
 
-                // Save to jQuery object
-                $ticketSalesChart.data('chart', pieChart1);
+                if(start_date == null & end_date == null){
+                    pieChart1 = new Chart($ticketSalesChart, {
+                        type: 'pie',
+                        data: {
+                            labels: Object.keys(arr),
+                            datasets: [{
+                                data: Object.values(arr),
+                                backgroundColor: [
+                                    'rgb(255, 99, 10)',
+                                    'rgb(54, 30, 20)',
+                                    'rgb(255, 205, 40)',
+                                    'rgb(50, 99, 132)',
+                                    'rgb(54, 60, 235)',
+                                    'rgb(255, 70, 86)',
+                                    'rgb(255, 80, 132)',
+                                    'rgb(54, 90, 235)',
+                                    'rgb(255, 205, 100)',
+                                    'rgb(255, 99, 110)',
+                                    'rgb(54, 130, 235)',
+                                    'rgb(120, 205, 86)'
+                                ],
+                                label: 'Dataset 1'
+                            }],
+                        },
+                        options: {
+                            responsive: true,
+                            legend: {
+                                position: 'top',
+                            },
+                            animation: {
+                                animateScale: true,
+                                animateRotate: true
+                            },
+                            maintainAspectRatio: false
+                        }
+                    });
+
+                    // Save to jQuery object
+                    $ticketSalesChart.data('chart', pieChart1);
+                }else{
+                    //UPDATE CHART
+                    pieChart1.data.labels = Object.keys(arr)
+                    pieChart1.data.datasets[0].data = Object.values(arr)
+                    pieChart1.update();
+                }
+
+
             }
 
-            function initTicketSalesByEvent(ticketSalesChart, $elearningByEvent, $event_id){
+            function initTicketSalesByEvent(ticketSalesChart, data, $event_id){
+                //console.log('ticket')
+                //console.log(data)
                 let tickets = []
                 let labels = []
-                $.each($elearningByEvent, function(key, value) {
+
+
+                $.each(data, function(key, value) {
                     //console.log(value)
                     if(key == $event_id){
                         $.each(value, function(key1, value1) {
                             if(tickets[value1.ticketName] !== undefined){
                                 tickets[value1.ticketName] = tickets[value1.ticketName] + parseInt(value1.amount)
                             }else{
-                                tickets[value1.ticketName] = 0;
+                                tickets[value1.ticketName] = parseInt(value1.amount);
                             }
                         })
+
                         labels = Object.keys(tickets)
                         data = Object.values(tickets)
                     }
@@ -775,44 +803,118 @@
             // Methods
             //
 
+            function calculate_labels(arr){
+                console.log(arr)
+                data = []
+                new_labels = []
+                labels = {1:'Jan',2:'Feb',3:'Mar',4:'Apr',5:'May',6:'Jun',7:'Jul',8:'Aug', 9:'Sep', 10:'Oct', 11:'Nov', 12:'Dec'}
+                //console.log(arr)
+                let count = 0;
+                $.each(arr, function(key, value) {
+                    //console.log(key)
+                    if(value !== undefined){
+                        new_labels.push(labels[key])
+                    }else{
+                        if(key != 0){
+                            arr[new_labels.length] = 0
+                        }
+
+                        new_labels[new_labels.length] = labels[new_labels.length]
+
+                        if(key != count){
+                            arr[count] = 0
+                            new_labels[count] = labels[count]
+                        }
+                    }
+                    count++
+                })
+
+                let count1 = 1;
+                for(count1; count1<=12;count1++){
+                    if(new_labels[count1] === undefined){
+                        new_labels[count1] = 0
+                        new_labels[count1] = labels[count1]
+                        arr[count1] = 0
+                    }
+                }
+
+
+                //console.log(arr)
+                data['labels'] = new_labels
+                data['sum'] = arr
+               // delete labels[0]
+                //console.log(new_labels)
+                return data
+            }
+
             // Init chart
             function initChart($chart, $revenueByYear) {
+                //console.log($revenueByYear)
 
                 let months = []
 
                 $.each($revenueByYear, function(key, value) {
-                    let amount = 0;
                     $.each(value, function(key1, value1) {
-                        //console.log(value1.amount)
-                        amount = amount + parseInt(value1.amount)
+                        let num_mon = parseInt(value1.month)
+
+                        if(months[num_mon] !== undefined){
+                            months[num_mon] = months[num_mon] + parseInt(value1.amount)
+
+                        }else{
+                            months[num_mon] = parseInt(value1.amount)
+                        }
+
                     })
-                    months.push(amount)
+                    //months.push(amount)
                 })
 
 
+                data = calculate_labels(months)
+                // console.log('-------////')
+                // console.log(months)
+                // console.log(labels)
 
-                // Create chart
-                ordersChart = new Chart($chart, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                        datasets: [{
-                            label: 'Income',
-                            data: months,
-                            backgroundColor: 'rgb(255, 99, 10)',
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        legend: {
-                            position: 'top',
+
+                if(start_date == null && end_date == null){
+                    // Create chart
+                    ordersChart = new Chart($chart, {
+                        type: 'bar',
+                        data: {
+                            labels: data.labels,
+                            datasets: [{
+                                label: 'Income',
+                                data: data.sum,
+                                backgroundColor: 'rgb(255, 99, 10)',
+                            }]
                         },
-                        maintainAspectRatio: false
-                    }
-                });
+                        options: {
+                            responsive: true,
+                            legend: {
+                                position: 'top',
+                            },
+                            animation: {
+                                animateScale: true,
+                                animateRotate: true
+                            },
+                            scales: {
+                                y: {
+                                    suggestedMin: 500,
+                                    suggestedMax: 10000
+                                }
+                            },
+                            maintainAspectRatio: false
+                        }
+                    });
 
-                // Save to jQuery object
-                $chart.data('chart', ordersChart);
+                    // Save to jQuery object
+                    $chart.data('chart', ordersChart);
+                }else{
+                    //Update chart
+                    ordersChart.data.datasets[0].data = months
+                    ordersChart.update();
+                }
+
+
             }
 
             function initChartByEvent(chart, $revenueByYear, $event_id){
@@ -822,12 +924,20 @@
                     let sum = 0;
 
                     $.each(value, function(key1, value1) {
+                        let num_mon = parseInt(value1.month)
                         if(value1.event_id == $event_id){
-                            sum = sum + parseInt(value1.amount)
+                            if(months[num_mon] !== undefined){
+                                months[num_mon] = months[num_mon] + parseInt(value1.amount)
+                            }else{
+                                months[num_mon] = parseInt(value1.amount)
+                            }
+
                         }
                     })
-                    months.push(sum)
+                    //months.push(sum)
                 })
+                data = calculate_labels(months)
+
 
 
                 chart.data().chart.data.datasets[0].data = months
@@ -841,37 +951,53 @@
                 let months = []
 
                 $.each($elearningByYear, function(key, value) {
-                    months.push(value.length)
+
+                    let num = parseInt(key)
+                    months[num] = value.length
+                    //months.push(value.length)
                 })
 
+                //console.log(months)
 
+                data = calculate_labels(months)
 
-                // Create chart
-                ordersChart1 = new Chart($elearningChart, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                        datasets: [{
-                            label: 'Users',
-                            data: months,
-                            backgroundColor: '#5603ad',
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        legend: {
-                            position: 'top',
+                //console.log(calculate_labels(months))
+
+                if(start_date == null && end_date == null) {
+                    // Create chart
+                    ordersChart1 = new Chart($elearningChart, {
+                        type: 'bar',
+                        data: {
+                            labels: data.labels,
+                            datasets: [{
+                                label: 'Users',
+                                data: data.sum,
+                                backgroundColor: '#5603ad',
+                            }]
                         },
-                        animation: {
-                            animateScale: true,
-                            animateRotate: true
-                        },
-                        maintainAspectRatio: false
-                    }
-                });
+                        options: {
+                            responsive: true,
+                            legend: {
+                                position: 'top',
+                            },
+                            animation: {
+                                animateScale: true,
+                                animateRotate: true
+                            },
 
-                // Save to jQuery object
-                $elearningChart.data('chart', ordersChart1);
+                            maintainAspectRatio: false
+                        }
+                    });
+
+                    // Save to jQuery object
+                    $elearningChart.data('chart', ordersChart1);
+                }else{
+                    //Update chart
+                    ordersChart1.data.datasets[0].data = months
+                    ordersChart1.update();
+                }
+
+
             }
 
             function initElearningByEvent(elearningChart, $elearningByYear, $event_id){
@@ -882,9 +1008,11 @@
                     $.each(value, function(key1, value1) {
                         if($event_id == value1.event_id){
                             sum++
+                            //console.log(value1)
                         }
                     })
-                    months.push(sum)
+                    console.log(sum)
+                    //months.push(sum)
                 })
 
                 elearningChart.data().chart.data.datasets[0].data = months
@@ -892,53 +1020,78 @@
             }
 
             function initAlumniChart($alumniChart, $alumniByYear) {
+                console.log($alumniByYear)
                 let months = []
 
                 $.each($alumniByYear, function(key, value) {
-                    months.push(value.length)
+                    //months.push(value.length)
+                    let num = parseInt(key)
+                    months[num] = value.length
                 })
 
-                // Create chart
-                ordersChart2 = new Chart($alumniChart, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                        datasets: [{
-                            label: 'Alumni Tickets',
-                            data: months,
-                            backgroundColor: '#ffd600',
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        legend: {
-                            position: 'top',
-                        },
-                        animation: {
-                            animateScale: true,
-                            animateRotate: true
-                        },
-                        maintainAspectRatio: false
-                    }
-                });
 
-                // Save to jQuery object
-                $alumniChart.data('chart', ordersChart2);
+
+                data = calculate_labels(months)
+
+                if(start_date == null & end_date == null){
+                    // Create chart
+                    ordersChart2 = new Chart($alumniChart, {
+                        type: 'bar',
+                        data: {
+                            labels: data.labels,
+                            datasets: [{
+                                label: 'Alumni Tickets',
+                                data: data.sum,
+                                backgroundColor: '#ffd600',
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            legend: {
+                                position: 'top',
+                            },
+                            animation: {
+                                animateScale: true,
+                                animateRotate: true
+                            },
+                            maintainAspectRatio: false
+                        }
+                    });
+
+                    // Save to jQuery object
+                    $alumniChart.data('chart', ordersChart2);
+                }else{
+                    //UPDATE CHART
+                    ordersChart2.data.datasets[0].data = months
+                    ordersChart2.update();
+                }
+
+
             }
 
             function initAlumniByEvent(alumniChart, $alumniByYear, $event_id){
                 let months = []
 
                 $.each($alumniByYear, function(key, value) {
-                    let sum = 0
+                    //let sum = 0
                     $.each(value, function(key1, value1) {
+                        let num_mon = parseInt(value1.month)
                         if($event_id == value1.event_id){
-                            sum++
+                            //sum++
+                            months[num_mon]
+                            if(months[num_mon] !== undefined){
+                                months[num_mon]++
+
+                            }else{
+                                months[num_mon] = 0
+                            }
                         }
                     })
-                    months.push(sum)
+                    //months.push(sum)
                 })
-                alumniChart.data().chart.data.datasets[0].data = months
+                //console.log(months)
+                data = calculate_labels(months)
+                alumniChart.data().chart.data.datasets[0].data = data.sum
                 ordersChart2.update();
             }
 
@@ -961,20 +1114,20 @@
 
 
             $("#ticket-num-filter-by-event").change(function() {
-                console.log('triggered')
+                //console.log('triggered')
                 let event_id = $(this).val()
                 if(event_id != ''){
 
-                    console.log('start:'+start_date)
-                    console.log('end:'+end_date)
+                    //console.log('start:'+start_date)
+                    //console.log('end:'+end_date)
 
                     if(start_date == null && end_date == null){
                         //console.log($elearningByEvent)
                         initTicketByEvent($ticketNameChart, $elearningByEvent, event_id)
                     }else{
-                        console.log('between dates')
+                        //console.log('between dates')
                         //console.log(elearningByEventDate)
-                        initTicketByEvent($ticketNameChart, elearningByEventDate, event_id)
+                        initTicketByEvent($ticketNameChart, elearningByDate, event_id)
                     }
 
                 }else{
@@ -984,9 +1137,9 @@
 
                     //create new chart
                     if(start_date == null && end_date == null){
-                        initTicketChart($ticketNameChart, $ticketNameByYear)
+                        initTicketChart($ticketNameChart, $ticketNameByDate)
                     }else{
-                        console.log('between dates')
+                        //console.log('between dates')
                         initTicketChart($ticketNameChart, ticketNameByDate)
                     }
 
@@ -997,14 +1150,33 @@
 
 
             $("#ticket-filter-by-event").change(function() {
+                console.log('sum')
                 let event_id = $(this).val()
                 if(event_id != ''){
-                    initTicketSalesByEvent($ticketSalesChart, $elearningByEvent, event_id)
+
+
+                    if(start_date == null && end_date == null){
+                        console.log('here')
+                        initTicketSalesByEvent($ticketSalesChart, $elearningByEvent, event_id)
+                    }else{
+                        console.log('between dates by event')
+                        //PROBLEM
+                        initTicketSalesByEvent($ticketSalesChart, elearningByEventDate, event_id)
+                    }
+
                 }else{
                     //destroy
                     pieChart1.destroy();
                     //create new chart
-                    initTicketSalesChart($ticketSalesChart, $ticketNameByYear)
+
+//EDWWWWW
+                    if(start_date == null && end_date == null){
+                        initTicketSalesChart($ticketSalesChart, $elearningByEvent)
+                    }else{
+                        console.log('between dates//')
+                        initTicketSalesChart($ticketSalesChart, elearningByDate)
+                    }
+
 
                 }
             })
@@ -1012,12 +1184,26 @@
             $("#alumni-filter-by-event").change(function() {
                 let event_id = $(this).val()
                 if(event_id != ''){
-                    initAlumniByEvent($alumniChart,$alumniByYear,event_id)
+
+                    if(start_date == null && end_date == null){
+                        initAlumniByEvent($alumniChart,$alumniByYear,event_id)
+                    }else{
+                        //console.log('between dates')
+                        initAlumniByEvent($alumniChart,alumniByDate,event_id)
+                    }
+
                 }else{
                     //destroy
                     ordersChart2.destroy();
+
                     //create new chart
-                    initAlumniChart($alumniChart, $alumniByYear)
+                    if(start_date == null && end_date == null){
+                        initAlumniChart($alumniChart, $alumniByYear)
+                    }else{
+                        initAlumniChart($alumniChart, alumniByDate)
+                    }
+
+
 
                 }
             })
@@ -1026,12 +1212,23 @@
             $("#elearning-filter-by-event").change(function() {
                 let event_id = $(this).val()
                 if(event_id != ''){
-                    initElearningByEvent($elearningChart,$elearningByYear,event_id)
+
+                    if(start_date == null && end_date == null){
+                        initElearningByEvent($elearningChart,$elearningByYear,event_id)
+                    }else{
+                        initElearningByEvent($elearningChart, elearningByDate,event_id)
+                    }
+
                 }else{
                     //destroy
                     ordersChart1.destroy();
                     //create new chart
-                    initElearningChart($elearningChart, $elearningByYear)
+                    if(start_date == null & end_date == null){
+                        initElearningChart($elearningChart, $elearningByYear)
+                    }else{
+                        initElearningChart($elearningChart, elearningByDate)
+                    }
+
 
                 }
             })
@@ -1040,12 +1237,23 @@
             $( "#revenue-filter-by-event" ).change(function() {
                 let event_id = $(this).val()
                 if(event_id != ''){
-                    initChartByEvent($chart, $revenueByYear, event_id)
+
+                    if(start_date == null && end_date == null) {
+                        initChartByEvent($chart, $revenueByYear, event_id)
+                    }else{
+                        initChartByEvent($chart, revenueByDate, event_id)
+                    }
+
                 }else{
                     //destroy
                     ordersChart.destroy();
                     //create new chart
-                    initChart($chart, $revenueByYear)
+                    if(start_date == null && end_date == null){
+                        initChart($chart, $revenueByYear)
+                    }else{
+                        initChart($chart, revenueByDate)
+                    }
+
 
                 }
 
@@ -1068,8 +1276,8 @@
             });
 
             function calculate_charts_by_selected_dates(){
-                console.log('start_date:'+ start_date)
-                console.log('end_date:' + end_date)
+                //console.log('start_date:'+ start_date)
+               // console.log('end_date:' + end_date)
 
                 $.ajax({
                     headers: {
@@ -1087,6 +1295,12 @@
                             elearningByEventDate = data1.elearningByEventDate
                             ticketNameByDate = data1.ticketNameDate
                         }
+
+                        initTicketChart($ticketNameChart, ticketNameByDate)
+                        initAlumniChart($alumniChart, alumniByDate)
+                        initElearningChart($elearningChart, elearningByDate)
+                        initChart($chart, revenueByDate)
+                        initTicketSalesChart($ticketSalesChart, ticketNameByDate)
 
 
                     }

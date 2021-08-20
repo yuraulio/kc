@@ -224,6 +224,7 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     //media2
     Route::get('media2/index', ['as' => 'media2.index', 'uses' => 'MediaController@index']);
     Route::get('media2/{id}', ['as' => 'media2.eventImage', 'uses' => 'MediaController@eventImage']);
+    Route::post('media2_image', ['as' => 'media2.mediaImage', 'uses' => 'MediaController@mediaImage']);
 
     //Lessons
     Route::post('/sort-lessons/{event}', 'LessonController@orderLesson')->name('sort-lessons');
@@ -391,6 +392,10 @@ Route::group(['middleware' => ['auth'], 'prefix'=>'myaccount'], function () {
         //Route::put('/elearning/save', 'Theme\StudentController@saveElearning');
 
         Route::get('/mycertificate/{certificate}', 'Theme\CertificateController@getCertificate');
+
+        Route::post('/card/store_from_payment_myaccount',  'Theme\CardController@storePaymentMyaccount')->name('payment_method.store');
+        Route::post('/update-methodPayment', 'Theme\CardController@updatePaymentMethod')->name('payment_method.update');
+        Route::post('/remove-methodPayment', 'Theme\CardController@removePaymentMethod')->name('payment_method.remove');
 
     });
 });

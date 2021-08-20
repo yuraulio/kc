@@ -21,8 +21,10 @@ class CreateSubscriptionsTable extends Migration
             $table->string('stripe_status');
             $table->string('stripe_price')->nullable();
             $table->integer('quantity')->nullable();
-            $table->timestamp('trial_ends_at')->nullable();
-            $table->timestamp('ends_at')->nullable();
+            //$table->timestamp('trial_ends_at')->nullable();
+            //$table->timestamp('ends_at')->nullable();
+            $table->string('trial_ends_at')->nullable();
+            $table->string('ends_at')->nullable();
             $table->text('metadata')->nullable();
             $table->decimal('price',10,4)->default(0);	
             $table->boolean('email_send')->default(false);
