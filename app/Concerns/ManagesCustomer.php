@@ -130,10 +130,12 @@ trait ManagesCustomer
         
         $this->stripe_id = null;
         $this->save();
-
+        
         foreach((array) json_decode($this->stripe_ids) as $stripe_id){
             try{
-                
+                if(!$stripe_id){
+                    continue;
+                }
                 
                 $customer = $this->stripe()->customers->retrieve(
                     $stripe_id, ['expand' => $expand]
@@ -142,7 +144,7 @@ trait ManagesCustomer
                 
                 $this->stripe_id = $stripe_id;
                 $this->save();  
-
+               
                 $this->assertCustomerExists();
                 return $customer;
 

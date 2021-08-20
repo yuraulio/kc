@@ -485,6 +485,19 @@ Route::group(['middleware' => ['web']], function () {
 });
 
 
+//cronjobs
+//abanoded/user_error
+//dropbox/KUBnqOX1FNyTh72
+//unroll-elearning-users
+//fb-google-csv
+//sendInvoice
+//sendNonpaymentEmail
+//updateJsonVideos
+//sendWarningElearning
+//sendHalfPeriodElearning
+//sendSubscriptionNonPayment
+//sendSubscriptionRemind
+
 Route::group(['middleware' => ['preview','web','auth.sms']], function () {
 
     Route::get('/regularly-mentioned-in-media', function(){

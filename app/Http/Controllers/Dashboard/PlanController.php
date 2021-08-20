@@ -70,7 +70,8 @@ class PlanController extends Controller
                 $eventsAttach[] = $eventId;
                 
                 $secretKey = env('PAYMENT_PRODUCTION') ? $event->paymentMethod->first()->processor_options['secret_key'] : $event->paymentMethod->first()->test_processor_options['secret_key'];
-
+                session()->put('payment_method',$event->paymentMethod->first()->id);
+    
                 Stripe::setApiKey($secretKey);
                 $id = 'plan'.time();
                 $plan = Plan::create([

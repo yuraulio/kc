@@ -124,9 +124,12 @@ class MakePhotoVersions extends Command
                 
             }
             foreach(get_image_versions() as $value){
-                
+                if(!file_exists(public_path($media['path'] . $media['original_name']))){
+                    continue;
+                }
 
-                if(isset($details['img_align'][$value['version']]) && $details['img_align'][$value['version']]['x'] > 0 && $details['img_align'][$value['version']]['y'] > 0){
+                //if(isset($details['img_align'][$value['version']]) && $details['img_align'][$value['version']]['x'] > 0 && $details['img_align'][$value['version']]['y'] > 0){
+                if(isset($details['img_align'][$value['version']])){
                     $edit = $details['img_align'][$value['version']];
                     
                     $image_resize = Image::make(public_path($media['path'] . $media['original_name']));

@@ -1464,7 +1464,6 @@ if(!isset($info)){
                 //$('button.pay').removeAttr('disabled')
             } else {
                paymentMethod = result.setupIntent.payment_method
-               console.log(paymentMethod)
                $('button').prop('disabled', true);
                $.ajax({
                   type:'POST',

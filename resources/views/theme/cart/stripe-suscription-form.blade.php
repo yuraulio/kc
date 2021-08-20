@@ -73,10 +73,11 @@
          <button type="button" id="addCard" class="btn btn--secondary btn--sm">Add New Card</button>
       </div>
 
-      <div id="container" class="col12">
-         
-      </div>
+     
    @endif
+   <div id="container" class="col12">
+         
+   </div>
 </div>
 <!--  <div class='form-row'>
    <div class='col-md-12 form-group'>
@@ -215,7 +216,6 @@
                 //$('button.pay').removeAttr('disabled')
             } else {
                paymentMethod = result.setupIntent.payment_method
-               console.log(paymentMethod)
                $('button').prop('disabled', true);
                $.ajax({
                   type:'POST',

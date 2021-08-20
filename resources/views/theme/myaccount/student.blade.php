@@ -495,11 +495,11 @@
 
             <div id="subscriptions" class="in-tab-wrapper">
                <div id="container" class="container">
-                  <div class="row">
+                  <div class="row" id="cardList">
 
                      @if(count($defaultPaymetnt) > 0)
                      
-                        <table id="cardList" style="width:100%">
+                        <table  style="width:100%">
                            <tr>
                               <th>Brand</th>
                               <th>Default</th>
@@ -1778,7 +1778,6 @@
                 //$('button.pay').removeAttr('disabled')
             } else {
                paymentMethod = result.setupIntent.payment_method
-               console.log(paymentMethod)
                $('button').prop('disabled', true);
                $.ajax({
                   type:'POST',
@@ -1795,7 +1794,7 @@
                         let defaultCard = data['default_card'];
                         let cards = data['cards'];
                         
-                        let html = `<tr>
+                        let html = ` <table  style="width:100%"><tr>
                               <th>Brand</th>
                               <th>Default</th>
                               <th>Last four</th>
@@ -1837,7 +1836,7 @@
                            }
                            
                         });
-
+                        html += '</table>' 
                         $("#cardList").empty();
                         $("#cardList").append(html);
 

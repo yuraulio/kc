@@ -61,10 +61,14 @@ class StudentController extends Controller
         $data['stripe_key'] = env('PAYMENT_PRODUCTION') ? $paymentMethod->processor_options['key'] : 
                                                                     $paymentMethod->test_processor_options['key'];
 
+        $secretKey = env('PAYMENT_PRODUCTION') ? $paymentMethod->processor_options['secret_key'] : 
+                                                    $paymentMethod->test_processor_options['secret_key'];
+        
         session()->put('payment_method',$paymentMethod->id);
+        Stripe::setApiKey($secretKey);
         $user->asStripeCustomer();
         
-        
+       
         $data['defaultPaymetnt'] = [];
         $data['defaultPaymetntId'] = -1;
         $card = $user->defaultPaymentMethod() ? $user->defaultPaymentMethod()->toArray() : [];
