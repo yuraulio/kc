@@ -321,18 +321,5 @@ class MediaController extends Controller
         ]);
     }
 
-    // public function createFolder($event = null){
-    //     $event = new Event;
-    //     //dd($event);
-    //     \Event::listen('Alexusmai\LaravelFileManager\Events\BeforeInitialization',
-    //     function ($event) {
-    //         var_dump('from listener');
-    //         \Log::info('Download:', [
-    //             $event->t(),
-    //             // $event->path(),
-    //         ]);
-    //     }
-    // );
-    // }
 
 }

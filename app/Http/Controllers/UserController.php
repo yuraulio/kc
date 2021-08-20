@@ -59,6 +59,7 @@ class UserController extends Controller
         $data['all_users'] = $model::count();
         $data['total_graduates'] = total_graduate();
 
+
         $data['events'] = (new EventController)->fetchAllEvents();
         $data['transactions'] = (new TransactionController)->participants();
         $data['coupons'] = (new CouponController)->fetchAllCoupons();

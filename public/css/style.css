@@ -358,6 +358,28 @@
     margin-top: 1.3rem !important;
 }
 
+.filter_col {
+    margin-bottom: 1rem;
+}
+
+.select2-css {
+    border: 1px solid #ccc !important;
+    border-radius: 0px !important;
+    display: block;
+    width: 100%;
+    height: calc(2.75rem + 2px);
+    padding: 0.625rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #8898aa;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    box-shadow: 0 3px 2px rgba(233, 236, 239, 0.05);
+    transition: all 0.15s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
 
 @media (min-height: 693px) {
     #file-man-main {

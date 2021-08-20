@@ -683,11 +683,9 @@
             }
 
             function initTicketSalesChart($ticketSalesChart, $ticketNameByYear) {
-                console.log('from function')
                 let arr = [];
                 let labels1 = [];
                 let data1 = [];
-                console.log($ticketNameByYear)
                 $.each($ticketNameByYear, function(key, value) {
                     if(arr[value.name] !== undefined){
                         arr[value.name] = arr[value.name] + parseInt(value.amount)
@@ -737,10 +735,7 @@
                     // Save to jQuery object
                     $ticketSalesChart.data('chart', pieChart1);
                 }else{
-                    console.log('from update')
                     //UPDATE CHART
-                    console.log(Object.keys(arr))
-                    console.log(Object.values(arr))
                     pieChart1.data.labels = Object.keys(arr)
                     pieChart1.data.datasets[0].data = Object.values(arr)
                     pieChart1.update();
@@ -809,6 +804,7 @@
             //
 
             function calculate_labels(arr){
+                console.log(arr)
                 data = []
                 new_labels = []
                 labels = {1:'Jan',2:'Feb',3:'Mar',4:'Apr',5:'May',6:'Jun',7:'Jul',8:'Aug', 9:'Sep', 10:'Oct', 11:'Nov', 12:'Dec'}
@@ -843,7 +839,7 @@
                 }
 
 
-                console.log(arr)
+                //console.log(arr)
                 data['labels'] = new_labels
                 data['sum'] = arr
                // delete labels[0]
@@ -896,6 +892,16 @@
                             legend: {
                                 position: 'top',
                             },
+                            animation: {
+                                animateScale: true,
+                                animateRotate: true
+                            },
+                            scales: {
+                                y: {
+                                    suggestedMin: 500,
+                                    suggestedMax: 10000
+                                }
+                            },
                             maintainAspectRatio: false
                         }
                     });
@@ -918,12 +924,20 @@
                     let sum = 0;
 
                     $.each(value, function(key1, value1) {
+                        let num_mon = parseInt(value1.month)
                         if(value1.event_id == $event_id){
-                            sum = sum + parseInt(value1.amount)
+                            if(months[num_mon] !== undefined){
+                                months[num_mon] = months[num_mon] + parseInt(value1.amount)
+                            }else{
+                                months[num_mon] = parseInt(value1.amount)
+                            }
+
                         }
                     })
-                    months.push(sum)
+                    //months.push(sum)
                 })
+                data = calculate_labels(months)
+
 
 
                 chart.data().chart.data.datasets[0].data = months
@@ -970,6 +984,7 @@
                                 animateScale: true,
                                 animateRotate: true
                             },
+
                             maintainAspectRatio: false
                         }
                     });
@@ -993,9 +1008,11 @@
                     $.each(value, function(key1, value1) {
                         if($event_id == value1.event_id){
                             sum++
+                            //console.log(value1)
                         }
                     })
-                    months.push(sum)
+                    console.log(sum)
+                    //months.push(sum)
                 })
 
                 elearningChart.data().chart.data.datasets[0].data = months
@@ -1003,6 +1020,7 @@
             }
 
             function initAlumniChart($alumniChart, $alumniByYear) {
+                console.log($alumniByYear)
                 let months = []
 
                 $.each($alumniByYear, function(key, value) {
@@ -1055,15 +1073,25 @@
                 let months = []
 
                 $.each($alumniByYear, function(key, value) {
-                    let sum = 0
+                    //let sum = 0
                     $.each(value, function(key1, value1) {
+                        let num_mon = parseInt(value1.month)
                         if($event_id == value1.event_id){
-                            sum++
+                            //sum++
+                            months[num_mon]
+                            if(months[num_mon] !== undefined){
+                                months[num_mon]++
+
+                            }else{
+                                months[num_mon] = 0
+                            }
                         }
                     })
-                    months.push(sum)
+                    //months.push(sum)
                 })
-                alumniChart.data().chart.data.datasets[0].data = months
+                //console.log(months)
+                data = calculate_labels(months)
+                alumniChart.data().chart.data.datasets[0].data = data.sum
                 ordersChart2.update();
             }
 

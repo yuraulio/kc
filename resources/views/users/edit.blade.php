@@ -117,7 +117,6 @@
                         <h6 class="heading-small text-muted mb-4">{{ __('User information') }}</h6>
 
                         @include('alerts.error_self_update', ['key' => 'not_allow_profile'])
-<?php //dd($user->statusAccount()->first()); ?>
                         <div class="pl-lg-4">
                             @if(Auth::user()->isAdmin())
                             <?php //dd($user->statusAccount()->first()['completed']); ?>
@@ -558,6 +557,7 @@
                                                             <div class="col-lg-4">
 
                                                                 <?php $billing = json_decode($tran['billing_details'],true); ?>
+                                                                <?php //dd($billing); ?>
                                                                 @if(!empty($billing))
 
                                                                     @if($billing['billing'] == 1)
@@ -567,7 +567,7 @@
                                                                     <p><label class="form-control-label" for="input-method">{{ __('Address') }}: </label> {{$billing['billaddress']}} {{$billing['billaddressnum']}}</p>
                                                                     <p><label class="form-control-label" for="input-method">{{ __('PostCode') }}: </label> {{$billing['billpostcode']}} </p>
                                                                     <p><label class="form-control-label" for="input-method">{{ __('City') }}: </label> {{$billing['billcity']}} </p>
-                                                                    <p><label class="form-control-label" for="input-method">{{ __('Vat number') }}: </label> {{$billing['billafm']}} </p>
+                                                                    <p><label class="form-control-label" for="input-method">{{ __('Vat number') }}: </label> @if(isset($billing['billafm'])){{$billing['billafm']}} @else  @endif </p>
                                                                     @elseif($billing['billing'] == 2)
                                                                     <h6 class="heading-small text-muted mb-4">{{ __('Invoice Details') }}</h6>
 
