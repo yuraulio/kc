@@ -387,7 +387,7 @@
 
             <div class="col">
                <div class="partners-set">
-               <img alt="{{ $key['name'] }}" title="{{ $key['name'] }}" src="{{ $path }}" width="150" height="77" align=""/>
+               <img alt="{{ $key['name'] }}" title="{{ $key['name'] }}" src="{{ $path }}" width="120" height="110" align=""/>
                </div>
             </div>
             @endforeach

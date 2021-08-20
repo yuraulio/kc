@@ -286,7 +286,7 @@ class MediaController extends Controller
                 $word = $word.'/'.$folder.'/';
             }
         }
-
+        //dd($mediaKey);
         $image = Image::make($mediaKey);
         $image->crop(intval($request->width),intval($request->height), intval($request->x), intval($request->y));
         if($request->version != 'profile_image'){

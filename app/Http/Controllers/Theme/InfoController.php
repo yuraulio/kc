@@ -230,6 +230,8 @@ class InfoController extends Controller
             //get event name and date from cart
             $thisevent = Event::where('id', '=', $evid)->first();
            
+            
+
             $specialseats = 0;
             $thisticket = $thisevent->ticket->where('ticket_id', $ticketid)->first();
             $tickettypename = $thisticket->type; // e.g. Early Birds
@@ -265,6 +267,10 @@ class InfoController extends Controller
             }
         }
 
+        if(!$elearning){
+            $transaction->event()->save($thisevent);
+        }
+
         //Collect all users from seats
         $newmembersdetails = [];
         //dd($pay_seats_data['emails']);
@@ -297,7 +303,9 @@ class InfoController extends Controller
     		$checkemailuser = User::where('email', '=', $thismember['email'])->first();
 
     		if ($checkemailuser) {
-              
+                if(!$elearning){
+                    $transaction->user()->save($checkemailuser);
+                }
                 if ($evid && $evid > 0) {
 
                     $today = date('Y/m/d'); 

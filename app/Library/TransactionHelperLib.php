@@ -14,16 +14,14 @@ use App\Model\Transaction;
 use App\Model\User;
 use \Cart as Cart;
 use Session;
-use Library\EmailNotificationsLib;
 //use PostRider\EventTicket;
 use Auth;
 
 class TransactionHelperLib
 {
-    public function __construct(EmailNotificationsLib $emailNotify)
+    public function __construct()
     {
         $this->current_user = Auth::user();
-        $this->emailNotify = $emailNotify;
     }
 
     public function handleStatusChange($trans_id = 0, $new_status = 0, $user_id = 0)

@@ -14,7 +14,8 @@ class AddExpirationToEventsTable extends Migration
     public function up()
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->integer("expiration")->after('release_date_files')->nullable();
+            //$table->integer("expiration")->after('release_date_files')->nullable();
+            $table->string("expiration")->after('release_date_files')->nullable();
         });
     }
 

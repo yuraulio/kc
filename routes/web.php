@@ -393,6 +393,10 @@ Route::group(['middleware' => ['auth'], 'prefix'=>'myaccount'], function () {
 
         Route::get('/mycertificate/{certificate}', 'Theme\CertificateController@getCertificate');
 
+        Route::post('/card/store_from_payment_myaccount',  'Theme\CardController@storePaymentMyaccount')->name('payment_method.store');
+        Route::post('/update-methodPayment', 'Theme\CardController@updatePaymentMethod')->name('payment_method.update');
+        Route::post('/remove-methodPayment', 'Theme\CardController@removePaymentMethod')->name('payment_method.remove');
+
     });
 });
 

@@ -51,8 +51,77 @@ class MakePhotoVersions extends Command
             }
             $details = json_decode($media['details'],true);
            
-            if(!$details){
+            if($media['ext'] =='.svg'){
+                
                 continue;
+            }
+
+            if(!$details){
+                
+                continue;
+                
+
+                $details["img_align"] = [
+                    "default" =>  [
+                      "x" => "65",
+                      "y" => "73",
+                      "width" => "874",
+                      "height" => "379",
+                      "slug" => "default"
+                    ],
+                    "instructors-testimonials" => [
+                      "x" => "232",
+                      "y" => "61",
+                      "width" => "546",
+                      "height" => "546",
+                      "slug" => "instructors-testimonials"
+                    ],
+                    "event-card" => [
+                      "x" => "144",
+                      "y" => "36",
+                      "width" => "908",
+                      "height" => "487",
+                      "slug" => "event-card"
+                    ],
+                    "users" => [
+                      "x" => "321",
+                      "y" => "85",
+                      "width" => "341",
+                      "height" => "341",
+                      "slug" => "users"
+                    ],
+                    "header-image" =>  [
+                      "x" => "1",
+                      "y" => "44",
+                      "width" => "1200",
+                      "height" => "520",
+                      "slug" => "header-image"
+                    ],
+                    "instructors-small" =>  [
+                      "x" => "252",
+                      "y" => "55",
+                      "width" => "492",
+                      "height" => "492",
+                      "slug" => "instructors-small"
+                    ],
+                    "feed-image" =>  [
+                      "x" => "658",
+                      "y" => "0",
+                      "width" => "1005",
+                      "height" => "1005",
+                      "slug" => "feed-image"
+                    ],
+                    "main" =>  [
+                      "x" => "235",
+                      "y" => "0",
+                      "width" => "1849",
+                      "height" => "1005",
+                      "slug" => "main"
+                    ]
+                   
+                    ];
+                
+                
             }
             foreach(get_image_versions() as $value){
                 

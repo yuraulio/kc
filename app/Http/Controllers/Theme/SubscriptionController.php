@@ -24,7 +24,9 @@ class SubscriptionController extends Controller
         $plan = Plan::where('name',$plan)->first();
         $event = Event::where('title',$event)->first();
         session()->put('payment_method',$event->paymentMethod->first()->id);
-        $stripe = Stripe::setApiKey($event->paymentMethod->first()->processor_options['secret_key']);
+
+        $secretKey = env('PAYMENT_PRODUCTION') ? $event->paymentMethod->first()->processor_options['secret_key'] : $event->paymentMethod->first()->test_processor_options['secret_key'];
+        Stripe::setApiKey($secretKey);
         
         $user = Auth::user();
         $user->asStripeCustomer();

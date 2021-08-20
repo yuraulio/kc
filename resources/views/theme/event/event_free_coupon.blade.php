@@ -245,6 +245,7 @@
                            <div class="row-flex row-flex-17">
 
                               @foreach($benefits as $key => $benefit)
+                              @if($benefit['name'] != '')
                                  <div class="col-3 col-sm-6 col-xs-12">
                                     <div class="benefit-box">
                                        <div class="box-icon">
@@ -255,6 +256,7 @@
                                        <!-- /.benefit-box -->
                                     </div>
                                  </div>
+                                 @endif
 
                               @endforeach
                            </div>

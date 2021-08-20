@@ -22,6 +22,7 @@ use App\Model\Activation;
 use \Carbon\Carbon;
 use Session;
 use Mail;
+use App\Model\PaymentMethod;
 
 
 class StudentController extends Controller
@@ -55,6 +56,26 @@ class StudentController extends Controller
         }else{
             $data = $this->studentsEvent();
         }
+
+        $paymentMethod = PaymentMethod::where('method_slug','stripe')->first();
+        $data['stripe_key'] = env('PAYMENT_PRODUCTION') ? $paymentMethod->processor_options['key'] : 
+                                                                    $paymentMethod->test_processor_options['key'];
+
+        session()->put('payment_method',$paymentMethod->id);
+        $user->asStripeCustomer();
+        
+        
+        $data['defaultPaymetnt'] = [];
+        $data['defaultPaymetntId'] = -1;
+        $card = $user->defaultPaymentMethod() ? $user->defaultPaymentMethod()->toArray() : [];
+      
+        if(!empty($card)){
+            $data['defaultPaymetntId'] = $card['id'];
+            $data['defaultPaymetnt'][] = ['brand' => $card['card']['brand'] ,'last4' => $card['card']['last4'],
+             'exp_month' => $card['card']['exp_month'], 'exp_year' => $card['card']['exp_year']];
+        }
+
+        $data['cards'] = $user->paymentMethods()->toArray();
 
         $data['instructor'] = count($user->instructor) > 0;
         return view('theme.myaccount.student', $data);

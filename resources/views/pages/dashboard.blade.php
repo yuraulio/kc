@@ -804,6 +804,7 @@
             //
 
             function calculate_labels(arr){
+                console.log(arr)
                 data = []
                 new_labels = []
                 labels = {1:'Jan',2:'Feb',3:'Mar',4:'Apr',5:'May',6:'Jun',7:'Jul',8:'Aug', 9:'Sep', 10:'Oct', 11:'Nov', 12:'Dec'}
@@ -1007,15 +1008,11 @@
                     $.each(value, function(key1, value1) {
                         let num_mon = parseInt(value1.month)
                         if($event_id == value1.event_id){
-                            if(months[num_mon] !== undefined){
-                                months[num_mon]++
-                            }else{
-                                months[num_mon] = 1
-                            }
-
+                            sum++
+                            //console.log(value1)
                         }
                     })
-
+                    console.log(sum)
                     //months.push(sum)
                 })
                 console.log(months)
@@ -1026,7 +1023,7 @@
             }
 
             function initAlumniChart($alumniChart, $alumniByYear) {
-                //console.log($alumniByYear)
+                console.log($alumniByYear)
                 let months = []
                 let sum = 0
 
@@ -1036,10 +1033,9 @@
                     months[num] = value.length
                 })
 
-                data = calculate_labels(months)
-                console.log('-----')
-                console.log(data)
 
+
+                data = calculate_labels(months)
 
                 if(start_date == null & end_date == null){
                     // Create chart
@@ -1049,7 +1045,7 @@
                             labels: data.labels,
                             datasets: [{
                                 label: 'Alumni Tickets',
-                                data: months,
+                                data: data.sum,
                                 backgroundColor: '#ffd600',
                             }]
                         },
@@ -1069,10 +1065,8 @@
                     // Save to jQuery object
                     $alumniChart.data('chart', ordersChart2);
                 }else{
-                    console.log(data)
                     //UPDATE CHART
-                    ordersChart2.data.labels = data.labels
-                    ordersChart2.data.datasets[0].data = data.sum
+                    ordersChart2.data.datasets[0].data = months
                     ordersChart2.update();
                 }
 
@@ -1082,20 +1076,18 @@
             function initAlumniByEvent(alumniChart, $alumniByYear, $event_id){
                 let months = []
                 $.each($alumniByYear, function(key, value) {
-
-
+                    //let sum = 0
                     $.each(value, function(key1, value1) {
-                        console.log(value1)
                         let num_mon = parseInt(value1.month)
-                        console.log(num_mon)
-
                         if($event_id == value1.event_id){
+                            //sum++
+                            months[num_mon]
                             if(months[num_mon] !== undefined){
                                 months[num_mon]++
-                            }else{
-                                months[num_mon] = 1
-                            }
 
+                            }else{
+                                months[num_mon] = 0
+                            }
                         }
                     })
                     //months.push(sum)
@@ -1192,6 +1184,7 @@
                     pieChart1.destroy();
                     //create new chart
 
+//EDWWWWW
                     if(start_date == null && end_date == null){
                         initTicketSalesChart($ticketSalesChart, $elearningByEvent)
                     }else{
@@ -1210,22 +1203,18 @@
                     if(start_date == null && end_date == null){
                         initAlumniByEvent($alumniChart,$alumniByYear,event_id)
                     }else{
-                        console.log('between dates')
-                        initAlumniByEvent($alumniChart,alumniByEventDate,event_id)
+                        //console.log('between dates')
+                        initAlumniByEvent($alumniChart,alumniByDate,event_id)
                     }
 
-                }
-                else{
+                }else{
                     //destroy
                     ordersChart2.destroy();
 
                     //create new chart
                     if(start_date == null && end_date == null){
-                        console.log($alumniByYear)
                         initAlumniChart($alumniChart, $alumniByYear)
                     }else{
-                        console.log('from all')
-                        console.log(alumniByDate)
                         initAlumniChart($alumniChart, alumniByDate)
                     }
 
@@ -1240,9 +1229,9 @@
                 if(event_id != ''){
 
                     if(start_date == null && end_date == null){
-                        initElearningByEvent($elearningChart,$elearningByEvent,event_id)
+                        initElearningByEvent($elearningChart,$elearningByYear,event_id)
                     }else{
-                        initElearningByEvent($elearningChart, elearningByEventDate,event_id)
+                        initElearningByEvent($elearningChart, elearningByDate,event_id)
                     }
 
                 }else{
@@ -1322,8 +1311,6 @@
                             elearningByEventDate = data1.elearningByEventDate
                             ticketNameByDate = data1.ticketNameDate
                         }
-
-                        //console.log(alumniByDate)
 
                         initTicketChart($ticketNameChart, ticketNameByDate)
                         initAlumniChart($alumniChart, alumniByDate)
