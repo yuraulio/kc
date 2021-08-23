@@ -78,7 +78,7 @@ class UserController extends Controller
 
         //dd($model->with('role', 'image')->get()->toArray()[0]['image']);
         //dd($model->with('role', 'image','statusAccount', 'events_for_user_list')->get()->toArray()[10]);
-
+        
         return view('users.index', ['users' => $model->with('role', 'image','statusAccount', 'events_for_user_list')->get(), 'data' => $data]);
     }
 

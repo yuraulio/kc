@@ -667,7 +667,7 @@ if(!isset($info)){
                      <li>
                         <span class="label">Ticket:</span>
 
-                        <span class="value">{{ $item->model->type }}</span>
+                        @if($item->model)<span class="value">{{ $item->model->type }}</span>@endif
                      </li>
                      <li>
                         <span class="label">Price:</span>
