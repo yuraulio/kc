@@ -1,6 +1,7 @@
 @extends('theme.layouts.master_consent')
 @section('metas')
 
+    <title>{{ $page['name'] }}</title>
    {!! $page->metable->getMetas() !!}
 
 @endsection
@@ -25,8 +26,8 @@
             <!-- /.container -->
             </div>
         </div>
-        
-       
+
+
    </section>
 
    <section class="section-page-content">
@@ -52,7 +53,7 @@
                      </div>
                   </div>
                </div>
-         
+
          </form>
         </div>
 
@@ -64,30 +65,30 @@
 <script type="text/javascript">
    $(document).on('click', '.conotSubmit', function(e) {
        e.preventDefault();
-   
+
        if(!$(this).hasClass('inconsent')) {
             window.location.replace('/logmeout');
        }
        else {
             alert('Please read all way down and accept our data privacy policy');
        }
-   
+
    });
-   
+
    $(document).on('click', '.coSubmit', function(e) {
        e.preventDefault();
-   
+
        var thec = $('input#accept');
        if (thec.prop("checked") === false) {
-   
+
            alert('Please read all way down and accept our data privacy policy');
-   
+
        }
        else {
-   
-   
+
+
            var consentUrl = 'update-consent';
-   
+
            var fdata = $("#acceptconsent").serialize();
          //  console.log(fdata);
         //   return;
@@ -97,21 +98,21 @@
                    //alert('HO');
                    $('#acceptconsent').find("input[type=text]").removeClass('verror');
                    if (Number(data.status) === 0) {
-   
+
                        $('.errorReponse').html(data.message);
-   
+
                    } else {
-   
+
                       window.location.replace('/myaccount');
                    }
                }
            });
-   
+
        }
        });
-   
+
    $(window).on("scroll", function() {
-   
+
        if($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
            $('#botview').css('opacity', '1');
            $('#conotSubmit').css('opacity', '1');
@@ -131,6 +132,6 @@
         // $('#coSubmit').addClass('btn btn--lg btn--secondary btn--completed');
        }
    });
-   
+
 </script>
 @stop

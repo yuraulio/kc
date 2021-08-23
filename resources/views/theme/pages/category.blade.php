@@ -1,4 +1,7 @@
 @extends('theme.layouts.master')
+@section('metas')
+    <title>{{ $title }}</title>
+@endsection
 @section('content')
 <main id="main-area" role="main">
    <div class="section section--dynamic-learning">

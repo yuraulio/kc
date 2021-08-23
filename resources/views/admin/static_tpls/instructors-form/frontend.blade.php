@@ -2,6 +2,7 @@
 
 @section('metas')
 
+    <title>{{ $page['name'] }}</title>
    {!! $page->metable->getMetas() !!}
 @endsection
 
@@ -80,7 +81,7 @@
 											<div class="input-safe-wrapper">
 												<input class="required" type="text" id="iform-expertise" name='iform-expertise'>
 											</div>
-											
+
 											<div class="checkbox-row custom-checkbox-wrapper">
 	                                            <div class="custom-checkbox">
 	                                                <input type="checkbox" id="accept" name="receive-messages" value="accept">
@@ -156,7 +157,7 @@ $(document).on('click', '.beSubmit', function(e) {
                         $('#beForm').find('input#'+newkey).addClass('verror');
 
                         if(newkey.startsWith("student")) {
-                            
+
                             var s = $('#beForm').find('input#'+newkey).attr('placeholder');
 
                             var pl = 'The '+s+' is required';
@@ -165,7 +166,7 @@ $(document).on('click', '.beSubmit', function(e) {
 
                         }
                         else {
-                         
+
                             $('#beForm').find('input#'+newkey).attr('placeholder', row);
                         //$('.cartForm').find('textarea[name="'+key+'"]').attr('placeholder', row);
                         }

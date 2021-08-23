@@ -1,4 +1,9 @@
 @extends('theme.layouts.master')
+@section('metas')
+
+    <title>{{ $page['name'] }}</title>
+
+@endsection
 @section('content')
 @include('theme.preview.preview_warning', ["id" => $page['id'], "type" => "content", "status" => $page['status']])
 <main id="" role="main">

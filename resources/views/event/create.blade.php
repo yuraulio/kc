@@ -44,13 +44,13 @@
                                     @include('alerts.feedback', ['field' => 'priority'])
                                 </div>
                                 <div class="form-group{{ $errors->has('published') ? ' has-danger' : '' }}">
-                                  
+
                                         <label class="custom-toggle custom-published">
                                             <input type="checkbox" name="published" id="input-published">
                                             <span class="custom-toggle-slider rounded-circle" data-label-off="unpublished" data-label-on="published"></span>
                                         </label>
                                         @include('alerts.feedback', ['field' => 'published'])
-                                    
+
                                 </div>
 
                                 <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
@@ -102,7 +102,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
                                         </div>
-                                        <input class="form-control datepicker" id="input-release_date_files" name="release_date_files" placeholder="Select date" type="text" value="20/06/2020">
+                                        <input class="form-control datepicker" id="input-release_date_files" name="release_date_files" placeholder="Select date" type="text" value="">
                                     </div>
                                     @include('alerts.feedback', ['field' => 'release_date_files'])
                                 </div>

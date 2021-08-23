@@ -337,6 +337,7 @@ class HomeController extends Controller
         $city = City::with('event')->find($page['id']);
 
         //$data['content'] = $city;
+        $data['title'] = $city['name'];
         $data['city'] = $city;
         $data['openlist'] = $city->event()->with('category','slugable', 'city', 'ticket','summary1')->where('status', 0)->get();
         $data['completedlist'] = $city->event()->with('category','slugable', 'city', 'ticket', 'summary1')->where('status', 3)->get();
@@ -353,6 +354,8 @@ class HomeController extends Controller
         //dd($instructor['event'][0]);
         $category = array();
 
+
+        $data['title'] = $instructor['title'].' '.$instructor['subtitle'];
 
         foreach($instructor['event'] as $key => $event){
             if(($event['status'] == 0 || $event['status'] == 2) && $event->is_inclass_course()){
@@ -448,8 +451,8 @@ class HomeController extends Controller
 
     private function types($type){
 
-
         $data['type'] = $type;
+        $data['title'] = $type['name'];
 
         $data['openlist'] = $type->events()->has('slugable')->with('category','slugable', 'city', 'ticket','summary1')->where('published',true)->where('status', 0)->orderBy('created_at','desc')->get();
         $data['completedlist'] = $type->events()->has('slugable')->with('category','slugable', 'city', 'ticket', 'summary1')->where('published',true)->where('status', 3)->orderBy('published_at','desc')->get();
@@ -459,9 +462,8 @@ class HomeController extends Controller
     }
 
     private function category($category){
-
-
         $data['type'] = $category;
+        $data['title'] = $category['name'];
 
         $data['openlist'] = $category->events()->has('slugable')->with('category','slugable', 'city', 'ticket','summary1')->where('published',true)->where('status', 0)->orderBy('created_at','desc')->get();
         $data['completedlist'] = $category->events()->has('slugable')->with('category','slugable', 'city', 'ticket', 'summary1')->where('published',true)->where('status', 3)->orderBy('published_at','desc')->get();
@@ -472,6 +474,7 @@ class HomeController extends Controller
 
     private function delivery($delivery){
 
+        $data['title'] = $delivery['name'];
         $data['delivery'] = $delivery;
         $data['openlist'] = $delivery->event()->has('slugable')->with('category', 'city', 'ticket')->where('published',true)->where('status', 0)->orderBy('created_at','desc')->get();
         $data['completedlist'] = $delivery->event()->has('slugable')->with('category','slugable', 'city', 'ticket')->where('published',true)->where('status', 3)->orderBy('created_at','desc')->get();

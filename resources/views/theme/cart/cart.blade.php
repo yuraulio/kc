@@ -1,4 +1,7 @@
 @extends('theme.layouts.master')
+@section('metas')
+<title>Cart</title>
+@endsection
 @section('content')
 
 <?php $thetype =0;
@@ -1608,7 +1611,7 @@ if(!isset($info)){
 </script>
 <script>
    $(".btn-add-participant").on("click", function() {
-      
+
    var number = $(this).attr('data-participant-number');
          var maxticket = $(this).attr('data-ticket-max');
          maxticket = parseInt(maxticket);

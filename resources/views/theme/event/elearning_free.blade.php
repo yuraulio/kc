@@ -1,6 +1,7 @@
 @extends('theme.layouts.master')
 @section('metas')
 
+    <title>{{ $event['title'] }}</title>
    {!! $event->metable->getMetas() !!}
 
 @endsection
@@ -118,17 +119,17 @@
                                              $alt='';
                                              $img = get_image($syllabus[0]['mediable'],'instructors-small'); //$event->mediable->original_name;
 
-                                            
+
                                              ?>
                                           <a id="syllabus-link" href=""><img src="{{cdn($img)}}" alt="{{$alt}}"></a>
                                        </div>
                                        <div class="ibox-text">
 
-                                       
+
                                           <p>Syllabus Manager<br></p>
                                           <p>
                                              <a href="{{$syllabus[0]['slugable']['slug']}}">{{ $syllabus[0]['title'] }} {!! $syllabus[0]['subtitle'] !!}</a>
-                                          </p>                                      
+                                          </p>
                                        </div>
                                     </div>
                                  </div>
@@ -165,10 +166,10 @@
                         <div class="course-tab-sidebar">
                            <div class="course-details @if(!isset($section_fullvideo)) non-video-height @endif">
                               <ul class="two-column-list">
-                              
+
                               @foreach($summary as $sum)
 
-                                         
+
                                  @if($sum['title'])
                                  <li>
                                     @if($sum['mediable'])<img class="info-icon" class="replace-with-svg" src="{{cdn(get_image($sum['mediable']))}}" width="30" />@endif
@@ -182,7 +183,7 @@
                                  @endif
 
                               @endforeach
-                           
+
 
 
                               </ul>
@@ -360,15 +361,15 @@
                            @foreach($instructors as $instructor)
                            @foreach($instructor as $inst)
                            <?php
-                           
+
                            $socialMedia = json_decode($inst['social_media'],true);
-                           $fb = isset($socialMedia['facebook']) ? $socialMedia['facebook'] : ''; 
-                           $twitter = isset($socialMedia['twitter']) ? $socialMedia['twitter'] : ''; 
+                           $fb = isset($socialMedia['facebook']) ? $socialMedia['facebook'] : '';
+                           $twitter = isset($socialMedia['twitter']) ? $socialMedia['twitter'] : '';
                            $instagram = isset($socialMedia['instagram']) ? $socialMedia['instagram'] : '';
                            $linkedIn = isset($socialMedia['linkedin']) ? $socialMedia['linkedin']: '';
                            $yt = isset($socialMedia['youtube']) ? $socialMedia['youtube'] : '';
 
-                           
+
 
                            ?>
                            <div class="col-3 col-md-4 col-sm-6 col-xs-12">
@@ -404,7 +405,7 @@
                                        @if($yt !='')
                                        <li><a target="_blank" href="{{$yt}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Youtube.svg')}}" width="16" alt="Visit"></a></li>
                                        @endif
-                                      
+
                                     </ul>
                                     <!-- /.instructor-inner -->
                                  </div>
