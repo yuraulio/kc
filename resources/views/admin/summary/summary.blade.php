@@ -78,7 +78,7 @@
                         @include('alerts.feedback', ['field' => 'title'])
                     </div>
                     <div class="form-group{{ $errors->has('description2') ? ' has-danger' : '' }}">
-                        <label class="form-control-label" for="input-description2">{{ __('Description') }}</label>
+                        <label class="form-control-label" for="input-description4">{{ __('Description') }}</label>
                         <textarea name="description4" id="input-description4" class="ckeditor form-control{{ $errors->has('description2') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}"></textarea>
                         @include('alerts.feedback', ['field' => 'description4'])
                     </div>
@@ -190,7 +190,6 @@
     });
 
     $(document).on('click',"#save_summary",function(){
-        console.log('from save summary')
         let modelType = "{{addslashes ( get_class($model) )}}";
         let modelId = "{{ $model->id }}";
 
@@ -237,6 +236,7 @@
 
 
                 $(".summary-body").append(newSummary);
+                $('#cke_5_contents').text()
                 $(".close_modal").click();
                 $("#success-message p").html(data.success);
                 $("#success-message").show();

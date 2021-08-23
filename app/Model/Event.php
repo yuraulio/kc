@@ -212,9 +212,7 @@ class Event extends Model
     public function topicsLessonsInstructors(){
 
         $topics = [];
-
         $lessons = $this->lessons->groupBy('topic_id');
-        //dd($lessons);
         $sum1 = 0;
 
         // sum topic duration
@@ -285,13 +283,11 @@ class Event extends Model
                 }
 
                 $sum1 = $sum1 + $sum;
-                //var_dump($sum1);
                 $data['keys'][$key] = $sum1;
 
         }
 
         }
-        //die();
 
 
         $instructors = $this->instructors->unique()->groupBy('instructor_id')->toArray();
@@ -300,7 +296,6 @@ class Event extends Model
         foreach($this->topic->unique()->groupBy('topic_id') as $key => $topic){
 
             foreach($topic as $t){
-                //var_dump($t->title);
 
 
                 $lessonsArray = $lessons[$t->id]->toArray();
@@ -321,7 +316,6 @@ class Event extends Model
 
 
         }
-        //die();
 
         $data['topics'] = $topics;
         $data['instructors'] = $instructors;
@@ -376,12 +370,25 @@ class Event extends Model
                 foreach($faq->category as $categoryFaq){
                     $faqs[$categoryFaq['name']][] = array('id' => $faq['id'], 'question' =>  $faq['title']);
                 }
-
             }
-
         }
 
-        return $faqs;
+        //pt
+
+        $new_faqs = [];
+
+        foreach($faqs as $key => $val){
+           $arr = unique_multidim_array($val, 'id');
+           $new_faqs[$key] = $arr;
+        }
+
+        //dd($new_faqs);
+        return $new_faqs;
+
+        //pt
+
+
+        //return $faqs;
     }
 
     public function statistic()

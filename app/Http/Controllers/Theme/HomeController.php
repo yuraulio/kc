@@ -523,7 +523,9 @@ class HomeController extends Controller
         }
 
         $data['eventorganisers']=array();
-        $data['location']= $data['content']['city'][0];
+        if(count($data['content']['city']) != 0){
+            $data['location']= $data['content']['city'][0];
+        }
 
         $data['etax'] = $data['content']['topic'];
 

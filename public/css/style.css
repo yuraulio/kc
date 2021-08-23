@@ -303,7 +303,8 @@
 }
 
 .sum_ben_icon {
-    max-width: 20%;
+    max-width: 60px;
+    max-height: 60px;
 }
 
 .topic-header .topic-title {

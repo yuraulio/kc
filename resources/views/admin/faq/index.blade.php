@@ -18,6 +18,7 @@
     @include('alerts.errors')
 </div>
 <div class="accordion"  id="accordionTopicMain1">
+
     @foreach ($event->getFaqsByCategoryEvent() as $key => $faqs)
 
 

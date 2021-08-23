@@ -498,7 +498,7 @@
                   <div class="row" id="cardList">
 
                      @if(count($defaultPaymetnt) > 0)
-                     
+
                         <table  style="width:100%">
                            <tr>
                               <th>Brand</th>
@@ -509,24 +509,24 @@
                               <th>Actions</th>
                            </tr>
                            @foreach($defaultPaymetnt as $card)
-                          
-                           
+
+
                            <tr id="defalt-card">
                               <td>{{$card['brand']}}</td>
                               <td><i class="far fa-check-circle"></i>Yes</td>
                               <td>{{$card['last4']}}</td>
                               <td>{{$card['exp_month']}}</td>
                               <td>{{$card['exp_year']}}</td>
-                              
+
                            </tr>
-                          
+
                            @endforeach
 
 
                         @if(count($cards) > 1)
-                       
+
                            @foreach($cards as $card)
-                           
+
                            @if($card['id'] != $defaultPaymetntId)
                            <tr id="all-cards">
                               <td>{{$card['card']['brand']}}</td>
@@ -535,13 +535,13 @@
                               <td>{{$card['card']['exp_month']}}</td>
                               <td>{{$card['card']['exp_year']}}</td>
                               <td>
-                              
+
                               <form action="{{route('payment_method.update')}}" method="post" id="payment-form">
                                  {{ csrf_field() }}
                                  <input type="hidden" name="card_id" value="{{$card['id']}}">
                                  <button class="btn btn--secondary btn--sm">Set default</button>
                               </form>
-                              
+
                                  <form action="{{route('payment_method.remove')}}" method="post" id="payment-form">
                                     {{ csrf_field() }}
                                     <input type="hidden" name="card_id" value="{{$card['id']}}">
@@ -551,7 +551,7 @@
                            </tr>
                            @endif
                            @endforeach
-                       
+
                         @endif
                         </table>
                      @else
@@ -560,7 +560,7 @@
                      <div id="addCardBtn" class="col12 text-right">
                         <button type="button" id="addCard" class="btn btn--secondary btn--sm">Add New Card</button>
                      </div>
-                    
+
                   </div>
                   </div>
                </div>
@@ -852,64 +852,67 @@
 
                                   ?>
 
-
+<?php //dd($event['release_date_files']); ?>
+<?php //dd(date()); ?>
                                  @if(isset($dropbox) && $folders != null)
                                  <div id="c-files-inner{{$tab}}" class="in-tab-wrapper">
-                                 <div class="acc-topic-accordion">
-                                       <div class="accordion-wrapper accordion-big">
-                                       @if(isset($folders) && count($folders) > 0)
-                                          @foreach($folders as $folder)
-                                             <div class="accordion-item">
-                                                <h3 class="accordion-title title-blue-gradient scroll-to-top"> {{ $folder['foldername'] }}</h3>
-                                                <div class="accordion-content no-padding">
-                                                   @if(isset($files) && count($files) > 0)
-                                                   @foreach($files as $file)
-                                                      @if($folder['id'] == $file['fid'])
-                                                      <div class="files-wrapper">
-                                                         <div class="file-wrapper">
-                                                            <h4 class="file-title">{{ $file['filename'] }}</h4>
-                                                            <span class="last-modified">Last modified:  {{ $file['last_mod'] }}</span>
-                                                            <a  class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" >
-                                                            <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
-                                                         </div>
-                                                      </div>
-                                                      @endif
-                                                   @endforeach
-                                                   @endif
-
-
-                                                   @if(isset($folders_bonus) && count($folders_bonus) > 0)
-                                                    <div class="files-wrapper bonus-files">
-                                                    @foreach($folders_bonus as $folder_bonus)
-                                                        @if($folder_bonus['parent'] == $folder['id'])
-                                                            <h4 class="bonus-title">{{ $folder_bonus['foldername'] }}</h4>
-                                                            <span><i class="icon-folder-open"></i>   </span>
-                                                            @if(isset($files_bonus) && count($files_bonus) > 0)
-                                                                @foreach($files_bonus as $file_bonus)
-                                                                @if($file_bonus['fid'] == $folder['id'])
-                                                                    <div class="file-wrapper">
-                                                                        <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
-                                                                        <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
-                                                                        <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
-                                                                        <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
-                                                                    </div>
-                                                                @endif
-                                                                @endforeach
+                                    {{--@if($event['release_date_files'] != null)--}}
+                                        <div class="acc-topic-accordion">
+                                            <div class="accordion-wrapper accordion-big">
+                                            @if(isset($folders) && count($folders) > 0)
+                                                @foreach($folders as $folder)
+                                                    <div class="accordion-item">
+                                                        <h3 class="accordion-title title-blue-gradient scroll-to-top"> {{ $folder['foldername'] }}</h3>
+                                                        <div class="accordion-content no-padding">
+                                                        @if(isset($files) && count($files) > 0)
+                                                        @foreach($files as $file)
+                                                            @if($folder['id'] == $file['fid'])
+                                                            <div class="files-wrapper">
+                                                                <div class="file-wrapper">
+                                                                    <h4 class="file-title">{{ $file['filename'] }}</h4>
+                                                                    <span class="last-modified">Last modified:  {{ $file['last_mod'] }}</span>
+                                                                    <a  class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" >
+                                                                    <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
+                                                                </div>
+                                                            </div>
                                                             @endif
+                                                        @endforeach
                                                         @endif
-                                                    @endforeach
-                                                    </div>
 
-                                                   @endif
-                                                   </div>
-                                             </div>
-                                          @endforeach
 
-                                       @endif
-                                                    </div>
-                                                    </div>
+                                                        @if(isset($folders_bonus) && count($folders_bonus) > 0)
+                                                            <div class="files-wrapper bonus-files">
+                                                            @foreach($folders_bonus as $folder_bonus)
+                                                                @if($folder_bonus['parent'] == $folder['id'])
+                                                                    <h4 class="bonus-title">{{ $folder_bonus['foldername'] }}</h4>
+                                                                    <span><i class="icon-folder-open"></i>   </span>
+                                                                    @if(isset($files_bonus) && count($files_bonus) > 0)
+                                                                        @foreach($files_bonus as $file_bonus)
+                                                                        @if($file_bonus['fid'] == $folder['id'])
+                                                                            <div class="file-wrapper">
+                                                                                <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
+                                                                                <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
+                                                                                <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
+                                                                                <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
+                                                                            </div>
+                                                                        @endif
+                                                                        @endforeach
+                                                                    @endif
+                                                                @endif
+                                                            @endforeach
+                                                            </div>
 
-                                 </div>
+                                                        @endif
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+
+                                            @endif
+                                                            </div>
+                                                            </div>
+
+                                        </div>
+                                    {{--@endif--}}
                                  @endif
 
 
@@ -1793,7 +1796,7 @@
                         let defaultPaymetntID = data['defaultPaymetntId'];
                         let defaultCard = data['default_card'];
                         let cards = data['cards'];
-                        
+
                         let html = ` <table  style="width:100%"><tr>
                               <th>Brand</th>
                               <th>Default</th>
@@ -1820,13 +1823,13 @@
                                  `<td>` + value['card']['exp_month'] + `</td>` +
                                  `<td>` + value['card']['exp_year'] + `</td>` +
                                  `<td>
-                              
+
                                        <form action="{{route('payment_method.update')}}" method="post" id="payment-form">
                                           {{ csrf_field() }}
                                           <input type="hidden" name="card_id" value="`+ value['id'] +`">
                                           <button class="btn btn--secondary btn--sm">Set default</button>
                                        </form>
-                              
+
                                        <form action="{{route('payment_method.remove')}}" method="post" id="payment-form">
                                           {{ csrf_field() }}
                                           <input type="hidden" name="card_id" value="`+ value['id'] +`">
@@ -1834,9 +1837,9 @@
                                        </form>
                                  </td></tr>`;
                            }
-                           
+
                         });
-                        html += '</table>' 
+                        html += '</table>'
                         $("#cardList").empty();
                         $("#cardList").append(html);
 

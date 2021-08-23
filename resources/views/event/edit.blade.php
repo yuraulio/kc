@@ -619,20 +619,7 @@
 
 
 </script>
-<script>
 
-        $( document ).on('change',"#instFormControlSelect12",function() {
-            if($('#instFormControlSelect').val() == '-'){
-                $('#lesson_update_btn').prop('disabled', true);
-                $('#lesson_update_btn').css('opacity', '0.4')
-            }else{
-                $('#lesson_update_btn').prop('disabled', false);
-                $('#lesson_update_btn').css('opacity', '1')
-            }
-        //alert( "Handler for .change() called." );
-        });
-
-</script>
 
 <script>
             function formatDate(date) {
@@ -715,14 +702,7 @@
 
                     lesson = data.lesson.pivot
 
-                    if(lesson.instructor_id == null){
 
-                        $('#lesson_update_btn').prop('disabled', true);
-                        $('#lesson_update_btn').css('opacity', '0.4')
-                    }else{
-                        $('#lesson_update_btn').prop('disabled', false);
-                        $('#lesson_update_btn').css('opacity', '1')
-                    }
                     $('#modal-title-default').text(lesson.title)
 
                 //    inst_row =  `<div class="form-group">

@@ -21,9 +21,7 @@
                 <th scope="col">{{ __('Title') }}</th>
                 <th scope="col">{{ __('Description') }}</th>
                 <th scope="col">{{ __('Created at') }}</th>
-                @can('manage-users', App\Model\User::class)
-                    <th scope="col"></th>
-                @endcan
+                <th scope="col"></th>
             </tr>
         </thead>
 
@@ -129,7 +127,7 @@
          </div>
          <div class="modal-footer">
             <button type="button" class="btn btn-secondary close-modal" data-dismiss="modal">Close</button>
-            <button type="button" id="edit-section" class="btn btn-primary">Save changes</button>
+            <button type="button" id="edit-section-btn" class="btn btn-primary">Save changes</button>
          </div>
       </div>
    </div>
@@ -152,23 +150,23 @@
         //$(this).parent().parent().find('.dropdown-item').click()
     })
 
-        $(document).on('shown.bs.modal', '#editSectionModal',function(e) {
-            //e.preventDefault()
-            var link  = e.relatedTarget,
-                    modal    = $(this),
-                id = e.relatedTarget.dataset.id
-                //name = e.relatedTarget.dataset.name,
-                //description =e.relatedTarget.dataset.description;
-                name = $("#name-"+id).text();
-                description = $("#desc-"+id).text();
+        // $(document).on('shown.bs.modal', '#editSectionModal',function(e) {
+        //     //e.preventDefault()
+        //     var link  = e.relatedTarget,
+        //             modal    = $(this),
+        //         id = e.relatedTarget.dataset.id
+        //         //name = e.relatedTarget.dataset.name,
+        //         //description =e.relatedTarget.dataset.description;
+        //         name = $("#name-"+id).text();
+        //         description = $("#desc-"+id).text();
 
-                modal.find("#sectionModalLabel").val(name)
+        //         modal.find("#sectionModalLabel").val(name)
 
-            modal.find("#edit-name").val(name);
-            modal.find("#edit-description1").val(description);
-            modal.find("#section-id").val(id)
+        //     modal.find("#edit-name").val(name);
+        //     modal.find("#edit-description1").val(description);
+        //     modal.find("#section-id").val(id)
 
-        });
+        // });
     </script>
     <script>
         $(document).on('click',"#save-section",function(){
@@ -220,7 +218,7 @@
 
 
     <script>
-    $(document).on('click',"#edit-section",function(){
+    $(document).on('click',"#edit-section-btn",function(){
 
         $sectionId = $("#section-id").val()
         $.ajax({
@@ -253,14 +251,12 @@
     <script>
 
     $(document).on('shown.bs.modal', '#editSectionModal',function(e) {
-        //e.preventDefault()
+        e.preventDefault()
 
 
         var link  = e.relatedTarget,
-                modal    = $(this),
+            modal    = $(this),
             id = e.relatedTarget.dataset.id
-            //name = e.relatedTarget.dataset.name,
-            //description =e.relatedTarget.dataset.description;
 
             section = $("#section-"+id).text(),
 

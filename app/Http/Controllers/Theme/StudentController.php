@@ -58,21 +58,21 @@ class StudentController extends Controller
         }
 
         $paymentMethod = PaymentMethod::where('method_slug','stripe')->first();
-        $data['stripe_key'] = env('PAYMENT_PRODUCTION') ? $paymentMethod->processor_options['key'] : 
+        $data['stripe_key'] = env('PAYMENT_PRODUCTION') ? $paymentMethod->processor_options['key'] :
                                                                     $paymentMethod->test_processor_options['key'];
 
-        $secretKey = env('PAYMENT_PRODUCTION') ? $paymentMethod->processor_options['secret_key'] : 
+        $secretKey = env('PAYMENT_PRODUCTION') ? $paymentMethod->processor_options['secret_key'] :
                                                     $paymentMethod->test_processor_options['secret_key'];
-        
+
         session()->put('payment_method',$paymentMethod->id);
         Stripe::setApiKey($secretKey);
         $user->asStripeCustomer();
-        
-       
+
+
         $data['defaultPaymetnt'] = [];
         $data['defaultPaymetntId'] = -1;
         $card = $user->defaultPaymentMethod() ? $user->defaultPaymentMethod()->toArray() : [];
-      
+
         if(!empty($card)){
             $data['defaultPaymetntId'] = $card['id'];
             $data['defaultPaymetnt'][] = ['brand' => $card['card']['brand'] ,'last4' => $card['card']['last4'],
@@ -268,7 +268,7 @@ class StudentController extends Controller
                 //dd($expiration_event >= $now);
                 if($expiration_event >= $now || !$expiration_event)
                     $video_access = true;
-                
+
                 $data['user']['events'][$key]['video_access'] = $video_access;
 
                 //$this->updateUserStatistic($event,$statistics,$user);
@@ -676,8 +676,8 @@ class StudentController extends Controller
             }
 
             //$videos[$key]['seen'] = isset($video['seen']) ? $video['seen'] : 0;
-            //$videos[$key]['stop_time'] = isset($video['stop_time']) ? $video['stop_time'] : 0;
-           // $videos[$key]['percentMinutes'] = isset($video['stop_time']) ? $video['percentMinutes'] : 0;
+            $videos[$key]['stop_time'] = isset($video['stop_time']) ? $video['stop_time'] : 0;
+            $videos[$key]['percentMinutes'] = isset($video['stop_time']) ? $video['percentMinutes'] : 0;
 
             if( (int) $video['seen'] == 1 && (int) $videos[$key]['seen'] == 0){
                 $videos[$key]['seen'] = (int) $video['seen'];
