@@ -15,7 +15,7 @@ class TransactionController extends Controller
         //$data['transactions'] = $data['transactions']/*->has('user')*/->doesntHave('subscription');
         //$data['transactions'] = $data['transactions']->get();
 
-        $transactions = Transaction::with('user.statisticGroupByEvent','user.events','user.ticket','subscription','event','event.delivery')->orderBy('created_at','desc')->get();
+        $transactions = Transaction::with('user.statisticGroupByEvent','user.events','user.ticket','subscription','event','event.delivery')->where('status', 1)->orderBy('created_at','desc')->get();
         //dd($transactions[0]);
         $data['transactions'] = [];
         foreach($transactions as $transaction){
@@ -217,7 +217,7 @@ class TransactionController extends Controller
             if($data['status'] > 0){
                 $us->events()->detach($request->oldevents[$key]);
                 $us->events()->attach($request->newevents[$key]);
-    
+
                 $transaction->event()->detach($request->oldevents[$key]);
                 $transaction->event()->attach($request->newevents[$key]);
             }else{
@@ -226,7 +226,7 @@ class TransactionController extends Controller
                 $transaction->event()->detach($request->oldevents[$key]);
                 $transaction->user()->detach($us);
             }
-           
+
         }
 
         return back();

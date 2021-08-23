@@ -118,7 +118,8 @@ class HomeController extends Controller
             }
             array_push($ticketName,[
                 'name' => $item['ticketName'],
-                'amount'=> $item['amount']
+                'amount'=> $item['amount'],
+                'event_id' => $item['event_id']
             ]);
         }
 

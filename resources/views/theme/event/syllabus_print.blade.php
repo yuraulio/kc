@@ -49,7 +49,7 @@
                                         <div id="tcollapse{{ $key }}">
                                             <div class="panel-body">
 
-                                                <div class="topic-desc">{{$desc[$key]}}</div>
+                                                <div class="topic-desc">{!! $desc[$key] !!}</div>
                                                 <!-- TOPIC LESSONS HERE -->
                                                 <table class="patates">
                                                     <thead>
