@@ -1,6 +1,7 @@
 @extends('theme.layouts.master')
 @section('metas')
 
+    <title>{{ $page['name'] }}</title>
    {!! $page->metable->getMetas() !!}
 
 @endsection
@@ -174,7 +175,7 @@ $(document).ready(function() {
 
                     } else {
 						var p = document.getElementById('contact-success').textContent = data['message'];
-						
+
 						var img = document.createElement('img');
 						img.setAttribute('src',"/theme/assets/images/icons/alert-icons/icon-success-alert.svg" )
 						img.setAttribute('alt',"Info Alert" )

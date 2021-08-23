@@ -2,6 +2,7 @@
 
 @section('metas')
 
+    <title>{{ $event['title'] }}</title>
    {!! $event->metable->getMetas() !!}
 
 @endsection
@@ -124,17 +125,17 @@
                                              $alt='';
                                              $img = get_image($syllabus[0]['mediable'],'instructors-small'); //$event->mediable->original_name;
 
-                                            
+
                                              ?>
                                           <a id="syllabus-link" href=""><img src="{{cdn($img)}}" alt="{{$alt}}"></a>
                                        </div>
                                        <div class="ibox-text">
 
-                                       
+
                                           <p>Syllabus Manager<br></p>
                                           <p>
                                              <a href="{{$syllabus[0]['slugable']['slug']}}">{{ $syllabus[0]['title'] }} {!! $syllabus[0]['subtitle'] !!}</a>
-                                          </p>                                      
+                                          </p>
                                        </div>
                                     </div>
                                  </div>
@@ -171,7 +172,7 @@
                         <div class="course-tab-sidebar">
                            <div class="course-details @if(!isset($section_fullvideo)) non-video-height @endif">
                               <ul class="two-column-list">
-                              
+
                               @foreach($summary as $sum)
                                  @if($sum['title'])
                                  <li>
@@ -186,7 +187,7 @@
                                  @endif
 
                               @endforeach
-                           
+
 
 
                               </ul>
@@ -293,7 +294,7 @@
                                  <div class="accordion-content">
 
                                  @foreach($topic['lessons'] as $lkey => $lesson)
-                                 
+
                                     <div class="topic-wrapper-big">
                                        <div class="topic-title-meta">
                                           <h4 class="@if(isset($lesson['bold']) && $lesson['bold']) bold-topic @endif">{!! $lesson['title'] !!}</h4>
@@ -301,7 +302,7 @@
 
                                           <div class="topic-meta">
                                              @if(isset($lesson['pivot']['type']) && $lesson['pivot']['type'])<div class="category">{{$lesson['pivot']['type']}}</div>@endif
-                                             <?php  
+                                             <?php
                                                 $date = $lesson['pivot']['time_starts'] ? date('l d F Y',strtotime($lesson['pivot']['time_starts'])) : null;
                                                 $time =  $lesson['pivot']['time_starts'] ? date('H:i',strtotime($lesson['pivot']['time_starts'])) : null;
 
@@ -370,15 +371,15 @@
                            @foreach($instructors as $instructor)
                            @foreach($instructor as $inst)
                            <?php
-                           
+
                            $socialMedia = json_decode($inst['social_media'],true);
-                           $fb = isset($socialMedia['facebook']) ? $socialMedia['facebook'] : ''; 
-                           $twitter = isset($socialMedia['twitter']) ? $socialMedia['twitter'] : ''; 
+                           $fb = isset($socialMedia['facebook']) ? $socialMedia['facebook'] : '';
+                           $twitter = isset($socialMedia['twitter']) ? $socialMedia['twitter'] : '';
                            $instagram = isset($socialMedia['instagram']) ? $socialMedia['instagram'] : '';
                            $linkedIn = isset($socialMedia['linkedin']) ? $socialMedia['linkedin']: '';
                            $yt = isset($socialMedia['youtube']) ? $socialMedia['youtube'] : '';
 
-                           
+
 
                            ?>
                            <div class="col-3 col-md-4 col-sm-6 col-xs-12">
@@ -414,7 +415,7 @@
                                        @if($yt !='')
                                        <li><a target="_blank" href="{{$yt}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Youtube.svg')}}" width="16" alt="Visit"></a></li>
                                        @endif
-                                      
+
                                     </ul>
                                     <!-- /.instructor-inner -->
                                  </div>
@@ -541,12 +542,12 @@
                   <!-- /.tab-content-wrapper -->
                </div>
                @endif
-               
+
                @if(count($venues))
                <div id="location" class="tab-content-wrapper ">
                   <div class="container">
                      <div class="course-full-text">
-                        
+
                         <?php
                                   $title = '';
                                   $body = '';
@@ -559,7 +560,7 @@
                         <h2 class="text-align-center text-xs-left tab-title">{!!$title!!}</h2>
                         <h3>{!!$body!!}</h3>
                         @foreach($venues as $vkey => $venue)
-                        
+
                         <div class="location-text">
                            <h3>{!! $venue['name'] !!} </h3>
                            <p>{!! $venue['address'] !!}<br/><br/><br/>{!!$venue['direction_description']!!}</p>

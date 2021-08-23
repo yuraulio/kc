@@ -1,4 +1,7 @@
 @extends('theme.layouts.master')
+@section('metas')
+<title>{{ 'My Account' }}</title>
+@endsection
 @section('content')
 <?php $bonusFiles = ['_Bonus', 'Bonus', 'Bonus Files', 'Βonus', '_Βonus', 'Βonus', 'Βonus Files'] ?>
 <?php $currentuser = $user ?>
@@ -852,11 +855,25 @@
 
                                   ?>
 
-<?php //dd($event['release_date_files']); ?>
-<?php //dd(date()); ?>
+                                    <?php
+                                    $now1 = strtotime("now");
+                                    $display = false;
+                                    if($event['release_date_files'] !=null){
+
+                                    }
+                                    if($event['release_date_files'] == null){
+                                        $display = true;
+
+                                    }else if(strtotime($event['release_date_files']) > $now1){
+
+                                        $display = true;
+                                    }
+
+                                    ?>
                                  @if(isset($dropbox) && $folders != null)
                                  <div id="c-files-inner{{$tab}}" class="in-tab-wrapper">
-                                    {{--@if($event['release_date_files'] != null)--}}
+                                    @if($display)
+
                                         <div class="acc-topic-accordion">
                                             <div class="accordion-wrapper accordion-big">
                                             @if(isset($folders) && count($folders) > 0)
@@ -912,7 +929,7 @@
                                                             </div>
 
                                         </div>
-                                    {{--@endif--}}
+                                    @endif
                                  @endif
 
 
