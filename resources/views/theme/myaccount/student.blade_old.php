@@ -106,7 +106,7 @@
                <ul class="clearfix tab-controls-list">
                   <li><a href="#my-account">My Account</a></li>
                   <li>
-                     @if( (isset($events) && count($events) == 0))
+                     @if( (isset($user['events']) && count($user['events']) == 0))
                      <a  href="#nocourses" >My courses</a>
                      @else
                      <a id="myCourses"  class="active" href="#courses">My courses</a>
@@ -706,7 +706,7 @@
                </div>
                <!-- /#my-account.tab-content-wrapper -->
             </div>
-            @if((isset($events) && count($events) == 0) )
+            @if((isset($user['events']) && count($user['events']) == 0) )
             <div id="nocourses" class="tab-content-wrapper active-tab">
                <div class="container">
                   You have no courses
@@ -733,9 +733,9 @@
                <div class="container">
                   <div class="row">
                      <?php $tab = 0; ?>
-                     <?php //dd($events[0]); ?>
-                     @if(isset($events) && count($events) > 0)
-                     @foreach($events as $keyType => $event)
+                     <?php //dd($user['events'][0]); ?>
+                     @if(isset($user['events']) && count($user['events']) > 0)
+                     @foreach($user['events'] as $keyType => $event)
 
                      @if($event['view_tpl'] != 'elearning_free' && $event['view_tpl'] != 'elearning_event')
                      <div class="col12 dynamic-courses-wrapper dynamic-courses-wrapper--style2">
@@ -994,13 +994,13 @@
                                     @endif
                                  </ul>
                               </div>
-                             
+                              <?php //dd($event); ?>
                               <div class="inside-tabs-wrapper">
                                  <div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
                                     <div class="bottom">
                                         <?php //dd($event['videos_progress']); ?>
-                                       @if($event['expiration'])
-                                       <div class="expire-date exp-date"><img src="{{cdn('/theme/assets/images/icons/Days-Week.svg')}}" alt="">Expiration date: {{$event['expiration']}}</div>
+                                       @if($event->pivot['expiration'])
+                                       <div class="expire-date exp-date"><img src="{{cdn('/theme/assets/images/icons/Days-Week.svg')}}" alt="">Expiration date: {{$event->pivot['expiration']}}</div>
                                        @endif
                                        @if (isset($event['hours']))
                                        <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""> {{$event['hours']}}h </div>
@@ -1012,7 +1012,6 @@
                                        @endif
                                     </div>
                                  </div>
-                                 
                                  @if($subscriptionAccess)
                                  <div id="c-subs-inner{{$tab}}" class="in-tab-wrapper">
                                     <div class="bottom">
@@ -1143,7 +1142,7 @@
                                           @endif
                                           @endforeach
                                           @endforeach
-                                          
+                                          <?php //dd($event); ?>
                                           @if(!$event['video_access'])
                                           {{--<a style="cursor:not-allowed; opacity: 0.5; pointer-events: none;" href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if((isset($event['videos_progress']) && $event['videos_progress'] == 100) || count($event['cert'])>0) WATCH AGAIN @else WATCH NOW @endif</a>--}}
                                           @else
