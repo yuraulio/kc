@@ -207,7 +207,7 @@ class LoginController extends Controller
 
     private function checkForCacheItems($dpuser){
 
-
+        
         if($dpuser->cart && Cart::content()->count() == 0){
             
             $cart = $dpuser->cart;
@@ -215,7 +215,7 @@ class LoginController extends Controller
             //Cart::store($dpuser->id);
 
         }else if(Cart::content()->count() > 0){
-
+           
             $cart = Cart::content();
             $event = $cart->first()->options->event;
             $tid = $cart->first()->id;

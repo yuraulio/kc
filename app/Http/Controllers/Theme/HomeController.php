@@ -316,7 +316,7 @@ class HomeController extends Controller
                     $expiration_date = '';
 
                     if($content->expiration){
-                        $monthsExp = '+' . $event->expiration .'months';
+                        $monthsExp = '+' . $content->expiration .'months';
                         $expiration_date = date('Y-m-d', strtotime($monthsExp, strtotime($today)));
                     }
 
