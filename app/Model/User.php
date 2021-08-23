@@ -210,7 +210,11 @@ class User extends Authenticatable
         return $this->morphToMany(Transaction::class,'transactionable');
     }
 
-
+/*
+ public function transactionss(){
+        return $this->morphToMany(Transaction::class,'transactionable')->doesntHave('subscription')->with('subscription','event','event.delivery')->orderBy('created_at','desc');
+    }
+*/
 
     /*public function examAccess($successPer = 0.8, $event){
         $seenPercent =  $this->videosSeenPercent($event);

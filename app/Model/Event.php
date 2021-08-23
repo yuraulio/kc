@@ -173,7 +173,7 @@ class Event extends Model
 
     public function sections()
     {
-        return $this->belongsToMany(Section::class, 'sectiontitles_event', 'event_id', 'section_title_id');
+        return $this->belongsToMany(Section::class, 'sectionTitles_event', 'event_id', 'section_title_id');
     }
 
 
