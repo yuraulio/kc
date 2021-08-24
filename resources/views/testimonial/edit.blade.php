@@ -214,7 +214,6 @@
         function formatOptions (state) {
             //console.log(state)
         if (!state.id) { return state.text; }
-        console.log(state.text)
 
         path = state.element.attributes['path'].value
         name = state.element.attributes['name'].value

@@ -296,7 +296,6 @@
 
         $('#img-upload').attr('src', path);
 
-        alert($('#img-upload').width())
         $(".close").click();
     });
 

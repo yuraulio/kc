@@ -38,6 +38,8 @@
 .select2-container--default .select2-selection--single {
     border: 1px solid #ccc !important;
     border-radius: 0px !important;
+    min-height: 46px;
+    height: auto;
 }
 
 #exp_input {
@@ -231,7 +233,7 @@
     position: relative;
     display: block;
     text-indent: -9999px;
-    margin-left: -5px;
+    margin-left: -4px;
 }
 
 .logo-area .logo:before {

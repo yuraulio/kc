@@ -4,7 +4,7 @@
 ])
 
 @section('content')
-   
+
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
@@ -13,7 +13,7 @@
 
             <li class="breadcrumb-item active" aria-current="page">{{ __('Dashboard') }}</li>
         @endcomponent
-        @include('layouts.headers.cards')
+        {{--@include('layouts.headers.cards')--}}
     @endcomponent
 
     <div class="container-fluid mt--10">
@@ -88,7 +88,7 @@
                     <div class="card-header bg-transparent">
                         <div class="row align-items-center">
                             <div class="col">
-                                <h6 class="text-uppercase text-muted ls-1 mb-1">Performance</h6>
+
                                 <h5 class="h3 mb-0">Revenue report</h5>
                             </div>
                             <div class="col">
@@ -117,7 +117,7 @@
                     <div class="card-header bg-transparent">
                         <div class="row align-items-center">
                             <div class="col">
-                                <h6 class="text-uppercase text-muted ls-1 mb-1">Performance</h6>
+
                                 <h5 class="h3 mb-0">Elearning Users report</h5>
                             </div>
                             <div class="col">
@@ -144,7 +144,7 @@
                     <div class="card-header bg-transparent">
                         <div class="row align-items-center">
                             <div class="col">
-                                <h6 class="text-uppercase text-muted ls-1 mb-1">Performance</h6>
+
                                 <h5 class="h3 mb-0">Alumni Ticket report</h5>
                             </div>
                             <div class="col">
@@ -174,7 +174,7 @@
                     <div class="card-header bg-transparent">
                         <div class="row align-items-center">
                             <div class="col">
-                                <h6 class="text-uppercase text-muted ls-1 mb-1">Ticket Stats</h6>
+
                                 <h5 class="h3 mb-0"># of tickets / ticket type</h5>
                             </div>
                             <div class="col">
@@ -202,7 +202,7 @@
                     <div class="card-header bg-transparent">
                         <div class="row align-items-center">
                             <div class="col">
-                                <h6 class="text-uppercase text-muted ls-1 mb-1">Ticket Stats</h6>
+
                                 <h5 class="h3 mb-0">Sales / ticket type</h5>
                             </div>
                             <div class="col">

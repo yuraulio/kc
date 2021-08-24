@@ -540,7 +540,6 @@
     });
 
     $(function() {
-        console.log( "ready!" );
 
         if($("#input-delivery").val() == 143){
                 $('#exp_input').css('display', 'block')
@@ -592,7 +591,6 @@
 
                     var base_url = window.location.origin
 
-                    console.log(window.location.origin + inst_media.path + inst_media.original_name)
 
                     row =`
                         <span style="display:inline-block" class="avatar avatar-sm rounded-circle">
@@ -694,7 +692,6 @@
                     date = ''
 
                     data = JSON.parse(data)
-                    console.log(data)
                     let instructors = data.instructors
 
                     let event_type = data.isInclassCourse
@@ -714,7 +711,6 @@
                     //$('#lesson_details').append(inst_row)
 
                     $.each( instructors, function( key, value ) {
-                        console.log(value)
                         //console.log(key+':'+value.title)
                         // $('#instFormControlSelect').append(`<option ${lesson.instructor_id == value.id ? 'selected' : ''} value="${value.id}">${value.title} ${value.subtitle}</option>`)
                         $('#instFormControlSelect12').append(`<option ${lesson.instructor_id == value.id ? 'selected' : ''} path="${value.medias.path}" original_name="${value.medias.original_name}" name="${value.medias.name}" ext="${value.medias.ext}" value="${value.id}">${value.title} ${value.subtitle}</option>`)

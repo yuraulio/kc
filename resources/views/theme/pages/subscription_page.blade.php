@@ -358,7 +358,6 @@ $.ajax({
 						img.setAttribute('alt',"Info Alert" )
 
 						$('#coorporate-success').append(img);
-						console.log(p);
 
 						$('.alert-outer').show()
 

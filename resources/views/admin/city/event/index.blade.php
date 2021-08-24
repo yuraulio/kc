@@ -138,7 +138,6 @@
 
 
                 $.each( city, function( key, value ) {
-                    console.log( key + ": " + value.name );
                     row =`
                         <option value="${value.id}">${value.name}</option>
                     `

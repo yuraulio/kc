@@ -144,8 +144,10 @@
 
                                         <td>
 
-                                        @if($user['status_account'] != null)
-                                        @if($user['status_account']['completed'] == 1)
+                                        <?php //dd($user); ?>
+
+                                        @if($user['statusAccount'] != null)
+                                        @if($user['statusAccount']['completed'] == 1)
                                             {{ __('Active') }}
                                         @else
                                             {{ __('Inactive') }}
@@ -767,7 +769,6 @@
     //Refilter the table
     $('#min, #max').on('change', function () {
         $('#participants_info').removeClass('d-none')
-        alert('change date')
         //console.log('from change min!!')
         table.draw();
         //console.log(table.column(1).data())

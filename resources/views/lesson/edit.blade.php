@@ -226,8 +226,6 @@ let a = [];
 
         let selected_value = $(this).find(":selected").val();
         let selected_cat = $(this).find(":selected").data("category");
-        console.log('select_value: ' + selected_value)
-        console.log('select_cat: ' + selected_cat)
 
         if(selected_cat == undefined){
             $( '.topics option' ).each(function() {

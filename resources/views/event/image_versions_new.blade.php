@@ -137,9 +137,6 @@
     var versions = @json($versions);
     if("{{$event}}" && versions != null){
         image_details = @json($event)
-
-
-        console.log(versions)
         let myObj = {};
         let myArr = []
 
@@ -231,7 +228,6 @@
 
 
     $(".crop_profile").click(function(){
-        alert('btn from user')
         let media = @json($event);
 
         let path = $(this).parent().find('img').attr('src')

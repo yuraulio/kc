@@ -158,8 +158,7 @@
             url: '/admin/media/crop_image',
             data: {'media_id': media.id,'version':version ,'path':path, 'x':cropper.getData({rounded: true}).x, 'y':cropper.getData({rounded: true}).y, 'width':cropper.getData({rounded: true}).width, 'height':cropper.getData({rounded: true}).height},
             success: function (data) {
-                //console.log(data)
-                console.log(data.data.version)
+
                 if(data){
                     $('#msg_'+data.data.version).append(data.success)
                     $('#msg_'+data.data.version).css('display', 'inline-block')

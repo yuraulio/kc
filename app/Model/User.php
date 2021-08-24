@@ -357,7 +357,7 @@ class User extends Authenticatable
             }
 
         }
-        
+
         foreach($this->subscriptionEvents as $event){
 
             $categoryIndex = false;
@@ -386,7 +386,7 @@ class User extends Authenticatable
             }
 
         }
-        
+
         if(count(array_diff($events, $nonEventPlans)) == 0){
             return [false,[]];
         }
@@ -442,7 +442,7 @@ class User extends Authenticatable
         foreach($plans as $plan){
             $eventPlans = array_merge($plan->events()->pluck('event_id')->toArray(),$eventPlans);
         }
-        
+
 
         $eventPlans = array_diff($eventPlans,$events);
         $eventPlans = array_diff($eventPlans,$this->subscriptionEvents->pluck('event_id')->toArray());
@@ -486,7 +486,7 @@ class User extends Authenticatable
             $categoryIndex = 0;
             $categoryIndexDelete = 0;
             $events[] = $event->pivot->event_id;
-           
+
             $category = $event->category->first() ? $event->category->first()->id : -1;
 
             $categoryEvents[$category][] = $event->pivot->event_id;
@@ -509,7 +509,7 @@ class User extends Authenticatable
             }
 
         }
-        
+
         if(count(array_diff($events, $nonEventPlans)) == 0){
             return false;
         }

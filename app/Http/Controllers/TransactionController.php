@@ -146,6 +146,7 @@ class TransactionController extends Controller
             //dd($event->users()->wherePivot('user_id',$user)->first()->pivot->expiration);
 
             $old_date = explode(" ",$event->users()->wherePivot('user_id',$user)->first()->pivot->expiration);
+            //dd($old_date);
 
             if(isset($old_date[1])){
                 $old_date = $old_date[1];
@@ -153,9 +154,10 @@ class TransactionController extends Controller
                 $old_date = $old_date[0];
             }
 
-            $new_date = $date.' '.$old_date;
-            //dd($new_date);
+            $new_date = $date;
+
             $new_date = date('Y-m-d', strtotime($new_date));
+            //dd($new_date);
             $res_new_date = date('d/m/Y', strtotime($new_date));
             //dd($res_new_date);
 

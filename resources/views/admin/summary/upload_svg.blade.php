@@ -48,7 +48,6 @@ $(".close_svg_modal").click(function() {
     $( "#select-svg-"+@json($template1) ).click(function() {
         path = ''
 
-        console.log("from: "+@json($template1))
 
 
         $.each( $('.select_Svg_Modal-'+@json($template1) + ' .fm-breadcrumb li'), function(key, value) {

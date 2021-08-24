@@ -240,7 +240,6 @@
             interval +='s';
         }
 
-        console.log(interval);
 
         $("#interval_count_label").text(interval);
 

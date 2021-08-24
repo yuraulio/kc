@@ -79,10 +79,10 @@
                             <i class="ni ni-single-02"></i>
                             <span>{{ __('My account') }}</span>
                         </a>
-                        <a href="javascript:void(0)" id="update-btn" class="dropdown-item">
+                        <!-- <a href="javascript:void(0)" id="update-btn" class="dropdown-item">
                             <i class="fab fa-dropbox"></i>
                             <span>{{ __('Update Dropbox') }}</span>
-                        </a>
+                        </a> -->
                         <div class="dropdown-divider"></div>
                         <a href="{{ route('logout') }}" class="dropdown-item" onclick="event.preventDefault();
                         document.getElementById('logout-form').submit();">
@@ -97,6 +97,7 @@
 </nav>
 
 @push('js')
+<script src="{{ asset('argon') }}/vendor/sweetalert2/dist/sweetalert2.min.js"></script>
 <script>
     $(document).on("click", "#update-btn", function(){
         $.ajax({
@@ -105,12 +106,6 @@
         url: '/admin/dropbox/update',
 
         success: function (data) {
-            console.log(data)
-
-
-
-
-
         },
         error: function() {
             //console.log(data);

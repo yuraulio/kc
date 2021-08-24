@@ -278,26 +278,26 @@ $(document).ready(function() {
 
 
 
-    $( ".update_exp" ).on( "click", function() {
-        const transaction_id = $(this).data('id')
-        let new_date =  $('#'+transaction_id).val()
-        $.ajax({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            type: 'post',
-            url: '/admin/transaction/updateExpirationDate',
-            data: {'id': transaction_id, 'date': new_date},
-            success: function (data) {
-                //console.log(data)
-                if(data){
-                    data = data.data
-                    $('.exp_'+data.id).text(data.date)
-                }
+    // $( ".update_exp" ).on( "click", function() {
+    //     const transaction_id = $(this).data('id')
+    //     let new_date =  $('#'+transaction_id).val()
+    //     $.ajax({
+    //         headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //         },
+    //         type: 'post',
+    //         url: '/admin/transaction/updateExpirationDate',
+    //         data: {'id': transaction_id, 'date': new_date},
+    //         success: function (data) {
+    //             //console.log(data)
+    //             if(data){
+    //                 data = data.data
+    //                 $('.exp_'+data.id).text(data.date)
+    //             }
 
-            }
-        });
-    });
+    //         }
+    //     });
+    // });
 
 
     // Create date inputs
@@ -773,7 +773,6 @@ function filterGlobal () {
         } );
 
     function ClearFields(){
-        console.log('from clear')
 
         $('#min').val('')
         $('#max').val('')

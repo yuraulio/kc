@@ -154,7 +154,6 @@ $(document).ready(function() {
 
             var contactUrl = '/contact-us';
             //dataLayer.push({'event' : 'leadSubmitted', 'formName' : 'lead'});
-            console.log('from ajax')
 
             $.ajax({ url: contactUrl, type: "post",
                 data: $(".contactUsForm").serialize(),
