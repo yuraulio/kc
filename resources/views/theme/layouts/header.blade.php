@@ -38,7 +38,7 @@
 								@endif
 
                                 @if (Auth::check())
-
+								
 								<?php
 
 
@@ -46,7 +46,7 @@
 
 									if(isset($currentuser->avatar) && $currentuser->avatar > 0 && $currentuser->avatar!=''){
 
-										$mediaAvatar = PostRider\Media::select('id','path','name','ext','details')->findOrFail($currentuser->avatar)->toArray();
+										$mediaAvatar = null;
 
 									}
 									$img_src = '/theme/assets/images/icons/user-profile-placeholder-image.png';
