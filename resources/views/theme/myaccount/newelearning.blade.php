@@ -1246,9 +1246,6 @@
                var dir = $(this).attr('data-dirname');
                var fname = $(this).attr('data-filename');
 
-               alert(dir)
-               alert(fname)
-
                $.ajax({ url: '/getdropbox', type: "post",
                  headers: {
                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

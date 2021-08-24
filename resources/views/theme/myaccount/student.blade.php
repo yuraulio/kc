@@ -2256,18 +2256,16 @@
    });*/
 
    $('.getdropboxlink').click(function() {
-       alert('sdf')
 
       var dir = $(this).attr('data-dirname');
       var fname = $(this).attr('data-filename');
-      alert(dir)
-      alert(fname)
+     
 
       $.ajax({ url: '/getdropbox', type: "post",
           data: {dir: dir, fname:fname},
 
           success: function(data) {
-           alert(data)
+          
             window.location.href = data;
           }
       });
