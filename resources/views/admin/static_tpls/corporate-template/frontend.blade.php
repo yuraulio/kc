@@ -7,7 +7,6 @@
 @section('content')
 @include('theme.preview.preview_warning', ["id" => $page['id'], "type" => "page", "status" => $page['status']])
 <main id="main-area" class="with-hero" role="main">
-    <?php //dd($page['medias']); ?>
 @if (!empty($page['medias']))
     <section class="section-hero" style="background-image:url({{cdn(get_image($page['medias'], 'header-image'))}})">
 

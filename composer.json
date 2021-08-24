@@ -55,6 +55,7 @@
             "App\\": "app/",
             "Laravel\\Cashier\\": "app/Model",
             "Alexusmai\\LaravelFileManager\\Controllers\\": "app/overrides/file-manager/",
+            "Dompdf\\": "app/overrides/Dompdf/",
             "Laravel\\Cashier\\Concerns\\": "app/Concerns",
             "Library\\": "app/Library/"
 
