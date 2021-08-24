@@ -388,7 +388,7 @@
                                       @if($inst['status'])
                                           <a href="{{$inst['slugable']['slug']}}"><img src="{{cdn(get_image($inst['mediable'],'instructors-testimonials'))}}"  title="{{$inst['title']}}" alt="{{$inst['title']}}"></a>
                                       @else
-                                          <img src="{{cdn('$img')}}"  title="{{$inst['title']}}" alt="{{$inst['title']}}">
+                                          <img src="{{cdn(get_image($inst['mediable'],'instructors-testimonials'))}}"  title="{{$inst['title']}}" alt="{{$inst['title']}}">
                                       @endif
                                     </div>
                                     @if($inst['status'])
