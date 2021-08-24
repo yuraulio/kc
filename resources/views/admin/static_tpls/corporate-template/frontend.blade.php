@@ -9,7 +9,7 @@
 <main id="main-area" class="with-hero" role="main">
     <?php //dd($page['medias']); ?>
 @if (!empty($page['medias']))
-    <section class="section-hero" style="background-image:url(<?= asset(get_image($page['medias'], 'header-image')); ?>)">
+    <section class="section-hero" style="background-image:url({{cdn(get_image($page['medias'], 'header-image'))}})">
 
         <div class="overlay"></div>
         <div class="container">
@@ -198,7 +198,7 @@
                                     @if(isset($value['medias']))
                                     <?php //dd($value); ?>
 								<div class="slide">
-									<img alt="{{ $value['name'] }}" title="{{ $value['name'] }}" src="<?php get_image($page['medias']); ?>"/>
+									<img alt="{{ $value['name'] }}" title="{{ $value['name'] }}" src="{{cdn(get_image($value['medias']))}}"/>
 								</div>
 								@endif
                             @endforeach
