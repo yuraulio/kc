@@ -50,16 +50,16 @@ class StudentController extends Controller
     public function index(){
 
         $user = Auth::user();
-       
+
         $instructor = count($user->instructor) > 0;
 
         if($instructor){
             $data = $this->instructorEvents();
         }else{
             $data = $this->studentsEvent();
-        } 
+        }
         $data['instructor'] = $instructor;
-      
+
             $paymentMethod = PaymentMethod::where('method_slug','stripe')->first();
             $data['stripe_key'] = env('PAYMENT_PRODUCTION') ? $paymentMethod->processor_options['key'] :
                                                                         $paymentMethod->test_processor_options['key'];
@@ -83,8 +83,8 @@ class StudentController extends Controller
             }
 
             $data['cards'] = $user->paymentMethods()->toArray();
-        
-       
+
+
        //dd($data);
         return view('theme.myaccount.student', $data);
 
@@ -152,11 +152,11 @@ class StudentController extends Controller
                 $data['events'][$key]['title'] = $event['title'];
                 $data['events'][$key]['release_date_files'] = $event->release_date_files;
                 $data['events'][$key]['plans'] = [];
-                
+
 
             }
 
-            
+
             $find = false;
             $view_tpl = $event['view_tpl'];
             $find = strpos($view_tpl, 'elearning');
@@ -376,7 +376,7 @@ class StudentController extends Controller
         }
         $data['instructors'] = Instructor::with('slugable', 'medias')->get()->groupby('id');
         $data['subscriptionEvents'] = Event::whereIn('id',$subscriptionEvents)->with('slugable')->get();
-     
+
         //dd($data['user']['events'][0]);
         return $data;
 

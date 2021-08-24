@@ -422,7 +422,7 @@
                                  @foreach($files as $key11 => $file)
                                  @if($folder['id'] == $file['fid'])
                                  <li id="{{$folder['dirname']}}" data-folder-id="{{$topic_name}}" class="resource hidden">
-                                    <a class="download-file getdropboxlink"  data-dirname="{{ $folder['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" ><img
+                                    <a class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" ><img
                                        src="theme/assets/img/new/download.svg"
                                        alt="download resource" />{{ $file['filename'] }}</a
                                        >
@@ -1246,6 +1246,9 @@
                var dir = $(this).attr('data-dirname');
                var fname = $(this).attr('data-filename');
 
+               alert(dir)
+               alert(fname)
+
                $.ajax({ url: '/getdropbox', type: "post",
                  headers: {
                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -1253,6 +1256,7 @@
                  data: {dir: dir, fname:fname},
 
                  success: function(data) {
+
                    window.location.href = data;
                  }
                });
@@ -1401,24 +1405,24 @@
 
          //checkWidth();
 
-         $('.getdropboxlink').click(function() {
+        //  $('.getdropboxlink').click(function() {
 
-            var dir = $(this).attr('data-dirname');
-            var fname = $(this).attr('data-filename');
+        //     var dir = $(this).attr('data-dirname');
+        //     var fname = $(this).attr('data-filename');
 
-            $.ajax({ url: '/getdropbox', type: "post",
-                headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: {dir: dir, fname:fname},
+        //     $.ajax({ url: '/getdropbox', type: "post",
+        //         headers: {
+        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //         },
+        //         data: {dir: dir, fname:fname},
 
-                success: function(data) {
-                //console.log(data);
-                window.location.href = data;
-                }
-            });
+        //         success: function(data) {
+        //         //console.log(data);
+        //         window.location.href = data;
+        //         }
+        //     });
 
-        });
+        // });
 
 
          });

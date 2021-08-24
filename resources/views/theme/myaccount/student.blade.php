@@ -994,7 +994,7 @@
                                     @endif
                                  </ul>
                               </div>
-                             
+
                               <div class="inside-tabs-wrapper">
                                  <div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
                                     <div class="bottom">
@@ -1012,7 +1012,7 @@
                                        @endif
                                     </div>
                                  </div>
-                                 
+
                                  @if($subscriptionAccess)
                                  <div id="c-subs-inner{{$tab}}" class="in-tab-wrapper">
                                     <div class="bottom">
@@ -1143,7 +1143,7 @@
                                           @endif
                                           @endforeach
                                           @endforeach
-                                          
+
                                           @if(!$event['video_access'])
                                           {{--<a style="cursor:not-allowed; opacity: 0.5; pointer-events: none;" href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if((isset($event['videos_progress']) && $event['videos_progress'] == 100) || count($event['cert'])>0) WATCH AGAIN @else WATCH NOW @endif</a>--}}
                                           @else
@@ -2256,15 +2256,18 @@
    });*/
 
    $('.getdropboxlink').click(function() {
+       alert('sdf')
 
       var dir = $(this).attr('data-dirname');
       var fname = $(this).attr('data-filename');
+      alert(dir)
+      alert(fname)
 
       $.ajax({ url: '/getdropbox', type: "post",
           data: {dir: dir, fname:fname},
 
           success: function(data) {
-           //console.log(data);
+           alert(data)
             window.location.href = data;
           }
       });
