@@ -490,7 +490,7 @@
                               <div class="testimonial-box">
                                  <div class="author-infos">
                                     <div class="author-img">
-                                       <img src="{{ cdn(get_image($row['mediable'],'instructors-small')) }}" alt="{!! $row['name'] !!}">
+                                       <img src="{{ cdn(get_image($row['mediable'],'users')) }}" alt="{!! $row['name'] !!}">
                                     </div>
                                     <span class="author-name">
                                     {!! $row['name'] !!} {!! $row['lastname'] !!}</span>
