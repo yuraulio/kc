@@ -108,7 +108,7 @@ class Invoice extends Model
 
         $this->instalments_remaining = $this->instalments_remaining - 1;
         if( $this->instalments_remaining >=1){
-            $this->date = date('d-m-Y', strtotime('+1 month', strtotime($this->date)));
+            $this->date = date('Y-m-d', strtotime('+1 month', strtotime($this->date)));
         }else{
             $this->date = '-';
         }
@@ -150,7 +150,7 @@ class Invoice extends Model
 
         $remainingInst = $this->instalments_remaining - 1;
         if( $remainingInst >=1){
-            $date = date('d-m-Y', strtotime('+1 month', strtotime($this->date)));
+            $date = date('Y-m-d', strtotime('+1 month', strtotime($this->date)));
         }
         $this->instalments_remaining = 0;
         $this->save();

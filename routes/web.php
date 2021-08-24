@@ -486,17 +486,22 @@ Route::group(['middleware' => ['web']], function () {
 
 
 //cronjobs
+
 //abanoded/user_error
-//dropbox/KUBnqOX1FNyTh72
-//unroll-elearning-users
 //fb-google-csv
-//sendInvoice
-//sendNonpaymentEmail
-//updateJsonVideos
+
+
+//sendSubscriptionNonPayment
+
 //sendWarningElearning
 //sendHalfPeriodElearning
-//sendSubscriptionNonPayment
 //sendSubscriptionRemind
+
+Route::get('dropbox/KUBnqOX1FNyTh72','DropboxController@cacheDropboxCLI');
+Route::get('/unroll-elearning-users', 'Dashboard\CronjobsController@unroll'); 
+Route::get('/sendNonpaymentEmail', 'Dashboard\CronjobsController@sendNonPayment');
+Route::get('/sendSubscriptionNonPayment', 'Dashboard\CronjobsController@sendSubscriptionNonPayment');
+//Route::get('/sendInvoice', 'Dashboard\CronjobsController@sendInvoice'); 
 
 Route::get('feed/{feed_type?}','Theme\FeedController@index');
 

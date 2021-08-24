@@ -63,13 +63,13 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if($event->status == 0)
+                                            @if($event->status == 1)
                                                 {{'Close'}}
-                                            @elseif($event->status == 1)
+                                            @elseif($event->status == 0)
                                                 {{'Open'}}
-                                            @elseif($event->status == 2)
-                                                {{'Completed'}}
                                             @elseif($event->status == 3)
+                                                {{'Completed'}}
+                                            @elseif($event->status == 2)
                                                 {{'Soldout'}}
                                             @elseif($event->status == 4)
                                                 {{ __('My Account Only') }}

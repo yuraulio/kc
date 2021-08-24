@@ -80,7 +80,7 @@ class WebhookController extends BaseWebhookController
                 $elearningInvoice->name = json_decode($transaction->billing_details,true)['billname'];
                 $elearningInvoice->amount = round($transaction->amount / $totalinst, 2);
                 $elearningInvoice->invoice = $invoiceNumber;
-                $elearningInvoice->date = Carbon::today()->toDateString();
+                $elearningInvoice->date = date('Y-m-d');//Carbon::today()->toDateString();
                 $elearningInvoice->instalments_remaining = $totalinst;
                 $elearningInvoice->instalments = $totalinst;
 

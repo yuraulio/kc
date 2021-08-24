@@ -38,6 +38,11 @@ class FeedController extends Controller
         $slugs = Slug::all();
 
         foreach($slugs as $slug){
+            if(!$slug->slugable){
+                continue;
+            } 
+            Sitemap::addTag($this->baseUrl.$slug->slug, $slug->slugable->updated_at, 'daily', '0.8');
+
             
         }
         
