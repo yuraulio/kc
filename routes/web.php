@@ -498,6 +498,8 @@ Route::group(['middleware' => ['web']], function () {
 //sendSubscriptionNonPayment
 //sendSubscriptionRemind
 
+Route::get('feed/{feed_type?}', [ 'as' => 'feedGenerator' , 'uses' => 'FeedController@index' ]);
+
 Route::group(['middleware' => ['preview','web','auth.sms']], function () {
 
     Route::get('/regularly-mentioned-in-media', function(){

@@ -1,4 +1,5 @@
 <nav class="sidenav navbar navbar-vertical fixed-left navbar-expand-xs navbar-light bg-white" id="sidenav-main">
+    @if($seeAll)
     <div class="scrollbar-inner scroll-scrollx_visible">
         <div class="sidenav-header d-flex align-items-center">
         <div class="logo-area">
@@ -260,4 +261,5 @@
             </div>
         </div>
     </div>
+    @endif
 </nav>

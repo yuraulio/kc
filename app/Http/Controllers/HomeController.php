@@ -18,6 +18,7 @@
 namespace App\Http\Controllers;
 use App\Model\Transaction;
 use Illuminate\Http\Request;
+use Auth;
 
 class HomeController extends Controller
 {
@@ -90,7 +91,6 @@ class HomeController extends Controller
 
 
         $data['booking'] = $transactions;// (new SubscriptionController)->subs_for_dashboard();
-
         return view('pages.dashboard', $data);
     }
 

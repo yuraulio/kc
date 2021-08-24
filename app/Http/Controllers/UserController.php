@@ -53,7 +53,7 @@ class UserController extends Controller
      */
     public function index(User $model)
     {
-        $this->authorize('manage-users', User::class);
+
         $user = Auth::user();
 
         $data['all_users'] = $model::count();

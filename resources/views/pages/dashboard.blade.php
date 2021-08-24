@@ -4,6 +4,7 @@
 ])
 
 @section('content')
+   
     @component('layouts.headers.auth')
         @component('layouts.headers.breadcrumbs')
             @slot('title')
