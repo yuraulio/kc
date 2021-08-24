@@ -12,8 +12,7 @@ $(document).ready(function () {
             $(this).parent().find(".lessons-list").slideDown();
             var container = $('.sidebar-content'),
             scrollTo = $(this).parent();
-            setTimeout(function(){ 
-                console.log(scrollTo.position().top)
+            setTimeout(function(){
                 container.animate({scrollTop: scrollTo.position().top}, 700);
             }, 750);
         } else {
@@ -49,7 +48,7 @@ $(document).ready(function () {
         e.preventDefault();
         $(".jsSidebar").removeClass("open");
         $(".jsLesson").addClass("full-width");
-        
+
 		if ($(document).width() > 991) {
             let headerHeight = $(".lesson-header").innerHeight();
             let windowHeight = $(window).height();
@@ -62,7 +61,7 @@ $(document).ready(function () {
         e.preventDefault();
         $(".jsSidebar").addClass("open");
         $(".jsLesson").removeClass("full-width");
-        
+
 		if ($(document).width() > 991) {
             $(".video-wrapper").css('height', '0');
         }
@@ -115,7 +114,7 @@ $(document).ready(function () {
             if (lessonTitleLowerCase.includes(keyword.toLowerCase())) {
                 $(this).css('display', 'block');
                 hasMatch = true;
-                var regexp = new RegExp(keyword, "i") 
+                var regexp = new RegExp(keyword, "i")
                 var result = lessonTitle.match(regexp);
 
                 $(this).find(".lesson-info_title").html(lessonTitle.replace(result, '<span class="highlighted">'+ result +'</span>'));
@@ -150,7 +149,7 @@ $(document).ready(function () {
             if (topicTitleLowerCase.includes(keyword.toLowerCase())) {
                 $(this).css('display', 'block');
                 $(this).find('.lessons-list').css('display', 'block');
-                var regexp = new RegExp(keyword, "i") 
+                var regexp = new RegExp(keyword, "i")
                 var result = topicTitle.match(regexp);
                 if (!hasChildrenMatch) {
                     $(this).find(".lesson").css('display', 'block');
@@ -167,7 +166,7 @@ $(document).ready(function () {
                 $(this).css('display', 'none');
             }
 
-                
+
             hasChildrenMatch = false;
         })
     }

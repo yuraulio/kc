@@ -108,10 +108,11 @@
                                     <li class="nav-item {{ $elementName == 'menu-management' ? 'active' : '' }}">
                                         <a href="{{ route('menu.index') }}" class="nav-link">{{ __('Menus') }}</a>
                                     </li>
-
-
                                     <li class="nav-item {{ $elementName == 'payment-management' ? 'active' : '' }}">
                                         <a href="{{ route('payments.index') }}" class="nav-link">{{ __('Payment Methods') }}</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="javascript:void(0)" id="update-btn" class="nav-link">{{ __('Update Dropbox') }}</a>
                                     </li>
 
                             </ul>

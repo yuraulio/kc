@@ -8,17 +8,17 @@
 <div class="col12 col-sm-12">
    <div class="stripe-wrapper">
       <div class="">
-         
+
          <div id="debit" >
             <label class="stripe" for="radio-debit-card-control">Debit/Credit card</label>
             <span>Up to 2 installments (some international credit cards and AMEX cards do not accept installments).</span>
          </div>
       </div>
-      
+
    </div>
 </div>
 <div class="stripe-errors panel hidden"></div>
-                           
+
    <div class="row">
       <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
          <label> Card number <span>*</span></label>
@@ -30,15 +30,15 @@
       </div>
       <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
          <label>Expiration month <span>*</span></label>
-       
+
             <input onblur="this.placeholder = 'MM'" onfocus="this.placeholder = ''"  placeholder='MM' onkeyup="month(this)" type='text' name="ccExpiryMonth" id="ccExpiryMonth" required>
-         
+
       </div>
       <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
          <label>Expiration year <span>*</span></label>
-         
+
             <input onblur="this.placeholder = 'YYYY'" onfocus="this.placeholder = ''" placeholder='YYYY' type='text' maxlength="4" size="4" onkeyup="year(this)"  name="ccExpiryYear" id="ccExpiryYear" required>
-   
+
       </div>
    </div>
 </div>
@@ -86,15 +86,12 @@ $('#payment-form button').on('click', function() {
 	submit.attr('disabled', 'disabled').text('Just one moment...')
 
 	Stripe.card.createToken(form, function(status, response) {
-      alert('hello')
 		var token;
 		if(response.error){
 			form.find('.stripe-errors').text(response.error.message).show();
-         alert('from fail')
 		}else{
          token = response.id;
          form.append($('<input type="hidden" name="token" >').val(token));
-         alert(token)
       }
 	});
 });
@@ -105,7 +102,7 @@ $('#payment-form button').on('click', function() {
 
 
    function cvv(input) {
-      
+
 
       if(isNaN(input.value)){
          input.value = '';
@@ -115,7 +112,7 @@ $('#payment-form button').on('click', function() {
 
 
    function cardNo(input) {
-      
+
 
       if(isNaN(input.value)){
          input.value = '';
@@ -124,7 +121,7 @@ $('#payment-form button').on('click', function() {
    }
 
    function month(input) {
-   
+
 
       if(isNaN(input.value)){
          input.value = '';

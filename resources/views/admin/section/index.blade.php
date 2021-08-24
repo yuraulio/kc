@@ -261,7 +261,6 @@
             section = $("#section-"+id).text(),
 
             title = $("#section-title-"+id).text();
-            console.log(section)
             description = $("#section-desc-"+id).text();
 
             modal.find("#sectionModalLabel").val(title)

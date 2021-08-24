@@ -201,7 +201,6 @@
             url: '{{route("summary.store")}}',
                 data: {'title':$('#input-title-summary').val(),'section':$('#input-section_sum').val(),'description':CKEDITOR.instances['input-description4'].getData(),'model_type':modelType,'model_id':modelId},
             success: function (data) {
-                console.log(data);
                 let summary = data.summary;
                 let newSummary =
                 `<tr>` +
@@ -334,7 +333,6 @@
 
             base_url = window.location.protocol + "//" + window.location.host
             $("#img-upload-summary").attr('src', base_url+media)
-            console.log(base_url+media)
 
             }
 

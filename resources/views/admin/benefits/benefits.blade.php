@@ -154,7 +154,6 @@
    	    url: '{{route("benefit.store")}}',
             data: {'name':$('#input-name').val(),'description':CKEDITOR.instances['input-description'].getData(),'model_type':modelType,'model_id':modelId},
    	    success: function (data) {
-   	console.log(data);
    	let benefit = data.benefit;
    	let newBenefit =
    	`<tr>` +
@@ -216,7 +215,6 @@
             data: {'name':$('#edit-name').val(),'description':CKEDITOR.instances['edit-description1'].getData(),'svg': $('#image_svg_upload-benefit').val()},
             success: function (data) {
                 let benefit = data.benefit;
-                console.log(benefit)
 
                 if(data.benefit.medias !== undefined){
                     let media = data.benefit.medias
@@ -264,7 +262,6 @@
             modal.find("#benefitModalLabel").val(name)
             description = e.relatedTarget.dataset.description
             media = e.relatedTarget.dataset.media
-            console.log(media)
 
             modal.find("#edit-name").val(name);
             CKEDITOR.instances['edit-description1'].setData(description)

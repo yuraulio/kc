@@ -220,7 +220,6 @@
             url: '{{route("menu.store_item")}}',
             data: {'menu':$(selected_option).val(),'name':menu_name},
             success: function (data) {
-                console.log(data)
             let item = data.data.find_item;
             let menu = data.data.menu;
             let newItem =
@@ -270,7 +269,6 @@
                 url: '{{route("menu.remove_item")}}',
                 data: {'item_id':id},
                 success: function (data) {
-                    console.log(data)
 
 
                 $(`#itemMenu_${data.data}`).remove()

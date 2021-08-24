@@ -225,8 +225,6 @@
 
         let elements = $('#col_'+id).find('tr')
 
-        console.log(status)
-
         if(status == '1'){
 
 
@@ -263,13 +261,9 @@
                 // console.log(data.request.status1)
                 // console.log(data.request.topic_id)
                 let elem = $('#toggle_'+data.request.topic_id).find('input')[0]
-                console.log(elem)
                 if(data.request.status1 == "1"){
-                    console.log('from flase')
                     $(elem).attr("data-event-status", "1")
                 }else{
-                    console.log($(elem))
-                    console.log('from truw')
                     $(elem).attr("data-event-status", "0")
                 }
             }

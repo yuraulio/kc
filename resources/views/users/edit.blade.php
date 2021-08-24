@@ -324,79 +324,79 @@
 
                 <!-- Create Modal -->
                 <div class="modal fade" id="assignUserEvent" tabindex="-1" role="dialog" aria-labelledby="assignUserEventLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="assignUserEventLabel">Assign Course</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form>
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="assignUserEventLabel">Assign Course</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
 
-                            <div class="form-group{{ $errors->has('event_id') ? ' has-danger' : '' }}">
-                                <label class="form-control-label" for="input-topic_id">{{ __('Events') }}</label>
-                                <select name="event_id" id="input-event_id" class="form-control event" placeholder="{{ __('Event') }}">
-                                    <option selected="selected" value="">-</option>
+                                <div class="form-group{{ $errors->has('event_id') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-topic_id">{{ __('Events') }}</label>
+                                    <select name="event_id" id="input-event_id" class="form-control event" placeholder="{{ __('Event') }}">
+                                        <option selected="selected" value="">-</option>
 
-                                    @foreach ($events as $event)
-                                    <?php $selected = false; ?>
-                                        @if(count($event->users) != 0)
-                                            @foreach($event->users as $user_event)
-                                                @if($user_event['id'] != $user['id'])
-                                                    <?php $selected = true; ?>
+                                        @foreach ($events as $event)
+                                        <?php $selected = false; ?>
+                                            @if(count($event->users) != 0)
+                                                @foreach($event->users as $user_event)
+                                                    @if($user_event['id'] != $user['id'])
+                                                        <?php $selected = true; ?>
+                                                    @endif
+                                                @endforeach
+                                                @if($selected)
+                                                        <option value="{{ $event->id }}" >{{ $event->title }}</option>
                                                 @endif
-                                            @endforeach
-                                            @if($selected)
-                                                    <option value="{{ $event->id }}" >{{ $event->title }}</option>
+                                            @else
+                                            <option value="{{ $event->id }}" >{{ $event->title }}</option>
                                             @endif
-                                        @else
-                                        <option value="{{ $event->id }}" >{{ $event->title }}</option>
-                                        @endif
-                                    @endforeach
-                                </select>
+                                        @endforeach
+                                    </select>
 
-                                @include('alerts.feedback', ['field' => 'event_id'])
-                            </div>
-
-                            <div class="form-group">
-                                <div class="card-deck" id="card-ticket">
+                                    @include('alerts.feedback', ['field' => 'event_id'])
                                 </div>
-                            </div>
 
-                            <div class="form-group">
-                                <label class="form-control-label" for="input-topic_id">{{ __('Select Billing Details') }}</label>
-                                <select class="form-control" name="billing" id="billing">
-                                    <option value="1">Receipt</option>
-                                    <option value="2">Invoice</option>
+                                <div class="form-group">
+                                    <div class="card-deck" id="card-ticket">
+                                    </div>
+                                </div>
 
-                                </select>
-                            </div>
+                                <div class="form-group">
+                                    <label class="form-control-label" for="input-topic_id">{{ __('Select Billing Details') }}</label>
+                                    <select class="form-control" name="billing" id="billing">
+                                        <option value="1">Receipt</option>
+                                        <option value="2">Invoice</option>
 
-                            <div class="form-group">
-                                <label class="form-control-label" for="input-topic_id">{{ __('Select Payment Type') }}</label>
-                                <select class="form-control" name="cardtype" id="cardtype">
-                                    <option value="3">Bank Transfer</option>
-                                    <option value="4">Cash</option>
-                                </select>
-                            </div>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-control-label" for="input-topic_id">{{ __('Select Payment Type') }}</label>
+                                    <select class="form-control" name="cardtype" id="cardtype">
+                                        <option value="3">Bank Transfer</option>
+                                        <option value="4">Cash</option>
+                                    </select>
+                                </div>
 
 
 
 
-                            <input type="hidden" name="user_id" value="{{$user['id']}}">
+                                <input type="hidden" name="user_id" value="{{$user['id']}}">
 
-                            <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary close_modal" data-dismiss="modal">Close</button>
-                        <button type="button" data-user-id="{{$user['id']}}" id="assignTicketUser" class="btn btn-primary">Save changes</button>
+                                <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary close_modal" data-dismiss="modal">Close</button>
+                            <button type="button" data-user-id="{{$user['id']}}" id="assignTicketUser" class="btn btn-primary">Save changes</button>
+                        </div>
+
+                            </form>
+                        </div>
+
+                        </div>
                     </div>
-
-                        </form>
-                    </div>
-
-                    </div>
-                </div>
                 </div>
 
 
@@ -417,7 +417,8 @@
                             <tr>
                                 <th scope="col">{{ __('Event') }}</th>
                                 <th scope="col">{{ __('Ticket') }}</th>
-                                <th scope="col">{{ __('Expired') }}</th>
+                                <th scope="col">{{ __('Initial Expiration Date') }}</th>
+                                <th scope="col">{{ __('New Expiration Date') }}</th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
@@ -426,12 +427,20 @@
                                 <tr id="event_{{$user_event->id}}">
                                     <td>{{ $user_event->title }}</td>
                                     <td>{{ $user_event->ticket_title }}</td>
+                                    <td class="exp_{{$user_event->id}}"><?= ($user_event->pivot->expiration != null) ? date_format( new DateTime($user_event->pivot->expiration),'m/d/Y') : ''; ?></td>
+                                    <td>
+                                        <div style="display: inline-flex;">
+                                            <input id="{{$user_event->id}}" class="form-control datepicker" placeholder="Select date" type="text" value="<?= ($user_event->pivot->expiration != null) ? date_format( new DateTime($user_event->pivot->expiration), 'm/d/Y') : ''; ?>">
+                                        </div>
 
-                                    <td>{{ $user_event->pivot->expiration}}</td>
+                                        <div style="display: inline-flex;">
+                                            <button class="update_exp btn btn-info btn-sm" style="margin-top:10px;" type="button" data-id="{{$user_event->id}}" >Update</button>
+                                        </div>
+                                    </td>
 
                                         <td class="text-right">
 
-                                                <div class="dropdown">
+                                                <div class="dropdown" style="margin-left: 1.8rem;">
                                                     <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         <i class="fas fa-ellipsis-v"></i>
                                                     </a>
@@ -1016,7 +1025,6 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/sweetalert2/dist/sweetalert2.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js" integrity="sha512-zlWWyZq71UMApAjih4WkaRpikgY9Bz1oXIW5G0fED4vk14JjGlQ1UmkGM392jEULP8jbNMiwLWdM8Z87Hu88Fw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     $(document).on('click', '#remove_ticket_user',function(e) {
     $.ajax({
@@ -1228,7 +1236,6 @@ $(document).on('click', '.ticket-card', function () {
                 confirmButtonText: 'Yes!',
                 closeOnConfirm: false
                 }).then((result) => {
-                    console.log(result)
                 if (result.value) {
                     $.ajax({
                         url: '/admin/status-inform',
@@ -1238,7 +1245,6 @@ $(document).on('click', '.ticket-card', function () {
                     type: "post",
                         data: { content_id: user_id },
                         success: function(data) {
-                            console.log(data)
                             if(data.status == 1){
                                 //toastr.info(data.message);
                                 Swal.fire(
@@ -1334,7 +1340,6 @@ $(document).on('click', '.ticket-card', function () {
                         type: "post",
                         data: { content_id: user_id },
                         success: function(data) {
-                            console.log(data)
                             if(data.status == 1){
                                 //toastr.info(data.message);
 
@@ -1389,15 +1394,31 @@ $(document).on('click', '.ticket-card', function () {
 	    $("body").on("click", '.email_user_activation_link', function () {
 	        filterScopeUserActivationLink($(this));
 	    });
+
+        $( ".update_exp" ).on( "click", function() {
+            const transaction_id = $(this).data('id')
+            let new_date =  $('#'+transaction_id).val()
+            alert(new_date)
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: 'post',
+                url: '/admin/transaction/updateExpirationDate',
+                data: {'id': transaction_id, 'date': new_date},
+                success: function (data) {
+                    console.log(data)
+                    if(data){
+                        data = data.data
+                        $('.exp_'+data.id).text(data.date)
+                    }
+
+                }
+            });
+        });
+
+
     });
-
-
-
-
-
-
-
-
 
 </script>
 

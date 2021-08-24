@@ -1617,8 +1617,6 @@ if(!isset($info)){
          maxticket = parseInt(maxticket);
          var newNumber = parseInt(number)+1;
 
-         console.log(newNumber);
-
    document.getElementById('item-quantity').setAttribute('value',newNumber)
 
    	  $.ajax({ url: '/cart', type: "post",

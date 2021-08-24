@@ -886,7 +886,6 @@
                          url: '/elearning/save',
                          data:{'videos':videos,'event_statistic':eventStatistic,'lastVideoSeen':videoId,'event':event},
                          success: function(data) {
-                            console.log(data)
                                 if(!data['loged_in']){
                                    notLogin(data)
                                 }else{
@@ -946,7 +945,6 @@
                             url: '/elearning/save',
                             data:{'videos':videos,'event_statistic':eventStatistic,'lastVideoSeen':videoId,'event':event},
                             success: function(data) {
-                               console.log(data);
                                if(!data['loged_in']){
                                   notLogin(data)
                                }else{

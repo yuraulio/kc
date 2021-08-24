@@ -131,7 +131,6 @@ $(document).on('click', '.btn-remove-coupon', function(e) {
 	e.preventDefault();
 	//alert();
 
-    console.log('edwdww');
    // return;
 
 	var link = $(this).attr('href');
@@ -167,27 +166,27 @@ function checkKnowcrunchId(){
 
     var knowcrunchInput = document.getElementById("knowcrunch");
 	var id = document.getElementById("knowcrunchId").value;
-    
+
 	if(id.length !=0){
-       
+
 		return $.ajax({url:"/cart/checkKnocrunchId", type:'post', data:{'id':id},
 			success: function(data) {
 				if (data === 'false'){
 					knowcrunchInput.classList.add("knowcrunchId");
                     $('#knowcrunchId').attr('placeholder', 'Knowcrunch Id or Deree Id is required' );
-                    return false; 
-                    
-                } 
-                
+                    return false;
+
+                }
+
                 $body.addClass("loading");
-     
+
                 var checkoutUrl = 'cart/checkoutcheck';
                 //routesObj.baseUrl+'{{ $frontHelp->pRoute("contact", $_ENV["LANG"], $_ENV["WEBSITE"],  "post") }}';
-        
+
                 var fdata = $("#billing-setting, #user-info, #sbt-pay").serialize();
-        
+
                // console.log(fdata);
-        
+
                 //return;
                 $.ajax({ url: checkoutUrl, type: "post",
                     data: fdata,
@@ -201,53 +200,53 @@ function checkKnowcrunchId(){
                                 //console.log(data.errors);
                                 var newkey = key.replace('.', '');
                                 //console.log(newkey);
-        
+
                                 $('.small-form').find('input#'+newkey).addClass('verror');
-        
+
                                 if(newkey.startsWith("student")) {
-        
+
                                     var s = $('.small-form').find('input#'+newkey).attr('placeholder');
-        
+
                                     var pl = 'The '+s+' is required';
-        
+
                                     $('.small-form').find('input#'+newkey).attr('placeholder', pl);
-        
+
                                 }
                                 else {
                                     $('.small-form').find('input#'+newkey).attr('placeholder', row);
                                 //$('.cartForm').find('textarea[name="'+key+'"]').attr('placeholder', row);
                                 }
                             });
-        
+
                             $body.removeClass("loading");
-        
+
                         } else {
-        
-                          
+
+
                             $('#sbt-pay :input').not(':submit').clone().hide().appendTo('#billing-setting')
                             $('#user-info :input').not(':submit').clone().hide().appendTo('#billing-setting')
-                           
+
                             $("#billing-setting").submit();
-        
-                            
-        
-        
+
+
+
+
                         }
                     }
                 });
-        
+
 
                 return true;
 			},
-		
+
 		});
-        
+
 	}else {
         //knowcrunchInput.classList.add("knowcrunchId");
         $('#knowcrunchId').attr('placeholder', 'Knowcrunch Id or Deree Id is required' );
-		return false; 
+		return false;
     }
-    
+
 }
 
 function checkStudentId(){
@@ -261,7 +260,7 @@ function checkStudentId(){
         newPlaceholder  = newPlaceholder.replace('*','');
         $('#studentId').attr('placeholder', newPlaceholder );
 		return false;
-        
+
     }
 //    knowcrunchInput.classList.remove("studentId");
     return true;
@@ -274,20 +273,20 @@ function checkForId(){
 
     /*
     if(type == 3){
-        
+
          checkKnowcrunchId()
-        
+
     }else if(type== 1 || type == 2 || type == 5 || type == 0){
-        
+
         return checkStudentId()
-          
-    }*/  
+
+    }*/
 }
 
 
 $(document).on('click', '.regmeup', function(e) {
 
-    
+
 
     var thec = $('input#regaccept');
     if (thec.prop("checked") === false) {
@@ -313,32 +312,32 @@ $(document).on('click', '.do-checkout', function(e) {
         //alert('Please accept the terms, conditions & data privacy in order to complete your registration.');
         //$('.alert-wrapper').dialog();
         var favDialog = document.getElementById('favDialog');
-        
+
        favDialog.style.display = "block";
         $("body").css("overflow-y", "hidden")
         if($('#last4').text() == '-'){
             favDialogCard.style.display = "block";
         }
     }
-    
+
    else if($('#last4').text() == '-'){
     favDialogCard.style.display = "block";
    }
-    
+
     else if(!checkForId()){
-        
-        
+
+
             $(window).scrollTop(0);
           //  alert('id field required');
-        
-    }   
+
+    }
 
 	else {
 
         $body.addClass("loading");
-     
+
         var checkoutUrl = 'cart/checkoutcheck';
-        
+
         //routesObj.baseUrl+'{{ $frontHelp->pRoute("contact", $_ENV["LANG"], $_ENV["WEBSITE"],  "post") }}';
 
         var fdata = $("#billing-setting, #user-info, #sbt-pay").serialize();
@@ -360,21 +359,21 @@ $(document).on('click', '.do-checkout', function(e) {
                         var newkey = key.replace('.', '');
 
                         $('.small-form').find('input#'+newkey).addClass(['verror','validate-error']);
-                        
-                        if(!firstError){                       
-                            elementsHeight = Math.round($('#header').outerHeight()) - document.getElementById(newkey).getBoundingClientRect().top +30  
+
+                        if(!firstError){
+                            elementsHeight = Math.round($('#header').outerHeight()) - document.getElementById(newkey).getBoundingClientRect().top +30
                             firstError = true;
-                         
+
                             $('html, body').animate({
                                 scrollTop: elementsHeight
                             }, 300);
                         }
-                       
+
 
                         if(newkey.startsWith("student")) {
 
-                            if(!firstError){ 
-                                                 
+                            if(!firstError){
+
                                 elementsHeight = Math.round($('#header').outerHeight()) - document.getElementById(newkey).getBoundingClientRect().top +30
                                 firstError = true;
                             }
@@ -390,19 +389,19 @@ $(document).on('click', '.do-checkout', function(e) {
                         //$('.cartForm').find('textarea[name="'+key+'"]').attr('placeholder', row);
                         }
                     });
-                                   
+
 
                     $body.removeClass("loading");
 
                 } else {
 
-                  
+
                     $('#sbt-pay :input').not(':submit').clone().hide().appendTo('#billing-setting')
                     $('#user-info :input').not(':submit').clone().hide().appendTo('#billing-setting')
-                   
+
                 	$("#billing-setting").submit();
 
-                    
+
 
 
                 }
@@ -424,14 +423,14 @@ $(document).on('click', '.do-checkout-free', function(e) {
        // favDialog.showModal();
        favDialog.style.display = "block";
         $("body").css("overflow-y", "hidden")
-    } 
+    }
 
 	else {
 
         $body.addClass("loading");
-     
+
         var checkoutUrl = 'complete-registration-validation';
-        
+
         //routesObj.baseUrl+'{{ $frontHelp->pRoute("contact", $_ENV["LANG"], $_ENV["WEBSITE"],  "post") }}';
 
         var fdata = $("#user-info, #code-reg").serialize();
@@ -453,21 +452,20 @@ $(document).on('click', '.do-checkout-free', function(e) {
                         var newkey = key.replace('.', '');
 
                         $('.small-form').find('input#'+newkey).addClass(['verror','validate-error']);
-                        
-                        if(!firstError){                       
-                            elementsHeight = Math.round($('#header').outerHeight()) - document.getElementById(newkey).getBoundingClientRect().top +30  
+
+                        if(!firstError){
+                            elementsHeight = Math.round($('#header').outerHeight()) - document.getElementById(newkey).getBoundingClientRect().top +30
                             firstError = true;
-                         
+
                             $('html, body').animate({
                                 scrollTop: elementsHeight
                             }, 300);
                         }
-                       
-                        console.log("newkey = ", newkey)
+
                         if(newkey.startsWith("student")) {
 
-                            if(!firstError){ 
-                                                 
+                            if(!firstError){
+
                                 elementsHeight = Math.round($('#header').outerHeight()) - document.getElementById(newkey).getBoundingClientRect().top +30
                                 firstError = true;
                             }
@@ -483,18 +481,18 @@ $(document).on('click', '.do-checkout-free', function(e) {
                         //$('.cartForm').find('textarea[name="'+key+'"]').attr('placeholder', row);
                         }
                     });
-                                   
+
 
                     $body.removeClass("loading");
 
                 } else {
 
-                  
+
                     $('#code-reg :input').not(':submit').clone().hide().appendTo('#user-info')
-                   
+
                 	$("#user-info").submit();
 
-                    
+
 
 
                 }
@@ -508,9 +506,9 @@ $(document).on('click', '.do-checkout-subscription', function(e) {
     e.preventDefault();
 	var thec = $('input#read-accept-tcp');
     var favDialogCard = document.getElementById('favDialogCard');
-    
+
 	if (thec.prop("checked") === false) {
-        
+
 
         //alert('Please accept the terms, conditions & data privacy in order to complete your registration.');
         //$('.alert-wrapper').dialog();
@@ -519,8 +517,8 @@ $(document).on('click', '.do-checkout-subscription', function(e) {
        favDialog.style.display = "block";
         $("body").css("overflow-y", "hidden")
     }
-    
-   
+
+
     else if($('#last4').val() == '-'){
         favDialogCard.style.display = "block";
     }
@@ -528,9 +526,9 @@ $(document).on('click', '.do-checkout-subscription', function(e) {
 	else {
 
         $body.addClass("loading");
-     
+
         var checkoutUrl = 'cart/checkoutcheck';
-        
+
         //routesObj.baseUrl+'{{ $frontHelp->pRoute("contact", $_ENV["LANG"], $_ENV["WEBSITE"],  "post") }}';
 
         var fdata = $("#billing-setting, #user-info, #sbt-pay").serialize();
@@ -552,21 +550,21 @@ $(document).on('click', '.do-checkout-subscription', function(e) {
                         var newkey = key.replace('.', '');
 
                         $('.small-form').find('input#'+newkey).addClass(['verror','validate-error']);
-                        
-                        if(!firstError){                       
-                            elementsHeight = Math.round($('#header').outerHeight()) - document.getElementById(newkey).getBoundingClientRect().top +30  
+
+                        if(!firstError){
+                            elementsHeight = Math.round($('#header').outerHeight()) - document.getElementById(newkey).getBoundingClientRect().top +30
                             firstError = true;
-                         
+
                             $('html, body').animate({
                                 scrollTop: elementsHeight
                             }, 300);
                         }
-                       
+
 
                         if(newkey.startsWith("student")) {
 
-                            if(!firstError){ 
-                                                 
+                            if(!firstError){
+
                                 elementsHeight = Math.round($('#header').outerHeight()) - document.getElementById(newkey).getBoundingClientRect().top +30
                                 firstError = true;
                             }
@@ -582,19 +580,19 @@ $(document).on('click', '.do-checkout-subscription', function(e) {
                         //$('.cartForm').find('textarea[name="'+key+'"]').attr('placeholder', row);
                         }
                     });
-                                   
+
 
                     $body.removeClass("loading");
 
                 } else {
 
-                  
+
                     $('#sbt-pay :input').not(':submit').clone().hide().appendTo('#billing-setting')
                     $('#user-info :input').not(':submit').clone().hide().appendTo('#billing-setting')
-                   
+
                 	$("#billing-setting").submit();
 
-                    
+
 
 
                 }

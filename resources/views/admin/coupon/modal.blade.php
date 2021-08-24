@@ -16,12 +16,12 @@
           </tr>
         </thead>
         <tbody class="modal_table">
-        <?php //dd($plans) ?> 
+        <?php //dd($plans) ?>
 
         @if($plans !=0)
 
-        @foreach($plans as $key => $plan) 
-            
+        @foreach($plans as $key => $plan)
+
         <tr id="<?= $plan['id'] ?>">
             <td class="title"><?= $plan['title'] ?></td>
             <td class="cost"><?= $plan['cost'] ?></td>
@@ -36,7 +36,7 @@
 
         @endif
 
-       
+
         </tbody>
     </table>
     <h3>Add Plan</h4>
@@ -70,8 +70,8 @@
                 <span class="error-hint 2 trial_num1">This field must be a number</span>
                 <input type="text" class="form-control" id="trial1" value="0"></input>
             </div>
-            
-            
+
+
             <div class="form-group">
                 <label for="message-text" class="col-form-label period">Charge Period:</label>
                 <input type="radio" id="period1" name="period1" value="month" checked>
@@ -101,7 +101,7 @@
                 <span class="error-hint 2 trial_num1">This field must be a number</span>
                 <input type="text" class="form-control" id="trial2" value="0"></input>
             </div>
-            
+
             <div class="form-group">
                 <label for="message-text" class="col-form-label period">Charge Period:</label>
                 <input type="radio" id="period2" name="period2" value="month">
@@ -110,7 +110,7 @@
                 <label style="color:black;" for="female">Year</label><br>
             </div>
         </div>
-        
+
     </form>
 </div>
 
@@ -121,7 +121,7 @@
     <a href="javascript:void(0)" data-event-id="<?= $event_id ?>" id="add-plan" class="btn btn-primary">Add Plan</a>
     <a href="javascript:void(0)" data-plan-id="" id="save-plan" class="btn btn-primary hidden">Save</a>
 </div>
-    
+
   <!-- <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button> -->
 </div>
 <script>
@@ -221,7 +221,7 @@
             $('.error-hint').removeClass('error')
             return true
         }
-        
+
     }
 
     $( "#edit-plan" ).click(function(e) {
@@ -255,13 +255,13 @@
             type: 'post',
             url: '/admin/plan/edit',
             data:{'plan_id':plan_id,'name':name, 'cost':cost, 'period':period},
-            success: function(data) { 
+            success: function(data) {
                     if(data){
 
                         $('#'+data['data']['plan_id']).find('.title').text(data['data']['name'])
                         $('#'+data['data']['plan_id']).find('.cost').text(data['data']['cost'])
                         $('#'+data['data']['plan_id']).find('.description').text(data['data']['period'])
-                        
+
 
                         $('#name').val('')
                         $('#cost').val('')
@@ -269,11 +269,11 @@
                         $('#add-plan').removeClass('hidden')
                         $('#save-plan').addClass('hidden')
 
-                    }else{ 
-                        console.log("fail from edit") 
+                    }else{
+                        console.log("fail from edit")
                     }
                     //playVi = true;
-                
+
             }
             });
         }
@@ -297,7 +297,6 @@
         }
 
         //var isValid = validate()
-        console.log(isValid)
         if(isValid){
             $.ajax({
             headers: {
@@ -306,10 +305,8 @@
             type: 'post',
             url: '/admin/plan/add',
             data:{'event_id':event_id,'name1':$('#name1').val(), 'cost1':$('#cost1').val(), 'period1':$("#period1:checked").val(),'trial1':$('#trial1').val(),'name2':$('#name2').val(), 'cost2':$('#cost2').val(),'trial2':$('#trial2').val(), 'period2':$("#period2:checked").val()},
-            success: function(data) { 
-                console.log(data['data']['event_id'])
+            success: function(data) {
                     if(data){
-                        console.log('from success')
                         // APPEND IN ROW
                         if(data['data']['plan_id2'])
                         {
@@ -345,7 +342,7 @@
                                 </tr>`
                                 $('.modal_table').append(html)
                         }
-                        
+
 
                             $('#name1').val('')
                             $('#cost1').val('')
@@ -353,19 +350,18 @@
                             $('#name2').val('')
                             $('#cost2').val('')
                             $('#trial2').val('')
-                    }else{  
-                    }              
+                    }else{
+                    }
             }
             });
         }
-        
-        
-        
+
+
+
     });
 
     $('.table').on('click',".remove-plan",function(e) {
         const id = $(this).data('planId')
-        console.log('remove:'+ id)
         $.ajax({
         headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -373,14 +369,14 @@
           type: 'post',
           url: '/admin/plan/remove',
           data:{'id':id},
-          success: function(data) { 
+          success: function(data) {
                 if(data){
 					$('#'+data['data']).remove();
-                }else{  
+                }else{
                     console.log('fail remove')
                 }
                 //playVi = true;
-            
+
           }
         });
     });

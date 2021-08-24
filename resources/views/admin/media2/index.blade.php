@@ -460,8 +460,6 @@
 
                 image_name = image_name.split('.')[0]
 
-                console.log('alt:'+alt_text)
-
                 data = {id: image_alt_id, name: image_name, alt: alt_text}
 
                 $.ajax({
@@ -499,8 +497,6 @@
 
                         $('#img-cropper').attr('src', data)
                         $('.cropper-crop-box.table-info img').attr('src', data)
-
-                        console.log(cropper.getCroppedCanvas({maxWidth: 4096, maxHeight: 4096}))
 
 
                     }
@@ -658,7 +654,6 @@
                                     //console.log(value)
                                     obj1[key] = value['path']
                                 })
-                                console.log(obj1)
 
                                 let arr = {};
                                 arr = {[key]: key, type: type, disk: 'uploads', directories: [], files: obj1}
@@ -743,7 +738,6 @@
                                 //console.log('name: '+name + 'path:  '+ path)
 
                                 let name1 = details[1].split('.')
-                                console.log('name:'+name1)
                                 data = { media_name: name1[0]}
 
                                 $.ajax({
@@ -877,8 +871,6 @@
                         $('#dataRotate').val(Math.round(event.detail.rotate))
                         $('#dataScaleX').val(event.detail.scaleX)
                         $('#dataScaleY').val(event.detail.scaleY)
-                        console.log(Math.round(event.detail.height))
-                        console.log(Math.round(event.detail.width))
 
                     },
 
@@ -928,7 +920,6 @@
 
             arr = { files: obj1, directories: [] }
 
-            console.log(arr)
 
             data = { disk: 'uploads', name: name+'.zip', path: null, elements: arr}
 
