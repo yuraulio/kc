@@ -28,7 +28,8 @@
         "maatwebsite/excel": "^3.1",
         "jenssegers/agent": "^2.6",
         "vimeo/vimeo-api": "^3.0",
-        "embed/embed": "^3.0"
+        "embed/embed": "^3.0",
+        "watson/sitemap": "^4.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5",

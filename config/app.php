@@ -237,6 +237,7 @@ return [
         'Cart' => Gloudemans\ShoppingCart\Facades\Cart::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
+        'Sitemap'   => Watson\Sitemap\Facades\Sitemap::class,
 
     ],
 

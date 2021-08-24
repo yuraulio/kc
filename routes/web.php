@@ -498,7 +498,7 @@ Route::group(['middleware' => ['web']], function () {
 //sendSubscriptionNonPayment
 //sendSubscriptionRemind
 
-Route::get('feed/{feed_type?}', [ 'as' => 'feedGenerator' , 'uses' => 'FeedController@index' ]);
+Route::get('feed/{feed_type?}','Theme\FeedController@index');
 
 Route::group(['middleware' => ['preview','web','auth.sms']], function () {
 

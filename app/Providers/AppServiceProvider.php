@@ -28,8 +28,14 @@ class AppServiceProvider extends ServiceProvider
         
         
         view()->composer('layouts.app', function($view){
-            $roles = Auth::user()->role->pluck('name')->toArray();
-            $seeAll =  (in_array('Super Administrator',$roles) || in_array('Administrator',$roles) || in_array('Manager',$roles) || in_array('Author',$roles));
+
+            if(Auth::user()){
+                $roles = Auth::user()->role->pluck('name')->toArray();
+                $seeAll =  (in_array('Super Administrator',$roles) || in_array('Administrator',$roles) || in_array('Manager',$roles) || in_array('Author',$roles));
+            }else{
+                $seeAll = true;
+            }
+           
             $view->with('seeAll', $seeAll);
 
         });
