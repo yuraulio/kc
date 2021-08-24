@@ -133,7 +133,7 @@ class StudentController extends Controller
                 $data['events'][$key]['summary1'] = $event->summary1;
                 $data['events'][$key]['hours'] = $event->hours;
                 $data['events'][$key]['slugable'] = $event->slugable;
-                $data['events'][$key]['release_date_files'] = null;
+                $data['events'][$key]['release_date_files'] = $event->release_date_files;
                 $data['events'][$key]['plans'] = [];
                 $data['events'][$key]['exam_access'] =false;
                 $data['events'][$key]['videos_progress'] = 0;
@@ -150,7 +150,7 @@ class StudentController extends Controller
                 $data['events'][$key]['hours'] = $event['hours'];
                 $data['events'][$key]['slugable'] = $event['slugable']->toArray();
                 $data['events'][$key]['title'] = $event['title'];
-                $data['events'][$key]['release_date_files'] = null;
+                $data['events'][$key]['release_date_files'] = $event->release_date_files;
                 $data['events'][$key]['plans'] = [];
                 
 
@@ -282,7 +282,7 @@ class StudentController extends Controller
                 $data['events'][$key]['hours'] = $event['hours'];
                 $data['events'][$key]['slugable'] = $event['slugable']->toArray();
                 $data['events'][$key]['title'] = $event['title'];
-                $data['events'][$key]['release_date_files'] = null;
+                $data['events'][$key]['release_date_files'] = $event->release_date_files;
                 $data['events'][$key]['expiration'] = $event->pivot->expiration;
                 //$data['user']['events'][$key]['exam_results'] = $user->examAccess(0.8,$event->id);
 
@@ -319,7 +319,7 @@ class StudentController extends Controller
                 $data['events'][$key]['hours'] = $event['hours'];
                 $data['events'][$key]['slugable'] = $event['slugable']->toArray();
                 $data['events'][$key]['title'] = $event['title'];
-                $data['events'][$key]['release_date_files'] = null;
+                $data['events'][$key]['release_date_files'] = $event->release_date_files;
                 //$data['user']['events'][$key]['exam_access'] = $user->examAccess(0.8,$event->id);
 
             }
