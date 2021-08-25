@@ -505,6 +505,12 @@ Route::get('/sendSubscriptionNonPayment', 'Dashboard\CronjobsController@sendSubs
 
 Route::get('feed/{feed_type?}','Theme\FeedController@index');
 
+Route::group(['middleware' => ['web']], function () {
+    Route::get('home',function(){
+        return redirect('/');
+    });
+});
+
 Route::group(['middleware' => ['preview','web','auth.sms']], function () {
 
     Route::get('/regularly-mentioned-in-media', function(){
