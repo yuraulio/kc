@@ -552,16 +552,16 @@
                                                             <div class="col-lg-4">
 
                                                                 <?php $billing = json_decode($tran['billing_details'],true); ?>
-                                                                <?php //dd($billing); ?>
-                                                                @if(!empty($billing))
+                                                                
+                                                                @if($billing)
 
                                                                     @if($billing['billing'] == 1)
                                                                     <h6 class="heading-small text-muted mb-4">{{ __('Receipt Details') }}</h6>
-                                                                    <p><label class="form-control-label" for="input-method">{{ __('Name') }}: </label> {{$billing['billname']}} </p>
-                                                                    <p><label class="form-control-label" for="input-method">{{ __('Surname') }}: </label> {{$billing['billsurname']}} </p>
-                                                                    <p><label class="form-control-label" for="input-method">{{ __('Address') }}: </label> {{$billing['billaddress']}} {{$billing['billaddressnum']}}</p>
-                                                                    <p><label class="form-control-label" for="input-method">{{ __('PostCode') }}: </label> {{$billing['billpostcode']}} </p>
-                                                                    <p><label class="form-control-label" for="input-method">{{ __('City') }}: </label> {{$billing['billcity']}} </p>
+                                                                    @if(isset($billing['billname']))<p><label class="form-control-label" for="input-method">{{ __('Name') }}: </label> {{$billing['billname']}} </p>@endif
+                                                                    @if(isset($billing['billsurname']))<p><label class="form-control-label" for="input-method">{{ __('Surname') }}: </label> {{$billing['billsurname']}} </p>@endif
+                                                                    @if(isset($billing['billaddress']) && isset($billing['billaddressnum']))<p><label class="form-control-label" for="input-method">{{ __('Address') }}: </label> {{$billing['billaddress']}} {{$billing['billaddressnum']}}</p>@endif
+                                                                    @if(isset($billing['billpostcode']))<p><label class="form-control-label" for="input-method">{{ __('PostCode') }}: </label> {{$billing['billpostcode']}} </p>@endif
+                                                                    @if(isset($billing['billpostcode']))<p><label class="form-control-label" for="input-method">{{ __('City') }}: </label> {{$billing['billcity']}} </p>@endif
                                                                     <p><label class="form-control-label" for="input-method">{{ __('Vat number') }}: </label> @if(isset($billing['billafm'])){{$billing['billafm']}} @else  @endif </p>
                                                                     @elseif($billing['billing'] == 2)
                                                                     <h6 class="heading-small text-muted mb-4">{{ __('Invoice Details') }}</h6>
@@ -920,41 +920,41 @@
 
                         <div class="form-group{{ $errors->has('billname') ? ' has-danger' : '' }}">
                             <label class="form-control-label" for="input-billname">{{ __('Firstname') }}</label>
-                            <input type="text" name="billname" id="input-billname" class="form-control{{ $errors->has('billname') ? ' is-invalid' : '' }}" placeholder="{{ __('Firstname') }}" value="{{ ($invoice != null && $receipt['billname'] != null) ? $receipt['billname'] : '' }}" autofocus>
+                            <input type="text" name="billname" id="input-billname" class="form-control{{ $errors->has('billname') ? ' is-invalid' : '' }}" placeholder="{{ __('Firstname') }}" value="{{ ($invoice != null && isset($receipt['billname']) ) ? $receipt['billname'] : '' }}" autofocus>
 
                             @include('alerts.feedback', ['field' => 'billname'])
                         </div>
 
                         <div class="form-group{{ $errors->has('billsurname') ? ' has-danger' : '' }}">
                             <label class="form-control-label" for="input-billsurname">{{ __('Lastname') }}</label>
-                            <input type="text" name="billsurname" id="input-billsurname" class="form-control{{ $errors->has('billsurname') ? ' is-invalid' : '' }}" placeholder="{{ __('Lastname') }}" value="{{($invoice != null && $receipt['billsurname'] != null) ? $receipt['billsurname'] : ''}}" autofocus>
+                            <input type="text" name="billsurname" id="input-billsurname" class="form-control{{ $errors->has('billsurname') ? ' is-invalid' : '' }}" placeholder="{{ __('Lastname') }}" value="{{($invoice != null && isset($receipt['billsurname'])) ? $receipt['billsurname'] : ''}}" autofocus>
 
                             @include('alerts.feedback', ['field' => 'billsurname'])
                         </div>
                         <div class="form-group{{ $errors->has('billaddress') ? ' has-danger' : '' }}">
                             <label class="form-control-label" for="input-billaddress">{{ __('Address') }}</label>
-                            <input type="text" name="billaddress" id="input-billaddress" class="form-control{{ $errors->has('billaddress') ? ' is-invalid' : '' }}" placeholder="{{ __('Address') }}" value="{{($invoice != null && $receipt['billaddress'] != null) ? $receipt['billaddress'] : '' }}" autofocus>
+                            <input type="text" name="billaddress" id="input-billaddress" class="form-control{{ $errors->has('billaddress') ? ' is-invalid' : '' }}" placeholder="{{ __('Address') }}" value="{{($invoice != null && isset($receipt['billaddress'])) ? $receipt['billaddress'] : '' }}" autofocus>
 
                             @include('alerts.feedback', ['field' => 'billaddress'])
                         </div>
                         <div class="form-row">
                                 <div class="form-group{{ $errors->has('billaddressnum') ? ' has-danger' : '' }} col-md-4">
                                     <label class="form-control-label" for="input-billaddressnum">{{ __('Address No') }}</label>
-                                    <input type="number" name="billaddressnum" id="input-billaddressnum" class="form-control{{ $errors->has('billaddressnum') ? ' is-invalid' : '' }}" placeholder="{{ __('Address No') }}" value="{{($invoice != null && $receipt['billaddressnum'] != null) ? $receipt['billaddressnum'] : '' }}" autofocus>
+                                    <input type="number" name="billaddressnum" id="input-billaddressnum" class="form-control{{ $errors->has('billaddressnum') ? ' is-invalid' : '' }}" placeholder="{{ __('Address No') }}" value="{{($invoice != null && isset($receipt['billaddressnum'])) ? $receipt['billaddressnum'] : '' }}" autofocus>
 
                                     @include('alerts.feedback', ['field' => 'billaddressnum'])
                                 </div>
 
                                 <div class="form-group{{ $errors->has('billpostcode') ? ' has-danger' : '' }} col-md-4">
                                     <label class="form-control-label" for="input-billpostcode">{{ __('Postcode') }}</label>
-                                    <input type="number" name="billpostcode" id="input-billpostcode" class="form-control{{ $errors->has('billpostcode') ? ' is-invalid' : '' }}" placeholder="{{ __('Postcode') }}" value="{{ ($invoice != null && $receipt['billpostcode'] != null) ? $receipt['billpostcode'] : '' }}" autofocus>
+                                    <input type="number" name="billpostcode" id="input-billpostcode" class="form-control{{ $errors->has('billpostcode') ? ' is-invalid' : '' }}" placeholder="{{ __('Postcode') }}" value="{{ ($invoice != null && isset($receipt['billpostcode'])) ? $receipt['billpostcode'] : '' }}" autofocus>
 
                                     @include('alerts.feedback', ['field' => 'billpostcode'])
                                 </div>
 
                                 <div class="form-group{{ $errors->has('billcity') ? ' has-danger' : '' }} col-md-4">
                                     <label class="form-control-label" for="input-billcity">{{ __('City') }}</label>
-                                    <input type="text" name="billcity" id="input-billcity" class="form-control{{ $errors->has('billcity') ? ' is-invalid' : '' }}" placeholder="{{ __('City') }}" value="{{ ($invoice != null && $receipt['billcity'] != null) ? $receipt['billcity'] : '' }}" autofocus>
+                                    <input type="text" name="billcity" id="input-billcity" class="form-control{{ $errors->has('billcity') ? ' is-invalid' : '' }}" placeholder="{{ __('City') }}" value="{{ ($invoice != null && isset($receipt['billcity'])) ? $receipt['billcity'] : '' }}" autofocus>
 
                                     @include('alerts.feedback', ['field' => 'billcity'])
                                 </div>
@@ -1156,7 +1156,7 @@ $(document).on('click', '.ticket-card', function () {
     $img = @json($user->image);
 
 
-    if($img['name'] != '' && $img['details'] != null){
+    if($img['name'] != '' && $img['details'] != null && $img['details'] !=''){
         image_details = JSON.parse($img['details'].split(','))
         width = image_details.width
         height = image_details.height

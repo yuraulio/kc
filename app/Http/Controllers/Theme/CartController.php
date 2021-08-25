@@ -844,7 +844,7 @@ class CartController extends Controller
 
                 if($transaction) {
 
-                    $transaction->user()->save($dpuser);
+                    //$transaction->user()->save($dpuser);
                     $transaction->event()->save($ev);
 
                     if($installments <= 1){
@@ -870,7 +870,7 @@ class CartController extends Controller
                         $elearningInvoice->save();
 
 
-                        $elearningInvoice->user()->save($dpuser);
+                        //$elearningInvoice->user()->save($dpuser);
                         $elearningInvoice->event()->save($ev);
                         $elearningInvoice->transaction()->save($transaction);
                     }else{

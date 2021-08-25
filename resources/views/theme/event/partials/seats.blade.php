@@ -36,6 +36,11 @@
                continue;
             } 
 
+            if($ticket['type'] == 'Sponsored'){
+               continue;
+            } 
+            
+
          ?>
          <div class="col-4 col-sm-12">
        
