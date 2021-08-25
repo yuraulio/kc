@@ -158,8 +158,8 @@
                 cropBoxResizable: true,
                 minContainerWidth: 300,
                 minContainerHeight: 300,
-                // minCanvasWidth: 350,
-                // minCanvasHeight: 350,
+                minCanvasWidth: 350,
+                minCanvasHeight: 350,
 
                 data:{
                     x:parseInt(value.x),
