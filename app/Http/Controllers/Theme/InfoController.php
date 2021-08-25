@@ -303,9 +303,18 @@ class InfoController extends Controller
     		$checkemailuser = User::where('email', '=', $thismember['email'])->first();
 
     		if ($checkemailuser) {
-                if(!$elearning){
+                //if(!$elearning){
                     $transaction->user()->save($checkemailuser);
+                //}
+
+                if($elearning){
+                    $invoice = $transaction->invoice()->first();
+                    if($invoice){
+                        $invoice->user()->save($checkemailuser);
+
+                    }
                 }
+
                 if ($evid && $evid > 0) {
 
                     $today = date('Y/m/d'); 
@@ -443,6 +452,12 @@ class InfoController extends Controller
            
             $user->save();
             $transaction->user()->save($user);
+            if($elearning){
+                $invoice = $transaction->invoice()->first();
+                if($invoice){
+                    $invoice->user()->save($user);
+                }
+            }
             // Send the activation email
             $sent = Mail::send('activation.emails.activate_groupof2+', compact('user', 'code'), function ($m) use ($user) {
                 $m->to($user->email)->subject('Activate Your Account');
