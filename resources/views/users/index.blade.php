@@ -63,8 +63,8 @@
                                         <label>Status</label>
                                         <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col7_filter">
                                         <option value=""></option>
-                                        <option value="active"> Active </option>
-                                        <option value="inactive"> Inactive </option>
+                                        <option value="Active"> Active </option>
+                                        <option value="Inactive"> Inactive </option>
                                         </select>
                                     </div>
                                     <div class="col-sm-3 filter_col" id="filter_col6" data-column="6">
@@ -254,154 +254,8 @@
         max = new Date($('#max').val());
         let selected_event = '--All--';
 
-        // minDate = new DateTime($('#min'), {
-        // format: 'L'
-        // });
-        // //console.log('--min: '+minDate.val())
-        // maxDate = new DateTime($('#max'), {
-        //     format: 'L'
-        // });
-
-        //min = moment($('#min').val()).format('MM/DD/YYYY')
 
         initCounters()
-
-        // function statsByEvent(event, key)
-        // {
-        //     console.log(event)
-        //     selected_event = removeSpecial($('#select2-col9_filter-container').attr('title'))
-        //     console.log('event for stats'+event)
-        //     coupons = []
-
-        //     let sum = 0
-
-        //     user_ids.push($('#datatable-basic45').DataTable().column( 5 ).data()[key])
-        //     ticket_type = event[1]
-        //     ticket_amount = parseInt(event[2])
-
-        //     if(typeof event[3] !== "undefined"){
-        //         coupon = event[3]
-        //         console.log('////'+coupon)
-        //         if(selected_event.search('E-Learning') != -1){
-        //         //console.log(ticket_type)
-        //             coupons.push({
-        //                         'price': ticket_amount,
-        //                         'type' : ticket_type,
-        //                         'name' : coupon
-        //                     })
-
-
-        //         }
-        //     }
-
-        //     //console.log(ticket_amount)
-        //     if(typeof ticket_amount !== "undefined" && !isNaN(ticket_amount)){
-        //             sum = sum + ticket_amount
-        //             //console.log(sum)
-        //         }
-
-
-        //         if(ticket_type == 'Alumni'){
-        //             alumni = alumni + parseInt(ticket_amount)
-        //             count_alumni++
-        //         }else if(ticket_type == 'Regular'){
-        //             regular = regular + parseInt(ticket_amount)
-        //             count_regular++
-        //         }else if(ticket_type == 'Special'){
-        //             special = special + parseInt(ticket_amount)
-        //             count_special++
-        //         }else if(ticket_type == 'Sponsored'){
-        //             sponsored = sponsored + parseInt(ticket_amount)
-        //             count_sponsored++
-        //         }else if(ticket_type == 'Earlybirds' || ticket_type == 'EarlyBird'){
-        //             //console.log('has early bird')
-        //             early = early + parseInt(ticket_amount)
-        //             count_early++
-        //         }
-
-        //         if(selected_event.search('E-Learning') != -1){
-
-        //             if($('.elearning-infos').hasClass('d-none')){
-        //                 $('.elearning-infos').removeClass('d-none')
-        //                 $('#participants_info').removeClass('d-none')
-        //             }
-
-        //                 //$('#participants_info').removeClass('d-none')
-
-        //                 $('.elearning-coupons').remove()
-        //                 // Accepts the array and key
-        //                 const groupBy = (array, key) => {
-        //                 // Return the end result
-        //                 return array.reduce((result, currentValue) => {
-        //                     // If an array already present for key, push it to the array. Else create an array and push the object
-        //                     (result[currentValue[key]] = result[currentValue[key]] || []).push(
-        //                     currentValue
-        //                     );
-        //                     // Return the current iteration `result` value, this will be taken as next iteration `result` value and accumulate
-        //                     return result;
-        //                 }, {}); // empty object is the initial value for result object
-        //                 };
-
-        //                 // Group by color as key to the person array
-        //                 const couponsGroupedByName = groupBy(coupons, 'name');
-
-        //                 //console.log(couponsGroupedByName)
-
-        //                 sumCoupon = []
-        //                 //console.log(couponsGroupedByName)
-        //                 $.each(couponsGroupedByName, function(key, value){
-        //                     //console.log('from coupons')
-        //                     var sum1 = 0
-        //                     var count1 = 0
-        //                     $.each(value, function(key1, value1){
-        //                         count1++
-
-        //                         sum1 = sum1 + parseInt(value1.price)
-        //                     })
-
-        //                     elem =`
-        //                             <div class="elearning-coupons col-xl-3 col-md-6">
-        //                                 <div class="card card-stats">
-        //                                     <div class="card-body">
-        //                                         <div class="row">
-        //                                             <div class="col">
-        //                                                 <h5 class="card-title text-uppercase text-muted mb-0"><div id="count_sponsored">${count1}x ${key}:</div></h5>
-        //                                                 <span id="total" class="h2 font-weight-bold mb-0">${'€'+sum1}</span>
-        //                                             </div>
-        //                                         </div>
-        //                                     </div>
-        //                                 </div>
-        //                             </div>
-        //                         `
-
-        //                             $('#participants_info').append(elem)
-
-        //                 })
-
-        //                 }else{
-        //                 $('.elearning-infos').addClass('d-none')
-        //                 $('#participants_info').addClass('d-none')
-
-        //                 }
-
-        //                 $('#total').text('€'+sum)
-        //                 $('#special').text('€'+special)
-        //                 $('#regular').text('€'+regular)
-        //                 $('#alumni').text('€'+alumni)
-        //                 $('#early').text('€'+early)
-        //                 $('#sponsored').text('€'+sponsored)
-        //                 $('#count_special').text(count_special)
-        //                 $('#count_regular').text(count_regular)
-        //                 $('#count_alumni').text(count_alumni)
-        //                 $('#count_early').text(count_early)
-        //                 $('#count_sponsored').text(count_sponsored)
-
-
-        // }
-
-
-
-
 
         // Custom filtering function which will search data in column four between two values
         $.fn.dataTable.ext.search.push(
@@ -431,36 +285,42 @@
                 //console.log(row)
                 $.each(row, function(key1, value1) {
 
+                    if(selected_event != '--All--'){
+                        //console.log(value1)
+                        if(value1 != ''){
+                            event = value1.split('--')
+                            date1 = event[4]
+                            if(date1 !== undefined){
+                                var date = new Date(date1)
 
-                    //console.log(value1)
-                    if(value1 != ''){
-                        event = value1.split('--')
-                        date1 = event[4]
-                        if(date1 !== undefined){
-                            var date = new Date(date1)
+                                if (selected_event == removeSpecial(event[0]) && (( min === null && max === null ) ||
+                                ( min === null && date <= max ) ||
+                                ( min <= date   && max === null ) ||
+                                ( min <= date   && date <= max ))) {
+                                    find = true
+                                        return true
+                                    }else if(selected_event == '--All--' && (( min === null && max === null ) ||
+                                ( min === null && date <= max ) ||
+                                ( min <= date   && max === null ) ||
+                                ( min <= date   && date <= max ))){
+                                    find = true
+                                        return true
+                                }
 
-                            if (selected_event == removeSpecial(event[0]) && (( min === null && max === null ) ||
-                            ( min === null && date <= max ) ||
-                            ( min <= date   && max === null ) ||
-                            ( min <= date   && date <= max ))) {
-                                find = true
-                                    return true
-                                }else if(selected_event == '--All--' && (( min === null && max === null ) ||
-                            ( min === null && date <= max ) ||
-                            ( min <= date   && max === null ) ||
-                            ( min <= date   && date <= max ))){
-                                find = true
-                                    return true
                             }
 
+                            //var date = new Date( date1 );
+
+                            //console.log('inside row:'+date >= min)
+
+
                         }
-
-                        //var date = new Date( date1 );
-
-                        //console.log('inside row:'+date >= min)
-
-
+                    }else{
+                        find = true
                     }
+
+
+
                     if(find){
                         return true;
                     }
@@ -514,258 +374,6 @@
             return s
         }
 
-        function stats(selected_event){
-            coupons = []
-            user_ids = []
-            let sum = 0
-
-            initCounters()
-
-            selected_event = removeSpecial($('#select2-col9_filter-container').attr('title'))
-            events = $('#datatable-basic45').DataTable().column( 9 ).data()
-
-
-
-            $.each(events, function(key, value) {
-                let ticket_type = ''
-                let ticket_amount = 0;
-
-                value_without_spec = removeSpecial(value)
-                let find = value_without_spec.indexOf(selected_event)
-                //console.log(find)
-                if(find != -1){
-
-                    found_eve = value_without_spec.split('||')
-                    //console.log(found_eve)
-                    let count = 0;
-                    $.each(found_eve, function(key1, value1) {
-                        a = value1.split('--')
-                        //console.log('////////')
-                        if(removeSpecial(a[0]) == selected_event){
-                            user_ids.push($('#datatable-basic45').DataTable().column( 5 ).data()[key])
-                            ticket_type = a[1]
-                            ticket_amount = parseInt(a[2])
-
-                            if(typeof a[3] !== "undefined"){
-                                coupon = a[3]
-                                //console.log('////'+a[3])
-                                if(selected_event.search('E-Learning') != -1){
-                                //console.log(ticket_type)
-                                    coupons.push({
-                                                'price': ticket_amount,
-                                                'type' : ticket_type,
-                                                'name' : coupon
-                                            })
-
-
-                                }
-                            }
-                        }
-
-                    })
-
-                }
-
-
-                //console.log(ticket_amount)
-                if(typeof ticket_amount !== "undefined" && !isNaN(ticket_amount)){
-                    sum = sum + ticket_amount
-                    //console.log(sum)
-                }
-
-
-                if(ticket_type == 'Alumni'){
-                    alumni = alumni + parseInt(ticket_amount)
-                    count_alumni++
-                }else if(ticket_type == 'Regular'){
-                    regular = regular + parseInt(ticket_amount)
-                    count_regular++
-                }else if(ticket_type == 'Special'){
-                    special = special + parseInt(ticket_amount)
-                    count_special++
-                }else if(ticket_type == 'Sponsored'){
-                    sponsored = sponsored + parseInt(ticket_amount)
-                    count_sponsored++
-                }else if(ticket_type == 'Earlybirds' || ticket_type == 'EarlyBird'){
-                    //console.log('has early bird')
-                    early = early + parseInt(ticket_amount)
-                    count_early++
-                }
-
-            })
-
-
-
-            if(selected_event.search('E-Learning') != -1){
-
-                if($('.elearning-infos').hasClass('d-none')){
-                    $('.elearning-infos').removeClass('d-none')
-                    $('#participants_info').removeClass('d-none')
-                }
-
-                //$('#participants_info').removeClass('d-none')
-
-                $('.elearning-coupons').remove()
-                // Accepts the array and key
-                const groupBy = (array, key) => {
-                // Return the end result
-                return array.reduce((result, currentValue) => {
-                    // If an array already present for key, push it to the array. Else create an array and push the object
-                    (result[currentValue[key]] = result[currentValue[key]] || []).push(
-                    currentValue
-                    );
-                    // Return the current iteration `result` value, this will be taken as next iteration `result` value and accumulate
-                    return result;
-                }, {}); // empty object is the initial value for result object
-                };
-
-                // Group by color as key to the person array
-                const couponsGroupedByName = groupBy(coupons, 'name');
-
-                //console.log(couponsGroupedByName)
-
-                sumCoupon = []
-                //console.log(couponsGroupedByName)
-                $.each(couponsGroupedByName, function(key, value){
-                    //console.log('from coupons')
-                    var sum1 = 0
-                    var count1 = 0
-                    $.each(value, function(key1, value1){
-                        count1++
-
-                        sum1 = sum1 + parseInt(value1.price)
-                    })
-
-                    elem =`
-                            <div class="elearning-coupons col-xl-3 col-md-6">
-                                <div class="card card-stats">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col">
-                                                <h5 class="card-title text-uppercase text-muted mb-0"><div id="count_sponsored">${count1}x ${key}:</div></h5>
-                                                <span id="total" class="h2 font-weight-bold mb-0">${'€'+sum1}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        `
-
-                            $('#participants_info').append(elem)
-
-                })
-
-            }else{
-                $('.elearning-infos').addClass('d-none')
-                $('#participants_info').addClass('d-none')
-
-            }
-
-            $('#total').text('€'+sum)
-            $('#special').text('€'+special)
-            $('#regular').text('€'+regular)
-            $('#alumni').text('€'+alumni)
-            $('#early').text('€'+early)
-            $('#sponsored').text('€'+sponsored)
-            $('#count_special').text(count_special)
-            $('#count_regular').text(count_regular)
-            $('#count_alumni').text(count_alumni)
-            $('#count_early').text(count_early)
-            $('#count_sponsored').text(count_sponsored)
-
-
-
-        }
-
-
-
-
-        function getStatsByDate(min, max, details){
-
-            if(details.length > 2){
-
-                title = details[0]
-                type = details[1]
-                amount = parseInt(details[2])
-                datatable_date = details[4]
-                datatable_date = new Date(datatable_date);
-                datatable_date = moment(datatable_date).format('MM/DD/YYYY')
-
-                if(type != ''){
-                if(min != 'Invalid date' && max == 'Invalid date'){
-                    if(moment(datatable_date).isAfter(min)){
-                        sum = sum + amount
-
-
-                        if(type == 'Alumni'){
-                            alumni = alumni + amount
-                            count_alumni++
-                        }else if(type == 'Regular'){
-                            regular = regular + amount
-                            count_regular++
-                        }else if(type == 'Special'){
-                            special = special + amount
-                            count_special++
-                        }else if(type == 'Sponsored'){
-                            sponsored = sponsored + amount
-                            count_sponsored++
-                        }else if(type == 'Early birds'){
-                            early = early + amount
-                            count_early++
-                        }
-                    }
-                }else if(min !='Invalid date' && max != 'Invalid date'){
-                    if(moment(datatable_date).isAfter(min) && moment(datatable_date).isBefore(max)){
-                        sum = sum + amount
-
-                        if(type == 'Alumni'){
-                            alumni = alumni + amount
-                            count_alumni++
-                        }else if(type == 'Regular'){
-                            regular = regular + amount
-                            count_regular++
-                        }else if(type == 'Special'){
-                            special = special + amount
-                            count_special++
-                        }else if(type == 'Sponsored'){
-                            sponsored = sponsored + amount
-                            count_sponsored++
-                        }else if(type == 'Early birds'){
-                            early = early + amount
-                            count_early++
-                        }
-                    }
-                }else if(min == 'Invalid date' && max != 'Invalid date'){
-                    if(moment(datatable_date).isBefore(max)){
-                        sum = sum + amount
-
-                        if(type == 'Alumni'){
-                            alumni = alumni + amount
-                            count_alumni++
-                        }else if(type == 'Regular'){
-                            regular = regular + amount
-                            count_regular++
-                        }else if(type == 'Special'){
-                            special = special + amount
-                            count_special++
-                        }else if(type == 'Sponsored'){
-                            sponsored = sponsored + amount
-                            count_sponsored++
-                        }else if(type == 'Early birds'){
-                            early = early + amount
-                            count_early++
-                        }
-                    }
-                }
-            }
-
-            }
-
-
-
-
-    }
-
     //Refilter the table
     $('#min, #max').on('change', function () {
         $('#participants_info').removeClass('d-none')
@@ -816,36 +424,30 @@
         // $('#count_sponsored').text(count_sponsored)
     });
 
-
-
-
-
-
-
         function updateElearningInfos(ids, event, page){
             // user_ids = $('#datatable-basic45').DataTable().column( 5 ).data()
             // console.log(user_ids)
 
             $.ajax({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            type: 'post',
-            url: '/admin/events/fetchElearningInfos',
-            data: {'ids': ids, 'event': event, 'page': page},
-            success: function (data) {
-                data = JSON.parse(data)
-                if(data){
-                    $.each(data, function(key, value) {
-                        //console.log(value)
-                        $('#user_'+value.id).find('.videoSeen').text(value.video_seen)[0]
-                    })
-                   //data = data.data
-                    //$('.exp_'+data.id).text(data.date)
-                }
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: 'post',
+                url: '/admin/events/fetchElearningInfos',
+                data: {'ids': ids, 'event': event, 'page': page},
+                success: function (data) {
+                    data = JSON.parse(data)
+                    if(data){
+                        $.each(data, function(key, value) {
+                            //console.log(value)
+                            $('#user_'+value.id).find('.videoSeen').text(value.video_seen)[0]
+                        })
+                    //data = data.data
+                        //$('.exp_'+data.id).text(data.date)
+                    }
 
-            }
-        });
+                }
+            });
         }
 
         function stats_elearning(){

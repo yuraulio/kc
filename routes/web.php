@@ -53,7 +53,7 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::post('/summary/update/{summary}', 'SummaryController@update')->name('summary.update');
 
     //Participants
-    Route::get('transaction/participants', 'TransactionController@participants')->name('transaction.participants');
+    Route::get('transaction/participants', 'TransactionController@participants_inside_revenue')->name('transaction.participants');
     Route::post('transaction/updateExpirationDate', ['as' => 'transaction.updateExpirationDate', 'uses' => 'TransactionController@updateExpirationDate']);
     Route::post('home/fetchDashboardData', ['as' => 'home.fetchData', 'uses' => 'HomeController@fetchByDate']);
 
@@ -498,10 +498,10 @@ Route::group(['middleware' => ['web']], function () {
 //sendSubscriptionRemind
 
 Route::get('dropbox/KUBnqOX1FNyTh72','DropboxController@cacheDropboxCLI');
-Route::get('/unroll-elearning-users', 'Dashboard\CronjobsController@unroll'); 
+Route::get('/unroll-elearning-users', 'Dashboard\CronjobsController@unroll');
 Route::get('/sendNonpaymentEmail', 'Dashboard\CronjobsController@sendNonPayment');
 Route::get('/sendSubscriptionNonPayment', 'Dashboard\CronjobsController@sendSubscriptionNonPayment');
-//Route::get('/sendInvoice', 'Dashboard\CronjobsController@sendInvoice'); 
+//Route::get('/sendInvoice', 'Dashboard\CronjobsController@sendInvoice');
 
 Route::get('feed/{feed_type?}','Theme\FeedController@index');
 
