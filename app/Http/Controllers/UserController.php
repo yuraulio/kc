@@ -72,13 +72,13 @@ class UserController extends Controller
             $data['transactions'][$key] = group_by('event_id', $item);
         }
 
-
+        //dd($model->with('role', 'image','statusAccount', 'events_for_user_list')->get()[0]);
         //dd($data['transactions']);
         //dd($model->with('role', 'image')->get()[0]);
 
         //dd($model->with('role', 'image')->get()->toArray()[0]['image']);
         //dd($model->with('role', 'image','statusAccount', 'events_for_user_list')->get()->toArray()[10]);
-        
+
         return view('users.index', ['users' => $model->with('role', 'image','statusAccount', 'events_for_user_list')->get(), 'data' => $data]);
     }
 
@@ -94,12 +94,12 @@ public function index(User $model)
         $data['users'] = $model->with('role', 'image','statusAccount', 'events_for_user_list','statisticGroupByEvent','events','ticket','transactionss')->get();
 
         //$this->getAllTransactions($data['users']);
-    
+
 
         $data['events'] = (new EventController)->fetchAllEvents();
         $data['transactions'] = $this->getAllTransactions($data['users']);
         $data['coupons'] = (new CouponController)->fetchAllCoupons();
-      
+
 
         //groupby user_id(level1)
         $data['transactions'] = group_by('user_id', $data['transactions']);
@@ -126,12 +126,12 @@ public function index(User $model)
             $events = $user['events']->groupBy('id');
             foreach($user['transactionss'] as $transaction){
                 //dd(empty($transaction['subscription']));
-                 
+
                     $event = $events[$transaction['event']->first()->id]->first();
                     if(!$event){
                         continue;
-                    } 
-                  
+                    }
+
                     $statistic = $user['statisticGroupByEvent']->groupBy('event_id');
 
                     $tickets = $user['ticket']->groupBy('event_id');
@@ -149,7 +149,7 @@ public function index(User $model)
                     }else{
                         $coupon_code = '-';
                     }
-                   
+
                     $videos = isset($statistic[$event->id]) ?
                         $statistic[$event->id]->first()->pivot : null;
 
@@ -159,14 +159,14 @@ public function index(User $model)
                     $videos = 'fdw';//isset($videos) ? json_decode($videos->videos,true) : null;
 
                     $isElearning = $event->delivery->first() && $event->delivery->first()->id == 143;
-                    
+
 
                     $data['transactions'][] = ['id' => $transaction['id'], 'user_id' => $user['id'],'name' => $user['firstname'].' '.$transaction->user[0]['lastname'],
                     'event_id' => $event->id,'event_title' =>$event['title'],'coupon_code' => $coupon_code, 'type' => $ticketType,'ticketName' => $ticketName,
                     'date' => date_format($transaction['created_at'], 'm/d/Y'), 'amount' => $transaction['amount'],
                     'is_elearning' => $isElearning,
                     'coupon_code' => $transaction['coupon_code'],'videos_seen' => '0','expiration'=>$expiration];
-                
+
             }
         }
         //dd($data['transactions']);

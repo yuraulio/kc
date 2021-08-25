@@ -45,42 +45,38 @@
 
 
                 <div class="collapse" id="collapseExample">
-                <div class="container">
+                    <div class="container">
                         <div class="row">
-                            <div class="col-sm-4" id="filter_col1" data-column="1">
+                            <div class="col-sm-3 filter_col" id="filter_col1" data-column="1">
                                 <label>Event</label>
                                 <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="col1_filter">
                                 <option selected value> -- All -- </option>
                                 </select>
                             </div>
-                            <div class="col-sm-4" id="filter_col4" data-column="4">
+                            <div class="col-sm-3 filter_col" id="filter_col4" data-column="4">
                                 <label>Coupon</label>
                                 <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col4_filter" placeholder="Coupon">
                                 <option selected value> -- All -- </option>
                                 </select>
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-3 filter_col">
                                 <div class="form-group">
-                                    <label>Min</label>
-                                    <input type="text" id="min" name="min">
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Max</label>
-                                    <input type="text" id="max" name="max">
+                                    <label>From:</label>
+                                    <input class="select2-css" type="text" id="min" name="min">
                                 </div>
                             </div>
-                            <Button type="button" onclick="ClearFields();" class="btn btn-secondary btn-lg "> Clear Filter</Button>
+                            <div class="col-sm-3 filter_col">
+                                <div class="form-group">
+                                    <label>To:</label>
+                                    <input class="select2-css" type="text" id="max" name="max">
+                                </div>
+                            </div>
+                            {{--<Button type="button" onclick="ClearFields();" class="btn btn-secondary btn-lg "> Clear Filter</Button>--}}
                         </div>
                     </div>
                 </div>
-                {{--<div class="card bg-gradient-default">
+                <div class="card bg-gradient-default">
                     <div class="card-body">
-                        <!-- <h3 class="card-title text-white">Testimonial</h3>
-                        <blockquote class="blockquote text-white mb-0">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                            <footer class="blockquote-footer text-danger">Someone famous in <cite title="Source Title">Source Title</cite></footer>
-                        </blockquote> -->
                         <div class="container">
                             <div class="row">
                                 <div class="col-sm">
@@ -116,7 +112,7 @@
                         </div>
                         </div>
                     </div>
-                </div>--}}
+                </div>
 
                 <table class="table align-items-center table-flush"  id="participants_table">
                     <thead class="thead-light">
@@ -150,29 +146,12 @@
                         @foreach ($transactions as $transaction)
                         <?php //dd($transaction); ?>
                             <tr>
-                                <td>
-
-                                    {{$transaction['name']}}
-
-                                </td>
-                                <td>
-
-                                {{$transaction['event_title']}};
-
-                                </td>
-                                <td>
-
-                                        {{ $transaction['type'] }}
-
-                                </td>
+                                <td>{{$transaction['name']}}</td>
+                                <td>{{$transaction['event_title']}}</td>
+                                <td>{{ $transaction['type'] }}</td>
                                 <td><?= '€'.number_format($transaction['amount'], 2, '.', ''); ?></td>
-
                                 <td>{{ $transaction['coupon_code'] }}</td>
-                                <td class="participant_elearning none">
-
-                                   {{$transaction['videos_seen']}}
-
-                                </td>
+                                <td class="participant_elearning none">{{$transaction['videos_seen']}}</td>
 
                                 <td>{{ $transaction['date']}}</td>
 

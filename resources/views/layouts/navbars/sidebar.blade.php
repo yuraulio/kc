@@ -226,6 +226,9 @@
                         </a>
                         <div class="collapse show" id="navbar-revenue">
                             <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item  {{ $elementName == 'participants-management' ? 'active' : '' }}">
+                                        <a href="{{ route('transaction.participants') }}" class="nav-link">{{ __('Participants') }}</a>
+                                    </li>
                                     <li class="nav-item  {{ $elementName == 'subscriptions-management' ? 'active' : '' }}">
                                         <a href="{{ route('subscriptions.index') }}" class="nav-link">{{ __('Subscriptions') }}</a>
                                     </li>
