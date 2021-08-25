@@ -132,8 +132,9 @@ class ExamController extends Controller
             $averageScore = number_format((float)$averageScore, 2, '.', '');
 
         }
-              
-            
+        
+           
+        dd(json_decode($exam->questions));
         return view('admin.exams.create', ['user' => $user, 'events' => $events, 'edit' => $edit, 'exam' => $exam,'event_id'=>$event_edit,
                     'results' => $results,'averageHour' => $averageHour, 'averageScore' => $averageScore]);
     }
