@@ -1,6 +1,6 @@
 @extends('theme.layouts.master')
 @section('content')
-@inject('frontHelp', 'Library\FrontendHelperLib')
+{{--@inject('frontHelp', 'Library\FrontendHelperLib')--}}
 <main id="main-area" class="search-results-page-main"  role="main">
 <script type="application/ld+json">
                 {
@@ -20,7 +20,7 @@
       <h1 class="search-results-title">Search results for <span>{{ $search_term }}</span></h1>
       <?php
          $results = 0;
-         
+
          if(!empty($list)){
              $results += count($list);
          }
@@ -28,7 +28,7 @@
          if(isset($instructors)){
              $results += count($instructors);
          }*/
-         
+
          ?>
       @if($results > 0 )
       <p class="search-results-text"><span>{{$results}} result(s) </span> found containing the term <span>{{ $search_term }}.</span></p>
@@ -42,19 +42,19 @@
    <?php echo empty($list)?>
    @if (count($list) > 0)
       <div class="section section--dynamic-learning">
-        
+
          @foreach($list as $key => $row)
-         @if($row->view_tpl != 'elearning_event' && $row->view_tpl != 'elearning_greek')
+         @if($row['view_tpl'] != 'elearning_event' && $row['view_tpl'] != 'elearning_greek')
          <?php
-            
-                $chmonth = date('m', strtotime($row->published_at));
-                $month = date('F Y', strtotime($row->published_at));
-         
-                
+
+                $chmonth = date('m', strtotime($row['published_at']));
+                $month = date('F Y', strtotime($row['published_at']));
+
+
                 $isonCart = Cart::search(function ($cartItem, $rowId) use ($row) {
                     return $cartItem->id === $row->id;
                 });
-                
+
                 ?>
          <?php
             $location = [];
@@ -79,17 +79,36 @@
             <?php
 
             $loc = '';
-            
-            if(isset($location->name)){
-               $loc = $location->name;
+            if(count($row['city']) != 0){
+               $loc = $row['city'][0]['name'];
             }
 
-            
+
             $search1 = strpos(trim(strtolower($loc)),trim(strtolower($search_term)));
-            $search2 = strpos(trim(strtolower($frontHelp->pField($row, 'title'))),trim(strtolower($search_term)));
+            $search2 = strpos(trim(strtolower($row['title'])),trim(strtolower($search_term)));
            // $search3 = strpos(trim(strtolower($lvalue['header'])),trim(strtolower($search_term)));
            // $search4 = false;
+            //dd($row);
 
+            foreach($row['summary1'] as $sum){
+                if($sum['section'] == 'date'){
+                    $exp = $sum['title'];
+                }
+            }
+
+
+            if(isset($row['hours'])){
+                $duration = $row['hours'];
+
+            }else{
+                foreach($row['summary1'] as $sum){
+                    if($sum['section'] == 'duration'){
+                        $duration = explode(' hours', $sum['title']);
+                        $duration = $duration[0];
+                        //dd($duration);
+                    }
+                }
+            }
 
             ?>
 
@@ -97,27 +116,27 @@
          <div class="dynamic-courses-wrapper dynamic-courses-wrapper--style2">
             <div class="item">
                <div class="left">
-                  <h2 class="@if($search2!==false) search-highlight @endif">{{ $frontHelp->pField($row, 'title') }}</h2>
+                  <h2 class="@if($search2!==false) search-highlight @endif">{{ $row['title'] }}</h2>
                   <div class="bottom">
-                     @if(isset($location->name))   <a href="{{ $location->slug }}" class="location" title="{{ $location->name }}">
-                     <img width="20" src="/theme/assets/images/icons/marker.svg" alt=""> <span class="@if($search1!==false) search-highlight @endif"> {{ $location->name }} </span></a> @else City @endif
-                     <div class="duration"><img width="20" src="/theme/assets/images/icons/icon-calendar.svg" alt="">@if (isset($row['c_fields']['simple_text'][0]) && $row['c_fields']['simple_text'][0]['value'] != '') {{ $row['c_fields']['simple_text'][0]['value'] }} @else Date @endif</div>
-                     <div class="expire-date"><img width="20" src="/theme/assets/images/icons/Times.svg" alt="">{{ $row['c_fields']['simple_text'][34]['value'] }}h</div>
+                     @if(count($row['city']) != 0)   <a href="{{ $row['city'][0]['slugable']['slug'] }}" class="location" title="{{ $row['city'][0]['name'] }}">
+                     <img width="20" src="/theme/assets/images/icons/marker.svg" alt=""> <span class="@if($search1!==false) search-highlight @endif"> {{ $row['city'][0]['name'] }} </span></a> @else City @endif
+                     <div class="duration"><img width="20" src="/theme/assets/images/icons/icon-calendar.svg" alt="">@if (isset($exp)) {{ $exp }} @else Date @endif</div>
+                     <div class="expire-date"><img width="20" src="/theme/assets/images/icons/Times.svg" alt="">{{ $duration }} h</div>
                   </div>
                </div>
                <div class="right">
-                  <?php  if (isset($eventprices[$row->id])) {
-                     $price = $eventprices[$row->id];												
-                     
+                  <?php  if (count($row['ticket']) != 0) {
+                     $price = $row['ticket'][0]['pivot']['price'];
+
                      }
                      else { $price = 0; } ?>
 
-                  @if($row->view_tpl == 'elearning_pending')
+                  @if($row['view_tpl'] == 'elearning_pending')
                      <div class="price">Pending</div>
                   @else
                      <div class="price">from €{{$price}}</div>
                   @endif
-                  <a href="{{ $frontHelp->pSlug($row) }}" class="btn btn--secondary btn--md">Course Details</a>
+                  <a href="{{ $row['slugable']['slug'] }}" class="btn btn--secondary btn--md">Course Details</a>
                </div>
             </div>
             <!-- ./item -->
@@ -126,17 +145,19 @@
             <div class="dynamic-courses-wrapper">
                <div class="item">
                   <div class="left">
-                     <h2>{{ $frontHelp->pField($row, 'title') }}</h2>
-                     <div class="expire-date"><img width="20" src="/theme/assets/images/icons/Times.svg" alt="">{{ $row['c_fields']['simple_text'][34]['value'] }}h</div>
+                     <h2>{{ $row['title'] }}</h2>
+                     <div class="expire-date"><img width="20" src="/theme/assets/images/icons/Times.svg" alt="">{{ $duration }} h</div>
                   </div>
                   <div class="right">
-                     <?php  if (isset($eventprices[$row->id])) {
-                        $price = $eventprices[$row->id];												
-                        
-                        }
+
+                     <?php
+                    if(count($row['ticket']) != 0)
+                    {
+                        $price = $row['ticket'][0]['pivot']['price'];
+                    }
                         else { $price = 0; } ?>
                      <div class="price">from €{{$price}}</div>
-                     <a href="{{ $frontHelp->pSlug($row) }}" class="btn btn--secondary btn--md">Course Details</a>
+                     <a href="{{ $row['slugable']['slug'] }}" class="btn btn--secondary btn--md">Course Details</a>
                   </div>
                   <!-- ./item -->
                </div>
@@ -144,7 +165,7 @@
                @endforeach
             </div>
             <!-- ./dynamic-courses-wrapper -->
-            
+
          </div>
          @endif
          <!--
@@ -154,7 +175,7 @@
 
             <?php
 
-               
+
                $search1 = strpos(trim(strtolower($lvalue['title'])),trim(strtolower($search_term)));
                $search2 = strpos(trim(strtolower($lvalue['subtitle'])),trim(strtolower($search_term)));
                $search3 = strpos(trim(strtolower($lvalue['header'])),trim(strtolower($search_term)));
