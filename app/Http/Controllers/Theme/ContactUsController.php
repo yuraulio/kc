@@ -36,7 +36,7 @@ class ContactUsController extends Controller
 
             	 $fullname = $mail_data['cname'] . ' ' . $mail_data['csurname'];
 
-            	$adminemail = 'moulopoulos@lioncode.gr';
+            	$adminemail = 'info@knowcrunch.com';
                 if(isset($mail_data['eventtitle'])) {
                     $subject = 'KnowCrunch – information about ' . $mail_data['eventtitle'];
                 }

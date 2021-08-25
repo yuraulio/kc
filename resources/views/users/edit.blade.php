@@ -434,7 +434,8 @@
                                         </div>
 
                                         <div style="display: inline-flex;">
-                                            <button class="update_exp btn btn-info btn-sm" style="margin-top:10px;" type="button" data-id="{{$user_event->id}}" >Update</button>
+                                            <button class="update_exp btn btn-info btn-sm" style="margin-top:10px;" type="button"
+                                                data-user_id="{{$user_event->pivot->user_id}}" data-event_id="{{$user_event->id}}" >Update</button>
                                         </div>
                                     </td>
 
@@ -1396,18 +1397,19 @@ $(document).on('click', '.ticket-card', function () {
 	    });
 
         $( ".update_exp" ).on( "click", function() {
-            const transaction_id = $(this).data('id')
-            let new_date =  $('#'+transaction_id).val()
-            alert(new_date)
+            let user_id = $(this).data('user_id')
+            let event_id =  $(this).data('event_id')
+            let new_date =  $('#'+ event_id).val()
+            
+            
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 type: 'post',
                 url: '/admin/transaction/updateExpirationDate',
-                data: {'id': transaction_id, 'date': new_date},
+                data: {'user_id': user_id ,'event_id': event_id , 'date': new_date},
                 success: function (data) {
-                    console.log(data)
                     if(data){
                         data = data.data
                         $('.exp_'+data.id).text(data.date)

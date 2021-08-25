@@ -20,6 +20,7 @@ class CheckForEvent
     public function handle($request, Closure $next)
     {
         
+        
         if(!isset($request->route()->parameters['course'])){
             abort(404);
         }
@@ -42,13 +43,12 @@ class CheckForEvent
         }
 
         $event = $user->events->where('id',$eventId)->first();
-        $eventSub = $user->subscriptionEvents->where('event_id',$eventId)->first();
-
+        $eventSub = $user->subscriptionEvents->where('id',$eventId)->first();
         if(!$event && !$eventSub){
             //return redirect('/myaccount');
             abort(404);
         }
-        
+      
         $event = isset($event) ? $event : $eventSub;
 
         $today = date('Y/m/d'); 

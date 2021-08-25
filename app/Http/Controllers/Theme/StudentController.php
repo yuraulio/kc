@@ -293,10 +293,11 @@ class StudentController extends Controller
 
                 $video_access = false;
                 $expiration_event = $event->pivot['expiration'];
+          
                 $expiration_event = strtotime($expiration_event);
 
-                $now = strtotime("now");
-
+                $now = strtotime(date('Y-m-d'));
+                //dd($now);
                 //dd($expiration_event >= $now);
                 if($expiration_event >= $now || !$expiration_event)
                     $video_access = true;
@@ -622,7 +623,8 @@ class StudentController extends Controller
             $event = $user->instructor->first()->event()->wherePivot('event_id', $event['id'])->first();
 
         }else{
-            $event = $user->events()->wherePivot('event_id', $event['id'])->first();
+            $event = $user->events()->wherePivot('event_id', $event['id'])->first() ? $user->events()->wherePivot('event_id', $event['id'])->first() :
+                $user->subscriptionEvents->where('id',$event['id'])->first();
         }
 
         $data['details'] = $event->toArray();

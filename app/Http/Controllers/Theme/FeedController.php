@@ -41,6 +41,10 @@ class FeedController extends Controller
             if(!$slug->slugable){
                 continue;
             } 
+
+            if(!get_status_by_slug($slug->slug)){
+                continue;
+            }
             Sitemap::addTag($this->baseUrl.$slug->slug, $slug->slugable->updated_at, 'daily', '0.8');
 
             
