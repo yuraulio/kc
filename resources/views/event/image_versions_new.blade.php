@@ -136,8 +136,8 @@
     let prof_image = false
     var versions = @json($versions);
     if("{{$event}}" && versions != null){
-        image_details = @json($event)
-        let myObj = {};
+        image_details = @json($event);
+        let myObj = {}
         let myArr = []
 
         $.each(versions, function(key, value){

@@ -32,7 +32,7 @@ class EventController extends Controller
         $this->authorize('manage-users', User::class);
         $user = Auth::user();
 
-        $data['live_courses'] = count(Event::where('published', 1)->where('status', '0')->orwhere('status', '2')->get());
+        $data['live_courses'] = count(Event::where('published', 1)->where('status', [0,2])->get());
         $data['completed_courses'] = count(Event::where('published', 1)->where('status', '0')->orwhere('status', '3')->get());
         $data['total_courses'] = count(Event::all());
 
