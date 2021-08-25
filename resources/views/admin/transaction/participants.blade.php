@@ -75,44 +75,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="card bg-gradient-default">
-                    <div class="card-body">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-sm">
-                                    <h4 class="card-title text-white">Total Amount:</h4>
-                                    <div class="text-white" id="total"></div>
-                                </div>
-                                <div class="col-sm">
-                                    <h4 class="card-title text-white"><div id="count_early"></div> Early birds:</h4>
-                                    <div class="text-white" id="early"></div>
-                                </div>
-                                <div class="col-sm">
-                                    <h4 class="card-title text-white"><div id="count_regular"></div> Regular:</h4>
-                                    <div class="text-white" id="regular"></div>
-                                </div>
-                                <div class="col-sm">
-                                    <h4 class="card-title text-white"><div id="count_alumni"></div> Alumni:</h4>
-                                    <div class="text-white" id="alumni"></div>
-                                </div>
-                                <div class="col-sm">
-                                    <h4 class="card-title text-white"><div id="count_special"></div> Special:</h4>
-                                    <div class="text-white" id="special"></div>
-                                </div>
-                                <div class="col-sm">
-                                    <h4 class="card-title text-white"><div id="count_sponsored"></div> Sponsored:</h4>
-                                    <div class="text-white" id="sponsored"></div>
-                                </div>
-                                <hr id="participantHr">
-
-                            </div>
-                        </div>
-                        <div style="margin-top:10px" class="container">
-                        <div class="row" id="participants_info">
-                        </div>
-                        </div>
-                    </div>
-                </div>
 
                 <table class="table align-items-center table-flush"  id="participants_table">
                     <thead class="thead-light">
@@ -125,7 +87,7 @@
                             <th class="participant_elearning none">{{ __('Video Seen') }}</th>
                             <th scope="col">{{ __('Registration Date') }}</th>
                             <th class="participant_elearning none">{{ __('Initial Expiration Date') }}</th>
-                            <th class="participant_elearning none">{{ __('New Expiration Date') }}</th>
+                            {{--<th class="participant_elearning none">{{ __('New Expiration Date') }}</th>--}}
                         </tr>
                     </thead>
                     <tfoot>
@@ -138,7 +100,7 @@
                             <th class="participant_elearning none">{{ __('Video Seen') }}</th>
                             <th>{{ __('Registration Date') }}</th>
                             <th class="participant_elearning none">{{ __('Initial Expiration Date') }}</th>
-                            <th class="participant_elearning none">{{ __('New Expiration Date') }}</th>
+                            {{--<th class="participant_elearning none">{{ __('New Expiration Date') }}</th>--}}
                         </tr>
                     </tfoot>
                     <tbody>
@@ -161,10 +123,10 @@
 
                                 </td>
 
-                                <td class="participant_elearning none">
+                                {{--<td class="participant_elearning none">
                                     <input id="{{$transaction['id']}}" class="form-control datepicker" placeholder="Select date" type="text" value="<?= ($transaction['expiration'] != null) ? $transaction['expiration'] : ''; ?>">
                                     <button class="update_exp btn btn-info btn-sm" style="margin-top:10px;" type="button" data-id="{{$transaction['id']}}" >Update</button>
-                                </td>
+                                </td>--}}
                             </tr>
                         @endforeach
                     </tbody>
@@ -253,40 +215,6 @@ $.fn.dataTable.ext.search.push(
 
 $(document).ready(function() {
 
-
-
-
-
-    // $( ".update_exp" ).on( "click", function() {
-    //     const transaction_id = $(this).data('id')
-    //     let new_date =  $('#'+transaction_id).val()
-    //     $.ajax({
-    //         headers: {
-    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //         },
-    //         type: 'post',
-    //         url: '/admin/transaction/updateExpirationDate',
-    //         data: {'id': transaction_id, 'date': new_date},
-    //         success: function (data) {
-    //             //console.log(data)
-    //             if(data){
-    //                 data = data.data
-    //                 $('.exp_'+data.id).text(data.date)
-    //             }
-
-    //         }
-    //     });
-    // });
-
-
-    // Create date inputs
-    // minDate = new DateTime($('#min'), {
-    //     format: 'L'
-    // });
-    // maxDate = new DateTime($('#max'), {
-    //     format: 'L'
-    // });
-
     // Create date inputs
     //console.log($('#min'))
     minDate = new DateTime($('#min'), {
@@ -355,9 +283,11 @@ $(document).ready(function() {
     })
 
     function getStatsByDate(min, max, key, value){
+
+        value = value.replace("€", "")
         if(min != 'Invalid date' && max == 'Invalid date'){
             if(moment(datatable_date).isAfter(min)){
-                sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key])
+                sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key].replace("€",""))
 
 
                 if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Alumni'){
@@ -379,7 +309,7 @@ $(document).ready(function() {
             }
         }else if(min !='Invalid date' && max != 'Invalid date'){
             if(moment(datatable_date).isAfter(min) && moment(datatable_date).isBefore(max)){
-                sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key])
+                sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key].replace("€",""))
 
                 if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Alumni'){
                     alumni = alumni + parseInt(value)
@@ -400,7 +330,7 @@ $(document).ready(function() {
             }
         }else if(min == 'Invalid date' && max != 'Invalid date'){
             if(moment(datatable_date).isBefore(max)){
-                sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key])
+                sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key].replace("€",""))
 
                 if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Alumni'){
                     alumni = alumni + parseInt(value)
@@ -449,6 +379,7 @@ $(document).ready(function() {
         //console.log(moment(min).isBefore(max))
 
         //initCounters()
+        sum = 0
         $.each(price, function(key, value){
             datatable_date = $('#participants_table').DataTable().column( 6 ).data()[key]
             datatable_date = new Date(datatable_date);
@@ -470,15 +401,17 @@ $(document).ready(function() {
         $('#count_alumni').text(count_alumni)
         $('#count_early').text(count_early)
         $('#count_sponsored').text(count_sponsored)
+
+        $('#participants_info').removeClass('d-none')
     });
 });
 
-function filterGlobal () {
-    $('#participants_table').DataTable().search(
-        $('#global_filter').val(),
-    ).draw();
+    function filterGlobal () {
+        $('#participants_table').DataTable().search(
+            $('#global_filter').val(),
+        ).draw();
 
-}
+    }
 
     function removeSpecial(s){
         s = s.replace(/ /g,'');
@@ -492,7 +425,7 @@ function filterGlobal () {
             $('#col'+i+'_filter').val()
         ).draw();
 
-        $('.participants_info').empty()
+        $('.participants_info').remove()
         event = removeSpecial($('#col'+i+'_filter').val())
 
         if(event.search('E-Learning') != -1){
@@ -533,6 +466,7 @@ function filterGlobal () {
                 if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Alumni'){
                     alumni = alumni + parseInt(value)
                     count_alumni++
+
                 }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Regular'){
                     regular = regular + parseInt(value)
                     count_regular++
@@ -610,14 +544,14 @@ function filterGlobal () {
         // Accepts the array and key
         const groupBy = (array, key) => {
         // Return the end result
-        return array.reduce((result, currentValue) => {
-            // If an array already present for key, push it to the array. Else create an array and push the object
-            (result[currentValue[key]] = result[currentValue[key]] || []).push(
-            currentValue
-            );
-            // Return the current iteration `result` value, this will be taken as next iteration `result` value and accumulate
-            return result;
-        }, {}); // empty object is the initial value for result object
+            return array.reduce((result, currentValue) => {
+                // If an array already present for key, push it to the array. Else create an array and push the object
+                (result[currentValue[key]] = result[currentValue[key]] || []).push(
+                currentValue
+                );
+                // Return the current iteration `result` value, this will be taken as next iteration `result` value and accumulate
+                return result;
+            }, {}); // empty object is the initial value for result object
         };
 
         // Group by color as key to the person array
@@ -669,6 +603,8 @@ function filterGlobal () {
         $('#count_alumni').text(count_alumni)
         $('#count_early').text(count_early)
         $('#count_sponsored').text(count_sponsored)
+
+        $('#participants_info').removeClass('d-none')
 
 
     }

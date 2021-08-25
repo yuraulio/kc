@@ -1407,7 +1407,6 @@ $(document).on('click', '.ticket-card', function () {
                 url: '/admin/transaction/updateExpirationDate',
                 data: {'id': transaction_id, 'date': new_date},
                 success: function (data) {
-                    console.log(data)
                     if(data){
                         data = data.data
                         $('.exp_'+data.id).text(data.date)
