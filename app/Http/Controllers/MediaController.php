@@ -199,7 +199,7 @@ class MediaController extends Controller
 
         $image->crop($request->width, $request->height, $request->x, $request->y);
         $name = explode('.', $media['original_name']);
-        $image->save(public_path($media['path'].$name[0].'-crop'.$media['ext']), 50);
+        $image->save(public_path($media['path'].$name[0].'-crop'.$media['ext']), 80);
         //dd(public_path($media['path'].$name[0].'-crop'.$media['ext']));
 
         return response()->json([
@@ -290,10 +290,10 @@ class MediaController extends Controller
         $image = Image::make($mediaKey);
         $image->crop(intval($request->width),intval($request->height), intval($request->x), intval($request->y));
         if($request->version != 'profile_image'){
-            $image->save(public_path('/uploads').$word.$path[0].'-'.$request->version.'.'.$path[1], 50);
+            $image->save(public_path('/uploads').$word.$path[0].'-'.$request->version.'.'.$path[1], 80);
             $data['version'] = $request->version;
         }else{
-            $image->save(public_path('/uploads').$word.$path[0].'.'.$path[1], 50);
+            $image->save(public_path('/uploads').$word.$path[0].'.'.$path[1], 80);
             $data['version'] = 'profile_image';
         }
 
