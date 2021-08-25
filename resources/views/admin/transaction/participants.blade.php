@@ -16,7 +16,7 @@
 
             @endslot
 
-            <li class="breadcrumb-item"><a href="{{ route('transaction.participants') }}">{{ __('Participant List') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('transaction.participants') }}">{{ __('Revenue List') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
         @endcomponent
         @include('admin.transaction.layouts.cards')
@@ -29,7 +29,7 @@
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col-8">
-                                <h3 class="mb-0">{{ __('Participants') }}</h3>
+                                <h3 class="mb-0">{{ __('Revenue') }}</h3>
                             </div>
                         </div>
                     </div>
@@ -106,9 +106,9 @@
                     <tbody>
                     <?php //dd($transactions[100]); ?>
                         @foreach ($transactions as $transaction)
-                        <?php //dd($transaction); ?>
+
                             <tr>
-                                <td>{{$transaction['name']}}</td>
+                                <td><a href="{{ route('user.edit', $transaction['user_id']) }}">{{$transaction['name']}}</a></td>
                                 <td>{{$transaction['event_title']}}</td>
                                 <td>{{ $transaction['type'] }}</td>
                                 <td><?= '€'.number_format($transaction['amount'], 2, '.', ''); ?></td>
@@ -214,6 +214,8 @@ $.fn.dataTable.ext.search.push(
 );
 
 $(document).ready(function() {
+
+    $('#participants_info').removeClass('d-none')
 
     // Create date inputs
     //console.log($('#min'))
@@ -408,7 +410,7 @@ $(document).ready(function() {
 
     function filterGlobal () {
         $('#participants_table').DataTable().search(
-            $('#global_filter').val(),
+            $('#global_filter').val()
         ).draw();
 
     }
@@ -422,7 +424,7 @@ $(document).ready(function() {
 
     function filterColumn ( i ) {
         $('#participants_table').DataTable().column( i ).search(
-            $('#col'+i+'_filter').val()
+            '^'+$('#col'+i+'_filter').val()+'$', true,true
         ).draw();
 
         $('.participants_info').remove()

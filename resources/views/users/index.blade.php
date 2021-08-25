@@ -123,11 +123,11 @@
                                         <?php //dd(asset('profile_user').'/'.$user['image']['name'] ); ?>
                                             <span class="avatar avatar-sm rounded-circle">
 
-                                            {{--@if($user['image'] != null && $user['image']['name'] != '')
+                                            @if($user['image'] != null && $user['image']['name'] != '')
                                                 <img src="{{ cdn(get_image($user['image'])) }}" alt="{{ $user['firstname'] }}" style="max-width: 100px; border-radiu: 25px">
                                             @else
                                             <img src="" alt="{{ $user['firstname'] }}" style="max-width: 100px; border-radius: 25px">
-                                            @endif--}}
+                                            @endif
                                             </span>
                                         </td>
                                         <td><a href="{{ route('user.edit', $user['id']) }}">{{ $user['firstname'] }}</a></td>
