@@ -142,12 +142,11 @@
 
         $.each(versions, function(key, value){
             let name = value.version
-            //console.log(value)
             const cropper = new Cropper(document.getElementById(`${value.version}`), {
                 aspectRatio: Number((value.w/value.h), 4),
                 viewMode: 0,
                 dragMode: "crop",
-                responsive: false,
+                responsive: true,
                 autoCropArea: 1,
                 restore: false,
                 movable: false,
@@ -158,8 +157,8 @@
                 cropBoxResizable: true,
                 minContainerWidth: 300,
                 minContainerHeight: 300,
-                // minCanvasWidth: 350,
-                // minCanvasHeight: 350,
+                //minCanvasWidth: 350,
+                //minCanvasHeight: 350,
 
                 data:{
                     x:parseInt(value.x),

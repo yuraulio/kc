@@ -100,12 +100,27 @@
 <script src="{{ asset('argon') }}/vendor/sweetalert2/dist/sweetalert2.min.js"></script>
 <script>
     $(document).on("click", "#update-btn", function(){
+
+        window.swal({
+            title: "Dropbox Updating...",
+            text: "Please wait",
+            showConfirmButton: false,
+            allowOutsideClick: false
+        });
+
         $.ajax({
 
         type: 'get',
         url: '/admin/dropbox/update',
 
         success: function (data) {
+            if(data){
+                window.swal({
+                    title: "Finished!",
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            }
         },
         error: function() {
             //console.log(data);

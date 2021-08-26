@@ -103,13 +103,12 @@ class FileManagerController extends Controller
 
             $path = Storage::disk('public')->allFiles($folder);
 
-
             $arr = [];
             if(count($path) != 0){
                 //dd($path);
                 foreach($path as $key1 => $folder1){
-                    //dd($folder1);
                     $name = substr($folder1, strrpos($folder1, '/') + 1);
+                    //dd($name);
                     $second = explode("/", $folder1, 10);
                     $length = count($second);
                     $word = '';
@@ -120,6 +119,10 @@ class FileManagerController extends Controller
                         }
                         $arr['path'] = $word;
                         $arr['name'] = $val;
+                        $arr['size'] = formatBytes(Storage::disk('public')->size($folder1));
+
+                        $arr['modified'] = date("d/m/Y", Storage::disk('public')->lastModified($folder1));
+                        $arr['type'] = explode('.',$name)[1];
                     }
                     $files[$key][$key1] = $arr;
                 }

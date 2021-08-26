@@ -100,12 +100,12 @@ class TransactionController extends Controller
     public function updateExpirationDate(Request $request)
     {
 
-        
+
         $transaction_id = $request->id;
         $date = date('Y-m-d',strtotime($request->date));
-       
+
         $user = User::find($request->user_id);
-      
+
         if(!$user){
             return response()->json([
                 'message' => 'User not found!',
@@ -116,7 +116,7 @@ class TransactionController extends Controller
         if(!$event){
             return response()->json([
                 'message' => 'User has not be assigned to event!',
-            ]); 
+            ]);
         }
 
 
@@ -131,7 +131,7 @@ class TransactionController extends Controller
             'message' => 'Expiration date has updated!',
             'data' => $data
         ]);
-       
+
 
 
 

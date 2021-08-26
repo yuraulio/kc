@@ -44,7 +44,7 @@ class UserController extends Controller
     }
 
     public function smsVerification(Request $request){
-       
+
         $user = Auth::user();
         $cookie_value = '-11111111';
         if($request->hasHeader('auth-sms')){
@@ -54,7 +54,7 @@ class UserController extends Controller
         //dd($cookie_value);
 
         if($user->cookiesSMS()->where('coockie_value',$cookie_value)->first()){
-           
+
             $cookieSms = $user->cookiesSMS()->where('coockie_value',$cookie_value)->first();
             $sms_code = $cookieSms->sms_code;
 
@@ -75,7 +75,7 @@ class UserController extends Controller
                 ]);
 
             }
-           
+
             if($sms_code == $request->sms_code){
 
                 $smsCookies = $user->cookiesSMS()->where('coockie_value',$cookie_value)->first();
@@ -121,7 +121,7 @@ class UserController extends Controller
         require_once("../app/Apifon/Model/MessageContent.php");
         require_once("../app/Apifon/Model/SmsRequest.php");
         require_once("../app/Apifon/Model/SubscriberInformation.php");
-       
+
         $user = Auth::user();
         $cookie_value = '-11111111';
         if($request->hasHeader('auth-sms')){
@@ -130,9 +130,9 @@ class UserController extends Controller
         $this->token = env('token');
         $this->secretId = env('secret_key');
         $cookieSms = $user->cookiesSMS()->where('coockie_value',$cookie_value)->first();
-                
+
         if(!$cookieSms->sms_verification && $user->mobile != ''){
-        
+
             $codeExpired = strtotime($cookieSms->updated_at);
             $codeExpired  = (time() - $codeExpired) / 60;
             if($codeExpired >= 5){
@@ -142,34 +142,34 @@ class UserController extends Controller
             }
 
             if(!$cookieSms->send){
-                                    
+
                 Mookee::addCredentials("sms",$this->token, $this->secretId);
                 Mookee::setActiveCredential("sms");
-        
+
                 $smsResource = new SMSResource();
                 $smsRequest = new SmsRequest();
-                
+
                 $mob = trim($user->mobile);
                 $mob = trim($user->country_code) . trim($user->mobile);
-               
+
                 $mobileNumber = trim($mob);
                 $nums = [$mobileNumber];
-        
+
                 $message = new MessageContent();
                 $messageText = 'Knowcrunch code: '. $cookieSms->sms_code . ' Valid for 5 minutes';
                 $message->setText($messageText);
                 $message->setSenderId("Knowcrunch");
-        
+
                 $smsRequest->setStrSubscribers($nums);
                 $smsRequest->setMessage($message);
-        
+
                 $response = $smsResource->send($smsRequest);
-           
+
                 $cookieSms->send = true;
                 $cookieSms->save();
 
             }
-            
+
             return response()->json([
                 'success' => false,
                 'code' => 700,
@@ -177,7 +177,7 @@ class UserController extends Controller
             ]);
 
         }
-       
+
 
     }
 
@@ -491,6 +491,7 @@ class UserController extends Controller
                                 //dd($arr_lesson['time_starts']);
                             }
 
+                            $arr_lesson['title'] = $lesson1['title'];
                             $arr_lesson['time_starts'] = $lesson1['pivot']['time_starts'];
                             $arr_lesson['time_ends'] = $lesson1['pivot']['time_ends'];
                             $arr_lesson['duration'] = $lesson1['pivot']['duration'];

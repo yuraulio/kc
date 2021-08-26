@@ -95,7 +95,6 @@ class DropboxController extends Controller
                 //foreach ($allbcats as $catkey => $cat) {
                     $li = Storage::disk('dropbox');
                     $folders = $li->listContents();
-
                     //dd($folders);
                 foreach ($folders as $key => $row) {
                     if($row['type'] == 'dir') {
@@ -199,8 +198,8 @@ class DropboxController extends Controller
     }
 
     public function cacheDropboxCLI(){
-        
-           
+
+
             $data['blockcat'] = [];
             $data['groupblockcat'] = [];
             //$allbcats = Category::where('type', 0)->where('status', 1)->where('parent_id', 45)->where('admin_tpl', '!=', '0')->where('admin_tpl', '!=', '')->get();
@@ -292,6 +291,6 @@ class DropboxController extends Controller
             return response()->json([
                 'success' => __('Dropbox folders and files successfully updated!'),
             ]);
-        
+
     }
 }

@@ -86,7 +86,7 @@
                             <th scope="col">{{ __('Coupon') }}</th>
                             <th class="participant_elearning none">{{ __('Video Seen') }}</th>
                             <th scope="col">{{ __('Registration Date') }}</th>
-                            <th class="participant_elearning none">{{ __('Initial Expiration Date') }}</th>
+                            <th class="participant_elearning none">{{ __('Expiration Date') }}</th>
                             {{--<th class="participant_elearning none">{{ __('New Expiration Date') }}</th>--}}
                         </tr>
                     </thead>
@@ -99,7 +99,7 @@
                             <th>{{ __('Coupon') }}</th>
                             <th class="participant_elearning none">{{ __('Video Seen') }}</th>
                             <th>{{ __('Registration Date') }}</th>
-                            <th class="participant_elearning none">{{ __('Initial Expiration Date') }}</th>
+                            <th class="participant_elearning none">{{ __('Expiration Date') }}</th>
                             {{--<th class="participant_elearning none">{{ __('New Expiration Date') }}</th>--}}
                         </tr>
                     </tfoot>
@@ -118,7 +118,7 @@
                                 <td>{{ $transaction['date']}}</td>
 
                                 <td class="exp_{{$transaction['id']}} participant_elearning none" >
-                                    {{$transaction['expiration']}}
+                                    <?= date('m/d/Y',strtotime($transaction['expiration']))  ?>
 
 
                                 </td>
@@ -160,6 +160,16 @@
     <script src="{{ asset('argon') }}/vendor/datatables-datetime/datetime.min.js"></script>
     <script>
 
+        // DataTables initialisation
+        var table = $('#participants_table').DataTable({
+            language: {
+                paginate: {
+                next: '&#187;', // or '→'
+                previous: '&#171;' // or '←'
+                }
+            }
+        });
+
         let alumni = 0;
         let special = 0;
         let regular = 0;
@@ -170,6 +180,8 @@
         let count_regular = 0;
         let count_sponsored = 0;
         let count_early = 0;
+        let min = null;
+        let max = null;
 
         function initCounters(){
             sum = 0
@@ -227,16 +239,7 @@ $(document).ready(function() {
         format: 'L'
     });
 
-    // DataTables initialisation
-    var table = $('#participants_table').DataTable({
-        "order": [[ 4, "desc" ]],
-        language: {
-            paginate: {
-            next: '&#187;', // or '→'
-            previous: '&#171;' // or '←'
-            }
-        }
-    });
+
 
 
     // $('#min, #max').on('change', function () {
@@ -284,76 +287,76 @@ $(document).ready(function() {
         $('#col4_filter').append('<option value="'+value+'">'+value+'</option>')
     })
 
-    function getStatsByDate(min, max, key, value){
+    // function getStatsByDate(min, max, key, value){
 
-        value = value.replace("€", "")
-        if(min != 'Invalid date' && max == 'Invalid date'){
-            if(moment(datatable_date).isAfter(min)){
-                sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key].replace("€",""))
+    //     value = value.replace("€", "")
+    //     if(min != 'Invalid date' && max == 'Invalid date'){
+    //         if(moment(datatable_date).isAfter(min)){
+    //             sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key].replace("€",""))
 
 
-                if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Alumni'){
-                    alumni = alumni + parseInt(value)
-                    count_alumni++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Regular'){
-                    regular = regular + parseInt(value)
-                    count_regular++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Special'){
-                    special = special + parseInt(value)
-                    count_special++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Sponsored'){
-                    sponsored = sponsored + parseInt(value)
-                    count_sponsored++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early birds'){
-                    early = early + parseInt(value)
-                    count_early++
-                }
-            }
-        }else if(min !='Invalid date' && max != 'Invalid date'){
-            if(moment(datatable_date).isAfter(min) && moment(datatable_date).isBefore(max)){
-                sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key].replace("€",""))
+    //             if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Alumni'){
+    //                 alumni = alumni + parseInt(value)
+    //                 count_alumni++
+    //             }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Regular'){
+    //                 regular = regular + parseInt(value)
+    //                 count_regular++
+    //             }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Special'){
+    //                 special = special + parseInt(value)
+    //                 count_special++
+    //             }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Sponsored'){
+    //                 sponsored = sponsored + parseInt(value)
+    //                 count_sponsored++
+    //             }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early birds'){
+    //                 early = early + parseInt(value)
+    //                 count_early++
+    //             }
+    //         }
+    //     }else if(min !='Invalid date' && max != 'Invalid date'){
+    //         if(moment(datatable_date).isAfter(min) && moment(datatable_date).isBefore(max)){
+    //             sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key].replace("€",""))
 
-                if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Alumni'){
-                    alumni = alumni + parseInt(value)
-                    count_alumni++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Regular'){
-                    regular = regular + parseInt(value)
-                    count_regular++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Special'){
-                    special = special + parseInt(value)
-                    count_special++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Sponsored'){
-                    sponsored = sponsored + parseInt(value)
-                    count_sponsored++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early birds'){
-                    early = early + parseInt(value)
-                    count_early++
-                }
-            }
-        }else if(min == 'Invalid date' && max != 'Invalid date'){
-            if(moment(datatable_date).isBefore(max)){
-                sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key].replace("€",""))
+    //             if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Alumni'){
+    //                 alumni = alumni + parseInt(value)
+    //                 count_alumni++
+    //             }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Regular'){
+    //                 regular = regular + parseInt(value)
+    //                 count_regular++
+    //             }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Special'){
+    //                 special = special + parseInt(value)
+    //                 count_special++
+    //             }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Sponsored'){
+    //                 sponsored = sponsored + parseInt(value)
+    //                 count_sponsored++
+    //             }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early birds'){
+    //                 early = early + parseInt(value)
+    //                 count_early++
+    //             }
+    //         }
+    //     }else if(min == 'Invalid date' && max != 'Invalid date'){
+    //         if(moment(datatable_date).isBefore(max)){
+    //             sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key].replace("€",""))
 
-                if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Alumni'){
-                    alumni = alumni + parseInt(value)
-                    count_alumni++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Regular'){
-                    regular = regular + parseInt(value)
-                    count_regular++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Special'){
-                    special = special + parseInt(value)
-                    count_special++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Sponsored'){
-                    sponsored = sponsored + parseInt(value)
-                    count_sponsored++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early birds'){
-                    early = early + parseInt(value)
-                    count_early++
-                }
-            }
-        }
+    //             if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Alumni'){
+    //                 alumni = alumni + parseInt(value)
+    //                 count_alumni++
+    //             }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Regular'){
+    //                 regular = regular + parseInt(value)
+    //                 count_regular++
+    //             }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Special'){
+    //                 special = special + parseInt(value)
+    //                 count_special++
+    //             }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Sponsored'){
+    //                 sponsored = sponsored + parseInt(value)
+    //                 count_sponsored++
+    //             }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early birds'){
+    //                 early = early + parseInt(value)
+    //                 count_early++
+    //             }
+    //         }
+    //     }
 
-    }
+    // }
 
     //Refilter the table
     $('#min, #max').on('change', function () {
@@ -364,8 +367,8 @@ $(document).ready(function() {
 
         initCounters()
 
-        let min = new Date($('#min').val());
-        let max = new Date($('#max').val());
+        min = new Date($('#min').val());
+        max = new Date($('#max').val());
 
         minDate = new DateTime($('#min'), {
             format: 'L'
@@ -378,33 +381,23 @@ $(document).ready(function() {
         //console.log('Min:'+min)
         max = moment(max).format('MM/DD/YYYY')
 
-        //console.log(moment(min).isBefore(max))
-
-        //initCounters()
-        sum = 0
-        $.each(price, function(key, value){
-            datatable_date = $('#participants_table').DataTable().column( 6 ).data()[key]
-            datatable_date = new Date(datatable_date);
-            datatable_date = moment(datatable_date).format('MM/DD/YYYY')
-
-           getStatsByDate(min, max, key, value)
-        })
+        stats_non_elearning()
 
 
         //alert(sum)
-        $('#total').text('€'+sum)
-        $('#special').text('€'+special)
-        $('#regular').text('€'+regular)
-        $('#alumni').text('€'+alumni)
-        $('#early').text('€'+early)
-        $('#sponsored').text('€'+sponsored)
-        $('#count_special').text(count_special)
-        $('#count_regular').text(count_regular)
-        $('#count_alumni').text(count_alumni)
-        $('#count_early').text(count_early)
-        $('#count_sponsored').text(count_sponsored)
+        // $('#total').text('€'+sum)
+        // $('#special').text('€'+special)
+        // $('#regular').text('€'+regular)
+        // $('#alumni').text('€'+alumni)
+        // $('#early').text('€'+early)
+        // $('#sponsored').text('€'+sponsored)
+        // $('#count_special').text(count_special)
+        // $('#count_regular').text(count_regular)
+        // $('#count_alumni').text(count_alumni)
+        // $('#count_early').text(count_early)
+        // $('#count_sponsored').text(count_sponsored)
 
-        $('#participants_info').removeClass('d-none')
+        // $('#participants_info').removeClass('d-none')
     });
 });
 
@@ -421,6 +414,55 @@ $(document).ready(function() {
         s = s.replace(/amp;/g,'');
         return s
     }
+
+    function stats_non_elearning(){
+        initCounters()
+
+        let sum = 0
+
+        //returns 'filtered' or visible rows
+        table.rows({filter: 'applied'}).every( function ( rowIdx, tableLoop, rowLoop ) {
+            var coupon = this.data()[2];
+            var amount = this.data()[3];
+            amount = parseInt(amount.replace("€",""))
+            sum = sum + amount
+
+            if(coupon == 'Alumni'){
+                alumni = alumni + amount
+                count_alumni++
+            }else if(coupon == 'Regular'){
+                regular = regular + amount
+                count_regular++
+            }else if(coupon == 'Special'){
+                special = special + amount
+                count_special++
+            }else if(coupon == 'Sponsored'){
+                sponsored = sponsored + amount
+                count_sponsored++
+            }else if(coupon == 'Early birds' || coupon == 'Early Bird'){
+                //console.log('has early bird')
+                early = early + amount
+                count_early++
+            }
+
+        } );
+
+
+        $('#total').text('€'+sum)
+        $('#special').text('€'+special)
+        $('#regular').text('€'+regular)
+        $('#alumni').text('€'+alumni)
+        $('#early').text('€'+early)
+        $('#sponsored').text('€'+sponsored)
+        $('#count_special').text(count_special)
+        $('#count_regular').text(count_regular)
+        $('#count_alumni').text(count_alumni)
+        $('#count_early').text(count_early)
+        $('#count_sponsored').text(count_sponsored)
+
+
+    }
+
 
     function filterColumn ( i ) {
         $('#participants_table').DataTable().column( i ).search(
@@ -440,173 +482,181 @@ $(document).ready(function() {
         }
 
         //console.log(removeSpecial($('#col'+i+'_filter').val()))
+        stats_non_elearning()
+        // if(min == null || max == null){
+        //     stats_non_elearning()
+
+        //         price = $('#participants_table').DataTable().column( 3 ).data();
+        //         let sum = 0;
+        //         let alumni = 0;
+        //         let special = 0;
+        //         let regular = 0;
+        //         let sponsored = 0;
+        //         let early = 0;
+        //         let count_alumni = 0;
+        //         let count_special = 0;
+        //         let count_regular = 0;
+        //         let count_sponsored = 0;
+        //         let count_early = 0;
+
+        //         let coupons = []
+        //     $.each(price, function(key, value){
+        //         value = value.replace("€", "")
 
 
-        price = $('#participants_table').DataTable().column( 3 ).data();
-            let sum = 0;
-            let alumni = 0;
-            let special = 0;
-            let regular = 0;
-            let sponsored = 0;
-            let early = 0;
-            let count_alumni = 0;
-            let count_special = 0;
-            let count_regular = 0;
-            let count_sponsored = 0;
-            let count_early = 0;
+        //         //console.log(removeSpecial($('#participants_table').DataTable().column( i ).data()[key]))
 
-            let coupons = []
-        $.each(price, function(key, value){
-            value = value.replace("€", "")
+        //         if(removeSpecial($('#participants_table').DataTable().column( i ).data()[key]) == removeSpecial($('#col'+i+'_filter').val())){
+        //             sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key].replace("€", ""))
 
+        //             if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Alumni'){
+        //                 alumni = alumni + parseInt(value)
+        //                 count_alumni++
 
-            //console.log(removeSpecial($('#participants_table').DataTable().column( i ).data()[key]))
-
-            if(removeSpecial($('#participants_table').DataTable().column( i ).data()[key]) == removeSpecial($('#col'+i+'_filter').val())){
-                sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key].replace("€", ""))
-
-                if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Alumni'){
-                    alumni = alumni + parseInt(value)
-                    count_alumni++
-
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Regular'){
-                    regular = regular + parseInt(value)
-                    count_regular++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Special'){
-                    special = special + parseInt(value)
-                    count_special++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Sponsored'){
-                    sponsored = sponsored + parseInt(value)
-                    count_sponsored++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early birds'){
-                    early = early + parseInt(value)
-                    count_early++
-                }
+        //             }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Regular'){
+        //                 regular = regular + parseInt(value)
+        //                 count_regular++
+        //             }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Special'){
+        //                 special = special + parseInt(value)
+        //                 count_special++
+        //             }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Sponsored'){
+        //                 sponsored = sponsored + parseInt(value)
+        //                 count_sponsored++
+        //             }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early birds'){
+        //                 early = early + parseInt(value)
+        //                 count_early++
+        //             }
 
 
-                event = removeSpecial($('#col'+i+'_filter').val())
+        //             event = removeSpecial($('#col'+i+'_filter').val())
 
-                if(event.search('E-Learning') != -1){
-                    //console.log('test')
-                    coupon = $('#participants_table').DataTable().column( 4 ).data()[key];
-                    if(coupon != ""){
-                        coupons.push({
-                            'price': $('#participants_table').DataTable().column( 3 ).data()[key],
-                            'type' : $('#participants_table').DataTable().column( 2 ).data()[key],
-                            'name' : coupon
-                    })
-                    }
+        //             if(event.search('E-Learning') != -1){
+        //                 //console.log('test')
+        //                 coupon = $('#participants_table').DataTable().column( 4 ).data()[key];
+        //                 if(coupon != ""){
+        //                     coupons.push({
+        //                         'price': $('#participants_table').DataTable().column( 3 ).data()[key],
+        //                         'type' : $('#participants_table').DataTable().column( 2 ).data()[key],
+        //                         'name' : coupon
+        //                 })
+        //                 }
 
-                }else{
-
-
-                }
-            }else if($('#col'+i+'_filter').val() == ''){
-                //if select all
-                //alert('select all')
-                sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key].replace("€", ""))
-
-                if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Alumni'){
-                    alumni = alumni + parseInt(value)
-                    count_alumni++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Regular'){
-                    regular = regular + parseInt(value)
-                    count_regular++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Special'){
-                    special = special + parseInt(value)
-                    count_special++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Sponsored'){
-                    sponsored = sponsored + parseInt(value)
-                    count_sponsored++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early birds'){
-                    early = early + parseInt(value)
-                    count_early++
-                }
+        //             }else{
 
 
-                event = removeSpecial($('#col'+i+'_filter').val())
+        //             }
+        //         }else if($('#col'+i+'_filter').val() == ''){
+        //             //if select all
+        //             //alert('select all')
+        //             sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key].replace("€", ""))
 
-                if(event.search('E-Learning') != -1){
-                    //console.log('test')
-                    coupon = $('#participants_table').DataTable().column( 4 ).data()[key];
-                    //console.log(coupon)
-                    if(coupon != ""){
-                        coupons.push({
-                            'price': $('#participants_table').DataTable().column( 3 ).data()[key],
-                            'type' : $('#participants_table').DataTable().column( 2 ).data()[key],
-                            'name' : coupon
-                    })
-                    }
+        //             if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Alumni'){
+        //                 alumni = alumni + parseInt(value)
+        //                 count_alumni++
+        //             }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Regular'){
+        //                 regular = regular + parseInt(value)
+        //                 count_regular++
+        //             }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Special'){
+        //                 special = special + parseInt(value)
+        //                 count_special++
+        //             }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Sponsored'){
+        //                 sponsored = sponsored + parseInt(value)
+        //                 count_sponsored++
+        //             }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early birds'){
+        //                 early = early + parseInt(value)
+        //                 count_early++
+        //             }
 
-                }
-            }
-        })
+
+        //             event = removeSpecial($('#col'+i+'_filter').val())
+
+        //             if(event.search('E-Learning') != -1){
+        //                 //console.log('test')
+        //                 coupon = $('#participants_table').DataTable().column( 4 ).data()[key];
+        //                 //console.log(coupon)
+        //                 if(coupon != ""){
+        //                     coupons.push({
+        //                         'price': $('#participants_table').DataTable().column( 3 ).data()[key],
+        //                         'type' : $('#participants_table').DataTable().column( 2 ).data()[key],
+        //                         'name' : coupon
+        //                 })
+        //                 }
+
+        //             }
+        //         }
+        //     })
 
 
-        // Accepts the array and key
-        const groupBy = (array, key) => {
-        // Return the end result
-            return array.reduce((result, currentValue) => {
-                // If an array already present for key, push it to the array. Else create an array and push the object
-                (result[currentValue[key]] = result[currentValue[key]] || []).push(
-                currentValue
-                );
-                // Return the current iteration `result` value, this will be taken as next iteration `result` value and accumulate
-                return result;
-            }, {}); // empty object is the initial value for result object
-        };
+        //     // Accepts the array and key
+        //     const groupBy = (array, key) => {
+        //     // Return the end result
+        //         return array.reduce((result, currentValue) => {
+        //             // If an array already present for key, push it to the array. Else create an array and push the object
+        //             (result[currentValue[key]] = result[currentValue[key]] || []).push(
+        //             currentValue
+        //             );
+        //             // Return the current iteration `result` value, this will be taken as next iteration `result` value and accumulate
+        //             return result;
+        //         }, {}); // empty object is the initial value for result object
+        //     };
 
-        // Group by color as key to the person array
-        const couponsGroupedByName = groupBy(coupons, 'name');
+        //     // Group by color as key to the person array
+        //     const couponsGroupedByName = groupBy(coupons, 'name');
 
-        //console.log(couponsGroupedByName)
+        //     //console.log(couponsGroupedByName)
 
-        sumCoupon = []
-        //console.log(couponsGroupedByName)
-        $.each(couponsGroupedByName, function(key, value){
-            //console.log('from coupons')
-            var sum1 = 0
-            var count1 = 0
-            $.each(value, function(key1, value1){
-                val = value1.price
-                value = val.replace('€','')
-                count1++
+        //     sumCoupon = []
+        //     //console.log(couponsGroupedByName)
+        //     $.each(couponsGroupedByName, function(key, value){
+        //         //console.log('from coupons')
+        //         var sum1 = 0
+        //         var count1 = 0
+        //         $.each(value, function(key1, value1){
+        //             val = value1.price
+        //             value = val.replace('€','')
+        //             count1++
 
-                 sum1 = sum1 + parseInt(value)
-            })
-            //console.log(key+'::'+sum)
+        //             sum1 = sum1 + parseInt(value)
+        //         })
+        //         //console.log(key+'::'+sum)
 
-            elem =`
-                    <div class="participants_info col-xl-3 col-md-6">
-                        <div class="card card-stats">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col">
-                                        <h5 class="card-title text-uppercase text-muted mb-0"><div id="count_sponsored">${count1}x ${key}:</div></h5>
-                                        <span id="total" class="h2 font-weight-bold mb-0">${'€'+sum1}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `
+        //         elem =`
+        //                 <div class="participants_info col-xl-3 col-md-6">
+        //                     <div class="card card-stats">
+        //                         <div class="card-body">
+        //                             <div class="row">
+        //                                 <div class="col">
+        //                                     <h5 class="card-title text-uppercase text-muted mb-0"><div id="count_sponsored">${count1}x ${key}:</div></h5>
+        //                                     <span id="total" class="h2 font-weight-bold mb-0">${'€'+sum1}</span>
+        //                                 </div>
+        //                             </div>
+        //                         </div>
+        //                     </div>
+        //                 </div>
+        //             `
 
-                    $('#participants_info').append(elem)
+        //                 $('#participants_info').append(elem)
 
-        })
-        $('#total').text('€'+sum)
-        $('#special').text('€'+special)
-        $('#regular').text('€'+regular)
-        $('#alumni').text('€'+alumni)
-        $('#early').text('€'+early)
-        $('#sponsored').text('€'+sponsored)
-        $('#count_special').text(count_special)
-        $('#count_regular').text(count_regular)
-        $('#count_alumni').text(count_alumni)
-        $('#count_early').text(count_early)
-        $('#count_sponsored').text(count_sponsored)
+        //                 //$('#total').text('€'+sum)
+        // $('#special').text('€'+special)
+        // $('#regular').text('€'+regular)
+        // $('#alumni').text('€'+alumni)
+        // $('#early').text('€'+early)
+        // $('#sponsored').text('€'+sponsored)
+        // $('#count_special').text(count_special)
+        // $('#count_regular').text(count_regular)
+        // $('#count_alumni').text(count_alumni)
+        // $('#count_early').text(count_early)
+        // $('#count_sponsored').text(count_sponsored)
 
-        $('#participants_info').removeClass('d-none')
+
+        //     })
+        // }else{
+        //     stats_non_elearning()
+        // }
+
+
+
 
 
     }
