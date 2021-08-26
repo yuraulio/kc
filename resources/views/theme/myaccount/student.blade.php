@@ -2259,13 +2259,13 @@
 
       var dir = $(this).attr('data-dirname');
       var fname = $(this).attr('data-filename');
-     
+
 
       $.ajax({ url: '/getdropbox', type: "post",
           data: {dir: dir, fname:fname},
 
           success: function(data) {
-          
+
             window.location.href = data;
           }
       });

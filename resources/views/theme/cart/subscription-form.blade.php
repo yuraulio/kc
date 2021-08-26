@@ -43,8 +43,8 @@
          <h1 class="page-title">Checkout</h1>
          <h2>Your selection</h2>
 
-         
-         
+
+
          <div class="your-selection">
             <div class="item">
                <div class="remove-area">
@@ -67,11 +67,11 @@
                      </li>
                      <li>
                         <span class="label">Billing period:</span>
-                       
+
                         <span class="value ticket-coupon">
                         {{$plan->period()}}
                         </span>
-                       
+
                      </li>
                      <li class="total-amount">
                         <span class="label">Total amount:</span>
@@ -82,7 +82,7 @@
             </div>
             <!-- ./item -->
          </div>
-      
+
       </div>
    </section>
 
@@ -108,9 +108,9 @@
                   <div class="form-wrapper">
                      <form method="post" id='user-info' action="/myaccount/subscription/store/{{$event->title}}/{{$plan->name}}" class="small-form">
                         {{csrf_field()}}
-                       
+
                         <?php $i=0 ?>
-                  
+
                            <div class="row">
                               <div class="col6 col-sm-12">
                                  <label>First name <span>*</span></label>
@@ -348,7 +348,7 @@
                                        <option data-countryCode="YE" value="967">YE (South)(+967)</option>
                                        <option data-countryCode="ZM" value="260">ZM (+260)</option>
                                        <option data-countryCode="ZW" value="263">ZW (+263)</option>
-                                          
+
                                     </select>
                                     <input class="required"type="text"  onkeyup="checkPhoneNumberParticipant(this,<?php echo $i; ?>)" id="mobile<?php echo $i; ?>" name="mobile[]" placeholder="Mobile*" value="@if(isset($pay_seats_data) && isset($pay_seats_data['mobiles'][$i])){{$pay_seats_data['mobiles'][$i]}}@elseif(isset($cur_user) && $i == 0){{$cur_user->mobile}}@endif" required />
                                     <input class="required"type="hidden" id="mobileCheck<?php echo $i; ?>" name="mobileCheck[]" placeholder="Mobile*" value="@if(isset($pay_seats_data) && isset($pay_seats_data['mobileCheck'][$i])){{$pay_seats_data['mobileCheck'][$i]}}@elseif(isset($cur_user) && $i == 0)+{{$cur_user->country_code}}{{$cur_user->mobile}}@endif" required />
@@ -357,7 +357,7 @@
                               <div class="col6 col-sm-12">
                                  <label>Company </label>
                                     <input type="text" id="company<?php echo $i; ?>" name="company[]" placeholder="Company (if any)" value="@if(isset($pay_seats_data) && isset($pay_seats_data['companies'][$i])){{$pay_seats_data['companies'][$i]}}@elseif(isset($cur_user) && $i == 0){{$cur_user->company}}@endif" />
-                                
+
                               </div>
                               <div class="col6 col-sm-12">
                                  <label>Position title </label>
@@ -365,12 +365,12 @@
                                           <input class="" type="text" id="jobtitle<?php echo $i; ?>" name="jobtitle[]" placeholder="Title or Job Position" value="@if(isset($pay_seats_data) && isset($pay_seats_data['jobtitles'][$i])){{$pay_seats_data['jobtitles'][$i]}}@elseif(isset($cur_user) && $i == 0){{$cur_user->job_title}}@endif" required />
                                  </div>
                               </div>
-                             
+
                            </div>
                            @if($i>0)
                         </div>
                         @endif
-                        
+
                      </form>
 
                   </div>
@@ -389,26 +389,26 @@
                      <form method="post" id="billing-setting" action="/myaccount/subscription/store/{{$event->title}}/{{$plan->name}}" class="small-form">
                         {{csrf_field()}}
                         <div class="row">
-                         
-                          
+
+
                            <div class="col12 receipt-fields hidden-fields-actions" style="display:block">
                               <div class ="row">
                               <div class="col6 col-sm-12">
-                           
-                              <label>Name or Company <span>*</span></label> 
+
+                              <label>Name or Company <span>*</span></label>
                                  <div class="input-safe-wrapper">
                                     <input class="required" type="text" id="billname" name="billname" placeholder="Name" value="@if(isset($pay_bill_data) && isset($pay_bill_data['billname'])){{$pay_bill_data['billname']}}@endif" oninput="billsurname.value = billname.value; return true;" required />
                                  </div>
                               </div>
 
-                            
-                        
+
+
                               <input hidden id="radio-receipt-control" name="needbilling" value="1" @if(isset($pay_bill_data) && isset($pay_bill_data['billing']) && $pay_bill_data['billing'] == 1) checked @elseif(!isset($pay_bill_data['billing'])) checked @endif type="radio" data-fieldset-target="receipt-fields" name="billing-receipt-invoice" checked="checked">
                               <input style="display:none" name="event" value="{{$event->id}}">
 
                               <input style="display:none"  class="hidden" type="text" id="billsurname" name="billsurname" value="@if(isset($pay_bill_data) && isset($pay_bill_data['billsurname'])){{$pay_bill_data['billsurname']}}@endif" oninput="billname.value = billsurname.value; return true;" />
 
-                             
+
                               <div class="col6 col-sm-12" >
                                  <label>Street <span>*</span></label>
                                  <div class="input-safe-wrapper">
@@ -503,14 +503,14 @@
                                           <input class="required" type="text"id="companyemail" name="companyemail" placeholder="Email αποστολής τιμολογίου" value="@if(isset($pay_bill_data) && isset($pay_bill_data['companyemail'])){{$pay_bill_data['companyemail']}}@endif"required />
                                     </div>
                                  </div>
-                           
+
                               </div>
                            </div>
 
                         </div>
 
-                       
-                        
+
+
                      </form>
                   </div>
                </div>
@@ -530,15 +530,15 @@
                      <form method="post" id='sbt-pay' action="/myaccount/subscription/store/{{$event->title}}/{{$plan->name}}">
                         {{csrf_field()}}
 
-                  
+
                         <input type="hidden" name="plan_id" value="{{$plan->id}}">
                         <div class="row">
-                           
+
                               @include('theme.cart.stripe-suscription-form')
                               <input type="hidden" id="payment_method_id" name="payment_method_id" value="100">
 
-                           
-                  
+
+
 
                            <div class="col12">
                               <div class="custom-checkbox-wrapper text-align-left extra-top-margin clearfix">
@@ -555,7 +555,7 @@
                               </div>
                            </div>
                         </div>
-                       
+
                      </form>
                   </div>
                </div>
@@ -586,7 +586,7 @@ $(document).ready(function() {
          let mobile = $("#mobile"+index).val()
          $("#mobileCheck"+index).val("+" + code.value + mobile)
       }
-     
+
       function checkPhoneNumberParticipant(phone,index){
          phone = phone.value.replace(/\s/g,'')
          let validatePhone = false;
@@ -628,9 +628,9 @@ $(document).ready(function() {
                validatePhone = true;
                $("#selectCountry"+index).val("44").change();
                $("#selectCountry-reg"+index).val("44").change();
-            }else if(phone.substring(0, 2) == '07' /*|| phone.substring(0, 3) == '073' || phone.substring(0, 3) == '074' || phone.substring(0, 3) == '075' || phone.substring(0, 3) == '076' 
+            }else if(phone.substring(0, 2) == '07' /*|| phone.substring(0, 3) == '073' || phone.substring(0, 3) == '074' || phone.substring(0, 3) == '075' || phone.substring(0, 3) == '076'
                || phone.substring(0, 3) == '077' || phone.substring(0, 3) == '078' || phone.substring(0, 3) == '079'*/){
-            
+
                //phone = '+44'+phone
                validatePhone = true;
                $("#selectCountry"+index).val("44").change();
@@ -664,14 +664,14 @@ $(document).ready(function() {
 
 
    function checkPhoneNumber(phone){
-     
+
       phone = phone.value.replace(/\s/g,'')
       let validatePhone = false;
 
       if(phone.length > 3){
 
          if(phone.substring(0, 3) == '+30' || phone.substring(0, 2) == '30'){
-            
+
             $("#selectCountry").val("30").change();
             $("#selectCountry-reg").val("30").change();
             validatePhone = true;
@@ -705,9 +705,9 @@ $(document).ready(function() {
             validatePhone = true;
             $("#selectCountry").val("44").change();
             $("#selectCountry-reg").val("44").change();
-         }else if(phone.substring(0, 2) == '07' /*|| phone.substring(0, 3) == '073' || phone.substring(0, 3) == '074' || phone.substring(0, 3) == '075' || phone.substring(0, 3) == '076' 
+         }else if(phone.substring(0, 2) == '07' /*|| phone.substring(0, 3) == '073' || phone.substring(0, 3) == '074' || phone.substring(0, 3) == '075' || phone.substring(0, 3) == '076'
             || phone.substring(0, 3) == '077' || phone.substring(0, 3) == '078' || phone.substring(0, 3) == '079'*/){
-            
+
                //phone = '+44'+phone
                validatePhone = true;
                $("#selectCountry").val("44").change();
@@ -721,23 +721,23 @@ $(document).ready(function() {
 
       }
 
-     
+
 
    }
    </script>
-   
+
    <script>
    $(document).on('click', '.close-alert', function(e){
       var favDialog = document.getElementById('favDialog');
       var favDialogCard = document.getElementById('favDialogCard');
       var favDialogCardNumberFailed = document.getElementById('favDialogCardNumberFailed');
-     // favDialog.close(); 
+     // favDialog.close();
      favDialog.style.display = "none";
      favDialogCard.style.display = "none";
      favDialogCardNumberFailed.style.display = "none";
       $("body").css("overflow-y", "auto")
    })
-   
+
    </script>
    <script>
     $(document).on('click', '#addCard', function(e){
@@ -755,15 +755,15 @@ $(document).ready(function() {
       </div>
       <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
          <label>Expiration month <span>*</span></label>
-       
+
             <input onblur="this.placeholder = 'MM'" onfocus="this.placeholder = ''"  placeholder='MM' onkeyup="month(this)" type='text' name="ccExpiryMonth" id="ccExpiryMonth" required>
-         
+
       </div>
       <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
          <label>Expiration year <span>*</span></label>
-         
+
             <input onblur="this.placeholder = 'YYYY'" onfocus="this.placeholder = ''" placeholder='YYYY' type='text' maxlength="4" size="4" onkeyup="year(this)"  name="ccExpiryYear" id="ccExpiryYear" required>
-   
+
          <input class='form-control ammount' type='hidden' name="amount" value="{{ Cart::instance('default')->subtotal() }}">
       </div>
       <div class="checkout-proceed-action">
@@ -787,7 +787,7 @@ $(document).ready(function() {
                },
                data:{ 'card_no' : card_no, 'cvv' : cvv, 'exp_month' : exp_month, 'exp_year' : exp_year},
                success:function(data) {
-                 
+
                   if(data['success']){
                      data = JSON.stringify(data['card'])
                      data = JSON.parse(data)
@@ -807,7 +807,7 @@ $(document).ready(function() {
                   }else{
                      let message = `<img src="{{cdn('theme/assets/images/icons/alert-icons/icon-error-alert.svg')}}" alt="Info Alert">` + data['message'];
                      $("#card-message").html( message)
-                     
+
                      var favDialogCard = document.getElementById('favDialogCardNumberFailed');
                      favDialogCard.style.display = "block";
 
@@ -815,13 +815,13 @@ $(document).ready(function() {
                      $('button').prop('disabled', false);
                   }
 
-                 
+
                },
                error:function(data){
 
                   let message = `<img src="{{cdn('theme/assets/images/icons/alert-icons/icon-error-alert.svg')}}" alt="Info Alert">` + data['message'];
                   $("#card-message").html( message)
-         
+
                   var favDialogCard = document.getElementById('favDialogCardNumberFailed');
                   favDialogCard.style.display = "block";
 
@@ -835,7 +835,7 @@ $(document).ready(function() {
 
 
    function cvv(input) {
-      
+
 
       if(isNaN(input.value)){
          input.value = '';
@@ -845,7 +845,7 @@ $(document).ready(function() {
 
 
    function cardNo(input) {
-      
+
 
       if(isNaN(input.value)){
          input.value = '';
@@ -854,7 +854,7 @@ $(document).ready(function() {
    }
 
    function month(input) {
-   
+
 
       if(isNaN(input.value)){
          input.value = '';
