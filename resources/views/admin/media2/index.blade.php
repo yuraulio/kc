@@ -915,7 +915,6 @@
                 obj1[key] = {}
                 obj1[key] = value['path']
             })
-            //console.log(obj1)
 
 
             arr = { files: obj1, directories: [] }
@@ -1143,6 +1142,7 @@
 
 
     $( document ).on("click","#search_btn",function() {
+        $('.table-info').removeClass('table-info')
         file = $('.search_input').val()
         //console.log(file)
         $.ajax({
