@@ -293,7 +293,7 @@ class StudentController extends Controller
 
                 $video_access = false;
                 $expiration_event = $event->pivot['expiration'];
-          
+
                 $expiration_event = strtotime($expiration_event);
 
                 $now = strtotime(date('Y-m-d'));

@@ -162,7 +162,6 @@
 
         // DataTables initialisation
         var table = $('#participants_table').DataTable({
-            "order": [[ 4, "desc" ]],
             language: {
                 paginate: {
                 next: '&#187;', // or '→'
@@ -240,7 +239,7 @@ $(document).ready(function() {
         format: 'L'
     });
 
-    
+
 
 
     // $('#min, #max').on('change', function () {
@@ -486,7 +485,7 @@ $(document).ready(function() {
         stats_non_elearning()
         // if(min == null || max == null){
         //     stats_non_elearning()
-            
+
         //         price = $('#participants_table').DataTable().column( 3 ).data();
         //         let sum = 0;
         //         let alumni = 0;
@@ -656,8 +655,8 @@ $(document).ready(function() {
         //     stats_non_elearning()
         // }
 
-        
-        
+
+
 
 
     }

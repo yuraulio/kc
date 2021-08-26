@@ -543,7 +543,7 @@
 
         $(function(){
             $('.fm-content-body tbody').contextMenu({
-                selector: 'tr',
+                selector: 'tr.search-result',
                 build: function($trigger, e) {
                     // this callback is executed every time the menu is to be shown
                     // its results are destroyed every time the menu is hidden
@@ -733,8 +733,8 @@
                                 details = name.split(' ')
                                 $('#properties-name').text(details[1])
                                 $('#properties-path').text(path)
-                                $('#properties-path').text(path)
-                                $('#properties-mod').text(details[3]+details[4]+details[5])
+                                $('#properties-size').text(details[2]+' KB')
+                                $('#properties-mod').text(details[4])
                                 //console.log('name: '+name + 'path:  '+ path)
 
                                 let name1 = details[1].split('.')
@@ -1169,7 +1169,7 @@
                     $.each(data, function(key, value) {
                         //console.log(value.path+'/'+value.name)
                         if(first_grid){
-                            row = `<tr class="search-result"><td data-name="${value.name}" data-path='${value.path}/${value.name}' class="fm-content-item unselectable fm-download"><i class="far fa-file"></i> ${value.name} </td><td></td><td>File</td><td> 6/7/2021, 12:13:38 PM </td></tr>`
+                            row = `<tr class="search-result"><td data-name="${value.name}" data-path='${value.path}/${value.name}' class="fm-content-item unselectable fm-download"><i class="far fa-file"></i> ${value.name} </td><td>${value.size}</td><td>${value.type}</td><td> ${value.modified} </td></tr>`
                             $('.fm-content-body tbody').append(row)
                         }else{
                             row =`<div title="fdf" class="fm-grid-item text-center unselectable active fm-download"><div class="fm-item-icon"><i class="fa-5x pb-2 far fa-folder"></i></div><div class="fm-item-info">${value.name}</div></div>`
@@ -1204,21 +1204,29 @@
     });
 
     $(document).on("click",".close_modal", function () {
-        console.log('close modal')
 
         $('.close').click()
 
     });
 
     $(document).mousedown(function(e){
-        //console.log(e.button)
+        let elem = e.target
+
             if( e.button == 2 ) {
                 //$("#test").removeClass("class-one").addClass("class-two");
                 //$('.table-info').removeClass('table-info')
-                let elem = e.target
-                $(elem).parent().addClass('table-info')
+
+                if($(elem).parent().hasClass('search-result')){
+                    $(elem).parent().addClass('table-info')
+                }
+
 
                 return false;
+            }
+            if(e.button == 0){
+                if($(elem).parent().parent().hasClass('fm-tree-branch')){
+                   $('.search-result').remove()
+                }
             }
             return true;
         });
