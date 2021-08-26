@@ -696,7 +696,7 @@ window.actQues = 0;
                                         <div class="row">
                                         <div class="col-md-10 offset-1" style="padding-top: 2%;">
                                             <?php
-                                                if($ex_content['question_type'] == 1) { //For True False Type
+                                                if($ex_content['question-type'] == 1) { //For True False Type
                                                     echo '
                                                         <div class="col-md-12">
                                                             <div class="form-check form-check-inline">
@@ -716,7 +716,7 @@ window.actQues = 0;
                                                         </div>
                                                         ';
                 
-                                                } elseif($ex_content['question_type'] == 'radio buttons') { //For Multiple Choice Type                                    
+                                                } elseif($ex_content['question-type'] == 'radio buttons') { //For Multiple Choice Type                                    
                                                     
                                                     $unser_data = $ex_content['answers_keys'];
                                                     
@@ -753,7 +753,7 @@ window.actQues = 0;
                                                         </div>
                                                         ';
                                     
-                                                } elseif($ex_content['question_type'] == 3) { //For Several Answer Type
+                                                } elseif($ex_content['question-type'] == 3) { //For Several Answer Type
                                                    
                                                     $unser_data = $ex_content['answers_keys'];
                                                     

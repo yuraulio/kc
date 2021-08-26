@@ -170,11 +170,23 @@ class ExamController extends Controller
 
     public function addQuestion(Request $request, Exam $exam){
 
+       
         $questions = json_decode($exam->questions) ? json_decode($exam->questions,true) : [];
 
         $questions[] = $request->question;
+        $newQ = [];
+        foreach($questions as $key1 => $question){
 
-        $exam->questions = json_encode($questions);
+            $question['question'] = trim(str_replace(['"',"'"], "", $question['question']));
+            
+            foreach($question['answers'] as $key => $answer){
+                $question['answers'][$key] = trim(str_replace(['"',"'"], "", $answer));
+            }
+            
+            $newQ[] = $question;
+        }
+
+        $exam->questions = json_encode($newQ);
         $exam->save();
 
         return response()->json([
@@ -188,8 +200,16 @@ class ExamController extends Controller
        
        $oldQuestions = json_decode($exam->questions,true);
        //dd($oldQuestion); 
-       //dd($request->question);
-       $oldQuestions[$request->key] = $request->question;
+      
+
+       $question = $request->question;
+       $question['question'] = trim(str_replace(['"',"'"], "", html_entity_decode($request->question['question'])));
+
+       foreach($request->question['answers'] as $key => $answer){
+        $question['answers'][$key] = trim(str_replace(['"',"'"], "", html_entity_decode($answer)));
+       }
+
+       $oldQuestions[$request->key] = $question;
 
        
 

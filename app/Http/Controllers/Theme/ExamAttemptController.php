@@ -107,7 +107,7 @@ class ExamAttemptController extends Controller
             }     
         
             $ex_contents[] = ['id'=> $key,'answers_keys' => $options, 'mark_status' => 0, 'question_title' => $ex_content['question'], 'question_description' => '',
-                'question_type' => $ex_content['question-type'],'given_ans'=>'', 'q_id' => $exam_key];
+                'question-type' => $ex_content['question-type'],'given_ans'=>'', 'q_id' => $exam_key];
 
         }
         $redata = 0;
