@@ -1346,7 +1346,6 @@ if(!isset($info)){
                                  </div>
                               </div>
 
-
                               <input type="hidden" id="payment_method_id" name="payment_method_id" value="{{$pay_methods['id']}}">
 
                               <!-- /.col12.hidden-fields-actions.installments-fields -->
@@ -1401,36 +1400,33 @@ if(!isset($info)){
        .attr('id', 'stripe-js')
        .appendTo('head');*/
 
+       $('#container').removeClass('d-none')
+
 
 
       $('#addCard').prop('disabled', true);
       $('.msg_save_card').remove();
-      $('#container').append(`
-         <input id="card-holder-name" type="text">
-         <!-- Stripe Elements Placeholder -->
-         <div id="card-element"></div>
-         <button id="card-button" type="button" class="btn btn--secondary btn--sm" data-secret="{{ Auth::user()->createSetupIntent()->client_secret }}">
-             Update Payment Method
-         </button>`)
-
-
+       $('#container').append(`
+          <input id="card-holder-name" type="text" placeholder="Cardholder Name">
+          <!-- Stripe Elements Placeholder -->
+          <div id="card-element"></div>
+          <button id="card-button" type="button" class="btn btn--secondary btn--sm" data-secret="{{ Auth::user()->createSetupIntent()->client_secret }}">
+              Update Payment Method
+          </button>`)
          $('<script>')
-       .text(`var stripe = Stripe('{{$stripe_key}}',{locale: 'en'});
-               var elements = stripe.elements();
-               var cardElement = elements.create('card',{
-                  style: {
-                     base: {
-
+        .text(`var stripe = Stripe('{{$stripe_key}}',{locale: 'en'});
+                var elements = stripe.elements();
+                var cardElement = elements.create('card',{
+                   style: {
+                      base: {
                         fontSize: '18px',
-
                      },
-                  },
-                  hidePostalCode: true,
-                  });
-               cardElement.mount('#card-element');`)
-
+                   },
+                   hidePostalCode: true,
+                   });
+                cardElement.mount('#card-element');`)
        .attr('id', 'stripe-form')
-       .appendTo('head');
+        .appendTo('head');
 
 
 
@@ -1481,16 +1477,34 @@ if(!isset($info)){
                         data = JSON.stringify(data['card'])
                         data = JSON.parse(data)
 
+                        $('#cardInformation').removeClass('d-none')
+
 
                         $('#brand').text(data['brand'])
                         $('#last4').text(data['last4'])
                         $('#exp_month').text(data['exp_month'])
                         $('#exp_year').text(data['exp_year'])
 
+                        if(data['brand'] == 'visa'){
+                            $('#icon_card').attr('src', "argon/img/icons/cards/visa.svg")
+                            $('#brand-sec').text('Visa')
+                        }else{
+                            $('#icon_card').attr('src', "argon/img/icons/cards/master.svg")
+                            $('#brand-sec').text('Mastercard')
+                        }
+
+                        console.log('{{ Auth::user()->createSetupIntent()->client_secret }}')
+
+                        $("#card-button").attr('data-secret', '{{ Auth::user()->createSetupIntent()->client_secret }}' ) //"{{ Auth::user()->createSetupIntent()->client_secret }}"
+
+                        $('#add_card_btn').removeClass('d-none')
+
+
                         $("#stripe-form").remove();
-                     $("#stripe-js").remove();
+                        $("#stripe-js").remove();
 
                         $('#container').children().remove();
+
 
                         $('#container').append(`<p class="normal msg_save_card"> Successfully added card!!</p>`)
                         $('#addCard').prop('disabled', false);
@@ -1505,7 +1519,7 @@ if(!isset($info)){
                         $('#addCard').prop('disabled', false);
                         $('button').prop('disabled', false);
                         $("#stripe-form").remove();
-                     $("#stripe-js").remove();
+                        $("#stripe-js").remove();
                      }
 
 
@@ -1525,6 +1539,41 @@ if(!isset($info)){
 
 <script>
    $(document).ready(function() {
+
+    if($('#last4').text() == ''){
+        $( "#addCard" ).click();
+    }
+
+
+    //     $('#container').append(`
+    //      <input id="card-holder-name" type="text" placeholder="Cardholder Name">
+    //      <!-- Stripe Elements Placeholder -->
+    //      <div id="card-element"></div>
+    //      <button id="card-button" type="button" class="btn btn--secondary btn--sm" data-secret="{{ Auth::user()->createSetupIntent()->client_secret }}">
+    //          Update Payment Method
+    //      </button>`)
+
+
+    //      $('<script>')
+    //    .text(`var stripe = Stripe('{{$stripe_key}}',{locale: 'en'});
+    //            var elements = stripe.elements();
+    //            var cardElement = elements.create('card',{
+    //               style: {
+    //                  base: {
+
+    //                     fontSize: '18px',
+
+    //                  },
+    //               },
+    //               hidePostalCode: true,
+    //               });
+    //            cardElement.mount('#card-element');`)
+
+    //    .attr('id', 'stripe-form')
+    //    .appendTo('head');
+
+
+
        $(document).on('submit', '#billing-setting', function() {
            $('#checkout-button').attr('disabled', 'disabled');
            $('button').prop('disabled', true);

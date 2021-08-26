@@ -139,7 +139,7 @@
 
 
 @media (min-width:981px) {
-   
+
     .lg-flex{
         display: flex;
     }
@@ -355,13 +355,13 @@ height: 21px;
     width: 60px;
     height: 34px;
   }
-  
-  .switch input { 
+
+  .switch input {
     opacity: 0;
     width: 0;
     height: 0;
   }
-  
+
   .slider {
     position: absolute;
     cursor: pointer;
@@ -373,7 +373,7 @@ height: 21px;
     -webkit-transition: .4s;
     transition: .4s;
   }
-  
+
   .slider:before {
     position: absolute;
     content: "";
@@ -407,8 +407,8 @@ height: 21px;
 }
 
 .wrapper-switch{
-    display:inline-block; 
-    position:absolute; 
+    display:inline-block;
+    position:absolute;
     margin-left:20px;
 }
 .onoffswitch-checkbox {
@@ -446,34 +446,34 @@ height: 21px;
     position: absolute; top: 0; bottom: 0;
     right: 56px;
     border: 2px solid #999999; border-radius: 20px;
-    transition: all 0.3s ease-in 0s; 
+    transition: all 0.3s ease-in 0s;
 }
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
     margin-left: 0;
 }
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
-    right: 0px; 
+    right: 0px;
 }
-  
+
   input:checked + .slider {
     background-color: #2196F3;
   }
-  
+
   input:focus + .slider {
     box-shadow: 0 0 1px #2196F3;
   }
-  
+
   input:checked + .slider:before {
     -webkit-transform: translateX(26px);
     -ms-transform: translateX(26px);
     transform: translateX(26px);
   }
-  
+
   /* Rounded sliders */
   .slider.round {
     border-radius: 34px;
   }
-  
+
   .slider.round:before {
     border-radius: 50%;
   }
@@ -503,7 +503,7 @@ height: 21px;
     z-index: 1000;
     color: black;
   }
-  
+
   /* Modal Content/Box */
   .modal-content {
     background-color: #fefefe;
@@ -524,7 +524,7 @@ height: 21px;
   #cardList #payment-form {
       display: inline-block;
   }
-  
+
   /* The Close Button */
   .close {
     color: #aaa;
@@ -532,13 +532,13 @@ height: 21px;
     font-size: 28px;
     font-weight: bold;
   }
-  
+
   .close:hover,
   .close:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
-  } 
+  }
 
 .stripe{
     display: block!important;
@@ -554,21 +554,21 @@ height: 21px;
     color: #000;
 }
 
-div.important-notice  
+div.important-notice
 {
     background-color: #92CC16 !important;
     padding: 50px !important;
     color: white !important;
     margin-bottom: 40px !important;
 }
-p.important-notice  
+p.important-notice
 {
     background-color: #92CC16 !important;
     padding: 50px !important;
     color: white !important;
     margin-bottom: 40px !important;
 }
-h3.important-notice 
+h3.important-notice
 {
     font-size: 20px !important;
     text-transform: uppercase !important;
@@ -616,7 +616,7 @@ input[type="number"]#billaddressnum:focus::-webkit-outer-spin-button {
    -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    margin: 0; 
+    margin: 0;
 }
 
 input[type="number"]#companyaddressnum:hover::-webkit-inner-spin-button,
@@ -626,7 +626,7 @@ input[type="number"]#companyaddressnum:focus::-webkit-outer-spin-button {
    -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    margin: 0; 
+    margin: 0;
 }
 
 a#courses-tab {
@@ -656,7 +656,7 @@ input[type="number"]#ccExpiryMonth:focus::-webkit-outer-spin-button {
    -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    margin: 0; 
+    margin: 0;
 }
 
 input[type="number"]#ccExpiryYear:hover::-webkit-inner-spin-button,
@@ -666,7 +666,7 @@ input[type="number"]#ccExpiryYear:focus::-webkit-outer-spin-button {
    -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    margin: 0; 
+    margin: 0;
 }
 
 input[type="number"]#card_no:hover::-webkit-inner-spin-button,
@@ -676,7 +676,7 @@ input[type="number"]#card_no:focus::-webkit-outer-spin-button {
    -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    margin: 0; 
+    margin: 0;
 }
 
 input[type="number"]#cvvNumber:hover::-webkit-inner-spin-button,
@@ -686,7 +686,7 @@ input[type="number"]#cvvNumber:focus::-webkit-outer-spin-button {
    -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    margin: 0; 
+    margin: 0;
 }
 
 #cvvNumber{
@@ -855,7 +855,7 @@ input#event-code::placeholder {
 
 @media only screen and (min-width: 993px){
     .sub-blue-form {
-        margin-top: -200px!important;   
+        margin-top: -200px!important;
     }
 }
 
@@ -890,7 +890,7 @@ height: 190px;
   -webkit-perspective: 600px;
   -moz-perspective: 600px;
   perspective:600px;
-  
+
 }
 
 .card__part{
@@ -907,7 +907,7 @@ z-index: 1000;
     background-position: center;
     background-size: cover;
     border-radius: 8px;
-   
+
     -webkit-transition: all .5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     -moz-transition: all .5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     -ms-transition: all .5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -1061,13 +1061,21 @@ border-radius: 4px;
     margin-top: 40px;
 }
 
+.d-none {
+    display: none;
+}
+
+#container {
+    margin-top: 5rem;
+}
+
 
 @media only screen and (min-width: 980px){
     .sub-blue-form form {
         width: 84%!important;
         margin: auto!important;
     }
-    
+
 }
 
 /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */

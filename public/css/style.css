@@ -392,6 +392,10 @@
     margin-left: 5px !important;
 }
 
+.hidden {
+    display: none;
+}
+
 
 @media (min-height: 693px) {
     #file-man-main {
