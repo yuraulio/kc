@@ -298,6 +298,9 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
 
     Route::get('invoice/{invoice}', 'Theme\InvoiceController@getInvoice');
 
+    //generate google db csv
+    Route::get('/fb-google-csv', 'Dashboard\CronjobsController@fbGoogleCsv');
+
 });
 
 

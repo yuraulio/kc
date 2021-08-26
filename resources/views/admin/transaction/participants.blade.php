@@ -162,6 +162,7 @@
 
         // DataTables initialisation
         var table = $('#participants_table').DataTable({
+            order: [[5, 'desc']],
             language: {
                 paginate: {
                 next: '&#187;', // or '→'

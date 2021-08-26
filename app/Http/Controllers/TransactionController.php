@@ -10,7 +10,7 @@ use Auth;
 
 class TransactionController extends Controller
 {
-    
+
     public function participants($start_date = null, $end_date = null)
     {
         $this->authorize('view',User::class,Transaction::class);
@@ -21,24 +21,24 @@ class TransactionController extends Controller
             $start_date = date_format($start_date,"Y-m-d");
             $end_date = date_create($end_date);
             $end_date = date_format($end_date,"Y-m-d");
-    
+
             $from = date($start_date);
             $to = date($end_date);
-            
+
             $transactions = Transaction::with('user.statisticGroupByEvent','user.events','user.ticket','subscription','event','event.delivery')->whereBetween('created_at', [$from,$to])->orderBy('created_at','desc')->get();
 
         }else{
             $transactions = Transaction::with('user.statisticGroupByEvent','user.events','user.ticket','subscription','event','event.delivery')->where('status', 1)->orderBy('created_at','desc')->get();
 
         }
-        
+
 
         $data['transactions'] = [];
         foreach($transactions as $transaction){
             if(!$transaction->subscription->first() && $transaction->user->first() && $transaction->event->first()){
 
                 $isElearning = $transaction->event->first()->delivery->first() && $transaction->event->first()->delivery->first()->id == 143;
-               
+
                 if(in_array(9,$userRole) &&  $isElearning){
                     continue;
                 }
@@ -72,7 +72,7 @@ class TransactionController extends Controller
 
                 $data['transactions'][] = ['id' => $transaction['id'], 'user_id' => $transaction->user[0]['id'],'name' => $transaction->user[0]['firstname'].' '.$transaction->user[0]['lastname'],
                                             'event_id' => $transaction->event[0]['id'],'event_title' => $transaction->event[0]['title'],'coupon_code' => $coupon_code, 'type' => $ticketType,'ticketName' => $ticketName,
-                                            'date' => date_format($transaction['created_at'], 'm/d/Y'), 'amount' => $transaction['amount'],
+                                            'date' => date_format($transaction['created_at'], 'Y-m-d'), 'amount' => $transaction['amount'],
                                             'is_elearning' => $isElearning,
                                             'coupon_code' => $transaction['coupon_code'],'videos_seen' => $this->getVideosSeen($videos),'expiration'=>$expiration];
             }
@@ -84,14 +84,14 @@ class TransactionController extends Controller
 
     public function participants_inside_revenue()
     {
-        
+
         $data['transactions'] = $this->participants()['transactions'];
         return view('admin.transaction.participants', $data);
     }
 
     public function participants_for_select_date($start_date, $end_date)
     {
-        
+
 
         return $this->participants($start_date, $end_date);
 
