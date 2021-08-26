@@ -3,7 +3,7 @@
 
 
 @section('content')
-@if($exam->examCheckbox !== "")
+@if($exam->examCheckbox !== "" && $exam->examCheckbox)
 <div class="container">
 
         <div class="row justify-content-center">

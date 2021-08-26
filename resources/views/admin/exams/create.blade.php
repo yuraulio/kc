@@ -780,9 +780,11 @@
       $(document).on('click','#update-question' ,function(){
 	   //$("edit-question").click(function(){
 
-       let question = {};
+         let question = {};
 
-
+       //question['question'] = (CKEDITOR.instances['edit-question'].getData()).replace(/[&#39;]+/g, '');
+       //question['question'] =  question['question'].replace(/[quot]+/g, '');
+       
        question['question'] = CKEDITOR.instances['edit-question'].getData();
        question['answer-credit'] = $(".modal #answer-credit").val() ? $(".modal #answer-credit").val() : 1;
        question['question-type'] = $("#edit-question-types").val();

@@ -59,68 +59,7 @@ class MakePhotoVersions extends Command
             if(!$details){
                 
                 continue;
-                
-
-                $details["img_align"] = [
-                    "default" =>  [
-                      "x" => "65",
-                      "y" => "73",
-                      "width" => "874",
-                      "height" => "379",
-                      "slug" => "default"
-                    ],
-                    "instructors-testimonials" => [
-                      "x" => "232",
-                      "y" => "61",
-                      "width" => "546",
-                      "height" => "546",
-                      "slug" => "instructors-testimonials"
-                    ],
-                    "event-card" => [
-                      "x" => "144",
-                      "y" => "36",
-                      "width" => "908",
-                      "height" => "487",
-                      "slug" => "event-card"
-                    ],
-                    "users" => [
-                      "x" => "321",
-                      "y" => "85",
-                      "width" => "341",
-                      "height" => "341",
-                      "slug" => "users"
-                    ],
-                    "header-image" =>  [
-                      "x" => "1",
-                      "y" => "44",
-                      "width" => "1200",
-                      "height" => "520",
-                      "slug" => "header-image"
-                    ],
-                    "instructors-small" =>  [
-                      "x" => "252",
-                      "y" => "55",
-                      "width" => "492",
-                      "height" => "492",
-                      "slug" => "instructors-small"
-                    ],
-                    "feed-image" =>  [
-                      "x" => "658",
-                      "y" => "0",
-                      "width" => "1005",
-                      "height" => "1005",
-                      "slug" => "feed-image"
-                    ],
-                    "main" =>  [
-                      "x" => "235",
-                      "y" => "0",
-                      "width" => "1849",
-                      "height" => "1005",
-                      "slug" => "main"
-                    ]
-                   
-                    ];
-                
+            
                 
             }
             foreach(get_image_versions() as $value){
@@ -131,7 +70,6 @@ class MakePhotoVersions extends Command
                 //if(isset($details['img_align'][$value['version']]) && $details['img_align'][$value['version']]['x'] > 0 && $details['img_align'][$value['version']]['y'] > 0){
                 if(isset($details['img_align'][$value['version']])){
                     $edit = $details['img_align'][$value['version']];
-                    
                     $image_resize = Image::make(public_path($media['path'] . $media['original_name']));
                     $image_resize->crop(intval($edit['width']),intval($edit['height']), intval($edit['x']), intval($edit['y']));
                     $image_resize->save(public_path($media['path'] .$media['name'].'-'.$value['version'] . $media['ext']), $value['q']);

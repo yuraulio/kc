@@ -46,7 +46,7 @@ class InsertExams extends Command
 
             $exam->questions = json_encode($questions);
             $exam->save();
-            //break;
+            break;
         }
         return 0;
     }
