@@ -134,7 +134,7 @@ class ExamAttemptController extends Controller
             }
 
         }
-  
+        
         return view('exams.exam_start', ['event' => $event,'user_id' => $st_id, 'ex_contents' => $ex_contents, 'exam' => $exam, 'redata' => $redata,
                     'event_title' => $event->title,'first_name' => Auth::user()->firstname,'last_name'=>Auth::user()->lastname]);
 
