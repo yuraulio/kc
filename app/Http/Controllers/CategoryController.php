@@ -27,7 +27,7 @@ class CategoryController extends Controller
 {
     public function __construct()
     {
-        $this->authorizeResource(Category::class);
+        
     }
 
     /**
@@ -38,7 +38,7 @@ class CategoryController extends Controller
      */
     public function index(Category $model)
     {
-        $this->authorize('manage-items', User::class);
+       
 
         return view('global_settings.categories.index', ['categories' => $model->all()]);
     }

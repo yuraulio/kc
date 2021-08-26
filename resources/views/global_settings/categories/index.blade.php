@@ -44,14 +44,14 @@
                         </td>
                         @can('manage-users', App\Model\User::class)
                             <td class="text-right">
-                                @can('update', $category)
+                              
                                     <div class="dropdown">
                                         <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="fas fa-ellipsis-v"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                                             <a class="dropdown-item" href="{{ route('category.edit', $category) }}">{{ __('Edit') }}</a>
-                                            @can('delete', $category)
+                                            
                                             <form action="{{ route('category.destroy', $category) }}" method="post">
                                                 @csrf
                                                 @method('delete')
@@ -60,11 +60,11 @@
                                                     {{ __('Delete') }}
                                                 </button>
                                             </form>
-                                            @endcan
+                                            
                                         </div>
 
                                     </div>
-                                @endcan
+                               
                             </td>
                         @endcan
                     </tr>

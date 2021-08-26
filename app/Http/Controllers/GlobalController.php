@@ -10,7 +10,7 @@ class GlobalController extends Controller
 {
     public function index(Category $model)
     {
-        $this->authorize('manage-items', User::class);
+       
 
         $cat = $model->with('topics')->get();
 
@@ -19,7 +19,7 @@ class GlobalController extends Controller
 
     public function course_index()
     {
-        $this->authorize('manage-items', User::class);
+       
 
         return view('global_settings.main');
     }

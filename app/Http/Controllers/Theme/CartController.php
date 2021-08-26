@@ -598,7 +598,7 @@ class CartController extends Controller
             $qty = $item->qty;
             $ev = Event::where('id', $item->options['event'])->first();
             $eventId = $item->options['event'];
-            $ev_date_help = $ev->summary1->where('section','date')->first() ? $ev->summary1->where('section','date')->first() : 'date';
+            $ev_date_help = $ev->summary1->where('section','date')->first() ? $ev->summary1->where('section','date')->first()->title : 'date';
             $ev_title = $ev->title;
             $ticket_id = $item->id;
             break;

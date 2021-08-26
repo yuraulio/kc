@@ -48,9 +48,8 @@
                                     <th scope="col">{{ __('Name') }}</th>
                                     <th scope="col">{{ __('Description') }}</th>
                                     <th scope="col">{{ __('Creation date') }}</th>
-                                    @can('manage-items', App\Model\User::class)
-                                        <th scope="col"></th>
-                                    @endcan
+                                    <th scope="col"></th>
+                                   
                                 </tr>
                             </thead>
                             <tbody>

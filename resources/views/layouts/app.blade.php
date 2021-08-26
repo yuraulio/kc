@@ -131,16 +131,16 @@
             </form>
             @if (!in_array(request()->route()->getName(), ['welcome', 'page.pricing', 'page.lock']))
             
-                @include('layouts.navbars.sidebar',['seeAll' => $seeAll])
+                @include('layouts.navbars.sidebar')
             @endif
         @endauth
         
-        @if($seeAll)
+       
         <div class="main-content">
             @include('layouts.navbars.navbar')
             @yield('content')
         </div>
-        @endif
+       
 
         @if(!auth()->check() || in_array(request()->route()->getName(), ['welcome', 'page.pricing', 'page.lock']))
             @include('layouts.footers.guest')

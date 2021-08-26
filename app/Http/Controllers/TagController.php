@@ -36,7 +36,7 @@ class TagController extends Controller
      */
     public function index(Tag $model)
     {
-        $this->authorize('manage-items', User::class);
+       
 
         return view('tags.index', ['tags' => $model->all()]);
     }

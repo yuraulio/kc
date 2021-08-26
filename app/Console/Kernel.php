@@ -21,6 +21,8 @@ class Kernel extends ConsoleKernel
        Commands\OrderInclassLessons::class,
        Commands\FixTestimonials::class,
        Commands\SyllabusManager::class,
+       Commands\InsertExams::class,
+       Commands\CompressImages::class,
     ];
 
     /**

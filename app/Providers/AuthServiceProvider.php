@@ -38,9 +38,10 @@ class AuthServiceProvider extends ServiceProvider
         Passport::refreshTokensExpireIn(now()->addDays(30));
         Passport::personalAccessTokensExpireIn(now()->addMonths(1));
 
-        Gate::define('manage-items', 'App\Policies\UserPolicy@manageItems');
-
+        //Gate::define('manage-items', 'App\Policies\UserPolicy@manageItems');
         Gate::define('manage-users', 'App\Policies\UserPolicy@manageUsers');
+        Gate::define('view', 'App\Policies\TransactionPolicy@view');
+
 
 
     }

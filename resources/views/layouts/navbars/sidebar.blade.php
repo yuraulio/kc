@@ -1,5 +1,5 @@
 <nav class="sidenav navbar navbar-vertical fixed-left navbar-expand-xs navbar-light bg-white" id="sidenav-main">
-    @if($seeAll)
+    
     <div class="scrollbar-inner scroll-scrollx_visible">
         <div class="sidenav-header d-flex align-items-center">
         <div class="logo-area">
@@ -58,7 +58,7 @@
                             </ul>
                         </div>
                     </li> -->
-
+                    @can('manage-users', App\Model\User::class)
                     <li class="nav-item active">
                         <a class="nav-link active" href="#navbar-users" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-users">
                             <i class="fas fa-users" style="color: #f4645f;"></i>
@@ -82,7 +82,8 @@
                             </ul>
                         </div>
                     </li>
-
+                    @endcan
+                    @can('manage-users', App\Model\User::class)
                     <li class="nav-item active">
                         <a class="nav-link active" href="#navbar-sites" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-sites">
                             <i class="fas fa-sliders-h" style="color: #f4645f;"></i>
@@ -118,6 +119,9 @@
                             </ul>
                         </div>
                     </li>
+                    @endcan
+
+                    @can('manage-users', App\Model\User::class)
                     <li class="nav-item active">
                         <a class="nav-link active" href="#navbar-pages" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-pages">
                             <i class="fas fa-columns" style="color: #f4645f;"></i>
@@ -135,7 +139,7 @@
                             </ul>
                         </div>
                     </li>
-
+                    
                     <li class="nav-item active">
                         <a class="nav-link active" href="#navbar-courses" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-courses">
                             <i class="fas fa-book-reader" style="color: #f4645f;"></i>
@@ -218,7 +222,9 @@
                             </ul>
                         </div>
                     </li>
+                    @endcan
 
+                    @can('view', App\Model\Transaction::class)
                     <li class="nav-item active">
                         <a class="nav-link active" href="#navbar-revenue" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-revenue">
                             <i class="fas fa-euro-sign" style="color: #f4645f;"></i>
@@ -226,9 +232,11 @@
                         </a>
                         <div class="collapse show" id="navbar-revenue">
                             <ul class="nav nav-sm flex-column">
+                           
                                     <li class="nav-item  {{ $elementName == 'participants-management' ? 'active' : '' }}">
                                         <a href="{{ route('transaction.participants') }}" class="nav-link">{{ __('Revenue') }}</a>
                                     </li>
+                                    @can('manage-users', App\Model\User::class)
                                     <li class="nav-item  {{ $elementName == 'subscriptions-management' ? 'active' : '' }}">
                                         <a href="{{ route('subscriptions.index') }}" class="nav-link">{{ __('Subscriptions') }}</a>
                                     </li>
@@ -241,10 +249,13 @@
                                     <li class="nav-item {{ $elementName == 'affiliates-management' ? 'active' : '' }}">
                                         <a href="#" class="nav-link">{{ __('Affiliates') }}</a>
                                     </li>
+                                    @endcan
                             </ul>
                         </div>
                     </li>
+                    @endcan
 
+                    @can('manage-users', App\Model\User::class)
                     <li class="nav-item active">
                         <a class="nav-link active" href="#navbar-messages" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-messages">
                             <i class="fas fa-envelope" style="color: #f4645f;"></i>
@@ -258,12 +269,12 @@
                             </ul>
                         </div>
                     </li>
-
+                   @endcan
 
                 </ul>
 
             </div>
         </div>
     </div>
-    @endif
+    
 </nav>

@@ -17,6 +17,7 @@ class UserPolicy
      */
     public function viewAny(User $user)
     {
+       
         return $user->isAdmin();
     }
 
@@ -63,17 +64,9 @@ class UserPolicy
      */
     public function manageUsers(User $user)
     {
-        return $user->isAdmin();
+        $roles = $user->role->pluck('name')->toArray();
+        return (in_array('Super Administrator',$roles) || in_array('Administrator',$roles) || in_array('Manager',$roles) || 
+                        in_array('Author',$roles));
     }
 
-    /**
-     * Determine whether the authenticate user can manage items and other related entities(tags, categories).
-     *
-     * @param  \App\Model\User  $user
-     * @return boolean
-     */
-    public function manageItems(User $user)
-    {
-        return $user->isAdmin() || $user->isCreator();
-    }
 }

@@ -15,7 +15,7 @@ class MenuController extends Controller
 
     public function index(Menu $model)
     {
-        $this->authorize('manage-items', User::class);
+       
 
         //Group by key
         $result = array();

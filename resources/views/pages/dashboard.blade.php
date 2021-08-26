@@ -15,7 +15,7 @@
         @endcomponent
         {{--@include('layouts.headers.cards')--}}
     @endcomponent
-
+    @can('manage-users', App\Model\User::class)
     <div class="container-fluid mt--10">
         <div class="row">
             <div class="col">
@@ -552,8 +552,9 @@
         <!-- Footer -->
         @include('layouts.footers.auth')
     </div>
+    @endcan
 @endsection
-
+@can('manage-users', App\Model\User::class)
 @push('js')
     <script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.extension.js"></script>
@@ -1325,3 +1326,4 @@
 
     </script>
 @endpush
+@endcan

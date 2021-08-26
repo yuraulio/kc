@@ -25,20 +25,7 @@ class AppServiceProvider extends ServiceProvider
         define('__ROOT__', dirname(dirname(__FILE__)));
         require_once(__ROOT__.'/helpers/functions.php');
 
-        
-        
-        view()->composer('layouts.app', function($view){
-
-            if(Auth::user()){
-                $roles = Auth::user()->role->pluck('name')->toArray();
-                $seeAll =  (in_array('Super Administrator',$roles) || in_array('Administrator',$roles) || in_array('Manager',$roles) || in_array('Author',$roles));
-            }else{
-                $seeAll = true;
-            }
-           
-            $view->with('seeAll', $seeAll);
-
-        });
+    
 
         Item::observe(ItemObserver::class);
         User::observe(UserObserver::class);
