@@ -329,6 +329,9 @@
     width: 60%;
     float: left;
     margin-right: 10px;
+
+    max-width: 300px;
+    max-height: 130px;
 }
 
 .card-version-info {

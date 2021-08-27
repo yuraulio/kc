@@ -133,7 +133,7 @@
 <script>
     let prof_image = false
     var versions = @json($versions);
-    console.log(versions)
+    //console.log(versions)
     if("{{$event}}" && versions != null){
         image_details = @json($event);
         let myObj = {}
@@ -142,7 +142,7 @@
         $.each(versions, function(key, value){
             let name = value.version
             const cropper = new Cropper(document.getElementById(`${value.version}`), {
-                aspectRatio: Number((value.w/value.h), 4),
+                aspectRatio: Number((value.w/value.h)).toFixed(4),
                 viewMode: 0,
                 dragMode: "crop",
                 responsive: false,
@@ -154,10 +154,10 @@
                 zoomable: false,
                 cropBoxMovable: true,
                 cropBoxResizable: true,
-                // minContainerWidth: 300,
-                // minContainerHeight: 300,
-                //minCanvasWidth: 350,
-                //minCanvasHeight: 350,
+                //minContainerWidth: 300,
+                //minContainerHeight: 130,
+                //minCanvasWidth: 300,
+                //minCanvasHeight: 130,
 
                 data:{
                     x:parseInt(value.x),
@@ -167,9 +167,10 @@
                 }
             });
 
-            console.log(name)
-            console.log('w:',parseInt(value.w))
-            console.log('h:',parseInt(value.h))
+            // console.log(name)
+            // console.log('w:',parseInt(value.w))
+            // console.log('h:',parseInt(value.h))
+            // console.log(Number((value.w/value.h).toFixed(4)))
 
             versions[key]['insta'] = cropper;
 

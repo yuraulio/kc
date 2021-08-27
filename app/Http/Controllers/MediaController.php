@@ -55,7 +55,9 @@ class MediaController extends Controller
     }
 
     public function uploadVersionImage(Request $request, Media $media){
+        //dd($request->versions);
         $versions = json_decode($request->versions);
+        //dd($versions);
         $mediaKey = $request->image_upload;
         ///  test/companyAvatar.png
 
@@ -77,6 +79,8 @@ class MediaController extends Controller
 
         $media->save();
 
+        $details = [];
+
         foreach(get_image_versions() as $value){
             //dd($value['version']);
             foreach($versions as $version){
@@ -84,11 +88,17 @@ class MediaController extends Controller
                     $image->resize($value['w'], $value['h']);
                     $image->fit($value['w'], $value['h']);
                     $image->save(public_path('/').$folders.'/'.$path[0].'-'.$value['version'].'.'.$path[1], $value['q']);
+
+                    $details['img_align'][$version]['x'] = 0;
+                    $details['img_align'][$version]['y'] = 0;
+                    $details['img_align'][$version]['width'] =  $value['w'];
+                    $details['img_align'][$version]['height'] =  $value['h'];
                 }
 
             }
-
         }
+
+        Media::where('id', $media['id'])->update(['details' => json_encode($details)]);
 
         return back();
 
@@ -196,6 +206,9 @@ class MediaController extends Controller
         //dd(public_path($media['path'].$media['original_name'].$media['ext']));
 
         $image = Image::make(public_path($media['path'].$media['original_name']));
+
+        //resize
+        //fit
 
         $image->crop($request->width, $request->height, $request->x, $request->y);
         $name = explode('.', $media['original_name']);
