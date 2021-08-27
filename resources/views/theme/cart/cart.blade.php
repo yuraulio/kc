@@ -1555,35 +1555,6 @@ if(!isset($info)){
     }
 
 
-    //     $('#container').append(`
-    //      <input id="card-holder-name" type="text" placeholder="Cardholder Name">
-    //      <!-- Stripe Elements Placeholder -->
-    //      <div id="card-element"></div>
-    //      <button id="card-button" type="button" class="btn btn--secondary btn--sm" data-secret="{{ Auth::user()->createSetupIntent()->client_secret }}">
-    //          Update Payment Method
-    //      </button>`)
-
-
-    //      $('<script>')
-    //    .text(`var stripe = Stripe('{{$stripe_key}}',{locale: 'en'});
-    //            var elements = stripe.elements();
-    //            var cardElement = elements.create('card',{
-    //               style: {
-    //                  base: {
-
-    //                     fontSize: '18px',
-
-    //                  },
-    //               },
-    //               hidePostalCode: true,
-    //               });
-    //            cardElement.mount('#card-element');`)
-
-    //    .attr('id', 'stripe-form')
-    //    .appendTo('head');
-
-
-
        $(document).on('submit', '#billing-setting', function() {
            $('#checkout-button').attr('disabled', 'disabled');
            $('button').prop('disabled', true);

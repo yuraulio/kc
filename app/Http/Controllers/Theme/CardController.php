@@ -153,9 +153,9 @@ class CardController extends Controller
                 'defaultPaymetntId' => $data['defaultPaymetntId'],
                 'default_card' => $data['defaultPaymetnt'],
                 'cards' => $data['cards'],
-                'payment_method' => $request->payment_method
+                'payment_method' => $request->payment_method,
+                'id' => Auth::user()->createSetupIntent()->client_secret
             ]);
-           return back();
 
         } catch (Exception $e) {
 

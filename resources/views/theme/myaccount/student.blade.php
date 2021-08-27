@@ -1733,6 +1733,7 @@
 @section('scripts')
 <script src="https://js.stripe.com/v3/"></script>
 <script>
+    var stripeUserId = '{{ Auth::user()->createSetupIntent()->client_secret }}';
     $(document).on('click', '#addCard', function(e){
 
       /*$('<script>')
@@ -1748,7 +1749,7 @@
          <input id="card-holder-name" type="text">
          <!-- Stripe Elements Placeholder -->
          <div id="card-element"></div>
-         <button id="card-button" type="button" class="btn btn--secondary btn--sm" data-secret="{{ Auth::user()->createSetupIntent()->client_secret }}">
+         <button id="card-button" type="button" class="btn btn--secondary btn--sm" data-secret="${stripeUserId}">
              Update Payment Method
          </button></div>`)
 
@@ -1808,7 +1809,7 @@
                   },
                   data:{ 'payment_method' : paymentMethod},
                   success:function(data) {
-
+                     stripeUserId = data.id;
                      if(data['success']){
 
                         let defaultPaymetntID = data['defaultPaymetntId'];
@@ -1897,41 +1898,7 @@
 
 </script>
 
-<!-- <script>
-    $(document).on('click', '#saveCard', function(e){
-      let card_no = $('#card_no').val()
-      let cvv = $('#cvvNumber').val()
-      let exp_month = $('#ccExpiryMonth').val()
-      let exp_year = $('#ccExpiryYear').val()
 
-      $.ajax({
-               type:'POST',
-               url:'/myaccount/card/store_from_payment',
-               headers: {
-                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-               },
-               data:{ 'card_no' : card_no, 'cvv' : cvv, 'exp_month' : exp_month, 'exp_year' : exp_year},
-               success:function(data) {
-
-                 data = JSON.stringify(data)
-                 data = JSON.parse(data)
-                 console.log(data)
-
-                 $('#brand').text(data['brand'])
-                 $('#last4').text(data['last4'])
-                 $('#exp_month').text(data['exp_month'])
-                 $('#exp_year').text(data['exp_year'])
-
-
-                 $('#container').children().remove();
-
-                 $('#container').append(`<p class="normal msg_save_card"> Successfully added card!!</p>`)
-                 $('#addCard').prop('disabled', false);
-
-               }
-            });
-    });
-</script> -->
 <script>
 
 
