@@ -55,8 +55,8 @@ class FixExams extends Command
                 "correct_answer"=>$q["correct_answer"]];
             }
             //dd($questions);
-            $exam->questions = json_encode($questions);
-            $exam->save();
+            //$exam->questions = json_encode($questions);
+            //$exam->save();
             //break;
             
         }

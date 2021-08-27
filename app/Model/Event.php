@@ -114,7 +114,7 @@ class Event extends Model
     public function instructors()
     {
         return $this->belongsToMany(Instructor::class,'event_topic_lesson_instructor')->with('mediable')->select('instructors.*','lesson_id','instructor_id','event_id')
-            ->withPivot('lesson_id','instructor_id')->orderBy('priority','asc')->with('slugable');
+            ->withPivot('lesson_id','instructor_id')->orderBy('subtitle','asc')->with('slugable');
     }
 
 

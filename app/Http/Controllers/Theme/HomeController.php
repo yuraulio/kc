@@ -429,7 +429,7 @@ class HomeController extends Controller
             $data['benefits'] = $page->benefits;
             $data['corporatebrands'] = Logos::with('medias')->where('type', 'brands')->get();
         }else if($data['page']['template'] == 'instructors'){
-            $data['instructors'] =  Instructor::with('medias', 'slugable')->where('status', 1)->get();
+            $data['instructors'] =  Instructor::with('medias', 'slugable')->orderBy('subtitle','asc')->where('status', 1)->get();
         }else if($data['page']['id'] == 800){
             $data['brands'] = Logos::with('medias')->where('type', 'brands')->get();
             return view('admin.static_tpls.logos.backend' ,$data);

@@ -58,7 +58,7 @@ class InstructorController extends Controller
         {
             $status = 0;
         }
-
+        
         $request->request->add(['status' => $status]);
         $isCreate = $model->create($request->all());
         if($isCreate){
@@ -67,7 +67,7 @@ class InstructorController extends Controller
             }*/
 
             $isCreate->createMedia();
-
+            $isCreate->createSlug($request->subtitle);
             //attach instructor-user
             if($request->user_id != null){
                 $isCreate->user()->attach(['user_id' => $request->user_id]);
