@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Model\Exam;
 use GuzzleHttp\Client;
+
 class InsertExams extends Command
 {
     /**
@@ -50,9 +51,9 @@ class InsertExams extends Command
         }*/
 
 
-        $client = new GuzzleHttp\Client(['base_uri' => 'https://lcknowcrunch.test']);
+        $client = new Client(['base_uri' => 'lcknowcrunch.test']);
         // Send a request to https://foo.com/api/test
-        $response = $client->request('GET', 'get-exams');
+        $response = $client->request('GET', 'lcknowcrunch.test/get-exams');
         dd($response);
         
 
