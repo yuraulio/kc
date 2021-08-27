@@ -79,10 +79,10 @@
                     <?php //dd($default_card); ?>
                     @if($default_card && $default_card->brand == 'visa')
                         <?php $brand = 'Visa' ?>
-                        <img id="icon_card" alt="Image placeholder" src="{{ asset('argon') }}/img/icons/cards/visa.svg">
+                        <img style="padding:10px" id="icon_card" alt="Image placeholder" src="{{ asset('argon') }}/img/icons/cards/visa.svg">
                     @else
                         <?php $brand = 'Mastercard' ?>
-                        <img id="icon_card" alt="Image placeholder" src="{{ asset('argon') }}/img/icons/cards/master.svg">
+                        <img style="padding:10px" id="icon_card" alt="Image placeholder" src="{{ asset('argon') }}/img/icons/cards/master.svg">
                     @endif
 
                 </div>
@@ -91,7 +91,7 @@
                     <b style="margin-right:0.5rem;" class="mb-0"> **** </b>
                     <b id="last4" class="mb-0">@if($default_card) {{$default_card->last4}} @endif</b>
 
-                    <p class="text-sm text-muted mb-0"><span style="margin-right:0.8rem;">Expires: </span><span id="exp_month">@if($default_card) {{$default_card->exp_month}} @endif</span>/<span id="exp_year">@if($default_card) {{$default_card->exp_year}} @endif</span></p>
+                    <p class="text-sm text-muted mb-0"><span style="margin-right:0.8rem;">Expires: </span><span id="exp_month">@if($default_card) {{$default_card->exp_month}}@endif</span>/<span id="exp_year">@if($default_card){{$default_card->exp_year}} @endif</span></p>
 
                 </div>
             </div>

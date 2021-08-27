@@ -1393,12 +1393,9 @@ if(!isset($info)){
 
 @if(isset($paywithstripe) && $paywithstripe == 1 && Auth::check())
 <script>
+    var count = 0;
+    var stripeUserId = '{{ Auth::user()->createSetupIntent()->client_secret }}';
     $(document).on('click', '#addCard', function(e){
-
-      /*$('<script>')
-       .attr('src', 'https://js.stripe.com/v3/')
-       .attr('id', 'stripe-js')
-       .appendTo('head');*/
 
        $('#container').removeClass('d-none')
 
@@ -1410,7 +1407,7 @@ if(!isset($info)){
           <input id="card-holder-name" type="text" placeholder="Cardholder Name">
           <!-- Stripe Elements Placeholder -->
           <div id="card-element"></div>
-          <button id="card-button" type="button" class="btn btn--secondary btn--sm" data-secret="{{ Auth::user()->createSetupIntent()->client_secret }}">
+          <button id="card-button" type="button" class="btn btn--secondary btn--sm" data-secret="${stripeUserId}">
               Update Payment Method
           </button>`)
          $('<script>')
@@ -1427,6 +1424,10 @@ if(!isset($info)){
                 cardElement.mount('#card-element');`)
        .attr('id', 'stripe-form')
         .appendTo('head');
+
+
+
+        //$('#card-button').attr('data-secret', '{{ Auth::user()->createSetupIntent()->client_secret }}')
 
 
 
@@ -1473,6 +1474,8 @@ if(!isset($info)){
                   data:{ 'payment_method' : paymentMethod},
                   success:function(data) {
 
+                    stripeUserId = data.id;
+
                      if(data['success']){
                         data = JSON.stringify(data['card'])
                         data = JSON.parse(data)
@@ -1493,9 +1496,7 @@ if(!isset($info)){
                             $('#brand-sec').text('Mastercard')
                         }
 
-                        console.log('{{ Auth::user()->createSetupIntent()->client_secret }}')
 
-                        $("#card-button").attr('data-secret', '{{ Auth::user()->createSetupIntent()->client_secret }}' ) //"{{ Auth::user()->createSetupIntent()->client_secret }}"
 
                         $('#add_card_btn').removeClass('d-none')
 
@@ -1507,6 +1508,15 @@ if(!isset($info)){
 
 
                         $('#container').append(`<p class="normal msg_save_card"> Successfully added card!!</p>`)
+
+                        setTimeout(function(){
+
+                            $msg_save_card = $('.msg_save_card')
+
+                            $msg_save_card.hide('slow', function(){ $msg_save_card.remove(); });
+
+                            }, 4000);
+
                         $('#addCard').prop('disabled', false);
                         $('button').prop('disabled', false);
                      }else{
