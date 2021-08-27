@@ -1397,8 +1397,6 @@ if(!isset($info)){
     var stripeUserId = '{{ Auth::user()->createSetupIntent()->client_secret }}';
     $(document).on('click', '#addCard', function(e){
 
-        console.log('stripeUserId = ', stripeUserId);
-
        $('#container').removeClass('d-none')
 
 
