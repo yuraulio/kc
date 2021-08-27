@@ -73,6 +73,7 @@
                 <div class="card" style="width: auto;">
                 <div class="card-body">
                     {{--<h4 class="card-title">{{$version['version']}}</h4>--}}
+
                     <div class="card-version-image"><img id="{{$version['version']}}" class="img-fluid" data-version="{{$version['version']}}" src="<?php
                         if(isset($event)) {
                             echo url($event['path'].$event['original_name']);
@@ -141,7 +142,7 @@
         $.each(versions, function(key, value){
             let name = value.version
             const cropper = new Cropper(document.getElementById(`${value.version}`), {
-                //aspectRatio: Number((value.w/value.h), 4),
+                aspectRatio: Number((value.w/value.h), 4),
                 viewMode: 0,
                 dragMode: "crop",
                 responsive: false,
