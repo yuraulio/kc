@@ -305,7 +305,7 @@ $(document).on('click', '.do-checkout', function(e) {
 	e.preventDefault();
     var hasCard = false
     var favDialogCard = document.getElementById('favDialogCard');
-
+    
 	var thec = $('input#read-accept-tcp');
 	if (thec.prop("checked") === false) {
 
@@ -320,7 +320,7 @@ $(document).on('click', '.do-checkout', function(e) {
         }
     }
 
-   else if($('#last4').text() == '-'){
+   else if(!$('#last4').text()){
     favDialogCard.style.display = "block";
    }
 
@@ -519,7 +519,7 @@ $(document).on('click', '.do-checkout-subscription', function(e) {
     }
 
 
-    else if($('#last4').val() == '-'){
+    else if(!$('#last4').text()){
         favDialogCard.style.display = "block";
     }
 

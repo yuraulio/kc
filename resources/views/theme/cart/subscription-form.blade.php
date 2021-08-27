@@ -739,39 +739,7 @@ $(document).ready(function() {
    })
 
    </script>
-   <script>
-    $(document).on('click', '#addCard', function(e){
-      $('#addCard').prop('disabled', true);
-      $('.msg_save_card').remove();
-      $('#container').append(`<div class="row cardForm">
-      <h4>Add New Card</h4>
-      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-         <label> Card number <span>*</span></label>
-         <input onblur="this.placeholder = 'Card Number'" autocomplete='off' onfocus="this.placeholder = ''" placeholder="Card Number" onkeyup="cardNo(this)"  type='text' name="card_no" id="card_no">
-      </div>
-      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-         <label>CVV <span>*</span></label>
-         <input onblur="this.placeholder = 'e.g. 311'" autocomplete='off' onfocus="this.placeholder = ''" placeholder='e.g. 311' onkeyup="cvv(this)"  type='text' name="cvvNumber" id="cvvNumber">
-      </div>
-      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-         <label>Expiration month <span>*</span></label>
 
-            <input onblur="this.placeholder = 'MM'" onfocus="this.placeholder = ''"  placeholder='MM' onkeyup="month(this)" type='text' name="ccExpiryMonth" id="ccExpiryMonth" required>
-
-      </div>
-      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-         <label>Expiration year <span>*</span></label>
-
-            <input onblur="this.placeholder = 'YYYY'" onfocus="this.placeholder = ''" placeholder='YYYY' type='text' maxlength="4" size="4" onkeyup="year(this)"  name="ccExpiryYear" id="ccExpiryYear" required>
-
-         <input class='form-control ammount' type='hidden' name="amount" value="{{ Cart::instance('default')->subtotal() }}">
-      </div>
-      <div class="checkout-proceed-action">
-         <button id="saveCard" type="button" class="btn btn--secondary btn--sm">Save Card</button>
-      </div>
-   </div>`)
-   })
-   </script>
    <script>
     $(document).on('click', '#saveCard', function(e){
       let card_no = $('#card_no').val()

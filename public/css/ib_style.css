@@ -88,12 +88,12 @@ img.account-thumb {
 }
 
 div#chartContainer:after {
-  width: 100px;
-  height: 100px;
   background: white;
+  content: '';
   position: absolute;
-  bottom: 0;
-  content: "";
+  top: 97%;
+  height: 11px;
+  width:100%;
 }
 
 #hide-results {

@@ -65,8 +65,7 @@
     <!-- /.col12.hidden-fields-actions.installments-fields -->
 </div>
 
-<?php //dd($default_card); ?>
-<!-- ///////////////////////////////////// -->
+
 <div id="cardInformation" class="col12 <?= ($default_card) ? '' : 'd-none'; ?>">
     <h4>Card Information</h4>
         <!-- Card body -->
@@ -111,85 +110,8 @@
 <div id="container" class="col12 <?= ($default_card) ? 'd-none' : '';?>"></div>
 
 
-<!-- //////////////////////////////////////////// -->
-   <?//php dd($default_card); ?>
-
-   {{--@if(!isset($default_card) || (isset($default_card) && !$default_card))
-   <?php //dd($default_card); ?>
-   <div class="row ">
-
-
-    <div class="col12">
-         <h4>Card Information</h4>
-         <?php //dd($default_card); ?>
-         <div class="label-wrapper">
-            <label for="radio-installment-full-control">Brand: <span id="brand" class="ticket-coupon">No card</span></label>
-         </div>
-         <div class="label-wrapper">
-            <label for="radio-installment-full-control">Last four: <span id="last4" class="ticket-coupon">-</span></label>
-         </div>
-         <div class="label-wrapper">
-            <label for="radio-installment-full-control">Expire month: <span id="exp_month" class="ticket-coupon">-</span></label>
-         </div>
-         <div class="label-wrapper">
-            <label for="radio-installment-full-control">Expire year <span id="exp_year" class="ticket-coupon">-</span></label>
-         </div>
-
-    </div>
-</div>
-
-   <div class="row cardForm">
-      <div id="addCardBtn" class="col12">
-         <button type="button" id="addCard" class="btn btn--secondary btn--sm">Add New Card</button>
-      </div>
-
-      <div id="container" class="col12"></div>
-   </div>
-   @else
-   <div class="row">
-      <div class="col12">
-         <h4>Card Information</h4>
-         <?php //dd($default_card); ?>
-         <div class="label-wrapper">
-            <label for="radio-installment-full-control">Brand: <span id="brand" class="ticket-coupon">{{$default_card->brand}}</span></label>
-         </div>
-         <div class="label-wrapper">
-            <label for="radio-installment-full-control">Last four: <span id="last4" class="ticket-coupon">{{$default_card->last4}}</span></label>
-         </div>
-         <div class="label-wrapper">
-            <label for="radio-installment-full-control">Expire month: <span id="exp_month" class="ticket-coupon">{{$default_card->exp_month}}</span></label>
-         </div>
-         <div class="label-wrapper">
-            <label for="radio-installment-full-control">Expire year <span id="exp_year" class="ticket-coupon">{{$default_card->exp_year}}</span></label>
-         </div>
-
-         <!-- <div class="label-wrapper">
-            <label for="radio-installment-full-control">CVV:
-               <input id="cvv" type="text" value="" placeholder="CVV" required></input>
-            </label>
-         </div> -->
-      </div>
-
-      <div class="row cardForm">
-         <div id="addCardBtn" class="col12">
-            <button type="button" id="addCard" class="btn btn--secondary btn--sm">Add New Card</button>
-         </div>
-
-         <div id="container" class="col12"></div>
-      </div>
-
-
-   @endif--}}
-
-
-
 
 </div>
-<!--  <div class='form-row'>
-   <div class='col-md-12 form-group'>
-   <button class='form-control btn btn-primary submit-button' type='submit'>Pay »</button>
-   </div>
-   </div> -->
 
 
    <script>

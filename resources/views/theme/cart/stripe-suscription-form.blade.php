@@ -1,89 +1,61 @@
-<div class="col12  invoice-fields">
-   <div class="row">
-      <div class="col12">
-         <img src='/theme/assets/images/stripe/powered_by_stripe.png'>
-      </div>
-   </div>
-   </br>
-   <div class="col12  installments-fields">
-      <input type="hidden" id="payment_method_id" name="payment_method_id" value="1">
-      <!-- /.col12.hidden-fields-actions.installments-fields -->
-   </div>
-   <?php //dd($default_card); ?>
-   @if(!$default_card)
-   <?php //dd($default_card); ?>
-   <div class="col12">
-         <h4>Card Information</h4>
-         <?php //dd($default_card); ?>
-         <div class="label-wrapper">
-            <label for="radio-installment-full-control">Brand: <span id="brand" class="ticket-coupon">No card</span></label>
-         </div>
-         <div class="label-wrapper">
-            <label for="radio-installment-full-control">Last four: <span id="last4" class="ticket-coupon">-</span></label>
-         </div>
-         <div class="label-wrapper">
-            <label for="radio-installment-full-control">Expire month: <span id="exp_month" class="ticket-coupon">-</span></label>
-         </div>
-         <div class="label-wrapper">
-            <label for="radio-installment-full-control">Expire year <span id="exp_year" class="ticket-coupon">-</span></label>
-         </div>
-         
-         <!-- <div class="label-wrapper">
-            <label for="radio-installment-full-control">CVV: 
-               <input id="cvv" type="text" value="" placeholder="CVV" required></input>
-            </label>
-         </div> -->
-      </div>
-   <div class="row cardForm">
+<div id="cardInformation" class="col12 <?= ($default_card) ? '' : 'd-none'; ?>">
+    <h4>Card Information</h4>
+        <!-- Card body -->
+        <div class="card-body">
 
 
-      <div id="addCardBtn" class="col12">
-         <button type="button" id="addCard" class="btn btn--secondary btn--sm">Add New Card</button>
-      </div>
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <!-- Avatar -->
+                    <?php //dd($default_card); ?>
+                    @if($default_card && $default_card->brand == 'visa')
+                        <?php $brand = 'Visa' ?>
+                        <img style="padding:10px" id="icon_card" alt="Image placeholder" src="{{ asset('argon') }}/img/icons/cards/visa.svg">
+                    @else
+                        <?php $brand = 'Mastercard' ?>
+                        <img style="padding:10px" id="icon_card" alt="Image placeholder" src="{{ asset('argon') }}/img/icons/cards/master.svg">
+                    @endif
 
-   </div>
-   @else
-   <div class="row">
-      <div class="col12">
-         <h4>Card Information</h4>
-         <?php //dd($default_card); ?>
-         <div class="label-wrapper">
-            <label for="radio-installment-full-control">Brand: <span id="brand" class="ticket-coupon">{{$default_card['brand']}}</span></label>
-         </div>
-         <div class="label-wrapper">
-            <label for="radio-installment-full-control">Last four: <span id="last4" class="ticket-coupon">{{$default_card['last4']}}</span></label>
-         </div>
-         <div class="label-wrapper">
-            <label for="radio-installment-full-control">Expire month: <span id="exp_month" class="ticket-coupon">{{$default_card['exp_month']}}</span></label>
-         </div>
-         <div class="label-wrapper">
-            <label for="radio-installment-full-control">Expire year <span id="exp_year" class="ticket-coupon">{{$default_card['exp_year']}}</span></label>
-         </div>
-         
-         <!-- <div class="label-wrapper">
-            <label for="radio-installment-full-control">CVV: 
-               <input id="cvv" type="text" value="" placeholder="CVV" required></input>
-            </label>
-         </div> -->
-      </div>
+                </div>
+                <div class="col ml--2">
+                    <b id="brand-sec" style="margin-right:2rem;" class="mb-0"> {{$brand}}</b>
+                    <b style="margin-right:0.5rem;" class="mb-0"> **** </b>
+                    <b id="last4" class="mb-0">@if($default_card) {{$default_card->last4}} @endif</b>
 
-      
+                    <p class="text-sm text-muted mb-0"><span style="margin-right:0.8rem;">Expires: </span><span id="exp_month">@if($default_card) {{$default_card->exp_month}}@endif</span>/<span id="exp_year">@if($default_card){{$default_card->exp_year}} @endif</span></p>
 
-      <div id="addCardBtn" class="col12">
-         <button type="button" id="addCard" class="btn btn--secondary btn--sm">Add New Card</button>
-      </div>
+                </div>
+            </div>
 
-     
-   @endif
-   <div id="container" class="col12">
-         
-   </div>
+        </div>
+
 </div>
-<!--  <div class='form-row'>
-   <div class='col-md-12 form-group'>
-   <button class='form-control btn btn-primary submit-button' type='submit'>Pay »</button>
-   </div>
-   </div> -->
+
+
+<div id="add_card_btn" class="col12 <?= (!$default_card) ? 'd-none' : '';?>">
+    <div id="addCardBtn" class="col12">
+        <button type="button" id="addCard" class="btn btn--secondary btn--sm">Add New Card</button>
+    </div>
+</div>
+
+
+<div id="container" class="col12 <?= ($default_card) ? 'd-none' : '';?>"></div>
+
+
+
+</div>
+
+
+<script>
+   $(document).ready(function() {
+
+      if($('#last4').text() == ''){
+          $( "#addCard" ).click();
+      }
+
+   });
+</script>
+
 <script>
    function cvv(input) {
       
@@ -146,55 +118,6 @@
    
 </script>
 
-
-<script>
-    $(document).on('click', '#addCard', function(e){
-      
-      /*$('<script>')
-       .attr('src', 'https://js.stripe.com/v3/')
-       .attr('id', 'stripe-js')
-       .appendTo('head');*/
-
-   
-      
-      $('#addCard').prop('disabled', true);
-      $('.msg_save_card').remove();
-      $('#container').append(`
-         <input id="card-holder-name" type="text">
-         <!-- Stripe Elements Placeholder -->
-         <div id="card-element"></div>
-         <button id="card-button" type="button" class="btn btn--secondary btn--sm" data-secret="{{ Auth::user()->createSetupIntent()->client_secret }}">
-             Update Payment Method
-         </button>`)
-
-
-         $('<script>')
-       .text(`var stripe = Stripe('{{$stripe_key}}',{locale: 'en'});
-               var elements = stripe.elements();
-               var cardElement = elements.create('card',{
-                  style: {
-                     base: {
-      
-                        fontSize: '18px',
-      
-                     },
-                  },
-                  hidePostalCode: true,
-                  });
-               cardElement.mount('#card-element');`)
-
-       .attr('id', 'stripe-form')
-       .appendTo('head');
-
-     
-
-      
-   })
-
-  
-
-</script>
-
 <script>
 
 
@@ -225,10 +148,14 @@
                   },
                   data:{ 'payment_method' : paymentMethod},
                   success:function(data) {
-                 
+
+                    stripeUserId = data.id;
+
                      if(data['success']){
                         data = JSON.stringify(data['card'])
                         data = JSON.parse(data)
+
+                        $('#cardInformation').removeClass('d-none')
 
 
                         $('#brand').text(data['brand'])
@@ -236,12 +163,35 @@
                         $('#exp_month').text(data['exp_month'])
                         $('#exp_year').text(data['exp_year'])
 
+                        if(data['brand'] == 'visa'){
+                            $('#icon_card').attr('src', "argon/img/icons/cards/visa.svg")
+                            $('#brand-sec').text('Visa')
+                        }else{
+                            $('#icon_card').attr('src', "argon/img/icons/cards/master.svg")
+                            $('#brand-sec').text('Mastercard')
+                        }
+
+
+
+                        $('#add_card_btn').removeClass('d-none')
+
+
                         $("#stripe-form").remove();
-                     $("#stripe-js").remove();
+                        $("#stripe-js").remove();
 
                         $('#container').children().remove();
 
+
                         $('#container').append(`<p class="normal msg_save_card"> Successfully added card!!</p>`)
+
+                        setTimeout(function(){
+
+                            $msg_save_card = $('.msg_save_card')
+
+                            $msg_save_card.hide('slow', function(){ $msg_save_card.remove(); });
+
+                            }, 4000);
+
                         $('#addCard').prop('disabled', false);
                         $('button').prop('disabled', false);
                      }else{
@@ -254,20 +204,70 @@
                         $('#addCard').prop('disabled', false);
                         $('button').prop('disabled', false);
                         $("#stripe-form").remove();
-                     $("#stripe-js").remove();
+                        $("#stripe-js").remove();
                      }
 
-                     
+
 
                   },
-           
+
                });
             }
          });
-               
+
    })
-  
+
 
 
 
 </script>
+
+
+@if(Auth::check())
+<script>
+    var count = 0;
+    var stripeUserId = '{{ Auth::user()->createSetupIntent()->client_secret }}';
+    $(document).on('click', '#addCard', function(e){
+
+       $('#container').removeClass('d-none')
+
+
+
+      $('#addCard').prop('disabled', true);
+      $('.msg_save_card').remove();
+       $('#container').append(`
+          <input id="card-holder-name" type="text" placeholder="Cardholder Name">
+          <!-- Stripe Elements Placeholder -->
+          <div id="card-element"></div>
+          <button id="card-button" type="button" class="btn btn--secondary btn--sm" data-secret="${stripeUserId}">
+              Update Payment Method
+          </button>`)
+         $('<script>')
+        .text(`var stripe = Stripe('{{$stripe_key}}',{locale: 'en'});
+                var elements = stripe.elements();
+                var cardElement = elements.create('card',{
+                   style: {
+                      base: {
+                        fontSize: '18px',
+                     },
+                   },
+                   hidePostalCode: true,
+                   });
+                cardElement.mount('#card-element');`)
+       .attr('id', 'stripe-form')
+        .appendTo('head');
+
+
+
+        //$('#card-button').attr('data-secret', '{{ Auth::user()->createSetupIntent()->client_secret }}')
+
+
+
+
+   })
+
+
+
+</script>
+
+@endif
