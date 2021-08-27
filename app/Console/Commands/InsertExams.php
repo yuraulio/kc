@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Model\Exam;
-
+use GuzzleHttp\Client;
 class InsertExams extends Command
 {
     /**
@@ -38,7 +38,7 @@ class InsertExams extends Command
      */
     public function handle()
     {
-        $exams = Exam::all();
+        /*$exams = Exam::all();
 
         foreach($exams as $exam){   
             $questions = decrypt($exam->questions);
@@ -47,7 +47,15 @@ class InsertExams extends Command
             $exam->questions = json_encode($questions);
             $exam->save();
             break;
-        }
+        }*/
+
+
+        $client = new GuzzleHttp\Client(['base_uri' => 'https://lcknowcrunch.test']);
+        // Send a request to https://foo.com/api/test
+        $response = $client->request('GET', 'get-exams');
+        dd($response);
+        
+
         return 0;
     }
 }

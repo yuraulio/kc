@@ -1288,6 +1288,7 @@ if(!isset($info)){
                                        <input type="hidden"  name="cardtype" value="1">
                                        <span></span>
                                     </div>
+                                    <b hidden id="last4"> ok </b>
                                     <div class="label-wrapper">
                                        <label for="radio-debit-card-control">Debit card</label>
                                        <span>No installments.</span>

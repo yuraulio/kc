@@ -315,7 +315,7 @@ $(document).on('click', '.do-checkout', function(e) {
 
        favDialog.style.display = "block";
         $("body").css("overflow-y", "hidden")
-        if($('#last4').text() == '-'){
+        if(!$('#last4').text()){
             favDialogCard.style.display = "block";
         }
     }

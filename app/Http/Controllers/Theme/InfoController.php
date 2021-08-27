@@ -160,6 +160,126 @@ class InfoController extends Controller
 
     }
 
+
+    public function orderError()
+    {
+       
+    	$data = array();
+        
+        $data['pay_methods'] = array();
+    	
+
+        $cart = Cart::content();
+
+        $data['eventId'] = '';
+        $data['categoryScript'] = '';
+        
+        foreach($cart as $cart){
+
+            $ev = Event::find($cart->options['event']);
+            if ($ev->category->first()){
+                
+                $data['categoryScript'] = 'Event > ' . $ev->category->first()->name;
+                   
+                
+                    
+            }
+
+            $data['eventId'] = $cart->options['event'];
+        }
+        
+        $data['eventtickets'] = $ev->ticket;
+        $data['hours'] = $ev->hours;
+        $data['pay_methods'] = $ev->paymentMethod->first();
+
+        if (Session::has('transaction_id')) {
+            $transaction = Transaction::where('id', Session::get('transaction_id'))->first();
+              
+            if ($transaction) {
+              $this->transaction = $transaction->toArray();
+          } else {
+              $this->transaction = [];
+          }
+       }
+       else {
+          $this->transaction = [];
+      }
+       
+
+        if (Session::has('transaction_id')) {
+         	 $transaction = Transaction::where('id', Session::get('transaction_id'))->first();
+
+           
+
+         	 if ($transaction) {
+                  
+                $this->transaction = $transaction->toArray();
+            } else {
+                $this->transaction = [];
+            }
+         	//dd($transaction);
+         }
+         else {
+            $this->transaction = ['payment_response' => 'Card is not valid'];
+        }
+
+        $data['info']['success'] = false;
+        $data['info']['title'] = '<h3>It seems something went wrong..</h3>';
+        $data['info']['message'] = "Your payment didn't go through. Please check your credit or debit card limit or just contact us.";
+        $data['info']['transaction'] = $this->transaction;
+        $data['info']['statusClass'] = 'danger';
+        //return view('admin.info.order_error', $data);
+      
+        if (Session::has('pay_seats_data')) {
+            $data['pay_seats_data'] = Session::get('pay_seats_data');
+        }
+        else {
+            $data['pay_seats_data'] = [];
+        }
+
+        /*if (Session::has('pay_invoice_data')) {
+            $data['pay_invoice_data'] = Session::get('pay_invoice_data');
+        }
+        else {
+            $data['pay_invoice_data'] = [];
+        }*/
+
+        if (Session::has('pay_bill_data')) {
+            $data['pay_bill_data'] = Session::get('pay_bill_data');
+        }
+        else {
+            $data['pay_bill_data'] = [];
+        }
+
+        if (Session::has('deree_user_data')) {
+            $data['deree_user_data'] = Session::get('deree_user_data');
+        }
+        else {
+            $data['deree_user_data'] = [];
+        }
+
+         if (Session::has('cardtype')) {
+            $data['cardtype'] = Session::get('cardtype');
+        }
+        else {
+            $data['cardtype'] = [];
+        }
+
+        if (Session::has('installments')) {
+            $data['installments'] = Session::get('installments');
+        }
+        else {
+            $data['installments'] = [];
+        }
+
+	    Session::forget('deree_user_data');
+       
+
+        $data['city'] = '';
+        $data['duration'] = '';
+        return view('theme.cart.cart', $data);
+    }
+
     public function createUsersFromTransaction($transaction)
     {
     	/*

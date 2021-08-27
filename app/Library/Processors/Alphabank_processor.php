@@ -333,6 +333,8 @@ Class Alphabank_processor
         if ($order_details) {
             $order_details = $order_details->toArray();
             $payment_method_details = $order_details['payment_method_id'];
+            $payment_method_details = PaymentMethod::where('id', $order_details['payment_method_id'])->first();
+
         } else {
             $order_details = [];
             $payment_method_details = [];
