@@ -22,7 +22,6 @@
                                 $found = false;
                             }
                             if($found){
-                                dd($version);
                                 $versions[$key] = $version;
                             }
 
@@ -66,7 +65,6 @@
             }
 
             ?>
-
 
             @if($versions != null)
                 @foreach($versions as $version)
@@ -143,7 +141,7 @@
         $.each(versions, function(key, value){
             let name = value.version
             const cropper = new Cropper(document.getElementById(`${value.version}`), {
-                aspectRatio: Number((value.w/value.h), 4),
+                //aspectRatio: Number((value.w/value.h), 4),
                 viewMode: 0,
                 dragMode: "crop",
                 responsive: false,
@@ -155,8 +153,8 @@
                 zoomable: false,
                 cropBoxMovable: true,
                 cropBoxResizable: true,
-                minContainerWidth: 300,
-                minContainerHeight: 300,
+                // minContainerWidth: 300,
+                // minContainerHeight: 300,
                 //minCanvasWidth: 350,
                 //minCanvasHeight: 350,
 
