@@ -326,12 +326,12 @@
 
 .card-version-image{
     display: inline-flex;
-    width: 60%;
+    /* width: 60%; */
     float: left;
     margin-right: 10px;
 
     max-width: 300px;
-    max-height: 130px;
+    max-height: 200px;
 }
 
 .card-version-info {

@@ -139,11 +139,13 @@
         let myObj = {}
         let myArr = []
 
+
         $.each(versions, function(key, value){
+            //console.log(document.getElementById(`${value.version}`))
             let name = value.version
             const cropper = new Cropper(document.getElementById(`${value.version}`), {
                 aspectRatio: Number((value.w/value.h)).toFixed(4),
-                viewMode: 0,
+                viewMode: 1,
                 dragMode: "crop",
                 responsive: false,
                 autoCropArea: 1,

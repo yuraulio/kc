@@ -79,8 +79,6 @@ class MediaController extends Controller
 
         $media->save();
 
-        $details = [];
-
         foreach(get_image_versions() as $value){
             //dd($value['version']);
             foreach($versions as $version){
@@ -88,17 +86,13 @@ class MediaController extends Controller
                     $image->resize($value['w'], $value['h']);
                     $image->fit($value['w'], $value['h']);
                     $image->save(public_path('/').$folders.'/'.$path[0].'-'.$value['version'].'.'.$path[1], $value['q']);
-
-                    $details['img_align'][$version]['x'] = 0;
-                    $details['img_align'][$version]['y'] = 0;
-                    $details['img_align'][$version]['width'] =  $value['w'];
-                    $details['img_align'][$version]['height'] =  $value['h'];
                 }
 
             }
-        }
 
-        Media::where('id', $media['id'])->update(['details' => json_encode($details)]);
+            //dd($versions);
+
+        }
 
         return back();
 
@@ -301,6 +295,10 @@ class MediaController extends Controller
         }
         //dd($mediaKey);
         $image = Image::make($mediaKey);
+
+        //$image->resize($request->width, $request->height);
+        //$image->fit($request->width, $request->height);
+
         $image->crop(intval($request->width),intval($request->height), intval($request->x), intval($request->y));
         if($request->version != 'profile_image'){
             $image->save(public_path('/uploads').$word.$path[0].'-'.$request->version.'.'.$path[1], 80);
