@@ -67,7 +67,7 @@
 }
 
 #select_ImageModal .modal-dialog {
-    max-width: none !important;
+    max-width: 70% !important;
 }
 
 .img_version {

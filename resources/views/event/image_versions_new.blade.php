@@ -14,7 +14,6 @@
                 $versions = [];
 
 
-
                     foreach (get_image_versions() as $key => $version) {
                         foreach($versions1 as $version_from_include){
                             if($version_from_include == $version['version']){
@@ -23,6 +22,7 @@
                                 $found = false;
                             }
                             if($found){
+                                dd($version);
                                 $versions[$key] = $version;
                             }
 
@@ -66,7 +66,6 @@
             }
 
             ?>
-
 
 
             @if($versions != null)
@@ -135,6 +134,7 @@
 <script>
     let prof_image = false
     var versions = @json($versions);
+    console.log(versions)
     if("{{$event}}" && versions != null){
         image_details = @json($event);
         let myObj = {}
@@ -146,7 +146,7 @@
                 aspectRatio: Number((value.w/value.h), 4),
                 viewMode: 0,
                 dragMode: "crop",
-                responsive: true,
+                responsive: false,
                 autoCropArea: 1,
                 restore: false,
                 movable: false,
@@ -167,6 +167,10 @@
                     height: parseInt(value.h)
                 }
             });
+
+            console.log(name)
+            console.log('w:',parseInt(value.w))
+            console.log('h:',parseInt(value.h))
 
             versions[key]['insta'] = cropper;
 
@@ -202,8 +206,8 @@
             aspectRatio: Number((width/height), 4),
             viewMode: 0,
             dragMode: "crop",
-            responsive: false,
-            autoCropArea: 1,
+            responsive: true,
+            autoCropArea: 0,
             restore: false,
             movable: false,
             rotatable: false,
