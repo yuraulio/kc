@@ -496,13 +496,12 @@ Route::group(['middleware' => ['web']], function () {
 //fb-google-csv
 
 
-//sendSubscriptionNonPayment
 
 //sendWarningElearning
 //sendHalfPeriodElearning
 //sendSubscriptionRemind
 
-Route::get('dropbox/KUBnqOX1FNyTh72','DropboxController@cacheDropboxCLI');
+Route::get('/dropbox/KUBnqOX1FNyTh72','DropboxController@cacheDropboxCLI');
 Route::get('/unroll-elearning-users', 'Dashboard\CronjobsController@unroll');
 Route::get('/sendNonpaymentEmail', 'Dashboard\CronjobsController@sendNonPayment');
 Route::get('/sendSubscriptionNonPayment', 'Dashboard\CronjobsController@sendSubscriptionNonPayment');
