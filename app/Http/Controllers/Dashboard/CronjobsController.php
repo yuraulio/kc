@@ -73,7 +73,7 @@ class CronjobsController extends Controller
 
         $today = strtotime( date('Y/m/d'));
 
-        $subscriptions = Subscription::where('must_be_updated','<',$today)->where('status',true)->where('email_send',false)->where('must_be_updated','!=', 0)->get();
+        $subscriptions = Subscription::where('must_be_updated','<',$today)->where('stripe_status','active')->where('email_send',false)->where('must_be_updated','!=', 0)->get();
 
         foreach($subscriptions as $subscription){
 
