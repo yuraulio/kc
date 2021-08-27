@@ -9,6 +9,7 @@ use App\Model\Invoice;
 use Laravel\Cashier\Subscription;
 use Mail;
 use App\Model\Event;
+use Illuminate\Support\Facades\File;
 
 class CronjobsController extends Controller
 {
@@ -120,92 +121,33 @@ class CronjobsController extends Controller
         }
 
 
-        //$events = Content::where('type',33)->where('status',1)->where('view_tpl','!=','event_free')->where('view_tpl','!=','elearning_free')->with('categories','tags','author','featured.media','contentLinksTicket')->get();
 
-        $events = Event::where('view_tpl','!=','event_free')->where('view_tpl','!=','elearning_free')->with('category', 'ticket')->get();
-        /*$headers = array(
-            "Content-type" => "text/csv",
-            "Content-Disposition" => "attachment; filename=fb.csv",
-            "Pragma" => "no-cache",
-            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
-            "Expires" => "0"
-        );*/
-
-
-        //$this->cFieldLib->contentCustomFields($events);
-        //$this->cFieldLib->contentCustomFields($events);
-        //dd($events);
-
-       // $reviews = Reviews::getReviewExport($this->hw->healthwatchID)->get();
+        $events = Event::where('view_tpl','!=','event_free')->where('view_tpl','!=','elearning_free')->where('published',true)->whereIn('status',[0])->with('category', 'ticket','mediable')->get();
         $columns = array('id', 'title', 'description', 'availability', 'price', 'link', 'image_link', 'brand', 'google_product_category','condition');
 
-        //$callback = function() use ($events, $columns)
-        //{
-            $file = fopen('csv/fb/fb.csv', 'w');
-            fputcsv($file, $columns);
+        $file = fopen('csv/fb/fb.csv', 'w');
+        fputcsv($file, $columns);
 
-            foreach($events as $event) {
+        foreach($events as $event) {
 
-                $cat = '';
-                if (isset($event->categories) && !empty($event->categories)) {
-                    foreach ($event->categories as $category) {
-
-
-                        if($category->parent_id == 12){
-                            $cat = $category;
-                        }
-
-
-                    }
-
-                }
-
-                $amount = 0;
-                $prices = $event->contentLinksTicket()->with('ticket')->orderBy('price', 'asc')->get();
-
-                foreach($prices as $price){
-                    if($price->price > 0) {
-                        $amount = $price->price;
-                    }
-
-                }
-
-
-                if(isset($event['c_fields']['dropdown_select_status']['value'])){
-
-                    $estatus = $event['c_fields']['dropdown_select_status']['value'];
-
-                    $img = '';
-                    if (!empty($event['featured']) && isset($event['featured'][0]) &&isset($event['featured'][0]['media']) && !empty($event['featured'][0]['media'])){
-
-                        $img_path = $event['featured'][0]['media']['path'];
-                        $img_name = $event['featured'][0]['media']['name'].$event['featured'][0]['media']['ext'];
-                        $img = $img_path.'/'.$img_name;
-                        $img = url('/') . '/uploads/originals/' . $img;
-
-
-                    }
-
-                    if(($estatus == 0 /*|| $estatus == 2*/) && $amount > 0){
-                        fputcsv($file, array($event->id, $event->title, $event->title, 'in stock', $amount . ' EUR', url('/') . '/' . $event->slug, str_replace('\"', '', $img), 'Knowcrunch',  'Event > ' . $cat['name'], 'new'));
-                    }
-
+            $cat = $event->category->first() ? $event->category->first()->name : '';
+        
+            $amount = 0;
+           
+            foreach($event->ticket as $price){
+                if($price->pivot->price > 0) {
+                    $amount = $price->pivot->price;
                 }
 
             }
-            fclose($file);
-           // return $file;
-       // };
 
-        //response()->stream($callback, 200, $headers);
-       // dd(response()->stream($callback, 200, $headers));
-       // response()->save($callback, 200, $headers);
-        //Storage::disk('public')->move('/public',$file);
-        //Storage::disk('public')->move('/csv/fb',$file);
-        //Storage::put('fb.csv',$file);
+            $img = url('/') . $event['mediable']['path'] . '/' . $event['mediable']['original_name'];
+            fputcsv($file, array($event->id, $event->title, $event->title, 'in stock', $amount . ' EUR', url('/') . '/' . $event->slug, str_replace('\"', '', $img), 'Knowcrunch',  'Event > ' . $cat, 'new'));
 
+        }
+        fclose($file);
+     
         return back();
-        //Storage::disk('public')->put('fb.csv',$file);
 
 
     }
@@ -218,107 +160,41 @@ class CronjobsController extends Controller
             File::makeDirectory($destinationPath, $mode = 0777, true, true);
         }
 
-        $events = Content::where('type',33)->where('status',1)->where('view_tpl','!=','event_free')->where('view_tpl','!=','elearning_free')->with('categories','tags','author','featured.media','contentLinksTicket')->get();
+        $events = Event::where('view_tpl','!=','event_free')->where('view_tpl','!=','elearning_free')->where('published',true)->whereIn('status',[0])->with('category', 'ticket','mediable')->get();
 
-        /*$headers = array(
-            "Content-type" => "text/csv",
-            "Content-Disposition" => "attachment; filename=google.csv",
-            "Pragma" => "no-cache",
-            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
-            "Expires" => "0"
-        );*/
-
-
-        $this->cFieldLib->contentCustomFields($events);
-        //$this->cFieldLib->contentCustomFields($events);
-        //dd($events);
-
-       // $reviews = Reviews::getReviewExport($this->hw->healthwatchID)->get();
-        //$columns = array("Program ID", "Location ID", "Program name", "School name", "Final URL", "Image URL", "Area of study", "Program description");
         $columns = array("ID", "Item Title", "Final URL", "Image URL", "Price", "Item Category", "Item Description");
 
-        //$callback = function() use ($events, $columns)
-        //{
-            //$file = fopen('csv/google/google1.csv', 'w');
-            $file = fopen('csv/google/google.csv', 'w');
-            fputcsv($file, $columns);
+       
+        $file = fopen('csv/google/google.csv', 'w');
+        fputcsv($file, $columns);
 
-            foreach($events as $event) {
+        foreach($events as $event) {
 
-                $cat = '';
-                $city = null;
-                if (isset($event->categories) && !empty($event->categories)) {
-                    foreach ($event->categories as $category) {
+            $cat = $event->category->first() ? $event->category->first()->name : '';
+            $city = null;
+          
+            $amount = 0;
 
-
-                        if($category->parent_id == 12){
-                            $cat = $category;
-                        }
-
-
-                        if ($category->depth != 0 && $category->parent_id == 9) {
-                            //   dd($category);
-                            $city = $category->name;
-
-                        }
-
-
-                    }
-
+            foreach($event->ticket as $price){
+                if($price->pivot->price > 0) {
+                    $amount = $price->pivot->price;
                 }
-
-                //dd($city);
-
-
-
-                $amount = 0;
-                $prices = $event->contentLinksTicket()->with('ticket')->orderBy('price', 'asc')->get();
-
-                foreach($prices as $price){
-                    if($price->price > 0) {
-                        $amount = $price->price;
-                    }
-
-                }
-
-
-                if(isset($event['c_fields']['dropdown_select_status']['value'])){
-
-                    $estatus = $event['c_fields']['dropdown_select_status']['value'];
-
-                    $img = '';
-                    if (!empty($event['featured']) && isset($event['featured'][0]) &&isset($event['featured'][0]['media']) && !empty($event['featured'][0]['media'])){
-
-                        /*$img_path = $event['featured'][0]['media']['path'];
-                        $img_name = $event['featured'][0]['media']['name'].$event['featured'][0]['media']['ext'];
-                        $img = $img_path.'/'.$img_name;
-                        $img = url('/') . '/uploads/originals/' . $img; */
-                        $img = $this->frontHelp->pImg($event, 'feed-image');
-                        //$img = $this->frontHelp->pImg($event, 'header-image');
-                    }
-                   // $cat['name']
-                    if(($estatus == 0 /*|| $estatus == 2*/) && $amount > 0){
-                        $summary = 'empty';
-                        if($event->summary != ''){
-                            $summary = strip_tags($event->summary);
-                        }
-                        if(!$city){
-                            $city = $cat->name;
-                        }
-                        //fputcsv($file, array(trim($event->id), trim($city), trim($event->title), 'Knowcrunch',  trim(url('/') . '/' . $event->slug), trim($img), 'Digital Marketing' , trim($summary) ));
-                        fputcsv($file, array($event->id, $event->title,  url('/') . '/' . $event->slug, $img, $amount . ' EUR', 'Event > ' . $cat['name'],trim($summary)));
-                    }
-
-
-                }
-
-
+    
             }
-            fclose($file);
-        //};
-        return back();
-        //return response()->stream($callback, 200, $headers);
 
+            $img = url('/') . $event['mediable']['path'] . '/' . $event['mediable']['original_name'];
+
+            $summary = 'empty';
+            if($event->summary != ''){
+                $summary = strip_tags($event->summary);
+            }
+           
+            fputcsv($file, array($event->id, $event->title,  url('/') . '/' . $event->slug, $img, $amount . ' EUR', 'Event > ' . $cat,trim($summary)));
+            
+        }
+        fclose($file);
+        
+        return back();
 
     }
 
@@ -442,6 +318,47 @@ class CronjobsController extends Controller
                         
                     });
                 
+                }
+            }
+        }
+
+    }
+
+
+    public function sendSubscriptionRemind(){
+
+        $adminemail = 'info@knowcrunch.com';
+        $today = strtotime( date('Y/m/d'));
+        $subscriptions = Subscription::where('must_be_updated','>',$today)->where('stripe_status','active')->get();
+
+        $today = date_create( date('Y/m/d'));
+        foreach($subscriptions as $subscription){
+            
+            if($subscription->event->first() && $subscription->event->first()->pivot->expiration){
+                $date = date_create($subscription->event->first()->pivot->expiration);
+                $date = date_diff($date, $today);
+
+                if( $date->y==0 && ( ($date->m == 1 &&  $date->d == 0) || ($date->m ==  0 && $date->d == 7))){  
+                    $muser['name'] = $subscription->user->firstname . ' ' . $subscription->user->lastname;
+                    $muser['first'] = $subscription->user->firstname;
+                    $muser['eventTitle'] =  $subscription->event->first()->title;
+                    $muser['email'] = $subscription->user->email;
+    
+                    $data['firstName'] = $subscription->user->firstname;
+                    $data['eventTitle'] = $subscription->event->first()->title;
+                    $data['expirationDate'] = date('d/m/Y',strtotime($subscription->event->first()->pivot->expiration));
+                    
+                    $sent = Mail::send('emails.student.subscription.subscription_date_reminder', $data, function ($m) use ($adminemail, $muser) {
+    
+                        $fullname = $muser['name'];
+                        $first = $muser['first'];
+                        $sub = $first . ' - A reminder about the Subscription expiration date';
+                        $m->from($adminemail, 'Knowcrunch');
+                        $m->to($muser['email'], $fullname);
+                        //$m->cc($adminemail);
+                        $m->subject($sub);
+    
+                    });
                 }
             }
         }

@@ -488,25 +488,18 @@ Route::group(['middleware' => ['web']], function () {
 
 
 //cronjobs
-
-//abanoded/user_error
-//fb-google-csv
-
-//sendWarningElearning
-//sendHalfPeriodElearning
-//sendSubscriptionRemind
-
 Route::get('/dropbox/KUBnqOX1FNyTh72','DropboxController@cacheDropboxCLI');
 Route::get('/unroll-elearning-users', 'Dashboard\CronjobsController@unroll');
 Route::get('/sendNonpaymentEmail', 'Dashboard\CronjobsController@sendNonPayment');
 Route::get('/sendSubscriptionNonPayment', 'Dashboard\CronjobsController@sendSubscriptionNonPayment');
 Route::get('/sendWarningElearning', 'Dashboard\CronjobsController@sendElearningWarning'); 
 Route::get('/sendHalfPeriodElearning', 'Dashboard\CronjobsController@sendElearningHalfPeriod'); 
-
-//Route::get('/sendSubscriptionRemind', 'Dashboard\CronjobsController@sendSubscriptionRemind'); 
-//Route::get('/fb-google-csv', 'Dashboard\CronjobsController@fbGoogleCsv');
+Route::get('/fb-google-csv', 'Dashboard\CronjobsController@fbGoogleCsv');
+Route::get('/sendSubscriptionRemind', 'Dashboard\CronjobsController@sendSubscriptionRemind'); 
+//Route::get('/abanoded/user', 'Dashboard\CronjobsController@remindAbandonedUser');
 //Route::get('/sendInvoice', 'Dashboard\CronjobsController@sendInvoice');
 
+//SITEMAP
 Route::get('feed/{feed_type?}','Theme\FeedController@index');
 
 Route::group(['middleware' => ['web']], function () {
