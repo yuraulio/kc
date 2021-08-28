@@ -62,8 +62,8 @@ class LessonController extends Controller
             $arr1 = [];
         }
         $links = json_encode($arr1);
-
-        if($request->status == 'on'){
+    
+        if($request->status){
             $status = 1;
         }else{
             $status = 0;
@@ -72,13 +72,15 @@ class LessonController extends Controller
         $request->request->add(['status' => $status, 'links' => $links]);
 
         $lesson = $model->create($request->all());
-
         if($request->topic_id != null){
             foreach($request->topic_id as $topic){
-
+                
                 //assign on Topic
                 $topic = Topic::find($topic);
-                $cat_id = $topic->with('category')->first()->category[0]->id;
+                if(!isset($topic->category[0])){
+                    continue;
+                }
+                $cat_id = $topic->category[0]->id;
                 $cat = Category::with('events')->find($cat_id);
 
                 $cat->topic()->attach($topic, ['lesson_id' => $lesson->id]);
@@ -245,7 +247,7 @@ class LessonController extends Controller
         $links = json_encode($arr1);
 
         //dd($request->all());
-        if($request->status == 'on')
+        if($request->status)
         {
             $status = 1;
         }else

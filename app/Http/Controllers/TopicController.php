@@ -82,7 +82,7 @@ class TopicController extends Controller
      */
     public function store(TopicRequest $request, Topic $model)
     {
-        if($request->status == 'on')
+        if($request->status)
         {
             $status = 1;
         }else
@@ -156,7 +156,7 @@ class TopicController extends Controller
      */
     public function update(TopicRequest $request, Topic $topic)
     {
-        if($request->status == 'on')
+        if($request->status)
         {
             $status = 1;
         }else

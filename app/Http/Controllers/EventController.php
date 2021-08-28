@@ -88,7 +88,7 @@ class EventController extends Controller
         {
             //var_dump($lesson['id']);
             $find = $event->topic()->wherePivot('topic_id', $request->topic_id)->wherePivot('lesson_id', $lesson['id'])->first();
-            //dd($find);
+            
             if($find == null && $request->status1 == '0')
             {
                 $a = $event->topic()->attach($request->topic_id,['lesson_id' => $lesson['id']]);
