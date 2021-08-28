@@ -297,7 +297,9 @@ class Event extends Model
 
             foreach($topic as $t){
 
-
+                if(!isset($lessons[$t->id])){
+                    continue;
+                }
                 $lessonsArray = $lessons[$t->id]->toArray();
                 foreach( $lessonsArray as $key => $lesson){
                     if(!$lesson['instructor_id']){

@@ -630,7 +630,7 @@ class StudentController extends Controller
         $data['details'] = $event->toArray();
         $data['details']['slug'] = $event['slugable']['slug'];
 
-        $data['files'] = !$user->instructor->first() ? $event['category'][0]['dropbox'][0]->toArray() : [];
+        $data['files'] = !$user->instructor->first() && isset($event['category'][0]['dropbox'][0]) ? $event['category'][0]['dropbox'][0]->toArray() : [];
         //dd($data['files']);
         //dd($data['details']);
 

@@ -43,6 +43,8 @@
                         </thead>
                         <tbody id="topic_lessons"  class="lessons-order" data-event-id="{{$event['id']}}">
                             <?php $i=0; ?>
+
+                                @if(isset($lessons[$key]))
                                 @foreach($lessons[$key] as $key1 => $lesson)
                                 <tr id="{{$lesson['id']}}" class="topic_{{$topic->id}} lessons-list">
                                 <td><a class="edit_btn_topic1" href="#">{{ $lesson->title }}</td>
@@ -60,7 +62,7 @@
                                     </span>
 
                                     <div style="display:inline-block">{{$instructors[$lesson->id]->first()['title']}} {{$instructors[$lesson->id]->first()['subtitle']}}</div>
-<?php
+                                <?php
                                 }else{
                                     echo '-';
                                 } ?></td>
@@ -99,7 +101,7 @@
                             </tr>
 
                                 @endforeach
-
+                                @endif
                         </tbody>
                     </table>
                 </div>
