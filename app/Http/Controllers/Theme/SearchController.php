@@ -50,7 +50,7 @@ class SearchController extends Controller
             }
         }
 
-        dd($data['events']);
+        //dd($data['events']);
         return view('theme.search.search_results', $data);
 
     }
