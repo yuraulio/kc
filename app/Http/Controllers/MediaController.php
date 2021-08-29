@@ -201,8 +201,6 @@ class MediaController extends Controller
 
         $image = Image::make(public_path($media['path'].$media['original_name']));
 
-        //resize
-        //fit
 
         $image->crop($request->width, $request->height, $request->x, $request->y);
         $name = explode('.', $media['original_name']);
@@ -293,13 +291,14 @@ class MediaController extends Controller
                 $word = $word.'/'.$folder.'/';
             }
         }
-        //dd($mediaKey);
+
         $image = Image::make($mediaKey);
-
-        //$image->resize($request->width, $request->height);
-        //$image->fit($request->width, $request->height);
-
         $image->crop(intval($request->width),intval($request->height), intval($request->x), intval($request->y));
+        foreach(get_image_versions() as $key => $ver){
+            if($ver['version'] == $request->version){
+                $image->resize($ver['w'],$ver['h']);
+            }
+        }
         if($request->version != 'profile_image'){
             $image->save(public_path('/uploads').$word.$path[0].'-'.$request->version.'.'.$path[1], 80);
             $data['version'] = $request->version;
