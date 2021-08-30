@@ -48,7 +48,7 @@
                                 <li class="account-menu login-pad">
 									<a href="javascript:void(0)" title="Superhero Login">
 
-										<img class="login-image" src="{{cdn($img_src)}}" alt="user-profile-placeholder-image"/>
+										<img class="login-image" src="{{cdn($img_src)}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" alt="user-profile-placeholder-image"/>
 
 									</a>
                                         <div class="account-submenu">

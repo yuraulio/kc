@@ -25,10 +25,10 @@ class TransactionController extends Controller
             $from = date($start_date);
             $to = date($end_date);
 
-            $transactions = Transaction::with('user.statisticGroupByEvent','user.events','user.ticket','subscription','event','event.delivery')->whereBetween('created_at', [$from,$to])->orderBy('created_at','desc')->get();
+            $transactions = Transaction::with('user.statisticGroupByEvent','user.events','user.ticket','subscription','event','event.delivery','event.category')->whereBetween('created_at', [$from,$to])->orderBy('created_at','desc')->get();
 
         }else{
-            $transactions = Transaction::with('user.statisticGroupByEvent','user.events','user.ticket','subscription','event','event.delivery')->where('status', 1)->orderBy('created_at','desc')->get();
+            $transactions = Transaction::with('user.statisticGroupByEvent','user.events','user.ticket','subscription','event','event.delivery','event.category')->where('status', 1)->orderBy('created_at','desc')->get();
 
         }
 
@@ -38,8 +38,11 @@ class TransactionController extends Controller
             if(!$transaction->subscription->first() && $transaction->user->first() && $transaction->event->first()){
 
                 $isElearning = $transaction->event->first()->delivery->first() && $transaction->event->first()->delivery->first()->id == 143;
+                
 
-                if(in_array(9,$userRole) &&  $isElearning){
+                $category =  $transaction->event->first()->category->first() ? $transaction->event->first()->category->first()->id : -1;
+                
+                if(in_array(9,$userRole) &&  ($category !== 46)){
                     continue;
                 }
 

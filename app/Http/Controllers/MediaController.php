@@ -93,6 +93,22 @@ class MediaController extends Controller
                     }
                     //$image->fit($value['w'], $value['h']);
                     $image->save(public_path('/').$folders.'/'.$path[0].'-'.$value['version'].'.'.$path[1], $value['q']);
+
+                    if ($image->mime == 'image/jpeg'){
+                        $image1 = imagecreatefromjpeg(public_path($media['path'] .$media['name'].'-'.$value['version'] . $media['ext']));
+
+                    }elseif($image->mime == 'image/gif'){
+                        $image1 = imagecreatefromgif(public_path($media['path'] .$media['name'].'-'.$value['version'] . $media['ext']));
+
+                    }elseif($image->mime == 'image/png'){
+                        $image1 = imagecreatefrompng(public_path($media['path'] .$media['name'].'-'.$value['version'] . $media['ext']));
+
+                    }
+
+                    imagejpeg($image1, public_path($media['path'] .$media['name'].'-'.$value['version'] . $media['ext']), 30);
+
+
+                    
                 }
 
             }
@@ -143,8 +159,6 @@ class MediaController extends Controller
             $media->save();
 
     }
-
-
 
     public function crop_profile_image(Request $request)
     {
@@ -319,8 +333,22 @@ class MediaController extends Controller
         if($request->version != 'profile_image'){
             $image->save(public_path('uploads/').$word.$path[0].'-'.$request->version.'.'.$path[1], 80);
             $data['version'] = $request->version;
+
+            if ($image->mime == 'image/jpeg'){
+                $image1 = imagecreatefromjpeg(public_path('uploads/').$word.$path[0].'-'.$request->version.'.'.$path[1]);
+
+            }elseif($image->mime == 'image/gif'){
+                $image1 = imagecreatefromgif(public_path('uploads/').$word.$path[0].'-'.$request->version.'.'.$path[1]);
+
+            }elseif($image->mime == 'image/png'){
+                $image1 = imagecreatefrompng(public_path('uploads/').$word.$path[0].'-'.$request->version.'.'.$path[1]);
+
+            }
+            //$image->save(public_path('uploads/').$word.$path[0].'.'.$path[1], 80);
+            imagejpeg($image1, public_path('uploads/').$word.$path[0].'-'.$request->version.'.'.$path[1], 30);
+
         }else{
-            $image->save(public_path('uploads/').$word.$path[0].'.'.$path[1], 80);
+            $image->save(public_path('/uploads').$word.$path[0].'.'.$path[1], 80);
             $data['version'] = 'profile_image';
         }
 
@@ -346,6 +374,5 @@ class MediaController extends Controller
             'data' => $data['medias']['id'],
         ]);
     }
-
 
 }

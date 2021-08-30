@@ -71,77 +71,22 @@ class MakePhotoVersions extends Command
                 if(isset($details['img_align'][$value['version']])){
                     $edit = $details['img_align'][$value['version']];
                     $image_resize = Image::make(public_path($media['path'] . $media['original_name']));
-                    $image_resize->crop(intval($edit['width']),intval($edit['height']), intval($edit['x']), intval($edit['y']));
-                    $image_resize->resize($value['w'],$value['h']);
+                    //$image_resize->crop(intval($edit['width']),intval($edit['height']), intval($edit['x']), intval($edit['y']));
+                    //$image_resize->resize($value['w'],$value['h']);
+
+                    if($image_resize->width() > $image_resize->height()){
+                        $image_resize->crop(intval($edit['width']),intval($edit['height']), intval($edit['x']), intval($edit['y']));
+                    }elseif($image_resize->width() < $image_resize->height()){
+                        $image_resize->crop(intval($edit['width']),intval($edit['height']), intval($edit['x']), intval($edit['y']))->widen($value['w'])->crop($value['w'], $value['h']);
+                    }else{
+                        $image_resize->crop(intval($edit['width']),intval($edit['height']), intval($edit['x']), intval($edit['y']))->resize($value['w'], $value['h']);
+                    }
+
                     $image_resize->save(public_path($media['path'] .$media['name'].'-'.$value['version'] . $media['ext']), $value['q']);
 
                 }
 
-                /*if(!isset($details[$value['version']])){
-                    continue;
-                }*/
-                /*Image::make(public_path($media['path'] . $media['original_name']))->widen($value['w'], function ($constraint) {
-                    $constraint->upsize();
-                })->save(public_path($media['path'] .$media['name'].'-'.$value['version'] . $media['ext']), $value['q']);*/
-
-
-                /*if ($value['w'] > $value['h']) {
-                    
-                    //landscape, resize by height
-                    $image_resize = Image::make(public_path($media['path'] . $media['original_name']));
-                    $image_resize->heighten($value['h']);
-                    //$image_resize->fit($value['w'], $value['h']);
-                    $image_resize->crop($details[$value['version']]['width'], $details[$value['version']]['height'],$details[$value['version']]['x'],$details[$value['version']]['y']);
-                    //$image_resize->fit($details[$value['version']]['x'],$details[$value['version']]['y']);
-
-
-                } else if ($value['w'] < $value['h']) {
-
-                    //portrait, resize by width
-                    $image_resize = Image::make(public_path($media['path'] . $media['original_name']));
-                    $image_resize->widen($value['w']);
-                    //$image_resize->fit($value['w'], $value['h']);
-                    $image_resize->crop($details[$value['version']]['width'], $details[$value['version']]['height'],$details[$value['version']]['x'],$details[$value['version']]['y']);
-                    //$image_resize->fit($details[$value['version']]['x'],$details[$value['version']]['y']);
-
-                } else {
-                    //square, all is well
-                    $image_resize = Image::make(public_path($media['path'] . $media['original_name']));
-                    $image_resize->resize($value['w'], $value['h']);
-                    //$image_resize->crop($details[$value['version']]['width'], $details[$value['version']]['height'],$details[$value['version']]['x'],$details[$value['version']]['y']);
-                    $image_resize->crop($value['w'], $value['h'],$details[$value['version']]['x'],$details[$value['version']]['y']);
-
-                    //$image_resize->fit($details[$value['version']]['x'],$details[$value['version']]['y']);
-
-                //}*/
-
-
-                /*if(!isset($details['img_align'])){
-                    $image_resize = Image::make(public_path($media['path'] . $media['original_name']));
-                    $image_resize->resize($value['w'], $value['h']);
-                    //$image_resize->crop($details[$value['version']]['width'], $details[$value['version']]['height'],$details[$value['version']]['x'],$details[$value['version']]['y']);
-                    //$image_resize->crop($value['w'], $value['h'],$details[$value['version']]['x'],$details[$value['version']]['y']);
-                }else{
-                    
-                    $details = $details['img_align'];
-                    if(!isset($details[$value['version']])){
-                        continue;
-                    }
-                    $image_resize = Image::make(public_path($media['path'] . $media['original_name']));
-                    $image_resize->resize($value['w'], $value['h']);
-                    //$image_resize->crop($details[$value['version']]['width'], $details[$value['version']]['height'],$details[$value['version']]['x'],$details[$value['version']]['y']);
-                    $image_resize->crop($value['w'], $value['h'],intval($details[$value['version']]['x']),intval($details[$value['version']]['y']));
-                }*/
-                
-                //$image_resize = Image::make(public_path($media['path'] . $media['original_name']));
-
-     
-                /*$image->crop(intval($request->width),intval($request->height), intval($request->x), intval($request->y));
-                $image->save(public_path('/uploads').$word.$path[0].'-'.$request->version.'.'.$path[1], 50);
-                $data['version'] = $request->version;*/
-
-                //$image_resize->resize($value['w'], $value['h']);              
-                //$image_resize->save(public_path($media['path'] .$media['name'].'-'.$value['version'] . $media['ext']), $value['q']);
+               
             }
         }
         

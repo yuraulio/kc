@@ -69,11 +69,17 @@ class CompressImages extends Command
                     $edit = $details['img_align'][$value['version']];
                     
                     $image_resize = Image::make(public_path($media['path'] . $media['original_name']));
-                    $image_resize->crop(intval($edit['width']),intval($edit['height']), intval($edit['x']), intval($edit['y']));
-                    $image_resize->save(public_path($media['path'] .$media['name'].'-'.$value['version'] . $media['ext']), $value['q']);
+                    //$image_resize->crop(intval($edit['width']),intval($edit['height']), intval($edit['x']), intval($edit['y']));
+                    //$image_resize->save(public_path($media['path'] .$media['name'].'-'.$value['version'] . $media['ext']), $value['q']);
 
-                    //dd($image_resize);
-                    //$info = getimagesize($image_resize);
+                    if($image_resize->width() > $image_resize->height()){
+                        $image_resize->crop(intval($edit['width']),intval($edit['height']), intval($edit['x']), intval($edit['y']))->heighten($value['h']);
+                    }elseif($image_resize->width() < $image_resize->height()){
+                        $image_resize->crop(intval($edit['width']),intval($edit['height']), intval($edit['x']), intval($edit['y']))->widen($value['w']);
+                    }else{
+                        $image_resize->crop(intval($edit['width']),intval($edit['height']), intval($edit['x']), intval($edit['y']))->resize($value['w'], $value['h'])
+                    }
+
 
                     if ($image_resize->mime == 'image/jpeg')
                     $image = imagecreatefromjpeg(public_path($media['path'] .$media['name'].'-'.$value['version'] . $media['ext']));
