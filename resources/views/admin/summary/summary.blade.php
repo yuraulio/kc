@@ -189,66 +189,7 @@
         }
     });
 
-    $(document).on('click',"#save_summary",function(){
-        let modelType = "{{addslashes ( get_class($model) )}}";
-        let modelId = "{{ $model->id }}";
 
-        $.ajax({
-           headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-           },
-            type: 'post',
-            url: '{{route("summary.store")}}',
-                data: {'title':$('#input-title-summary').val(),'section':$('#input-section_sum').val(),'description':CKEDITOR.instances['input-description4'].getData(),'model_type':modelType,'model_id':modelId},
-            success: function (data) {
-                let summary = data.summary;
-                let newSummary =
-                `<tr>` +
-                `<td>
-                    <img
-                        id="sum_ben_icon-${summary['id']}"
-                        class="sum_ben_icon sum_ben_icon-${summary['id']}"
-                        src=""
-                        onerror="this.src='https://via.placeholder.com/60'"
-                    >
-                </td>`+
-                `<td id="title-` + summary['id'] +`"><a class="edit-btn" href="#">` + summary['title'] + `</a></td>` +
-                `<td id="section_sum-` + summary['id'] +`">` + summary['section'] + `</td>` +
-                `<td hidden id="media_sum-` + summary['id'] +`" data-id="` + summary['id'] +`" class="summary-list"></td>`+
-
-                `<td class="text-right">
-                        <div class="dropdown">
-                            <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-ellipsis-v"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                <a class="dropdown-item" data-toggle="modal" data-target="#editModalSummary" data-id="` + summary['id'] + `" data-title="`+summary['title'] +`" data-description="`+ summary['description']+`">{{ __('Edit') }}</a>
-
-                            </div>
-                        </div>
-                        </td>
-
-                </tr>`;
-
-
-
-
-
-                $(".summary-body").append(newSummary);
-                $('#cke_5_contents').text()
-                $(".close_modal").click();
-                $("#success-message p").html(data.success);
-                $("#success-message").show();
-                $("#sum_create").trigger('reset')
-            },
-            error: function() {
-                //console.log(data);
-            }
-        });
-
-
-
-    })
 
 
 
@@ -362,6 +303,67 @@
             orderSummary()
           },
       });
+
+      $(document).on('click',"#save_summary",function(){
+        let modelType = "{{addslashes ( get_class($model) )}}";
+        let modelId = "{{ $model->id }}";
+
+        $.ajax({
+           headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+           },
+            type: 'post',
+            url: '{{route("summary.store")}}',
+                data: {'title':$('#input-title-summary').val(),'section':$('#input-section_sum').val(),'description':CKEDITOR.instances['input-description4'].getData(),'model_type':modelType,'model_id':modelId},
+            success: function (data) {
+                let summary = data.summary;
+                let newSummary =
+                `<tr>` +
+                `<td>
+                    <img
+                        id="sum_ben_icon-${summary['id']}"
+                        class="sum_ben_icon sum_ben_icon-${summary['id']}"
+                        src=""
+                        onerror="this.src='https://via.placeholder.com/60'"
+                    >
+                </td>`+
+                `<td id="title-` + summary['id'] +`"><a class="edit-btn" href="#">` + summary['title'] + `</a></td>` +
+                `<td id="section_sum-` + summary['id'] +`">` + summary['section'] + `</td>` +
+                `<td hidden id="media_sum-` + summary['id'] +`" data-id="` + summary['id'] +`" class="summary-list"></td>`+
+
+                `<td class="text-right">
+                        <div class="dropdown">
+                            <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                <a class="dropdown-item" data-toggle="modal" data-target="#editModalSummary" data-id="` + summary['id'] + `" data-title="`+summary['title'] +`" data-description="`+ summary['description']+`">{{ __('Edit') }}</a>
+
+                            </div>
+                        </div>
+                        </td>
+
+                </tr>`;
+
+
+
+
+
+                $(".summary-body").append(newSummary);
+                $('#cke_5_contents').text()
+                $(".close_modal").click();
+                $("#success-message p").html(data.success);
+                $("#success-message").show();
+                $("#sum_create").trigger('reset')
+            },
+            error: function() {
+                //console.log(data);
+            }
+        });
+
+
+
+    })
 
    })( jQuery );
 
