@@ -5637,7 +5637,7 @@ EOT;
         for ($c = 0; $c < 256; ++$c) {
             imagecolorallocate($imgalpha, $c, $c, $c);
         }
-
+       
         // Use PECL gmagick + Graphics Magic to process transparent PNG images
         if (extension_loaded("gmagick")) {
             $gmagick = new \Gmagick($file);
@@ -5684,7 +5684,8 @@ EOT;
 
             // Get opacity channel (negative of alpha channel)
             if ($imagick->getImageAlphaChannel() !== 0) {
-                $alpha_channel = $imagickClonable ? clone $imagick : $imagick->clone();
+                //$alpha_channel = $imagickClonable ? clone $imagick : $imagick->clone();
+                $alpha_channel =clone $imagick;
                 $alpha_channel->separateImageChannel(\Imagick::CHANNEL_ALPHA);
                 // Since ImageMagick7 negate invert transparency as default
                 if (\Imagick::getVersion()['versionNumber'] < 1800) {
