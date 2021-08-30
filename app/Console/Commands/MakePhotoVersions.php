@@ -75,9 +75,9 @@ class MakePhotoVersions extends Command
                     //$image_resize->resize($value['w'],$value['h']);
 
                     if($image_resize->width() > $image_resize->height()){
-                        $image_resize->crop(intval($edit['width']),intval($edit['height']), intval($edit['x']), intval($edit['y']));
-                    }elseif($image_resize->width() < $image_resize->height()){
-                        $image_resize->crop(intval($edit['width']),intval($edit['height']), intval($edit['x']), intval($edit['y']))->widen($value['w'])->crop($value['w'], $value['h']);
+                        $image_resize->crop(intval($edit['width']),intval($edit['height']), intval($edit['x']), intval($edit['y']))->heighten($value['h']);
+                    }else if($image_resize->width() < $image_resize->height()){
+                        $image_resize->crop(intval($edit['width']),intval($edit['height']), intval($edit['x']), intval($edit['y']))->widen($value['w']);
                     }else{
                         $image_resize->crop(intval($edit['width']),intval($edit['height']), intval($edit['x']), intval($edit['y']))->resize($value['w'], $value['h']);
                     }

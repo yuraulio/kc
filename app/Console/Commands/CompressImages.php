@@ -77,19 +77,19 @@ class CompressImages extends Command
                     }elseif($image_resize->width() < $image_resize->height()){
                         $image_resize->crop(intval($edit['width']),intval($edit['height']), intval($edit['x']), intval($edit['y']))->widen($value['w']);
                     }else{
-                        $image_resize->crop(intval($edit['width']),intval($edit['height']), intval($edit['x']), intval($edit['y']))->resize($value['w'], $value['h'])
+                        $image_resize->crop(intval($edit['width']),intval($edit['height']), intval($edit['x']), intval($edit['y']))->resize($value['w'], $value['h']);
                     }
 
 
-                    if ($image_resize->mime == 'image/jpeg')
-                    $image = imagecreatefromjpeg(public_path($media['path'] .$media['name'].'-'.$value['version'] . $media['ext']));
+                    if ($image_resize->mime == 'image/jpeg'){
+                        $image = imagecreatefromjpeg(public_path($media['path'] .$media['name'].'-'.$value['version'] . $media['ext']));
 
-                    elseif ($image_resize->mime == 'image/gif')
+                    }elseif ($image_resize->mime == 'image/gif'){
                     $image = imagecreatefromgif(public_path($media['path'] .$media['name'].'-'.$value['version'] . $media['ext']));
 
-                    elseif ($image_resize->mime == 'image/png')
+                    }elseif ($image_resize->mime == 'image/png'){
                     $image = imagecreatefrompng(public_path($media['path'] .$media['name'].'-'.$value['version'] . $media['ext']));
-
+                    }
 
                     imagejpeg($image, public_path($media['path'] .$media['name'].'-'.$value['version'] . $media['ext']), 30);
 
