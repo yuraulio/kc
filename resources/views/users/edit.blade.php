@@ -23,7 +23,8 @@
                             <div class="card-profile-image">
                                <?php //dd(get_image($user->image,'users')); ?>
                                 @if($path = get_image($user->image,'users'))
-                                    <img src="{{ cdn($path) }}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" class="rounded-circle">
+                                <?php $path = get_image($user->image,'users'); ?>
+                                    <img src="{{ asset(get_image($user->image,'users')) }}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" class="rounded-circle">
                                 @else
                                     <img src="" alt="{{$user['firstname']}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" class="rounded-circle">
                                 @endif

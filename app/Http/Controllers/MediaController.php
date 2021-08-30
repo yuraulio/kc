@@ -103,7 +103,10 @@ class MediaController extends Controller
             $old_image = $media;
             //delete old image
             if($old_image['name'] != null){
-                unlink('uploads/profile_user/'.$old_image['original_name']);
+                if(file_exists('uploads/profile_user/'.$old_image['original_name'])){
+                    unlink('uploads/profile_user/'.$old_image['original_name']);
+                }
+
             }
 
 
@@ -112,7 +115,6 @@ class MediaController extends Controller
 
             $path_name = $request->photo->store('profile_user', 'public');
 
-            dd($path_name);
 
             $name = explode('profile_user/',$path_name);
             $size = getimagesize('uploads/'.$path_name);

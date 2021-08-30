@@ -235,7 +235,8 @@
     $(".crop_profile").click(function(){
         let media = @json($event);
 
-        let path = $(this).parent().find('img').attr('src')
+        let path = $(this).parent().parent().find('img').attr('src')
+
 
         path = path.split('/')
 

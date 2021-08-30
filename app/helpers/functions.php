@@ -153,8 +153,16 @@ if (!function_exists('get_image')){
             return isset($media['original_name']) ? $media['path'] . $media['original_name']  : '';
         }
 
-        if($version == 'user'){
-            dd('users');
+        if($version == 'users'){
+            if(isset($media['original_name'])){
+                $name = explode('.', $media['original_name']);
+                if(file_exists($media['path'] . $name[0] . '-crop.'. $name[1])){
+                    return $media['path'] . $name[0] . '-crop.'. $name[1];
+                }else{
+                    return $media['path'] . $media['original_name'];
+                }
+
+            }
         }
 
         return isset($media['name']) ? $media['path']  . $media['name'] . '-' . $version . $media['ext'] : '';

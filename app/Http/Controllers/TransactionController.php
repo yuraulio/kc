@@ -71,7 +71,7 @@ class TransactionController extends Controller
                 $videos = isset($videos) ? json_decode($videos->videos,true) : null;
 
                 $data['transactions'][] = ['id' => $transaction['id'], 'user_id' => $transaction->user[0]['id'],'name' => $transaction->user[0]['firstname'].' '.$transaction->user[0]['lastname'],
-                                            'event_id' => $transaction->event[0]['id'],'event_title' => $transaction->event[0]['title'].'-'.$transaction->event[0]['id'],'coupon_code' => $coupon_code, 'type' => $ticketType,'ticketName' => $ticketName,
+                                            'event_id' => $transaction->event[0]['id'],'event_title' => $transaction->event[0]['title'].' '.date('d-m-Y', strtotime($transaction->event[0]['published_at'])),'coupon_code' => $coupon_code, 'type' => $ticketType,'ticketName' => $ticketName,
                                             'date' => date_format($transaction['created_at'], 'Y-m-d'), 'amount' => $transaction['amount'],
                                             'is_elearning' => $isElearning,
                                             'coupon_code' => $transaction['coupon_code'],'videos_seen' => $this->getVideosSeen($videos),'expiration'=>$expiration];
