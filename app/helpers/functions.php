@@ -153,6 +153,10 @@ if (!function_exists('get_image')){
             return isset($media['original_name']) ? $media['path'] . $media['original_name']  : '';
         }
 
+        if($version == 'user'){
+            dd('users');
+        }
+
         return isset($media['name']) ? $media['path']  . $media['name'] . '-' . $version . $media['ext'] : '';
     }
 }

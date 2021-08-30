@@ -234,7 +234,16 @@
             ]
         });
 
-        $('#datatable-basic45').on( 'page.dt', function () {
+        table.on( 'search.dt', function () {
+            selected_event = $('#select2-col9_filter-container').attr('title')
+            if(selected_event.search('E-Learning') != -1){
+                table.$('.elearning-infos').removeClass('d-none');
+            }else{
+                table.$('.elearning-infos').addClass('d-none');
+            }
+        } );
+
+        table.on( 'page.dt', function () {
             selected_event = $('#select2-col9_filter-container').attr('title')
 
             if(selected_event.search('E-Learning') != -1){
@@ -579,6 +588,8 @@
 
         function stats_non_elearning(){
 
+            $('.elearning-infos').addClass('d-none');
+
             let sum = 0
 
             //returns 'filtered' or visible rows
@@ -641,6 +652,8 @@
             if(!$('.elearning-coupons').hasClass('d-none')){
                 $('.elearning-coupons').addClass('d-none')
             }
+
+
 
             $('#total').text('€'+sum)
             $('#special').text('€'+special)
@@ -713,7 +726,6 @@
 
 
                 })
-
                 //console.log('type'+ early)
                 if($('.elearning-infos').hasClass('d-none')){
                     $('.elearning-infos').removeClass('d-none')

@@ -394,7 +394,6 @@ public function index(User $model)
      */
     public function edit(User $user, Role $model)
     {
-        //dd($user);
         $data['events'] = Event::has('ticket')->whereIn('status',[0,2])->get();
 
         //dd($data['events']);

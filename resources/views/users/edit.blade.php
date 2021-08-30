@@ -21,6 +21,7 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-3 order-lg-2">
                             <div class="card-profile-image">
+                               <?php //dd(get_image($user->image,'users')); ?>
                                 @if($path = get_image($user->image,'users'))
                                     <img src="{{ cdn($path) }}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" class="rounded-circle">
                                 @else
@@ -552,7 +553,7 @@
                                                             <div class="col-lg-4">
 
                                                                 <?php $billing = json_decode($tran['billing_details'],true); ?>
-                                                                
+
                                                                 @if($billing)
 
                                                                     @if($billing['billing'] == 1)
@@ -979,7 +980,6 @@
                         <img class="img-fluid" id="profile_image" src="
                         <?php
                             if(isset($user) && $user->image != null) {
-
                                 echo asset('uploads/profile_user').'/'.$user->image->original_name;
                             }else{
                                 echo '';
@@ -1400,8 +1400,8 @@ $(document).on('click', '.ticket-card', function () {
             let user_id = $(this).data('user_id')
             let event_id =  $(this).data('event_id')
             let new_date =  $('#'+ event_id).val()
-            
-            
+
+
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

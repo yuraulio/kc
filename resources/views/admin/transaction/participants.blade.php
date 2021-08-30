@@ -241,11 +241,14 @@ $(document).ready(function() {
     });
 
 
-
-
-    // $('#min, #max').on('change', function () {
-    //     table.draw();
-    // });
+    $('#participants_table').on( 'search.dt', function () {
+        selected_event = $('#select2-col1_filter-container').attr('title')
+        if(selected_event.search('E-Learning') != -1){
+            table.$('.participant_elearning').removeClass('none');
+        }else{
+            table.$('.participant_elearning').addClass('none');
+        }
+    } );
 
 
     //otan allazei selida kai einai E-learnign na energopoiounte oi antistoixes sthles
@@ -281,7 +284,6 @@ $(document).ready(function() {
     //let sum = 0;
 
     $.each(events, function(key, value){
-
         $('#col1_filter').append('<option value="'+value+'">'+value+'</option>')
     })
     $.each(coupons, function(key, value){

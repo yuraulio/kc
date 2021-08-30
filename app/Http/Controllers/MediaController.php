@@ -112,6 +112,8 @@ class MediaController extends Controller
 
             $path_name = $request->photo->store('profile_user', 'public');
 
+            dd($path_name);
+
             $name = explode('profile_user/',$path_name);
             $size = getimagesize('uploads/'.$path_name);
             $media->name = $name1[0];
