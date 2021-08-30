@@ -21,11 +21,9 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-3 order-lg-2">
                             <div class="card-profile-image">
-                               <?php //dd(get_image($user->image,'users')); ?>
-                                @if($path = get_image($user->image,'users'))
-                                <?php $path = get_image($user->image,'users');
+                                @if($path = get_profile_image($user->image))
                                 //dd($path);?>
-                                    <img src="{{ asset(get_image($user->image,'users')) }}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" class="rounded-circle">
+                                    <img src="{{ cdn(asset($path)) }}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" class="rounded-circle">
                                 @else
                                     <img src="" alt="{{$user['firstname']}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" class="rounded-circle">
                                 @endif
