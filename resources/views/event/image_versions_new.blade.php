@@ -131,6 +131,7 @@
 @push('js')
 
 <script>
+    let ver = []
     let prof_image = false
     var versions = @json($versions);
     //console.log(versions)
@@ -229,10 +230,13 @@
                 height: parseInt(height)
             }
         });
+
+        ver['0'] = cropper
     }
 
 
     $(".crop_profile").click(function(){
+        console.log(ver[0])
         let media = @json($event);
 
         let path = $(this).parent().parent().find('img').attr('src')

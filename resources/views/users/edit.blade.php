@@ -1197,33 +1197,33 @@ $(document).on('click', '.ticket-card', function () {
 
 
 
-    $(".crop_profile").click(function(){
-        let media = @json($user->image);
+    // $(".crop_profile").click(function(){
+    //     let media = @json($user->image);
 
-        let path = $(this).parent().find('img').attr('src')
+    //     let path = $(this).parent().find('img').attr('src')
 
-        path = path.split('/')
+    //     path = path.split('/')
 
-        path = '/'+path[3]+'/' + path[4]+'/' + path[5]
+    //     path = '/'+path[3]+'/' + path[4]+'/' + path[5]
 
 
 
-        $.ajax({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            type: 'post',
-            url: '/admin/media/crop_profile_image',
-            data: {'media_id': media.id,'path':path, 'x':cropper.getData({rounded: true}).x, 'y':cropper.getData({rounded: true}).y, 'width':cropper.getData({rounded: true}).width, 'height':cropper.getData({rounded: true}).height},
-            success: function (data) {
-                if(data){
-                    $('#profile_image_msg').append(data.success)
-                    $('#profile_image_msg').css('display', 'inline-block')
-                }
-            }
-        });
+    //     $.ajax({
+    //         headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //         },
+    //         type: 'post',
+    //         url: '/admin/media/crop_profile_image',
+    //         data: {'media_id': media.id,'path':path, 'x':cropper.getData({rounded: true}).x, 'y':cropper.getData({rounded: true}).y, 'width':cropper.getData({rounded: true}).width, 'height':cropper.getData({rounded: true}).height},
+    //         success: function (data) {
+    //             if(data){
+    //                 $('#profile_image_msg').append(data.success)
+    //                 $('#profile_image_msg').css('display', 'inline-block')
+    //             }
+    //         }
+    //     });
 
-    });
+    // });
 
     function filterScopeUserEmailStatus(id){
         user_id = $(id).data('id')
