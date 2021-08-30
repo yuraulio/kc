@@ -236,7 +236,7 @@
 
 
     $(".crop_profile").click(function(){
-        console.log(ver[0])
+        cropper = ver[0]
         let media = @json($event);
 
         let path = $(this).parent().parent().find('img').attr('src')
