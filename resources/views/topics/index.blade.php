@@ -10,6 +10,11 @@
             @slot('title')
                 {{ __('') }}
             @endslot
+            @slot('filter')
+                <!-- <a href="#" class="btn btn-sm btn-neutral">{{ __('Filters') }}</a> -->
+                <a class="btn btn-sm btn-neutral" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">{{ __('Filters') }}</a>
+
+            @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('topics.index') }}">{{ __('Topics Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
@@ -36,6 +41,22 @@
                     <div class="col-12 mt-2">
                         @include('alerts.success')
                         @include('alerts.errors')
+                    </div>
+
+                    <div class="collapse" id="collapseExample">
+                        <div class="container">
+                            <div class="row">
+
+                                <div class="col-sm-4 filter_col" id="filter_col1" data-column="1">
+                                    <label>Category</label>
+                                    <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="col1_filter">
+                                    <option selected value=""> -- All -- </option>
+                                    </select>
+                                </div>
+
+
+                            </div>
+                        </div>
                     </div>
 
                     <!-- <div class="table-responsive py-4">
@@ -99,7 +120,7 @@
 
                         @foreach($categories as $category)
 
-                        <div class="card">
+                        <div id="{{$category['id']}}" class="card">
                             <div class="card-header" id="catt_{{$category['id']}}" data-toggle="collapse" data-target="#cat_{{$category['id']}}" aria-expanded="false" aria-controls="collapseOne">
                                 <h5 class="mb-0">{{$category->name}}</h5>
                             </div>
@@ -182,6 +203,7 @@
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css">
+    <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css">
 @endpush
 
 @push('js')
@@ -195,6 +217,7 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
 
     <script type="text/javascript">
+        let categories = @json($categories);
         var table = $('.datatable-basic39').DataTable({
                 language: {
                     paginate: {
@@ -203,5 +226,43 @@
                     }
                 }
             });
+
+
+        $(function() {
+            $("#col1_filter").change(function() {
+                let selectedCategoryId = $(this).val()
+
+                let topics = $('#accordionTopicMain .card')
+
+                if(selectedCategoryId != ''){
+                    $.each(topics, function(key, value) {
+                        let id = $(value).attr('id')
+                        if(id != selectedCategoryId){
+                            $(value).addClass('d-none')
+                        }else{
+                            if($(value).hasClass('d-none')){
+                                $(value).removeClass('d-none')
+                            }
+                        }
+
+                    })
+                }else{
+                    $.each(topics, function(key, value) {
+                        $(value).removeClass('d-none')
+                    })
+                }
+
+
+
+            })
+
+            $.each(categories, function(key, value) {
+                let row = `
+                    <option value="${value.id}">${value.name}</option>
+                `
+                $('#col1_filter').append(row)
+            })
+        });
+
     </script>
 @endpush

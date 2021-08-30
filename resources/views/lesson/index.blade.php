@@ -10,6 +10,11 @@
             @slot('title')
                 {{ __('') }}
             @endslot
+            @slot('filter')
+                <!-- <a href="#" class="btn btn-sm btn-neutral">{{ __('Filters') }}</a> -->
+                <a class="btn btn-sm btn-neutral" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">{{ __('Filters') }}</a>
+
+            @endslot
 
             <li class="breadcrumb-item"><a href="{{ route('lessons.index') }}">{{ __('Lessons Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
@@ -34,6 +39,22 @@
                     <div class="col-12 mt-2">
                         @include('alerts.success')
                         @include('alerts.errors')
+                    </div>
+
+                    <div class="collapse" id="collapseExample">
+                        <div class="container">
+                            <div class="row">
+
+                                <div class="col-sm-4 filter_col" id="filter_col1" data-column="1">
+                                    <label>Topics</label>
+                                    <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="col1_filter">
+                                    <option selected value=""> -- All -- </option>
+                                    </select>
+                                </div>
+
+
+                            </div>
+                        </div>
                     </div>
 
                     <div class="table-responsive py-4">
@@ -122,5 +143,23 @@
             }
         }
     });
+
+    $(function() {
+        var data = table
+            .rows()
+            .data();
+
+
+        // $.each(data, function(key, value) {
+        //     console.log(value[2])
+
+        // })
+
+    });
+
+
+
+
+
     </script>
 @endpush
