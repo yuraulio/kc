@@ -55,7 +55,7 @@ class MediaController extends Controller
     }
 
     public function uploadVersionImage(Request $request, Media $media){
-        //dd($request->versions);
+       
         $versions = json_decode($request->versions);
         //dd($versions);
         $mediaKey = $request->image_upload;
@@ -83,8 +83,15 @@ class MediaController extends Controller
             //dd($value['version']);
             foreach($versions as $version){
                 if($value['version'] == $version){
-                    $image->resize($value['w'], $value['h']);
-                    $image->fit($value['w'], $value['h']);
+
+                    if($image->width() > $image->height()){
+                        $image->heighten($value['h'])->crop($value['w'], $value['h']);
+                    }elseif($image->width() < $image->height()){
+                        $image->widen($value['w'])->crop($value['w'], $value['h']);
+                    }else{
+                        $image->resize($value['w'], $value['h']);
+                    }
+                    //$image->fit($value['w'], $value['h']);
                     $image->save(public_path('/').$folders.'/'.$path[0].'-'.$value['version'].'.'.$path[1], $value['q']);
                 }
 
@@ -300,19 +307,22 @@ class MediaController extends Controller
         $image->crop(intval($request->width),intval($request->height), intval($request->x), intval($request->y));
         foreach(get_image_versions() as $key => $ver){
             if($ver['version'] == $request->version){
-                $image->resize($ver['w'],$ver['h']);
+                if($image->width() > $image->height()){
+                    $image->heighten($ver['h']);
+                }elseif($image->width() < $image->height()){
+                    $image->widen($ver['w']);
+                }else{
+                    $image->resize($ver['w'], $ver['h']);
+                }
             }
         }
         if($request->version != 'profile_image'){
-            $image->save(public_path('/uploads').$word.$path[0].'-'.$request->version.'.'.$path[1], 80);
+            $image->save(public_path('uploads/').$word.$path[0].'-'.$request->version.'.'.$path[1], 80);
             $data['version'] = $request->version;
         }else{
-            $image->save(public_path('/uploads').$word.$path[0].'.'.$path[1], 80);
+            $image->save(public_path('uploads/').$word.$path[0].'.'.$path[1], 80);
             $data['version'] = 'profile_image';
         }
-
-
-
 
         return response()->json([
             'success' => __('Already image cropped.'),

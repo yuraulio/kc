@@ -41,21 +41,8 @@
 								
 								<?php
 
-
-									$currentuser = Auth::getUser();
-
-									if(isset($currentuser->avatar) && $currentuser->avatar > 0 && $currentuser->avatar!=''){
-
-										$mediaAvatar = null;
-
-									}
-									$img_src = '/theme/assets/images/icons/user-profile-placeholder-image.png';
-									if(isset($mediaAvatar)){
-									//	print_r($media);
-										$img_src = 'portal-img/users/'.$mediaAvatar['path'].'/'.$mediaAvatar['name'].$mediaAvatar['ext'];
-									}
-
-
+									$img_src = get_profile_image(Auth::user()->image);
+									
 								?>
 
                                 <li class="account-menu login-pad">

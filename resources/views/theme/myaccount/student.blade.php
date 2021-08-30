@@ -11,25 +11,15 @@
          <div class="hero-message">
             <div class="account-infos">
                <div class="account-thumb">
-                   <?php //dd($user->events); ?>
+                   
                   @if(isset($user['image']))
                   <?php
-                        $name1 = explode('.',$user['image']['original_name']);
-                        $path = $user['image']['path'].$name1[0].$user['image']['ext'];
-                        $path_crop = $user['image']['path'].$name1[0].'-crop'.$user['image']['ext'];
-                        $path_crop = substr_replace($path_crop, "", 0, 1);
-
-                        if(file_exists($path_crop)){
-                            //dd('asd');
-                            $path = asset($path_crop);
-                        }else{
-                            $path = asset($path);
-                        }
+                        $img_src = get_profile_image($user['image']);
                     ?>
 
 
-                  <?php $img_src = $path?>
-                  <img id="user-img-up" src="{{cdn($img_src)}}" alt="{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}"/>
+                  
+                  <img id="user-img-up" src="{{cdn($img_src)}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" alt="{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}"/>
                   @else
                   <img id="user-img-up" src="{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}" alt="user-profile-placeholder-image"/>
                   @endif
