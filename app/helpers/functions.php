@@ -156,7 +156,11 @@ if (!function_exists('get_image')){
         if($version == 'users'){
             if(isset($media['original_name'])){
                 $name = explode('.', $media['original_name']);
-                if(file_exists($media['path'] . $name[0] . '-crop.'. $name[1])){
+
+                $path = ltrim($media['path'] . $name[0] . '-crop.'. $name[1], $media['path'][0]);
+
+                if(file_exists($path)){
+
                     return $media['path'] . $name[0] . '-crop.'. $name[1];
                 }else{
                     return $media['path'] . $media['original_name'];
