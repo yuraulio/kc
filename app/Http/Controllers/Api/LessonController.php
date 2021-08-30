@@ -56,10 +56,9 @@ class LessonController extends Controller
         }
 
 
+        $db_video_original = $user->statistic()->wherePivot('event_id',$event_id)->first();
 
-        $db_video = $user->statistic()->wherePivot('event_id',$event_id)->first()->pivot['videos'];
-
-        $db_video = json_decode($db_video, true);
+        $db_video = json_decode($db_video_original->pivot['videos'], true);
 
         $arr = [];
 
@@ -72,8 +71,6 @@ class LessonController extends Controller
             $db_video[$vimeo_id]['percentMinutes'] = $progress;
 
             $db_video = json_encode($db_video);
-
-
 
             $message = 'Update video info successfully';
         }else{
@@ -94,6 +91,7 @@ class LessonController extends Controller
 
         $user->statistic()->updateExistingPivot($event_id, [
             'videos' => $db_video,
+            'lastVideoSeen' => $vimeo_id
         ]);
 
 
