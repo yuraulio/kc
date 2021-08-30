@@ -72,6 +72,7 @@ class MakePhotoVersions extends Command
                     $edit = $details['img_align'][$value['version']];
                     $image_resize = Image::make(public_path($media['path'] . $media['original_name']));
                     $image_resize->crop(intval($edit['width']),intval($edit['height']), intval($edit['x']), intval($edit['y']));
+                    $image_resize->resize($value['w'],$value['h']);
                     $image_resize->save(public_path($media['path'] .$media['name'].'-'.$value['version'] . $media['ext']), $value['q']);
 
                 }

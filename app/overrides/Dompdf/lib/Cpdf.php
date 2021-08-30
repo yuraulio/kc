@@ -5637,7 +5637,7 @@ EOT;
         for ($c = 0; $c < 256; ++$c) {
             imagecolorallocate($imgalpha, $c, $c, $c);
         }
-       
+
         // Use PECL gmagick + Graphics Magic to process transparent PNG images
         if (extension_loaded("gmagick")) {
             $gmagick = new \Gmagick($file);

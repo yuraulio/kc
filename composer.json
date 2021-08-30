@@ -61,7 +61,8 @@
             "Laravel\\Cashier\\Concerns\\": "app/Concerns",
             "Library\\": "app/Library/",
             "Dompdf\\Adapter\\": "app/overrides/Dompdf/Adapter",
-            "Dompdf\\": "app/overrides/Dompdf/"
+            "Dompdf\\": "app/overrides/Dompdf/",
+            "Dompdf\\lib\\": "app/overrides/Dompdf/lib"
 
         },
         "classmap": [

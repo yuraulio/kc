@@ -279,7 +279,6 @@ class Dompdf
      */
     public function __construct($options = null)
     {
-        //dd($options);
         if (isset($options) && $options instanceof Options) {
             $this->setOptions($options);
         } elseif (is_array($options)) {
