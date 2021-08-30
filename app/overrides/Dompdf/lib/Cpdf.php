@@ -24,7 +24,7 @@ use FontLib\BinaryStream;
 
 class Cpdf
 {
-    
+
     const ACROFORM_SIG_SIGNATURESEXISTS = 0x0001;
     const ACROFORM_SIG_APPENDONLY =       0x0002;
 
@@ -5684,9 +5684,7 @@ EOT;
 
             // Get opacity channel (negative of alpha channel)
             if ($imagick->getImageAlphaChannel() !== 0) {
-                
-                //$alpha_channel = $imagickClonable ? clone $imagick : $imagick->clone();
-                $alpha_channel = clone $imagick;
+                $alpha_channel = $imagickClonable ? clone $imagick : $imagick->clone();
                 $alpha_channel->separateImageChannel(\Imagick::CHANNEL_ALPHA);
                 // Since ImageMagick7 negate invert transparency as default
                 if (\Imagick::getVersion()['versionNumber'] < 1800) {
