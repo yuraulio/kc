@@ -131,9 +131,9 @@ class CronjobsController extends Controller
         foreach($events as $event) {
 
             $cat = $event->category->first() ? $event->category->first()->name : '';
-        
+
             $amount = 0;
-           
+
             foreach($event->ticket as $price){
                 if($price->pivot->price > 0) {
                     $amount = $price->pivot->price;
@@ -146,7 +146,7 @@ class CronjobsController extends Controller
 
         }
         fclose($file);
-     
+
         return back();
 
 
@@ -164,7 +164,7 @@ class CronjobsController extends Controller
 
         $columns = array("ID", "Item Title", "Final URL", "Image URL", "Price", "Item Category", "Item Description");
 
-       
+
         $file = fopen('csv/google/google.csv', 'w');
         fputcsv($file, $columns);
 
@@ -172,14 +172,14 @@ class CronjobsController extends Controller
 
             $cat = $event->category->first() ? $event->category->first()->name : '';
             $city = null;
-          
+
             $amount = 0;
 
             foreach($event->ticket as $price){
                 if($price->pivot->price > 0) {
                     $amount = $price->pivot->price;
                 }
-    
+
             }
 
             $img = url('/') . $event['mediable']['path'] . '/' . $event['mediable']['original_name'];
@@ -188,12 +188,12 @@ class CronjobsController extends Controller
             if($event->summary != ''){
                 $summary = strip_tags($event->summary);
             }
-           
+
             fputcsv($file, array($event->id, $event->title,  url('/') . '/' . $event->slug, $img, $amount . ' EUR', 'Event > ' . $cat,trim($summary)));
-            
+
         }
         fclose($file);
-        
+
         return back();
 
     }
@@ -212,36 +212,36 @@ class CronjobsController extends Controller
 
         $today = date_create( date('Y/m/d'));
         $today1 = date('Y-m-d');
-        
+
         foreach($events as $event){
 
-            
-            
+
+
 
             foreach($event['users'] as $user){
-                
+
                 if(!($user->pivot->expiration >= $today1) || !$user->pivot->expiration){
                     continue;
                 }
-                
-               
+
+
                 $date = date_create($user->pivot->expiration);
                 $date = date_diff($date, $today);
 
                 if( ($date->y == 0 && $date->m == 1 && $date->d == 0) || ($date->y == 0 && $date->m ==  0 && $date->d == 7 )){
-            
+
                     // dd('edww');
                     $muser['name'] = $user->firstname . ' ' . $user->lastname;
                     $muser['first'] = $user->firstname;
                     $muser['eventTitle'] =  $event->title;
                     $muser['email'] = $user->email;
-    
+
                     $data['firstName'] = $user->firstname;
                     $data['eventTitle'] = $event->title;
                     $data['expirationDate'] = $user->pivot->expiration;
-    
+
                     $sent = Mail::send('emails.admin.remind_elearning', $data, function ($m) use ($adminemail, $muser) {
-    
+
                         $fullname = $muser['name'];
                         $first = $muser['first'];
                         $sub =  $first . '– A reminder about the ' . $muser['eventTitle'];
@@ -249,20 +249,20 @@ class CronjobsController extends Controller
                         $m->to($muser['email'], $fullname);
                         $m->cc($adminemail);
                         $m->subject($sub);
-                        
+
                     });
-                
+
                 }
             }
 
-            
-            
-            
 
 
-            
 
-            
+
+
+
+
+
         }
 
     }
@@ -281,31 +281,31 @@ class CronjobsController extends Controller
 
         foreach($events as $event){
 
-            
-            
+
+
 
             foreach($event['users'] as $user){
-                
+
                 if(!($user->pivot->expiration >= $today1) || !$user->pivot->expiration){
                     continue;
                 }
-                
-               
+
+
                 $date = date_create($user->pivot->expiration);
                 $date = date_diff($date, $today);
 
                 if( $date->y==0 && $date->m == 2  && $date->d == 0){
-            
+
                     // dd('edww');
                     $muser['name'] = $user->firstname . ' ' . $user->lastname;
                     $muser['first'] = $user->firstname;
                     $muser['eventTitle'] =  $event->title;
                     $muser['email'] = $user->email;
-    
+
                     $data['firstName'] = $user->firstname;
                     $data['eventTitle'] = $event->title;
                     $data['expirationDate'] = $user->pivot->expiration;
-    
+
                     $sent = Mail::send('emails.student.elearning_half_period', $data, function ($m) use ($adminemail, $muser) {
 
                         $fullname = $muser['name'];
@@ -315,9 +315,9 @@ class CronjobsController extends Controller
                         $m->to($muser['email'], $fullname);
                         //$m->cc($adminemail);
                         $m->subject($sub);
-                        
+
                     });
-                
+
                 }
             }
         }
@@ -333,23 +333,23 @@ class CronjobsController extends Controller
 
         $today = date_create( date('Y/m/d'));
         foreach($subscriptions as $subscription){
-            
+
             if($subscription->event->first() && $subscription->event->first()->pivot->expiration){
                 $date = date_create($subscription->event->first()->pivot->expiration);
                 $date = date_diff($date, $today);
 
-                if( $date->y==0 && ( ($date->m == 1 &&  $date->d == 0) || ($date->m ==  0 && $date->d == 7))){  
+                if( $date->y==0 && ( ($date->m == 1 &&  $date->d == 0) || ($date->m ==  0 && $date->d == 7))){
                     $muser['name'] = $subscription->user->firstname . ' ' . $subscription->user->lastname;
                     $muser['first'] = $subscription->user->firstname;
                     $muser['eventTitle'] =  $subscription->event->first()->title;
                     $muser['email'] = $subscription->user->email;
-    
+
                     $data['firstName'] = $subscription->user->firstname;
                     $data['eventTitle'] = $subscription->event->first()->title;
                     $data['expirationDate'] = date('d/m/Y',strtotime($subscription->event->first()->pivot->expiration));
-                    
+
                     $sent = Mail::send('emails.student.subscription.subscription_date_reminder', $data, function ($m) use ($adminemail, $muser) {
-    
+
                         $fullname = $muser['name'];
                         $first = $muser['first'];
                         $sub = $first . ' - A reminder about the Subscription expiration date';
@@ -357,7 +357,7 @@ class CronjobsController extends Controller
                         $m->to($muser['email'], $fullname);
                         //$m->cc($adminemail);
                         $m->subject($sub);
-    
+
                     });
                 }
             }
