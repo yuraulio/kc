@@ -142,7 +142,7 @@
                                             <tbody>
                                                 @foreach ($category->topics as $topic)
                                                     <tr>
-                                                        <td>{{ $topic->status }}</td>
+                                                        <td><?= ($topic->status == 1) ? 'Published' : 'Unpublished'; ?></td>
                                                         <td> <a href="{{ route('topics.edit', $topic) }}">{{ $topic->title }}</a></td>
                                                         <td>
                                                         @foreach($topic['category'] as $category)

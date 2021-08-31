@@ -174,12 +174,12 @@
 
         });
 
-        $('#datatable-basic').DataTable({
-                        "ordering" : false,
-                    });
+        // $('#datatable-basic').DataTable({
+        //                 "ordering" : false,
+        //             });
 
     var table = $('#datatable-basic26').DataTable({
-        "order": [[ 5, "desc" ]],
+        "order": [[1, 'asc'],[ 5, "desc" ]],
         language: {
             paginate: {
             next: '&#187;', // or '→'

@@ -52,14 +52,14 @@
                                     </select>
                                 </div>
 
-                                <div class="col-sm-4 filter_col" id="filter_col1" data-column="1">
+                                <div class="col-sm-4 filter_col" id="filter_col1" data-column="2">
                                     <label>Topics</label>
                                     <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="col1_filter">
                                     <option selected value="-- All --"> -- All -- </option>
                                     </select>
                                 </div>
 
-                                <div class="col-sm-4 filter_col" id="filter_col3" data-column="1">
+                                <div class="col-sm-4 filter_col" id="filter_col3" data-column="3">
                                     <label>Status</label>
                                     <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="col3_filter">
                                         <option></option>
@@ -155,6 +155,7 @@
         var categories = @json($categories);
         var selectedTopic = null
         var selectedCategory = null
+        var selectedStatus = null
         var table = $('#datatable-basic31').DataTable({
             language: {
                 paginate: {
@@ -178,13 +179,25 @@
                 let found_from_topi = false
                 let found_from_cat = false
                 let found = false
+                let status = data[0]
+
+                let global_search = $('.dataTables_filter input').val()
+
+                if(global_search != '' && global_search.length > 3 && selectedTopic == null && selectedCategory == null){
+                    if(data[1].includes(global_search) ){
+                        found = true
+                    }
+                }else{
+                    found = true
+                }
 
 
 
                 if(selectedCategory != '' && selectedTopic == null){
-                    console.log('first')
+                    //console.log('first')
 
                     let word = data[3].split(',');
+
 
                     if(selectedCategory != "--All--"){
                         if(selectedCategory != ''){
@@ -193,8 +206,16 @@
                                 $.each(word, function(key, value) {
                                     if(value != ''){
                                         if(removeSpecial(value) == selectedCategory){
-                                            //alert('found')
-                                            found = true
+                                            found = true;
+                                            if(selectedStatus != null){
+                                                //console.log('has status')
+                                                if(selectedStatus == status){
+
+                                                }else{
+                                                    found = false
+                                                }
+                                            }
+
                                         }
                                     }
                                 })
@@ -204,12 +225,21 @@
                             found = true
                         }
                     }else{
+                        //console.log('from all')
                         found = true
+                        if(selectedStatus != null){
+                            //console.log('has status')
+                            if(selectedStatus == status){
+
+                            }else{
+                                found = false
+                            }
+                        }
                     }
 
 
                 }else if(selectedCategory != null && selectedTopic != ''){
-                    console.log('second')
+                    //console.log('second')
 
                     let cat = data[3].split(',');
                     let topi = data[2].split(',');
@@ -234,6 +264,15 @@
 
                         if(found_from_topi && found_from_cat){
                             found = true
+                            if(selectedStatus != null){
+                                //console.log('has status')
+                                if(selectedStatus == status){
+                                    found = true
+                                }else{
+                                    found = false
+                                }
+                            }
+
                         }
                     }else{
                         $.each(cat, function(key, value) {
@@ -252,7 +291,7 @@
                     }
 
                 }else if(selectedCategory == null && selectedTopic != null){
-                    console.log('third')
+                    //console.log('third')
                     let word = data[2].split(',');
 
                     if(selectedTopic != '--All--'){
@@ -265,6 +304,14 @@
                                     if(removeSpecial(value) == selectedTopic){
                                         //alert('found')
                                         found = true
+                                        if(selectedStatus != null){
+                                            //console.log('has status')
+                                            if(selectedStatus == status){
+
+                                            }else{
+                                                found = false
+                                            }
+                                        }
                                     }
                                 }
                             })
@@ -275,6 +322,14 @@
                         }
                     }else{
                         found = true
+                        if(selectedStatus != null){
+                            //console.log('has status')
+                            if(selectedStatus == status){
+
+                            }else{
+                                found = false
+                            }
+                        }
                     }
 
 
@@ -291,6 +346,11 @@
 
 
         $(function() {
+
+            function filterGlobal () {
+                table.draw();
+
+            }
 
             $("#col2_filter").select2({
                 templateResult: function(option, container) {
@@ -351,8 +411,12 @@
 
             $('#col3_filter').change(function() {
                 selectedStatus = $(this).val()
-                console.log(selectedStatus)
+                table.draw();
             })
+
+            $('input').on( 'keyup change', function () {
+                filterGlobal();
+            } );
 
 
         });
