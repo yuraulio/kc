@@ -1,3 +1,4 @@
+<?php $header_menus = get_header();?>
 <!doctype html>
 <html lang="en" class="no-js">
 <head>
