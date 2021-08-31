@@ -181,15 +181,15 @@
                 let found = false
                 let status = data[0]
 
-                let global_search = $('.dataTables_filter input').val()
+                //let global_search = $('.dataTables_filter input').val()
 
-                if(global_search != '' && global_search.length > 3 && selectedTopic == null && selectedCategory == null){
-                    if(data[1].includes(global_search) ){
-                        found = true
-                    }
-                }else{
-                    found = true
-                }
+                // if(global_search != '' && global_search.length > 3 && selectedTopic == null && selectedCategory == null){
+                //     if(data[1].includes(global_search) ){
+                //         found = true
+                //     }
+                // }else{
+                //     found = true
+                // }
 
 
 
@@ -413,10 +413,6 @@
                 selectedStatus = $(this).val()
                 table.draw();
             })
-
-            $('input').on( 'keyup change', function () {
-                filterGlobal();
-            } );
 
 
         });

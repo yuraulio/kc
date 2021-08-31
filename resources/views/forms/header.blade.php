@@ -17,10 +17,10 @@
             <div class="col-md-12 {{ $class ?? '' }}">
             @if(isset($partner_id) || isset($kc_id))
                 <div style="color: white;">
-                    @if($partner_id != '')<strong>Deree ID:</strong>{{ $partner_id }}@endif
+                    @if($partner_id != '')<strong>Deree ID:</strong> {{ $partner_id }}@endif
                         <br/>
 
-                    @if($kc_id != '')<strong>KC ID:</strong>{{ $kc_id }}@endif
+                    @if($kc_id != '')<strong>KC ID:</strong> {{ $kc_id }}@endif
                 </div>
             @endif
             </div>
