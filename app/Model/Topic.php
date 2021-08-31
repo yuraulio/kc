@@ -29,7 +29,7 @@ class Topic extends Model
 
     public function lessonsCategory()
     {
-        return $this->belongsToMany(Lesson::class, 'categories_topics_lesson');
+        return $this->belongsToMany(Lesson::class, 'categories_topics_lesson')->withPivot('category_id');
     }
 
     public function lessons()

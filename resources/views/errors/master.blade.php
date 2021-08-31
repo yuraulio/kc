@@ -92,7 +92,7 @@
                      <?php $header_menus = get_header();?>
 
                         @if (!empty($header_menus))
-                           @foreach ($header_menus['Header'] as $key => $row)
+                           @foreach ($header_menus['menu']['Header'] as $key => $row)
                            
                                <li>
                                    <a title="{{ $row['data']['name'] }}" href="{{ $row['data']['slugable']['slug'] }}">{{ $row['data']['name'] }}</a>

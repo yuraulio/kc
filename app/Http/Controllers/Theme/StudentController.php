@@ -138,6 +138,8 @@ class StudentController extends Controller
                 $data['events'][$key]['exam_access'] =false;
                 $data['events'][$key]['videos_progress'] = 0;
                 $data['events'][$key]['expiration'] = false;
+                $data['events'][$key]['status'] = $event->status;
+
 
 
             }else{
@@ -152,6 +154,8 @@ class StudentController extends Controller
                 $data['events'][$key]['title'] = $event['title'];
                 $data['events'][$key]['release_date_files'] = $event->release_date_files;
                 $data['events'][$key]['plans'] = [];
+                $data['events'][$key]['status'] = $event->status;
+
 
 
             }
@@ -284,6 +288,7 @@ class StudentController extends Controller
                 $data['events'][$key]['title'] = $event['title'];
                 $data['events'][$key]['release_date_files'] = $event->release_date_files;
                 $data['events'][$key]['expiration'] = $event->pivot->expiration;
+                $data['events'][$key]['status'] = $event->status;
                 //$data['user']['events'][$key]['exam_results'] = $user->examAccess(0.8,$event->id);
 
                 $eventSubscriptions[] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first() ?
@@ -321,6 +326,7 @@ class StudentController extends Controller
                 $data['events'][$key]['slugable'] = $event['slugable']->toArray();
                 $data['events'][$key]['title'] = $event['title'];
                 $data['events'][$key]['release_date_files'] = $event->release_date_files;
+                $data['events'][$key]['status'] = $event->status;
                 //$data['user']['events'][$key]['exam_access'] = $user->examAccess(0.8,$event->id);
 
             }
@@ -612,6 +618,7 @@ class StudentController extends Controller
             return \Response::make($content, 200, $headers);
         }
     }
+    
     public function elearning($course){
 
         $user = Auth::user();

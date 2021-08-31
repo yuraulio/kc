@@ -321,6 +321,7 @@ class InfoController extends Controller
 
         if (isset($transaction['billing_details']['billing'])) {
             if ($transaction['billing_details']['billing'] == 2) {
+                dd('d');
                 $invoice = 'YES';
             }
             else {
@@ -466,7 +467,7 @@ class InfoController extends Controller
                 $fullname = $checkemailuser->firstname . ' ' . $checkemailuser->lastname;
                 $firstname = $checkemailuser->firstname;
 
-                $emailsCollector[] = ['email' => $checkemailuser->email, 'name' => $fullname, 'first' => $firstname];
+                $emailsCollector[] = ['email' => $checkemailuser->email, 'name' => $fullname, 'first' => $firstname,'id' => $checkemailuser->id];
 
                 //Update user details with the given ones
 
@@ -689,6 +690,7 @@ class InfoController extends Controller
             $muser['name'] = $transaction->user->first()->firstname;
             $muser['first'] = $transaction->user->first()->firstname;
             $muser['email'] = $transaction->user->first()->email;
+            $muser['id'] = $transaction->user->first()->id;
             $muser['event_title'] =$transaction->event->first()->title;
             $data['firstName'] = $transaction->user->first()->firstname;
             $data['eventTitle'] =$transaction->event->first()->title;

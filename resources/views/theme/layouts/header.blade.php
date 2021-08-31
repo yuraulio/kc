@@ -88,11 +88,10 @@
 						</div>
 
 						<ul class="main-menu">
-                        <?php $header_menus = get_header();
-                        //dd($header_menus);?>
+                       
 
                             @if (!empty($header_menus))
-                                @foreach ($header_menus['Header'] as $key => $row)
+                                @foreach ($header_menus['menu']['Header'] as $key => $row)
                                 <?php //dd($row['header_menus']['data']);
                                 //dd($row); ?>
                                     <li>

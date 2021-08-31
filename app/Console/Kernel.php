@@ -24,6 +24,9 @@ class Kernel extends ConsoleKernel
        Commands\InsertExams::class,
        Commands\CompressImages::class,
        Commands\AttachBenefitsSummaryMedia::class,
+       Commands\AttachInvoices::class,
+       Commands\StopAccessFilesDiplomas::class,
+       Commands\AttachTopicCategory::class,
        //Commands\FixExams::class,
     ];
 

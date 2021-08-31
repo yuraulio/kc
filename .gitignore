@@ -16,4 +16,7 @@ npm-debug.log
 yarn-error.log
 *.orig
 .vscode/
+.htaccess
+/config/cdn_setup.php
+/public/.htaccess
 

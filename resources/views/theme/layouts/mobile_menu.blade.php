@@ -10,7 +10,7 @@
       <div class="menu-wrapper">
          <ul class="mob-menu">
             @if (!empty($header_menus))
-            @foreach ($header_menus['Header'] as $key => $row)
+            @foreach ($header_menus['menu']['Header'] as $key => $row)
             <li class="nav-item uppercase-item">
             <a title="{{ $row['data']['name'] }}" href="{{ $row['data']['slugable']['slug'] }}">{{ $row['data']['name'] }}</a>
             </li>

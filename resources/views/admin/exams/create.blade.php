@@ -85,8 +85,8 @@
                                   </div>
                               </div>
                               <div class="form-group{{ $errors->has('examCheckbox') ? ' has-danger' : '' }}">
-                                 <label class="form-control-label" for="input-examCheckbox">{{ __('Exam Checkbox Text') }}</label>
-                                 <input type="text" name="examCheckbox" id="input-examCheckbox" class="form-control{{ $errors->has('examCheckbox') ? ' is-invalid' : '' }}" placeholder="{{ __('Exam Checkbox Text') }}" value="{{ old('examCheckbox',$exam->examCheckbox) }}" autofocus>
+                                 <label class="form-control-label" for="input-examCheckbox">{{ __('Exam Password') }}</label>
+                                 <input type="text" name="examCheckbox" id="input-examCheckbox" class="form-control{{ $errors->has('examCheckbox') ? ' is-invalid' : '' }}" placeholder="{{ __('Exam Password') }}" value="{{ old('examCheckbox',$exam->examCheckbox) }}" autofocus>
                                  @include('alerts.feedback', ['field' => 'examCheckbox'])
                               </div>
                            </div>

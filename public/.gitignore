@@ -6,3 +6,5 @@
 !pictures/img1.jpg
 !pictures/img2.jpg
 !pictures/img3.jpg
+/.htaccess
+/config/cdn_setup.php

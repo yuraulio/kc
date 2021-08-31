@@ -737,7 +737,7 @@
                                     <li class="active"><a href="#c-info-inner{{$tab}}">Info</a></li>
                                     <li><a href="#c-shedule-inner{{$tab}}">Schedule </a></li>
 
-                                    @if(!$instructor && isset($event['category'][0]['dropbox']) && count($event['category'][0]['dropbox']) != 0)
+                                    @if(!$instructor && isset($event['category'][0]['dropbox']) && count($event['category'][0]['dropbox']) != 0 && $event['status'] == 3)
                                     <li><a href="#c-files-inner{{$tab}}">Files</a></li>
                                     @endif
                                     @if(isset($event['exams']) && count($event['exams']) >0 )
@@ -846,15 +846,12 @@
                                   ?>
 
                                     <?php
-                                    $now1 = strtotime("now");
+                                    $now1 = strtotime(date("Y-m-d"));
                                     $display = false;
-                                    if($event['release_date_files'] !=null){
-
-                                    }
                                     if($event['release_date_files'] == null){
                                         $display = true;
 
-                                    }else if(strtotime($event['release_date_files']) > $now1){
+                                    }else if(strtotime(date('Y-m-d',strtotime($event['release_date_files']))) >= $now1 && $event['status'] == 3){
 
                                         $display = true;
                                     }

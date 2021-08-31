@@ -151,7 +151,9 @@
                                     <div class="col-md-6 col-sm-6">
                                         <div class="form-group">
                                             <label class="form-control-label" for="input-published">{{ __('Published at') }}</label>
-                                            <input type="text" placeholder="{{$event['published_at']}}" class="form-control" disabled />
+                                            <input type="text" name="published_at" type="text" id="input-published-input"
+                                                        value="{{ date('d-m-Y',strtotime(old('published_at', $event->published_at))) }}" class="form-control datepicker" />
+                                            
                                         </div>
                                     </div>
                                     @endif
@@ -164,17 +166,14 @@
                                     @include('alerts.feedback', ['field' => 'expiration'])
                                 </div>
 
-                                <?php
-                                $date = date_create($event->release_date_files);
-                                $old_date = date_format($date,"d/m/Y");
-                                    ?>
+                        
                                 <div class="form-group{{ $errors->has('release_date_files') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-delivery">{{ __('Release Date Files') }}</label>
+                                    <label class="form-control-label" for="input-delivery">{{ __('Access to files until') }}</label>
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
                                             </div>
-                                            <input class="form-control datepicker" id="input-release_date_file" name="release_date_files" placeholder="Select date" type="text" value="{{ old('release_date_files', $old_date) }}">
+                                            <input class="form-control datepicker" id="input-release_date_file" name="release_date_files" placeholder="Select date" type="text" value="{{ date('d-m-Y',strtotime(old('release_date_files', $event->release_date_files))) }}">
                                         </div>
                                         @include('alerts.feedback', ['field' => 'release_date_files'])
                                     </div>
@@ -944,6 +943,21 @@
 
 
 </script>
+
+<script>
+//$("#input-release_date_file")
+var datePickerOptions = {
+        format: 'dd-mm-yyyy',                    
+        changeMonth: true,
+        changeYear: true,
+    }
+    $("#input-release_date_file").datepicker(datePickerOptions);
+    $("#input-published-input").datepicker(datePickerOptions);
+
+    
+</script>
+
+
 
 @endpush
 

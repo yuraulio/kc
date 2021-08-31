@@ -1,3 +1,4 @@
+<?php $header_menus = get_header();?>
 @extends('theme.layouts.master')
 
 @section('metas')
@@ -22,7 +23,7 @@
    <?php $image = get_image($homePage['mediable'],'header-image');
      // dd($image);
    ?>
-   <section class="section-hero"  style="background-image:url('{{ $image }}');">
+   <section class="section-hero"  style="background-image:url('{{ cdn($image) }}');">
       <div class="overlay"></div>
       <div class="container">
          <div class="hero-message">
@@ -182,7 +183,8 @@
                            <?php $url = url($slug); ?>
 
                            <h3><a href="{{$url}}">{{ $until }}</a></h3>
-                           <a href="{{ $category['slug'] }}" class="location">{{ $category['name'] }}</a>
+                           
+                           @if(isset($header_menus['elearning_card']['data']['slugable']) )<a href="{{ $header_menus['elearning_card']['data']['slugable']['slug'] }}" class="location"> VIDEO E-LEARNING COURSES</a>@endif
                            <span class="date"> </span>
                            <a href="{{$url}}" class="btn btn--sm btn--secondary">course details</a>
 
@@ -317,7 +319,7 @@
                         <div class="box-text">
                            <h3><a href="{{ $row['slugable']['slug'] }}">{{ $until}}</a></h3>
 
-                           <a href="{{$category['slug']}}" class="location">{{ $category['name'] }}</a>
+                           @if(isset($header_menus['elearning_card']['data']['slugable']) )<a href="{{ $header_menus['elearning_card']['data']['slugable']['slug'] }}" class="location"> VIDEO E-LEARNING COURSES</a>@endif
                            <span class="date"></span>
                            <a href="{{ $row['slugable']['slug'] }}" class="btn btn--sm btn--secondary">enroll for free</a>
                         </div>

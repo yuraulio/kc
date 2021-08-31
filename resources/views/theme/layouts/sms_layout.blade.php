@@ -52,7 +52,7 @@
    <script>
 
       $("#logout-sms").click(function(){
-         window.location='/logmeout';
+         window.location="{{ route('logout') }}";
       })
 
    </script>

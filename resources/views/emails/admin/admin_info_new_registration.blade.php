@@ -103,9 +103,7 @@ else {
 <strong>CITY:</strong> {{ $extrainfo[6] }}<br /><br />
 
 @if(isset($trans->coupon_code) && $trans->coupon_code != '') <strong>COUPON CODE:</strong> {{ $trans->coupon_code }}<br /><br />@endif
-
-
-<a target="_blank" href="http://www.knowcrunch.com/admin/transaction/edit/{{ $trans->id }}">Check the registration details online</a>.<br /><br />
+@if($user['id'])<a target="_blank" href="http://www.knowcrunch.com/admin/user/{{$user['id']}}/edit">Check the registration details online</a>.<br /><br />@endif
 <!--<a target="_blank" href="https://kclioncode.j.scaleforce.net/admin/transaction/edit/{{ $trans->id }}">Check the registration details online</a>.<br /><br />-->
 
 </p>

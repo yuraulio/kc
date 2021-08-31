@@ -12,7 +12,10 @@ Dear {{$firstName}},<br />
 
 We remind you that your access to the {{$eventTitle}} is completed in {{$expirationDate}}. 
 <br />
+Continue your training and gain full access to our updated videos, files and your personal notes by purchasing an annual subscription in your account.
 <br />
+<br />
+
 Thank you,
 
 <br />

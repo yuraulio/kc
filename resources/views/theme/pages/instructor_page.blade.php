@@ -16,7 +16,7 @@
                                     <div class="avatar-wrapper">
 
 
-                                        <div class="avatar" alt="{{ $content['title'] }} {{ $content['subtitle'] }}" title="{{ $content['title'] }} {{ $content['subtitle'] }}"  style="background-image:url(<?= asset(get_image($content['medias'])); ?>);"></div>
+                                        <div class="avatar" alt="{{ $content['title'] }} {{ $content['subtitle'] }}" title="{{ $content['title'] }} {{ $content['subtitle'] }}"  style="background-image:url({{cdn(get_image($content['medias'],'instructors-testimonials'))}});"></div>
                                         <div class="social-links">
                                             <?php $social_media = json_decode($content['social_media'], true); ?>
 

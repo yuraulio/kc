@@ -46,17 +46,16 @@ class ExamResult extends Model
             $answers = [];
             $data['answers'] = [];
             if($examResult){
-                foreach((array) json_decode($examResult->answers,true) as $answer){
+                foreach((array) json_decode($examResult->answers,true) as $key => $answer){
 
                     $answers['classname'] = 'text-danger';
                     $answers['question'] = $answer['question'];
                     $answers['correct_answer'] = is_array($answer['correct_answer']) ? $answer['correct_answer'][0] : $answer['correct_answer'];
                     $answers['given_answer'] = $answer['given_answer'];
 
-
-                    if(is_array($answer['correct_answer']) && $answer['correct_answer'][0] == $answer['given_answer']){
+                    if(is_array($answer['correct_answer']) && htmlspecialchars_decode($answer['correct_answer'][0],ENT_QUOTES) == htmlspecialchars_decode($answer['given_answer'],ENT_QUOTES)){
                         $answers['classname'] = 'text-success';
-                    }else if(!is_array($answer['correct_answer']) && $answer['correct_answer'] == $answer['given_answer'] ) {
+                    }else if(!is_array($answer['correct_answer']) && htmlspecialchars_decode($answer['correct_answer'],ENT_QUOTES) == htmlspecialchars_decode($answer['given_answer'],ENT_QUOTES) ) {
                         $answers['classname'] = 'text-success';
                     }
 

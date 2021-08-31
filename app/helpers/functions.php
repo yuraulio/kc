@@ -110,7 +110,7 @@ if (!function_exists('cdn')){
         if (!Config::get('cdn_setup.cdn')) {
             return asset($asset);
         }
-
+        
         // Get file name incl extension and CDN URLs
         $cdns = Config::get('cdn_setup.cdn');
         $assetName = basename($asset);
@@ -187,13 +187,17 @@ if (!function_exists('get_header')){
         $result = array();
         foreach ($menus as $key => $element) {
 
-
-
+        
             $model = app($element['menuable_type']);
             //dd($model::with('slugable')->find($element['menuable_id']));
 
             $element['data'] = $model::with('slugable')->find($element['menuable_id']);
-            $result[$element['name']][] = $element;
+            $result['menu'][$element['name']][] = $element;
+
+            if($element['menuable_id'] == 143){
+                $result['elearning_card'] = $element;
+            }
+
             //dd($element);
 
         }

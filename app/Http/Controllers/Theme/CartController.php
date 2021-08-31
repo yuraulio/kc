@@ -1370,6 +1370,7 @@ class CartController extends Controller
 
         $muser = [];
         $muser['name'] = $user->first_name . ' ' . $user->last_name;
+        $muser['id'] = $user->id;
         $muser['first'] = $user->first_name;
         $muser['email'] = $user->email;
 

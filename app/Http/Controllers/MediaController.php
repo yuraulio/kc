@@ -105,7 +105,7 @@ class MediaController extends Controller
 
                     }
 
-                    imagejpeg($image1, public_path($media['path'] .$media['name'].'-'.$value['version'] . $media['ext']), 30);
+                    imagejpeg($image1, public_path($media['path'] .$media['name'].'-'.$value['version'] . $media['ext']), 40);
 
 
                     
@@ -345,7 +345,7 @@ class MediaController extends Controller
 
             }
             //$image->save(public_path('uploads/').$word.$path[0].'.'.$path[1], 80);
-            imagejpeg($image1, public_path('uploads/').$word.$path[0].'-'.$request->version.'.'.$path[1], 30);
+            imagejpeg($image1, public_path('uploads/').$word.$path[0].'-'.$request->version.'.'.$path[1], 40);
 
         }else{
             $image->save(public_path('/uploads').$word.$path[0].'.'.$path[1], 80);

@@ -91,7 +91,7 @@
                                        //dd($inst_url);
                                        ?>
                                     <div class="profile-img">
-                                       <a href="{{$lvalue['slugable']['slug']}}"><img src="{{$img}}"  title="{{$name}}" alt="{{$name}}"></a>
+                                       <a href="{{$lvalue['slugable']['slug']}}"><img src="{{cdn($img)}}"  title="{{$name}}" alt="{{$name}}"></a>
                                     </div>
                                     <h3><a href="{{$lvalue['slugable']['slug']}}">{{$name}}</a></h3>
                                     <p>{{$field1}}, <a target="_blank" title="{{$field1}}" @if($ext_url!='') href="{{$ext_url}}"@endif>{{$field2}}</a>.</p>

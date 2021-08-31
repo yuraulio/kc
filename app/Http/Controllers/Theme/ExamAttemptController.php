@@ -277,7 +277,7 @@ class ExamAttemptController extends Controller
                             
                             $cAns = $dbAns;
                            
-                            if($given_ans == $cAns[0]) {
+                            if(htmlspecialchars_decode($given_ans,ENT_QUOTES) == htmlspecialchars_decode($cAns[0],ENT_QUOTES)) {
 
                                 $credit = $getDB[$q_id]['answer-credit'];
 

@@ -42,9 +42,21 @@ class Lesson extends Model
 
     }
 
+    public function event()
+    {
+        return $this->belongsToMany(Event::class, 'event_topic_lesson_instructor');
+
+    }
+
     public function get_instructor($id)
     {
         $instructor = Instructor::find($id);
         return $instructor;
+    }
+
+    public function deletee(){
+        $this->event()->detach();
+        $this->topic()->detach();
+        $this->delete();
     }
 }

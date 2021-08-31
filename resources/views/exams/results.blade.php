@@ -10,7 +10,7 @@
 
             <div class="card-header">
                
-                <img class="account-thumb" src="{{cdn('')}}" alt="user-profile-placeholder-image">
+                <img class="account-thumb" src="{{cdn(get_profile_image($image))}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" alt="user-profile-placeholder-image">
                 <div class="pad-left-15">
                 <p class="completed"> Completed: {{$end_time}}</p>
                 <p class="name"> {{$first_name}} {{$last_name}} </p>      
@@ -18,15 +18,12 @@
                  
             </div>
 
-            
-
         </div>
 
         <div class = "row border-bot">
-           
-                <div class="col-md-6" id="chartContainer" style="height: 370px; width: 100%;"></div>
+        
+            <div class="col-md-6" id="chartContainer" style="height: 370px; width: 100%;"></div>
 
-            
             <div class="col-md-6 success-fail-text @if($success) pass @else fail @endif">
                 <?php
                 

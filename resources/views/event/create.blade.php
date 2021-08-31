@@ -97,7 +97,7 @@
 
 
                                 <div class="form-group{{ $errors->has('release_date_files') ? ' has-danger' : '' }}">
-                                <label class="form-control-label" for="input-delivery">{{ __('Release Date Files') }}</label>
+                                <label class="form-control-label" for="input-delivery">{{ __('Access to files until') }}</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>

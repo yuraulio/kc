@@ -129,9 +129,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 {{-- End Google Tag Manager (noscript) --}}
 @endif
+
 <div class="page-wrapper non-pointer">
 @include('theme.layouts.header')
 @include('theme.layouts.mobile_menu')
+
 @if (!Auth::check())
 
 <div  class="login-popup-wrapper">

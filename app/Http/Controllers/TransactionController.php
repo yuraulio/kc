@@ -13,7 +13,6 @@ class TransactionController extends Controller
 
     public function participants($start_date = null, $end_date = null)
     {
-        $this->authorize('view',User::class,Transaction::class);
         $userRole = Auth::user()->role->pluck('id')->toArray();
 
         if($start_date && $end_date){
@@ -87,7 +86,7 @@ class TransactionController extends Controller
 
     public function participants_inside_revenue()
     {
-
+        $this->authorize('view',User::class,Transaction::class);
         $data['transactions'] = $this->participants()['transactions'];
         return view('admin.transaction.participants', $data);
     }

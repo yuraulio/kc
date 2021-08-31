@@ -176,14 +176,32 @@ class LessonController extends Controller
             $end_response = null;
         }
 
+        
+        $duration = null;
+        if($start_response && $end_response){
 
+            $startHour = date_create($start_response);
+            $endHour = date_create($end_response);
+
+            $durationH = date_diff($endHour, $startHour);;
+            
+            if($durationH->h > 0){
+                $duration .=  $durationH->h.'h';
+            }
+
+            if($durationH->i > 0){
+                $duration .= ' ' .  $durationH->i.'m';
+            }
+
+            $duration = trim($duration);
+        }
 
 
         $topic->event_topic()->wherePivot('lesson_id', '=', $request->lesson_id)->wherePivot('event_id', '=', $request->event_id)->updateExistingPivot($request->topic_id,[
             //'priority' => $request->priority,
             'date' => $date,
             'room' => $request->room,
-            'duration' => $request->duration,
+            'duration' => $duration,
             'instructor_id' => $request->instructor_id,
             'time_starts' => $start,
             'time_ends' => $end
@@ -286,12 +304,9 @@ class LessonController extends Controller
      */
     public function destroy(Lesson $lesson)
     {
-        //dd($lesson);
-        if (!$lesson->topic->isEmpty()) {
-            return redirect()->route('lessons.index')->withErrors(__('This lesson has items attached and can\'t be deleted.'));
-        }
+        
 
-        $lesson->delete();
+        $lesson->deletee();
 
         return redirect()->route('lessons.index')->withStatus(__('Lesson successfully deleted.'));
     }
