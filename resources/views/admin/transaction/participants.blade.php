@@ -228,6 +228,8 @@ $.fn.dataTable.ext.search.push(
 
 $(document).ready(function() {
 
+    let sort_events = []
+
     $('#participants_info').removeClass('d-none')
 
     // Create date inputs
@@ -282,10 +284,45 @@ $(document).ready(function() {
     $('#total').text('€'+sum)
 
     //let sum = 0;
+    //console.log(events)
 
     $.each(events, function(key, value){
-        $('#col1_filter').append('<option value="'+value+'">'+value+'</option>')
+        let d = value.split(' / ')
+        let DateParts = d[1].split("-")
+        let t= new Date(+DateParts[2], DateParts[1] - 1, +DateParts[0]).setUTCHours(
+      0,
+      0,
+      0,
+      0
+    )
+    let date = new Date(t)
+
+    let arr = []
+    arr['name'] = value
+    arr['date'] = date
+
+    sort_events.push(arr)
+
     })
+
+    sort_events.sort(function compare(a, b) {
+        var dateA = new Date(a.date);
+        var dateB = new Date(b.date);
+        return dateA - dateB;
+    });
+
+    let length = parseInt(sort_events.length) -1
+    console.log(length)
+
+    $.each(sort_events, function(key, value){
+        let data = sort_events[length];
+        $('#col1_filter').append(`<option value="${sort_events[length].name}">${sort_events[length].name}</option>`)
+
+        length = length - 1;
+    })
+
+
+
     $.each(coupons, function(key, value){
         $('#col4_filter').append('<option value="'+value+'">'+value+'</option>')
     })
