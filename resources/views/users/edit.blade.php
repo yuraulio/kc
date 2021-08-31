@@ -6,16 +6,19 @@
     'elementName' => 'user-management'
 ])
 
+
 @section('content')
     @include('forms.header', [
         'title' => $user['firstname'] . ' '. $user['lastname'],
+        'kc_id' => $user['kc_id'],
+        'partner_id' => $user['partner_id'],
         'description' => __(''),
         'class' => 'col-lg-7'
     ])
 
     <div class="container-fluid mt--6">
         <div class="row">
-            <div class="col-xl-4 order-xl-2">
+            {{--<div class="col-xl-4 order-xl-2">
                 <div class="card card-profile">
                     <img src="{{ asset('argon') }}/img/theme/img-1-1000x600.jpg" alt="Image placeholder" class="card-img-top">
                     <div class="row justify-content-center">
@@ -46,12 +49,8 @@
                     </div>
                 </div>
                 <!-- Progress track -->
-            </div>
-            <div class="col-xl-8 order-xl-1">
-                <div class="row">
-
-
-                </div>
+            </div>--}}
+            <div class="col-xl-12 order-xl-12">
 
 
 

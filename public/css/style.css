@@ -31,6 +31,10 @@
     margin-top: 20px;
 }
 
+li.select2-results__option:empty {
+    display: none;
+}
+
 .accordion {
     margin-top: 15px;
 }

@@ -26,7 +26,11 @@ class LessonController extends Controller
         $this->authorize('manage-users', User::class);
         $user = Auth::user();
 
-        return view('lesson.index', ['lessons' => $model->with('topic', 'type')->get(), 'user' => $user]);
+        $data['lessons'] = $model->with('topic.category', 'type')->get();
+
+        $categories = Category::with('topics')->get()->groupBy('name')->toArray();
+
+        return view('lesson.index', ['lessons' => $data['lessons'], 'user' => $user, 'categories' => $categories]);
     }
 
     /**
@@ -62,7 +66,7 @@ class LessonController extends Controller
             $arr1 = [];
         }
         $links = json_encode($arr1);
-    
+
         if($request->status){
             $status = 1;
         }else{
@@ -74,7 +78,7 @@ class LessonController extends Controller
         $lesson = $model->create($request->all());
         if($request->topic_id != null){
             foreach($request->topic_id as $topic){
-                
+
                 //assign on Topic
                 $topic = Topic::find($topic);
                 if(!isset($topic->category[0])){
