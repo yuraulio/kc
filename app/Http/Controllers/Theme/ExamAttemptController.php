@@ -399,7 +399,7 @@ class ExamAttemptController extends Controller
                     $cert->user()->save($student);
                     $cert->exam()->save($exam);
                    
-                    $adminemail = 'info@knocrunch.com';
+                    $adminemail = 'info@knowcrunch.com';
 
                     $muser = [];
                     $muser['email'] = $examResultData->user->email;

@@ -77,16 +77,19 @@
                 </div>
 
                 <table class="table align-items-center table-flush"  id="participants_table">
+                  
                     <thead class="thead-light">
                         <tr>
                             <th scope="col">{{ __('Student Data') }}</th>
                             <th scope="col">{{ __('Event') }}</th>
+                            
                             <th scope="col">{{ __('Ticket Type') }}</th>
                             <th scope="col">{{ __('Ticket Price') }}</th>
                             <th scope="col">{{ __('Coupon') }}</th>
                             <th class="participant_elearning none">{{ __('Video Seen') }}</th>
                             <th scope="col">{{ __('Registration Date') }}</th>
                             <th class="participant_elearning none">{{ __('Expiration Date') }}</th>
+                            <th hidden>{{ __('Event ID') }}</th>
                             {{--<th class="participant_elearning none">{{ __('New Expiration Date') }}</th>--}}
                         </tr>
                     </thead>
@@ -94,12 +97,14 @@
                         <tr>
                             <th>{{ __('Student Data') }}</th>
                             <th>{{ __('Event') }}</th>
+                            
                             <th>{{ __('Ticket Type') }}</th>
                             <th>{{ __('Ticket Price') }}</th>
                             <th>{{ __('Coupon') }}</th>
                             <th class="participant_elearning none">{{ __('Video Seen') }}</th>
                             <th>{{ __('Registration Date') }}</th>
                             <th class="participant_elearning none">{{ __('Expiration Date') }}</th>
+                            <th hidden>{{ __('Event ID') }}</th>
                             {{--<th class="participant_elearning none">{{ __('New Expiration Date') }}</th>--}}
                         </tr>
                     </tfoot>
@@ -110,6 +115,7 @@
                             <tr>
                                 <td><a href="{{ route('user.edit', $transaction['user_id']) }}">{{$transaction['name']}}</a></td>
                                 <td>{{$transaction['event_title']}}</td>
+                               
                                 <td>{{ $transaction['type'] }}</td>
                                 <td><?= '€'.number_format($transaction['amount'], 2, '.', ''); ?></td>
                                 <td>{{ $transaction['coupon_code'] }}</td>
@@ -122,7 +128,7 @@
 
 
                                 </td>
-
+                                <td hidden>{{$transaction['event_id']}}</td>
                                 {{--<td class="participant_elearning none">
                                     <input id="{{$transaction['id']}}" class="form-control datepicker" placeholder="Select date" type="text" value="<?= ($transaction['expiration'] != null) ? $transaction['expiration'] : ''; ?>">
                                     <button class="update_exp btn btn-info btn-sm" style="margin-top:10px;" type="button" data-id="{{$transaction['id']}}" >Update</button>
@@ -159,7 +165,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{ asset('argon') }}/vendor/datatables-datetime/datetime.min.js"></script>
     <script>
-
+       var eventsArray = {};
         // DataTables initialisation
         var table = $('#participants_table').DataTable({
             order: [[5, 'asc']],
@@ -268,10 +274,18 @@ $(document).ready(function() {
 
     } );
 
+    let eventIDS = table.column(8).data().unique()
+    let events = table.column(1).data().unique();
+
+    $.each(events, function(key, value) {
+        eventsArray[removeSpecial(value)] = eventIDS[key]
+    })
+
+
     events = table.column(1).data().unique().sort()
     coupons = table.column(4).data().unique().sort()
     prices = table.column(3).data()
-    //console.log(prices)
+    
     let sum = 0
     $.each(prices, function(key, value) {
         value = value.replace("€", "")
@@ -284,7 +298,6 @@ $(document).ready(function() {
     $('#total').text('€'+sum)
 
     //let sum = 0;
-    //console.log(events)
 
     $.each(events, function(key, value){
         let d = value.split(' / ')
@@ -300,7 +313,7 @@ $(document).ready(function() {
     let arr = []
     arr['name'] = value
     arr['date'] = date
-
+            
     sort_events.push(arr)
 
     })
@@ -312,7 +325,6 @@ $(document).ready(function() {
     });
 
     let length = parseInt(sort_events.length) -1
-    console.log(length)
 
     $.each(sort_events, function(key, value){
         let data = sort_events[length];
@@ -800,6 +812,46 @@ $(document).ready(function() {
 
     }
 
+
+    </script>
+
+    <script>
+
+        $(document).ready(function(){
+
+            $('#participants_table_filter').append(
+                `<div class='excel-button'>
+                        <button class="btn btn-icon btn-primary" type="button">
+                        	<span class="btn-inner--icon"><i class="ni ni-cloud-download-95"></i></span>
+                        </button>
+                    </div>`
+            )
+            
+        })
+
+
+        $(document).on("click",".excel-button",function() {
+            
+            let min = $("#min").val();
+            let max = $("#max").val();
+            let event = eventsArray[removeSpecial($("#col1_filter").val())];
+
+    
+            $.ajax({ 
+                headers: {
+                    'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{route('transaction.export-excel')}}", 
+                type: "POST",
+                data:{event:event,fromDate:min,toDate:max} ,
+                success: function(data) {
+
+                    window.location.href = '/uploads/tmp/exports/TransactionsExport.xlsx'
+
+                }
+            });
+  
+        });
 
     </script>
 

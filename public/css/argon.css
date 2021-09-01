@@ -15978,3 +15978,8 @@ body {
 .text-right {
   text-align: right; }
 
+.excel-button {
+  position: absolute;
+  right: 20em;
+  top: -10px; }
+

@@ -55,6 +55,7 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     //Participants
     Route::get('transaction/participants', 'TransactionController@participants_inside_revenue')->name('transaction.participants');
     Route::post('transaction/updateExpirationDate', ['as' => 'transaction.updateExpirationDate', 'uses' => 'TransactionController@updateExpirationDate']);
+    Route::post('transaction/export-excel', 'TransactionController@exportExcel')->name('transaction.export-excel');
     Route::post('home/fetchDashboardData', ['as' => 'home.fetchData', 'uses' => 'HomeController@fetchByDate']);
 
     //Subscriptions

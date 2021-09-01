@@ -7,6 +7,8 @@ use App\Model\Transaction;
 use App\Model\Event;
 use App\Model\User;
 use Auth;
+use Excel;
+use App\Exports\TransactionExport;
 
 class TransactionController extends Controller
 {
@@ -188,6 +190,17 @@ class TransactionController extends Controller
         }
 
         return back();
+    }
+
+    public function exportExcel(Request $request){
+        
+        $fromDate = date('Y-m-d',strtotime($request->fromDate));
+        $toDate = $request->toDate ? date('Y-m-d',strtotime($request->toDate)) : date('Y-m-d');
+
+        $this->authorize('view',User::class,Transaction::class);
+       
+        Excel::store(new TransactionExport($request), 'TransactionsExport.xlsx', 'export');
+        Excel::download(new TransactionExport($request), 'TransactionsExport.xlsx');
     }
 
 }
