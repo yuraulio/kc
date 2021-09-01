@@ -51,18 +51,17 @@
                                     @include('alerts.feedback', ['field' => 'description'])
                                 </div>
 
-                                <div class="form-group{{ $errors->has('hours') ? ' has-danger' : '' }}">
+                                <div class="form-group{{ $errors->has('hourPs') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-hours">{{ __('Hours') }}</label>
                                     <input type="text" name="hours" id="input-hours" class="form-control{{ $errors->has('hours') ? ' is-invalid' : '' }}" placeholder="{{ __('Hours') }}" value="{{ old('hours', $category->hours) }}">
 
                                     @include('alerts.feedback', ['field' => 'hours'])
                                 </div>
 
-                                <?php //dd($data['folders']); ?>
 
                                 <div class="form-group">
                                     <label for="exampleFormControlSelect1">Select Dropbox Folder</label>
-                                    <?php //dd($already_assign[0]); ?>
+                                    <?php //dd($data['folders']); ?>
                                     <select class="form-control" name="folder_name" id="folder_name">
 
                                         @foreach($data['folders'] as $folder)
@@ -75,6 +74,7 @@
                                                 @endif
                                             @endforeach
                                             @if($found)
+                                            <?php //dd($folder); ?>
                                                 <option selected value="{{ $folder }}">{{ $folder }}</option>
                                             @else
                                                 <option value="{{ $folder }}">{{ $folder }}</option>

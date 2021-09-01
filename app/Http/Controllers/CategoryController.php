@@ -27,7 +27,7 @@ class CategoryController extends Controller
 {
     public function __construct()
     {
-        
+
     }
 
     /**
@@ -38,7 +38,7 @@ class CategoryController extends Controller
      */
     public function index(Category $model)
     {
-       
+
 
         return view('global_settings.categories.index', ['categories' => $model->all()]);
     }
@@ -51,7 +51,7 @@ class CategoryController extends Controller
     public function create()
     {
         $li = Storage::disk('dropbox');
-        
+
         $data['folders'] = [];
         if($li) {
 
@@ -95,7 +95,7 @@ class CategoryController extends Controller
                     //dd($model->with('dropbox')->get());
                     $model->dropbox()->attach([$exist_dropbox->id]);
                 }else{
-                    return redirect()->route('global.index')->withStatus(__('Update Dropbox First.'));
+                    return redirect()->route('global.index')->withErrors('Update Dropbox Please!!');
                 }
 
 
@@ -116,7 +116,7 @@ class CategoryController extends Controller
     {
         $data['folders'] = [];
         //dd($category->dropbox()->get());
-       
+
         $data['slug'] = $category->slugable;
         $li = Storage::disk('dropbox');
 
@@ -126,17 +126,19 @@ class CategoryController extends Controller
             //dd($folders);
             //$data['folders'][0] = 'Select Dropbox Folder';
             foreach ($folders as $key => $row) {
+                //dd($row);
                 if($row['type'] == 'dir') :
                     $data['folders'][$row['basename']] = $row['basename'];
                 endif;
             }
+            //dd($data['folders']);
 
             //dd($category->with('dropbox')->get());
             $already_assign = $category->dropbox;
             //dd($already_assign);
 
         }
-       
+
         return view('global_settings.categories.edit', compact('category', 'data', 'already_assign'));
     }
 
