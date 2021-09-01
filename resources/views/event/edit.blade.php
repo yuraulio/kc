@@ -148,11 +148,19 @@
                                         </div>
                                     </div>
                                     @if($event['published_at'] != null)
-                                    <div class="col-md-6 col-sm-6">
-                                        <div class="form-group">
+                                    <div class="col-md-6 col-sm-6 is-flex">
+
+                                        <div class="form-group col-sm-6">
+                                            <label class="form-control-label" for="launch_date">{{ __('Launch Date') }}</label>
+                                            <input type="text" name="launch_date" type="text" id="input-launch-input"
+                                                        value="{{ date('d-m-Y',strtotime(old('launch_date', $event->launch_date))) }}" class="form-control datepicker" />
+                                            
+                                        </div>
+
+                                        <div class="form-group col-sm-6">
                                             <label class="form-control-label" for="input-published">{{ __('Published at') }}</label>
                                             <input type="text" name="published_at" type="text" id="input-published-input"
-                                                        value="{{ date('d-m-Y',strtotime(old('published_at', $event->published_at))) }}" class="form-control datepicker" />
+                                                        value="{{ date('d-m-Y',strtotime(old('published_at', $event->published_at))) }}" class="form-control" disabled />
                                             
                                         </div>
                                     </div>
@@ -772,7 +780,7 @@
 
                         $('#lesson_details').append(row)
                         var datePickerOptions = {
-                            dateFormat: 'Y-m-d',
+                            format: 'dd-mm-yyyy',
                             firstDay: 1,
                             changeMonth: true,
                             changeYear: true,
@@ -952,7 +960,7 @@ var datePickerOptions = {
         changeYear: true,
     }
     $("#input-release_date_file").datepicker(datePickerOptions);
-    $("#input-published-input").datepicker(datePickerOptions);
+    $("#input-launch-input").datepicker(datePickerOptions);
 
     
 </script>

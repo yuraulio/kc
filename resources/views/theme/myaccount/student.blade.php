@@ -736,8 +736,9 @@
                                  <ul>
                                     <li class="active"><a href="#c-info-inner{{$tab}}">Info</a></li>
                                     <li><a href="#c-shedule-inner{{$tab}}">Schedule </a></li>
-
-                                    @if(!$instructor && isset($event['category'][0]['dropbox']) && count($event['category'][0]['dropbox']) != 0 && $event['status'] == 3)
+                                       <?php  $fa = strtotime(date('Y-m-d',strtotime($event['release_date_files']))) >= strtotime(date('Y-m-d'))?>
+                                    @if(!$instructor && isset($event['category'][0]['dropbox']) && count($event['category'][0]['dropbox']) != 0 &&
+                                        $event['status'] == 3 &&  $fa)
                                     <li><a href="#c-files-inner{{$tab}}">Files</a></li>
                                     @endif
                                     @if(isset($event['exams']) && count($event['exams']) >0 )

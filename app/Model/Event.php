@@ -46,7 +46,8 @@ class Event extends Model
     protected $table = 'events';
 
     protected $fillable = [
-        'published', 'published_at', 'release_date_files', 'expiration' ,'status', 'title', 'htmlTitle', 'subtitle', 'header', 'summary', 'body', 'hours','author_id', 'creator_id', 'view_tpl', 'view_counter'
+        'published', 'published_at', 'release_date_files', 'expiration' ,'status', 'title', 'htmlTitle', 'subtitle', 'header', 'summary', 'body', 'hours','author_id', 'creator_id', 'view_tpl', 'view_counter',
+        'launch_date'
     ];
 
     public function category()

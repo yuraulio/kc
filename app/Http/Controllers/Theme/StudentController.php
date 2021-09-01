@@ -773,7 +773,7 @@ class StudentController extends Controller
 
                         $fullname = $muser['name'];
                         $first = $muser['first'];
-                        $sub =  $first . ' – Your exams on the ' . $muser['eventTitle'] . 'have been activated!';
+                        $sub =  $first . ' – Your exams on the ' . $muser['eventTitle'] . ' have been activated!';
                         $m->from($adminemail, 'Knowcrunch');
                         $m->to($muser['email'], $fullname);
                         //$m->cc($adminemail);

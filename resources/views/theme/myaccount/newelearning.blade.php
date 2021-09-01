@@ -389,64 +389,85 @@
                            <?php //dd($files); ?>
                            @if(isset($files) && count($files) > 0)
                            <?php
+                           
                               $folders = $files['folders'][0];
-                              //dd($folders);
                               if(isset($files['folders'][1])){
-                                  $folder_bonus = $files['folders'][1];
+                                  $folders_bonus = $files['folders'][1];
                               }
-
-                              $files = $files['files'][1];
-                              //dd($files);
-
+                              
                               if(isset($files['files'][2])){
-                                  $files_bonus = $files['files'][2];
-                              }
+                                
+                                 $files_bonus = $files['files'][2];
+                             }
+                              $files = $files['files'][1];
+                             
+                             
 
                               ?>
                            <div class="lesson-downloads">
                               <h4 class="resource-list-title">Downloads</h4>
                               <?php //dd($folders) ?>
                               <ul class="resource-list">
+                                 <?php $topicNames = []; ?>
+                                 <?php $count =0?>
                                  @foreach($folders as $key => $folder)
-                                 <?php
-                                    $topic_name = preg_replace('/[0-9]+/', '', $folder['foldername']);
-                                    $topic_name = Str::slug($topic_name, '-');
-                                    //dd($topic_name);
-
-                                    $id = explode('/',$folder['dirname']);
-                                    //dd($id[2]);
-                                    $str=substr($id[2], 0, strrpos($id[2], '-'));
-                                    $str = intval($str);
-                                    //dd($str);
+                                    <?php
+                                       $topic_name = preg_replace('/[0-9]+/', '', $folder['foldername']);
+                                       $topic_name = Str::slug($topic_name, '-');
+                                       //dd($topic_name);
+                             
+                                       $id = explode('/',$folder['dirname']);
+                                       //dd($id[2]);
+                                       $str=substr($id[2], 0, strrpos($id[2], '-'));
+                                       $str = intval($str);
+                                       //dd($str);
+                                    
+                                       $topicNames[$folder['id']] = $topic_name;
                                     ?>
-                                 @foreach($files as $key11 => $file)
-                                 @if($folder['id'] == $file['fid'])
-                                 <li id="{{$folder['dirname']}}" data-folder-id="{{$topic_name}}" class="resource hidden">
-                                    <a class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" ><img
-                                       src="theme/assets/img/new/download.svg"
-                                       alt="download resource" />{{ $file['filename'] }}</a
-                                       >
-                                    {{--<span class="last-modified">Last modified:  {{$file['last_mod']}}</span>--}}
-                                 </li>
-                                 @endif
+                                    @foreach($files as $key11 => $file)
+                                       
+
+                                       @if($folder['id'] == $file['fid'])
+                                       <li id="{{$folder['dirname']}}" data-folder-id="{{$topic_name}}" class="resource hidden">
+                                          <a class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" ><img
+                                             src="theme/assets/img/new/download.svg"
+                                             alt="download resource" />{{ $file['filename'] }}</a
+                                             >
+                                          {{--<span class="last-modified">Last modified:  {{$file['last_mod']}}</span>--}}
+                                       </li>
+                                       @endif
+                                    @endforeach
                                  @endforeach
-                                 @endforeach
-                                 @if(isset($folders_bonus) && count($folders_bonus) > 0)
-                                 @foreach($folders_bonus as $folder_bonus)
-                                 @if($folder_bonus['parent'] == $folder['id'])
-                                 @foreach($files_bonus as $file_bonus)
-                                 <li id="{{$folder_bonus['dirname']}}" class="resource bonus-files">
-                                    <a class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" ><img
-                                       src="theme/assets/img/new/download.svg"
-                                       alt="download resource" />{{ $file_bonus['filename'] }}</a>
-                                 </li>
-                                 @endforeach
-                                 @endif
-                                 @endforeach
+                                 
+                                 @if(isset($files_bonus) && count($files_bonus) > 0 && isset($files) && count($files) > 0)
+                                 
+                                    @foreach($folders as $folder)
+
+                                       @foreach($folders_bonus as $folder_bonus)
+
+                                          
+                                          @if($folder_bonus['parent'] == $folder['id'])
+                                             
+                                             @foreach($files_bonus as $file_bonus)
+                                                
+                                                @if($file_bonus['fid'] == $folder_bonus['id']  )
+                                                  
+                                                   <li id="{{$folder_bonus['dirname']}}" data-folder-id="{{$topicNames[$folder_bonus['parent']]}}" class="resource bonus-files hidden">
+                                                      <a class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" ><img
+                                                         src="theme/assets/img/new/download.svg"
+                                                         alt="download resource" />{{ $file_bonus['filename'] }}</a>
+                                                   </li>
+                                                @endif
+                                             @endforeach
+                                          @endif
+                                       @endforeach
+                                       
+                                    @endforeach
                                  @endif
                               </ul>
                            </div>
                            @endif
+                          
                            <!-- ./lesson-downloads -->
                            <div class="lesson-links">
                               <h4 class="resource-list-title">Links</h4>

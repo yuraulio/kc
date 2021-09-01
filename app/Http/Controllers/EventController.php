@@ -172,14 +172,16 @@ class EventController extends Controller
         if($request->published == 'on')
         {
             $published = 1;
-            $published_at = date("Y-m-d");
+            $published_at = !$event->published_at ? date("Y-m-d") : $event->published_at;
         }else
         {
             $published = 0;
-            $published_at = null;
+            $published_at = $event->published_at;
         }
 
-        $request->request->add(['published' => $published, 'published_at' => $published_at, 'release_date_files' => date('Y-m-d', strtotime($request->release_date_files))]);
+        $launchDate = date('Y-m-d',strtotime($request->launch_date));
+
+        $request->request->add(['published' => $published, 'published_at' => $published_at, 'release_date_files' => date('Y-m-d', strtotime($request->release_date_files)),'launch_date'=>$launchDate]);
         $event = $model->create($request->all());
 
         /*if($event && $request->image_upload){
@@ -349,17 +351,19 @@ class EventController extends Controller
         if($request->published == 'on')
         {
             $published = 1;
-            $published_at = date("Y-m-d",strtotime($request->published_at));
+            $published_at = !$event->published_at ? date("Y-m-d") : $event->published_at;
         }else
         {
             $published = 0;
-            $published_at = null;
+            $published_at = $event->published_at;
         }
 
         //dd($request->all());
        //dd($request->release_date_files);
        
-        $request->request->add(['published' => $published, 'published_at' => $published_at, 'release_date_files' => date('Y-m-d', strtotime($request->release_date_files))]);
+        $launchDate = date('Y-m-d',strtotime($request->launch_date));
+
+        $request->request->add(['published' => $published, 'published_at' => $published_at, 'release_date_files' => date('Y-m-d', strtotime($request->release_date_files)),'launch_date'=>$launchDate]);
         $ev = $event->update($request->all());
 
         /*if($request->image_upload != null && $ev){
