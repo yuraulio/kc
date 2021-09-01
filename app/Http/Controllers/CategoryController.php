@@ -170,7 +170,7 @@ class CategoryController extends Controller
                     array_push($ids, $exist_dropbox->id);
                     //$model->dropbox()->attach($exist_dropbox->id,['category_id' => $model->id]);
                 }else{
-                    return redirect()->route('global.index')->withStatus(__('Update Dropbox First.'));
+                    return redirect()->route('global.index')->withError('Update Dropbox First.');
                 }
 
                 $category->dropbox()->sync($ids);
