@@ -144,7 +144,7 @@ class DropboxController extends Controller
                                                     $depth = 2;
                                                     if($s2row['.tag'] == 'file') {
                                                         $sst = Carbon::parse($s2row['server_modified'])->format('d/m/Y H:i:s');
-                                                        $data['files'][$di][$depth][] = ['fid' => $skey, 'dirname' => $s2row['path_display'], 'filename' => $s2row['name'], 'ext' => substr($s2row['name'], strrpos($s2row['name'], '.') + 1), 'last_mod' => $sst];
+                                                        $data['files'][$di][$depth][] = ['parent' => $key,'fid' => $skey, 'dirname' => $s2row['path_display'], 'filename' => $s2row['name'], 'ext' => substr($s2row['name'], strrpos($s2row['name'], '.') + 1), 'last_mod' => $sst];
                                                     }
                                                 }
                                             }
@@ -263,7 +263,7 @@ class DropboxController extends Controller
                                                     $depth = 2;
                                                     if($s2row['.tag'] == 'file') {
                                                         $sst = Carbon::parse($s2row['server_modified'])->format('d/m/Y H:i:s');
-                                                        $data['files'][$di][$depth][] = ['fid' => $skey, 'dirname' => $s2row['path_display'], 'filename' => $s2row['name'], 'ext' => substr($s2row['name'], strrpos($s2row['name'], '.') + 1), 'last_mod' => $sst];
+                                                        $data['files'][$di][$depth][] = ['parent' => $key,'fid' => $skey, 'dirname' => $s2row['path_display'], 'filename' => $s2row['name'], 'ext' => substr($s2row['name'], strrpos($s2row['name'], '.') + 1), 'last_mod' => $sst];
                                                     }
                                                 }
                                             }

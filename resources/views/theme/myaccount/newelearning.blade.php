@@ -396,14 +396,11 @@
                               }
                               
                               if(isset($files['files'][2])){
-                                
                                  $files_bonus = $files['files'][2];
-                             }
+                              }
                               $files = $files['files'][1];
                              
-                              //dd($files);
-
-                              ?>
+                           ?>
                            <div class="lesson-downloads">
                               <h4 class="resource-list-title">Downloads</h4>
                               <?php //dd($folders) ?>
@@ -450,8 +447,7 @@
                                              
                                              @foreach($files_bonus as $file_bonus)
                                                 
-                                                @if($file_bonus['fid'] == $folder_bonus['id']  )
-                                                  
+                                                @if($file_bonus['parent'] == $folder_bonus['parent']  )
                                                    <li id="{{$folder_bonus['dirname']}}" data-folder-id="{{$topicNames[$folder_bonus['parent']]}}" class="resource bonus-files hidden">
                                                       <a class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" ><img
                                                          src="theme/assets/img/new/download.svg"

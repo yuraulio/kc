@@ -849,7 +849,7 @@
                                     <?php
                                     $now1 = strtotime(date("Y-m-d"));
                                     $display = false;
-                                    if($event['release_date_files'] == null){
+                                    if(!$event['release_date_files'] && $event['status'] == 3){
                                         $display = true;
 
                                     }else if(strtotime(date('Y-m-d',strtotime($event['release_date_files']))) >= $now1 && $event['status'] == 3){
@@ -893,7 +893,7 @@
                                                                     <span><i class="icon-folder-open"></i>   </span>
                                                                     @if(isset($files_bonus) && count($files_bonus) > 0)
                                                                         @foreach($files_bonus as $file_bonus)
-                                                                        @if($file_bonus['fid'] == $folder['id'])
+                                                                        @if($file_bonus['parent'] == $folder_bonus['parent'])
                                                                             <div class="file-wrapper">
                                                                                 <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
                                                                                 <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
