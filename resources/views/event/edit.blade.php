@@ -639,7 +639,7 @@
                 day = '0' + day;
 
 
-            return [day,month,year].join('/');
+            return [day,month,year].join('-');
         }
 
         $(document).on('click', '#remove_lesson', function() {
@@ -726,13 +726,13 @@
 
                     if(lesson.date != ''){
                         var date = new Date(lesson.date);
-                            date =((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + date.getFullYear()
+                            date =((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '-' + ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '-' + date.getFullYear()
                     }else{
                         if(lesson.time_starts == null){
                             date = ""
                         }else{
                             var date = new Date(lesson.time_starts);
-                            date =((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '/' + ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '/' + date.getFullYear()
+                            date =((date.getDate() > 9) ? date.getDate() : ('0' + date.getDate())) + '-' + ((date.getMonth() > 8) ? (date.getMonth() + 1) : ('0' + (date.getMonth() + 1))) + '-' + date.getFullYear()
                         }
 
                     }
@@ -803,6 +803,9 @@
                             timeFormat: 'HH:mm',
                             zindex: 9999999,
                             interval: 5,
+                            minTime: '00:00',
+                            maxTime: '23:55',
+                            dynamic: false,
                         });
 
 

@@ -537,7 +537,7 @@ class HomeController extends Controller
 
         $data['is_event_paid'] = 1;
         $data['desc'] = $topicDescription;
-
+        
         $pdf = PDF::loadView('theme.event.syllabus_print', $data)->setPaper('a4', 'landscape');
         $fn = $slug . '.pdf';
         return $pdf->stream($fn);

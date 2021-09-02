@@ -160,10 +160,11 @@ class LessonController extends Controller
         $topic = Topic::find($request->topic_id);
 
         if($request->date != null){
-            $date = date('Y-m-d H:i:s', strtotime($request->date));
-            $date1 = date('d-m-Y', strtotime($request->date));
+            $date = date('Y-m-d', strtotime($request->date));
+            
+            $date1 = date('Y-m-d', strtotime($request->date));
         }else{
-            $date1 = null;
+            $date1 = date('Y-m-d', strtotime($request->start));;
         }
 
         if($request->start != null){
@@ -200,7 +201,7 @@ class LessonController extends Controller
             $duration = trim($duration);
         }
 
-
+       
         $topic->event_topic()->wherePivot('lesson_id', '=', $request->lesson_id)->wherePivot('event_id', '=', $request->event_id)->updateExistingPivot($request->topic_id,[
             //'priority' => $request->priority,
             'date' => $date,

@@ -228,14 +228,14 @@ class TicketController extends Controller
         $data['tickets'] = Ticket::all();
 
         foreach($model->ticket as $key => $ticket){
-            foreach($data['tickets'] as $allTicket){
-                if($ticket['id'] == $allTicket['id']){
-                    unset($data['tickets'][$key]);
+            foreach($data['tickets'] as $key1 => $allTicket){
+                if($ticket['ticket_id'] == $allTicket['id']){
+                    unset($data['tickets'][$key1]);
                 }
             }
 
         }
-
+        //dd($data['tickets']);
         return response()->json([
             'success' => __('Ticket successfully fetched.'),
             'data' => $data,

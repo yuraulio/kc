@@ -65,12 +65,12 @@
                                                     <tbody>
 
                                                     @foreach($value['lessons'] as $lke => $lvalue)
-                                                    <?php //dd($lvalu); ?>
+                                                    
                                                          {{--@foreach($lvalu as $lkey => $lvalue)--}}
 
                                                         <tr >
                                                             <td><img height="10" src="theme/assets/img/calendar.svg" alt="Date" /> <?= date( "l d M Y", strtotime($lvalue['pivot']['time_starts']) ) ?></td>
-                                                            <td><?= date( "l d M Y", strtotime($lvalue['pivot']['time_ends']) ) ?> ({!! $lvalue['pivot']['duration'] !!})</td>
+                                                            <td><?= date( "H:i", strtotime($lvalue['pivot']['time_ends']) ) ?> ({!! $lvalue['pivot']['duration'] !!})</td>
                                                             <td>{{$lvalue['pivot']['room'] }}</td>
 
                                                             <td>{{-- $level --}} @if(count($lvalue['type']) > 0) {!! $lvalue['type'][0]['name'] !!} @endif</td>

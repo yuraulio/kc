@@ -27,6 +27,7 @@ class Kernel extends ConsoleKernel
        Commands\AttachInvoices::class,
        Commands\StopAccessFilesDiplomas::class,
        Commands\AttachTopicCategory::class,
+       Commands\GetOldLessonInstrunctor::class,
        //Commands\FixExams::class,
     ];
 

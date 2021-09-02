@@ -35,8 +35,7 @@ class TransactionExport implements FromArray,WithHeadings
         $userRole = Auth::user()->role->pluck('id')->toArray();
         $data = array();
         foreach($transactions as $transaction){
-        
-        
+    
             if(!$transaction->subscription->first() && $transaction->user->first() && $transaction->event->first() && $transaction->event->first()->id == $this->event){
             
                 $category =  $transaction->event->first()->category->first() ? $transaction->event->first()->category->first()->id : -1;
@@ -104,16 +103,20 @@ class TransactionExport implements FromArray,WithHeadings
                     $companyName = isset($billingDetails['companyname']) ? $billingDetails['companyname'] : '';
                     $companyProfession = isset($billingDetails['companyprofession']) ? $billingDetails['companyprofession'] : '';
                     $companyafm = isset($billingDetails['companyafm']) ? $billingDetails['companyafm'] : '';
-                    $companydoy= isset($billingDetails['companyname']) ? $billingDetails['companyname'] : '';
-                    $companyaddress= isset($billingDetails['companydoy']) ? $billingDetails['companydoy'] : '';
-                    $companyaddressnum= isset($billingDetails['companyaddress']) ? $billingDetails['companyaddress'] : '';
+                    $companydoy= isset($billingDetails['companydoy']) ? $billingDetails['companydoy'] : '';
+                    $companyaddress= isset($billingDetails['companyaddress']) ? $billingDetails['companyaddress'] : '';
+                    $companyaddressnum= isset($billingDetails['companyaddressnum']) ? $billingDetails['companyaddressnum'] : '';
                     $companypostcode=  isset($billingDetails['companypostcode']) ? $billingDetails['companypostcode'] : ''; 
-                    $companycity =isset($billingDetails['companycity']) ? $billingDetails['companyaddressnum'] : '';
+                    $companycity =isset($billingDetails['companycity']) ? $billingDetails['companycity'] : '';
                     $email= isset($billingDetails['companyemail']) ? $billingDetails['companyemail'] : $email;
                 
                 }else if( isset($billingDetails['billing']) && $billingDetails['billing'] == 1 ){
-                
+                    //dd($billingDetails);
                     $city = isset($billingDetails['billcity']) ? $billingDetails['billcity'] : '';
+                    $companyafm = isset($billingDetails['billafm']) ? $billingDetails['billafm'] : '';
+                    $companypostcode = isset($billingDetails['billpostcode']) ? $billingDetails['billpostcode'] : '';
+                    $companyaddress= isset($billingDetails['billaddress']) ? $billingDetails['billaddress'] : '';
+                    $companyaddressnum= isset($billingDetails['billaddressnum']) ? $billingDetails['billaddressnum'] : '';
                 }
             
                 $rowdata = array($event, $name, $last, $email, $mobile, $jobTitle,$companyName,$companyProfession,$companyafm,$companydoy,$companyaddress.' '.$companyaddressnum,

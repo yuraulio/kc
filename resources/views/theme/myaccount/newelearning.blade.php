@@ -386,10 +386,10 @@
                      <div class="lesson-misc resources active">
                         <!--<h3 class="lesson-misc-title">Lesson resources</h3>-->
                         <div class="lesson-resources">
-                           <?php //dd($files); ?>
+                          
                            @if(isset($files) && count($files) > 0)
                            <?php
-                           
+                              
                               $folders = $files['folders'][0];
                               if(isset($files['folders'][1])){
                                   $folders_bonus = $files['folders'][1];
@@ -401,7 +401,7 @@
                              }
                               $files = $files['files'][1];
                              
-                             
+                              //dd($files);
 
                               ?>
                            <div class="lesson-downloads">
@@ -409,7 +409,7 @@
                               <?php //dd($folders) ?>
                               <ul class="resource-list">
                                  <?php $topicNames = []; ?>
-                                 <?php $count =0?>
+                               
                                  @foreach($folders as $key => $folder)
                                     <?php
                                        $topic_name = preg_replace('/[0-9]+/', '', $folder['foldername']);
@@ -425,7 +425,7 @@
                                        $topicNames[$folder['id']] = $topic_name;
                                     ?>
                                     @foreach($files as $key11 => $file)
-                                       
+                                    
 
                                        @if($folder['id'] == $file['fid'])
                                        <li id="{{$folder['dirname']}}" data-folder-id="{{$topic_name}}" class="resource hidden">
