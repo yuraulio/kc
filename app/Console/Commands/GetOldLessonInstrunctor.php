@@ -42,9 +42,9 @@ class GetOldLessonInstrunctor extends Command
 
         //http://knowcrunchls.j.scaleforce.net/
 
-        $client = new Client(['base_uri' => 'lcknowcrunch.test']);
+        $client = new Client(['base_uri' => 'http://knowcrunchls.j.scaleforce.net','verify' => false]);
         // Send a request to https://foo.com/api/test
-        $response = $client->request('GET', 'lcknowcrunch.test/get-event-lesson');
+        $response = $client->request('GET', 'http://knowcrunchls.j.scaleforce.net/get-event-lesson');
         $count = 0;
         $lessons = json_decode($response->getBody()->getContents(),true);
         foreach($lessons['lessons'] as $lesson){
