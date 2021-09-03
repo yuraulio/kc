@@ -19,7 +19,6 @@ class MediaController extends Controller
 
     public function crop_file_manager_image(Request $request){
         $path = $request->folder.$request->name;
-        //dd($request->all());
         $image = Image::make(public_path('uploads').$path);
         $image->crop(intval($request->width),intval($request->height), intval($request->x), intval($request->y));
         $image->save(public_path('uploads').$path);
@@ -119,7 +118,7 @@ class MediaController extends Controller
 
         //return redirect()->route('events.edit', $media['mediable_id']);
 
-        return back()->withStatus(__('Image successfully uploaded.'))->withInput(['tab' => 'tabs-icons-text-3-tab']);
+        return back()->withStatus(__('Image successfully uploaded.'))->withInput(['tab' => 'tabs-icons-text-2-tab']);
 
     }
 
