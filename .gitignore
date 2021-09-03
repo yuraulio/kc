@@ -19,4 +19,5 @@ yarn-error.log
 .htaccess
 /config/cdn_setup.php
 /public/.htaccess
+/storage/laravel-excel
 
