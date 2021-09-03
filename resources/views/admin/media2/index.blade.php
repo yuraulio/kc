@@ -441,8 +441,9 @@
                     url: "/admin/media2_image",
                     data: {name: $('#properties-name').text()},
                     success: function(data) {
+                        console.log(data)
 
-                        window.location = '/admin/media2/' + data.data;
+                        window.location = '/admin/media2/' + data.data.id;
 
 
                     }
@@ -757,11 +758,16 @@
                                     url: "/file-manager/fetchAlt",
                                     data: data,
                                     success: function(data) {
-                                        $('#image-alt-id').val(data.data.id)
-                                        $('#image-alt').val(data.data.alt)
+                                        if(data.data){
+                                            $('#image-alt-id').val(data.data.id)
+                                            $('#image-alt').val(data.data.alt)
+                                        }
+
 
                                     }
                                 });
+
+                                console.log('before ajax')
 
                                 $.ajax({
                                     type: 'GET',
@@ -771,13 +777,17 @@
                                     contentType: "application/json; charset=utf-8",
                                     dataType: "json",
                                     url: "/admin/media2_image",
-                                    data: {name: $('#properties-name').text()},
+                                    data: {name: name1[0]},
                                     success: function(data) {
-                                        $('#image-alt-id').val(data.data.id)
-                                        $('#image-alt').val(data.data.alt)
+                                        console.log(data.data)
+                                        if(data.data === null){
+                                            console.log('from add')
+                                            $('#version-btn').addClass('d-none')
+                                        }
 
                                     }
                                 });
+                                console.log('================')
 
 
                             }

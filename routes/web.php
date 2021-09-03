@@ -225,7 +225,7 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     //media2
     Route::get('media2/index', ['as' => 'media2.index', 'uses' => 'MediaController@index']);
     Route::get('media2/{id}', ['as' => 'media2.eventImage', 'uses' => 'MediaController@eventImage']);
-    Route::post('media2_image', ['as' => 'media2.mediaImage', 'uses' => 'MediaController@mediaImage']);
+    Route::get('media2_image', ['as' => 'media2.mediaImage', 'uses' => 'MediaController@mediaImage']);
 
     //Lessons
     Route::post('/sort-lessons/{event}', 'LessonController@orderLesson')->name('sort-lessons');

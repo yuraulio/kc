@@ -367,12 +367,20 @@ class MediaController extends Controller
     }
 
     public function mediaImage(Request $request) {
-        $data['medias'] = Media::where('original_name', $request->name)->first();
+        $data['medias'] = Media::where('name', $request->name)->first();
+
+        if($data['medias'] != null){
+            $id = $data['medias']['id'];
+            $message = __('Already Fetch image.');
+        }else{
+            $id = null;
+            $message = __('Image does not exist in datatable');
+        }
 
 
         return response()->json([
-            'success' => __('Already image cropped.'),
-            'data' => $data['medias']['id'],
+            'success' => $message,
+            'data' => $id,
         ]);
     }
 
