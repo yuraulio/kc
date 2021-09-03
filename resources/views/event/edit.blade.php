@@ -887,6 +887,12 @@
     instructors = @json($instructors1);
 
     $(document).ready(function(){
+
+        if('{{old('tab')}}' != ''){
+            $('#'+'{{old('tab')}}').trigger('click')
+            $('#tabs-icons-text-11-tab_inside').trigger('click')
+        }
+
         $("#input-syllabus1").select2({
             templateResult: formatOptions,
             templateSelection: formatOptions

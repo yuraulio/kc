@@ -331,7 +331,6 @@
                                 <button id="version-btn" class="btn btn-sm btn-light" type="button"><i class=""></i>Enter</button>
                             </span>
                         </div>
-                        <div class="col-1 text-right"><i title="Copy" class="far fa-copy"></i></div>
                     </div>
 
                     <div class="row">
@@ -431,6 +430,8 @@
             })
 
             $( document ).on('click', '#version-btn', function() {
+                console.log('from enter:')
+                console.log($('#properties-name').text())
 
                 $.ajax({
                     type: 'POST',
@@ -483,6 +484,9 @@
             $( document ).on('click', '#crop-img-modal', function(e) {
                 var rest = path.substring(0, path.lastIndexOf("/") + 1);
                 var last = path.substring(path.lastIndexOf("/") + 1, path.length);
+
+                console.log(rest)
+                console.log(last)
 
                 data = {folder: rest, name: last, x:cropper.getData({rounded: true}).x, y:cropper.getData({rounded: true}).y, width:cropper.getData({rounded: true}).width, height:cropper.getData({rounded: true}).height}
                 //EDW
@@ -758,6 +762,24 @@
 
                                     }
                                 });
+
+                                $.ajax({
+                                    type: 'GET',
+                                    headers: {
+                                        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                                    },
+                                    contentType: "application/json; charset=utf-8",
+                                    dataType: "json",
+                                    url: "/admin/media2_image",
+                                    data: {name: $('#properties-name').text()},
+                                    success: function(data) {
+                                        $('#image-alt-id').val(data.data.id)
+                                        $('#image-alt').val(data.data.alt)
+
+                                    }
+                                });
+
+
                             }
 
 
@@ -845,7 +867,7 @@
                 cropper = new Cropper(image, {
                     preview: ".cropper-preview",
                     aspectRatio: Number($(image1).width()/$(image1).height(), 4),
-                    viewMode: 0,
+                    viewMode: 1,
                     responsive: false,
                     dragMode: "move",
                     autoCropArea: 1,
