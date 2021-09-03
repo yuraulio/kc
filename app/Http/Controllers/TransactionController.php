@@ -86,6 +86,89 @@ class TransactionController extends Controller
 
     }
 
+    /*
+public function participants($start_date = null, $end_date = null)
+    {
+        $userRole = Auth::user()->role->pluck('id')->toArray();
+
+        if($start_date && $end_date){
+            $start_date = date_create($start_date);
+            $start_date = date_format($start_date,"Y-m-d");
+            $end_date = date_create($end_date);
+            $end_date = date_format($end_date,"Y-m-d");
+
+            $from = date($start_date);
+            $to = date($end_date);
+
+            $transactions = Transaction::with('user.statisticGroupByEvent','user.events','user.ticket','subscription','event','event.delivery','event.category')->whereBetween('created_at', [$from,$to])->orderBy('created_at','desc')->get();
+
+        }else{
+            $transactions = Transaction::with('user.statisticGroupByEvent','user.events','user.ticket','subscription','event','event.delivery','event.category')->where('status', 1)->orderBy('created_at','desc')->get();
+
+        }
+
+
+        $data['transactions'] = [];
+        foreach($transactions as $transaction){
+            if(!$transaction->subscription->first() && $transaction->user->first() && $transaction->event->first()){
+
+                $isElearning = $transaction->event->first()->delivery->first() && $transaction->event->first()->delivery->first()->id == 143;
+
+
+                $category =  $transaction->event->first()->category->first() ? $transaction->event->first()->category->first()->id : -1;
+
+                if(in_array(9,$userRole) &&  ($category !== 46)){
+                    continue;
+                }
+
+                
+
+                $tickets = $transaction->user->first()['ticket']->groupBy('event_id');
+                $ticketType = isset($tickets[$transaction->event->first()->id]) ? $tickets[$transaction->event->first()->id]->first()->type : '-';
+
+                if(isset($tickets[$transaction->event->first()->id])){
+                    $ticketType = $tickets[$transaction->event->first()->id]->first()->type;
+                    $ticketName = $tickets[$transaction->event->first()->id]->first()->title;
+
+                }else{
+                    $ticketType = '-';
+                    $ticketName = '-';
+                }
+
+                if($transaction['coupon_code'] != ''){
+                    $coupon_code = $transaction['coupon_code'];
+                }else{
+                    $coupon_code = '-';
+                }
+
+                
+                $countUsers = count($transaction->user);
+
+                foreach($transaction->user as $u){
+
+                    $statistic = $u->first()->statisticGroupByEvent->groupBy('event_id');
+                    $videos = isset($statistic[$transaction->event->first()->id]) ?
+                    $statistic[$transaction->event->first()->id]->first()->pivot : null;
+
+                    $events = $u->first()->events->groupBy('id');
+                    $expiration = isset($events[$transaction->event->first()->id]) ? $events[$transaction->event->first()->id]->first()->pivot->expiration : null;
+                    $videos = isset($videos) ? json_decode($videos->videos,true) : null;
+                   
+                    $data['transactions'][] = ['id' => $transaction['id'], 'user_id' => $u['id'],'name' => $u['firstname'].' '.$u['lastname'],
+                                                'event_id' => $transaction->event[0]['id'],'event_title' => $transaction->event[0]['title'].' / '.date('d-m-Y', strtotime($transaction->event[0]['published_at'])),'coupon_code' => $coupon_code, 'type' => $ticketType,'ticketName' => $ticketName,
+                                                'date' => date_format($transaction['created_at'], 'Y-m-d'), 'amount' => $transaction['amount'] / $countUsers,
+                                                'is_elearning' => $isElearning,
+                                                'coupon_code' => $transaction['coupon_code'],'videos_seen' => $this->getVideosSeen($videos),'expiration'=>$expiration];
+                }
+               
+            }
+
+        }
+        return $data;
+
+    }
+    */
+
     public function participants_inside_revenue()
     {
         $this->authorize('view',User::class,Transaction::class);
