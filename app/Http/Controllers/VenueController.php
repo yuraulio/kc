@@ -128,7 +128,8 @@ class VenueController extends Controller
     {
         $venue->update($request->all());
 
-        return redirect()->route('admin.venue.main.index')->withStatus(__('Venue successfully updated.'));
+
+        return redirect()->route('venue.edit_main', $venue->id)->withStatus(__('Venue successfully updated.'));
     }
 
     /**

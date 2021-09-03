@@ -55,14 +55,14 @@
 
                                 <div class="form-group{{ $errors->has('longitude') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-longitude">{{ __('Longitude') }}</label>
-                                    <input type="number" min="-180" max="180" name="longitude" id="input-longitude" class="form-control{{ $errors->has('longitude') ? ' is-invalid' : '' }}" placeholder="{{ __('Longitude') }}" value="{{ old('longitude', $venue->longitude) }}" autofocus>
+                                    <input type="number" min="-180" max="180" step="any" name="longitude" id="input-longitude" class="form-control{{ $errors->has('longitude') ? ' is-invalid' : '' }}" placeholder="{{ __('Longitude') }}" value="{{ old('longitude', $venue->longitude) }}" autofocus>
 
                                     @include('alerts.feedback', ['field' => 'longitude'])
                                 </div>
 
                                 <div class="form-group{{ $errors->has('latitude') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-latitude">{{ __('Latitude') }}</label>
-                                    <input type="number" min="-90" max="90" name="latitude" id="input-latitude" class="form-control{{ $errors->has('latitude') ? ' is-invalid' : '' }}" placeholder="{{ __('Latitude') }}" value="{{ old('latitude', $venue->latitude) }}" autofocus>
+                                    <input type="number" min="-90" max="90" step="any" name="latitude" id="input-latitude" class="form-control{{ $errors->has('latitude') ? ' is-invalid' : '' }}" placeholder="{{ __('Latitude') }}" value="{{ old('latitude', $venue->latitude) }}" autofocus>
 
                                     @include('alerts.feedback', ['field' => 'latitude'])
                                 </div>
