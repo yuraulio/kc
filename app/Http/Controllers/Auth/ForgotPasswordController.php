@@ -85,20 +85,35 @@ class ForgotPasswordController extends Controller
         if($user){
             $user->notify(new userChangePassword($user));
 
-            return response()->json([
-                'success' => true,
-                'message' => "We just sent you a link to your email so you can update your password"
-            ]);
+            if($request->ajax()){
+                return response()->json([
+                    'success' => true,
+                    'message' => "We just sent you a link to your email so you can update your password"
+                ]);
+            }else{
+                return back()->with('message',
+                    'We just sent you a link to your email so you can update your password'
+                );
+            }
+
+            
         }
 
        
-
-        return response()->json([
-            'success' => false,
-            'message' => "No student found with this email address"
-        ]);
+        if($request->ajax()){
+            return response()->json([
+                'success' => false,
+                'message' => "No student found with this email address"
+            ]);
+        }else{
+            return back()->with('message',
+                'No student found with this email address'
+            );
+        }
         
     }
+
+
 
     public function getChangePass(){
         return view('auth.passwords.complete');

@@ -539,7 +539,8 @@ class HomeController extends Controller
         $data['desc'] = $topicDescription;
         
         $pdf = PDF::loadView('theme.event.syllabus_print', $data)->setPaper('a4', 'landscape');
-        $fn = $slug . '.pdf';
+        $fn = $slug->slugable->title . '.pdf';
+        
         return $pdf->stream($fn);
 
     }

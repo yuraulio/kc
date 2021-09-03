@@ -1,7 +1,7 @@
 <div class="mobile-menu">
    <div class="mob-menu-inner">
       <div class="search-wrapper">
-      <form method="post" action="search/term">
+      <form method="get" action="search/term">
           {{ csrf_field() }}
             <input type="text" name="search_term" placeholder="Search KnowCrunch">
             <button type="submit"><img src="/theme/assets/images/icons/icon-magnifier.svg" alt=""/></button>

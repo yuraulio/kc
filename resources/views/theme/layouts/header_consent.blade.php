@@ -63,7 +63,7 @@
                                 <li class="header-search-area">
 									<a href="javascript:void(0)" title="Search" class="search-toggle"><img src="{{cdn('/theme/assets/images/icons/icon-magnifier.svg')}}" alt="Search"></a>
 									<div class="header-search-wrapper">
-										<form method="post" action="search/term">
+										<form method="get" action="search/term">
                                         {{ csrf_field() }}
 											<input id="sat" type="text" name="search_term"  class="search-input" placeholder="Search">
 										</form>

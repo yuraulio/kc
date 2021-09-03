@@ -13,6 +13,11 @@ class SearchController extends Controller
 {
     public function searchForTerm(Request $request)
     {
+        
+        $this->validate($request, [
+            'search_term' => 'required',
+        ]);
+
         $data['list'] = [];
 
         if($request->search_term != ''){

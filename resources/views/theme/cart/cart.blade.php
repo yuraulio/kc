@@ -145,7 +145,7 @@ if(!isset($info)){
                                  </div>
                                  <button type="submit" class="btn btn--md btn--secondary">Login</button>
                               </form>
-                              <form id="forgotf" method="post" action="/cart/reset" autocomplete="off" class="login-form" hidden>
+                              <form id="forgotf" method="post" action="/myaccount/reset" autocomplete="off" class="login-form" hidden>
                                  {!! csrf_field() !!}
                                  <div class="input-wrapper input-wrapper--text input-wrapper--email">
                                     <span class="icon"><img width="14" src="{{cdn('/theme/assets/images/icons/icon-email.svg')}}" alt=""></span>

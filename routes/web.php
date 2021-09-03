@@ -369,7 +369,7 @@ Route::get('/file-manager/fetchAlt', '\Alexusmai\LaravelFileManager\Controllers\
 Route::post('/file-manager/saveAlt', '\Alexusmai\LaravelFileManager\Controllers\FileManagerController@saveAlt')
         ->name('fm.saveAltText');
 
-Route::post('search/term', [ 'as' => 'search.term', 'uses' => 'Theme\SearchController@searchForTerm' ]);
+Route::get('search/term', [ 'as' => 'search.term', 'uses' => 'Theme\SearchController@searchForTerm' ]);
 
 
 Route::group(['middleware' => ['auth'], 'prefix'=>'myaccount'], function () {
