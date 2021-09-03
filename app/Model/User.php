@@ -416,7 +416,7 @@ class User extends Authenticatable
          /************
          * NEWW
          *************/
-        foreach($plans as $plan){
+        foreach($plans as $key1 => $plan){
             $index = 0;
 
             foreach($plan->categories as $key => $planCat){
@@ -427,7 +427,7 @@ class User extends Authenticatable
 
             if($index === count($plan->categories)){
 
-                unset($plans[$key]);
+                unset($plans[$key1]);
             }
 
         }

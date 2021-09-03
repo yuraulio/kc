@@ -886,16 +886,20 @@
 
                                                          @if($file['fid'] == $folder['id'])
 
+                                                            @if($folder['id'])
+                                                               <?php 
+                                                                  print_r($folder);
+                                                               ?>
+                                                            @endif
+
                                                             <?php
-                                                               if($file['fid'] == 4){
-                                                                //  $checkedF[] = $file;
-                                                               }
+                                                               
                                                                $fn = $file['filename'];
                                                                $dirname = explode('/',$file['dirname']);
                                                                if( in_array($fn,$dirname) && !in_array($folder['foldername'],$bonusFiles)){
 
                                                                   $checkedF[] = $folder['id']+ 1 ;
-                                                                  $fs[$folder['id']+1]=[];
+                                                                  //$fs[$folder['id']+1]=[];
                                                                   $fs[$folder['id']+1][] = $file;
 
                                                                }
@@ -915,9 +919,13 @@
                                                                   $sfv = reset($checkedF);
                                                                   $sfk = array_search($sfv, $checkedF);
                                                                   unset($checkedF[$sfk]);
+                                                                 // dd($fs);
                                                                ?>
 
+                                                             
 
+
+                                                              
                                                                <?php $fk += 1;?>
                                                                @endwhile
                                                             @endif
