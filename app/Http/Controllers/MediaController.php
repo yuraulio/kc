@@ -55,7 +55,7 @@ class MediaController extends Controller
     }
 
     public function uploadVersionImage(Request $request, Media $media){
-       
+
         $versions = json_decode($request->versions);
         //dd($versions);
         $mediaKey = $request->image_upload;
@@ -108,7 +108,7 @@ class MediaController extends Controller
                     imagejpeg($image1, public_path($media['path'] .$media['name'].'-'.$value['version'] . $media['ext']), 40);
 
 
-                    
+
                 }
 
             }
@@ -117,7 +117,9 @@ class MediaController extends Controller
 
         }
 
-        return back();
+        //return redirect()->route('events.edit', $media['mediable_id']);
+
+        return back()->withStatus(__('Image successfully uploaded.'))->withInput(['tab' => 'tabs-icons-text-3-tab']);
 
     }
 

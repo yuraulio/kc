@@ -154,14 +154,14 @@
                                             <label class="form-control-label" for="launch_date">{{ __('Launch Date') }}</label>
                                             <input type="text" name="launch_date" type="text" id="input-launch-input"
                                                         value="{{ date('d-m-Y',strtotime(old('launch_date', $event->launch_date))) }}" class="form-control datepicker" />
-                                            
+
                                         </div>
 
                                         <div class="form-group col-sm-6">
                                             <label class="form-control-label" for="input-published">{{ __('Published at') }}</label>
                                             <input type="text" name="published_at" type="text" id="input-published-input"
                                                         value="{{ date('d-m-Y',strtotime(old('published_at', $event->published_at))) }}" class="form-control" disabled />
-                                            
+
                                         </div>
                                     </div>
                                     @endif
@@ -174,7 +174,7 @@
                                     @include('alerts.feedback', ['field' => 'expiration'])
                                 </div>
 
-                        
+
                                 <div class="form-group{{ $errors->has('release_date_files') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-delivery">{{ __('Access to files until') }}</label>
                                         <div class="input-group">
@@ -958,14 +958,14 @@
 <script>
 //$("#input-release_date_file")
 var datePickerOptions = {
-        format: 'dd-mm-yyyy',                    
+        format: 'dd-mm-yyyy',
         changeMonth: true,
         changeYear: true,
     }
     $("#input-release_date_file").datepicker(datePickerOptions);
     $("#input-launch-input").datepicker(datePickerOptions);
 
-    
+
 </script>
 
 
