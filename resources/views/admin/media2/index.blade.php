@@ -538,12 +538,13 @@
     </script>
     <script>
 
+        let cntrlIsPressed = false;
         let files = []
         let type = ''
 
         $(function(){
-            $('.fm-content-body tbody').contextMenu({
-                selector: 'tr.search-result',
+            $.contextMenu({
+                selector: 'tr.search-result.table-info',
                 build: function($trigger, e) {
                     // this callback is executed every time the menu is to be shown
                     // its results are destroyed every time the menu is hidden
@@ -552,7 +553,7 @@
                         callback: function(key, options) {
                             var base_url = window.location.protocol + "//" + window.location.host
                             name = $(this).find('td').text()
-                            path = $(this).children().data('path')
+                            path = $(this).children().attr('data-path')
 
                             if(key == 'download'){
                                 const a = document.createElement('a');
@@ -598,9 +599,9 @@
                                 $('#folder-ren').val('')
                                 let elem = $(this).find('td')[0]
 
-                                name = $(elem).data('name')
-                                str = $(elem).data('path')
-                                //console.log($(elem).data('name'))
+                                name = $(elem).attr('data-name')
+                                str = $(elem).attr('data-path')
+                                console.log(name)
 
                                 //console.log('test: '+$('#fm-input-rename').val())
 
@@ -626,8 +627,8 @@
                                 let element_for_copy = $('.table-info')
                                 $.each(element_for_copy, function(key, value) {
                                     local_elem = $(value).find('td')[0]
-                                    path = $(local_elem).data('path')
-                                    name = $(local_elem).data('name')
+                                    path = $(local_elem).attr('data-path')
+                                    name = $(local_elem).attr('data-name')
 
                                     files[key] = []
                                     files[key]['path'] = path
@@ -727,10 +728,12 @@
                                 })
 
                             }else if(key == 'properties'){
+
                                 $('#image-alt-id').val('0')
                                 $('#image-alt').val('')
                                 $('#propertiesModal').modal('show');
                                 details = name.split(' ')
+                                console.log(details)
                                 $('#properties-name').text(details[1])
                                 $('#properties-path').text(path)
                                 $('#properties-size').text(details[2]+' KB')
@@ -876,6 +879,24 @@
 
                     });
         })
+
+
+
+        $( document ).on("dblclick",".search-result",function() {
+            var base_url = window.location.protocol + "//" + window.location.host
+            name = $(this).find('td').text()
+            path = $(this).children().data('path')
+
+            $('#previewModal').modal('toggle');
+            $('#previewModal .title-small').text(name)
+            $('#previewModal img').attr('src', base_url+'/uploads'+path)
+
+            $('.cropper-img').attr('src', base_url+'/uploads'+path)
+
+            $('#upload_image').val(base_url+'/uploads'+path)
+            });
+
+
 
 
         $( document ).on("click", "#back-btn-preview", function() {
@@ -1055,7 +1076,7 @@
                         var rest = old.substring(0, old.lastIndexOf("/") + 1);
                         var last = old.substring(old.lastIndexOf("/") + 1, old.length);
 
-                        if($(value).find('td').data('name') == last){
+                        if($(value).find('td').attr('data-name') == last){
                             let elem = $(value).find('td')[0]
                             //console.log(elem)
 
@@ -1063,9 +1084,9 @@
                             var rest = new_.substring(0, new_.lastIndexOf("/") + 1);
                             var last = new_.substring(new_.lastIndexOf("/") + 1, new_.length);
 
-                            $(elem).data('name', last)
-                            $(elem).data('path', data.new)
-                            $(elem).text(last)
+                            $(elem).attr('data-name', last)
+                            $(elem).attr('data-path', data.new)
+                            $(elem).html(`<i class="far fa-file"></i> ${last}`)
                         }
                     })
                 }
@@ -1209,16 +1230,41 @@
 
     });
 
+    $(document).keydown(function(event){
+
+        if(event.which=="17"){
+            cntrlIsPressed = true;
+        }else{
+            cntrlIsPressed = false;
+        }
+
+
+    });
+
     $(document).mousedown(function(e){
         let elem = e.target
-
             if( e.button == 2 ) {
+                //console.log('right click')
                 //$("#test").removeClass("class-one").addClass("class-two");
                 //$('.table-info').removeClass('table-info')
 
-                if($(elem).parent().hasClass('search-result')){
-                    $(elem).parent().addClass('table-info')
+                if(!cntrlIsPressed){
+                    $('.search-result').removeClass('table-info')
                 }
+
+                    if($(elem).parent().hasClass('table-info')){
+                        if(!cntrlIsPressed){
+                            $(elem).parent().removeClass('table-info')
+                        }else{
+                            console.log('add class')
+                            //$(elem).parent().addClass('table-info')
+                        }
+
+                    }else{
+                        $(elem).parent().addClass('table-info')
+                    }
+                    //
+
 
 
                 return false;

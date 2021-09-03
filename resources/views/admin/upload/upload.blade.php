@@ -71,11 +71,18 @@ Upload Image
         })
 
         name = $('#select_ImageModal .table-info .fm-content-item').text()
-        //alert(name)
+        if(name == ''){
+            name = $('#select_ImageModal .fm-grid-item.active').attr('title')
+        }
+
         name = name.replace(/\s/g, '')
         ext = $('#select_ImageModal .table-info td:nth-child(3)').text()
         ext = ext.replace(/\s/g, '')
         path = 'uploads'+path +'/'+name+'.'+ext
+        if(name == ''){
+            path = 'uploads'+path +'/'+name
+        }
+
         $('#image_upload').val(path)
         $('#img-upload').attr('src', path);
         $(".close").click();
