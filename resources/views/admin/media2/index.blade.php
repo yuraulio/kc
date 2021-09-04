@@ -326,7 +326,7 @@
 
                     <div class="row">
                         <div class="col-2">Versions:</div>
-                        <div id="properties-size" class="col-9">
+                        <div id="" class="col-9">
                             <span>
                                 <button id="version-btn" class="btn btn-sm btn-light" type="button"><i class=""></i>Enter</button>
                             </span>
@@ -434,16 +434,15 @@
                 console.log($('#properties-name').text())
 
                 $.ajax({
-                    type: 'POST',
+                    type: 'GET',
                     headers: {
                         'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
                     },
                     url: "/admin/media2_image",
                     data: {name: $('#properties-name').text()},
                     success: function(data) {
-                        console.log(data)
 
-                        window.location = '/admin/media2/' + data.data.id;
+                        window.location = '/admin/media2/' + data.data;
 
 
                     }
@@ -737,12 +736,13 @@
                                 $('#image-alt-id').val('0')
                                 $('#image-alt').val('')
                                 $('#propertiesModal').modal('show');
+                                console.log(name)
                                 details = name.split(' ')
                                 console.log(details)
                                 $('#properties-name').text(details[1])
                                 $('#properties-path').text(path)
-                                $('#properties-size').text(details[2]+' KB')
-                                $('#properties-mod').text(details[4])
+                                $('#properties-size').text(details[3]+' '+details[4])
+                                $('#properties-mod').text(details[6])
                                 //console.log('name: '+name + 'path:  '+ path)
 
                                 let name1 = details[1].split('.')
@@ -777,7 +777,7 @@
                                     contentType: "application/json; charset=utf-8",
                                     dataType: "json",
                                     url: "/admin/media2_image",
-                                    data: {name: name1[0]},
+                                    data: {name: details[1]},
                                     success: function(data) {
                                         console.log(data.data)
                                         if(data.data === null){
@@ -1118,7 +1118,7 @@
 
                             $(elem).attr('data-name', last)
                             $(elem).attr('data-path', data.new)
-                            $(elem).html(`<i class="far fa-file"></i> ${last}`)
+                            $(elem).html(`<i class="far fa-file"></i> ${last} `)
                         }
                     })
                 }
@@ -1222,7 +1222,7 @@
                     $.each(data, function(key, value) {
                         //console.log(value.path+'/'+value.name)
                         if(first_grid){
-                            row = `<tr class="search-result"><td data-name="${value.name}" data-path='${value.path}/${value.name}' class="fm-content-item unselectable fm-download"><i class="far fa-file"></i> ${value.name} </td><td>${value.size}</td><td>${value.type}</td><td> ${value.modified} </td></tr>`
+                            row = `<tr class="search-result"><td data-name="${value.name}" data-path='${value.path}/${value.name}' class="fm-content-item unselectable fm-download"><i class="far fa-file"></i> ${value.name} </td><td> ${value.size} </td><td>${value.type}</td><td> ${value.modified} </td></tr>`
                             $('.fm-content-body tbody').append(row)
                         }else{
                             row =`<div title="fdf" class="fm-grid-item text-center unselectable active fm-download"><div class="fm-item-icon"><i class="fa-5x pb-2 far fa-folder"></i></div><div class="fm-item-info">${value.name}</div></div>`

@@ -286,6 +286,7 @@ class FileManagerController extends Controller
 
 
 
+
         return response()->json(
 
             ['data' => $this->fm->rename(

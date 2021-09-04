@@ -366,9 +366,8 @@ class MediaController extends Controller
         return view('layouts.media_versions', $data);
     }
 
-    public function mediaImage(Request $request) {
-        $data['medias'] = Media::where('name', $request->name)->first();
-
+    public function mediaImage(Request $request) {  
+        $data['medias'] = Media::where('original_name', $request->name)->first();
         if($data['medias'] != null){
             $id = $data['medias']['id'];
             $message = __('Already Fetch image.');
@@ -376,7 +375,6 @@ class MediaController extends Controller
             $id = null;
             $message = __('Image does not exist in datatable');
         }
-
 
         return response()->json([
             'success' => $message,
