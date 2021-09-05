@@ -86,8 +86,8 @@
 
                            <a href="{{ $row['city'][0]['slugable']['slug'] }}" class="location">{{ $row['city'][0]['name'] }}</a>
                            @endif
-                              {{--<?php $dateLaunch = !$row['launch_date'] ? date('F Y', strtotime($row['published_at'])) : date('F Y', strtotime($row['launch_date']));?>
-                              <span class="date">{{$dateLaunch}} </span>--}}
+                              <?php $dateLaunch = !$row['launch_date'] ? date('F Y', strtotime($row['published_at'])) : date('F Y', strtotime($row['launch_date']));?>
+                              <span class="date">{{$dateLaunch}} </span>
                            @if(isset($row['slugable']) && $row['slugable']['slug'] != '')
 
                               @if($row['status'] != 0)
@@ -178,7 +178,7 @@
                                 $slug = '';
                             }
 
-                            {{--$month = !$row['launch_date'] ? date('F Y', strtotime($row['published_at'])) : date('F Y', strtotime($row['launch_date']));--}}
+                            $month = !$row['launch_date'] ? date('F Y', strtotime($row['published_at'])) : date('F Y', strtotime($row['launch_date']));
 
                              ?>
                            <?php $url = url($slug); ?>

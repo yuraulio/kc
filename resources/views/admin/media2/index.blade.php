@@ -641,50 +641,58 @@
                                 })
                                 //console.log(files)
 
+                                let nav = $('.fm-navbar').find('button')
+                                $(nav[9]).attr('id', 'pasteFromSearch')
+                                $(nav[9]).removeAttr('disabled')
+                                $(nav[7]).attr('disabled', 'disabled')
+                                $(nav[8]).attr('disabled', 'disabled')
+
 
                                 //console.log($elem_clip)
-                            }else if(key == 'paste'){
+                            }
+                            // else if(key == 'paste'){
 
-                                path = ''
-                                $.each( $('.fm-breadcrumb li'), function(key, value) {
-                                    if(key != 0){
-                                        path = path+'/'+$(value).text()
-                                    }
-                                })
-
-
-                                obj1 = {}
-
-                                $.each(files, function(key, value){
-                                    //console.log(value)
-                                    obj1[key] = value['path']
-                                })
-
-                                let arr = {};
-                                arr = {[key]: key, type: type, disk: 'uploads', directories: [], files: obj1}
-
-                                //console.log(path)
-
-                                data = { disk: 'uploads', path: path, clipboard: arr}
+                            //     path = ''
+                            //     $.each( $('.fm-breadcrumb li'), function(key, value) {
+                            //         if(key != 0){
+                            //             path = path+'/'+$(value).text()
+                            //         }
+                            //     })
 
 
-                                $.ajax({
-                                    type: 'POST',
-                                    headers: {
-                                        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-                                    },
-                                    contentType: "application/json; charset=utf-8",
-                                    dataType: "json",
-                                    url: "/file-manager/paste",
-                                    data: JSON.stringify(data),
-                                    success: function(data) {
-                                        //console.log('data: '+data.new)
+                            //     obj1 = {}
 
-                                    }
-                                });
+                            //     $.each(files, function(key, value){
+                            //         //console.log(value)
+                            //         obj1[key] = value['path']
+                            //     })
+
+                            //     let arr = {};
+                            //     arr = {[key]: key, type: type, disk: 'uploads', directories: [], files: obj1}
+
+                            //     //console.log(path)
+
+                            //     data = { disk: 'uploads', path: path, clipboard: arr}
 
 
-                            }else if(key == 'cut'){
+                            //     $.ajax({
+                            //         type: 'POST',
+                            //         headers: {
+                            //             'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                            //         },
+                            //         contentType: "application/json; charset=utf-8",
+                            //         dataType: "json",
+                            //         url: "/file-manager/paste",
+                            //         data: JSON.stringify(data),
+                            //         success: function(data) {
+                            //             //console.log('data: '+data.new)
+
+                            //         }
+                            //     });
+
+
+                            // }
+                            else if(key == 'cut'){
                                 type = "cut"
                                 elem_clip = $('.col-auto.text-right').find('span')[1]
                                 $(elem_clip).attr('id', 'clipboard-toggle')
@@ -703,6 +711,13 @@
                                     files[key]['name'] = name
 
                                 })
+
+                                let nav = $('.fm-navbar').find('button')
+                                $(nav[9]).attr('id', 'pasteFromSearch')
+                                $(nav[9]).removeAttr('disabled')
+
+                                $(nav[7]).attr('disabled', 'disabled')
+                                $(nav[8]).attr('disabled', 'disabled')
 
                             }else if(key == 'zip'){
                                 files = []
@@ -822,7 +837,7 @@
                             "sep1": "---------",
                             "copy": {name: "Copy", icon: "far fa-copy"},
                             "cut": {name: "Cut", icon: "fas fa-cut"},
-                            "paste": {name: "Paste", icon: "fas fa-paste"},
+                            // "paste": {name: "Paste", icon: "fas fa-paste"},
                             "rename": {
                                 name: "Rename",
                                 icon: "fas fa-edit",
@@ -1163,11 +1178,6 @@
 
 
     $( document ).ready(function() {
-
-
-
-
-
         //console.log( "ready!" );
         search = `<div class="col-auto"><div role="group" class="btn-group">
                         <input id="inpuy-search" type="text" class="form-control form-control-alternative search_input" placeholder="Search">
@@ -1190,91 +1200,212 @@
             });
         });
 
+        $(document).on("click", "#cutFromSearch", function(key, value) {
+            type = "cut"
+            elem_clip = $('.col-auto.text-right').find('span')[1]
+            $(elem_clip).attr('id', 'clipboard-toggle')
+
+            $(elem_clip).show()
 
 
+            let element_for_copy = $('.table-info')
+            $.each(element_for_copy, function(key, value) {
+                local_elem = $(value).find('td')[0]
+                path = $(local_elem).data('path')
+                name = $(local_elem).data('name')
+
+                files[key] = []
+                files[key]['path'] = path
+                files[key]['name'] = name
+
+            })
+
+            let nav = $('.fm-navbar').find('button')
+            $(nav[9]).attr('id', 'pasteFromSearch')
+            $(nav[9]).removeAttr('disabled')
+            $(nav[7]).attr('disabled', 'disabled')
+            $(nav[8]).attr('disabled', 'disabled')
+        })
+
+        $(document).on("click", "#copyFromSearch", function(key, value) {
+            type = "copy"
+            elem_clip = $('.col-auto.text-right').find('span')[1]
+            $(elem_clip).attr('id', 'clipboard-toggle')
+
+            $(elem_clip).show()
 
 
-    $( document ).on("click","#search_btn",function() {
-        $('.table-info').removeClass('table-info')
-        file = $('.search_input').val()
-        //console.log(file)
-        $.ajax({
-                type: 'GET',
+            let element_for_copy = $('.table-info')
+            $.each(element_for_copy, function(key, value) {
+                local_elem = $(value).find('td')[0]
+                path = $(local_elem).attr('data-path')
+                name = $(local_elem).attr('data-name')
+
+                files[key] = []
+                files[key]['path'] = path
+                files[key]['name'] = name
+
+            })
+            //console.log(files)
+
+            let nav = $('.fm-navbar').find('button')
+            $(nav[9]).attr('id', 'pasteFromSearch')
+            $(nav[9]).removeAttr('disabled')
+            $(nav[8]).attr('disabled', 'disabled')
+            $(nav[7]).attr('disabled', 'disabled')
+        })
+
+
+        $(document).on("click", "#pasteFromSearch", function() {
+            path = ''
+            $.each( $('.fm-breadcrumb li'), function(key, value) {
+                if(key != 0){
+                    path = path+'/'+$(value).text()
+                }
+            })
+            obj1 = {}
+
+            console.log(path)
+
+            $.each(files, function(key, value){
+                //console.log(value)
+                obj1[key] = value['path']
+            })
+
+            let arr = {};
+            arr = {['paste']: 'paste', type: type, disk: 'uploads', directories: [], files: obj1}
+
+            //console.log(path)
+
+            data = { disk: 'uploads', path: path, clipboard: arr}
+
+
+            $.ajax({
+                type: 'POST',
                 headers: {
-                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-               },
-               Accept: 'application/json',
-                url: "/file-manager/search?param="+file,
+                    'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: "/file-manager/paste",
+                data: JSON.stringify(data),
                 success: function(data) {
-                    // data = JSON.parse(data)
-                    data = data.data
-
-                    first_grid = $('.fas.fa-th-list').parent().hasClass('active')
-
-                    if(first_grid){
-                        $('.fm-content-body tbody').empty()
-                    }else{
-                        $('.fm-content-body .d-flex.align-content-start.flex-wrap').empty()
+                    //console.log('data: '+data.new)
+                    if(data.result.status == 'success'){
+                        $('#pasteFromSearch').removeAttr('id')
                     }
-
-
-
-                    $.each(data, function(key, value) {
-                        //console.log(value.path+'/'+value.name)
-                        if(first_grid){
-                            row = `<tr class="search-result"><td data-name="${value.name}" data-path='${value.path}/${value.name}' class="fm-content-item unselectable fm-download"><i class="far fa-file"></i> ${value.name} </td><td> ${value.size} </td><td>${value.type}</td><td> ${value.modified} </td></tr>`
-                            $('.fm-content-body tbody').append(row)
-                        }else{
-                            row =`<div title="fdf" class="fm-grid-item text-center unselectable active fm-download"><div class="fm-item-icon"><i class="fa-5x pb-2 far fa-folder"></i></div><div class="fm-item-info">${value.name}</div></div>`
-                            $('.fm-content-body .d-flex.align-content-start.flex-wrap').appen(row)
-                        }
-
-
-                    })
-
 
                 }
             });
-    });
+        })
 
-    $(document).on("click",".search-result", function (evt) {
 
-        if (evt.ctrlKey){
-            //console.log('asd')
-            $(this).toggleClass("table-info");
-        }else if(evt.which != 3){
 
+
+
+
+        $( document ).on("click","#search_btn",function() {
             $('.table-info').removeClass('table-info')
-            $(this).addClass('table-info')
-        }
+            file = $('.search_input').val()
 
-    });
+            //console.log(file)
+            $.ajax({
+                    type: 'GET',
+                    headers: {
+                    'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                },
+                Accept: 'application/json',
+                    url: "/file-manager/search?param="+file,
+                    success: function(data) {
 
-    $(document).on("click","tr", function () {
+                        
+                        // data = JSON.parse(data)
+                        data = data.data
 
-        selected = $('.search-result.table-info').length
+                        first_grid = $('.fas.fa-th-list').parent().hasClass('active')
 
-    });
-
-    $(document).on("click",".close_modal", function () {
-
-        $('.close').click()
-
-    });
-
-    $(document).keydown(function(event){
-
-        if(event.which=="17"){
-            cntrlIsPressed = true;
-        }else{
-            cntrlIsPressed = false;
-        }
+                        if(first_grid){
+                            $('.fm-content-body tbody').empty()
+                        }else{
+                            $('.fm-content-body .d-flex.align-content-start.flex-wrap').empty()
+                        }
 
 
-    });
 
-    $(document).mousedown(function(e){
-        let elem = e.target
+                        $.each(data, function(key, value) {
+                            //console.log(value.path+'/'+value.name)
+                            if(first_grid){
+                                row = `<tr class="search-result"><td data-name="${value.name}" data-path='${value.path}/${value.name}' class="fm-content-item unselectable fm-download"><i class="far fa-file"></i> ${value.name} </td><td> ${value.size} </td><td>${value.type}</td><td> ${value.modified} </td></tr>`
+                                $('.fm-content-body tbody').append(row)
+                            }else{
+                                row =`<div title="fdf" class="fm-grid-item text-center unselectable active fm-download"><div class="fm-item-icon"><i class="fa-5x pb-2 far fa-folder"></i></div><div class="fm-item-info">${value.name}</div></div>`
+                                $('.fm-content-body .d-flex.align-content-start.flex-wrap').appen(row)
+                            }
+
+
+                        })
+
+                        // let el = $('.breadcrumb.active-manager').find('li')
+                        // let selectedTree = $('.list-unstyled.fm-tree-branch').find('.selected').text()[0]
+                        // console.log(selectedTree)
+
+                        // $.each(el, function(key, value) {
+                        //     if(key != 0){
+                        //         $(value).find('span').text('sdf')[0]
+                        //     }
+                        // })
+
+                       
+
+                    }
+                });
+        });
+
+        $(document).on("click",".search-result", function (evt) {
+
+            if (evt.ctrlKey){
+                //console.log('asd')
+                $(this).toggleClass("table-info");
+            }else if(evt.which != 3){
+
+                $('.table-info').removeClass('table-info')
+                $(this).addClass('table-info')
+                if($(this).hasClass('table-info')){
+                    let nav1 = $('.fm-navbar').find('button')
+                    $(nav1[8]).attr('id', 'cutFromSearch')
+                    $(nav1[8]).removeAttr('disabled')
+                    $(nav1[7]).attr('id', 'copyFromSearch')
+                    $(nav1[7]).removeAttr('disabled')
+                }
+            }
+
+        });
+
+        $(document).on("click","tr", function () {
+
+            selected = $('.search-result.table-info').length
+
+        });
+
+        $(document).on("click",".close_modal", function () {
+
+            $('.close').click()
+
+        });
+
+        $(document).keydown(function(event){
+
+            if(event.which=="17"){
+                cntrlIsPressed = true;
+            }else{
+                cntrlIsPressed = false;
+            }
+
+
+        });
+
+        $(document).mousedown(function(e){
+            let elem = e.target
             if( e.button == 2 ) {
                 //console.log('right click')
                 //$("#test").removeClass("class-one").addClass("class-two");
@@ -1293,7 +1424,10 @@
                         }
 
                     }else{
-                        $(elem).parent().addClass('table-info')
+                        if($(elem).hasClass('fm-content-item')){
+                            $(elem).parent().addClass('table-info')
+                        }
+                        
                     }
                     //
 
