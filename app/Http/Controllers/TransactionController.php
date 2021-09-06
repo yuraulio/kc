@@ -248,27 +248,30 @@ public function participants($start_date = null, $end_date = null)
         $data['status'] = $request->input('statusTr');
         $data['newevent'] = $request->input('newevent');
 
-        $transaction = Transaction::find($data['id']);
+        foreach($data['id'] as $key => $id){
+            $transaction = Transaction::find($id);
 
-        if($transaction){
-            $transaction->status =  $data['status'];
-            $transaction->save();
-        }
+            if($transaction){
+                $transaction->status =  $data['status'][$key];
+                $transaction->save();
 
-        foreach($request->users as $key => $user){
-            $us = User::find($user);
+                $us = User::find($request->users[$key]);
+                
+                if($data['status'][$key] > 0){
+                    
+                    $us->events()->detach($request->oldevents[$key]);
+                    $us->events()->attach($request->newevents[$key]);
+        
+                    $transaction->event()->detach($request->oldevents[$key]);
+                    $transaction->event()->attach($request->newevents[$key]);
 
-            if($data['status'] > 0){
-                $us->events()->detach($request->oldevents[$key]);
-                $us->events()->attach($request->newevents[$key]);
-
-                $transaction->event()->detach($request->oldevents[$key]);
-                $transaction->event()->attach($request->newevents[$key]);
-            }else{
-               //dd($transaction);
-                $us->events()->detach($request->oldevents[$key]);
-                $transaction->event()->detach($request->oldevents[$key]);
-                $transaction->user()->detach($us);
+                }else{
+                    
+                    $us->events()->detach($request->oldevents[$key]);
+                    $transaction->event()->detach($request->oldevents[$key]);
+                    $transaction->user()->detach($us);
+                }
+    
             }
 
         }

@@ -180,6 +180,12 @@
                                 </div>
                             </div>
 
+                            <div class="form-group{{ $errors->has('country_code') ? ' has-danger' : '' }}">
+                                <label class="form-control-label" for="input-country_code">{{ __('Country Code') }}</label>
+                                <input type="number" name="country_code" id="input-country_code" class="form-control{{ $errors->has('country_code') ? ' is-invalid' : '' }}" placeholder="{{ __('Country Code') }}" value="{{ old('country_code', $user['country_code']) }}" autofocus>
+
+                                @include('alerts.feedback', ['field' => 'country_code'])
+                            </div>
 
 
                             <div class="form-group{{ $errors->has('mobile') ? ' has-danger' : '' }}">
@@ -189,8 +195,7 @@
                                 @include('alerts.feedback', ['field' => 'mobile'])
                             </div>
 
-                            <?php //dd(auth()->user()); ?>
-
+                           
                             <div class="form-group{{ $errors->has('telephone') ? ' has-danger' : '' }}">
                                 <label class="form-control-label" for="input-telephone">{{ __('Telephone') }}</label>
                                 <input type="number" name="telephone" id="input-telephone" class="form-control{{ $errors->has('telephone') ? ' is-invalid' : '' }}" placeholder="{{ __('Telephone') }}" value="{{ old('telephone', $user['telephone']) }}" autofocus>
@@ -522,7 +527,7 @@
                                                     <form action="/admin/transaction/update" method="post" autocomplete="off" enctype="multipart/form-data">
                                                         @csrf
                                                         @foreach($transaction as  $tran)
-                                                        <input name="transaction" value="{{$tran['id']}}" hidden>
+                                                        <input name="transaction[]" value="{{$tran['id']}}" hidden>
                                                         <div class="row">
 
                                                             <div class="col-lg-4">
@@ -530,7 +535,7 @@
 
                                                                 <div class="form-group">
                                                                     <label class="form-control-label" for="input-method">{{ __('Status') }}</label>
-                                                                    <select name="statusTr" id="input-method" class="form-control" placeholder="{{ __('Status') }}">
+                                                                    <select name="statusTr[]" id="input-method" class="form-control" placeholder="{{ __('Status') }}">
                                                                         <option value="0" @if($tran['status'] == 0)  selected @endif>Cancelled</option>
                                                                         <option value="1" @if($tran['status'] == 1)  selected @endif>Approved</option>
                                                                         <option value="2" @if($tran['status'] == 2)  selected @endif>Abandonded</option>
@@ -650,7 +655,7 @@
                                                             </div>
 
                                                             <div class="col-lg-12" style="border:1px solid">
-                                                            @if($tran['status'] == 1 || $tran['status'] == 0)
+                                                            @if($tran['status'] == 1 || $tran['status'] == 2)
 
 
                                                                 <h3>Booking Seats Details</h3>
