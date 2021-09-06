@@ -35,6 +35,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\Dashboard\CouponController;
 use App\Notifications\userActivationLink;
+use Mail;
 
 use Illuminate\Http\Request;
 
@@ -309,6 +310,9 @@ public function index(User $model)
        $response_data['user_id'] = $user['id'];
        $response_data['ticket']['ticket_id'] = $ticket['id'];;
 
+
+       $this->sendEmails($transaction,$event);
+
        return response()->json([
             'success' => __('Ticket assigned succesfully.'),
             'data' => $response_data
@@ -476,6 +480,66 @@ public function index(User $model)
         $user->delete();
 
         return redirect()->route('user.index')->withStatus(__('User successfully deleted.'));
+    }
+
+
+    public function sendEmails($transaction,$content)
+    {
+
+        $user = Auth::user();
+
+        $muser = [];
+        $muser['name'] = $user->first_name . ' ' . $user->last_name;
+        $muser['id'] = $user->id;
+        $muser['first'] = $user->first_name;
+        $muser['email'] = $user->email;
+
+        $tickettypedrop = 'Upon Coupon';
+        $tickettypename = 'Upon Coupon';
+        $eventname = $content->title;
+        $date = '';
+        $eventcity = '';
+
+
+        $extrainfo = [$tickettypedrop, $tickettypename, $eventname, $date, '-', '-', $eventcity];
+        $helperdetails[$user->email] = ['kcid' => $user->kc_id, 'deid' => $user->partner_id, 'stid' => $user->student_type_id, 'jobtitle' => $user->job_title, 'company' => $user->company, 'mobile' => $user->mobile];
+
+        $adminemail = 'info@knowcrunch.com';
+
+        $data = [];
+        $data['user'] = $muser;
+        $data['trans'] = $transaction;
+        $data['extrainfo'] = $extrainfo;
+        $data['helperdetails'] = $helperdetails;
+        $data['eventslug'] = $content->slug;
+
+        $sent = Mail::send('emails.admin.info_new_registration', $data, function ($m) use ($adminemail,$muser) {
+
+            $fullname = $muser['name'];
+            $first = $muser['first'];
+            $sub = 'Knowcrunch - ' . $first . ' your registration has been completed.';
+            $m->from($adminemail, 'Knowcrunch');
+            $m->to($muser['email'], $fullname);
+            $m->subject($sub);
+        });
+
+
+        //send elearning Invoice
+        $transdata = [];
+        $transdata['trans'] = $transaction;
+
+        $transdata['user'] = $muser;
+        $transdata['trans'] = $transaction;
+        $transdata['extrainfo'] = $extrainfo;
+        $transdata['helperdetails'] = $helperdetails;
+        $transdata['coupon'] = $transaction->coupon_code;
+
+        $sentadmin = Mail::send('emails.admin.admin_info_new_registration', $transdata, function ($m) use ($adminemail) {
+            $m->from($adminemail, 'Knowcrunch');
+            $m->to($adminemail, 'Knowcrunch');
+            $m->subject('Knowcrunch - New Registration');
+        });
+
     }
 
 }

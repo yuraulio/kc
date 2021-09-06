@@ -925,41 +925,41 @@
 
                         <div class="form-group{{ $errors->has('billname') ? ' has-danger' : '' }}">
                             <label class="form-control-label" for="input-billname">{{ __('Firstname') }}</label>
-                            <input type="text" name="billname" id="input-billname" class="form-control{{ $errors->has('billname') ? ' is-invalid' : '' }}" placeholder="{{ __('Firstname') }}" value="{{ ($invoice != null && isset($receipt['billname']) ) ? $receipt['billname'] : '' }}" autofocus>
+                            <input type="text" name="billname" id="input-billname" class="form-control{{ $errors->has('billname') ? ' is-invalid' : '' }}" placeholder="{{ __('Firstname') }}" value="{{ (isset($receipt['billname']) ) ? $receipt['billname'] : '' }}" autofocus>
 
                             @include('alerts.feedback', ['field' => 'billname'])
                         </div>
 
                         <div class="form-group{{ $errors->has('billsurname') ? ' has-danger' : '' }}">
                             <label class="form-control-label" for="input-billsurname">{{ __('Lastname') }}</label>
-                            <input type="text" name="billsurname" id="input-billsurname" class="form-control{{ $errors->has('billsurname') ? ' is-invalid' : '' }}" placeholder="{{ __('Lastname') }}" value="{{($invoice != null && isset($receipt['billsurname'])) ? $receipt['billsurname'] : ''}}" autofocus>
+                            <input type="text" name="billsurname" id="input-billsurname" class="form-control{{ $errors->has('billsurname') ? ' is-invalid' : '' }}" placeholder="{{ __('Lastname') }}" value="{{(isset($receipt['billsurname'])) ? $receipt['billsurname'] : ''}}" autofocus>
 
                             @include('alerts.feedback', ['field' => 'billsurname'])
                         </div>
                         <div class="form-group{{ $errors->has('billaddress') ? ' has-danger' : '' }}">
                             <label class="form-control-label" for="input-billaddress">{{ __('Address') }}</label>
-                            <input type="text" name="billaddress" id="input-billaddress" class="form-control{{ $errors->has('billaddress') ? ' is-invalid' : '' }}" placeholder="{{ __('Address') }}" value="{{($invoice != null && isset($receipt['billaddress'])) ? $receipt['billaddress'] : '' }}" autofocus>
+                            <input type="text" name="billaddress" id="input-billaddress" class="form-control{{ $errors->has('billaddress') ? ' is-invalid' : '' }}" placeholder="{{ __('Address') }}" value="{{(isset($receipt['billaddress'])) ? $receipt['billaddress'] : '' }}" autofocus>
 
                             @include('alerts.feedback', ['field' => 'billaddress'])
                         </div>
                         <div class="form-row">
                                 <div class="form-group{{ $errors->has('billaddressnum') ? ' has-danger' : '' }} col-md-4">
                                     <label class="form-control-label" for="input-billaddressnum">{{ __('Address No') }}</label>
-                                    <input type="number" name="billaddressnum" id="input-billaddressnum" class="form-control{{ $errors->has('billaddressnum') ? ' is-invalid' : '' }}" placeholder="{{ __('Address No') }}" value="{{($invoice != null && isset($receipt['billaddressnum'])) ? $receipt['billaddressnum'] : '' }}" autofocus>
+                                    <input type="number" name="billaddressnum" id="input-billaddressnum" class="form-control{{ $errors->has('billaddressnum') ? ' is-invalid' : '' }}" placeholder="{{ __('Address No') }}" value="{{(isset($receipt['billaddressnum'])) ? $receipt['billaddressnum'] : '' }}" autofocus>
 
                                     @include('alerts.feedback', ['field' => 'billaddressnum'])
                                 </div>
 
                                 <div class="form-group{{ $errors->has('billpostcode') ? ' has-danger' : '' }} col-md-4">
                                     <label class="form-control-label" for="input-billpostcode">{{ __('Postcode') }}</label>
-                                    <input type="number" name="billpostcode" id="input-billpostcode" class="form-control{{ $errors->has('billpostcode') ? ' is-invalid' : '' }}" placeholder="{{ __('Postcode') }}" value="{{ ($invoice != null && isset($receipt['billpostcode'])) ? $receipt['billpostcode'] : '' }}" autofocus>
+                                    <input type="number" name="billpostcode" id="input-billpostcode" class="form-control{{ $errors->has('billpostcode') ? ' is-invalid' : '' }}" placeholder="{{ __('Postcode') }}" value="{{ (isset($receipt['billpostcode'])) ? $receipt['billpostcode'] : '' }}" autofocus>
 
                                     @include('alerts.feedback', ['field' => 'billpostcode'])
                                 </div>
 
                                 <div class="form-group{{ $errors->has('billcity') ? ' has-danger' : '' }} col-md-4">
                                     <label class="form-control-label" for="input-billcity">{{ __('City') }}</label>
-                                    <input type="text" name="billcity" id="input-billcity" class="form-control{{ $errors->has('billcity') ? ' is-invalid' : '' }}" placeholder="{{ __('City') }}" value="{{ ($invoice != null && isset($receipt['billcity'])) ? $receipt['billcity'] : '' }}" autofocus>
+                                    <input type="text" name="billcity" id="input-billcity" class="form-control{{ $errors->has('billcity') ? ' is-invalid' : '' }}" placeholder="{{ __('City') }}" value="{{ (isset($receipt['billcity'])) ? $receipt['billcity'] : '' }}" autofocus>
 
                                     @include('alerts.feedback', ['field' => 'billcity'])
                                 </div>

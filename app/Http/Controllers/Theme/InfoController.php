@@ -476,6 +476,14 @@ class InfoController extends Controller
                 $checkemailuser->mobile = $thismember['mobile'];
                 $checkemailuser->country_code = $thismember['country_code'];
                 $checkemailuser->job_title = $thismember['job_title'];
+
+                /*$transactionBillingDetails = json_decode($transaction->billing_details,true);
+                if(isset($transactionBillingDetails['billing']) && $transactionBillingDetails['billing'] == 1){
+                    $checkemailuser->receipt_details = $transactionBillingDetails;
+                }else if(isset($transactionBillingDetails['billing']) && $transactionBillingDetails['billing'] == 2){
+                    $checkemailuser->invoice_details = $transactionBillingDetails;
+                }*/
+
                 if(isset($thismember['company']))
                     $checkemailuser->company = $thismember['company'];
                 

@@ -10,6 +10,7 @@ use Laravel\Cashier\Subscription;
 use Mail;
 use App\Model\Event;
 use Illuminate\Support\Facades\File;
+use App\Model\Option;
 
 class CronjobsController extends Controller
 {
@@ -361,6 +362,35 @@ class CronjobsController extends Controller
                     });
                 }
             }
+        }
+
+    }
+
+    public function updateStatusField(){
+        $subscriptions = Subscription::where('stripe_status','canceled')->get();
+
+        foreach($subscriptions as $subscription){
+            $subscription->status = false;
+            $subscription->save();
+        }
+    }
+
+    public function dereeIDNotification(){
+        $option = Option::where('abbr','deree_codes')->first();
+		$dereelist = json_decode($option->settings, true);
+
+
+        if(count($dereelist) <= 15 ){
+            $data = [];
+            $data['dereeIDs'] = count($dereelist);
+            $sent = Mail::send('emails.admin.deree_notification', $data, function ($m)  {
+
+                $sub = 'DereeIDs';
+                $m->from('info@knowcrunch.com', 'Knowcrunch');
+                $m->to('info@knowcrunch.com', 'Knowcrunch');
+                $m->subject($sub);
+
+            });
         }
 
     }

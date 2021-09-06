@@ -76,8 +76,29 @@ class TransactionExport implements FromArray,WithHeadings
                 $seats = isset($statusHistory[0]['pay_seats_data']['name']) ? count(isset($statusHistory[0]['pay_seats_data']['companies'])) : 1;
                 $datePlaced = date('d-m-Y',strtotime($transaction->placement_date));
             
-                $paymentResponse = json_decode($transaction->payment_response,TRUE);
-                if($paymentResponse){
+                $bankDetails = '-';
+
+                if(isset($statusHistory[0]['cardtype'])){
+                    
+                    if($statusHistory[0]['cardtype'] == 2 &&  (isset($statusHistory[0]['installments']))){
+                        $bankDetails = 'Credit Card ' . $statusHistory[0]['installments'] . ' installments';
+                    }
+                       
+                    elseif($statusHistory[0]['cardtype'] == 4){
+                        $bankDetails =   'Cash';
+                    }
+                      
+                    elseif($statusHistory[0]['cardtype'] == 3){
+                        $bankDetails ='Bank Transfer';
+                    }
+
+                    else{
+                        $bankDetails = 'Debit Card';
+                    }                                                      
+                }
+
+                //$paymentResponse = json_decode($transaction->payment_response,TRUE);
+                /*if($paymentResponse){
                 
                     if(isset($paymentResponse['payMethod'])){
                         $bankDetails .= $paymentResponse['payMethod'];
@@ -88,7 +109,7 @@ class TransactionExport implements FromArray,WithHeadings
                     }
                 
                     $bankDetails = trim($bankDetails);
-                }
+                }*/
             
                 $status = 'CANCELLED / REFUSED';
                 if($transaction->status == 1){
@@ -121,7 +142,7 @@ class TransactionExport implements FromArray,WithHeadings
             
                 $rowdata = array($event, $name, $last, $email, $mobile, $jobTitle,$companyName,$companyProfession,$companyafm,$companydoy,$companyaddress.' '.$companyaddressnum,
                                     $companypostcode,$companycity,$city, $company, $kcId, $partnerId, $amount, $invoice, $ticketType, $seats, $datePlaced, 
-            $status/*, $bankDetails*/);
+            $status, $bankDetails);
             
         		array_push($data, $rowdata);
             
@@ -133,7 +154,7 @@ class TransactionExport implements FromArray,WithHeadings
     public function headings(): array {
         return [
             'Event', 'Name', 'Surname', 'Email', 'Mobile', 'Job Title','Επωνυμία/Company','Δραστηριότητα','ΑΦΜ','ΔΟΥ','Διεύθυνση/Address','Τ.Κ./PostCode',
-            'Πόλη/City','Πόλη','Company', 'Knowcrunch Id', 'DereeId', 'Amount', 'Invoice', 'Ticket Type', '# of Seats', 'Date Placed', 'Status'/*, 'Bank Details'*/
+            'Πόλη/City','Πόλη','Company', 'Knowcrunch Id', 'DereeId', 'Amount', 'Invoice', 'Ticket Type', '# of Seats', 'Date Placed', 'Status', 'Bank Details'
         ];
       }
 
