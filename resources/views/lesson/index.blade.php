@@ -48,7 +48,7 @@
                                 <div class="col-sm-4 filter_col" id="filter_col2" data-column="1">
                                     <label>Categories</label>
                                     <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="col2_filter">
-                                    <option selected value="-- All --"> -- All -- </option>
+                                    <option id="allCat" selected value="-- All --"> -- All -- </option>
                                     </select>
                                 </div>
 
@@ -192,9 +192,11 @@
                 // }
 
 
+            if(selectedCategory != null){
+
 
                 if(selectedCategory != '' && selectedTopic == null){
-                    //console.log('first')
+                    console.log('first')
 
                     let word = data[3].split(',');
 
@@ -239,7 +241,7 @@
 
 
                 }else if(selectedCategory != null && selectedTopic != ''){
-                    //console.log('second')
+                    console.log('second')
 
                     let cat = data[3].split(',');
                     let topi = data[2].split(',');
@@ -291,7 +293,7 @@
                     }
 
                 }else if(selectedCategory == null && selectedTopic != null){
-                    //console.log('third')
+                    console.log('third')
                     let word = data[2].split(',');
 
                     if(selectedTopic != '--All--'){
@@ -335,11 +337,16 @@
 
 
                 }
-
                 if(found){
                         return true;
                     }
                 return false;
+            }else{
+                return true
+            }
+            return true
+
+
 
             }
         );
@@ -347,10 +354,10 @@
 
         $(function() {
 
-            function filterGlobal () {
-                table.draw();
+            // function filterGlobal () {
+            //     table.draw();
 
-            }
+            // }
 
             $("#col2_filter").select2({
                 templateResult: function(option, container) {
@@ -413,6 +420,7 @@
                 selectedStatus = $(this).val()
                 table.draw();
             })
+
 
 
         });
