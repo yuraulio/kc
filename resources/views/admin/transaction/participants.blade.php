@@ -77,12 +77,12 @@
                 </div>
 
                 <table class="table align-items-center table-flush"  id="participants_table">
-                  
+
                     <thead class="thead-light">
                         <tr>
                             <th scope="col">{{ __('Student Data') }}</th>
                             <th scope="col">{{ __('Event') }}</th>
-                            
+
                             <th scope="col">{{ __('Ticket Type') }}</th>
                             <th scope="col">{{ __('Ticket Price') }}</th>
                             <th scope="col">{{ __('Coupon') }}</th>
@@ -97,7 +97,7 @@
                         <tr>
                             <th>{{ __('Student Data') }}</th>
                             <th>{{ __('Event') }}</th>
-                            
+
                             <th>{{ __('Ticket Type') }}</th>
                             <th>{{ __('Ticket Price') }}</th>
                             <th>{{ __('Coupon') }}</th>
@@ -115,7 +115,7 @@
                             <tr>
                                 <td><a href="{{ route('user.edit', $transaction['user_id']) }}">{{$transaction['name']}}</a></td>
                                 <td>{{$transaction['event_title']}}</td>
-                               
+
                                 <td>{{ $transaction['type'] }}</td>
                                 <td><?= '€'.number_format($transaction['amount'], 2, '.', ''); ?></td>
                                 <td>{{ $transaction['coupon_code'] }}</td>
@@ -285,7 +285,7 @@ $(document).ready(function() {
     events = table.column(1).data().unique().sort()
     coupons = table.column(4).data().unique().sort()
     prices = table.column(3).data()
-    
+
     let sum = 0
     $.each(prices, function(key, value) {
         value = value.replace("€", "")
@@ -313,7 +313,7 @@ $(document).ready(function() {
     let arr = []
     arr['name'] = value
     arr['date'] = date
-            
+
     sort_events.push(arr)
 
     })
@@ -826,22 +826,22 @@ $(document).ready(function() {
                         </button>
                     </div>`
             )
-            
+
         })
 
 
         $(document).on("click",".excel-button",function() {
-            
+
             let min = $("#min").val();
             let max = $("#max").val();
             let event = eventsArray[removeSpecial($("#col1_filter").val())];
 
-    
-            $.ajax({ 
+
+            $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
                 },
-                url: "{{route('transaction.export-excel')}}", 
+                url: "{{route('transaction.export-excel')}}",
                 type: "POST",
                 data:{event:event,fromDate:min,toDate:max} ,
                 success: function(data) {
@@ -850,7 +850,7 @@ $(document).ready(function() {
 
                 }
             });
-  
+
         });
 
     </script>

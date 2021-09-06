@@ -55,7 +55,7 @@
                                 <div class="col-sm-4 filter_col" id="filter_col1" data-column="2">
                                     <label>Topics</label>
                                     <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="col1_filter">
-                                    <option selected value="-- All --"> -- All -- </option>
+                                    <option selected id="allTop" value="-- All --"> -- All -- </option>
                                     </select>
                                 </div>
 
@@ -155,6 +155,7 @@
         var categories = @json($categories);
         var selectedTopic = null
         var selectedCategory = null
+        var count = 0
         var selectedStatus = null
         var table = $('#datatable-basic31').DataTable({
             language: {
@@ -236,7 +237,7 @@
 
 
                 }else if(selectedCategory != null && selectedTopic != ''){
-                    
+
 
                     let cat = data[3].split(',');
                     let topi = data[2].split(',');
@@ -401,8 +402,14 @@
             })
 
             $('#col2_filter').change(function() {
+                if(count != 0){
+                    if($(this).val() == '-- All --'){
+                        $("#col1_filter").val("-- All --").change();
+                    }
+                }
                 selectedCategory = removeSpecial($(this).val())
                 table.draw();
+                count = count + 1
             })
 
             $('#col3_filter').change(function() {
