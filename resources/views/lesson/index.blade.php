@@ -196,7 +196,6 @@
 
 
                 if(selectedCategory != '' && selectedTopic == null){
-                    console.log('first')
 
                     let word = data[3].split(',');
 
@@ -204,13 +203,11 @@
                     if(selectedCategory != "--All--"){
                         if(selectedCategory != ''){
                             if(word.length != 0){
-                                //console.log(word)
                                 $.each(word, function(key, value) {
                                     if(value != ''){
                                         if(removeSpecial(value) == selectedCategory){
                                             found = true;
                                             if(selectedStatus != null){
-                                                //console.log('has status')
                                                 if(selectedStatus == status){
 
                                                 }else{
@@ -227,10 +224,8 @@
                             found = true
                         }
                     }else{
-                        //console.log('from all')
                         found = true
                         if(selectedStatus != null){
-                            //console.log('has status')
                             if(selectedStatus == status){
 
                             }else{
@@ -241,7 +236,7 @@
 
 
                 }else if(selectedCategory != null && selectedTopic != ''){
-                    console.log('second')
+                    
 
                     let cat = data[3].split(',');
                     let topi = data[2].split(',');
@@ -267,7 +262,6 @@
                         if(found_from_topi && found_from_cat){
                             found = true
                             if(selectedStatus != null){
-                                //console.log('has status')
                                 if(selectedStatus == status){
                                     found = true
                                 }else{
@@ -293,21 +287,18 @@
                     }
 
                 }else if(selectedCategory == null && selectedTopic != null){
-                    console.log('third')
                     let word = data[2].split(',');
 
                     if(selectedTopic != '--All--'){
                         if(selectedCategory != ''){
 
                         if(word.length != 0){
-                            //console.log(word)
                             $.each(word, function(key, value) {
                                 if(value != ''){
                                     if(removeSpecial(value) == selectedTopic){
                                         //alert('found')
                                         found = true
                                         if(selectedStatus != null){
-                                            //console.log('has status')
                                             if(selectedStatus == status){
 
                                             }else{
@@ -325,7 +316,6 @@
                     }else{
                         found = true
                         if(selectedStatus != null){
-                            //console.log('has status')
                             if(selectedStatus == status){
 
                             }else{
@@ -395,7 +385,6 @@
 
             $.each(categories, function(key, value) {
                 let topics = value[0].topics
-                //console.log(topics)
                 let row = `<option value="${key}">${key}</option>`
                 $('#col2_filter').append(row)
 
@@ -427,7 +416,9 @@
 
 
 
-
+        $(document).ready(function(){
+            $('#col2_filter').change();
+        })
 
     </script>
 @endpush
