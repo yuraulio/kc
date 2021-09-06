@@ -170,7 +170,7 @@
 
                                         <td>{{ $item['ends_at'] }}</td>
                                         <td><?= '€'.number_format(intval($item['total_amount']), 2, '.', ''); ?></td>
-                                        <td><?= date_format(date_create($item['created_at']),'Y/m/d'); ?></td>
+                                        <td><?= date_format(date_create($item['created_at']),'m/d/Y'); ?></td>
 
 
                                     </tr>
@@ -213,7 +213,15 @@
             var min = minDate;
             var max = maxDate;
             console.log(min)
-            var date = new Date( data[7] );
+            var date = new Date(data[7], {
+                format: 'L'
+            });
+
+            date moment(date).format('MM/DD/YYYY')
+
+            console.log(min)
+            console.log(date)
+
 
             if (
                 ( min === null && max === null ) ||
@@ -306,11 +314,11 @@
 
             // Refilter the table
             $('#min, #max').on('change', function () {
-                min = new Date($('#min').val());
-                max = new Date($('#max').val());
-                min = moment(min).format('MM/DD/YYYY')
-                //console.log('Min:'+min)
-                max = moment(max).format('MM/DD/YYYY')
+                min = new DateTime($('#min').val());
+                max = new DateTIme($('#max').val());
+                console.log('min:'+ min)
+
+
                 table.draw();
             });
 
