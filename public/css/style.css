@@ -410,10 +410,10 @@ li.select2-results__option:empty {
     display: none;
 }
 
-#file-man-main {
-    height: 78vh !important;
+/* #file-man-main {
+    height: 68vh !important;
     ;
-}
+} */
 
 
 /* @media (min-height: 693px) {

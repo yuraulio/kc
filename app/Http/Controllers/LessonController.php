@@ -42,7 +42,7 @@ class LessonController extends Controller
     {
         $user = Auth::user();
 
-        return view('lesson.create', ['user' => $user, 'topics' => $topics->get(['id', 'title']), 'types' => Type::all()]);
+        return view('lesson.create', ['user' => $user, 'topics' => $topics->with('category')->get(['id', 'title']), 'types' => Type::all()]);
     }
 
     /**
@@ -161,7 +161,7 @@ class LessonController extends Controller
 
         if($request->date != null){
             $date = date('Y-m-d', strtotime($request->date));
-            
+
             $date1 = date('Y-m-d', strtotime($request->date));
         }else{
             $date1 = date('Y-m-d', strtotime($request->start));;
@@ -181,7 +181,7 @@ class LessonController extends Controller
             $end_response = null;
         }
 
-        
+
         $duration = null;
         if($start_response && $end_response){
 
@@ -189,7 +189,7 @@ class LessonController extends Controller
             $endHour = date_create($end_response);
 
             $durationH = date_diff($endHour, $startHour);;
-            
+
             if($durationH->h > 0){
                 $duration .=  $durationH->h.'h';
             }
@@ -201,7 +201,7 @@ class LessonController extends Controller
             $duration = trim($duration);
         }
 
-       
+
         $topic->event_topic()->wherePivot('lesson_id', '=', $request->lesson_id)->wherePivot('event_id', '=', $request->event_id)->updateExistingPivot($request->topic_id,[
             //'priority' => $request->priority,
             'date' => $date,
@@ -309,7 +309,7 @@ class LessonController extends Controller
      */
     public function destroy(Lesson $lesson)
     {
-        
+
 
         $lesson->deletee();
 
