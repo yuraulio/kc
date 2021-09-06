@@ -61,6 +61,39 @@
                                     </select>
                                 </div>
 
+
+
+
+                                <div id="sub_datePicker" class="input-daterange datepicker">
+                                    <div class="col">
+                                    <label>From</label>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
+                                                </div>
+                                                <input class="form-control select2-css" id="min" placeholder="Start date" type="text" value="06/18/2018">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                    <label>To</label>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
+                                                </div>
+                                                <input class="form-control select2-css" placeholder="End date" id="max" type="text" value="06/22/2018">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+
                             </div>
                         </div>
                     </div>
@@ -101,6 +134,7 @@
                                     {{--<th scope="col">{{ __('Trials Sub end at') }}</th>--}}
                                     <th scope="col">{{ __('Sub end at') }}</th>
                                     <th scope="col">{{ __('Amount') }}</th>
+                                    <th scope="col">{{ __('Create Date') }}</th>
                                 </tr>
                             </thead>
                             <tfoot>
@@ -112,6 +146,7 @@
                                     <th>{{ __('Status') }}</th>
                                     <th>{{ __('Sub end at') }}</th>
                                     <th>{{ __('Amount') }}</th>
+                                    <th>{{ __('Create Date') }}</th>
                                 </tr>
                             </tfoot>
                             <tbody>
@@ -135,6 +170,7 @@
 
                                         <td>{{ $item['ends_at'] }}</td>
                                         <td><?= '€'.number_format(intval($item['total_amount']), 2, '.', ''); ?></td>
+                                        <td><?= date_format(date_create($item['created_at']),'Y/m/d'); ?></td>
 
 
                                     </tr>
@@ -166,8 +202,31 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
+
+    var minDate = null, maxDate = null;
+
+    $.fn.dataTable.ext.search.push(
+        function( settings, data, dataIndex ) {
+            var min = minDate;
+            var max = maxDate;
+            console.log(min)
+            var date = new Date( data[7] );
+
+            if (
+                ( min === null && max === null ) ||
+                ( min === null && date <= max ) ||
+                ( min <= date   && max === null ) ||
+                ( min <= date   && date <= max )
+            ) {
+                return true;
+            }
+            return false;
+        }
+    );
+
 
 
         function initStats(){
@@ -236,6 +295,29 @@
                 filterColumn( $(this).parents('div').attr('data-column') );
 
             } );
+
+            minDate = new Date($('#min').val(), {
+                format: 'L'
+            });
+            //console.log('--min: '+minDate.val())
+            maxDate = new Date($('#max'), {
+                format: 'L'
+            });
+
+            // Refilter the table
+            $('#min, #max').on('change', function () {
+                min = new Date($('#min').val());
+                max = new Date($('#max').val());
+                min = moment(min).format('MM/DD/YYYY')
+                //console.log('Min:'+min)
+                max = moment(max).format('MM/DD/YYYY')
+                table.draw();
+            });
+
+
+
+
+
 
         });
     </script>
