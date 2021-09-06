@@ -1004,9 +1004,10 @@
                                  @if($subscriptionAccess)
                                  <div id="c-subs-inner{{$tab}}" class="in-tab-wrapper">
                                     <div class="bottom">
-                                       <div class="left">
+                                       
 
                                           @if($event['mySubscription'])
+                                          <div class="left">
                                           <div class="bottom">
                                              @if($event['mySubscription']['trial_ends_at'])
                                                 <?php
@@ -1084,8 +1085,9 @@
                                              </div>
                                              @endif
                                           </div>
+                                          </div>
                                           @endif
-                                       </div>
+                                       
                                        <?php //dd($event['mySubscription']); ?>
                                        @if(!$event['mySubscription'])
                                        <div class="left">
