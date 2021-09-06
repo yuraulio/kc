@@ -51,7 +51,7 @@ class LessonController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(LessonRequest $request, Lesson $model)
+    public function store(Request $request, Lesson $model)
     {
         //dd($request->all());
 
@@ -67,13 +67,21 @@ class LessonController extends Controller
         }
         $links = json_encode($arr1);
 
-        if($request->status){
+        if($request->status == 'on'){
             $status = 1;
         }else{
             $status = 0;
         }
 
-        $request->request->add(['status' => $status, 'links' => $links]);
+        if($request->bold == 'on')
+        {
+            $bold = 1;
+        }else
+        {
+            $bold = 0;
+        }
+
+        $request->request->add(['status' => $status, 'links' => $links,'bold'=>$bold]);
 
         $lesson = $model->create($request->all());
         if($request->topic_id != null){
@@ -269,8 +277,7 @@ class LessonController extends Controller
         }
         $links = json_encode($arr1);
 
-        //dd($request->all());
-        if($request->status)
+        if($request->status == 'on')
         {
             $status = 1;
         }else
@@ -278,7 +285,15 @@ class LessonController extends Controller
             $status = 0;
         }
 
-        $request->request->add(['status' => $status, 'links' => $links]);
+        if($request->bold == 'on')
+        {
+            $bold = 1;
+        }else
+        {
+            $bold = 0;
+        }
+
+        $request->request->add(['status' => $status, 'links' => $links,'bold'=>$bold]);
 
         $lesson_id = $lesson['id'];
         $lesson->update($request->all());

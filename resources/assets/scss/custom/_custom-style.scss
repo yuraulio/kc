@@ -50,3 +50,12 @@ body
   right: 20em;
   top: -10px;
 }
+
+.toggle-bold{
+  width:65px!important;
+}
+
+.toggle-bold input:checked + .custom-toggle-slider:before{
+  transform: translateX(38px)!important;
+}
+

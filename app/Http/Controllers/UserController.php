@@ -236,11 +236,11 @@ public function index(User $model)
 
 
        //fetch user information
-       $person_details = [];
+       /*$person_details = [];
        $person_details['billing'] = $billing;
        $person_details['billname'] = $user['name'];
        $person_details['billsurname'] = $user['surname'];
-
+       //dd($user);
         if($user['address'] != null){
             $person_details['billaddress'] = $user['address'];
         }
@@ -254,17 +254,17 @@ public function index(User $model)
             $person_details['billcity'] = $user['city'];
         }
 
-        $person_details = json_encode($person_details);
-
-
+        $person_details = json_encode($person_details);*/
+        
        //Create Transaction
        $transaction = new Transaction;
        $transaction->placement_date = Carbon::now();
        $transaction->ip_address = \Request::ip();
        $transaction->type = $ticket['type'];
-       $transaction->billing_details = $person_details;
+       $transaction->billing_details = $request->billing == 1 ? $user['receipt_details'] : $user['invoice_details'];
        $transaction->total_amount = $price;
        $transaction->amount = $price;
+       $transaction->status = 1;
        $transaction->trial = 0;
 
        $cart_data = ["manualtransaction" => [
@@ -285,7 +285,7 @@ public function index(User $model)
             ],
         //'pay_seats_data' => $pay_seats_data,//$data['pay_seats_data'],
         'pay_bill_data' => [],
-        //'cardtype' => 9,
+        'cardtype' => $request->cardtype,
         //'installments' => 1,
         //'deree_user_data' => $deree_user_data, //$data['deree_user_data'],
         'cart_data' => $cart_data //$cart

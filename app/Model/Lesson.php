@@ -16,7 +16,7 @@ class Lesson extends Model
     protected $table = 'lessons';
 
     protected $fillable = [
-        'priority', 'status', 'links' ,'title', 'htmlTitle', 'subtitle', 'header', 'summary', 'body', 'vimeo_video', 'vimeo_duration','author_id', 'creator_id'
+        'priority', 'status', 'links' ,'title', 'htmlTitle', 'subtitle', 'header', 'summary', 'body', 'vimeo_video', 'vimeo_duration','author_id', 'creator_id','bold',
     ];
 
     public function topic()

@@ -571,14 +571,14 @@
                                                                     @elseif($billing['billing'] == 2)
                                                                     <h6 class="heading-small text-muted mb-4">{{ __('Invoice Details') }}</h6>
 
-                                                                    <p><label class="form-control-label" for="input-method">Επωνυμία: </label>{{ $billing['companyname'] }}</p>
-                                                                    <p><label class="form-control-label" for="input-method">Δραστηριότητα: </label>{{ $billing['companyprofession'] }}</p>
-                                                                    <p><label class="form-control-label" for="input-method">ΑΦΜ: </label>{{ $billing['companyafm'] }}</p>
-                                                                    <p><label class="form-control-label" for="input-method">ΔΟΥ:</label>{{ $billing['companydoy'] }}</p>
-                                                                    <p><label class="form-control-label" for="input-method">Διεύθυνση: </label>{{ $billing['companyaddress'] }} {{ $billing['companyaddressnum'] }}</p>
-                                                                    <p><label class="form-control-label" for="input-method">Τ.Κ.: </label>{{ $billing['companypostcode'] }}</p>
-                                                                    <p><label class="form-control-label" for="input-method">Πόλη: </label>{{ $billing['companycity'] }}</p>
-                                                                    <p><label class="form-control-label" for="input-method">Email Αποστολής Τιμολογίου: </label>@if(isset($billing['companyemail'])) {{ $billing['companyemail'] }} @endif</p>
+                                                                    @if(isset($billing['companyname']))<p><label class="form-control-label" for="input-method">Επωνυμία: </label>{{ $billing['companyname'] }}</p>@endif
+                                                                    @if(isset($billing['companyprofession']))<p><label class="form-control-label" for="input-method">Δραστηριότητα: </label>{{ $billing['companyprofession'] }}</p>@endif
+                                                                    @if(isset($billing['companyafm']))<p><label class="form-control-label" for="input-method">ΑΦΜ: </label>{{ $billing['companyafm'] }}</p>@endif
+                                                                    @if(isset($billing['companydoy']))<p><label class="form-control-label" for="input-method">ΔΟΥ:</label>{{ $billing['companydoy'] }}</p>@endif
+                                                                    @if(isset( $billing['companyaddress']))<p><label class="form-control-label" for="input-method">Διεύθυνση: </label>{{ $billing['companyaddress'] }} {{ $billing['companyaddressnum'] }}</p>@endif
+                                                                    @if(isset($billing['companypostcode']))<p><label class="form-control-label" for="input-method">Τ.Κ.: </label>{{ $billing['companypostcode'] }}</p>@endif
+                                                                    @if(isset($billing['companycity']))<p><label class="form-control-label" for="input-method">Πόλη: </label>{{ $billing['companycity'] }}</p>@endif
+                                                                    @if(isset($billing['companyemail']))<p><label class="form-control-label" for="input-method">Email Αποστολής Τιμολογίου: </label>{{ $billing['companyemail'] }} </p>@endif
 
 
                                                                     @endif
@@ -655,7 +655,7 @@
                                                             </div>
 
                                                             <div class="col-lg-12" style="border:1px solid">
-                                                            @if($tran['status'] == 1 || $tran['status'] == 2)
+                                                            {{--@if($tran['status'] == 1 || $tran['status'] == 2)--}}
 
 
                                                                 <h3>Booking Seats Details</h3>
@@ -710,7 +710,7 @@
 
                                                                 @endforeach
 
-                                                            @endif
+                                                            {{--@endif--}}
                                                             </div>
 
                                                         </div>

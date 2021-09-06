@@ -109,7 +109,15 @@
                                     @include('alerts.feedback', ['field' => 'type_id'])
                                 </div>
 
-                                <div class="form-group{{ $errors->has('htmlTitle') ? ' has-danger' : '' }}">
+                                <div class="form-group{{ $errors->has('bold') ? ' has-danger' : '' }}">
+                                <label class="custom-toggle custom-published toggle-bold">
+                                    <input name="bold" id="input-bold" type="checkbox" @if($lesson->bold) checked @endif>
+                                    <span class="custom-toggle-slider rounded-circle" data-label-off="off" data-label-on="on"></span>
+                                </label>
+                                @include('alerts.feedback', ['field' => 'bold'])
+                                </div>
+
+                                {{--<div class="form-group{{ $errors->has('htmlTitle') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-htmlTitle">{{ __('HTML Title') }}</label>
                                     <input type="text" name="htmlTitle" id="input-htmlTitle" class="form-control{{ $errors->has('htmlTitle') ? ' is-invalid' : '' }}" placeholder="{{ __('HTML Title') }}" value="{{ old('Short title', $lesson->htmlTitle) }}" autofocus>
 
@@ -142,7 +150,8 @@
                                     <textarea name="body" id="input-body"  class="ckeditor form-control{{ $errors->has('body') ? ' is-invalid' : '' }}" placeholder="{{ __('Body') }}" required autofocus>{{ old('body', $lesson->body) }}</textarea>
 
                                     @include('alerts.feedback', ['field' => 'body'])
-                                </div>
+                                </div>--}}
+
                                 <div class="form-group{{ $errors->has('body') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-vimeo_video">{{ __('Vimeo Video') }}</label>
                                     <input type="text" name="vimeo_video" id="input-vimeo_video" class="form-control{{ $errors->has('vimeo_video') ? ' is-invalid' : '' }}" placeholder="{{ __('Vimeo Video') }}" value="{{ old('vimeo_video', $lesson->vimeo_video) }}" autofocus>
