@@ -63,13 +63,34 @@
                                 </div>
 
                                 <div class="form-group{{ $errors->has('topic_id') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-topic_id">{{ __('Topic') }}</label>
-                                    <select multiple name="topic_id[]" id="input-topic_id" class="form-control topics" placeholder="{{ __('Topic') }}">
-                                        <option value="">-</option>
-                                        @foreach ($topics as $topic)
-                                            <option value="{{ $topic->id }}" >{{ $topic->title }}</option>
-                                        @endforeach
-                                    </select>
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <label class="form-control-label" for="input-topic_id">{{ __('Filters') }}</label>
+                                            <div class="filter_col" data-column="9">
+                                                <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="category">
+                                                <option></option>
+                                                </select>
+                                            </div>
+                                            <div class="filter_col" data-column="9">
+                                                <input class="select2-css" type="text" placeholder="Search Topic" id="searchTopic" name="searchTopic">
+                                            </div>
+
+                                        </div>
+
+
+
+                                        <div class="col-8">
+                                            <label class="form-control-label" for="input-topic_id">{{ __('Topic') }}</label>
+                                            <select multiple name="topic_id[]" id="input-topic_id" class="form-control topics" placeholder="{{ __('Topic') }}">
+                                                @foreach ($topics as $topic)
+                                                    <option data-category="{{$topic['category'][0]['name']}}" value="{{ $topic->id }}" >{{ $topic->title }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+
+                                    </div>
+
 
                                     @include('alerts.feedback', ['field' => 'topic_id'])
                                 </div>
@@ -157,6 +178,94 @@
 
 @push('js')
 <script>
+    let topics = @json($topics);
+    let uniqueTopics = []
+    var selectedCategory = null
+
+    function removeSpecial(s){
+            s = s.replace(/ /g,'');
+            s = s.replace(/&/g,'');
+            s = s.replace(/amp;/g,'');
+            return s
+        }
+
+    $(function() {
+
+        $("#category").select2({
+            placeholder: "By Category",
+            allowClear: true
+        });
+
+        $.each(topics, function(key, value) {
+            let categoryName = value.category[0].name
+            if(uniqueTopics[categoryName] === undefined){
+                uniqueTopics[categoryName] = categoryName
+                $('#category').append(`<option value="${categoryName}">${categoryName}</option>`)
+            }
+        })
+
+        //on select filter category Show or Hide topics
+        $('#category').on('select2:select', function (e) {
+            var data = e.params.data;
+            selectedCategory = data.text
+            $.each($('#input-topic_id option'), function(key, value) {
+                if($(value).data('category') !== undefined){
+                    if(removeSpecial($(value).data('category')) != removeSpecial(selectedCategory)){
+                        $(value).hide()
+                    }
+                    else{
+                        $(value).show()
+                    }
+                }
+
+            })
+        });
+
+        $("#category").on("select2:unselecting", function (e) {
+            $.each($('#input-topic_id option'), function(key, value) {
+                $(value).show()
+            })
+        });
+
+
+        $( "#searchTopic" ).keyup(function() {
+
+            let word = $('#searchTopic').val()
+            if( word.length >= 3){
+                $.each($('#input-topic_id option'), function(key, value) {
+                    let name = $(value).text()
+                    if(name !== undefined){
+                        if(name.includes(word)){
+                            $(value).show()
+                        }else{
+                            $(value).hide()
+                        }
+                    }
+
+                })
+
+            }else if(word === ""){
+                $.each($('#input-topic_id option'), function(key, value) {
+                    if($(value).data('category') !== undefined){
+                        if(removeSpecial($(value).data('category')) != removeSpecial(selectedCategory)){
+                            $(value).hide()
+                        }
+                        else{
+                            $(value).show()
+                        }
+                    }
+
+                })
+
+            }
+        });
+
+
+
+
+    });
+
+
 
     $(document).on('click', '.add-dynamic-link', function() {
 

@@ -262,15 +262,25 @@
             //description =e.relatedTarget.dataset.description;
             title = $("#title-"+id).text(),
             section = e.relatedTarget.dataset.section
+
+            //console.log()
+            let elem = $('#edit_section_sum option')
+
+            $.each(elem, function(key, value) {
+                if($(value).val() == section){
+                    $(value).attr('selected',true)
+                }
+
+            })
+
+
             description = e.relatedTarget.dataset.description
             media = e.relatedTarget.dataset.media
             modal.find("#edit-title").val(title);
             CKEDITOR.instances['edit-description2'].setData(description)
-                modal.find("#summary-id").val(id)
-            //$("#summary-id").val('asd')
+            modal.find("#summary-id").val(id)
             $("#edit-summary").attr('data-id', id)
             $("#image_svg_upload-summary").val(media)
-            modal.find("#edit-section_sum").val(section)
 
             base_url = window.location.protocol + "//" + window.location.host
             $("#img-upload-summary").attr('src', base_url+media)

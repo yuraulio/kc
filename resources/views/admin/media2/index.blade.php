@@ -1255,8 +1255,8 @@
             $(nav[7]).attr('disabled', 'disabled')
         })
 
-
         $(document).on("click", "#pasteFromSearch", function() {
+            let copyFiles = $('#clipboard-files .copy-file')
             path = ''
             $.each( $('.fm-breadcrumb li'), function(key, value) {
                 if(key != 0){
@@ -1264,8 +1264,6 @@
                 }
             })
             obj1 = {}
-
-            console.log(path)
 
             $.each(files, function(key, value){
                 //console.log(value)
@@ -1293,6 +1291,33 @@
                     //console.log('data: '+data.new)
                     if(data.result.status == 'success'){
                         $('#pasteFromSearch').removeAttr('id')
+                        $('#pasteFromSearch').attr('disabled', 'disabled')
+
+                        console.log('before data')
+
+                        ////EDW
+                        console.log(copyFiles)
+                        ////EDW
+
+                        console.log('after data')
+
+
+                        $.each(copyFiles, function(key, value) {
+                            let file = $(value).data('path')
+                            console.log(file)
+                            let row = `
+                                <tr>
+                                    <td class="fm-content-item unselectable">
+                                        <i class="far fa-file-image"></i>
+                                        ${file}
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            `
+                            $('.fm-content-body tbody').append(row)
+                        })
                     }
 
                 }
@@ -1318,7 +1343,7 @@
                     url: "/file-manager/search?param="+file,
                     success: function(data) {
 
-                        
+
                         // data = JSON.parse(data)
                         data = data.data
 
@@ -1355,7 +1380,7 @@
                         //     }
                         // })
 
-                       
+
 
                     }
                 });
@@ -1427,7 +1452,7 @@
                         if($(elem).hasClass('fm-content-item')){
                             $(elem).parent().addClass('table-info')
                         }
-                        
+
                     }
                     //
 

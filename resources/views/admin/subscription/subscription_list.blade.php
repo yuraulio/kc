@@ -46,13 +46,13 @@
                     <div class="collapse" id="collapseExample">
                         <div class="container">
                             <div class="row">
-                                <div class="col" id="filter_col1" data-column="3">
+                                <div class="col col-sm-3" id="filter_col1" data-column="3">
                                     <label>Event</label>
                                     <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="event" class="column_filter" id="col3_filter">
                                         <option selected value> -- All -- </option>
                                     </select>
                                 </div>
-                                <div class="col" id="filter_col4" data-column="4">
+                                <div class="col col-sm-3" id="filter_col4" data-column="4">
                                     <label>Status</label>
                                     <select data-toggle="select" data-live-search="true" class="column_filter" id="col4_filter" placeholder="Status">
                                         <option selected value> -- All -- </option>
@@ -60,6 +60,20 @@
                                         <option value="0"> INACTIVE </option>
                                     </select>
                                 </div>
+
+                                <div class="col col-sm-3">
+                                    <div class="form-group">
+                                        <label>From:</label>
+                                        <input class="select2-css" type="text" id="min" name="min">
+                                    </div>
+                                </div>
+                                <div class="col col-sm-3">
+                                    <div class="form-group">
+                                        <label>To:</label>
+                                        <input class="select2-css" type="text" id="max" name="max">
+                                    </div>
+                                </div>
+
 
                             </div>
                         </div>
@@ -165,9 +179,44 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.html5.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
 
     <script>
+
+        // DataTables initialisation
+        var table = $('#subscriptions_table').DataTable({
+                    "order": [[ 4, "desc" ]],
+                    language: {
+                        paginate: {
+                        next: '&#187;', // or '→'
+                        previous: '&#171;' // or '←'
+                        }
+                    }
+                });
+
+    var minDate, maxDate;
+
+
+
+        // Custom filtering function which will search data in column four between two values
+        $.fn.dataTable.ext.search.push(
+            function( settings, data, dataIndex ) {
+                var min = minDate.val();
+                var max = maxDate.val();
+                var date = new Date( data[4] );
+
+                if (
+                    ( min === null && max === null ) ||
+                    ( min === null && date <= max ) ||
+                    ( min <= date   && max === null ) ||
+                    ( min <= date   && date <= max )
+                ) {
+                    return true;
+                }
+                return false;
+            }
+        );
 
 
         function initStats(){
@@ -215,27 +264,37 @@
         }
 
 
-        // DataTables initialisation
-        var table = $('#subscriptions_table').DataTable({
-            "order": [[ 4, "desc" ]],
-            language: {
-                paginate: {
-                next: '&#187;', // or '→'
-                previous: '&#171;' // or '←'
-                }
-            }
-        });
+
         initStats()
 
         let status = '';
 
         $(document).ready(function() {
+
+            minDate = new DateTime($('#min'), {
+                format: 'L'
+            });
+            //console.log('--min: '+minDate.val())
+            maxDate = new DateTime($('#max'), {
+                format: 'L'
+            });
+
+
+
             fillSelectedBox()
 
             $('select.column_filter').on('change', function () {
                 filterColumn( $(this).parents('div').attr('data-column') );
 
             } );
+
+
+            // Refilter the table
+            $('#min, #max').on('change', function () {
+                table.draw();
+            });
+
+
 
         });
     </script>
