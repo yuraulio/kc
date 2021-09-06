@@ -297,7 +297,7 @@
 
 
                                           <div class="topic-meta">
-                                             @if(isset($lesson['type']) && $lesson['type'])<div class="category">{{$lesson['type']}}</div>@endif
+                                          @if(isset($lesson['type'][0]['name']))<div class="category">{{$lesson['type'][0]['name']}}</div>@endif
 
                                              <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/Times.svg')}}" width="12" alt="" />{{$lesson['vimeo_duration']}}</span>
 

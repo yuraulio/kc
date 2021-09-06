@@ -13,7 +13,7 @@ use App\Exports\TransactionExport;
 class TransactionController extends Controller
 {
 
-    public function participants($start_date = null, $end_date = null)
+    /*public function participants($start_date = null, $end_date = null)
     {
         $userRole = Auth::user()->role->pluck('id')->toArray();
 
@@ -84,9 +84,9 @@ class TransactionController extends Controller
         }
         return $data;
 
-    }
+    }*/
 
-    /*
+    
 public function participants($start_date = null, $end_date = null)
     {
         $userRole = Auth::user()->role->pluck('id')->toArray();
@@ -144,13 +144,13 @@ public function participants($start_date = null, $end_date = null)
                 
                 $countUsers = count($transaction->user);
 
-                foreach($transaction->user as $u){
+                foreach($transaction['user'] as $u){
 
-                    $statistic = $u->first()->statisticGroupByEvent->groupBy('event_id');
+                    $statistic = $u->statisticGroupByEvent->groupBy('event_id');
                     $videos = isset($statistic[$transaction->event->first()->id]) ?
                     $statistic[$transaction->event->first()->id]->first()->pivot : null;
 
-                    $events = $u->first()->events->groupBy('id');
+                    $events = $u->events->groupBy('id');
                     $expiration = isset($events[$transaction->event->first()->id]) ? $events[$transaction->event->first()->id]->first()->pivot->expiration : null;
                     $videos = isset($videos) ? json_decode($videos->videos,true) : null;
                    
@@ -164,10 +164,11 @@ public function participants($start_date = null, $end_date = null)
             }
 
         }
+        
         return $data;
 
     }
-    */
+    
 
     public function participants_inside_revenue()
     {

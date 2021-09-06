@@ -78,22 +78,14 @@
 
                                     @include('alerts.feedback', ['field' => 'topic_id'])
                                 </div>
-                                <?php //dd(count($lesson->type) == 0); ?>
+                                
                                 <div class="form-group{{ $errors->has('type_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-type_id">{{ __('Type') }}</label>
                                     <select name="type_id" id="input-type_id" class="form-control" placeholder="{{ __('Type') }}">
                                         <option value="">-</option>
                                         @foreach ($types as $type)
                                             @if($type['id'] >= 150 && $type['id'] <= 161)
-
-                                            <option <?php if(count($lesson->type) != 0){
-                                                if($lesson->type[0]->id == $type->id){
-                                                    echo 'selected';
-                                                }else{
-                                                    echo '';
-                                                }
-                                            }
-                                            ?>
+                                            <option @if(isset($lesson->type[0]['id']) && $lesson->type[0]['id'] == $type['id']) selected @endif
                                             value="{{ $type->id }}" > {{ $type->name }}</option>
                                             @endif
                                         @endforeach

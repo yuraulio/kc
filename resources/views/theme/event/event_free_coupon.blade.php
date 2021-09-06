@@ -299,7 +299,7 @@
 
 
                                           <div class="topic-meta">
-                                             @if(isset($lesson['pivot']['type']) && $lesson['pivot']['type'])<div class="category">{{$lesson['pivot']['type']}}</div>@endif
+                                          @if(isset($lesson['type'][0]['name']))<div class="category">{{$lesson['type'][0]['name']}}</div>@endif
                                              <?php  
                                                 $date = $lesson['pivot']['time_starts'] ? date('l d F Y',strtotime($lesson['pivot']['time_starts'])) : null;
                                                 $time =  $lesson['pivot']['time_starts'] ? date('H:i',strtotime($lesson['pivot']['time_starts'])) : null;

@@ -198,16 +198,15 @@
                                        />
                                     <div class="lesson-info">
                                        <h3
-                                          class="lesson-info_title {{--@if($lesson['bold'])bold-topic @endif--}}"
+                                          class="lesson-info_title @if($lesson['bold'])bold-topic @endif"
                                           data-title="{!! $lesson['title'] !!}"
                                           >
                                           {!! $lesson['title'] !!}
                                        </h3>
                                        <span class="lesson-info_duration">{{$lesson['vimeo_duration']}}</span>
                                        <span class="white-separator"> | </span>
-                                       <span class="lesson-info_topic-type"
-                                          >Live Tutorial</span
-                                          >
+                                       @if(isset($lesson['type'][0]['name']))<span class="lesson-info_topic-type">{{$lesson['type'][0]['name']}}</span>@endif
+                                          
                                     </div>
                                     <!-- ./lesson-info -->
                                     <div class="lesson-teacher-wrapper">

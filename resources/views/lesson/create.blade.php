@@ -80,7 +80,7 @@
                                         <option value="">-</option>
                                         @foreach ($types as $type)
                                             @if($type['id'] >= 150 && $type['id'] <= 161)
-                                                <option value="{{ $type['id'] }}" >{{ $type['name'] }}</option>
+                                                <option value="{{ $type['id'] }}" @if(isset($lesson['type'][0]['id']) && $lesson['type'][0]['id'] == $type['id']) selected @endif>{{ $type['name'] }}</option>
                                             @endif
                                         @endforeach
                                     </select>

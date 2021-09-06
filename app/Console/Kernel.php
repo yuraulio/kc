@@ -25,6 +25,8 @@ class Kernel extends ConsoleKernel
        Commands\CompressImages::class,
        Commands\AttachBenefitsSummaryMedia::class,
        Commands\AttachTransactionSpecial::class,
+       Commands\GetLessonType::class,
+       Commands\TopicStatus::class,
        //Commands\AttachInvoices::class,
        //Commands\StopAccessFilesDiplomas::class,
        //Commands\AttachTopicCategory::class,

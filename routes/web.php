@@ -507,6 +507,11 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('home',function(){
         return redirect('/');
     });
+
+    Route::get('terms-privacy',function(){
+        return redirect('terms');
+    });
+    
 });
 
 Route::group(['middleware' => ['preview','web','auth.sms']], function () {
