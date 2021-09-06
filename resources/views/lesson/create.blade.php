@@ -110,6 +110,7 @@
                                 </div>
 
                                 <div class="form-group{{ $errors->has('bold') ? ' has-danger' : '' }}">
+                                <label class="form-control-label" for="input-bold">{{ __('Bold') }}</label>
                                     <label class="custom-toggle custom-published toggle-bold">
                                         <input name="bold" id="input-bold" type="checkbox">
                                         <span class="custom-toggle-slider rounded-circle" data-label-off="off" data-label-on="on"></span>
