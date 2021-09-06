@@ -72,7 +72,7 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
                                                 </div>
-                                                <input class="form-control select2-css" id="min" placeholder="Start date" type="text" value="06/18/2018">
+                                                <input class="form-control select2-css" id="min" placeholder="Start date" type="text" value="">
                                             </div>
                                         </div>
                                     </div>
@@ -83,7 +83,7 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
                                                 </div>
-                                                <input class="form-control select2-css" placeholder="End date" id="max" type="text" value="06/22/2018">
+                                                <input class="form-control select2-css" placeholder="End date" id="max" type="text" value="">
                                             </div>
                                         </div>
                                     </div>
@@ -134,7 +134,7 @@
                                     {{--<th scope="col">{{ __('Trials Sub end at') }}</th>--}}
                                     <th scope="col">{{ __('Sub end at') }}</th>
                                     <th scope="col">{{ __('Amount') }}</th>
-                                    <th scope="col">{{ __('Create Date') }}</th>
+                                    <th class="d-none" scope="col">{{ __('Create Date') }}</th>
                                 </tr>
                             </thead>
                             <tfoot>
@@ -146,7 +146,7 @@
                                     <th>{{ __('Status') }}</th>
                                     <th>{{ __('Sub end at') }}</th>
                                     <th>{{ __('Amount') }}</th>
-                                    <th>{{ __('Create Date') }}</th>
+                                    <th class="d-none">{{ __('Create Date') }}</th>
                                 </tr>
                             </tfoot>
                             <tbody>
@@ -170,7 +170,7 @@
 
                                         <td>{{ $item['ends_at'] }}</td>
                                         <td><?= '€'.number_format(intval($item['total_amount']), 2, '.', ''); ?></td>
-                                        <td><?= date_format(date_create($item['created_at']),'m/d/Y'); ?></td>
+                                        <td class="d-none"><?= date_format(date_create($item['created_at']),'m/d/Y'); ?></td>
 
 
                                     </tr>
@@ -203,7 +203,7 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
+    <script src="{{ asset('argon') }}/vendor/datatables-datetime/datetime.min.js"></script>
     <script>
 
     var minDate = null, maxDate = null;
@@ -212,16 +212,11 @@
         function( settings, data, dataIndex ) {
             var min = minDate;
             var max = maxDate;
-            console.log(min)
-            var date = new Date(data[7], {
-                format: 'L'
-            });
 
-            date moment(date).format('MM/DD/YYYY')
 
-            console.log(min)
-            console.log(date)
+            var date = new Date(data[7]);
 
+            date = moment(date).format('MM/DD/YYYY')
 
             if (
                 ( min === null && max === null ) ||
@@ -304,19 +299,13 @@
 
             } );
 
-            minDate = new Date($('#min').val(), {
-                format: 'L'
-            });
-            //console.log('--min: '+minDate.val())
-            maxDate = new Date($('#max'), {
-                format: 'L'
-            });
 
             // Refilter the table
             $('#min, #max').on('change', function () {
-                min = new DateTime($('#min').val());
-                max = new DateTIme($('#max').val());
-                console.log('min:'+ min)
+                min = new Date($('#min').val());
+                max = new Date($('#max').val());
+                minDate = moment(min).format('MM/DD/YYYY')
+                maxDate = moment(max).format('MM/DD/YYYY')
 
 
                 table.draw();

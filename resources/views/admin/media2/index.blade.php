@@ -355,7 +355,10 @@
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css">
-@endpush
+    <link rel="stylesheet" href="{{ asset('argon') }}/vendor/animate.css/animate.min.css">
+
+
+    @endpush
 
 @push('js')
     <script src="{{ asset('argon') }}/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
@@ -366,6 +369,9 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
+    <script src="{{ asset('argon') }}/vendor/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+
     <script>
         let value = 200
         let selected = 0
@@ -1255,6 +1261,7 @@
             $(nav[7]).attr('disabled', 'disabled')
         })
 
+
         $(document).on("click", "#pasteFromSearch", function() {
             let copyFiles = $('#clipboard-files .copy-file')
             path = ''
@@ -1288,36 +1295,37 @@
                 url: "/file-manager/paste",
                 data: JSON.stringify(data),
                 success: function(data) {
-                    //console.log('data: '+data.new)
+                    console.log(data)
                     if(data.result.status == 'success'){
                         $('#pasteFromSearch').removeAttr('id')
                         $('#pasteFromSearch').attr('disabled', 'disabled')
 
-                        console.log('before data')
-
-                        ////EDW
-                        console.log(copyFiles)
-                        ////EDW
-
-                        console.log('after data')
+                        $.notify({message: data.result.message}, {type:"success", placement: {from: "bottom",align: "right"},});
 
 
-                        $.each(copyFiles, function(key, value) {
-                            let file = $(value).data('path')
-                            console.log(file)
-                            let row = `
-                                <tr>
-                                    <td class="fm-content-item unselectable">
-                                        <i class="far fa-file-image"></i>
-                                        ${file}
-                                    </td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            `
-                            $('.fm-content-body tbody').append(row)
-                        })
+                        // $.each(copyFiles, function(key, value) {
+                        //     let file = $(value).data('path')
+                        //     console.log(file)
+                        //     let row = `
+                        //         <tr>
+                        //             <td class="fm-content-item unselectable">
+                        //                 <i class="far fa-file-image"></i>
+                        //                 ${file}
+                        //             </td>
+                        //             <td></td>
+                        //             <td></td>
+                        //             <td></td>
+                        //         </tr>
+                        //     `
+                        //     $('.fm-content-body tbody').append(row)
+                        // })
+                    }else{
+                        //console.log('from error')
+                        //console.log(data.result.message)
+
+                        $.notify({message: data.result.message}, {type:"danger", placement: {from: "bottom",align: "right"},});
+
+
                     }
 
                 }
