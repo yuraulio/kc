@@ -44,7 +44,6 @@ class UserController extends Controller
         if(isset($user['image'])){
 
             $user['profileImage'] = asset(get_profile_image($user['image']));
-            //dd($user['profileImage']);
         }else{
             $user['profileImage'] = null;
         }

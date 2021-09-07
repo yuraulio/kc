@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('content'); ?>
     <?php $__env->startComponent('layouts.headers.auth'); ?>
         <?php $__env->startComponent('layouts.headers.breadcrumbs'); ?>
@@ -98,7 +96,7 @@
                                     </div>
                                     <?php echo $__env->make('alerts.feedback', ['field' => 'topic_id'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                                 </div>
-                                
+
                                 <div class="form-group<?php echo e($errors->has('type_id') ? ' has-danger' : ''); ?>">
                                     <label class="form-control-label" for="input-type_id"><?php echo e(__('Type')); ?></label>
                                     <select name="type_id" id="input-type_id" class="form-control" placeholder="<?php echo e(__('Type')); ?>">
@@ -232,20 +230,32 @@
             $.each($('#input-topic_id option'), function(key, value) {
                 $(value).show()
             })
+            selectedCategory = null
         });
 
         $( "#searchTopic" ).keyup(function() {
 
-            let word = $('#searchTopic').val()
+            let word = $('#searchTopic').val().toLowerCase()
             if( word.length >= 3){
                 $.each($('#input-topic_id option'), function(key, value) {
-                    let name = $(value).text()
+                    let name = $(value).text().toLowerCase()
                     if(name !== undefined){
-                        if(name.includes(word)){
-                            $(value).show()
+                        if(selectedCategory == null){
+                            console.log('select is null')
+                            if(name.includes(word)){
+                                $(value).show()
+                            }else{
+                                $(value).hide()
+                            }
                         }else{
-                            $(value).hide()
+                            console.log('select is not null')
+                            if(name.includes(word) && (removeSpecial($(value).data('categoryname')) == removeSpecial(selectedCategory))){
+                                $(value).show()
+                            }else{
+                                $(value).hide()
+                            }
                         }
+
                     }
 
                 })

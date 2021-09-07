@@ -235,21 +235,31 @@
             $.each($('#input-topic_id option'), function(key, value) {
                 $(value).show()
             })
+            selectedCategory = null
         });
 
 
         $( "#searchTopic" ).keyup(function() {
 
-            let word = $('#searchTopic').val()
+            let word = $('#searchTopic').val().toLowerCase()
             if( word.length >= 3){
                 $.each($('#input-topic_id option'), function(key, value) {
-                    let name = $(value).text()
+                    let name = $(value).text().toLowerCase()
                     if(name !== undefined){
-                        if(name.includes(word)){
-                            $(value).show()
+                        if(selectedCategory == null){
+                            if(name.includes(word)){
+                                $(value).show()
+                            }else{
+                                $(value).hide()
+                            }
                         }else{
-                            $(value).hide()
+                            if(name.includes(word) && (removeSpecial($(value).data('category')) == removeSpecial(selectedCategory))){
+                                $(value).show()
+                            }else{
+                                $(value).hide()
+                            }
                         }
+
                     }
 
                 })
@@ -257,12 +267,17 @@
             }else if(word === ""){
                 $.each($('#input-topic_id option'), function(key, value) {
                     if($(value).data('category') !== undefined){
-                        if(removeSpecial($(value).data('category')) != removeSpecial(selectedCategory)){
-                            $(value).hide()
-                        }
-                        else{
+                        if(selectedCategory == null){
                             $(value).show()
+                        }else{
+                            if(removeSpecial($(value).data('category')) != removeSpecial(selectedCategory)){
+                                $(value).hide()
+                            }
+                            else{
+                                $(value).show()
+                            }
                         }
+
                     }
 
                 })
