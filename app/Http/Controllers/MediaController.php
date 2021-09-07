@@ -141,7 +141,7 @@ class MediaController extends Controller
 
 
             $name = explode('profile_user/',$path_name);
-            $size = getimagesize('uploads/'.$path_name);
+            //$size = getimagesize('uploads/'.$path_name);
             $media->name = $name1[0];
             $media->ext = '.'.$content->guessClientExtension();
             $media->original_name = $name[1];
@@ -155,8 +155,8 @@ class MediaController extends Controller
             $media->path = '/'.'uploads/'.$string.'/';
 
 
-            $media->width = $size[0];
-            $media->height = $size[1];
+            // $media->width = $size[0];
+            // $media->height = $size[1];
             $media->save();
 
     }
@@ -366,7 +366,7 @@ class MediaController extends Controller
         return view('layouts.media_versions', $data);
     }
 
-    public function mediaImage(Request $request) {  
+    public function mediaImage(Request $request) {
         $data['medias'] = Media::where('original_name', $request->name)->first();
         if($data['medias'] != null){
             $id = $data['medias']['id'];

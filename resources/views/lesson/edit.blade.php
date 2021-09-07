@@ -93,7 +93,7 @@
                                     </div>
                                     @include('alerts.feedback', ['field' => 'topic_id'])
                                 </div>
-                                
+
                                 <div class="form-group{{ $errors->has('type_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-type_id">{{ __('Type') }}</label>
                                     <select name="type_id" id="input-type_id" class="form-control" placeholder="{{ __('Type') }}">
@@ -260,20 +260,30 @@
             $.each($('#input-topic_id option'), function(key, value) {
                 $(value).show()
             })
+            selectedCategory = null
         });
 
         $( "#searchTopic" ).keyup(function() {
 
-            let word = $('#searchTopic').val()
+            let word = $('#searchTopic').val().toLowerCase()
             if( word.length >= 3){
                 $.each($('#input-topic_id option'), function(key, value) {
-                    let name = $(value).text()
+                    let name = $(value).text().toLowerCase()
                     if(name !== undefined){
-                        if(name.includes(word)){
-                            $(value).show()
+                        if(selectedCategory == null){
+                            if(name.includes(word)){
+                                $(value).show()
+                            }else{
+                                $(value).hide()
+                            }
                         }else{
-                            $(value).hide()
+                            if(name.includes(word) && (removeSpecial($(value).data('categoryname')) == removeSpecial(selectedCategory))){
+                                $(value).show()
+                            }else{
+                                $(value).hide()
+                            }
                         }
+
                     }
 
                 })
