@@ -100,6 +100,12 @@ class Event extends Model
     }
 
 
+    public function allLessons()
+    {
+
+        return $this->belongsToMany(Lesson::class,'event_topic_lesson_instructor')->select('lessons.*');
+    }
+
     public function lessons()
     {
 
@@ -323,12 +329,16 @@ class Event extends Model
         $data['topics'] = $topics;
         $data['instructors'] = $instructors;
         foreach($data['topics'] as $key => $topics){
-            //dd($topics['lessons']);
-            if(isset($topics['lessons'][0])){
-                $topic_id = $topics['lessons'][0]['topic_id'];
-            }else{
-                $topic_id = $topics['lessons'][1]['topic_id'];
+           
+            if(!isset($topics['lessons'][0]['topic_id'])){
+                continue;
             }
+            $topic_id = $topics['lessons'][0]['topic_id'];
+            //if(isset($topics['lessons'][0])){
+            //    $topic_id = $topics['lessons'][0]['topic_id'];
+            //}else{
+            //    $topic_id = $topics['lessons'][1]['topic_id'];
+            //}
 
             $data['topics'][$key]['topic_duration'] = $data['keys'][$topic_id];
 

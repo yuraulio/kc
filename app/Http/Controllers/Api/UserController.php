@@ -451,8 +451,8 @@ class UserController extends Controller
                             //$data[$key]['topics'][$key11]['topic_id'] = $lesson1['topic_id'];
                             $arr['topic_content']['topic_id'] = $lesson1['topic_id'];
 
-                            $m = floor(($topic['topic_duration'] / 60) % 60);
-                            $h = $hours = floor($topic['topic_duration'] / 3600);
+                            $m = isset($topic['topic_duration']) ?  floor(($topic['topic_duration'] / 60) % 60) : 0;
+                            $h =isset($topic['topic_duration']) ? $hours = floor($topic['topic_duration'] / 3600) : 0;
                             $arr['topic_content']['total_duration'] = intval($h) . 'h ' . $m . 'm';
 
 

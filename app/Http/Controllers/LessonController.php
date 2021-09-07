@@ -92,16 +92,30 @@ class LessonController extends Controller
                 if(!isset($topic->category[0])){
                     continue;
                 }
+
                 $cat_id = $topic->category[0]->id;
                 $cat = Category::with('events')->find($cat_id);
-
                 $cat->topic()->attach($topic, ['lesson_id' => $lesson->id]);
-
-                //assign on AllEvents
+              
+                if($cat_id != $request->category){
+                    continue;
+                }
+                
+                
                 $allEvents = $cat->events;
                 foreach($allEvents as $event)
                 {
-                    $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id']]);
+                    $allLessons = $event->allLessons->pluck('id')->toArray();
+                    
+                    if(!in_array($lesson['id'],$allLessons)){
+                        
+                        $priority = count($allLessons)+1;
+                        
+                        //$event->topic()->sync([['topic_id'=>$topic['id'],'lesson_id' => $lesson['id'],'priority' => $priority]]);
+                        $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id'],'priority' => $priority]);
+                    }
+                    
+
                 }
 
             }
@@ -258,7 +272,7 @@ class LessonController extends Controller
      * @param  \App\Model\Lesson  $lesson
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Lesson $lesson)
+    /*public function update(Request $request, Lesson $lesson)
     {
         $arr = array();
 
@@ -304,15 +318,27 @@ class LessonController extends Controller
             foreach($request->topic_id as $topic)
             {
                 $topic = Topic::with('category')->find($topic);
-    
+                dd($topic);
                 foreach($topic->category as $cat){
                     $cat->topic()->attach($topic, ['lesson_id' => $lesson->id]);
 
                     $allEvents = $cat->events;
                     foreach($allEvents as $event)
                     {
-                        $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id']]);
+                        $allLessons = $event->allLessons->pluck('id')->toArray();
+
+                        if(!in_array($lesson['id'],$allLessons)){
+                            $priority = count($allLessons)+1;
+                            //$event->topic()->sync([['topic_id'=>$topic['id'],'lesson_id' => $lesson['id'],'priority' => $priority]]);
+                            $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id'],'priority' => $priority]);
+                        }
+                        
+    
                     }
+
+                 
+                       
+
                 }
                 
 
@@ -323,7 +349,93 @@ class LessonController extends Controller
         $lesson->type()->sync([$request->type_id]);
 
 
-        return redirect()->route('lessons.index')->withStatus(__('Lesson successfully updated.'));
+        return back()->withStatus(__('Lesson successfully updated.'));
+        //return redirect()->route('lessons.index')->withStatus(__('Lesson successfully updated.'));
+    }*/
+
+    public function update(Request $request, Lesson $lesson)
+    {
+        $arr = array();
+
+        if(!empty($request->links)){
+            foreach($request->links as $key => $link){
+
+                $correct_link = strpos($link, 'https://');
+
+                if(!$correct_link){
+                    $link = 'https://'.$link;
+                }
+                $arr1[$key] = ['name'=> $request->names[$key], 'link'=>$link];
+            }
+        }else{
+            $arr1 = [];
+        }
+        $links = json_encode($arr1);
+
+        if($request->status == 'on')
+        {
+            $status = 1;
+        }else
+        {
+            $status = 0;
+        }
+
+        if($request->bold == 'on')
+        {
+            $bold = 1;
+        }else
+        {
+            $bold = 0;
+        }
+
+        $request->request->add(['status' => $status, 'links' => $links,'bold'=>$bold]);
+
+        $lesson_id = $lesson['id'];
+        $lesson->update($request->all());
+        
+        if($request->topic_id != null){
+            $lesson->topic()->detach();
+            foreach($request->topic_id as $topic)
+            {
+                $topic = Topic::with('category')->find($topic);
+               
+                foreach($topic->category as $cat){
+                    $cat->topic()->attach($topic, ['lesson_id' => $lesson->id]);
+                    //dd($cat->id . ' => ' .$request->category);
+                    if($cat->id != $request->category){
+                        
+                        continue;
+                    }
+                    
+                    $allEvents = $cat->events;
+                    foreach($allEvents as $event)
+                    {
+                        $allLessons = $event->allLessons->pluck('id')->toArray();
+
+                        if(!in_array($lesson['id'],$allLessons)){
+                            $priority = count($allLessons)+1;
+                            //$event->topic()->sync([['topic_id'=>$topic['id'],'lesson_id' => $lesson['id'],'priority' => $priority]]);
+                            $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id'],'priority' => $priority]);
+                        }
+                        
+    
+                    }
+
+                 
+                       
+
+                }
+                
+
+                
+            }
+        }
+
+        $lesson->type()->sync([$request->type_id]);
+
+
+        return back()->withStatus(__('Lesson successfully updated.'));
+        //return redirect()->route('lessons.index')->withStatus(__('Lesson successfully updated.'));
     }
 
     /**

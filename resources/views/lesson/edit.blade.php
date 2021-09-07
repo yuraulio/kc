@@ -62,7 +62,7 @@
                                         <div class="col-4">
                                                 <label class="form-control-label" for="input-topic_id">{{ __('Filters') }}</label>
                                                 <div class="filter_col" data-column="9">
-                                                    <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="category">
+                                                    <select name="category" data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="category">
                                                     <option></option>
                                                     </select>
                                                 </div>
@@ -235,7 +235,7 @@
             let categoryName = value.category[0].name
             if(uniqueTopics[categoryName] === undefined){
                 uniqueTopics[categoryName] = categoryName
-                $('#category').append(`<option value="${categoryName}">${categoryName}</option>`)
+                $('#category').append(`<option value="${value.category[0].id}">${categoryName}</option>`)
             }
         })
 

@@ -125,8 +125,8 @@
                                  </h3>
                                  <span class="topic-info_duration">
                                  <?php
-                                    $m = floor(($topic['topic_duration'] / 60) % 60);
-                                    $h = $hours = floor($topic['topic_duration'] / 3600);
+                                    $m = isset($topic['topic_duration']) ?  floor(($topic['topic_duration'] / 60) % 60) : 0;
+                                    $h =isset($topic['topic_duration']) ? $hours = floor($topic['topic_duration'] / 3600) : 0;
 
                                     echo intval($h) . 'h ' . $m . 'm';
                                     ?>
