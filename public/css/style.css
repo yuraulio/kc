@@ -122,11 +122,11 @@ li.select2-results__option:empty {
 }
 
 #tabs-icons-text-2_inside .modal-dialog {
-    max-width: 650px;
+    max-width: 800px;
 }
 
 #tabs-icons-text-3_inside .modal-dialog {
-    max-width: 650px;
+    max-width: 800px;
 }
 
 #participants_info {
@@ -413,6 +413,16 @@ li.select2-results__option:empty {
 #sub_datePicker {
     display: inline-flex;
 }
+
+.select_Svg_Modal-summary .modal-content{
+    min-height: 118vh;
+}
+
+.select_Svg_Modal-benefit .modal-content{
+    min-height: 118vh;
+}
+
+
 
 
 /* #file-man-main {

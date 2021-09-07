@@ -166,18 +166,22 @@ class FileManager
                 continue;
             }
 
-            //dd($disk.'/'.$path);
+            $path1 = $disk.'/'.$path;
 
-            $path = $disk.'/'.$path;
 
-            $this->compressImage($file,$path,70);
+            if(getimagesize($file) === false){
+                // overwrite or save file
+                Storage::disk($disk)->putFileAs(
+                    $path,
+                    $file,
+                    $file->getClientOriginalName()
+                );
+            }else{
+                $this->compressImage($file,$path1,70);
+            }
 
-            // overwrite or save file
-            // Storage::disk($disk)->putFileAs(
-            //     $path,
-            //     $file,
-            //     $file->getClientOriginalName()
-            // );
+
+
         }
 
         // If the some file was not uploaded
@@ -202,6 +206,7 @@ class FileManager
     public function compressImage($source, $destination, $quality) {
 
         $info = getimagesize($source);
+
 
         if ($info['mime'] == 'image/jpeg')
         $image = imagecreatefromjpeg($source);

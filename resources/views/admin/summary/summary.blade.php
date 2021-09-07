@@ -264,9 +264,13 @@
             section = e.relatedTarget.dataset.section
 
             //console.log()
+            //console.log(section)
+            //console.log('------')
             let elem = $('#edit_section_sum option')
 
             $.each(elem, function(key, value) {
+                //console.log($(value).val())
+
                 if($(value).val() == section){
                     $(value).attr('selected',true)
                 }

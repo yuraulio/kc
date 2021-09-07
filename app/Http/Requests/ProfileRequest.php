@@ -37,7 +37,9 @@ class ProfileRequest extends FormRequest
            // 'city' => ['required', 'min:3'],
            // 'afm' => ['required', 'max:9'],
             //'photo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'email' => ['required', 'email'],
+            'email' => [
+                'required', 'email','unique:users,email'
+            ],
         ];
     }
 }

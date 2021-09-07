@@ -110,7 +110,7 @@ if (!function_exists('cdn')){
         if (!Config::get('cdn_setup.cdn')) {
             return asset($asset);
         }
-        
+
         // Get file name incl extension and CDN URLs
         $cdns = Config::get('cdn_setup.cdn');
         $assetName = basename($asset);
@@ -159,14 +159,14 @@ if (!function_exists('get_image')){
 
 if (!function_exists('get_profile_image')){
     function get_profile_image($media) {
-       
 
-        
+
+
         if(isset($media['original_name']) && $media['original_name']!=''){
-            
+
             $name = explode('.', $media['original_name']);
-           
             $path = ltrim($media['path'] . $name[0] . '-crop.'. $name[1], $media['path'][0]);
+
 
             if(file_exists($path)){
 
@@ -176,7 +176,7 @@ if (!function_exists('get_profile_image')){
             }
 
         }
-        
+
 
     }
 }
@@ -187,7 +187,7 @@ if (!function_exists('get_header')){
         $result = array();
         foreach ($menus as $key => $element) {
 
-        
+
             $model = app($element['menuable_type']);
             //dd($model::with('slugable')->find($element['menuable_id']));
 
