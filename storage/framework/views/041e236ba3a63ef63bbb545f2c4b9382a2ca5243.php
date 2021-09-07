@@ -205,6 +205,29 @@
    })
 </script>
 <script>
+
+
+
+    $(document).on('click',".close_modal",function(){
+        $('.modal-backdrop').remove();
+    })
+
+    $(document).on('click',".close_svg_modal",function(){
+
+        if($('.select_Svg_Modal-summary').hasClass('show')){
+            $('.select_Svg_Modal-summary').modal('toggle');
+            $('.select_Svg_Modal-benefit').modal('toggle');
+        }
+    })
+
+
+    $(document).on('click',".close-modal",function(){
+        $('#editModal').removeClass('show')
+        $('.modal-backdrop').remove()
+    })
+
+
+
     $(document).on('click',"#edit-benefit",function(){
 
         //$benefitId = $("#benefit-id").val()
@@ -287,6 +310,8 @@
 <script>
 
    (function( $ ){
+
+
 
       var el = document.getElementsByClassName('benefits-order')[0];
 

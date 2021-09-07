@@ -47,17 +47,23 @@ class GetPaymentDetailsFromTransactions extends Command
             if(!$transaction->subscription->first() && $transaction->user->first() && $transaction->event->first()){
                 $user = $transaction->user->first();
 
-                if($transaction->billing_details){
-                    continue;
+                $transactionBillingDetails = json_decode($transaction->billing_details,true);
+                if(isset($transactionBillingDetails['billing']) && $transactionBillingDetails['billing'] == 1){
+
+                    if($user->receipt_details){
+                        continue;
+                    }
+                    $user->receipt_details = $transactionBillingDetails;
+
+                }else if(isset($transactionBillingDetails['billing']) && $transactionBillingDetails['billing'] == 2){
+
+                    if($user->invoice_details){
+                        continue;
+                    }
+                    $user->invoice_details = $transactionBillingDetails;
                 }
 
-                if($user->receipt_details){
-                    $transaction->billing_details = $user->receipt_details;
-                }else{
-                    $transaction->billing_details = $user->invoice_details;
-                }                
-
-                $transaction->save();
+                $user->save();
             }
         }
     }

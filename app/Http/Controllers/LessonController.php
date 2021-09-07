@@ -298,15 +298,25 @@ class LessonController extends Controller
         $lesson_id = $lesson['id'];
         $lesson->update($request->all());
 
-
+        //dd($request->all());
         if($request->topic_id != null){
             $lesson->topic()->detach();
             foreach($request->topic_id as $topic)
             {
                 $topic = Topic::with('category')->find($topic);
-                $cat = $topic->category[0];
+    
+                foreach($topic->category as $cat){
+                    $cat->topic()->attach($topic, ['lesson_id' => $lesson->id]);
 
-                $cat->topic()->attach($topic, ['lesson_id' => $lesson->id]);
+                    $allEvents = $cat->events;
+                    foreach($allEvents as $event)
+                    {
+                        $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id']]);
+                    }
+                }
+                
+
+                
             }
         }
 

@@ -123,6 +123,12 @@ class TransactionExport implements FromArray,WithHeadings
             
             
                 if( isset($billingDetails['billing']) && $billingDetails['billing'] == 2 ){
+
+                    if(!isset($billingDetails['companyname'])){
+                        $billingDetails = json_decode($transaction->user->first()->invoice_details,true);
+                    }
+
+
                     $invoice = 'YES';
                     $companyName = isset($billingDetails['companyname']) ? $billingDetails['companyname'] : '';
                     $companyProfession = isset($billingDetails['companyprofession']) ? $billingDetails['companyprofession'] : '';
@@ -135,7 +141,11 @@ class TransactionExport implements FromArray,WithHeadings
                     $email= isset($billingDetails['companyemail']) ? $billingDetails['companyemail'] : $email;
                 
                 }else if( isset($billingDetails['billing']) && $billingDetails['billing'] == 1 ){
-                    //dd($billingDetails);
+                    
+                    if(!isset($billingDetails['billcity'])){
+                        $billingDetails = json_decode($transaction->user->first()->receipt_details,true);
+                    }
+                   
                     $city = isset($billingDetails['billcity']) ? $billingDetails['billcity'] : '';
                     $companyafm = isset($billingDetails['billafm']) ? $billingDetails['billafm'] : '';
                     $companypostcode = isset($billingDetails['billpostcode']) ? $billingDetails['billpostcode'] : '';
