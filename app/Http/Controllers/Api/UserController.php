@@ -19,6 +19,7 @@ use \Apifon\Mookee;
 use \Apifon\Model\SmsRequest;
 use \Apifon\Model\MessageContent;
 use \Apifon\Resource\SMSResource;
+use App\Http\Controllers\MediaController;
 
 class UserController extends Controller
 {
@@ -35,7 +36,20 @@ class UserController extends Controller
     public function index()
     {
         $user1 = Auth::user();
+
         $user = User::with('image')->find($user1->id);
+
+
+
+        if(isset($user['image'])){
+
+            $user['profileImage'] = asset(get_profile_image($user['image']));
+            //dd($user['profileImage']);
+        }else{
+            $user['profileImage'] = null;
+        }
+
+        unset($user['image']);
 
         return response()->json([
             'success' => true,
@@ -532,7 +546,8 @@ class UserController extends Controller
                                 $data[$key]['calendar'][$calendar_count]['date_time'] = date_format(date_create($date_lesson), 'd/m/Y');
                                 $data[$key]['calendar'][$calendar_count]['title'] = $lesson1['title'];
                                 $data[$key]['calendar'][$calendar_count]['room'] = $lesson1['pivot']['room'];
-                                $data[$key]['calendar'][$calendar_count]['instructor_image'] = \Request::url().$instructors[$lesson1['instructor_id']][0]->medias['path'].$instructors[$lesson1['instructor_id']][0]->medias['original_name'];
+                                $data[$key]['calendar'][$calendar_count]['instructor_image'] = asset(get_image($instructors[$lesson1['instructor_id']][0]->medias, 'instructors-small'));
+                                // $data[$key]['calendar'][$calendar_count]['instructor_image'] = \Request::url().$instructors[$lesson1['instructor_id']][0]->medias['path'].$instructors[$lesson1['instructor_id']][0]->medias['original_name'];
                                 $data[$key]['calendar'][$calendar_count]['instructor_name'] = $instructors[$lesson1['instructor_id']][0]['title'].' '.$instructors[$lesson1['instructor_id']][0]['subtitle'];
 
                                 $calendar_count++;
@@ -542,7 +557,7 @@ class UserController extends Controller
 
 
                         $instructor['name'] = $instructors[$lesson1['instructor_id']][0]['title'].' '.$instructors[$lesson1['instructor_id']][0]['subtitle'];
-                        $instructor['media'] = \Request::url().$instructors[$lesson1['instructor_id']][0]->medias['path'].$instructors[$lesson1['instructor_id']][0]->medias['original_name'];
+                        $instructor['media'] = asset(get_image($instructors[$lesson1['instructor_id']][0]->medias, 'instructors-small'));
                         $arr_lesson['instructor'] = $instructor;
                         //dd($arr['topic_content']);
 
@@ -637,29 +652,15 @@ class UserController extends Controller
         $user1 = Auth::user();
 
         if($request->file('photo')){
-            //parse old image
-            $old_image = $user1->image;
-            //parse input photo
-            $content = $request->file('photo');
-            $name = explode(".",$content->getClientOriginalName());
-            $name = $name[0];
-
-            //$user= Auth::user();
-            //create new instance
-            $media = new Media;
-            $media->original_name = $content->getClientOriginalName();
-            $media->name = $name;
-            $media->ext = $content->guessClientExtension();
-            $media->file_info = $content->getClientMimeType();
-            $media->mediable_id = $user1['id'];
+            (new MediaController)->uploadProfileImage($request, $user1->image);
         }
 
-        $isUpdateImage = $user1->update(
-            $request->merge(['picture' => $request->photo ? $path_name = $request->photo->store('profile_user', 'public') : null])
-                    ->except([$request->hasFile('photo') ? '' : 'picture'])
+        // $isUpdateImage = $user1->update(
+        //     $request->merge(['picture' => $request->photo ? $path_name = $request->photo->store('profile_user', 'public') : null])
+        //             ->except([$request->hasFile('photo') ? '' : 'picture'])
 
 
-        );
+        // );
 
 
 
@@ -668,27 +669,39 @@ class UserController extends Controller
             'password' => Hash::make($request->get('password'))
         ])->except([$hasPassword ? '' : 'password', 'picture', 'photo', 'confirm_password']));
 
-        if($request->file('photo')){
-            $name = explode('profile_user/',$path_name);
-            $size = getimagesize('uploads/'.$path_name);
-            $media->original_name = $name[1];
-            $media->width = $size[0];
-            $media->height = $size[1];
-            $user1->image()->save($media);
+        // if($request->file('photo')){
+        //     $name = explode('profile_user/',$path_name);
+        //     $size = getimagesize('uploads/'.$path_name);
+        //     $media->original_name = $name[1];
+        //     $media->width = $size[0];
+        //     $media->height = $size[1];
+        //     $user1->image()->save($media);
 
-            //delete old image
-            //fetch old image
+        //     //delete old image
+        //     //fetch old image
 
-            if($old_image != null){
-                //delete from folder
-                unlink('uploads/profile_user/'.$old_image['original_name']);
-                //delete from db
-                $old_image->delete();
-            }
-        }
+        //     if($old_image != null){
+        //         //delete from folder
+        //         unlink('uploads/profile_user/'.$old_image['original_name']);
+        //         //delete from db
+        //         $old_image->delete();
+        //     }
+        // }
 
 
         $updated_user = User::with('image')->find($user1->id);
+
+
+        if(isset($updated_user['image'])){
+
+            $updated_user['profileImage'] = asset(get_image($updated_user['image']));
+        }else{
+
+            $updated_user['profileImage'] = null;
+        }
+
+        unset($updated_user['image']);
+
 
 
         if($isUpdateUser == 1){

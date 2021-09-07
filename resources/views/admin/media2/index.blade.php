@@ -436,8 +436,6 @@
             })
 
             $( document ).on('click', '#version-btn', function() {
-                console.log('from enter:')
-                console.log($('#properties-name').text())
 
                 $.ajax({
                     type: 'GET',
@@ -490,9 +488,6 @@
             $( document ).on('click', '#crop-img-modal', function(e) {
                 var rest = path.substring(0, path.lastIndexOf("/") + 1);
                 var last = path.substring(path.lastIndexOf("/") + 1, path.length);
-
-                console.log(rest)
-                console.log(last)
 
                 data = {folder: rest, name: last, x:cropper.getData({rounded: true}).x, y:cropper.getData({rounded: true}).y, width:cropper.getData({rounded: true}).width, height:cropper.getData({rounded: true}).height}
                 //EDW
@@ -611,7 +606,6 @@
 
                                 name = $(elem).attr('data-name')
                                 str = $(elem).attr('data-path')
-                                console.log(name)
 
                                 //console.log('test: '+$('#fm-input-rename').val())
 
@@ -757,9 +751,7 @@
                                 $('#image-alt-id').val('0')
                                 $('#image-alt').val('')
                                 $('#propertiesModal').modal('show');
-                                console.log(name)
                                 details = name.split(' ')
-                                console.log(details)
                                 $('#properties-name').text(details[1])
                                 $('#properties-path').text(path)
                                 $('#properties-size').text(details[3]+' '+details[4])
@@ -788,8 +780,6 @@
                                     }
                                 });
 
-                                console.log('before ajax')
-
                                 $.ajax({
                                     type: 'GET',
                                     headers: {
@@ -800,15 +790,12 @@
                                     url: "/admin/media2_image",
                                     data: {name: details[1]},
                                     success: function(data) {
-                                        console.log(data.data)
                                         if(data.data === null){
-                                            console.log('from add')
                                             $('#version-btn').addClass('d-none')
                                         }
 
                                     }
                                 });
-                                console.log('================')
 
 
                             }
@@ -1295,7 +1282,6 @@
                 url: "/file-manager/paste",
                 data: JSON.stringify(data),
                 success: function(data) {
-                    console.log(data)
                     if(data.result.status == 'success'){
                         $('#pasteFromSearch').removeAttr('id')
                         $('#pasteFromSearch').attr('disabled', 'disabled')
@@ -1452,7 +1438,7 @@
                         if(!cntrlIsPressed){
                             $(elem).parent().removeClass('table-info')
                         }else{
-                            console.log('add class')
+                            //console.log('add class')
                             //$(elem).parent().addClass('table-info')
                         }
 
