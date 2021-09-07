@@ -286,8 +286,8 @@ public function participants($start_date = null, $end_date = null)
 
         $this->authorize('view',User::class,Transaction::class);
        
-        Excel::store(new TransactionExport($request), 'TransactionsExport.xlsx', 'export');
-        Excel::download(new TransactionExport($request), 'TransactionsExport.xlsx');
+        //Excel::store(new TransactionExport($request), 'TransactionsExport.xlsx', 'export');
+        //Excel::download(new TransactionExport($request), 'TransactionsExport.xlsx');
     }
 
 }

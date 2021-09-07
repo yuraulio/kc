@@ -1,0 +1,150 @@
+
+
+<!DOCTYPE html>
+
+<html lang="<?php echo e(str_replace('_', '-', app()->getLocale())); ?>">
+
+<head>
+
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+    <!-- CSRF Token -->
+
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+
+
+
+    <title><?php echo e($event_title); ?></title>
+
+
+
+    <!-- Scripts -->
+
+    <script src="<?php echo e(asset('js/app.js')); ?>" defer></script>
+    <script src="<?php echo e(asset('js/ib_script1.js')); ?>" defer></script>
+    <!-- Custom Style -->
+
+    <link rel="stylesheet" href="<?php echo e(asset('css/ib_style.css')); ?>">
+
+    <!-- Font Awesome -->
+
+    <link rel="stylesheet" href="<?php echo e(asset('bower_components/font-awesome/css/font-awesome.min.css')); ?>">
+
+
+
+    <!-- Fonts -->
+
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
+
+
+
+    <!-- Styles -->
+
+    <link href="<?php echo e(asset('css/app.css')); ?>" rel="stylesheet">
+
+    <!-- jQuery 3 -->
+
+    <script src="<?php echo e(asset('bower_components/jquery/dist/jquery.min.js')); ?>"></script>
+
+ <?php echo $__env->yieldContent('head_scripts'); ?>
+
+
+</head>
+
+<body style="background: transparent;" class="hold-transition exam-page disable-select" oncontextmenu="return false;" onkeydown="return (event.keyCode != 116)">
+
+    <div id="app">
+
+        <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
+
+         
+                <h1  id="custom" class="navbar-brand">                    
+
+                    <?php echo e($event_title); ?>
+
+
+                </h1>
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="<?php echo e(__('Toggle navigation')); ?>">
+
+                    <span class="navbar-toggler-icon"></span>
+
+                </button>
+
+
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+                    <!-- Left Side Of Navbar -->
+
+                    <ul class="navbar-nav mr-auto">
+
+
+
+                    </ul>
+
+
+
+                    <!-- Right Side Of Navbar -->
+
+                    <ul class="navbar-nav ml-auto">                    
+
+                        <li class="nav-item">
+
+                            <div><strong><?php echo e($first_name); ?> <?php echo e($last_name); ?></strong></button>
+
+                        </li>
+
+                        <li class="nav-item">
+
+                   
+
+                            <!-- <button type="button" class="btn btn-danger" onclick="window.close('fs')"> <i class="fa fa-window-close" aria-hidden="true"></i>Ολοκλήρωση</button> -->           
+
+                        </li>               
+
+                    </ul>
+
+                </div>
+
+            
+
+        </nav>
+
+
+
+        <main class="py-4">
+
+            <?php echo $__env->yieldContent('content'); ?>
+
+        </main>
+
+    </div>
+
+    <script>
+
+		//window.onbeforeunload = function() { return "Your work will be lost."; };
+
+		//$(window).blur(function() {	alert('You are not allowed to leave page'); });		
+
+	</script>
+
+
+
+    <script language="JavaScript">
+
+
+
+    </script>
+
+    <?php echo $__env->yieldContent('scripts'); ?>
+
+</body>
+
+</html><?php /**PATH C:\laragon\www\kcversion8\resources\views/exams/exams-layout.blade.php ENDPATH**/ ?>
