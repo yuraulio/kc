@@ -848,7 +848,7 @@ $(document).ready(function() {
                 data:{event:event,fromDate:min,toDate:max} ,
                 success: function(data) {
 
-                    window.location.href = '/uploads/tmp/exports/TransactionsExport.xlsx'
+                    window.location.href = '/tmp/exports/TransactionsExport.xlsx'
 
                 }
             });

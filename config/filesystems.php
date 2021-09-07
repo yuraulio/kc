@@ -62,7 +62,7 @@ return [
         ],
         'export' => [
             'driver' => 'local',
-            'root' => public_path('/uploads/tmp/exports'),
+            'root' => public_path('/tmp/exports'),
             'url' => env('APP_URL'),
             'visibility' => 'public',
         ],

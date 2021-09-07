@@ -281,13 +281,11 @@ public function participants($start_date = null, $end_date = null)
 
     public function exportExcel(Request $request){
         
-        $fromDate = date('Y-m-d',strtotime($request->fromDate));
-        $toDate = $request->toDate ? date('Y-m-d',strtotime($request->toDate)) : date('Y-m-d');
+        //$fromDate = date('Y-m-d',strtotime($request->fromDate));
+        //$toDate = $request->toDate ? date('Y-m-d',strtotime($request->toDate)) : date('Y-m-d');
 
-        $this->authorize('view',User::class,Transaction::class);
-       
-        //Excel::store(new TransactionExport($request), 'TransactionsExport.xlsx', 'export');
-        //Excel::download(new TransactionExport($request), 'TransactionsExport.xlsx');
+        Excel::store(new TransactionExport($request), 'TransactionsExport.xlsx', 'export');
+        return Excel::download(new TransactionExport($request), 'TransactionsExport.xlsx');
     }
 
 }

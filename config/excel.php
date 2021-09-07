@@ -9,7 +9,7 @@ return array(
         | Enable/Disable cell caching
         |--------------------------------------------------------------------------
         */
-        'enable'   => true,
+        'enable'   => false,
 
         /*
         |--------------------------------------------------------------------------
@@ -32,7 +32,7 @@ return array(
         'settings' => array(
 
             'memoryCacheSize' => '32MB',
-            'cacheTime'       => 600
+            'cacheTime'       => 0
 
         ),
 

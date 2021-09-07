@@ -18,9 +18,12 @@ class TransactionExport implements FromArray,WithHeadings
     public $event;
     public function __construct($request){
 
-        $this->createDir(base_path('public/uploads/tmp/exports/'));
+        $this->createDir(base_path('public/tmp/exports/'));
         $this->fromDate = date('Y-m-d',strtotime($request->fromDate));
+
         $this->toDate = $request->toDate ? date('Y-m-d',strtotime($request->toDate)) : date('Y-m-d');
+        $this->toDate = date('Y-m-d', strtotime($this->toDate . ' +1 day'));
+        
         $this->event = $request->event;
 
     }
@@ -63,15 +66,15 @@ class TransactionExport implements FromArray,WithHeadings
                 $bankDetails = '';
             
                 $event = $transaction->event->first()->title;
-                $name = $transaction->user->first()->firstname;
-                $last = $transaction->user->first()->lastname;
-                $email = $transaction->user->first()->email;
-                $mobile = $transaction->user->first()->mobile;
-                $jobTitle = isset($statusHistory[0]['pay_seats_data']['jobtitles'][0]) ? $statusHistory[0]['pay_seats_data']['jobtitles'][0] : '' ;
-                $company = isset($statusHistory[0]['pay_seats_data']['companies'][0]) ? $statusHistory[0]['pay_seats_data']['companies'][0] : '' ;
-                $amount = round($transaction->amount,2);
-                $kcId =  $transaction->user->first()->kc_id;
-                $partnerId = $transaction->user->first()->partner_id;
+                //$name = $transaction->user->first()->firstname;
+                //$last = $transaction->user->first()->lastname;
+                //$email = $transaction->user->first()->email;
+                //$mobile = $transaction->user->first()->mobile;
+                //$jobTitle = isset($statusHistory[0]['pay_seats_data']['jobtitles'][0]) ? $statusHistory[0]['pay_seats_data']['jobtitles'][0] : '' ;
+                //$company = isset($statusHistory[0]['pay_seats_data']['companies'][0]) ? $statusHistory[0]['pay_seats_data']['companies'][0] : '' ;
+                $amount = round(($transaction->amount/count($transaction->user)),2);
+                //$kcId =  $transaction->user->first()->kc_id;
+                //$partnerId = $transaction->user->first()->partner_id;
                 //$ticketType = $transaction->type;
                 $seats = isset($statusHistory[0]['pay_seats_data']['name']) ? count(isset($statusHistory[0]['pay_seats_data']['companies'])) : 1;
                 $datePlaced = date('d-m-Y',strtotime($transaction->placement_date));
@@ -140,11 +143,27 @@ class TransactionExport implements FromArray,WithHeadings
                     $companyaddressnum= isset($billingDetails['billaddressnum']) ? $billingDetails['billaddressnum'] : '';
                 }
             
-                $rowdata = array($event, $name, $last, $email, $mobile, $jobTitle,$companyName,$companyProfession,$companyafm,$companydoy,$companyaddress.' '.$companyaddressnum,
-                                    $companypostcode,$companycity,$city, $company, $kcId, $partnerId, $amount, $invoice, $ticketType, $seats, $datePlaced, 
-            $status, $bankDetails);
+                foreach( $transaction->user as $keyU => $user){
+ 
+                    $name = $user->firstname;
+                    $last = $user->lastname;
+                    $email = $user->email;
+                    $mobile = $user->mobile;
+                    $jobTitle = isset($statusHistory[0]['pay_seats_data']['jobtitles'][$keyU]) ? $statusHistory[0]['pay_seats_data']['jobtitles'][$keyU] : '' ;
+                    $company = isset($statusHistory[0]['pay_seats_data']['companies'][$keyU]) ? $statusHistory[0]['pay_seats_data']['companies'][$keyU] : '' ;
+                    $kcId =  $user->kc_id;
+                    $partnerId = $user->partner_id;
+
+                    $rowdata = array($event, $name, $last, $email, $mobile, $jobTitle,$companyName,$companyProfession,$companyafm,$companydoy,$companyaddress.' '.$companyaddressnum,
+                    $companypostcode,$companycity,$city, $company, $kcId, $partnerId, $amount, $invoice, $ticketType, $seats, $datePlaced, 
+                        $status, $bankDetails);
+
+
+                    array_push($data, $rowdata);
+                }
+               
             
-        		array_push($data, $rowdata);
+        		
             
             }
         }

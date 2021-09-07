@@ -42,15 +42,16 @@ class AuthAuthorsAndAbove
             return $next($request);
         }
         elseif(in_array('KnowCrunch Partner',$roles)) {
-            $request->route()->action['uses'] = 'App\Http\Controllers\TransactionController@participants_inside_revenue';
-            $request->route()->action['controller'] = 'App\Http\Controllers\TransactionController@participants_inside_revenue';
-            $request->route()->action['as'] = 'transaction.participants';
-            $request->route()->action['prefix'] = 'transaction.participants';
-            $request->route()->controller = (new \App\Http\Controllers\TransactionController);
-            $request->route()->controller->uri = 'admin/transaction/participants';
-            ///admin/transaction/participants
-            //dd( $request->route());;
-            //dd($request);
+
+            if($request->route()->uri != 'admin/transaction/export-excel'){
+                $request->route()->action['uses'] = 'App\Http\Controllers\TransactionController@participants_inside_revenue';
+                $request->route()->action['controller'] = 'App\Http\Controllers\TransactionController@participants_inside_revenue';
+                $request->route()->action['as'] = 'transaction.participants';
+                $request->route()->action['prefix'] = 'transaction.participants';
+                $request->route()->controller = (new \App\Http\Controllers\TransactionController);
+                $request->route()->controller->uri = 'admin/transaction/participants';
+            }
+           
             return $next($request);
            
         }
