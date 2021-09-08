@@ -95,7 +95,9 @@
 
                                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-                                                    <option <?= ($selected) ? 'selected' : ''; ?> data-categoryName="<?php echo e($topic->category[0]->name); ?>" data-category="<?php echo e($topic->category[0]->id); ?>" value="<?php echo e($topic->id); ?>" > <?php echo e($topic->title); ?></option>
+                                                    <?php $__currentLoopData = $topic->category; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $tcategory): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <option <?= ($selected) ? 'selected' : ''; ?> <?php if($key>0): ?> style="display:none" <?php endif; ?> data-categoryName="<?php echo e($tcategory->name); ?>" data-category="<?php echo e($tcategory->id); ?>" value="<?php echo e($topic->id); ?>" > <?php echo e($topic->title); ?></option>
+                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             </select>
                                         </div>
@@ -216,7 +218,7 @@
 
                 if(uniqueTopics[categoryName] === undefined){
                     uniqueTopics[categoryName] = categoryName
-                    $('#category').append(`<option value="${value.category[0].id}">${categoryName}</option>`)
+                    $('#category').append(`<option value="${value1.id}">${categoryName}</option>`)
                 }
             });
             
@@ -228,7 +230,9 @@
         $('#category').on('select2:select', function (e) {
             var data = e.params.data;
             selectedCategory = data.text
+            
             $.each($('#input-topic_id option'), function(key, value) {
+
                 if($(value).data('categoryname') !== undefined){
                     if(removeSpecial($(value).data('categoryname')) != removeSpecial(selectedCategory)){
                         $(value).hide()

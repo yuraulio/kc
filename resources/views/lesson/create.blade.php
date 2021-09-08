@@ -88,8 +88,13 @@
                                             <label class="form-control-label" for="input-topic_id">{{ __('Topic') }}</label>
                                             <select multiple name="topic_id[]" id="input-topic_id" class="form-control topics" placeholder="{{ __('Topic') }}">
                                                 @foreach ($topics as $topic)
-                                                    <option data-category="{{$topic['category'][0]['name']}}" value="{{ $topic->id }}" >{{ $topic->title }}</option>
+                                                   
+                                                    @foreach($topic->category as $key => $tcategory)
+                                                        <option @if($key>0) style="display:none" @endif data-category="{{$tcategory->name}}"  value="{{ $topic->id }}" > {{ $topic->title }}</option>
+                                                    @endforeach
                                                 @endforeach
+
+                                             
                                             </select>
                                         </div>
 
@@ -212,11 +217,15 @@
         });
 
         $.each(topics, function(key, value) {
-            let categoryName = value.category[0].name
-            if(uniqueTopics[categoryName] === undefined){
-                uniqueTopics[categoryName] = categoryName
-                $('#category').append(`<option value="${value.category[0].id}">${categoryName}</option>`)
-            }
+            $.each(value.category, function(key1, value1) {
+
+                let categoryName = value1.name
+
+                if(uniqueTopics[categoryName] === undefined){
+                    uniqueTopics[categoryName] = categoryName
+                    $('#category').append(`<option value="${value1.id}">${categoryName}</option>`)
+                }
+            });
         })
 
         //on select filter category Show or Hide topics

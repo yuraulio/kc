@@ -90,7 +90,9 @@
 
                                                     @endforeach
 
-                                                    <option <?= ($selected) ? 'selected' : ''; ?> data-categoryName="{{$topic->category[0]->name}}" data-category="{{ $topic->category[0]->id }}" value="{{ $topic->id }}" > {{ $topic->title }}</option>
+                                                    @foreach($topic->category as $key => $tcategory)
+                                                    <option <?= ($selected) ? 'selected' : ''; ?> @if($key>0) style="display:none" @endif data-categoryName="{{$tcategory->name}}" data-category="{{ $tcategory->id }}" value="{{ $topic->id }}" > {{ $topic->title }}</option>
+                                                    @endforeach
                                                 @endforeach
                                             </select>
                                         </div>
@@ -244,7 +246,7 @@
 
                 if(uniqueTopics[categoryName] === undefined){
                     uniqueTopics[categoryName] = categoryName
-                    $('#category').append(`<option value="${value.category[0].id}">${categoryName}</option>`)
+                    $('#category').append(`<option value="${value1.id}">${categoryName}</option>`)
                 }
             });
             
@@ -256,7 +258,9 @@
         $('#category').on('select2:select', function (e) {
             var data = e.params.data;
             selectedCategory = data.text
+            
             $.each($('#input-topic_id option'), function(key, value) {
+
                 if($(value).data('categoryname') !== undefined){
                     if(removeSpecial($(value).data('categoryname')) != removeSpecial(selectedCategory)){
                         $(value).hide()

@@ -88,8 +88,13 @@
                                             <label class="form-control-label" for="input-topic_id"><?php echo e(__('Topic')); ?></label>
                                             <select multiple name="topic_id[]" id="input-topic_id" class="form-control topics" placeholder="<?php echo e(__('Topic')); ?>">
                                                 <?php $__currentLoopData = $topics; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $topic): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                    <option data-category="<?php echo e($topic['category'][0]['name']); ?>" value="<?php echo e($topic->id); ?>" ><?php echo e($topic->title); ?></option>
+                                                   
+                                                    <?php $__currentLoopData = $topic->category; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $tcategory): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                        <option <?php if($key>0): ?> style="display:none" <?php endif; ?> data-category="<?php echo e($tcategory->name); ?>"  value="<?php echo e($topic->id); ?>" > <?php echo e($topic->title); ?></option>
+                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                                             
                                             </select>
                                         </div>
 
@@ -186,11 +191,15 @@
         });
 
         $.each(topics, function(key, value) {
-            let categoryName = value.category[0].name
-            if(uniqueTopics[categoryName] === undefined){
-                uniqueTopics[categoryName] = categoryName
-                $('#category').append(`<option value="${value.category[0].id}">${categoryName}</option>`)
-            }
+            $.each(value.category, function(key1, value1) {
+
+                let categoryName = value1.name
+
+                if(uniqueTopics[categoryName] === undefined){
+                    uniqueTopics[categoryName] = categoryName
+                    $('#category').append(`<option value="${value1.id}">${categoryName}</option>`)
+                }
+            });
         })
 
         //on select filter category Show or Hide topics
