@@ -1250,7 +1250,7 @@
 
 
         $(document).on("click", "#pasteFromSearch", function() {
-            let copyFiles = $('#clipboard-files .copy-file')
+            let copyFiles = $('#clipboard-files .justify-content-between')
             path = ''
             $.each( $('.fm-breadcrumb li'), function(key, value) {
                 if(key != 0){
@@ -1290,8 +1290,10 @@
 
 
                         // $.each(copyFiles, function(key, value) {
-                        //     let file = $(value).data('path')
-                        //     console.log(file)
+
+                        //     let file = $(value).find('.copy-file').data('path')[0]
+                        //     let nameFile = $(value).find('.far.fa-file').text()[0]
+                        //     console.log($(value).find('.far.fa-file').text())
                         //     let row = `
                         //         <tr>
                         //             <td class="fm-content-item unselectable">
@@ -1305,6 +1307,7 @@
                         //     `
                         //     $('.fm-content-body tbody').append(row)
                         // })
+                        $('#clipboard-files').empty()
                     }else{
                         //console.log('from error')
                         //console.log(data.result.message)
