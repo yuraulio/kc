@@ -23,6 +23,7 @@ class Kernel extends ConsoleKernel
        Commands\SyllabusManager::class,
        Commands\InsertExams::class,
        Commands\CompressImages::class,
+       Commands\ClearTopics::class,
        //Commands\GetPaymentDetailsFromTransactions::class,
        //Commands\AttachBenefitsSummaryMedia::class,
        //Commands\AttachTransactionSpecial::class,

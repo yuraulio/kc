@@ -236,11 +236,20 @@
         });
 
         $.each(topics, function(key, value) {
-            let categoryName = value.category[0].name
-            if(uniqueTopics[categoryName] === undefined){
-                uniqueTopics[categoryName] = categoryName
-                $('#category').append(`<option value="${value.category[0].id}">${categoryName}</option>`)
-            }
+            
+
+            $.each(value.category, function(key1, value1) {
+
+                let categoryName = value1.name
+
+                if(uniqueTopics[categoryName] === undefined){
+                    uniqueTopics[categoryName] = categoryName
+                    $('#category').append(`<option value="${value.category[0].id}">${categoryName}</option>`)
+                }
+            });
+            
+
+            
         })
 
         //on select filter category Show or Hide topics

@@ -57,12 +57,27 @@
         <?php echo $__env->make('alerts.success', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
             <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
                 <div class="card-body">
-                    <form method="post" action="<?php echo e(route('create-kc-deree')); ?>" autocomplete="off"
-                            enctype="multipart/form-data">
-                            <?php echo csrf_field(); ?>
-                            <input hidden name="user" value="<?php echo e($user->id); ?>">
-                            <button class="btn btn-primary" type="submit">Create Deree KC ID</button>
-                    </form>
+                    <div class="is-flex">
+                        <?php if(!$user->kc_id): ?>
+                        
+                        <form method="post" action="<?php echo e(route('create-kc')); ?>" autocomplete="off"
+                                enctype="multipart/form-data">
+                                <?php echo csrf_field(); ?>
+                                <input hidden name="user" value="<?php echo e($user->id); ?>">
+                                <button class="btn btn-primary" type="submit">Create KC ID</button>
+                        </form>
+                        <?php endif; ?>
+
+                        <?php if(!$user->partner_id): ?>
+                        <form class="pad-left" method="post" action="<?php echo e(route('create-deree')); ?>" autocomplete="off"
+                                enctype="multipart/form-data">
+                                <?php echo csrf_field(); ?>
+                                <input hidden name="user" value="<?php echo e($user->id); ?>">
+                                <button class="btn btn-primary" type="submit">Create Deree </button>
+                        </form>
+                        
+                        <?php endif; ?>
+                    </div>
                     <form method="post" action="<?php echo e(route('profile.update')); ?>" autocomplete="off"
                         enctype="multipart/form-data">
                         <?php echo csrf_field(); ?>

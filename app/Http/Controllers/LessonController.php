@@ -157,6 +157,7 @@ class LessonController extends Controller
     {
         $lesson = $lesson->with('topic', 'category','type')->find($lesson['id']);
         $topics = Topic::with('category')->get();
+
         // //dd($topics);
         // $new_topics = [];
 

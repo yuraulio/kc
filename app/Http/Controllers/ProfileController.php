@@ -115,16 +115,33 @@ class ProfileController extends Controller
      * @param  \App\Http\Requests\ProfileRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(ProfileRequest $request)
+
+    //public function update(ProfileRequest $request)
+    public function update(Request $request)
     {
         //dd($request->all());
         $user = User::with('image')->find($request->user_id);
 
+        if($user->email !== $request->email){
+           
+            $this->validate($request, [
+                'firstname' => ['required', 'min:3'],
+                'lastname' => ['required', 'min:3'],
+                'email' => [
+                    'required', 'email','unique:users,email'
+                ]
+                ]);
+        }else{
+            $this->validate($request,[
+                'firstname' => ['required', 'min:3'],
+                'lastname' => ['required', 'min:3'],
+                'email' => [  
+                  'required', 'email',
+                ]
+                ]);
+        }
 
-        //dd($request->file('photo'));
-
-
-
+       
         if (Gate::denies('update', auth()->user())) {
 
             return back()->withErrors(['not_allow_profile' => __('You are not allowed to change data for a default user.')]);

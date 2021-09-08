@@ -327,8 +327,6 @@ class UserController extends Controller
 
         $event = Event::with('ticket')->find($request->event_id);
 
-
-
         return view('users.courses.edit_ticket', ['events' => $event ,'user' => $user]);
     }
 
@@ -545,7 +543,7 @@ class UserController extends Controller
     }
 
 
-    public function createKCDeree(Request $request){
+    public function createKC(Request $request){
 
         $KC = "KC-";
 		$time = strtotime(date('Y-m-d'));
@@ -554,18 +552,7 @@ class UserController extends Controller
 
         
         $user = User::find($request->user);
-        $option = Option::where('abbr','deree_codes')->first();
-        $dereelist = json_decode($option->settings, true);
-
-        if(count($dereelist) > 0 && !$user->partner_id){
-            $user->partner_id = $dereelist[0];
-            unset($dereelist[0]);
-
-            $option->settings = json_encode(array_values($dereelist));
-	        $option->save();
-
-        }
-
+       
         if(!$user->kc_id){
 
             $optionKC = Option::where('abbr','website_details')->first();
@@ -587,6 +574,32 @@ class UserController extends Controller
             $optionKC->save();
 
         }
+        $user->save();
+
+       
+
+        return back()->withStatus(__('User successfully updated.'));
+    }
+
+    public function createDeree(Request $request){
+
+       
+
+        
+        $user = User::find($request->user);
+        $option = Option::where('abbr','deree_codes')->first();
+        $dereelist = json_decode($option->settings, true);
+
+        if(count($dereelist) > 0 && !$user->partner_id){
+            $user->partner_id = $dereelist[0];
+            unset($dereelist[0]);
+
+            $option->settings = json_encode(array_values($dereelist));
+	        $option->save();
+
+        }
+
+       
         $user->save();
 
        

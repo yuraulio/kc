@@ -103,7 +103,7 @@ class Event extends Model
     public function allLessons()
     {
 
-        return $this->belongsToMany(Lesson::class,'event_topic_lesson_instructor')->select('lessons.*');
+        return $this->belongsToMany(Lesson::class,'event_topic_lesson_instructor')->select('lessons.*')->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room','priority');
     }
 
     public function lessons()

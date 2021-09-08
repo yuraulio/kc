@@ -93,12 +93,27 @@
         @include('alerts.success')
             <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
                 <div class="card-body">
-                    <form method="post" action="{{ route('create-kc-deree') }}" autocomplete="off"
-                            enctype="multipart/form-data">
-                            @csrf
-                            <input hidden name="user" value="{{$user->id}}">
-                            <button class="btn btn-primary" type="submit">Create Deree KC ID</button>
-                    </form>
+                    <div class="is-flex">
+                        @if(!$user->kc_id)
+                        
+                        <form method="post" action="{{ route('create-kc') }}" autocomplete="off"
+                                enctype="multipart/form-data">
+                                @csrf
+                                <input hidden name="user" value="{{$user->id}}">
+                                <button class="btn btn-primary" type="submit">Create KC ID</button>
+                        </form>
+                        @endif
+
+                        @if(!$user->partner_id)
+                        <form class="pad-left" method="post" action="{{ route('create-deree') }}" autocomplete="off"
+                                enctype="multipart/form-data">
+                                @csrf
+                                <input hidden name="user" value="{{$user->id}}">
+                                <button class="btn btn-primary" type="submit">Create Deree </button>
+                        </form>
+                        
+                        @endif
+                    </div>
                     <form method="post" action="{{ route('profile.update') }}" autocomplete="off"
                         enctype="multipart/form-data">
                         @csrf

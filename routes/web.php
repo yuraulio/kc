@@ -299,7 +299,8 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::get('invoice/{invoice}', 'Theme\InvoiceController@getInvoice');
 
     //Create Deree KCid
-    Route::post('/create-deree-kc-id', 'UserController@createKCDeree')->name('create-kc-deree');
+    Route::post('/create-kc-id', 'UserController@createKC')->name('create-kc');
+    Route::post('/create-deree-id', 'UserController@createDeree')->name('create-deree');
 
 });
 
