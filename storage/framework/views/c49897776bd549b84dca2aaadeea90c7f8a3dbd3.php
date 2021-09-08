@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('content'); ?>
     <?php $__env->startComponent('layouts.headers.auth'); ?>
         <?php $__env->startComponent('layouts.headers.breadcrumbs'); ?>
@@ -331,12 +329,11 @@
 
                     <div class="row">
                         <div class="col-2">Versions:</div>
-                        <div id="properties-size" class="col-9">
+                        <div id="" class="col-9">
                             <span>
                                 <button id="version-btn" class="btn btn-sm btn-light" type="button"><i class=""></i>Enter</button>
                             </span>
                         </div>
-                        <div class="col-1 text-right"><i title="Copy" class="far fa-copy"></i></div>
                     </div>
 
                     <div class="row">
@@ -361,7 +358,10 @@
     <link rel="stylesheet" href="<?php echo e(asset('argon')); ?>/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="<?php echo e(asset('argon')); ?>/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">
     <link rel="stylesheet" href="<?php echo e(asset('argon')); ?>/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css">
-<?php $__env->stopPush(); ?>
+    <link rel="stylesheet" href="<?php echo e(asset('argon')); ?>/vendor/animate.css/animate.min.css">
+
+
+    <?php $__env->stopPush(); ?>
 
 <?php $__env->startPush('js'); ?>
     <script src="<?php echo e(asset('argon')); ?>/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
@@ -372,6 +372,9 @@
     <script src="<?php echo e(asset('argon')); ?>/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
     <script src="<?php echo e(asset('argon')); ?>/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
     <script src="<?php echo e(asset('argon')); ?>/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
+    <script src="<?php echo e(asset('argon')); ?>/vendor/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+
     <script>
         let value = 200
         let selected = 0
@@ -438,7 +441,7 @@
             $( document ).on('click', '#version-btn', function() {
 
                 $.ajax({
-                    type: 'POST',
+                    type: 'GET',
                     headers: {
                         'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
                     },
@@ -543,12 +546,13 @@
     </script>
     <script>
 
+        let cntrlIsPressed = false;
         let files = []
         let type = ''
 
         $(function(){
-            $('.fm-content-body tbody').contextMenu({
-                selector: 'tr.search-result',
+            $.contextMenu({
+                selector: 'tr.search-result.table-info',
                 build: function($trigger, e) {
                     // this callback is executed every time the menu is to be shown
                     // its results are destroyed every time the menu is hidden
@@ -557,7 +561,7 @@
                         callback: function(key, options) {
                             var base_url = window.location.protocol + "//" + window.location.host
                             name = $(this).find('td').text()
-                            path = $(this).children().data('path')
+                            path = $(this).children().attr('data-path')
 
                             if(key == 'download'){
                                 const a = document.createElement('a');
@@ -603,9 +607,8 @@
                                 $('#folder-ren').val('')
                                 let elem = $(this).find('td')[0]
 
-                                name = $(elem).data('name')
-                                str = $(elem).data('path')
-                                //console.log($(elem).data('name'))
+                                name = $(elem).attr('data-name')
+                                str = $(elem).attr('data-path')
 
                                 //console.log('test: '+$('#fm-input-rename').val())
 
@@ -631,8 +634,8 @@
                                 let element_for_copy = $('.table-info')
                                 $.each(element_for_copy, function(key, value) {
                                     local_elem = $(value).find('td')[0]
-                                    path = $(local_elem).data('path')
-                                    name = $(local_elem).data('name')
+                                    path = $(local_elem).attr('data-path')
+                                    name = $(local_elem).attr('data-name')
 
                                     files[key] = []
                                     files[key]['path'] = path
@@ -641,50 +644,58 @@
                                 })
                                 //console.log(files)
 
+                                let nav = $('.fm-navbar').find('button')
+                                $(nav[9]).attr('id', 'pasteFromSearch')
+                                $(nav[9]).removeAttr('disabled')
+                                $(nav[7]).attr('disabled', 'disabled')
+                                $(nav[8]).attr('disabled', 'disabled')
+
 
                                 //console.log($elem_clip)
-                            }else if(key == 'paste'){
+                            }
+                            // else if(key == 'paste'){
 
-                                path = ''
-                                $.each( $('.fm-breadcrumb li'), function(key, value) {
-                                    if(key != 0){
-                                        path = path+'/'+$(value).text()
-                                    }
-                                })
-
-
-                                obj1 = {}
-
-                                $.each(files, function(key, value){
-                                    //console.log(value)
-                                    obj1[key] = value['path']
-                                })
-
-                                let arr = {};
-                                arr = {[key]: key, type: type, disk: 'uploads', directories: [], files: obj1}
-
-                                //console.log(path)
-
-                                data = { disk: 'uploads', path: path, clipboard: arr}
+                            //     path = ''
+                            //     $.each( $('.fm-breadcrumb li'), function(key, value) {
+                            //         if(key != 0){
+                            //             path = path+'/'+$(value).text()
+                            //         }
+                            //     })
 
 
-                                $.ajax({
-                                    type: 'POST',
-                                    headers: {
-                                        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-                                    },
-                                    contentType: "application/json; charset=utf-8",
-                                    dataType: "json",
-                                    url: "/file-manager/paste",
-                                    data: JSON.stringify(data),
-                                    success: function(data) {
-                                        //console.log('data: '+data.new)
+                            //     obj1 = {}
 
-                                    }
-                                });
+                            //     $.each(files, function(key, value){
+                            //         //console.log(value)
+                            //         obj1[key] = value['path']
+                            //     })
+
+                            //     let arr = {};
+                            //     arr = {[key]: key, type: type, disk: 'uploads', directories: [], files: obj1}
+
+                            //     //console.log(path)
+
+                            //     data = { disk: 'uploads', path: path, clipboard: arr}
 
 
-                            }else if(key == 'cut'){
+                            //     $.ajax({
+                            //         type: 'POST',
+                            //         headers: {
+                            //             'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                            //         },
+                            //         contentType: "application/json; charset=utf-8",
+                            //         dataType: "json",
+                            //         url: "/file-manager/paste",
+                            //         data: JSON.stringify(data),
+                            //         success: function(data) {
+                            //             //console.log('data: '+data.new)
+
+                            //         }
+                            //     });
+
+
+                            // }
+                            else if(key == 'cut'){
                                 type = "cut"
                                 elem_clip = $('.col-auto.text-right').find('span')[1]
                                 $(elem_clip).attr('id', 'clipboard-toggle')
@@ -703,6 +714,13 @@
                                     files[key]['name'] = name
 
                                 })
+
+                                let nav = $('.fm-navbar').find('button')
+                                $(nav[9]).attr('id', 'pasteFromSearch')
+                                $(nav[9]).removeAttr('disabled')
+
+                                $(nav[7]).attr('disabled', 'disabled')
+                                $(nav[8]).attr('disabled', 'disabled')
 
                             }else if(key == 'zip'){
                                 files = []
@@ -732,14 +750,15 @@
                                 })
 
                             }else if(key == 'properties'){
+
                                 $('#image-alt-id').val('0')
                                 $('#image-alt').val('')
                                 $('#propertiesModal').modal('show');
                                 details = name.split(' ')
                                 $('#properties-name').text(details[1])
                                 $('#properties-path').text(path)
-                                $('#properties-size').text(details[2]+' KB')
-                                $('#properties-mod').text(details[4])
+                                $('#properties-size').text(details[3]+' '+details[4])
+                                $('#properties-mod').text(details[6])
                                 //console.log('name: '+name + 'path:  '+ path)
 
                                 let name1 = details[1].split('.')
@@ -755,11 +774,33 @@
                                     url: "/file-manager/fetchAlt",
                                     data: data,
                                     success: function(data) {
-                                        $('#image-alt-id').val(data.data.id)
-                                        $('#image-alt').val(data.data.alt)
+                                        if(data.data){
+                                            $('#image-alt-id').val(data.data.id)
+                                            $('#image-alt').val(data.data.alt)
+                                        }
+
 
                                     }
                                 });
+
+                                $.ajax({
+                                    type: 'GET',
+                                    headers: {
+                                        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                                    },
+                                    contentType: "application/json; charset=utf-8",
+                                    dataType: "json",
+                                    url: "/admin/media2_image",
+                                    data: {name: details[1]},
+                                    success: function(data) {
+                                        if(data.data === null){
+                                            $('#version-btn').addClass('d-none')
+                                        }
+
+                                    }
+                                });
+
+
                             }
 
 
@@ -792,7 +833,7 @@
                             "sep1": "---------",
                             "copy": {name: "Copy", icon: "far fa-copy"},
                             "cut": {name: "Cut", icon: "fas fa-cut"},
-                            "paste": {name: "Paste", icon: "fas fa-paste"},
+                            // "paste": {name: "Paste", icon: "fas fa-paste"},
                             "rename": {
                                 name: "Rename",
                                 icon: "fas fa-edit",
@@ -847,7 +888,7 @@
                 cropper = new Cropper(image, {
                     preview: ".cropper-preview",
                     aspectRatio: Number($(image1).width()/$(image1).height(), 4),
-                    viewMode: 0,
+                    viewMode: 1,
                     responsive: false,
                     dragMode: "move",
                     autoCropArea: 1,
@@ -881,6 +922,24 @@
 
                     });
         })
+
+
+
+        $( document ).on("dblclick",".search-result",function() {
+            var base_url = window.location.protocol + "//" + window.location.host
+            name = $(this).find('td').text()
+            path = $(this).children().data('path')
+
+            $('#previewModal').modal('toggle');
+            $('#previewModal .title-small').text(name)
+            $('#previewModal img').attr('src', base_url+'/uploads'+path)
+
+            $('.cropper-img').attr('src', base_url+'/uploads'+path)
+
+            $('#upload_image').val(base_url+'/uploads'+path)
+            });
+
+
 
 
         $( document ).on("click", "#back-btn-preview", function() {
@@ -1060,7 +1119,7 @@
                         var rest = old.substring(0, old.lastIndexOf("/") + 1);
                         var last = old.substring(old.lastIndexOf("/") + 1, old.length);
 
-                        if($(value).find('td').data('name') == last){
+                        if($(value).find('td').attr('data-name') == last){
                             let elem = $(value).find('td')[0]
                             //console.log(elem)
 
@@ -1068,9 +1127,9 @@
                             var rest = new_.substring(0, new_.lastIndexOf("/") + 1);
                             var last = new_.substring(new_.lastIndexOf("/") + 1, new_.length);
 
-                            $(elem).data('name', last)
-                            $(elem).data('path', data.new)
-                            $(elem).text(last)
+                            $(elem).attr('data-name', last)
+                            $(elem).attr('data-path', data.new)
+                            $(elem).html(`<i class="far fa-file"></i> ${last} `)
                         }
                     })
                 }
@@ -1115,11 +1174,6 @@
 
 
     $( document ).ready(function() {
-
-
-
-
-
         //console.log( "ready!" );
         search = `<div class="col-auto"><div role="group" class="btn-group">
                         <input id="inpuy-search" type="text" class="form-control form-control-alternative search_input" placeholder="Search">
@@ -1142,88 +1196,265 @@
             });
         });
 
+        $(document).on("click", "#cutFromSearch", function(key, value) {
+            type = "cut"
+            elem_clip = $('.col-auto.text-right').find('span')[1]
+            $(elem_clip).attr('id', 'clipboard-toggle')
+
+            $(elem_clip).show()
 
 
+            let element_for_copy = $('.table-info')
+            $.each(element_for_copy, function(key, value) {
+                local_elem = $(value).find('td')[0]
+                path = $(local_elem).data('path')
+                name = $(local_elem).data('name')
+
+                files[key] = []
+                files[key]['path'] = path
+                files[key]['name'] = name
+
+            })
+
+            let nav = $('.fm-navbar').find('button')
+            $(nav[9]).attr('id', 'pasteFromSearch')
+            $(nav[9]).removeAttr('disabled')
+            $(nav[7]).attr('disabled', 'disabled')
+            $(nav[8]).attr('disabled', 'disabled')
+        })
+
+        $(document).on("click", "#copyFromSearch", function(key, value) {
+            type = "copy"
+            elem_clip = $('.col-auto.text-right').find('span')[1]
+            $(elem_clip).attr('id', 'clipboard-toggle')
+
+            $(elem_clip).show()
 
 
-    $( document ).on("click","#search_btn",function() {
-        $('.table-info').removeClass('table-info')
-        file = $('.search_input').val()
-        //console.log(file)
-        $.ajax({
-                type: 'GET',
+            let element_for_copy = $('.table-info')
+            $.each(element_for_copy, function(key, value) {
+                local_elem = $(value).find('td')[0]
+                path = $(local_elem).attr('data-path')
+                name = $(local_elem).attr('data-name')
+
+                files[key] = []
+                files[key]['path'] = path
+                files[key]['name'] = name
+
+            })
+            //console.log(files)
+
+            let nav = $('.fm-navbar').find('button')
+            $(nav[9]).attr('id', 'pasteFromSearch')
+            $(nav[9]).removeAttr('disabled')
+            $(nav[8]).attr('disabled', 'disabled')
+            $(nav[7]).attr('disabled', 'disabled')
+        })
+
+
+        $(document).on("click", "#pasteFromSearch", function() {
+            let copyFiles = $('#clipboard-files .justify-content-between')
+            path = ''
+            $.each( $('.fm-breadcrumb li'), function(key, value) {
+                if(key != 0){
+                    path = path+'/'+$(value).text()
+                }
+            })
+            obj1 = {}
+
+            $.each(files, function(key, value){
+                //console.log(value)
+                obj1[key] = value['path']
+            })
+
+            let arr = {};
+            arr = {['paste']: 'paste', type: type, disk: 'uploads', directories: [], files: obj1}
+
+            //console.log(path)
+
+            data = { disk: 'uploads', path: path, clipboard: arr}
+
+
+            $.ajax({
+                type: 'POST',
                 headers: {
-                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-               },
-               Accept: 'application/json',
-                url: "/file-manager/search?param="+file,
+                    'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: "/file-manager/paste",
+                data: JSON.stringify(data),
                 success: function(data) {
-                    // data = JSON.parse(data)
-                    data = data.data
+                    if(data.result.status == 'success'){
+                        $('#pasteFromSearch').removeAttr('id')
+                        $('#pasteFromSearch').attr('disabled', 'disabled')
 
-                    first_grid = $('.fas.fa-th-list').parent().hasClass('active')
-
-                    if(first_grid){
-                        $('.fm-content-body tbody').empty()
-                    }else{
-                        $('.fm-content-body .d-flex.align-content-start.flex-wrap').empty()
-                    }
+                        $.notify({message: data.result.message}, {type:"success", placement: {from: "bottom",align: "right"},});
 
 
-
-                    $.each(data, function(key, value) {
-                        //console.log(value.path+'/'+value.name)
-                        if(first_grid){
-                            row = `<tr class="search-result"><td data-name="${value.name}" data-path='${value.path}/${value.name}' class="fm-content-item unselectable fm-download"><i class="far fa-file"></i> ${value.name} </td><td>${value.size}</td><td>${value.type}</td><td> ${value.modified} </td></tr>`
+                        $.each(copyFiles, function(key, value) {
+                            console.log($(value))
+                            let file = $(value).find('.copy-file').data('path')[0]
+                            let nameFile = $(value).find('.far.fa-file').text()[0]
+                            console.log($(value).find('.far.fa-file').text())
+                            let row = `
+                                <tr>
+                                    <td class="fm-content-item unselectable">
+                                        <i class="far fa-file-image"></i>
+                                        ${file}
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            `
                             $('.fm-content-body tbody').append(row)
-                        }else{
-                            row =`<div title="fdf" class="fm-grid-item text-center unselectable active fm-download"><div class="fm-item-icon"><i class="fa-5x pb-2 far fa-folder"></i></div><div class="fm-item-info">${value.name}</div></div>`
-                            $('.fm-content-body .d-flex.align-content-start.flex-wrap').appen(row)
-                        }
+                        })
+                    }else{
+                        //console.log('from error')
+                        //console.log(data.result.message)
+
+                        $.notify({message: data.result.message}, {type:"danger", placement: {from: "bottom",align: "right"},});
 
 
-                    })
-
+                    }
 
                 }
             });
-    });
+        })
 
-    $(document).on("click",".search-result", function (evt) {
 
-        if (evt.ctrlKey){
-            //console.log('asd')
-            $(this).toggleClass("table-info");
-        }else if(evt.which != 3){
 
+
+
+
+        $( document ).on("click","#search_btn",function() {
             $('.table-info').removeClass('table-info')
-            $(this).addClass('table-info')
-        }
+            file = $('.search_input').val()
 
-    });
+            //console.log(file)
+            $.ajax({
+                    type: 'GET',
+                    headers: {
+                    'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                },
+                Accept: 'application/json',
+                    url: "/file-manager/search?param="+file,
+                    success: function(data) {
 
-    $(document).on("click","tr", function () {
 
-        selected = $('.search-result.table-info').length
+                        // data = JSON.parse(data)
+                        data = data.data
 
-    });
+                        first_grid = $('.fas.fa-th-list').parent().hasClass('active')
 
-    $(document).on("click",".close_modal", function () {
+                        if(first_grid){
+                            $('.fm-content-body tbody').empty()
+                        }else{
+                            $('.fm-content-body .d-flex.align-content-start.flex-wrap').empty()
+                        }
 
-        $('.close').click()
 
-    });
 
-    $(document).mousedown(function(e){
-        let elem = e.target
+                        $.each(data, function(key, value) {
+                            //console.log(value.path+'/'+value.name)
+                            if(first_grid){
+                                row = `<tr class="search-result"><td data-name="${value.name}" data-path='${value.path}/${value.name}' class="fm-content-item unselectable fm-download"><i class="far fa-file"></i> ${value.name} </td><td> ${value.size} </td><td>${value.type}</td><td> ${value.modified} </td></tr>`
+                                $('.fm-content-body tbody').append(row)
+                            }else{
+                                row =`<div title="fdf" class="fm-grid-item text-center unselectable active fm-download"><div class="fm-item-icon"><i class="fa-5x pb-2 far fa-folder"></i></div><div class="fm-item-info">${value.name}</div></div>`
+                                $('.fm-content-body .d-flex.align-content-start.flex-wrap').appen(row)
+                            }
 
+
+                        })
+
+                        // let el = $('.breadcrumb.active-manager').find('li')
+                        // let selectedTree = $('.list-unstyled.fm-tree-branch').find('.selected').text()[0]
+                        // console.log(selectedTree)
+
+                        // $.each(el, function(key, value) {
+                        //     if(key != 0){
+                        //         $(value).find('span').text('sdf')[0]
+                        //     }
+                        // })
+
+
+
+                    }
+                });
+        });
+
+        $(document).on("click",".search-result", function (evt) {
+
+            if (evt.ctrlKey){
+                //console.log('asd')
+                $(this).toggleClass("table-info");
+            }else if(evt.which != 3){
+
+                $('.table-info').removeClass('table-info')
+                $(this).addClass('table-info')
+                if($(this).hasClass('table-info')){
+                    let nav1 = $('.fm-navbar').find('button')
+                    $(nav1[8]).attr('id', 'cutFromSearch')
+                    $(nav1[8]).removeAttr('disabled')
+                    $(nav1[7]).attr('id', 'copyFromSearch')
+                    $(nav1[7]).removeAttr('disabled')
+                }
+            }
+
+        });
+
+        $(document).on("click","tr", function () {
+
+            selected = $('.search-result.table-info').length
+
+        });
+
+        $(document).on("click",".close_modal", function () {
+
+            $('.close').click()
+
+        });
+
+        $(document).keydown(function(event){
+
+            if(event.which=="17"){
+                cntrlIsPressed = true;
+            }else{
+                cntrlIsPressed = false;
+            }
+
+
+        });
+
+        $(document).mousedown(function(e){
+            let elem = e.target
             if( e.button == 2 ) {
+                //console.log('right click')
                 //$("#test").removeClass("class-one").addClass("class-two");
                 //$('.table-info').removeClass('table-info')
 
-                if($(elem).parent().hasClass('search-result')){
-                    $(elem).parent().addClass('table-info')
+                if(!cntrlIsPressed){
+                    $('.search-result').removeClass('table-info')
                 }
+
+                    if($(elem).parent().hasClass('table-info')){
+                        if(!cntrlIsPressed){
+                            $(elem).parent().removeClass('table-info')
+                        }else{
+                            //console.log('add class')
+                            //$(elem).parent().addClass('table-info')
+                        }
+
+                    }else{
+                        if($(elem).hasClass('fm-content-item')){
+                            $(elem).parent().addClass('table-info')
+                        }
+
+                    }
+                    //
+
 
 
                 return false;
