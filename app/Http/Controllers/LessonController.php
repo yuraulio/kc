@@ -53,6 +53,10 @@ class LessonController extends Controller
      */
     public function store(Request $request, Lesson $model)
     {
+        $this->validate($request, [
+            'category' => 'required',
+            'topic_id' => 'required',
+        ]);
         //dd($request->all());
 
         $arr = array();
@@ -355,6 +359,12 @@ class LessonController extends Controller
 
     public function update(Request $request, Lesson $lesson)
     {
+
+        $this->validate($request, [
+            'category' => 'required',
+            'topic_id' => 'required',
+        ]);
+
         $arr = array();
 
         if(!empty($request->links)){

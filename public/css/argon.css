@@ -15991,3 +15991,6 @@ body {
 .toggle-bold input:checked + .custom-toggle-slider:before {
   transform: translateX(38px) !important; }
 
+.topic-list select {
+  height: 250px !important; }
+

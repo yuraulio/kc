@@ -93,7 +93,12 @@
         @include('alerts.success')
             <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
                 <div class="card-body">
-                <?php //dd($user); ?>
+                    <form method="post" action="{{ route('create-kc-deree') }}" autocomplete="off"
+                            enctype="multipart/form-data">
+                            @csrf
+                            <input hidden name="user" value="{{$user->id}}">
+                            <button class="btn btn-primary" type="submit">Create Deree KC ID</button>
+                    </form>
                     <form method="post" action="{{ route('profile.update') }}" autocomplete="off"
                         enctype="multipart/form-data">
                         @csrf

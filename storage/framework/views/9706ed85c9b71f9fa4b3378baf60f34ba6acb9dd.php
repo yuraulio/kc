@@ -1,3 +1,5 @@
+
+
 <?php $__env->startSection('content'); ?>
     <?php $__env->startComponent('layouts.headers.auth'); ?>
         <?php $__env->startComponent('layouts.headers.breadcrumbs'); ?>
@@ -18,8 +20,12 @@
 <?php unset($__componentOriginalf553482b463f6cda44d25fdb8f98d9a83d364bb5); ?>
 <?php endif; ?>
 <?php echo $__env->renderComponent(); ?>
-
+    
     <div class="container-fluid mt--6">
+        <div class="col-12 mt-2">
+            <?php echo $__env->make('alerts.success', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+            <?php echo $__env->make('alerts.errors', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        </div>
         <div class="row">
             <div class="col-xl-12 order-xl-1">
                 <div class="card">
@@ -62,7 +68,7 @@
 
                                 <div class="form-group<?php echo e($errors->has('topic_id') ? ' has-danger' : ''); ?>">
                                     <div class="row">
-                                        <div class="col-4">
+                                        <div class="col-12">
                                                 <label class="form-control-label" for="input-topic_id"><?php echo e(__('Filters')); ?></label>
                                                 <div class="filter_col" data-column="9">
                                                     <select name="category" data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="category">
@@ -75,7 +81,7 @@
 
                                             </div>
 
-                                        <div class="col-8">
+                                        <div class="col-12 topic-list">
                                             <label class="form-control-label" for="input-topic_id"><?php echo e(__('Topic')); ?></label>
                                             <select multiple name="topic_id[]" id="input-topic_id" class="form-control topics" placeholder="<?php echo e(__('Topic')); ?>" required>
 
@@ -241,14 +247,12 @@
                     let name = $(value).text().toLowerCase()
                     if(name !== undefined){
                         if(selectedCategory == null){
-                            console.log('select is null')
                             if(name.includes(word)){
                                 $(value).show()
                             }else{
                                 $(value).hide()
                             }
                         }else{
-                            console.log('select is not null')
                             if(name.includes(word) && (removeSpecial($(value).data('categoryname')) == removeSpecial(selectedCategory))){
                                 $(value).show()
                             }else{

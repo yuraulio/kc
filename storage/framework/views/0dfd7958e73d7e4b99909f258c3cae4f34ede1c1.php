@@ -1,3 +1,5 @@
+
+
 <?php $__env->startSection('content'); ?>
     <?php $__env->startComponent('layouts.headers.auth'); ?>
         <?php $__env->startComponent('layouts.headers.breadcrumbs'); ?>
@@ -20,6 +22,11 @@
 <?php echo $__env->renderComponent(); ?>
 
     <div class="container-fluid mt--6">
+        <div class="col-12 mt-2">
+            <?php echo $__env->make('alerts.success', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+            <?php echo $__env->make('alerts.errors', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        </div>
+
         <div class="row">
             <div class="col-xl-12 order-xl-1">
                 <div class="card">
@@ -62,7 +69,7 @@
 
                                 <div class="form-group<?php echo e($errors->has('topic_id') ? ' has-danger' : ''); ?>">
                                     <div class="row">
-                                        <div class="col-4">
+                                        <div class="col-12">
                                             <label class="form-control-label" for="input-topic_id"><?php echo e(__('Filters')); ?></label>
                                             <div class="filter_col" data-column="9">
                                                 <select name="category" data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="category">
@@ -77,7 +84,7 @@
 
 
 
-                                        <div class="col-8">
+                                        <div class="col-12 topic-list">
                                             <label class="form-control-label" for="input-topic_id"><?php echo e(__('Topic')); ?></label>
                                             <select multiple name="topic_id[]" id="input-topic_id" class="form-control topics" placeholder="<?php echo e(__('Topic')); ?>">
                                                 <?php $__currentLoopData = $topics; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $topic): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>

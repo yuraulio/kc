@@ -36,6 +36,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\Dashboard\CouponController;
 use App\Notifications\userActivationLink;
 use Mail;
+use App\Model\Option;
 
 use Illuminate\Http\Request;
 
@@ -83,8 +84,9 @@ class UserController extends Controller
         return view('users.index', ['users' => $model->with('role', 'image','statusAccount', 'events_for_user_list')->get(), 'data' => $data]);
     }
 
+
     /*
-public function index(User $model)
+    public function index(User $model)
     {
         //$this->authorize('manage-users', User::class);
         //$user = Auth::user();
@@ -486,12 +488,12 @@ public function index(User $model)
     public function sendEmails($transaction,$content)
     {
 
-        $user = Auth::user();
+        $user = $transaction->user()->first();//Auth::user();
 
         $muser = [];
-        $muser['name'] = $user->first_name . ' ' . $user->last_name;
+        $muser['name'] = $user->firstname . ' ' . $user->lastname;
         $muser['id'] = $user->id;
-        $muser['first'] = $user->first_name;
+        $muser['first'] = $user->firstname;
         $muser['email'] = $user->email;
 
         $tickettypedrop = 'Upon Coupon';
@@ -541,5 +543,56 @@ public function index(User $model)
         });
 
     }
+
+
+    public function createKCDeree(Request $request){
+
+        $KC = "KC-";
+		$time = strtotime(date('Y-m-d'));
+		$MM = date("m",$time);
+		$YY = date("y",$time);
+
+        
+        $user = User::find($request->user);
+        $option = Option::where('abbr','deree_codes')->first();
+        $dereelist = json_decode($option->settings, true);
+
+        if(count($dereelist) > 0 && !$user->partner_id){
+            $user->partner_id = $dereelist[0];
+            unset($dereelist[0]);
+
+            $option->settings = json_encode(array_values($dereelist));
+	        $option->save();
+
+        }
+
+        if(!$user->kc_id){
+
+            $optionKC = Option::where('abbr','website_details')->first();
+		    $next = $optionKC->value;
+
+            $next_kc_id = str_pad($next, 4, '0', STR_PAD_LEFT);
+            $knowcrunch_id = $KC.$YY.$MM.$next_kc_id;
+
+            $user->kc_id = $knowcrunch_id;
+
+            if ($next == 9999) {
+                $next = 1;
+            }
+            else {
+                $next = $next + 1;
+            }
+    
+            $optionKC->value=$next;
+            $optionKC->save();
+
+        }
+        $user->save();
+
+       
+
+        return back()->withStatus(__('User successfully updated.'));
+    }
+
 
 }

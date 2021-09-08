@@ -17,6 +17,11 @@
     @endcomponent
 
     <div class="container-fluid mt--6">
+        <div class="col-12 mt-2">
+            @include('alerts.success')
+            @include('alerts.errors')
+        </div>
+
         <div class="row">
             <div class="col-xl-12 order-xl-1">
                 <div class="card">
@@ -64,7 +69,7 @@
 
                                 <div class="form-group{{ $errors->has('topic_id') ? ' has-danger' : '' }}">
                                     <div class="row">
-                                        <div class="col-4">
+                                        <div class="col-12">
                                             <label class="form-control-label" for="input-topic_id">{{ __('Filters') }}</label>
                                             <div class="filter_col" data-column="9">
                                                 <select name="category" data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="category">
@@ -79,7 +84,7 @@
 
 
 
-                                        <div class="col-8">
+                                        <div class="col-12 topic-list">
                                             <label class="form-control-label" for="input-topic_id">{{ __('Topic') }}</label>
                                             <select multiple name="topic_id[]" id="input-topic_id" class="form-control topics" placeholder="{{ __('Topic') }}">
                                                 @foreach ($topics as $topic)
