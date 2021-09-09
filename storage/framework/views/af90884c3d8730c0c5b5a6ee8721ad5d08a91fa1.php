@@ -197,7 +197,7 @@
                                  <?php endif; ?>
                                  <div class="form-wrapper profile-form-wrapper" id="student-view-mode">
                                     
-                                    <form id="update-form" method="post" action="<?php echo e(route('update.personalInfo')); ?>" autocomplete="off">
+                                    <form method="post" action="<?php echo e(route('update.personalInfo')); ?>" autocomplete="off">
                                        <?php echo csrf_field(); ?>
 
                                        <div class="col12">
@@ -234,15 +234,13 @@
                                        <div class="col12">
                                           <label>Email: <span>*</span></label>
                                           <div class="input-safe-wrapper">
-                                             <span id="email-error"></span>
-                                             <input class="required" id="email" name="email" type="email" value="<?php echo e(old('email', $currentuser['email'])); ?>" >
+                                             <input class="required" name="email" type="email" value="<?php echo e(old('email', $currentuser['email'])); ?>" >
                                           </div>
                                        </div>
                                        <div class="col12">
-                                          <span id="mobileCheck-error"></span>
                                           <label>Mobile phone: <span>*</span></label>
                                           <div class="input-safe-wrapper is-flex full-width">
-                                             <select name="country_code" id="selectCountry" class="select2 form-control mb-3 custom-select country-select">
+                                             <select name="countryCode" id="selectCountry" class="select2 form-control mb-3 custom-select country-select">
                                                 <option data-countryCode="DZ" value="213">DZ (+213)</option>
                                                 <option data-countryCode="AD" value="376">AD (+376)</option>
                                                 <option data-countryCode="AO" value="244">AO (+244)</option>
@@ -458,14 +456,13 @@
                                                 <option data-countryCode="ZM" value="260">ZM (+260)</option>
                                                 <option data-countryCode="ZW" value="263">ZW (+263)</option>
                                              </select>
-                                             
                                              <input class="required" onkeyup="checkPhoneNumber(this)" type="text" name="mobile" id="mobile" value="<?php echo e(old('mobile', $currentuser['mobile'])); ?>" >
                                              <input type="hidden" name="mobileCheck" id="mobileCheck" value="<?php echo e(old('mobile', '+'.$currentuser['country_code'].$currentuser['mobile'])); ?>">
                                           </div>
                                        </div>
                                        
                                        <div class="form-submit-area">
-                                          <button id="update-personal-info" type="button" class="btn btn--md btn--secondary">Update</button>
+                                          <button type="submit" class="btn btn--md btn--secondary">Update</button>
                                        </div>
                                     </form>
                                  </div>
@@ -811,7 +808,7 @@
                                  </div>
                                  <?php
                                     $dropbox = $event['category'][0]['dropbox'][0];
-                                    //dd($dropbox);
+                                    //dd($dropbox['files']);
                                     $folders = isset($dropbox['folders'][0]) ? $dropbox['folders'][0] : [];
                                     //dd($folders);
 
@@ -822,9 +819,16 @@
 
                                     //dd($files);
 
-                                  ?>
+                                    foreach($files_bonus as $file){
+                                       
+                                       if(trim($file['filename']) == "9. Facebook Business Manager.pdf"){
+                                         // dd($file);
+                                       }
+                                    }
 
-                                    <?php
+                                 ?>
+
+                                 <?php
                                     $now1 = strtotime(date("Y-m-d"));
                                     $display = false;
                                     if(!$event['release_date_files'] && $event['status'] == 3){
@@ -835,67 +839,93 @@
                                         $display = true;
                                     }
 
-                                    ?>
+                                 ?>
                                  <?php if(isset($dropbox) && $folders != null): ?>
                                  <div id="c-files-inner<?php echo e($tab); ?>" class="in-tab-wrapper">
                                     <?php if($display): ?>
 
-                                        <div class="acc-topic-accordion">
-                                            <div class="accordion-wrapper accordion-big">
-                                            <?php if(isset($folders) && count($folders) > 0): ?>
-                                                <?php $__currentLoopData = $folders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $folder): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                    <div class="accordion-item">
-                                                        <h3 class="accordion-title title-blue-gradient scroll-to-top"> <?php echo e($folder['foldername']); ?></h3>
-                                                        <div class="accordion-content no-padding">
-                                                        <?php if(isset($files) && count($files) > 0): ?>
-                                                        <?php $__currentLoopData = $files; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $file): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                            <?php if($folder['id'] == $file['fid']): ?>
-                                                            <div class="files-wrapper">
-                                                                <div class="file-wrapper">
-                                                                    <h4 class="file-title"><?php echo e($file['filename']); ?></h4>
-                                                                    <span class="last-modified">Last modified:  <?php echo e($file['last_mod']); ?></span>
-                                                                    <a  class="download-file getdropboxlink"  data-dirname="<?php echo e($file['dirname']); ?>" data-filename="<?php echo e($file['filename']); ?>" href="javascript:void(0)" >
-                                                                    <img src="<?php echo e(cdn('/theme/assets/images/icons/Access-Files.svg')); ?>"  alt="Download File"/></a>
-                                                                </div>
-                                                            </div>
+
+                                    
+                                       <div class="acc-topic-accordion">
+                                          <div class="accordion-wrapper accordion-big">
+                                             <?php $__currentLoopData = $folders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $catid => $folder): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                             
+
+
+                                                <div class="accordion-item">
+                                                   <h3 class="accordion-title title-blue-gradient scroll-to-top"> <?php echo e($folder['foldername']); ?></h3>
+                                                   
+                                                   <div class="accordion-content no-padding">
+                                                      <?php
+                                                         $checkedF = [];
+                                                         $fs = [];
+                                                         $fk = 1;
+                                                         $bonus = [];
+                                                         $subfolder = false;
+                                                      ?>
+
+                                                      <?php $__currentLoopData = $files_bonus; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $file): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+
+                                                         <?php if($file['fid'] == $folder['id']): ?>
+
+                                                            <?php
+                                                              
+                                                               $fn = $file['filename'];
+                                                               $dirname = explode('/',$file['dirname']);
+                                                               if( in_array($fn,$dirname) && !in_array($folder['foldername'],$bonusFiles)){
+
+                                                                  $checkedF[] = $folder['id']+ 1 ;
+                                                                  $fs[$folder['id']+1]=[];
+                                                                  $fs[$folder['id']+1][] = $file;
+
+                                                               }
+
+                                                             
+
+                                                               if(count($fs) > 0 ){
+                                                                  
+                                                                  $subfolder = true;
+                                                               }
+
+                                                            ?>
+
+                                                            <?php if($subfolder && in_array($fk,$checkedF)): ?>
+                                                               <?php while(in_array($fk,$checkedF)): ?>
+                                                               <?php
+                                                                  $sfv = reset($checkedF);
+                                                                  $sfk = array_search($sfv, $checkedF);
+                                                                  unset($checkedF[$sfk]);
+                                                                 // dd($fs);
+                                                               ?>
+
+                                                             
+
+
+                                                              
+                                                               <?php $fk += 1;?>
+                                                               <?php endwhile; ?>
                                                             <?php endif; ?>
-                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                        <?php endif; ?>
 
+                                                         <?php endif; ?>
+                                                        
+                                                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                      <?php if(count($fs) > 0 ): ?>
+                                                         <?php echo e(dd($fs)); ?>;
+                                                         <?php endif; ?>
+                                                   <!-- /.accordion-content -->
+                                                   </div>
+                                                <!-- /.accordion-item -->
+                                                </div>
 
-                                                        <?php if(isset($folders_bonus) && count($folders_bonus) > 0): ?>
-                                                            <div class="files-wrapper bonus-files">
-                                                            <?php $__currentLoopData = $folders_bonus; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $folder_bonus): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                                <?php if($folder_bonus['parent'] == $folder['id']): ?>
-                                                                    <h4 class="bonus-title"><?php echo e($folder_bonus['foldername']); ?></h4>
-                                                                    <span><i class="icon-folder-open"></i>   </span>
-                                                                    <?php if(isset($files_bonus) && count($files_bonus) > 0): ?>
-                                                                        <?php $__currentLoopData = $files_bonus; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $file_bonus): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                                        <?php if($file_bonus['parent'] == $folder_bonus['parent']): ?>
-                                                                            <div class="file-wrapper">
-                                                                                <h4 class="file-title"><?php echo e($file_bonus['filename']); ?></h4>
-                                                                                <span class="last-modified">Last modified:  <?php echo e($file_bonus['last_mod']); ?></span>
-                                                                                <a  class="download-file getdropboxlink"  data-dirname="<?php echo e($file_bonus['dirname']); ?>" data-filename="<?php echo e($file_bonus['filename']); ?>" href="javascript:void(0)" >
-                                                                                <img src="<?php echo e(cdn('/theme/assets/images/icons/Access-Files.svg')); ?>"  alt="Download File"/></a>
-                                                                            </div>
-                                                                        <?php endif; ?>
-                                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                                    <?php endif; ?>
-                                                                <?php endif; ?>
-                                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                            </div>
+                                                   
 
-                                                        <?php endif; ?>
-                                                        </div>
-                                                    </div>
-                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-                                            <?php endif; ?>
-                                                            </div>
-                                                            </div>
-
-                                        </div>
+                                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                             <!-- /.accordion-wrapper -->
+                                          </div>
+                                          <!-- /.acc-topic-accordion -->
+                                       </div>
                                     <?php endif; ?>
+                                 </div>
                                  <?php endif; ?>
 
 
@@ -982,10 +1012,9 @@
                                  <?php if($subscriptionAccess): ?>
                                  <div id="c-subs-inner<?php echo e($tab); ?>" class="in-tab-wrapper">
                                     <div class="bottom">
-                                       
+                                       <div class="left">
 
                                           <?php if($event['mySubscription']): ?>
-                                          <div class="left">
                                           <div class="bottom">
                                              <?php if($event['mySubscription']['trial_ends_at']): ?>
                                                 <?php
@@ -1063,9 +1092,8 @@
                                              </div>
                                              <?php endif; ?>
                                           </div>
-                                          </div>
                                           <?php endif; ?>
-                                       
+                                       </div>
                                        <?php //dd($event['mySubscription']); ?>
                                        <?php if(!$event['mySubscription']): ?>
                                        <div class="left">
@@ -2357,61 +2385,12 @@
 
       $("#selectCountry").select2()
 
-      <?php if("<?php echo e(old('country_code')); ?>"): ?>
+      <?php if("<?php echo e(old('countryCode')); ?>"): ?>
 
-         $("#selectCountry").val("<?php echo e(old('country_code',$currentuser->country_code)); ?>").change();
+         $("#selectCountry").val("<?php echo e(old('countryCode',$currentuser->country_code)); ?>").change();
 
       <?php endif; ?>
 
-   });
-
-</script>
-
-<script>
-
-   $("#update-personal-info").click(function(){
-
-      fdata =$("#update-form").serialize();
-      var firstError = false;
-      $.ajax({ url: "<?php echo e(route('validate.personalInfo')); ?>", type: "post",
-            data: fdata,
-            success: function(data) {
-                //console.log(data);
-                //return;
-                $('#update-form').find("input").removeClass('verror');
-                if (Number(data.status) === 0) {
-                    //var html = '<ul>';
-                    $.each(data.errors, function (key, row) {
-                        //console.log(data.errors);
-                        var newkey = key.replace('.', '');
-
-                        $('#update-form').find('input#'+newkey).addClass(['verror','validate-error']);
-
-                        if(!firstError){
-                            elementsHeight = Math.round($('#header').outerHeight()) - document.getElementById(newkey).getBoundingClientRect().top +30
-                            firstError = true;
-
-                            $('html, body').animate({
-                                scrollTop: elementsHeight
-                            }, 300);
-                        }
-
-                        $('#'+newkey+'-error').text(row[0]);
-                        //var s = $('#update-form').find('input#'+newkey).attr('placeholder');
-                        var pl =  row[0] ;
-
-                        $('#update-form').find('input#'+newkey).attr('placeholder', pl);
-
-                    });
-
-
-                  
-                } else { 
-                  $('#update-form').submit();
-                }
-            }
-        });
-      
    });
 
 </script>

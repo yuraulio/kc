@@ -833,7 +833,7 @@
                                  </div>
                                  <?php
                                     $dropbox = $event['category'][0]['dropbox'][0];
-                                    //dd($dropbox);
+                                    //dd($dropbox['files']);
                                     $folders = isset($dropbox['folders'][0]) ? $dropbox['folders'][0] : [];
                                     //dd($folders);
 
@@ -843,6 +843,13 @@
                                     $files_bonus = isset($dropbox['files'][2]) ? $dropbox['files'][2] : [];
 
                                     //dd($files);
+
+                                    foreach($files_bonus as $file){
+                                       
+                                       if(trim($file['filename']) == "9. Facebook Business Manager.pdf"){
+                                         // dd($file);
+                                       }
+                                    }
 
                                  ?>
 
@@ -882,24 +889,18 @@
                                                          $subfolder = false;
                                                       ?>
 
-                                                      @foreach($files as $file)
+                                                      @foreach($files_bonus as $file)
 
                                                          @if($file['fid'] == $folder['id'])
 
-                                                            @if($folder['id'])
-                                                               <?php 
-                                                                  print_r($folder);
-                                                               ?>
-                                                            @endif
-
                                                             <?php
-                                                               
+                                                              
                                                                $fn = $file['filename'];
                                                                $dirname = explode('/',$file['dirname']);
                                                                if( in_array($fn,$dirname) && !in_array($folder['foldername'],$bonusFiles)){
 
                                                                   $checkedF[] = $folder['id']+ 1 ;
-                                                                  //$fs[$folder['id']+1]=[];
+                                                                  $fs[$folder['id']+1]=[];
                                                                   $fs[$folder['id']+1][] = $file;
 
                                                                }
@@ -907,7 +908,7 @@
                                                              
 
                                                                if(count($fs) > 0 ){
-
+                                                                  
                                                                   $subfolder = true;
                                                                }
 
@@ -931,9 +932,9 @@
                                                             @endif
 
                                                          @endif
-                                                     
+                                                        
                                                       @endforeach
-                                                      
+                                                     
                                                    <!-- /.accordion-content -->
                                                    </div>
                                                 <!-- /.accordion-item -->
