@@ -180,7 +180,7 @@
                                        <option data-countryCode="CU" value="53">CU (+53)</option>
                                        <option data-countryCode="CY" value="90392">CY (+90392)</option>
                                        <option data-countryCode="CY" value="357">CY (+357)</option>
-                                       <option data-countryCode="CZ" value="42">CZ (+42)</option>
+                                       <option data-countryCode="CZ" value="420">CZ (+420)</option>
                                        <option data-countryCode="DK" value="45">DK (+45)</option>
                                        <option data-countryCode="DJ" value="253">DJ (+253)</option>
                                        <option data-countryCode="DM" value="1809">DM (+1809)</option>

@@ -32,26 +32,11 @@ Your login: <strong><?php echo e($user['email']); ?> </strong> <br />
 
 <br />
 
-<?php 
-
-    $monthAccess = '';
-    if(isset($eventAccess[0]) && $eventAccess[1]){
-        $monthAccess = '+'.$eventAccess[0]. ' '.$eventAccess[1];
-    }
-
-    $expirationDate = '';
-    $eventAccess = explode(' ',trim($extrainfo[3]));
-    
-    $currentDay = date('Y-m-d');
-    $expirationDate = date('d-m-Y', strtotime($monthAccess, strtotime($currentDay)));
-   
-
-?>
-
 SUBSCRIPTION<br/>
  Ticket Type: <strong><?php echo e($extrainfo[1]); ?></strong><br />
- Ticket Price: <?php if($trans->total_amount == 0): ?> Free <?php else: ?> <?php echo e($trans->total_amount); ?></strong><?php endif; ?><br />
- Expiration date: <strong><?php echo e($expirationDate); ?></strong><br />
+ Ticket Price: <?php if($trans->total_amount == 0): ?> Free <?php else: ?> <?php echo e(round($trans->total_amount,2)); ?></strong><?php endif; ?><br />
+ <?php if($extrainfo[8]): ?> Expiration date: <strong><?php echo e(date('d-m-Y', strtotime($extrainfo[8]))); ?></strong><br /><?php endif; ?>
+
 
 </p>
 <br/>

@@ -1077,3 +1077,7 @@ border-radius: 4px;
     }
 
 }
+
+#email-error,#mobileCheck-error{
+    color:red;
+}

@@ -29,25 +29,11 @@ Your login: <strong>{{ $user['email'] }} </strong> <br />
 Your password: <strong> (password) </strong> <br />
 <br />
 
-<?php 
-
-    $monthAccess = '';
-    if(isset($eventAccess[0]) && $eventAccess[1]){
-        $monthAccess = '+'.$eventAccess[0]. ' '.$eventAccess[1];
-    }
-
-    $expirationDate = '';
-    $eventAccess = explode(' ',trim($extrainfo[3]));
-    $currentDay = date('Y-m-d');
-    $expirationDate = date('d-m-Y', strtotime($monthAccess, strtotime($currentDay)));
-   
-
-?>
 
 SUBSCRIPTION<br/>
  Ticket Type: <strong>{{ $extrainfo[1] }}</strong><br />
  Ticket Ammount: <strong>{{ $trans->total_amount }}</strong><br />
- Expiration date: <strong>{{ $expirationDate }}</strong><br />
+ @if($extrainfo[8]) Expiration date: <strong>{{$extrainfo[8] }}</strong><br />@endif
 
 </p>
 <br/>

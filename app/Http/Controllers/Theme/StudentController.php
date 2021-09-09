@@ -23,7 +23,8 @@ use \Carbon\Carbon;
 use Session;
 use Mail;
 use App\Model\PaymentMethod;
-
+use Validator;
+use Image;
 
 class StudentController extends Controller
 {
@@ -33,6 +34,38 @@ class StudentController extends Controller
     {
 
         $this->middleware('event.check')->only('elearning');
+
+    }
+
+
+    public function infoValidation(Request $request){
+
+        $validatorArray = [];
+
+        $validatorArray['firstname'] = 'required';
+        $validatorArray['lastname'] = 'required';
+        $validatorArray['mobileCheck'] = 'phone:AUTO';
+
+    
+        if($request->email != Auth::user()->email){
+            $validatorArray['email'] = 'required|email|unique:users,email';
+        }
+
+        $validator = Validator::make($request->all(), $validatorArray);
+
+        if ($validator->fails()) {
+            return [
+                'status' => 0,
+                'errors' => $validator->errors(),
+                'message' => '',
+            ];
+        
+        }else{
+            return [
+                'status' => 1,
+                'message' => '',
+            ];
+        }
 
     }
 
@@ -436,6 +469,18 @@ class StudentController extends Controller
         $name1 = explode(".",$content->getClientOriginalName());
 
         $path_name = $request->dp_fileupload->store('profile_user', 'public');
+        
+        $image = Image::make(public_path('/uploads/').$path_name);
+
+        if($image->width() > $image->height()){
+            $image->heighten(470)->crop(470, 470);
+        }elseif($image->width() < $image->height()){
+            $image->widen(470)->crop(470, 470);
+        }else{
+            $image->resize(470, 470);
+        }
+
+        $image->save(public_path('/uploads/').$path_name, 60);
 
         $name = explode('profile_user/',$path_name);
         $size = getimagesize('uploads/'.$path_name);
@@ -465,6 +510,26 @@ class StudentController extends Controller
 
     public function updatePersonalInfo(Request $request){
         $user = Auth::user();
+
+        if($user->email !== $request->email){
+           
+            $this->validate($request, [
+                'firstname' => ['required', 'min:3'],
+                'lastname' => ['required', 'min:3'],
+                'email' => [
+                    'required', 'email','unique:users,email'
+                ]
+                ]);
+        }else{
+            $this->validate($request,[
+                'firstname' => ['required', 'min:3'],
+                'lastname' => ['required', 'min:3'],
+                'email' => [  
+                  'required', 'email',
+                ]
+                ]);
+        }
+
         $hasPassword = $request->get("password");
 
         $user->update($request->merge([

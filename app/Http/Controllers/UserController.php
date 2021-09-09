@@ -260,11 +260,22 @@ class UserController extends Controller
         $person_details = json_encode($person_details);*/
         
        //Create Transaction
+
+       $billingDetails = [];
+
+       if($request->billing == 1){
+        $billingDetails = json_decode($user['receipt_details'],true);
+        $billingDetails['billing'] = 1;
+       }else{
+        $billingDetails = json_decode($user['invoice_details'],true);
+        $billingDetails['billing'] = 2;
+       }
+       
        $transaction = new Transaction;
        $transaction->placement_date = Carbon::now();
        $transaction->ip_address = \Request::ip();
        $transaction->type = $ticket['type'];
-       $transaction->billing_details = $request->billing == 1 ? $user['receipt_details'] : $user['invoice_details'];
+       $transaction->billing_details = json_encode($billingDetails);
        $transaction->total_amount = $price;
        $transaction->amount = $price;
        $transaction->status = 1;
@@ -304,16 +315,16 @@ class UserController extends Controller
        $transaction->event()->attach($event_id);
 
 
-
        $response_data['ticket']['event'] = $data['event']['title'];
        $response_data['ticket']['ticket_title'] = $ticket['title'];
        $response_data['ticket']['exp'] = $exp_date;
        $response_data['ticket']['event_id'] = $data['event']['id'];
        $response_data['user_id'] = $user['id'];
        $response_data['ticket']['ticket_id'] = $ticket['id'];;
+       $response_data['ticket']['type'] = $ticket['type'];;
 
 
-       $this->sendEmails($transaction,$event);
+       $this->sendEmails($transaction,$event,$response_data);
 
        return response()->json([
             'success' => __('Ticket assigned succesfully.'),
@@ -483,7 +494,7 @@ class UserController extends Controller
     }
 
 
-    public function sendEmails($transaction,$content)
+    public function sendEmails($transaction,$content,$ticket)
     {
 
         $user = $transaction->user()->first();//Auth::user();
@@ -494,14 +505,29 @@ class UserController extends Controller
         $muser['first'] = $user->firstname;
         $muser['email'] = $user->email;
 
-        $tickettypedrop = 'Upon Coupon';
-        $tickettypename = 'Upon Coupon';
+        $tickettypedrop = $ticket['ticket']['type'];
+        $tickettypename = $ticket['ticket']['type'];
         $eventname = $content->title;
-        $date = '';
+        $date = $content->summary1->first() ? $content->summary1->first()->title : '';
         $eventcity = '';
 
+        $groupEmailLink = '';
+        if ($content && $content->id == 2068) {
+            $groupEmailLink = 'https://www.facebook.com/groups/846949352547091';
+        }else{
+            $groupEmailLink = 'https://www.facebook.com/groups/elearningdigital/';
+        }
 
-        $extrainfo = [$tickettypedrop, $tickettypename, $eventname, $date, '-', '-', $eventcity];
+        $today = date('Y/m/d'); 
+        $expiration_date = '';
+
+        if($content->expiration){
+            $monthsExp = '+' . $content->expiration .'months';
+            $expiration_date = date('Y-m-d', strtotime($monthsExp, strtotime($today)));
+        }
+
+        $extrainfo = [$tickettypedrop, $tickettypename, $eventname, $date, '-', '-', $eventcity,$groupEmailLink,$expiration_date];
+        
         $helperdetails[$user->email] = ['kcid' => $user->kc_id, 'deid' => $user->partner_id, 'stid' => $user->student_type_id, 'jobtitle' => $user->job_title, 'company' => $user->company, 'mobile' => $user->mobile];
 
         $adminemail = 'info@knowcrunch.com';
@@ -513,16 +539,31 @@ class UserController extends Controller
         $data['helperdetails'] = $helperdetails;
         $data['eventslug'] = $content->slug;
 
-        $sent = Mail::send('emails.admin.info_new_registration', $data, function ($m) use ($adminemail,$muser) {
+        if($content->view_tpl == 'elearning_event'){
+  
+            $sent = Mail::send('emails.admin.info_new_registration_elearning', $data, function ($m) use ($adminemail, $muser) {
 
-            $fullname = $muser['name'];
-            $first = $muser['first'];
-            $sub = 'Knowcrunch - ' . $first . ' your registration has been completed.';
-            $m->from($adminemail, 'Knowcrunch');
-            $m->to($muser['email'], $fullname);
-            $m->subject($sub);
-        });
+                $fullname = $muser['name'];
+                $first = $muser['first'];
+                $sub = 'Knowcrunch - ' . $first . ' your registration has been completed.';
+                $m->from($adminemail, 'Knowcrunch');
+                $m->to($muser['email'], $fullname);
+                $m->subject($sub);
+               // $m->attachData($pdf->output(), "invoice.pdf");
+            });
 
+        }else{
+            
+            $sent = Mail::send('emails.admin.info_new_registration', $data, function ($m) use ($adminemail, $muser) {
+
+                $fullname = $muser['name'];
+                $first = $muser['first'];
+                $sub = 'Knowcrunch - ' . $first . ' your registration has been completed.';
+                $m->from($adminemail, 'Knowcrunch');
+                $m->to($muser['email'], $fullname);
+                $m->subject($sub);
+            });
+        }
 
         //send elearning Invoice
         $transdata = [];

@@ -55,29 +55,30 @@ class CartController extends Controller
 
         $validatorArray = [];
 
-        	$validatorArray['email.*'] = 'required|email';
-            $validatorArray['name.*'] = 'required';
-            $validatorArray['surname.*'] = 'required';
-            $validatorArray['mobile.*'] = 'required';
-            $validatorArray['city.*'] = 'required';
-            $validatorArray['address.*'] = 'required';
-            $validatorArray['addressnum.*'] = 'required';
-            $validatorArray['postcode.*'] = 'required';
+        $validatorArray['email.*'] = 'required|email';
+        $validatorArray['name.*'] = 'required';
+        $validatorArray['surname.*'] = 'required';
+        $validatorArray['mobile.*'] = 'required';
+        $validatorArray['city.*'] = 'required';
+        $validatorArray['address.*'] = 'required';
+        $validatorArray['addressnum.*'] = 'required';
+        $validatorArray['postcode.*'] = 'required';
+        //$validatorArray['mobileCheck.*'] = 'phone:AUTO';
 
         //    $validatorArray['jobtitle.*'] = 'required';
             //$validatorArray['afm.*'] = 'required';
 
-            $freecheck = Cart::total();
-            if ($studentidfield) {
-                if($freecheck > 0) {
-                    $validatorArray['student.*'] = 'required';
-                }
-                else {
-                    $validatorArray['student.*'] = 'required|min:10|max:11|exists:users,kc_id';
-                }
-
-
+        $freecheck = Cart::total();
+        if ($studentidfield) {
+            if($freecheck > 0) {
+                $validatorArray['student.*'] = 'required';
             }
+            else {
+                $validatorArray['student.*'] = 'required|min:10|max:11|exists:users,kc_id';
+            }
+
+
+        }
 
 
         if ($pay_bill_data['billing'] == 2) {
@@ -562,7 +563,6 @@ class CartController extends Controller
 
     public function userPaySbt(Request $request){
 
-       //dd($request->all());
         $this->validate($request, [
             'mobileCheck.*' => 'phone:AUTO',
         ]);

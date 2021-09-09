@@ -321,7 +321,7 @@ class InfoController extends Controller
 
         if (isset($transaction['billing_details']['billing'])) {
             if ($transaction['billing_details']['billing'] == 2) {
-                dd('d');
+                
                 $invoice = 'YES';
             }
             else {
@@ -374,7 +374,7 @@ class InfoController extends Controller
               //  dd($eventslug);
                 $eventname = $thisevent->title;
                 $eventcity = '';//$thisevent->categories->where('parent_id',9)->first()->name;
-
+                $eventdate = $thisevent->summary1->where('section','date')->first() ? $thisevent->summary1->where('section','date')->first()->title : '';
                 if($thisevent->city->first() != null){
                     $eventcity = $thisevent->city->first()->name;
                 }
@@ -422,7 +422,7 @@ class InfoController extends Controller
                 $thismember['afm'] = $pay_seats_data['afms'][$key];
 
     		$checkemailuser = User::where('email', '=', $thismember['email'])->first();
-
+            $expiration_date = '';
     		if ($checkemailuser) {
                 //if(!$elearning){
                     $transaction->user()->save($checkemailuser);
@@ -439,7 +439,7 @@ class InfoController extends Controller
                 if ($evid && $evid > 0) {
 
                     $today = date('Y/m/d'); 
-                    $expiration_date = '';
+                   
 
                     if($thisevent->expiration){
                         $monthsExp = '+' . $thisevent->expiration .'months';
@@ -529,7 +529,7 @@ class InfoController extends Controller
         }else{
             $groupEmailLink = 'https://www.facebook.com/groups/elearningdigital/';
         }
-		$extrainfo = [$tickettypedrop, $tickettypename, $eventname, $eventdate, $specialseats, $invoice,$eventcity,$groupEmailLink];
+		$extrainfo = [$tickettypedrop, $tickettypename, $eventname, $eventdate, $specialseats, $invoice,$eventcity,$groupEmailLink,$expiration_date];
 
         //Create new collected users
 
@@ -655,9 +655,9 @@ class InfoController extends Controller
     		$data['trans'] = $transaction;
     		$data['extrainfo'] = $extrainfo;
             $data['helperdetails'] = $helperdetails;
-            $data['$elearning'] = $elearning;
+            $data['elearning'] = $elearning;
             $data['eventslug'] = $eventslug;
-            
+           
             //dd($helperdetails);
 
             if($elearning){

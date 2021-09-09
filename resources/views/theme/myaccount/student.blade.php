@@ -201,7 +201,7 @@
                                        <a href="#" class="edit-fields" href="javascript:void(0)"><img src="{{cdn('/theme/assets/images/icons/icon-edit.svg')}}" alt="Edit Fields"/><span>Edit</span></a>
                                     </div>
                                     --}}
-                                    <form method="post" action="{{ route('update.personalInfo') }}" autocomplete="off">
+                                    <form id="update-form" method="post" action="{{ route('update.personalInfo') }}" autocomplete="off">
                                        {!! csrf_field() !!}
                                        <div class="col12">
                                           <label>First name: <span>*</span></label>
@@ -212,7 +212,7 @@
                                        <div class="col12">
                                           <label>Last name: <span>*</span></label>
                                           <div class="input-safe-wrapper">
-                                             <input class="required"  type="text" name="lastname" id="lastname" value="{{{ old('lastname', $currentuser['lastname']) }}}" >
+                                             <input class="required"  type="text" name="lastname" id="lastname" value="{{ old('lastname', $currentuser['lastname']) }}" >
                                           </div>
                                        </div>
                                        <div class="col12">
@@ -225,25 +225,27 @@
                                        <div class="col12">
                                           <label>Company:</label>
                                           <div class="input-safe-wrapper">
-                                             <input  type="text" name="company" id="company" value="{{{ old('company', $currentuser['company']) }}}" >
+                                             <input  type="text" name="company" id="company" value="{{ old('company', $currentuser['company']) }}" >
                                           </div>
                                        </div>
                                        <div class="col12">
                                           <label>Position/Title:</label>
                                           <div class="input-safe-wrapper">
-                                             <input name="job_title" id="job_title" value="{{{ old('job_title', $currentuser['job_title']) }}}" >
+                                             <input name="job_title" id="job_title" value="{{ old('job_title', $currentuser['job_title']) }}" >
                                           </div>
                                        </div>
                                        <div class="col12">
                                           <label>Email: <span>*</span></label>
                                           <div class="input-safe-wrapper">
-                                             <input class="required" name="email" type="email" value="{{{ old('email', $currentuser['email']) }}}" >
+                                             <span id="email-error"></span>
+                                             <input class="required" id="email" name="email" type="email" value="{{ old('email', $currentuser['email']) }}" >
                                           </div>
                                        </div>
                                        <div class="col12">
+                                          <span id="mobileCheck-error"></span>
                                           <label>Mobile phone: <span>*</span></label>
                                           <div class="input-safe-wrapper is-flex full-width">
-                                             <select name="countryCode" id="selectCountry" class="select2 form-control mb-3 custom-select country-select">
+                                             <select name="country_code" id="selectCountry" class="select2 form-control mb-3 custom-select country-select">
                                                 <option data-countryCode="DZ" value="213">DZ (+213)</option>
                                                 <option data-countryCode="AD" value="376">AD (+376)</option>
                                                 <option data-countryCode="AO" value="244">AO (+244)</option>
@@ -290,7 +292,7 @@
                                                 <option data-countryCode="CU" value="53">CU (+53)</option>
                                                 <option data-countryCode="CY" value="90392">CY (+90392)</option>
                                                 <option data-countryCode="CY" value="357">CY (+357)</option>
-                                                <option data-countryCode="CZ" value="42">CZ (+42)</option>
+                                                <option data-countryCode="CZ" value="420">CZ (+420)</option>
                                                 <option data-countryCode="DK" value="45">DK (+45)</option>
                                                 <option data-countryCode="DJ" value="253">DJ (+253)</option>
                                                 <option data-countryCode="DM" value="1809">DM (+1809)</option>
@@ -459,6 +461,7 @@
                                                 <option data-countryCode="ZM" value="260">ZM (+260)</option>
                                                 <option data-countryCode="ZW" value="263">ZW (+263)</option>
                                              </select>
+                                             
                                              <input class="required" onkeyup="checkPhoneNumber(this)" type="text" name="mobile" id="mobile" value="{{{ old('mobile', $currentuser['mobile']) }}}" >
                                              <input type="hidden" name="mobileCheck" id="mobileCheck" value="{{{ old('mobile', '+'.$currentuser['country_code'].$currentuser['mobile']) }}}">
                                           </div>
@@ -480,7 +483,7 @@
                                        </div>
                                        --}}
                                        <div class="form-submit-area">
-                                          <button type="submit" class="btn btn--md btn--secondary">Update</button>
+                                          <button id="update-personal-info" type="button" class="btn btn--md btn--secondary">Update</button>
                                        </div>
                                     </form>
                                  </div>
@@ -2379,12 +2382,61 @@
 
       $("#selectCountry").select2()
 
-      @if("{{ old('countryCode') }}")
+      @if("{{ old('country_code') }}")
 
-         $("#selectCountry").val("{{ old('countryCode',$currentuser->country_code) }}").change();
+         $("#selectCountry").val("{{ old('country_code',$currentuser->country_code) }}").change();
 
       @endif
 
+   });
+
+</script>
+
+<script>
+
+   $("#update-personal-info").click(function(){
+
+      fdata =$("#update-form").serialize();
+      var firstError = false;
+      $.ajax({ url: "{{route('validate.personalInfo')}}", type: "post",
+            data: fdata,
+            success: function(data) {
+                //console.log(data);
+                //return;
+                $('#update-form').find("input").removeClass('verror');
+                if (Number(data.status) === 0) {
+                    //var html = '<ul>';
+                    $.each(data.errors, function (key, row) {
+                        //console.log(data.errors);
+                        var newkey = key.replace('.', '');
+
+                        $('#update-form').find('input#'+newkey).addClass(['verror','validate-error']);
+
+                        if(!firstError){
+                            elementsHeight = Math.round($('#header').outerHeight()) - document.getElementById(newkey).getBoundingClientRect().top +30
+                            firstError = true;
+
+                            $('html, body').animate({
+                                scrollTop: elementsHeight
+                            }, 300);
+                        }
+
+                        $('#'+newkey+'-error').text(row[0]);
+                        //var s = $('#update-form').find('input#'+newkey).attr('placeholder');
+                        var pl =  row[0] ;
+
+                        $('#update-form').find('input#'+newkey).attr('placeholder', pl);
+
+                    });
+
+
+                  
+                } else { 
+                  $('#update-form').submit();
+                }
+            }
+        });
+      
    });
 
 </script>
