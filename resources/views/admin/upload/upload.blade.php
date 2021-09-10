@@ -59,7 +59,7 @@ Upload Image
 
 @push('js')
 
-<script>
+{{--<script>
     $( "#select-image" ).click(function() {
         path = ''
         let elem = $('#select_ImageModal .table-info').parent().parent().parent().parent().parent()
@@ -82,7 +82,39 @@ Upload Image
         if(name == ''){
             path = 'uploads'+path +'/'+name
         }
+        console.log('path = ', path)
+        $('#image_upload').val(path)
+        $('#img-upload').attr('src', path);
+        $(".close").click();
+        //$("#upload_form").submit();
 
+    });
+
+</script>--}}
+
+
+<script>
+    $( "#select-image" ).click(function() {
+        let path = '/uploads/'
+        
+
+        name = $('#select_ImageModal .table-info .fm-content-item').text()
+        if(name == ''){
+            name = $('#select_ImageModal .fm-grid-item.active').attr('title')
+        }
+
+        name = name.replace(/\s/g, '')
+        ext = $('#select_ImageModal .table-info td:nth-child(3)').text()
+        ext = ext.replace(/\s/g, '')
+
+        $("#select_ImageModal .breadcrumb.active-manager .breadcrumb-item.text-truncate span").each(function() {
+
+            path += $(this).text() + '/' ;
+
+        });
+
+        path += name+'.'+ext;
+        console.log('path = ', path)
         $('#image_upload').val(path)
         $('#img-upload').attr('src', path);
         $(".close").click();

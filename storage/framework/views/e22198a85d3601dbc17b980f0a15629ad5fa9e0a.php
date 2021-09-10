@@ -1,1 +1,0 @@
-Έχουν απομείνει <?php echo e($dereeIDs); ?> codes!<?php /**PATH C:\laragon\www\kcversion8\resources\views/emails/admin/deree_notification.blade.php ENDPATH**/ ?>

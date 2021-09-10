@@ -422,6 +422,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('studentlogin','Auth\LoginController@studentauth');
     Route::post('kcregister', 'Auth\RegisterController@kcRegister');
     Route::get('/logout', [ 'as' => 'logout' , 'uses' => 'Theme\StudentController@logout']);
+    Route::get('/logmeout', 'Theme\StudentController@logout');
 });
 
 Route::group(['middleware' => 'auth'], function () {

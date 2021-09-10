@@ -59,16 +59,13 @@ Upload Image
 
 <?php $__env->startPush('js'); ?>
 
+
+
+
 <script>
     $( "#select-image" ).click(function() {
-        path = ''
-        let elem = $('#select_ImageModal .table-info').parent().parent().parent().parent().parent()
-        elem = $(elem).find('.fm-breadcrumb li')
-        $.each( elem, function(key, value) {
-            if(key != 0){
-                path = path+'/'+$(value).text()
-            }
-        })
+        let path = '/uploads/'
+        
 
         name = $('#select_ImageModal .table-info .fm-content-item').text()
         if(name == ''){
@@ -78,11 +75,15 @@ Upload Image
         name = name.replace(/\s/g, '')
         ext = $('#select_ImageModal .table-info td:nth-child(3)').text()
         ext = ext.replace(/\s/g, '')
-        path = 'uploads'+path +'/'+name+'.'+ext
-        if(name == ''){
-            path = 'uploads'+path +'/'+name
-        }
 
+        $("#select_ImageModal .breadcrumb.active-manager .breadcrumb-item.text-truncate span").each(function() {
+
+            path += $(this).text() + '/' ;
+
+        });
+
+        path += name+'.'+ext;
+        console.log('path = ', path)
         $('#image_upload').val(path)
         $('#img-upload').attr('src', path);
         $(".close").click();

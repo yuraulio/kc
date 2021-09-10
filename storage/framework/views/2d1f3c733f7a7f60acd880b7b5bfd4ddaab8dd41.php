@@ -92,6 +92,7 @@
 
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 <div class="col crop-wrap-btn">
+                <!-- <div class="status-crop d-none">Successfully cropped!!</div> -->
                 <button class="btn btn-primary crop" data-version="<?php echo e($version['version']); ?>" type="button">Crop</button>
                     </div>
                 <?php else: ?>
@@ -128,7 +129,13 @@
 
 </div>
 
+<?php $__env->startPush('css'); ?>
+<link rel="stylesheet" href="<?php echo e(asset('argon')); ?>/vendor/sweetalert2/dist/sweetalert2.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css" integrity="sha512-wJgJNTBBkLit7ymC6vvzM1EcSWeM9mmOu+1USHaRBbHkm6W9EgM0HY27+UtUaprntaYQJF75rc8gjxllKs5OIQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<?php $__env->stopPush(); ?>
+
 <?php $__env->startPush('js'); ?>
+<script src="<?php echo e(asset('argon')); ?>/vendor/sweetalert2/dist/sweetalert2.min.js"></script>
 
 <script>
     let ver = []
@@ -266,7 +273,7 @@
     });
 
 
-
+let status = false
     $(".crop").click(function(){
         let media = <?php echo json_encode($event, 15, 512) ?>;
         let path = $(this).parent().parent().find('img').attr('src')
@@ -283,29 +290,33 @@
                     cropper = value.insta
 
                     $.ajax({
-                    async: false,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                type: 'post',
-                url: '/admin/media/crop_image',
-                data: {'media_id': media.id,'version':version ,'path':path, 'x':cropper.getData({rounded: true}).x, 'y':cropper.getData({rounded: true}).y, 'width':cropper.getData({rounded: true}).width, 'height':cropper.getData({rounded: true}).height},
-                success: function (data) {
-                    //console.log(data)
-                    if(data){
-                        $('#msg_'+data.data.version).append(data.success)
-                        $('#msg_'+data.data.version).css('display', 'inline-block')
-                    }
-                }
-            });
+                        async: false,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        type: 'post',
+                        url: '/admin/media/crop_image',
+                        data: {'media_id': media.id,'version':version ,'path':path, 'x':cropper.getData({rounded: true}).x, 'y':cropper.getData({rounded: true}).y, 'width':cropper.getData({rounded: true}).width, 'height':cropper.getData({rounded: true}).height},
+                        success: function (data) {
+                            //console.log(data)
+                            if(data){
+                                status = true
+                                // $('#msg_'+data.data.version).append(data.success)
+                                // $('#msg_'+data.data.version).css('display', 'inline-block')
+                            }
+                        }
+                    });
                 }
             })
-
-            //alert(cropper.getData({rounded: true}).height)
-
-
-
         })
+
+        if(status){
+            Swal.fire(
+                'Good job!',
+                'Successfully Cropped!',
+                'success'
+            )
+        }
 
 
     });

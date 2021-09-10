@@ -66,7 +66,7 @@
        e.preventDefault();
 
        if(!$(this).hasClass('inconsent')) {
-            window.location.replace('/logmeout');
+            window.location.replace('/logout');
        }
        else {
             alert('Please read all way down and accept our data privacy policy');
