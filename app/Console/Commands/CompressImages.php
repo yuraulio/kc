@@ -80,7 +80,7 @@ class CompressImages extends Command
                         $image_resize->crop(intval($edit['width']),intval($edit['height']), intval($edit['x']), intval($edit['y']))->resize($value['w'], $value['h']);
                     }
 
-
+                    //$image_resize->save(public_path($media['path'] .$media['name'].'-'.$value['version'] . $media['ext']), $value['q']);
                     if ($image_resize->mime == 'image/jpeg'){
                         $image = imagecreatefromjpeg(public_path($media['path'] .$media['name'].'-'.$value['version'] . $media['ext']));
 
@@ -91,7 +91,7 @@ class CompressImages extends Command
                     $image = imagecreatefrompng(public_path($media['path'] .$media['name'].'-'.$value['version'] . $media['ext']));
                     }
 
-                    imagejpeg($image, public_path($media['path'] .$media['name'].'-'.$value['version'] . $media['ext']), 30);
+                    imagejpeg($image, public_path($media['path'] .$media['name'].'-'.$value['version'] . $media['ext']), 40);
 
                 }
 
