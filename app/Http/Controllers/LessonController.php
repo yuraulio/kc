@@ -433,7 +433,7 @@ class LessonController extends Controller
                         
                         continue;
                     }
-
+                    //$lesson->topic()->detach($topic->id);
                     $cat->topic()->detach($topic);
                     $cat->topic()->attach($topic, ['lesson_id' => $lesson->id]);
                     $allEvents = $cat->events;
@@ -462,7 +462,10 @@ class LessonController extends Controller
                         }
 
                         //if(!in_array($lesson['id'],$allLessons)){
-                            
+                        
+                        
+                        //$lesson->topic()->attach($topic->id);
+                
                         $event->allLessons()->detach($lesson['id']);
                         $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id'],'date'=>$date,'time_starts'=>$time_starts,
                             'time_ends'=>$time_ends, 'duration' => $duration, 'room' => $room, 'instructor_id' => $instructor_id, 'priority' => $priority]);
