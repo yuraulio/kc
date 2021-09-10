@@ -208,7 +208,7 @@ class UserController extends Controller
 
         foreach($user->events as $key => $event)
         {
-            //if($event['title'] == 'E-Learning Masterclass in Digital & Social Media Marketing 2020'){
+            if($event['title'] == 'E-Learning Masterclass in Digital & Social Media Marketing 2020'){
 
             $event = Event::find($event['id']);
             //dd($event->category);
@@ -228,6 +228,7 @@ class UserController extends Controller
                 //dd($files);
                 $data1 = [];
 
+
                 foreach($folders as $key44 => $folder)
                 {
                     //dd($folder);
@@ -239,41 +240,42 @@ class UserController extends Controller
                         //dd($folder);
 
                         foreach($folder as $key33 => $folder_bonus){
+                            //dd($folder_bonus);
+                            if($folder['id'] == $folder_bonus['parent']){
+                                dd('find');
+                                //$data1['bonus'][$key44] = $folder_bonus;
+                            }
+
                             //"/How to use URLs with UTMs/1 - How to work with UTMs/Bonus Files"
                             //dd($key33);
 
-                            $folder_bonus1 = preg_replace('/[0-9]+/', '', $folder_bonus['dirname']);
-                            $folder_bonus1 = str_replace('/', '', $folder_bonus1);
-                            //dd($folder_bonus1);
-                            $folder_bonus1 = Str::slug($folder_bonus1);
 
-                            foreach($files[2] as $key1 => $file){
-                                $file11 = explode($file['filename'], $file['dirname']);
-                                //dd($file11);
-                                $file2 = preg_replace('/[0-9]+/', '', $file11[0]);
-                                $file2 = str_replace('/', '', $file2);
-                                $file2 = Str::slug($file2);
-                                if($folder_bonus1 == $file2){
-                                    //dd('found');
-                                    //dd($folder_bonus);
+                            // foreach($files[2] as $key1 => $file){
+                            //     $file11 = explode($file['filename'], $file['dirname']);
+                            //     //dd($file11);
+                            //     $file2 = preg_replace('/[0-9]+/', '', $file11[0]);
+                            //     $file2 = str_replace('/', '', $file2);
+                            //     $file2 = Str::slug($file2);
+                            //     if($folder_bonus1 == $file2){
+                            //         //dd('found');
+                            //         //dd($folder_bonus);
 
-                                    //$data1['folders']['bonus'][$key] = $folder;;
+                            //         //$data1['folders']['bonus'][$key] = $folder;;
 
-                                    //$data1['bonus'][$key44] = $folder_bonus;
-                                    //dd($data1['bonus'][$key33][]);
-                                    $data1['bonus'][$key33]['files'][] = $file;
-                                    //var_dump($file);
-                                    //dd($data1['bonus'][$key33]['files'][$key1]);
+                            //         //$data1['bonus'][$key44] = $folder_bonus;
+                            //         //dd($data1['bonus'][$key33][]);
+                            //         $data1['bonus'][$key33]['files'][] = $file;
+                            //         //var_dump($file);
+                            //         //dd($data1['bonus'][$key33]['files'][$key1]);
 
-                                }
-                            }
+                            //     }
+                            // }
 
 
                         }
                         //dd($data1['bonus']);
 
                     }else{
-                        //dd($files);
                         foreach($files as $key1 => $file){
 
                             if($key1 == 1){
@@ -282,31 +284,18 @@ class UserController extends Controller
                                     //dd($folder);
                                     $data1['folders'][$key22] = $folder;
 
-                                    // "dirname" => "/Diploma in Digital & Social Media 2020/0 - Check First"
-                                    // "foldername" => "0 - Check First"
+                                    // $folder2 = preg_replace('/[0-9]+/', '', $folder['dirname']);
 
 
-                                    $folder2 = preg_replace('/[0-9]+/', '', $folder['dirname']);
-
-                                    ///Diploma in Digital & Social Media / - Check First
-
-                                    $folder2 = str_replace('/', '', $folder2);
-                                    $folder2 = Str::slug($folder2);
+                                    // $folder2 = str_replace('/', '', $folder2);
+                                    // $folder2 = Str::slug($folder2);
                                     $data1['folders'][$key22]['files'] = array();
                                     foreach($file as $key0 => $file1){
-
-                                        $file222 = explode($file1['filename'], $file1['dirname']);
-                                        //dd($file222);
-                                        $file2 = preg_replace('/[0-9]+/', '', $file222[0]);
-
-                                        $file2 = str_replace('/', '', $file2);
-                                        //dd($file2);
-                                        $file2 = Str::slug($file2);
-                                        //dd($file2);
-
-                                        if($folder2 == $file2){
+                                        if($folder['id'] == $file1['fid']){
                                             array_push($data1['folders'][$key22]['files'], $file1);
                                         }
+
+
                                     }
                                 }
 
@@ -316,7 +305,6 @@ class UserController extends Controller
                 }
 
                 foreach($data1['folders'] as $key_folder => $folder){
-                    //dd($folder);
 
                     $folder_dir = $folder['dirname'];
                     $folder_dir = preg_replace('/[0-9]+/', '', $folder_dir);
@@ -359,7 +347,7 @@ class UserController extends Controller
 
 
             //$data[$key]['event']['files'] = $data1;
-            //dd($data1);
+            dd($data1);
             //dd($data[$key]['event']);
 
 
@@ -594,7 +582,7 @@ class UserController extends Controller
                 array_push($data[$key]['topics'], $arr);
             }
             //dd($data);
-        //}
+        }
 
 
         }

@@ -58,7 +58,7 @@ class CheckSmsForApi
 
 
         if (Auth::guest() || env('APP_DEBUG') == true) {
-            //return $next($request);
+            return $next($request);
         }
 
 
