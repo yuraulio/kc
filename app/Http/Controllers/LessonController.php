@@ -100,7 +100,7 @@ class LessonController extends Controller
                     if($cat->id != $request->category){
                         continue;
                     }
-                    $cat->topic()->detach($topic);
+                    $lesson->topic()->wherePivot('category_id',$request->category)->detach();
                     $cat->topic()->attach($topic, ['lesson_id' => $lesson->id]);
 
                     $allEvents = $cat->events;
@@ -124,7 +124,7 @@ class LessonController extends Controller
                             $duration = $allLessons[$lesson['id']][0]['pivot']['duration'];
                             $room = $allLessons[$lesson['id']][0]['pivot']['room'];
                             $instructor_id = $allLessons[$lesson['id']][0]['pivot']['instructor_id'];
-                            $priority = count($allLessons)+1;
+                            
                         }
 
                         //if(!in_array($lesson['id'],$allLessons)){
@@ -433,8 +433,7 @@ class LessonController extends Controller
                         
                         continue;
                     }
-                    //$lesson->topic()->detach($topic->id);
-                    $cat->topic()->detach($topic);
+                    $lesson->topic()->wherePivot('category_id',$request->category)->detach();
                     $cat->topic()->attach($topic, ['lesson_id' => $lesson->id]);
                     $allEvents = $cat->events;
                     foreach($allEvents as $event)
@@ -458,7 +457,7 @@ class LessonController extends Controller
                             $duration = $allLessons[$lesson['id']][0]['pivot']['duration'];
                             $room = $allLessons[$lesson['id']][0]['pivot']['room'];
                             $instructor_id = $allLessons[$lesson['id']][0]['pivot']['instructor_id'];
-                            $priority = count($allLessons)+1;
+                            //$priority = $priority;
                         }
 
                         //if(!in_array($lesson['id'],$allLessons)){
