@@ -509,6 +509,9 @@ Route::get('/deree-notification', 'Dashboard\CronjobsController@dereeIDNotificat
 //SITEMAP
 Route::get('feed/{feed_type?}','Theme\FeedController@index');
 
+//UPDATE CONSENT
+Route::post('/update-consent', 'Theme\StudentController@updateConsent');
+
 Route::group(['middleware' => ['web']], function () {
     Route::get('home',function(){
         return redirect('/');

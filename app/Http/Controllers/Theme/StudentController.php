@@ -212,6 +212,25 @@ class StudentController extends Controller
         return $data;
     }
 
+    public static function updateConsent(Request $request)
+    {
+        $user = Auth::user();
+        
+        if($user){
+            
+            $now = date('Y-m-d H:i:s');
+            $clientip = '';
+            $clientip = \Request::ip();
+            $user->terms = 1;
+            $user->consent = '{"ip": "' . $clientip . '", "date": "'.$now.'" }';
+            $user->save();
+           
+            return ['status' => 1, 'message' => 'Thank you!'];
+        }
+
+        return ['status' => 0, 'message' => 'No student found'];
+    }
+
     /*public function updateUserStatistic($event,$statistics,$user){
 
         $tab = $event['title'];

@@ -921,7 +921,16 @@
                                                                <div class="files-wrapper bonus-files">
                                                                   <h4 class="bonus-title">{{ $subf['foldername'] }}</h4>
                                                                   <span><i class="icon-folder-open"></i>   </span>
-                                                                  {{--@foreach($files_bonus as $file_bonus)
+                                                                  @foreach($files_bonus as $file_bonus)
+                                                                  
+
+                                                                  @if($file_bonus['filename'] == '1. Facebook.pdf')
+
+                                                                     {{dd($file_bonus)}}
+                                                                     
+                                                                  @endif
+
+                                                                  @if($file_bonus['fid'] == $folder_bonus['fid'])
                                                                   <?php $subfiles[]= $file_bonus['filename'] ?>
                                                                   <div class="file-wrapper">
                                                                      <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
@@ -929,7 +938,8 @@
                                                                      <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
                                                                      <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
                                                                   </div>
-                                                                  @endforeach--}}
+                                                                  @endif
+                                                                  @endforeach
 
                                                                </div>
                                                                @endif
@@ -967,14 +977,15 @@
                                                                     <span><i class="icon-folder-open"></i>   </span>
                                                                     @if(isset($files_bonus) && count($files_bonus) > 0)
                                                                         @foreach($files_bonus as $file_bonus)
-                                                                        @if($file_bonus['parent'] == $folder_bonus['parent'] )
-                                                                            <div class="file-wrapper">
-                                                                                <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
-                                                                                <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
-                                                                                <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
-                                                                                <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
-                                                                            </div>
-                                                                        @endif
+                                                                           @if($file_bonus['parent'] == $folder_bonus['parent'] && !in_array($file_bonus['filename'],$subfiles))
+                                                                              
+                                                                              <div class="file-wrapper">
+                                                                                  <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
+                                                                                  <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
+                                                                                  <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
+                                                                                  <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
+                                                                              </div>
+                                                                           @endif
                                                                         @endforeach
                                                                     @endif
                                                                 @endif

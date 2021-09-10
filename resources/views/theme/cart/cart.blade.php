@@ -2000,6 +2000,13 @@ $( document ).ready(function() {
 
 
    }
+
+$(document).ready(function(){
+
+   $("#selectCountry").change();
+   $("#selectCountry-reg").change();
+})
+
 </script>
 
 @if(isset($paywithstripe) && $paywithstripe == 1)

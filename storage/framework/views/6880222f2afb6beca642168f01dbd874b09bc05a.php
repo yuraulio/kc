@@ -2002,6 +2002,13 @@ $( document ).ready(function() {
 
 
    }
+
+$(document).ready(function(){
+
+   $("#selectCountry").change();
+   $("#selectCountry-reg").change();
+})
+
 </script>
 
 <?php if(isset($paywithstripe) && $paywithstripe == 1): ?>

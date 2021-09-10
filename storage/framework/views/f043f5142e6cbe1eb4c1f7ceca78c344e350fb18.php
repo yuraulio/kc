@@ -1,18 +1,19 @@
-@extends('theme.layouts.master')
-@section('metas')
 
-    <title>{{ $page['name'] }}</title>
-   {!! $page->metable->getMetas() !!}
+<?php $__env->startSection('metas'); ?>
 
-@endsection
-@section('content')
+    <title><?php echo e($page['name']); ?></title>
+   <?php echo $page->metable->getMetas(); ?>
+
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
 
 <main id="" role="main">
    <section class="section-hero section-hero-small section-hero-blue-bg">
       <div class="container">
          <div class="hero-message">
-         <h1>{{ $page['name'] }}</h1>
-                    <h2>{{ $page['title'] }}</h2>
+         <h1><?php echo e($page['name']); ?></h1>
+                    <h2><?php echo e($page['title']); ?></h2>
          </div>
       </div>
       <!-- /.section-hero -->
@@ -20,7 +21,8 @@
    <section class="section-page-content">
         <div class="container">
             <div class="content-text-area">
-               {!! $page['content'] !!}
+               <?php echo $page['content']; ?>
+
             <!-- /.text-area -->
             <!-- /.container -->
             </div>
@@ -32,7 +34,8 @@
    <section class="section-page-content">
    <div class="container">
         <form id="acceptconsent" method="POST" action="" class="content-text-area">
-               {{ csrf_field() }}
+               <?php echo e(csrf_field()); ?>
+
                <div class="row">
                   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                      <div class="form-group text-center">
@@ -59,8 +62,8 @@
 </section>
    <!-- /.section-page-content -->
 </main>
-@endsection
-@section('scripts')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('scripts'); ?>
 <script type="text/javascript">
    $(document).on('click', '.conotSubmit', function(e) {
        e.preventDefault();
@@ -133,4 +136,6 @@
    });
 
 </script>
-@stop
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('theme.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\kcversion8\resources\views/admin/static_tpls/consent/frontend.blade.php ENDPATH**/ ?>
