@@ -562,8 +562,8 @@
                                                 'companyemail' => 'Company email'
                                             ];
                                         $rec_data = [];
-                                    
-                                    
+
+
                                     ?>
                                  <div class="form-wrapper profile-form-wrapper">
                                     {{--
@@ -804,26 +804,26 @@
                                     //dd($dropbox);
                                     $folders = isset($dropbox['folders'][0]) ? $dropbox['folders'][0] : [];
                                     //dd($folders);
-                                    
+
                                     $folders_bonus = isset($dropbox['folders'][1]) ? $dropbox['folders'][1] : [];
                                     //dd($folders_bonus);
                                     $files = isset($dropbox['files'][1]) ? $dropbox['files'][1] : [];
                                     $files_bonus = isset($dropbox['files'][2]) ? $dropbox['files'][2] : [];
-                                    
+
                                     //dd($files);
-                                    
+
                                     ?>
                                  <?php
                                     $now1 = strtotime(date("Y-m-d"));
                                     $display = false;
                                     if(!$event['release_date_files'] && $event['status'] == 3){
                                         $display = true;
-                                    
+
                                     }else if(strtotime(date('Y-m-d',strtotime($event['release_date_files']))) >= $now1 && $event['status'] == 3){
-                                    
+
                                         $display = true;
                                     }
-                                    
+
                                     ?>
                                  @if(isset($dropbox) && $folders != null)
                                  <div id="c-files-inner{{$tab}}" class="in-tab-wrapper">
@@ -846,11 +846,11 @@
                                                 @if(isset($files) && count($files) > 0)
                                                 @foreach($folders_bonus as $folder_bonus)
                                                 @if($folder_bonus['parent'] == $folder['id']  && !in_array($folder_bonus['foldername'],$bonusFiles))
-                                                <?php  
+                                                <?php
                                                    $checkedF[] = $folder_bonus['id'] + 1 ;
                                                    $fs[$folder_bonus['id']+1]=[];
                                                    $fs[$folder_bonus['id']+1] = $folder_bonus;
-                                                   
+
                                                    ?>
                                                 @endif
                                                 @endforeach
@@ -899,10 +899,10 @@
                                                 @if(isset($folders_bonus) && count($folders_bonus) > 0)
                                                 <div class="files-wrapper bonus-files">
                                                    @foreach($folders_bonus as $folder_bonus)
-                                                   <?php 
+                                                   <?php
                                                       if(in_array($folder_bonus['foldername'],$subfolder)){
                                                          continue;
-                                                      }      
+                                                      }
                                                       ?>
                                                    @if($folder_bonus['parent'] == $folder['id'])
                                                    <h4 class="bonus-title">{{ $folder_bonus['foldername'] }}</h4>
@@ -1052,7 +1052,7 @@
                                                          $a = 'checked';
                                                          $status = 'Active';
                                                          //row_status = ` style="color:green;" `;
-                                                   
+
                                                       }else{
                                                          $status = 'Cancel';
                                                          //row_status = ` style="color:red;" `;
@@ -1246,7 +1246,7 @@
                                                 $date_timestamp = strtotime($event['mySubscription']['trial_ends_at']);
                                                 $now_date = strtotime(date('d/m/Y'));
                                                 $date = date('d-m-Y',$date_timestamp);
-                                                
+
                                                 ?>
                                              @if($date_timestamp > $now_date )
                                              <?php //dd('not expired'); ?>
@@ -1287,7 +1287,7 @@
                                                          $a = 'checked';
                                                          $status = 'Active';
                                                          //row_status = ` style="color:green;" `;
-                                                   
+
                                                       }else{
                                                          $status = 'Cancel';
                                                          //row_status = ` style="color:red;" `;
@@ -1484,14 +1484,14 @@
 <script>
    var stripeUserId = '{{ Auth::user()->createSetupIntent()->client_secret }}';
    $(document).on('click', '#addCard', function(e){
-   
+
      /*$('<script>')
       .attr('src', 'https://js.stripe.com/v3/')
       .attr('id', 'stripe-js')
       .appendTo('head');*/
-   
-   
-   
+
+
+
      $('#addCard').prop('disabled', true);
      $('.msg_save_card').remove();
      $('#container').append(`<div id="paymentMethodAdd">
@@ -1501,31 +1501,31 @@
         <button id="card-button" type="button" class="btn btn--secondary btn--sm" data-secret="${stripeUserId}">
             Update Payment Method
         </button></div>`)
-   
-   
+
+
         $('<script>')
       .text(`var stripe = Stripe('{{$stripe_key}}',{locale: 'en'});
               var elements = stripe.elements();
               var cardElement = elements.create('card',{
                  style: {
                     base: {
-   
+
                        fontSize: '18px',
-   
+
                     },
                  },
                  hidePostalCode: true,
                  });
               cardElement.mount('#card-element');`)
-   
+
       .attr('id', 'stripe-form')
       .appendTo('head');
-   
-   
-   
-   
+
+
+
+
    })
-   
+
 </script>
 <script>
    $(document).on('click',"#card-button",async (e) => {
@@ -1557,11 +1557,11 @@
                   success:function(data) {
                      stripeUserId = data.id;
                      if(data['success']){
-   
+
                         let defaultPaymetntID = data['defaultPaymetntId'];
                         let defaultCard = data['default_card'];
                         let cards = data['cards'];
-   
+
                         let html = ` <table  style="width:100%"><tr>
                               <th>Brand</th>
                               <th>Default</th>
@@ -1570,16 +1570,16 @@
                               <th>Expire Year</th>
                               <th>Actions</th>
                            </tr>`;
-   
+
                         $.each( defaultCard, function( key, value ) {
-   
+
                            html +=`<tr><td>` + value['brand'] + `</td>` +
                            `<td><i class="far fa-check-circle"></i>Yes</td>`+
                                  `<td>` + value['last4'] + `</td>` +
                                  `<td>` + value['exp_month'] + `</td>` +
                                  `<td>` + value['exp_year'] + `</td></tr>` ;
                         });
-   
+
                         $.each( cards, function( key, value ) {
                            if(value['id'] != defaultPaymetntID){
                               html +=`<tr><td>` + value['card']['brand'] + `</td>` +
@@ -1588,13 +1588,13 @@
                                  `<td>` + value['card']['exp_month'] + `</td>` +
                                  `<td>` + value['card']['exp_year'] + `</td>` +
                                  `<td>
-   
+
                                        <form action="{{route('payment_method.update')}}" method="post" id="payment-form">
                                           {{ csrf_field() }}
                                           <input type="hidden" name="card_id" value="`+ value['id'] +`">
                                           <button class="btn btn--secondary btn--sm">Set default</button>
                                        </form>
-   
+
                                        <form action="{{route('payment_method.remove')}}" method="post" id="payment-form">
                                           {{ csrf_field() }}
                                           <input type="hidden" name="card_id" value="`+ value['id'] +`">
@@ -1602,74 +1602,74 @@
                                        </form>
                                  </td></tr>`;
                            }
-   
+
                         });
                         html += '</table>'
                         $("#cardList").empty();
                         $("#cardList").append(html);
-   
+
                         $("#stripe-form").remove();
                         $("#stripe-js").remove();
-   
+
                         $('#paymentMethodAdd').children().remove();
-   
+
                         $('#container').append(`<p class="normal msg_save_card"> Successfully added card!!</p>`)
                         $('#addCard').prop('disabled', false);
                         $('button').prop('disabled', false);
                      }else{
                         let message = `<img src="{{cdn('theme/assets/images/icons/alert-icons/icon-error-alert.svg')}}" alt="Info Alert">` + data['message'];
                         $("#card-message").html( message)
-   
+
                         var favDialogCard = document.getElementById('favDialogCardNumberFailed');
                         favDialogCard.style.display = "block";
-   
+
                         $('#addCard').prop('disabled', false);
                         $('button').prop('disabled', false);
                         $("#stripe-form").remove();
                      $("#stripe-js").remove();
                      }
-   
-   
-   
+
+
+
                   },
-   
+
                });
             }
          });
-   
+
    })
-   
-   
-   
-   
+
+
+
+
 </script>
 <script>
    function cvv(input) {
-   
-   
+
+
       if(isNaN(input.value)){
          input.value = '';
       }
-   
+
    }
-   
-   
+
+
    function cardNo(input) {
-   
-   
+
+
       if(isNaN(input.value)){
          input.value = '';
       }
-   
+
    }
-   
+
    function month(input) {
-   
-   
+
+
       if(isNaN(input.value)){
          input.value = '';
       }
-   
+
       if(input.value.length == 1 && (input.value >= 2 || input.value < 0)){
          input.value = ''
       }else if(input.value.length == 2 && (input.value <= 0 || input.value > 12)){
@@ -1679,16 +1679,16 @@
       }else if(input.value == ''){
          input.value = ''
       }
-   
+
    }
-   
+
    function year(input) {
-   
-   
+
+
       if(isNaN(input.value)){
          input.value = '';
       }
-   
+
       if(input.value.length == 1 && input.value != 2){
          input.value = ''
       }else if(input.value.length == 2 && (input.value < 20 || input.value >=30)){
@@ -1700,9 +1700,9 @@
       }else{
          document.getElementById('checkout-button').disabled = false;
       }
-   
+
    }
-   
+
 </script>
 <script src="{{ cdn('theme/assets/addons/dropzone/dropzone.js') }}"></script>
 <script>
@@ -1714,24 +1714,24 @@
 </script>
 <script type="text/javascript">
    $.ajaxSetup({headers:{'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
-   
+
    $(document).ajaxError(function(event, jqxhr, settings, exception) {
        if (exception == 'Unauthorized') {
            window.location.href = baseUrl+'/';
        }
    });
-   
+
    var settingsObj = {
        maxUploadSize: "3", // in MB
        dropzoneAcceptedFiles: "image/*",
        dropzoneAcceptImage: "image/*"
    };
-   
-   
-   
+
+
+
    var logo_dropzone = {};
    var logo_dropzoneObj = {dragenter: 0, dragleave: 0};
-   
+
    function logo_dropzoneToDropzone() {
        logo_dropzone = new Dropzone(document.getElementById("logo_dropzone"), {
        url: 'myaccount/upload-profile-image',
@@ -1769,13 +1769,13 @@
            renderLogoDropzone(response, true);
        }
    });
-   
+
    logo_dropzone.on("dragenter", function(event) {
        logo_dropzoneObj.dragenter++;
        logo_dropzoneObj.dragleave = 0;
        $("#logoDropzone").addClass('acceptDrop');
    });
-   
+
    logo_dropzone.on("dragleave", function(file) {
        logo_dropzoneObj.dragleave++;
        logo_dropzoneObj.dragenter = 0;
@@ -1784,47 +1784,47 @@
        }
    });
    }
-   
+
    logo_dropzoneToDropzone();
-   
-   
-   
+
+
+
    function renderLogoDropzone(mediaObj, overwrite) {
    //    console.log(mediaObj);
-   
+
    if (mediaObj.media_id > 0) {
-   
+
        var userMedia = document.getElementById('user-media');
         var li = document.createElement('li')
         li.className = "remove-photo delete_media";
-   
+
         var a = document.createElement('a');
-   
+
         a.setAttribute('data-dp-media-id',mediaObj.media_id)
         a.setAttribute('href',"javascript:void(0)");
-   
+
      var img = document.createElement('img')
-   
+
      img.setAttribute('src','/theme/assets/images/icons/icon-remove.svg')
      img.setAttribute('alt','Remove photo')
-   
+
      var span = document.createElement('span')
      span.innerHTML = 'Remove photo';
-   
-   
-   
+
+
+
      a.append(img)
      a.append(span);
      li.append(a)
      userMedia.append(li)
-   
-   
+
+
        document.getElementById('user-img').setAttribute('src','portal-img/users/'+mediaObj.media.path+'/'+mediaObj.media.name+mediaObj.media.ext)
        document.getElementById('user-img-up').setAttribute('src','portal-img/users/'+mediaObj.media.path+'/'+mediaObj.media.name+mediaObj.media.ext)
-   
-   
+
+
    }
-   
+
    if ((typeof overwrite !== "undefined") && (overwrite === true)) {
        //console.log(html);
       // $('[data-dp-scope="logo_dropzone"] #cfMedia_logo_dropzone').html(html);
@@ -1836,20 +1836,20 @@
        return html;
    }
    }
-   
-   
-   
+
+
+
 </script>
 <script>
    $(document).on('click', '#myonoffswitch', function(e){
       //alert('asd')
    //e.preventDefault();
    $('.onoffswitch').removeAttr( "id" )
-   
+
    let sub_id = $(this).parent().data('id')
    let status = $(this).parent().data('status')
    let set_status = '';
-   
+
    if(status == 'Active'){
      set_status = 'Cancel'
      $(this).parent().data('status', 'Cancel');
@@ -1859,7 +1859,7 @@
      $(this).parent().data('status', 'Active');
      $('.onoffswitch-checkbox').attr('checked', '')
    }
-   
+
    $.ajax({
      type: 'POST',
      url: 'myaccount/subscription/change_status',
@@ -1878,17 +1878,17 @@
            }
      }
    });
-   
+
    });
 </script>
 <script>
    $("body").on("click", ".delete_media", function (event) {
-   
+
       var favDialog = document.getElementById('favDialog');
         //favDialog.showModal();
         favDialog.style.display = "block";
         $("body").css("overflow-y", "hidden")
-   
+
      // favDialog.show();
             /*if(confirm('Do you really want to remove your profile picture?')) {
                   //alert('You are very brave!');
@@ -1896,94 +1896,94 @@
               }
               else {
                   alert('Tip! Drag and Drop or click to change your profile picture');
-   
+
               }*/
           });
           $("body").on("click", ".deleteImg", function (event) {
                deleteMediaPromt($('.remove-photo.delete_media a').attr('data-dp-media-id'));
-   
+
             });
-   
-   
+
+
             $("body").on("click", ".cancelImg", function (event) {
-   
+
                var favDialog = document.getElementById('favDialog');
              //  favDialog.close();
                favDialog.style.display = "none";
                $("body").css("overflow-y", "auto")
-   
+
            });
-   
+
           function deleteMediaPromt(media_id) {
             //alert(media_id)
               $.ajax({ url: "myaccount/remove-avatar", type: "post",
                   data: {'media':media_id},
                   success: function(data) {
-   
+
                       if (Number(data.status) === 1) {
-   
-   
+
+
                         document.getElementById('user-img').setAttribute('src','/theme/assets/images/icons/user-profile-placeholder-image.png')
                         document.getElementById('user-img-up').setAttribute('src','/theme/assets/images/icons/user-profile-placeholder-image.png')
-   
+
                           $('.delete_media').hide();
                       }
                   }
               });
-   
+
               var favDialog = document.getElementById('favDialog');
               favDialog.style.display = "none";
                $("body").css("overflow-y", "auto")
           }
-   
-   
-   
+
+
+
           $(document).on('click', '.close-alert', function(e){
             var favDialog = document.getElementById('favDialog');
             favDialog.style.display = "none";
             //favDialog.close();
             $("body").css("overflow-y", "auto")
          })
-   
+
    /*$('.getcertificate').click(function() {
-   
+
       var dir = $(this).attr('data-dirname');
       var fname = $(this).attr('data-filename');
-   
-   
-   
+
+
+
       $.ajax({ url: '/myaccount/mycertificate/' + dir, type: "get",
-   
+
           success: function(data) {
            //console.log(data);
       //      window.location.href = data;
           }
       });
-   
+
    });*/
-   
+
    $('.getdropboxlink').click(function() {
-   
+
       var dir = $(this).attr('data-dirname');
       var fname = $(this).attr('data-filename');
-   
-   
+
+
       $.ajax({ url: '/getdropbox', type: "post",
           data: {dir: dir, fname:fname},
-   
+
           success: function(data) {
-   
+
             window.location.href = data;
           }
       });
-   
+
    });
-   
+
    $('#gdpr-download').click(function() {
-   
+
    window.location.href = 'myaccount/mydata';
-   
-   
+
+
    });
       $('.edit-mode').on('click', function() {
       //    $('#student-view-mode').addClass('hidden');
@@ -1997,7 +1997,7 @@
          $('#student-view-mode').show();
           $('#student-edit-mode').hide();
       });
-   
+
       $('.edit-invoice-mode').on('click', function() {
            $('#invoice_add_edit_mode').show();
            $('#edit-invoice-mode').hide('hidden');
@@ -2006,7 +2006,7 @@
            $('#invoice_add_edit_mode').hide();
            $('#edit-invoice-mode').show();
        });
-   
+
        $('.edit-receipt-mode').on('click', function() {
           // $('#static-receipt').hide();
            $('#receipt_add_edit_mode').show();
@@ -2017,9 +2017,9 @@
            //$('#static-receipt').show();
            $('#edit-receipt-mode').show();
        });
-   
-   
-   
+
+
+
        $('#save-receipt-data').on('click', function() {
            var receiptdata = $("#receipt_add_edit_mode :input").serialize();
            //console.log(receiptdata);
@@ -2027,7 +2027,7 @@
                data: receiptdata,
                success: function(data) {
                    if (Number(data.status) === 1) {
-   
+
                        window.location = 'myaccount'; //'myaccount/billing';
                    }
                    else {
@@ -2036,8 +2036,8 @@
                }
            });
        });
-   
-   
+
+
        $('#save-invoice-data').on('click', function() {
            var invoicedata = $("#invoice_add_edit_mode :input").serialize();
            //console.log(invoicedata);
@@ -2056,21 +2056,21 @@
 </script>
 <script>
    $("#selectCountry").change(function() {
-   
+
       let mobile = $("#mobile").val()
-   
+
       $("#mobileCheck").val("+" + this.value + mobile)
    });
-   
+
    function checkPhoneNumber(phone){
-   
+
    phone = phone.value.replace(/\s/g,'')
    let validatePhone = false;
-   
+
    if(phone.length > 3){
-   
+
       if(phone.substring(0, 3) == '+30' || phone.substring(0, 2) == '30'){
-   
+
          $("#selectCountry").val("30").change();
          validatePhone = true;
       }else if(phone.substring(0, 2) == '69'){
@@ -2086,60 +2086,60 @@
          validatePhone = true;
          $("#selectCountry").val("357").change();
       }
-   
+
       /*else if(phone.substring(0, 2) == '+1' || phone.substring(0, 1) == '1'){//usa
          validatePhone = true;
-   
+
       }else if(phone.substring(0, 2) == '69'){
          phone = '+30'+phone
          validatePhone = true;
-   
+
       }*/
-   
+
       else if(phone.substring(0, 3) == '+44' || phone.substring(0, 2) == '44'){//england
          validatePhone = true;
          $("#selectCountry").val("44").change();
       }else if(phone.substring(0, 2) == '07' /*|| phone.substring(0, 3) == '073' || phone.substring(0, 3) == '074' || phone.substring(0, 3) == '075' || phone.substring(0, 3) == '076'
          || phone.substring(0, 3) == '077' || phone.substring(0, 3) == '078' || phone.substring(0, 3) == '079'*/){
-   
+
             //phone = '+44'+phone
             validatePhone = true;
             $("#selectCountry").val("44").change();
       }
-   
+
       //$("#mobile").val(phone)
       let mobile = '+' + $( "#selectCountry" ).val() + $("#mobile").val()
       $("#mobileCheck").val( mobile)
-   
+
       if(!validatePhone){
          //$("#mobile").val('')
       }
-   
+
    }
-   
-   
-   
+
+
+
    }
 </script>
 <script>
    $(document).ready(function() {
-   
-   
-   
+
+
+
       $("#selectCountry").select2()
-   
+
       @if("{{ old('country_code') }}")
-   
+
          $("#selectCountry").val("{{ old('country_code',$currentuser->country_code) }}").change();
-   
+
       @endif
-   
+
    });
-   
+
 </script>
 <script>
    $("#update-personal-info").click(function(){
-   
+
       fdata =$("#update-form").serialize();
       var firstError = false;
       $.ajax({ url: "{{route('validate.personalInfo')}}", type: "post",
@@ -2153,35 +2153,35 @@
                     $.each(data.errors, function (key, row) {
                         //console.log(data.errors);
                         var newkey = key.replace('.', '');
-   
+
                         $('#update-form').find('input#'+newkey).addClass(['verror','validate-error']);
-   
+
                         if(!firstError){
                             elementsHeight = Math.round($('#header').outerHeight()) - document.getElementById(newkey).getBoundingClientRect().top +30
                             firstError = true;
-   
+
                             $('html, body').animate({
                                 scrollTop: elementsHeight
                             }, 300);
                         }
-   
+
                         $('#'+newkey+'-error').text(row[0]);
                         //var s = $('#update-form').find('input#'+newkey).attr('placeholder');
                         var pl =  row[0] ;
-   
+
                         $('#update-form').find('input#'+newkey).attr('placeholder', pl);
-   
+
                     });
-   
-   
-                  
-                } else { 
+
+
+
+                } else {
                   $('#update-form').submit();
                 }
             }
         });
-      
+
    });
-   
+
 </script>
 @stop
