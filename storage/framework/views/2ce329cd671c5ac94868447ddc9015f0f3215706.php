@@ -83,7 +83,7 @@ Upload Image
         });
 
         path += name+'.'+ext;
-        console.log('path = ', path)
+
         $('#image_upload').val(path)
         $('#img-upload').attr('src', path);
         $(".close").click();

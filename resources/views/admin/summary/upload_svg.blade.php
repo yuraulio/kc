@@ -38,7 +38,7 @@ Upload Image
 
 @push('js')
 
-<script>
+{{--<script>
 from = @json($template1);
 
 $(".close_svg_modal").click(function() {
@@ -62,6 +62,53 @@ $(".close_svg_modal").click(function() {
         ext = ext.replace(/\s/g, '')
         path = '/uploads'+path +'/'+name+'.'+ext
 
+        //alert(path)
+
+        $('#image_svg_upload-'+@json($template1)).val(path)
+        $('#img-upload-'+@json($template1)).attr('src', path)
+
+        $('.select_Svg_Modal-'+@json($template1)).modal('hide')
+
+
+    });
+
+
+
+
+
+</script>--}}
+
+<script>
+from = @json($template1);
+
+$(".close_svg_modal").click(function() {
+    $('#select_Svg_Modal-'+@json($template1)).modal('hide')
+})
+
+    $( "#select-svg-"+@json($template1) ).click(function() {
+        
+        path = '/uploads/';
+        $("#select_ImageModal .breadcrumb.active-manager .breadcrumb-item.text-truncate span").each(function() {
+            path += $(this).text() + '/' ;
+        });
+
+        
+        name = $('.select_Svg_Modal-'+@json($template1)+ ' .table-info .fm-content-item').text()
+        name = name.replace(/\s/g, '')
+        ext = $('.select_Svg_Modal-'+@json($template1)+ ' .table-info td:nth-child(3)').text()
+        ext = ext.replace(/\s/g, '')
+        
+        if(name == ''){
+            name = $('.select_Svg_Modal-'+@json($template1)+ ' .fm-grid-item.active').attr('title');
+            path += name;
+        }else{
+            path += name+'.'+ext;
+        }
+        
+        
+
+        
+        
         //alert(path)
 
         $('#image_svg_upload-'+@json($template1)).val(path)

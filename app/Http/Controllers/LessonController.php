@@ -89,37 +89,53 @@ class LessonController extends Controller
 
         $lesson = $model->create($request->all());
         if($request->topic_id != null){
+            
             foreach($request->topic_id as $topic){
-
-                //assign on Topic
-                $topic = Topic::find($topic);
-                if(!isset($topic->category[0])){
-                    continue;
-                }
-
-                $cat_id = $topic->category[0]->id;
-                $cat = Category::with('events')->find($cat_id);
-                $cat->topic()->attach($topic, ['lesson_id' => $lesson->id]);
+                $topic = Topic::with('category')->find($topic);
+               
+                foreach($topic->category as $cat){
+                    
+               
               
-                if($cat_id != $request->category){
-                    continue;
-                }
-                
-                
-                $allEvents = $cat->events;
-                foreach($allEvents as $event)
-                {
-                    $allLessons = $event->allLessons->pluck('id')->toArray();
-                    
-                    if(!in_array($lesson['id'],$allLessons)){
-                        
-                        $priority = count($allLessons)+1;
-                        
-                        //$event->topic()->sync([['topic_id'=>$topic['id'],'lesson_id' => $lesson['id'],'priority' => $priority]]);
-                        $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id'],'priority' => $priority]);
+                    if($cat->id != $request->category){
+                        continue;
                     }
-                    
+                    $cat->topic()->detach($topic);
+                    $cat->topic()->attach($topic, ['lesson_id' => $lesson->id]);
 
+                    $allEvents = $cat->events;
+                    foreach($allEvents as $event)
+                    {
+                        $allLessons = $event->allLessons->groupBy('id');
+
+                        $date = '';
+                        $time_starts = '';
+                        $time_ends = '';
+                        $duration = '';
+                        $room = '';
+                        $instructor_id = '';
+                        $priority = count($allLessons)+1;
+
+                        if(isset($allLessons[$lesson['id']][0])){
+
+                            $date = $allLessons[$lesson['id']][0]['pivot']['date'];
+                            $time_starts = $allLessons[$lesson['id']][0]['pivot']['time_starts'];
+                            $time_ends = $allLessons[$lesson['id']][0]['pivot']['time_ends'];
+                            $duration = $allLessons[$lesson['id']][0]['pivot']['duration'];
+                            $room = $allLessons[$lesson['id']][0]['pivot']['room'];
+                            $instructor_id = $allLessons[$lesson['id']][0]['pivot']['instructor_id'];
+                            $priority = count($allLessons)+1;
+                        }
+
+                        //if(!in_array($lesson['id'],$allLessons)){
+                        
+                        $event->allLessons()->detach($lesson['id']);
+                        $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id'],'date'=>$date,'time_starts'=>$time_starts,
+                            'time_ends'=>$time_ends, 'duration' => $duration, 'room' => $room, 'instructor_id' => $instructor_id, 'priority' => $priority]);
+                        //}
+                        
+
+                    }
                 }
 
             }
@@ -405,29 +421,52 @@ class LessonController extends Controller
         $lesson->update($request->all());
         
         if($request->topic_id != null){
-            $lesson->topic()->detach();
+            //$lesson->topic()->detach();
             foreach($request->topic_id as $topic)
             {
                 $topic = Topic::with('category')->find($topic);
                
                 foreach($topic->category as $cat){
-                    $cat->topic()->attach($topic, ['lesson_id' => $lesson->id]);
+                    
                     //dd($cat->id . ' => ' .$request->category);
                     if($cat->id != $request->category){
                         
                         continue;
                     }
-                    
+
+                    $cat->topic()->detach($topic);
+                    $cat->topic()->attach($topic, ['lesson_id' => $lesson->id]);
                     $allEvents = $cat->events;
                     foreach($allEvents as $event)
                     {
-                        $allLessons = $event->allLessons->pluck('id')->toArray();
+                        
+                        $allLessons = $event->allLessons->groupBy('id');
+                        
+                        $date = '';
+                        $time_starts = '';
+                        $time_ends = '';
+                        $duration = '';
+                        $room = '';
+                        $instructor_id = '';
+                        $priority = count($allLessons)+1;
 
-                        if(!in_array($lesson['id'],$allLessons)){
+                        if(isset($allLessons[$lesson['id']][0])){
+                            
+                            $date = $allLessons[$lesson['id']][0]['pivot']['date'];
+                            $time_starts = $allLessons[$lesson['id']][0]['pivot']['time_starts'];
+                            $time_ends = $allLessons[$lesson['id']][0]['pivot']['time_ends'];
+                            $duration = $allLessons[$lesson['id']][0]['pivot']['duration'];
+                            $room = $allLessons[$lesson['id']][0]['pivot']['room'];
+                            $instructor_id = $allLessons[$lesson['id']][0]['pivot']['instructor_id'];
                             $priority = count($allLessons)+1;
-                            //$event->topic()->sync([['topic_id'=>$topic['id'],'lesson_id' => $lesson['id'],'priority' => $priority]]);
-                            $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id'],'priority' => $priority]);
                         }
+
+                        //if(!in_array($lesson['id'],$allLessons)){
+                            
+                        $event->allLessons()->detach($lesson['id']);
+                        $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id'],'date'=>$date,'time_starts'=>$time_starts,
+                            'time_ends'=>$time_ends, 'duration' => $duration, 'room' => $room, 'instructor_id' => $instructor_id, 'priority' => $priority]);
+                        //}
                         
     
                     }

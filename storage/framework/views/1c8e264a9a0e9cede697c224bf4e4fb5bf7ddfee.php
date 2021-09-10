@@ -38,6 +38,8 @@ Upload Image
 
 <?php $__env->startPush('js'); ?>
 
+
+
 <script>
 from = <?php echo json_encode($template1, 15, 512) ?>;
 
@@ -46,22 +48,29 @@ $(".close_svg_modal").click(function() {
 })
 
     $( "#select-svg-"+<?php echo json_encode($template1, 15, 512) ?> ).click(function() {
-        path = ''
+        
+        path = '/uploads/';
+        $("#select_ImageModal .breadcrumb.active-manager .breadcrumb-item.text-truncate span").each(function() {
+            path += $(this).text() + '/' ;
+        });
 
-
-
-        $.each( $('.select_Svg_Modal-'+<?php echo json_encode($template1, 15, 512) ?> + ' .fm-breadcrumb li'), function(key, value) {
-            if(key != 0){
-                path = path+'/'+$(value).text()
-            }
-        })
-
+        
         name = $('.select_Svg_Modal-'+<?php echo json_encode($template1, 15, 512) ?>+ ' .table-info .fm-content-item').text()
         name = name.replace(/\s/g, '')
         ext = $('.select_Svg_Modal-'+<?php echo json_encode($template1, 15, 512) ?>+ ' .table-info td:nth-child(3)').text()
         ext = ext.replace(/\s/g, '')
-        path = '/uploads'+path +'/'+name+'.'+ext
+        
+        if(name == ''){
+            name = $('.select_Svg_Modal-'+<?php echo json_encode($template1, 15, 512) ?>+ ' .fm-grid-item.active').attr('title');
+            path += name;
+        }else{
+            path += name+'.'+ext;
+        }
+        
+        
 
+        
+        
         //alert(path)
 
         $('#image_svg_upload-'+<?php echo json_encode($template1, 15, 512) ?>).val(path)
