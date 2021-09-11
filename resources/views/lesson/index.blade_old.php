@@ -79,26 +79,26 @@
                                     <th scope="col">{{ __('Status') }}</th>
                                     <th scope="col">{{ __('Title') }}</th>
                                     <th scope="col">{{ __('Assigned Topic') }}</th>
-                                    <th class="" scope="col">{{ __('Assigned Categories') }}</th>
+                                    <th class="hidden" scope="col">{{ __('Assigned Categories') }}</th>
                                     <th scope="col"></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($lessons as $lesson)
-                                @foreach($lesson->topic as $topic)
-                                @foreach($topic['category'] as $category)
                                     <tr>
                                         <td><?= ($lesson->status == 1) ? 'Published' : 'Unpublished'; ?></td>
                                         <td><a href="{{ route('lessons.edit', $lesson) }}">{{ $lesson->title }}</a></td>
                                         <td>
-                                       
+                                        @foreach($lesson->topic as $topic)
                                             {{ $topic->title }},
-                                       
+                                        @endforeach
                                         </td>
-                                        <td class="">
-                                       
+                                        <td class="hidden">
+                                        @foreach($lesson->topic as $topic)
+                                            @foreach($topic['category'] as $category)
                                                 {{ $category['name'] }},
-                                         
+                                            @endforeach
+                                        @endforeach
                                         </td>
 
                                         <td class="text-right">
@@ -113,7 +113,7 @@
                                                         @csrf
                                                         @method('delete')
 
-                                                        <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this lesson?") }}') ? this.parentElement.submit() : ''">
+                                                        <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
                                                             {{ __('Delete') }}
                                                         </button>
                                                     </form>
@@ -124,8 +124,6 @@
                                         </td>
 
                                     </tr>
-                                @endforeach
-                                @endforeach
                                 @endforeach
                             </tbody>
                         </table>
