@@ -85,8 +85,16 @@
                             </thead>
                             <tbody>
                                 @foreach ($lessons as $lesson)
+                                <?php $categoriess = []; ?>
                                 @foreach($lesson->topic as $topic)
                                 @foreach($topic['category'] as $category)
+                                <?php 
+                                    if(in_array($category['name'],$categoriess)){
+                                        continue;
+                                    }
+
+                                    $categoriess[] = $category['name'];
+                                ?>
                                     <tr>
                                         <td><?= ($lesson->status == 1) ? 'Published' : 'Unpublished'; ?></td>
                                         <td><a href="{{ route('lessons.edit', $lesson) }}">{{ $lesson->title }}</a></td>
