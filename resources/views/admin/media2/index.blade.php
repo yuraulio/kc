@@ -18,7 +18,7 @@
     <div id="file_manager" class="container-fluid mt--6">
         <div class="row">
             <div class="col">
-            <div id="file-man-main" style="height: 600px;">
+            <div id="file-man-main" style="height: 75vh;">
                 <div id="fm"></div>
             </div>
             </div>
@@ -1287,6 +1287,27 @@
                         $('#pasteFromSearch').attr('disabled', 'disabled')
 
                         $.notify({message: data.result.message}, {type:"success", placement: {from: "bottom",align: "right"},});
+                        // console.log('=========')
+                        // console.log(files)
+
+                        // $.each($(files), function(key, value){
+                        //     console.log('---------')
+
+                        //          let row = `
+                        //              <tr>
+                        //                  <td class="fm-content-item unselectable">
+                        //                      <i class="far fa-file-image"></i>
+                        //                      ${value.name}
+                        //                  </td>
+                        //                  <td></td>
+                        //                  <td></td>
+                        //                  <td></td>
+                        //              </tr>
+                        //          `
+                        //          $('.fm-content-body tbody').append(row)
+                            
+                           
+                        // })
 
 
                         // $.each(copyFiles, function(key, value) {

@@ -414,13 +414,6 @@ li.select2-results__option:empty {
     display: inline-flex;
 }
 
-.select_Svg_Modal-summary .modal-content{
-    min-height: 118vh;
-}
-
-.select_Svg_Modal-benefit .modal-content{
-    min-height: 118vh;
-}
 
 
 
