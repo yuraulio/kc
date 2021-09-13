@@ -68,12 +68,17 @@
                                     </select>
                                 </div>
                                 
-                                    <div class="col-sm-4 filter_col hidden" id="move_col1">
+                                    <div class="col-sm-12 filter_col hidden" id="move_col1">
+                                        
                                         <label>Move To Topic</label>
-                                        <select data-topic="-1" data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="col1_move">
-                                        <option selected id="allTop" value="-- All --"> -- All -- </option>
-                                        </select>
-                                        <button id="move-lesson" class="btn btn-primary" type="button"> Move </button> 
+                                        <div class="is-flex">
+                                            <select data-topic="-1" data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="form-control" id="col1_move">
+                                            <option selected id="allTop" value="-- All --"> -- All -- </option>
+                                            </select>
+                                        
+                                            
+                                            <button id="move-lesson" class="btn btn-primary" type="button"> Move </button> 
+                                        </div>
                                     </div>
                                     
                                 
