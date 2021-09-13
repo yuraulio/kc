@@ -47,7 +47,7 @@
 
                                 <div class="col-sm-4 filter_col" id="filter_col2" data-column="1">
                                     <label>Categories</label>
-                                    <select data-toggle="select" data-category="-1" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="col2_filter">
+                                    <select data-toggle="select" data-categoryy="" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="col2_filter">
                                     <option id="allCat" data-categoryy="" selected value="-- All --"> -- All -- </option>
                                     </select>
                                 </div>
@@ -71,7 +71,7 @@
                                     <div class="col-sm-6 filter_col hidden" id="move_col1">
                                         <label>Move To Topic</label>
                                         <div class="is-flex">
-                                            <select data-topic="-1" data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="form-control" id="col1_move">
+                                            <select data-topic="" data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="form-control" id="col1_move">
                                                 <option selected id="allTop" value="-- All --"> -- All -- </option>
                                             </select>
                                             <button id="move-lesson" class="btn btn-primary" type="button"> Move </button> 
