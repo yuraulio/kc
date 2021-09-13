@@ -1,8 +1,7 @@
-@extends('theme.layouts.master')
-@section('metas')
-<title>{{ 'My Account' }}</title>
-@endsection
-@section('content')
+<?php $__env->startSection('metas'); ?>
+<title><?php echo e('My Account'); ?></title>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
 <?php $bonusFiles = ['_Bonus', 'Bonus', 'Bonus Files', 'Βonus', '_Βonus', 'Βonus', 'Βonus Files'] ?>
 <?php $currentuser = $user ?>
 <main  id="" role="main">
@@ -11,24 +10,24 @@
          <div class="hero-message">
             <div class="account-infos">
                <div class="account-thumb">
-                  @if(isset($user['image']))
+                  <?php if(isset($user['image'])): ?>
                   <?php
                      $img_src = get_profile_image($user['image']);
                      ?>
-                  <img id="user-img-up" src="{{cdn($img_src)}}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" alt="{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}"/>
-                  @else
-                  <img id="user-img-up" src="{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}" alt="user-profile-placeholder-image"/>
-                  @endif
+                  <img id="user-img-up" src="<?php echo e(cdn($img_src)); ?>" onerror="this.src='<?php echo e(cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')); ?>'" alt="<?php echo e($currentuser['firstname']); ?> <?php echo e($currentuser['lastname']); ?>"/>
+                  <?php else: ?>
+                  <img id="user-img-up" src="<?php echo e(cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')); ?>" alt="user-profile-placeholder-image"/>
+                  <?php endif; ?>
                </div>
                <div class="account-hero-info">
-                  <h2>{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}</h2>
+                  <h2><?php echo e($currentuser['firstname']); ?> <?php echo e($currentuser['lastname']); ?></h2>
                   <ul>
-                     @if($currentuser['kc_id'] != '')
-                     <li>KnowCrunch alumni number: {{ $currentuser['kc_id'] }}</li>
-                     @endif
-                     @if($currentuser['partner_id'])
-                     <li>Deree number: {{ $currentuser['partner_id'] }}</li>
-                     @endif
+                     <?php if($currentuser['kc_id'] != ''): ?>
+                     <li>KnowCrunch alumni number: <?php echo e($currentuser['kc_id']); ?></li>
+                     <?php endif; ?>
+                     <?php if($currentuser['partner_id']): ?>
+                     <li>Deree number: <?php echo e($currentuser['partner_id']); ?></li>
+                     <?php endif; ?>
                   </ul>
                </div>
             </div>
@@ -40,8 +39,8 @@
       <div id="favDialog" hidden>
          <div class="alert-wrapper error-alert">
             <div class="alert-inner">
-               <p><img src="{{cdn('theme/assets/images/icons/alert-icons/icon-error-alert.svg')}}" alt="Info Alert">Do you really want to remove your profile picture?</p>
-               <a href="javascript:void(0)" class="close-alert"><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')}}" alt="Close Alert"/></a>
+               <p><img src="<?php echo e(cdn('theme/assets/images/icons/alert-icons/icon-error-alert.svg')); ?>" alt="Info Alert">Do you really want to remove your profile picture?</p>
+               <a href="javascript:void(0)" class="close-alert"><img src="<?php echo e(cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')); ?>" alt="Close Alert"/></a>
             </div>
             <button class="btn btn-del btn--sm deleteImg"> ok </button>
             <button class="btn btn-del btn--sm cancelImg"> cancel </button>
@@ -51,8 +50,8 @@
       <div id="favDialogCard" hidden>
          <div class="alert-wrapper error-alert">
             <div class="alert-inner">
-               <p><img src="{{cdn('theme/assets/images/icons/alert-icons/icon-error-alert.svg')}}" alt="Info Alert">Do you really want to remove your profile picture?</p>
-               <a href="javascript:void(0)" class="close-alert"><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')}}" alt="Close Alert"/></a>
+               <p><img src="<?php echo e(cdn('theme/assets/images/icons/alert-icons/icon-error-alert.svg')); ?>" alt="Info Alert">Do you really want to remove your profile picture?</p>
+               <a href="javascript:void(0)" class="close-alert"><img src="<?php echo e(cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')); ?>" alt="Close Alert"/></a>
             </div>
             <button class="btn btn-del btn--sm deleteImg"> ok </button>
             <button class="btn btn-del btn--sm cancelImg"> cancel </button>
@@ -77,7 +76,7 @@
                <p>Your examination has now been activated.</p>
                <p>Access from: My Account → My courses → E-learning Masterclass → Exams.</p>
                <p>Good luck!</p>
-               <a id="close-exam-dialog" href="javascript:void(0)" class="close-alert"><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')}}" alt="Close Alert"/></a>
+               <a id="close-exam-dialog" href="javascript:void(0)" class="close-alert"><img src="<?php echo e(cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')); ?>" alt="Close Alert"/></a>
             </div>
             <button class="btn btn-del btn--sm go-to-account">Go to my account </button>
             <!-- /.alert-outer -->
@@ -91,11 +90,11 @@
                <ul class="clearfix tab-controls-list">
                   <li><a href="#my-account">My Account</a></li>
                   <li>
-                     @if( (isset($events) && count($events) == 0))
+                     <?php if( (isset($events) && count($events) == 0)): ?>
                      <a  href="#nocourses" >My courses</a>
-                     @else
+                     <?php else: ?>
                      <a id="myCourses"  class="active" href="#courses">My courses</a>
-                     @endif
+                     <?php endif; ?>
                   </li>
                </ul>
                <!-- /.container -->
@@ -109,26 +108,26 @@
                      <div class="col4 col-sm-12">
                         <div class="account-image-actions"  id="logo_dropzone">
                            <div class="acc-img">
-                              @if(isset($user['image']) && $user['image']['name'] != '')
-                              <img id="user-img" src="{{cdn($img_src)}}" onerror="this.src='https://via.placeholder.com/150'" alt="{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}"/>
-                              @else
-                              <img id="user-img" src="{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}" alt="user-profile-placeholder-image"/>
-                              @endif
+                              <?php if(isset($user['image']) && $user['image']['name'] != ''): ?>
+                              <img id="user-img" src="<?php echo e(cdn($img_src)); ?>" onerror="this.src='https://via.placeholder.com/150'" alt="<?php echo e($currentuser['firstname']); ?> <?php echo e($currentuser['lastname']); ?>"/>
+                              <?php else: ?>
+                              <img id="user-img" src="<?php echo e(cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')); ?>" alt="user-profile-placeholder-image"/>
+                              <?php endif; ?>
                            </div>
                            <div class="actions">
                               <ul id='user-media'>
-                                 <li class="change-photo"><a id="logoDropzone" class="custFieldMediaDrop dz-message" href="javascript:void(0)"><img src="{{cdn('/theme/assets/images/icons/icon-edit.svg')}}" alt="Change photo"/><span>Change photo</span>
+                                 <li class="change-photo"><a id="logoDropzone" class="custFieldMediaDrop dz-message" href="javascript:void(0)"><img src="<?php echo e(cdn('/theme/assets/images/icons/icon-edit.svg')); ?>" alt="Change photo"/><span>Change photo</span>
                                     </a>
                                  </li>
-                                 @if(isset($user['image']))
-                                 <li class="remove-photo delete_media"><a data-dp-media-id="{{ $user['image']['id'] }}" href="javascript:void(0)"><img src="{{cdn('/theme/assets/images/icons/icon-remove.svg')}}" alt="Remove photo"/><span>Remove photo</span></a></li>
-                                 @endif
+                                 <?php if(isset($user['image'])): ?>
+                                 <li class="remove-photo delete_media"><a data-dp-media-id="<?php echo e($user['image']['id']); ?>" href="javascript:void(0)"><img src="<?php echo e(cdn('/theme/assets/images/icons/icon-remove.svg')); ?>" alt="Remove photo"/><span>Remove photo</span></a></li>
+                                 <?php endif; ?>
                               </ul>
                            </div>
                         </div>
                         <div class="download-area">
                            <div class="download-area-inner">
-                              <a id="gdpr-download" href="javascript:void(0)"><span><img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="Remove photo"/>Download all my data.</span></a>
+                              <a id="gdpr-download" href="javascript:void(0)"><span><img src="<?php echo e(cdn('/theme/assets/images/icons/Access-Files.svg')); ?>" alt="Remove photo"/>Download all my data.</span></a>
                            </div>
                         </div>
                      </div>
@@ -147,90 +146,87 @@
                            </div>
                            <div class="inside-tabs-wrapper">
                               <div id="personal-data" class="in-tab-wrapper" style="display: block;">
-                                 @if($errors->any())
+                                 <?php if($errors->any()): ?>
                                  <div class="alert-outer">
                                     <div class="container">
                                        <div class="alert-wrapper error-alert">
                                           <div class="alert-inner">
-                                             <p><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-success-alert.svg')}}" alt="Info Alert">{{ $errors->first() }}</p>
-                                             <a href="javascript:void(0)" class="close-alert"><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')}}" alt="Close Alert"/></a>
+                                             <p><img src="<?php echo e(cdn('/theme/assets/images/icons/alert-icons/icon-success-alert.svg')); ?>" alt="Info Alert"><?php echo e($errors->first()); ?></p>
+                                             <a href="javascript:void(0)" class="close-alert"><img src="<?php echo e(cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')); ?>" alt="Close Alert"/></a>
                                           </div>
                                        </div>
                                     </div>
                                     <!-- /.alert-outer -->
                                  </div>
-                                 @endif
-                                 @if(Session::has('opmessage'))
-                                 @if(Session::get('opstatus'))
+                                 <?php endif; ?>
+                                 <?php if(Session::has('opmessage')): ?>
+                                 <?php if(Session::get('opstatus')): ?>
                                  <div class="alert-outer">
                                     <div class="container">
                                        <div class="alert-wrapper success-alert">
                                           <div class="alert-inner">
-                                             <p><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-success-alert.svg')}}" alt="Info Alert">{{ Session::get('opmessage') }}</p>
-                                             <a href="javascript:void(0)" class="close-alert"><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')}}" alt="Close Alert"/></a>
+                                             <p><img src="<?php echo e(cdn('/theme/assets/images/icons/alert-icons/icon-success-alert.svg')); ?>" alt="Info Alert"><?php echo e(Session::get('opmessage')); ?></p>
+                                             <a href="javascript:void(0)" class="close-alert"><img src="<?php echo e(cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')); ?>" alt="Close Alert"/></a>
                                           </div>
                                        </div>
                                     </div>
                                     <!-- /.alert-outer -->
                                  </div>
-                                 @else
+                                 <?php else: ?>
                                  <div class="alert-outer">
                                     <div class="container">
                                        <div class="alert-wrapper error-alert">
                                           <div class="alert-inner">
-                                             <p><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-success-alert.svg')}}" alt="Info Alert">{{ Session::get('opmessage') }}</p>
-                                             <a href="javascript:void(0)" class="close-alert"><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')}}" alt="Close Alert"/></a>
+                                             <p><img src="<?php echo e(cdn('/theme/assets/images/icons/alert-icons/icon-success-alert.svg')); ?>" alt="Info Alert"><?php echo e(Session::get('opmessage')); ?></p>
+                                             <a href="javascript:void(0)" class="close-alert"><img src="<?php echo e(cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')); ?>" alt="Close Alert"/></a>
                                           </div>
                                        </div>
                                     </div>
                                     <!-- /.alert-outer -->
                                  </div>
-                                 @endif
-                                 @endif
+                                 <?php endif; ?>
+                                 <?php endif; ?>
                                  <div class="form-wrapper profile-form-wrapper" id="student-view-mode">
-                                    {{--
-                                    <div class="form-action-upper">
-                                       <a href="#" class="edit-fields" href="javascript:void(0)"><img src="{{cdn('/theme/assets/images/icons/icon-edit.svg')}}" alt="Edit Fields"/><span>Edit</span></a>
-                                    </div>
-                                    --}}
-                                    <form id="update-form" method="post" action="{{ route('update.personalInfo') }}" autocomplete="off">
-                                       {!! csrf_field() !!}
+                                    
+                                    <form id="update-form" method="post" action="<?php echo e(route('update.personalInfo')); ?>" autocomplete="off">
+                                       <?php echo csrf_field(); ?>
+
                                        <div class="col12">
                                           <label>First name: <span>*</span></label>
                                           <div class="input-safe-wrapper">
-                                             <input class="required" type="text" name="firstname" id="firstname"  value="{{ old('firstname', $currentuser['firstname']) }}" >
+                                             <input class="required" type="text" name="firstname" id="firstname"  value="<?php echo e(old('firstname', $currentuser['firstname'])); ?>" >
                                           </div>
                                        </div>
                                        <div class="col12">
                                           <label>Last name: <span>*</span></label>
                                           <div class="input-safe-wrapper">
-                                             <input class="required"  type="text" name="lastname" id="lastname" value="{{ old('lastname', $currentuser['lastname']) }}" >
+                                             <input class="required"  type="text" name="lastname" id="lastname" value="<?php echo e(old('lastname', $currentuser['lastname'])); ?>" >
                                           </div>
                                        </div>
                                        <div class="col12">
                                           <?php $birthday = date('j F Y',strtotime($currentuser['birthday']))?>
                                           <label>Date of birth:</label>
                                           <div class="input-wrapper">
-                                             <input type="text" class="datepicker-jqui with-arrow" name="birthday" value="{{$birthday}}">
+                                             <input type="text" class="datepicker-jqui with-arrow" name="birthday" value="<?php echo e($birthday); ?>">
                                           </div>
                                        </div>
                                        <div class="col12">
                                           <label>Company:</label>
                                           <div class="input-safe-wrapper">
-                                             <input  type="text" name="company" id="company" value="{{ old('company', $currentuser['company']) }}" >
+                                             <input  type="text" name="company" id="company" value="<?php echo e(old('company', $currentuser['company'])); ?>" >
                                           </div>
                                        </div>
                                        <div class="col12">
                                           <label>Position/Title:</label>
                                           <div class="input-safe-wrapper">
-                                             <input name="job_title" id="job_title" value="{{ old('job_title', $currentuser['job_title']) }}" >
+                                             <input name="job_title" id="job_title" value="<?php echo e(old('job_title', $currentuser['job_title'])); ?>" >
                                           </div>
                                        </div>
                                        <div class="col12">
                                           <label>Email: <span>*</span></label>
                                           <div class="input-safe-wrapper">
                                              <span id="email-error"></span>
-                                             <input class="required" id="email" name="email" type="email" value="{{ old('email', $currentuser['email']) }}" >
+                                             <input class="required" id="email" name="email" type="email" value="<?php echo e(old('email', $currentuser['email'])); ?>" >
                                           </div>
                                        </div>
                                        <div class="col12">
@@ -453,26 +449,11 @@
                                                 <option data-countryCode="ZM" value="260">ZM (+260)</option>
                                                 <option data-countryCode="ZW" value="263">ZW (+263)</option>
                                              </select>
-                                             <input class="required" onkeyup="checkPhoneNumber(this)" type="text" name="mobile" id="mobile" value="{{{ old('mobile', $currentuser['mobile']) }}}" >
-                                             <input type="hidden" name="mobileCheck" id="mobileCheck" value="{{{ old('mobile', '+'.$currentuser['country_code'].$currentuser['mobile']) }}}">
+                                             <input class="required" onkeyup="checkPhoneNumber(this)" type="text" name="mobile" id="mobile" value="<?php echo e(old('mobile', $currentuser['mobile'])); ?>" >
+                                             <input type="hidden" name="mobileCheck" id="mobileCheck" value="<?php echo e(old('mobile', '+'.$currentuser['country_code'].$currentuser['mobile'])); ?>">
                                           </div>
                                        </div>
-                                       {{--
-                                       <div class="checkbox-row">
-                                          <div class="custom-checkbox">
-                                             <input type="checkbox" id="receive-emails" name="receive-emails" value="accept" checked="checked">
-                                             <span></span>
-                                          </div>
-                                          <label for="receive-emails">I want to receive emails from KnowCrunch.</label>
-                                       </div>
-                                       <div class="checkbox-row">
-                                          <div class="custom-checkbox">
-                                             <input type="checkbox" id="receive-messages" name="receive-messages" value="accept" checked="checked">
-                                             <span></span>
-                                          </div>
-                                          <label for="receive-messages">I want to receive important mobile messages from KnowCrunch.</label>
-                                       </div>
-                                       --}}
+                                       
                                        <div class="form-submit-area">
                                           <button id="update-personal-info" type="button" class="btn btn--md btn--secondary">Update</button>
                                        </div>
@@ -482,7 +463,7 @@
                               <div id="subscriptions" class="in-tab-wrapper">
                                  <div id="container" class="container">
                                     <div class="row" id="cardList">
-                                       @if(count($defaultPaymetnt) > 0)
+                                       <?php if(count($defaultPaymetnt) > 0): ?>
                                        <table  style="width:100%">
                                           <tr>
                                              <th>Brand</th>
@@ -492,44 +473,46 @@
                                              <th>Expire Year</th>
                                              <th>Actions</th>
                                           </tr>
-                                          @foreach($defaultPaymetnt as $card)
+                                          <?php $__currentLoopData = $defaultPaymetnt; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $card): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                           <tr id="defalt-card">
-                                             <td>{{$card['brand']}}</td>
+                                             <td><?php echo e($card['brand']); ?></td>
                                              <td><i class="far fa-check-circle"></i>Yes</td>
-                                             <td>{{$card['last4']}}</td>
-                                             <td>{{$card['exp_month']}}</td>
-                                             <td>{{$card['exp_year']}}</td>
+                                             <td><?php echo e($card['last4']); ?></td>
+                                             <td><?php echo e($card['exp_month']); ?></td>
+                                             <td><?php echo e($card['exp_year']); ?></td>
                                           </tr>
-                                          @endforeach
-                                          @if(count($cards) > 1)
-                                          @foreach($cards as $card)
-                                          @if($card['id'] != $defaultPaymetntId)
+                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                          <?php if(count($cards) > 1): ?>
+                                          <?php $__currentLoopData = $cards; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $card): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                          <?php if($card['id'] != $defaultPaymetntId): ?>
                                           <tr id="all-cards">
-                                             <td>{{$card['card']['brand']}}</td>
+                                             <td><?php echo e($card['card']['brand']); ?></td>
                                              <td><i class="far fa-check-circle"></i>No</td>
-                                             <td>{{$card['card']['last4']}}</td>
-                                             <td>{{$card['card']['exp_month']}}</td>
-                                             <td>{{$card['card']['exp_year']}}</td>
+                                             <td><?php echo e($card['card']['last4']); ?></td>
+                                             <td><?php echo e($card['card']['exp_month']); ?></td>
+                                             <td><?php echo e($card['card']['exp_year']); ?></td>
                                              <td>
-                                                <form action="{{route('payment_method.update')}}" method="post" id="payment-form">
-                                                   {{ csrf_field() }}
-                                                   <input type="hidden" name="card_id" value="{{$card['id']}}">
+                                                <form action="<?php echo e(route('payment_method.update')); ?>" method="post" id="payment-form">
+                                                   <?php echo e(csrf_field()); ?>
+
+                                                   <input type="hidden" name="card_id" value="<?php echo e($card['id']); ?>">
                                                    <button class="btn btn--secondary btn--sm">Set default</button>
                                                 </form>
-                                                <form action="{{route('payment_method.remove')}}" method="post" id="payment-form">
-                                                   {{ csrf_field() }}
-                                                   <input type="hidden" name="card_id" value="{{$card['id']}}">
+                                                <form action="<?php echo e(route('payment_method.remove')); ?>" method="post" id="payment-form">
+                                                   <?php echo e(csrf_field()); ?>
+
+                                                   <input type="hidden" name="card_id" value="<?php echo e($card['id']); ?>">
                                                    <button id="removebtn" class="btn btn--secondary btn--sm">Remove</button>
                                                 </form>
                                              </td>
                                           </tr>
-                                          @endif
-                                          @endforeach
-                                          @endif
+                                          <?php endif; ?>
+                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                          <?php endif; ?>
                                        </table>
-                                       @else
+                                       <?php else: ?>
                                        <p>You don't have any credit/debit cards available. </p>
-                                       @endif
+                                       <?php endif; ?>
                                        <div id="addCardBtn" class="col12 text-right">
                                           <button type="button" id="addCard" class="btn btn--secondary btn--sm">Add New Card</button>
                                        </div>
@@ -566,11 +549,7 @@
 
                                     ?>
                                  <div class="form-wrapper profile-form-wrapper">
-                                    {{--
-                                    <div class="form-action-upper">
-                                       <a href="#" class="edit-fields"><img src="/theme/assets/images/icons/icon-edit.svg" alt="Edit Fields"/><span>Edit</span></a>
-                                    </div>
-                                    --}}
+                                    
                                     <form >
                                        <div class="custom-radio-wrapper">
                                           <div class="custom-radio-box active">
@@ -595,40 +574,40 @@
                                        <?php //dd($receipt_info); ?>
                                        <div id="receipt_add_edit_mode" class="hidden-fields-actions receipt-fields" style="display: block;">
                                           <?php //dd($user['receipt_details']);?>
-                                          @if($user['receipt_details'] != '')
+                                          <?php if($user['receipt_details'] != ''): ?>
                                           <?php $receipt_info = json_decode($user['receipt_details']);  ?>
-                                          @foreach($receipt_info as $k => $v)
-                                          @if($k != 'billing' && isset($hone[$k]))
+                                          <?php $__currentLoopData = $receipt_info; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                          <?php if($k != 'billing' && isset($hone[$k])): ?>
                                           <div class="col12">
-                                             <label>{{$hone[$k]}}:</label>
+                                             <label><?php echo e($hone[$k]); ?>:</label>
                                              <div class="input-safe-wrapper">
-                                                <input  type="text" id="{{$k}}" name="{{$k}}" value="{{ $v }}" >
+                                                <input  type="text" id="<?php echo e($k); ?>" name="<?php echo e($k); ?>" value="<?php echo e($v); ?>" >
                                              </div>
                                           </div>
-                                          @endif
-                                          @endforeach
+                                          <?php endif; ?>
+                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                           <div class="form-submit-area">
                                              <button id="save-receipt-data" type="button" class="btn btn--md btn--secondary">Update</button>
                                           </div>
-                                          @endif
+                                          <?php endif; ?>
                                        </div>
                                        <div id="invoice_add_edit_mode" class="hidden-fields-actions invoice-fields">
-                                          @if($user['invoice_details'] != '')
+                                          <?php if($user['invoice_details'] != ''): ?>
                                           <?php $invoice_info = json_decode($user['invoice_details']);  ?>
-                                          @foreach($invoice_info as $k => $v)
-                                          @if($k != 'billing' && isset($htwo[$k]))
+                                          <?php $__currentLoopData = $invoice_info; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $k => $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                          <?php if($k != 'billing' && isset($htwo[$k])): ?>
                                           <div class="col12">
-                                             <label>{{$htwo[$k]}}:</label>
+                                             <label><?php echo e($htwo[$k]); ?>:</label>
                                              <div class="input-safe-wrapper">
-                                                <input  type="text" id="{{$k}}" name="{{$k}}" value="{{ $v }}" >
+                                                <input  type="text" id="<?php echo e($k); ?>" name="<?php echo e($k); ?>" value="<?php echo e($v); ?>" >
                                              </div>
                                           </div>
-                                          @endif
-                                          @endforeach
+                                          <?php endif; ?>
+                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                           <div class="form-submit-area">
                                              <button id="save-invoice-data" type="button" class="btn btn--md btn--secondary">Update</button>
                                           </div>
-                                          @endif
+                                          <?php endif; ?>
                                        </div>
                                     </form>
                                     <?php //dd(); ?>
@@ -638,15 +617,14 @@
                               </div>
                               <div id="password-edit" class="in-tab-wrapper">
                                  <div class="account-text">
-                                    {{--
-                                    <h2>Change password</h2>
-                                    --}}
+                                    
                                     <div class="form-wrapper profile-form-wrapper">
-                                       <form method="post" action="{{ route('update.personalInfo') }}" autocomplete="off" class="password-form">
-                                          {!! csrf_field() !!}
+                                       <form method="post" action="<?php echo e(route('update.personalInfo')); ?>" autocomplete="off" class="password-form">
+                                          <?php echo csrf_field(); ?>
+
                                           <div class="row">
                                              <div class="col12 col-sm-12">
-                                                <label>New password:{{--<br/><small>(Min. 8 letters, min. 1 capital letter & 1 number)</small>--}}</label>
+                                                <label>New password:</label>
                                                 <input type="password" autocomplete="new-password" name="password" id="password" required />
                                              </div>
                                              <div class="col12 col-sm-12">
@@ -656,7 +634,7 @@
                                                    data-bv-identical-field="password"
                                                    data-bv-identical-message="The password and its confirmation are not the same!" required />
                                              </div>
-                                             <input type="hidden" name='email' value="{{$currentuser['email']}}">
+                                             <input type="hidden" name='email' value="<?php echo e($currentuser['email']); ?>">
                                           </div>
                                           <div class="form-submit-area">
                                              <button type="submit" class="btn btn--md btn--secondary">Change password</button>
@@ -674,57 +652,55 @@
                </div>
                <!-- /#my-account.tab-content-wrapper -->
             </div>
-            @if((isset($events) && count($events) == 0) )
+            <?php if((isset($events) && count($events) == 0) ): ?>
             <div id="nocourses" class="tab-content-wrapper active-tab">
                <div class="container">
                   You have no courses
                </div>
             </div>
-            @else
+            <?php else: ?>
             <div id="courses" class="tab-content-wrapper active-tab">
-               @if(\Session('stripe-error'))
+               <?php if(\Session('stripe-error')): ?>
                <div class="alert-outer">
                   <div class="container">
                      <div class="alert-wrapper error-alert">
                         <div class="alert-inner">
-                           <p><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-error-alert.svg')}}" alt="Info Alert">{{\Session('stripe-error')}}.</p>
-                           <a href="javascript:void(0)" class="close-alert"><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')}}" alt="Close Alert"/></a>
+                           <p><img src="<?php echo e(cdn('/theme/assets/images/icons/alert-icons/icon-error-alert.svg')); ?>" alt="Info Alert"><?php echo e(\Session('stripe-error')); ?>.</p>
+                           <a href="javascript:void(0)" class="close-alert"><img src="<?php echo e(cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')); ?>" alt="Close Alert"/></a>
                         </div>
                      </div>
                   </div>
                   <!-- /.alert-outer -->
                </div>
-               @endif
+               <?php endif; ?>
                <div class="container">
                   <div class="row">
                      <?php $tab = 0; ?>
                      <?php //dd($events[0]); ?>
-                     @if(isset($events) && count($events) > 0)
-                     @foreach($events as $keyType => $event)
-                     @if($event['view_tpl'] != 'elearning_free' && $event['view_tpl'] != 'elearning_event')
+                     <?php if(isset($events) && count($events) > 0): ?>
+                     <?php $__currentLoopData = $events; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $keyType => $event): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                     <?php if($event['view_tpl'] != 'elearning_free' && $event['view_tpl'] != 'elearning_event'): ?>
                      <div class="col12 dynamic-courses-wrapper dynamic-courses-wrapper--style2">
                         <div class="item">
-                           <h2>{{ $event['title'] }}</h2>
+                           <h2><?php echo e($event['title']); ?></h2>
                            <div class="inside-tabs">
                               <div class="tabs-ctrl">
                                  <ul>
-                                    <li class="active"><a href="#c-info-inner{{$tab}}">Info</a></li>
-                                    <li><a href="#c-shedule-inner{{$tab}}">Schedule </a></li>
+                                    <li class="active"><a href="#c-info-inner<?php echo e($tab); ?>">Info</a></li>
+                                    <li><a href="#c-shedule-inner<?php echo e($tab); ?>">Schedule </a></li>
                                     <?php  $fa = strtotime(date('Y-m-d',strtotime($event['release_date_files']))) >= strtotime(date('Y-m-d'))?>
-                                    @if(!$instructor && isset($event['category'][0]['dropbox']) && count($event['category'][0]['dropbox']) != 0 &&
-                                    $event['status'] == 3 &&  $fa)
-                                    <li><a href="#c-files-inner{{$tab}}">Files</a></li>
-                                    @endif
-                                    @if(isset($event['exams']) && count($event['exams']) >0 )
-                                    <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
-                                    @endif
-                                    {{--
-                                    <li><a href="#c-subs-inner{{$tab}}">Subscription</a></li>
-                                    --}}
+                                    <?php if(!$instructor && isset($event['category'][0]['dropbox']) && count($event['category'][0]['dropbox']) != 0 &&
+                                    $event['status'] == 3 &&  $fa): ?>
+                                    <li><a href="#c-files-inner<?php echo e($tab); ?>">Files</a></li>
+                                    <?php endif; ?>
+                                    <?php if(isset($event['exams']) && count($event['exams']) >0 ): ?>
+                                    <li><a href="#c-exams-inner<?php echo e($tab); ?>">Exams</a></li>
+                                    <?php endif; ?>
+                                    
                                  </ul>
                               </div>
                               <div class="inside-tabs-wrapper">
-                                 <div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
+                                 <div id="c-info-inner<?php echo e($tab); ?>" class="in-tab-wrapper" style="display: block;">
                                     <div class="bottom">
                                        <?php
                                           $summaryDate = '';
@@ -734,66 +710,65 @@
                                              }
                                           }
                                           ?>
-                                       <div class="duration"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}" alt="">{{$summaryDate}}</div>
-                                       @if($event['hours'])
-                                       <div class="expire-date"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt="">{{$event['hours']}}</div>
-                                       @endif
+                                       <div class="duration"><img class="replace-with-svg" src="<?php echo e(cdn('/theme/assets/images/icons/icon-calendar.svg')); ?>" alt=""><?php echo e($summaryDate); ?></div>
+                                       <?php if($event['hours']): ?>
+                                       <div class="expire-date"><img class="replace-with-svg" src="<?php echo e(cdn('/theme/assets/images/icons/Start-Finish.svg')); ?>" alt=""><?php echo e($event['hours']); ?></div>
+                                       <?php endif; ?>
                                     </div>
                                  </div>
-                                 <div id="c-shedule-inner{{$tab}}" class="in-tab-wrapper">
+                                 <div id="c-shedule-inner<?php echo e($tab); ?>" class="in-tab-wrapper">
                                     <div class="bottom tabs-bottom">
-                                       <div class="expire-date exp-date"><img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="">Schedule available in PDF</div>
+                                       <div class="expire-date exp-date"><img src="<?php echo e(cdn('/theme/assets/images/icons/Access-Files.svg')); ?>" alt="">Schedule available in PDF</div>
                                        <div class="right">
-                                          <a target="_blank" href="/print/syllabus/{{$event['slugable']['slug']}}" class="btn btn--secondary btn--md"> DOWNLOAD SCHEDULE </a>
+                                          <a target="_blank" href="/print/syllabus/<?php echo e($event['slugable']['slug']); ?>" class="btn btn--secondary btn--md"> DOWNLOAD SCHEDULE </a>
                                        </div>
                                     </div>
                                     <div class="acc-topic-accordion">
                                        <div class="accordion-wrapper accordion-big">
                                           <?php $catId = -1?>
                                           <?php //dd($event['topics']); ?>
-                                          @if(isset($event['topics']) && count($event['topics']) > 0)
-                                          @foreach($event['topics'] as $keyTopic => $topic)
+                                          <?php if(isset($event['topics']) && count($event['topics']) > 0): ?>
+                                          <?php $__currentLoopData = $event['topics']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $keyTopic => $topic): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                           <?php //dd($keyTopic); ?>
-                                          @if(isset($topic) && count($topic) != 0 )
+                                          <?php if(isset($topic) && count($topic) != 0 ): ?>
                                           <div class="accordion-item">
-                                             <h3 class="accordion-title title-blue-gradient scroll-to-top">{{$keyTopic}}</h3>
+                                             <h3 class="accordion-title title-blue-gradient scroll-to-top"><?php echo e($keyTopic); ?></h3>
                                              <div class="accordion-content no-padding">
                                                 <?php //dd($topic[0]['lessons']); ?>
-                                                @foreach($topic['lessons'] as $keyLesso => $lesso)
+                                                <?php $__currentLoopData = $topic['lessons']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $keyLesso => $lesso): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                 <div class="topic-wrapper-big">
                                                    <div class="topic-title-meta">
-                                                      <h4>{{$lesso['title']}}</h4>
+                                                      <h4><?php echo e($lesso['title']); ?></h4>
                                                       <!-- Feedback 18-11 changed -->
                                                       <div class="topic-meta">
-                                                         @if(count($lesso['type']) >0)
-                                                         <div class="category">{{$lesso['type'][0]['name']}}</div>
-                                                         @endif
+                                                         <?php if(count($lesso['type']) >0): ?>
+                                                         <div class="category"><?php echo e($lesso['type'][0]['name']); ?></div>
+                                                         <?php endif; ?>
                                                          <!-- Feedback 18-11 changed -->
-                                                         <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}" alt="" /><?= date( "l d M Y", strtotime($lesso['pivot']['time_starts']) ) ?></span> <!-- Feedback 18-11 changed -->
-                                                         <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/Times.svg')}}" alt="" /><?= date( "H:i", strtotime($lesso['pivot']['time_starts']) ) ?> ({{$lesso['pivot']['duration']}})</span> <!-- Feedback 18-11 changed -->
-                                                         <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-marker.svg')}}" alt="" />{{$lesso['pivot']['room']}}</span> <!-- Feedback 18-11 changed -->
+                                                         <span class="meta-item duration"><img src="<?php echo e(cdn('/theme/assets/images/icons/icon-calendar.svg')); ?>" alt="" /><?= date( "l d M Y", strtotime($lesso['pivot']['time_starts']) ) ?></span> <!-- Feedback 18-11 changed -->
+                                                         <span class="meta-item duration"><img src="<?php echo e(cdn('/theme/assets/images/icons/Times.svg')); ?>" alt="" /><?= date( "H:i", strtotime($lesso['pivot']['time_starts']) ) ?> (<?php echo e($lesso['pivot']['duration']); ?>)</span> <!-- Feedback 18-11 changed -->
+                                                         <span class="meta-item duration"><img src="<?php echo e(cdn('/theme/assets/images/icons/icon-marker.svg')); ?>" alt="" /><?php echo e($lesso['pivot']['room']); ?></span> <!-- Feedback 18-11 changed -->
                                                       </div>
                                                       <!-- /.topic-title-meta -->
                                                    </div>
                                                    <div class="author-img">
                                                       <!-- Feedback 18-11 changed -->
-                                                      <a href="{{$instructors[$lesso['instructor_id']][0]['slugable']['slug']}}">
+                                                      <a href="<?php echo e($instructors[$lesso['instructor_id']][0]['slugable']['slug']); ?>">
                                                       <span class="custom-tooltip"><?= $instructors[$lesso['instructor_id']][0]['title'].' '.$instructors[$lesso['instructor_id']][0]['subtitle']; ?></span>
-                                                      <img src="{{cdn( get_image($instructors[$lesso['instructor_id']][0]['mediable'],'instructors-small') )}}" alt="<?= $instructors[$lesso['instructor_id']][0]['title']; $instructors[$lesso['instructor_id']][0]['subtitle']; ?>"/>
+                                                      <img src="<?php echo e(cdn( get_image($instructors[$lesso['instructor_id']][0]['mediable'],'instructors-small') )); ?>" alt="<?= $instructors[$lesso['instructor_id']][0]['title']; $instructors[$lesso['instructor_id']][0]['subtitle']; ?>"/>
                                                       </a>
                                                    </div>
                                                    <!-- /.topic-wrapper-big -->
                                                 </div>
-                                                {{--@if($lesso['type'])
-                                                @endif--}}
-                                                @endforeach
+                                                
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                 <!-- /.accordion-content -->
                                              </div>
                                              <!-- /.accordion-item -->
                                           </div>
-                                          @endif
-                                          @endforeach
-                                          @endif
+                                          <?php endif; ?>
+                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                          <?php endif; ?>
                                           <!-- /.accordion-wrapper -->
                                        </div>
                                        <!-- /.acc-topic-accordion -->
@@ -825,13 +800,13 @@
                                     }
 
                                     ?>
-                                 @if(isset($dropbox) && $folders != null)
-                                 <div id="c-files-inner{{$tab}}" class="in-tab-wrapper">
-                                    @if($display)
+                                 <?php if(isset($dropbox) && $folders != null): ?>
+                                 <div id="c-files-inner<?php echo e($tab); ?>" class="in-tab-wrapper">
+                                    <?php if($display): ?>
                                     <div class="acc-topic-accordion">
                                        <div class="accordion-wrapper accordion-big">
-                                          @if(isset($folders) && count($folders) > 0)
-                                          @foreach($folders as $folder)
+                                          <?php if(isset($folders) && count($folders) > 0): ?>
+                                          <?php $__currentLoopData = $folders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $folder): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                           <?php
                                              $checkedF = [];
                                              $fs = [];
@@ -841,207 +816,207 @@
                                              $subfiles = [];
                                              ?>
                                           <div class="accordion-item">
-                                             <h3 class="accordion-title title-blue-gradient scroll-to-top"> {{ $folder['foldername'] }}</h3>
+                                             <h3 class="accordion-title title-blue-gradient scroll-to-top"> <?php echo e($folder['foldername']); ?></h3>
                                              <div class="accordion-content no-padding">
-                                                @if(isset($files) && count($files) > 0)
-                                                   @foreach($folders_bonus as $folder_bonus)
-                                                      @if($folder_bonus['parent'] == $folder['id']  && !in_array($folder_bonus['foldername'],$bonusFiles))
+                                                <?php if(isset($files) && count($files) > 0): ?>
+                                                   <?php $__currentLoopData = $folders_bonus; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $folder_bonus): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                      <?php if($folder_bonus['parent'] == $folder['id']  && !in_array($folder_bonus['foldername'],$bonusFiles)): ?>
                                                       <?php
                                                          $checkedF[] = $folder_bonus['id'] + 1 ;
                                                          $fs[$folder_bonus['id']+1]=[];
                                                          $fs[$folder_bonus['id']+1] = $folder_bonus;
 
                                                          ?>
-                                                      @endif
-                                                   @endforeach
-                                                   @if(count($fs) > 0)
+                                                      <?php endif; ?>
+                                                   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                   <?php if(count($fs) > 0): ?>
                                                    <?php //dd($fs); ?>
-                                                      @foreach($fs as $subf)
-                                                         @foreach($files_bonus as $folder_bonus)
+                                                      <?php $__currentLoopData = $fs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subf): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                         <?php $__currentLoopData = $files_bonus; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $folder_bonus): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                          <?php
                                                             if(in_array($subf['foldername'],$subfolder)){
                                                                continue;
                                                             }
                                                             ?>
-                                                            @if($folder_bonus['parent'] == $folder['id'])
+                                                            <?php if($folder_bonus['parent'] == $folder['id']): ?>
                                                             <?php $subfolder[] =  $subf['foldername']; ?>
                                                             <div class="files-wrapper bonus-files">
-                                                               <h4 class="bonus-title">{{ $subf['foldername'] }}</h4>
+                                                               <h4 class="bonus-title"><?php echo e($subf['foldername']); ?></h4>
                                                                <span><i class="icon-folder-open"></i>   </span>
-                                                                  @foreach($files_bonus as $file_bonus)
-                                                                     @if($file_bonus['fid'] == $subf['id'] && $file_bonus['parent'] == $subf['parent'] )
+                                                                  <?php $__currentLoopData = $files_bonus; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $file_bonus): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                                     <?php if($file_bonus['fid'] == $subf['id'] && $file_bonus['parent'] == $subf['parent'] ): ?>
                                                                      <?php $subfiles[]= $file_bonus['filename'] ?>
                                                                      <div class="file-wrapper">
-                                                                        <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
-                                                                        <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
-                                                                        <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
-                                                                        <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
+                                                                        <h4 class="file-title"><?php echo e($file_bonus['filename']); ?></h4>
+                                                                        <span class="last-modified">Last modified:  <?php echo e($file_bonus['last_mod']); ?></span>
+                                                                        <a  class="download-file getdropboxlink"  data-dirname="<?php echo e($file_bonus['dirname']); ?>" data-filename="<?php echo e($file_bonus['filename']); ?>" href="javascript:void(0)" >
+                                                                        <img src="<?php echo e(cdn('/theme/assets/images/icons/Access-Files.svg')); ?>"  alt="Download File"/></a>
                                                                      </div>
-                                                                     @endif
-                                                                  @endforeach
+                                                                     <?php endif; ?>
+                                                                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                             </div>
-                                                            @endif
-                                                         @endforeach
-                                                      @endforeach
-                                                   @endif
-                                                   @foreach($files as $file)
-                                                      @if($folder['id'] == $file['fid'])
+                                                            <?php endif; ?>
+                                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                   <?php endif; ?>
+                                                   <?php $__currentLoopData = $files; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $file): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                      <?php if($folder['id'] == $file['fid']): ?>
                                                       <div class="files-wrapper">
                                                          <div class="file-wrapper">
-                                                            <h4 class="file-title">{{ $file['filename'] }}</h4>
-                                                            <span class="last-modified">Last modified:  {{ $file['last_mod'] }}</span>
-                                                            <a  class="download-file getdropboxlink"  data-dirname="{{ $file['dirname'] }}" data-filename="{{ $file['filename'] }}" href="javascript:void(0)" >
-                                                            <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
+                                                            <h4 class="file-title"><?php echo e($file['filename']); ?></h4>
+                                                            <span class="last-modified">Last modified:  <?php echo e($file['last_mod']); ?></span>
+                                                            <a  class="download-file getdropboxlink"  data-dirname="<?php echo e($file['dirname']); ?>" data-filename="<?php echo e($file['filename']); ?>" href="javascript:void(0)" >
+                                                            <img src="<?php echo e(cdn('/theme/assets/images/icons/Access-Files.svg')); ?>"  alt="Download File"/></a>
                                                          </div>
                                                       </div>
-                                                      @endif
-                                                   @endforeach
-                                                @endif
-                                                @if(isset($folders_bonus) && count($folders_bonus) > 0)
+                                                      <?php endif; ?>
+                                                   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                <?php endif; ?>
+                                                <?php if(isset($folders_bonus) && count($folders_bonus) > 0): ?>
                                                 <div class="files-wrapper bonus-files">
-                                                   @foreach($folders_bonus as $folder_bonus)
+                                                   <?php $__currentLoopData = $folders_bonus; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $folder_bonus): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                    <?php
                                                       if(in_array($folder_bonus['foldername'],$subfolder)){
                                                          continue;
                                                       }
                                                       ?>
-                                                   @if($folder_bonus['parent'] == $folder['id'])
-                                                   <h4 class="bonus-title">{{ $folder_bonus['foldername'] }}</h4>
+                                                   <?php if($folder_bonus['parent'] == $folder['id']): ?>
+                                                   <h4 class="bonus-title"><?php echo e($folder_bonus['foldername']); ?></h4>
                                                    <span><i class="icon-folder-open"></i>   </span>
-                                                   @if(isset($files_bonus) && count($files_bonus) > 0)
-                                                   @foreach($files_bonus as $file_bonus)
-                                                   @if($file_bonus['parent'] == $folder_bonus['parent'] && !in_array($file_bonus['filename'],$subfiles))
+                                                   <?php if(isset($files_bonus) && count($files_bonus) > 0): ?>
+                                                   <?php $__currentLoopData = $files_bonus; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $file_bonus): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                   <?php if($file_bonus['parent'] == $folder_bonus['parent'] && !in_array($file_bonus['filename'],$subfiles)): ?>
                                                    <div class="file-wrapper">
-                                                      <h4 class="file-title">{{ $file_bonus['filename'] }}</h4>
-                                                      <span class="last-modified">Last modified:  {{$file_bonus['last_mod']}}</span>
-                                                      <a  class="download-file getdropboxlink"  data-dirname="{{ $file_bonus['dirname'] }}" data-filename="{{ $file_bonus['filename'] }}" href="javascript:void(0)" >
-                                                      <img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}"  alt="Download File"/></a>
+                                                      <h4 class="file-title"><?php echo e($file_bonus['filename']); ?></h4>
+                                                      <span class="last-modified">Last modified:  <?php echo e($file_bonus['last_mod']); ?></span>
+                                                      <a  class="download-file getdropboxlink"  data-dirname="<?php echo e($file_bonus['dirname']); ?>" data-filename="<?php echo e($file_bonus['filename']); ?>" href="javascript:void(0)" >
+                                                      <img src="<?php echo e(cdn('/theme/assets/images/icons/Access-Files.svg')); ?>"  alt="Download File"/></a>
                                                    </div>
-                                                   @endif
-                                                   @endforeach
-                                                   @endif
-                                                   @endif
-                                                   @endforeach
+                                                   <?php endif; ?>
+                                                   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                   <?php endif; ?>
+                                                   <?php endif; ?>
+                                                   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                 </div>
-                                                @endif
+                                                <?php endif; ?>
                                              </div>
                                           </div>
-                                          @endforeach
-                                          @endif
+                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                          <?php endif; ?>
                                        </div>
                                     </div>
-                                    @endif
+                                    <?php endif; ?>
                                  </div>
-                                 @endif
-                                 @if(isset($event['exams']) && count($event['exams']) >0 )
-                                 <div id="c-exams-inner{{$tab}}" class="in-tab-wrapper">
+                                 <?php endif; ?>
+                                 <?php if(isset($event['exams']) && count($event['exams']) >0 ): ?>
+                                 <div id="c-exams-inner<?php echo e($tab); ?>" class="in-tab-wrapper">
                                     <div class="dynamic-courses-wrapper dynamic-courses-wrapper--style2">
                                        <div class="bottom">
-                                          <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="">Exams will activate in the end of your course.</div>
-                                          @foreach($event['exams'] as $p)
+                                          <div class="location"><img class="replace-with-svg" src="<?php echo e(cdn('/theme/assets/images/icons/Customer_Access.svg')); ?>" alt="">Exams will activate in the end of your course.</div>
+                                          <?php $__currentLoopData = $event['exams']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                           <div class="right">
                                              <!-- Feedback 8-12 changed -->
-                                             @if(($userExam = $user->hasExamResults($p->id)) && $nowTime->diffInHours($userExam->end_time) < 48)
-                                             <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['title']}}" class="btn btn--secondary btn--md">VIEW RESULT</a>
-                                             @elseif($user->hasExamResults($p->id) )
-                                             <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['title']}}" class="btn btn--secondary btn--md btn--completed">VIEW RESULT</a>
-                                             @elseif($p->islive == 1)
-                                             <a target="_blank" onclick="window.open('{{ route('attempt-exam', [$p->id]) }}', 'newwindow', 'width=1400,height=650'); return false;" title="{{$p['title']}}" class="btn btn--secondary btn--md">TAKE EXAM</a>
-                                             @elseif($p->isupcom == 1)
-                                             <a  title="{{$p['title'] }}" class="btn btn--secondary btn--md">{{ date('F j, Y', strtotime($p->publish_time)) }}</a>
-                                             @endif
+                                             <?php if(($userExam = $user->hasExamResults($p->id)) && $nowTime->diffInHours($userExam->end_time) < 48): ?>
+                                             <a target="_blank" href="<?php echo e(url('exam-results/' . $p->id)); ?>?s=1" title="<?php echo e($p['title']); ?>" class="btn btn--secondary btn--md">VIEW RESULT</a>
+                                             <?php elseif($user->hasExamResults($p->id) ): ?>
+                                             <a target="_blank" href="<?php echo e(url('exam-results/' . $p->id)); ?>?s=1" title="<?php echo e($p['title']); ?>" class="btn btn--secondary btn--md btn--completed">VIEW RESULT</a>
+                                             <?php elseif($p->islive == 1): ?>
+                                             <a target="_blank" onclick="window.open('<?php echo e(route('attempt-exam', [$p->id])); ?>', 'newwindow', 'width=1400,height=650'); return false;" title="<?php echo e($p['title']); ?>" class="btn btn--secondary btn--md">TAKE EXAM</a>
+                                             <?php elseif($p->isupcom == 1): ?>
+                                             <a  title="<?php echo e($p['title']); ?>" class="btn btn--secondary btn--md"><?php echo e(date('F j, Y', strtotime($p->publish_time))); ?></a>
+                                             <?php endif; ?>
                                           </div>
                                           <!-- ./item -->
-                                          @endforeach
+                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                        </div>
                                     </div>
                                     <!-- ./dynamic-courses-wrapper -->
                                  </div>
-                                 @endif
+                                 <?php endif; ?>
                               </div>
                            </div>
                         </div>
                      </div>
-                     @else
+                     <?php else: ?>
                      <div class="col12 dynamic-courses-wrapper">
                         <div class="item">
                            <?php //dd($event['title']); ?>
-                           <h2>{{ $event['title'] }}</h2>
+                           <h2><?php echo e($event['title']); ?></h2>
                            <div class="inside-tabs">
                               <div class="tabs-ctrl">
                                  <ul>
-                                    <li class="active"><a href="#c-info-inner{{$tab}}">Info</a></li>
-                                    <li><a href="#c-watch-inner{{$tab}}">Watch</a></li>
-                                    @if($event['view_tpl'] != 'elearning_free')
+                                    <li class="active"><a href="#c-info-inner<?php echo e($tab); ?>">Info</a></li>
+                                    <li><a href="#c-watch-inner<?php echo e($tab); ?>">Watch</a></li>
+                                    <?php if($event['view_tpl'] != 'elearning_free'): ?>
                                     <?php //']); ?>
-                                    @if(isset($event['exams']) && count($event['exams']) >0 )
-                                    <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
-                                    @endif
-                                    @if(count($event['certs']) > 0)
-                                    <li><a href="#c-cert-inner{{$tab}}">Certificate</a></li>
-                                    @endif
-                                    @endif
-                                    @if($subscriptionAccess && count($event['plans']) > 0)
-                                    <li><a href="#c-subs-inner{{$tab}}">Subscription</a></li>
-                                    @endif
+                                    <?php if(isset($event['exams']) && count($event['exams']) >0 ): ?>
+                                    <li><a href="#c-exams-inner<?php echo e($tab); ?>">Exams</a></li>
+                                    <?php endif; ?>
+                                    <?php if(count($event['certs']) > 0): ?>
+                                    <li><a href="#c-cert-inner<?php echo e($tab); ?>">Certificate</a></li>
+                                    <?php endif; ?>
+                                    <?php endif; ?>
+                                    <?php if($subscriptionAccess && count($event['plans']) > 0): ?>
+                                    <li><a href="#c-subs-inner<?php echo e($tab); ?>">Subscription</a></li>
+                                    <?php endif; ?>
                                  </ul>
                               </div>
                               <div class="inside-tabs-wrapper">
-                                 <div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
+                                 <div id="c-info-inner<?php echo e($tab); ?>" class="in-tab-wrapper" style="display: block;">
                                     <div class="bottom">
                                        <?php //dd($event['videos_progress']); ?>
-                                       @if($event['expiration'])
-                                       <div class="expire-date exp-date"><img src="{{cdn('/theme/assets/images/icons/Days-Week.svg')}}" alt="">Expiration date: {{$event['expiration']}}</div>
-                                       @endif
-                                       @if (isset($event['hours']))
-                                       <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""> {{$event['hours']}}h </div>
-                                       @endif
-                                       @if (isset($event['videos_progress']))
+                                       <?php if($event['expiration']): ?>
+                                       <div class="expire-date exp-date"><img src="<?php echo e(cdn('/theme/assets/images/icons/Days-Week.svg')); ?>" alt="">Expiration date: <?php echo e($event['expiration']); ?></div>
+                                       <?php endif; ?>
+                                       <?php if(isset($event['hours'])): ?>
+                                       <div  class="duration"><img class="replace-with-svg" width="20" src="<?php echo e(cdn('/theme/assets/images/icons/Start-Finish.svg')); ?>" alt=""> <?php echo e($event['hours']); ?>h </div>
+                                       <?php endif; ?>
+                                       <?php if(isset($event['videos_progress'])): ?>
                                        <?php //dd($event); ?>
-                                       <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/E-Learning.svg')}}" alt=""> {{$event['videos_progress']}}% </div>
-                                       @endif
+                                       <div  class="duration"><img class="replace-with-svg" width="20" src="<?php echo e(cdn('/theme/assets/images/icons/E-Learning.svg')); ?>" alt=""> <?php echo e($event['videos_progress']); ?>% </div>
+                                       <?php endif; ?>
                                     </div>
                                  </div>
-                                 @if($subscriptionAccess)
-                                 <div id="c-subs-inner{{$tab}}" class="in-tab-wrapper">
+                                 <?php if($subscriptionAccess): ?>
+                                 <div id="c-subs-inner<?php echo e($tab); ?>" class="in-tab-wrapper">
                                     <div class="bottom">
-                                       @if($event['mySubscription'])
+                                       <?php if($event['mySubscription']): ?>
                                        <div class="left">
                                           <div class="bottom">
-                                             @if($event['mySubscription']['trial_ends_at'])
+                                             <?php if($event['mySubscription']['trial_ends_at']): ?>
                                              <?php
                                                 $date_timestamp = strtotime($event['mySubscription']['trial_ends_at']);
                                                 $now_date = strtotime(date('d/m/Y'));
                                                 $date = date('d-m-Y',$date_timestamp);
                                                 ?>
-                                             @if($date_timestamp > $now_date )
+                                             <?php if($date_timestamp > $now_date ): ?>
                                              <?php //dd('not expired'); ?>
-                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/clock-coins.svg')}}" alt=""><?php echo 'Your trial expiration: '.$date; ?></div>
-                                             @if($event['mySubscription']['status'])
-                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
-                                             @endif
-                                             @else
-                                             @if($event['mySubscription'])
-                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
-                                             @endif
-                                             @endif
-                                             @else
+                                             <div class="location"><img class="replace-with-svg" src="<?php echo e(cdn('/theme/assets/images/icons/clock-coins.svg')); ?>" alt=""><?php echo 'Your trial expiration: '.$date; ?></div>
+                                             <?php if($event['mySubscription']['status']): ?>
+                                             <div class="location"><img class="replace-with-svg" src="<?php echo e(cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')); ?>" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                             <?php endif; ?>
+                                             <?php else: ?>
+                                             <?php if($event['mySubscription']): ?>
+                                             <div class="location"><img class="replace-with-svg" src="<?php echo e(cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')); ?>" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                             <?php endif; ?>
+                                             <?php endif; ?>
+                                             <?php else: ?>
                                              <?php
                                                 $date_timestamp = strtotime($event['mySubscription']['trial_ends_at']);
                                                 $now_date = strtotime(date('d/m/Y'));
                                                 $date = date('d-m-Y',$date_timestamp);
                                                 ?>
-                                             @if($date_timestamp > $now_date )
-                                             @if($event['mySubscription']['status'])
-                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
-                                             @endif
-                                             @else
-                                             @if($event['mySubscription'])
-                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
-                                             @endif
-                                             @endif
-                                             @endif
-                                             @if(isset($event['mySubscription']))
+                                             <?php if($date_timestamp > $now_date ): ?>
+                                             <?php if($event['mySubscription']['status']): ?>
+                                             <div class="location"><img class="replace-with-svg" src="<?php echo e(cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')); ?>" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                             <?php endif; ?>
+                                             <?php else: ?>
+                                             <?php if($event['mySubscription']): ?>
+                                             <div class="location"><img class="replace-with-svg" src="<?php echo e(cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')); ?>" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                             <?php endif; ?>
+                                             <?php endif; ?>
+                                             <?php endif; ?>
+                                             <?php if(isset($event['mySubscription'])): ?>
                                              <div class="status_wrapper">
                                                 <div class="status_label"><label> Status:  </label></div>
                                                 <?php
@@ -1060,7 +1035,7 @@
                                                       }
                                                    ?>
                                                 <div class="status_switch">
-                                                   <div class="onoffswitch" data-status="{{$status}}" data-id="{{$event['mySubscription']['id']}}" id="onoffswitch">
+                                                   <div class="onoffswitch" data-status="<?php echo e($status); ?>" data-id="<?php echo e($event['mySubscription']['id']); ?>" id="onoffswitch">
                                                       <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" tabindex="0" <?php echo $a; ?>>
                                                       <label class="onoffswitch-label" for="myonoffswitch">
                                                       <span class="onoffswitch-inner"></span>
@@ -1069,43 +1044,43 @@
                                                    </div>
                                                 </div>
                                              </div>
-                                             @endif
+                                             <?php endif; ?>
                                           </div>
                                        </div>
-                                       @endif
+                                       <?php endif; ?>
                                        <?php //dd($event['mySubscription']); ?>
-                                       @if(!$event['mySubscription'])
+                                       <?php if(!$event['mySubscription']): ?>
                                        <div class="left">
-                                          <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/checklist-graduate-hat.svg')}}" alt="">Get annual access to updated videos & files. 15 days free trial.</div>
+                                          <div  class="duration"><img class="replace-with-svg" width="20" src="<?php echo e(cdn('/theme/assets/images/icons/checklist-graduate-hat.svg')); ?>" alt="">Get annual access to updated videos & files. 15 days free trial.</div>
                                        </div>
-                                       @endif
+                                       <?php endif; ?>
                                        <div class="right">
                                           <?php //dd($event) ?>
-                                          @if(!$event['mySubscription'])
-                                          @foreach($event['plans'] as $key => $plan)
-                                          <a href="/myaccount/subscription/{{$event['title']}}/{{ $plan->name }}" class="btn btn--secondary btn--md">SUBSCRIBE NOW</a>
-                                          @endforeach
-                                          @endif
+                                          <?php if(!$event['mySubscription']): ?>
+                                          <?php $__currentLoopData = $event['plans']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $plan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                          <a href="/myaccount/subscription/<?php echo e($event['title']); ?>/<?php echo e($plan->name); ?>" class="btn btn--secondary btn--md">SUBSCRIBE NOW</a>
+                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                          <?php endif; ?>
                                        </div>
                                     </div>
                                  </div>
-                                 @endif
+                                 <?php endif; ?>
                                  <?php //dd($event); ?>
-                                 <div id="c-watch-inner{{$tab}}" class="in-tab-wrapper">
+                                 <div id="c-watch-inner<?php echo e($tab); ?>" class="in-tab-wrapper">
                                     <div class="bottom">
-                                       @if (isset($event['videos_progress']))
-                                       <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/E-Learning.svg')}}" alt=""> {{$event['videos_progress']}}% </div>
-                                       @endif
-                                       @if (isset($event['videos_seen']))
-                                       <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/Recap-Events.svg')}}" alt=""> {{str_replace('/','of',$event['videos_seen'])}} </div>
-                                       @endif
+                                       <?php if(isset($event['videos_progress'])): ?>
+                                       <div  class="duration"><img class="replace-with-svg" width="20" src="<?php echo e(cdn('/theme/assets/images/icons/E-Learning.svg')); ?>" alt=""> <?php echo e($event['videos_progress']); ?>% </div>
+                                       <?php endif; ?>
+                                       <?php if(isset($event['videos_seen'])): ?>
+                                       <div  class="duration"><img class="replace-with-svg" width="20" src="<?php echo e(cdn('/theme/assets/images/icons/Recap-Events.svg')); ?>" alt=""> <?php echo e(str_replace('/','of',$event['videos_seen'])); ?> </div>
+                                       <?php endif; ?>
                                        <div class="right">
                                           <?php $expire = false; ?>
-                                          @foreach($mySubscriptions as $key => $sub)
-                                          @foreach($plans as $key1 => $plan)
+                                          <?php $__currentLoopData = $mySubscriptions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                          <?php $__currentLoopData = $plans; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key1 => $plan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                           <?php //dd($plan['stipe_plan']); ?>
-                                          @if($sub['stripe_plan'] == $plan['stripe_plan'])
-                                          @if($event['id'] == $plan['event_id'])
+                                          <?php if($sub['stripe_plan'] == $plan['stripe_plan']): ?>
+                                          <?php if($event['id'] == $plan['event_id']): ?>
                                           <?php
                                              if(date("Y-m-d h:i:s") < $sub['must_be_updated']){
                                                 $expire = false;
@@ -1113,110 +1088,110 @@
                                                 $expire = true;
                                              }
                                              ?>
-                                          @endif
-                                          @endif
-                                          @endforeach
-                                          @endforeach
-                                          @if(!$event['video_access'])
-                                          {{--<a style="cursor:not-allowed; opacity: 0.5; pointer-events: none;" href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if((isset($event['videos_progress']) && $event['videos_progress'] == 100) || count($event['cert'])>0) WATCH AGAIN @else WATCH NOW @endif</a>--}}
-                                          @else
-                                          <a href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if((isset($event['videos_progress']) && $event['videos_progress'] == 100) ) WATCH AGAIN @else WATCH NOW @endif</a>
-                                          @endif
+                                          <?php endif; ?>
+                                          <?php endif; ?>
+                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                          <?php if(!$event['video_access']): ?>
+                                          
+                                          <?php else: ?>
+                                          <a href="/myaccount/elearning/<?php echo e($event['title']); ?>" class="btn btn--secondary btn--md"><?php if((isset($event['videos_progress']) && $event['videos_progress'] == 100) ): ?> WATCH AGAIN <?php else: ?> WATCH NOW <?php endif; ?></a>
+                                          <?php endif; ?>
                                        </div>
                                     </div>
                                  </div>
-                                 @if($event['view_tpl'] != 'elearning_free' )
-                                 @if(isset($event['exams']))
+                                 <?php if($event['view_tpl'] != 'elearning_free' ): ?>
+                                 <?php if(isset($event['exams'])): ?>
                                  <?php $nowTime = \Carbon\Carbon::now(); ?>
-                                 <div id="c-exams-inner{{$tab}}" class="in-tab-wrapper">
+                                 <div id="c-exams-inner<?php echo e($tab); ?>" class="in-tab-wrapper">
                                     <div class="bottom">
-                                       @foreach($event['exams'] as $p)
-                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="">Exams activate automatically when you watch 80% </div>
+                                       <?php $__currentLoopData = $event['exams']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                       <div class="location"><img class="replace-with-svg" src="<?php echo e(cdn('/theme/assets/images/icons/Customer_Access.svg')); ?>" alt="">Exams activate automatically when you watch 80% </div>
                                        <div class="right">
                                           <!-- Feedback 8-12 changed -->
-                                          @if($event['exam_access'] && !$user->hasExamResults($p->id))
-                                          @if($p->islive == 1)
-                                          <a target="_blank" onclick="window.open('{{ route('attempt-exam', [$p->id]) }}', 'newwindow', 'width=1400,height=650'); return false;" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">TAKE EXAM</a>
-                                          @endif
-                                          @elseif($userExam = $user->hasExamResults($p->id))
-                                          @if($nowTime->diffInHours($userExam->end_time) < 48)
-                                          <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">VIEW RESULT</a>
-                                          @else
-                                          <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md btn--completed">VIEW RESULT</a>
-                                          @endif
-                                          @else
+                                          <?php if($event['exam_access'] && !$user->hasExamResults($p->id)): ?>
+                                          <?php if($p->islive == 1): ?>
+                                          <a target="_blank" onclick="window.open('<?php echo e(route('attempt-exam', [$p->id])); ?>', 'newwindow', 'width=1400,height=650'); return false;" title="<?php echo e($p['exam_name']); ?>" class="btn btn--secondary btn--md">TAKE EXAM</a>
+                                          <?php endif; ?>
+                                          <?php elseif($userExam = $user->hasExamResults($p->id)): ?>
+                                          <?php if($nowTime->diffInHours($userExam->end_time) < 48): ?>
+                                          <a target="_blank" href="<?php echo e(url('exam-results/' . $p->id)); ?>?s=1" title="<?php echo e($p['exam_name']); ?>" class="btn btn--secondary btn--md">VIEW RESULT</a>
+                                          <?php else: ?>
+                                          <a target="_blank" href="<?php echo e(url('exam-results/' . $p->id)); ?>?s=1" title="<?php echo e($p['exam_name']); ?>" class="btn btn--secondary btn--md btn--completed">VIEW RESULT</a>
+                                          <?php endif; ?>
+                                          <?php else: ?>
                                           <div class="right">
-                                             <a href="javascript:void(0)" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md btn--completed">TAKE EXAM</a>
+                                             <a href="javascript:void(0)" title="<?php echo e($p['exam_name']); ?>" class="btn btn--secondary btn--md btn--completed">TAKE EXAM</a>
                                           </div>
-                                          @endif
+                                          <?php endif; ?>
                                        </div>
-                                       @endforeach
+                                       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </div>
                                  </div>
-                                 @endif
-                                 @if(count($event['certs']) > 0)
-                                 <div id="c-cert-inner{{$tab}}" class="in-tab-wrapper">
+                                 <?php endif; ?>
+                                 <?php if(count($event['certs']) > 0): ?>
+                                 <div id="c-cert-inner<?php echo e($tab); ?>" class="in-tab-wrapper">
                                     <div class="bottom">
-                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="">@if(isset($newlayoutExamsEvent[$keyType]) && count($newlayoutExamsEvent[$keyType])>0)Certificate download after completing your exams. @else Your certification is ready @endif</div>
-                                       @foreach($event['certs'] as $certificate)
+                                       <div class="location"><img class="replace-with-svg" src="<?php echo e(cdn('/theme/assets/images/icons/Access-Files.svg')); ?>" alt=""><?php if(isset($newlayoutExamsEvent[$keyType]) && count($newlayoutExamsEvent[$keyType])>0): ?>Certificate download after completing your exams. <?php else: ?> Your certification is ready <?php endif; ?></div>
+                                       <?php $__currentLoopData = $event['certs']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $certificate): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                        <div class="right">
-                                          <a  class="btn btn--secondary btn--md" target="_blank" href="/myaccount/mycertificate/{{$certificate->id}}" >DOWNLOAD </a>
+                                          <a  class="btn btn--secondary btn--md" target="_blank" href="/myaccount/mycertificate/<?php echo e($certificate->id); ?>" >DOWNLOAD </a>
                                        </div>
-                                       @endforeach
+                                       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </div>
                                  </div>
-                                 @endif
-                                 @endif
+                                 <?php endif; ?>
+                                 <?php endif; ?>
                               </div>
                            </div>
                            <!-- ./item -->
                         </div>
                      </div>
-                     @endif
+                     <?php endif; ?>
                      <?php $tab += 1; ?>
-                     @endforeach
-                     @endif
-                     @if(isset($mySubscriptionEvents) && count($mySubscriptionEvents) > 0)
+                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                     <?php endif; ?>
+                     <?php if(isset($mySubscriptionEvents) && count($mySubscriptionEvents) > 0): ?>
                      <!-- subs -->
-                     @foreach($mySubscriptionEvents as $keyType => $event)
-                     @if($event['view_tpl'] != 'elearning_event' && $event['view_tpl'] != 'elearning_free')
-                     @else
+                     <?php $__currentLoopData = $mySubscriptionEvents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $keyType => $event): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                     <?php if($event['view_tpl'] != 'elearning_event' && $event['view_tpl'] != 'elearning_free'): ?>
+                     <?php else: ?>
                      <div class="col12 dynamic-courses-wrapper">
                         <div class="item">
-                           <h2>{{ $event['title'] }}</h2>
+                           <h2><?php echo e($event['title']); ?></h2>
                            <div class="inside-tabs">
                               <div class="tabs-ctrl">
                                  <ul>
-                                    <li class="active"><a href="#c-info-inner{{$tab}}">Info</a></li>
-                                    <li><a href="#c-watch-inner{{$tab}}">Watch</a></li>
-                                    <li><a href="#c-subs-inner{{$tab}}">Subscription</a></li>
+                                    <li class="active"><a href="#c-info-inner<?php echo e($tab); ?>">Info</a></li>
+                                    <li><a href="#c-watch-inner<?php echo e($tab); ?>">Watch</a></li>
+                                    <li><a href="#c-subs-inner<?php echo e($tab); ?>">Subscription</a></li>
                                  </ul>
                               </div>
                               <div class="inside-tabs-wrapper">
-                                 <div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
+                                 <div id="c-info-inner<?php echo e($tab); ?>" class="in-tab-wrapper" style="display: block;">
                                     <div class="bottom">
-                                       @if (isset($event['hours']) && $event['hours'])
-                                       <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""> {{$event['hours']}}h </div>
-                                       @endif
-                                       @if (isset($event['videos_progress']))
-                                       <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/E-Learning.svg')}}" alt=""> {{$event['videos_progress']}}% </div>
-                                       @endif
+                                       <?php if(isset($event['hours']) && $event['hours']): ?>
+                                       <div  class="duration"><img class="replace-with-svg" width="20" src="<?php echo e(cdn('/theme/assets/images/icons/Start-Finish.svg')); ?>" alt=""> <?php echo e($event['hours']); ?>h </div>
+                                       <?php endif; ?>
+                                       <?php if(isset($event['videos_progress'])): ?>
+                                       <div  class="duration"><img class="replace-with-svg" width="20" src="<?php echo e(cdn('/theme/assets/images/icons/E-Learning.svg')); ?>" alt=""> <?php echo e($event['videos_progress']); ?>% </div>
+                                       <?php endif; ?>
                                     </div>
                                  </div>
-                                 <div id="c-watch-inner{{$tab}}" class="in-tab-wrapper">
+                                 <div id="c-watch-inner<?php echo e($tab); ?>" class="in-tab-wrapper">
                                     <div class="bottom">
-                                       @if (isset($event['videos_progress']))
-                                       <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/E-Learning.svg')}}" alt=""> {{$event['videos_progress']}}% </div>
-                                       @endif
-                                       @if (isset($event['videos_seen']))
-                                       <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/Recap-Events.svg')}}" alt=""> {{str_replace('/','of',$event['videos_seen'])}} </div>
-                                       @endif
+                                       <?php if(isset($event['videos_progress'])): ?>
+                                       <div  class="duration"><img class="replace-with-svg" width="20" src="<?php echo e(cdn('/theme/assets/images/icons/E-Learning.svg')); ?>" alt=""> <?php echo e($event['videos_progress']); ?>% </div>
+                                       <?php endif; ?>
+                                       <?php if(isset($event['videos_seen'])): ?>
+                                       <div  class="duration"><img class="replace-with-svg" width="20" src="<?php echo e(cdn('/theme/assets/images/icons/Recap-Events.svg')); ?>" alt=""> <?php echo e(str_replace('/','of',$event['videos_seen'])); ?> </div>
+                                       <?php endif; ?>
                                        <div class="right">
                                           <?php $expire = false; ?>
-                                          @foreach($mySubscriptions as $key => $sub)
-                                          @foreach($plans as $key1 => $plan)
-                                          @if($sub['stripe_plan'] == $plan['stripe_plan'])
-                                          @if($event['id'] == $plan['event_id'])
+                                          <?php $__currentLoopData = $mySubscriptions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                          <?php $__currentLoopData = $plans; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key1 => $plan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                          <?php if($sub['stripe_plan'] == $plan['stripe_plan']): ?>
+                                          <?php if($event['id'] == $plan['event_id']): ?>
                                           <?php
                                              if(date("Y-m-d h:i:s") < $sub['must_be_updated']){
                                                 $expire = false;
@@ -1224,59 +1199,59 @@
                                                 $expire = true;
                                              }
                                              ?>
-                                          @endif
-                                          @endif
-                                          @endforeach
-                                          @endforeach
-                                          @if(!$event['video_access'])
-                                          {{--<a style="cursor:not-allowed; opacity: 0.5; pointer-events: none;" href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if((isset($event['videos_progress']) && $event['videos_progress'] == 100) || count($event['cert'])>0) WATCH AGAIN @else WATCH NOW @endif</a>--}}
-                                          @else
-                                          <a href="/myaccount/elearning/{{ $event['title'] }}" class="btn btn--secondary btn--md">@if((isset($event['videos_progress']) && $event['videos_progress'] == 100))>0) WATCH AGAIN @else WATCH NOW @endif</a>
-                                          @endif
+                                          <?php endif; ?>
+                                          <?php endif; ?>
+                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                          <?php if(!$event['video_access']): ?>
+                                          
+                                          <?php else: ?>
+                                          <a href="/myaccount/elearning/<?php echo e($event['title']); ?>" class="btn btn--secondary btn--md"><?php if((isset($event['videos_progress']) && $event['videos_progress'] == 100)): ?>>0) WATCH AGAIN <?php else: ?> WATCH NOW <?php endif; ?></a>
+                                          <?php endif; ?>
                                        </div>
                                     </div>
                                  </div>
-                                 @if($subscriptionAccess)
-                                 <div id="c-subs-inner{{$tab}}" class="in-tab-wrapper">
+                                 <?php if($subscriptionAccess): ?>
+                                 <div id="c-subs-inner<?php echo e($tab); ?>" class="in-tab-wrapper">
                                     <div class="bottom">
                                        <div class="left">
-                                          @if($event['mySubscription'])
+                                          <?php if($event['mySubscription']): ?>
                                           <div class="bottom">
-                                             @if($event['mySubscription']['trial_ends_at'])
+                                             <?php if($event['mySubscription']['trial_ends_at']): ?>
                                              <?php
                                                 $date_timestamp = strtotime($event['mySubscription']['trial_ends_at']);
                                                 $now_date = strtotime(date('d/m/Y'));
                                                 $date = date('d-m-Y',$date_timestamp);
 
                                                 ?>
-                                             @if($date_timestamp > $now_date )
+                                             <?php if($date_timestamp > $now_date ): ?>
                                              <?php //dd('not expired'); ?>
-                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/clock-coins.svg')}}" alt=""><?php echo 'Your trial expiration: '.$date; ?></div>
-                                             @if($event['mySubscription']['status'])
-                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php  echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
-                                             @endif
-                                             @else
-                                             @if($event['mySubscription'])
-                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
-                                             @endif
-                                             @endif
-                                             @else
+                                             <div class="location"><img class="replace-with-svg" src="<?php echo e(cdn('/theme/assets/images/icons/clock-coins.svg')); ?>" alt=""><?php echo 'Your trial expiration: '.$date; ?></div>
+                                             <?php if($event['mySubscription']['status']): ?>
+                                             <div class="location"><img class="replace-with-svg" src="<?php echo e(cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')); ?>" alt=""><?php  echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                             <?php endif; ?>
+                                             <?php else: ?>
+                                             <?php if($event['mySubscription']): ?>
+                                             <div class="location"><img class="replace-with-svg" src="<?php echo e(cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')); ?>" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                             <?php endif; ?>
+                                             <?php endif; ?>
+                                             <?php else: ?>
                                              <?php
                                                 $date_timestamp = strtotime($event['mySubscription']['trial_ends_at']);
                                                 $now_date = strtotime(date('d/m/Y'));
                                                 $date = date('d-m-Y',$date_timestamp);
                                                 ?>
-                                             @if($date_timestamp > $now_date )
-                                             @if($event['mySubscription']['status'])
-                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
-                                             @endif
-                                             @else
-                                             @if($event['mySubscription'])
-                                             <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')}}" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
-                                             @endif
-                                             @endif
-                                             @endif
-                                             @if(isset($event['mySubscription']))
+                                             <?php if($date_timestamp > $now_date ): ?>
+                                             <?php if($event['mySubscription']['status']): ?>
+                                             <div class="location"><img class="replace-with-svg" src="<?php echo e(cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')); ?>" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                             <?php endif; ?>
+                                             <?php else: ?>
+                                             <?php if($event['mySubscription']): ?>
+                                             <div class="location"><img class="replace-with-svg" src="<?php echo e(cdn('/theme/assets/images/icons/Credit card, Check, Done.svg')); ?>" alt=""><?php echo 'You will be charged: '.date('d-m-Y',$event['mySubscription']['must_be_updated']); ?></div>
+                                             <?php endif; ?>
+                                             <?php endif; ?>
+                                             <?php endif; ?>
+                                             <?php if(isset($event['mySubscription'])): ?>
                                              <div class="status_wrapper">
                                                 <div class="status_label"><label> Status:  </label></div>
                                                 <?php
@@ -1295,7 +1270,7 @@
                                                       }
                                                    ?>
                                                 <div class="status_switch">
-                                                   <div class="onoffswitch" data-status="{{$status}}" data-id="{{$event['mySubscription']['id']}}" id="onoffswitch">
+                                                   <div class="onoffswitch" data-status="<?php echo e($status); ?>" data-id="<?php echo e($event['mySubscription']['id']); ?>" id="onoffswitch">
                                                       <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" tabindex="0" <?php echo $a; ?>>
                                                       <label class="onoffswitch-label" for="myonoffswitch">
                                                       <span class="onoffswitch-inner"></span>
@@ -1304,113 +1279,111 @@
                                                    </div>
                                                 </div>
                                              </div>
-                                             @endif
+                                             <?php endif; ?>
                                           </div>
-                                          @endif
+                                          <?php endif; ?>
                                        </div>
-                                       @if(!$event['mySubscription'])
+                                       <?php if(!$event['mySubscription']): ?>
                                        <div class="left">
-                                          <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/checklist-graduate-hat.svg')}}" alt="">Get annual access to updated videos & files. 15 days free trial.</div>
+                                          <div  class="duration"><img class="replace-with-svg" width="20" src="<?php echo e(cdn('/theme/assets/images/icons/checklist-graduate-hat.svg')); ?>" alt="">Get annual access to updated videos & files. 15 days free trial.</div>
                                        </div>
-                                       @endif
+                                       <?php endif; ?>
                                        <div class="right">
-                                          @if(!$event['mySubscription'])
-                                          @foreach($event['plans'] as $key => $plan)
-                                          <a href="/myaccount/subscription/{{$event['title']}}/{{ $plan->name }}" class="btn btn--secondary btn--md">SUBSCRIBE NOW</a>
-                                          @endforeach
-                                          @endif
+                                          <?php if(!$event['mySubscription']): ?>
+                                          <?php $__currentLoopData = $event['plans']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $plan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                          <a href="/myaccount/subscription/<?php echo e($event['title']); ?>/<?php echo e($plan->name); ?>" class="btn btn--secondary btn--md">SUBSCRIBE NOW</a>
+                                          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                          <?php endif; ?>
                                        </div>
                                     </div>
-                                    @endif
+                                    <?php endif; ?>
                                  </div>
                               </div>
                               <!-- ./item -->
                            </div>
                         </div>
-                        @endif
+                        <?php endif; ?>
                         <?php $tab += 1; ?>
-                        @endforeach
-                        @endif
-                        @if(isset($subscriptionEvents) && count($subscriptionEvents) > 0 )
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <?php endif; ?>
+                        <?php if(isset($subscriptionEvents) && count($subscriptionEvents) > 0 ): ?>
                         <!-- subs -->
-                        @foreach($subscriptionEvents as $keyType => $event)
-                        @if($event['view_tpl'] != 'elearning_event' && $event['view_tpl'] != 'elearning_free')
+                        <?php $__currentLoopData = $subscriptionEvents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $keyType => $event): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php if($event['view_tpl'] != 'elearning_event' && $event['view_tpl'] != 'elearning_free'): ?>
                         <div class="col12 dynamic-courses-wrapper dynamic-courses-wrapper--style2">
                            <div class="item">
-                              <h2>{{ $event['title'] }}</h2>
+                              <h2><?php echo e($event['title']); ?></h2>
                               <div class="inside-tabs">
                                  <div class="tabs-ctrl">
                                     <ul>
-                                       <li class="active"><a href="#c-info-inner{{$tab}}">Info</a></li>
-                                       <li><a href="#c-shedule-inner{{$tab}}">Schedule </a></li>
-                                       @if(isset($showFiles[$keyType]) && $showFiles[$keyType])
-                                       <li><a href="#c-files-inner{{$tab}}">Files</a></li>
-                                       @endif
-                                       {{--
-                                       <li><a href="#c-subs-inner{{$tab}}">Subscription</a></li>
-                                       --}}
+                                       <li class="active"><a href="#c-info-inner<?php echo e($tab); ?>">Info</a></li>
+                                       <li><a href="#c-shedule-inner<?php echo e($tab); ?>">Schedule </a></li>
+                                       <?php if(isset($showFiles[$keyType]) && $showFiles[$keyType]): ?>
+                                       <li><a href="#c-files-inner<?php echo e($tab); ?>">Files</a></li>
+                                       <?php endif; ?>
+                                       
                                     </ul>
                                  </div>
                                  <div class="inside-tabs-wrapper">
-                                    <div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
+                                    <div id="c-info-inner<?php echo e($tab); ?>" class="in-tab-wrapper" style="display: block;">
                                        <div class="bottom">
-                                          <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/marker.svg')}}" alt=""><a href="{{$event['city']['slug']}}">{{$event['city']['name']}}</a></div>
-                                          <div class="duration"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}" alt="">{{$event['date']}}</div>
-                                          @if($event['hours'])
-                                          <div class="expire-date"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt="">{{$event['hours']}}</div>
-                                          @endif
+                                          <div class="location"><img class="replace-with-svg" src="<?php echo e(cdn('/theme/assets/images/icons/marker.svg')); ?>" alt=""><a href="<?php echo e($event['city']['slug']); ?>"><?php echo e($event['city']['name']); ?></a></div>
+                                          <div class="duration"><img class="replace-with-svg" src="<?php echo e(cdn('/theme/assets/images/icons/icon-calendar.svg')); ?>" alt=""><?php echo e($event['date']); ?></div>
+                                          <?php if($event['hours']): ?>
+                                          <div class="expire-date"><img class="replace-with-svg" src="<?php echo e(cdn('/theme/assets/images/icons/Start-Finish.svg')); ?>" alt=""><?php echo e($event['hours']); ?></div>
+                                          <?php endif; ?>
                                        </div>
                                     </div>
-                                    <div id="c-shedule-inner{{$tab}}" class="in-tab-wrapper">
+                                    <div id="c-shedule-inner<?php echo e($tab); ?>" class="in-tab-wrapper">
                                        <div class="bottom tabs-bottom">
-                                          <div class="expire-date exp-date"><img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="">Schedule available in PDF</div>
+                                          <div class="expire-date exp-date"><img src="<?php echo e(cdn('/theme/assets/images/icons/Access-Files.svg')); ?>" alt="">Schedule available in PDF</div>
                                           <div class="right">
-                                             <a target="_blank" href="/print/syllabus/{{$event['slug']}}" class="btn btn--secondary btn--md"> DOWNLOAD SCHEDULE </a>
+                                             <a target="_blank" href="/print/syllabus/<?php echo e($event['slug']); ?>" class="btn btn--secondary btn--md"> DOWNLOAD SCHEDULE </a>
                                           </div>
                                        </div>
                                        <div class="acc-topic-accordion">
                                           <div class="accordion-wrapper accordion-big">
                                              <?php $catId = -1?>
-                                             @foreach($event['topics'] as $keyTopic => $topic)
+                                             <?php $__currentLoopData = $event['topics']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $keyTopic => $topic): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                              <div class="accordion-item">
-                                                <h3 class="accordion-title title-blue-gradient scroll-to-top">{{$keyTopic}}</h3>
+                                                <h3 class="accordion-title title-blue-gradient scroll-to-top"><?php echo e($keyTopic); ?></h3>
                                                 <div class="accordion-content no-padding">
-                                                   @foreach($topic as $keyLesso => $lesso)
-                                                   @foreach($lesso as $keyLesson => $lesson)
+                                                   <?php $__currentLoopData = $topic; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $keyLesso => $lesso): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                   <?php $__currentLoopData = $lesso; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $keyLesson => $lesson): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                    <?php $catId = $lesson['cat_id'] ?>
-                                                   @if($lesson['type'])
+                                                   <?php if($lesson['type']): ?>
                                                    <div class="topic-wrapper-big">
                                                       <div class="topic-title-meta">
-                                                         <h4>{{$keyLesson}}</h4>
+                                                         <h4><?php echo e($keyLesson); ?></h4>
                                                          <!-- Feedback 18-11 changed -->
                                                          <div class="topic-meta">
-                                                            @if($lesson['type'])
-                                                            <div class="category">{{$lesson['type']}}</div>
-                                                            @endif
+                                                            <?php if($lesson['type']): ?>
+                                                            <div class="category"><?php echo e($lesson['type']); ?></div>
+                                                            <?php endif; ?>
                                                             <!-- Feedback 18-11 changed -->
-                                                            <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}" alt="" />{{$lesson['eldate']}}</span> <!-- Feedback 18-11 changed -->
-                                                            <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/Times.svg')}}" alt="" />{{$lesson['eltime']}} ({{$lesson['in_class_duration']}})</span> <!-- Feedback 18-11 changed -->
-                                                            <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-marker.svg')}}" alt="" />{{$lesson['room']}}</span> <!-- Feedback 18-11 changed -->
+                                                            <span class="meta-item duration"><img src="<?php echo e(cdn('/theme/assets/images/icons/icon-calendar.svg')); ?>" alt="" /><?php echo e($lesson['eldate']); ?></span> <!-- Feedback 18-11 changed -->
+                                                            <span class="meta-item duration"><img src="<?php echo e(cdn('/theme/assets/images/icons/Times.svg')); ?>" alt="" /><?php echo e($lesson['eltime']); ?> (<?php echo e($lesson['in_class_duration']); ?>)</span> <!-- Feedback 18-11 changed -->
+                                                            <span class="meta-item duration"><img src="<?php echo e(cdn('/theme/assets/images/icons/icon-marker.svg')); ?>" alt="" /><?php echo e($lesson['room']); ?></span> <!-- Feedback 18-11 changed -->
                                                          </div>
                                                          <!-- /.topic-title-meta -->
                                                       </div>
                                                       <div class="author-img">
                                                          <!-- Feedback 18-11 changed -->
-                                                         <a href="{{$lesson['slug']}}">
-                                                         <span class="custom-tooltip">{{$lesson['inst']}}</span>
-                                                         <img src="{{cdn( get_image($instructors[$lesso['instructor_id']][0]['mediable'],'instructors-small') )}}" alt="{{$lesson['inst']}}"/>
+                                                         <a href="<?php echo e($lesson['slug']); ?>">
+                                                         <span class="custom-tooltip"><?php echo e($lesson['inst']); ?></span>
+                                                         <img src="<?php echo e(cdn( get_image($instructors[$lesso['instructor_id']][0]['mediable'],'instructors-small') )); ?>" alt="<?php echo e($lesson['inst']); ?>"/>
                                                          </a>
                                                       </div>
                                                       <!-- /.topic-wrapper-big -->
                                                    </div>
-                                                   @endif
-                                                   @endforeach
-                                                   @endforeach
+                                                   <?php endif; ?>
+                                                   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                    <!-- /.accordion-content -->
                                                 </div>
                                                 <!-- /.accordion-item -->
                                              </div>
-                                             @endforeach
+                                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                              <!-- /.accordion-wrapper -->
                                           </div>
                                           <!-- /.acc-topic-accordion -->
@@ -1420,55 +1393,55 @@
                               </div>
                            </div>
                         </div>
-                        @else
+                        <?php else: ?>
                         <div class="col12 dynamic-courses-wrapper">
                            <div class="item">
-                              <h2>{{ $event['title'] }}</h2>
+                              <h2><?php echo e($event['title']); ?></h2>
                               <div class="inside-tabs">
                                  <div class="tabs-ctrl">
                                     <ul>
-                                       <li class="active"><a href="#c-info-inner{{$tab}}">Info</a></li>
-                                       <li><a href="#c-subs-inner{{$tab}}">Subscription</a></li>
+                                       <li class="active"><a href="#c-info-inner<?php echo e($tab); ?>">Info</a></li>
+                                       <li><a href="#c-subs-inner<?php echo e($tab); ?>">Subscription</a></li>
                                     </ul>
                                  </div>
                                  <div class="inside-tabs-wrapper">
-                                    <div id="c-info-inner{{$tab}}" class="in-tab-wrapper" style="display: block;">
+                                    <div id="c-info-inner<?php echo e($tab); ?>" class="in-tab-wrapper" style="display: block;">
                                        <div class="bottom">
-                                          @if (isset($event['hours']) && $event['hours'])
-                                          <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt=""> {{$event['hours']}}h </div>
-                                          @endif
-                                          @if (isset($event['videos_progress']))
-                                          <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/E-Learning.svg')}}" alt=""> {{$event['videos_progress']}}% </div>
-                                          @endif
+                                          <?php if(isset($event['hours']) && $event['hours']): ?>
+                                          <div  class="duration"><img class="replace-with-svg" width="20" src="<?php echo e(cdn('/theme/assets/images/icons/Start-Finish.svg')); ?>" alt=""> <?php echo e($event['hours']); ?>h </div>
+                                          <?php endif; ?>
+                                          <?php if(isset($event['videos_progress'])): ?>
+                                          <div  class="duration"><img class="replace-with-svg" width="20" src="<?php echo e(cdn('/theme/assets/images/icons/E-Learning.svg')); ?>" alt=""> <?php echo e($event['videos_progress']); ?>% </div>
+                                          <?php endif; ?>
                                        </div>
                                     </div>
-                                    @if($subscriptionAccess)
-                                    <div id="c-subs-inner{{$tab}}" class="in-tab-wrapper">
+                                    <?php if($subscriptionAccess): ?>
+                                    <div id="c-subs-inner<?php echo e($tab); ?>" class="in-tab-wrapper">
                                        <div class="bottom">
                                           <div class="left">
-                                             <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/checklist-graduate-hat.svg')}}" alt="">Get annual access to updated videos & files. 15 days free trial.</div>
+                                             <div  class="duration"><img class="replace-with-svg" width="20" src="<?php echo e(cdn('/theme/assets/images/icons/checklist-graduate-hat.svg')); ?>" alt="">Get annual access to updated videos & files. 15 days free trial.</div>
                                           </div>
                                           <div class="right">
-                                             @foreach($event['plans'] as $key => $plan)
-                                             <a href="/myaccount/subscription/{{$event['title']}}/{{ $plan->name }}" class="btn btn--secondary btn--md">SUBSCRIBE NOW</a>
-                                             @endforeach
+                                             <?php $__currentLoopData = $event['plans']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $plan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                             <a href="/myaccount/subscription/<?php echo e($event['title']); ?>/<?php echo e($plan->name); ?>" class="btn btn--secondary btn--md">SUBSCRIBE NOW</a>
+                                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                           </div>
                                        </div>
                                     </div>
-                                    @endif
+                                    <?php endif; ?>
                                  </div>
                               </div>
                               <!-- ./item -->
                            </div>
                         </div>
-                        @endif
+                        <?php endif; ?>
                         <?php $tab += 1; ?>
-                        @endforeach
-                        @endif
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <?php endif; ?>
                      </div>
                   </div>
                </div>
-               @endif
+               <?php endif; ?>
             </div>
             <!-- /#elearning-tab-child.tab-content-wrapper -->
             <!-- /.tabs-content -->
@@ -1479,11 +1452,11 @@
       <!-- /.section-account-tabs -->
    </section>
 </main>
-@endsection
-@section('scripts')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('scripts'); ?>
 <script src="https://js.stripe.com/v3/"></script>
 <script>
-   var stripeUserId = '{{ Auth::user()->createSetupIntent()->client_secret }}';
+   var stripeUserId = '<?php echo e(Auth::user()->createSetupIntent()->client_secret); ?>';
    $(document).on('click', '#addCard', function(e){
 
      /*$('<script>')
@@ -1505,7 +1478,7 @@
 
 
         $('<script>')
-      .text(`var stripe = Stripe('{{$stripe_key}}',{locale: 'en'});
+      .text(`var stripe = Stripe('<?php echo e($stripe_key); ?>',{locale: 'en'});
               var elements = stripe.elements();
               var cardElement = elements.create('card',{
                  style: {
@@ -1590,14 +1563,16 @@
                                  `<td>` + value['card']['exp_year'] + `</td>` +
                                  `<td>
 
-                                       <form action="{{route('payment_method.update')}}" method="post" id="payment-form">
-                                          {{ csrf_field() }}
+                                       <form action="<?php echo e(route('payment_method.update')); ?>" method="post" id="payment-form">
+                                          <?php echo e(csrf_field()); ?>
+
                                           <input type="hidden" name="card_id" value="`+ value['id'] +`">
                                           <button class="btn btn--secondary btn--sm">Set default</button>
                                        </form>
 
-                                       <form action="{{route('payment_method.remove')}}" method="post" id="payment-form">
-                                          {{ csrf_field() }}
+                                       <form action="<?php echo e(route('payment_method.remove')); ?>" method="post" id="payment-form">
+                                          <?php echo e(csrf_field()); ?>
+
                                           <input type="hidden" name="card_id" value="`+ value['id'] +`">
                                           <button id="removebtn" class="btn btn--secondary btn--sm">Remove</button>
                                        </form>
@@ -1618,7 +1593,7 @@
                         $('#addCard').prop('disabled', false);
                         $('button').prop('disabled', false);
                      }else{
-                        let message = `<img src="{{cdn('theme/assets/images/icons/alert-icons/icon-error-alert.svg')}}" alt="Info Alert">` + data['message'];
+                        let message = `<img src="<?php echo e(cdn('theme/assets/images/icons/alert-icons/icon-error-alert.svg')); ?>" alt="Info Alert">` + data['message'];
                         $("#card-message").html( message)
 
                         var favDialogCard = document.getElementById('favDialogCardNumberFailed');
@@ -1705,7 +1680,7 @@
    }
 
 </script>
-<script src="{{ cdn('theme/assets/addons/dropzone/dropzone.js') }}"></script>
+<script src="<?php echo e(cdn('theme/assets/addons/dropzone/dropzone.js')); ?>"></script>
 <script>
    $( document ).ready(function() {
       if($('tr').length <= 2){
@@ -2129,11 +2104,11 @@
 
       $("#selectCountry").select2()
 
-      @if("{{ old('country_code') }}")
+      <?php if("<?php echo e(old('country_code')); ?>"): ?>
 
-         $("#selectCountry").val("{{ old('country_code',$currentuser->country_code) }}").change();
+         $("#selectCountry").val("<?php echo e(old('country_code',$currentuser->country_code)); ?>").change();
 
-      @endif
+      <?php endif; ?>
 
    });
 
@@ -2143,7 +2118,7 @@
 
       fdata =$("#update-form").serialize();
       var firstError = false;
-      $.ajax({ url: "{{route('validate.personalInfo')}}", type: "post",
+      $.ajax({ url: "<?php echo e(route('validate.personalInfo')); ?>", type: "post",
             data: fdata,
             success: function(data) {
                 //console.log(data);
@@ -2185,4 +2160,6 @@
    });
 
 </script>
-@stop
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('theme.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\kcversion8\resources\views/theme/myaccount/student.blade.php ENDPATH**/ ?>
