@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\LessonRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Validator;
 
 class LessonController extends Controller
 {
@@ -26,7 +27,8 @@ class LessonController extends Controller
         $this->authorize('manage-users', User::class);
         $user = Auth::user();
 
-        $data['lessons'] = $model->with('topic.category', 'type')->get();
+        $data['lessons'] = $model->with('category','topic', 'type')->get();
+        
 
         $categories = Category::with('topics')->get()->groupBy('name')->toArray();
 
@@ -473,9 +475,6 @@ class LessonController extends Controller
     
                     }
 
-                 
-                       
-
                 }
                 
 
@@ -499,7 +498,19 @@ class LessonController extends Controller
     public function destroy(Lesson $lesson)
     {
 
+        if(count($lesson->topic) > 1){
 
+            $catgegoriesAssignded = '';
+           
+            foreach($lesson->topic as $key => $topic){
+            
+                $catgegoriesAssignded .= $lesson->category[$key]['name'] . ' => ' . $topic->title . '<br> ';
+
+               
+            }
+
+            return redirect()->route('lessons.index')->withErrors(__('Lesson cannot be delete because is attached to more than one topics.<br>'. $catgegoriesAssignded));
+        }
         $lesson->deletee();
 
         return redirect()->route('lessons.index')->withStatus(__('Lesson successfully deleted.'));
@@ -511,6 +522,88 @@ class LessonController extends Controller
         $topic->event_topic()->wherePivot('lesson_id', '=', $request->lesson_id)->wherePivot('event_id', '=', $request->event_id)->detach($request->topic_id);
 
         echo json_encode($request->all());
+    }
+
+    public function moveMultipleLessonToTopic(Request $request){
+        
+        //dd($request->all());
+        $validatorArray['lessons'] = 'required';
+        $validatorArray['category'] = 'required';
+        $validatorArray['fromTopic'] = 'required';
+        $validatorArray['toTopic'] = 'required';
+       
+
+        $validator = Validator::make($request->all(), $validatorArray);
+        
+        if ($validator->fails()) {
+            return [
+                'success' => false,
+                'errors' => $validator->errors(),
+                'message' => '',
+            ];
+
+        }
+
+        $lessons = $request->lessons;
+        $category = $request->category;
+        $fromTopic = $request->fromTopic;
+        $toTopic = $request->toTopic;
+       
+        $category = Category::find($category);
+       
+        if($category){
+
+            foreach($lessons as $lesson){
+                //dd($fromTopic);
+                //dd($category->lessons()->wherePivot('topic_id',450)->get());
+                $category->lessons()->wherePivot('topic_id',$fromTopic)->detach();
+                $category->topic()->attach($toTopic, ['lesson_id' => $lesson]);
+                
+                $allEvents = $category->events;
+
+                foreach($allEvents as $event)
+                {
+                        
+                    $allLessons = $event->allLessons->groupBy('id');
+                    
+                    $date = '';
+                    $time_starts = '';
+                    $time_ends = '';
+                    $duration = '';
+                    $room = '';
+                    $instructor_id = '';
+                    $priority = count($allLessons)+1;
+
+                    if(isset($allLessons[$lesson][0])){
+                        
+                        $date = $allLessons[$lesson][0]['pivot']['date'];
+                        $time_starts = $allLessons[$lesson][0]['pivot']['time_starts'];
+                        $time_ends = $allLessons[$lesson][0]['pivot']['time_ends'];
+                        $duration = $allLessons[$lesson][0]['pivot']['duration'];
+                        $room = $allLessons[$lesson][0]['pivot']['room'];
+                        $instructor_id = $allLessons[$lesson][0]['pivot']['instructor_id'];
+                        //$priority = $priority;
+                    }
+
+                    $event->allLessons()->detach($lesson);
+                    $event->topic()->attach($toTopic,['lesson_id' => $lesson,'date'=>$date,'time_starts'=>$time_starts,
+                        'time_ends'=>$time_ends, 'duration' => $duration, 'room' => $room, 'instructor_id' => $instructor_id, 'priority' => $priority]);
+                        //}
+                        
+                }
+
+            }
+
+            return response()->json([
+                'success' => true,
+            ]);
+
+        }
+        return response()->json([
+            'success' => false,
+        ]);
+        
+
     }
 
     public function orderLesson(Request $request, Event $event){

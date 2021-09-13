@@ -1,25 +1,30 @@
-@extends('layouts.app', [
-    'title' => __('Lesson Management'),
-    'parentSection' => 'laravel',
-    'elementName' => 'lessons-management'
-])
 
-@section('content')
-    @component('layouts.headers.auth')
-        @component('layouts.headers.breadcrumbs')
-            @slot('title')
-                {{ __('') }}
-            @endslot
-            @slot('filter')
-                <!-- <a href="#" class="btn btn-sm btn-neutral">{{ __('Filters') }}</a> -->
-                <a class="btn btn-sm btn-neutral" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">{{ __('Filters') }}</a>
 
-            @endslot
+<?php $__env->startSection('content'); ?>
+    <?php $__env->startComponent('layouts.headers.auth'); ?>
+        <?php $__env->startComponent('layouts.headers.breadcrumbs'); ?>
+            <?php $__env->slot('title'); ?>
+                <?php echo e(__('')); ?>
 
-            <li class="breadcrumb-item"><a href="{{ route('lessons.index') }}">{{ __('Lessons Management') }}</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
-        @endcomponent
-    @endcomponent
+            <?php $__env->endSlot(); ?>
+            <?php $__env->slot('filter'); ?>
+                <!-- <a href="#" class="btn btn-sm btn-neutral"><?php echo e(__('Filters')); ?></a> -->
+                <a class="btn btn-sm btn-neutral" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample"><?php echo e(__('Filters')); ?></a>
+
+            <?php $__env->endSlot(); ?>
+
+            <li class="breadcrumb-item"><a href="<?php echo e(route('lessons.index')); ?>"><?php echo e(__('Lessons Management')); ?></a></li>
+            <li class="breadcrumb-item active" aria-current="page"><?php echo e(__('List')); ?></li>
+        <?php if (isset($__componentOriginalb0ed43a6eda44b84021326772a22e85ada88d5cd)): ?>
+<?php $component = $__componentOriginalb0ed43a6eda44b84021326772a22e85ada88d5cd; ?>
+<?php unset($__componentOriginalb0ed43a6eda44b84021326772a22e85ada88d5cd); ?>
+<?php endif; ?>
+<?php echo $__env->renderComponent(); ?>
+    <?php if (isset($__componentOriginalf553482b463f6cda44d25fdb8f98d9a83d364bb5)): ?>
+<?php $component = $__componentOriginalf553482b463f6cda44d25fdb8f98d9a83d364bb5; ?>
+<?php unset($__componentOriginalf553482b463f6cda44d25fdb8f98d9a83d364bb5); ?>
+<?php endif; ?>
+<?php echo $__env->renderComponent(); ?>
 
     <div class="container-fluid mt--6">
         <div class="row">
@@ -28,17 +33,17 @@
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col-8">
-                                <h3 class="mb-0">{{ __('Lessons') }}</h3>
+                                <h3 class="mb-0"><?php echo e(__('Lessons')); ?></h3>
                             </div>
                                 <div class="col-4 text-right">
-                                    <a href="{{ route('lessons.create') }}" class="btn btn-sm btn-primary">{{ __('Add Lesson') }}</a>
+                                    <a href="<?php echo e(route('lessons.create')); ?>" class="btn btn-sm btn-primary"><?php echo e(__('Add Lesson')); ?></a>
                                 </div>
                         </div>
                     </div>
 
                     <div class="col-12 mt-2">
-                        @include('alerts.success')
-                        @include('alerts.errors')
+                        <?php echo $__env->make('alerts.success', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                        <?php echo $__env->make('alerts.errors', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                     </div>
 
                     <div class="collapse" id="collapseExample">
@@ -86,21 +91,21 @@
                         <table class="table align-items-center table-flush"  id="datatable-basic31">
                             <thead class="thead-light">
                                 <tr>
-                                    <th scope="col">{{ __('Select') }}</th>
-                                    <th scope="col">{{ __('Status') }}</th>
-                                    <th scope="col">{{ __('Title') }}</th>
-                                    <th scope="col">{{ __('Assigned Topic') }}</th>
-                                    <th class="" scope="col">{{ __('Assigned Categories') }}</th>
+                                    <th scope="col"><?php echo e(__('Select')); ?></th>
+                                    <th scope="col"><?php echo e(__('Status')); ?></th>
+                                    <th scope="col"><?php echo e(__('Title')); ?></th>
+                                    <th scope="col"><?php echo e(__('Assigned Topic')); ?></th>
+                                    <th class="" scope="col"><?php echo e(__('Assigned Categories')); ?></th>
                                     <th scope="col"></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($lessons as $lesson)
+                                <?php $__currentLoopData = $lessons; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $lesson): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                              
 
                                
 
-                                @foreach($lesson->topic as $key => $topic)
+                                <?php $__currentLoopData = $lesson->topic; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $topic): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 
                                 
                                 
@@ -108,20 +113,20 @@
                                         <td> 
                                             <div class="input-group-prepend lesson-select">
                                                 <div class="input-group-text">
-                                                    <input data-lesson-id="{{$lesson->id}}" class="check-lesson" type="checkbox" aria-label="Checkbox for following text input">
+                                                    <input data-lesson-id="<?php echo e($lesson->id); ?>" class="check-lesson" type="checkbox" aria-label="Checkbox for following text input">
                                                 </div>
                                             </div> 
                                         </td>
                                         <td><?= ($lesson->status == 1) ? 'Published' : 'Unpublished'; ?></td>
-                                        <td><a href="{{ route('lessons.edit', $lesson) }}">{{ $lesson->title }}</a></td>
-                                        <td id="{{$lesson->category[$key]['id']}}-{{$topic->id}}-{{$lesson->id}}">
+                                        <td><a href="<?php echo e(route('lessons.edit', $lesson)); ?>"><?php echo e($lesson->title); ?></a></td>
+                                        <td id="<?php echo e($lesson->category[$key]['id']); ?>-<?php echo e($topic->id); ?>-<?php echo e($lesson->id); ?>">
                                        
-                                            {{ $topic->title }},
+                                            <?php echo e($topic->title); ?>,
                                        
                                         </td>
                                         <td class="">
                                        
-                                                {{ $lesson->category[$key]['name'] }},
+                                                <?php echo e($lesson->category[$key]['name']); ?>,
                                          
                                         </td>
 
@@ -132,13 +137,14 @@
                                                     <i class="fas fa-ellipsis-v"></i>
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                    <a class="dropdown-item" href="{{ route('lessons.edit', $lesson) }}">{{ __('Edit') }}</a>
-                                                    <form action="{{ route('lessons.destroy', $lesson) }}" method="post">
-                                                        @csrf
-                                                        @method('delete')
+                                                    <a class="dropdown-item" href="<?php echo e(route('lessons.edit', $lesson)); ?>"><?php echo e(__('Edit')); ?></a>
+                                                    <form action="<?php echo e(route('lessons.destroy', $lesson)); ?>" method="post">
+                                                        <?php echo csrf_field(); ?>
+                                                        <?php echo method_field('delete'); ?>
 
-                                                        <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this lesson?") }}') ? this.parentElement.submit() : ''">
-                                                            {{ __('Delete') }}
+                                                        <button type="button" class="dropdown-item" onclick="confirm('<?php echo e(__("Are you sure you want to delete this lesson?")); ?>') ? this.parentElement.submit() : ''">
+                                                            <?php echo e(__('Delete')); ?>
+
                                                         </button>
                                                     </form>
 
@@ -149,8 +155,8 @@
 
                                     </tr>
                                 
-                                @endforeach
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
                         </table>
                     </div>
@@ -158,28 +164,28 @@
             </div>
         </div>
 
-        @include('layouts.footers.auth')
+        <?php echo $__env->make('layouts.footers.auth', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('css')
-    <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">
-    <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css">
-@endpush
+<?php $__env->startPush('css'); ?>
+    <link rel="stylesheet" href="<?php echo e(asset('argon')); ?>/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="<?php echo e(asset('argon')); ?>/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">
+    <link rel="stylesheet" href="<?php echo e(asset('argon')); ?>/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css">
+<?php $__env->stopPush(); ?>
 
-@push('js')
-    <script src="{{ asset('argon') }}/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="{{ asset('argon') }}/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
-    <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="{{ asset('argon') }}/vendor/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
-    <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.html5.min.js"></script>
-    <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
-    <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
-    <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
+<?php $__env->startPush('js'); ?>
+    <script src="<?php echo e(asset('argon')); ?>/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="<?php echo e(asset('argon')); ?>/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="<?php echo e(asset('argon')); ?>/vendor/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="<?php echo e(asset('argon')); ?>/vendor/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+    <script src="<?php echo e(asset('argon')); ?>/vendor/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="<?php echo e(asset('argon')); ?>/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="<?php echo e(asset('argon')); ?>/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="<?php echo e(asset('argon')); ?>/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
     <script>
 
-        var categories = @json($categories);
+        var categories = <?php echo json_encode($categories, 15, 512) ?>;
         var selectedTopic = null
         var selectedCategory = null
         var count = 0
@@ -514,7 +520,7 @@
                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
    	            type: 'post',
-   	            url: '{{route("move-multiple-lessons")}}',
+   	            url: '<?php echo e(route("move-multiple-lessons")); ?>',
                 data: data,
    	            
                 success: function (data) {
@@ -564,4 +570,10 @@
             }
         });
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.app', [
+    'title' => __('Lesson Management'),
+    'parentSection' => 'laravel',
+    'elementName' => 'lessons-management'
+], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\kcversion8\resources\views/lesson/index.blade.php ENDPATH**/ ?>

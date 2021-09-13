@@ -302,6 +302,8 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::post('/create-kc-id', 'UserController@createKC')->name('create-kc');
     Route::post('/create-deree-id', 'UserController@createDeree')->name('create-deree');
 
+    //MoveMultipleLesson
+    Route::post('/move-multiple-lessons', 'LessonController@moveMultipleLessonToTopic')->name('move-multiple-lessons');
 });
 
 

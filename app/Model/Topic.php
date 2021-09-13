@@ -27,6 +27,11 @@ class Topic extends Model
         return $this->morphToMany(Category::class, 'categoryable');
     }
 
+    public function category1()
+    {
+        return $this->belongsToMany(Category::class, 'categories_topics_lesson','category_id', 'topic_id');
+    }
+
     public function lessonsCategory()
     {
         return $this->belongsToMany(Lesson::class, 'categories_topics_lesson')->withPivot('category_id');

@@ -15997,3 +15997,6 @@ body {
 .pad-left {
   padding-left: 10px; }
 
+.input-group-prepend.lesson-select .input-group-text {
+  border-right: 1px solid #dee2e6 !important; }
+

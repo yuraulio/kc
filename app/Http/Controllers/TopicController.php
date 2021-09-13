@@ -180,8 +180,21 @@ class TopicController extends Controller
      */
     public function destroy(Topic $topic)
     {
-        if (!$topic->category->isEmpty()) {
+        /*if (!$topic->category->isEmpty()) {
             return redirect()->route('topics.index')->withErrors(__('This topic has items attached and can\'t be deleted.'));
+        }*/
+
+        if( count($topic->category) > 1){
+            $catgegoriesAssignded = '';
+            foreach($topic['category'] as $category){
+            
+                $categoriess[] = $category['name'];
+
+                $catgegoriesAssignded .= $category['name'] . '<br>';
+
+            }
+
+            return redirect()->route('topics.index')->withErrors(__('This topic cannot be delete because is attached to more than one categries.<br>' . $catgegoriesAssignded));
         }
 
         $topic->delete();
