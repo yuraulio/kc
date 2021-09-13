@@ -855,7 +855,7 @@
                                                       @endif
                                                    @endforeach
                                                    @if(count($fs) > 0)
-                                                   <?php dd($fs); ?>
+                                                   <?php //dd($fs); ?>
                                                       @foreach($fs as $subf)
                                                          @foreach($files_bonus as $folder_bonus)
                                                          <?php
