@@ -124,16 +124,16 @@ class UserController extends Controller
 
     public function getSMSVerification(Request $request){
 
-        require_once("../app/Apifon/Model/IRequest.php");
-        require_once("../app/Apifon/Model/SubscribersViewRequest.php");
-        require_once("../app/Apifon/Mookee.php");
-        require_once("../app/Apifon/Security/Hmac.php");
-        require_once("../app/Apifon/Resource/AbstractResource.php");
-        require_once("../app/Apifon/Resource/SMSResource.php");
-        require_once("../app/Apifon/Response/GatewayResponse.php");
-        require_once("../app/Apifon/Model/MessageContent.php");
-        require_once("../app/Apifon/Model/SmsRequest.php");
-        require_once("../app/Apifon/Model/SubscriberInformation.php");
+        require_once("/usr/www/users/lioncode/kcdev/app/Apifon/Model/IRequest.php");
+        require_once("/usr/www/users/lioncode/kcdev/app/Apifon/Model/SubscribersViewRequest.php");
+        require_once("/usr/www/users/lioncode/kcdev/app/Apifon/Mookee.php");
+        require_once("/usr/www/users/lioncode/kcdev/app/Apifon/Security/Hmac.php");
+        require_once("/usr/www/users/lioncode/kcdev/app/Apifon/Resource/AbstractResource.php");
+        require_once("/usr/www/users/lioncode/kcdev/app/Apifon/Resource/SMSResource.php");
+        require_once("/usr/www/users/lioncode/kcdev/app/Apifon/Response/GatewayResponse.php");
+        require_once("/usr/www/users/lioncode/kcdev/app/Apifon/Model/MessageContent.php");
+        require_once("/usr/www/users/lioncode/kcdev/app/Apifon/Model/SmsRequest.php");
+        require_once("/usr/www/users/lioncode/kcdev/app/Apifon/Model/SubscriberInformation.php");
 
         $user = Auth::user();
         $cookie_value = '-11111111';
@@ -196,7 +196,6 @@ class UserController extends Controller
 
     public function events()
     {
-        $bonusFiles = ['_Bonus', 'Bonus', 'Bonus Files', 'Βonus', '_Βonus', 'Βonus', 'Βonus Files'];
         $user1 = Auth::user();
 
         //dd($user1);
@@ -209,7 +208,7 @@ class UserController extends Controller
 
         foreach($user->events as $key => $event)
         {
-            if($event['title'] == 'dasfsdfasdf'){
+            //if($event['title'] == 'E-Learning Masterclass in Digital & Social Media Marketing 2020'){
 
             $event = Event::find($event['id']);
             //dd($event->category);
@@ -218,138 +217,13 @@ class UserController extends Controller
             //dd($data[$key]['event']);
             // dd($data[$key]);
             $dropbox = $event->category->first()['dropbox']->first();
-            $folders = isset($dropbox['folders'][0]) ? $dropbox['folders'][0] : [];
-            //dd($folders);
-            $folders_bonus = isset($dropbox['folders'][1]) ? $dropbox['folders'][1] : [];
-            //dd($folders_bonus);
-            $files = isset($dropbox['files'][1]) ? $dropbox['files'][1] : [];
-            //dd($files);
-            $files_bonus = isset($dropbox['files'][2]) ? $dropbox['files'][2] : [];
-            //dd($files_bonus);
-
-            if(isset($dropbox) && $folders != null)
-            {
-                if(isset($folders) && count($folders) > 0)
-                {
-                    foreach($folders as $folder)
-                    {
-                        $checkedF = [];
-                        $fs = [];
-                        $fk = 1;
-                        $bonus = [];
-                        $subfolder = [];
-                        $subfiles = [];
-                        $data1[$folder['foldername']] = $folder;
-
-                        if(isset($files) && count($files) > 0)
-                        {
-                            
-                            foreach($folders_bonus as $folder_bonus)
-                            {
-                                //dd($folder_bonus);
-                                //dd($folder);
-                                //dd($folder_bonus);
-                                if($folder_bonus['parent'] == $folder['id']  && !in_array($folder_bonus['foldername'],$bonusFiles))
-                                {
-                                    //dd('asd');
-                                    $checkedF[] = $folder_bonus['id'] + 1 ;
-                                    $fs[$folder_bonus['id']+1]=[];
-                                    $fs[$folder_bonus['id']+1] = $folder_bonus;
-                                    //dd('asd');
-                                }
-                            }
-                            if(count($fs) > 0)
-                            {
-                                foreach($fs as $subf)
-                                {
-                                    foreach($files_bonus as $folder_bonus)
-                                    {
-                                        //dd($subf);
-                                        //dd($folder_bonus);
-                                        if(in_array($subf['foldername'],$subfolder))
-                                        {
-                                            continue;
-                                        }
-                                        //dd($folder['id']);
-                                        //dd('asd');
-                                        //dd($folder_bonus);
-                                        if($folder_bonus['fid'] == $folder['id'])
-                                        {
-                                            $subfolder[] =  $subf['foldername'];
-                                            //dd('asd');
-                                            //$data1[$folder['foldername']]['bonus'][$subf['foldername']] = '//';
-                                            foreach($files_bonus as $file_bonus)
-                                            {
-                                                if($file_bonus['fid'] == $subf['id'] && $file_bonus['parent'] == $subf['parent'] )
-                                                {
-                                                    //dd('asd');
-                                                    $subfiles[] = $file_bonus['filename'];
-                                                    $data1[$folder['foldername']]['bonus'][]  = $file_bonus;
-                                                    //dd($subfiles);
-                                                    //$data1[$folder['foldername']]
-
-                                                }
-                                            }
-                                            //dd($subfiles);
-                                        }
-                                    }
-
-                                }
-
-                            }
-
-                            foreach($files as $file)
-                            {
-                                if($folder['id'] == $file['fid'])
-                                {
-                                    $data1[$folder['foldername']]['files'][] = $file;
-                                }
-                            }
-                        }
-
-
-                        if(isset($folder_bonus) && count($folder_bonus) > 0)
-                        {
-                            foreach($folders_bonus as $key11 => $folder_bonus)
-                            {
-                                if(in_array($folder_bonus['foldername'],$subfolder)){
-                                    continue;
-                                 }
-                                 if($folder_bonus['parent'] == $folder['id'])
-                                 {
-                          
-                                    $data1[$folder['foldername']]['folder_bonus'][$key11] = $folder_bonus;
-                                    if(isset($files_bonus) && count($files_bonus) > 0){
-                                        //dd($files_bonus);
-                                        foreach($files_bonus as $file_bonus)
-                                        {
-                                            if($file_bonus['fid'] == $folder_bonus['id'] && !in_array($file_bonus['filename'],$subfiles))
-                                            {
-                                                $data1[$folder['foldername']]['folder_bonus'][$key11][] = $file_bonus;
-                                            }
-                                        }
-                                    }
-                                 }
-                            }
-                        }
-
-
-
-
-
-                    }
-                    
-                } 
-            }
-
-            dd($data1['1 - Digital Marketing Fundamentals']['folder_bonus']);
+            //dd($dropbox);
 
             // Files
-            /*
             if($dropbox){
 
                 $folders = $dropbox['folders'];
-                dd($folders);
+                //dd($folders);
                 $files = $dropbox['files'];
                 //dd($files);
                 $data1 = [];
@@ -482,59 +356,6 @@ class UserController extends Controller
                 unset($data1['bonus']);
                //dd($data1);
             }
-            */
-
-
-            /*
-            if($dropbox)
-            {
-                $folders = $dropbox['folders'];
-                //dd($folders);
-                $files = $dropbox['files'];
-                $data1 = [];
-                //general folder
-                foreach($folders[0] as $key => $folder)
-                {                  
-                //files
-                    //dd($folder);
-                        $data1[$folder['dirname']] = $folder;
-                        //general files
-                        foreach($files[1] as $file)
-                        {
-                            ///dd($file);
-                            if($folder['id'] == $file['fid']){
-                                $data1[$folder['dirname']]['files'][] = $file;
-                            }
-                        }
-                    
-                
-                }
-                //folder bonus
-                foreach($folders[1] as $key => $folder)
-                {
-                    //dd($folder);
-                    foreach($data1 as $key => $data)
-                    {
-                        if($data['id'] == $folder['parent']){
-                            $arr = [];
-                            foreach($files[2] as $file){
-                                if($file['fid'] == $folder['id'])
-                                {
-                                    $arr[] = $file;
-                                }
-                            }
-                            $data1[$key]['bonus'] = $arr;
-                        }
-                    }
-                }
-                    
-            }
-            */
-
-
-
-            
-
 
 
             //$data[$key]['event']['files'] = $data1;
@@ -592,12 +413,15 @@ class UserController extends Controller
                 //progress here
                 $data[$key]['progress'] = intval($event->progress($user)).'%';
 
-                // Notes
+                // Statistics
+                $statistics =  ($statistics = $user->statistic()->wherePivot('event_id',$event['id'])->first()) ?
+                            $statistics->toArray() : ['pivot' => [], 'videos' => ''];
 
-                $statistics = $user->statistic()->wherePivot('event_id',$event['id'])->first();
-                $notes = json_decode($statistics->pivot['notes'], true);
-                $videos = json_decode($statistics->pivot['videos'], true);
-                $data[$key]['lastVideoSeen'] = $statistics->pivot['lastVideoSeen'];
+                $statistics = $user->updateUserStatistic($event,$statistics['pivot']);
+               
+                $notes = isset($statistics->pivot['notes']) ? json_decode($statistics->pivot['notes'], true) : [];
+                $videos = isset($statistics->pivot['videos']) ? json_decode($statistics->pivot['videos'], true) : [];
+                $data[$key]['lastVideoSeen'] = isset($statistics->pivot['lastVideoSeen']) ? $statistics->pivot['lastVideoSeen'] : -1;
 
 
             }
@@ -773,7 +597,7 @@ class UserController extends Controller
                 array_push($data[$key]['topics'], $arr);
             }
             //dd($data);
-        }
+        //}
 
 
         }
