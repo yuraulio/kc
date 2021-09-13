@@ -209,23 +209,17 @@ class UserController extends Controller
 
         foreach($user->events as $key => $event)
         {
-            if($event['title'] == 'dasfsdfasdf'){
+            if($event['title'] == 'E-Learning Masterclass in Digital & Social Media Marketing'){
 
             $event = Event::find($event['id']);
-            //dd($event->category);
 
             $data[$key]['event'] = $event->toArray();
-            //dd($data[$key]['event']);
-            // dd($data[$key]);
             $dropbox = $event->category->first()['dropbox']->first();
             $folders = isset($dropbox['folders'][0]) ? $dropbox['folders'][0] : [];
-            //dd($folders);
             $folders_bonus = isset($dropbox['folders'][1]) ? $dropbox['folders'][1] : [];
             //dd($folders_bonus);
             $files = isset($dropbox['files'][1]) ? $dropbox['files'][1] : [];
-            //dd($files);
             $files_bonus = isset($dropbox['files'][2]) ? $dropbox['files'][2] : [];
-            //dd($files_bonus);
 
             if(isset($dropbox) && $folders != null)
             {
@@ -243,54 +237,42 @@ class UserController extends Controller
 
                         if(isset($files) && count($files) > 0)
                         {
-                            
+
                             foreach($folders_bonus as $folder_bonus)
                             {
-                                //dd($folder_bonus);
-                                //dd($folder);
-                                //dd($folder_bonus);
                                 if($folder_bonus['parent'] == $folder['id']  && !in_array($folder_bonus['foldername'],$bonusFiles))
                                 {
-                                    //dd('asd');
+                                    dd('sad');
                                     $checkedF[] = $folder_bonus['id'] + 1 ;
                                     $fs[$folder_bonus['id']+1]=[];
                                     $fs[$folder_bonus['id']+1] = $folder_bonus;
-                                    //dd('asd');
                                 }
                             }
+                            //dd($fs);
                             if(count($fs) > 0)
                             {
                                 foreach($fs as $subf)
                                 {
                                     foreach($files_bonus as $folder_bonus)
                                     {
-                                        //dd($subf);
-                                        //dd($folder_bonus);
                                         if(in_array($subf['foldername'],$subfolder))
                                         {
                                             continue;
                                         }
-                                        //dd($folder['id']);
-                                        //dd('asd');
-                                        //dd($folder_bonus);
-                                        if($folder_bonus['fid'] == $folder['id'])
+                                        dd('asd');
+                                        if($folder_bonus['parent'] == $folder['id'])
                                         {
                                             $subfolder[] =  $subf['foldername'];
-                                            //dd('asd');
-                                            //$data1[$folder['foldername']]['bonus'][$subf['foldername']] = '//';
+                                            dd($subfolder);
                                             foreach($files_bonus as $file_bonus)
                                             {
                                                 if($file_bonus['fid'] == $subf['id'] && $file_bonus['parent'] == $subf['parent'] )
                                                 {
-                                                    //dd('asd');
                                                     $subfiles[] = $file_bonus['filename'];
                                                     $data1[$folder['foldername']]['bonus'][]  = $file_bonus;
-                                                    //dd($subfiles);
-                                                    //$data1[$folder['foldername']]
-
                                                 }
                                             }
-                                            //dd($subfiles);
+                                            dd($subfiles);
                                         }
                                     }
 
@@ -317,13 +299,12 @@ class UserController extends Controller
                                  }
                                  if($folder_bonus['parent'] == $folder['id'])
                                  {
-                          
+
                                     $data1[$folder['foldername']]['folder_bonus'][$key11] = $folder_bonus;
                                     if(isset($files_bonus) && count($files_bonus) > 0){
-                                        //dd($files_bonus);
                                         foreach($files_bonus as $file_bonus)
                                         {
-                                            if($file_bonus['fid'] == $folder_bonus['id'] && !in_array($file_bonus['filename'],$subfiles))
+                                            if($file_bonus['parent'] == $folder_bonus['parent'] && !in_array($file_bonus['filename'],$subfiles))
                                             {
                                                 $data1[$folder['foldername']]['folder_bonus'][$key11][] = $file_bonus;
                                             }
@@ -338,206 +319,11 @@ class UserController extends Controller
 
 
                     }
-                    
-                } 
+
+                }
             }
 
-            dd($data1['1 - Digital Marketing Fundamentals']['folder_bonus']);
-
-            // Files
-            /*
-            if($dropbox){
-
-                $folders = $dropbox['folders'];
-                dd($folders);
-                $files = $dropbox['files'];
-                //dd($files);
-                $data1 = [];
-
-                foreach($folders as $key44 => $folder)
-                {
-                    //dd($folder);
-
-                    //if has bonus files
-                    if($key44 == 1){
-                       // dd($folder);
-                        //$data1['folders']['bonus'][$key] = $folder;
-                        //dd($folder);
-
-                        foreach($folder as $key33 => $folder_bonus){
-                            //"/How to use URLs with UTMs/1 - How to work with UTMs/Bonus Files"
-                            //dd($key33);
-
-                            $folder_bonus1 = preg_replace('/[0-9]+/', '', $folder_bonus['dirname']);
-                            $folder_bonus1 = str_replace('/', '', $folder_bonus1);
-                            //dd($folder_bonus1);
-                            $folder_bonus1 = Str::slug($folder_bonus1);
-
-                            foreach($files[2] as $key1 => $file){
-                                $file11 = explode($file['filename'], $file['dirname']);
-                                //dd($file11);
-                                $file2 = preg_replace('/[0-9]+/', '', $file11[0]);
-                                $file2 = str_replace('/', '', $file2);
-                                $file2 = Str::slug($file2);
-                                if($folder_bonus1 == $file2){
-                                    //dd('found');
-                                    //dd($folder_bonus);
-
-                                    //$data1['folders']['bonus'][$key] = $folder;;
-
-                                    //$data1['bonus'][$key44] = $folder_bonus;
-                                    //dd($data1['bonus'][$key33][]);
-                                    $data1['bonus'][$key33]['files'][] = $file;
-                                    //var_dump($file);
-                                    //dd($data1['bonus'][$key33]['files'][$key1]);
-
-                                }
-                            }
-
-
-                        }
-                        //dd($data1['bonus']);
-
-                    }else{
-                        //dd($files);
-                        foreach($files as $key1 => $file){
-
-                            if($key1 == 1){
-                                //dd($file);
-                                foreach($folder as $key22 => $folder){
-                                    //dd($folder);
-                                    $data1['folders'][$key22] = $folder;
-
-                                    // "dirname" => "/Diploma in Digital & Social Media 2020/0 - Check First"
-                                    // "foldername" => "0 - Check First"
-
-
-                                    $folder2 = preg_replace('/[0-9]+/', '', $folder['dirname']);
-
-                                    ///Diploma in Digital & Social Media / - Check First
-
-                                    $folder2 = str_replace('/', '', $folder2);
-                                    $folder2 = Str::slug($folder2);
-                                    $data1['folders'][$key22]['files'] = array();
-                                    foreach($file as $key0 => $file1){
-
-                                        $file222 = explode($file1['filename'], $file1['dirname']);
-                                        //dd($file222);
-                                        $file2 = preg_replace('/[0-9]+/', '', $file222[0]);
-
-                                        $file2 = str_replace('/', '', $file2);
-                                        //dd($file2);
-                                        $file2 = Str::slug($file2);
-                                        //dd($file2);
-
-                                        if($folder2 == $file2){
-                                            array_push($data1['folders'][$key22]['files'], $file1);
-                                        }
-                                    }
-                                }
-
-                            }
-                        }
-                    }
-                }
-
-                foreach($data1['folders'] as $key_folder => $folder){
-                    //dd($folder);
-
-                    $folder_dir = $folder['dirname'];
-                    $folder_dir = preg_replace('/[0-9]+/', '', $folder_dir);
-
-                            $folder_dir = str_replace('/', '', $folder_dir);
-                            //dd($file2);
-                            $folder_dir = Str::slug($folder_dir);
-                    //dd($folder_dir);
-                    if(isset($data1['bonus'])){
-                        //dd('asd');
-                        //dd($data1['bonus']);
-                        foreach($data1['bonus'] as $key_bonus => $bonus){
-                            //dd($bonus);
-                            //dd($bonus['files']);
-                            foreach($bonus['files'] as $bonus_key => $bonus1){
-                                 $file3333 = explode($bonus1['filename'], $bonus1['dirname']);
-                           //dd($file3333);
-                            //dd($bonus1);
-                            //explode('')
-                            $file3333 = preg_replace('/[0-9]+/', '', $file3333[0]);
-                            //dd($file3333);
-                            $file3333 = str_replace('/', '', $file3333);
-                            //dd($file3333);
-                            $file3333 = Str::slug($file3333);
-                            $file3333 = str_replace('bonus-files','',$file3333);
-                            if($folder_dir == $file3333){
-                               // dd("Word Found!");
-                                $data1['folders'][$key_folder]['bonus_files'][] = $bonus1;
-                            }
-                            }
-
-
-                        }
-                    }
-
-                }
-                unset($data1['bonus']);
-               //dd($data1);
-            }
-            */
-
-
-            /*
-            if($dropbox)
-            {
-                $folders = $dropbox['folders'];
-                //dd($folders);
-                $files = $dropbox['files'];
-                $data1 = [];
-                //general folder
-                foreach($folders[0] as $key => $folder)
-                {                  
-                //files
-                    //dd($folder);
-                        $data1[$folder['dirname']] = $folder;
-                        //general files
-                        foreach($files[1] as $file)
-                        {
-                            ///dd($file);
-                            if($folder['id'] == $file['fid']){
-                                $data1[$folder['dirname']]['files'][] = $file;
-                            }
-                        }
-                    
-                
-                }
-                //folder bonus
-                foreach($folders[1] as $key => $folder)
-                {
-                    //dd($folder);
-                    foreach($data1 as $key => $data)
-                    {
-                        if($data['id'] == $folder['parent']){
-                            $arr = [];
-                            foreach($files[2] as $file){
-                                if($file['fid'] == $folder['id'])
-                                {
-                                    $arr[] = $file;
-                                }
-                            }
-                            $data1[$key]['bonus'] = $arr;
-                        }
-                    }
-                }
-                    
-            }
-            */
-
-
-
-            
-
-
-
-            //$data[$key]['event']['files'] = $data1;
+            $data[$key]['event']['files'] = $data1;
             //dd($data1);
             //dd($data[$key]['event']);
 
@@ -741,22 +527,23 @@ class UserController extends Controller
 
 
 
-
+                        //dd($key11);
                         $topic1 = preg_replace('/[0-9]+/', '', $key11);
                         $topic1 = Str::slug($topic1);
-
+//dd($topic1);
                         //dd($data1);
 
-                        foreach($data1['folders'] as $folder){
+                        foreach($data1 as $key12 => $folder){
                             //dd($key11);
                             //dd($folder);
-                            $folderName = $folder['foldername'];
+                            $folderName = $key12;
                             $folderName = preg_replace('/[0-9]+/', '', $folderName);
 
                             //$folderName = str_replace('/', '', $folderName);
                             $folderName = Str::slug($folderName);
                             //dd($folderName);
                             if($topic1 == $folderName){
+                                //dd($folder);
                                 $arr['topic_content']['files'] = $folder;
                                 //dd($data[$key]['topics']);
                             }
