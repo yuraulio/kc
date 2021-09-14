@@ -187,6 +187,7 @@
         var count = 0
         var selectedStatus = null
         var table = $('#datatable-basic31').DataTable({
+            destroy: true,
             language: {
                 paginate: {
                 next: '&#187;', // or '→'
@@ -439,40 +440,41 @@
     }
     /////
     $('#col1_filter').change(function() {
-    
-    $("#col1_filter").data('topic',$("option:selected", this).data('topic'))
-    selectedTopic = removeSpecial($(this).val())
-    
-    searchByFilters()
-    table.draw();
+        
+        initCheckBox();
+        $("#col1_filter").data('topic',$("option:selected", this).data('topic'))
+        selectedTopic = removeSpecial($(this).val())
+        
+        searchByFilters()
+        table.draw();
 
     })
     
     $('#col1_move').change(function() {
-    $("#col1_move").data('topic',$("option:selected", this).data('topic'))
+        $("#col1_move").data('topic',$("option:selected", this).data('topic'))
     })
     
     $('#col2_filter').change(function() {
-   
-    $("#col2_filter").data('categoryy',$("option:selected", this).data('categoryy'))
+        initCheckBox();
+        $("#col2_filter").data('categoryy',$("option:selected", this).data('categoryy'))
 
-    if(count != 0){
-        if($(this).val() == '-- All --'){
-            $("#col1_filter").val("-- All --").change();
-            $("#col1_move").val("-- All --").change();
-            
+        if(count != 0){
+            if($(this).val() == '-- All --'){
+                $("#col1_filter").val("-- All --").change();
+                $("#col1_move").val("-- All --").change();
+
+            }
         }
-    }
-    selectedCategory = removeSpecial($(this).val())
-    searchByFilters()
-    table.draw();
-    count = count + 1
+        selectedCategory = removeSpecial($(this).val())
+        searchByFilters()
+        table.draw();
+        count = count + 1
     })
     
     $('#col3_filter').change(function() {
-    selectedStatus = $(this).val()
-    searchByFilters()
-    table.draw();
+        selectedStatus = $(this).val()
+        searchByFilters()
+        table.draw();
     })
 
 });
@@ -522,13 +524,30 @@
                 success: function (data) {
                    
                     if(data['success']){
+
+
                         $.each(lessons,function(index, value){                            
                             $(`#${category}-${fromTopic}-${value}`).html( toTopicName + ',')
                             $(`#${category}-${fromTopic}-${value}`).attr("id",`${category}-${toTopic}-${value}`);
                         });
-                       
+
+                        initCheckBox()
+
+                        $('#datatable-basic31').dataTable().fnDestroy();
+                        table = $('#datatable-basic31').DataTable({
+                            destroy: true,
+                            language: {
+                                paginate: {
+                                next: '&#187;', // or '→'
+                                previous: '&#171;' // or '←'
+                                }
+                            }
+                        });
                         $('#col2_filter').change();
                         $('#col1_filter').change();
+
+                       
+
                     }else{
                         let errorMessage = '';
                         $.each(data.errors,function(index, value){
@@ -551,7 +570,17 @@
 
     <script>
 
-        $(".check-lesson").click(function(){
+        function initCheckBox(){
+
+            $('.check-lesson').each(function(){
+                $("#move_col1").hide()
+                $(this).prop('checked', false);
+            });
+
+        }
+
+        //$(".check-lesson").click(function(){
+        $(document).on("click",".check-lesson",function(){
             let clicked = false;
             $('.check-lesson').each(function(index, value) {
                 if ($(this).is(':checked')) {

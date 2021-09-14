@@ -16000,3 +16000,7 @@ body {
 .input-group-prepend.lesson-select .input-group-text {
   border-right: 1px solid #dee2e6 !important; }
 
+button#move-lesson {
+  position: absolute;
+  left: 103%; }
+
