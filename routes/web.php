@@ -228,7 +228,8 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::get('media2_image', ['as' => 'media2.mediaImage', 'uses' => 'MediaController@mediaImage']);
 
     //Lessons
-    Route::post('/sort-lessons/{event}', 'LessonController@orderLesson')->name('sort-lessons');
+    //Route::post('/sort-lessons/{event}', 'LessonController@orderLesson')->name('sort-lessons');
+    Route::post('/sort-lessons', 'LessonController@orderLesson')->name('sort-lessons');
 
     //Social
     Route::get('/social', 'Dashboard\SocialController@index')->name('social.index');

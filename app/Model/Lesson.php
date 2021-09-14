@@ -21,7 +21,7 @@ class Lesson extends Model
 
     public function topic()
     {
-        return $this->belongsToMany(Topic::class, 'categories_topics_lesson');
+        return $this->belongsToMany(Topic::class, 'categories_topics_lesson')->withPivot('priority')->orderBy('priority','asc');
     }
 
     public function category()

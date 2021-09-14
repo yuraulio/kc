@@ -22,6 +22,19 @@ class LessonController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+   
+    /*public function index(Lesson $model)
+    {
+        $this->authorize('manage-users', User::class);
+        $user = Auth::user();
+
+        $data['topics'] = Topic::with('lessonsPage')->get();
+        dd($data['topics'][0]);
+        $categories = Category::with('topics')->get()->groupBy('name')->toArray();
+
+        return view('lesson.index', ['topics' => $data['topics'], 'user' => $user, 'categories' => $categories]);
+    }*/
+   
     public function index(Lesson $model)
     {
         $this->authorize('manage-users', User::class);
@@ -102,8 +115,8 @@ class LessonController extends Controller
                     if($cat->id != $request->category){
                         continue;
                     }
-                    $lesson->topic()->wherePivot('category_id',$request->category)->detach();
-                    $cat->topic()->attach($topic, ['lesson_id' => $lesson->id]);
+                    //$lesson->topic()->wherePivot('category_id',$request->category)->detach();
+                    //$cat->topic()->attach($topic, ['lesson_id' => $lesson->id]);
 
                     $allEvents = $cat->events;
                     foreach($allEvents as $event)
@@ -135,6 +148,9 @@ class LessonController extends Controller
                         $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id'],'date'=>$date,'time_starts'=>$time_starts,
                             'time_ends'=>$time_ends, 'duration' => $duration, 'room' => $room, 'instructor_id' => $instructor_id, 'priority' => $priority]);
                         //}
+
+                        $lesson->topic()->wherePivot('category_id',$request->category)->detach();
+                        $cat->topic()->attach($topic, ['lesson_id' => $lesson->id,'priority'=>$priority]);
                         
 
                     }
@@ -606,13 +622,66 @@ class LessonController extends Controller
 
     }
 
-    public function orderLesson(Request $request, Event $event){
+    /*public function orderLesson(Request $request, Event $event){
         //dd($request->all());
         foreach($event->lessons as $lesson){
             $lesson->pivot->priority = $request->all()[$lesson['id']];
             $lesson->pivot->save();
 
         }
+
+    }*/
+
+    public function orderLesson(Request $request){
+        //dd($request->all());
+
+        $validatorArray['order'] = 'required';
+        $validatorArray['category'] = 'required';
+        $validatorArray['topic'] = 'required';       
+
+        $validator = Validator::make($request->all(), $validatorArray);
+        
+        if ($validator->fails()) {
+            return [
+                'success' => false,
+                'errors' => $validator->errors(),
+                'message' => '',
+            ];
+
+        }
+
+        $category = Category::find($request->category);
+
+        foreach($category->events as $event){
+            foreach($event->lessons as $lesson){
+                $index = $category->id . '-' . $lesson->pivot->topic_id . '-' . $lesson->pivot->lesson_id;
+
+                if(!isset($request->order[$index])){
+                    continue;
+                }
+
+                $lesson->pivot->priority = $request->order[$index];
+                $lesson->pivot->save();
+
+            }
+        }
+
+        foreach($category->lessons as $lesson){
+            $index = $lesson->pivot->category_id . '-' . $lesson->pivot->topic_id . '-' . $lesson->pivot->lesson_id;
+
+            if(!isset($request->order[$index])){
+                continue;
+            }
+
+            $lesson->pivot->priority = $request->order[$index];
+            $lesson->pivot->save();
+
+        }
+
+        return [
+            'success' => true,
+            'message' => 'Order has changed',
+        ];
 
     }
 

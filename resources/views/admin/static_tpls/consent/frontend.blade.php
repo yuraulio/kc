@@ -29,6 +29,7 @@
 
    </section>
 
+   @if(Auth::user() && !Auth::user()->terms)
    <section class="section-page-content">
    <div class="container">
         <form id="acceptconsent" method="POST" action="" class="content-text-area">
@@ -57,10 +58,12 @@
         </div>
 
 </section>
+@endif
    <!-- /.section-page-content -->
 </main>
 @endsection
 @section('scripts')
+@if(Auth::user() && !Auth::user()->terms)
 <script type="text/javascript">
    $(document).on('click', '.conotSubmit', function(e) {
        e.preventDefault();
@@ -110,7 +113,7 @@
        }
        });
 
-   $(window).on("scroll", function() {
+   /*$(window).on("scroll", function() {
 
        if($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
            $('#botview').css('opacity', '1');
@@ -130,7 +133,8 @@
           //  $('#conotSubmit').addClass('btn btn--lg btn--secondary btn--completed')
         // $('#coSubmit').addClass('btn btn--lg btn--secondary btn--completed');
        }
-   });
+   });*/
 
 </script>
+@endif
 @stop

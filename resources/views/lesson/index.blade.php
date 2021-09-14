@@ -68,7 +68,7 @@
                                     </select>
                                 </div>
                                 
-                                    <div class="col-sm-6 filter_col hidden" id="move_col1">
+                                    <div class="col-sm-4 filter_col hidden" id="move_col1">
                                         <label>Move To Topic</label>
                                         <div class="is-flex">
                                             <select data-topic="" data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="form-control" id="col1_move">
@@ -93,10 +93,11 @@
                                     <th scope="col">{{ __('Title') }}</th>
                                     <th scope="col">{{ __('Assigned Topic') }}</th>
                                     <th class="" scope="col">{{ __('Assigned Categories') }}</th>
+                                    <th class="hidden" scope="col">{{ __('Order') }}</th>
                                     <th scope="col"></th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="lessons-order">
                                 @foreach ($lessons as $lesson)
                              
 
@@ -106,7 +107,7 @@
                                 
                                 
                                 
-                                    <tr>
+                                    <tr class="lesson-list">
                                         <td> 
                                             <div class="input-group-prepend lesson-select">
                                                 <div class="input-group-text">
@@ -115,7 +116,7 @@
                                             </div> 
                                         </td>
                                         <td><?= ($lesson->status == 1) ? 'Published' : 'Unpublished'; ?></td>
-                                        <td><a href="{{ route('lessons.edit', $lesson) }}">{{ $lesson->title }}</a></td>
+                                        <td class="lesson-title-{{$lesson->id}}"><a href="{{ route('lessons.edit', $lesson) }}">{{ $lesson->title }}</a></td>
                                         <td id="{{$lesson->category[$key]['id']}}-{{$topic->id}}-{{$lesson->id}}">
                                        
                                             {{ $topic->title }},
@@ -124,6 +125,12 @@
                                         <td class="">
                                        
                                                 {{ $lesson->category[$key]['name'] }},
+                                         
+                                        </td>
+                                       
+                                        <td data-priority="{{$lesson->category[$key]['id']}}-{{$topic->id}}-{{$lesson->id}}" class="hidden order-priority">
+                                       
+                                                {{ $topic->pivot->priority }}
                                          
                                         </td>
 
@@ -188,6 +195,8 @@
         var selectedStatus = null
         var table = $('#datatable-basic31').DataTable({
             destroy: true,
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            "order": [[ 5, "asc" ]],
             language: {
                 paginate: {
                 next: '&#187;', // or '→'
@@ -512,7 +521,8 @@
             });
 
             let data = {'lessons':lessons, "category":category,'fromTopic':fromTopic,'toTopic':toTopic}
-    
+            let message = '';
+
             $.ajax({
                 headers: {
                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -526,16 +536,30 @@
                     if(data['success']){
 
 
-                        $.each(lessons,function(index, value){                            
+                        $.each(lessons,function(index, value){   
+
+                            if(index > 0){
+                                message += ', ' + $(`.lesson-title-${value}`).text();
+                            }else{
+                                message +=  $(`.lesson-title-${value}`).text();
+                            }
+
                             $(`#${category}-${fromTopic}-${value}`).html( toTopicName + ',')
                             $(`#${category}-${fromTopic}-${value}`).attr("id",`${category}-${toTopic}-${value}`);
                         });
+
+                        if(lessons.length > 1 ){
+                            message = 'The lessons ' + message + ' are moved to ' + toTopicName + '.'
+                        }else{
+                            message = 'The lesson ' + message + ' is moved to ' + toTopicName + '.'
+                        }
 
                         initCheckBox()
 
                         $('#datatable-basic31').dataTable().fnDestroy();
                         table = $('#datatable-basic31').DataTable({
                             destroy: true,
+                            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                             language: {
                                 paginate: {
                                 next: '&#187;', // or '→'
@@ -546,7 +570,8 @@
                         $('#col2_filter').change();
                         $('#col1_filter').change();
 
-                       
+                        $(".success-message p").html(message);
+                        $(".success-message").show();
 
                     }else{
                         let errorMessage = '';
@@ -595,4 +620,134 @@
             }
         });
     </script>
+
+
+<script src="{{ asset('js/sortable/Sortable.js') }}"></script>
+<script>
+    let category ;
+    let topic;
+    let lessons;
+
+    (function( $ ){
+        
+        
+        lessons = {};
+        var el
+
+        $( ".lessons-order" ).each(function( index ) {
+
+            el = document.getElementsByClassName('lessons-order')[index];
+            
+            new Sortable(el, {
+               group: "words",
+               handle: ".my-handle",
+               draggable: ".item",
+               ghostClass: "sortable-ghost",
+
+            });
+
+            new Sortable(el, {
+                onStart: function ( /**Event*/ evt) {
+                    initOrder()
+                },
+
+                // Element dragging ended
+                onEnd: function ( /**Event*/ evt) {           
+                    orderLessons()
+                },
+            });
+
+        });
+
+       
+    })( jQuery );
+
+    function initOrder(){
+        
+        lessons = {};
+        let order = 0;
+
+       $( ".lesson-list .order-priority" ).each(function( index ) {
+            
+            if(index == 0){
+                order = Number($(this).html());
+                lessons[$(this).data('priority')] = order;
+                lessons[index] = order;
+            }else{
+                order += 1;
+                lessons[$(this).data('priority')] = order;
+                lessons[index] = order;
+            }
+
+       });
+
+    
+   }
+
+    function orderLessons(){
+        let newOrder = {};
+        category = $("#col2_filter").data('categoryy');
+        topic = $("#col1_filter").data('topic');
+        $( ".lesson-list .order-priority" ).each(function( index ) {
+            newOrder[$(this).data('priority')] = lessons[index]
+        });
+
+        //console.log('old order = ', lessons)
+        //console.log('new order = ', newOrder)
+
+        data = {'category':category,'topic':topic,'order':newOrder}
+        
+        $.ajax({
+            type: 'POST',
+            headers: {
+            'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+            },
+            Accept: 'application/json',
+            url: "{{ route ('sort-lessons') }}",
+            data:data,
+            success: function(data) {
+                if(data['success']){
+
+                    $( ".lesson-list .order-priority" ).each(function( index ) {
+                        $(this).html(lessons[index])
+                    });
+
+                    initCheckBox()
+                    $('#datatable-basic31').dataTable().fnDestroy();
+                    table = $('#datatable-basic31').DataTable({
+                        destroy: true,
+                        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                        "order": [[ 5, "asc" ]],
+                        language: {
+                            paginate: {
+                            next: '&#187;', // or '→'
+                            previous: '&#171;' // or '←'
+                            }
+                        }
+                    });
+                    $('#col2_filter').change();
+                    $('#col1_filter').change();
+
+                    $(".success-message p").html(data['message']);
+                    $(".success-message").show();
+                   
+                }else{
+                    let errorMessage = '';
+                    $.each(data.errors,function(index, value){
+                        $.each(value,function(index1, value1){
+                            errorMessage += value1 + ' ';
+                        });
+                       
+                    });
+
+                    $(".error-message p").html(errorMessage);
+                    $(".error-message").show();
+                }
+
+            }
+        });
+    }
+
+</script>
+
 @endpush

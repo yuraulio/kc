@@ -285,7 +285,7 @@ $(document).ready( function () {
 });
 </script>
 
-<script src="{{ asset('js/sortable/Sortable.js') }}"></script>
+{{--<script src="{{ asset('js/sortable/Sortable.js') }}"></script>
 <script>
     (function( $ ){
         var el
@@ -371,7 +371,7 @@ $(document).ready( function () {
         });
     }
 
-</script>
+</script>--}}
 
 @endpush
 
