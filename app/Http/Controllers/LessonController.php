@@ -110,8 +110,6 @@ class LessonController extends Controller
                
                 foreach($topic->category as $cat){
                     
-               
-              
                     if($cat->id != $request->category){
                         continue;
                     }
@@ -652,27 +650,35 @@ class LessonController extends Controller
 
         $category = Category::find($request->category);
 
+        $lessons = [];
+        foreach($request->order as $key => $order){
+            $lessons[] = explode('-',$key)[2];
+        }
+
         foreach($category->events as $event){
-            foreach($event->lessons as $lesson){
+
+            //dd($event->lessons()->wherePivotIn('lesson_id',$lessons)->get());
+
+            foreach($event->lessons()->wherePivotIn('lesson_id',$lessons)->get() as $lesson){
                 $index = $category->id . '-' . $lesson->pivot->topic_id . '-' . $lesson->pivot->lesson_id;
 
                 if(!isset($request->order[$index])){
                     continue;
                 }
-
+                
                 $lesson->pivot->priority = $request->order[$index];
                 $lesson->pivot->save();
 
             }
         }
 
-        foreach($category->lessons as $lesson){
+        foreach($category->lessons()->wherePivotIn('lesson_id',$lessons)->get() as $lesson){
             $index = $lesson->pivot->category_id . '-' . $lesson->pivot->topic_id . '-' . $lesson->pivot->lesson_id;
-
+           
             if(!isset($request->order[$index])){
                 continue;
             }
-
+            
             $lesson->pivot->priority = $request->order[$index];
             $lesson->pivot->save();
 

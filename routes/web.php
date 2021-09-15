@@ -305,6 +305,10 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
 
     //MoveMultipleLesson
     Route::post('/move-multiple-lessons', 'LessonController@moveMultipleLessonToTopic')->name('move-multiple-lessons');
+
+    //CLONE
+    Route::post('clone-event/{event}','EventController@cloneEvent')->name('event.clone');
+
 });
 
 

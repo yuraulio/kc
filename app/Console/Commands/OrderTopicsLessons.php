@@ -43,7 +43,7 @@ class OrderTopicsLessons extends Command
     {
         $topics = [];
         $lessonss = [];
-        $events = Event::where('published',true)->whereIn('status',[0,2,3])->get();
+        $events = Event::where('published',true)->whereIn('status',[0,2,3,4])->get();
 
         foreach($events as $event){
             if(!$event->category->first()){
@@ -65,7 +65,7 @@ class OrderTopicsLessons extends Command
             }
 
         }
-        //dd($lessonss['183'][2]);
+        //dd($lessonss['277']);
         foreach($lessonss as $categoryId => $topicsIds){
             $cat = Category::find($categoryId);
             $cat->lessons()->detach();
@@ -73,7 +73,10 @@ class OrderTopicsLessons extends Command
 
 
                 foreach($lessonsIds as $keyLes => $lessonId){
-                   
+                    /*if($cat->id == 277){
+                        //dd($cat->id);
+                        dd($cat->lessons()->wherePivot('lesson_id',$keyLes)->get());
+                    }*/
                     $cat->lessons()->wherePivot('lesson_id',$keyLes)->detach();
                     $cat->lessons()->attach($keyLes,['topic_id'=>$topicId]);
                 }

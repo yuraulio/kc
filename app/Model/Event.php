@@ -108,9 +108,14 @@ class Event extends Model
 
     public function lessons()
     {
-
-        return $this->belongsToMany(Lesson::class,'event_topic_lesson_instructor')->where('status',true)->select('lessons.*','topic_id','event_id', 'lesson_id','instructor_id')
-        ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room','priority')->orderBy('event_topic_lesson_instructor.priority','asc')->with('type');//priority
+        if($this->delivery->first() && $this->delivery->first()->id == 143){
+            return $this->belongsToMany(Lesson::class,'event_topic_lesson_instructor')->where('status',true)->select('lessons.*','topic_id','event_id', 'lesson_id','instructor_id')
+            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room','priority')->orderBy('event_topic_lesson_instructor.priority','asc')->with('type');//priority
+        }else{
+            return $this->belongsToMany(Lesson::class,'event_topic_lesson_instructor')->where('status',true)->select('lessons.*','topic_id','event_id', 'lesson_id','instructor_id')
+            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room','priority')->orderBy('event_topic_lesson_instructor.time_starts','asc')->with('type');//priority
+        }
+        
     }
 
     public function plans(){

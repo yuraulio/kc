@@ -104,6 +104,15 @@
                                                             {{ __('Delete') }}
                                                         </button>
                                                     </form>
+
+                                                    <form action="{{ route('event.clone', $event) }}" method="post">
+                                                        @csrf
+                                                        
+                                                        <button type="sumbit" class="dropdown-item">
+                                                            {{ __('Clone') }}
+                                                        </button>
+                                                    </form>
+
                                                 </div>
                                             </div>
 

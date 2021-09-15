@@ -84,7 +84,7 @@ class Category extends Model
 
     public function lessons()
     {
-        return $this->belongsToMany(Lesson::class, 'categories_topics_lesson');
+        return $this->belongsToMany(Lesson::class, 'categories_topics_lesson')->withPivot('topic_id');
     }
 
     /**

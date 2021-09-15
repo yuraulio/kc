@@ -172,11 +172,11 @@ class EventController extends Controller
         if($request->published == 'on')
         {
             $published = 1;
-            $published_at = !$event->published_at ? date("Y-m-d") : $event->published_at;
+            $published_at = date("Y-m-d");
         }else
         {
             $published = 0;
-            $published_at = $event->published_at;
+            $published_at = null;
         }
 
         $launchDate = date('Y-m-d',strtotime($request->launch_date));
@@ -288,11 +288,10 @@ class EventController extends Controller
         //dd($instructors);
         $topics = $event['topic']->unique()->groupBy('topic_id');
         $unassigned = [];
-        //dd($allTopicsByCategory->topics);
+        //dd($allTopicsByCategory->topics[1]);
         //dd($allTopicsByCategory1);
 
         foreach($allTopicsByCategory->topics as $key => $allTopics){
-            //dd($allTopics);
 
             $found = false;
             foreach($allTopicsByCategory1 as $key1 => $assig){
@@ -448,5 +447,51 @@ class EventController extends Controller
         echo json_encode($ids);
 
 
+    }
+
+    public function cloneEvent(Request $request, Event $event){
+
+        $newEvent = $event->replicate();
+        
+
+        $newEvent->published = false;
+        $newEvent->title = $newEvent->title . ' - clone';
+        $newEvent->release_date_files = null;
+        $newEvent->published_at = null;
+        $newEvent->launch_date = null;
+        $newEvent->push();
+
+        $newEvent->createMedia();
+        $newEvent->createSlug($newEvent->title);
+        //$event->createMetas($request->all());
+        //dd($event->lessons);
+        $event->load('category','faqs','sectionVideos','type','summary1','delivery','ticket','city','sections','venues','syllabus','benefits');
+
+        foreach ($event->getRelations() as $relationName => $values){
+          
+            $newEvent->{$relationName}()->sync($values);
+ 
+        }
+
+        foreach($event->lessons as $lesson){
+            if(!$lesson->pivot){
+                continue;
+            }
+
+            $newEvent->lessons()->attach($lesson->pivot->lesson_id,['topic_id'=>$lesson->pivot->topic_id, 'date'=>$lesson->pivot->date,
+                'time_starts'=>$lesson->pivot->time_starts,'time_ends'=>$lesson->pivot->time_ends, 'duration' => $lesson->pivot->duration, 
+                'room' => $lesson->pivot->room,'instructor_id' => $lesson->pivot->instructor_id, 'priority' => $lesson->pivot->priority]);
+        }
+
+        
+        //$newEvent->lessons()->save($event->lessons());
+
+        $newEvent->createMetas();
+        $newEvent->metable->meta_title = $event->metable ? $event->metable->meta_title : '';
+        $newEvent->metable->meta_keywords = $event->metable ? $event->metable->meta_keywords : '';
+        $newEvent->metable->meta_description = $event->metable ? $event->metable->meta_description : '';
+        $newEvent->metable->save();
+
+        return redirect()->route('events.edit',$newEvent->id)->withStatus(__('Event successfully cloned.'));
     }
 }

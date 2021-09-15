@@ -637,25 +637,27 @@
         $( ".lessons-order" ).each(function( index ) {
 
             el = document.getElementsByClassName('lessons-order')[index];
-            
             new Sortable(el, {
-               group: "words",
-               handle: ".my-handle",
-               draggable: ".item",
-               ghostClass: "sortable-ghost",
-
-            });
-
-            new Sortable(el, {
-                onStart: function ( /**Event*/ evt) {
+               
+                multiDrag: true,
+                selectedClass: 'selected',
+                
+                onSelect: function ( /**Event*/ evt) {
                     initOrder()
                 },
 
+                /*onStart: function (evt) {
+                    initOrder()
+                },*/
+
                 // Element dragging ended
                 onEnd: function ( /**Event*/ evt) {           
+                   
                     orderLessons()
                 },
+
             });
+           
 
         });
 
@@ -679,6 +681,9 @@
                 lessons[index] = order;
             }
 
+            //console.log('index = ' + index + ' order = ' + order)
+
+
        });
 
     
@@ -697,6 +702,15 @@
 
         data = {'category':category,'topic':topic,'order':newOrder}
         
+        $( document ).ajaxStart(function() {
+            window.swal({
+                title: "Change Order...",
+                text: "Please wait",
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
+        });
+
         $.ajax({
             type: 'POST',
             headers: {
@@ -728,8 +742,14 @@
                     $('#col2_filter').change();
                     $('#col1_filter').change();
 
-                    $(".success-message p").html(data['message']);
-                    $(".success-message").show();
+                    window.swal({
+                        title: data['message'],
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+
+                    {{--$(".success-message p").html(data['message']);
+                    $(".success-message").show();--}}
                    
                 }else{
                     let errorMessage = '';
@@ -746,6 +766,14 @@
 
             }
         });
+
+        {{--$.ajaxComplete(function() {
+            window.swal({
+                title: "Finished!",
+                showConfirmButton: false,
+                timer: 2000
+            });
+        });--}}
     }
 
 </script>
