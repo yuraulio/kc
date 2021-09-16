@@ -50,13 +50,14 @@ class OrderTopicsLessons extends Command
                 continue;
             }
             $category = $event->category->first()->id;
+            //$event->category->first()->lessons()->detach();
             foreach($event->lessons->groupBy('topic_id') as $key => $lessons){
 
                 foreach($lessons as $lesson){
-                    if($lesson->pivot->priority){
+                    if($lesson->pivot){
 
                         //$lessonss[$category] = $lesson->pivot->priority;
-                        $lessonss[$category][$lesson->pivot->topic_id][$lesson->id] = $lesson->pivot->priority;
+                        $lessonss[$category][$lesson->pivot->topic_id][$lesson->id][] = $lesson->pivot->priority;
                         $topics[$category][$lesson->pivot->topic_id] = $lesson->pivot->priority;
 
                     }
@@ -65,7 +66,7 @@ class OrderTopicsLessons extends Command
             }
 
         }
-        //dd($lessonss['277']);
+        
         foreach($lessonss as $categoryId => $topicsIds){
             $cat = Category::find($categoryId);
             //$cat->lessons()->detach();
@@ -76,12 +77,8 @@ class OrderTopicsLessons extends Command
                 $cat->topics()->save($t);
 
                 foreach($lessonsIds as $keyLes => $lessonId){
-                    //if($keyLes == 2305){
-                    //    //dd($cat->id);
-                    //        dd('gdf');
-                    // //   dd($cat->lessons()->wherePivot('lesson_id',$keyLes)->get());
-                    //}
-                    $cat->lessons()->wherePivot('lesson_id',$keyLes)->detach();
+                   
+                    $cat->lessons()->wherePivot('topic_id',$topicId)->wherePivot('lesson_id',$keyLes)->detach();
                     $cat->lessons()->attach($keyLes,['topic_id'=>$topicId]);
                 }
                 

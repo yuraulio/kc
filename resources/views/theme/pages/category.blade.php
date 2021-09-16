@@ -108,8 +108,10 @@
                      </div>
                      @else
                         <?php
-                           $chmonth = date('m', strtotime($row->published_at));
-                           $month = date('F Y', strtotime($row->published_at));
+
+                           $pubdate = $row->launch_date ? $row->launch_date :  $row->published_at;
+                           $chmonth = date('m', strtotime($pubdate));
+                           $month = date('F Y', strtotime($pubdate));
 
                            $isonCart = Cart::search(function ($cartItem, $rowId) use ($row) {
                               return $cartItem->id === $row->id;
@@ -211,8 +213,10 @@
                @foreach($completedlist as $row)
                   @if($row->view_tpl != 'elearning_event' && $row->view_tpl != 'elearning_greek' && $row->view_tpl != 'elearning_free' && $row->view_tpl != 'elearning_pending')
                      <?php
-                        $chmonth = date('m', strtotime($row->published_at));
-                        $month = date('F Y', strtotime($row->published_at));
+
+                           $pubdate = $row->launch_date ? $row->launch_date :  $row->published_at;
+                           $chmonth = date('m', strtotime($pubdate));
+                           $month = date('F Y', strtotime($pubdate));
 
                         $isonCart = Cart::search(function ($cartItem, $rowId) use ($row) {
                            return $cartItem->id === $row->id;
