@@ -117,6 +117,47 @@ class OrderTopicsLessons extends Command
             //dd($topicAll->lessonsCategory)
         }
 
+
+        $categories = Category::all();
+        $deleteTopics = [];
+        foreach($categories as $category){
+            //dd($category);
+
+            foreach($category->events as $event){
+
+                foreach($category->lessons as $lesson){
+                    if(count($event->lessons()->wherePivot('topic_id',$lesson->pivot->topic_id)->wherePivot('lesson_id',$lesson->pivot->lesson_id)->get()) > 0){
+                        $deleteTopics[$category->id][$lesson->pivot->topic_id][$lesson->pivot->lesson_id] = true;
+                    }
+                }
+
+
+            }
+
+            foreach($category->lessons as $lesson){
+                if(!isset($deleteTopics[$category->id][$lesson->pivot->topic_id][$lesson->pivot->lesson_id])){
+                    $category->lessons()->wherePivot('lesson_id',$lesson->pivot->lesson_id)->wherePivot('topic_id',$lesson->pivot->topic_id)->detach();
+                }
+            }
+
+        }
+
+
+        /*foreach($events as $event){
+            if(!$event->category->first()){
+                continue;
+            }
+            $category = $event->category->first()->id;
+
+            foreach($event->lessons->groupBy('topic_id') as $key => $lessons){
+
+                foreach($lessons as $lesson){
+
+                }
+            }
+
+        }*/
+
         /*foreach($topicsAll as $topicAll){
             foreach($topicAll->lessonsCategory as $topic){
                 
