@@ -57,7 +57,7 @@ class OrderTopicsLessons extends Command
                     if($lesson->pivot){
 
                         //$lessonss[$category] = $lesson->pivot->priority;
-                        $lessonss[$category][$lesson->pivot->topic_id][$lesson->id][] = $lesson->pivot->priority;
+                        $lessonss[$category][$lesson->pivot->topic_id][$lesson->id] = $lesson->pivot->priority;
                         $topics[$category][$lesson->pivot->topic_id] = $lesson->pivot->priority;
 
                     }
@@ -97,6 +97,7 @@ class OrderTopicsLessons extends Command
                 }/*else{
                     $topicAll->lessonsCategory()->attach($topic->pivot->lesson_id,['category_id'=>$topic->pivot->category_id]);
                 }*/
+                //dd($lessonss[$topic->pivot->category_id][$topic->pivot->topic_id][$topic->pivot->lesson_id]);
                 $topic->pivot->priority = $lessonss[$topic->pivot->category_id][$topic->pivot->topic_id][$topic->pivot->lesson_id];
                 $topic->pivot->save();
                 //dd($topic->pivot->priority);

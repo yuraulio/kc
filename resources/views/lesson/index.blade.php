@@ -748,8 +748,6 @@
                         timer: 2000
                     });
 
-                    {{--$(".success-message p").html(data['message']);
-                    $(".success-message").show();--}}
                    
                 }else{
                     let errorMessage = '';
@@ -760,20 +758,20 @@
                        
                     });
 
-                    $(".error-message p").html(errorMessage);
-                    $(".error-message").show();
+                    window.swal({
+                        title: errorMessage,
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+
+                    {{--$(".error-message p").html(errorMessage);
+                    $(".error-message").show();--}}
                 }
 
             }
         });
 
-        {{--$.ajaxComplete(function() {
-            window.swal({
-                title: "Finished!",
-                showConfirmButton: false,
-                timer: 2000
-            });
-        });--}}
+       
     }
 
 </script>
