@@ -262,7 +262,7 @@ class EventController extends Controller
 
         $user = Auth::user();
         $id = $event['id'];
-        $event = $event->with('coupons','delivery','category', 'summary1', 'benefits', 'ticket', 'city', 'venues', 'topic', 'lessons', 'instructors', 'users', 'partners', 'sections','paymentMethod','slugable','metable', 'medias', 'sectionVideos')->find($id);
+        //$event = $event->with('coupons','delivery','category', 'summary1', 'benefits', 'ticket', 'city', 'venues', 'topic', 'lessons', 'instructors', 'users', 'partners', 'sections','paymentMethod','slugable','metable', 'medias', 'sectionVideos');
         //dd($event['topic']);
         //dd($event->summary1);
         //dd($event->medias->details);
@@ -282,7 +282,7 @@ class EventController extends Controller
         //dd($event['lessons']->unique()->groupBy('topic_id'));
         //$allTopicsByCategory1 = $event['lessons']->unique()->groupBy('topic_id');
         $allTopicsByCategory1 = $event['lessons']->groupBy('topic_id');
-        //dd($allTopicsByCategory1);
+        //dd($allTopicsByCategory1[185]);
         $data['instructors1'] = Instructor::with('medias')->where('status', 1)->get()->groupBy('id');
         $instructors = $event['instructors']->groupBy('lesson_id');
         //dd($instructors);

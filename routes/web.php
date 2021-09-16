@@ -309,6 +309,9 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     //CLONE
     Route::post('clone-event/{event}','EventController@cloneEvent')->name('event.clone');
 
+    //EnrollToElearning
+    Route::get('enroll-to-elearning/{event}/{enroll}','Dashboard\DashboardController@enrollStudendsToElearning');
+
 });
 
 

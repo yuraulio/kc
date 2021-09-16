@@ -48,6 +48,19 @@
 
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
+                          
+                                <div class="form-group">
+                                    <label class="form-control-label" for="input-method">{{ __('Enroll Students to E-Learning') }}</label>
+                                    <div style="margin: auto;" class="form-group">
+
+                                        <label class="custom-toggle enroll-toggle">
+                                            <input type="checkbox" id="input-enroll" @if($event['enroll']) checked @endif>
+                                            <span class="custom-toggle-slider rounded-circle" data-label-off="enroll" data-label-on="unroll"></span>
+                                        </label>
+
+                                    </div>
+                                </div>
+
                                 <form method="post" id="event_edit_form" method="POST" action="{{ route('events.update', $event) }}" autocomplete="off"
                                             enctype="multipart/form-data">
                                             @csrf
@@ -953,6 +966,25 @@
             data:data,
             success: function(data) {
 
+            }
+        });
+
+    })
+
+
+    $('.enroll-toggle').change(function(){
+
+        let enroll = $("#input-enroll").is(":checked");
+
+        $.ajax({
+            type: 'get',
+            headers: {
+            'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+            },
+            Accept: 'application/json',
+            url: "/admin/enroll-to-elearning/" + "{{$event->id}}" +"/" + enroll,
+            success: function(data) {
+            
             }
         });
 

@@ -68,15 +68,16 @@ class OrderTopicsLessons extends Command
         //dd($lessonss['277']);
         foreach($lessonss as $categoryId => $topicsIds){
             $cat = Category::find($categoryId);
-            $cat->lessons()->detach();
+            //$cat->lessons()->detach();
             foreach($topicsIds as $topicId => $lessonsIds){
 
 
                 foreach($lessonsIds as $keyLes => $lessonId){
-                    /*if($cat->id == 277){
-                        //dd($cat->id);
-                        dd($cat->lessons()->wherePivot('lesson_id',$keyLes)->get());
-                    }*/
+                    //if($keyLes == 2305){
+                    //    //dd($cat->id);
+                    //        dd('gdf');
+                    // //   dd($cat->lessons()->wherePivot('lesson_id',$keyLes)->get());
+                    //}
                     $cat->lessons()->wherePivot('lesson_id',$keyLes)->detach();
                     $cat->lessons()->attach($keyLes,['topic_id'=>$topicId]);
                 }
@@ -84,6 +85,8 @@ class OrderTopicsLessons extends Command
             }
 
         }
+
+        
         
         $topicsAll = Topic::all();
 
@@ -111,6 +114,18 @@ class OrderTopicsLessons extends Command
             }
             //dd($topicAll->lessonsCategory)
         }
+
+        /*foreach($topicsAll as $topicAll){
+            foreach($topicAll->lessonsCategory as $topic){
+                
+                if($topic->pivot->priority  == 0){
+                    $topic->pivot->delete();
+                }
+
+               
+            }
+
+        }*/
 
         return 0;
     }

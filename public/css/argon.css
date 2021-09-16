@@ -16004,3 +16004,9 @@ button#move-lesson {
   position: absolute;
   left: 103%; }
 
+.enroll-toggle input:checked + .custom-toggle-slider:before {
+  transform: translateX(55px) !important; }
+
+.enroll-toggle {
+  width: 80px !important; }
+
