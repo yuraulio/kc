@@ -71,6 +71,9 @@ class OrderTopicsLessons extends Command
             //$cat->lessons()->detach();
             foreach($topicsIds as $topicId => $lessonsIds){
 
+                $t = Topic::find($topicId);
+                $cat->topics()->wherePivot('categoryable_id',$topicId)->detach();
+                $cat->topics()->save($t);
 
                 foreach($lessonsIds as $keyLes => $lessonId){
                     //if($keyLes == 2305){
@@ -107,6 +110,7 @@ class OrderTopicsLessons extends Command
                 if(!isset($topics[$category->pivot->category_id][$category->pivot->categoryable_id])){
                     continue;
                 }
+
                 
                 $category->pivot->priority = $topics[$category->pivot->category_id][$category->pivot->categoryable_id];
                 $category->pivot->save();

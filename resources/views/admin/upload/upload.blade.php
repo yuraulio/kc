@@ -101,12 +101,14 @@ Upload Image
         name = $('#select_ImageModal .table-info .fm-content-item').text()
         if(name == ''){
             name = $('#select_ImageModal .fm-grid-item.active').attr('title')
+
+            console.log('name2 = ', name)
         }
 
         name = name.replace(/\s/g, '')
         ext = $('#select_ImageModal .table-info td:nth-child(3)').text()
         ext = ext.replace(/\s/g, '')
-
+        console.log('ext1 = ', ext)
         $("#select_ImageModal .breadcrumb.active-manager .breadcrumb-item.text-truncate span").each(function() {
 
             path += $(this).text() + '/' ;
@@ -114,6 +116,11 @@ Upload Image
         });
 
         path += name+'.'+ext;
+
+        if (path[path.length-1] === "."){
+            path = path.slice(0,-1);
+
+        }
 
         $('#image_upload').val(path)
         $('#img-upload').attr('src', path);

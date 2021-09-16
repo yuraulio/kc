@@ -209,7 +209,7 @@ class EventController extends Controller
                 $lessons = $topic->lessonsCategory;
 
                 foreach($lessons as $lesson){
-                    $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id']]);
+                    $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id'],'priority'=>$lesson->pivot->priority]);
                 }
             }
 

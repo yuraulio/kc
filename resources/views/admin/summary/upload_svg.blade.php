@@ -107,7 +107,10 @@ $(".close_svg_modal").click(function() {
         
         
 
-        
+        if (path[path.length-1] === "."){
+            path = path.slice(0,-1);
+
+        }
         
         //alert(path)
 

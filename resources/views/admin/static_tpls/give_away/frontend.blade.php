@@ -7,7 +7,8 @@
 @endsection
 <main id="main-area" class="with-hero" role="main">
 @if (!empty($page['medias']))
-				<section class="section-hero" style="background-image:url(<?= asset(get_image($page['medias'], 'header-image')); ?>)">
+
+				<section class="section-hero" style="background-image:url({{cdn(get_image($page['medias'], 'header-image'))}})">
 
 					<div class="overlay"></div>
 					<div class="container">
