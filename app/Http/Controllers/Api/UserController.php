@@ -212,6 +212,7 @@ class UserController extends Controller
             //if($event['title'] == 'E-Learning Masterclass in Digital & Social Media Marketing'){
 
             $data1 = [];
+            
             $event = Event::find($event['id']);
 
             $data[$key]['event'] = $event->toArray();
@@ -230,15 +231,20 @@ class UserController extends Controller
             }else if(strtotime(date('Y-m-d',strtotime($event['release_date_files']))) >= $now1 && $event['status'] == 3){
 
                 $display = true;
+            }else if(isset($event['delivery'][0]['id']) && $event['delivery'][0]['id'] == 143){
+                $display = true;
             }
-
-           
 
             if(isset($dropbox) && $folders != null && $display)
             {
                 if(isset($folders) && count($folders) > 0){
-
+                   
                     foreach($folders as $folder){
+                        
+                        $data1[$folder['foldername']]['subfolders'] = [];
+                        $data1[$folder['foldername']]['files'] = [];
+                        $data1[$folder['foldername']]['bonus'] = [];
+
                         $checkedF = [];
                         $fs = [];
                         $fk = 1;
@@ -247,32 +253,80 @@ class UserController extends Controller
                         $subfiles = [];
 
                         if(isset($files) && count($files) > 0){
-                            foreach($folders_bonus as $folder_bonus){
 
+                            foreach($folders_bonus as $folder_bonus){
+                                
                                 if($folder_bonus['parent'] == $folder['id']  && !in_array($folder_bonus['foldername'],$bonusFiles)){
-                                     
                                     $checkedF[] = $folder_bonus['id'] + 1 ;
                                     $fs[$folder_bonus['id']+1]=[];
                                     $fs[$folder_bonus['id']+1] = $folder_bonus;
-
 
                                 }
                                                      
                             }
                         }
 
+                        if(count($fs)>0){
+                            foreach($fs as $subf){
+                                foreach($files_bonus as $folder_bonus){
+                                
+                                    if(in_array($subf['foldername'],$subfolder)){
+                                      continue;
+                                    }
+                                    if($folder_bonus['parent'] == $folder['id']){
+                           
+                                        $subfolder[] =  $subf['foldername']; 
+                                        $data1[$folder['foldername']]['subfolders'][$subf['foldername']]=[];
+                                        foreach($files_bonus as $file_bonus){
+                                            if($file_bonus['fid'] == $subf['id'] && $file_bonus['parent'] == $subf['parent'] ){
+                                                $subfiles[]= $file_bonus['filename'];
+                                               
+                                                $data1[$folder['foldername']]['subfolders'][$subf['foldername']][]=$file_bonus['filename'];
+                                            }
+                                        }
+                                    
+                                    }
+                                }                   
+                            }
+                            
+                        }
+
+                        foreach($files as $file){
+                            if($folder['id'] == $file['fid']){
+                                $data1[$folder['foldername']]['files'][] = $file['filename'];
+                           
+                            }
+                        }
+
+                        if(isset($folders_bonus) && count($folders_bonus) > 0){
+                                                
+                            foreach($folders_bonus as $folder_bonus){
+                                                   
+                                if(in_array($folder_bonus['foldername'],$subfolder)){
+                                   continue;
+                                }
+                                
+                                if($folder_bonus['parent'] == $folder['id']){
+
+                                    $data1[$folder['foldername']]['bonus'] = [];
+                                    if(isset($files_bonus) && count($files_bonus) > 0){
+                                        foreach($files_bonus as $file_bonus){
+                                            if($file_bonus['parent'] == $folder_bonus['parent'] && !in_array($file_bonus['filename'],$subfiles)){
+                                                $data1[$folder['foldername']]['bonus'][] = $file_bonus['filename'];
+                                                   
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                                               
+                        }
+
                     }
-                                         
-                                            
+                                          
                 }
-                                          
-                                          
+                                                                       
             }
-
-            if($event['id'] == 4611){
-                dd($fs);
-            }
-
             $data[$key]['event']['files'] = $data1;
             //dd($data1);
             //dd($data[$key]['event']);
