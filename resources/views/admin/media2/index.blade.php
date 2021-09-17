@@ -549,7 +549,7 @@
 
         $(function(){
             $.contextMenu({
-                selector: 'tr.search-result.table-info',
+                selector: 'tr.search-result.table-info, tr.pasted-file.table-info',
                 build: function($trigger, e) {
                     // this callback is executed every time the menu is to be shown
                     // its results are destroyed every time the menu is hidden
@@ -638,6 +638,13 @@
                                     files[key]['path'] = path
                                     files[key]['name'] = name
 
+                                    size = $(value).find('td')[1]
+                                    ext = $(value).find('td')[2]
+                                    mod_date = $(value).find('td')[3]
+                                    files[key]['size'] = $(size).text()
+                                    files[key]['ext'] = $(ext).text()
+                                    files[key]['mod_date'] = $(mod_date).text()
+
                                 })
                                 //console.log(files)
 
@@ -709,6 +716,14 @@
                                     files[key] = []
                                     files[key]['path'] = path
                                     files[key]['name'] = name
+
+                                    size = $(value).find('td')[1]
+                                    ext = $(value).find('td')[2]
+                                    mod_date = $(value).find('td')[3]
+
+                                    files[key]['size'] = $(size).text()
+                                    files[key]['ext'] = $(ext).text()
+                                    files[key]['date'] = $(mod_date).text()
 
                                 })
 
@@ -1034,14 +1049,9 @@
 
 
             $.each(files, function(key, value) {
-                //console.log()
-                // let elem = $(value).find('td')[0]
-
-                // name = $(elem).data('name')
-                // path = $(elem).data('path')
                 let row = `
                     <div  class="d-flex justify-content-between">
-                        <div class="copy-file" data-id="${key}" data-path="${value['path']}" class="w-75 text-truncate"><span><i class="far fa-file"></i> ${value['name']} </span></div>
+                        <div class="copy-file" data-size="${value['size']}" data-ext="${value['ext']}" data-date="${value['mod_date']}" data-id="${key}" data-path="${value['path']}" class="w-75 text-truncate"><span><i class="far fa-file"></i> ${value['name']} </span></div>
                         <div class="text-right">
                             <button type="button" title="Delete" class="close deleteFileFromClipboard"><span aria-hidden="true">×</span></button>
                         </div>
@@ -1249,6 +1259,15 @@
         })
 
 
+
+        $(document).on("click",".list-unstyled.fm-tree-branch", function(e) {
+            if (e.target.class == "unselectable") {
+            } else {
+                $('.pasted-file').remove()
+            }
+        });
+
+
         $(document).on("click", "#pasteFromSearch", function() {
             let copyFiles = $('#clipboard-files .justify-content-between')
             path = ''
@@ -1290,24 +1309,25 @@
                         // console.log('=========')
                         // console.log(files)
 
-                        // $.each($(files), function(key, value){
-                        //     console.log('---------')
+                        $.each($(files), function(key, value){
+                            console.log('---------')
+                            console.log(value)
 
-                        //          let row = `
-                        //              <tr>
-                        //                  <td class="fm-content-item unselectable">
-                        //                      <i class="far fa-file-image"></i>
-                        //                      ${value.name}
-                        //                  </td>
-                        //                  <td></td>
-                        //                  <td></td>
-                        //                  <td></td>
-                        //              </tr>
-                        //          `
-                        //          $('.fm-content-body tbody').append(row)
-                            
-                           
-                        // })
+                                 let row = `
+                                     <tr class="pasted-file">
+                                         <td class="fm-content-item unselectable">
+                                             <i class="far fa-file-image"></i>
+                                             ${value.name}
+                                         </td>
+                                         <td>${value.size}</td>
+                                         <td>${value.ext}</td>
+                                         <td>${value.date}</td>
+                                     </tr>
+                                 `
+                                 $('.fm-content-body tbody').append(row)
+
+
+                        })
 
 
                         // $.each(copyFiles, function(key, value) {
