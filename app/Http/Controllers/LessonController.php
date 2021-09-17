@@ -588,8 +588,8 @@ class LessonController extends Controller
                     $duration = '';
                     $room = '';
                     $instructor_id = '';
-                    $priority = count($allLessons)+1;
-
+                    $priority = isset($allLessons->last()[0]['pivot']['priority']) ? $allLessons->last()[0]['pivot']['priority'] + 1 :( count($allLessons)+1);
+                   
                     if(isset($allLessons[$lesson][0])){
                         
                         $date = $allLessons[$lesson][0]['pivot']['date'];
@@ -606,7 +606,7 @@ class LessonController extends Controller
                         'time_ends'=>$time_ends, 'duration' => $duration, 'room' => $room, 'instructor_id' => $instructor_id, 'priority' => $priority]);
                         //}
 
-                    $category->lessons()->wherePivot('topic_id',$fromTopic)->detach();
+                    $category->lessons()->wherePivot('topic_id',$fromTopic)->wherePivot('lesson_id',$lesson)->detach();
                     $category->topic()->attach($toTopic, ['lesson_id' => $lesson,'priority'=>$priority]);
                     $newOrder[$category->id.'-'.$fromTopic.'-'.$lesson] = $priority;
                 }

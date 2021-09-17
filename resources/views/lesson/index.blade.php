@@ -549,7 +549,7 @@
                         });
 
                         $.each(data.newOrder,function(index, value){
-                            $(`#order`+index).html( value );
+                            $(`#order-`+index).html( value );
                         })
 
                         if(lessons.length > 1 ){
