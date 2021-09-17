@@ -449,8 +449,8 @@ class LessonController extends Controller
                         
                         continue;
                     }
-                    $lesson->topic()->wherePivot('category_id',$request->category)->detach();
-                    $cat->topic()->attach($topic, ['lesson_id' => $lesson->id]);
+                    //$lesson->topic()->wherePivot('category_id',$request->category)->detach();
+                    //$cat->topic()->attach($topic, ['lesson_id' => $lesson->id]);
                     $allEvents = $cat->events;
                     foreach($allEvents as $event)
                     {
@@ -486,6 +486,8 @@ class LessonController extends Controller
                             'time_ends'=>$time_ends, 'duration' => $duration, 'room' => $room, 'instructor_id' => $instructor_id, 'priority' => $priority]);
                         //}
                         
+                        $lesson->topic()->wherePivot('category_id',$request->category)->detach();
+                        $cat->topic()->attach($topic, ['lesson_id' => $lesson->id,'priority'=>$priority]);
     
                     }
 
@@ -564,14 +566,14 @@ class LessonController extends Controller
         $toTopic = $request->toTopic;
        
         $category = Category::find($category);
-       
+        $newOrder = [];
         if($category){
 
             foreach($lessons as $lesson){
                 //dd($fromTopic);
                 //dd($category->lessons()->wherePivot('topic_id',450)->get());
-                $category->lessons()->wherePivot('topic_id',$fromTopic)->detach();
-                $category->topic()->attach($toTopic, ['lesson_id' => $lesson]);
+                //$category->lessons()->wherePivot('topic_id',$fromTopic)->detach();
+                //$category->topic()->attach($toTopic, ['lesson_id' => $lesson]);
                 
                 $allEvents = $category->events;
 
@@ -603,13 +605,17 @@ class LessonController extends Controller
                     $event->topic()->attach($toTopic,['lesson_id' => $lesson,'date'=>$date,'time_starts'=>$time_starts,
                         'time_ends'=>$time_ends, 'duration' => $duration, 'room' => $room, 'instructor_id' => $instructor_id, 'priority' => $priority]);
                         //}
-                        
+
+                    $category->lessons()->wherePivot('topic_id',$fromTopic)->detach();
+                    $category->topic()->attach($toTopic, ['lesson_id' => $lesson,'priority'=>$priority]);
+                    $newOrder[$category->id.'-'.$fromTopic.'-'.$lesson] = $priority;
                 }
 
             }
 
             return response()->json([
                 'success' => true,
+                'newOrder' => $newOrder,
             ]);
 
         }
@@ -671,7 +677,7 @@ class LessonController extends Controller
 
             }
         }
-
+        $newOrder = [];
         foreach($category->lessons()->wherePivotIn('lesson_id',$lessons)->get() as $lesson){
             $index = $lesson->pivot->category_id . '-' . $lesson->pivot->topic_id . '-' . $lesson->pivot->lesson_id;
            

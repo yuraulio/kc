@@ -128,7 +128,7 @@
                                          
                                         </td>
                                        
-                                        <td data-priority="{{$lesson->category[$key]['id']}}-{{$topic->id}}-{{$lesson->id}}" class="hidden order-priority">
+                                        <td id="order-{{$lesson->category[$key]['id']}}-{{$topic->id}}-{{$lesson->id}}" data-priority="{{$lesson->category[$key]['id']}}-{{$topic->id}}-{{$lesson->id}}" class="hidden order-priority">
                                        
                                                 {{ $topic->pivot->priority }}
                                          
@@ -548,6 +548,10 @@
                             $(`#${category}-${fromTopic}-${value}`).attr("id",`${category}-${toTopic}-${value}`);
                         });
 
+                        $.each(data.newOrder,function(index, value){
+                            $(`#order`+index).html( value );
+                        })
+
                         if(lessons.length > 1 ){
                             message = 'The lessons ' + message + ' are moved to ' + toTopicName + '.'
                         }else{
@@ -701,7 +705,7 @@
         //console.log('new order = ', newOrder)
 
         data = {'category':category,'topic':topic,'order':newOrder}
-        
+        //console.log(data);
         $( document ).ajaxStart(function() {
             window.swal({
                 title: "Change Order...",
