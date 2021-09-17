@@ -105,6 +105,7 @@ class Invoice extends Model
         $data['invoice'] = $this->invoice ;
         $data['country'] = 'Ελλάδα';
         $data['vat'] = $billing['billafm'];
+        $data['footer'] = $this->event->first()->paymentMethod->first() ? $this->event->first()->paymentMethod->first()->footer : '';
 
         $this->instalments_remaining = $this->instalments_remaining - 1;
         if( $this->instalments_remaining >=1){
@@ -199,6 +200,7 @@ class Invoice extends Model
         $data['invoice'] = $newInvoice->invoice ;
         $data['country'] = 'Ελλάδα';
         $data['vat'] = $billing['billafm'];
+        $data['footer'] = $newInvoice->event->first()->paymentMethod->first() ? $newInvoice->event->first()->paymentMethod->first()->footer : '';
 
         $pdf = PDF::setOptions([
             'isHtml5ParserEnabled'=> true,
@@ -231,6 +233,7 @@ class Invoice extends Model
         $data['invoice'] = $this->invoice ;
         $data['country'] = 'Ελλάδα';
         $data['vat'] = $billing['billafm'];
+        $data['footer'] = $this->event->first()->paymentMethod->first() ? $this->event->first()->paymentMethod->first()->footer : '';
 
         $pdf = PDF::setOptions([
             'isHtml5ParserEnabled'=> true,

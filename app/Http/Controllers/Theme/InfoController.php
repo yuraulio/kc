@@ -363,9 +363,11 @@ class InfoController extends Controller
             $elearning = false;
             $expirationDate = '';
             $eventslug = '';
+            $stripe = false;
 
             if ($thisevent) {
 
+                $stripe = ($thisevent->paymentMethod->first() && $thisevent->paymentMethod->first()->id !== 1);
                 if($thisevent->view_tpl === 'elearning_event'){
 
                     $elearning = true;
@@ -388,7 +390,8 @@ class InfoController extends Controller
             }
         }
 
-        if(!$elearning){
+        //if(!$elearning){
+        if($thisevent->paymentMethod->first() && $thisevent->paymentMethod->first()->id == 1){
             $transaction->event()->save($thisevent);
         }
 
@@ -581,7 +584,9 @@ class InfoController extends Controller
            
             $user->save();
             $transaction->user()->save($user);
-            if($elearning){
+            //if($elearning){
+            if($thisevent->paymentMethod->first() && $thisevent->paymentMethod->first()->id !== 1){
+
                 $invoice = $transaction->invoice()->first();
                 if($invoice){
                     $invoice->user()->save($user);
@@ -636,11 +641,11 @@ class InfoController extends Controller
         $option->value=$next;
         $option->save();
         
-        $this->sendEmails($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug);
+        $this->sendEmails($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug, $stripe);
 
     }
 
-    public function sendEmails($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug)
+    public function sendEmails($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug,$stripe)
     {
        // dd($elearning);
         // 5 email, admin, user, 2 deree, darkpony
@@ -688,7 +693,7 @@ class InfoController extends Controller
     	}
 
       
-        if($elearning){
+        if($stripe){
 
             //dd($transaction);
             //dd($transaction->invoice);
@@ -735,20 +740,22 @@ class InfoController extends Controller
             }
 
         
-
-            $pathFile = url('/') . '/pdf/elearning/KnowCrunch - How to access our website & account.pdf';
-            $pathFile = str_replace(' ','%20',$pathFile);
-            $sent = Mail::send('emails.admin.elearning_after_register', $data, function ($m) use ($adminemail, $muser,$pathFile) {
-
-                $fullname = $muser['name'];
-                $first = $muser['first'];
-                $sub = 'KnowCrunch |' . $first . ', welcome to ' . $muser['event_title'].'!';
-                $m->from($adminemail, 'Knowcrunch');
-                $m->to($muser['email'], $fullname);
-                $m->subject($sub);
-                $m->attach($pathFile);
-                    
-            });
+            if($elearning){
+                $pathFile = url('/') . '/pdf/elearning/KnowCrunch - How to access our website & account.pdf';
+                $pathFile = str_replace(' ','%20',$pathFile);
+                $sent = Mail::send('emails.admin.elearning_after_register', $data, function ($m) use ($adminemail, $muser,$pathFile) {
+    
+                    $fullname = $muser['name'];
+                    $first = $muser['first'];
+                    $sub = 'KnowCrunch |' . $first . ', welcome to ' . $muser['event_title'].'!';
+                    $m->from($adminemail, 'Knowcrunch');
+                    $m->to($muser['email'], $fullname);
+                    $m->subject($sub);
+                    $m->attach($pathFile);
+                        
+                });
+            }
+            
 
             
 

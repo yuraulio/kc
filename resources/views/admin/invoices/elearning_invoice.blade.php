@@ -207,7 +207,7 @@ td p{
 </div>
 
 <footer>
-        <p> KNOWCRUNCH INC, ID: 32-055519, 651 N. BROAD ST. SUITE 206, MIDDLETOWN, DELAWARE, 19709, USA </p>
+        <p> {{$data['footer']}} </p>
     </footer>
 </body>
 </html>

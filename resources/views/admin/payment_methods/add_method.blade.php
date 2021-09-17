@@ -80,6 +80,11 @@
                               </select>
                               @include('alerts.feedback', ['field' => 'status'])
                            </div>
+                           <div class="form-group{{ $errors->has('footer') ? ' has-danger' : '' }}">
+                              <label class="form-control-label" for="input-footer">{{ __('Footer') }}</label>
+                              <input type="text" name="footer" id="input-footer" class="form-control{{ $errors->has('footer') ? ' is-invalid' : '' }}" placeholder="{{ __('Footer') }}" value="{{ old('footer',$method['footer']) }}" required autofocus>
+                              @include('alerts.feedback', ['field' => 'footer'])
+                           </div>
                            {{--<div class="form-group{{ $errors->has('type') ? ' has-danger' : '' }}">
                               <label class="form-control-label" for="input-status">{{ __('Type') }}</label>
                               <select name="type" id="input-status" class="form-control" placeholder="{{ __('Type') }}">

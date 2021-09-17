@@ -28,6 +28,7 @@ class PaymentMethod extends Model
         'surcharge_percentage',
         'surcharge_amount',
         'type',
+        'footer',
 
     ];
 
