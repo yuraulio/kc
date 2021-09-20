@@ -133,4 +133,14 @@ class Category extends Model
         return $this->morphToMany(Faq::class, 'faqable')->with('category');
     }
 
+    public function getSumOfStudents(){
+        
+        $students = 0;
+        foreach($this->events as $event){
+            $students += $event->users->count();
+        }
+        return $students;
+    }
+
+
 }

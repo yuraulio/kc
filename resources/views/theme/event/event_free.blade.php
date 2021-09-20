@@ -174,16 +174,32 @@
                               <ul class="two-column-list">
 
                               @foreach($summary as $sum)
-                                 @if($sum['title'])
+                                 @if($sum['title'] && $sum['section'] != 'students')
                                  <li>
                                  @if($sum['mediable'])<img class="info-icon" class="replace-with-svg" src="{{cdn(get_image($sum['mediable']))}}" width="30" />@endif
                                     <div class="info-text">
 
                                        <p>{{  $sum['title'] }}</br>
-                                          {{  $sum['description'] }}
+                                          {!!  $sum['description'] !!}
                                        </p>
                                     </div>
                                  </li>
+
+                                 @elseif($sum['title'] && $sum['section'] == 'students')
+
+                                 <li>
+                                 @if($sum['mediable'])<img class="info-icon" class="replace-with-svg" src="{{cdn(get_image($sum['mediable']))}}" width="30" />@endif
+                                    <div class="info-text">
+
+                                          @if($sumStudents<=0)
+                                             <p>{{  $sum['title'] }}</br></p>
+                                          @else
+                                             <p>{{$sumStudents}} {{preg_replace('/[0-9]+/', '', $sum['title'])}}</br></p>
+                                          @endif
+                                       
+                                    </div>
+                                 </li>
+
                                  @endif
 
                               @endforeach

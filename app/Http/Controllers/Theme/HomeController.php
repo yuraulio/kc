@@ -497,6 +497,7 @@ class HomeController extends Controller
         $data['venues'] = $event->venues->toArray();
         $data['syllabus'] = $event->syllabus->toArray();
         $data['is_event_paid'] = 0;
+        $data['sumStudents'] = $event->category[0]->getSumOfStudents();
 
         if(Auth::user() && count(Auth::user()->events->where('id',$event->id)) > 0){
             $data['is_event_paid'] = 1;

@@ -209,7 +209,7 @@ class UserController extends Controller
 
         foreach($user->events as $key => $event)
         {
-            //if($event['title'] == 'E-Learning Masterclass in Digital & Social Media Marketing'){
+            
 
             $data1 = [];
             
@@ -284,7 +284,7 @@ class UserController extends Controller
                                             if($file_bonus['fid'] == $subf['id'] && $file_bonus['parent'] == $subf['parent'] ){
                                                 $subfiles[]= $file_bonus['filename'];
                                                
-                                                $data1[$folder_bonus['parent']]['subfolders'][$subf['foldername']][]=['fid'=>$file_bonus['parent'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'], 
+                                                $data1[$folder_bonus['parent']]['subfolders'][$subf['foldername']][]=['fid'=>$file_bonus['parent'], 'foldername'=>$subf['foldername'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'], 
                                                 'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
                                             }
                                         }
@@ -338,13 +338,32 @@ class UserController extends Controller
                 }
                                                                        
             }
-            $data[$key]['event']['files'] = $data1;
-            //dd($data1);
-            //dd($data[$key]['event']);
 
+            $folders = [];
+                        
+            foreach($data1 as $file){
 
+                $bonus = [];
+                $subfolders = [];
+
+                if(!isset($file['id'])){
+                    continue;
+
+                }
+
+                $newSubfolders = [];
+                foreach($file['subfolders'] as $subf){
+                    
+                    $newSubfolders[] = $subf;
+                //    //$newSubfolders['foldername'] = $key;
+                }
+                
+                $folders[] = ['id'=>$file['id'],'dirname'=>$file['dirname'],'foldername'=>$file['foldername'],'files'=>$file['files'],'bonus'=>$file['bonus'],
+                    'subfolders'=>$newSubfolders];
+            }
+            //$data[$key]['event']['files']['folders'] = $folders;
+                   
             // Summary
-
             foreach($event->summary1 as $key_summary => $summary){
                 $data[$key]['summary'][$key_summary]['title'] = $summary->title;
                 $data[$key]['summary'][$key_summary]['description'] = $summary->description;
@@ -386,7 +405,7 @@ class UserController extends Controller
 
 
                 // if inclass, parse dropbox files without attach by topic
-                $data[$key]['files'] = $data1;
+                $data[$key]['files']['folders'] = $folders;
 
             }else if($event->is_elearning_course()){
                 $data[$key]['is_elearning'] = true;
@@ -409,7 +428,6 @@ class UserController extends Controller
                 $data[$key]['is_inClass'] = false;
             }
 
-            //dd($event->topicsLessonsInstructors()[]);
             $arr = array();
 
             $data[$key]['topics'] = [];
@@ -425,7 +443,7 @@ class UserController extends Controller
 
 
 
-                    //dd($key11);
+                    
                         $arr['topic_name'] = $key11;
 
                         //$data[$key]['topics'][$key11]['lessons'][$key_topic]['title'] = $lesson1['title'];
@@ -473,6 +491,21 @@ class UserController extends Controller
                             }
 
 
+                            $topic1 = preg_replace('/[0-9]+/', '', $key11);
+                            $topic1 = Str::slug($topic1);
+
+                        ////dd($data1);
+
+                            foreach($folders as $key12 => $folder){
+                                
+                                $folderName = $folder['foldername'];
+                                $folderName = preg_replace('/[0-9]+/', '', $folderName);
+
+                                $folderName = Str::slug($folderName);
+                                if($topic1 == $folderName){
+                                    $arr['topic_content']['files']['folders'] = $folder;
+                                }
+                            }
 
 
                         }else if($event->is_inclass_course()){
@@ -545,23 +578,7 @@ class UserController extends Controller
 
 
 
-                        //dd($key11);
-                        $topic1 = preg_replace('/[0-9]+/', '', $key11);
-                        $topic1 = Str::slug($topic1);
-
-                        //dd($data1);
-
-                        // foreach($data1 as $key12 => $folder){
-                        //     $folderName = $key12;
-                        //     $folderName = preg_replace('/[0-9]+/', '', $folderName);
-
-                        //     $folderName = Str::slug($folderName);
-                        //     if($topic1 == $folderName){
-                        //         $arr['topic_content']['files'] = $folder;
-                        //     }
-                        // }
-
-
+                        
 
                         array_push($arr['topic_content']['lessons'], $arr_lesson);
 
@@ -569,13 +586,11 @@ class UserController extends Controller
 
                 array_push($data[$key]['topics'], $arr);
             }
-            //dd($data);
-        //}
+         
 
 
         }
 
-        //$data['events'] = $user->events;
 
         return response()->json([
             'success' => true,
