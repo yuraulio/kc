@@ -117,8 +117,8 @@
                   @include('alerts.feedback', ['field' => 'title-section'])
                </div>
                <div class="form-group{{ $errors->has('description-section') ? ' has-danger' : '' }}">
-                  <label class="form-control-label" for="edit-description-section">{{ __('Section') }}</label>
-                  <input type="text" name="description-section" id="edit-description-section" class="form-control{{ $errors->has('description-section') ? ' is-invalid' : '' }}" placeholder="{{ __('Section') }}" value="{{ old('description-section') }}" autofocus>
+                  <label class="form-control-label" for="edit-description-section">{{ __('Description') }}</label>
+                  <input type="text" name="description-section" id="edit-description-section" class="form-control{{ $errors->has('description-section') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}" value="{{ old('description-section') }}" autofocus>
                   @include('alerts.feedback', ['field' => 'description-section'])
                </div>
                <input type="text" id="section-id"  value="" hidden>
@@ -219,7 +219,6 @@
 
     <script>
     $(document).on('click',"#edit-section-btn",function(){
-
         $sectionId = $("#section-id").val()
         $.ajax({
                 headers: {
@@ -262,7 +261,7 @@
 
             title = $("#section-title-"+id).text();
             description = $("#section-desc-"+id).text();
-
+        
             modal.find("#sectionModalLabel").val(title)
 
         modal.find("#edit-section").val(section);

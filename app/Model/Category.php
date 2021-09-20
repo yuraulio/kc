@@ -53,7 +53,7 @@ class Category extends Model
 
     public function topics()
     {
-        return $this->morphedByMany(Topic::class, 'categoryable')->with('lessonsCategory');
+        return $this->morphedByMany(Topic::class, 'categoryable')->with('lessonsCategory')->withPivot('priority')->orderBy('priority','asc');
     }
 
     public function menu()

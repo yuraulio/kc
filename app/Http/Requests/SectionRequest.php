@@ -30,9 +30,9 @@ class SectionRequest extends FormRequest
             'title' => [
                 'required', 'min:3'
             ],
-            'description' => [
+            /*'description' => [
                 'required', 'min:3'
-            ]
+            ]*/
         ];
     }
 }

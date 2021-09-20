@@ -503,7 +503,7 @@ class UserController extends Controller
 
                                 $folderName = Str::slug($folderName);
                                 if($topic1 == $folderName){
-                                    $arr['topic_content']['files']['folders'] = $folder;
+                                    $arr['topic_content']['files'] = $folder;
                                 }
                             }
 

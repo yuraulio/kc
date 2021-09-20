@@ -140,7 +140,8 @@
                                                     <th scope="col"></th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
+                                            <tbody class="topics-order">
+                                                {{dd($category->topics[3])}}
                                                 @foreach ($category->topics as $topic)
                                                     <tr>
                                                         <td><?= ($topic->status == 1) ? 'Published' : 'Unpublished'; ?></td>
@@ -266,4 +267,90 @@
         });
 
     </script>
+
+    <script src="{{ asset('js/sortable/Sortable.js') }}"></script>
+
+    <script>
+        let category ;
+        let topic;
+        let lessons;
+
+        (function( $ ){
+        
+        
+            lessons = {};
+            var el
+
+            $( ".topics-order" ).each(function( index ) {
+
+            el = document.getElementsByClassName('topics-order')[index];
+            new Sortable(el, {
+               
+                multiDrag: true,
+                selectedClass: 'selected',
+                
+                onSelect: function ( /**Event*/ evt) {
+                    initOrder()
+                },
+
+                /*onStart: function (evt) {
+                    initOrder()
+                },*/
+
+                // Element dragging ended
+                onEnd: function ( /**Event*/ evt) {           
+                   
+                    orderLessons()
+                },
+
+            });
+           
+
+            });
+
+       
+        })( jQuery );
+
+    function initOrder(){
+        
+        {{--lessons = {};
+        let order = 0;
+
+       $( ".lesson-list .order-priority" ).each(function( index ) {
+            
+            if(index == 0){
+                order = Number($(this).html());
+                lessons[$(this).data('priority')] = order;
+                lessons[index] = order;
+            }else{
+                order += 1;
+                lessons[$(this).data('priority')] = order;
+                lessons[index] = order;
+            }
+
+            //console.log('index = ' + index + ' order = ' + order)
+
+
+       });--}}
+
+    
+   }
+
+    function orderLessons(){
+       
+        $( document ).ajaxStart(function() {
+            window.swal({
+                title: "Change Order...",
+                text: "Please wait",
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
+        });
+
+       
+
+       
+    }
+
+</script>
 @endpush
