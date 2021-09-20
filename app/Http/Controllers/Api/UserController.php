@@ -241,9 +241,12 @@ class UserController extends Controller
                    
                     foreach($folders as $folder){
                         
-                        $data1[$folder['foldername']]['subfolders'] = [];
-                        $data1[$folder['foldername']]['files'] = [];
-                        $data1[$folder['foldername']]['bonus'] = [];
+                        $data1[$folder['id']]['subfolders'] = [];
+                        $data1[$folder['id']]['id'] = $folder['id'];
+                        $data1[$folder['id']]['dirname'] = $folder['dirname'];
+                        $data1[$folder['id']]['foldername'] = $folder['foldername'];
+                        $data1[$folder['id']]['files'] = [];
+                        $data1[$folder['id']]['bonus'] = [];
 
                         $checkedF = [];
                         $fs = [];
@@ -276,12 +279,13 @@ class UserController extends Controller
                                     if($folder_bonus['parent'] == $folder['id']){
                            
                                         $subfolder[] =  $subf['foldername']; 
-                                        $data1[$folder['foldername']]['subfolders'][$subf['foldername']]=[];
+                                        $data1[$folder_bonus['parent']]['subfolders'][$subf['foldername']]=[];
                                         foreach($files_bonus as $file_bonus){
                                             if($file_bonus['fid'] == $subf['id'] && $file_bonus['parent'] == $subf['parent'] ){
                                                 $subfiles[]= $file_bonus['filename'];
                                                
-                                                $data1[$folder['foldername']]['subfolders'][$subf['foldername']][]=$file_bonus['filename'];
+                                                $data1[$folder_bonus['parent']]['subfolders'][$subf['foldername']][]=['fid'=>$file_bonus['parent'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'], 
+                                                'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
                                             }
                                         }
                                     
@@ -293,7 +297,9 @@ class UserController extends Controller
 
                         foreach($files as $file){
                             if($folder['id'] == $file['fid']){
-                                $data1[$folder['foldername']]['files'][] = $file['filename'];
+                                //dd($file);
+                                $data1[$folder['id']]['files'][] = ['fid'=>$file['fid'], 'filename' => $file['filename'], 'dirname' => $file['dirname'], 
+                                    'ext' => $file['ext'], 'last_mod' => $file['last_mod']];
                            
                             }
                         }
@@ -312,7 +318,12 @@ class UserController extends Controller
                                     if(isset($files_bonus) && count($files_bonus) > 0){
                                         foreach($files_bonus as $file_bonus){
                                             if($file_bonus['parent'] == $folder_bonus['parent'] && !in_array($file_bonus['filename'],$subfiles)){
-                                                $data1[$folder['foldername']]['bonus'][] = $file_bonus['filename'];
+                                                
+                                                
+                                                $data1[$folder_bonus['parent']]['bonus'][] = ['fid'=>$file_bonus['parent'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'], 
+                                                'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
+
+                                                
                                                    
                                             }
                                         }
