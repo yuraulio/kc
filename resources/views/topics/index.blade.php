@@ -135,25 +135,26 @@
                                                 <tr>
                                                     <th scope="col">{{ __('Status') }}</th>
                                                     <th scope="col">{{ __('Title') }}</th>
-                                                    <th scope="col">{{ __('Assigned Category') }}</th>
+                                                    <th class="hidden" scope="col">{{ __('Assigned Category') }}</th>
                                                     <th scope="col">{{ __('Created at') }}</th>
+                                                    <th class="hidden" scope="col">{{ __('Order') }}</th>                                                    
                                                     <th scope="col"></th>
                                                 </tr>
                                             </thead>
                                             <tbody class="topics-order">
-                                                {{dd($category->topics[3])}}
+                                        
                                                 @foreach ($category->topics as $topic)
-                                                    <tr>
+                                                    <tr class="topic-list">
                                                         <td><?= ($topic->status == 1) ? 'Published' : 'Unpublished'; ?></td>
                                                         <td> <a href="{{ route('topics.edit', $topic) }}">{{ $topic->title }}</a></td>
-                                                        <td>
-                                                        @foreach($topic['category'] as $category)
+                                                        <td class="hidden">
+                                                        
                                                             {{$category->name}}
-                                                        @endforeach
+                                                       
                                                         </td>
                                                         <td>{{ $topic->created_at ? date_format($topic->created_at, 'Y-m-d' ) : '' }}</td>
 
-                                                            <td class="text-right">
+                                                        <td class="text-right">
 
                                                                 <div class="dropdown">
                                                                     <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -177,8 +178,9 @@
                                                                     </div>
                                                                 </div>
 
-                                                            </td>
+                                                        </td>
 
+                                                        <td class="hidden order-priority" data-priority="{{$category->id}}-{{$topic->id}}"> {{$topic->pivot->priority}} </td>
                                                     </tr>
                                                 @endforeach
                                             </tbody>
@@ -217,17 +219,19 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
-
+   
     <script type="text/javascript">
         let categories = @json($categories);
         var table = $('.datatable-basic39').DataTable({
-                language: {
-                    paginate: {
-                    next: '&#187;', // or '→'
-                    previous: '&#171;' // or '←'
-                    }
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            "order": [[ 5, "asc" ]],
+            language: {
+                paginate: {
+                next: '&#187;', // or '→'
+                previous: '&#171;' // or '←'
                 }
-            });
+            }
+        });
 
 
         $(function() {
@@ -273,12 +277,12 @@
     <script>
         let category ;
         let topic;
-        let lessons;
+        let topics;
 
         (function( $ ){
         
         
-            lessons = {};
+            topics = {};
             var el
 
             $( ".topics-order" ).each(function( index ) {
@@ -313,31 +317,40 @@
 
     function initOrder(){
         
-        {{--lessons = {};
+        topics = {};
         let order = 0;
 
-       $( ".lesson-list .order-priority" ).each(function( index ) {
+        $( ".topic-list .order-priority" ).each(function( index ) {
             
             if(index == 0){
                 order = Number($(this).html());
-                lessons[$(this).data('priority')] = order;
-                lessons[index] = order;
+                topics[$(this).data('priority')] = order;
+                topics[index] = order;
             }else{
                 order += 1;
-                lessons[$(this).data('priority')] = order;
-                lessons[index] = order;
+                topics[$(this).data('priority')] = order;
+                topics[index] = order;
             }
 
             //console.log('index = ' + index + ' order = ' + order)
-
-
-       });--}}
-
+        });
     
    }
 
     function orderLessons(){
-       
+
+        let newOrder = {};
+        category = $("#col1_filter").val();
+
+        $( ".topic-list .order-priority" ).each(function( index ) {
+            newOrder[$(this).data('priority')] = topics[index]
+        });
+
+        //console.log('old priority = ', topics)
+        //console.log('new priority = ', newOrder)
+
+        data = {'category':category,'order':newOrder}
+
         $( document ).ajaxStart(function() {
             window.swal({
                 title: "Change Order...",
@@ -347,7 +360,49 @@
             });
         });
 
-       
+        $.ajax({
+            type: 'POST',
+            headers: {
+            'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+            },
+            Accept: 'application/json',
+            url: "{{ route ('sort-topics') }}",
+            data:data,
+            success: function(data) {
+                if(data['success']){
+
+                    $( ".topic-list .order-priority" ).each(function( index ) {
+                        $(this).html(topics[index])
+                    });
+
+                    
+                    window.swal({
+                        title: data['message'],
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+
+                   
+                }else{
+                    let errorMessage = '';
+                    $.each(data.errors,function(index, value){
+                        $.each(value,function(index1, value1){
+                            errorMessage += value1 + ' ';
+                        });
+                       
+                    });
+
+                    window.swal({
+                        title: errorMessage,
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+
+                    
+                }
+
+            }
+        });
 
        
     }

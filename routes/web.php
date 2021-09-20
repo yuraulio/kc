@@ -312,6 +312,9 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     //EnrollToElearning
     Route::get('enroll-to-elearning/{event}/{enroll}','Dashboard\DashboardController@enrollStudendsToElearning');
 
+    //Topics
+    Route::post('/sort-topics', 'TopicController@orderTopic')->name('sort-topics');
+
 });
 
 

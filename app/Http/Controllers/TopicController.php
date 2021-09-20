@@ -11,6 +11,7 @@ use App\Http\Requests\TopicRequest;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\Routing\Route as SymfonyRoute;;
 use Illuminate\Support\Facades\URL;
+use Validator;
 
 class TopicController extends Controller
 {
@@ -200,5 +201,75 @@ class TopicController extends Controller
         $topic->delete();
 
         return redirect()->route('topics.index')->withStatus(__('topic successfully deleted.'));
+    }
+
+    public function orderTopic(Request $request){
+        //dd($request->all());
+
+        $validatorArray['order'] = 'required';
+        $validatorArray['category'] = 'required';
+
+        $validator = Validator::make($request->all(), $validatorArray);
+        
+        if ($validator->fails()) {
+            return [
+                'success' => false,
+                'errors' => $validator->errors(),
+                'message' => '',
+            ];
+
+        }
+
+        $category = Category::find($request->category);
+        $order = 1;
+        $orderLessons = 1;
+        
+        foreach($category->topics as $topic){
+            //dd($category->id);
+            $index = $category->id . '-' . $topic->id;
+            if(!isset($request->order[$index])){
+                continue;
+            }
+           
+            $topic->pivot->priority = $request->order[$index];
+            $topic->pivot->save();
+            
+        }
+
+        foreach($category->topics as $topic){
+            //dd($category->id);
+            $index = $category->id . '-' . $topic->id;
+            if(!isset($request->order[$index])){
+                continue;
+            }
+          
+            foreach($category->lessons()->wherePivot('topic_id',$topic->id)->get() as $topicc){
+                
+                $topicc->pivot->priority = $order;
+                $topicc->pivot->save();
+                $order += 1;
+    
+            }
+
+            foreach($category->events as $event){
+    
+                foreach($event->lessons()->wherePivot('topic_id',$topic->id)->get() as $lesson){
+                   
+                    $lesson->pivot->priority = $orderLessons;
+                    $lesson->pivot->save();
+
+                    $orderLessons += 1;
+    
+                }
+            }
+
+        }
+
+        return [
+            'success' => true,
+            'message' => 'Order has changed',
+        ];
+
+
     }
 }
