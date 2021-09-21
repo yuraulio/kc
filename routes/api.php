@@ -42,4 +42,7 @@ Route::middleware('auth:api')->group(function () {
    
 
 });
+
+
+Route::post('/myaccount/reset','Api\ForgotPasswordController@sendResetLinkEmail');
  
