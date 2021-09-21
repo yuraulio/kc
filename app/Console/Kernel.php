@@ -25,6 +25,7 @@ class Kernel extends ConsoleKernel
        Commands\CompressImages::class,
        Commands\ClearTopics::class,
        Commands\OrderTopicsLessons::class,
+       Commands\RemoveTopics::class,
        //Commands\GetPaymentDetailsFromTransactions::class,
        //Commands\AttachBenefitsSummaryMedia::class,
        //Commands\AttachTransactionSpecial::class,

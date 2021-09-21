@@ -223,6 +223,11 @@ class TopicController extends Controller
         $category = Category::find($request->category);
         $order = 1;
         $orderLessons = 1;
+
+        /*$orderTopics = [];
+        foreach($request->order as $key => $orderTopic){
+            $orderTopics[] = explode('-',$key)[1];
+        }*/
         
         foreach($category->topics as $topic){
             //dd($category->id);
@@ -232,18 +237,21 @@ class TopicController extends Controller
             }
            
             $topic->pivot->priority = $request->order[$index];
-            $topic->pivot->save();
+            //$topic->pivot->save();
             
         }
 
-        foreach($category->topics as $topic){
-            //dd($category->id);
-            $index = $category->id . '-' . $topic->id;
-            if(!isset($request->order[$index])){
+        foreach($request->order as $key => $ct){
+            
+            $index = $key;
+
+            $categoryIndex = explode('-',$key)[0];
+            $topic = explode('-',$key)[1];
+            if(!isset($request->order[$index]) || $request->category != $categoryIndex){
                 continue;
             }
-          
-            foreach($category->lessons()->wherePivot('topic_id',$topic->id)->get() as $topicc){
+            
+            foreach($category->lessons()->wherePivot('topic_id',$topic)->get() as $topicc){
                 
                 $topicc->pivot->priority = $order;
                 $topicc->pivot->save();
@@ -253,7 +261,7 @@ class TopicController extends Controller
 
             foreach($category->events as $event){
     
-                foreach($event->lessons()->wherePivot('topic_id',$topic->id)->get() as $lesson){
+                foreach($event->lessons()->wherePivot('topic_id',$topic)->get() as $lesson){
                    
                     $lesson->pivot->priority = $orderLessons;
                     $lesson->pivot->save();
