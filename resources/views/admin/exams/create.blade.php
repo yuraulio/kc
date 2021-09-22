@@ -95,8 +95,8 @@
                                  <label class="form-control-label" for="input-event_id">{{ __('Event') }}</label>
                                  <select name="event_id" id="input-event_id" class="form-control" placeholder="{{ __('Event') }}">
                                     <option value="">-</option>
-                                    @foreach ($events as $event)
-                                    <option value="{{ $event->id }}" @if(old('event_id',$event_id) == $event->id) selected @endif>{{ $event->title }}</option>
+                                    @foreach ($events as $key => $event)
+                                    <option value="{{ $key }}" @if(old('event_id',$event_id) == $key) selected @endif>{{ $event }}</option>
                                     @endforeach
                                  </select>
                                  @include('alerts.feedback', ['field' => 'event_id'])

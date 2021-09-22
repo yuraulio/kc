@@ -43,11 +43,11 @@ class InsertExams extends Command
     {
    
 
-        $client = new Client(['base_uri' => 'http://knowcrunchls.j.scaleforce.net','verify' => false]);
-        //$client = new Client(['base_uri' => 'http://lcknowcrunch.test','verify' => false]);
+        //$client = new Client(['base_uri' => 'http://knowcrunchls.j.scaleforce.net','verify' => false]);
+        $client = new Client(['base_uri' => 'http://lcknowcrunch.test','verify' => false]);
 
-        $response = $client->request('GET', 'http://knowcrunchls.j.scaleforce.net/get-exams');
-        //$response = $client->request('GET', 'http://lcknowcrunch.test/get-exams');
+        //$response = $client->request('GET', 'http://knowcrunchls.j.scaleforce.net/get-exams');
+        $response = $client->request('GET', 'http://lcknowcrunch.test/get-exams');
 
         $data = json_decode($response->getBody()->getContents(),true);
 
@@ -116,7 +116,7 @@ class InsertExams extends Command
 
         }
 
-        foreach($data['syncsData'] as $key1 => $dataSync){
+        /*foreach($data['syncsData'] as $key1 => $dataSync){
             
             foreach($dataSync as $key2 => $examResult){
                 
@@ -140,10 +140,7 @@ class InsertExams extends Command
                 $examR->save();
             }
             
-            
-            
-        }
-
+        }*/
 
         return 0;
     }

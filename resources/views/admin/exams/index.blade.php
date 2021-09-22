@@ -60,9 +60,16 @@
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                                                     <a class="dropdown-item" href="{{ route('exams.edit', $exam->id) }}">{{ __('Edit') }}</a>
+                                                    <a class="dropdown-item" href="{{ route('exam.clone', $exam->id) }}">{{ __('Clone') }}</a>
                                                 </div>
+
+                                                
+                                                
+                                        
+                                            
                                             </div>
 
+                                            
                                         </td>
                                     </tr>
                                 @endforeach

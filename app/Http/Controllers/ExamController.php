@@ -41,7 +41,20 @@ class ExamController extends Controller
         $edit = false;
         $event_edit = false;
 
-        return view('admin.exams.create', ['user' => $user, 'events' => $events, 'edit' => $edit, 'exam' => $exam,'event_id'=>$event_edit]);
+        foreach($events as $event){
+
+            if($event->is_elearning_course() || !$event->summary1()->where('section','date')->first()){
+                $eventsData[$event->id] = trim($event->title);
+
+            }else{
+                $eventsData[$event->id] = trim($event->title . ' ' . $event->summary1()->where('section','date')->first()->title) ;
+
+            }
+
+            
+        }
+
+        return view('admin.exams.create', ['user' => $user, 'events' => $eventsData, 'edit' => $edit, 'exam' => $exam,'event_id'=>$event_edit]);
     }
 
     /**
@@ -85,7 +98,7 @@ class ExamController extends Controller
         $user = Auth::user();
         $events = Event::all();
         $edit = true;
-        $event_edit = $exam->event->first()->id;
+        $event_edit = $exam->event->first() ? $exam->event->first()->id : -1;
 
         $results = [];
         $count = 0;
@@ -133,8 +146,22 @@ class ExamController extends Controller
 
         }
               
+        $eventsData = [];
+
+        foreach($events as $event){
+
+            if($event->is_elearning_course() || !$event->summary1()->where('section','date')->first()){
+                $eventsData[$event->id] = trim($event->title);
+
+            }else{
+                $eventsData[$event->id] = trim($event->title . ' ' . $event->summary1()->where('section','date')->first()->title) ;
+
+            }
+
             
-        return view('admin.exams.create', ['user' => $user, 'events' => $events, 'edit' => $edit, 'exam' => $exam,'event_id'=>$event_edit,
+        }
+        
+        return view('admin.exams.create', ['user' => $user, 'events' => $eventsData, 'edit' => $edit, 'exam' => $exam,'event_id'=>$event_edit,
                     'results' => $results,'averageHour' => $averageHour, 'averageScore' => $averageScore]);
     }
 
@@ -240,4 +267,16 @@ class ExamController extends Controller
         $exam->questions = json_encode($sortedQuestions);
         $exam->save();
     }
+
+    public function cloneExam(Exam $exam){
+
+        $exam = $exam->replicate();
+        
+        $exam->status = false;
+        $exam->push();
+
+        return redirect()->route('exams.edit',$exam->id)->withStatus(__('Exam successfully cloned.'));
+
+    }
+
 }
