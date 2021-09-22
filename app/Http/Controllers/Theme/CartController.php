@@ -918,6 +918,11 @@ class CartController extends Controller
             \Session::put('dperror',$e->getMessage());
             //return redirect('/info/order_error');
             return '/cart';
+        }catch(\Stripe\Exception\CardException $e) {
+            //dd($e);
+            \Session::put('dperror',$e->getMessage());
+            //return redirect('/info/order_error');
+            return '/cart';
         }
 
 
