@@ -42,24 +42,61 @@
 
                             <h6 class="heading-small text-muted mb-4">{{ __('Lesson information') }}</h6>
                             <div class="pl-lg-4">
-                                <?php //dd($lesson); ?>
+                                <div class="row">
+                                    <div style="margin:auto 0;" class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
+                                        <label class="custom-toggle custom-published">
+                                            <input name="status" id="input-status" type="checkbox" @if($lesson->status) checked @endif>
+                                            <span class="custom-toggle-slider rounded-circle" data-label-off="unpublished" data-label-on="published"></span>
+                                        </label>
+                                        @include('alerts.feedback', ['field' => 'status'])
+                                    </div>
 
-                            <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
-                                <label class="custom-toggle custom-published">
-                                    <input name="status" id="input-status" type="checkbox" @if($lesson->status) checked @endif>
-                                    <span class="custom-toggle-slider rounded-circle" data-label-off="unpublished" data-label-on="published"></span>
-                                </label>
-                                @include('alerts.feedback', ['field' => 'status'])
-                            </div>
+                                    <div style="margin:auto 40px;" class="form-group{{ $errors->has('bold') ? ' has-danger' : '' }}">
+                                        <label class="form-control-label" for="input-bold">{{ __('Bold') }}</label>
+                                        <label class="custom-toggle custom-published toggle-bold">
+                                            <input name="bold" id="input-bold" type="checkbox" @if($lesson->bold) checked @endif>
+                                            <span class="custom-toggle-slider rounded-circle" data-label-off="off" data-label-on="on"></span>
+                                        </label>
+                                        @include('alerts.feedback', ['field' => 'bold'])
+                                    </div>
+                                </div>
 
                                 <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-title">{{ __('Title') }}</label>
+                                    <label class="form-control-label" for="input-title">{{ __('Lesson Title') }}</label>
                                     <input type="text" name="title" id="input-title" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title', $lesson->title) }}" required autofocus>
 
                                     @include('alerts.feedback', ['field' => 'title'])
                                 </div>
-                                <?php //dd($topics[1]); ?>
-                                <?php //dd($lesson->topic); ?>
+                            
+                                <div class="form-group{{ $errors->has('type_id') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-type_id">{{ __('Type') }}</label>
+                                    <select name="type_id" id="input-type_id" class="form-control" placeholder="{{ __('Type') }}">
+                                        <option value="">-</option>
+                                        @foreach ($types as $type)
+                                            @if($type['id'] >= 150 && $type['id'] <= 161)
+                                            <option @if(isset($lesson->type[0]['id']) && $lesson->type[0]['id'] == $type['id']) selected @endif
+                                            value="{{ $type->id }}" > {{ $type->name }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+
+                                    @include('alerts.feedback', ['field' => 'type_id'])
+                                </div>
+
+
+                                <div class="form-group{{ $errors->has('body') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-vimeo_video">{{ __('Vimeo Video') }}</label>
+                                    <input type="text" name="vimeo_video" id="input-vimeo_video" class="form-control{{ $errors->has('vimeo_video') ? ' is-invalid' : '' }}" placeholder="{{ __('Vimeo Video') }}" value="{{ old('vimeo_video', $lesson->vimeo_video) }}" autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'vimeo_video'])
+                                </div>
+
+                                <div class="form-group{{ $errors->has('body') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-vimeo_duration">{{ __('Vimeo Duration') }}</label>
+                                    <input type="text" name="vimeo_duration" id="input-vimeo_duration" class="form-control{{ $errors->has('vimeo_duration') ? ' is-invalid' : '' }}" placeholder="{{ __('Vimeo Duration') }}" value="{{ old('vimeo_duration', $lesson->vimeo_duration) }}" autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'vimeo_duration'])
+                                </div>
 
                                 <div class="form-group{{ $errors->has('topic_id') ? ' has-danger' : '' }}">
                                     <div class="row">
@@ -100,80 +137,7 @@
                                     @include('alerts.feedback', ['field' => 'topic_id'])
                                 </div>
 
-                                <div class="form-group{{ $errors->has('type_id') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-type_id">{{ __('Type') }}</label>
-                                    <select name="type_id" id="input-type_id" class="form-control" placeholder="{{ __('Type') }}">
-                                        <option value="">-</option>
-                                        @foreach ($types as $type)
-                                            @if($type['id'] >= 150 && $type['id'] <= 161)
-                                            <option @if(isset($lesson->type[0]['id']) && $lesson->type[0]['id'] == $type['id']) selected @endif
-                                            value="{{ $type->id }}" > {{ $type->name }}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-
-                                    @include('alerts.feedback', ['field' => 'type_id'])
-                                </div>
-
-                                <div class="form-group{{ $errors->has('bold') ? ' has-danger' : '' }}">
-                                <label class="form-control-label" for="input-bold">{{ __('Bold') }}</label>
-                                <label class="custom-toggle custom-published toggle-bold">
-                                    <input name="bold" id="input-bold" type="checkbox" @if($lesson->bold) checked @endif>
-                                    <span class="custom-toggle-slider rounded-circle" data-label-off="off" data-label-on="on"></span>
-                                </label>
-                                @include('alerts.feedback', ['field' => 'bold'])
-                                </div>
-
-                                {{--<div class="form-group{{ $errors->has('htmlTitle') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-htmlTitle">{{ __('HTML Title') }}</label>
-                                    <input type="text" name="htmlTitle" id="input-htmlTitle" class="form-control{{ $errors->has('htmlTitle') ? ' is-invalid' : '' }}" placeholder="{{ __('HTML Title') }}" value="{{ old('Short title', $lesson->htmlTitle) }}" autofocus>
-
-                                    @include('alerts.feedback', ['field' => 'htmlTitle'])
-                                </div>
-
-                                <div class="form-group{{ $errors->has('subtitle') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-subtitle">{{ __('Subtitle') }}</label>
-                                    <input type="text" name="subtitle" id="input-subtitle" class="form-control{{ $errors->has('subtitle') ? ' is-invalid' : '' }}" placeholder="{{ __('subtitle') }}" value="{{ old('Subtitle', $lesson->subtitle) }}" autofocus>
-
-                                    @include('alerts.feedback', ['field' => 'subtitle'])
-                                </div>
-
-                                <div class="form-group{{ $errors->has('header') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-header">{{ __('Header') }}</label>
-                                    <input type="text" name="header" id="input-header" class="form-control{{ $errors->has('header') ? ' is-invalid' : '' }}" placeholder="{{ __('Header') }}" value="{{ old('header', $lesson->header) }}" autofocus>
-
-                                    @include('alerts.feedback', ['field' => 'header'])
-                                </div>
-
-                                <div class="form-group{{ $errors->has('summary') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-summary">{{ __('Summary') }}</label>
-                                    <textarea name="summary" id="input-summary"  class="ckeditor form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Summary') }}" required autofocus>{{ old('summary', $lesson->summary) }}</textarea>
-
-                                    @include('alerts.feedback', ['field' => 'summary'])
-                                </div>
-
-                                <div class="form-group{{ $errors->has('body') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-body">{{ __('Body') }}</label>
-                                    <textarea name="body" id="input-body"  class="ckeditor form-control{{ $errors->has('body') ? ' is-invalid' : '' }}" placeholder="{{ __('Body') }}" required autofocus>{{ old('body', $lesson->body) }}</textarea>
-
-                                    @include('alerts.feedback', ['field' => 'body'])
-                                </div>--}}
-
-                                <div class="form-group{{ $errors->has('body') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-vimeo_video">{{ __('Vimeo Video') }}</label>
-                                    <input type="text" name="vimeo_video" id="input-vimeo_video" class="form-control{{ $errors->has('vimeo_video') ? ' is-invalid' : '' }}" placeholder="{{ __('Vimeo Video') }}" value="{{ old('vimeo_video', $lesson->vimeo_video) }}" autofocus>
-
-                                    @include('alerts.feedback', ['field' => 'vimeo_video'])
-                                </div>
-
-                                <div class="form-group{{ $errors->has('body') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-vimeo_duration">{{ __('Vimeo Duration') }}</label>
-                                    <input type="text" name="vimeo_duration" id="input-vimeo_duration" class="form-control{{ $errors->has('vimeo_duration') ? ' is-invalid' : '' }}" placeholder="{{ __('Vimeo Duration') }}" value="{{ old('vimeo_duration', $lesson->vimeo_duration) }}" autofocus>
-
-                                    @include('alerts.feedback', ['field' => 'vimeo_duration'])
-                                </div>
-
-
+                            
                                 <div class="form-group">
                                     <button class="btn btn-primary add-dynamic-link" type="button">Add Link</button>
                                     <div id="dynamic-link">

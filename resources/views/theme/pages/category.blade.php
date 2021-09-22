@@ -157,11 +157,23 @@
                               </div>
                               <?php //dd($row['ticket'][0]['pivot']['price']); ?>
                               <div class="right">
-                                 <?php  if (isset($row['ticket'][0]['pivot']['price'])) {
-                                    $price = $row['ticket'][0]['pivot']['price'];
+                                 <?php  
+                                 
+                                    if (isset($row['ticket']->where('type','Early Bird')->first()->pivot->price) && 
+                                                $row['ticket']->where('type','Early Bird')->first()->pivot->price > 0 && 
+                                                   $row['ticket']->where('type','Early Bird')->first()->pivot->quantity > 0) {
 
+                                       $price = $row['ticket']->where('type','Early Bird')->first()->pivot->price;
+
+                                    }else if(isset($row['ticket']->where('type','Special')->first()->pivot->price) && 
+                                                      $row['ticket']->where('type','Special')->first()->pivot->price > 0 && 
+                                                         $row['ticket']->where('type','Special')->first()->pivot->quantity > 0){
+                                                            
+                                       $price = $row['ticket']->where('type','Special')->first()->pivot->price;
                                     }
-                                    else { $price = 0; }
+                                    else { 
+                                       $price = 0; 
+                                    }
                                  ?>
                                  <?php $etstatus = 0 ?>
                                  <?php //dd($row['status']); ?>

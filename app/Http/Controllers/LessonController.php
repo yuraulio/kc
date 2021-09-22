@@ -14,6 +14,7 @@ use App\Http\Requests\LessonRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Validator;
+use Vimeo\Vimeo;
 
 class LessonController extends Controller
 {
@@ -103,6 +104,19 @@ class LessonController extends Controller
         $request->request->add(['status' => $status, 'links' => $links,'bold'=>$bold]);
 
         $lesson = $model->create($request->all());
+
+        $vimeoVideo = explode("/",$lesson->vimeo_video);
+        $duration = 0;       
+
+        $client = new Vimeo(env('client_id'), env('client_secret'), env('vimeo_token'));
+        $response = $client->request("/videos/". end($vimeoVideo) . "/?password=".env('video_password'), array(), 'GET');
+
+        if($response['status'] === 200){
+            $duration = $response['body']['duration'];
+            $lesson->vimeo_duration = $this->formatDuration($duration);
+            $lesson->save();
+        }
+
         if($request->topic_id != null){
             
             foreach($request->topic_id as $topic){
@@ -435,6 +449,18 @@ class LessonController extends Controller
 
         $lesson_id = $lesson['id'];
         $lesson->update($request->all());
+
+        $vimeoVideo = explode("/",$lesson->vimeo_video);
+        $duration = 0;       
+
+        $client = new Vimeo(env('client_id'), env('client_secret'), env('vimeo_token'));
+        $response = $client->request("/videos/". end($vimeoVideo) . "/?password=".env('video_password'), array(), 'GET');
+
+        if($response['status'] === 200){
+            $duration = $response['body']['duration'];
+            $lesson->vimeo_duration = $this->formatDuration($duration);
+            $lesson->save();
+        }
         
         if($request->topic_id != null){
             //$lesson->topic()->detach();
@@ -473,7 +499,7 @@ class LessonController extends Controller
                             $duration = $allLessons[$lesson['id']][0]['pivot']['duration'];
                             $room = $allLessons[$lesson['id']][0]['pivot']['room'];
                             $instructor_id = $allLessons[$lesson['id']][0]['pivot']['instructor_id'];
-                            //$priority = $priority;
+                            $priority = $allLessons[$lesson['id']][0]['pivot']['priority'];
                         }
 
                         //if(!in_array($lesson['id'],$allLessons)){
@@ -503,6 +529,26 @@ class LessonController extends Controller
 
         return back()->withStatus(__('Lesson successfully updated.'));
         //return redirect()->route('lessons.index')->withStatus(__('Lesson successfully updated.'));
+    }
+
+
+    private function formatDuration($duration){
+        $duration = gmdate("H:i:s", $duration);
+        $duration = explode(":",$duration);
+
+        $finalFormat = '';
+
+        if($duration[0]!="00"){
+            $finalFormat = $finalFormat . $duration[0]."h ";
+        }
+        if($duration[1]!="00"){
+            $finalFormat =  $finalFormat . $duration[1]."m ";
+        }
+
+        if($duration[2]!="00"){
+            $finalFormat = $finalFormat . $duration[2]."s";
+        }
+        return trim($finalFormat);
     }
 
     /**

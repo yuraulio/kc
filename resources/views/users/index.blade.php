@@ -124,9 +124,9 @@
                                             <span class="avatar avatar-sm rounded-circle">
 
                                             @if($user['image'] != null && $user['image']['name'] != '')
-                                                <img src="{{ cdn(get_image($user['image'])) }}" alt="{{ $user['firstname'] }}" style="max-width: 100px; border-radiu: 25px">
+                                                <img src="{{ cdn(get_image($user['image'])) }}" alt="{{ $user['firstname'] }}" onerror="this.src='{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}'" style="max-width: 100px; border-radiu: 25px">
                                             @else
-                                            <img src="" alt="{{ $user['firstname'] }}" style="max-width: 100px; border-radius: 25px">
+                                            <img src="{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}" alt="{{ $user['firstname'] }}" style="max-width: 100px; border-radius: 25px">
                                             @endif
                                             </span>
                                         </td>
@@ -229,9 +229,7 @@
                 }
             },
             dom: 'Bfrtip',
-            buttons: [
-                'csvHtml5',
-            ]
+            
         });
 
         table.on( 'search.dt', function () {

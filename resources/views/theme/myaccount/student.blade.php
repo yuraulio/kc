@@ -800,7 +800,7 @@
                                     </div>
                                  </div>
                                  <?php
-                                    $dropbox = $event['category'][0]['dropbox'][0];
+                                    $dropbox = isset($event['category'][0]['dropbox'][0]) ? $event['category'][0]['dropbox'][0] : [];
                                     //dd($dropbox);
                                     $folders = isset($dropbox['folders'][0]) ? $dropbox['folders'][0] : [];
                                     //dd($folders);
