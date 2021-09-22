@@ -73,14 +73,14 @@ if (!function_exists('check_for_slug')) {
 
 if (!function_exists('get_status_by_slug')){
 
-    function get_status_by_slug($slug){
+    function get_status_by_slug($slugg){
 
-        $slug = Slug::where('slug',$slug)->first();
-
-        if(isset($slug) && (get_class($slug->slugable) == 'App\\Model\\Pages' || get_class($slug->slugable) == 'App\\Model\\Event')){
+        $slug = Slug::where('slug',$slugg)->first();
+        
+        if($slug && $slug->slugable && (get_class($slug->slugable) == 'App\\Model\\Pages' || get_class($slug->slugable) == 'App\\Model\\Event')){
             return $slug->slugable->published;
         }
-
+        
         return true;
 
     }

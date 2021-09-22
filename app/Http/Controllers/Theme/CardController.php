@@ -97,6 +97,16 @@ class CardController extends Controller
             //\Session::flash('stripe-error',$e->getMessage());
 
         }
+        catch(\Stripe\Exception\CardException $e) {
+
+            return response()->json([
+                'success' => false,
+              	'message' => $e->getMessage()
+
+              ]);
+            //\Session::flash('stripe-error',$e->getMessage());
+
+        }
 
     }
 
@@ -298,6 +308,11 @@ class CardController extends Controller
               ]);
             //\Session::flash('stripe-error',$e->getMessage());
 
+        }catch(\Stripe\Exception\CardException $e) {
+            //dd($e);
+            \Session::put('dperror',$e->getMessage());
+            //return redirect('/info/order_error');
+            return '/cart';
         }
 
     }

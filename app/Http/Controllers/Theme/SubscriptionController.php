@@ -195,6 +195,9 @@ class SubscriptionController extends Controller
             \Session::put('dperror',$e->getMessage());
             //return redirect('/info/order_error');
             return back();
+        }catch(\Stripe\Exception\CardException $e) {
+            \Session::put('dperror',$e->getMessage());
+            return back();
         }
     }
 
