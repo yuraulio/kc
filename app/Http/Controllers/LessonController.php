@@ -409,7 +409,7 @@ class LessonController extends Controller
 
         $this->validate($request, [
             'category' => 'required',
-            'topic_id' => 'required',
+            //'topic_id' => 'required',
         ]);
 
         $arr = array();
@@ -461,7 +461,6 @@ class LessonController extends Controller
             $lesson->vimeo_duration = $this->formatDuration($duration);
             $lesson->save();
         }
-        
         if($request->topic_id != null){
             //$lesson->topic()->detach();
             foreach($request->topic_id as $topic)
@@ -518,9 +517,21 @@ class LessonController extends Controller
                     }
 
                 }
-                
+                    
+            }
 
-                
+        }else{
+
+
+            $category = Category::find($request->category);
+
+            $allEvents = $category->events;
+            foreach($allEvents as $event)
+            {
+                           
+                $event->allLessons()->detach($lesson['id']);              
+                $lesson->topic()->wherePivot('category_id',$request->category)->detach();
+    
             }
         }
 
@@ -557,7 +568,7 @@ class LessonController extends Controller
      * @param  \App\Model\Lesson  $lesson
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Lesson $lesson)
+    /*public function destroy(Lesson $lesson)
     {
 
         if(count($lesson->topic) > 1){
@@ -574,6 +585,40 @@ class LessonController extends Controller
             return redirect()->route('lessons.index')->withErrors(__('Lesson cannot be delete because is attached to more than one topics.<br>'. $catgegoriesAssignded));
         }
         $lesson->deletee();
+
+        return redirect()->route('lessons.index')->withStatus(__('Lesson successfully deleted.'));
+    }*/
+
+    public function destroy(Request $request, Lesson $lesson)
+    {
+
+        $error = false;
+        $categoriesAssignded = '';
+        foreach($request->lessons as $lesson){
+            $lesson = Lesson::find($lesson);
+
+            if(count($lesson->topic) > 1){
+                $error = true;
+                $categoriesAssignded .= 'Lesson <strong>'. $lesson->title .'</strong> cannot be delete because is attached to more than one topics.<br>';
+               
+                foreach($lesson->topic as $key => $topic){
+                
+                    $categoriesAssignded .= $lesson->category[$key]['name'] . ' => ' . $topic->title . '<br> ';
+    
+                   
+                }
+                $categoriesAssignded .= '<br>';
+                //return redirect()->route('lessons.index')->withErrors(__('Lesson cannot be delete because is attached to more than one topics.<br>'. $catgegoriesAssignded));
+            }else{
+                $lesson->deletee();
+
+            }
+
+        }
+
+        if($error){
+            return redirect()->route('lessons.index')->withErrors($categoriesAssignded);
+        }
 
         return redirect()->route('lessons.index')->withStatus(__('Lesson successfully deleted.'));
     }

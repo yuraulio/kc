@@ -142,11 +142,11 @@
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                                                     <a class="dropdown-item" href="{{ route('lessons.edit', $lesson) }}">{{ __('Edit') }}</a>
-                                                    <form action="{{ route('lessons.destroy', $lesson) }}" method="post">
+                                                    <form id="deleteLesson" action="{{ route('lessons.destroy', $lesson) }}" method="post">
                                                         @csrf
                                                         @method('delete')
 
-                                                        <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this lesson?") }}') ? this.parentElement.submit() : ''">
+                                                        <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this lesson?") }}') ? deleteLesson() : ''">
                                                             {{ __('Delete') }}
                                                         </button>
                                                     </form>
@@ -776,6 +776,29 @@
         });
 
        
+    }
+
+</script>
+
+<script>
+
+    function deleteLesson(){
+        let lessons = [];
+        $('.check-lesson').each(function(index, value) {
+            if ($(this).is(':checked')) {
+                lessons.push($(this).data('lesson-id'))
+            }
+        });
+
+        let lessonsInput = '';
+        $.each( lessons, function( key, value ) {
+            lessonsInput += `<input class="hidden" name="lessons[]" value="${value}">`
+        });
+
+        $("#deleteLesson").append(lessonsInput);
+
+        $("#deleteLesson").submit();
+
     }
 
 </script>

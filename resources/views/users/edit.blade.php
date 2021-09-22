@@ -104,7 +104,7 @@
                         </form>
                         @endif
 
-                        @if(!$user->partner_id)
+                        {{--@if(!$user->partner_id)
                         <form class="pad-left" method="post" action="{{ route('create-deree') }}" autocomplete="off"
                                 enctype="multipart/form-data">
                                 @csrf
@@ -112,7 +112,7 @@
                                 <button class="btn btn-primary" type="submit">Create Deree </button>
                         </form>
                         
-                        @endif
+                        @endif--}}
                     </div>
                     <form method="post" action="{{ route('profile.update') }}" autocomplete="off"
                         enctype="multipart/form-data">

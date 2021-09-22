@@ -115,7 +115,7 @@
 
                                         <div class="col-12 topic-list">
                                             <label class="form-control-label" for="input-topic_id">{{ __('Topic') }}</label>
-                                            <select multiple name="topic_id[]" id="input-topic_id" class="form-control topics" placeholder="{{ __('Topic') }}" required>
+                                            <select multiple name="topic_id[]" id="input-topic_id" class="form-control topics" placeholder="{{ __('Topic') }}">
 
                                                 @foreach ($topics as $topic)
                                                 <?php $selected = false; ?>

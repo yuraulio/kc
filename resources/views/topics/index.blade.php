@@ -133,6 +133,7 @@
                                         <table class="table align-items-center table-flush datatable-basic39">
                                             <thead class="thead-light">
                                                 <tr>
+                                                    <th scope="col">{{ __('Select') }}</th>
                                                     <th scope="col">{{ __('Status') }}</th>
                                                     <th scope="col">{{ __('Title') }}</th>
                                                     <th class="hidden" scope="col">{{ __('Assigned Category') }}</th>
@@ -145,6 +146,13 @@
                                         
                                                 @foreach ($category->topics as $topic)
                                                     <tr class="topic-list">
+                                                        <td> 
+                                                            <div class="input-group-prepend lesson-select">
+                                                                <div class="input-group-text">
+                                                                    <input data-topic-id="{{$topic->id}}" class="check-topic" type="checkbox" aria-label="Checkbox for following text input">
+                                                                </div>
+                                                            </div> 
+                                                        </td>
                                                         <td><?= ($topic->status == 1) ? 'Published' : 'Unpublished'; ?></td>
                                                         <td> <a href="{{ route('topics.edit', $topic) }}">{{ $topic->title }}</a></td>
                                                         <td class="hidden">
@@ -165,11 +173,11 @@
 
                                                                                 <a class="dropdown-item" href="{{ route('topics.edit', $topic) }}">{{ __('Edit') }}</a>
 
-                                                                                <form action="{{ route('topics.destroy', $topic) }}" method="post">
+                                                                                <form id="deleteTopic" action="{{ route('topics.destroy', $topic) }}" method="post">
                                                                                     @csrf
                                                                                     @method('delete')
-
-                                                                                    <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
+                                                                                    {{-- this.parentElement.submit() --}}
+                                                                                    <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this topics?") }}') ? deleteTopics() : ''">
                                                                                         {{ __('Delete') }}
                                                                                     </button>
                                                                                 </form>
@@ -408,4 +416,28 @@
     }
 
 </script>
+
+<script>
+
+    function deleteTopics(){
+        let topics = [];
+        $('.check-topic').each(function(index, value) {
+            if ($(this).is(':checked')) {
+                topics.push($(this).data('topic-id'))
+            }
+        });
+
+        let topicsInput = '';
+        $.each( topics, function( key, value ) {
+            topicsInput += `<input class="hidden" name="topics[]" value="${value}">`
+        });
+
+        $("#deleteTopic").append(topicsInput);
+
+        $("#deleteTopic").submit();
+
+    }
+
+</script>
+
 @endpush

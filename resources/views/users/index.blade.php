@@ -228,8 +228,7 @@
                 previous: '&#171;' // or '←'
                 }
             },
-            dom: 'Bfrtip',
-            
+        
         });
 
         table.on( 'search.dt', function () {

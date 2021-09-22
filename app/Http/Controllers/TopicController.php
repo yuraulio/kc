@@ -179,13 +179,13 @@ class TopicController extends Controller
      * @param  \App\Model\Topic  $topic
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Topic $topic)
+    /*public function destroy(Topic $topic)
     {
         /*if (!$topic->category->isEmpty()) {
             return redirect()->route('topics.index')->withErrors(__('This topic has items attached and can\'t be deleted.'));
         }*/
 
-        if( count($topic->category) > 1){
+        /*if( count($topic->category) > 1){
             $catgegoriesAssignded = '';
             foreach($topic['category'] as $category){
             
@@ -201,6 +201,42 @@ class TopicController extends Controller
         $topic->delete();
 
         return redirect()->route('topics.index')->withStatus(__('topic successfully deleted.'));
+    }*/
+
+    public function destroy(Request $request, Topic $topic)
+    {
+       
+        $catgegoriesAssignded = '';
+        $error = false;
+
+        foreach($request->topics as $topic){
+            $topic = Topic::find($topic);
+
+            if( count($topic->category) > 1){
+                $error = true;
+
+                $catgegoriesAssignded .= 'The topic <strong>' . $topic->title . '</strong> cannot be delete because is attached to more than one categries.<br>';
+
+                foreach($topic['category'] as $category){
+                    
+                    $catgegoriesAssignded .= $category['name'] . '<br>';
+    
+                }
+
+                $catgegoriesAssignded .= '<br>';
+    
+            }else{
+                $topic->delete();
+            }
+
+        }
+
+
+        if($error){
+            return redirect()->route('topics.index')->withErrors($catgegoriesAssignded);
+        }
+
+        return redirect()->route('topics.index')->withStatus(__('Topics successfully deleted.'));
     }
 
     public function orderTopic(Request $request){
