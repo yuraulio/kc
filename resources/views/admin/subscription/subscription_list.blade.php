@@ -39,7 +39,6 @@
                         @include('alerts.errors')
                     </div>
 
-                    <?php //dd($transactions[0]); ?>
 
                     <div class="table-responsive py-4">
 
@@ -56,8 +55,10 @@
                                     <label>Status</label>
                                     <select data-toggle="select" data-live-search="true" class="column_filter" id="col4_filter" placeholder="Status">
                                         <option selected value> -- All -- </option>
-                                        <option value="1"> ACTIVE </option>
-                                        <option value="0"> INACTIVE </option>
+                                        <option value="active"> Paid </option>
+                                        <option value="trialing"> Trial </option>
+                                        <option value="cancel"> Cancelled </option>
+
                                     </select>
                                 </div>
 
@@ -150,27 +151,20 @@
                                 </tr>
                             </tfoot>
                             <tbody>
-                                @foreach ($new_sub as $item)
+                                @foreach ($subscriptions as $item)
                                     <tr>
                                         <td>
                                             {{ $item['id'] }}
                                         </td>
                                         <td>
-                                            <?php
-                                                $user = $item['user'][0];
-                                            ?>
-                                            {{ $user['firstname']}} {{ $user['lastname']}}
+                                            {{ $item['user'] }}
                                         </td>
-                                        <td>{{$item['subscription'][0]['plan_name']}}</td>
-                                        <td>{{ $item['subscription'][0]['event'][0]['title'] }}</td>
-
+                                        <td>{{$item['plan_name']}}</td>
+                                        <td>{{ $item['event_title'] }}</td>
                                         <td>{{ $item['status'] }}</td>
-
-
-
                                         <td>{{ $item['ends_at'] }}</td>
-                                        <td><?= '€'.number_format(intval($item['total_amount']), 2, '.', ''); ?></td>
-                                        <td class="d-none"><?= date_format(date_create($item['created_at']),'m/d/Y'); ?></td>
+                                        <td>{{ $item['amount'] }}</td>
+                                        <td class="d-none">{{ $item['created_at'] }}</td>
 
 
                                     </tr>
@@ -279,7 +273,7 @@
 
         // DataTables initialisation
         var table = $('#subscriptions_table').DataTable({
-            "order": [[ 4, "desc" ]],
+            "order": [[ 7, "desc" ]],
             language: {
                 paginate: {
                 next: '&#187;', // or '→'

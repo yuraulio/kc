@@ -86,9 +86,7 @@ class TransactionController extends Controller
 
     }*/
 
-    
-public function participants($start_date = null, $end_date = null)
-    {
+    public function participants($start_date = null, $end_date = null){
         $userRole = Auth::user()->role->pluck('id')->toArray();
 
         if($start_date && $end_date){

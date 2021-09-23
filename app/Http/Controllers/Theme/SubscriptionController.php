@@ -226,12 +226,14 @@ class SubscriptionController extends Controller
 
         if($request->status == 'Cancel'){
             $subscription->status = false;
+            $subscription->stripe_status = 'cancel';
             $subscription->save();
             $subscription = $subscription->cancel();
          
 
         }else if($request->status == 'Active'){
             $subscription->status = true;
+            $subscription->stripe_status = 'active';
             $subscription->save();
             $subscription = $subscription->resume();
            

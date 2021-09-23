@@ -367,7 +367,7 @@ class CronjobsController extends Controller
     }
 
     public function updateStatusField(){
-        $subscriptions = Subscription::where('stripe_status','canceled')->get();
+        $subscriptions = Subscription::whereIn('stripe_status',['canceled','cancel'])->get();
 
         foreach($subscriptions as $subscription){
             $subscription->status = false;

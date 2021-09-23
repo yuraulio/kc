@@ -934,6 +934,7 @@
                                  </div>
                                  @endif
                                  @if(isset($event['exams']) && count($event['exams']) >0 )
+                                 <?php $nowTime = \Carbon\Carbon::now(); ?>
                                  <div id="c-exams-inner{{$tab}}" class="in-tab-wrapper">
                                     <div class="dynamic-courses-wrapper dynamic-courses-wrapper--style2">
                                        <div class="bottom">
