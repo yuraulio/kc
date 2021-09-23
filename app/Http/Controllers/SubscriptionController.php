@@ -21,20 +21,22 @@ class SubscriptionController extends Controller
         $data['subscriptions'] = Transaction::with('user', 'subscription.event')->get()->toArray();
         $plans = Plan::all()->groupby('stripe_plan');
 
-        $status = $sub['subscription'][0]['stripe_status'];
-
-        if($status == 'canceled'){
-            $status = 'cancel';
-        }
+        
 
         foreach($data['subscriptions'] as $key => $sub){
 
             if(count($sub['subscription']) != 0){
+
+                $status = $sub['subscription'][0]['stripe_status'];
+
+                if($status == 'cancel'){
+                    $status = 'canceled';
+                }
                
                 $name = $sub['user'][0]['firstname'] . ' ' . $sub['user'][0]['lastname'];
                 $amount = '€'.number_format(intval($sub['total_amount']), 2, '.', '');
                 $subscriptions[]=['user' => $name, 'plan_name' => $sub['subscription'][0]['name'], 
-                    'event_title' => $sub['subscription'][0]['event'][0]['title'], 'status' => $sub['subscription'][0]['stripe_status'],'ends_at'=>$sub['ends_at'],
+                    'event_title' => $sub['subscription'][0]['event'][0]['title'], 'status' => $status,'ends_at'=>$sub['ends_at'],
                     'amount' => $amount,'created_at'=>$sub['created_at'],'id'=>$sub['id']];
 
             }
