@@ -741,8 +741,11 @@ class CartController extends Controller
                         ;*/
 
                         $charge = $dpuser->newSubscription($name, $plan->id)->create($dpuser->defaultPaymentMethod()->id,
-                        ['email' => $dpuser->email],
-                                    ['metadata' => ['installments_paid' => 0, 'installments' => $installments]]);
+                                    ['email' => $dpuser->email],
+                                    ['metadata' => ['installments_paid' => 0, 'installments' => $installments],
+                                    'off_session' => true,                                
+                                    ],
+                                );
 
                         $charge->metadata = json_encode(['installments_paid' => 0, 'installments' => $installments]);
                         $charge->price = $instamount;
@@ -789,7 +792,7 @@ class CartController extends Controller
                         'description' => $nevent,
                         'customer' => $dpuser->stripe_id,
                         'metadata' => $temp,
-
+                        'off_session' => true,
                     ]
                 );
 
