@@ -538,6 +538,9 @@ Route::group(['middleware' => ['web']], function () {
     
 });
 
+//Route::get('/stripe/payment/{id}/{paymentMethod}', 'PaymentController@show')->name('payment');
+Route::get('/stripe/payment/{id}/{paymentMethod}/{input}', '\Laravel\Cashier\Http\Controllers\PaymentController@show')->name('payment');
+
 Route::group(['middleware' => ['preview','web','auth.sms']], function () {
 
     Route::get('/regularly-mentioned-in-media', function(){

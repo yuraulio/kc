@@ -24,6 +24,8 @@ use Laravel\Cashier\Payment;
 use App\Model\CartCache;
 use Mail;
 use App\Model\Option;
+use Laravel\Cashier\Exceptions\IncompletePayment;
+use Illuminate\Support\Facades\Http;
 
 class CartController extends Controller
 {
@@ -741,8 +743,11 @@ class CartController extends Controller
                         ;*/
 
                         $charge = $dpuser->newSubscription($name, $plan->id)->create($dpuser->defaultPaymentMethod()->id,
-                        ['email' => $dpuser->email],
-                                    ['metadata' => ['installments_paid' => 0, 'installments' => $installments]]);
+                                    ['email' => $dpuser->email],
+                                    ['metadata' => ['installments_paid' => 0, 'installments' => $installments],
+                                    'off_session' => true,                                
+                                    ],
+                                );
 
                         $charge->metadata = json_encode(['installments_paid' => 0, 'installments' => $installments]);
                         $charge->price = $instamount;
@@ -778,20 +783,43 @@ class CartController extends Controller
 
                 $temp['customer'] = $dpuser->email;
                 $nevent = $ev_title . ' ' . $ev_date_help;
-                $dpuser->stripe_id;
-                 $charge = $dpuser->charge(
-                    $stripeAmount,
-                    $dpuser->defaultPaymentMethod()->id,
-                    [
+            
 
-                        'currency' => 'eur',
-                        'amount' => $stripeAmount,
-                        'description' => $nevent,
-                        'customer' => $dpuser->stripe_id,
-                        'metadata' => $temp,
+                try {
+                    $dpuser->stripe_id;
+                    $charge = $dpuser->charge(
+                       $stripeAmount,
+                       $dpuser->defaultPaymentMethod()->id,
+                       [
+   
+                           'currency' => 'eur',
+                           'amount' => $stripeAmount,
+                           'description' => $nevent,
+                           'customer' => $dpuser->stripe_id,
+                           'metadata' => $temp,
+                           //'off_session' => true,
+                       ]
+                   );
+                } catch (IncompletePayment $exception) {
 
-                    ]
-                );
+                    $payment_method_id = -1;
+                    if($ev->paymentMethod->first()){
+                        
+                        $payment_method_id = $ev->paymentMethod->first()->id;
+                           
+                    }
+
+                    //return Http::withOptions(['verify' => false])->post(url('/').'/stripe/payment/'.$exception->payment->id, $input);
+
+//                    $client = new Client(['base_uri' => url('/')]);
+
+ //                   $response = $client->request('post',  url('/'). '/s');
+                    $input = encrypt($input);
+                    return route('cashier.payment',[$exception->payment->id,$payment_method_id,$input]);
+                    //return '/stripe/payment/'.$exception->payment->id;
+
+                }
+
 
             }
 
