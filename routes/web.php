@@ -539,7 +539,8 @@ Route::group(['middleware' => ['web']], function () {
 });
 
 //Route::get('/stripe/payment/{id}/{paymentMethod}', 'PaymentController@show')->name('payment');
-Route::get('/stripe/payment/{id}/{paymentMethod}/{input}', '\Laravel\Cashier\Http\Controllers\PaymentController@show')->name('payment');
+Route::get('/stripe/payment/{id}/{input}', '\Laravel\Cashier\Http\Controllers\PaymentController@show')->name('payment');
+Route::post('/stripe/payment/securee', 'Theme\CartController@securePayment')->name('payment.secure');
 
 Route::group(['middleware' => ['preview','web','auth.sms']], function () {
 

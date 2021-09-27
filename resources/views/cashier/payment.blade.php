@@ -10,6 +10,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"></script>
     <script src="https://js.stripe.com/v3"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body class="font-sans text-gray-600 bg-gray-100 leading-normal p-4 h-full">
     <div id="app" class="h-full md:flex md:justify-center md:items-center">
@@ -231,6 +232,7 @@
 
             methods: {
                 configurePayment: function (paymentIntent) {
+
                     // Set the payment intent object...
                     this.paymentIntent = paymentIntent;
 
@@ -248,6 +250,9 @@
                             paymentMethod => paymentMethod.type === type
                         )[0];
                     }
+
+                   
+
                 },
 
                 configureStripeElements: function () {
@@ -286,16 +291,19 @@
                         setup_future_usage: this.paymentMethod.remember && this.remember
                             ? 'off_session'
                             : null,
+                        
+                        //setup_future_usage: 'off_session',
                         payment_method: {
-                            billing_details: { name: this.name, email: this.email }
-                        }
+                            billing_details: { name: this.name, email: this.email },
+                        },
+                        
                     };
                     let paymentPromise;
 
                     // Set a return url to redirect the user back to the payment
                     // page after handling the off session payment confirmation.
                     if (this.paymentMethod.redirects) {
-                        data.return_url = '{{ route('userPaySbt', $input) }}';
+                        data.return_url = '{{ route('payment.secure', $input) }}';
                     }
 
                     if (this.paymentMethod.type === 'card') {
@@ -338,8 +346,9 @@
                         paymentPromise = stripe.confirmSepaDebitPayment(secret, data);
                     }
                     
+                    
                     paymentPromise.then(result => this.confirmCallback(result));
-                    window.location.href = '{{ route('userPaySbt', $input) }}';
+                    
                 },
 
                 confirmCallback: function (result) {
@@ -353,12 +362,29 @@
                         }
 
                         if (result.error.payment_intent) {
+
+                            const dataa = {'input':"{{$input}}", 'paymentIntent':result.paymentIntent};
+                            axios.post('{{route("payment.secure")}}', dataa)
+                                .then(response => element.innerHTML = response.data.id);
+                            
+
                             this.configurePayment(result.error.payment_intent);
 
                             this.configureStripeElements();
                         }
                     } else {
+
                         this.configurePayment(result.paymentIntent);
+
+                        const dataa = {'input':"{{$input}}", 'paymentIntent':result.paymentIntent};
+                        axios.post('{{route("payment.secure")}}', dataa)
+                            .then(function(response){
+
+                                if(response.data.success == true){
+                                    window.location.href = response.data.redirect;
+                                }
+
+                            });
                     }
                 },
 

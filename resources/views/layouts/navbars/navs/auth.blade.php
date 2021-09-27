@@ -130,6 +130,37 @@
         })
     })
 
+    $(document).on("click", "#update-feed-btn", function(){
+
+        window.swal({
+            title: "Feed Updating...",
+            text: "Please wait",
+            showConfirmButton: false,
+            allowOutsideClick: false
+        });
+
+        $.ajax({
+        
+        type: 'get',
+        url: 'fb-google-csv',
+        
+        success: function (data) {
+            
+            window.swal({
+                title: "Finished!",
+                showConfirmButton: false,
+                timer: 2000
+            });
+            
+        },
+        error: function() {
+            //console.log(data);
+        }
+
+
+        })
+    })
+
         $(document).on('keyup',"#search-user",function(){
 
             if(!$(this).val()){

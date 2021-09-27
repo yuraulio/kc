@@ -86,7 +86,7 @@
                </header>
                <!-- ./sidebar-header -->
                <div class="searchbar-wrapper">
-                  <form class="searchbar" action="/">
+                  <form class="searchbar" action="javascript:void(0);">
                      <label for="search">Search: </label>
                      <input
                         class="jsSearchInput"

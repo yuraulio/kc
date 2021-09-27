@@ -21,6 +21,7 @@ use App\Model\Activation;
 use App\Model\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use \Carbon\Carbon;
 
 class InfoController extends Controller
 {
@@ -558,6 +559,14 @@ class InfoController extends Controller
             $user->country_code = $member['country_code'];
     		$user->job_title = $pay_seats_data['jobtitles'][$key];
     		$user->company = $pay_seats_data['companies'][$key];
+
+            $connow = Carbon::now();
+            $clientip = '';
+            $clientip = \Request::ip();
+            $user->terms = 1;
+            $user->consent = '{"ip": "' . $clientip . '", "date": "'.$connow.'" }';
+
+
             if(isset($deree_user_data[$value])) {
                 $user->partner_id = $deree_user_data[$value];
             }

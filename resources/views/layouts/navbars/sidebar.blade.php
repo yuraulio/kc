@@ -115,6 +115,9 @@
                                     <li class="nav-item">
                                         <a href="javascript:void(0)" id="update-btn" class="nav-link">{{ __('Update Dropbox') }}</a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a href="javascript:void(0)" id="update-feed-btn" class="nav-link">{{ __('Update Feed') }}</a>
+                                    </li>
 
                             </ul>
                         </div>

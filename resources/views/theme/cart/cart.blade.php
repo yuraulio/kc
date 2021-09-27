@@ -1452,10 +1452,13 @@ if(!isset($info)){
       var cardButton = document.getElementById('card-button');
       var clientSecret = cardButton.dataset.secret;
       let { setupIntent, error } = await stripe.confirmCardSetup(
+           
            clientSecret, {
+            
                payment_method: {
                    card: cardElement,
-                   billing_details: { name: cardHolderName.value }
+                   billing_details: { name: cardHolderName.value },
+                   usage:'off_session',
                }
            }
        ).then(function (result) {

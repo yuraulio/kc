@@ -49,6 +49,16 @@
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
                           
+                                @if($event->is_inclass_course() && isset($slug))
+                                <div class="form-group">
+                                    <label class="form-control-label" for="input-method">{{ __('Syllabus Pdf') }}</label>
+                                    <div class="form-group">
+
+                                        <a target="_blank" href="/print/syllabus/{{$slug->slug}}" id="syllabus-pdf" class="btn btn-primary">Get Pdf</a>
+
+                                    </div>
+                                </div>
+                                @endif
                                 <div class="form-group">
                                     <label class="form-control-label" for="input-method">{{ __('Enroll Students to E-Learning') }}</label>
                                     <div style="margin: auto;" class="form-group">
@@ -1005,6 +1015,12 @@ var datePickerOptions = {
 
 
 </script>
+
+{{--<script>
+    $("#syllabus-pdf").click(function(){
+        window
+    })
+</script>--}}
 
 
 

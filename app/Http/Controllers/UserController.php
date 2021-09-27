@@ -395,6 +395,13 @@ class UserController extends Controller
         $user = User::find($user['id']);
         $user->role()->sync($request->role_id);
 
+        $connow = Carbon::now();
+        $clientip = '';
+        $clientip = \Request::ip();
+
+        $user->consent = '{"ip": "' . $clientip . '", "date": "'.$connow.'" }';
+        $user->save();
+
         $user->notify(new userActivationLink($user,'activate'));
 
         return redirect()->route('user.edit', $user->id)->withStatus(__('User successfully created.'));

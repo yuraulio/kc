@@ -29,10 +29,10 @@ class PaymentController extends Controller
      * @param  string  $id
      * @return \Illuminate\Contracts\View\View
      */
-    public function show($id,$paymentMethod,$input)
+    public function show($id,$input)
     {
-        
-        //$paymentMethod = 3;
+        $input = decrypt($input);
+        $paymentMethod = $input['paymentMethod'];
         session()->put('payment_method',$paymentMethod);
         $paymentMethod = PaymentMethod::find($paymentMethod);
 
@@ -47,7 +47,7 @@ class PaymentController extends Controller
         ]);
 
         $paymentIntent['payment_method'] = Arr::only($paymentIntent['payment_method'] ?? [], 'id');
-        $input = decrypt($input);
+        $input = encrypt($input);
        
         return view('cashier.payment', [
             'stripeKey' => env('PAYMENT_PRODUCTION') ? $paymentMethod->processor_options['key'] : $paymentMethod->test_processor_options['key'],

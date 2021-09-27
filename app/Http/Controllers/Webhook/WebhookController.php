@@ -30,6 +30,10 @@ class WebhookController extends BaseWebhookController
         }
 	}
 
+	public function handlePaymentIntentRequiresAction(array $payload){
+		return $payload;
+	}
+
 	private function installments($payload,$sub,$user){
 	
 		$count = $sub['metadata']['installments_paid'];
