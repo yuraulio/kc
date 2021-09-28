@@ -212,7 +212,6 @@
             const data = {
                 labels: ['correct','wrong'],
                     datasets: [{
-                    labels: ,
                     data: [score,100-score],
                     backgroundColor: [
                       'red',

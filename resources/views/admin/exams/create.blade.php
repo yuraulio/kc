@@ -21,12 +21,19 @@
             <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i>Settings</a>
          </li>
          @if($edit)
-         <li class="nav-item">
-            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#questions" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Content</a>
-         </li>
-         <li class="nav-item">
-            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#results" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i> Results</a>
-         </li>
+            <li class="nav-item">
+               <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#questions" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Content</a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#results" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i> Results</a>
+            </li>
+            
+            @if(count($liveResults)>0)
+               <li class="nav-item">
+                  <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#live_result" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i> Live Result</a>
+               </li>
+            @endif
+
          @endif
       </ul>
    </div>
@@ -374,6 +381,85 @@
             </tbody>
          </table>
       </div>
+
+      @if(count($liveResults)>0)
+         <?php
+            $duration = $exam->duration;
+            $hours = intval($duration/60);
+            $minutes = $duration%60;
+            $seconds = 0;
+         ?>
+         <div class="tab-pane fade" id="live_result" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
+
+            <div class="row">
+                 
+                  <div class="col-xs-12">
+                     <div class="box">
+                        <div class="box-header">
+                           <h3 class="box-title">Live Results</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                           <table id="liveResultTable" class="table table-bordered table-striped">
+                              <thead>
+                                 <tr>
+                                    <th>SL No.</th>
+                                    <th>Name</th>
+                                    <th>Answered</th>
+                                    <th>Correct</th>
+                                    <th>Started At</th>
+                                    {{--<th>Remaining Time</th>--}}
+                                    <th>Finished At</th>
+                                    
+                                 </tr>
+                              </thead>
+                              <tbody>
+                                 <?php $i=1; ?>
+                                 @foreach($liveResults as $resultt)
+                                 <tr>
+                                    <td>{{ $i++ }}</td>
+                                    <td>{{$resultt['name']}}</td>
+                                    <td id="{{$resultt['id']}}">{{ $resultt['answered'] }}</td>
+                                    <td id="correct-{{$resultt['id']}}">{{ $resultt['correct'] }}</td>
+                                    <td>{{ $resultt['started_at'] }}</td>
+                                    
+                                    <!--<input type="hidden" name="time_spent" id="time_spent{{$resultt['id']}}" value="0">
+                                    <td id="remainingTime{{$resultt['id']}}">
+                                       <span id="hours{{$resultt['id']}}">{{$hours}}</span> : 
+                                       <span id="mins{{$resultt['id']}}"><?php //if($minutes<10){ echo '0'; }?>{{$minutes}}</span> : 
+                                       <span id="seconds{{$resultt['id']}}">00</span>
+                                    </td>-->
+                                    
+                                    <td id="finish-at{{$resultt['id']}}">{{ $resultt['finish_at'] }}</td>
+                                    
+                                 </tr>
+                                 <!--Result Delete Modal-->
+                                 
+                                 <!-- /.modal -->
+                                 @endforeach                         
+                              </tbody>
+                              <tfoot>
+                                 <tr>
+                                    <th>SL No.</th>
+                                    <th>Name</th>
+                                    <th>Answered</th>
+                                    <th>Correct</th>
+                                    <th>Started At</th>
+                                    {{--<th>Remaining Time</th>--}}
+                                    <th>Finished At</th>
+                                 </tr>
+                              </tfoot>
+                           </table>
+                        </div>
+                        <!-- /.box-body -->         
+                     </div>
+                     <!-- /.box -->
+                  </div>
+                  <!-- /.col -->
+            </div>
+            <!-- /.row -->                              
+         </div>
+      @endif
 
       @endif
    </div>
@@ -967,6 +1053,145 @@
 
 
 </script>
+
+
+
+@if(count($liveResults) > 0)
+<script>
+   var HOURS = [];
+   var MINUTES = [];
+   var SECONDS = [];
+
+   setInterval(function(){
+
+    $.get({
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+            type:'get',
+            datatType : 'json',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            url:'/admin/live-results/{{$exam->id}}',
+            success:function(data){
+              
+              $.each(data['liveResults'], function(key1, value1) {
+              
+                  $('#'+value1['id']).html(value1['answered']);
+                  $('#correct-'+value1['id']).html(value1['correct']);
+                  $('#finish-at'+value1['id']).html(value1['finish_at']);
+                  
+
+              })
+				
+              
+            }
+    });
+   },1000 * 60)
+
+
+   setTimeout('start()', 1000)
+
+function start(){
+
+   @foreach($liveResults as $resultt)
+   
+      var startTime = '<?php echo date( "Y-m-d")."T".$resultt['started_at'] ?>'
+      var currentTime = '<?php echo date( "Y-m-d")."T".date( "H:i:s") ?>';
+      var sTime = new Date(startTime);
+      var cTime = new Date(currentTime);
+      var cSeconds = (cTime.getTime() - sTime.getTime()) / 1000;
+      var sSeconds = "{{$exam->duration}}"*60; 
+      var tSeconds = sSeconds - cSeconds;
+
+
+      minutes = parseInt(tSeconds/60);
+      seconds = tSeconds- minutes*60;
+      hours = parseInt(minutes/60);
+      minutes = minutes%60;
+
+      intilizetimer(hours, minutes, seconds,"{{$resultt['id']}}");
+
+   @endforeach
+
+}
+function intilizetimer(hrs, mins, sec,idd) {
+
+
+   if(idd in  HOURS == false){
+      HOURS[idd] = 0;
+      MINUTES[idd] = 0;
+      SECONDS[idd] = 0;
+   }
+
+   HOURS[idd]      = hrs;
+   MINUTES[idd]     = mins;
+   SECONDS[idd]     = sec; 
+   
+   $("#hours"+idd).text(HOURS[idd]);
+   if(MINUTES[idd]<10)
+    $("#mins"+idd).text("0"+MINUTES[idd]);
+   else
+   $("#mins").text(MINUTES[idd]);
+   if(SECONDS[idd]<10)
+    $("#seconds"+idd).text("0"+SECONDS[idd]);
+   else
+    $("#seconds"+idd).text(SECONDS[idd]);
+  
+} 
+
+
+
+setInterval("tictac()", 1000);
+function tictac(){
+    
+   @foreach($liveResults as $resultt)
+   if('{{$resultt["finish_at"]}}' == '00:00:00'){
+      SECONDS['{{$resultt["id"]}}']--;
+      SPENT_TIME = jQuery('#time_spent{{$resultt["id"]}}').val();
+      if(isNaN(SPENT_TIME))
+         SPENT_TIME = 0;
+      else
+         SPENT_TIME = parseInt(SPENT_TIME)+1;
+      jQuery('#time_spent{{$resultt["id"]}}').val(SPENT_TIME);
+      if(SECONDS['{{$resultt["id"]}}']<=0)
+      {
+         MINUTES['{{$resultt["id"]}}'] = MINUTES['{{$resultt["id"]}}'] - 1;
+
+         if(MINUTES['{{$resultt["id"]}}']<1)
+         {     
+              
+         }
+         if(MINUTES['{{$resultt["id"]}}']<0)
+         {
+               if(HOURS['{{$resultt["id"]}}']!=0) {
+                  MINUTES['{{$resultt["id"]}}'] = 59;
+                  HOURS['{{$resultt["id"]}}'] =  HOURS['{{$resultt["id"]}}']-1;
+                  SECONDS['{{$resultt["id"]}}'] = 59;
+                  $("#mins{{$resultt['id']}}").text(MINUTES['{{$resultt["id"]}}']);
+                  $("#hours{{$resultt['id']}}").text(HOURS['{{$resultt["id"]}}']);
+                  return;
+               }
+               //stopInterval();
+              // forceFinish();
+               return;
+         }
+         if(MINUTES['{{$resultt["id"]}}']<10)
+               $("#mins{{$resultt['id']}}").text("0"+MINUTES['{{$resultt["id"]}}']);
+         else
+               $("#mins{{$resultt['id']}}").text(MINUTES['{{$resultt["id"]}}']);
+      SECONDS['{{$resultt["id"]}}']=60;
+      }
+      if(MINUTES['{{$resultt["id"]}}']>=0) {
+         if(SECONDS['{{$resultt["id"]}}']<10)
+            $("#seconds{{$resultt['id']}}").text("0"+SECONDS['{{$resultt["id"]}}']);
+         else
+            $("#seconds{{$resultt['id']}}").text(SECONDS['{{$resultt["id"]}}']);
+      }
+      else
+      $("#seconds{{$resultt['id']}}").text('00');
+   }
+   @endforeach
+}
+</script>
+@endif
 
 
 

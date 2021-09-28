@@ -943,7 +943,7 @@
                                           <div class="right">
                                              <!-- Feedback 8-12 changed -->
                                              @if(($userExam = $user->hasExamResults($p->id)) && $nowTime->diffInHours($userExam->end_time) < 48)
-                                             <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['title']}}" class="btn btn--secondary btn--md">VIEW RESULT</a>
+                                             <a target="_blank" href="{{ route('exam-results', [$p->id,'s'=>1]) }}" title="{{$p['title']}}" class="btn btn--secondary btn--md">VIEW RESULT</a>
                                              @elseif($user->hasExamResults($p->id) )
                                              <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['title']}}" class="btn btn--secondary btn--md btn--completed">VIEW RESULT</a>
                                              @elseif($p->islive == 1)

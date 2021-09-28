@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ExamRequest;
 use App\Model\ExamResult;
-
+use App\Model\ExamSyncData;
 
 class ExamController extends Controller
 {
@@ -161,8 +161,48 @@ class ExamController extends Controller
             
         }
         
+        $liveResults = [];
+        $syncDatas = ExamSyncData::where('exam_id', $exam->id)->get();
+
+        if(count($results) < count($syncDatas) || count($results) == 0){
+            
+            $questions = json_decode($exam->questions,true);
+            foreach($syncDatas as $syncData){
+                //dd($questions);
+                
+                $answered = 0;
+                $allAnswers = json_decode($syncData->data,true);
+                $correct = 0;
+                foreach($allAnswers as $answer){
+                    if(trim($answer['given_ans']) != ''){
+
+                        $answered += 1;
+                        $correctAnswer = $questions[$answer['q_id']]['correct_answer'];
+                        if(is_array($correctAnswer) &&  
+                                htmlspecialchars_decode($answer['given_ans'],ENT_QUOTES) == htmlspecialchars_decode($correctAnswer[0],ENT_QUOTES) ){
+                                
+                                $correct += 1;
+
+                        }elseif(htmlspecialchars_decode($answer['given_ans'],ENT_QUOTES) == htmlspecialchars_decode($correctAnswer[0],ENT_QUOTES)){
+                            $correct += 1;
+                        }
+                        
+                    }
+                    
+
+                }
+
+                $start_at = explode('T', $syncData->started_at);
+                $finish_at = explode(' ', $syncData->finish_at);
+
+                $liveResults[] = array('id'=>$syncData->id,'name'=>$syncData->student->firstname . ' ' . $syncData->student->lastname,
+                'answered' =>  $answered . ' / ' . count($allAnswers), 'correct' => $correct . '/' . $answered  , 'started_at'=> $start_at[1],'finish_at' => $finish_at[1]) ;
+                
+                
+            }
+        }
         return view('admin.exams.create', ['user' => $user, 'events' => $eventsData, 'edit' => $edit, 'exam' => $exam,'event_id'=>$event_edit,
-                    'results' => $results,'averageHour' => $averageHour, 'averageScore' => $averageScore]);
+                    'results' => $results,'averageHour' => $averageHour, 'averageScore' => $averageScore,'liveResults' => $liveResults]);
     }
 
     /**
@@ -276,6 +316,49 @@ class ExamController extends Controller
         $exam->push();
 
         return redirect()->route('exams.edit',$exam->id)->withStatus(__('Exam successfully cloned.'));
+
+    }
+
+    public function getLiveResults(Exam $exam){
+        $liveResults = [];
+        $syncDatas = ExamSyncData::where('exam_id', $exam->id)->get();
+        
+        $questions = json_decode($exam->questions,true);
+        foreach($syncDatas as $syncData){
+            
+            $answered = 0;
+            $allAnswers = json_decode($syncData->data,true);
+            $correct = 0;
+
+            foreach($allAnswers as $answer){
+
+                if(trim($answer['given_ans']) != ''){
+                    $answered += 1;
+                    $correctAnswer = $questions[$answer['q_id']]['correct_answer'];
+                    if(is_array($correctAnswer) &&  
+                            htmlspecialchars_decode($answer['given_ans'],ENT_QUOTES) == htmlspecialchars_decode($correctAnswer[0],ENT_QUOTES) ){
+                            
+                            $correct += 1;
+
+                    }elseif(htmlspecialchars_decode($answer['given_ans'],ENT_QUOTES) == htmlspecialchars_decode($correctAnswer[0],ENT_QUOTES)){
+                        $correct += 1;
+                    }
+                }
+
+            }
+
+            $start_at = explode('T', $syncData->started_at);
+            $finish_at = explode(' ', $syncData->finish_at);
+
+            $liveResults[] = array('id'=>$syncData->id,'name'=>$syncData->student->firstname . ' ' . $syncData->student->lastname,
+                'answered' =>  $answered . ' / ' . count($allAnswers), 'correct' => $correct . '/' . $answered  , 'started_at'=> $start_at[1],'finish_at' => $finish_at[1]) ;
+            
+        }
+
+        return response()->json([
+            'success'=>true,
+            'liveResults' => $liveResults
+            ]);
 
     }
 

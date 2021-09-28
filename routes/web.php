@@ -261,6 +261,7 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::post('/exams/add-question/{exam}', 'ExamController@addQuestion')->name('exam.add_question');
     Route::post('/exams/update-question/{exam}', 'ExamController@updateQuestion')->name('exam.update-question');
     Route::post('/exams/order-question/{exam}', 'ExamController@orderQuestion')->name('exam.order-questions');
+    Route::get('/live-results/{exam?}', 'ExamController@getLiveResults');
 
     //ExamsResult
     Route::get('/student-summary/{exam_id}/{user_id}','Dashboard\ExamResultController@showResult');

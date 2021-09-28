@@ -468,10 +468,42 @@ class EventController extends Controller
         $event->load('category','faqs','sectionVideos','type','summary1','delivery','ticket','city','sections','venues','syllabus','benefits');
 
         foreach ($event->getRelations() as $relationName => $values){
-          
-            $newEvent->{$relationName}()->sync($values);
+            if($relationName == 'summary1' || $relationName == 'benefits' || $relationName == 'sections'){
+                $newValues = [];
+                foreach($values as $value){
+
+    
+                    $valuee = $value->replicate();
+                    $valuee->push();
+
+                    if($value->medias){
+                        $valuee->medias()->delete();
+                        //$valuee->createMedia();
+                        
+                        $medias = $value->medias->replicate();
+                        $medias->push();
+                        //dd($medias);
+                        $valuee->medias()->save($medias);
+                    }
+                    
+
+                    $newValues[] = $valuee; 
+
+                }
+                
+                $newValues = collect($newValues);
+                $newEvent->{$relationName}()->detach();
+
+                foreach($newValues as $value){
+                    $newEvent->{$relationName}()->attach($value);
+                }
+
+            }else{
+                $newEvent->{$relationName}()->sync($values);
+            }
  
         }
+
 
         foreach($event->lessons as $lesson){
             if(!$lesson->pivot){

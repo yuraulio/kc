@@ -315,7 +315,7 @@ function finishExam() {
           //  alert("Exam Completed Successfully");
             <?php if($exam->indicate_crt_incrt_answers || $exam->display_crt_answers) { 
             ?>
-                window.location = "{{ route('exam-results', [$exam->id]) }}";
+                window.location = "{{ route('exam-results', [$exam->id,'s'=>1]) }}";
             <?php
             }
             else
@@ -352,7 +352,7 @@ function forceFinish() {
        // alert("Time Over. Exam Completed Successfully");
             <?php if($exam->indicate_crt_incrt_answers || $exam->display_crt_answers) { 
             ?>
-            setTimeout(function(){  window.location = "{{ route('exam-results', [$exam->id]) }}"; }, 50000);
+            setTimeout(function(){  window.location = "{{ route('exam-results', [$exam->id,'s'=>1]) }}"; }, 50000);
 
                
             <?php
