@@ -36,7 +36,7 @@ class Kernel extends ConsoleKernel
        //Commands\AttachTopicCategory::class,
        //Commands\GetOldLessonInstrunctor::class,
        //Commands\FixExams::class,
-       Commands\SeperateRelationships::class,
+       //Commands\SeperateRelationships::class,
     ];
 
     /**
