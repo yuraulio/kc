@@ -322,6 +322,41 @@
       </div>
 
       <div class="tab-pane fade" id="results" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
+         <div class="row">
+         <div class="col-md-6 col-sm-6 col-xs-12">
+      
+            <div class="progress-wrapper">
+              <div class="progress-info">
+                <div class="progress-label">
+                  <span>The average percentage of the exam</span>
+               
+                  <span>{{$averageScore}}%</span>
+                </div>
+              </div>
+              <div class="progress">
+                <div class="progress-bar bg-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{$averageScore}}%;"></div>
+              </div>
+            </div>
+
+         </div>
+
+         <div class="col-md-6 col-sm-6 col-xs-12">
+      
+            <div class="progress-wrapper">
+              <div class="progress-info">
+                <div class="progress-label">
+                  <span>The average time of every participant</span>
+               
+                  <span>{{$averageHour}}</span>
+                </div>
+              </div>
+              <div class="progress">
+                <div class="progress-bar bg-info" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+              </div>
+            </div>
+
+         </div>
+         </div>
          <table class="table align-items-center table-flush"  id="results-table">
             <thead class="thead-light">
                <tr>

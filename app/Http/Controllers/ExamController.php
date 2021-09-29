@@ -127,9 +127,9 @@ class ExamController extends Controller
         }
 
         $averageHour = 0 . ' hours '. 0 . ' minutes';         
-        if($count==0){
+        if($count > 0){
                      
-            $average = $count > 0 ? $seconds/$count : 0;
+            $average = $seconds/$count;
             $avg_hr = floor($average/3600);
             $avg_min = floor(($average%3600)/60);
             $avg_sec = ($average%3600)%60;

@@ -30,9 +30,9 @@ class WebhookController extends BaseWebhookController
         }
 	}
 
-	public function handlePaymentIntentRequiresAction(array $payload){
+	/*public function handlePaymentIntentRequiresAction(array $payload){
 		return $payload;
-	}
+	}*/
 
 	private function installments($payload,$sub,$user){
 	
@@ -171,7 +171,7 @@ class WebhookController extends BaseWebhookController
                 
                 "amount" => $sub['amount']/100,
                 "total_amount" => $sub['amount']/100,
-                'trial' => $sub['amount']/100 == 0 ? true : false,
+                'trial' => $sub['amount']/100 <= 0 ? true : false,
                 'ends_at' => date('Y-m-d H:i:s', $ends_at),
             ];
 
@@ -201,7 +201,7 @@ class WebhookController extends BaseWebhookController
 			$transaction->user()->save($user);
 			$transaction->event()->save($subscription->event->first());
 			//$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;
-			if($sub['amount']/100 != 0){
+			if($sub['amount']/100 > 0){
 
 				if(!Invoice::latest()->has('subscription')->first()){
 					$invoiceNumber = sprintf('%04u', 1);
