@@ -121,8 +121,8 @@
                                 </div>
 
                                 <div class="form-group{{ $errors->has('youtube') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-youtube">{{ __('Youtube link') }}</label>
-                                    <input type="text" name="youtube" id="input-youtube" class="form-control{{ $errors->has('youtube') ? ' is-invalid' : '' }}" placeholder="{{ __('Youtube link') }}" autofocus>
+                                    <label class="form-control-label" for="input-youtube">{{ __('Video Testimonial') }}</label>
+                                    <input type="text" name="youtube" id="input-youtube" class="form-control{{ $errors->has('youtube') ? ' is-invalid' : '' }}" placeholder="{{ __('Video Testimonial') }}" autofocus>
 
                                     @include('alerts.feedback', ['field' => 'youtube'])
                                 </div>

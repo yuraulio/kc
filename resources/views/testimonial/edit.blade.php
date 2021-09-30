@@ -67,13 +67,14 @@
                                             @include('alerts.feedback', ['field' => 'title'])
                                         </div>
 
-
+                                        
 
                                         <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
                                             <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="category_id" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}" required>
                                                 <option value="">-</option>
                                                 @foreach ($categories as $category)
+                                               
                                                     <option value="{{ $category->id }}"
                                                     <?php if(count($testimonial->category) != 0){
                                                         if($category->id == $testimonial->category[0]->id){
@@ -124,7 +125,7 @@
 
                                         <?php
                                             $video = $testimonial['video_url'];
-                                            $video = json_decode($video);
+                                            //$video = json_decode($video);
                                             $social = $testimonial['social_url'];
                                             $social = json_decode($social);
                                             if(isset($social->facebook)){
@@ -138,8 +139,9 @@
                                                 $linkedin = null;
                                             }
 
-                                            if(isset($video->youtube)){
-                                                $youtube = $social->youtube;
+                                            if(isset($video)){
+                                                $youtube = $video;
+                                                
                                             }else{
                                                 $youtube = null;
                                             }
@@ -160,8 +162,8 @@
                                         </div>
 
                                         <div class="form-group{{ $errors->has('youtube') ? ' has-danger' : '' }}">
-                                            <label class="form-control-label" for="input-youtube">{{ __('Youtube') }}</label>
-                                            <input type="text" name="youtube" id="input-youtube" class="form-control{{ $errors->has('youtube') ? ' is-invalid' : '' }}" placeholder="{{ __('Youtube') }}" value="{{ old('youtube', $youtube) }}" autofocus>
+                                            <label class="form-control-label" for="input-youtube">{{ __('Video Testimonial') }}</label>
+                                            <input type="text" name="youtube" id="input-youtube" class="form-control{{ $errors->has('youtube') ? ' is-invalid' : '' }}" placeholder="{{ __('Video Testimonial') }}" value="{{ old('youtube', $youtube) }}" autofocus>
 
                                             @include('alerts.feedback', ['field' => 'youtube'])
                                         </div>

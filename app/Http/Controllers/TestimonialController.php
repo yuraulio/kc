@@ -53,8 +53,10 @@ class TestimonialController extends Controller
         $social['linkedin'] = $request->linkedin;
         $social = json_encode($social);
 
-        $video['youtube'] = $request->youtube;
-        $video = json_encode($video);
+        //$video['youtube'] = $request->youtube;
+        //$video = json_encode($video);
+
+        $video = $request->youtube;
 
         if($request->status == 'on')
         {
@@ -132,8 +134,9 @@ class TestimonialController extends Controller
         $social['linkedin'] = $request->linkedin;
         $social = json_encode($social);
 
-        $video['youtube'] = $request->youtube;
-        $video = json_encode($video);
+        //$video['youtube'] = $request->youtube;
+        //$video = json_encode($video);
+        $video = $request->youtube;
 
         if($request->status == 'on')
         {

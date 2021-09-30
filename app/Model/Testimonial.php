@@ -23,7 +23,7 @@ class Testimonial extends Model
 
     public function category()
     {
-        return $this->morphToMany(Category::class, 'categoryable');
+        return $this->morphedByMany(Category::class, 'testimoniable');
     }
 
     public function instructors()
