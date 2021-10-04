@@ -68,7 +68,15 @@ class CompressImages extends Command
                 if(isset($details['img_align'][$value['version']])){
                     $edit = $details['img_align'][$value['version']];
                     
+                    /*$mediaKey = file_get_contents( public_path($media['path'] . $media['original_name']), false, stream_context_create( [
+                        'ssl' => [
+                            'verify_peer'      => false,
+                            'verify_peer_name' => false,
+                        ],
+                    ] ) );*/
+
                     $image_resize = Image::make(public_path($media['path'] . $media['original_name']));
+                    //$image_resize = Image::make(public_path($media['path'] . $media['original_name']));
                     //$image_resize->crop(intval($edit['width']),intval($edit['height']), intval($edit['x']), intval($edit['y']));
                     //$image_resize->save(public_path($media['path'] .$media['name'].'-'.$value['version'] . $media['ext']), $value['q']);
 

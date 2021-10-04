@@ -318,6 +318,13 @@ class MediaController extends Controller
             }
         }
 
+        $mediaKey = file_get_contents( $mediaKey, false, stream_context_create( [
+            'ssl' => [
+                'verify_peer'      => false,
+                'verify_peer_name' => false,
+            ],
+        ] ) );
+
         $image = Image::make($mediaKey);
         $image->crop(intval($request->width),intval($request->height), intval($request->x), intval($request->y));
         foreach(get_image_versions() as $key => $ver){
