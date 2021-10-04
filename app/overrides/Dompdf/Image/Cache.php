@@ -180,8 +180,8 @@ class Cache
                 }
             }
         } catch (ImageException $e) {
-           
-            $resolved_url = self::$broken_image;
+            
+            $resolved_url = $full_url;
             $type = "png";
             $message = self::$error_message;
             Helpers::record_warnings($e->getCode(), $e->getMessage() . " \n $url", $e->getFile(), $e->getLine());
