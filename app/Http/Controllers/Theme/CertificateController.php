@@ -27,11 +27,22 @@ class CertificateController extends Controller
         
         //dd(storage_path('fonts\Foco_Lt.ttf'));
   
-       $pdf = PDF::setOptions([
-        'isHtml5ParserEnabled'=> true,
-        'isRemoteEnabled' => true,
-        'defaultFont', 'Foco',
-        ])->loadView($view ,compact('certificate'))->setPaper('a4', 'landscape');
+        $contxt = stream_context_create([
+          'ssl' => [
+          'verify_peer' => FALSE,
+          'verify_peer_name' => FALSE,
+          'allow_self_signed'=> TRUE
+          ]
+      ]);
+
+      $pdf = PDF::setOptions([
+          'isHtml5ParserEnabled'=> true,
+          'isRemoteEnabled' => true,
+         
+        ]);
+
+        $pdf->getDomPDF()->setHttpContext($contxt);
+        $pdf->loadView($view,compact('certificate'))->setPaper('a4', 'portrait');
           $fn = 'mycertificate' . '.pdf';
           return $pdf->stream($fn);
   

@@ -118,11 +118,22 @@ class Invoice extends Model
 
         //dd($data);
         
+        $contxt = stream_context_create([
+            'ssl' => [
+            'verify_peer' => FALSE,
+            'verify_peer_name' => FALSE,
+            'allow_self_signed'=> TRUE
+            ]
+        ]);
+
         $pdf = PDF::setOptions([
             'isHtml5ParserEnabled'=> true,
             'isRemoteEnabled' => true,
-            'defaultFont', 'Foco',
-          ])->loadView('admin.invoices.elearning_invoice',compact('data'))->setPaper('a4', 'portrait');
+           
+          ]);
+
+          $pdf->getDomPDF()->setHttpContext($contxt);
+          $pdf->loadView('admin.invoices.elearning_invoice',compact('data'))->setPaper('a4', 'portrait');
         $fn = 'myinvoice' . '.pdf';
         return $pdf;
     
@@ -202,11 +213,22 @@ class Invoice extends Model
         $data['vat'] = $billing['billafm'];
         $data['footer'] = $newInvoice->event->first()->paymentMethod->first() ? $newInvoice->event->first()->paymentMethod->first()->footer : '';
 
+        $contxt = stream_context_create([
+            'ssl' => [
+            'verify_peer' => FALSE,
+            'verify_peer_name' => FALSE,
+            'allow_self_signed'=> TRUE
+            ]
+        ]);
+
         $pdf = PDF::setOptions([
             'isHtml5ParserEnabled'=> true,
             'isRemoteEnabled' => true,
-            'defaultFont', 'Foco',
-          ])->loadView('admin.invoices.elearning_invoice',compact('data'))->setPaper('a4', 'portrait');
+           
+          ]);
+
+          $pdf->getDomPDF()->setHttpContext($contxt);
+          $pdf->loadView('admin.invoices.elearning_invoice',compact('data'))->setPaper('a4', 'portrait');
         $fn = 'myinvoice' . '.pdf';
         return $pdf;
     
@@ -235,11 +257,23 @@ class Invoice extends Model
         $data['vat'] = $billing['billafm'];
         $data['footer'] = $this->event->first()->paymentMethod->first() ? $this->event->first()->paymentMethod->first()->footer : '';
 
+        $contxt = stream_context_create([
+            'ssl' => [
+            'verify_peer' => FALSE,
+            'verify_peer_name' => FALSE,
+            'allow_self_signed'=> TRUE
+            ]
+        ]);
+
         $pdf = PDF::setOptions([
             'isHtml5ParserEnabled'=> true,
             'isRemoteEnabled' => true,
-            'defaultFont', 'Foco',
-          ])->loadView('admin.invoices.elearning_invoice',compact('data'))->setPaper('a4', 'portrait');
+           
+          ]);
+
+          $pdf->getDomPDF()->setHttpContext($contxt);
+          $pdf->loadView('admin.invoices.elearning_invoice',compact('data'))->setPaper('a4', 'portrait');
+
         $fn = 'myinvoice' . '.pdf';
         return $pdf->stream($fn);
     
