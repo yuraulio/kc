@@ -95,18 +95,15 @@ class Cache
                     $image = "";
 
                     if ($data_uri) {
-                        
                         if ($parsed_data_uri = Helpers::parse_data_uri($url)) {
                             $image = $parsed_data_uri['data'];
                         }
                     } else {
-                        
                         list($image, $http_response_header) = Helpers::getFileContent($full_url, $dompdf->getHttpContext());
                     }
 
                     // Image not found or invalid
                     if (empty($image)) {
-                        
                         $msg = ($data_uri ? "Data-URI could not be parsed" : "Image not found");
                         throw new ImageException($msg, E_WARNING);
                     } // Image found, put in cache and process
@@ -168,7 +165,6 @@ class Cache
                     }
                 } // Unknown image type
                 else {
-                
                     throw new ImageException("Image type unknown", E_WARNING);
                 }
             }
