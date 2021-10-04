@@ -3,21 +3,6 @@
 
 <style>
 
-    /*@font-face {
-        font-family: 'Foco';
-        src: url('/theme/assets/fonts/Foco_W_Lt.eot');
-        src: url('/theme/assets/fonts/Foco_W_Lt.eot?#iefix') format('embedded-opentype'),
-            url('/theme/assets/fonts/Foco_W_Lt.woff2') format('woff2'),
-            url('/theme/assets/fonts/Foco_W_Lt.woff') format('woff'); 
-    }*/
-
-
-    @font-face {
-        font-family: 'Foco';
-            /*src: url({{ asset('/storage/fonts/Foco_Lt.ttf') }});*/
-            src: url("{{ asset('/fonts/Foco_Lt.ttf') }}") format("truetype");
-            
-    }
 
     @page { margin: 0px; }
 

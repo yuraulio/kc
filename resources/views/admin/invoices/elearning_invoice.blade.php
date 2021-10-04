@@ -6,14 +6,7 @@
 
     <style type="text/css">
 
-   
 
-     @font-face {
-        font-family: 'Foco';
-        /*src: url("{{ storage_path('fonts\Foco_Lt.ttf') }}") format("truetype");*/
-        src: url("{{ asset('/fonts/Foco_Lt.ttf') }}") format("truetype");
-        
-        }
 
         @page {
             margin: 0px;
@@ -136,7 +129,7 @@ td p{
 <body>
 
 <header>
-        <img src="{{asset('/theme/assets/images/logo-knowcrunch-seminars.svg')}}">
+        <img src="{{url('/theme/assets/images/logo-knowcrunch-seminars.svg')}}">
     </header>
 
 

@@ -3,22 +3,7 @@
 <head>
 <style>
 
-    /*@font-face {
-        font-family: 'Foco';
-        src: url('/theme/assets/fonts/Foco_W_Lt.eot');
-        src: url('/theme/assets/fonts/Foco_W_Lt.eot?#iefix') format('embedded-opentype'),
-            url('/theme/assets/fonts/Foco_W_Lt.woff2') format('woff2'),
-            url('/theme/assets/fonts/Foco_W_Lt.woff') format('woff'); 
-    }*/
 
-
-    @font-face {
-        font-family: 'Foco';
-        /*src: url("{{ storage_path('fonts\Foco_Lt.ttf') }}") format("truetype");*/
-        /*src: url("{{ asset('/storage/fonts/Foco_Lt.ttf') }}") format("truetype");*/
-        src: url("{{ asset('/fonts/Foco_Lt.ttf') }}") format("truetype");
-        
-    }
 
 
 

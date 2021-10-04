@@ -257,7 +257,7 @@ class Dompdf
         "courier", "courier-bold", "courier-oblique", "courier-boldoblique",
         "helvetica", "helvetica-bold", "helvetica-oblique", "helvetica-boldoblique",
         "times-roman", "times-bold", "times-italic", "times-bolditalic",
-        "symbol", "zapfdinbats"
+        "symbol", "zapfdinbats","foco"
     ];
 
     /**
@@ -269,7 +269,7 @@ class Dompdf
         "courier", "courier-bold", "courier-oblique", "courier-boldoblique",
         "helvetica", "helvetica-bold", "helvetica-oblique", "helvetica-boldoblique",
         "times-roman", "times-bold", "times-italic", "times-bolditalic",
-        "symbol", "zapfdinbats"
+        "symbol", "zapfdinbats","foco"
     ];
 
     /**

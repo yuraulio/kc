@@ -714,7 +714,7 @@ class CartController extends Controller
                 //./ngrok authtoken 69hUuQ1DgonuoGjunLYJv_3PVuHFueuq5Kiuz7S1t21
                 // Create the plan to subscribe
                 $desc = $installments . ' installments';
-                $planid = 'plan_'.$dpuser->id.'_Eddd_'.$ev->id.'_T_'.$ticket_id.'_x'.$installments;
+                $planid = 'plan_'.$dpuser->id.'_Efd_'.$ev->id.'_T_'.$ticket_id.'_x'.$installments;
                 $name = $ev_title . ' ' . $ev_date_help . ' | ' . $desc;
                 //dd(str_replace('.','',$instamount) . '00');
 
@@ -741,9 +741,7 @@ class CartController extends Controller
                 try {
                     $charge = $dpuser->newSubscription($name, $plan->id)->create($dpuser->defaultPaymentMethod()->id,
                                 ['email' => $dpuser->email],
-                                ['metadata' => ['installments_paid' => 0, 'installments' => $installments],
-                                'off_session' => true,                                
-                                ],
+                                ['metadata' => ['installments_paid' => 0, 'installments' => $installments]],
                             );
 
                     $charge->metadata = json_encode(['installments_paid' => 0, 'installments' => $installments]);

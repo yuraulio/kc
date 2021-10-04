@@ -24,7 +24,7 @@ use FontLib\BinaryStream;
 
 class Cpdf
 {
-
+ 
     const ACROFORM_SIG_SIGNATURESEXISTS = 0x0001;
     const ACROFORM_SIG_APPENDONLY =       0x0002;
 
@@ -381,7 +381,8 @@ class Cpdf
         'times-italic',
         'times-bolditalic',
         'symbol',
-        'zapfdingbats'
+        'zapfdingbats',
+        'foco',
     ];
 
     /**
@@ -394,7 +395,7 @@ class Cpdf
      * @param string  $tmp       The temporary folder
      */
     function __construct($pageSize = [0, 0, 612, 792], $isUnicode = false, $fontcache = '', $tmp = '')
-    {
+    {   
         $this->isUnicode = $isUnicode;
         $this->fontcache = rtrim($fontcache, DIRECTORY_SEPARATOR."/\\");
         $this->tmp = ($tmp !== '' ? $tmp : sys_get_temp_dir());
@@ -5542,6 +5543,7 @@ EOT;
      */
     function addImagePng(&$img, $file, $x, $y, $w = 0.0, $h = 0.0, $is_mask = false, $mask = null)
     {
+        
         if (!function_exists("imagepng")) {
             throw new \Exception("The PHP GD extension is required, but is not installed.");
         }
@@ -5605,6 +5607,7 @@ EOT;
      */
     protected function addImagePngAlpha($file, $x, $y, $w, $h, $byte)
     {
+
         // generate images
         $img = imagecreatefrompng($file);
 
@@ -5637,12 +5640,11 @@ EOT;
         for ($c = 0; $c < 256; ++$c) {
             imagecolorallocate($imgalpha, $c, $c, $c);
         }
-       
         // Use PECL gmagick + Graphics Magic to process transparent PNG images
         if (extension_loaded("gmagick")) {
             $gmagick = new \Gmagick($file);
             $gmagick->setimageformat('png');
-
+         
             // Get opacity channel (negative of alpha channel)
             $alpha_channel_neg = clone $gmagick;
             $alpha_channel_neg->separateimagechannel(\Gmagick::CHANNEL_OPACITY);
@@ -5684,6 +5686,7 @@ EOT;
 
             // Get opacity channel (negative of alpha channel)
             if ($imagick->getImageAlphaChannel() !== 0) {
+                
                 //$alpha_channel = $imagickClonable ? clone $imagick : $imagick->clone();
                 $alpha_channel =clone $imagick;
                 $alpha_channel->separateImageChannel(\Imagick::CHANNEL_ALPHA);
@@ -5803,7 +5806,6 @@ EOT;
             // 4 => greyscale with alpha
             // 6 => fullcolor with alpha
             $is_alpha = in_array($color_type, [4, 6]) || ($color_type == 3 && $bit_depth != 4);
-
             if ($is_alpha) { // exclude grayscale alpha
                 $this->addImagePngAlpha($file, $x, $y, $w, $h, $color_type);
                 return;

@@ -1458,7 +1458,6 @@ if(!isset($info)){
                payment_method: {
                    card: cardElement,
                    billing_details: { name: cardHolderName.value },
-                   usage:'off_session',
                }
            }
        ).then(function (result) {
