@@ -104,19 +104,23 @@ class Cache
                         list($image, $http_response_header) = Helpers::getFileContent($full_url, $dompdf->getHttpContext());
                         $image = $full_url;
                     }
-                    
+                   
                     // Image not found or invalid
                     if (empty($image)) {
+                        
                         $msg = ($data_uri ? "Data-URI could not be parsed" : "Image not found");
+                        
                         throw new ImageException($msg, E_WARNING);
                     } // Image found, put in cache and process
                     else {
+                        
                         //e.g. fetch.php?media=url.jpg&cache=1
                         //- Image file name might be one of the dynamic parts of the url, don't strip off!
                         //- a remote url does not need to have a file extension at all
                         //- local cached file does not have a matching file extension
                         //Therefore get image type from the content
                         if (@file_put_contents($resolved_url, $image) === false) {
+                               
                             throw new ImageException("Unable to create temporary image in " . $tmp_dir, E_WARNING);
                         }
                     }
@@ -124,6 +128,7 @@ class Cache
                 }
             } // Not remote, local image
             else {
+                
                 $resolved_url = Helpers::build_url($protocol, $host, $base_path, $url);
 
                 if ($protocol == "" || $protocol === "file://") {
@@ -175,6 +180,7 @@ class Cache
                 }
             }
         } catch (ImageException $e) {
+           
             $resolved_url = self::$broken_image;
             $type = "png";
             $message = self::$error_message;

@@ -1,6 +1,7 @@
 <?php
 $distFontDir = $rootDir . '/lib/fonts';
-
+//dd($distFontDir);
+//dd(base_path() . '/app/overrides/Dompdf/lib/fonts/foco_normal_cac6edede02e3298a5de814582962e0a');
 return [
     'sans-serif' =>
         [
@@ -94,7 +95,7 @@ return [
             'normal' => $distFontDir . '/DejaVuSerif'
         ],
     'foco' => [
-        'normal' => $distFontDir . '/foco_normal_cac6edede02e3298a5de814582962e0a',
+        'normal' => base_path() . '/app/overrides/Dompdf/lib/fonts/foco_normal_cac6edede02e3298a5de814582962e0a',
 
     ]
 ];

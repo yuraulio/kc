@@ -4716,7 +4716,7 @@ EOT;
         if (!$this->numFonts) {
             $this->selectFont($this->defaultFont);
         }
-
+        
         $font = $this->fonts[$this->currentFont];
 
         // for the current font, and the given size, what is the height of the font in user units

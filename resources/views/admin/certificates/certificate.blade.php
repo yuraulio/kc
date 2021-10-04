@@ -15,7 +15,7 @@
 
     h1, h2 { 
        /*font-family: 'DejaVu Sans';*/
-        font-family: 'Foco';
+        font-family: 'foco';
 
     }
             
