@@ -22,6 +22,8 @@ use App\Model\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use \Carbon\Carbon;
+use App\Notifications\CreateYourPassword;
+use App\Model\CookiesSMS;
 
 class InfoController extends Controller
 {
@@ -151,7 +153,11 @@ class InfoController extends Controller
         //Session::forget('pay_invoice_data');
         Session::forget('pay_bill_data');
         Session::forget('deree_user_data');
-
+        Session::forget('user_id');
+        Session::forget('coupon_code');
+        Session::forget('coupon_price');
+        
+        
         if (isset($this->transaction['payment_response'])) {
         	return view('theme.cart.cart', $data);
         }
@@ -413,14 +419,14 @@ class InfoController extends Controller
                 $thismember['password'] = $thismember['email'] . '-knowcrunch';
             }
 
-            
-
             $thismember['mobile'] = $pay_seats_data['mobiles'][$key];
             $thismember['country_code'] = $pay_seats_data['countryCodes'][$key];
-    
-            $thismember['job_title'] = $pay_seats_data['jobtitles'][$key];
-            if($pay_seats_data['companies'][$key] != '')
-                $thismember['company'] = $pay_seats_data['companies'][$key];
+            
+            if(isset($pay_seats_data['jobtitles'][$key])){
+                $thismember['job_title'] = $pay_seats_data['jobtitles'][$key];
+                if($pay_seats_data['companies'][$key] != '')
+                    $thismember['company'] = $pay_seats_data['companies'][$key];
+            }
             
             if(isset($pay_seats_data['afms'][$key]))
                 $thismember['afm'] = $pay_seats_data['afms'][$key];
@@ -479,7 +485,7 @@ class InfoController extends Controller
                 $checkemailuser->lastname = $thismember['lastname'];
                 $checkemailuser->mobile = $thismember['mobile'];
                 $checkemailuser->country_code = $thismember['country_code'];
-                $checkemailuser->job_title = $thismember['job_title'];
+                $checkemailuser->job_title = isset($thismember['job_title']) ? $thismember['job_title'] : '';
 
                 /*$transactionBillingDetails = json_decode($transaction->billing_details,true);
                 if(isset($transactionBillingDetails['billing']) && $transactionBillingDetails['billing'] == 1){
@@ -512,8 +518,26 @@ class InfoController extends Controller
                     }
                 }
 
-
                 $checkemailuser->save();
+
+                if(!$checkemailuser->statusAccount->completed){
+                    
+                    $checkemailuser->notify(new CreateYourPassword($checkemailuser));
+
+                    $cookieValue = base64_encode($checkemailuser->id . date("H:i"));
+                    setcookie('auth-'.$checkemailuser->id, $cookieValue, time() + (1 * 365 * 86400), "/"); // 86400 = 1 day
+                
+                    $coockie = new CookiesSMS;
+                    $coockie->coockie_name = 'auth-'.$checkemailuser->id;
+                    $coockie->coockie_value = $cookieValue;
+                    $coockie->user_id = $checkemailuser->id;
+                    $coockie->sms_code = -1;
+                    $coockie->sms_verification = true;
+
+                    $coockie->save();
+
+                }
+                
 	        
     		}
     		else{
@@ -549,7 +573,7 @@ class InfoController extends Controller
         	$code = Activation::create([
                 'user_id' => $user->id,
                 'code' => Str::random(40),
-                'completed' => false,
+                'completed' => true,
             ])->code;
         	//$role = Role::findRoleBySlug('know-crunch');
             $user->role()->attach(7);
@@ -601,10 +625,12 @@ class InfoController extends Controller
                     $invoice->user()->save($user);
                 }
             }
+
             // Send the activation email
-            $sent = Mail::send('activation.emails.activate_groupof2+', compact('user', 'code'), function ($m) use ($user) {
+            /*$sent = Mail::send('activation.emails.activate_groupof2+', compact('user', 'code'), function ($m) use ($user) {
                 $m->to($user->email)->subject('Activate Your Account');
-            });  
+            });*/
+            $user->notify(new CreateYourPassword($user));
 
             $helperdetails[$user->email] = ['kcid' => $user->kc_id, 'deid' => $user->partner_id, 'stid' => $user->student_type_id, 'jobtitle' => $user->job_title, 'company' => $user->company, 'mobile' => $user->mobile];
 

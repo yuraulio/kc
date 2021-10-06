@@ -74,6 +74,10 @@ class Kernel extends HttpKernel
         'event.subscription' => \App\Http\Middleware\CheckForSubscription::class,
         'cert.owner' => \App\Http\Middleware\CertificateOwner::class,
         'exam.check' => \App\Http\Middleware\ExamCheck::class,
+
+        'registration.check' => \App\Http\Middleware\Registration::class,
+        'billing.check' => \App\Http\Middleware\Billing::class,
+
     ];
 
     /**

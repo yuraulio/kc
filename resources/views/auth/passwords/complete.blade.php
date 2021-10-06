@@ -28,7 +28,7 @@
     <div id="login-popup" class="login-popup" style="margin:0 auto;">
         <a href="javascript:void(0)" class="close-btn close"><img width="26" src="{{cdn('theme/assets/images/icons/icon-close.svg')}}" class="replace-with-svg" alt="Close"></a>
         <div class="heading">
-            <h2>Change password</h2>
+            <h2>Create/reset Password</h2>
         </div>
         <div id="error-mail" class="alert-outer" hidden>
 					
@@ -85,37 +85,41 @@ $.ajaxSetup({headers:{'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content
         var passConf = document.getElementById('confirm-password').value
         
        //console.log(window.location.href)
+	    @if(isset($create) && $create)
+            var url = "{{ route('create.store',$slug) }}";
+        @else
+            var url = (window.location.href).split("/");
+            url = 'myaccount/reset/' + url[5] + '/' + url[6]
+        @endif
 	   
-	   var url = (window.location.href).split("/");
-	 
         
-            $.ajax({ url: 'myaccount/reset/' + url[5] + '/' + url[6], type: "post",
-                    
-                    data: {"password": pass,"password_confirmation": passConf},
-                    success: function(data) {
-                        
-                        
-                        if(data['success']){
-                            $('#success-mail').show()
-                            var p = document.getElementById('message-success').textContent = data['message'];
-                        }else if (!data['pass_confirm']){
-							$('#error-mail').show()
-                            var p = document.getElementById('message-error').textContent = data['message'];
-						}else{
-                            $('#error-mail').show()
-                            var p = document.getElementById('message-error').textContent = data['message'];
-
-                        }
-
-						if(data['pass_confirm']){
-							setTimeout( function(){
-								window.location.replace('/');
-							}, 1000 );
-						}
-
-                    },
+        $.ajax({ url:url , type: "post",
                 
-                });
+            data: {"password": pass,"password_confirmation": passConf},
+            success: function(data) {
+                
+                
+                if(data['success']){
+                    $('#success-mail').show()
+                    var p = document.getElementById('message-success').textContent = data['message'];
+                }else if (!data['pass_confirm']){
+					$('#error-mail').show()
+                    var p = document.getElementById('message-error').textContent = data['message'];
+				}else{
+                    $('#error-mail').show()
+                    var p = document.getElementById('message-error').textContent = data['message'];
+
+                }
+
+				if(data['pass_confirm']){
+					setTimeout( function(){
+						window.location.replace('/');
+					}, 1000 );
+				}
+
+            },
+            
+        });
         
 
     })

@@ -921,4 +921,71 @@ class StudentController extends Controller
         return $client->getTemporaryLink($dropboxPath);
     }
 
+    public function createPassIndex($slug){
+
+        try{
+            $user = decrypt($slug);
+            
+            if(!User::where('id',$user['id'])->where('email',$user['email'])->first()){
+                abort(404);
+            }
+
+            $create = $user['create'];
+            return view('auth.passwords.complete',compact('slug','create'));
+
+        }catch(\Exception $e){
+            abort(404);
+        }
+
+        
+    }
+
+    public function createPassStore(Request $request,$slug){
+        
+        $user = decrypt($slug);
+            
+        if( !($user = User::where('id',$user['id'])->where('email',$user['email'])->first()) ){
+            return response()->json([
+
+                'success' => false,
+                'pass_confirm' => true,
+                'message' => 'The user no longer exists.',
+                'redirect' =>'/'
+
+            ]);
+        }
+
+        $val =Validator::make($request->all(), [
+            'password' => 'required|confirmed',
+
+         ]);
+
+         if($val->fails()){
+            return response()->json([
+                'success' => false,
+                'pass_confirm' => false,
+                'message' => $val->errors()->first()
+            ]);
+        }
+
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        $user->statusAccount->completed = true;
+        $user->statusAccount->completed_at = Carbon::now();
+        $user->statusAccount->save();
+        
+        Auth::login($user);
+
+        return response()->json([
+
+            'success' => true,
+            'pass_confirm' => true,
+            'message' => 'Password was successfully resetted.',
+            'redirect' =>'/myaccount'
+
+        ]);
+
+    }
+
 }

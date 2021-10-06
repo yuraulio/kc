@@ -319,10 +319,7 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
 
 });
 
-
-
-
-Route::group(['prefix' => 'cart','middleware' => ['web']], function () {
+/*Route::group(['prefix' => 'cart','middleware' => ['web']], function () {
     Route::group(['middleware' => 'free.event' ], function() {
         Route::group(['middleware' => 'auth.sms' ], function () {
 
@@ -345,9 +342,33 @@ Route::group(['prefix' => 'cart','middleware' => ['web']], function () {
             //    //Route::get('move', [ 'as' => 'cart.move-item', 'uses' => 'Theme\CartController@move']);
 
             //});
+   /*     });
+    });
+});*/
+
+Route::get('/cart', function(){
+    return redirect('/registration');
+});
+Route::group(['middleware' => ['web']], function () {
+    Route::group(['middleware' => 'free.event' ], function() {
+        Route::group(['middleware' => 'auth.sms' ], function () {
+
+            Route::post('checkCoupon/{event}','Theme\CartController@checkCoupon');
+
+            Route::get('/registration', [ 'as' => 'registration.index', 'uses' => 'Theme\CartController@registrationIndex' ]);
+            Route::post('/registration', [ 'as' => 'registration', 'uses' => 'Theme\CartController@registration' ]);
+            Route::post('/mobile-check',  'Theme\CartController@mobileCheck');
+
+            Route::get('/billing', [ 'as' => 'billing.index', 'uses' => 'Theme\CartController@billingIndex' ]);
+            Route::post('/billing', [ 'as' => 'billing', 'uses' => 'Theme\CartController@billing' ]);
+
+            Route::get('/checkout', [ 'as' => 'checkout.index', 'uses' => 'Theme\CartController@checkoutIndex' ]);
+
+            Route::get('/remove/{item}', [ 'as' => 'cart.remove-item', 'uses' => 'Theme\CartController@dpremove']);
         });
     });
 });
+
 
 Route::post('checkCode', 'Theme\CartController@checkCode');
 Route::get('/free-event-cart', 'Theme\CartController@cartIndex');
@@ -508,6 +529,7 @@ Route::group(['middleware' => ['web']], function () {
 });
 
 
+
 //cronjobs
 Route::get('/dropbox/KUBnqOX1FNyTh72','DropboxController@cacheDropboxCLI');
 Route::get('/unroll-elearning-users', 'Dashboard\CronjobsController@unroll');
@@ -537,6 +559,16 @@ Route::group(['middleware' => ['web']], function () {
         return redirect('terms');
     });
     
+});
+
+//Create Your Password
+
+Route::group(['middleware' => ['web']], function () {
+
+    Route::get('/create-your-password/{slug}', 'Theme\StudentController@createPassIndex')->name('create.index');
+    Route::post('/create-your-password/{slug}', 'Theme\StudentController@createPassStore')->name('create.store');
+
+
 });
 
 //Route::get('/stripe/payment/{id}/{paymentMethod}', 'PaymentController@show')->name('payment');

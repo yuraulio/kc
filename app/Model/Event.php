@@ -83,9 +83,14 @@ class Event extends Model
 
     public function topic()
     {
-
-        return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id')
+        if($this->delivery->first() && $this->delivery->first()->id == 143){
+            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id')
             ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.priority','asc');
+        }else{
+            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id')
+            ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.time_starts','asc');
+        }
+        
     }
 
     public function topic_edit_instructor()
@@ -110,6 +115,7 @@ class Event extends Model
     {
     
         if($this->delivery->first() && $this->delivery->first()->id == 143){
+            
             return $this->belongsToMany(Lesson::class,'event_topic_lesson_instructor')->where('status',true)->select('lessons.*','topic_id','event_id', 'lesson_id','instructor_id')
             ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room','priority')->orderBy('event_topic_lesson_instructor.priority','asc')->with('type');//priority
         }else{
@@ -227,7 +233,8 @@ class Event extends Model
         $topics = [];
         $lessons = $this->lessons->groupBy('topic_id');
         $sum1 = 0;
-
+        //162
+        
         // sum topic duration
         foreach($lessons as $key => $lesson1){
 
@@ -298,13 +305,12 @@ class Event extends Model
                 $sum1 = $sum1 + $sum;
                 $data['keys'][$key] = $sum1;
 
-        }
+            }
 
         }
 
 
         $instructors = $this->instructors->unique()->groupBy('instructor_id')->toArray();
-        //dd($this->topic->unique()->groupBy('topic_id'));
 
         foreach($this->topic->unique()->groupBy('topic_id') as $key => $topic){
 
@@ -349,7 +355,6 @@ class Event extends Model
             $data['topics'][$key]['topic_duration'] = $data['keys'][$topic_id];
 
         }
-
 
         return $data;
     }
