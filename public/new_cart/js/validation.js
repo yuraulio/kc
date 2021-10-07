@@ -13,22 +13,25 @@ jQuery.validator.addMethod(
 
         rules: {
 
-            firstname: {
+            'firstname[]': {
                 required: true,
-                lettersonly: true
+                //lettersonly: true
             },
-            lastname: {
+            'lastname[]': {
                 required: true,
-                lettersonly: true
+                //lettersonly: true
             },
             'email[]': {
                 required: true,
                 emailWithDot: true
             },
-             country: {
+            'country[]': {
                 required: true                
             },
-            number: {
+            'number[]': {
+                required: true
+            },
+            'student_type_id[]': {
                 required: true
             },
             terms_condition:{
@@ -37,19 +40,22 @@ jQuery.validator.addMethod(
         },
 
         messages: {
-            'firstname': {
+            'firstname[]': {
                 required: "This field is required, enter your name",
-                lettersonly: "only letters allowed"                
+                //lettersonly: "only letters allowed"                
             },
-            'lastname': {
+            'lastname[]': {
                 required: "This field is required, enter your last name",
-                lettersonly: "only letters allowed"               
+                //lettersonly: "only letters allowed"               
             },
 
             'email[]': {
                 required: "This field is required, enter your email",
             },
-            'country': {               
+            'student_type_id[]': {
+                required: "This field is required, enter your ID",
+            },
+            'country[]': {               
                 required: "select country",
             },
             'terms_condition': {               

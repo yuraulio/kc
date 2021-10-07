@@ -76,9 +76,9 @@ else {
 
 ?>
 
-<?php if(isset($trans->status_history[0]['pay_seats_data']['studentId'])){
+<?php if(isset($trans->status_history[0]['pay_seats_data']['student_type_id'])){
 
-	$stId = $trans->status_history[0]['pay_seats_data']['studentId'][0];
+	$stId = $trans->status_history[0]['pay_seats_data']['student_type_id'][0];
 	
 }else{
 	
@@ -103,7 +103,7 @@ else {
 <strong>CITY:</strong> {{ $extrainfo[6] }}<br /><br />
 
 @if(isset($trans->coupon_code) && $trans->coupon_code != '') <strong>COUPON CODE:</strong> {{ $trans->coupon_code }}<br /><br />@endif
-@if($user['id'])<a target="_blank" href="http://www.knowcrunch.com/admin/user/{{$user['id']}}/edit">Check the registration details online</a>.<br /><br />@endif
+@if(isset($user['id']))<a target="_blank" href="http://www.knowcrunch.com/admin/user/{{$user['id']}}/edit">Check the registration details online</a>.<br /><br />@endif
 <!--<a target="_blank" href="https://kclioncode.j.scaleforce.net/admin/transaction/edit/{{ $trans->id }}">Check the registration details online</a>.<br /><br />-->
 
 </p>

@@ -418,13 +418,13 @@ class InfoController extends Controller
             else {
                 $thismember['password'] = $thismember['email'] . '-knowcrunch';
             }
-
+            
             $thismember['mobile'] = $pay_seats_data['mobiles'][$key];
             $thismember['country_code'] = $pay_seats_data['countryCodes'][$key];
             
             if(isset($pay_seats_data['jobtitles'][$key])){
                 $thismember['job_title'] = $pay_seats_data['jobtitles'][$key];
-                if($pay_seats_data['companies'][$key] != '')
+                if(isset($pay_seats_data['companies'][$key]))
                     $thismember['company'] = $pay_seats_data['companies'][$key];
             }
             
@@ -557,7 +557,7 @@ class InfoController extends Controller
         }else{
             $groupEmailLink = 'https://www.facebook.com/groups/elearningdigital/';
         }
-		$extrainfo = [$tickettypedrop, $tickettypename, $eventname, $eventdate, $specialseats, $invoice,$eventcity,$groupEmailLink,$expiration_date];
+		$extrainfo = [$tickettypedrop, $tickettypename, $eventname, $eventdate, $specialseats, 'YES',$eventcity,$groupEmailLink,$expiration_date];
 
         //Create new collected users
 
@@ -582,7 +582,9 @@ class InfoController extends Controller
             $user->mobile = $member['mobile'];
             $user->country_code = $member['country_code'];
     		$user->job_title = $pay_seats_data['jobtitles'][$key];
-    		$user->company = $pay_seats_data['companies'][$key];
+            if(isset($pay_seats_data['companies'][$key]))
+                $user->company = $pay_seats_data['companies'][$key];
+    		
 
             $connow = Carbon::now();
             $clientip = '';
@@ -775,7 +777,7 @@ class InfoController extends Controller
             }
 
         
-            if($elearning){
+            /*if($elearning){
                 $pathFile = url('/') . '/pdf/elearning/KnowCrunch - How to access our website & account.pdf';
                 $pathFile = str_replace(' ','%20',$pathFile);
                 $sent = Mail::send('emails.admin.elearning_after_register', $data, function ($m) use ($adminemail, $muser,$pathFile) {
@@ -789,7 +791,7 @@ class InfoController extends Controller
                     $m->attach($pathFile);
                         
                 });
-            }
+            }*/
             
 
             

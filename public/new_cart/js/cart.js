@@ -8,13 +8,10 @@ $(document).on('click', '.registration', function(e) {
     var elementsHeight
     var firstError = false;
 
-   
-    $("#mobile-error").hide();
     
-	/*if ($('#customCheck1').prop("checked") === false) {
-        $('#customCheck1').addClass('error');
-        return;
-    }*/
+    
+    $(".error-mobile").hide();
+	
 
     $.ajax({ url: checkoutUrl, type: "post",
     headers: {
@@ -29,8 +26,10 @@ $(document).on('click', '.registration', function(e) {
                     //var html = '<ul>';
                     $.each(data.errors, function (key, row) {
                         
-                        $("#mobile-error").html(row);
-                        $("#mobile-error").show()
+                        key = Number(key.split('.')[1]);
+                        
+                        $("#mobile-error"+(key+1)).html(row);
+                        $("#mobile-error"+(key+1)).show()
 
                     });
 

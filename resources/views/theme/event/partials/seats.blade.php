@@ -39,6 +39,10 @@
             if($ticket['type'] == 'Sponsored'){
                continue;
             } 
+
+            if($ticket['type'] == 'Alumni' && (!Auth::user() || (Auth::user() && !Auth::user()->kc_id))){
+               continue;
+            } 
             
 
          ?>

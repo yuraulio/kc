@@ -26,26 +26,18 @@
                         @csrf
 							<div class="form-wrp box" id="clone-box">												
 								
-								<p class="validation-info">Fields marked with an asterisk <span class="checkout-required-data">(*)</span> are required.</p>	
-								<div class="form-row d-none">
-									<div class="col-md-12 mb-4">
-										<label class="input-label">My unemployment ID is <span class="checkout-required-data">(*)</span></label>			
-										<input type="email" class="form-control" aria-describedby="inputGroupPrepend3" required>
-										<div class="invalid-feedback">											
-										</div>
-									</div>
-								</div>
+								
 								<div class="form-row">
 									<div class="col-md-6 mb-4 pr-md-3">
 										<label class="input-label">My first name is  <span class="checkout-required-data">(*)</span></label>
-										<input type="text" name="firstname[]" class="form-control with-focus-visible" value="{{old('firstname',$firstname[0])}}"  required>
+										<input type="text" name="firstname[]" class="form-control with-focus-visible" value="{{old('firstname',$firstname[0])}}" readonly required>
 										<div class="valid-feedback">
 											
 										</div>
 									</div>
 									<div class="col-md-6 mb-4 pl-md-3">
 										<label class="input-label">My last name is <span class="checkout-required-data">(*)</span></label>
-										<input type="text" name="lastname[]" class="form-control" value="{{old('lastname',$lastname[0])}}"  required>
+										<input type="text" name="lastname[]" class="form-control" value="{{old('lastname',$lastname[0])}}" readonly required>
 										<div class="valid-feedback">
 											
 										</div>
@@ -54,14 +46,14 @@
 								<div class="form-row">
 									<div class="col-md-12 mb-4">
 										<label class="input-label">My e-mail is  <span class="checkout-required-data">(*)</span></label>							<div class="email-wrap">
-												<input type="text" name="email[]" id="email" value="{{old('email',$email[0])}}" class="form-control" required>
+												<input type="text" name="email[]" id="email" value="{{old('email',$email[0])}}" class="form-control" readonly required>
 										  	</div>
 									</div>
 								</div>
 								<div class="form-row">
 									<div class="col-md-12 mb-4 position-relative country-dropdown">
 										<label class="input-label">My mobile phone number is <span class="checkout-required-data">(*)</span></label>
-										<select name="country_code[]"  class="form-control" id="country">
+										<select disabled  name="country_code[]"  class="form-control" id="country">
 											    <option value="0" label="Select a country">Select a country</option>
 												<option value="213" label="Algeria">Algeria</option>
 												<option value="244" label="Angola">Angola</option>
@@ -318,7 +310,7 @@
 											</optgroup>
 										</select>
 
-                                        <input class="required" id="mobile" onkeyup="checkPhoneNumber(this)" type="number"  name="mobile[]" value="{{old('mobile',$mobile[0])}}"/>
+                                        <input class="required" id="mobile" onkeyup="checkPhoneNumber(this)" type="number" readonly  name="mobile[]" value="{{old('mobile',$mobile[0])}}"/>
                                         <label id="mobile-error1" style="display:none" class="error error-mobile" for="mobile"></label>
                                         <input type="hidden" name="mobileCheck[]" id="mobileCheck" value="{{old('mobile',$mobile[0])}}">
 									</div>
@@ -326,7 +318,7 @@
 								<div class="form-row">
 									<div class="col-md-12 mb-4">
 										<label class="input-label">Town or city I live in is</label>								
-										<input type="text" name="city[]" class="form-control" value="{{old('city',$city[0])}}"  aria-describedby="inputGroupPrepend3">
+										<input type="text" name="city[]" readonly class="form-control" value="{{old('city',$city[0])}}"  aria-describedby="inputGroupPrepend3">
 										<div class="invalid-feedback">										
 										</div>
 									</div>
@@ -334,13 +326,13 @@
 								{{--<div class="form-row">
 									<div class="col-md-12 mb-4">
 										<label class="input-label">My company or employer is</label>													
-										<input type="text" class="form-control"  aria-describedby="inputGroupPrepend3">			
+										<input type="text" class="form-control" readonly aria-describedby="inputGroupPrepend3">			
 									</div>
 								</div>	--}}
 								<div class="form-row">
 									<div class="col-md-12 mb-4">
 										<label class="input-label">My occupation or title is</label>													
-										<input type="text" name="jobtitle[]" class="form-control" placeholder="E.g. Marketing specialist" aria-describedby="inputGroupPrepend3">			
+										<input type="text" name="jobtitle[]" readonly class="form-control" placeholder="E.g. Marketing specialist" aria-describedby="inputGroupPrepend3">			
 									</div>
 								</div>	
 								<div class="form-row">

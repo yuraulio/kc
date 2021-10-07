@@ -217,23 +217,28 @@ class CartController extends Controller
 
     }*/
 
-
     private function initCartDetails($data){
+        
         $event_id = 0;
         $data['price'] = 'free';
-        
+        $data['type'] = -1;
+        $totalitems = 0;
+       
+        $data['curStock'] = 1;
+
         $c = Cart::content()->count();
         if ($c > 0) {
             $cart_contents = Cart::content();
-            foreach ($cart_contents as $item) :
+            foreach ($cart_contents as $item){
+
+                $totalitems += $item->qty;
                 $event_id = $item->options->event;
                 $event_type = $item->options->type;
-
+                $data['itemid'] = $item->rowId;
             
                 break;
-            endforeach;
+            }
 
-            
             $ev = Event::find($event_id);
             if($ev) {
                 $data['eventId'] = $event_id;
@@ -242,7 +247,7 @@ class CartController extends Controller
                 }
                 //dd($ev->ticket);
                 $data['eventtickets'] = $ev->ticket;
-                $data['city'] = $ev->city->first() ? '' : '';
+                $data['city_event'] = $ev->city->first() ? '' : '';
                 $data['duration'] = '';
 
                 $categoryScript = 'Event > ' . $ev->category->first()->name;
@@ -265,7 +270,7 @@ class CartController extends Controller
 
                 $data['duration'] = $ev->summary1->where('section','date')->first() ? $ev->summary1->where('section','date')->first()->title:'';
                 $data['hours'] = $ev->summary1->where('section','duration')->first() ? $ev->summary1->where('section','duration')->first()->title:'';
-                $data['city'] = $ev->city->first() ? $ev->city->first()->name : '';
+                $data['city_event'] = $ev->city->first() ? $ev->city->first()->name : '';
                 $data['coupons'] = $ev->coupons->where('price','>',0)->toArray();
                 
             }
@@ -274,27 +279,27 @@ class CartController extends Controller
             $data['categoryScript'] = $categoryScript;
 
             $cart_contents = Cart::content();
-            foreach ($cart_contents as $item) :
+            foreach ($cart_contents as $item){
                
+                if($item->options->has('type')){
+                    $data['type'] = $item->options->type;
+                }
 
                 foreach ($data['eventtickets'] as $tkey => $tvalue) {
                     if ($tvalue->pivot->event_id == $item->options->event && $tvalue->ticket_id == $item->id) {
-                        $curStock = $tvalue->pivot->quantity;
-                        $data['price'] = $tvalue->pivot->price;
-                    
+                        $data['curStock'] = $tvalue->pivot->quantity;
+                        $data['price'] = $tvalue->pivot->price * $totalitems;
                     }
-                
                 }
-
                 break;
-            endforeach;
-
+            }
         }
 
         if(Session::get('coupon_code')){
-            $data['price'] = Session::get('coupon_price');
+            $data['price'] = Session::get('coupon_price') * $totalitems;
         }
 
+        $data['totalitems'] = $totalitems;
         return $data;
 
     }
@@ -340,11 +345,11 @@ class CartController extends Controller
 
     }
 
-        /**
+    /**
      * Display a listing of products on the cart.
      *
      * @return \Illuminate\View\View
-     */
+    */
     public function registrationIndex()
     {
 
@@ -402,26 +407,34 @@ class CartController extends Controller
         //check for logged in user
         $loggedin_user = Auth::user();
 
-        $data['cur_user'] = '';
-        $data['firstname'] = '';
-        $data['lastname'] = '';
-        $data['email'] = '';
-        $data['country_code'] = '';
-        $data['city'] = '';
-        $data['mobile'] = '';
-        $data['job_title'] = '';
+        for($i = 1;  $i <= $data['totalitems']; $i++ ){
 
-        if($loggedin_user) {
-
-            $data['cur_user'] = $loggedin_user;
-            $data['firstname'] = $loggedin_user->firstname;
-            $data['lastname'] = $loggedin_user->lastname;
-            $data['email'] = $loggedin_user->email;
-            $data['country_code'] = $loggedin_user->country_code;
-            $data['city'] = $loggedin_user->city;
-            $data['mobile'] = $loggedin_user->mobile;
-            $data['job_title'] = $loggedin_user->job_title;
-
+            //dd($data['pay_seats_data']);
+            //$data['cur_user'][$i] =  isset($data['pay_seats_data']['cur_user'][$i-1]) ? $data['pay_seats_data']['cur_user'][$i-1] : '';
+            $data['firstname'][$i-1] = isset($data['pay_seats_data']['names'][$i-1]) ? $data['pay_seats_data']['names'][$i-1] : '';
+            $data['lastname'][$i-1] = isset($data['pay_seats_data']['surnames'][$i-1]) ? $data['pay_seats_data']['surnames'][$i-1] : '';
+            $data['email'][$i-1] = isset($data['pay_seats_data']['emails'][$i-1]) ? $data['pay_seats_data']['emails'][$i-1] : '';
+            $data['country_code'][$i-1] = isset($data['pay_seats_data']['countryCodes'][$i-1]) ? $data['pay_seats_data']['countryCodes'][$i-1] : '';
+            $data['city'][$i-1] = isset($data['pay_seats_data']['cities'][$i-1]) ? $data['pay_seats_data']['cities'][$i-1] : '';
+            $data['mobile'][$i-1] = isset($data['pay_seats_data']['mobiles'][$i-1]) ? $data['pay_seats_data']['mobiles'][$i-1] : '';
+            $data['job_title'][$i-1] = isset($data['pay_seats_data']['jobtitles'][$i-1]) ?  $data['pay_seats_data']['jobtitles'][$i-1]: '';
+            $data['student_type_id'][$i-1] = isset($data['pay_seats_data']['student_type_id'][$i-1]) ?  $data['pay_seats_data']['student_type_id'][$i-1]: '';
+            
+        }
+        
+        $data['cur_user'][0] = $loggedin_user;
+        
+        if($loggedin_user && $data['firstname'][0] =="") {
+            
+            $data['firstname'][0] = $loggedin_user->firstname;
+            $data['lastname'][0] = $loggedin_user->lastname;
+            $data['email'][0] = $loggedin_user->email;
+            $data['country_code'][0] = $loggedin_user->country_code;
+            $data['city'][0] = $loggedin_user->city;
+            $data['mobile'][0] = $loggedin_user->mobile;
+            $data['job_title'][0] = $loggedin_user->job_title;
+            $data['student_type_id'][0] = $loggedin_user->student_type_id;
+            
 
             if(isset($data['pay_bill_data']) && empty($data['pay_bill_data'])) {
                 $inv = []; $rec = [];
@@ -447,6 +460,15 @@ class CartController extends Controller
             $ukcid = $loggedin_user->kc_id;
         }
 
+        if($data['type'] == 1 || $data['type'] == 2 || $data['type'] == 5){
+            return view('theme.cart.new_cart.participant_special', $data);
+        }
+
+        if($data['type'] == 3){
+            
+            return view('theme.cart.new_cart.participant_alumni', $data);
+        }
+
         return view('theme.cart.new_cart.participant', $data);
             
 
@@ -460,8 +482,13 @@ class CartController extends Controller
         if(!$user = User::where('email',$request->email[0])->first()){
 
             $input = [];
-
-            foreach($request->all() as $key => $value){
+            $formData = $request->all();
+            unset($formData['_token']);
+            unset($formData['terms_condition']);
+            unset($formData['update']);
+            unset($formData['type']);
+            
+            foreach($formData as $key => $value){
                 $input[$key] = $value[0];
             }
 
@@ -478,16 +505,49 @@ class CartController extends Controller
 
         }
 
+        $data = [];
+        $data = $this->initCartDetails($data);
 
         $seats_data = array();
-        $seats_data['names'] = $request->get('firstname');
-        $seats_data['surnames'] = $request->get('lastname');
-        $seats_data['emails'] = $request->get('email');
-        $seats_data['mobiles'] = $request->get('mobile');
-        $seats_data['mobileCheck'] = $request->get('mobileCheck');
-        $seats_data['countryCodes'] = $request->get('country_code');
-        $seats_data['cities'] = $request->get('city');
-        $seats_data['jobtitles'] = $request->get('jobtitle');
+        $userCheck = Auth::user();
+
+        if($data['type'] == 3 && $userCheck  && $userCheck ->kc_id ){
+
+            $seats_data['names'][] = $userCheck ->firstname;
+            $seats_data['surnames'][] = $userCheck ->lastname;
+            $seats_data['emails'][] =$userCheck ->email;
+            $seats_data['mobiles'][] = $userCheck ->mobile;
+            $seats_data['mobileCheck'][] = $userCheck ->mobileCheck;
+            $seats_data['countryCodes'][] = $userCheck ->country_code;
+            $seats_data['cities'][] = $userCheck ->city;
+            $seats_data['jobtitles'][] = $userCheck ->jobtitle;
+            $seats_data['student_type_id'][] = $userCheck ->student_type_id;
+
+        }else if($data['type'] != 3) {
+            $seats_data['names'] = $request->get('firstname');
+            $seats_data['surnames'] = $request->get('lastname');
+            $seats_data['emails'] = $request->get('email');
+            $seats_data['mobiles'] = $request->get('mobile');
+            $seats_data['mobileCheck'] = $request->get('mobileCheck');
+            $seats_data['countryCodes'] = $request->get('country_code');
+            $seats_data['cities'] = $request->get('city');
+            $seats_data['jobtitles'] = $request->get('jobtitle');
+            $seats_data['student_type_id'] = $request->get('student_type_id');
+        }else{
+            Cart::instance('default')->destroy();
+            Session::forget('pay_seats_data');
+            Session::forget('transaction_id');
+            Session::forget('cardtype');
+            Session::forget('installments');
+            //Session::forget('pay_invoice_data');
+            Session::forget('pay_bill_data');
+            Session::forget('deree_user_data');
+            Session::forget('user_id');
+            Session::forget('coupon_code');
+            Session::forget('coupon_price');
+        }
+        
+        
         
         Session::put('pay_seats_data', $seats_data);
         Session::put('user_id', $user->id);
@@ -638,7 +698,6 @@ class CartController extends Controller
         return redirect('/checkout');
     }
 
-
     public function checkoutIndex()
     {
 
@@ -694,7 +753,6 @@ class CartController extends Controller
         //return view('theme.cart.cart', $data);
     }
 
-
     /**
     * Adds a new product to the shopping cart.
     *
@@ -704,6 +762,10 @@ class CartController extends Controller
     */
     public function add($id, $ticket, $type, Request $request)
     {
+      
+        if((!Auth::user() || (Auth::user() && !Auth::user()->kc_id)) && $type == 3){
+            return back();
+        }
         
         // Determine if this is an ajax request
         //dd($ticket);
@@ -823,7 +885,6 @@ class CartController extends Controller
        return $item;
 
     }
-
 
     protected function addFreeToCart(Event $product, $ticket, $type)
     {
@@ -1348,6 +1409,7 @@ class CartController extends Controller
             return response([ 'message' => 'success', 'id' => $id ]);
         }
 
+        Cart::instance('default')->destroy();
         Session::forget('pay_seats_data');
         Session::forget('transaction_id');
         Session::forget('cardtype');
@@ -1355,16 +1417,16 @@ class CartController extends Controller
         //Session::forget('pay_invoice_data');
         Session::forget('pay_bill_data');
         Session::forget('deree_user_data');
+        Session::forget('user_id');
+        Session::forget('coupon_code');
+        Session::forget('coupon_price');
 
-        return Redirect::to('/registration')->with('success',
-            "{$product->name} was successfully removed from the shopping cart."
-        );
+        return Redirect::to('/registration');
 
         /*return redirect()->route('cart')->with('success',
             "{$product->name} was successfully removed from the shopping cart."
         );*/
     }
-
 
     public function checkCoupon(Request $request, $event){
 
@@ -1408,7 +1470,6 @@ class CartController extends Controller
         ]);
 
     }
-
 
     public function checkCode(Request $request){
 
@@ -1772,6 +1833,7 @@ class CartController extends Controller
         //return $request->all();
     	$updates = $request->get('update');
     	foreach ($updates as $key => $value) {
+            //dd($value['quantity']);
     		Cart::update($key, $value['quantity']);
     	}
 

@@ -4,8 +4,9 @@ $(document).ready(function() {
         $(this).next('p').addClass('active');
     });
 
-    var cloneCount = 1;
+    var cloneCount = 2;
     $(".add-participant").click(function() {
+      
         cloneCount = cloneCount + 1;
         var clone = $('#clone-box')
             .clone()
