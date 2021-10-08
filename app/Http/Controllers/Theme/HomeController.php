@@ -249,7 +249,7 @@ class HomeController extends Controller
     }
 
     public function enrollToFreeEvent(Event $content){
-
+        
         $published = $content->published;
         if($published == 0){
             return false;
@@ -296,7 +296,7 @@ class HomeController extends Controller
             $coockie->save();
         }
       
-
+        
         $student = $user->events->where('id',$content->id)->first();
         if(!$student){
 

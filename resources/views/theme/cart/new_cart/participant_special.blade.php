@@ -21,7 +21,7 @@
 				<!---------------- Participant form start--------------->
 				<div class="col-md-6 col-xl-6">
 					<div class="participant-full-wrap">
-						<p class="login-link">Already have an account? <a href="#" class="link-color">Log in</a></p>							
+					@if(!Auth::check())<p class="login-link">Already have an account? <a href="#" class="link-color">Log in</a></p>@endif					
 						<form action="{{route('registration')}}" method="post" id="participant-form" name="participant-form">
                         	@csrf
 							@for ($i=1; $i <= $totalitems; $i++) 

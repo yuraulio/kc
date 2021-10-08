@@ -66,7 +66,7 @@
 								<div class="d-flex align-items-center previous-participant-link">
 									<img src="{{cdn('new_cart/images/arrow-previous-green.svg')}}" width="20px" height="12px" class="without-hover" alt="">
 									<img src="{{cdn('new_cart/images/arrow-previous-green2.svg')}}" width="20px" height="12px" class="with-hover" alt="">
-									<a href="javascript:;" class="link-color">Previous: Billing</a>
+									<a href="/billing" class="link-color">Previous: Billing</a>
 								</div>
 								<button id="pay-now" type="button" class="btn btn-3 checkout-button-primary">Pay now</button>
 							</div>

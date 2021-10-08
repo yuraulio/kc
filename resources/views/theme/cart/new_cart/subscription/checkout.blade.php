@@ -57,7 +57,7 @@
 					</form>
 				</div>
 			</div>
-			{{-- @include('theme.cart.new_cart.selection') --}}
+			@include('theme.cart.new_cart.subscription.selection')
 		</div>
 	</div>						
 </div>

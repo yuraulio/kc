@@ -102,7 +102,7 @@
 								<div class="d-flex align-items-center previous-participant-link">
 									<img src="{{cdn('new_cart/images/arrow-previous-green.svg')}}" width="20px" height="12px" class="without-hover" alt="">
 									<img src="{{cdn('new_cart/images/arrow-previous-green2.svg')}}" width="20px" height="12px" class="with-hover" alt="">
-									<a href="javascript:;" class="link-color">Previous: Participant(s)</a>
+									<a href="/registration" class="link-color">Previous: Participant(s)</a>
 								</div>	
 								<button id="btn" type="submit" class="btn checkout-button-secondary">Next:Checkout <img src="{{cdn('new_cart/images/arrow-next-red.svg')}}" width="20px" height="12px" class="without-hover" alt=""> <img src="{{cdn('new_cart/images/arrow-next-red2.svg')}}" width="20px" height="12px" class="with-hover" alt=""> </button>
 							</div>
