@@ -89,7 +89,25 @@ class Invoice extends Model
 
         //dd($this);
 
-        $billInfo = $billing['billaddress'] . ' ' . $billing['billaddressnum'] . ', ' .  $billing['billpostcode'] . ', ' . $billing['billcity'];
+        $billInfo = '';
+
+        if($billing['billaddress']){
+            $billInfo .= $billing['billaddress'];
+        }
+
+        if($billing['billaddressnum']){
+            $billInfo .= ' ' . $billing['billaddressnum'];
+        }
+
+        if($billing['billpostcode']){
+            $billInfo .= ' ' . $billing['billpostcode'];
+        }
+
+        if($billing['billcity']){
+            $billInfo .= ' ' . $billing['billcity'];
+        }
+
+    
     
         if($this->amount - floor($this->amount)>0){
             $data['amount'] = number_format ($this->amount , 2 , ',', '.');
@@ -150,7 +168,23 @@ class Invoice extends Model
 
         //dd($this->transaction);
 
-        $billInfo = $billing['billaddress'] . ' ' . $billing['billaddressnum'] . ', ' .  $billing['billpostcode'] . ', ' . $billing['billcity'];
+        $billInfo = '';
+
+        if($billing['billaddress']){
+            $billInfo .= $billing['billaddress'];
+        }
+
+        if($billing['billaddressnum']){
+            $billInfo .= ' ' . $billing['billaddressnum'];
+        }
+
+        if($billing['billpostcode']){
+            $billInfo .= ' ' . $billing['billpostcode'];
+        }
+
+        if($billing['billcity']){
+            $billInfo .= ' ' . $billing['billcity'];
+        }
     
     
         /*$this->instalments_remaining = $this->instalments_remaining - 1;
@@ -241,7 +275,23 @@ class Invoice extends Model
        
         $billing = json_decode($this->transaction->first()->billing_details,true);
 
-        $billInfo = $billing['billaddress'] . ' ' . $billing['billaddressnum'] . ', ' .  $billing['billpostcode'] . ', ' . $billing['billcity'];
+        $billInfo = '';
+
+        if($billing['billaddress']){
+            $billInfo .= $billing['billaddress'];
+        }
+
+        if($billing['billaddressnum']){
+            $billInfo .= ' ' . $billing['billaddressnum'];
+        }
+
+        if($billing['billpostcode']){
+            $billInfo .= ' ' . $billing['billpostcode'];
+        }
+
+        if($billing['billcity']){
+            $billInfo .= ' ' . $billing['billcity'];
+        }
     
         if($this->amount - floor($this->amount)>0){
             $data['amount'] = number_format ($this->amount , 2 , ',', '.');

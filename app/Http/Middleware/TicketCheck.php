@@ -27,13 +27,16 @@ class TicketCheck
             if($user->cart){
                
                 $event = Event::where('id',$user->cart->event)->with('ticket')->first();
-               
-                $stock = $event->ticket->where('ticket_id',$user->cart->ticket_id)->first()->pivot->quantity;
-               
+                if($event->view_tpl == 'event_free_coupon'){
+                    $stock = 1;
+                }else{
+                    $stock = $event->ticket->where('ticket_id',$user->cart->ticket_id)->first()->pivot->quantity;
+
+                }
+
                 if($stock <= 0){
                     $user->cart->delete();
                     Cart::instance('default')->destroy();
-                    
                     return redirect($event->slugable->slug);
                 }
             }

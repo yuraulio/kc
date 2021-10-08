@@ -183,7 +183,7 @@ class WebhookController extends BaseWebhookController
 			$subscription->must_be_updated = $ends_at;
 			$subscription->email_send = false;
 			$subscription->status = true;
-			$subscription->stripe_status = 'active';
+			//$subscription->stripe_status = 'active';
 			
 			$subscription->ends_at = date('Y-m-d H:i:s', $ends_at);
 			$subscription->save();

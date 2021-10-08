@@ -367,6 +367,10 @@ Route::group(['middleware' => ['web']], function () {
             Route::get('/remove/{item}', [ 'as' => 'cart.remove-item', 'uses' => 'Theme\CartController@dpremove']);
 
             Route::post('/cart/update', [ 'as' => 'cart.update', 'uses' => 'Theme\CartController@update' ]);
+
+            Route::get('/enroll-for-free/{content}', 'Theme\HomeController@enrollToFreeEvent')->name('enrollForFree');
+
+
         });
     });
 });
@@ -374,7 +378,7 @@ Route::group(['middleware' => ['web']], function () {
 
 Route::post('checkCode', 'Theme\CartController@checkCode');
 Route::get('/free-event-cart', 'Theme\CartController@cartIndex');
-Route::post('/complete-registration', 'Theme\CartController@completeRegistration');
+Route::post('/complete-registration', 'Theme\CartController@completeRegistration')->name('registration.code_event');
 Route::post('/complete-registration-validation', 'Theme\CartController@validation');
 Route::post('/free-event-cart/remove',  'Theme\CartController@dpremove');
 
@@ -412,7 +416,6 @@ Route::post('/file-manager/saveAlt', '\Alexusmai\LaravelFileManager\Controllers\
 
 Route::get('search/term', [ 'as' => 'search.term', 'uses' => 'Theme\SearchController@searchForTerm' ]);
 
-
 Route::group(['middleware' => ['auth'], 'prefix'=>'myaccount'], function () {
     Route::group(['middleware' => 'auth.sms' ], function () {
         Route::get('/','Theme\StudentController@index')->name('myaccount');
@@ -424,11 +427,12 @@ Route::group(['middleware' => ['auth'], 'prefix'=>'myaccount'], function () {
         Route::post('/updrecbill', [ 'as' => 'updrecbill' , 'uses' => 'Theme\StudentController@updateReceiptBilling' ]);
         Route::get('/mydata', [ 'as' => 'festudent.mydata' , 'uses' => 'Theme\StudentController@downloadMyData' ]);
 
-        Route::get('/enroll-for-free/{content}', 'Theme\HomeController@enrollToFreeEvent')->name('enrollForFree');
+        
         Route::get('/elearning/{course?}',  'Theme\StudentController@elearning');
 
 
         Route::get('/subscription/{event}/{plan}',  'Theme\SubscriptionController@index');
+        Route::post('/subscription/checkout/{event}/{plan}',  'Theme\SubscriptionController@checkoutIndex')->name('subscription.checkoutIndex');
         Route::post('/subscription/store/{event}/{plan}',  'Theme\SubscriptionController@store')->name('subscription.store');
         Route::get('/subscription-success', 'Theme\SubscriptionController@orderSuccess');
         Route::post('/subscription/change_status',  'Theme\SubscriptionController@change_status')->name('subscription.change_status');

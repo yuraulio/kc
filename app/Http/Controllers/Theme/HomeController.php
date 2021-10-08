@@ -28,6 +28,13 @@ use App\Model\Transaction;
 use Mail;
 use Validator;
 use App\Model\GiveAway;
+use App\Model\CookiesSMS;
+use App\Notifications\CreateYourPassword;
+use Illuminate\Support\Facades\Hash;
+use App\Model\Activation;
+use Illuminate\Support\Str;
+use \Cart as Cart;
+use Session;
 
 class HomeController extends Controller
 {
@@ -243,64 +250,102 @@ class HomeController extends Controller
 
     public function enrollToFreeEvent(Event $content){
 
-
         $published = $content->published;
-      // dd($estatus);
         if($published == 0){
             return false;
         }
+        
+        
 
-        if(Auth::user() && $user = (Auth::user())){
+        if( !($user = Auth::user()) && !($user = User::where('email',request()->email[0])->first()) ){
 
-            $student = $user->events->where('id',$content->id)->first();
-            if(!$student){
+            $input = [];
+            $formData = request()->all();
+            unset($formData['_token']);
+            unset($formData['terms_condition']);
+            unset($formData['update']);
+            unset($formData['type']);
+            
+            foreach($formData as $key => $value){
+                $input[$key] = $value[0];
+            }
 
-                //ticket
-                $eventticket = 'free';
+            $input['password'] = Hash::make(date('Y-m-dTH:i:s'));
+            
+            $user = User::create($input);
 
-                $payment_method_id = 1;//intval($input["payment_method_id"]);
-                $payment_cardtype = 8; //free;
-                $amount = 0;
-                $namount = (float)$amount;
-                $transaction_arr = [
+            $code = Activation::create([
+                'user_id' => $user->id,
+                'code' => Str::random(40),
+                'completed' => false,
+            ]);
+            $user->role()->attach(7);
 
-                    'payment_method_id' => $payment_method_id,
-                    'account_id' => 17,
-                    'payment_status' => 2,
-                    'billing_details' => '',//serialize($billing_details),
-                    'placement_date' => Carbon::now()->toDateTimeString(),
-                    'ip_address' => '127.0.0.1',
-                    'type' => $payment_cardtype,//((Sentinel::inRole('super_admin') || Sentinel::inRole('know-crunch')) ? 1 : 0),
-                    'status' => 1, //2 PENDING, 0 FAILED, 1 COMPLETED
-                    'is_bonus' => 0, //$input['is_bonus'],
-                    'order_vat' => 0, //$input['credit'] - ($input['credit'] / (1 + Config::get('dpoptions.order_vat.value') / 100)),
-                    'surcharge_amount' => 0,
-                    'discount_amount' => 0,
-                    'amount' => $namount, //$input['credit'],
-                    'total_amount' => $namount,
-                    'trial' => false
-                ];
+            $user->notify(new CreateYourPassword($user));
 
-                $transaction = Transaction::create($transaction_arr);
+            $cookieValue = base64_encode($user->id . date("H:i"));
+            setcookie('auth-'.$user->id, $cookieValue, time() + (1 * 365 * 86400), "/"); // 86400 = 1 day
+        
+            $coockie = new CookiesSMS;
+            $coockie->coockie_name = 'auth-'.$user->id;
+            $coockie->coockie_value = $cookieValue;
+            $coockie->user_id = $user->id;
+            $coockie->sms_code = -1;
+            $coockie->sms_verification = true;
 
-                if ($transaction) {
+            $coockie->save();
+        }
+      
+
+        $student = $user->events->where('id',$content->id)->first();
+        if(!$student){
+
+            //ticket
+            $eventticket = 'free';
+
+            $payment_method_id = 1;//intval($input["payment_method_id"]);
+            $payment_cardtype = 8; //free;
+            $amount = 0;
+            $namount = (float)$amount;
+            $transaction_arr = [
+
+                'payment_method_id' => $payment_method_id,
+                'account_id' => 17,
+                'payment_status' => 2,
+                'billing_details' => json_encode([]),//serialize($billing_details),
+                'placement_date' => Carbon::now()->toDateTimeString(),
+                'ip_address' => '127.0.0.1',
+                'type' => $payment_cardtype,//((Sentinel::inRole('super_admin') || Sentinel::inRole('know-crunch')) ? 1 : 0),
+                'status' => 1, //2 PENDING, 0 FAILED, 1 COMPLETED
+                'is_bonus' => 0, //$input['is_bonus'],
+                'order_vat' => 0, //$input['credit'] - ($input['credit'] / (1 + Config::get('dpoptions.order_vat.value') / 100)),
+                'surcharge_amount' => 0,
+                'discount_amount' => 0,
+                'amount' => $namount, //$input['credit'],
+                'total_amount' => $namount,
+                'trial' => false
+            ];
+
+            $transaction = Transaction::create($transaction_arr);
+
+            if ($transaction) {
                     // set transaction id in session
 
-                    $pay_seats_data = ["names" => [Auth::user()->first_name],"surnames" => [Auth::user()->last_name],"emails" => [Auth::user()->email],
-                    "mobiles" => [Auth::user()->mobile],"addresses" => [Auth::user()->address],"addressnums" => [Auth::user()->address_num],
-                    "postcodes" => [Auth::user()->postcode],"cities" => [Auth::user()->city],"jobtitles" => [Auth::user()->job_title],
-                    "companies" => [Auth::user()->company],"students" => [""], "afms" => [Auth::user()->afm]];
+                    $pay_seats_data = ["names" => [$user->first_name],"surnames" => [$user->last_name],"emails" => [$user->email],
+                    "mobiles" => [$user->mobile],"addresses" => [$user->address],"addressnums" => [$user->address_num],
+                    "postcodes" => [$user->postcode],"cities" => [$user->city],"jobtitles" => [$user->job_title],
+                    "companies" => [$user->company],"students" => [""], "afms" => [$user->afm]];
 
 
-                    $deree_user_data = [Auth::user()->email => Auth::user()->partner_id];
+                    $deree_user_data = [$user->email => $user->partner_id];
                     $cart_data = ["manualtransaction" => ["rowId" => "manualtransaction","id" => 'free',"name" => $content->title,"qty" => "1","price" => $amount,"options" => ["type" => "8","event"=> $content->id],"tax" => 0,"subtotal" => $amount]];
 
                     $status_history[] = [
                     'datetime' => Carbon::now()->toDateTimeString(),
                     'status' => 1,
                     'user' => [
-                        'id' => $user, //0, $this->current_user->id,
-                        'email' => Auth::user()->email,//$this->current_user->email
+                        'id' => $user->id, //0, $this->current_user->id,
+                        'email' => $user->email,//$this->current_user->email
                         ],
                     'pay_seats_data' => $pay_seats_data,//$data['pay_seats_data'],
                     'pay_bill_data' => [],
@@ -322,12 +367,22 @@ class HomeController extends Controller
 
                     $content->users()->save($user,['comment'=>'free','expiration'=>$expiration_date,'paid'=>true]);
 
-                }
             }
-
         }
-
-        return back();
+        
+        Cart::instance('default')->destroy();
+        Session::forget('pay_seats_data');
+        Session::forget('transaction_id');
+        Session::forget('cardtype');
+        Session::forget('installments');
+        //Session::forget('pay_invoice_data');
+        Session::forget('pay_bill_data');
+        Session::forget('deree_user_data');
+        Session::forget('user_id');
+        Session::forget('coupon_code');
+        Session::forget('coupon_price');
+        
+        return redirect($content->slugable->slug);
     }
 
     private function city($page){

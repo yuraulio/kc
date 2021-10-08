@@ -191,7 +191,7 @@
    document.getElementById('syllabus-link').setAttribute('href',syllabusLink);
    
 </script>
-<script src="{{ cdn('theme/assets/js/cart.js') }}"></script>
+<script src="{{cdn('new_cart/js/cart.js')}}" type="text/javascript" charset="utf-8" async defer></script>
 @stop
 @section('fbchat')
 <div id="fb-root"></div>

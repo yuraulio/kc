@@ -20,17 +20,21 @@ class CheckCodeEvent
     {
 
         $user = Auth::user();
-        if($user){
+
+        $user = Auth::user();
+        $carts = Cart::content();
+        $event_type = '-1';
+
+        foreach($carts as $cart){
+            $event_type = $cart->id;
+            break;
+        }
+    
+        if($event_type == 'free_code'){
             
-            if($user->cart){
-                
-                $event = Event::where('id',$user->cart->event)->first();
-                if( $event->view_tpl === 'event_free_coupon' ){
-                    return $next($request);
-                }
-            }
+            return $next($request);
         }else{
-            return redirect('/cart');
+            return redirect('registration');
         }
         
         abort(404);

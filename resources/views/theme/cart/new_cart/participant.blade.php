@@ -27,14 +27,7 @@
 							<div class="form-wrp box" id="clone-box">												
 								
 								<p class="validation-info">Fields marked with an asterisk <span class="checkout-required-data">(*)</span> are required.</p>	
-								<div class="form-row d-none">
-									<div class="col-md-12 mb-4">
-										<label class="input-label">My unemployment ID is <span class="checkout-required-data">(*)</span></label>			
-										<input type="email" class="form-control" aria-describedby="inputGroupPrepend3" required>
-										<div class="invalid-feedback">											
-										</div>
-									</div>
-								</div>
+								
 								<div class="form-row">
 									<div class="col-md-6 mb-4 pr-md-3">
 										<label class="input-label">My first name is  <span class="checkout-required-data">(*)</span></label>

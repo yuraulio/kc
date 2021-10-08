@@ -17,7 +17,7 @@ class Registration
      */
     public function handle(Request $request, Closure $next)
     {
-        
+    
         if(Cart::content()->count() <= 0){
             return redirect('/');
         }

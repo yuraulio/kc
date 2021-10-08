@@ -18,7 +18,7 @@ class CheckForFreeEvent
      */
     public function handle($request, Closure $next)
     {
-        
+ 
         $user = Auth::user();
         if($user){
             
@@ -31,9 +31,6 @@ class CheckForFreeEvent
                     Cart::instance('default')->destroy();
                     return redirect($event->slugable->slug);
                     
-                }elseif( $event->view_tpl == 'event_free_coupon' ){
-                    
-                    return redirect('free-event-cart');
                 }
             }
         }

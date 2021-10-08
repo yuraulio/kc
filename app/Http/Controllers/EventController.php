@@ -459,6 +459,7 @@ class EventController extends Controller
         $newEvent->release_date_files = null;
         $newEvent->published_at = null;
         $newEvent->launch_date = null;
+        $newEvent->enroll = false;
         $newEvent->push();
 
         $newEvent->createMedia();

@@ -7,34 +7,22 @@
 								<img src="{{cdn('new_cart/images/close-green2.svg')}}" width="9px" height="10px" class="with-hover"></a>
 						</div>
 						<h2>My selection:</h2>
-                        <?php
-                            $mod = $item->model;
-                            
-                            $curStock = 1;
-                           
-                            if(isset($maxseats)) {
-                            	$themax = $maxseats;
-                            }
-                            else {
-                            	$themax = $curStock;
-                            }
-                        ?>
-
+                    
 						    <h3>{{ $item->name }}</h3>	
 						    @if($duration)<datetime="YYYY-MM-DDThh:mm:ssTZD">Sep14 - Dec 4, 2021</datetime="YYYY-MM-DDThh:mm:ssTZD">@endif
 						    <div class="checkout-price-wrap">
 						    	<div class="checkout-price">
-						    		<p>Price:</p><span>€{{$price}}</span>
+						    		<p>Price:</p><span>@if(is_numeric($price)) €{{$price}} @else {{$price}} @endif</span>
 						    	</div>
 						    	<div class="checkout-participant">
 						    		<p>Participant(s):</p><span>1</span>
 						    	</div>
 						    	<div class="checkout-total">
-						    		<p class="mb-0">Total amount:</p><span class="color-secondary checkout-total-amount">€{{$price}}</span>
+						    		<p class="mb-0">Total amount:</p><span class="color-secondary checkout-total-amount">@if(is_numeric($price)) €{{$price}} @else {{$price}} @endif </span>
 						    	</div>
 						    </div>
                         @endforeach
-						@if(!\Session::get('coupon_code'))
+						@if(!\Session::get('coupon_code') && !isset($show_coupon))
 						<div class="checkout-coupon-code-wrap">
 							<h2 class="mb-0">I have a coupon:</h2>							
 							<form class="checkout-fields d-flex justify-content-between mt-3 align-items-start">								
@@ -61,7 +49,7 @@
 
 @push('scripts')
 
-	@if(!\Session::get('coupon_code'))
+	@if(!\Session::get('coupon_code') && !isset($show_coupon))
 		<script>
 
 

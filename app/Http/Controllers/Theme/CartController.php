@@ -28,6 +28,8 @@ use App\Model\Activation;
 use App\Model\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+use App\Model\CookiesSMS;
+use App\Notifications\CreateYourPassword;
 
 class CartController extends Controller
 {
@@ -35,9 +37,11 @@ class CartController extends Controller
     public function __construct()
     {
         $this->middleware('cart')->except('cartIndex','completeRegistration','validation','checkCode');
+        $this->middleware('code.event')->only('completeRegistration');
         $this->middleware('registration.check')->except('cartIndex','completeRegistration','validation','checkCode','add');
-        $this->middleware('billing.check')->only('billingIndex','billing');
-        $this->middleware('code.event')->only('cartIndex','completeRegistration');
+        //$this->middleware('registration.check');
+        $this->middleware('billing.check')->only('billingIndex','billing','checkoutIndex');
+        
 
     }
 
@@ -299,6 +303,16 @@ class CartController extends Controller
             $data['price'] = Session::get('coupon_price') * $totalitems;
         }
 
+        if($data['type'] == 'free_code' ){
+            $data['price'] = 'Upon Coupon';
+            $data['show_coupon'] = false;
+
+        }else if($data['type'] == 'free' ){
+            $data['price'] = 'Free';
+            $data['show_coupon'] = false;
+        }
+
+
         $data['totalitems'] = $totalitems;
         return $data;
 
@@ -403,7 +417,6 @@ class CartController extends Controller
 
        $data = $this->initCartDetails($data);
 
-
         //check for logged in user
         $loggedin_user = Auth::user();
 
@@ -468,19 +481,28 @@ class CartController extends Controller
             
             return view('theme.cart.new_cart.participant_alumni', $data);
         }
+        
+        if($data['type'] == 'free_code'){
+            return view('theme.cart.new_cart.participant_code_event', $data);
+        }
+
+        if($data['type'] == 'free'){
+            return view('theme.cart.new_cart.participant_free_event', $data);
+        }
 
         return view('theme.cart.new_cart.participant', $data);
             
-
-
-        //return view('theme.cart.cart', $data);
     }
 
     public function registration(Request $request)
     {
 
-        if(!$user = User::where('email',$request->email[0])->first()){
-
+        $userCheck = Auth::user();
+        $data = [];
+        $data = $this->initCartDetails($data);
+        //dd($data['type']!=3);
+    
+        if((!$user = User::where('email',$request->email[0])->first()) && !$userCheck && $data['type'] != 3){
             $input = [];
             $formData = $request->all();
             unset($formData['_token']);
@@ -502,15 +524,34 @@ class CartController extends Controller
                 'completed' => false,
             ]);
             $user->role()->attach(7);
+            Session::put('user_id', $user->id);
 
+            $existingcheck = ShoppingCart::where('identifier', $user->id)->first();
+            //Cart::restore($user->id
+            if($existingcheck) {
+                //$user edww
+                if($user->cart){
+                    $user->cart->delete();
+                }
+                $existingcheck->delete($user->id);
+                Cart::store($user->id);
+                $timecheck = ShoppingCart::where('identifier', $user->id)->first();
+                $timecheck->created_at = Carbon::now();
+                $timecheck->updated_at = Carbon::now();
+                $timecheck->save();
+            }
+            else {
+                Cart::store($user->id);
+                $timecheck = ShoppingCart::where('identifier', $user->id)->first();
+                $timecheck->created_at = Carbon::now();
+                $timecheck->updated_at = Carbon::now();
+                $timecheck->save();
+            }
+ 
         }
 
-        $data = [];
-        $data = $this->initCartDetails($data);
-
         $seats_data = array();
-        $userCheck = Auth::user();
-
+        
         if($data['type'] == 3 && $userCheck  && $userCheck ->kc_id ){
 
             $seats_data['names'][] = $userCheck ->firstname;
@@ -522,6 +563,7 @@ class CartController extends Controller
             $seats_data['cities'][] = $userCheck ->city;
             $seats_data['jobtitles'][] = $userCheck ->jobtitle;
             $seats_data['student_type_id'][] = $userCheck ->student_type_id;
+            Session::put('user_id', $userCheck->id);
 
         }else if($data['type'] != 3) {
             $seats_data['names'] = $request->get('firstname');
@@ -546,11 +588,9 @@ class CartController extends Controller
             Session::forget('coupon_code');
             Session::forget('coupon_price');
         }
-        
-        
-        
+         
         Session::put('pay_seats_data', $seats_data);
-        Session::put('user_id', $user->id);
+        
         
         return redirect('/billing');
             
@@ -936,7 +976,7 @@ class CartController extends Controller
 
     public function postPaymentWithStripe($input)
     {
-       // dd($input);
+       
         Session::forget('dperror');
         Session::forget('error');
 
@@ -1525,115 +1565,10 @@ class CartController extends Controller
 
     }
 
-    public function cartIndex(Event $event){
-
-        $c = Cart::content()->count();
-        $data = [];
-        $data['city'] = null;
-        $data['duration'] = null;
-        $categoryScript ='';
-
-        $user = Auth::user();
-
-        $data['cur_user'] = $user;
-
-        if ($c > 0) {
-            $cart_contents = Cart::content();
-            foreach ($cart_contents as $item) {
-                $event_id = $item->options->event;
-                $event_type = $item->options->type;
-
-                break;
-            }
-
-            $ev = Event::find($event_id);
-            if($ev) {
-
-                if($ev->view_tpl != 'elearning_event'){
-                    if($ev->city->first()){
-                        $data['city'] = $ev->city->first()->name;
-
-                    }
-                }
-
-                if ($ev->category->first()) {
-                    $categoryScript = 'Event > ' . $ev->category->first()->name;
-                }
-
-
-                $data['ev_date_help'] = 'test';
-                $data['duration'] = 'tst3';
-
-            }
-        }
-
-        $data['eventId'] = $event_id;
-        $data['categoryScript'] = $categoryScript;
-
-
-
-        return view('theme.cart.cart_code_event',$data);
-    }
-
-    public function validation(Request $request){
-        $validatorArray = [];
-
-        $validatorArray['email.*'] = 'required|email';
-        $validatorArray['name.*'] = 'required';
-        $validatorArray['surname.*'] = 'required';
-        $validatorArray['mobile.*'] = 'required';
-        $validatorArray['city.*'] = 'required';
-        $validatorArray['address.*'] = 'required';
-        $validatorArray['addressnum.*'] = 'required';
-        $validatorArray['postcode.*'] = 'required';
-
-        $validator = Validator::make($request->all(), $validatorArray);
-
-        if ($validator->fails()) {
-            return [
-                'status' => 0,
-                'errors' => $validator->errors(),
-                'message' => '',
-            ];
-
-        }else{
-
-            $seats_data = array();
-            $seats_data['names'] = $request->get('name');
-        	$seats_data['surnames'] = $request->get('surname');
-        	$seats_data['emails'] = $request->get('email');
-            $seats_data['mobiles'] = $request->get('mobile');
-            $seats_data['mobileCheck'] = $request->get('mobileCheck');
-            $seats_data['countryCodes'] = $request->get('countryCodes');
-        	$seats_data['addresses'] = $request->get('address');
-        	$seats_data['addressnums'] = $request->get('addressnum');
-        	$seats_data['postcodes'] = $request->get('postcode');
-        	$seats_data['cities'] = $request->get('city');
-        	$seats_data['jobtitles'] = $request->get('jobtitle');
-        	$seats_data['companies'] = $request->get('company');
-            $seats_data['students'] = $request->get('student');
-            $seats_data['afms'] = $request->get('afm');
-            $seats_data['studentId'] = $request->get('studentId');
-            Session::put('pay_seats_data', $seats_data);
-
-            return [
-                'status' => 1,
-                'message' => 'Done go checkout',
-            ];
-
-        }
-
-
-    }
-
     public function completeRegistration(Request $request){
 
-        $this->validate($request, [
-            'mobileCheck.*' => 'phone:AUTO',
-        ]);
-
+        
         $data = [];
-
         $option = Option::where('abbr','deree-codes')->first();
         //$dereelist = json_decode($option->settings, true);
         $code = 0;
@@ -1641,7 +1576,33 @@ class CartController extends Controller
         //dd($dereelist);
 
         $c = Cart::content()->count();
-        $user = Auth::user();
+       
+        if((!$user = User::where('email',$request->email[0])->first())){
+            $input = [];
+            $formData = $request->all();
+            unset($formData['_token']);
+            unset($formData['terms_condition']);
+            unset($formData['update']);
+            unset($formData['type']);
+            
+            foreach($formData as $key => $value){
+                $input[$key] = $value[0];
+            }
+
+            $input['password'] = Hash::make(date('Y-m-dTH:i:s'));
+            
+            $user = User::create($input);
+
+            $code = Activation::create([
+                'user_id' => $user->id,
+                'code' => Str::random(40),
+                'completed' => false,
+            ]);
+            $user->role()->attach(7);
+            
+
+        
+        }
 
 
         if ($c > 0) {
@@ -1673,7 +1634,7 @@ class CartController extends Controller
             'payment_method_id' => $payment_method_id,
             'account_id' => 17,
             'payment_status' => 1,
-            'billing_details' => '',//serialize($billing_details),
+            'billing_details' => json_encode([]),
             'placement_date' => Carbon::now()->toDateTimeString(),
             'ip_address' => '127.0.0.1',
             'type' => $payment_cardtype,//((Sentinel::inRole('super_admin') || Sentinel::inRole('know-crunch')) ? 1 : 0),
@@ -1692,14 +1653,14 @@ class CartController extends Controller
 
         if ($transaction) {
             // set transaction id in session
+            
+            $pay_seats_data = ["names" => [$request->firstname[0]],"surnames" => [$request->lastname[0]],"emails" => [$request->email[0]],
+            "mobiles" => [$request->mobile[0]],"addresses" => [$user->address],"addressnums" => [$user->address_num],
+            "postcodes" => [$user->postcode],"cities" => [$user->city],"jobtitles" => [$user->job_title],
+            "companies" => [$user->company],"students" => [""], "afms" => [$user->afm]];
 
-            $pay_seats_data = ["names" => [$request->name[0]],"surnames" => [$request->surname[0]],"emails" => [$request->email[0]],
-            "mobiles" => [$request->mobile[0]],"addresses" => [Auth::user()->address],"addressnums" => [Auth::user()->address_num],
-            "postcodes" => [Auth::user()->postcode],"cities" => [Auth::user()->city],"jobtitles" => [Auth::user()->job_title],
-            "companies" => [Auth::user()->company],"students" => [""], "afms" => [Auth::user()->afm]];
 
-
-            $deree_user_data = [Auth::user()->email => Auth::user()->partner_id];
+            $deree_user_data = [$user->email => $user->partner_id];
 
             //dd($ticket->event->title);
             $cart_data = ["manualtransaction" => ["rowId" => "manualtransaction","id" => 'coupon code ' . $content->id,"name" => $content->title,"qty" => "1","price" => $amount,"options" => ["type" => "9","event"=> $content->id],"tax" => 0,"subtotal" => $amount]];
@@ -1708,8 +1669,8 @@ class CartController extends Controller
             'datetime' => Carbon::now()->toDateTimeString(),
             'status' => 1,
             'user' => [
-                'id' => Auth::user()->id, //0, $this->current_user->id,
-                'email' => Auth::user()->email,//$this->current_user->email
+                'id' => $user->id, //0, $this->current_user->id,
+                'email' => $user->email,//$this->current_user->email
                 ],
             'pay_seats_data' => $pay_seats_data,//$data['pay_seats_data'],
             'pay_bill_data' => [],
@@ -1724,7 +1685,9 @@ class CartController extends Controller
 
             $user->events()->attach($content->id,['comment' => 'upon coupon']);
 
-            $user->cart->delete();
+            if($user->cart){
+                $user->cart->delete();
+            }
             Cart::instance('default')->destroy();
             $content->coupons->where('id', $codeId)->first()->update(['used' => true]);
 
@@ -1753,7 +1716,7 @@ class CartController extends Controller
                 $option->value = $next;
                 $option->save();
             }
-            $this->sendEmails($transaction,$content);
+            $this->sendEmails($transaction,$content,$user);
 
             $data['info']['success'] = true;
             $data['info']['title'] = '<h1>Booking successful</h1>';
@@ -1765,14 +1728,12 @@ class CartController extends Controller
         }
 
 
-        return view('theme.cart.cart_code_event',$data);
-        //return redirect('/myaccount');
+        return view('theme.cart.new_cart.thank_you',$data);
+       
     }
 
-    public function sendEmails($transaction,$content)
+    public function sendEmails($transaction,$content,$user)
     {
-
-        $user = Auth::user();
 
         $muser = [];
         $muser['name'] = $user->first_name . ' ' . $user->last_name;
@@ -1825,6 +1786,24 @@ class CartController extends Controller
             $m->to($adminemail, 'Knowcrunch');
             $m->subject('Knowcrunch - New Registration');
         });
+
+        if(!$user->statusAccount->completed){
+                    
+            $user->notify(new CreateYourPassword($user));
+
+            $cookieValue = base64_encode($user->id . date("H:i"));
+            setcookie('auth-'.$user->id, $cookieValue, time() + (1 * 365 * 86400), "/"); // 86400 = 1 day
+        
+            $coockie = new CookiesSMS;
+            $coockie->coockie_name = 'auth-'.$user->id;
+            $coockie->coockie_value = $cookieValue;
+            $coockie->user_id = $user->id;
+            $coockie->sms_code = -1;
+            $coockie->sms_verification = true;
+
+            $coockie->save();
+
+        }
 
     }
 

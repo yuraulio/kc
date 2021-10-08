@@ -159,7 +159,7 @@ class InfoController extends Controller
         
         
         if (isset($this->transaction['payment_response'])) {
-        	return view('theme.cart.cart', $data);
+        	return view('theme.cart.new_cart.thank_you', $data);
         }
         else {
         	return Redirect::to('/');

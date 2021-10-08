@@ -14,6 +14,7 @@ use App\Model\Option;
 
 class CronjobsController extends Controller
 {
+    
     public function unroll(){
 
         $students = User::has('events')->with('events')->get();
@@ -204,7 +205,6 @@ class CronjobsController extends Controller
         $this->generateCSVForFB();
     }
 
-
     public function sendElearningWarning(){
 
 
@@ -268,7 +268,6 @@ class CronjobsController extends Controller
 
     }
 
-
     public function sendElearningHalfPeriod(){
 
 
@@ -324,7 +323,6 @@ class CronjobsController extends Controller
         }
 
     }
-
 
     public function sendSubscriptionRemind(){
 

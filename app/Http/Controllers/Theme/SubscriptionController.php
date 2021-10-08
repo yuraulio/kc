@@ -32,20 +32,224 @@ class SubscriptionController extends Controller
         $user->asStripeCustomer();
         $data['plan'] = $plan;
         $data['event'] = $event;
+        $data['eventId'] = $event->id;
         $data['cur_user'] = $user;
-        $data['default_card'] = $user->defaultPaymentMethod() ? $user->defaultPaymentMethod()->card : false;
-        
-        
+       
         $data['stripe_key'] = env('PAYMENT_PRODUCTION') ? $event->paymentMethod->first()->processor_options['key'] : 
                                                                 $event->paymentMethod->first()->test_processor_options['key'];
 
-        return view('theme.cart.subscription-form', $data);
+
+        if (Session::has('pay_seats_data')) {
+            $data['pay_seats_data'] = Session::get('pay_seats_data');
+        
+        }
+        else {
+            $data['pay_seats_data'] = [];
+        }
+        
+       
+        
+        if (Session::has('pay_bill_data')) {
+            $data['pay_bill_data'] = Session::get('pay_bill_data');
+        }
+        else {
+            $data['pay_bill_data'] = [];
+        }
+        
+        if (Session::has('cardtype')) {
+            $data['cardtype'] = Session::get('cardtype');
+        }
+        else {
+            $data['cardtype'] = [];
+        }
+        
+        if (Session::has('installments')) {
+            $data['installments'] = Session::get('installments');
+        }
+        else {
+            $data['installments'] = [];
+        }
+
+        
+        
+        $data['billname'] = '';
+        $data['billsurname'] = '';
+        $data['billaddress'] ='';
+        $data['billaddressnum'] = '';
+        $data['billpostcode'] = '';
+        $data['billcity'] = '';
+        $data['billafm'] = '';
+        $data['billstate'] = '';
+        $data['billemail'] = '';
+        $data['billcountry'] = '';
+        
+        if( $user) {
+        
+            
+            
+            if(isset($data['pay_bill_data']) && empty($data['pay_bill_data'])) {
+               
+                $inv = []; $rec = [];
+                if($user->invoice_details != '') {
+                    $inv = json_decode($user->invoice_details, true);
+                    if(isset($inv['billing']))
+                        unset($inv['billing']);
+                }
+        
+                if($user->receipt_details != '') {
+                    $rec = json_decode($user->receipt_details, true);
+                    if(isset($rec['billing']))
+                        unset($rec['billing']);
+                }
+        
+                $data['pay_bill_data'] = array_merge($inv, $rec);
+            }
+            
+            $data['billname'] = isset($data['pay_bill_data']['billname']) ? $data['pay_bill_data']['billname'] : '';
+            $data['billsurname'] = isset($data['pay_bill_data']['billsurname']) ? $data['pay_bill_data']['billsurname'] : '';
+            $data['billaddress'] = isset($data['pay_bill_data']['billaddress']) ? $data['pay_bill_data']['billaddress'] : '';
+            $data['billaddressnum'] = isset($data['pay_bill_data']['billaddressnum']) ? $data['pay_bill_data']['billaddressnum'] : '';
+            $data['billpostcode'] = isset( $data['pay_bill_data']['billpostcode']) ? $data['pay_bill_data']['billpostcode'] : '';
+            $data['billcity'] = isset($data['pay_bill_data']['billcity']) ? $data['pay_bill_data']['billcity'] : '';
+            $data['billafm'] = isset($data['pay_bill_data']['billafm']) ? $data['pay_bill_data']['billafm'] : '';
+            $data['billcountry'] = isset($data['pay_bill_data']['country']) ? $data['pay_bill_data']['billcountry'] : '';
+            $data['billstate'] = isset($data['pay_bill_data']['state']) ? $data['pay_bill_data']['billstate'] : '';
+            $data['billemail'] = isset($data['pay_bill_data']['billemail']) ? $data['pay_bill_data']['billemail'] : '';
+        
+            $ukcid = $user->kc_id;
+        }
+                                                        
+
+        return view('theme.cart.new_cart.subscription.billing', $data);
        
     }
 
+
+    public function checkoutIndex($event,$plan)
+    {     
+
+        $pay_bill_data = [];
+
+        $pay_bill_data['billing'] = 1;
+        $pay_bill_data['billname'] = request()->get('billname');
+		$pay_bill_data['billsurname'] = request()->get('billsurname');
+		$pay_bill_data['billemail'] = request()->get('billemail');
+		$pay_bill_data['billaddress'] = request()->get('billaddress');
+		$pay_bill_data['billaddressnum'] = request()->get('billaddressnum');
+		$pay_bill_data['billpostcode'] = request()->get('billpostcode');
+		$pay_bill_data['billcity'] = request()->get('billcity');
+        $pay_bill_data['billcountry'] = request()->get('billcountry');
+        $pay_bill_data['billstate'] = request()->get('billstate');
+        $pay_bill_data['billafm'] = request()->get('billafm');
+
+
+        $plan = Plan::where('name',$plan)->first();
+        $event = Event::where('title',$event)->first();
+        session()->put('payment_method',$event->paymentMethod->first()->id);
+
+        $secretKey = env('PAYMENT_PRODUCTION') ? $event->paymentMethod->first()->processor_options['secret_key'] : $event->paymentMethod->first()->test_processor_options['secret_key'];
+        Stripe::setApiKey($secretKey);
+        
+        $user = Auth::user();
+        $user->asStripeCustomer();
+        $data['plan'] = $plan;
+        $data['event'] = $event;
+        $data['eventId'] = $event->id;
+        $data['cur_user'] = $user;
+       
+        $data['stripe_key'] = env('PAYMENT_PRODUCTION') ? $event->paymentMethod->first()->processor_options['key'] : 
+                                                                $event->paymentMethod->first()->test_processor_options['key'];
+
+
+        if (Session::has('pay_seats_data')) {
+            $data['pay_seats_data'] = Session::get('pay_seats_data');
+        
+        }
+        else {
+            $data['pay_seats_data'] = [];
+        }
+        
+       
+        
+        if (Session::has('pay_bill_data')) {
+            $data['pay_bill_data'] = Session::get('pay_bill_data');
+        }
+        else {
+            $data['pay_bill_data'] = [];
+        }
+        
+        if (Session::has('cardtype')) {
+            $data['cardtype'] = Session::get('cardtype');
+        }
+        else {
+            $data['cardtype'] = [];
+        }
+        
+        if (Session::has('installments')) {
+            $data['installments'] = Session::get('installments');
+        }
+        else {
+            $data['installments'] = [];
+        }
+
+        
+        
+        $data['billname'] = '';
+        $data['billsurname'] = '';
+        $data['billaddress'] ='';
+        $data['billaddressnum'] = '';
+        $data['billpostcode'] = '';
+        $data['billcity'] = '';
+        $data['billafm'] = '';
+        $data['billstate'] = '';
+        $data['billemail'] = '';
+        $data['billcountry'] = '';
+        
+        if( $user) {
+        
+            
+            
+            if(isset($data['pay_bill_data']) && empty($data['pay_bill_data'])) {
+               
+                $inv = []; $rec = [];
+                if($user->invoice_details != '') {
+                    $inv = json_decode($user->invoice_details, true);
+                    if(isset($inv['billing']))
+                        unset($inv['billing']);
+                }
+        
+                if($user->receipt_details != '') {
+                    $rec = json_decode($user->receipt_details, true);
+                    if(isset($rec['billing']))
+                        unset($rec['billing']);
+                }
+        
+                $data['pay_bill_data'] = array_merge($inv, $rec);
+            }
+            
+            $data['billname'] = isset($data['pay_bill_data']['billname']) ? $data['pay_bill_data']['billname'] : '';
+            $data['billsurname'] = isset($data['pay_bill_data']['billsurname']) ? $data['pay_bill_data']['billsurname'] : '';
+            $data['billaddress'] = isset($data['pay_bill_data']['billaddress']) ? $data['pay_bill_data']['billaddress'] : '';
+            $data['billaddressnum'] = isset($data['pay_bill_data']['billaddressnum']) ? $data['pay_bill_data']['billaddressnum'] : '';
+            $data['billpostcode'] = isset( $data['pay_bill_data']['billpostcode']) ? $data['pay_bill_data']['billpostcode'] : '';
+            $data['billcity'] = isset($data['pay_bill_data']['billcity']) ? $data['pay_bill_data']['billcity'] : '';
+            $data['billafm'] = isset($data['pay_bill_data']['billafm']) ? $data['pay_bill_data']['billafm'] : '';
+            $data['billcountry'] = isset($data['pay_bill_data']['country']) ? $data['pay_bill_data']['billcountry'] : '';
+            $data['billstate'] = isset($data['pay_bill_data']['state']) ? $data['pay_bill_data']['billstate'] : '';
+            $data['billemail'] = isset($data['pay_bill_data']['billemail']) ? $data['pay_bill_data']['billemail'] : '';
+        
+            $ukcid = $user->kc_id;
+        }
+                                                        
+        Session::put('pay_bill_data', $pay_bill_data);
+        return view('theme.cart.new_cart.subscription.checkout', $data);
+       
+    }
+
+
     public function store(Request $request, $event,$plan)
     {
-         
+  
         $user = Auth::user();
 
         $plan = Plan::where('name',$plan)->first();
@@ -60,10 +264,12 @@ class SubscriptionController extends Controller
 
     
         if (Session::has('pay_bill_data')) {
+            
             $pay_bill_data = Session::get('pay_bill_data');
             $bd = json_encode($pay_bill_data);
         }
         else {
+          
             $bd = '';
             $pay_bill_data = [];
         }
@@ -111,10 +317,24 @@ class SubscriptionController extends Controller
             $days = $plan->interval_count;
             $sub_end = strtotime("+" . $days . "day");
         }
+        
+        $user->asStripeCustomer();
+        if(!$user->stripe_id){
+                
+            $options=['name' => $user['firstname'] . ' ' . $user['lastname'], 'email' => $user['email']];
+            $user->createAsStripeCustomer($options);
+           
+            $stripe_ids = json_decode($user->stripe_ids,true) ? json_decode($user->stripe_ids,true) : [];
+            $stripe_ids[] =$user->stripe_id;
+
+            $user->stripe_ids = json_encode($stripe_ids);
+            $user->save();
+        }
+
 
         try {
 
-            $charge = $user->newSubscription($plan->name, $plan->stripe_plan)->trialDays($plan->trial_days)->create($user->defaultPaymentMethod()->id, 
+            $charge = $user->newSubscription($plan->name, $plan->stripe_plan)->trialDays($plan->trial_days)->create($request->payment_method, 
             ['email' => $user->email]);
             
             $charge->price = $plan->cost;
