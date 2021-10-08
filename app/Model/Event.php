@@ -579,12 +579,12 @@ class Event extends Model
     }
 
 
-    public function certification(User $user){
+    public function certification(User $user,$successPer = 0.9){
 
 
         $certification = count($this->certificatesByUser($user->id)) > 0;
 
-        if($this->examAccess($user,$successPer = 0.9) && !$certification){
+        if($this->examAccess($user,$successPer) && !$certification){
 
             $cert = new Certificate;
             $cert->success = true;

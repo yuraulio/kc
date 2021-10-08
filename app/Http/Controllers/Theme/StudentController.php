@@ -825,19 +825,20 @@ class StudentController extends Controller
             ], false);
 
 
-            if($user->events()->where('event_id',2068)->first() && $user->events()->where('event_id',2068)->first() &&
+            /*if($user->events()->where('event_id',2068)->first() && $user->events()->where('event_id',2068)->first() &&
                 $user->events()->where('event_id',2068)->first()->tickets()->wherePivot('user_id',$user->id)->first()){
 
                     $user->events()->where('event_id',2068)->first()->certification($user);
 
-            }
+            }*/
 
+            $event=$user->events()->where('event_id',$request->event)->first();
 
             if(isset($_COOKIE['examMessage-'.$request->event_statistic])){
 
                 $examAccess = false;
 
-            }else if($request->event != 2068 && ($event=$user->events()->where('event_id',$request->event)->first())){
+            }else if( $event && count($event->getExams()) > 0 ){
 
                 $examAccess = $event->examAccess($user);
 
@@ -867,6 +868,8 @@ class StudentController extends Controller
 
                 }
 
+            }else if( $event && $event->view_tpl != 'elearning_free' && count($event->getExams()) == 0 ){
+                $event->certification($user);
             }
 
         }
