@@ -14,14 +14,14 @@
 	</div>
 
 <!---------------- checkout progress-bar end --------------->	
-<div class="form-wrap">
+	<div class="form-wrap">
 		<div class="container">			
 			<h1>Participant(s)</h1>			
 			<div class="row">
 				<!---------------- Participant form start--------------->
 				<div class="col-md-6 col-xl-6">
 					<div class="participant-full-wrap">
-					@if(!Auth::check())<p class="login-link">Already have an account? <a href="#" class="link-color">Log in</a></p>@endif					
+						@if(!Auth::check())<p class="login-link">Already have an account? <a href="#" class="link-color">Log in</a></p>@endif					
 						<form action="{{route('registration')}}" method="post" id="participant-form" name="participant-form">
                         	@csrf
 							@for ($i=1; $i <= $totalitems; $i++) 
@@ -348,11 +348,12 @@
 										<input type="text" name="jobtitle[{{$i - 1}}]" class="form-control" placeholder="E.g. Marketing specialist" aria-describedby="inputGroupPrepend3">			
 									</div>
 								</div>	
-								
+								@if($type == 5)
 								<div class="remove-participant" data-participant-number="{{ $totalitems }}">
 									<a href="javascript:void(0)">Remove participant <img src="{{cdn('new_cart/images/close-green.svg')}}" width="9px" height="10px"  class="without-hover">
 										<img src="{{cdn('new_cart/images/close-green2.svg')}}" width="9px" height="10px" class="with-hover"></a>
 								</div>	
+								@endif
 								
 							</div>
 							@endfor
