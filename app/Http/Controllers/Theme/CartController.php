@@ -31,6 +31,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Model\CookiesSMS;
 use App\Notifications\CreateYourPassword;
 
+
 class CartController extends Controller
 {
 
@@ -431,12 +432,13 @@ class CartController extends Controller
             $data['city'][$i-1] = isset($data['pay_seats_data']['cities'][$i-1]) ? $data['pay_seats_data']['cities'][$i-1] : '';
             $data['mobile'][$i-1] = isset($data['pay_seats_data']['mobiles'][$i-1]) ? $data['pay_seats_data']['mobiles'][$i-1] : '';
             $data['job_title'][$i-1] = isset($data['pay_seats_data']['jobtitles'][$i-1]) ?  $data['pay_seats_data']['jobtitles'][$i-1]: '';
+            $data['company'][$i-1] = isset($data['pay_seats_data']['companies'][$i-1]) ?  $data['pay_seats_data']['companies'][$i-1]: '';
             $data['student_type_id'][$i-1] = isset($data['pay_seats_data']['student_type_id'][$i-1]) ?  $data['pay_seats_data']['student_type_id'][$i-1]: '';
             
         }
         
         $data['cur_user'][0] = $loggedin_user;
-        
+        $data['kc_id'] = '';
         if($loggedin_user && $data['firstname'][0] =="") {
             
             $data['firstname'][0] = $loggedin_user->firstname;
@@ -446,6 +448,7 @@ class CartController extends Controller
             $data['city'][0] = $loggedin_user->city;
             $data['mobile'][0] = $loggedin_user->mobile;
             $data['job_title'][0] = $loggedin_user->job_title;
+            $data['company'][0] = $loggedin_user->company;
             $data['student_type_id'][0] = $loggedin_user->student_type_id;
             
 
@@ -471,6 +474,7 @@ class CartController extends Controller
 
 
             $ukcid = $loggedin_user->kc_id;
+            $data['kc_id'] = $ukcid;
         }
 
         if($data['type'] == 1 || $data['type'] == 2 || $data['type'] == 5){
@@ -518,6 +522,12 @@ class CartController extends Controller
             
             $user = User::create($input);
 
+            $connow = Carbon::now();
+            $clientip = '';
+            $clientip = \Request::ip();
+            $user->terms = 1;
+            $user->consent = '{"ip": "' . $clientip . '", "date": "'.$connow.'" }';
+            $user->save();
             $code = Activation::create([
                 'user_id' => $user->id,
                 'code' => Str::random(40),
@@ -562,6 +572,7 @@ class CartController extends Controller
             $seats_data['countryCodes'][] = $userCheck ->country_code;
             $seats_data['cities'][] = $userCheck ->city;
             $seats_data['jobtitles'][] = $userCheck ->jobtitle;
+            $seats_data['companies'][] = $userCheck ->company;
             $seats_data['student_type_id'][] = $userCheck ->student_type_id;
             Session::put('user_id', $userCheck->id);
 
@@ -574,7 +585,10 @@ class CartController extends Controller
             $seats_data['countryCodes'] = $request->get('country_code');
             $seats_data['cities'] = $request->get('city');
             $seats_data['jobtitles'] = $request->get('jobtitle');
+            $seats_data['companies'] = $request->get('company');
             $seats_data['student_type_id'] = $request->get('student_type_id');
+            Session::put('user_id', $user->id);
+
         }else{
             Cart::instance('default')->destroy();
             Session::forget('pay_seats_data');
@@ -624,6 +638,7 @@ class CartController extends Controller
         }*/
 
         if (Session::has('pay_bill_data')) {
+            
             $data['pay_bill_data'] = Session::get('pay_bill_data');
         }
         else {
@@ -692,8 +707,8 @@ class CartController extends Controller
             $data['billpostcode'] = isset( $data['pay_bill_data']['billpostcode']) ? $data['pay_bill_data']['billpostcode'] : '';
             $data['billcity'] = isset($data['pay_bill_data']['billcity']) ? $data['pay_bill_data']['billcity'] : '';
             $data['billafm'] = isset($data['pay_bill_data']['billafm']) ? $data['pay_bill_data']['billafm'] : '';
-            $data['billcountry'] = isset($data['pay_bill_data']['country']) ? $data['pay_bill_data']['billcountry'] : '';
-            $data['billstate'] = isset($data['pay_bill_data']['state']) ? $data['pay_bill_data']['billstate'] : '';
+            $data['billcountry'] = isset($data['pay_bill_data']['billcountry']) ? $data['pay_bill_data']['billcountry'] : '';
+            $data['billstate'] = isset($data['pay_bill_data']['billstate']) ? $data['pay_bill_data']['billstate'] : '';
             $data['billemail'] = isset($data['pay_bill_data']['billemail']) ? $data['pay_bill_data']['billemail'] : '';
 
             $ukcid = $loggedin_user->kc_id;
@@ -709,10 +724,9 @@ class CartController extends Controller
     public function billing(Request $request){
 
         $pay_bill_data = [];
-
+       
         $pay_bill_data['billing'] = 1;
         $pay_bill_data['billname'] = $request->get('billname');
-		$pay_bill_data['billsurname'] = $request->get('billsurname');
 		$pay_bill_data['billemail'] = $request->get('billemail');
 		$pay_bill_data['billaddress'] = $request->get('billaddress');
 		$pay_bill_data['billaddressnum'] = $request->get('billaddressnum');
@@ -721,7 +735,7 @@ class CartController extends Controller
         $pay_bill_data['billcountry'] = $request->get('billcountry');
         $pay_bill_data['billstate'] = $request->get('billstate');
         $pay_bill_data['billafm'] = $request->get('billafm');
-
+       
         if(!$user = Auth::user()){
             
             $user = User::find(Session::get('user_id'));
@@ -731,6 +745,7 @@ class CartController extends Controller
             //UPDATE billing in user profile
             
             $user->receipt_details = json_encode($pay_bill_data);
+            $user->afm = $pay_bill_data['billafm'];
             $user->save();
         }
 
@@ -981,6 +996,7 @@ class CartController extends Controller
         Session::forget('error');
 
         //$current_user = Auth::user();
+
         $dpuser = Auth::user() ? Auth::user() : User::find(Session::get('user_id'));
         $cart = Cart::content();
         $ev_title = '';
@@ -1065,7 +1081,7 @@ class CartController extends Controller
 
                     $temp['billing'] = 'Receipt requested';
                     
-                    $st_name =  $temp['billname'] . ' ' . $temp['billsurname'];
+                    $st_name =  $temp['billname'];
                     $st_tax_id = 'EL'.$temp['billafm'];
 
                     if(isset($temp['billaddress'])){
@@ -1310,7 +1326,8 @@ class CartController extends Controller
                     \Session::put('transaction_id', $transaction->id);
                 }
 
-                return '/info/order_success';
+                return '/thankyou';
+                //return '/info/order_success';
 
             } else {
                 //dd('edwww1');
@@ -1377,7 +1394,7 @@ class CartController extends Controller
         $bd['billzip'] = $input['billpostcode'];
         $bd['city'] = greeklish($input['billcity']);
         $bd['billcountry'] = 'GR';
-
+      
         if(Auth::check()) {
             $cuser = Auth::user();
             $uid = $cuser->id;

@@ -26,7 +26,7 @@
                         @csrf
 							<div class="form-wrp box" id="clone-box">												
 								
-								
+								<div class="alumni-number">KnowCrunch alumni number: {{$kc_id}}</div>
 								<div class="form-row">
 									<div class="col-md-6 mb-4 pr-md-3">
 										<label class="input-label">My first name is  <span class="checkout-required-data">(*)</span></label>
@@ -323,16 +323,16 @@
 										</div>
 									</div>
 								</div>	
-								{{--<div class="form-row">
+								<div class="form-row">
 									<div class="col-md-12 mb-4">
 										<label class="input-label">My company or employer is</label>													
-										<input type="text" class="form-control" readonly aria-describedby="inputGroupPrepend3">			
+										<input name="company[]" type="text" class="form-control" value="{{old('company',$company[0])}}"  aria-describedby="inputGroupPrepend3" readonly>			
 									</div>
-								</div>	--}}
+								</div>
 								<div class="form-row">
 									<div class="col-md-12 mb-4">
 										<label class="input-label">My occupation or title is</label>													
-										<input type="text" name="jobtitle[]" readonly class="form-control" placeholder="E.g. Marketing specialist" aria-describedby="inputGroupPrepend3">			
+										<input type="text" name="jobtitle[]" readonly class="form-control"  value="{{old('jobtitle',$job_title[0])}}"placeholder="E.g. Marketing specialist" aria-describedby="inputGroupPrepend3">			
 									</div>
 								</div>	
 								<div class="form-row">

@@ -24,6 +24,7 @@ use Illuminate\Support\Str;
 use \Carbon\Carbon;
 use App\Notifications\CreateYourPassword;
 use App\Model\CookiesSMS;
+use App\Notifications\WelcomeEmail;
 
 class InfoController extends Controller
 {
@@ -325,7 +326,9 @@ class InfoController extends Controller
         $installments = $transaction['status_history'][0]['installments'];
 
         $emailsCollector = [];
-
+        $billDet = json_decode($transaction['billing_details'],true);
+        $billingEmail = isset( $billDet['billemail']) &&  $billDet['billemail'] != '' ?  $billDet['billemail'] : false;
+        
         if (isset($transaction['billing_details']['billing'])) {
             if ($transaction['billing_details']['billing'] == 2) {
                 
@@ -422,14 +425,22 @@ class InfoController extends Controller
             $thismember['mobile'] = $pay_seats_data['mobiles'][$key];
             $thismember['country_code'] = $pay_seats_data['countryCodes'][$key];
             
+            $thismember['job_title'] = '';
+            $thismember['company'] = '';
+
             if(isset($pay_seats_data['jobtitles'][$key])){
                 $thismember['job_title'] = $pay_seats_data['jobtitles'][$key];
-                if(isset($pay_seats_data['companies'][$key]))
+            }
+
+            if(isset($pay_seats_data['companies'][$key])){
                     $thismember['company'] = $pay_seats_data['companies'][$key];
             }
             
             if(isset($pay_seats_data['afms'][$key]))
                 $thismember['afm'] = $pay_seats_data['afms'][$key];
+
+            if(isset($pay_seats_data['cities'][$key]))
+                $thismember['city'] = $pay_seats_data['cities'][$key];
 
     		$checkemailuser = User::where('email', '=', $thismember['email'])->first();
             $expiration_date = '';
@@ -477,7 +488,7 @@ class InfoController extends Controller
                 $fullname = $checkemailuser->firstname . ' ' . $checkemailuser->lastname;
                 $firstname = $checkemailuser->firstname;
 
-                $emailsCollector[] = ['email' => $checkemailuser->email, 'name' => $fullname, 'first' => $firstname,'id' => $checkemailuser->id];
+              
 
                 //Update user details with the given ones
 
@@ -486,17 +497,10 @@ class InfoController extends Controller
                 $checkemailuser->mobile = $thismember['mobile'];
                 $checkemailuser->country_code = $thismember['country_code'];
                 $checkemailuser->job_title = isset($thismember['job_title']) ? $thismember['job_title'] : '';
+                $checkemailuser->company = isset($thismember['company']) ? $thismember['company'] : '';
+                $checkemailuser->city = isset($thismember['city']) ? $thismember['city'] : '';
 
-                /*$transactionBillingDetails = json_decode($transaction->billing_details,true);
-                if(isset($transactionBillingDetails['billing']) && $transactionBillingDetails['billing'] == 1){
-                    $checkemailuser->receipt_details = $transactionBillingDetails;
-                }else if(isset($transactionBillingDetails['billing']) && $transactionBillingDetails['billing'] == 2){
-                    $checkemailuser->invoice_details = $transactionBillingDetails;
-                }*/
 
-                if(isset($thismember['company']))
-                    $checkemailuser->company = $thismember['company'];
-                
                 if(isset($thismember['afm']))
                     $checkemailuser->afm = $thismember['afm'];
 
@@ -519,10 +523,12 @@ class InfoController extends Controller
                 }
 
                 $checkemailuser->save();
-
+                $creatAccount = false;
                 if(!$checkemailuser->statusAccount->completed){
                     
-                    $checkemailuser->notify(new CreateYourPassword($checkemailuser));
+                    $creatAccount = true;
+
+                    //$checkemailuser->notify(new CreateYourPassword($checkemailuser));
 
                     $cookieValue = base64_encode($checkemailuser->id . date("H:i"));
                     setcookie('auth-'.$checkemailuser->id, $cookieValue, time() + (1 * 365 * 86400), "/"); // 86400 = 1 day
@@ -538,6 +544,10 @@ class InfoController extends Controller
 
                 }
                 
+
+                $emailsCollector[] = ['email' => $checkemailuser->email, 'name' => $fullname, 'first' => $firstname,'id' => $checkemailuser->id,
+                    'mobile' => $checkemailuser->mobile, 'company' => $checkemailuser->company, 'jobTitle' => $checkemailuser->job_title,'createAccount'=>$creatAccount];
+
 	        
     		}
     		else{
@@ -545,7 +555,9 @@ class InfoController extends Controller
     			$newmembersdetails[] = $thismember;
     			$fullname = $thismember['firstname'] . ' ' . $thismember['lastname'];
     			$firstname = $thismember['firstname'];
-                $emailsCollector[] = ['email' => $thismember['email'], 'name' => $fullname, 'first' => $firstname];
+                $emailsCollector[] = ['email' => $thismember['email'], 'name' => $fullname, 'first' => $firstname, 'company' => $thismember['company'], 'first' => $firstname,
+                    'mobile' => $thismember['mobile'], 'jobTitle' => $thismember['job_title'],'createAccount'=>true
+                ];
                 
 
     		}
@@ -589,7 +601,7 @@ class InfoController extends Controller
             $connow = Carbon::now();
             $clientip = '';
             $clientip = \Request::ip();
-            $user->terms = 1;
+            $user->terms = 0;
             $user->consent = '{"ip": "' . $clientip . '", "date": "'.$connow.'" }';
 
 
@@ -601,7 +613,7 @@ class InfoController extends Controller
             }
 
     		$user->kc_id = $knowcrunch_id;
-            $user->terms = 1;
+            $user->terms = 0;
 
             if(isset($pay_seats_data['studentId'][$key])) {
                 $user->student_type_id = $pay_seats_data['studentId'][$key];
@@ -632,7 +644,7 @@ class InfoController extends Controller
             /*$sent = Mail::send('activation.emails.activate_groupof2+', compact('user', 'code'), function ($m) use ($user) {
                 $m->to($user->email)->subject('Activate Your Account');
             });*/
-            $user->notify(new CreateYourPassword($user));
+            //$user->notify(new CreateYourPassword($user));
 
             $helperdetails[$user->email] = ['kcid' => $user->kc_id, 'deid' => $user->partner_id, 'stid' => $user->student_type_id, 'jobtitle' => $user->job_title, 'company' => $user->company, 'mobile' => $user->mobile];
 
@@ -678,11 +690,11 @@ class InfoController extends Controller
         $option->value=$next;
         $option->save();
         
-        $this->sendEmails($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug, $stripe);
+        $this->sendEmails($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug, $stripe,$billingEmail);
 
     }
 
-    public function sendEmails($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug,$stripe)
+    public function sendEmails($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug,$stripe,$billingEmail)
     {
        // dd($elearning);
         // 5 email, admin, user, 2 deree, darkpony
@@ -700,9 +712,13 @@ class InfoController extends Controller
             $data['elearning'] = $elearning;
             $data['eventslug'] = $eventslug;
            
+            if(($user = User::where('email',$muser['email'])->first())){
+                $user->notify(new WelcomeEmail($user,$data));
+            }
+
             //dd($helperdetails);
 
-            if($elearning){
+            /*if($elearning){
   
                 $sent = Mail::send('emails.admin.info_new_registration_elearning', $data, function ($m) use ($adminemail, $muser) {
 
@@ -726,7 +742,7 @@ class InfoController extends Controller
 	                $m->to($muser['email'], $fullname);
 	                $m->subject($sub);
                 });
-            }
+            }*/
     	}
 
       
@@ -742,14 +758,16 @@ class InfoController extends Controller
             $muser['email'] = $transaction->user->first()->email;
             $muser['id'] = $transaction->user->first()->id;
             $muser['event_title'] =$transaction->event->first()->title;
+
             $data['firstName'] = $transaction->user->first()->firstname;
             $data['eventTitle'] =$transaction->event->first()->title;
+            
 
             if(Session::has('installments') && Session::get('installments') <= 1){
                 
                 $pdf = $transaction->invoice->first()->generateInvoice();
                 $pdf = $pdf->output();
-                $sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf) {
+                $sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf,$billingEmail) {
 
                     $fullname = $muser['name'];
                     $first = $muser['first'];
@@ -762,13 +780,13 @@ class InfoController extends Controller
                 
                 });
 
-                $sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf) {
+                $sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf,$billingEmail) {
 
                     $fullname = $muser['name'];
                     $first = $muser['first'];
                     $sub = 'KnowCrunch |' . $first . ' – Payment Successful in ' . $muser['event_title'];;
                     $m->from($adminemail, 'Knowcrunch');
-                    $m->to($muser['email'], $fullname);
+                    $m->to($billingEmail ? $billingEmail : $muser['email'], $fullname);
                     $m->subject($sub);
                     $m->attachData($pdf, "invoice.pdf");
                 

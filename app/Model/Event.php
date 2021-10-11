@@ -84,10 +84,11 @@ class Event extends Model
     public function topic()
     {
         if($this->delivery->first() && $this->delivery->first()->id == 143){
-            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id')
+            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id','instructor_id')->where('instructor_id','!=', NULL)
             ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.priority','asc');
         }else{
-            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id')
+            
+            return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id','instructor_id')->where('instructor_id','!=', NULL)
             ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.time_starts','asc');
         }
         
@@ -311,11 +312,10 @@ class Event extends Model
 
 
         $instructors = $this->instructors->unique()->groupBy('instructor_id')->toArray();
-
+        
         foreach($this->topic->unique()->groupBy('topic_id') as $key => $topic){
-
             foreach($topic as $t){
-
+               
                 if(!isset($lessons[$t->id])){
                     continue;
                 }
@@ -337,7 +337,7 @@ class Event extends Model
 
 
         }
-
+      
         $data['topics'] = $topics;
         $data['instructors'] = $instructors;
         foreach($data['topics'] as $key => $topics){

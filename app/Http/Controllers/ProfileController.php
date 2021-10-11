@@ -65,6 +65,9 @@ class ProfileController extends Controller
             $receipt['billaddressnum'] = $request->billaddressnum;
             $receipt['billpostcode'] = $request->billpostcode;
             $receipt['billcity'] = $request->billcity;
+            $receipt['billstate'] = $request->billcity;
+            $receipt['billcountry'] = $request->billcountry;
+            $receipt['billemail'] = $request->billemail;
 
         }else{
             $receipt['billname'] = $request->billname;
@@ -73,6 +76,9 @@ class ProfileController extends Controller
             $receipt['billaddressnum'] = $request->billaddressnum;
             $receipt['billpostcode'] = $request->billpostcode;
             $receipt['billcity'] = $request->billcity;
+            $receipt['billstate'] = $request->billcity;
+            $receipt['billcountry'] = $request->billcountry;
+            $receipt['billemail'] = $request->billemail;
         }
 
         if($user['invoice_details'] != null){

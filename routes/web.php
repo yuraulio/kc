@@ -389,12 +389,17 @@ Route::post('pay-sbt', [
 
 Route::group([ 'prefix' => 'info'], function () {
     Route::get('order_error', [
-            'as' => 'info.Order.Error', 'uses' => 'Theme\InfoController@orderError'
-        ]);
-    Route::get('order_success', [
-            'as' => 'info.Order.Success', 'uses' => 'Theme\InfoController@orderSuccess'
-        ]);
-    });
+        'as' => 'info.Order.Error', 'uses' => 'Theme\InfoController@orderError'
+    ]);
+    /*Route::get('order_success', [
+       'as' => 'info.Order.Success', 'uses' => 'Theme\InfoController@orderSuccess'
+    ]);*/
+});
+
+Route::get('thankyou', [
+    'as' => 'info.Order.Success', 'uses' => 'Theme\InfoController@orderSuccess'
+]);
+
 
 Route::group([ 'prefix' => '{id}' ], function() {
     /*Route::post('/dpremove', [ 'as' => 'cart.remove-item', 'uses' => 'Theme\CartController@dpremove']);*/

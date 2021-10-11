@@ -52,13 +52,12 @@ else {
     $tickettype = $extrainfo[1];
 }
 
-
 if(isset($helperdetails[$user['email']])) {
 
     $did = $helperdetails[$user['email']]['deid'];
-    $mob = $helperdetails[$user['email']]['mobile'];
-    $com = $helperdetails[$user['email']]['company'];
-    $job = $helperdetails[$user['email']]['jobtitle'];
+    $mob = $helperdetails[$user['email']]['mobile'] ? $helperdetails[$user['email']]['mobile'] : '';
+    $com = $helperdetails[$user['email']]['company'] ? $helperdetails[$user['email']]['company'] : '';
+    $job = $helperdetails[$user['email']]['jobtitle'] ? $helperdetails[$user['email']]['jobtitle'] : '';
     //$stid = $helperdetails[$user['email']]['stid']; (user given ticket type id)
     $dereeid = $did; //substr($did, 0, -2);
 }
@@ -67,9 +66,9 @@ else {
     $did = '-';
     //$stid = '-';
     $dereeid = '-';
-    $mob = '-';
-    $com = '-';
-    $job = '-';
+    $mob = isset($user['mobile']) ? $user['mobile'] : '-';
+    $com = isset($user['company']) ? $user['company'] : '-';
+    $job = isset($user['jobTitle']) ? $user['jobTitle'] : '-';
 }
 
 

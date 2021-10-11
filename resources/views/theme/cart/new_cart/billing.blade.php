@@ -74,7 +74,7 @@
 							<div class="form-row">
 								<div class="col-md-12 mb-4">
 									<label class="input-label">State</label>
-									<input type="text" class="form-control" value="{{old('billstate',$billstate)}}" placeholder="" aria-describedby="inputGroupPrepend3">
+									<input type="text" class="form-control" name="billstate" value="{{old('billstate',$billstate)}}" placeholder="" aria-describedby="inputGroupPrepend3">
 									<div class="invalid-feedback">
 										
 									</div>
@@ -83,7 +83,7 @@
 							<div class="form-row">
 								<div class="col-md-12 mb-4">
 									<label class="input-label">Country</label>
-									<input type="text" class="form-control" value="{{old('billcountry',$billcountry)}}" placeholder="" aria-describedby="inputGroupPrepend3">
+									<input type="text" class="form-control" name="billcountry" value="{{old('billcountry',$billcountry)}}" placeholder="" aria-describedby="inputGroupPrepend3">
 									<div class="invalid-feedback">
 										
 									</div>
@@ -92,7 +92,7 @@
 							<div class="form-row">
 								<div class="col-md-12 mb-4">
 									<label class="input-label">Please send this receipt to this email address</label>
-									<input type="email" value="{{old('billemail',$billemail)}}" class="form-control" placeholder="" aria-describedby="inputGroupPrepend3">
+									<input type="email" name="billemail" value="{{old('billemail',$billemail)}}" class="form-control" placeholder="" aria-describedby="inputGroupPrepend3">
 									<div class="invalid-feedback">
 										
 									</div>

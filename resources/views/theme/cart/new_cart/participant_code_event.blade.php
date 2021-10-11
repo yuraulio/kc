@@ -324,16 +324,16 @@
 										</div>
 									</div>
 								</div>	
-								{{--<div class="form-row">
+								<div class="form-row">
 									<div class="col-md-12 mb-4">
 										<label class="input-label">My company or employer is</label>													
-										<input type="text" class="form-control"  aria-describedby="inputGroupPrepend3">			
+										<input name="company[]" type="text" class="form-control" value="{{old('company',$company[0])}}"  aria-describedby="inputGroupPrepend3">			
 									</div>
-								</div>	--}}
+								</div>
 								<div class="form-row">
 									<div class="col-md-12 mb-4">
 										<label class="input-label">My occupation or title is</label>													
-										<input type="text" name="jobtitle[]" class="form-control" placeholder="E.g. Marketing specialist" aria-describedby="inputGroupPrepend3">			
+										<input type="text" name="jobtitle[]" value="{{old('jobtitle',$job_title[0])}}" class="form-control" placeholder="E.g. Marketing specialist" aria-describedby="inputGroupPrepend3">			
 									</div>
 								</div>	
 								<div class="form-row">

@@ -25,6 +25,10 @@ jQuery.validator.addMethod(
                 required: true,
                 emailWithDot: true
             },
+            'billemail': {
+                required: true,
+                emailWithDot: true
+            },
             'country[]': {
                 required: true                
             },
@@ -50,6 +54,9 @@ jQuery.validator.addMethod(
             },
 
             'email[]': {
+                required: "This field is required, enter your email",
+            },
+            'billemail': {
                 required: "This field is required, enter your email",
             },
             'student_type_id[]': {

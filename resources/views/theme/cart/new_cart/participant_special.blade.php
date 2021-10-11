@@ -341,11 +341,20 @@
 										</div>
 									</div>
 								</div>	
+
+								@if($type !== 1 && $type !== 2)
+								<div class="form-row">
+									<div class="col-md-12 mb-4">
+										<label class="input-label">My company or employer is</label>													
+										<input name="company[{{$i - 1}}]"  type="text" class="form-control" value="{{old('company',$company[$i - 1])}}"  aria-describedby="inputGroupPrepend3">			
+									</div>
+								</div>
+								@endif
 								
 								<div class="form-row">
 									<div class="col-md-12 mb-4">
 										<label class="input-label">My occupation or title is</label>													
-										<input type="text" name="jobtitle[{{$i - 1}}]" class="form-control" placeholder="E.g. Marketing specialist" aria-describedby="inputGroupPrepend3">			
+										<input type="text" name="jobtitle[{{$i - 1}}]" value="{{old('jobtitle',$job_title[$i - 1])}}" class="form-control" placeholder="E.g. Marketing specialist" aria-describedby="inputGroupPrepend3">			
 									</div>
 								</div>	
 								

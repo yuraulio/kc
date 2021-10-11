@@ -29,14 +29,10 @@ use Image;
 class StudentController extends Controller
 {
 
-
     public function __construct()
     {
-
         $this->middleware('event.check')->only('elearning');
-
     }
-
 
     public function infoValidation(Request $request){
 
@@ -69,7 +65,6 @@ class StudentController extends Controller
 
     }
 
-
     protected function logout(){
 
         Auth::logout();
@@ -78,7 +73,6 @@ class StudentController extends Controller
         $url = URL::to('/');
         return redirect($url);
     }
-
 
     public function index(){
 
