@@ -712,7 +712,6 @@ class InfoController extends Controller
            
             if(($user = User::where('email',$muser['email'])->first())){
                 $user->notify(new WelcomeEmail($user,$data));
-                //dd('fdsf');
             }
 
             //dd($helperdetails);
