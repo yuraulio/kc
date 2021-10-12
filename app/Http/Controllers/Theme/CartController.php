@@ -29,7 +29,6 @@ use App\Model\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use App\Model\CookiesSMS;
-use App\Notifications\CreateYourPassword;
 
 
 class CartController extends Controller
@@ -1806,7 +1805,7 @@ class CartController extends Controller
 
         if(!$user->statusAccount->completed){
                     
-            $user->notify(new CreateYourPassword($user));
+            //$user->notify(new CreateYourPassword($user));
 
             $cookieValue = base64_encode($user->id . date("H:i"));
             setcookie('auth-'.$user->id, $cookieValue, time() + (1 * 365 * 86400), "/"); // 86400 = 1 day

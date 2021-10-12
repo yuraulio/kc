@@ -45,6 +45,15 @@ class WelcomeEmail extends Notification
      */
     public function toMail($notifiable)
     {
+        $slug = [];
+        $slug['id'] = $this->user->id;
+        $slug['email'] = $this->user->email;
+        $slug['create'] = true;
+        
+        $slug = encrypt($slug);
+
+        $this->data['slug'] = $slug;
+
         return (new MailMessage)
                     ->from('info@knowcrunch.com', 'Knowcrunch')
                     ->subject('Knowcrunch - Welcome')

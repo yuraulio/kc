@@ -22,18 +22,28 @@
 						    	</div>
 						    </div>
                         @endforeach
-						@if(!\Session::get('coupon_code') && !isset($show_coupon))
+						
 						<div class="checkout-coupon-code-wrap">
 							<h2 class="mb-0">I have a coupon:</h2>							
-							<form class="checkout-fields d-flex justify-content-between mt-3 align-items-start">								
+							<form class="checkout-fields d-flex justify-content-between mt-3 align-items-start">	
+								@if(!\Session::get('coupon_code') && !isset($show_coupon))							
 								<div class="checkout-input-groups">
 									<input id="coupon" type="text" name="" class="form-control">
-									<label class="coupon-code-validation-message d-block mt-1"> Enter a valid coupon code</label>
+									<label class="coupon-code-validation-message mt-1"> Enter a valid coupon code</label>
 								</div>								
 								<button type="button" class="btn btn-2 checkout-button-coupon">apply</button>
+
+								@elseif(!isset($show_coupon))
+
+								<div class="checkout-input-groups">
+									<input id="coupon" type="text" name="" value="{{Session::get('coupon_code')}}" class="form-control">
+									<label class="coupon-code-validation-message coupon-successfull mt-1"> Success! Your coupon has been accepted.</label>
+								</div>
+
+								@endif
 							</form>		
 							
-							<div id="couponDialog">
+							{{--<div id="couponDialog">
 							   <div class="alert-wrapper">
 							      <div class="alert-inner">
 
@@ -41,9 +51,9 @@
 
 											<!-- /.alert-outer -->
 								</div>
-							</div>
+							</div>--}}
 						</div>
-						@endif
+						
 					</div>
 				</div>
 
@@ -51,17 +61,21 @@
 
 	@if(!\Session::get('coupon_code') && !isset($show_coupon))
 		<script>
-
-
-
 			$('.checkout-button-coupon').click(function(){
-	
+
+				$(".coupon-code-validation-message").hide();
+
+				let couponCode = '';
+
+				if($("#coupon").val()){
+					couponCode = $("#coupon").val().toUpperCase();
+				}
 
    				$.ajax({ url: 'checkCoupon/{{$eventId}}', type: "post",
 				   	headers: {
     	    		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     	 			},
-					data:{'coupon': $("#coupon").val()} ,
+					data:{'coupon': couponCode} ,
    					success: function(data) {
 		  				if(data['success']){
 							
@@ -72,39 +86,36 @@
 							$("#inst2").text('I will pay in 2 installments: 2x €' + "{{ $item->qty }}" * data['newPriceInt2']);
 							$("#inst3").text('I will pay in 3 installments: 3x €' + "{{ $item->qty }}" * data['newPriceInt3']);
 
-							let p = `<p><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-success-alert.svg')}}" alt="Info Alert">` + data['message']+ `</p>`
+							//let p = `<p><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-success-alert.svg')}}" alt="Info Alert">` + data['message']+ `</p>`
 
-							$("#couponDialog .alert-inner").empty();
-							$("#couponDialog .alert-inner").append(p);
-
-							$("#couponDialog .alert-wrapper").addClass('success-alert')
-							$("#couponDialog").css("display", "block")
-							$("body").css("overflow-y", "hidden")
-
-							$('.coupon-submit').css("display", "none")
+							$('.coupon-code-validation-message').text('Success! Your coupon has been accepted.');
+							$('.coupon-code-validation-message').addClass('coupon-successfull');
+							$('.checkout-button-coupon').remove();
 							$("#coupon").prop("readonly", true);
 
-							$('.checkout-coupon-code-wrap').empty()
+							//$('.checkout-coupon-code-wrap').empty()
 
 		  				}else{
 
-							 let p = `<p><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-error-alert.svg')}}" alt="Info Alert">` + data['message']+ `</p>`
+							 /*let p = `<p><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-error-alert.svg')}}" alt="Info Alert">` + data['message']+ `</p>`
 
 							 $("#couponDialog .alert-inner").empty();
 							 $("#couponDialog .alert-inner").append(p);
 
 							 $("#couponDialog .alert-wrapper").addClass('error-alert')
 							 $("#couponDialog").css("display", "block")
-							 $("body").css("overflow-y", "hidden")
+							 $("body").css("overflow-y", "hidden")*/
+
+							 $(".coupon-code-validation-message").show();
 
 		  				}
 
-		  				setTimeout(function() {
+		  				/*setTimeout(function() {
 							$("#couponDialog").css("display", "none")
 							$("#couponDialog .alert-wrapper").removeClass('error-alert')
 							$("#couponDialog .alert-wrapper").removeClass('success-alert')
 							$("body").css("overflow-y", "auto")
-		   				}, 2000);
+		   				}, 2000);*/
 
    					}
 				});

@@ -342,7 +342,7 @@
 									</div>
 								</div>	
 
-								@if($type !== 1 && $type !== 2)
+								@if($type != 1 && $type != 2)
 								<div class="form-row">
 									<div class="col-md-12 mb-4">
 										<label class="input-label">My company or employer is</label>													

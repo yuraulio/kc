@@ -22,7 +22,6 @@ use App\Model\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use \Carbon\Carbon;
-use App\Notifications\CreateYourPassword;
 use App\Model\CookiesSMS;
 use App\Notifications\WelcomeEmail;
 
@@ -524,11 +523,11 @@ class InfoController extends Controller
 
                 $checkemailuser->save();
                 $creatAccount = false;
+                
                 if(!$checkemailuser->statusAccount->completed){
                     
                     $creatAccount = true;
 
-                    //$checkemailuser->notify(new CreateYourPassword($checkemailuser));
 
                     $cookieValue = base64_encode($checkemailuser->id . date("H:i"));
                     setcookie('auth-'.$checkemailuser->id, $cookieValue, time() + (1 * 365 * 86400), "/"); // 86400 = 1 day
@@ -644,7 +643,6 @@ class InfoController extends Controller
             /*$sent = Mail::send('activation.emails.activate_groupof2+', compact('user', 'code'), function ($m) use ($user) {
                 $m->to($user->email)->subject('Activate Your Account');
             });*/
-            //$user->notify(new CreateYourPassword($user));
 
             $helperdetails[$user->email] = ['kcid' => $user->kc_id, 'deid' => $user->partner_id, 'stid' => $user->student_type_id, 'jobtitle' => $user->job_title, 'company' => $user->company, 'mobile' => $user->mobile];
 
@@ -714,6 +712,7 @@ class InfoController extends Controller
            
             if(($user = User::where('email',$muser['email'])->first())){
                 $user->notify(new WelcomeEmail($user,$data));
+                //dd('fdsf');
             }
 
             //dd($helperdetails);

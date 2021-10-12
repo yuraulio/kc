@@ -113,7 +113,7 @@ header{background-image:linear-gradient(90deg,#3f6fb5 0%,#419bff 100%);}
 .checkout-step ul li:after{position:absolute;content:'';left:100%;width:90px;height:2px;background-color:#419bff;margin-top: 5px;}
 .checkout-step ul li:last-child:after{display:none;}
 .checkout-step ul li i{font-style:normal;margin-top:5px;}
-.coupon-code-validation-message {color:#f53000;font-size:14px;}
+.coupon-code-validation-message {color:#f53000;font-size:14px;/*lioncode*/display: none;}
 
 .participant-full-wrap, .billing-full-wrap, .checkout-full-wrap, .participant-alumni-wrap { max-width: 475px;width:100%;}
 .login-link{font-size:28px;line-height:1.4em;margin-bottom:1.1em;}
@@ -131,7 +131,7 @@ p.validation-info{font-size:19px;margin-bottom:1.4em;}
 .add-participant, .remove-participant{padding:0 5px;background: transparent;}
 .add-participant:hover .with-hover {display:block;}
 .add-participant:hover .without-hover{display:none;}
-.add-participant:hover, .remove-participant:hover{background-color:#ededed;}
+/*.add-participant:hover, .remove-participant:hover{background-color:#ededed;} lioncode*/
 .add-participant-wrap p img{max-width:32px;}
 .add-participant-wrap{margin-left:-8px;font-size:22px;}
 .add-participant-wrap span{color: #80bb01;text-decoration: underline;text-decoration-thickness: 2px;}
@@ -214,6 +214,12 @@ label.custom-control-label{font-size:19px;}
 
 
 /* lioncode */
+
+.coupon-successfull{
+    display: block!important;
+    color: #80bb01;
+}
+
 .card-input{
     border: 1px solid;
     padding: 10px;
@@ -263,6 +269,20 @@ label.custom-control-label{font-size:19px;}
     padding: 1px 3px;
     display: flex;
     align-items: center;
+}
+
+
+
+.add-participant a:hover, .add-participant span:hover{
+    color: #5b8600;
+}
+
+.remove-participant a:hover {
+    background-color: #ececec;
+    transition: 0.3s ease-in-out;
+    color: #008000;
+    text-decoration: none;
+    width: fit-content;
 }
 
 

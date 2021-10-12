@@ -113,7 +113,7 @@ $.ajaxSetup({headers:{'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content
 
 				if(data['pass_confirm']){
 					setTimeout( function(){
-						window.location.replace('/');
+						window.location.replace('/myaccount');
 					}, 1000 );
 				}
 
