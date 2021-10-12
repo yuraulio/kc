@@ -66,75 +66,77 @@ h2,h3{ font-size: 20px; padding: 0; font-weight:normal}
 
 .certificate{
     color:#3A6DA8;
-    font-size:25px;
+    font-size:30px;
     margin:auto;
     letter-spacing:3px;
 }
 
 .award{
     font-size:20px;
-    margin:-10px  auto -10px auto;
+    margin:-8px  auto 2px auto;
     max-width: 700px;
     line-height:1;
 }
 
 
 .signature-img{
-    max-width:120px;
+    max-width:147px;
     
 }
 
 .knowcrunch-signature-left{
-    top: 60px;
-    left:110px;
+    top: 140px;
+    left:130px;
 }
 
 .deree-signature-rigth{
-    top: 60px;
-    left:440px;
+    top: 140px;
+    left:550px;
 }
 
 .border-bottom{
-    border-bottom: 1px solid black !important;
-    padding-bottom: 25px;
+    border-bottom: 2px solid black !important;
+    max-width:295px;
+    margin:10px auto 0 auto;
 }
 
 .hat-icon{
-    max-width: 30px;
+    max-width: 38px;
 }
 
 .hat-icon-mar{
-    left: 276px;
-    top: 100px;
-    
+
+    top:195px;
+    left:342px;   
 }
 
 .name-signature{
-    font-size:13.6px;
-    color:#000;
     position: relative;
+    font-size:20px;
+    top:8px;
 }
 
 .title-signature{
     color:#000;
+    font-size:17px;
     position: relative;
     top:-20px;
-    font-size:12px;
 }
 
 .title-signature1{
     color:#000;
+    font-size:17px;
     position: relative;
-    top:-40px;
-    font-size:12px;
+    top:-50px;
 }
 
 
 .footer{
     position: relative;
-    top:30px;
+    top:148px;
     text-align: center;
     color: grey;
+    font-size:14px;
 }
 
 .mar-auto{
@@ -149,9 +151,10 @@ h2,h3{ font-size: 20px; padding: 0; font-weight:normal}
     height:0;
 }
 
-p{
-    margin:-1000px;
+.seperator{
+    padding: 0 10px;
 }
+
 
 </style>
 </head>
@@ -180,31 +183,32 @@ p{
 
             <h3 class="certificate"> CERTIFICATE OF COMPLETION </h3>
 
-            <div class="row mar-top-150">
-                <div class="col-4 knowcrunch-signature-left">
-                    <img class="signature-img" src="{{asset('certificates/knowcrunch-signature.png')}}">
-                    <div class="border-bottom"></div>
-                    <p class="name-signature"> APOSTOLIS AIVALIS</p>
-                    <p class="title-signature"> Head of Curriculum, KnowCrunch</p>
-                    
-                </div>
+        </div>
+
+
+        <div class="row text-center mar-top-150">
+            <div class="col-4 knowcrunch-signature-left">
+                <img class="signature-img" src="{{asset('certificates/knowcrunch-signature.png')}}">
+                <div class="border-bottom"></div>
+                <p class="name-signature"> APOSTOLIS AIVALIS</p>
+                <p class="title-signature"> Head of Curriculum, KnowCrunch</p>
                 
-                <div class="col-4 hat-icon-mar">
-                    <img class="hat-icon" src="{{asset('certificates/icon.png')}}">
-                </div>
-                <div class="col-4 deree-signature-rigth">
-                    <img class="signature-img" src="{{asset('certificates/deree-signature.png')}}">
-                    <div class="border-bottom"></div>
-                    <p class="name-signature"> ARETI KREPAPA, PHD </p>
-                    <p class="title-signature"> Dean of Deree School of Graduate </p>
-                    <p class="title-signature1"> and Professional Education </p>
-                </div>
             </div>
-           
+            
+            <div class="col-4 hat-icon-mar">
+                <img class="hat-icon" src="{{asset('certificates/icon.png')}}">
+            </div>
+            <div class="col-4 deree-signature-rigth">
+                <img class="signature-img" src="{{asset('certificates/deree-signature.png')}}">
+                <div class="border-bottom"></div>
+                <p class="name-signature"> ARETI KREPAPA, PHD </p>
+                <p class="title-signature"> Dean of Deree School of Graduate </p>
+                <p class="title-signature1"> and Professional Education </p>
+            </div>
         </div>
     
         <div class="footer">
-            <p> Issue date: Sepxember 2021   |   Credential #: 1234567890 </p>
+            <p> Issue date: Sepxember 2021 <span class="seperator">  | </span>  Credential #: 1234567890 </p>
         </div>
     </div>
 </body>
