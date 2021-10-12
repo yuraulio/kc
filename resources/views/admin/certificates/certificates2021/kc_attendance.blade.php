@@ -10,15 +10,15 @@
     max-width: 200pt;
 }
 
-h1, h2,h3,p { 
+h1, h2, h3, p { 
     font-family: 'foco';
 }
 
-h2{ font-size: 20pt; margin: 6pt 0; padding: 0; font-weight:normal}
+h2,h3{ font-size: 20pt; margin: 6pt 0; padding: 0; font-weight:normal}
 
 .borders{
-    border-left: 30pt solid #3A6DA8;
-    border-right: 30pt solid #3A6DA8;
+    border-left: 32.6pt solid #3A6DA8;
+    border-right: 32.6pt solid #3A6DA8;
 }
 
 .date{
@@ -30,19 +30,19 @@ h2{ font-size: 20pt; margin: 6pt 0; padding: 0; font-weight:normal}
     margin:auto;
 }
 
-.text-left{left:250pt;}
+.text-left{left:280pt;}
 
 .knowcrunch-logo{
-    max-width: 120pt;
+    max-width: 152pt;
 }
 
 .knowcrunch-logo-mar{
-    top:30pt;
-    left:40pt;
+    top:25pt;
+    left:18pt;
 }
 
 .deree-logo{
-    max-width: 70pt;
+    max-width: 77,8pt;
 }
 
 .mar-top-50{
@@ -58,22 +58,23 @@ h2{ font-size: 20pt; margin: 6pt 0; padding: 0; font-weight:normal}
 .name{
     color:#3A6DA8;
     font-size:34pt;
+    letter-spacing:3px;
 }
 
 .certificate{
     color:#3A6DA8;
     font-size:22pt;
+    margin:auto;
 }
 
 .award{
     font-size:15pt;
-    font-weight:bold;
 }
 
 
 .signature-img{
     max-width:120pt;
-    max-height:50px;
+    
 }
 
 .knowcrunch-signature-left{
@@ -97,7 +98,7 @@ h2{ font-size: 20pt; margin: 6pt 0; padding: 0; font-weight:normal}
 
 .hat-icon-mar{
     left: 276pt;
-    top: 90pt;
+    top: 100pt;
     
 }
 
@@ -123,14 +124,19 @@ h2{ font-size: 20pt; margin: 6pt 0; padding: 0; font-weight:normal}
 
 
 .footer{
-   
+    position: relative;
+    top:30pt;
     text-align: center;
-    
     color: grey;
 }
 
 .mar-auto{
     margin:auto;
+}
+
+
+.deree-signature-rigth, .knowcrunch-signature-left{
+    height:0;
 }
 
 </style>
@@ -162,7 +168,7 @@ h2{ font-size: 20pt; margin: 6pt 0; padding: 0; font-weight:normal}
             <h3 class="certificate"> CERTIFICATE OF COMPLETION </h3>
 
             <div class="row mar-top-150">
-                <div class="col-4 knowcrunch-signature-left ">
+                <div class="col-4 knowcrunch-signature-left">
                     <img class="signature-img" src="{{asset('certificates/knowcrunch-signature.png')}}">
                     <div class="border-bottom"></div>
                     <p class="name-signature"> APOSTOLIS AIVALIS</p>
@@ -184,7 +190,9 @@ h2{ font-size: 20pt; margin: 6pt 0; padding: 0; font-weight:normal}
            
         </div>
     
-
+        <div class="footer">
+            <p> Issue date: September 2021   |   Credential #: 1234567890 </p>
+        </div>
     </div>
 </body>
 </html>

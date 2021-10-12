@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">	
+    <style>
+
+@page { margin: 0px; }
+
+.signature{
+    max-width: 200px;
+}
+
+h1, h2, h3, p { 
+    font-family: 'foco';
+}
+
+h2,h3{ font-size: 20px; padding: 0; font-weight:normal}
+
+.borders{
+    border-left: 44px solid #3A6DA8;
+    border-right: 44px solid #3A6DA8;
+}
+
+.date{
+    margin-top:110px;
+    color:#3A6DA8;
+}
+
+.logo{
+    margin:auto;
+}
+
+.text-left{
+    top:14px;
+    left:373px;
+}
+
+.knowcrunch-logo{
+    max-width: 202px;
+}
+
+.knowcrunch-logo-mar{
+    top:51px;
+    left:24px;
+}
+
+.deree-logo{
+    max-width: 103px;
+}
+
+.mar-top-50{
+    margin-top: 50px;
+    
+}
+
+.mar-top-150{
+    margin-top: 150px;
+    max-height:50px;
+}
+
+.name{
+    color:#3A6DA8;
+    font-size:48px;
+    letter-spacing:3px;
+}
+
+.certificate{
+    color:#3A6DA8;
+    font-size:25px;
+    margin:auto;
+    letter-spacing:3px;
+}
+
+.award{
+    font-size:20px;
+    margin:-10px  auto -10px auto;
+    max-width: 700px;
+    line-height:1;
+}
+
+
+.signature-img{
+    max-width:120px;
+    
+}
+
+.knowcrunch-signature-left{
+    top: 60px;
+    left:110px;
+}
+
+.deree-signature-rigth{
+    top: 60px;
+    left:440px;
+}
+
+.border-bottom{
+    border-bottom: 1px solid black !important;
+    padding-bottom: 25px;
+}
+
+.hat-icon{
+    max-width: 30px;
+}
+
+.hat-icon-mar{
+    left: 276px;
+    top: 100px;
+    
+}
+
+.name-signature{
+    font-size:13.6px;
+    color:#000;
+    position: relative;
+}
+
+.title-signature{
+    color:#000;
+    position: relative;
+    top:-20px;
+    font-size:12px;
+}
+
+.title-signature1{
+    color:#000;
+    position: relative;
+    top:-40px;
+    font-size:12px;
+}
+
+
+.footer{
+    position: relative;
+    top:30px;
+    text-align: center;
+    color: grey;
+}
+
+.mar-auto{
+    margin:auto;
+}
+
+.user{
+    margin-top:40px;
+}
+
+.deree-signature-rigth, .knowcrunch-signature-left{
+    height:0;
+}
+
+p{
+    margin:-1000px;
+}
+
+</style>
+</head>
+<body class="borders">
+    <div class="mar-top-50">
+        <div class="row ">
+            <div class="logo col-6 knowcrunch-logo-mar">
+                <img class="knowcrunch-logo  mar-auto" src="{{asset('certificates/knowcrunch-logo.png')}}">
+            </div>
+
+            <div class="logo col-6 text-left">
+                <img class="deree-logo" src="{{asset('certificates/deree-logo.png')}}">
+            </div>
+
+        </div>
+
+        <div class="text-center user">
+        {{--$certificate->user->first()->firstname}} {{$certificate->user->first()->lastname --}}
+            <h2 class="name"> PANAGIOTIS MACROGIANNIS </h2>
+
+                
+            <p class="award">
+                has attended our course Professional Diploma in Digital & Social Media Marketing and is awarded this
+            </p>
+
+
+            <h3 class="certificate"> CERTIFICATE OF COMPLETION </h3>
+
+            <div class="row mar-top-150">
+                <div class="col-4 knowcrunch-signature-left">
+                    <img class="signature-img" src="{{asset('certificates/knowcrunch-signature.png')}}">
+                    <div class="border-bottom"></div>
+                    <p class="name-signature"> APOSTOLIS AIVALIS</p>
+                    <p class="title-signature"> Head of Curriculum, KnowCrunch</p>
+                    
+                </div>
+                
+                <div class="col-4 hat-icon-mar">
+                    <img class="hat-icon" src="{{asset('certificates/icon.png')}}">
+                </div>
+                <div class="col-4 deree-signature-rigth">
+                    <img class="signature-img" src="{{asset('certificates/deree-signature.png')}}">
+                    <div class="border-bottom"></div>
+                    <p class="name-signature"> ARETI KREPAPA, PHD </p>
+                    <p class="title-signature"> Dean of Deree School of Graduate </p>
+                    <p class="title-signature1"> and Professional Education </p>
+                </div>
+            </div>
+           
+        </div>
+    
+        <div class="footer">
+            <p> Issue date: Sepxember 2021   |   Credential #: 1234567890 </p>
+        </div>
+    </div>
+</body>
+</html>

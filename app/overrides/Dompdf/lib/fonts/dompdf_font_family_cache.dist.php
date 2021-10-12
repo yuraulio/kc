@@ -96,6 +96,9 @@ return [
         ],
     'foco' => [
         'normal' => base_path() . '/app/overrides/Dompdf/lib/fonts/foco_normal_cac6edede02e3298a5de814582962e0a',
+        'bold' => base_path() . '/app/overrides/Dompdf/lib/fonts/Foco_Bold',
+        //'bold' => base_path() . '/app/overrides/Dompdf/lib/Foco-Bold',
+
 
     ]
 ];
