@@ -142,7 +142,7 @@
                                  <li class="active"><a href="#personal-data">Personal</a></li>
                                  <li><a href="#billing-data">Billing</a></li>
                                  <li><a href="#password-edit">Password</a></li>
-                                 <li><a  href="#subscriptions" >Payment</a></li>
+                                 {{--<li><a  href="#subscriptions" >Payment</a></li>--}}
                               </ul>
                            </div>
                            <div class="inside-tabs-wrapper">
@@ -479,7 +479,7 @@
                                     </form>
                                  </div>
                               </div>
-                              <div id="subscriptions" class="in-tab-wrapper">
+                              {{--<div id="subscriptions" class="in-tab-wrapper">
                                  <div id="container" class="container">
                                     <div class="row" id="cardList">
                                        @if(count($defaultPaymetnt) > 0)
@@ -535,7 +535,7 @@
                                        </div>
                                     </div>
                                  </div>
-                              </div>
+                              </div>--}}
                               <div id="billing-data" class="in-tab-wrapper">
                                  <?php
                                     /*'billemail' => 'Email',
@@ -1482,7 +1482,7 @@
 </main>
 @endsection
 @section('scripts')
-<script src="https://js.stripe.com/v3/"></script>
+{{--<script src="https://js.stripe.com/v3/"></script>
 <script>
    var stripeUserId = '{{ Auth::user()->createSetupIntent()->client_secret }}';
    $(document).on('click', '#addCard', function(e){
@@ -1644,7 +1644,7 @@
 
 
 
-</script>
+</script>--}}
 <script>
    function cvv(input) {
 
