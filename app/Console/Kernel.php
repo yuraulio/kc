@@ -39,6 +39,7 @@ class Kernel extends ConsoleKernel
        //Commands\SeperateRelationships::class,
        Commands\InitCertificateTitle::class,
        Commands\SyncBillingData::class,
+       Commands\InitExpritationCertificate::class,
     ];
 
     /**

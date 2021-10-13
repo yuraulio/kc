@@ -3,11 +3,11 @@
 @section('content')
  
 <!---------------- checkout progress-bar start --------------->
-<div class="checkout-step">
+<div class="suscription checkout-step">
 		<div class="container">		
 			<ul>
-				<li><span class="counter">2.</span><i>Billing</i></li>
-				<li class="active"><span class="counter">3.</span><i>Checkout</i></li>
+				<li><span class="counter">1.</span><i>Billing</i></li>
+				<li class="active"><span class="counter">2.</span><i>Checkout</i></li>
 			</ul>
 		</div>
 	</div>
@@ -48,7 +48,7 @@
 								<div class="d-flex align-items-center previous-participant-link">
 									<img src="{{cdn('new_cart/images/arrow-previous-green.svg')}}" width="20px" height="12px" class="without-hover" alt="">
 									<img src="{{cdn('new_cart/images/arrow-previous-green2.svg')}}" width="20px" height="12px" class="with-hover" alt="">
-									<a href="javascript:;" class="link-color">Previous: Billing</a>
+									<a href="/myaccount/subscription/{{$event->title}}/{{$plan->name}}" class="link-color">Previous: Billing</a>
 								</div>
 								<button id="pay-now" type="button" class="btn btn-3 checkout-button-primary do-checkout-subscription">Pay now</button>
 							</div>

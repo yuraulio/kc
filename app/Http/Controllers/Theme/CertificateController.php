@@ -16,7 +16,7 @@ class CertificateController extends Controller
         $this->middleware('cert.owner');
     }
 
-    /*public function getCertificate(Certificate $certificate){
+    public function getCertificate(Certificate $certificate){
 
 
         //return view('admin.certificates.certificate',compact('certificate'));
@@ -48,18 +48,18 @@ class CertificateController extends Controller
   
           
   
-    }*/
+    }
 
     
-public function getCertificate(Certificate $certificate){
+    /*public function getCertificate(Certificate $certificate){
 
 
         //return view('admin.certificates.certificate',compact('certificate'));
         $view = 'admin.certificates.certificate';
         if($certificate->success){
-          $view = 'admin.certificates.certificates2021.kc_deree_attendance';
+          $view = 'admin.certificates.certificates2021.kc_attendance';
         }else{
-          $view = 'admin.certificates.certificates2021.kc_deree_attendance';
+          $view = 'admin.certificates.certificates2021.kc_attendance';
         }
         
         //dd(storage_path('fonts\Foco_Lt.ttf'));
@@ -87,6 +87,6 @@ public function getCertificate(Certificate $certificate){
   
           
   
-      }
+    }*/
     
 }

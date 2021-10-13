@@ -4,25 +4,25 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">	
     <style>
 
-@page { margin: 0pt; }
+@page { margin: 0px; }
 
 .signature{
-    max-width: 200pt;
+    max-width: 200px;
 }
 
 h1, h2, h3, p { 
     font-family: 'foco';
 }
 
-h2,h3{ font-size: 20pt; margin: 6pt 0; padding: 0; font-weight:normal}
+h2,h3{ font-size: 20px; padding: 0; font-weight:normal}
 
 .borders{
-    border-left: 32.6pt solid #3A6DA8;
-    border-right: 32.6pt solid #3A6DA8;
+    border-left: 44px solid #3A6DA8;
+    border-right: 44px solid #3A6DA8;
 }
 
 .date{
-    margin-top:110pt;
+    margin-top:110px;
     color:#3A6DA8;
 }
 
@@ -30,115 +30,140 @@ h2,h3{ font-size: 20pt; margin: 6pt 0; padding: 0; font-weight:normal}
     margin:auto;
 }
 
-.text-left{left:280pt;}
+.text-left{
+    top:14px;
+    left:373px;
+}
 
 .knowcrunch-logo{
-    max-width: 152pt;
+    max-width: 202px;
 }
 
 .knowcrunch-logo-mar{
-    top:25pt;
-    left:18pt;
+    top:51px;
+    left:24px;
 }
 
 .deree-logo{
-    max-width: 77,8pt;
+    max-width: 103px;
 }
 
 .mar-top-50{
-    margin-top: 50pt;
+    margin-top: 50px;
     
 }
 
 .mar-top-150{
-    margin-top: 150pt;
+    margin-top: 170px;
     max-height:50px;
 }
 
 .name{
     color:#3A6DA8;
-    font-size:34pt;
+    font-size:48px;
     letter-spacing:3px;
 }
 
 .certificate{
     color:#3A6DA8;
-    font-size:22pt;
-    max-width:600pt;
+    font-size:35px;
     margin:auto;
+    letter-spacing:3px;
+    max-width:600Wpx;
+   
+}
+
+h3.certificate {
+    margin:0 auto -100px auto;
+    line-height:0.8;
+     text-align:justify;;
 }
 
 .award{
-    font-size:15pt;
+    font-size:20px;
+    margin:-8px  auto 2px auto;
+    max-width: 700px;
+    line-height:1;
 }
 
 
 .signature-img{
-    max-width:120pt;
+    max-width:147px;
     
 }
 
 .knowcrunch-signature-left{
-    top: 60pt;
-    left:110pt;
+    top: 160px;
+    left:130px;
 }
 
 .deree-signature-rigth{
-    top: 60pt;
-    left:440pt;
+    top: 160px;
+    left:550px;
 }
 
 .border-bottom{
-    border-bottom: 1pt solid black !important;
-    padding-bottom: 25pt;
+    border-bottom: 2px solid black !important;
+    max-width:295px;
+    margin:10px auto 0 auto;
 }
 
 .hat-icon{
-    max-width: 30pt;
+    max-width: 38px;
 }
 
 .hat-icon-mar{
-    left: 276pt;
-    top: 100pt;
-    
+
+    top:220px;
+    left:342px;   
 }
 
 .name-signature{
-    font-size:13.6pt;
-    color:#000;
     position: relative;
+    font-size:20px;
+    top:8px;
 }
 
 .title-signature{
     color:#000;
+    font-size:17px;
     position: relative;
-    top:-20pt;
-    font-size:12pt;
+    top:-20px;
 }
 
 .title-signature1{
     color:#000;
+    font-size:17px;
     position: relative;
-    top:-40pt;
-    font-size:12pt;
+    top:-50px;
 }
 
 
 .footer{
     position: relative;
-    top:31pt;
+    top:148px;
     text-align: center;
-    color: grey;
+    color: #666666;
+    font-size:14px;
+    
 }
 
 .mar-auto{
     margin:auto;
 }
 
+.user{
+    margin-top:40px;
+}
 
 .deree-signature-rigth, .knowcrunch-signature-left{
     height:0;
 }
+
+.seperator{
+    padding: 0 10px;
+}
+
 
 </style>
 </head>
@@ -146,16 +171,16 @@ h2,h3{ font-size: 20pt; margin: 6pt 0; padding: 0; font-weight:normal}
     <div class="mar-top-50">
         <div class="row ">
             <div class="logo col-6 knowcrunch-logo-mar">
-                <img class="knowcrunch-logo  mar-auto" src="{{asset('certificates/knowcrunch-logo.png')}}">
+                <img class="knowcrunch-logo  mar-auto" src="{{asset('theme/assets/images/certificates2021/knowcrunch-logo.png')}}">
             </div>
 
             <div class="logo col-6 text-left">
-                <img class="deree-logo" src="{{asset('certificates/deree-logo.png')}}">
+                <img class="deree-logo" src="{{asset('theme/assets/images/certificates2021/deree-logo.png')}}">
             </div>
 
         </div>
 
-        <div class="text-center">
+        <div class="text-center user">
 
             <h2 class="name"> {{$certificate->user->first()->firstname}} {{$certificate->user->first()->lastname}} </h2>
 
@@ -169,9 +194,14 @@ h2,h3{ font-size: 20pt; margin: 6pt 0; padding: 0; font-weight:normal}
 
             <h3 class="certificate">  Professional Diploma in Digital & Social Media Marketing  </h3>
 
-            <div class="row mar-top-150">
-                <div class="col-4 knowcrunch-signature-left">
-                    <img class="signature-img" src="{{asset('certificates/knowcrunch-signature.png')}}">
+           
+               
+           
+        </div>
+
+        <div class="row text-center mar-top-150">
+            <div class="col-4 knowcrunch-signature-left">
+                    <img class="signature-img" src="{{asset('theme/assets/images/certificates2021/knowcrunch-signature.png')}}">
                     <div class="border-bottom"></div>
                     <p class="name-signature"> APOSTOLIS AIVALIS</p>
                     <p class="title-signature"> Head of Curriculum, KnowCrunch</p>
@@ -179,21 +209,20 @@ h2,h3{ font-size: 20pt; margin: 6pt 0; padding: 0; font-weight:normal}
                 </div>
                 
                 <div class="col-4 hat-icon-mar">
-                    <img class="hat-icon" src="{{asset('certificates/icon.png')}}">
+                    <img class="hat-icon" src="{{asset('theme/assets/images/certificates2021/icon.png')}}">
                 </div>
                 <div class="col-4 deree-signature-rigth">
-                    <img class="signature-img" src="{{asset('certificates/deree-signature.png')}}">
+                    <img class="signature-img" src="{{asset('theme/assets/images/certificates2021/deree-signature.png')}}">
                     <div class="border-bottom"></div>
                     <p class="name-signature"> ARETI KREPAPA, PHD </p>
                     <p class="title-signature"> Dean of Deree School of Graduate </p>
                     <p class="title-signature1"> and Professional Education </p>
                 </div>
             </div>
-           
         </div>
     
         <div class="footer">
-            <p> Issue date: September 2021   |   Credential #: 1234567890 </p>
+            <p> Issue date: {{$certificate->certification_date}}  @if($certificate->expiration_date) | Expiration date: September 2023 @endif |   Credential #: 1234567890 </p>
         </div>
     </div>
 </body>

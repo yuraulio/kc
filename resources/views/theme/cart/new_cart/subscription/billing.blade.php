@@ -3,11 +3,11 @@
 @section('content')
 
 <!---------------- checkout progress-bar start --------------->
-<div class="checkout-step">
+<div class="suscription checkout-step">
 		<div class="container">		
 			<ul>
-				<li class="active"><span class="counter">2.</span><i>Billing</i></li>
-				<li><span class="counter">3.</span><i>Checkout</i></li>
+				<li class="active"><span class="counter">1.</span><i>Billing</i></li>
+				<li><span class="counter">2.</span><i>Checkout</i></li>
 			</ul>
 		</div>
 	</div>

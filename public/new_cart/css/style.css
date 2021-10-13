@@ -290,6 +290,8 @@ label.custom-control-label{font-size:19px;}
     width: fit-content;
 }
 
+.suscription.checkout-step ul{max-width: 500px!important;}
+
 
  /* ==========================================================================
     LOGIN POPUP WINDOW

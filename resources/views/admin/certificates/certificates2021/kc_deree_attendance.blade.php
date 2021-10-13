@@ -163,22 +163,22 @@ h2,h3{ font-size: 20px; padding: 0; font-weight:normal}
     <div class="mar-top-50">
         <div class="row ">
             <div class="logo col-6 knowcrunch-logo-mar">
-                <img class="knowcrunch-logo  mar-auto" src="{{asset('certificates/knowcrunch-logo.png')}}">
+                <img class="knowcrunch-logo  mar-auto" src="{{asset('theme/assets/images/certificates2021/knowcrunch-logo.png')}}">
             </div>
 
             <div class="logo col-6 text-left">
-                <img class="deree-logo" src="{{asset('certificates/deree-logo.png')}}">
+                <img class="deree-logo" src="{{asset('theme/assets/images/certificates2021/deree-logo.png')}}">
             </div>
 
         </div>
 
         <div class="text-center user">
-        {{--$certificate->user->first()->firstname}} {{$certificate->user->first()->lastname --}}
-            <h2 class="name"> PANAGIOTIS MACROGIANNIS </h2>
+        
+            <h2 class="name"> {{ $certificate->user->first()->firstname}} {{$certificate->user->first()->lastname }} </h2>
 
                 
             <p class="award">
-                has attended our course Professional Diploma in Digital & Social Media Marketing and is awarded this
+                has attended our course {{$certificate->event()->first()->title}} and is awarded this
             </p>
 
 
@@ -189,7 +189,7 @@ h2,h3{ font-size: 20px; padding: 0; font-weight:normal}
 
         <div class="row text-center mar-top-150">
             <div class="col-4 knowcrunch-signature-left">
-                <img class="signature-img" src="{{asset('certificates/knowcrunch-signature.png')}}">
+                <img class="signature-img" src="{{asset('theme/assets/images/certificates2021/knowcrunch-signature.png')}}">
                 <div class="border-bottom"></div>
                 <p class="name-signature"> APOSTOLIS AIVALIS</p>
                 <p class="title-signature"> Head of Curriculum, KnowCrunch</p>
@@ -197,10 +197,10 @@ h2,h3{ font-size: 20px; padding: 0; font-weight:normal}
             </div>
             
             <div class="col-4 hat-icon-mar">
-                <img class="hat-icon" src="{{asset('certificates/icon.png')}}">
+                <img class="hat-icon" src="{{asset('theme/assets/images/certificates2021/icon.png')}}">
             </div>
             <div class="col-4 deree-signature-rigth">
-                <img class="signature-img" src="{{asset('certificates/deree-signature.png')}}">
+                <img class="signature-img" src="{{asset('theme/assets/images/certificates2021/deree-signature.png')}}">
                 <div class="border-bottom"></div>
                 <p class="name-signature"> ARETI KREPAPA, PHD </p>
                 <p class="title-signature"> Dean of Deree School of Graduate </p>
@@ -209,7 +209,7 @@ h2,h3{ font-size: 20px; padding: 0; font-weight:normal}
         </div>
     
         <div class="footer">
-            <p> Issue date: Sepxember 2021 <span class="seperator">  | </span>  Credential #: 1234567890 </p>
+            <p> Issue date: {{$certificate->certification_date}} <span class="seperator">  | </span>  Credential #: 1234567890 </p>
         </div>
     </div>
 </body>

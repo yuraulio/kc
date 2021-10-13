@@ -14,11 +14,12 @@ class AddCertificateTitleToEvent extends Migration
     public function up()
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->text('certificate_title');
+            $table->text('certificate_title')->after('enroll')->nullable();
         });
 
         Schema::table('certificates', function (Blueprint $table) {
-            $table->text('certificate_title');
+            $table->text('certificate_title')->after('id')->nullable();
+            $table->text('credential')->after('expiration_date')->nullable();
         });
     }
 
