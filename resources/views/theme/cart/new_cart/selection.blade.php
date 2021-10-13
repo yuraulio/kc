@@ -40,8 +40,7 @@
 							@elseif(!isset($show_coupon))
 								<form class="checkout-fields d-flex justify-content-between mt-3 align-items-start">
 									<div class="checkout-input-groups">
-										<input id="coupon" type="text" name="" value="{{Session::get('coupon_code')}}" class="form-control">
-										<label class="coupon-code-validation-message coupon-successfull mt-1"> Success! Your coupon has been accepted.</label>
+										<input id="coupon" type="text" name="" value="{{Session::get('coupon_code')}}" class="form-control input-coupon-successfull">
 									</div>
 								</form>
 							@endif
@@ -95,8 +94,14 @@
 							$('.coupon-code-validation-message').addClass('coupon-successfull');
 							$('.checkout-button-coupon').remove();
 							$("#coupon").prop("readonly", true);
-
+							$("#coupon").addClass('input-coupon-successfull');
 							//$('.checkout-coupon-code-wrap').empty()
+
+							setTimeout(function() {
+							  
+							  $('.coupon-code-validation-message').remove();
+							  
+							 }, 2000);
 
 		  				}else{
 
@@ -114,6 +119,7 @@
 		  				}
 
 		  				/*setTimeout(function() {
+							  
 							$("#couponDialog").css("display", "none")
 							$("#couponDialog .alert-wrapper").removeClass('error-alert')
 							$("#couponDialog .alert-wrapper").removeClass('success-alert')

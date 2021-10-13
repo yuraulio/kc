@@ -505,7 +505,7 @@ class CartController extends Controller
         $data = $this->initCartDetails($data);
         //dd($data['type']!=3);
     
-        if((!$user = User::where('email',$request->email[0])->first()) && !$userCheck && $data['type'] != 3){
+        if((!$userCheck && !$user = User::where('email',$request->email[0])->first()) &&  $data['type'] != 3){
             $input = [];
             $formData = $request->all();
             unset($formData['_token']);

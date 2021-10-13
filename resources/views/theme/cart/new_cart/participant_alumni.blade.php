@@ -43,7 +43,7 @@
 										</div>
 									</div>					
 								</div>
-								<div class="form-row">
+								{{--<div class="form-row">
 									<div class="col-md-12 mb-4">
 										<label class="input-label">My e-mail is  <span class="checkout-required-data">(*)</span></label>							<div class="email-wrap">
 												<input type="text" name="email[]" id="email" value="{{old('email',$email[0])}}" class="form-control" readonly required>
@@ -341,14 +341,9 @@
 										<label class="custom-control-label" for="customCheck1"></label><p>I have read, agree upon & accept the <a href="/terms" class="link-color">terms & conditions</a> and <a href="/data-privacy-policy" class="link-color">data privacy policy.</a></p>
 										<label id="terms_condition-error" class="error" for="terms_condition" style="display:none;"> </label>
 									</div>
-								</div>
+								</div>--}}
 							</div>
-							{{--<div class="add-participant-wrap d-flex justify-content-between">												
-								<button class="add-participant">
-									<img src="{{cdn('new_cart/images/plus-full-green.svg')}}" class="without-hover" width="44px" height="44px">
-									<img src="{{cdn('new_cart/images/plus-full-green2.svg')}}" class="with-hover"  width="44px" height="44px"> <span>Add another participant</span>
-								</button>							
-							</div>--}}
+						
 							<div class="checkout-btn-wrap form-row mb-4 my-md-5 align-items-center">
 								<button id="btn" type="submit" class="btn registration checkout-button-secondary">Next: Billing <img src="{{cdn('new_cart/images/arrow-next-red.svg')}}" width="20px" height="12px" class="without-hover" alt=""> <img src="{{cdn('new_cart/images/arrow-next-red2.svg')}}" width="20px" height="12px" class="with-hover" alt=""> </button>
 							</div>

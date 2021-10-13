@@ -128,7 +128,7 @@ p.validation-info{font-size:19px;margin-bottom:1.4em;}
 
 .add-participant{border:0;display:flex;align-items:center;padding:5px;}
 .add-participant img{margin-right:5px;}
-.add-participant, .remove-participant{padding:0 5px;background: transparent;}
+.add-participant, .remove-participant{padding:0 5px;background: transparent;cursor: pointer;}
 .add-participant:hover .with-hover {display:block;}
 .add-participant:hover .without-hover{display:none;}
 /*.add-participant:hover, .remove-participant:hover{background-color:#ededed;} lioncode*/
@@ -218,6 +218,11 @@ label.custom-control-label{font-size:19px;}
 .coupon-successfull{
     display: block!important;
     color: #80bb01;
+}
+
+.input-coupon-successfull{
+    background-color: #419bff!important;
+    color: #fff!important;
 }
 
 .card-input{

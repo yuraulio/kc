@@ -12,7 +12,7 @@
       <!--[if !mso]><!-->
       {{--<style type="text/css" emogrify="no">@import url("https://fonts.googleapis.com/css2?family=Montserrat"); </style>--}}
       <!--<![endif]-->
-      <style type="text/css">p, h1, h2, h3, h4, ol, ul { margin: 0px !important; } a, a:link { color: #0092ff; text-decoration: underline } .nl2go-default-textstyle { color: #3b3f44; font-family: 'Foco'; font-size: 16px; line-height: 1.5 } .default-button { border-radius: 4px; color: #ffffff; font-family: 'Foco'; font-size: 16px; line-height: 1.15; text-decoration: none; width: 50% } .default-heading1 { color: #1F2D3D; font-family: 'Foco'; font-size: 36px } .default-heading2 { color: #1F2D3D; font-family: 'Foco'; font-size: 32px } .default-heading3 { color: #1F2D3D; font-family: 'Foco'; font-size: 24px } .default-heading4 { color: #1F2D3D; font-family: 'Foco'; font-size: 18px } a[x-apple-data-detectors] { color: inherit !important; text-decoration: inherit !important; font-size: inherit !important; font-family: inherit !important; font-weight: inherit !important; line-height: inherit !important; } .no-show-for-you { border: none; display: none; float: none; font-size: 0; height: 0; line-height: 0; max-height: 0; mso-hide: all; overflow: hidden; table-layout: fixed; visibility: hidden; width: 0; } </style>
+      <style type="text/css">p, h1, h2, h3, h4, ol, ul { margin: 0px !important; } a, a:link { color: #0092ff; text-decoration: underline } .nl2go-default-textstyle { color: #3b3f44; font-family: 'Tahoma'; font-size: 16px; line-height: 1.5 } .default-button { border-radius: 4px; color: #ffffff; font-family: 'Tahoma'; font-size: 16px; line-height: 1.15; text-decoration: none; width: 50% } .default-heading1 { color: #1F2D3D; font-family: 'Tahoma'; font-size: 36px } .default-heading2 { color: #1F2D3D; font-family: 'Tahoma'; font-size: 32px } .default-heading3 { color: #1F2D3D; font-family: 'Tahoma'; font-size: 24px } .default-heading4 { color: #1F2D3D; font-family: 'Tahoma'; font-size: 18px } a[x-apple-data-detectors] { color: inherit !important; text-decoration: inherit !important; font-size: inherit !important; font-family: inherit !important; font-weight: inherit !important; line-height: inherit !important; } .no-show-for-you { border: none; display: none; float: none; font-size: 0; height: 0; line-height: 0; max-height: 0; mso-hide: all; overflow: hidden; table-layout: fixed; visibility: hidden; width: 0; } </style>
       <!--[if mso]>
       <xml>
          <o:OfficeDocumentSettings>
@@ -24,17 +24,17 @@
       
       <style>
 
-      @font-face {
+@font-face {
         font-family:'Foco';
         src: url('/fonts/Foco_Lt.ttf') format('ttf');
         font-style: normal;
         font-weight: bold;
       }
       body{
-    font-family: Foco;
+    font-family: Tahoma;
 }
 h1, h2, p, span{
-    font-family: Foco;
+    font-family: Tahoma;
 }
       </style>
    </head>
@@ -133,9 +133,9 @@ h1, h2, p, span{
                                                                            <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
                                                                         </tr>
                                                                         <tr>
-                                                                           <td align="left" valign="top" class="r17-i nl2go-default-textstyle" style="color: #3b3f44; font-family: Foco; font-size: 16px; line-height: 1.5; text-align: left;">
+                                                                           <td align="left" valign="top" class="r17-i nl2go-default-textstyle" style="color: #3b3f44; font-family: Tahoma; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                               <div>
-                                                                                 <h2 class="default-heading2" style="color: #1F2D3D; font-family: Foco; font-size: 32px; margin: 0px;"><span style="font-family: Foco;">Welcome {{ $user['first'] }}</span></h2>
+                                                                                 <h2 class="default-heading2" style="color: #1F2D3D; font-family: Tahoma; font-size: 32px; margin: 0px;"><span style="font-family: Tahoma;">Welcome {{ $user['first'] }}</span></h2>
                                                                               </div>
                                                                            </td>
                                                                         </tr>
@@ -149,28 +149,9 @@ h1, h2, p, span{
                                                                            <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
                                                                         </tr>
                                                                         <tr>
-                                                                           <td align="left" valign="top" class="r18-i nl2go-default-textstyle" style="color: #3b3f44; font-family: Foco; font-size: 16px; line-height: 1.5; text-align: left;">
+                                                                           <td align="left" valign="top" class="r18-i nl2go-default-textstyle" style="color: #3b3f44; font-family: Tahoma; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                               <div>
-                                                                                 <p style="margin: 0px;"><span style="font-family: Foco;">Your enrollment is successful. </span></p>
-                                                                              </div>
-                                                                           </td>
-                                                                        </tr>
-                                                                        <tr class="nl2go-responsive-hide">
-                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
-                                                                        </tr>
-                                                                     </table>
-                                                                  </td>
-                                                               </tr>
-                                                               <tr>
-                                                                  <td class="r15-c" align="left">
-                                                                     <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r16-o" style="table-layout: fixed; width: 100%;">
-                                                                        <tr class="nl2go-responsive-hide">
-                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                           <td align="left" valign="top" class="r18-i nl2go-default-textstyle" style="color: #3b3f44; font-family: Foco; font-size: 16px; line-height: 1.5; text-align: left;">
-                                                                              <div>
-                                                                                 <p style="margin: 0px;"><span style="font-family: Foco;">You are one of the privileged students of {{ $extrainfo[2] }}. Get ready for a wonderful experience. Your registration information:</span></p>
+                                                                                 <p style="margin: 0px;"><span style="font-family: Tahoma;">Your enrollment is successful. </span></p>
                                                                               </div>
                                                                            </td>
                                                                         </tr>
@@ -187,9 +168,9 @@ h1, h2, p, span{
                                                                            <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
                                                                         </tr>
                                                                         <tr>
-                                                                           <td align="left" valign="top" class="r18-i nl2go-default-textstyle" style="color: #3b3f44; font-family: Foco; font-size: 16px; line-height: 1.5; text-align: left;">
+                                                                           <td align="left" valign="top" class="r18-i nl2go-default-textstyle" style="color: #3b3f44; font-family: Tahoma; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                               <div>
-                                                                                 <p style="margin: 0px;"><span style="font-family: Foco;"><strong>Your name:</strong> {{ $user['name'] }}</span></p>
+                                                                                 <p style="margin: 0px;"><span style="font-family: Tahoma;">You are one of the privileged students of {{ $extrainfo[2] }}. Get ready for a wonderful experience. Your registration information:</span></p>
                                                                               </div>
                                                                            </td>
                                                                         </tr>
@@ -206,9 +187,9 @@ h1, h2, p, span{
                                                                            <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
                                                                         </tr>
                                                                         <tr>
-                                                                           <td align="left" valign="top" class="r18-i nl2go-default-textstyle" style="color: #3b3f44; font-family: Foco; font-size: 16px; line-height: 1.5; text-align: left;">
+                                                                           <td align="left" valign="top" class="r18-i nl2go-default-textstyle" style="color: #3b3f44; font-family: Tahoma; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                               <div>
-                                                                                 <p style="margin: 0px;"><span style="font-family: Foco;"><strong>Your total price:</strong>@if( !isset($trans) || (isset($trans) && $trans->total_amount == 0) ) Free @else {{ round($trans->total_amount,2) }}@endif</span></p>
+                                                                                 <p style="margin: 0px;"><span style="font-family: Tahoma;"><strong>Your name:</strong> {{ $user['name'] }}</span></p>
                                                                               </div>
                                                                            </td>
                                                                         </tr>
@@ -225,9 +206,28 @@ h1, h2, p, span{
                                                                            <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
                                                                         </tr>
                                                                         <tr>
-                                                                           <td align="left" valign="top" class="r18-i nl2go-default-textstyle" style="color: #3b3f44; font-family: Foco; font-size: 16px; line-height: 1.5; text-align: left;">
+                                                                           <td align="left" valign="top" class="r18-i nl2go-default-textstyle" style="color: #3b3f44; font-family: Tahoma; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                               <div>
-                                                                                 <p style="margin: 0px;"><span style="font-family: Foco;"><strong>Your login:</strong> {{ $user['email'] }}</span></p>
+                                                                                 <p style="margin: 0px;"><span style="font-family: Tahoma;"><strong>Your total price:</strong>@if( !isset($trans) || (isset($trans) && $trans->total_amount == 0) ) Free @else {{ round($trans->total_amount,2) }}@endif</span></p>
+                                                                              </div>
+                                                                           </td>
+                                                                        </tr>
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                     </table>
+                                                                  </td>
+                                                               </tr>
+                                                               <tr>
+                                                                  <td class="r15-c" align="left">
+                                                                     <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r16-o" style="table-layout: fixed; width: 100%;">
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                           <td align="left" valign="top" class="r18-i nl2go-default-textstyle" style="color: #3b3f44; font-family: Tahoma; font-size: 16px; line-height: 1.5; text-align: left;">
+                                                                              <div>
+                                                                                 <p style="margin: 0px;"><span style="font-family: Tahoma;"><strong>Your login:</strong> {{ $user['email'] }}</span></p>
                                                                               </div>
                                                                            </td>
                                                                         </tr>
@@ -243,19 +243,19 @@ h1, h2, p, span{
                                                                      <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="280" class="r19-o" style="table-layout: fixed; width: 280px;">
                                                                         
                                                                         <tr>
-                                                                           <td height="19" align="center" valign="top" class="r20-i nl2go-default-textstyle" style="color: #3b3f44; font-family: Foco; font-size: 16px; line-height: 1.5;">
+                                                                           <td height="19" align="center" valign="top" class="r20-i nl2go-default-textstyle" style="color: #3b3f44; font-family: Tahoma; font-size: 16px; line-height: 1.5;">
                                                                               <!--[if mso]> 
                                                                               <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://knowcrunch.com/?utm_source=Knowcrunch.com&utm_medium=Automated_Email&utm_campaign=KNOWCRUNCH_BRANDING" style="v-text-anchor:middle; height: 42px; width: 279px;" arcsize="10%" fillcolor="#c8d151" strokecolor="#c8d151" strokeweight="1px" data-btn="1">
                                                                                  <w:anchorlock/>
                                                                                  <div style="display:none;">
                                                                                     <center class="default-button">
-                                                                                       <p><span style="color:#030000;font-family:Foco;">Go to your account</span></p>
+                                                                                       <p><span style="color:#030000;font-family:Tahoma;">Go to your account</span></p>
                                                                                     </center>
                                                                                  </div>
                                                                               </v:roundrect>
                                                                               <![endif]-->  <!--[if !mso]><!-- --> 
-                                                                              <a href='{{ URL::to("create-your-password/$slug") }}?utm_source=Knowcrunch.com&utm_medium=Automated_Email&utm_campaign=KNOWCRUNCH_BRANDING' class="r21-r default-button" title="" data-btn="1" style="line-height: 1.15; text-decoration: none; border-style: solid; display: inline-block; -webkit-text-size-adjust: none; mso-hide: all; background-color: #c8d151; border-color: #c8d151; border-radius: 4px; border-width: 0px; color: #ffffff; font-family: Foco; font-size: 16px; height: 19px; padding-bottom: 12px; padding-left: 5px; padding-right: 5px; padding-top: 12px; width: 270px;">
-                                                                                 <p style="margin: 0px;"><span style="color: #030000; font-family: Foco;">Go to your account</span></p>
+                                                                              <a href='{{ URL::to("create-your-password/$slug") }}?utm_source=Knowcrunch.com&utm_medium=Automated_Email&utm_campaign=KNOWCRUNCH_BRANDING' class="r21-r default-button" title="" data-btn="1" style="line-height: 1.15; text-decoration: none; border-style: solid; display: inline-block; -webkit-text-size-adjust: none; mso-hide: all; background-color: #c8d151; border-color: #c8d151; border-radius: 4px; border-width: 0px; color: #ffffff; font-family: Tahoma; font-size: 16px; height: 19px; padding-bottom: 12px; padding-left: 5px; padding-right: 5px; padding-top: 12px; width: 270px;">
+                                                                                 <p style="margin: 0px;"><span style="color: #030000; font-family: Tahoma;">Go to your account</span></p>
                                                                               </a>
 
                                                                             
@@ -319,9 +319,9 @@ h1, h2, p, span{
                                                                   <td class="r15-c" align="left">
                                                                      <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r16-o" style="table-layout: fixed; width: 100%;">
                                                                         <tr>
-                                                                           <td align="center" valign="top" class="r22-i nl2go-default-textstyle" style="color: #3b3f44; font-family: Foco; font-size: 16px; line-height: 1.5; text-align: center;">
+                                                                           <td align="center" valign="top" class="r22-i nl2go-default-textstyle" style="color: #3b3f44; font-family: Tahoma; font-size: 16px; line-height: 1.5; text-align: center;">
                                                                               <div>
-                                                                                 <p style="font-size: 14px; margin: 0px;"><span style="color: #ffffff; font-family: Foco;">KnowCrunch Inc., 2035 Sunset Lake Road, Suite B2,  Newark, 19702, Delaware, USA</span></p>
+                                                                                 <p style="font-size: 14px; margin: 0px;"><span style="color: #ffffff; font-family: Tahoma;">KnowCrunch Inc., 2035 Sunset Lake Road, Suite B2,  Newark, 19702, Delaware, USA</span></p>
                                                                               </div>
                                                                            </td>
                                                                         </tr>
