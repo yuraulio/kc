@@ -135,8 +135,9 @@ h2,h3{ font-size: 20px; padding: 0; font-weight:normal}
     position: relative;
     top:148px;
     text-align: center;
-    color: grey;
+    color: #666666;
     font-size:14px;
+    
 }
 
 .mar-auto{
