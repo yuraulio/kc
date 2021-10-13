@@ -208,7 +208,7 @@ h1, h2, p, span{
                                                                         <tr>
                                                                            <td align="left" valign="top" class="r18-i nl2go-default-textstyle" style="color: #3b3f44; font-family: Foco; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                               <div>
-                                                                                 <p style="margin: 0px;"><span style="font-family: Foco;"><strong>Your total price:</strong>@if($trans->total_amount == 0) Free @else {{ round($trans->total_amount,2) }}@endif</span></p>
+                                                                                 <p style="margin: 0px;"><span style="font-family: Foco;"><strong>Your total price:</strong>@if( !isset($trans) || (isset($trans) && $trans->total_amount == 0) ) Free @else {{ round($trans->total_amount,2) }}@endif</span></p>
                                                                               </div>
                                                                            </td>
                                                                         </tr>

@@ -19,7 +19,6 @@ class SubscriptionController extends Controller
         $this->middleware('event.subscription')->only(['index','store']);
     }
 
-
     public function index($event,$plan)
     {     
         $plan = Plan::where('name',$plan)->first();
@@ -124,7 +123,6 @@ class SubscriptionController extends Controller
         return view('theme.cart.new_cart.subscription.billing', $data);
        
     }
-
 
     public function checkoutIndex($event,$plan)
     {     
@@ -246,7 +244,6 @@ class SubscriptionController extends Controller
         return view('theme.cart.new_cart.subscription.checkout', $data);
        
     }
-
 
     public function store(Request $request, $event,$plan)
     {
@@ -436,7 +433,6 @@ class SubscriptionController extends Controller
 
     }
 
-
     public function change_status(Request $request){
         
         $user = Auth::user();
@@ -469,6 +465,5 @@ class SubscriptionController extends Controller
 
 
     }
-
 
 }

@@ -27,12 +27,18 @@ class SubscriptionController extends Controller
 
             if(count($sub['subscription']) != 0){
 
+                if(!isset($sub['subscription'][0]['event'][0]['title'])){
+                    continue;
+                }
+
                 $status = $sub['subscription'][0]['stripe_status'];
 
                 if($status == 'cancel'){
-                    $status = 'canceled';
+                    $status = 'cancelled';
                 }
-               
+                
+                
+
                 $name = $sub['user'][0]['firstname'] . ' ' . $sub['user'][0]['lastname'];
                 $amount = '€'.number_format(intval($sub['total_amount']), 2, '.', '');
                 $subscriptions[]=['user' => $name, 'plan_name' => $sub['subscription'][0]['name'], 

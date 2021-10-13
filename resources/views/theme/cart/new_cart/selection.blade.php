@@ -24,24 +24,27 @@
                         @endforeach
 						
 						<div class="checkout-coupon-code-wrap">
+							@if(!\Session::get('coupon_code') && !isset($show_coupon))			
 							<h2 class="mb-0">I have a coupon:</h2>							
 							<form class="checkout-fields d-flex justify-content-between mt-3 align-items-start">	
-								@if(!\Session::get('coupon_code') && !isset($show_coupon))							
+												
 								<div class="checkout-input-groups">
 									<input id="coupon" type="text" name="" class="form-control">
 									<label class="coupon-code-validation-message mt-1"> Enter a valid coupon code</label>
 								</div>								
 								<button type="button" class="btn btn-2 checkout-button-coupon">apply</button>
 
-								@elseif(!isset($show_coupon))
-
-								<div class="checkout-input-groups">
-									<input id="coupon" type="text" name="" value="{{Session::get('coupon_code')}}" class="form-control">
-									<label class="coupon-code-validation-message coupon-successfull mt-1"> Success! Your coupon has been accepted.</label>
-								</div>
-
-								@endif
+								
 							</form>		
+
+							@elseif(!isset($show_coupon))
+								<form class="checkout-fields d-flex justify-content-between mt-3 align-items-start">
+									<div class="checkout-input-groups">
+										<input id="coupon" type="text" name="" value="{{Session::get('coupon_code')}}" class="form-control">
+										<label class="coupon-code-validation-message coupon-successfull mt-1"> Success! Your coupon has been accepted.</label>
+									</div>
+								</form>
+							@endif
 							
 							{{--<div id="couponDialog">
 							   <div class="alert-wrapper">

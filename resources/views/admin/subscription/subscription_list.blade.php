@@ -57,7 +57,7 @@
                                         <option selected value> -- All -- </option>
                                         <option value="active"> Paid </option>
                                         <option value="trialing"> Trial </option>
-                                        <option value="canceled"> Cancelled </option>
+                                        <option value="cancelled"> Cancelled </option>
 
                                     </select>
                                 </div>

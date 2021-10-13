@@ -29,7 +29,7 @@ use App\Model\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use App\Model\CookiesSMS;
-
+use App\Notifications\WelcomeEmail;
 
 class CartController extends Controller
 {
@@ -1616,7 +1616,11 @@ class CartController extends Controller
             ]);
             $user->role()->attach(7);
             
-
+            $connow = Carbon::now();
+            $clientip = '';
+            $clientip = \Request::ip();
+            $user->terms = 1;
+            $user->consent = '{"ip": "' . $clientip . '", "date": "'.$connow.'" }';
         
         }
 
@@ -1756,6 +1760,7 @@ class CartController extends Controller
         $muser['id'] = $user->id;
         $muser['first'] = $user->first_name;
         $muser['email'] = $user->email;
+        $muser['createAccount'] = false;
 
         $tickettypedrop = 'Upon Coupon';
         $tickettypename = 'Upon Coupon';
@@ -1805,8 +1810,7 @@ class CartController extends Controller
 
         if(!$user->statusAccount->completed){
                     
-            //$user->notify(new CreateYourPassword($user));
-
+            $data['user']['createAccount'] = true;
             $cookieValue = base64_encode($user->id . date("H:i"));
             setcookie('auth-'.$user->id, $cookieValue, time() + (1 * 365 * 86400), "/"); // 86400 = 1 day
         
@@ -1819,7 +1823,12 @@ class CartController extends Controller
 
             $coockie->save();
 
+            $user->statusAccount->completed = true;
+            $user->statusAccount->save();
+
         }
+
+        $user->notify(new WelcomeEmail($user,$data));
 
     }
 

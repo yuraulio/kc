@@ -260,6 +260,7 @@ class WebhookController extends BaseWebhookController
 			$subscription->name = $planName;
 			$subscription->stripe_id = $payload['data']['object']['subscription'];
 			$subscription->stripe_price = $sub['plan']['id'];
+			$subscription->stripe_status = 'active';
 			$subscription->quantity = 1;
 			$subscription->price = $sub['amount']/100;
 			$subscription->ends_at = date('Y-m-d H:i:s', $ends_at);
@@ -267,6 +268,7 @@ class WebhookController extends BaseWebhookController
 
 			$subscription->save();
 
+			$user->subscriptionEvents()->wherePivot('event_id',$eventId)->detach();
 			$user->subscriptionEvents()->attach($eventId,['subscription_id'=>$subscription->id]);
 
 		}else{

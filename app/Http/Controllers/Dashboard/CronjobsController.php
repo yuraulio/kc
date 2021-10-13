@@ -371,6 +371,31 @@ class CronjobsController extends Controller
             $subscription->status = false;
             $subscription->save();
         }
+
+        $subscriptions = Subscription::where('status',true)->get();
+
+        foreach($subscriptions as $subscription){
+
+            if(strtotime($subscription->trials_ends_at) < strtotime($subscription->ends_at)){
+                $subscription->stripe_status = 'active';
+                $subscription->save();
+            }
+
+            
+        }
+
+        $subscriptions = Subscription::where('status',false)->get();
+
+        foreach($subscriptions as $subscription){
+
+            if(strtotime($subscription->trials_ends_at) < strtotime($subscription->ends_at)){
+                $subscription->stripe_status = 'cancelled';
+                $subscription->save();
+            }
+
+            
+        }
+
     }
 
     public function dereeIDNotification(){

@@ -29,7 +29,7 @@ use Mail;
 use Validator;
 use App\Model\GiveAway;
 use App\Model\CookiesSMS;
-use App\Notifications\CreateYourPassword;
+use App\Notifications\WelcomeEmail;
 use Illuminate\Support\Facades\Hash;
 use App\Model\Activation;
 use Illuminate\Support\Str;
@@ -256,8 +256,11 @@ class HomeController extends Controller
         }
         
         
+        $data['user']['createAccount'] = false;
 
         if( !($user = Auth::user()) && !($user = User::where('email',request()->email[0])->first()) ){
+
+            $data['user']['createAccount'] = true;
 
             $input = [];
             $formData = request()->all();
@@ -277,11 +280,11 @@ class HomeController extends Controller
             $code = Activation::create([
                 'user_id' => $user->id,
                 'code' => Str::random(40),
-                'completed' => false,
+                'completed' => true,
             ]);
             $user->role()->attach(7);
 
-            $user->notify(new CreateYourPassword($user));
+
 
             $cookieValue = base64_encode($user->id . date("H:i"));
             setcookie('auth-'.$user->id, $cookieValue, time() + (1 * 365 * 86400), "/"); // 86400 = 1 day
@@ -295,7 +298,14 @@ class HomeController extends Controller
 
             $coockie->save();
         }
-      
+
+        $data['user']['first'] = $user->firstname;
+        $data['user']['name'] = $user->firstname . ' ' . $user->lastname;
+        $data['user']['email'] = $user->email;
+        $data['extrainfo'] = ['','',$content->title];
+        
+        $user->notify(new WelcomeEmail($user,$data));
+
         
         $student = $user->events->where('id',$content->id)->first();
         if(!$student){
