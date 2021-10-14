@@ -137,6 +137,9 @@
     padding:  20px 0;
 }
 
+.error{
+    color:red!important;
+}
 
 @media (min-width:981px) {
 

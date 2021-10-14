@@ -595,10 +595,10 @@ class StudentController extends Controller
 
             $currentuser->receipt_details = json_encode($pay_receipt_data);
             $currentuser->save();
-            return ['status' => 1, 'saveddata' => $pay_receipt_data];
+            return back();
         }
         else {
-            return ['status' => 0];
+            return back();
         }
     }
 

@@ -25,14 +25,19 @@ jQuery.validator.addMethod(
                 required: true,
                 emailWithDot: true
             },
-            'billemail': {
-                required: true,
-                emailWithDot: true
-            },
             'country': {
-                required: true                
+                lettersonly: true                
             },
-            'number': {
+            'city': {
+                lettersonly: true                
+            },
+            'company': {
+                lettersonly: true                
+            },
+            'job_title': {
+                lettersonly: true                
+            },
+            'mobile': {
                 required: true
             },
             'student_type_id': {
@@ -54,14 +59,24 @@ jQuery.validator.addMethod(
             'email': {
                 required: "This field is required, enter your email",
             },
-            'billemail': {
-                required: "This field is required, enter your email",
-            },
+            
             'student_type_id': {
                 required: "This field is required, enter your ID",
             },
             'country': {               
                 required: "select country",
+            },
+
+            'city': {
+                lettersonly: "Please write everything in English"               
+            },
+
+
+            'company': {
+                lettersonly: "Please write everything in English"               
+            },
+            'job_title': {
+                lettersonly: "Please write everything in English"                
             },
             
         },     
@@ -71,16 +86,64 @@ jQuery.validator.addMethod(
     });
 
 
-     $("form[name='billing']").validate({
+     $("#billing-data-form").validate({
+
+        rules: {
+
+            'billname': {
+                required: true,
+                lettersonly: true
+            },
+            'billafm': {
+                required: true,
+                
+            },
+           
+            'billaddress': {
+                lettersonly: true                
+            },
+            'billcity': {
+                lettersonly: true                
+            },
+            'billstate': {
+                lettersonly: true                
+            },
+            'billcountry': {
+                lettersonly: true                
+            },
+           
+    
+        },
 
         messages: {
 
             'billname': {
-                required: "This field is required, Enter billed name or company",             
+                required: "This field is required, Enter billed name or company", 
+                lettersonly: "Please write everything in English"            
             },
             'billafm': {
-                required: "This field is required, Enter VAT or tax ID",                
-            },            
+                required: "This field is required, Enter VAT or tax ID",             
+              
+            },    
+            
+            'billemail': {
+                required: "This field is required, enter your email",
+            },
+
+            'billaddress': {
+                lettersonly: "Please write everything in English"
+            },
+
+            'billcity': {
+                lettersonly: "Please write everything in English"
+            },
+            'billstate': {
+                lettersonly: "Please write everything in English"
+            },
+            'billcountry': {
+                lettersonly: "Please write everything in English"
+            },
+        
         },
         submitHandler: function(form) {
             form.submit();

@@ -490,8 +490,8 @@
                                  
                                  <div class="form-wrapper profile-form-wrapper">
                          
-                                    <form >
-                                     
+                                    <form action="myaccount/updrecbill" method="post" id="billing-data-form">
+                                    @csrf
                                        <div >
                                           <?php $billingDetails = json_decode($user['receipt_details'],true);?>
                                         
@@ -1966,9 +1966,9 @@
 
 
        $('#save-receipt-data').on('click', function() {
-           var receiptdata = $("#billing-data input").serialize();
-           console.log(receiptdata);
-           $.ajax({ url: "myaccount/updrecbill", type: "post",
+           //var receiptdata = $("#billing-data input").serialize();
+           //console.log(receiptdata);
+           /*$.ajax({ url: "myaccount/updrecbill", type: "post",
                data: receiptdata,
                success: function(data) {
                    if (Number(data.status) === 1) {
@@ -1979,7 +1979,9 @@
                        alert('Not saved. Please try again');
                    }
                }
-           });
+           });*/
+
+           $("#billing-data-form").submit();
        });
 
 
