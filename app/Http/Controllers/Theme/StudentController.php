@@ -584,14 +584,15 @@ class StudentController extends Controller
             $pay_receipt_data = [];
             $pay_receipt_data['billing'] = 1;
             $pay_receipt_data['billname'] = $request->input('billname');
-            $pay_receipt_data['billsurname'] = $request->input('billsurname');
-            /*$pay_receipt_data['billemail'] = $request->input('billemail');
-            $pay_receipt_data['billmobile'] = $request->input('billmobile');*/
+            $pay_receipt_data['billemail'] = $request->input('billemail');
             $pay_receipt_data['billaddress'] = $request->input('billaddress');
             $pay_receipt_data['billaddressnum'] = $request->input('billaddressnum');
             $pay_receipt_data['billpostcode'] = $request->input('billpostcode');
             $pay_receipt_data['billcity'] = $request->input('billcity');
             $pay_receipt_data['billafm'] = $request->input('billafm');
+            $pay_receipt_data['billcountry'] = $request->input('billcountry');
+            $pay_receipt_data['billstate'] = $request->input('billstate');
+
             $currentuser->receipt_details = json_encode($pay_receipt_data);
             $currentuser->save();
             return ['status' => 1, 'saveddata' => $pay_receipt_data];

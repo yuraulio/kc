@@ -215,15 +215,21 @@
                                           </div>
                                        </div>
                                        <div class="col12">
-                                          <label>Company:</label>
+                                          <label>Company/Employer:</label>
                                           <div class="input-safe-wrapper">
                                              <input  type="text" name="company" id="company" value="{{ old('company', $currentuser['company']) }}" >
                                           </div>
                                        </div>
                                        <div class="col12">
-                                          <label>Position/Title:</label>
+                                          <label>Occupation:</label>
                                           <div class="input-safe-wrapper">
                                              <input name="job_title" id="job_title" value="{{ old('job_title', $currentuser['job_title']) }}" >
+                                          </div>
+                                       </div>
+                                       <div class="col12">
+                                          <label>Town / City:</label>
+                                          <div class="input-safe-wrapper">
+                                             <input name="city" id="city" value="{{ old('city', $currentuser['city']) }}" >
                                           </div>
                                        </div>
                                        <div class="col12">
@@ -479,157 +485,89 @@
                                     </form>
                                  </div>
                               </div>
-                              {{--<div id="subscriptions" class="in-tab-wrapper">
-                                 <div id="container" class="container">
-                                    <div class="row" id="cardList">
-                                       @if(count($defaultPaymetnt) > 0)
-                                       <table  style="width:100%">
-                                          <tr>
-                                             <th>Brand</th>
-                                             <th>Default</th>
-                                             <th>Last four</th>
-                                             <th>Expire Month</th>
-                                             <th>Expire Year</th>
-                                             <th>Actions</th>
-                                          </tr>
-                                          @foreach($defaultPaymetnt as $card)
-                                          <tr id="defalt-card">
-                                             <td>{{$card['brand']}}</td>
-                                             <td><i class="far fa-check-circle"></i>Yes</td>
-                                             <td>{{$card['last4']}}</td>
-                                             <td>{{$card['exp_month']}}</td>
-                                             <td>{{$card['exp_year']}}</td>
-                                          </tr>
-                                          @endforeach
-                                          @if(count($cards) > 1)
-                                          @foreach($cards as $card)
-                                          @if($card['id'] != $defaultPaymetntId)
-                                          <tr id="all-cards">
-                                             <td>{{$card['card']['brand']}}</td>
-                                             <td><i class="far fa-check-circle"></i>No</td>
-                                             <td>{{$card['card']['last4']}}</td>
-                                             <td>{{$card['card']['exp_month']}}</td>
-                                             <td>{{$card['card']['exp_year']}}</td>
-                                             <td>
-                                                <form action="{{route('payment_method.update')}}" method="post" id="payment-form">
-                                                   {{ csrf_field() }}
-                                                   <input type="hidden" name="card_id" value="{{$card['id']}}">
-                                                   <button class="btn btn--secondary btn--sm">Set default</button>
-                                                </form>
-                                                <form action="{{route('payment_method.remove')}}" method="post" id="payment-form">
-                                                   {{ csrf_field() }}
-                                                   <input type="hidden" name="card_id" value="{{$card['id']}}">
-                                                   <button id="removebtn" class="btn btn--secondary btn--sm">Remove</button>
-                                                </form>
-                                             </td>
-                                          </tr>
-                                          @endif
-                                          @endforeach
-                                          @endif
-                                       </table>
-                                       @else
-                                       <p>You don't have any credit/debit cards available. </p>
-                                       @endif
-                                       <div id="addCardBtn" class="col12 text-right">
-                                          <button type="button" id="addCard" class="btn btn--secondary btn--sm">Add New Card</button>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>--}}
+                        
                               <div id="billing-data" class="in-tab-wrapper">
-                                 <?php
-                                    /*'billemail' => 'Email',
-                                                'billmobile' => 'Mobile',*/
-                                        $hone = [
-                                                'billname' => 'First name',
-                                                'billsurname' => 'Last name',
-                                                'billaddress' => 'Street',
-                                                'billaddressnum' => 'Street number',
-                                                'billcity' => 'City',
-                                                'billpostcode' => 'PostCode',
-                                                'billafm' => 'VAT Number'
-                                            ];
-                                        $inv_data = [];
-                                        $htwo = [
-                                                'companyname' => 'Company name',
-                                                'companyprofession' => 'Profession',
-                                                'companyafm' => 'VAT Number',
-                                                'companydoy' => 'Tax Area',
-                                                'companyaddress' => 'Address',
-                                                'companyaddressnum' => 'Street Number',
-                                                'companycity' => 'City',
-                                                'companypostcode' => 'PostCode',
-                                                'companyemail' => 'Company email'
-                                            ];
-                                        $rec_data = [];
-
-
-                                    ?>
+                                 
                                  <div class="form-wrapper profile-form-wrapper">
-                                    {{--
-                                    <div class="form-action-upper">
-                                       <a href="#" class="edit-fields"><img src="/theme/assets/images/icons/icon-edit.svg" alt="Edit Fields"/><span>Edit</span></a>
-                                    </div>
-                                    --}}
+                         
                                     <form >
-                                       <div class="custom-radio-wrapper">
-                                          <div class="custom-radio-box active">
-                                             <div class="crb-wrapper">
-                                                <input id="radio-receipt-control" type="radio" data-fieldset-target="receipt-fields" name="billing-receipt-invoice" checked="checked">
-                                                <span></span>
-                                             </div>
-                                             <div class="label-wrapper">
-                                                <label for="radio-receipt-control">Receipt</label>
-                                             </div>
-                                          </div>
-                                          <div class="custom-radio-box">
-                                             <div class="crb-wrapper">
-                                                <input id="radio-invoice-control" type="radio" data-fieldset-target="invoice-fields" name="billing-receipt-invoice">
-                                                <span></span>
-                                             </div>
-                                             <div class="label-wrapper">
-                                                <label for="radio-invoice-control">Invoice</label>
-                                             </div>
-                                          </div>
-                                       </div>
-                                       <?php //dd($receipt_info); ?>
-                                       <div id="receipt_add_edit_mode" class="hidden-fields-actions receipt-fields" style="display: block;">
-                                          <?php //dd($user['receipt_details']);?>
-                                          @if($user['receipt_details'] != '')
-                                          <?php $receipt_info = json_decode($user['receipt_details']);  ?>
-                                          @foreach($receipt_info as $k => $v)
-                                          @if($k != 'billing' && isset($hone[$k]))
+                                     
+                                       <div >
+                                          <?php $billingDetails = json_decode($user['receipt_details'],true);?>
+                                        
+                             
+                                          
+                                          
                                           <div class="col12">
-                                             <label>{{$hone[$k]}}:</label>
+                                             <label>Billed name or company:</label>
                                              <div class="input-safe-wrapper">
-                                                <input  type="text" id="{{$k}}" name="{{$k}}" value="{{ $v }}" >
+                                                <input  type="text" id="billname" name="billname" value="{{ isset($billingDetails['billname']) ? $billingDetails['billname'] : '' }}" >
                                              </div>
                                           </div>
-                                          @endif
-                                          @endforeach
+
+                                          <div class="col12">
+                                             <label>VAT or tax ID:</label>
+                                             <div class="input-safe-wrapper">
+                                                <input  type="text" id="billafm" name="billafm" value="{{ isset($billingDetails['billafm']) ? $billingDetails['billafm'] : '' }}" >
+                                             </div>
+                                          </div>
+
+                                          <div class="col12">
+                                             <label>Street:</label>
+                                             <div class="input-safe-wrapper">
+                                                <input  type="text" id="billaddress" name="billaddress" value="{{ isset($billingDetails['billaddress']) ? $billingDetails['billaddress'] : '' }}" >
+                                             </div>
+                                          </div>
+
+                                          <div class="col12">
+                                             <label>Street number:</label>
+                                             <div class="input-safe-wrapper">
+                                                <input  type="number" id="billaddressnum" name="billaddressnum" value="{{ isset($billingDetails['billaddressnum']) ? $billingDetails['billaddressnum'] : '' }}" >
+                                             </div>
+                                          </div>
+
+
+                                          <div class="col12">
+                                             <label>Town/city:</label>
+                                             <div class="input-safe-wrapper">
+                                                <input  type="text" id="billcity" name="billcity" value="{{ isset($billingDetails['billcity']) ? $billingDetails['billcity'] : '' }}" >
+                                             </div>
+                                          </div>
+
+                                          <div class="col12">
+                                             <label>Postcode:</label>
+                                             <div class="input-safe-wrapper">
+                                                <input  type="number" id="billpostcode" name="billpostcode" value="{{ isset($billingDetails['billpostcode']) ? $billingDetails['billpostcode'] : '' }}" >
+                                             </div>
+                                          </div>
+
+                                          <div class="col12">
+                                             <label>State:</label>
+                                             <div class="input-safe-wrapper">
+                                                <input  type="text" id="billstate" name="billstate" value="{{ isset($billingDetails['billstate']) ? $billingDetails['billstate'] : '' }}" >
+                                             </div>
+                                          </div>
+                                         
+                                          <div class="col12">
+                                             <label>Country:</label>
+                                             <div class="input-safe-wrapper">
+                                                <input  type="text" id="billcountry" name="billcountry" value="{{ isset($billingDetails['billcountry']) ? $billingDetails['billcountry'] : '' }}" >
+                                             </div>
+                                          </div>
+
+                                          <div class="col12">
+                                             <label>Bill email:</label>
+                                             <div class="input-safe-wrapper">
+                                                <input  type="text" id="billemail" name="billemail" value="{{ isset($billingDetails['billemail']) ? $billingDetails['billemail'] : '' }}" >
+                                             </div>
+                                          </div>
+                                        
                                           <div class="form-submit-area">
                                              <button id="save-receipt-data" type="button" class="btn btn--md btn--secondary">Update</button>
                                           </div>
-                                          @endif
+                                         
                                        </div>
-                                       <div id="invoice_add_edit_mode" class="hidden-fields-actions invoice-fields">
-                                          @if($user['invoice_details'] != '')
-                                          <?php $invoice_info = json_decode($user['invoice_details']);  ?>
-                                          @foreach($invoice_info as $k => $v)
-                                          @if($k != 'billing' && isset($htwo[$k]))
-                                          <div class="col12">
-                                             <label>{{$htwo[$k]}}:</label>
-                                             <div class="input-safe-wrapper">
-                                                <input  type="text" id="{{$k}}" name="{{$k}}" value="{{ $v }}" >
-                                             </div>
-                                          </div>
-                                          @endif
-                                          @endforeach
-                                          <div class="form-submit-area">
-                                             <button id="save-invoice-data" type="button" class="btn btn--md btn--secondary">Update</button>
-                                          </div>
-                                          @endif
-                                       </div>
+                                       
                                     </form>
                                     <?php //dd(); ?>
                                     <!-- /.form-wrapper.profile-form-wrapper -->
@@ -1482,6 +1420,11 @@
 </main>
 @endsection
 @section('scripts')
+
+<script src="{{cdn('theme/assets/js/validation_myaccount/jquery.validate.min.js')}}" type="text/javascript" charset="utf-8" async defer></script>
+	<script src="{{cdn('theme/assets/js/validation_myaccount/additional-methods.min.js')}}" type="text/javascript" charset="utf-8" async defer></script>	
+	<script src="{{cdn('theme/assets/js/validation_myaccount/validation.js')}}" type="text/javascript" charset="utf-8" async defer></script>	
+
 {{--<script src="https://js.stripe.com/v3/"></script>
 <script>
    var stripeUserId = '{{ Auth::user()->createSetupIntent()->client_secret }}';
@@ -2023,8 +1966,8 @@
 
 
        $('#save-receipt-data').on('click', function() {
-           var receiptdata = $("#receipt_add_edit_mode :input").serialize();
-           //console.log(receiptdata);
+           var receiptdata = $("#billing-data input").serialize();
+           console.log(receiptdata);
            $.ajax({ url: "myaccount/updrecbill", type: "post",
                data: receiptdata,
                success: function(data) {
