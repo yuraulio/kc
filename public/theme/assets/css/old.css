@@ -1081,3 +1081,9 @@ border-radius: 4px;
 #email-error,#mobileCheck-error{
     color:red;
 }
+
+.ticket-right{
+    text-align: right;
+    text-align: -webkit-right;
+
+}

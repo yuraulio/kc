@@ -505,7 +505,7 @@ class CartController extends Controller
         $data = $this->initCartDetails($data);
         //dd($data['type']!=3);
     
-        if((!$userCheck && !$user = User::where('email',$request->email[0])->first()) &&  $data['type'] != 3){
+        if((!$userCheck && !($user = User::where('email',$request->email[0])->first())) &&  $data['type'] != 3){
             $input = [];
             $formData = $request->all();
             unset($formData['_token']);
@@ -586,7 +586,7 @@ class CartController extends Controller
             $seats_data['jobtitles'] = $request->get('jobtitle');
             $seats_data['companies'] = $request->get('company');
             $seats_data['student_type_id'] = $request->get('student_type_id');
-            Session::put('user_id', $user->id);
+            Session::put('user_id', $userCheck ? $userCheck->id : $user->id);
 
         }else{
             Cart::instance('default')->destroy();

@@ -2,6 +2,21 @@
 $(document).on('click', '.registration', function(e) {
 	e.preventDefault();
 
+    $('input[name^="firstname["]').each(function(i){
+        let val = $(this).val();
+        let newVal = val.charAt(0).toUpperCase() + val.slice(1).toLowerCase();
+
+        $(this).val(newVal);
+    })
+
+    $('input[name^="lastname["]').each(function(i){
+        let val = $(this).val();
+        let newVal = val.charAt(0).toUpperCase() + val.slice(1).toLowerCase();
+
+        $(this).val(newVal);
+    })
+
+
     var checkoutUrl = 'mobile-check';
     var fdata = $("#participant-form").serialize();
     $(".error-mobile").hide();

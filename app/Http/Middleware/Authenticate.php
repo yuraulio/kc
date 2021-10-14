@@ -24,8 +24,17 @@ class Authenticate extends Middleware
         if (! $request->expectsJson()) {
 
             $url = explode('/',$request->getRequestUri());
-            if(isset($url[1]) && $url[1] == 'myaccount'){
-                return route('homepage');
+            $url = isset($url[1]) ? explode('?',$url[1]) : $url;
+
+            if(isset($url[0]) && $url[0] == 'myaccount'){
+
+                if($request->login){
+                    return route('homepage',['login'=>true]);
+
+                }else{
+                    return route('homepage');
+
+                }
             }
 
         }

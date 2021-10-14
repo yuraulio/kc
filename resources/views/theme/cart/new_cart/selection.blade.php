@@ -40,7 +40,7 @@
 							@elseif(!isset($show_coupon))
 								<form class="checkout-fields d-flex justify-content-between mt-3 align-items-start">
 									<div class="checkout-input-groups">
-										<input id="coupon" type="text" name="" value="{{Session::get('coupon_code')}}" class="form-control input-coupon-successfull">
+										<input readonly id="coupon" type="text" name="" value="{{Session::get('coupon_code')}}" class="form-control input-coupon-successfull">
 									</div>
 								</form>
 							@endif
@@ -90,8 +90,8 @@
 
 							//let p = `<p><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-success-alert.svg')}}" alt="Info Alert">` + data['message']+ `</p>`
 
-							$('.coupon-code-validation-message').text('Success! Your coupon has been accepted.');
-							$('.coupon-code-validation-message').addClass('coupon-successfull');
+							//$('.coupon-code-validation-message').text('Success! Your coupon has been accepted.');
+							//$('.coupon-code-validation-message').addClass('coupon-successfull');
 							$('.checkout-button-coupon').remove();
 							$("#coupon").prop("readonly", true);
 							$("#coupon").addClass('input-coupon-successfull');

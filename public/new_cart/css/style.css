@@ -221,9 +221,15 @@ label.custom-control-label{font-size:19px;}
 }
 
 .input-coupon-successfull{
-    background-color: #419bff!important;
-    color: #fff!important;
+    color: #b8ff6b!important;
+    text-align: center!important;
+    background: #419bff url(../images/checkbox-coupon-accepted.svg) no-repeat scroll 140px 10px!important;
+    background-size: 25px!important;
+    margin-top:15px!important;
+    padding-top: 5px!important;
 }
+
+
 
 .card-input{
     border: 1px solid;
@@ -359,6 +365,8 @@ label.custom-control-label{font-size:19px;}
 /* responsive media */
 
 @media(max-width:992px){
+
+.input-coupon-successfull {background: url(../images/checkbox-coupon-accepted.svg) no-repeat scroll 200px 10px;background-size: 25px;}/*lioncode*/
 .remove-participant a {left: 0;}
 .header-logo a {max-width: 150px;}
 .checkout-step{padding:40px 0;}

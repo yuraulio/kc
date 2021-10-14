@@ -137,6 +137,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 @if (!Auth::check())
 
+   
+
 <div  class="login-popup-wrapper">
 
 
@@ -232,6 +234,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 @include('theme.layouts.flash_notifications')
 @yield('scripts')
 
+
+@if(!Auth::check() && request()->login)
+    <script>
+        $(document).ready(function(){
+            $('li.account-menu a').click();
+        });
+    </script>
+@endif
 
 <script>
 

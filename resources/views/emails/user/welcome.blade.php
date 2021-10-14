@@ -237,7 +237,7 @@ h1, h2, p, span{
                                                                      </table>
                                                                   </td>
                                                                </tr>
-                                                               @if($user['createAccount'])
+                                                              
                                                                <tr>
                                                                   <td class="r15-c" align="left">
                                                                      <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="280" class="r19-o" style="table-layout: fixed; width: 280px;">
@@ -254,9 +254,15 @@ h1, h2, p, span{
                                                                                  </div>
                                                                               </v:roundrect>
                                                                               <![endif]-->  <!--[if !mso]><!-- --> 
+                                                                              @if($user['createAccount'])
                                                                               <a href='{{ URL::to("create-your-password/$slug") }}?utm_source=Knowcrunch.com&utm_medium=Automated_Email&utm_campaign=KNOWCRUNCH_BRANDING' class="r21-r default-button" title="" data-btn="1" style="line-height: 1.15; text-decoration: none; border-style: solid; display: inline-block; -webkit-text-size-adjust: none; mso-hide: all; background-color: #c8d151; border-color: #c8d151; border-radius: 4px; border-width: 0px; color: #ffffff; font-family: Tahoma; font-size: 16px; height: 19px; padding-bottom: 12px; padding-left: 5px; padding-right: 5px; padding-top: 12px; width: 270px;">
                                                                                  <p style="margin: 0px;"><span style="color: #030000; font-family: Tahoma;">Go to your account</span></p>
                                                                               </a>
+                                                                              @else
+                                                                              <a href='{{ URL::to("myaccount") }}?login=true&utm_source=Knowcrunch.com&utm_medium=Automated_Email&utm_campaign=KNOWCRUNCH_BRANDING' class="r21-r default-button" title="" data-btn="1" style="line-height: 1.15; text-decoration: none; border-style: solid; display: inline-block; -webkit-text-size-adjust: none; mso-hide: all; background-color: #c8d151; border-color: #c8d151; border-radius: 4px; border-width: 0px; color: #ffffff; font-family: Tahoma; font-size: 16px; height: 19px; padding-bottom: 12px; padding-left: 5px; padding-right: 5px; padding-top: 12px; width: 270px;">
+                                                                                 <p style="margin: 0px;"><span style="color: #030000; font-family: Tahoma;">Go to your account</span></p>
+                                                                              </a>
+                                                                              @endif
 
                                                                             
 
@@ -267,7 +273,7 @@ h1, h2, p, span{
                                                                      </table>
                                                                   </td>
                                                                </tr>
-                                                               @endif
+                                                               
                                                             </table>
                                                          </td>
                                                          <td class="nl2go-responsive-hide" width="10" style="font-size: 0px; line-height: 1px;">­ </td>

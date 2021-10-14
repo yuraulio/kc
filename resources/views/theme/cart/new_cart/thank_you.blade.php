@@ -1,7 +1,7 @@
 
 @extends('theme.layouts.master')
 @section('metas')
-<title>Cart</title>
+<title>Thank you</title>
 @endsection
 @section('content')
 

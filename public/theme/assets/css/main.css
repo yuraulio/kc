@@ -451,7 +451,7 @@
       ========================================================================== */
    .section-tickets{ padding: 84px 0 150px; background-color: #e3e3e3; }
    .section-tickets .section-title{ text-align: center; margin-bottom: 60px; }
-   .section-tickets .ticket-box-wrapper{  }
+   .section-tickets .ticket-box-wrapper{ max-width: 360px; }
    .section-tickets .ticket-box-wrapper .ticket-box{ background-color: #ffffff; position: relative; padding-bottom: 185px; }
    .section-tickets .ticket-box-wrapper .ticket-box h3{ background-color: #474747; text-align: center; padding: 42px 0 28px; text-align: center; font-size: 36px; color: #ffffff; margin-bottom: 0; }
    .section-tickets .ticket-box-wrapper .ticket-box h3 span{ display: none; }

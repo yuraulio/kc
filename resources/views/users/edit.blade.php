@@ -170,14 +170,14 @@
                                 @include('alerts.feedback', ['field' => 'photo'])
                             </div>
                             <div class="form-group{{ $errors->has('company') ? ' has-danger' : '' }}">
-                                <label class="form-control-label" for="input-company">{{ __('Company') }}</label>
-                                <input type="text" name="company" id="input-company" class="form-control{{ $errors->has('company') ? ' is-invalid' : '' }}" placeholder="{{ __('Company') }}" value="{{ old('company', $user['company']) }}" autofocus>
+                                <label class="form-control-label" for="input-company">{{ __('Company/Employer') }}</label>
+                                <input type="text" name="company" id="input-company" class="form-control{{ $errors->has('company') ? ' is-invalid' : '' }}" placeholder="{{ __('Company/Employer') }}" value="{{ old('company', $user['company']) }}" autofocus>
 
                                 @include('alerts.feedback', ['field' => 'company'])
                             </div>
                             <div class="form-group{{ $errors->has('job_title') ? ' has-danger' : '' }}">
-                                <label class="form-control-label" for="input-job_title">{{ __('Job title') }}</label>
-                                <input type="text" name="job_title" id="input-job_title" class="form-control{{ $errors->has('job_title') ? ' is-invalid' : '' }}" placeholder="{{ __('Job title') }}" value="{{ old('job_title', $user['job_title']) }}"  autofocus>
+                                <label class="form-control-label" for="input-job_title">{{ __('Occupation') }}</label>
+                                <input type="text" name="job_title" id="input-job_title" class="form-control{{ $errors->has('job_title') ? ' is-invalid' : '' }}" placeholder="{{ __('Occupation') }}" value="{{ old('job_title', $user['job_title']) }}"  autofocus>
 
                                 @include('alerts.feedback', ['field' => 'job_title'])
                             </div>
@@ -221,6 +221,13 @@
                                 <input type="number" name="telephone" id="input-telephone" class="form-control{{ $errors->has('telephone') ? ' is-invalid' : '' }}" placeholder="{{ __('Telephone') }}" value="{{ old('telephone', $user['telephone']) }}" autofocus>
 
                                 @include('alerts.feedback', ['field' => 'telephone'])
+                            </div>
+
+                            <div class="form-group{{ $errors->has('city') ? ' has-danger' : '' }}">
+                                <label class="form-control-label" for="input-telephone">{{ __('Town / City') }}</label>
+                                <input type="text" name="city" id="input-telephone" class="form-control{{ $errors->has('city') ? ' is-invalid' : '' }}" placeholder="{{ __('Town / City') }}" value="{{ old('city', $user['city']) }}" autofocus>
+
+                                @include('alerts.feedback', ['field' => 'city'])
                             </div>
 
                             <input type="hidden" name="user_id" value="{{$user['id']}}">

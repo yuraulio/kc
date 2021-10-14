@@ -384,11 +384,12 @@ class CronjobsController extends Controller
             
         }
 
+        $date = strtotime(date('Y-m-d'));
         $subscriptions = Subscription::where('status',false)->get();
 
         foreach($subscriptions as $subscription){
 
-            if(strtotime($subscription->trials_ends_at) < strtotime($subscription->ends_at)){
+            if(strtotime($subscription->ends_at) < $date){
                 $subscription->stripe_status = 'cancelled';
                 $subscription->save();
             }

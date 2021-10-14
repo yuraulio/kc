@@ -25,6 +25,7 @@
 						<form action="{{route('registration')}}" method="post" id="participant-form" name="participant-form">
                         	@csrf
 							@for ($i=1; $i <= $totalitems; $i++) 
+
 							<div class="form-wrp box" @if($i==1) id="clone-box" @else id="clone-box-{{$i}}" @endif>		
 																	
 								@if($type == 5) <h2 class="participant-number">Participant {{$i}}</h2> @endif
@@ -64,7 +65,7 @@
 								<div class="form-row">
 									<div class="col-md-12 mb-4">
 										<label class="input-label">My e-mail is  <span class="checkout-required-data">(*)</span></label>							<div class="email-wrap">
-												<input type="text" name="email[{{$i - 1}}]" id="email" value="{{old('email',$email[$i-1])}}" class="form-control" required>
+												<input type="text" name="email[{{$i - 1}}]"  value="{{old('email',$email[$i-1])}}" class="form-control" required>
 										  	</div>
 									</div>
 								</div>
@@ -357,7 +358,7 @@
 										<input type="text" name="jobtitle[{{$i - 1}}]" value="{{old('jobtitle',$job_title[$i - 1])}}" class="form-control" placeholder="E.g. Marketing specialist" aria-describedby="inputGroupPrepend3">			
 									</div>
 								</div>	
-								@if($type == 5)
+								@if($type == 5 && $i>2)
 								<div class="remove-participant" data-participant-number="{{ $totalitems }}">
 									<a href="javascript:void(0)">Remove participant <img src="{{cdn('new_cart/images/close-green.svg')}}" width="9px" height="10px"  class="without-hover">
 										<img src="{{cdn('new_cart/images/close-green2.svg')}}" width="9px" height="10px" class="with-hover"></a>
@@ -486,6 +487,8 @@ $(document).ready(function(){
 			return;
 		}
 
+ 
+
    		document.getElementById('item-quantity').setAttribute('value',newNumber)
 
    	  	$.ajax({ url: '/cart/update', type: "post",
@@ -500,7 +503,7 @@ $(document).ready(function(){
    $(".remove-participant").on("click", function() {
 
 	var number = Number($(this).attr('data-participant-number'));    
-	if(number <= 1){
+	if(number <= 2){
 		return;
 	}
 	
@@ -515,6 +518,16 @@ $(document).ready(function(){
              }
          });
    });
+
+
+   jQuery.validator.addMethod(
+        "emailWithDot",
+        function(value, element) {
+            var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return regex.test(String(value).toLowerCase());
+        },
+        "Enter valid email address."
+    );
 
 </script>
 @endif

@@ -18,7 +18,9 @@ class AddCertificateTitleToEvent extends Migration
         });
 
         Schema::table('certificates', function (Blueprint $table) {
-            $table->text('certificate_title')->after('id')->nullable();
+            $table->text('firstname')->after('id')->nullable();
+            $table->text('lastname')->after('firstname')->nullable();
+            $table->text('certificate_title')->after('lastname')->nullable();
             $table->text('credential')->after('expiration_date')->nullable();
         });
     }

@@ -18,10 +18,13 @@
 
       <div class="row row-flex row-flex-15">
          
-            <?php $early = false;?>
+            <?php 
+               $early = false;
+               $showAlumni = true;
+            ?>
          @foreach($tickets as $key => $ticket)
          <?php 
-         
+            
             $options = json_decode($ticket['pivot']['options'],true); 
             
           
@@ -40,13 +43,15 @@
                continue;
             } 
 
-            if($ticket['type'] == 'Alumni' && (!Auth::user() || (Auth::user() && !Auth::user()->kc_id))){
+            if($ticket['type'] == 'Alumni' && (!Auth::user() || (Auth::user() && !Auth::user()->kc_id))){  
+               $showAlumni = false;
                continue;
-            } 
+            }
             
 
          ?>
-         <div class="col-4 col-sm-12">
+         <div class="@if($showAlumni) col-4 col-sm-12 @else col-6 col-sm-12 @endif 
+                        @if(!$showAlumni && ($ticket['type'] == 'Early Bird' || $ticket['type'] == 'Special')) ticket-right @endif">
        
             <div class="ticket-box-wrapper">
                <div class="ticket-box">
