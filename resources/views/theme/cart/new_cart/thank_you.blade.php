@@ -23,15 +23,21 @@
                   <div class="text-area social-icons">
                      <p></p>
                   <p>Share your experience with the world!</p>
-                     <ul class="clearfix">
-                           <li class="fb-icon"><a target="_blank" title="Share on facebook" href="http://www.facebook.com/sharer.php?u={{$event['facebook']}}" onclick="javascript:window.open(this.href,
-                              '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=300');return false;"><i class="icon-facebook"></i></a></li>
-                           <li class="tw-icon "><a target="_blank" title="Share on Twitter" href="http://twitter.com/share?text={{$event['twitter']}}&url={{ url('/') }}/{{$event['slug']}}?utm_source=Twitter&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING" onclick="javascript:window.open(this.href,
-                              '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"><i class="icon-twitter"></i></a></li>
-                           <li class="in-icon"><a target="_blank" title="Share on LinkedIn" href="https://www.linkedin.com/shareArticle?mini=true&url={{$event['linkedin']}};" onclick="javascript:window.open(this.href,
-                              '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"><i class="icon-linkedin"></i></a></li>
-                     </ul>
+                    
 
+                     <ul class="clearfix">
+                        <li><a target="_blank" title="Share on facebook" href="http://www.facebook.com/sharer.php?u={{$event['facebook']}}" onclick="javascript:window.open(this.href,
+                            '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=300');return false;">
+                            <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Facebook.svg')}}" width="23" alt="Share on facebook"></a></li>
+                        
+                        <li><a target="_blank" title="Share on Twitter" href="http://twitter.com/share?text={{$event['twitter']}}&url={{ url('/') }}/{{$event['slug']}}?utm_source=Twitter&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING" onclick="javascript:window.open(this.href,
+                           '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;">
+                           <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Twitter.svg')}}" width="23" alt="Share on Twitter"></a></li>
+                           
+                        <li><a target="_blank" title="Share on LinkedIn" href="https://www.linkedin.com/shareArticle?mini=true&url={{$event['linkedin']}};" onclick="javascript:window.open(this.href,
+                              '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;">
+                              <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Linkedin.svg')}}" width="23" alt="Share on LinkedIn"></a></li>
+                     </ul>
 
                   </div>
                </div>

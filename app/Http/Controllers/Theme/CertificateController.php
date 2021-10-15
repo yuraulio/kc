@@ -13,13 +13,13 @@ use File;
 class CertificateController extends Controller
 {
 
-    public function __construct(){
-        $this->middleware('auth')->except('exportCertificates');
-        $this->middleware('cert.owner')->except('exportCertificates');
-        $this->middleware('auth.aboveauthor')->only('exportCertificates');
-    }
+  public function __construct(){
+      $this->middleware('auth')->except('exportCertificates');
+      $this->middleware('cert.owner')->except('exportCertificates');
+      $this->middleware('auth.aboveauthor')->only('exportCertificates');
+  }
 
-    public function getCertificate(Certificate $certificate){
+  public function getCertificate(Certificate $certificate){
 
 
         //return view('admin.certificates.certificate',compact('certificate'));
@@ -51,10 +51,10 @@ class CertificateController extends Controller
   
           
   
-    }
+  }
 
-    
-    /*public function getCertificate(Certificate $certificate){
+  
+  /*public function getCertificate(Certificate $certificate){
 
 
         //return view('admin.certificates.certificate',compact('certificate'));
@@ -96,7 +96,7 @@ class CertificateController extends Controller
   
           
   
-    }*/
+  }*/
 
   
   public function exportCertificates(Event $event){
