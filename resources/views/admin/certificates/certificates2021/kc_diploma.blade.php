@@ -181,7 +181,7 @@ h3.certificate {
         </div>
     
         <div class="footer">
-        <p> Issue date: {{$certificate['certification_date']}}  @if($certificate['expiration_date']) | Expiration date: {{$certificate['expiration_date']}} @endif |   Credential #: $certificate['credential'] </p>
+        <p> Issue date: {{$certificate['certification_date']}}  @if($certificate['expiration_date']) | Expiration date: {{$certificate['expiration_date']}} @endif |   Credential #: {{$certificate['credential']}} </p>
         </div>
     </div>
 </body>

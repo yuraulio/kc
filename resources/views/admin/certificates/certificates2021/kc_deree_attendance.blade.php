@@ -174,7 +174,7 @@ h2,h3{ font-size: 20px; padding: 0; font-weight:normal}
 
         <div class="text-center user">
         
-            <h2 class="name"> {{ $certificate->user->first()->firstname}} {{$certificate->user->first()->lastname }} </h2>
+            <h2 class="name"> {{$certificate['firstname']}} {{$certificate['lastname']}} </h2>
 
                 
             <p class="award">
@@ -209,7 +209,7 @@ h2,h3{ font-size: 20px; padding: 0; font-weight:normal}
         </div>
     
         <div class="footer">
-            <p> Issue date: {{$certificate->certification_date}} <span class="seperator">  | </span>  Credential #: 1234567890 </p>
+        <p> Issue date: {{$certificate['certification_date']}} |   Credential #: {{$certificate['credential']}} </p>
         </div>
     </div>
 </body>
