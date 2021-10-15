@@ -1090,3 +1090,9 @@ border-radius: 4px;
     text-align: -webkit-right;
 
 }
+
+
+.social-icons{}
+.social-icons ul{display: flex!important;}
+.social-icons a{color: #fff!important;}
+.social-icons li:first-child{margin-left: -10px;}

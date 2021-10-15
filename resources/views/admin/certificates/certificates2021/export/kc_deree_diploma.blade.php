@@ -21,18 +21,22 @@ h2,h3{ font-size: 20px; padding: 0; font-weight:normal}
     border-right: 44px solid #3A6DA8;
 }
 
-
-
-.logo{
-    margin-top:40px;
-    text-align:center;
+.date{
+    margin-top:110px;
+    color:#3A6DA8;
 }
 
+.logo{
+    margin:auto;
+}
 
+.text-left{
+    top:14px;
+    left:373px;
+}
 
 .knowcrunch-logo{
     max-width: 202px;
-    text-align:center;
 }
 
 .knowcrunch-logo-mar{
@@ -40,7 +44,9 @@ h2,h3{ font-size: 20px; padding: 0; font-weight:normal}
     left:24px;
 }
 
-
+.deree-logo{
+    max-width: 103px;
+}
 
 .mar-top-50{
     margin-top: 50px;
@@ -82,20 +88,34 @@ h3.certificate {
 
 
 .signature-img{
-    max-width:150px;
+    max-width:147px;
     
 }
 
 .knowcrunch-signature-left{
-    top: 260px;
+    top: 160px;
     left:130px;
 }
 
+.deree-signature-rigth{
+    top: 160px;
+    left:550px;
+}
 
 .border-bottom{
     border-bottom: 2px solid black !important;
     max-width:295px;
     margin:10px auto 0 auto;
+}
+
+.hat-icon{
+    max-width: 38px;
+}
+
+.hat-icon-mar{
+
+    top:220px;
+    left:342px;   
 }
 
 .name-signature{
@@ -111,11 +131,17 @@ h3.certificate {
     top:-20px;
 }
 
+.title-signature1{
+    color:#000;
+    font-size:17px;
+    position: relative;
+    top:-50px;
+}
 
 
 .footer{
     position: relative;
-    top:160px;
+    top:148px;
     text-align: center;
     color: #666666;
     font-size:14px;
@@ -127,7 +153,7 @@ h3.certificate {
 }
 
 .user{
-    margin-top:120px;
+    margin-top:40px;
 }
 
 .deree-signature-rigth, .knowcrunch-signature-left{
@@ -143,10 +169,16 @@ h3.certificate {
 </head>
 <body class="borders">
     <div class="mar-top-50">
-        
-            <div class="logo">
-                <img class="knowcrunch-logo" src="{{asset('theme/assets/images/certificates2021/knowcrunch-logo.png')}}">
+        <div class="row ">
+            <div class="logo col-6 knowcrunch-logo-mar">
+                <img class="knowcrunch-logo  mar-auto" src="{{asset('theme/assets/images/certificates2021/knowcrunch-logo.png')}}">
             </div>
+
+            <div class="logo col-6 text-left">
+                <img class="deree-logo" src="{{asset('theme/assets/images/certificates2021/deree-logo.png')}}">
+            </div>
+
+        </div>
 
         <div class="text-center user">
 
@@ -167,16 +199,25 @@ h3.certificate {
            
         </div>
 
-        <div class="text-center mar-top-150">
-            <div class="text-center knowcrunch-signature-left">
+        <div class="row text-center mar-top-150">
+            <div class="col-4 knowcrunch-signature-left">
                     <img class="signature-img" src="{{asset('theme/assets/images/certificates2021/knowcrunch-signature.png')}}">
                     <div class="border-bottom"></div>
                     <p class="name-signature"> APOSTOLIS AIVALIS</p>
                     <p class="title-signature"> Head of Curriculum, KnowCrunch</p>
                     
-              
+                </div>
                 
-              
+                <div class="col-4 hat-icon-mar">
+                    <img class="hat-icon" src="{{asset('theme/assets/images/certificates2021/icon.png')}}">
+                </div>
+                <div class="col-4 deree-signature-rigth">
+                    <img class="signature-img" src="{{asset('theme/assets/images/certificates2021/deree-signature.png')}}">
+                    <div class="border-bottom"></div>
+                    <p class="name-signature"> ARETI KREPAPA, PHD </p>
+                    <p class="title-signature"> Dean of Deree School of Graduate </p>
+                    <p class="title-signature1"> and Professional Education </p>
+                </div>
             </div>
         </div>
     

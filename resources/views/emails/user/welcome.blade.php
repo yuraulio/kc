@@ -38,7 +38,7 @@ h1, h2, p, span{
 }
       </style>
    </head>
-   <body text="#3b3f44" link="#0092ff" yahoo="fix" style="">
+   <body text="#3b3f44" link="#0092ff" yahoo="fix" style="max-width:600px; margin:0 auto">
       <table cellspacing="0" cellpadding="0" border="0" role="presentation" class="nl2go-body-table" width="100%" style="width: 100%;">
          <tr>
             <td align="" class="r0-c">

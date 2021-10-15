@@ -150,7 +150,7 @@ h3.certificate {
 
         <div class="text-center user">
 
-            <h2 class="name"> {{$certificate['firstname']}} {{$certificate['lastname']}} </h2>
+            <h2 class="name"> {{$certificate->user->first()->firstname}} {{$certificate->user->first()->lastname}} </h2>
 
                 
             <p class="award">
@@ -181,7 +181,7 @@ h3.certificate {
         </div>
     
         <div class="footer">
-        <p> Issue date: {{$certificate['certification_date']}}  @if($certificate['expiration_date']) | Expiration date: {{$certificate['expiration_date']}} @endif |   Credential #: $certificate['credential'] </p>
+            <p> Issue date: {{$certificate->certification_date}}  @if($certificate->expiration_date) | Expiration date: September 2023 @endif |   Credential #: 1234567890 </p>
         </div>
     </div>
 </body>

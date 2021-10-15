@@ -71,12 +71,17 @@ class InfoController extends Controller
         }
 
         $data['info']['success'] = true;
-        $data['info']['title'] = '<h1>Booking successful</h1>';
-        $data['info']['message'] = '<h2>Thank you and congratulations!<br/>We are very excited about you joining us. We hope you are too!</h2>
+        $data['info']['title'] = '<h1>Booking Successful!</h1>';
+        $data['info']['message'] = '<h2>Congratulations for your registration. We are very excited to have you in our course & we thank you for your trust!</h2>
         <p>An email with more information is on its way to your inbox.</p>';
         $data['info']['transaction'] = $this->transaction;
         $data['info']['statusClass'] = 'success';
-
+        $data['event'] = [];
+        $data['event']['title'] = '';
+        $data['event']['facebook'] = '';
+        $data['event']['twitter'] = '';
+        $data['event']['linkedin'] = '';
+        $data['event']['slug'] = '';
         if (isset($this->transaction['payment_response'])) {
 	        $cart = Cart::content();
 
@@ -86,6 +91,13 @@ class InfoController extends Controller
                 //Update Stock
 
                 $thisevent = Event::where('id', '=', $item->options['event'])->first();
+
+                $data['event']['title'] = $thisevent->title;
+                $data['event']['slug'] = $thisevent->slugable->slug;
+                $data['event']['facebook'] = url('/') . '/' .$thisevent->slugable->slug .'?utm_source=Facebook&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&quote='.urlencode("Proudly participating in ". $thisevent->title . " by KnowCrunch.");
+                $data['event']['twitter'] = urlencode("Proudly participating in ". $thisevent->title . " by KnowCrunch. 💙");
+                $data['event']['linkedin'] = urlencode(url('/') . '/' .$thisevent->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $thisevent->title . " by KnowCrunch. 💙");
+                //$data['event']['linkedin'] = urlencode('https://knowcrunch.com/' . '/' .$thisevent->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $thisevent->title . " by KnowCrunch. 💙");
 
 	        	$stockHelper = $thisevent->ticket->where('ticket_id', $item->id)->first();
 	        	$newstock = $stockHelper->pivot->quantity - $item->qty;
@@ -144,7 +156,7 @@ class InfoController extends Controller
             //$user->cart->delete();
         }
 
-         //DESTROY CART HERE AND SESSION vars
+        //DESTROY CART HERE AND SESSION vars
         Cart::instance('default')->destroy();
         Session::forget('pay_seats_data');
         Session::forget('transaction_id');
@@ -157,6 +169,7 @@ class InfoController extends Controller
         Session::forget('coupon_code');
         Session::forget('coupon_price');
         
+        ///dd($data);
         
         if (isset($this->transaction['payment_response'])) {
         	return view('theme.cart.new_cart.thank_you', $data);

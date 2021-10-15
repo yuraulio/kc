@@ -179,7 +179,7 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::put('profile/updateRole', ['as' => 'profile.updateRole', 'uses' => 'ProfileController@updateRole']);
     Route::get('events/fetchAllEvents', ['as' => 'events.fetchAllEvents', 'uses' => 'EventController@fetchAllEvents']);
     Route::post('events/fetchElearningInfos', ['as' => 'events.fetchElearningInfos', 'uses' => 'EventController@elearning_infos_user_table']);
-    Route::get('events/export-certificates/{$event}','CertificateController@exportCertificates');
+    Route::get('events/export-certificates/{event}','Theme\CertificateController@exportCertificates');
 
 
     //Notification

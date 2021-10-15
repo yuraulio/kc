@@ -20,6 +20,20 @@
 
                      <p>Proceed to <a href="/myaccount" class="dark-bg">your account</a>.</p>
                   </div>
+                  <div class="text-area social-icons">
+                     <p></p>
+                  <p>Share your experience with the world!</p>
+                     <ul class="clearfix">
+                           <li class="fb-icon"><a target="_blank" title="Share on facebook" href="http://www.facebook.com/sharer.php?u={{$event['facebook']}}" onclick="javascript:window.open(this.href,
+                              '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=300');return false;"><i class="icon-facebook"></i></a></li>
+                           <li class="tw-icon "><a target="_blank" title="Share on Twitter" href="http://twitter.com/share?text={{$event['twitter']}}&url={{ url('/') }}/{{$event['slug']}}?utm_source=Twitter&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING" onclick="javascript:window.open(this.href,
+                              '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"><i class="icon-twitter"></i></a></li>
+                           <li class="in-icon"><a target="_blank" title="Share on LinkedIn" href="https://www.linkedin.com/shareArticle?mini=true&url={{$event['linkedin']}};" onclick="javascript:window.open(this.href,
+                              '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"><i class="icon-linkedin"></i></a></li>
+                     </ul>
+
+
+                  </div>
                </div>
                <div class="col-5 col-sm-12">
                   <div class="image-wrapper">
