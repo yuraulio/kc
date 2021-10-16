@@ -6,6 +6,7 @@ use App\Model\Media;
 use Illuminate\Support\Str;
 use App\Model\Menu;
 use App\Model\Exam;
+use App\Model\Certificate;
 
 function get_social_media(){
     $social_media = Option::where('name', 'social_media')->get();
@@ -271,6 +272,20 @@ if(!function_exists('formatBytes')){
             return 0;
         }
     }
+}
+
+if (!function_exists('get_certifation_crendetial')){
+
+    function get_certifation_crendetial($date){
+
+        if(!$date){
+            $date = date('Y-m');
+        }
+
+        dd($date);
+
+    }
+
 }
 
 

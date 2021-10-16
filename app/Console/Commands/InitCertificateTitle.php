@@ -5,14 +5,14 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Model\Certificate;
 
-class InitCertificateTitle extends Command
+class InitCertificate extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'certificate:title';
+    protected $signature = 'certificate:init';
 
     /**
      * The console command description.
@@ -51,6 +51,11 @@ class InitCertificateTitle extends Command
 
             }
 
+            $certificate->firstname = $certificate->user->first()->firstname;
+            $certificate->lastname = $certificate->user->first()->lastname;
+
+            $certificate->expiration_date = NULL;
+            $certificate->credential = 'KC00' . date('y',$certificate->create_date) . decbin($certificate->user->first()->id) . date('m',$certificate->create_date);
             $certificate->save();
         }
 

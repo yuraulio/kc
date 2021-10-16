@@ -37,9 +37,8 @@ class Kernel extends ConsoleKernel
        //Commands\GetOldLessonInstrunctor::class,
        //Commands\FixExams::class,
        //Commands\SeperateRelationships::class,
-       Commands\InitCertificateTitle::class,
+       Commands\InitCertificate::class,
        Commands\SyncBillingData::class,
-       Commands\InitExpritationCertificate::class,
     ];
 
     /**

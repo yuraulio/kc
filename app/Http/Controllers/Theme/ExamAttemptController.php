@@ -387,10 +387,12 @@ class ExamAttemptController extends Controller
 
                     $cert = new Certificate;
                     $cert->success = $success;
-                    //$cert->content_id = $exam->event_id;
-                    //$cert->exam_id = $examResultData->id;
-                    //$cert->user_id = $st_id;
-                    $cert->create_date = strtotime(date('Y-m-d'));
+                    //$cert->firstname = $student->firstname;
+                    //$cert->lastname = $student->lastname;
+                    //$cert->certificate_title = $eventType->certificate_title;
+                    //$cert->credential = ;
+                    $createDate = strtotime(date('Y-m-d'));
+                    $cert->create_date = $createDate;
                     //$cert->expiration_date = strtotime(date('Y-m-d', strtotime('+24 months', strtotime(date('Y-m-d')))));
                     $cert->certification_date = date('F') . ' ' . date('Y');
                     $cert->save();
