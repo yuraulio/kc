@@ -145,7 +145,7 @@ $(function() {
     rules['terms_condition']={}
     messages['terms_condition']['required'] = "  Confirm that you accept our terms & conditions and data privacy policy"
     rules['terms_condition']['required'] = true
-    console.log('rules = ', rules);
+
     $("form[name='participant-form']").validate({
 
         rules: rules,
