@@ -574,8 +574,12 @@ class Event extends Model
     public function certificatesByUser($user){
 
         return $this->certificates()->whereHas('user', function ($query) use($user) {
+            $query->where('id', $user);
+        })->withPivot('certificatable_id','certificatable_type')->get();
+
+        /*return $this->certificates()->where('show_certificate',true)->whereHas('user', function ($query) use($user) {
                 $query->where('id', $user);
-            })->withPivot('certificatable_id','certificatable_type')->get();
+            })->withPivot('certificatable_id','certificatable_type')->get();*/
     }
 
 

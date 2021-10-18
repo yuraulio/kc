@@ -376,7 +376,11 @@ class CronjobsController extends Controller
 
         foreach($subscriptions as $subscription){
 
-            if(strtotime($subscription->trials_ends_at) < strtotime($subscription->ends_at)){
+            if(!$subscription->trial_ends_at && !$subscription->ends_at){
+                continue;
+            }
+
+            if(strtotime($subscription->trial_ends_at) < strtotime($subscription->ends_at)){
                 $subscription->stripe_status = 'active';
                 $subscription->save();
             }
