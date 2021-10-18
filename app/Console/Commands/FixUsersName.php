@@ -52,9 +52,6 @@ class FixUsersName extends Command
 
         foreach($file as $key =>  $line){
 
-
-            dd($line);
-
             $user = User::find($line[0]);
 
             $user->firstname = $line[1];
@@ -67,8 +64,8 @@ class FixUsersName extends Command
 
         foreach($users as $user){
             
-            $firstname = strtolower(trim($user->firstname));
-            $lastname = strtolower(trim($user->lastname));
+            $firstname = mb_strtolower(trim($user->firstname));
+            $lastname = mb_strtolower(trim($user->lastname));
 
             $user->firstname = trim(ucfirst($firstname));
             $user->lastname = trim(ucfirst($lastname));

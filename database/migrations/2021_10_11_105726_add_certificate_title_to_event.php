@@ -25,6 +25,7 @@ class AddCertificateTitleToEvent extends Migration
             $table->string('template')->after('credential')->nullable();
             $table->string('show_certificate')->after('template')->default(false);
             $table->string('post_linkedin')->after('show_certificate')->default(false);
+            $table->string('expiration_date')->nullable()->change();
 
         });
     }
