@@ -37,9 +37,12 @@ class Kernel extends ConsoleKernel
        //Commands\GetOldLessonInstrunctor::class,
        //Commands\FixExams::class,
        //Commands\SeperateRelationships::class,
+       //Commands\ExportEvents::class,
+       Commands\AttachCertificatesToOldStudents::class,
        Commands\InitCertificate::class,
        Commands\SyncBillingData::class,
        Commands\FixUsersName::class,
+
     ];
 
     /**

@@ -376,60 +376,77 @@ class ExamAttemptController extends Controller
                 $exam = Exam::find($ex_id);
                 $eventType = Event::select('id','view_tpl')->where('id',$exam->event->first()->id)->first();
 
-                if($eventType->view_tpl == 'elearning_event'){
-                   
-                   $successLimit = round(($total_credit*100 / $totalQues), 2);
-                   $success = false;
-                    
-                    if($successLimit >= $exam->q_limit){
-                        $success = true;
-                    }
+                $successLimit = round(($total_credit*100 / $totalQues), 2);
+                $success = false;
+                
+                if($successLimit >= $exam->q_limit){
+                    $success = true;
+                }
+
+                if( ($cert = $event->certificatesByUser($user->id)->fist()) ){
+
+                    $cert->success = $success;
+                    $cert->certificication_title = $success ? $event->certificate_title : $event->title;
+                    //$createDate = strtotime(date('Y-m-d'));
+                    ///$cert->create_date = $createDate;
+                    $cert->expiration_date = strtotime(date('Y-m-d', strtotime('+24 months', strtotime(date('Y-m-d')))));
+                    $cert->template = $success ? 'kc_diploma' : 'kc_attendance';
+                    $cert->show_certificate = true;
+                    $cert->save();
+
+                    $cert->exam()->save($exam);
+
+                }else{
 
                     $cert = new Certificate;
                     $cert->success = $success;
-                    //$cert->firstname = $student->firstname;
-                    //$cert->lastname = $student->lastname;
-                    //$cert->certificate_title = $eventType->certificate_title;
-                    //$cert->credential = ;
+                    $cert->firstname = $student->firstname;
+                    $cert->lastname = $student->lastname;
+                    $cert->certificate_title = $eventType->certificate_title;
+                    $cert->credential = get_certifation_crendetial();
+                    $cert->certificication_title = $success ? $event->certificate_title : $event->title;
                     $createDate = strtotime(date('Y-m-d'));
                     $cert->create_date = $createDate;
-                    //$cert->expiration_date = strtotime(date('Y-m-d', strtotime('+24 months', strtotime(date('Y-m-d')))));
+                    $cert->expiration_date = strtotime(date('Y-m-d', strtotime('+24 months', strtotime(date('Y-m-d')))));
                     $cert->certification_date = date('F') . ' ' . date('Y');
+                    $cert->template = $success ? 'kc_diploma' : 'kc_attendance';
                     $cert->save();
 
                     $cert->event()->save($eventType);
                     $cert->user()->save($student);
                     $cert->exam()->save($exam);
-                   
-                    $adminemail = 'info@knowcrunch.com';
-
-                    $muser = [];
-                    $muser['email'] = $examResultData->user->email;
-                    $muser['fullname'] = $examResultData->user->firstname . ' ' . $examResultData->user->lastname;
-                    $muser['first'] = $examResultData->user->firstname;
-
-                    $data['firstName'] = $examResultData->user->firstname;
-                    
-                    if($exam->event_id === 1350){
-                        $view_email = 'emails.student.after_exam_old';
-                    }else{
-                        $view_email = 'emails.student.after_exam';
-                    }
-
-                    $pathFile = url('/') . '/pdf/elearning/KnowCrunch - How to add your certification in Social Media.pdf';
-                    $pathFile = str_replace(' ','%20',$pathFile);
-                    
-                    $sent = Mail::send($view_email, $data,function ($m) use ($adminemail, $muser,$pathFile) {
-
-                        $sub =  'KnowCrunch |' . $muser['first'] . ', Final Evaluation Surveys & how to add your certification in Social Media';
-                        $m->from($adminemail, 'Knowcrunch');
-                        $m->to($muser['email'], $muser['fullname']);
-                        $m->subject($sub);
-                        $m->attach($pathFile);
-                        
-                    });
 
                 }
+
+                $adminemail = 'info@knowcrunch.com';
+
+                $muser = [];
+                $muser['email'] = $examResultData->user->email;
+                $muser['fullname'] = $examResultData->user->firstname . ' ' . $examResultData->user->lastname;
+                $muser['first'] = $examResultData->user->firstname;
+
+                $data['firstName'] = $examResultData->user->firstname;
+                
+                if($exam->event_id === 1350){
+                    $view_email = 'emails.student.after_exam_old';
+                }else{
+                    $view_email = 'emails.student.after_exam';
+                }
+
+                $pathFile = url('/') . '/pdf/elearning/KnowCrunch - How to add your certification in Social Media.pdf';
+                $pathFile = str_replace(' ','%20',$pathFile);
+                
+                $sent = Mail::send($view_email, $data,function ($m) use ($adminemail, $muser,$pathFile) {
+
+                    $sub =  'KnowCrunch |' . $muser['first'] . ', Final Evaluation Surveys & how to add your certification in Social Media';
+                    $m->from($adminemail, 'Knowcrunch');
+                    $m->to($muser['email'], $muser['fullname']);
+                    $m->subject($sub);
+                    $m->attach($pathFile);
+                    
+                });
+
+                
 
                 
                 if($examResultData) {

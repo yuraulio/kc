@@ -323,6 +323,7 @@ class StudentController extends Controller
 
                 $data['events'][$event->id]['mySubscription'] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first();
                 $data['events'][$event->id]['plans'] = $event['plans'];
+            
                 $data['events'][$event->id]['certs'] = $event->certificatesByUser($user->id);
                 $data['events'][$event->id]['exams'] = $event->getExams();
                 $data['events'][$event->id]['exam_access'] = $event->examAccess($user,0.8);//$user->examAccess(0.8,$event->id);
@@ -430,9 +431,11 @@ class StudentController extends Controller
         $data['instructors'] = Instructor::with('slugable', 'medias')->get()->groupby('id');
         $data['subscriptionEvents'] = Event::whereIn('id',$subscriptionEvents)->with('slugable')->get();
      
-        $value = $data['events'][2304];
-        unset($data['events'][2304]);
-        array_unshift($data['events'], $value);
+        if(isset($data['events'][2304])){
+            $value = $data['events'][2304];
+            unset($data['events'][2304]);
+            array_unshift($data['events'], $value);
+        }
         
         //dd($data['user']['events'][0]);
         return $data;

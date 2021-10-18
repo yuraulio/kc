@@ -80,7 +80,7 @@ jQuery.validator.addMethod(
         messages: {
 
             'company': {
-                required: "This field is required, Enter billed name or company",             
+                required: "This field is required, Enter Company or full name",             
             },
             'vat': {
                 required: "This field is required, Enter VAT or tax ID",                

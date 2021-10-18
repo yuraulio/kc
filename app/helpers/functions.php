@@ -276,13 +276,23 @@ if(!function_exists('formatBytes')){
 
 if (!function_exists('get_certifation_crendetial')){
 
-    function get_certifation_crendetial($date){
+    function get_certifation_crendetial($date = null){
 
         if(!$date){
             $date = date('Y-m');
         }
 
-        dd($date);
+        $fromDate = strtotime($date . '-01');
+        $toDate = strtotime($date . '-31');
+
+        $date = strtotime($date);
+
+        $certCount = ( $certCount = Certificate::where('create_date','>=',$fromDate)->where('create_date','<=',$toDate)->count()) > 0 ? $certCount : 1;
+        $certCount = str_pad($certCount, 6, '0', STR_PAD_LEFT);
+        
+        $certificateNumber =  date('m',$date) . date('y',$date) . $certCount;
+
+        return $certificateNumber;
 
     }
 

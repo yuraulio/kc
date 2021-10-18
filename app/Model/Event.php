@@ -47,7 +47,7 @@ class Event extends Model
 
     protected $fillable = [
         'published', 'published_at', 'release_date_files', 'expiration' ,'status', 'title', 'htmlTitle', 'subtitle', 'header', 'summary', 'body', 'hours','author_id', 'creator_id', 'view_tpl', 'view_counter',
-        'launch_date'
+        'launch_date','certificate_title'
     ];
 
     public function category()
@@ -573,13 +573,13 @@ class Event extends Model
 
     public function certificatesByUser($user){
 
-        return $this->certificates()->whereHas('user', function ($query) use($user) {
+        /*return $this->certificates()->whereHas('user', function ($query) use($user) {
             $query->where('id', $user);
-        })->withPivot('certificatable_id','certificatable_type')->get();
+        })->withPivot('certificatable_id','certificatable_type')->get();*/
 
-        /*return $this->certificates()->where('show_certificate',true)->whereHas('user', function ($query) use($user) {
+        return $this->certificates()->where('show_certificate',true)->whereHas('user', function ($query) use($user) {
                 $query->where('id', $user);
-            })->withPivot('certificatable_id','certificatable_type')->get();*/
+            })->withPivot('certificatable_id','certificatable_type')->get();
     }
 
 

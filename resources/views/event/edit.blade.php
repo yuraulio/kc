@@ -59,6 +59,10 @@
                                     </div>
                                 </div>
                                 @endif
+
+                               
+
+                                
                                 <div class="form-group">
                                     <label class="form-control-label" for="input-method">{{ __('Enroll Students to E-Learning') }}</label>
                                     <div style="margin: auto;" class="form-group">
@@ -71,11 +75,29 @@
                                     </div>
                                 </div>
 
+                                @if($event->exam()->first())
+                                <div class="form-group">
+                                    <label class="form-control-label" for="input-method">{{ __('Export Certificates') }}</label>
+                                    <div class="form-group">
+
+                                        <a href="/admin/events/export-certificates/{{$event->id}}"  class="btn btn-primary"> {{ __('Export Certificates') }} </a>
+
+                                    </div>
+                                </div>
+                                @endif
+
                                 <form method="post" id="event_edit_form" method="POST" action="{{ route('events.update', $event) }}" autocomplete="off"
                                             enctype="multipart/form-data">
                                             @csrf
                                             @method('put')
                                 <div class="form-group">
+                                <div class="form-group{{ $errors->has('certificate_title') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-hours">{{ __('Certificate Title') }}</label>
+                                    <input type="text" name="certificate_title" id="input-certificate_title" class="form-control{{ $errors->has('certificate_title') ? ' is-invalid' : '' }}" placeholder="{{ __('Certificate Title') }}" value="{{ old('certificate_title', $event->certificate_title) }}"autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'certificate_title'])
+                                </div>
+
                                     <label class="form-control-label" for="input-method">{{ __('Method Payment') }}</label>
                                     <select name="payment_method" id="input-method" class="form-control" placeholder="{{ __('Method Payment') }}" no-mouseflow>
                                         <option value="">-</option>
@@ -229,7 +251,8 @@
 
                                     @include('alerts.feedback', ['field' => 'hours'])
                                 </div>
-                                <?php //dd($event->instructors); ?>
+
+                                
                                 <div class="form-group{{ $errors->has('syllabus') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-syllabus1">{{ __('Syllabus Manager') }}</label>
                                             <select name="syllabus" data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." id="input-syllabus1" class="form-control" placeholder="{{ __('Syllabus Manager') }}">

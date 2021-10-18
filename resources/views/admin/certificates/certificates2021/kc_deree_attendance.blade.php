@@ -178,7 +178,7 @@ h2,h3{ font-size: 20px; padding: 0; font-weight:normal}
 
                 
             <p class="award">
-                has attended our course {{$certificate->event()->first()->title}} and is awarded this
+                has attended our course {{$certificate['certification_title']}} and is awarded this
             </p>
 
 

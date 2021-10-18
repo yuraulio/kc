@@ -499,7 +499,7 @@
                                           
                                           
                                           <div class="col12">
-                                             <label>Billed name or company:</label>
+                                             <label>Company or full name:</label>
                                              <div class="input-safe-wrapper">
                                                 <input  type="text" id="billname" name="billname" value="{{ isset($billingDetails['billname']) ? $billingDetails['billname'] : '' }}" >
                                              </div>
@@ -1099,7 +1099,7 @@
                                        <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="">@if(isset($newlayoutExamsEvent[$keyType]) && count($newlayoutExamsEvent[$keyType])>0)Certificate download after completing your exams. @else Your certification is ready @endif</div>
                                        @foreach($event['certs'] as $certificate)
                                        <div class="right">
-                                          <a  class="btn btn--secondary btn--md" target="_blank" href="/myaccount/mycertificate/{{$certificate->id}}" >DOWNLOAD </a>
+                                          <a  class="btn btn--secondary btn--md" target="_blank" href="/myaccount/mycertificate/{{encrypt(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
                                        </div>
                                        @endforeach
                                     </div>

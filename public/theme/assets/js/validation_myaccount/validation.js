@@ -118,7 +118,7 @@ jQuery.validator.addMethod(
         messages: {
 
             'billname': {
-                required: "This field is required, Enter billed name or company", 
+                required: "This field is required, Enter Company or full name", 
                 lettersonly: "Please write everything in English"            
             },
             'billafm': {

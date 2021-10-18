@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Model\User;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class FixUsersName extends Command
 {
@@ -38,11 +40,38 @@ class FixUsersName extends Command
      */
     public function handle()
     {
+
+        $fileName = public_path() . '/certificates_import/Greek names.xlsx';
+        $spreadsheet = new Spreadsheet();
+        $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($fileName);
+        $reader->setReadDataOnly(true);
+        $file = $reader->load($fileName);
+        $file = $file->getActiveSheet();
+
+        $file = $file->toArray();
+
+        foreach($file as $key =>  $line){
+
+
+            dd($line);
+
+            $user = User::find($line[0]);
+
+            $user->firstname = $line[1];
+            $user->lastname = $line[2];
+
+            $user->save();
+        }
+
         $users = User::all();
 
         foreach($users as $user){
-            $user->firstname = ucfirst($user->firstname);
-            $user->lastname =ucfirst($user->lastname);
+            
+            $firstname = strtolower(trim($user->firstname));
+            $lastname = strtolower(trim($user->lastname));
+
+            $user->firstname = trim(ucfirst($firstname));
+            $user->lastname = trim(ucfirst($lastname));
             $user->save();
         }
 
