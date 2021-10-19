@@ -128,7 +128,7 @@ class CertificateController extends Controller
 
         $expda = strtotime(date('Y-m-d', strtotime('+24 months', strtotime(date('Y-m-d'))))); 
 
-        if( !($cert = $event->certificatesByUser($user->id)->first()) ){
+        if( !($cert = $event->userHasCertificate($user->id)->first()) ){
 
           $date = date('Y');
 

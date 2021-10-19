@@ -383,14 +383,30 @@ class ExamAttemptController extends Controller
                     $success = true;
                 }
 
-                if( ($cert = $event->certificatesByUser($user->id)->fist()) ){
+                if(($eventType->delivery->first() && $eventType->delivery->first()->id == 143) || date('Y') > 2021){
+                    if($success){
+                        $template ='kc_diploma'; 
+                    }else{
+                        $template ='kc_attendance';
+                    }
+                }else{
+                    if($success){
+                        $template ='kc_deree_diploma'; 
+                    }else{
+                        $template ='kc_deree_attendance';
+                    }
+                }
+
+
+                if( ($cert = $eventType->userHasCertificate($student->id)->first()) ){
 
                     $cert->success = $success;
-                    $cert->certificication_title = $success ? $event->certificate_title : $event->title;
+                    $cert->certificate_title = $success ? $eventType->certificate_title : $eventType->title;
                     //$createDate = strtotime(date('Y-m-d'));
                     ///$cert->create_date = $createDate;
                     $cert->expiration_date = strtotime(date('Y-m-d', strtotime('+24 months', strtotime(date('Y-m-d')))));
-                    $cert->template = $success ? 'kc_diploma' : 'kc_attendance';
+                    //$cert->template = $success ? 'kc_diploma' : 'kc_attendance';
+                    $cert->template = $template
                     $cert->show_certificate = true;
                     $cert->save();
 
@@ -404,12 +420,13 @@ class ExamAttemptController extends Controller
                     $cert->lastname = $student->lastname;
                     $cert->certificate_title = $eventType->certificate_title;
                     $cert->credential = get_certifation_crendetial();
-                    $cert->certificication_title = $success ? $event->certificate_title : $event->title;
+                    $cert->certificate_title = $success ? $eventType->certificate_title : $eventType->title;
                     $createDate = strtotime(date('Y-m-d'));
                     $cert->create_date = $createDate;
                     $cert->expiration_date = strtotime(date('Y-m-d', strtotime('+24 months', strtotime(date('Y-m-d')))));
                     $cert->certification_date = date('F') . ' ' . date('Y');
-                    $cert->template = $success ? 'kc_diploma' : 'kc_attendance';
+                    //$cert->template = $success ? 'kc_diploma' : 'kc_attendance';
+                    $cert->template = $template;
                     $cert->save();
 
                     $cert->event()->save($eventType);

@@ -656,6 +656,9 @@
                                     @if(isset($event['exams']) && count($event['exams']) >0 )
                                     <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
                                     @endif
+                                    @if(count($event['certs']) > 0)
+                                    <li><a href="#c-cert-inner{{$tab}}">Certificate</a></li>
+                                    @endif
                                     {{--
                                     <li><a href="#c-subs-inner{{$tab}}">Subscription</a></li>
                                     --}}
@@ -895,6 +898,19 @@
                                        </div>
                                     </div>
                                     <!-- ./dynamic-courses-wrapper -->
+                                 </div>
+                                 @endif
+
+                                 @if(count($event['certs']) > 0)
+                                 <div id="c-cert-inner{{$tab}}" class="in-tab-wrapper">
+                                    <div class="bottom">
+                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="">@if(isset($newlayoutExamsEvent[$keyType]) && count($newlayoutExamsEvent[$keyType])>0)Certificate download after completing your exams. @else Your certification is ready @endif</div>
+                                       @foreach($event['certs'] as $certificate)
+                                       <div class="right">
+                                          <a  class="btn btn--secondary btn--md" target="_blank" href="/myaccount/mycertificate/{{encrypt(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
+                                       </div>
+                                       @endforeach
+                                    </div>
                                  </div>
                                  @endif
                               </div>

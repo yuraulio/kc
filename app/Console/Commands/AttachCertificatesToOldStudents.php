@@ -44,7 +44,7 @@ class AttachCertificatesToOldStudents extends Command
     public function handle()
     {
 
-        $nonEvents = [96,1347,4611,4612,4613,4614];
+        $nonEvents = [96,1347,4611,4612,4613,4614,2035,4616];
 
         $fileName =  public_path() . '/certificates_import/Users with kc id and events.xlsx';
         $spreadsheet = new Spreadsheet();
@@ -62,9 +62,13 @@ class AttachCertificatesToOldStudents extends Command
             }
             $event = Event::find($line[0]);
             //dd($line);
-            $event->certificate_title = $line[4];
+            $event->certificate_title = $line[4] ? $line[4] : $event->title;
             $event->save();
             //dd($line[3]);
+
+            if(!$line[3]){
+                continue;
+            }
 
             $date = new DateTime('1899-12-31');
             $date->modify("+".$line[3]." day -1 day");

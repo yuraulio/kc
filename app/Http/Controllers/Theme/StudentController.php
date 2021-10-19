@@ -366,6 +366,7 @@ class StudentController extends Controller
                 $expiration_event = $event->pivot['expiration'];
                 $expiration_event = strtotime($expiration_event);
                 $data['events'][$event->id]['exams'] = $event->getExams();
+                $data['events'][$event->id]['certs'] = $event->certificatesByUser($user->id);
                 $data['events'][$event->id]['view_tpl'] = $event['view_tpl'];
                 $data['events'][$event->id]['category'] = $event['category'];
                 $data['events'][$event->id]['summary1'] = $event['summary1'];

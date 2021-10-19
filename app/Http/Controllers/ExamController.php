@@ -40,7 +40,7 @@ class ExamController extends Controller
         $exam = new Exam;
         $edit = false;
         $event_edit = false;
-
+        $liveResults = [];
         foreach($events as $event){
 
             if($event->is_elearning_course() || !$event->summary1()->where('section','date')->first()){
@@ -54,7 +54,7 @@ class ExamController extends Controller
             
         }
 
-        return view('admin.exams.create', ['user' => $user, 'events' => $eventsData, 'edit' => $edit, 'exam' => $exam,'event_id'=>$event_edit]);
+        return view('admin.exams.create', ['user' => $user, 'events' => $eventsData, 'edit' => $edit, 'exam' => $exam,'event_id'=>$event_edit,'liveResults' => $liveResults]);
     }
 
     /**

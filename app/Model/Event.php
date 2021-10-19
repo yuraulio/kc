@@ -583,6 +583,14 @@ class Event extends Model
     }
 
 
+    public function userHasCertificate($user){
+
+        return $this->certificates()->whereHas('user', function ($query) use($user) {
+            $query->where('id', $user);
+        })->withPivot('certificatable_id','certificatable_type')->get();
+    }
+
+
     public function certification(User $user,$successPer = 0.9){
 
 
