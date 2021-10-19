@@ -406,7 +406,7 @@ class ExamAttemptController extends Controller
                     ///$cert->create_date = $createDate;
                     $cert->expiration_date = strtotime(date('Y-m-d', strtotime('+24 months', strtotime(date('Y-m-d')))));
                     //$cert->template = $success ? 'kc_diploma' : 'kc_attendance';
-                    $cert->template = $template
+                    $cert->template = $template;
                     $cert->show_certificate = true;
                     $cert->save();
 
