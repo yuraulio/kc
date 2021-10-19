@@ -98,7 +98,7 @@ class CertificateController extends Controller
 
         $pdf->getDomPDF()->setHttpContext($contxt);
         $pdf->loadView('admin.certificates.certificates2021.'.$certificate->template,compact('certificate'))->setPaper('a4', 'landscape');
-          $fn = 'mycertificate' . '.pdf';
+          $fn = $certificate->firstname . '-' . $certificate->lastname . '.pdf';
           return $pdf->stream($fn);
   
           
