@@ -374,7 +374,7 @@ class ExamAttemptController extends Controller
 
                 
                 $exam = Exam::find($ex_id);
-                $eventType = Event::select('id','view_tpl')->where('id',$exam->event->first()->id)->first();
+                $eventType = Event::select('id','view_tpl','certificate_title','title')->where('id',$exam->event->first()->id)->first();
 
                 $successLimit = round(($total_credit*100 / $totalQues), 2);
                 $success = false;
@@ -418,7 +418,6 @@ class ExamAttemptController extends Controller
                     $cert->success = $success;
                     $cert->firstname = $student->firstname;
                     $cert->lastname = $student->lastname;
-                    $cert->certificate_title = $eventType->certificate_title;
                     $cert->credential = get_certifation_crendetial();
                     $cert->certificate_title = $success ? $eventType->certificate_title : $eventType->title;
                     $createDate = strtotime(date('Y-m-d'));
@@ -427,6 +426,7 @@ class ExamAttemptController extends Controller
                     $cert->certification_date = date('F') . ' ' . date('Y');
                     //$cert->template = $success ? 'kc_diploma' : 'kc_attendance';
                     $cert->template = $template;
+                    $cert->show_certificate = true;
                     $cert->save();
 
                     $cert->event()->save($eventType);

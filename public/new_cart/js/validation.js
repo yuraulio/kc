@@ -169,8 +169,6 @@ $(function() {
 
             'billafm': {
                 required: true,
-                lettersonly: true,
-                
             },
             'billaddress': {
                 lettersonly: true,
@@ -200,7 +198,6 @@ $(function() {
             },
             'billafm': {
                 required: "This field is required, Enter VAT or tax ID",                
-                lettersonly: "Please write everything in English"  
             },    
             'billaddress': {
                 lettersonly: "Please write everything in English"  

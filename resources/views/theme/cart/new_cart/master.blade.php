@@ -245,7 +245,20 @@ var routesObj = {
 
 @endif
 
-	@stack('scripts')
+
+@if($tigran)
+
+      <script>
+
+         @foreach($tigran as $key => $ti)
+            dataLayer.push({"{{$key}}": "{{$ti}}"})
+         @endforeach
+
+      </script>
+
+   @endif
+
+@stack('scripts')
 
 </body>
 </html>

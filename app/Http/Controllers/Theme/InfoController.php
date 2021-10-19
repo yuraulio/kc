@@ -132,8 +132,20 @@ class InfoController extends Controller
                 }else{
                     $tr_price = number_format($this->transaction['amount'] , 0 , '.', '');
                 }
-                
-                $data['tigran'] = ['evid' => $item->options['event'], 'price' => $tr_price, 'transid' => $this->transaction['id']];
+                            
+                $categoryScript = $thisevent->category->first() ? 'Event > ' . $thisevent->category->first()->name : '';
+        
+              
+
+                $data['tigran'] = ['OrderSuccess_id' => $this->transaction['id'], 'OrderSuccess_total' => $tr_price, 'price' => $tr_price,'Product_id' => $thisevent->id, 'Product_SKU' => $thisevent->id,
+                        'Product_SKU' => $thisevent->id,'ProductCatergory' => $categoryScript, 'ProductName' =>  $thisevent->title, 'Quantity' => $item->qty
+                ];
+
+                if(Auth::user()){
+                    $data['tigran']['User_id'] = Auth::user()->id;
+                }else{
+                    $data['tigran']['Visitor_id'] = session()->getId();
+                }
 	        }
 
 	        if ($transaction) {
@@ -200,9 +212,7 @@ class InfoController extends Controller
             if ($ev->category->first()){
                 
                 $data['categoryScript'] = 'Event > ' . $ev->category->first()->name;
-                   
-                
-                    
+                         
             }
 
             $data['eventId'] = $cart->options['event'];

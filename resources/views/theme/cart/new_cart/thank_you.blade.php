@@ -54,3 +54,18 @@
 @endif
 
 @stop
+
+@section('scripts')
+   
+@if($tigran)
+
+<script>
+
+   @foreach($tigran as $key => $ti)
+      dataLayer.push({"{{$key}}": "{{$ti}}"})
+   @endforeach
+
+</script>
+
+@endif
+@stop

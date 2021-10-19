@@ -314,6 +314,17 @@ class CartController extends Controller
 
 
         $data['totalitems'] = $totalitems;
+
+        $data['tigran'] = ['price' => $data['price'],'Product_id' => $data['eventId'], 'Product_SKU' => $data['eventId'],
+                    'ProductCatergory' => $data['categoryScript'], 'ProductName' =>  $ev->title, 'Quantity' => $totalitems
+        ];
+
+        if(Auth::user()){
+            $data['tigran']['User_id'] = Auth::user()->id;
+        }else{
+            $data['tigran']['Visitor_id'] = session()->getId();
+        }
+
         return $data;
 
     }

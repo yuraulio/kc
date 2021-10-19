@@ -95,8 +95,7 @@ jQuery.validator.addMethod(
                 lettersonly: true
             },
             'billafm': {
-                required: true,
-                
+                required: true,  
             },
            
             'billaddress': {
@@ -122,8 +121,7 @@ jQuery.validator.addMethod(
                 lettersonly: "Please write everything in English"            
             },
             'billafm': {
-                required: "This field is required, Enter VAT or tax ID",             
-              
+                required: "This field is required, Enter VAT or tax ID",               
             },    
             
             'billemail': {
