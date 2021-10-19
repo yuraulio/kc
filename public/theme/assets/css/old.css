@@ -1097,3 +1097,5 @@ border-radius: 4px;
 .social-icons a{color: #fff!important;}
 .social-icons li:first-child{margin-left: -1px;}
 .social-icons li a path {stroke: #ffffff !important;transition: 300ms all ease;}
+
+img.linkdein-image-add{width:unset!important;}

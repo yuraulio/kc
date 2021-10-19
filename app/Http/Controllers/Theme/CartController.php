@@ -479,7 +479,7 @@ class CartController extends Controller
                 $data['pay_bill_data'] = array_merge($inv, $rec);
             }
             if($data['paywithstripe'] == 1){
-                $data['default_card'] = $loggedin_user->defaultPaymentMethod() ? $loggedin_user->defaultPaymentMethod()->card : false;
+                $data['default_card'] = false;//$loggedin_user->defaultPaymentMethod() ? $loggedin_user->defaultPaymentMethod()->card : false;
             }
 
 

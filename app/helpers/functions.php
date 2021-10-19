@@ -287,7 +287,7 @@ if (!function_exists('get_certifation_crendetial')){
 
         $date = strtotime($date);
 
-        $certCount = ( $certCount = Certificate::where('create_date','>=',$fromDate)->where('create_date','<=',$toDate)->count()) > 0 ? $certCount : 1;
+        $certCount = ( $certCount = Certificate::where('create_date','>=',$fromDate)->where('create_date','<=',$toDate)->count()) > 0 ? ($certCount + 1) : 1;
         $certCount = str_pad($certCount, 6, '0', STR_PAD_LEFT);
         
         $certificateNumber =  date('m',$date) . date('y',$date) . $certCount;

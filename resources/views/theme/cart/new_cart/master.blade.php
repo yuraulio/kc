@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 	<title>KnowCrunch Billing</title>
-	<link rel="icon" type="image/png" href="{{cdn('new_cart/images/logo_favicon.png')}}">		
+	@include('theme.layouts.favicons')	
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">	
 	<link rel="stylesheet" type="text/css" href="{{cdn('new_cart/css/style.css')}}">
 

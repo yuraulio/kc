@@ -532,7 +532,7 @@ class StudentController extends Controller
     public function updatePersonalInfo(Request $request){
         $user = Auth::user();
 
-        if($user->email !== $request->email){
+        if($user->email !== $request->email && !$request->has("password")){
            
             $this->validate($request, [
                 'firstname' => ['required', 'min:3'],
@@ -541,7 +541,7 @@ class StudentController extends Controller
                     'required', 'email','unique:users,email'
                 ]
                 ]);
-        }else{
+        }else if(!$request->has("password")){
             $this->validate($request,[
                 'firstname' => ['required', 'min:3'],
                 'lastname' => ['required', 'min:3'],

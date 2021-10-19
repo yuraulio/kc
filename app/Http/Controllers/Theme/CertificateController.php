@@ -56,7 +56,8 @@ class CertificateController extends Controller
   
   public function getCertificate($certificate){
 
-      $certificate = decrypt($certificate);
+      //$certificate = decrypt($certificate);
+      $certificate =base64_decode($certificate);
 
       $certificate = explode('--',$certificate)[1];
 

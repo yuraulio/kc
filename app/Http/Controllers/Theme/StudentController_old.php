@@ -74,7 +74,7 @@ class StudentController extends Controller
 
             $data['defaultPaymetnt'] = [];
             $data['defaultPaymetntId'] = -1;
-            $card = $user->defaultPaymentMethod() ? $user->defaultPaymentMethod()->toArray() : [];
+            $card = [];//$user->defaultPaymentMethod() ? $user->defaultPaymentMethod()->toArray() : [];
 
             if(!empty($card)){
                 $data['defaultPaymetntId'] = $card['id'];

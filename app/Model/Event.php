@@ -603,12 +603,22 @@ class Event extends Model
             $cert->create_date = strtotime(date('Y-m-d'));
             $cert->expiration_date = strtotime(date('Y-m-d', strtotime('+24 months', strtotime(date('Y-m-d')))));
             $cert->certification_date = date('F') . ' ' . date('Y');
+
+            $cert->firstname = $user->firstname;
+            $cert->lastname = $user->lastname;
+            $cert->credential = get_certifation_crendetial();
+            $cert->certificate_title =  $this->certificate_title ? $this->certificate_title : $this->title;
+
+            $createDate = strtotime(date('Y-m-d'));
+            $cert->create_date = $createDate;
+
+            $cert->template = 'kc_diploma';
+            $cert->show_certificate = true;
+
             $cert->save();
 
             $cert->event()->save($this);
             $cert->user()->save($user);
-
-
 
         }
 

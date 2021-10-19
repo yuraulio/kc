@@ -28,8 +28,11 @@ class CertificateOwner
         if(!in_array(Auth::user()->id,$certificate)){
             abort(404);
         }*/
-
-        $certificate = decrypt($request->route()->parameters['certificate']);
+        
+        //$certificate = decrypt($request->route()->parameters['certificate']);
+        //dd($request->route()->parameters['certificate']);
+        $certificate = base64_decode($request->route()->parameters['certificate']);
+        
         $certificate = explode('--',$certificate);
         //dd($certificate);
         if(!isset($certificate[1])){

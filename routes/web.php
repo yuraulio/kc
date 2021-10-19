@@ -446,7 +446,7 @@ Route::group(['middleware' => ['auth'], 'prefix'=>'myaccount'], function () {
         //Route::put('/elearning/saveNote', 'Theme\StudentController@saveNote');
         //Route::put('/elearning/save', 'Theme\StudentController@saveElearning');
 
-        Route::get('/mycertificate/{certificate}', 'Theme\CertificateController@getCertificate');
+        //Route::get('/mycertificate/{certificate}', 'Theme\CertificateController@getCertificate');
 
         Route::post('/card/store_from_payment_myaccount',  'Theme\CardController@storePaymentMyaccount')->name('payment_method.store');
         Route::post('/update-methodPayment', 'Theme\CardController@updatePaymentMethod')->name('payment_method.update');
@@ -471,6 +471,8 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('kcregister', 'Auth\RegisterController@kcRegister');
     Route::get('/logout', [ 'as' => 'logout' , 'uses' => 'Theme\StudentController@logout']);
     Route::get('/logmeout', 'Theme\StudentController@logout');
+
+    Route::get('/mycertificate/{certificate}', 'Theme\CertificateController@getCertificate');
 });
 
 Route::group(['middleware' => 'auth'], function () {

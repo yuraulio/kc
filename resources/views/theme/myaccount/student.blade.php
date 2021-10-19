@@ -906,8 +906,27 @@
                                     <div class="bottom">
                                        <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="">@if(isset($newlayoutExamsEvent[$keyType]) && count($newlayoutExamsEvent[$keyType])>0)Certificate download after completing your exams. @else Your certification is ready @endif</div>
                                        @foreach($event['certs'] as $certificate)
+                                       <?php
+                                             $expirationMonth = '';
+                                             $expirationYear = '';
+                                             $certUrl = url('/') . '/mycertificate/' . base64_encode(Auth::user()->email."--".$certificate->id);
+                                             if($certificate->expiration_date){
+                                                $expirationMonth = date('m',$certificate->expiration_date);
+                                                $expirationYear = date('Y',$certificate->expiration_date);
+                                             }
+
+                                          ?>
                                        <div class="right">
-                                          <a  class="btn btn--secondary btn--md" target="_blank" href="/myaccount/mycertificate/{{encrypt(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
+                                          <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
+                                          <a href="https://www.linkedin.com/profile/add?startTask={{urlencode($certificate->certificate_title)}}&name={{urlencode($certificate->certificate_title)}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
+                                                &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}
+                                                &certId={{$certificate->credential}}">
+                                                <img class="linkdein-image-add" src="{{cdn('theme/assets/images/linkedinpost/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
+                                       </div>
+
+                                       <div class="linkdein-image-add">
+                                          
+                                          </a>
                                        </div>
                                        @endforeach
                                     </div>
@@ -1114,8 +1133,27 @@
                                     <div class="bottom">
                                        <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="">@if(isset($newlayoutExamsEvent[$keyType]) && count($newlayoutExamsEvent[$keyType])>0)Certificate download after completing your exams. @else Your certification is ready @endif</div>
                                        @foreach($event['certs'] as $certificate)
+                                          <?php
+                                             $expirationMonth = '';
+                                             $expirationYear = '';
+                                             $certUrl = url('/') . '/mycertificate/' . base64_encode(Auth::user()->email."--".$certificate->id);
+                                             if($certificate->expiration_date){
+                                                $expirationMonth = date('m',$certificate->expiration_date);
+                                                $expirationYear = date('Y',$certificate->expiration_date);
+                                             }
+
+                                          ?>
                                        <div class="right">
-                                          <a  class="btn btn--secondary btn--md" target="_blank" href="/myaccount/mycertificate/{{encrypt(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
+                                          <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
+                                          <a href="https://www.linkedin.com/profile/add?startTask={{urlencode($certificate->certificate_title)}}&name={{urlencode($certificate->certificate_title)}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
+                                                &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}
+                                                &certId={{$certificate->credential}}">
+                                                <img class="linkdein-image-add" src="{{cdn('theme/assets/images/linkedinpost/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
+                                       </div>
+
+                                       <div class="linkdein-image-add">
+                                          
+                                          </a>
                                        </div>
                                        @endforeach
                                     </div>
