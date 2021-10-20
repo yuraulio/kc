@@ -1088,6 +1088,7 @@ border-radius: 4px;
 .ticket-right{
     text-align: right;
     text-align: -webkit-right;
+    text-align: -moz-right;
 
 }
 
@@ -1098,4 +1099,5 @@ border-radius: 4px;
 .social-icons li:first-child{margin-left: -1px;}
 .social-icons li a path {stroke: #ffffff !important;transition: 300ms all ease;}
 
+.linkedin-post{margin-left:10px;}
 img.linkdein-image-add{width:unset!important;}

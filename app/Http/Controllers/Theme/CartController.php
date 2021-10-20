@@ -227,7 +227,7 @@ class CartController extends Controller
         $data['price'] = 'free';
         $data['type'] = -1;
         $totalitems = 0;
-       
+        $ticketType = '';
         $data['curStock'] = 1;
 
         $c = Cart::content()->count();
@@ -238,6 +238,7 @@ class CartController extends Controller
                 $totalitems += $item->qty;
                 $event_id = $item->options->event;
                 $event_type = $item->options->type;
+                
                 $data['itemid'] = $item->rowId;
             
                 break;
@@ -290,7 +291,9 @@ class CartController extends Controller
                 }
 
                 foreach ($data['eventtickets'] as $tkey => $tvalue) {
+                    
                     if ($tvalue->pivot->event_id == $item->options->event && $tvalue->ticket_id == $item->id) {
+                        $ticketType = $tvalue->type;
                         $data['curStock'] = $tvalue->pivot->quantity;
                         $data['price'] = $tvalue->pivot->price * $totalitems;
                     }
@@ -306,17 +309,19 @@ class CartController extends Controller
         if($data['type'] == 'free_code' ){
             $data['price'] = 'Upon Coupon';
             $data['show_coupon'] = false;
+            $ticketType = 'Upon Coupon';
 
         }else if($data['type'] == 'free' ){
             $data['price'] = 'Free';
             $data['show_coupon'] = false;
+            $ticketType = 'Free';
         }
 
 
         $data['totalitems'] = $totalitems;
 
         $data['tigran'] = ['price' => $data['price'],'Product_id' => $data['eventId'], 'Product_SKU' => $data['eventId'],
-                    'ProductCatergory' => $data['categoryScript'], 'ProductName' =>  $ev->title, 'Quantity' => $totalitems
+                    'ProductCatergory' => $data['categoryScript'], 'ProductName' =>  $ev->title, 'Quantity' => $totalitems,'TicketType'=>$ticketType
         ];
 
         if(Auth::user()){

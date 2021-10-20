@@ -564,6 +564,24 @@ class HomeController extends Controller
         $data['is_event_paid'] = 0;
         $data['sumStudents'] = $event->category[0]->getSumOfStudents();
 
+       
+
+        $price = -1;
+
+        foreach($data['tickets'] as $ticket){
+            
+            if($ticket['pivot']['price'] && $ticket['pivot']['price'] > $price){
+                $price = $ticket['pivot']['price'];
+            }
+        }
+
+        if($price <= 0){
+            $price = (float) 0;
+        }
+        $categoryScript = $event->category->first() ? 'Event > ' . $event->category->first()->name : '';
+        
+        $data['tigran'] = ['price' => $price,'Product_id' => $event->id,'Product_SKU' => $event->id,'ProductCatergory' => $categoryScript, 'ProductName' =>  $event->title];
+
         if(Auth::user() && count(Auth::user()->events->where('id',$event->id)) > 0){
             $data['is_event_paid'] = 1;
         }

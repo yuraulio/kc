@@ -138,14 +138,10 @@ class InfoController extends Controller
               
 
                 $data['tigran'] = ['OrderSuccess_id' => $this->transaction['id'], 'OrderSuccess_total' => $tr_price, 'price' => $tr_price,'Product_id' => $thisevent->id, 'Product_SKU' => $thisevent->id,
-                        'Product_SKU' => $thisevent->id,'ProductCatergory' => $categoryScript, 'ProductName' =>  $thisevent->title, 'Quantity' => $item->qty
+                        'Product_SKU' => $thisevent->id,'ProductCatergory' => $categoryScript, 'ProductName' =>  $thisevent->title, 'Quantity' => $item->qty, 'TicketType'=>$stockHelper->type
                 ];
 
-                if(Auth::user()){
-                    $data['tigran']['User_id'] = Auth::user()->id;
-                }else{
-                    $data['tigran']['Visitor_id'] = session()->getId();
-                }
+               
 	        }
 
 	        if ($transaction) {

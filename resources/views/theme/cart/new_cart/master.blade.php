@@ -246,7 +246,7 @@ var routesObj = {
 @endif
 
 
-@if($tigran)
+@if(isset($tigran))
 
       <script>
 

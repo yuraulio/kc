@@ -296,5 +296,28 @@ $(document).on('click', '.close-btn', function(e){
 
 </script>
 
+@if(Auth::user())
+    <script>
+        dataLayer.push({"User_id": "{{Auth::user()->id}}"})
+    </script>
+
+@else
+    <script>
+        dataLayer.push({'Visitor_id': "{{session()->getId()}}"});
+    </script>
+@endif
+
+@if(isset($tigran))
+
+      <script>
+
+         @foreach($tigran as $key => $ti)
+            dataLayer.push({"{{$key}}": "{{$ti}}"})
+         @endforeach
+
+      </script>
+
+   @endif
+
 </body>
 </html>
