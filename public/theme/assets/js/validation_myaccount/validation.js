@@ -9,6 +9,15 @@ jQuery.validator.addMethod(
     "Enter valid email address."
 ); 
 
+jQuery.validator.addMethod(
+    "lettersonly",
+    function(value, element) {
+        var regex = /^[a-z][a-z\s]*$/;
+        return regex.test(String(value).toLowerCase());
+    },
+    "Enter valid email address."
+); 
+
     $("#update-form").validate({
 
         rules: {
