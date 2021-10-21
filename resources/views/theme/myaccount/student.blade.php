@@ -918,9 +918,9 @@
                                           ?>
                                        <div class="right">
                                           <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
-                                          <a class="linkedin-post" title="add certification to your LinkedIn profile" target="_blank" href="https://www.linkedin.com/profile/add?startTask={{urlencode($certificate->certificate_title)}}&name={{urlencode($certificate->certificate_title)}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
+                                          <a class="linkedin-post" title="Add this certification to your LinkedIn profile" target="_blank" href="https://www.linkedin.com/profile/add?startTask={{urlencode($certificate->certificate_title)}}&name={{urlencode($certificate->certificate_title)}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
                                                 &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
-                                                <img class="linkdein-image-add" src="{{cdn('theme/assets/images/linkedinpost/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
+                                                <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
                                           </a>
                                         </div>
 
@@ -1142,9 +1142,9 @@
                                           ?>
                                        <div class="right">
                                           <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
-                                          <a class="linkedin-post" title="add certification to your LinkedIn profile" target="_blank" href="https://www.linkedin.com/profile/add?startTask={{urlencode($certificate->certificate_title)}}&name={{urlencode($certificate->certificate_title)}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
+                                          <a class="linkedin-post" title="Add this certification to your LinkedIn profile" target="_blank" href="https://www.linkedin.com/profile/add?startTask={{urlencode($certificate->certificate_title)}}&name={{urlencode($certificate->certificate_title)}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
                                                 &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
-                                                <img class="linkdein-image-add" src="{{cdn('theme/assets/images/linkedinpost/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
+                                                <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
                                           </a>
                                        </div>
 
