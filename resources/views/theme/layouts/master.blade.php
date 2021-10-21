@@ -296,18 +296,18 @@ $(document).on('click', '.close-btn', function(e){
 
 </script>
 
-@if(Auth::user())
+@if(Auth::user() && !env('APP_DEBUG'))
     <script>
         dataLayer.push({"User_id": "{{Auth::user()->id}}"})
     </script>
 
-@else
+@elif(!env('APP_DEBUG'))
     <script>
         dataLayer.push({'Visitor_id': "{{session()->getId()}}"});
     </script>
 @endif
 
-@if(isset($tigran))
+@if(isset($tigran) && !env('APP_DEBUG'))
 
       <script>
 
