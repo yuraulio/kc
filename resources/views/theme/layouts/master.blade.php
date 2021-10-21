@@ -301,7 +301,7 @@ $(document).on('click', '.close-btn', function(e){
         dataLayer.push({"User_id": "{{Auth::user()->id}}"})
     </script>
 
-@elif(!env('APP_DEBUG'))
+@elseif(!env('APP_DEBUG'))
     <script>
         dataLayer.push({'Visitor_id': "{{session()->getId()}}"});
     </script>
