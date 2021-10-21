@@ -57,7 +57,7 @@
 
 @section('scripts')
    
-@if($tigran)
+@if(isset($tigran) && !env('APP_DEBUG'))
 
 <script>
 
