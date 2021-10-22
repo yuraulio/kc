@@ -69,14 +69,14 @@ h2,h3{ font-size: 20px; padding: 0; font-weight:normal}
     font-size:35px;
     margin:auto;
     letter-spacing:3px;
-    max-width:600Wpx;
+    max-width:650px;
    
 }
 
 h3.certificate {
     margin:0 auto -100px auto;
     line-height:0.8;
-     text-align:justify;;
+     text-align:center;;
 }
 
 .award{
