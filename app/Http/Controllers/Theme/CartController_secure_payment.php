@@ -24,8 +24,12 @@ use Laravel\Cashier\Payment;
 use App\Model\CartCache;
 use Mail;
 use App\Model\Option;
-use Laravel\Cashier\Exceptions\IncompletePayment;
-use Illuminate\Support\Facades\Http;
+use App\Model\Activation;
+use App\Model\User;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use App\Model\CookiesSMS;
+use App\Notifications\WelcomeEmail;
 
 class CartController extends Controller
 {
@@ -33,92 +37,139 @@ class CartController extends Controller
     public function __construct()
     {
         $this->middleware('cart')->except('cartIndex','completeRegistration','validation','checkCode');
-        $this->middleware('code.event')->only('cartIndex','completeRegistration');
+        $this->middleware('code.event')->only('completeRegistration');
+        $this->middleware('registration.check')->except('cartIndex','completeRegistration','validation','checkCode','add');
+        //$this->middleware('registration.check');
+        $this->middleware('billing.check')->only('billingIndex','billing','checkoutIndex');
+        
 
     }
 
-    public function checkoutcheck(Request $request)
-    {
-    	$data = array();
-        //$data['lang'] = $_ENV['LANG'];
-        //$data['website'] = $_ENV['WEBSITE'];
+
+    private function initCartDetails($data){
+        
+        $event_id = 0;
+        $data['price'] = 'free';
+        $data['type'] = -1;
+        $totalitems = 0;
+        $ticketType = '';
+        $data['curStock'] = 1;
+
+        $c = Cart::content()->count();
+        if ($c > 0) {
+            $cart_contents = Cart::content();
+            foreach ($cart_contents as $item){
+
+                $totalitems += $item->qty;
+                $event_id = $item->options->event;
+                $event_type = $item->options->type;
+                
+                $data['itemid'] = $item->rowId;
+            
+                break;
+            }
+
+            $ev = Event::find($event_id);
+            if($ev) {
+                $data['eventId'] = $event_id;
+                if($ev->view_tpl == 'event_free_coupon'){
+                    $data['couponEvent'] = true;
+                }
+                //dd($ev->ticket);
+                $data['eventtickets'] = $ev->ticket;
+                $data['city_event'] = $ev->city->first() ? '' : '';
+                $data['duration'] = '';
+
+                $categoryScript = 'Event > ' . $ev->category->first()->name;
+                //dd($categoryScript);
+
+                $data['stripe_key'] = '';
+                $data['paywithstripe'] = 0;
+
+                if($ev->paymentMethod->first()){
+                    if($ev->paymentMethod->first()->method_slug == 'stripe'){
+                        $data['paywithstripe'] = 1;
+                        session()->put('payment_method',$ev->paymentMethod->first()->id);
+                        $data['stripe_key'] = env('PAYMENT_PRODUCTION') ? $ev->paymentMethod->first()->processor_options['key'] :
+                                                                                $ev->paymentMethod->first()->test_processor_options['key'];
+                    }
+
+                }
+                $data['pay_methods'] = $ev->paymentMethod->first();
 
 
+                $data['duration'] = $ev->summary1->where('section','date')->first() ? $ev->summary1->where('section','date')->first()->title:'';
+                $data['hours'] = $ev->summary1->where('section','duration')->first() ? $ev->summary1->where('section','duration')->first()->title:'';
+                $data['city_event'] = $ev->city->first() ? $ev->city->first()->name : '';
+                $data['coupons'] = $ev->coupons->where('price','>',0)->toArray();
+                
+            }
 
-        $pay_invoice_data = array();
-        $pay_bill_data = array();
-        $pay_bill_data['billing'] = $request->get('needbilling');
-        $paymentCardType = $request->get('cardtype');
-        $paymentInstallments = $request->get('installments');
-        $studentidfield = $request->get('student');
-        $afmfield = $request->get('afm');
+            $data['eventId'] = $event_id;
+            $data['categoryScript'] = $categoryScript;
 
-        $payment_method_id = $request->get('payment_method_id');
+            $cart_contents = Cart::content();
+            foreach ($cart_contents as $item){
+               
+                if($item->options->has('type')){
+                    $data['type'] = $item->options->type;
+                }
 
+                foreach ($data['eventtickets'] as $tkey => $tvalue) {
+                    
+                    if ($tvalue->pivot->event_id == $item->options->event && $tvalue->ticket_id == $item->id) {
+                        $ticketType = $tvalue->type;
+                        $data['curStock'] = $tvalue->pivot->quantity;
+                        $data['price'] = $tvalue->pivot->price * $totalitems;
+                    }
+                }
+                break;
+            }
+        }
+
+        if(Session::get('coupon_code')){
+            $data['price'] = Session::get('coupon_price') * $totalitems;
+        }
+
+        if($data['type'] == 'free_code' ){
+            $data['price'] = 'Upon Coupon';
+            $data['show_coupon'] = false;
+            $ticketType = 'Upon Coupon';
+
+        }else if($data['type'] == 'free' ){
+            $data['price'] = 'Free';
+            $data['show_coupon'] = false;
+            $ticketType = 'Free';
+        }
+
+
+        $data['totalitems'] = $totalitems;
+
+        $data['tigran'] = ['price' => $data['price'],'Product_id' => $data['eventId'], 'Product_SKU' => $data['eventId'],
+                    'ProductCatergory' => $data['categoryScript'], 'ProductName' =>  $ev->title, 'Quantity' => $totalitems,'TicketType'=>$ticketType
+        ];
+
+        if(Auth::user()){
+            $data['tigran']['User_id'] = Auth::user()->id;
+        }else{
+            $data['tigran']['Visitor_id'] = session()->getId();
+        }
+
+        return $data;
+
+    }
+
+    public function mobileCheck(Request $request){
+        
+        
+        $data = array();
+        
         $validatorArray = [];
 
-        $validatorArray['email.*'] = 'required|email';
-        $validatorArray['name.*'] = 'required';
-        $validatorArray['surname.*'] = 'required';
-        $validatorArray['mobile.*'] = 'required';
-        $validatorArray['city.*'] = 'required';
-        $validatorArray['address.*'] = 'required';
-        $validatorArray['addressnum.*'] = 'required';
-        $validatorArray['postcode.*'] = 'required';
-        //$validatorArray['mobileCheck.*'] = 'phone:AUTO';
-
-        //    $validatorArray['jobtitle.*'] = 'required';
-            //$validatorArray['afm.*'] = 'required';
-
-        $freecheck = Cart::total();
-        if ($studentidfield) {
-            if($freecheck > 0) {
-                $validatorArray['student.*'] = 'required';
-            }
-            else {
-                $validatorArray['student.*'] = 'required|min:10|max:11|exists:users,kc_id';
-            }
-
-
-        }
-
-
-        if ($pay_bill_data['billing'] == 2) {
-
-    		$validatorArray['companyname'] = 'required';
-            $validatorArray['companyprofession'] = 'required';
-            $validatorArray['companyafm'] = 'required';
-            $validatorArray['companydoy'] = 'required';
-            $validatorArray['companyaddress'] = 'required';
-            $validatorArray['companyaddressnum'] = 'required';
-            $validatorArray['companypostcode'] = 'required';
-            $validatorArray['companycity'] = 'required';
-        }
-
-        if ($pay_bill_data['billing'] == 1) {
-
-        	//$validatorArray['billemail'] = 'required|email';
-            $validatorArray['billname'] = 'required';
-            $validatorArray['billsurname'] = 'required';
-            //$validatorArray['billmobile'] = 'required';
-            $validatorArray['billcity'] = 'required';
-            $validatorArray['billaddress'] = 'required';
-            $validatorArray['billaddressnum'] = 'required';
-            $validatorArray['billpostcode'] = 'required';
-            $validatorArray['billafm'] = 'required';
-
-        }
-
-        if ($payment_method_id == 100) {
-            //stripe
-            //$validatorArray['card_no'] = 'required';
-            //$validatorArray['ccExpiryMonth'] = 'required';
-            //$validatorArray['ccExpiryYear'] = 'required';
-            //$validatorArray['cvvNumber'] = 'required';
-        }
+        $validatorArray['mobileCheck.*'] = 'phone:AUTO';
 
         $validator = Validator::make($request->all(), $validatorArray);
-
+        //dd($validator);
         if ($validator->fails()) {
             return [
                 'status' => 0,
@@ -127,98 +178,25 @@ class CartController extends Controller
             ];
 
         } else {
-
-            $loggedin_user = Auth::user();
-
-            if ($pay_bill_data['billing'] == 2) {
-                $pay_invoice_data['billing'] = 2;
-		        $pay_invoice_data['companyname'] = $request->get('companyname');
-		        $pay_invoice_data['companyprofession'] = $request->get('companyprofession');
-		        $pay_invoice_data['companyafm'] = $request->get('companyafm');
-		        $pay_invoice_data['companydoy'] = $request->get('companydoy');
-		        $pay_invoice_data['companyaddress'] = $request->get('companyaddress');
-		        $pay_invoice_data['companyaddressnum'] = $request->get('companyaddressnum');
-		        $pay_invoice_data['companypostcode'] = $request->get('companypostcode');
-		        $pay_invoice_data['companycity'] = $request->get('companycity');
-                $pay_invoice_data['companyemail'] = $request->get('companyemail');
-
-                if($loggedin_user) {
-                    //UPDATE billing in user profile
-                    $loggedin_user->invoice_details = json_encode($pay_invoice_data);
-                    $loggedin_user->save();
-                }
-
-                Session::put('pay_bill_data', $pay_invoice_data);
-
-
-    		}
-
-    		if ($pay_bill_data['billing'] == 1) {
-		        $pay_bill_data['billname'] = $request->get('billname');
-		        $pay_bill_data['billsurname'] = $request->get('billsurname');
-		        //$pay_bill_data['billemail'] = $request->get('billemail');
-		        //$pay_bill_data['billmobile'] = $request->get('billmobile');
-		        $pay_bill_data['billaddress'] = $request->get('billaddress');
-		        $pay_bill_data['billaddressnum'] = $request->get('billaddressnum');
-		        $pay_bill_data['billpostcode'] = $request->get('billpostcode');
-		        $pay_bill_data['billcity'] = $request->get('billcity');
-                if($request->get('billafm'))
-                $pay_bill_data['billafm'] = $request->get('billafm');
-
-                if($loggedin_user) {
-                    //UPDATE billing in user profile
-                    $loggedin_user->receipt_details = json_encode($pay_bill_data);
-                    $loggedin_user->save();
-                }
-
-		        Session::put('pay_bill_data', $pay_bill_data);
-
-    		}
-
-    		if(isset($paymentCardType)) :
-    		     Session::put('cardtype', $paymentCardType);
-    		else :
-    			 Session::put('cardtype', 1);
-    		endif;
-    		if(isset($paymentInstallments)) :
-		   	     Session::put('installments', $paymentInstallments);
-		    else :
-		   		 Session::put('installments', 1);
-		   	endif;
-
-            $seats_data = array();
-            $seats_data['names'] = $request->get('name');
-        	$seats_data['surnames'] = $request->get('surname');
-        	$seats_data['emails'] = $request->get('email');
-            $seats_data['mobiles'] = $request->get('mobile');
-            $seats_data['mobileCheck'] = $request->get('mobileCheck');
-            $seats_data['countryCodes'] = $request->get('countryCodes');
-        	$seats_data['addresses'] = $request->get('address');
-        	$seats_data['addressnums'] = $request->get('addressnum');
-        	$seats_data['postcodes'] = $request->get('postcode');
-        	$seats_data['cities'] = $request->get('city');
-        	$seats_data['jobtitles'] = $request->get('jobtitle');
-        	$seats_data['companies'] = $request->get('company');
-            $seats_data['students'] = $request->get('student');
-            $seats_data['afms'] = $request->get('afm');
-            $seats_data['studentId'] = $request->get('studentId');
-        	Session::put('pay_seats_data', $seats_data);
-
+           
         	return [
-                    'status' => 1,
-                    'message' => 'Done go checkout',
-                ];
+                'status' => 1,
+                'message' => 'Done go checkout',
+    
+            ];
 
-    	}
+
+
+        }
 
     }
 
-        /**
+    /**
      * Display a listing of products on the cart.
      *
      * @return \Illuminate\View\View
-     */
-    public function index()
+    */
+    public function registrationIndex()
     {
 
         $data = array();
@@ -269,147 +247,395 @@ class CartController extends Controller
         }
 
 
+       $data = $this->initCartDetails($data);
 
         //check for logged in user
-
         $loggedin_user = Auth::user();
 
+        for($i = 1;  $i <= $data['totalitems']; $i++ ){
+
+            //dd($data['pay_seats_data']);
+            //$data['cur_user'][$i] =  isset($data['pay_seats_data']['cur_user'][$i-1]) ? $data['pay_seats_data']['cur_user'][$i-1] : '';
+            $data['firstname'][$i-1] = isset($data['pay_seats_data']['names'][$i-1]) ? $data['pay_seats_data']['names'][$i-1] : '';
+            $data['lastname'][$i-1] = isset($data['pay_seats_data']['surnames'][$i-1]) ? $data['pay_seats_data']['surnames'][$i-1] : '';
+            $data['email'][$i-1] = isset($data['pay_seats_data']['emails'][$i-1]) ? $data['pay_seats_data']['emails'][$i-1] : '';
+            $data['country_code'][$i-1] = isset($data['pay_seats_data']['countryCodes'][$i-1]) ? $data['pay_seats_data']['countryCodes'][$i-1] : '';
+            $data['city'][$i-1] = isset($data['pay_seats_data']['cities'][$i-1]) ? $data['pay_seats_data']['cities'][$i-1] : '';
+            $data['mobile'][$i-1] = isset($data['pay_seats_data']['mobiles'][$i-1]) ? $data['pay_seats_data']['mobiles'][$i-1] : '';
+            $data['job_title'][$i-1] = isset($data['pay_seats_data']['jobtitles'][$i-1]) ?  $data['pay_seats_data']['jobtitles'][$i-1]: '';
+            $data['company'][$i-1] = isset($data['pay_seats_data']['companies'][$i-1]) ?  $data['pay_seats_data']['companies'][$i-1]: '';
+            $data['student_type_id'][$i-1] = isset($data['pay_seats_data']['student_type_id'][$i-1]) ?  $data['pay_seats_data']['student_type_id'][$i-1]: '';
+            
+        }
+        
+        $data['cur_user'][0] = $loggedin_user;
+        $data['kc_id'] = '';
+        if($loggedin_user && $data['firstname'][0] =="") {
+            
+            $data['firstname'][0] = $loggedin_user->firstname;
+            $data['lastname'][0] = $loggedin_user->lastname;
+            $data['email'][0] = $loggedin_user->email;
+            $data['country_code'][0] = $loggedin_user->country_code;
+            $data['city'][0] = $loggedin_user->city;
+            $data['mobile'][0] = $loggedin_user->mobile;
+            $data['job_title'][0] = $loggedin_user->job_title;
+            $data['company'][0] = $loggedin_user->company;
+            $data['student_type_id'][0] = $loggedin_user->student_type_id;
+            
+
+            if(isset($data['pay_bill_data']) && empty($data['pay_bill_data'])) {
+                $inv = []; $rec = [];
+                if($loggedin_user->invoice_details != '') {
+                    $inv = json_decode($loggedin_user->invoice_details, true);
+                    if(isset($inv['billing']))
+                        unset($inv['billing']);
+                }
+
+                if($loggedin_user->receipt_details != '') {
+                    $rec = json_decode($loggedin_user->receipt_details, true);
+                    if(isset($rec['billing']))
+                        unset($rec['billing']);
+                }
+
+                $data['pay_bill_data'] = array_merge($inv, $rec);
+            }
+            if($data['paywithstripe'] == 1){
+                $data['default_card'] = false;//$loggedin_user->defaultPaymentMethod() ? $loggedin_user->defaultPaymentMethod()->card : false;
+            }
+
+
+            $ukcid = $loggedin_user->kc_id;
+            $data['kc_id'] = $ukcid;
+        }
+
+        if($data['type'] == 1 || $data['type'] == 2 || $data['type'] == 5){
+            return view('theme.cart.new_cart.participant_special', $data);
+        }
+
+        if($data['type'] == 3){
+            
+            return view('theme.cart.new_cart.participant_alumni', $data);
+        }
+        
+        if($data['type'] == 'free_code'){
+            return view('theme.cart.new_cart.participant_code_event', $data);
+        }
+
+        if($data['type'] == 'free'){
+            return view('theme.cart.new_cart.participant_free_event', $data);
+        }
+
+        return view('theme.cart.new_cart.participant', $data);
+            
+    }
+
+    public function registration(Request $request)
+    {
+
+        $userCheck = Auth::user();
+        $data = [];
+        $data = $this->initCartDetails($data);
+        //dd($data['type']!=3);
+    
+        if((!$userCheck && !($user = User::where('email',$request->email[0])->first())) &&  $data['type'] != 3){
+            $input = [];
+            $formData = $request->all();
+            unset($formData['_token']);
+            unset($formData['terms_condition']);
+            unset($formData['update']);
+            unset($formData['type']);
+            
+            foreach($formData as $key => $value){
+                $input[$key] = $value[0];
+            }
+
+            $input['password'] = Hash::make(date('Y-m-dTH:i:s'));
+            
+            $user = User::create($input);
+
+            $connow = Carbon::now();
+            $clientip = '';
+            $clientip = \Request::ip();
+            $user->terms = 1;
+            $user->consent = '{"ip": "' . $clientip . '", "date": "'.$connow.'" }';
+            $user->save();
+            $code = Activation::create([
+                'user_id' => $user->id,
+                'code' => Str::random(40),
+                'completed' => false,
+            ]);
+            $user->role()->attach(7);
+            Session::put('user_id', $user->id);
+
+            $existingcheck = ShoppingCart::where('identifier', $user->id)->first();
+            //Cart::restore($user->id
+            if($existingcheck) {
+                //$user edww
+                if($user->cart){
+                    $user->cart->delete();
+                }
+                $existingcheck->delete($user->id);
+                Cart::store($user->id);
+                $timecheck = ShoppingCart::where('identifier', $user->id)->first();
+                $timecheck->created_at = Carbon::now();
+                $timecheck->updated_at = Carbon::now();
+                $timecheck->save();
+            }
+            else {
+                Cart::store($user->id);
+                $timecheck = ShoppingCart::where('identifier', $user->id)->first();
+                $timecheck->created_at = Carbon::now();
+                $timecheck->updated_at = Carbon::now();
+                $timecheck->save();
+            }
+ 
+        }
+
+        $seats_data = array();
+        
+        if($data['type'] == 3 && $userCheck  && $userCheck ->kc_id ){
+
+            $seats_data['names'][] = $userCheck ->firstname;
+            $seats_data['surnames'][] = $userCheck ->lastname;
+            $seats_data['emails'][] =$userCheck ->email;
+            $seats_data['mobiles'][] = $userCheck ->mobile;
+            $seats_data['mobileCheck'][] = $userCheck ->mobileCheck;
+            $seats_data['countryCodes'][] = $userCheck ->country_code;
+            $seats_data['cities'][] = $userCheck ->city;
+            $seats_data['jobtitles'][] = $userCheck ->jobtitle;
+            $seats_data['companies'][] = $userCheck ->company;
+            $seats_data['student_type_id'][] = $userCheck ->student_type_id;
+            Session::put('user_id', $userCheck->id);
+
+        }else if($data['type'] != 3) {
+            $seats_data['names'] = $request->get('firstname');
+            $seats_data['surnames'] = $request->get('lastname');
+            $seats_data['emails'] = $request->get('email');
+            $seats_data['mobiles'] = $request->get('mobile');
+            $seats_data['mobileCheck'] = $request->get('mobileCheck');
+            $seats_data['countryCodes'] = $request->get('country_code');
+            $seats_data['cities'] = $request->get('city');
+            $seats_data['jobtitles'] = $request->get('jobtitle');
+            $seats_data['companies'] = $request->get('company');
+            $seats_data['student_type_id'] = $request->get('student_type_id');
+            Session::put('user_id', $userCheck ? $userCheck->id : $user->id);
+
+        }else{
+            Cart::instance('default')->destroy();
+            Session::forget('pay_seats_data');
+            Session::forget('transaction_id');
+            Session::forget('cardtype');
+            Session::forget('installments');
+            //Session::forget('pay_invoice_data');
+            Session::forget('pay_bill_data');
+            Session::forget('deree_user_data');
+            Session::forget('user_id');
+            Session::forget('coupon_code');
+            Session::forget('coupon_price');
+        }
+         
+        Session::put('pay_seats_data', $seats_data);
+        
+        
+        return redirect('/billing');
+            
+
+    }
+
+    public function billingIndex()
+    {
+
+        $data = array();
+        $data['pay_methods'] = array();
+
+        $data['eventtickets'] = [];
+        $categoryScript = '';
+        $data['couponEvent'] = false;
+
+
+        if (Session::has('pay_seats_data')) {
+            $data['pay_seats_data'] = Session::get('pay_seats_data');
+
+        }
+        else {
+            $data['pay_seats_data'] = [];
+        }
+
+       /* if (Session::has('pay_invoice_data')) {
+            $data['pay_invoice_data'] = Session::get('pay_invoice_data');
+        }
+        else {
+            $data['pay_invoice_data'] = [];
+        }*/
+
+        if (Session::has('pay_bill_data')) {
+            
+            $data['pay_bill_data'] = Session::get('pay_bill_data');
+        }
+        else {
+            $data['pay_bill_data'] = [];
+        }
+
+        if (Session::has('cardtype')) {
+            $data['cardtype'] = Session::get('cardtype');
+        }
+        else {
+            $data['cardtype'] = [];
+        }
+
+        if (Session::has('installments')) {
+            $data['installments'] = Session::get('installments');
+        }
+        else {
+            $data['installments'] = [];
+        }
+
+
+        $data = $this->initCartDetails($data);
+
+        //check for logged in user
+        $loggedin_user = Auth::user();
+
+
+       
+        $data['billname'] = '';
+        $data['billsurname'] = '';
+        $data['billaddress'] ='';
+        $data['billaddressnum'] = '';
+        $data['billpostcode'] = '';
+        $data['billcity'] = '';
+        $data['billafm'] = '';
+        $data['billstate'] = '';
+        $data['billemail'] = '';
+        $data['billcountry'] = '';
+
         if($loggedin_user) {
-            $data['cur_user'] = $loggedin_user;
+
+            
+            
+            if(isset($data['pay_bill_data']) && empty($data['pay_bill_data'])) {
+               
+                $inv = []; $rec = [];
+                if($loggedin_user->invoice_details != '') {
+                    $inv = json_decode($loggedin_user->invoice_details, true);
+                    if(isset($inv['billing']))
+                        unset($inv['billing']);
+                }
+
+                if($loggedin_user->receipt_details != '') {
+                    $rec = json_decode($loggedin_user->receipt_details, true);
+                    if(isset($rec['billing']))
+                        unset($rec['billing']);
+                }
+
+                $data['pay_bill_data'] = array_merge($inv, $rec);
+            }
+            
+            $data['billname'] = isset($data['pay_bill_data']['billname']) ? $data['pay_bill_data']['billname'] : '';
+            $data['billsurname'] = isset($data['pay_bill_data']['billsurname']) ? $data['pay_bill_data']['billsurname'] : '';
+            $data['billaddress'] = isset($data['pay_bill_data']['billaddress']) ? $data['pay_bill_data']['billaddress'] : '';
+            $data['billaddressnum'] = isset($data['pay_bill_data']['billaddressnum']) ? $data['pay_bill_data']['billaddressnum'] : '';
+            $data['billpostcode'] = isset( $data['pay_bill_data']['billpostcode']) ? $data['pay_bill_data']['billpostcode'] : '';
+            $data['billcity'] = isset($data['pay_bill_data']['billcity']) ? $data['pay_bill_data']['billcity'] : '';
+            $data['billafm'] = isset($data['pay_bill_data']['billafm']) ? $data['pay_bill_data']['billafm'] : '';
+            $data['billcountry'] = isset($data['pay_bill_data']['billcountry']) ? $data['pay_bill_data']['billcountry'] : '';
+            $data['billstate'] = isset($data['pay_bill_data']['billstate']) ? $data['pay_bill_data']['billstate'] : '';
+            $data['billemail'] = isset($data['pay_bill_data']['billemail']) ? $data['pay_bill_data']['billemail'] : '';
+
             $ukcid = $loggedin_user->kc_id;
         }
 
-        $event_id = 0;
-
-        $c = Cart::content()->count();
-        if ($c > 0) {
-            $cart_contents = Cart::content();
-            foreach ($cart_contents as $item) :
-                $event_id = $item->options->event;
-                $event_type = $item->options->type;
-
-                break;
-            endforeach;
+        return view('theme.cart.new_cart.billing', $data);
+            
 
 
-            $ev = Event::find($event_id);
-            if($ev) {
-                $data['eventId'] = $event_id;
-                if($ev->view_tpl == 'event_free_coupon'){
-                    $data['couponEvent'] = true;
-                }
-                //dd($ev->ticket);
-                $data['eventtickets'] = $ev->ticket;
-                $data['city'] = $ev->city->first() ? '' : '';
-                $data['duration'] = '';
+        //return view('theme.cart.cart', $data);
+    }
 
-                $categoryScript = 'Event > ' . $ev->category->first()->name;
-                //dd($categoryScript);
+    public function billing(Request $request){
 
-                $data['stripe_key'] = '';
-                $data['paywithstripe'] = 0;
+        $pay_bill_data = [];
+       
+        $pay_bill_data['billing'] = 1;
+        $pay_bill_data['billname'] = $request->get('billname');
+		$pay_bill_data['billemail'] = $request->get('billemail');
+		$pay_bill_data['billaddress'] = $request->get('billaddress');
+		$pay_bill_data['billaddressnum'] = $request->get('billaddressnum');
+		$pay_bill_data['billpostcode'] = $request->get('billpostcode');
+		$pay_bill_data['billcity'] = $request->get('billcity');
+        $pay_bill_data['billcountry'] = $request->get('billcountry');
+        $pay_bill_data['billstate'] = $request->get('billstate');
+        $pay_bill_data['billafm'] = $request->get('billafm');
+       
+        if(!$user = Auth::user()){
+            
+            $user = User::find(Session::get('user_id'));
+        }
 
-                if($ev->paymentMethod->first()){
-                    if($ev->paymentMethod->first()->method_slug == 'stripe'){
-                        $data['paywithstripe'] = 1;
-                        session()->put('payment_method',$ev->paymentMethod->first()->id);
-                        $data['stripe_key'] = env('PAYMENT_PRODUCTION') ? $ev->paymentMethod->first()->processor_options['key'] :
-                                                                                $ev->paymentMethod->first()->test_processor_options['key'];
-                    }
+        if($user) {
+            //UPDATE billing in user profile
+            
+            $user->receipt_details = json_encode($pay_bill_data);
+            $user->afm = $pay_bill_data['billafm'];
+            $user->save();
+        }
 
-                }
-                $data['pay_methods'] = $ev->paymentMethod->first();
+		Session::put('pay_bill_data', $pay_bill_data);
+        return redirect('/checkout');
+    }
 
+    public function checkoutIndex()
+    {
 
-                $data['duration'] = $ev->summary1->where('section','date')->first() ? $ev->summary1->where('section','date')->first()->title:'';
-                $data['hours'] = $ev->summary1->where('section','duration')->first() ? $ev->summary1->where('section','duration')->first()->title:'';
-                $data['city'] = $ev->city->first() ? $ev->city->first()->name : '';
-                $data['coupons'] = $ev->coupons->where('price','>',0)->toArray();
-                //dd($data['coupons']);
-                /*if($ev->customFields) {
-                    foreach ($ev->customFields as $key => $cfield) {
-                       if($cfield->name == 'simple_text' && $cfield->priority == 0) {
-                        //dd($cfield);
-                            $data['ev_date_help'] = $cfield->value;
-                            break;
-                       }
-                    }
+        $data = array();
+        $data['pay_methods'] = array();
 
-                    foreach ($ev->customFields as $key => $cfield) {
-                        if($cfield->name == 'simple_text' && $cfield->priority == 12) {
-
-                             $data['duration'] = $cfield->value;
-                             break;
-                        }
-                     }
-                }*/
-            }
-
-            $data['eventId'] = $event_id;
-            $data['categoryScript'] = $categoryScript;
-
-            if(!$loggedin_user) {
+        $data['eventtickets'] = [];
+        $categoryScript = '';
+        $data['couponEvent'] = false;
 
 
-                return view('theme.cart.cart', $data);
-            }
+        if (Session::has('pay_seats_data')) {
+            $data['pay_seats_data'] = Session::get('pay_seats_data');
 
-            else {
-
-                if($data['paywithstripe'] == 1){
-                    $loggedin_user->asStripeCustomer();
-
-                }
-
-                // Get user billing details in order to pre populate values
-                if(isset($data['pay_bill_data']) && empty($data['pay_bill_data'])) {
-                    $inv = []; $rec = [];
-                    if($loggedin_user->invoice_details != '') {
-                        $inv = json_decode($loggedin_user->invoice_details, true);
-                        if(isset($inv['billing']))
-                            unset($inv['billing']);
-                    }
-
-                    if($loggedin_user->receipt_details != '') {
-                        $rec = json_decode($loggedin_user->receipt_details, true);
-                        if(isset($rec['billing']))
-                            unset($rec['billing']);
-                    }
-
-                    $data['pay_bill_data'] = array_merge($inv, $rec);
-                }
-                if($data['paywithstripe'] == 1){
-                    $data['default_card'] = $loggedin_user->defaultPaymentMethod() ? $loggedin_user->defaultPaymentMethod()->card : false;
-                }
-
-                return view('theme.cart.cart', $data);
-            }
-
-            return view('theme.cart.cart', $data);
         }
         else {
+            $data['pay_seats_data'] = [];
+        }
 
+       /* if (Session::has('pay_invoice_data')) {
+            $data['pay_invoice_data'] = Session::get('pay_invoice_data');
+        }
+        else {
+            $data['pay_invoice_data'] = [];
+        }*/
 
-                if(request()->has('cart')){
-                  //  dd(request('cart'));
-                    //Cart::instance('default')->destroy();
-                    //$cartCache = CartCache::where('slug', request('cart'))->first();
+        if (Session::has('pay_bill_data')) {
+            $data['pay_bill_data'] = Session::get('pay_bill_data');
+        }
+        else {
+            $data['pay_bill_data'] = [];
+        }
 
-                   // if($cartCache){
-                     //  Cart::add($cartCache->ticket_id, $cartCache->product_title, $cartCache->quantity, $cartCache->price,
-                    //    ['type' => $cartCache->type, 'event' => $cartCache->event])->associate(Ticket::class);
-                  //  }
+        if (Session::has('cardtype')) {
+            $data['cardtype'] = Session::get('cardtype');
+        }
+        else {
+            $data['cardtype'] = [];
+        }
 
-
-
-                    //return redirect('/cart');
-                }
-
-            return Redirect::to('/');
+        if (Session::has('installments')) {
+            $data['installments'] = Session::get('installments');
+        }
+        else {
+            $data['installments'] = [];
         }
 
 
+        $data = $this->initCartDetails($data);
 
+        return view('theme.cart.new_cart.checkout', $data);
+            
         //return view('theme.cart.cart', $data);
     }
 
@@ -422,13 +648,17 @@ class CartController extends Controller
     */
     public function add($id, $ticket, $type, Request $request)
     {
-
+      
+        if((!Auth::user() || (Auth::user() && !Auth::user()->kc_id)) && $type == 3){
+            return back();
+        }
+        
         // Determine if this is an ajax request
         //dd($ticket);
         $isAjax = $request->ajax();
         // Get the product from the database
         $product = Event::find($id);
-
+        
         // Check if the product exists on the database
         if (! $product ) {
             if ($isAjax) {
@@ -449,11 +679,11 @@ class CartController extends Controller
         }
 
         if($ticket == 'free'){
-            return Redirect::to('/cart')->with('success',
+            return Redirect::to('/registration')->with('success',
                 "Free ticket was successfully added to your bag."
             );
         }else{
-            return Redirect::to('/cart')->with('success',
+            return Redirect::to('/registration')->with('success',
                 "{$ticketob->title} was successfully added to your bag."
             );
         }
@@ -468,6 +698,7 @@ class CartController extends Controller
 
     protected function addToCart($product, $ticket, $type)
     {
+    
        // Let only one event in the cart added on 5/6/2018
 
        Cart::instance('default')->destroy();
@@ -541,7 +772,6 @@ class CartController extends Controller
 
     }
 
-
     protected function addFreeToCart(Event $product, $ticket, $type)
     {
         // Let only one event in the cart added on 5/6/2018
@@ -565,14 +795,22 @@ class CartController extends Controller
 
     public function userPaySbt(Request $request){
 
-        $this->validate($request, [
-            'mobileCheck.*' => 'phone:AUTO',
-        ]);
-
         $input = $request->all();
         $payment_method_id = intval($input["payment_method_id"]);
 
-        if($payment_method_id == 100) {
+        
+        if(isset($input['installments'])){
+            Session::put('installments', $input['installments']);
+        }else{
+            Session::put('installments', 1);
+        }
+
+        if(Session::get('coupon_code')){
+            $input['coupon'] = Session::get('coupon_code');
+        }
+        
+
+        if($payment_method_id != 1) {
 
             $redurl = $this->postPaymentWithStripe($input);
             return redirect($redurl);
@@ -588,7 +826,9 @@ class CartController extends Controller
         Session::forget('dperror');
         Session::forget('error');
 
-        $dpuser = Auth::user();
+        //$current_user = Auth::user();
+
+        $dpuser = Auth::user() ? Auth::user() : User::find(Session::get('user_id'));
         $cart = Cart::content();
         $ev_title = '';
         $ev_date_help = '';
@@ -605,7 +845,8 @@ class CartController extends Controller
             break;
             //$item->id  <-ticket id
         }
-        
+        //dd($cart['CartItem']->CartItemOptions);
+        //dd($ev_title . $ev_date_help);
         $data = [];
         if (Session::has('pay_seats_data')) {
             $pay_seats_data = Session::get('pay_seats_data');
@@ -641,7 +882,7 @@ class CartController extends Controller
                 $coupon = $eventC->coupons()->where('status', true)->get();
             }
 
-            if(isset($input['coupon']) && count($coupon) > 1){
+            if(isset($input['coupon']) && count($coupon) > 0){
                 foreach($coupon as $key => $c){
                     if(!($c->code_coupon === $input['coupon'])){
                         unset($coupon[$key]);
@@ -665,14 +906,36 @@ class CartController extends Controller
             if(isset($pay_bill_data)) {
                 $temp = $pay_bill_data;
                 if($temp['billing'] == 1) {
+
+                    $address = [];
+                    $address['country'] = 'GR';
+
                     $temp['billing'] = 'Receipt requested';
-                    //generate array for stripe billing
-                   // $st_desc = $temp['billname'] . ' ' . $temp['billsurname'];
-                    $st_name =  $temp['billname'] . ' ' . $temp['billsurname'];
+                    
+                    $st_name =  $temp['billname'];
                     $st_tax_id = 'EL'.$temp['billafm'];
-                    $st_line1 = $temp['billaddress'] . ' ' . $temp['billaddressnum'];
-                    $st_postal_code = $temp['billpostcode'];
-                    $st_city = $temp['billcity'];
+
+                    if(isset($temp['billaddress'])){
+                        $st_line1 = $temp['billaddress'] ;
+                        
+                        if(isset($temp['billaddressnum'])){
+                            $st_line1 .= ' ' . $temp['billaddressnum'];
+                        }
+
+                        $address['line1'] = $st_line1;
+                    }
+
+                    if(isset($temp['billcity'])){
+                        $st_city = $temp['billcity'];
+                        $address['city'] = $st_city;
+                    }
+                    
+                    if(isset($temp['billpostcode'])){
+                        $st_postal_code = $temp['billpostcode'];
+                        $address['postal_code'] = $st_postal_code;
+                    }
+                    
+                    
                //     $st_phone = $temp['billmobile'];
 
                 }
@@ -697,9 +960,22 @@ class CartController extends Controller
                 Stripe::setApiKey($eventC->paymentMethod->first()->test_processor_options['secret_key']);
             }
             session()->put('payment_method',$eventC->paymentMethod->first()->id);
+            
             $dpuser->asStripeCustomer();
 
-            if($installments > 1) {
+            if(!$dpuser->stripe_id){
+                
+                $options=['name' => $dpuser['firstname'] . ' ' . $dpuser['lastname'], 'email' => $dpuser['email']];
+                $dpuser->createAsStripeCustomer($options);
+               
+                $stripe_ids = json_decode($dpuser->stripe_ids,true) ? json_decode($dpuser->stripe_ids,true) : [];
+                $stripe_ids[] =$dpuser->stripe_id;
+
+                $dpuser->stripe_ids = json_encode($stripe_ids);
+                $dpuser->save();
+            }
+
+             if($installments > 1) {
 
                 $instamount =  round($namount / $installments, 2);
 
@@ -708,66 +984,75 @@ class CartController extends Controller
                 }else{
                     $planAmount  = $instamount . '00';
                 }
-                    
+                    //$dpuser->subscription()->syncWithStripe();
+                   // dd("Entity ready to be billed!");
+                    // Check if the entity has any active subscription
 
 
-                //./ngrok authtoken 69hUuQ1DgonuoGjunLYJv_3PVuHFueuq5Kiuz7S1t21
-                // Create the plan to subscribe
-                $desc = $installments . ' installments';
-                $planid = 'plan_'.$dpuser->id.'_Efd_'.$ev->id.'_T_'.$ticket_id.'_x'.$installments;
-                $name = $ev_title . ' ' . $ev_date_help . ' | ' . $desc;
-                //dd(str_replace('.','',$instamount) . '00');
+                        //./ngrok authtoken 69hUuQ1DgonuoGjunLYJv_3PVuHFueuq5Kiuz7S1t21
+                        // Create the plan to subscribe
+                        $desc = $installments . ' installments';
+                        $planid = 'plan_'.$dpuser->id.'_E_'.$ev->id.'_T_'.$ticket_id.'_x'.$installments;
+                        $name = $ev_title . ' ' . $ev_date_help . ' | ' . $desc;
+                        //dd(str_replace('.','',$instamount) . '00');
 
-                $plan = Plan::create([
-                    'id'                   => $planid,
-                    "product" => array(
-                        'name'                 => $name,
-                      ),
+                        $plan = Plan::create([
+                            'id'                   => $planid,
+                            "product" => array(
+                                'name'                 => $name,
+                              ),
 
-                    'amount'               => $planAmount,
-                    'currency'             => 'eur',
-                    'interval'             => 'month',
-                    //'statement_descriptor' => $desc,
+                            'amount'               => $planAmount,
+                            'currency'             => 'eur',
+                            'interval'             => 'month',
+                            //'statement_descriptor' => $desc,
 
-                ]);
+                        ]);
 
 
-                /*$sub = $dpuser
-                    ->subscription()
-                    ->onPlan($planid)
-                    ->create(['metadata' => ['installments_paid' => 0, 'installments' => $installments]])
-                ;*/
+                        /*$sub = $dpuser
+                            ->subscription()
+                            ->onPlan($planid)
+                            ->create(['metadata' => ['installments_paid' => 0, 'installments' => $installments]])
+                        ;*/
+                        $input['paymentMethod'] = $payment_method_id;
+                        $input['amount'] = $namount;
+                        $input['couponCode'] = $couponCode;
+    
+                        $input = encrypt($input);
+                        session()->put('input',$input);
+                        ///try{
+                            $charge = $dpuser->newSubscription($name, $plan->id)->create($input['payment_method'],
+                            ['email' => $dpuser->email],
+                                        ['metadata' => ['installments_paid' => 0, 'installments' => $installments]]);
+    
+                            $charge->metadata = json_encode(['installments_paid' => 0, 'installments' => $installments]);
+                            $charge->price = $instamount;
+                            $charge->save();
+                        /*}catch(\Laravel\Cashier\Exceptions\IncompletePayment $exception){
+                            $payment_method_id = -1;
+                            if($ev->paymentMethod->first()){
+                                
+                                $payment_method_id = $ev->paymentMethod->first()->id;
+                                   
+                            }
+        
+                            $input['paymentMethod'] = $payment_method_id;
+                            $input['amount'] = $namount;
+                            $input['couponCode'] = $couponCode;
+        
+                            $input = encrypt($input);
+                            session()->put('input',$input);
+                            return '/';
+                            ///return 'stripe/payment/' . $exception->payment->id . '/' . $input;
+                        }*/
 
-                try {
-                    $charge = $dpuser->newSubscription($name, $plan->id)->create($dpuser->defaultPaymentMethod()->id,
-                                ['email' => $dpuser->email],
-                                ['metadata' => ['installments_paid' => 0, 'installments' => $installments]],
-                            );
-
-                    $charge->metadata = json_encode(['installments_paid' => 0, 'installments' => $installments]);
-                    $charge->price = $instamount;
-                    $charge->save();
-
-                } catch (IncompletePayment $exception) {
-
-                    $payment_method_id = -1;
-                    if($ev->paymentMethod->first()){
                         
-                        $payment_method_id = $ev->paymentMethod->first()->id;
-                           
-                    }
-        
-                    $input['paymentMethod'] = $payment_method_id;
-                    $input['amount'] = $namount;
-                    $input['couponCode'] = $couponCode;
-                    $input = encrypt($input);
-                    return 'stripe/payment/' . $exception->payment->id . '/' . $input;
-        
-                }
 
-            }
+                        //$namount = $instamount;
+             }
 
-
+             
             if($dpuser && $installments > 1) {
 
                 $charge['status'] = 'succeeded';
@@ -780,6 +1065,7 @@ class CartController extends Controller
                 }else{
                     $stripeAmount  = $namount . '00';
                 }
+            
                 $dpuser->updateStripeCustomer([
                     'name' => $st_name,
                     'email' => $dpuser->email,
@@ -787,31 +1073,32 @@ class CartController extends Controller
                     //'description' => $st_desc,
 
                     //'tax_info' => ['tax_id' => $st_tax_id, 'type' => 'vat'],
-                    'shipping' => ['name' => $st_name, 'address' => ['line1' => $st_line1,'postal_code' => $st_postal_code,'city' => $st_city,'country' => 'GR']],
-                    'address' => ['line1' => $st_line1,'postal_code' => $st_postal_code,'city' => $st_city,'country' => 'GR'],
-
+                    'shipping' => ['name' => $st_name, 'address' => $address],
+                    'address' => $address,
+                    
                 ]);
-
+               
                 $temp['customer'] = $dpuser->email;
                 $nevent = $ev_title . ' ' . $ev_date_help;
-            
 
-                try {
-                    $dpuser->stripe_id;
+               
+                try{
+                    
                     $charge = $dpuser->charge(
-                       $stripeAmount,
-                       $dpuser->defaultPaymentMethod()->id,
-                       [
-   
-                           'currency' => 'eur',
-                           'amount' => $stripeAmount,
-                           'description' => $nevent,
-                           'customer' => $dpuser->stripe_id,
-                           'metadata' => $temp,
-                           //'off_session' => true,
-                       ]
-                   );
-                } catch (IncompletePayment $exception) {
+                        $stripeAmount,
+                        $input['payment_method'],
+                        [
+                            'currency' => 'eur',
+                            'amount' => $stripeAmount,
+                            'description' => $nevent,
+                            //'shipping' => ['name' => $st_name, 'address' => ['line1' => $st_line1,'postal_code' => 59100,'city' => 'gsdf','country' => 'GR']],
+                            'customer' => $dpuser->stripe_id,
+                            //'metadata' => $temp,
+                        ],
+                        
+                    );
+                }catch (\Laravel\Cashier\Exceptions\IncompletePayment $exception) {
+                    //dd('gfds3')
 
                     $payment_method_id = -1;
                     if($ev->paymentMethod->first()){
@@ -823,7 +1110,9 @@ class CartController extends Controller
                     $input['paymentMethod'] = $payment_method_id;
                     $input['amount'] = $namount;
                     $input['couponCode'] = $couponCode;
+
                     $input = encrypt($input);
+                    
                     return 'stripe/payment/' . $exception->payment->id . '/' . $input;
                     //return '/stripe/payment/'.$exception->payment->id;
 
@@ -831,7 +1120,6 @@ class CartController extends Controller
 
 
             }
-
 
 
             if( (is_array($charge)  &&  $charge['status'] == 'succeeded' ) || $charge->status == 'succeeded') {
@@ -917,49 +1205,50 @@ class CartController extends Controller
                     \Session::put('transaction_id', $transaction->id);
                 }
 
-                return '/info/order_success';
+                return '/thankyou';
+                //return '/info/order_success';
 
             } else {
                 //dd('edwww1');
                  \Session::put('dperror','Cannot complete the payment!!');
                 //return redirect('/info/order_error');
-                  return '/cart';
+                  return '/checkout';
             }
         }
         catch (Exception $e) {
             //dd('edwww2');
              \Session::put('dperror',$e->getMessage());
-              return '/cart';
+              return '/checkout';
             // return redirect('/info/order_error');
         }
         catch(\Stripe\Exception\CardErrorException $e) {
             //dd('edwww3');
             \Session::put('dperror',$e->getMessage());
-              return '/cart';
+              return '/checkout';
              //return redirect('/info/order_error');
         }
         catch(\Stripe\Exception\InvalidRequestException $e) {
             //dd($e);
             \Session::put('dperror',$e->getMessage());
             //return redirect('/info/order_error');
-            return '/cart';
+            return '/checkout';
         }
         catch(\Stripe\Exception\MissingParameterException $e) {
             //dd($e);
             \Session::put('dperror',$e->getMessage());
             //return redirect('/info/order_error');
-            return '/cart';
+            return '/checkout';
         }
         catch(\Stripe\Api\Exception\ServerErrorException $e) {
             //dd($e);
             \Session::put('dperror',$e->getMessage());
             //return redirect('/info/order_error');
-            return '/cart';
+            return '/checkout';
         }catch(\Stripe\Exception\CardException $e) {
             //dd($e);
             \Session::put('dperror',$e->getMessage());
             //return redirect('/info/order_error');
-            return '/cart';
+            return '/checkout';
         }
 
 
@@ -984,7 +1273,7 @@ class CartController extends Controller
         $bd['billzip'] = $input['billpostcode'];
         $bd['city'] = greeklish($input['billcity']);
         $bd['billcountry'] = 'GR';
-
+      
         if(Auth::check()) {
             $cuser = Auth::user();
             $uid = $cuser->id;
@@ -1024,13 +1313,13 @@ class CartController extends Controller
         }
     }
 
-    public function dpremove(Request $request)
+    public function dpremove($item)
     {
-        //dd('edww');
+        
         //dd('sex');
         /*$t = Cart::get($id);
         $t->remove($id);*/
-        $id = $request->get('id');
+        $id = $item;
         Cart::remove($id);
 
         //UPDATE SAVED CART IF USER LOGGED
@@ -1050,15 +1339,25 @@ class CartController extends Controller
         }
 
 
-        $isAjax = $request->ajax();
+        $isAjax = request()->ajax();
 
         if ($isAjax) {
             return response([ 'message' => 'success', 'id' => $id ]);
         }
 
-        return Redirect::to('/cart')->with('success',
-            "{$product->name} was successfully removed from the shopping cart."
-        );
+        Cart::instance('default')->destroy();
+        Session::forget('pay_seats_data');
+        Session::forget('transaction_id');
+        Session::forget('cardtype');
+        Session::forget('installments');
+        //Session::forget('pay_invoice_data');
+        Session::forget('pay_bill_data');
+        Session::forget('deree_user_data');
+        Session::forget('user_id');
+        Session::forget('coupon_code');
+        Session::forget('coupon_price');
+
+        return Redirect::to('/registration');
 
         /*return redirect()->route('cart')->with('success',
             "{$product->name} was successfully removed from the shopping cart."
@@ -1086,6 +1385,9 @@ class CartController extends Controller
             $coupon = $coupon->first();
 
             if(trim($request->coupon) === trim($coupon->code_coupon) && $coupon->status && trim($request->coupon) != ''){
+
+                Session::put('coupon_code',$request->coupon);
+                Session::put('coupon_price',$coupon->price);
                 return response()->json([
                     'success' => true,
                     'new_price' => $coupon->price,
@@ -1153,121 +1455,16 @@ class CartController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'To event προστεθηκε στο καλάθι',
-                'redirect' => '/cart'
+                'redirect' => '/registration'
             ]);
         }
 
     }
 
-    public function cartIndex(Event $event){
-
-        $c = Cart::content()->count();
-        $data = [];
-        $data['city'] = null;
-        $data['duration'] = null;
-        $categoryScript ='';
-
-        $user = Auth::user();
-
-        $data['cur_user'] = $user;
-
-        if ($c > 0) {
-            $cart_contents = Cart::content();
-            foreach ($cart_contents as $item) {
-                $event_id = $item->options->event;
-                $event_type = $item->options->type;
-
-                break;
-            }
-
-            $ev = Event::find($event_id);
-            if($ev) {
-
-                if($ev->view_tpl != 'elearning_event'){
-                    if($ev->city->first()){
-                        $data['city'] = $ev->city->first()->name;
-
-                    }
-                }
-
-                if ($ev->category->first()) {
-                    $categoryScript = 'Event > ' . $ev->category->first()->name;
-                }
-
-
-                $data['ev_date_help'] = 'test';
-                $data['duration'] = 'tst3';
-
-            }
-        }
-
-        $data['eventId'] = $event_id;
-        $data['categoryScript'] = $categoryScript;
-
-
-
-        return view('theme.cart.cart_code_event',$data);
-    }
-
-    public function validation(Request $request){
-        $validatorArray = [];
-
-        $validatorArray['email.*'] = 'required|email';
-        $validatorArray['name.*'] = 'required';
-        $validatorArray['surname.*'] = 'required';
-        $validatorArray['mobile.*'] = 'required';
-        $validatorArray['city.*'] = 'required';
-        $validatorArray['address.*'] = 'required';
-        $validatorArray['addressnum.*'] = 'required';
-        $validatorArray['postcode.*'] = 'required';
-
-        $validator = Validator::make($request->all(), $validatorArray);
-
-        if ($validator->fails()) {
-            return [
-                'status' => 0,
-                'errors' => $validator->errors(),
-                'message' => '',
-            ];
-
-        }else{
-
-            $seats_data = array();
-            $seats_data['names'] = $request->get('name');
-        	$seats_data['surnames'] = $request->get('surname');
-        	$seats_data['emails'] = $request->get('email');
-            $seats_data['mobiles'] = $request->get('mobile');
-            $seats_data['mobileCheck'] = $request->get('mobileCheck');
-            $seats_data['countryCodes'] = $request->get('countryCodes');
-        	$seats_data['addresses'] = $request->get('address');
-        	$seats_data['addressnums'] = $request->get('addressnum');
-        	$seats_data['postcodes'] = $request->get('postcode');
-        	$seats_data['cities'] = $request->get('city');
-        	$seats_data['jobtitles'] = $request->get('jobtitle');
-        	$seats_data['companies'] = $request->get('company');
-            $seats_data['students'] = $request->get('student');
-            $seats_data['afms'] = $request->get('afm');
-            $seats_data['studentId'] = $request->get('studentId');
-            Session::put('pay_seats_data', $seats_data);
-
-            return [
-                'status' => 1,
-                'message' => 'Done go checkout',
-            ];
-
-        }
-
-
-    }
-
     public function completeRegistration(Request $request){
 
-        $this->validate($request, [
-            'mobileCheck.*' => 'phone:AUTO',
-        ]);
-
+        
         $data = [];
-
         $option = Option::where('abbr','deree-codes')->first();
         //$dereelist = json_decode($option->settings, true);
         $code = 0;
@@ -1275,7 +1472,37 @@ class CartController extends Controller
         //dd($dereelist);
 
         $c = Cart::content()->count();
-        $user = Auth::user();
+       
+        if((!$user = User::where('email',$request->email[0])->first())){
+            $input = [];
+            $formData = $request->all();
+            unset($formData['_token']);
+            unset($formData['terms_condition']);
+            unset($formData['update']);
+            unset($formData['type']);
+            
+            foreach($formData as $key => $value){
+                $input[$key] = $value[0];
+            }
+
+            $input['password'] = Hash::make(date('Y-m-dTH:i:s'));
+            
+            $user = User::create($input);
+
+            $code = Activation::create([
+                'user_id' => $user->id,
+                'code' => Str::random(40),
+                'completed' => false,
+            ]);
+            $user->role()->attach(7);
+            
+            $connow = Carbon::now();
+            $clientip = '';
+            $clientip = \Request::ip();
+            $user->terms = 1;
+            $user->consent = '{"ip": "' . $clientip . '", "date": "'.$connow.'" }';
+        
+        }
 
 
         if ($c > 0) {
@@ -1307,7 +1534,7 @@ class CartController extends Controller
             'payment_method_id' => $payment_method_id,
             'account_id' => 17,
             'payment_status' => 1,
-            'billing_details' => '',//serialize($billing_details),
+            'billing_details' => json_encode([]),
             'placement_date' => Carbon::now()->toDateTimeString(),
             'ip_address' => '127.0.0.1',
             'type' => $payment_cardtype,//((Sentinel::inRole('super_admin') || Sentinel::inRole('know-crunch')) ? 1 : 0),
@@ -1326,14 +1553,14 @@ class CartController extends Controller
 
         if ($transaction) {
             // set transaction id in session
+            
+            $pay_seats_data = ["names" => [$request->firstname[0]],"surnames" => [$request->lastname[0]],"emails" => [$request->email[0]],
+            "mobiles" => [$request->mobile[0]],"addresses" => [$user->address],"addressnums" => [$user->address_num],
+            "postcodes" => [$user->postcode],"cities" => [$user->city],"jobtitles" => [$user->job_title],
+            "companies" => [$user->company],"students" => [""], "afms" => [$user->afm]];
 
-            $pay_seats_data = ["names" => [$request->name[0]],"surnames" => [$request->surname[0]],"emails" => [$request->email[0]],
-            "mobiles" => [$request->mobile[0]],"addresses" => [Auth::user()->address],"addressnums" => [Auth::user()->address_num],
-            "postcodes" => [Auth::user()->postcode],"cities" => [Auth::user()->city],"jobtitles" => [Auth::user()->job_title],
-            "companies" => [Auth::user()->company],"students" => [""], "afms" => [Auth::user()->afm]];
 
-
-            $deree_user_data = [Auth::user()->email => Auth::user()->partner_id];
+            $deree_user_data = [$user->email => $user->partner_id];
 
             //dd($ticket->event->title);
             $cart_data = ["manualtransaction" => ["rowId" => "manualtransaction","id" => 'coupon code ' . $content->id,"name" => $content->title,"qty" => "1","price" => $amount,"options" => ["type" => "9","event"=> $content->id],"tax" => 0,"subtotal" => $amount]];
@@ -1342,8 +1569,8 @@ class CartController extends Controller
             'datetime' => Carbon::now()->toDateTimeString(),
             'status' => 1,
             'user' => [
-                'id' => Auth::user()->id, //0, $this->current_user->id,
-                'email' => Auth::user()->email,//$this->current_user->email
+                'id' => $user->id, //0, $this->current_user->id,
+                'email' => $user->email,//$this->current_user->email
                 ],
             'pay_seats_data' => $pay_seats_data,//$data['pay_seats_data'],
             'pay_bill_data' => [],
@@ -1358,7 +1585,9 @@ class CartController extends Controller
 
             $user->events()->attach($content->id,['comment' => 'upon coupon']);
 
-            $user->cart->delete();
+            if($user->cart){
+                $user->cart->delete();
+            }
             Cart::instance('default')->destroy();
             $content->coupons->where('id', $codeId)->first()->update(['used' => true]);
 
@@ -1387,7 +1616,7 @@ class CartController extends Controller
                 $option->value = $next;
                 $option->save();
             }
-            $this->sendEmails($transaction,$content);
+            $this->sendEmails($transaction,$content,$user);
 
             $data['info']['success'] = true;
             $data['info']['title'] = '<h1>Booking successful</h1>';
@@ -1399,20 +1628,19 @@ class CartController extends Controller
         }
 
 
-        return view('theme.cart.cart_code_event',$data);
-        //return redirect('/myaccount');
+        return view('theme.cart.new_cart.thank_you',$data);
+       
     }
 
-    public function sendEmails($transaction,$content)
+    public function sendEmails($transaction,$content,$user)
     {
-
-        $user = Auth::user();
 
         $muser = [];
         $muser['name'] = $user->first_name . ' ' . $user->last_name;
         $muser['id'] = $user->id;
         $muser['first'] = $user->first_name;
         $muser['email'] = $user->email;
+        $muser['createAccount'] = false;
 
         $tickettypedrop = 'Upon Coupon';
         $tickettypename = 'Upon Coupon';
@@ -1460,6 +1688,28 @@ class CartController extends Controller
             $m->subject('Knowcrunch - New Registration');
         });
 
+        if(!$user->statusAccount->completed){
+                    
+            $data['user']['createAccount'] = true;
+            $cookieValue = base64_encode($user->id . date("H:i"));
+            setcookie('auth-'.$user->id, $cookieValue, time() + (1 * 365 * 86400), "/"); // 86400 = 1 day
+        
+            $coockie = new CookiesSMS;
+            $coockie->coockie_name = 'auth-'.$user->id;
+            $coockie->coockie_value = $cookieValue;
+            $coockie->user_id = $user->id;
+            $coockie->sms_code = -1;
+            $coockie->sms_verification = true;
+
+            $coockie->save();
+
+            $user->statusAccount->completed = true;
+            $user->statusAccount->save();
+
+        }
+
+        $user->notify(new WelcomeEmail($user,$data));
+
     }
 
     public function update(Request $request)
@@ -1467,6 +1717,7 @@ class CartController extends Controller
         //return $request->all();
     	$updates = $request->get('update');
     	foreach ($updates as $key => $value) {
+            //dd($value['quantity']);
     		Cart::update($key, $value['quantity']);
     	}
 
@@ -1498,9 +1749,10 @@ class CartController extends Controller
         }
 
         //Cart::update();
-        return Redirect::to('/cart')->with('success', 'Shopping cart was successfully updated.');
+        return Redirect::to('/registration')->with('success', 'Shopping cart was successfully updated.');
         /*return redirect()->route('cart')->with('success', 'Shopping cart was successfully updated.');*/
     }
+
 
     public function securePayment(Request $request){
         //dd($request->all());
@@ -1511,7 +1763,7 @@ class CartController extends Controller
         $charge = $request->paymentIntent;
         $namount = $input['amount'];
 
-        $dpuser = Auth::user();
+        $dpuser = Auth::user() ? Auth::user() : User::find(Session::get('user_id'));
         $cart = Cart::content();
         $ev_title = '';
         $ev_date_help = '';
@@ -1559,14 +1811,36 @@ class CartController extends Controller
         if(isset($pay_bill_data)) {
             $temp = $pay_bill_data;
             if($temp['billing'] == 1) {
+
+                $address = [];
+                $address['country'] = 'GR';
+
                 $temp['billing'] = 'Receipt requested';
-                //generate array for stripe billing
-               // $st_desc = $temp['billname'] . ' ' . $temp['billsurname'];
-                $st_name =  $temp['billname'] . ' ' . $temp['billsurname'];
+                
+                $st_name =  $temp['billname'];
                 $st_tax_id = 'EL'.$temp['billafm'];
-                $st_line1 = $temp['billaddress'] . ' ' . $temp['billaddressnum'];
-                $st_postal_code = $temp['billpostcode'];
-                $st_city = $temp['billcity'];
+
+                if(isset($temp['billaddress'])){
+                    $st_line1 = $temp['billaddress'] ;
+                    
+                    if(isset($temp['billaddressnum'])){
+                        $st_line1 .= ' ' . $temp['billaddressnum'];
+                    }
+
+                    $address['line1'] = $st_line1;
+                }
+
+                if(isset($temp['billcity'])){
+                    $st_city = $temp['billcity'];
+                    $address['city'] = $st_city;
+                }
+                
+                if(isset($temp['billpostcode'])){
+                    $st_postal_code = $temp['billpostcode'];
+                    $address['postal_code'] = $st_postal_code;
+                }
+                
+                
            //     $st_phone = $temp['billmobile'];
 
             }
@@ -1666,9 +1940,9 @@ class CartController extends Controller
 
             return response()->json([
                 'success' => true,
-                'redirect' => '/info/order_success',
+                'redirect' => '/thankyou',
             ]);
-            return '/info/order_success';
+        
         }
 
 
