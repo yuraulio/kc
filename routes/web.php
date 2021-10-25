@@ -15,7 +15,7 @@ use App\Http\Controllers\NotificationController;
 
 //Route::get('/', 'Auth\LoginController@showLoginForm')->name('welcome');
 
-Auth::routes();
+Auth::routes(['register' => false]);
 
 //Route::get('dashboard', 'HomeController@index')->name('home');
 Route::get('pricing', 'PageController@pricing')->name('page.pricing');

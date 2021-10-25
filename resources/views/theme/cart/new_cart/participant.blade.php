@@ -369,7 +369,7 @@
 @push('scripts')
 @if(isset($tigran) && !env('APP_DEBUG'))
 <script>
-	dataLayer.push({'event': 'Add To Cart', 'Product_id' : "{{$tigran['Product_id']}}" 'Price': "{{$tigran['price']}}"});
+	dataLayer.push({'event': 'Add To Cart', 'Product_id' : "{{$tigran['Product_id']}}", 'Price': "{{$tigran['price']}}"});
 </script>
 @endif
 <script>
