@@ -423,9 +423,18 @@ class HomeController extends Controller
         //dd($instructor['event'][0]);
         $category = array();
 
+        $data['title'] = '';
 
-        $data['title'] = $instructor['title'].' '.$instructor['subtitle'];
+        if(isset($instructor['title'])){
+            $data['title'] .= $instructor['title']
+        }
 
+        if(isset($instructor['subtitle'])){
+            $data['title'] .= ' '.$instructor['subtitle'];
+            
+        }
+        $data['title'] = trim($data['title']);
+        
         foreach($instructor['event'] as $key => $event){
             if(($event['status'] == 0 || $event['status'] == 2) && $event->is_inclass_course()){
                 foreach($event['lessons'] as $lesson){
