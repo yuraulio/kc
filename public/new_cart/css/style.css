@@ -184,7 +184,7 @@ label#terms_condition-error{position:absolute;bottom:0;left:0;}
 .checkout-price, .checkout-participant, .checkout-total{display:flex;justify-content:space-between;}
 .checkout-price-wrap{border:1px solid #979797;border-left:0;border-right:0;padding: 1.1em 0;margin: 1.3em 0;}
 .checkout-coupon-code-wrap input:focus{filter:drop-shadow(9.326px 7.552px 12px rgba(76,76,76,0.11));background-color:#419bff;border:2px solid #000000;color:#fff;}
-.checkout-coupon-code-wrap input{text-align:left;font-size: 16px;text-transform: uppercase;height:41px;}
+.checkout-coupon-code-wrap input{text-align:left;font-size: 16px;text-transform: uppercase;height:41px;letter-spacing: 1px;}
 .checkout-coupon-code-wrap .btn{height:41px;min-height:41px;}
 input.wrong-coupon-code{border-color:red}
 .checkout-coupon-code-wrap{padding-top:1.1em;}
