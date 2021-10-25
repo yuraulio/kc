@@ -187,7 +187,6 @@ $(document).on('click', '.beSubmit', function(e) {
                     $('#beForm').find('input[type=text], input[type=email], textarea').val('');
                     $('#beForm').slideUp();
                     $('.successHide').hide();
-					fbq('track', 'Lead');
 
 
                 }
