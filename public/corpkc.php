@@ -18,7 +18,7 @@ $Headers1 = 'From:'  . $email . "\r\n";
 //$Headers1 .= 'Cc:'. $email . "\r\n";
 $Headers1 .= "MIME-Version: 1.0\r\n";
 $Headers1 .= "Content-Type: text/html; charset=UTF-8\r\n";
-$template = 
+$template =
 'Email:' . $email . '<br/>'
 
 . '<strong>Ονοματεπώνυμο: ' . $csurname . '</strong><br/>'
