@@ -588,37 +588,10 @@ $(document).ready(function() {
 </script>
 
 
-@if(request()->has('reg') &&request()->get('reg') == 10 )
-<script type="text/javascript">
-   $( document ).ready(function() {
-      
-      fbq('track', 'CompleteRegistration');
-        
-       
- 
-   });
-
-</script>
-@endif
 <script>
 $( document ).ready(function() {
    $(".select2").select2()
-   @if((isset($info) && isset($info['success'])) && $info['success'] !== true)
-   
-   if(<?php echo Cart::instance('default')->subtotal() ?> > 0){
-
-      fbq('track', 'AddToCart', {    
-         content_name: '<?php echo  $item->name ?>',
-         content_category: '<?php echo $categoryScript; ?>',
-         content_ids: ['{{$eventId}}'],
-         content_type: 'product',
-         value: '{{ $item->subtotal }}',
-         currency: 'EUR',
-      });
-
-
-   }
-@endif
+  
 
 });
 
