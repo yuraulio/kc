@@ -95,7 +95,7 @@
                 <div class="card-body">
                     <div class="is-flex">
                         @if(!$user->kc_id)
-                        
+
                         <form method="post" action="{{ route('create-kc') }}" autocomplete="off"
                                 enctype="multipart/form-data">
                                 @csrf
@@ -111,7 +111,7 @@
                                 <input hidden name="user" value="{{$user->id}}">
                                 <button class="btn btn-primary" type="submit">Create Deree </button>
                         </form>
-                        
+
                         @endif--}}
                     </div>
                     <form method="post" action="{{ route('profile.update') }}" autocomplete="off"
@@ -215,7 +215,7 @@
                                 @include('alerts.feedback', ['field' => 'mobile'])
                             </div>
 
-                           
+
                             <div class="form-group{{ $errors->has('telephone') ? ' has-danger' : '' }}">
                                 <label class="form-control-label" for="input-telephone">{{ __('Telephone') }}</label>
                                 <input type="number" name="telephone" id="input-telephone" class="form-control{{ $errors->has('telephone') ? ' is-invalid' : '' }}" placeholder="{{ __('Telephone') }}" value="{{ old('telephone', $user['telephone']) }}" autofocus>
@@ -852,14 +852,14 @@
                     @csrf
                     @method('put')
 
-                    
+
                     @include('alerts.error_self_update', ['key' => 'not_allow_profile'])
 
 
 
                     <div class="pl-lg-4">
-                  
-                 
+
+
 
                         <h6 class="heading-small text-muted mb-4">{{ __('Student receipt details') }}</h6>
 
@@ -870,7 +870,7 @@
                             @include('alerts.feedback', ['field' => 'billname'])
                         </div>
 
-                        
+
                         <div class="form-group{{ $errors->has('billname') ? ' has-danger' : '' }}">
                             <label class="form-control-label" for="input-billafm">{{ __('VAT or tax ID') }}</label>
                             <input type="text" name="billafm" id="input-billafm" class="form-control{{ $errors->has('billafm') ? ' is-invalid' : '' }}" placeholder="{{ __('VAT or tax ID') }}" value="{{ (isset($receipt['billafm']) ) ? $receipt['billafm'] : '' }}" autofocus>
@@ -878,8 +878,8 @@
                             @include('alerts.feedback', ['field' => 'billafm'])
                         </div>
 
-                        
-    
+
+
                         <div class="form-row">
                             <div class="form-group{{ $errors->has('billaddress') ? ' has-danger' : '' }} col-md-4">
                                 <label class="form-control-label" for="input-billaddress">{{ __('Street') }}</label>
@@ -895,7 +895,7 @@
                                 @include('alerts.feedback', ['field' => 'billaddressnum'])
                             </div>
                         </div>
-                               
+
                         <div class="form-row">
                             <div class="form-group{{ $errors->has('billcity') ? ' has-danger' : '' }} col-md-4">
                                 <label class="form-control-label" for="input-billcity">{{ __('Town/city') }}</label>
@@ -933,7 +933,7 @@
                             @include('alerts.feedback', ['field' => 'billemail'])
                         </div>
 
-                        
+
 
                             <input type="hidden" name="user_id" value="{{$user['id']}}">
 
@@ -1128,7 +1128,7 @@ $(document).on('click', '.ticket-card', function () {
     $img = @json($user->image);
 
 
-    if($img['name'] != '' && $img['details'] != null && $img['details'] !=''){
+    if($img != null && $img['name'] != '' && $img['details'] != null && $img['details'] !=''){
         image_details = JSON.parse($img['details'].split(','))
         width = image_details.width
         height = image_details.height
@@ -1289,7 +1289,7 @@ $(document).on('click', '.ticket-card', function () {
 
     $( document ).ready(function() {
 
-        if($img['name'] != ''){
+        if($img != null && $img['name'] != ''){
             $('.custom-file-label').text($img['name']+$img['ext'])
         }
 

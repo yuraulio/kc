@@ -42,7 +42,7 @@ class StudentController extends Controller
         $validatorArray['lastname'] = 'required';
         $validatorArray['mobileCheck'] = 'phone:AUTO';
 
-    
+
         if($request->email != Auth::user()->email){
             $validatorArray['email'] = 'required|email|unique:users,email';
         }
@@ -55,7 +55,7 @@ class StudentController extends Controller
                 'errors' => $validator->errors(),
                 'message' => '',
             ];
-        
+
         }else{
             return [
                 'status' => 1,
@@ -209,16 +209,16 @@ class StudentController extends Controller
     public static function updateConsent(Request $request)
     {
         $user = Auth::user();
-        
+
         if($user){
-            
+
             $now = date('Y-m-d H:i:s');
             $clientip = '';
             $clientip = \Request::ip();
             $user->terms = 1;
             $user->consent = '{"ip": "' . $clientip . '", "date": "'.$now.'" }';
             $user->save();
-           
+
             return ['status' => 1, 'message' => 'Thank you!'];
         }
 
@@ -323,7 +323,7 @@ class StudentController extends Controller
 
                 $data['events'][$event->id]['mySubscription'] = $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first();
                 $data['events'][$event->id]['plans'] = $event['plans'];
-            
+
                 $data['events'][$event->id]['certs'] = $event->certificatesByUser($user->id);
                 $data['events'][$event->id]['exams'] = $event->getExams();
                 $data['events'][$event->id]['exam_access'] = $event->examAccess($user,0.8);//$user->examAccess(0.8,$event->id);
@@ -431,13 +431,13 @@ class StudentController extends Controller
         }
         $data['instructors'] = Instructor::with('slugable', 'medias')->get()->groupby('id');
         $data['subscriptionEvents'] = Event::whereIn('id',$subscriptionEvents)->with('slugable')->get();
-     
+
         if(isset($data['events'][2304])){
             $value = $data['events'][2304];
             unset($data['events'][2304]);
             array_unshift($data['events'], $value);
         }
-        
+
         //dd($data['user']['events'][0]);
         return $data;
 
@@ -490,7 +490,7 @@ class StudentController extends Controller
         $name1 = explode(".",$content->getClientOriginalName());
 
         $path_name = $request->dp_fileupload->store('profile_user', 'public');
-        
+
         $image = Image::make(public_path('/uploads/').$path_name);
 
         if($image->width() > $image->height()){
@@ -533,7 +533,7 @@ class StudentController extends Controller
         $user = Auth::user();
 
         if($user->email !== $request->email && !$request->has("password")){
-           
+
             $this->validate($request, [
                 'firstname' => ['required', 'min:3'],
                 'lastname' => ['required', 'min:3'],
@@ -545,7 +545,7 @@ class StudentController extends Controller
             $this->validate($request,[
                 'firstname' => ['required', 'min:3'],
                 'lastname' => ['required', 'min:3'],
-                'email' => [  
+                'email' => [
                   'required', 'email',
                 ]
                 ]);
@@ -612,6 +612,7 @@ class StudentController extends Controller
 
     public static function downloadMyData()
     {
+
         $currentuser = Auth::user();
         if($currentuser) {
             // prepare content
@@ -681,7 +682,7 @@ class StudentController extends Controller
                 $content .= '------------------------'. PHP_EOL;
                 $receipt_details = json_decode($currentuser->receipt_details, true);
                 foreach ($receipt_details as $key => $value) {
-                    if($key != 'billing') {
+                    if($key != 'billing' && isset($hone[$key])) {
                          $content .= $hone[$key]. ': '. $value . PHP_EOL;
                     }
                 }
@@ -705,7 +706,7 @@ class StudentController extends Controller
             return \Response::make($content, 200, $headers);
         }
     }
-    
+
     public function elearning($course){
 
         $user = Auth::user();
@@ -931,7 +932,7 @@ class StudentController extends Controller
 
         try{
             $user = decrypt($slug);
-            
+
             if(!User::where('id',$user['id'])->where('email',$user['email'])->first()){
                 abort(404);
             }
@@ -943,13 +944,13 @@ class StudentController extends Controller
             abort(404);
         }
 
-        
+
     }
 
     public function createPassStore(Request $request,$slug){
-        
+
         $user = decrypt($slug);
-            
+
         if( !($user = User::where('id',$user['id'])->where('email',$user['email'])->first()) ){
             return response()->json([
 
@@ -980,7 +981,7 @@ class StudentController extends Controller
         $user->statusAccount->completed = true;
         $user->statusAccount->completed_at = Carbon::now();
         $user->statusAccount->save();
-        
+
         Auth::login($user);
 
         return response()->json([
