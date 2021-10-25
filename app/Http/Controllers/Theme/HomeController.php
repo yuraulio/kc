@@ -415,7 +415,7 @@ class HomeController extends Controller
     }
 
     private function instructor($page){
-
+       
         $data['content'] = $page;
         $events = array();
         $lessons = [];
@@ -426,7 +426,7 @@ class HomeController extends Controller
         $data['title'] = '';
 
         if(isset($instructor['title'])){
-            $data['title'] .= $instructor['title']
+            $data['title'] .= $instructor['title'];
         }
 
         if(isset($instructor['subtitle'])){
@@ -434,7 +434,7 @@ class HomeController extends Controller
             
         }
         $data['title'] = trim($data['title']);
-        
+       
         foreach($instructor['event'] as $key => $event){
             if(($event['status'] == 0 || $event['status'] == 2) && $event->is_inclass_course()){
                 foreach($event['lessons'] as $lesson){
@@ -494,7 +494,7 @@ class HomeController extends Controller
         $data['instructorEvents'] = $new_events;
         //dd($new_events);
 
-
+        
         return view('theme.pages.instructor_page' ,$data);
     }
 

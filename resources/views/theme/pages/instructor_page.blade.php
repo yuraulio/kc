@@ -16,7 +16,7 @@
                                     <div class="avatar-wrapper">
 
 
-                                        <div class="avatar" alt="{{ $content['title'] }} {{ $content['subtitle'] }}" title="{{ $content['title'] }} {{ $content['subtitle'] }}"  style="background-image:url({{cdn(get_image($content['medias'],'instructors-testimonials'))}});"></div>
+                                        <div class="avatar" alt="{{ $title }}" title="{{ $title }}"  style="background-image:url({{cdn(get_image($content['medias'],'instructors-testimonials'))}});"></div>
                                         <div class="social-links">
                                             <?php $social_media = json_decode($content['social_media'], true); ?>
 
@@ -54,7 +54,7 @@
                                 ?>
                                     <div class="text-area">
 
-                                        <h1>{{ $content['title'] }} {{ $content['subtitle'] }}</h1>
+                                        <h1>{{ $title }}</h1>
                                         <h2>{{ $content['header'] }},@if(isset($content['ext_url'])) <a target="_blank" title="{{ $field2 }}" href="{{ $content['ext_url'] }}"> {{ $field2 }}</a> @endif</h2>
                                         {!! $content['body'] !!}
                                     </div>
