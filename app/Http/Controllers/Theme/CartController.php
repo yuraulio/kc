@@ -508,7 +508,7 @@ class CartController extends Controller
         if($data['type'] == 'free'){
             return view('theme.cart.new_cart.participant_free_event', $data);
         }
-
+      
         return view('theme.cart.new_cart.participant', $data);
             
     }
