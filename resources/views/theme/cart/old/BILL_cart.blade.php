@@ -1027,10 +1027,4 @@ $(document).ready(function(){
 		}
 		</script>
 
-<script type="text/javascript">
-$(function() {
-	//fbq('track', 'Purchase');
-	fbq('track', 'AddToCart');
-});
-</script>
 @stop

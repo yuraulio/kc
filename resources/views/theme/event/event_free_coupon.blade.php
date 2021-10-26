@@ -787,35 +787,6 @@
 
 </script>
 {{--
-@if($estatus == 0 || $estatus == 2)
-
-
-<script>
-
-fbq('track', 'ViewContent', {
-  content_name: '<?php echo $content->title ?>',
-  content_category: '<?php echo $categoryScript ?>',
-  content_ids: ['{{$content->id}}'],
-  content_type: 'product',
-  value: {{$priceForScript}},
-  currency: 'EUR'
- });
-</script>
-
-<script>
-
-  gtag('event', 'page_view', {
-    'send_to': 'AW-859787100',
-    'value': '{{$priceForScript}}',
-    'items': [{
-      'id': '{{$content->id}}',
-      'google_business_vertical': 'custom'
-    }]
-  });
-
-</script>
-
-@endif
 
 
 <script>

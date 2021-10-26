@@ -679,8 +679,6 @@ class CartController extends Controller
 
         //check for logged in user
         $loggedin_user = Auth::user();
-
-
        
         $data['billname'] = '';
         $data['billsurname'] = '';
@@ -692,6 +690,22 @@ class CartController extends Controller
         $data['billstate'] = '';
         $data['billemail'] = '';
         $data['billcountry'] = '';
+
+        //dd()
+
+        $data['billname'] = isset($data['pay_bill_data']['billname']) ? $data['pay_bill_data']['billname'] : '';
+        $data['billsurname'] = isset($data['pay_bill_data']['billsurname']) ? $data['pay_bill_data']['billsurname'] : '';
+        $data['billaddress'] = isset($data['pay_bill_data']['billaddress']) ? $data['pay_bill_data']['billaddress'] : '';
+        $data['billaddressnum'] = isset($data['pay_bill_data']['billaddressnum']) ? $data['pay_bill_data']['billaddressnum'] : '';
+        $data['billpostcode'] = isset($data['pay_bill_data']['billpostcode']) ? $data['pay_bill_data']['billpostcode'] : '';
+        $data['billcity'] = isset($data['pay_bill_data']['billcity']) ? $data['pay_bill_data']['billcity'] : '';
+        $data['billafm'] = isset($data['pay_bill_data']['billafm']) ?  $data['pay_bill_data']['billafm'] : '';
+        $data['billstate'] = isset($data['pay_bill_data']['billstate']) ?  $data['pay_bill_data']['billstate'] : '';
+        $data['billemail'] = isset($data['pay_bill_data']['billemail']) ?  $data['pay_bill_data']['billemail'] : '';
+        $data['billcountry'] = isset($data['pay_bill_data']['billcountry']) ?  $data['pay_bill_data']['billcountry'] : '';
+            
+        
+
 
         if($loggedin_user) {
 

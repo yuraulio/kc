@@ -13,8 +13,10 @@ $(function() {
     jQuery.validator.addMethod(
         "lettersonly",
         function(value, element) {
-            var regex = /^[a-z][a-z\s]*$/;
-            return regex.test(String(value).toLowerCase());
+            //var regex = /^[a-z][a-z\s]*$/;
+            var regex = /^[a-z][a-z\s\(~!@#$$%^^&*(),.<>?]*$/;
+            //var regex = /^[a-z][a-z\s\(+=&._-]*$/;
+            return regex.test(String(value).toLowerCase()) || String(value).toLowerCase() == '';
         },
         "Enter valid email address."
     ); 

@@ -210,6 +210,10 @@ class HomeController extends Controller
 
         //dd(get_class($slug->slugable));
 
+        if(!isset($slug->slugable)){
+            abort(404);
+        }
+
         switch (get_class($slug->slugable)) {
             case Event::class:
 
