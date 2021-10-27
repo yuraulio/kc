@@ -42,7 +42,7 @@ $(document).on('click', '.registration', function(e) {
 
                     });
 
-
+                    $("#participant-form").valid();
                 } else {
 
                     $("#participant-form").submit();
