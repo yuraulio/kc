@@ -21,7 +21,7 @@ use App\Model\Pages;
 use Laravel\Cashier\Cashier;
 use App\Model\User;
 use App\Model\Invoice;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use PDF;
 use Carbon\Carbon;
 use App\Model\Transaction;
@@ -35,12 +35,28 @@ use App\Model\Activation;
 use Illuminate\Support\Str;
 use \Cart as Cart;
 use Session;
+use App\Services\FBPixelService;
 
 class HomeController extends Controller
 {
-    public function __construct()
+    private $fbp;
+
+    public function __construct(/*FBPixelService $fbp*/)
     {
+        //$this->fbp = $fbp;
         $this->middleware('auth.sms')->except('getSMSVerification','smsVerification');
+
+
+        /*$this->middleware(function ($request, $next) {
+            if(Auth::user()){
+                $content['User_id'] = Auth::user()->id;
+            }else{
+                $content['Visitor_id'] = 'fsdf';
+            } 
+            
+            return $next($request);
+        });*/
+
     }
 
     /*public function homePage(){
@@ -111,7 +127,6 @@ class HomeController extends Controller
         return view('theme.home.homepage',$data);
 
     }*/
-
 
     public function homePage(){
 
@@ -561,7 +576,6 @@ class HomeController extends Controller
         return view('theme.pages.category' ,$data);
     }
 
-
     private function event($event){
         $data = $event->topicsLessonsInstructors();
         $data['event'] = $event;
@@ -593,7 +607,7 @@ class HomeController extends Controller
         }
         $categoryScript = $event->category->first() ? 'Event > ' . $event->category->first()->name : '';
         
-        $data['tigran'] = ['price' => $price,'Product_id' => $event->id,'Product_SKU' => $event->id,'ProductCatergory' => $categoryScript, 'ProductName' =>  $event->title];
+        $data['tigran'] = ['price' => $price,'Product_id' => $event->id,'Product_SKU' => $event->id,'ProductCatergory' => $categoryScript, 'ProductName' =>  $event->title,'Event_ID' => 'kc_' . time() ];
 
         if(Auth::user() && count(Auth::user()->events->where('id',$event->id)) > 0){
             $data['is_event_paid'] = 1;
@@ -602,7 +616,6 @@ class HomeController extends Controller
         return view('theme.event.' . $event->view_tpl,$data);
 
     }
-
 
     public function printSyllabusBySlug($slug = '')
     {
@@ -641,7 +654,6 @@ class HomeController extends Controller
         return $pdf->stream($fn);
 
     }
-
 
     public function getSMSVerification($slug){
 
@@ -698,7 +710,7 @@ class HomeController extends Controller
 
     }
 
-     public function giveAway(Request $request){
+    public function giveAway(Request $request){
 
         $validator = Validator::make($request->all(), [
             'cemail' => 'required|email',

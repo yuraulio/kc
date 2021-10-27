@@ -289,7 +289,7 @@ $.ajax({
 						$('.alert-outer').show()
 
 $("#doall")[0].reset(); // To reset form fields on success.
-fbq('track', 'Lead');
+//fbq('track', 'Lead');
             }
         });
 

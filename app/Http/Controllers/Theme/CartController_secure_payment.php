@@ -146,7 +146,7 @@ class CartController extends Controller
         $data['totalitems'] = $totalitems;
 
         $data['tigran'] = ['price' => $data['price'],'Product_id' => $data['eventId'], 'Product_SKU' => $data['eventId'],
-                    'ProductCatergory' => $data['categoryScript'], 'ProductName' =>  $ev->title, 'Quantity' => $totalitems,'TicketType'=>$ticketType
+                    'ProductCategory' => $data['categoryScript'], 'ProductName' =>  $ev->title, 'Quantity' => $totalitems,'TicketType'=>$ticketType,'Event_ID' => 'kc_' . time() 
         ];
 
         if(Auth::user()){

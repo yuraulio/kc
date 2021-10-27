@@ -1,0 +1,125 @@
+<?php 
+
+namespace App\Services;
+
+//require __DIR__ . '/vendor/autoload.php';
+
+use FacebookAds\Api;
+use FacebookAds\Logger\CurlLogger;
+use FacebookAds\Object\ServerSide\ActionSource;
+use FacebookAds\Object\ServerSide\Content;
+use FacebookAds\Object\ServerSide\CustomData;
+use FacebookAds\Object\ServerSide\DeliveryCategory;
+use FacebookAds\Object\ServerSide\Event;
+use FacebookAds\Object\ServerSide\EventRequest;
+use FacebookAds\Object\ServerSide\UserData;
+use Auth;
+
+class FBPixelService
+{
+
+    public $accessToken;
+    public $pixelID;
+
+    public function __construct(){
+
+        //knowcrunch
+        $this->accessToken = 'EAA3qLyUpL7kBAI4e5zZBqa2g3jxyNIZBLofS6Nk85UG5mMs9QuVHpokkgYHzxfZBNm0t1Ty2uAbpxqBSyj5yrhBGInDr9DW6u3RRbijMSw6XN27NoEMzcOnskWZAVjQ8quN53YX1XhFZAa1aanQ3BZAgRUiT4ZAAtdU3GJOpjWhIjRdzWsVyqZCP';//env('ACCESS_TOKEN');
+        $this->pixelID = '1745172385734431';//env('PIXEL_ID');
+
+        //$this->accessToken = 'EAAM3tzaF3aEBAPuliANvgmVV0Gacw7ziWDwANMD1l0LcQoerZCxCZCkqY2ZAKsix1vVTAtZBD4Ev15RcezaJNJqHTxhF7rKgHQoWfuXYEMe3kMDVX3znt3bT2P8zlUwiSe93HwtaljiHBcDzjwXeWenqCzH2Iqnuy4WCVlqlpaZABO4ZByN346';
+        //$this->pixelID = '811415882786573';
+
+
+        $api = Api::init(null, null, $this->accessToken);
+        $api->setLogger(new CurlLogger());
+
+    }
+
+    public function sendEvent($event,$data){
+
+        $user_data = (new UserData())
+            ->setClientIpAddress($_SERVER['REMOTE_ADDR'])
+            ->setClientUserAgent($_SERVER['HTTP_USER_AGENT']);
+   
+        //dd($data);
+        $content = (new Content())
+            ->setProductId($data['Product_id'])
+            ->setQuantity($data['Quantity']);
+            //->setItemPrice($data['price']);
+            //->setDeliveryCategory($data['ProductCategory']);
+
+        //dd($event);
+        $custom_data = (new CustomData())
+                ->setContents(array($content))
+                ->setCurrency('eur')
+                ->setValue($data['price']);
+        
+        $event = (new Event())
+                ->setEventName($event)
+                ->setEventTime(time())
+                ->setUserData($user_data)
+                ->setCustomData($custom_data);
+        
+        $events = array();
+        array_push($events, $event);
+        //TEST63100 knowcrunch
+        //TEST9833
+        $request = (new EventRequest($this->pixelID,['test_event_code'=>'TEST63100']))
+            ->setEvents($events);
+
+      
+
+        $response = $request->execute();
+
+        //dd($response);
+
+    }
+
+    private function getUserData(){
+
+        if($user = Auth::user()){
+
+            $user_data = (new UserData())
+                ->setEmail($user->email)
+                ->setPhone($user->mobile)
+                ->setFirstName($user->firstname)
+                ->setLastName($user->lastname)
+                //->setCountry($user->country)
+                ->setCity($user->city)
+                ->setClientIpAddress($_SERVER['REMOTE_ADDR'])
+                ->setClientUserAgent($_SERVER['HTTP_USER_AGENT']);
+
+        }else{
+            $user_data = (new UserData())
+                ->setClientIpAddress($_SERVER['REMOTE_ADDR'])
+                ->setClientUserAgent($_SERVER['HTTP_USER_AGENT']);
+        }
+        return $user_data;
+    }
+
+    public function sendLeaderEvent($event,$data){
+ 
+        $eventData = ['event_id' => $data['Event_ID'],'event_name'=>'Lead Event','event_source_url'=>url('/'),'action_source'=>'website'];
+        
+        $event = (new Event())
+                ->setEventName($event)
+                ->setEventTime(time())
+                ->setUserData($this->getUserData());
+        
+        $events = array();
+        array_push($events, $event);
+        //TEST63100 knowcrunch
+        //TEST9833
+        $request = (new EventRequest($this->pixelID,['test_event_code'=>'TEST63100']))
+            ->setEvents($events);
+
+      
+
+        $response = $request->execute();
+
+        //dd($response);
+
+    }
+
+}

@@ -30,12 +30,16 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use App\Model\CookiesSMS;
 use App\Notifications\WelcomeEmail;
+use App\Services\FBPixelService;
 
 class CartController extends Controller
 {
+    private $fbp;
 
-    public function __construct()
+    public function __construct(FBPixelService $fbp)
     {
+        $this->fbp = $fbp;
+
         $this->middleware('cart')->except('cartIndex','completeRegistration','validation','checkCode');
         $this->middleware('code.event')->only('completeRegistration');
         $this->middleware('registration.check')->except('cartIndex','completeRegistration','validation','checkCode','add');
@@ -247,6 +251,7 @@ class CartController extends Controller
             $ev = Event::find($event_id);
             if($ev) {
                 $data['eventId'] = $event_id;
+               
                 if($ev->view_tpl == 'event_free_coupon'){
                     $data['couponEvent'] = true;
                 }
@@ -321,7 +326,7 @@ class CartController extends Controller
         $data['totalitems'] = $totalitems;
 
         $data['tigran'] = ['price' => $data['price'],'Product_id' => $data['eventId'], 'Product_SKU' => $data['eventId'],
-                    'ProductCatergory' => $data['categoryScript'], 'ProductName' =>  $ev->title, 'Quantity' => $totalitems,'TicketType'=>$ticketType
+                    'ProductCatergory' => $data['categoryScript'], 'ProductName' =>  $ev->title, 'Quantity' => $totalitems,'TicketType'=>$ticketType,'Event_ID' => 'kc_' . time() 
         ];
 
         if(Auth::user()){
@@ -491,6 +496,8 @@ class CartController extends Controller
             $ukcid = $loggedin_user->kc_id;
             $data['kc_id'] = $ukcid;
         }
+
+        $this->fbp->sendLeaderEvent('Lead Event', $data['tigran']);
 
         if($data['type'] == 1 || $data['type'] == 2 || $data['type'] == 5){
             return view('theme.cart.new_cart.participant_special', $data);

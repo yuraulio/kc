@@ -138,7 +138,7 @@ class InfoController extends Controller
               
 
                 $data['tigran'] = ['OrderSuccess_id' => $this->transaction['id'], 'OrderSuccess_total' => $tr_price, 'price' => $tr_price,'Product_id' => $thisevent->id, 'Product_SKU' => $thisevent->id,
-                        'Product_SKU' => $thisevent->id,'ProductCatergory' => $categoryScript, 'ProductName' =>  $thisevent->title, 'Quantity' => $item->qty, 'TicketType'=>$stockHelper->type
+                        'Product_SKU' => $thisevent->id,'ProductCategory' => $categoryScript, 'ProductName' =>  $thisevent->title, 'Quantity' => $item->qty, 'TicketType'=>$stockHelper->type,'Event_ID' => 'kc_' . time() 
                 ];
 
                
