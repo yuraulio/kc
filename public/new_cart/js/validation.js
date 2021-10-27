@@ -1,4 +1,3 @@
-   
 $(function() {  
 
     jQuery.validator.addMethod(
@@ -31,51 +30,51 @@ $(function() {
         
 
         messages[`firstname[]`] = {}
-        messages[`firstname[]`]['required'] = "This field is required, enter your name"
-        messages[`firstname[]`]['lettersonly'] = "Please write everything in English"
+        messages[`firstname[]`]['required'] = "This field is required, enter your name."
+        messages[`firstname[]`]['lettersonly'] = "Please write everything in English."
 
         messages[`firstname[${index}]`] = {}
-        messages[`firstname[${index}]`]['required'] = "This field is required, enter your name"
-        messages[`firstname[${index}]`]['lettersonly'] = "Please write everything in English"
+        messages[`firstname[${index}]`]['required'] = "This field is required, enter your name."
+        messages[`firstname[${index}]`]['lettersonly'] = "Please write everything in English."
 
         messages[`lastname[]`] = {}
-        messages[`lastname[]`]['required'] = "This field is required, enter your last name"
-        messages[`lastname[]`]['lettersonly'] = "Please write everything in English"
+        messages[`lastname[]`]['required'] = "This field is required, enter your last name."
+        messages[`lastname[]`]['lettersonly'] = "Please write everything in English."
 
         messages[`lastname[${index}]`] = {}
-        messages[`lastname[${index}]`]['required'] = "This field is required, enter your last name"
-        messages[`lastname[${index}]`]['lettersonly'] = "Please write everything in English"
+        messages[`lastname[${index}]`]['required'] = "This field is required, enter your last name."
+        messages[`lastname[${index}]`]['lettersonly'] = "Please write everything in English."
 
         messages[`email[]`] = {}
-        messages[`email[]`]['required'] = "This field is required, enter your name"
+        messages[`email[]`]['required'] = "This field is required, enter your email."
 
         messages[`email[${index}]`] = {}
-        messages[`email[${index}]`]['required'] = "This field is required, enter your name"
+        messages[`email[${index}]`]['required'] = "This field is required, enter your email."
 
         messages[`company[]`] = {}
-        messages[`company[]`]['lettersonly'] = "Please write everything in English"
+        messages[`company[]`]['lettersonly'] = "Please write everything in English."
 
         messages[`company[${index}]`] = {}
-        messages[`company[${index}]`]['lettersonly'] = "Please write everything in English"
+        messages[`company[${index}]`]['lettersonly'] = "Please write everything in English."
 
         messages[`city[]`] = {}
-        messages[`city[]`]['lettersonly'] = "Please write everything in English"
+        messages[`city[]`]['lettersonly'] = "Please write everything in English."
 
         messages[`city[${index}]`] = {}
-        messages[`city[${index}]`]['lettersonly'] = "Please write everything in English"
+        messages[`city[${index}]`]['lettersonly'] = "Please write everything in English."
 
         messages[`mobile[]`] = {}
-        messages[`mobile[]`]['required'] = "This field is required, enter your name"
+        messages[`mobile[]`]['required'] = "This field is required, enter your phone."
 
         messages[`mobile[${index}]`] = {}
-        messages[`mobile[${index}]`]['required'] = "This field is required, enter your name"
+        messages[`mobile[${index}]`]['required'] = "This field is required, enter your phone."
 
         messages[`student_type_id[]`] = {}
-        messages[`student_type_id[]`]['required'] = "This field is required, enter your ID"
+        messages[`student_type_id[]`]['required'] = "This field is required, enter your ID."
 
 
         messages[`student_type_id[${index}]`] = {}
-        messages[`student_type_id[${index}]`]['required'] = "This field is required, enter your ID"
+        messages[`student_type_id[${index}]`]['required'] = "This field is required, enter your ID."
 
 
         messages[`country_code[]`] = {}
@@ -85,10 +84,10 @@ $(function() {
         messages[`country_code[${index}]`]['required'] = "select country"
 
         messages[`jobtitle[]`] = {}
-        messages[`jobtitle[]`]['lettersonly'] = "Please write everything in English"
+        messages[`jobtitle[]`]['lettersonly'] = "Please write everything in English."
 
         messages[`jobtitle[${index}]`] = {}
-        messages[`jobtitle[${index}]`]['lettersonly'] = "Please write everything in English"
+        messages[`jobtitle[${index}]`]['lettersonly'] = "Please write everything in English."
 
         //rules
         rules[`firstname[]`] = {}
@@ -157,7 +156,7 @@ $(function() {
 
     messages['terms_condition']={}
     rules['terms_condition']={}
-    messages['terms_condition']['required'] = "  Confirm that you accept our terms & conditions and data privacy policy"
+    messages['terms_condition']['required'] = "  Confirm that you accept our terms & conditions and data privacy policy."
     rules['terms_condition']['required'] = true
 
     $("form[name='participant-form']").validate({
@@ -207,27 +206,27 @@ $(function() {
         messages: {
 
             'billname': {
-                required: "This field is required, Enter Company or full name",      
-                lettersonly: "Please write everything in English"         
+                required: "This field is required, Enter Company or full name.",      
+                lettersonly: "Please write everything in English."         
             },
             'billafm': {
-                required: "This field is required, Enter VAT or tax ID",                
+                required: "This field is required, Enter VAT or tax ID.",                
             },    
             'billaddress': {
-                lettersonly: "Please write everything in English"  
+                lettersonly: "Please write everything in English."  
             },
             'billcity': {
-                lettersonly: "Please write everything in English"  
+                lettersonly: "Please write everything in English."  
             }, 
             'billstate': {
-                lettersonly: "Please write everything in English"  
+                lettersonly: "Please write everything in English."  
             },  
             
             'billcountry': {
-                lettersonly: "Please write everything in English"  
+                lettersonly: "Please write everything in English."  
             }, 
             'billemail': {
-                required: "This field is required, enter your email",
+                required: "This field is required, enter your email.",
             },
         },
         submitHandler: function(form) {

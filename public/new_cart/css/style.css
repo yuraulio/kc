@@ -418,7 +418,9 @@ label.custom-control-label{font-size:16px;}
 .powered-strip { font-size: 11px; padding: 3px 6px; }
 .checkout-selection-wrap h2{font-size:20px;}
 .checkout-selection-wrap h3{font-size:16px;line-height:1.2em;}
+.checkout-selection-wrap .datetime{font-size:16px;line-height:1.2em;}
 .checkout-price-wrap p{font-size:16px;}
+.checkout-button-coupon {margin-left: 0;}
 .checkout-coupon-code-wrap form { flex-direction: column; }
 .checkout-coupon-code-wrap .btn-2 {width:100%;margin-top:10px;}
 .checkout-selection-wrap{padding:60px 20px 40px;}
@@ -426,7 +428,7 @@ label.custom-control-label{font-size:16px;}
 footer .bank-details{padding:20px 0;margin-top:50px;}
 .address{padding:25px 0px;font-size:15px;}
 .checkout-step ul .counter{width:30px;height:30px;font-size:13px;}
-.checkout-step ul li{margin-bottom:10px;font-size:16px;}
+.checkout-step ul li{margin-bottom:13px;font-size:16px;}
 .checkout-coupon-code-wrap .input-groups{width:100%;}
 .card-input-wrap input{padding-left:51px;}
 .card-input-wrap img{max-width:30px;top:15px;}

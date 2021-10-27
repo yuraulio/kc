@@ -90,24 +90,27 @@ class Invoice extends Model
         //dd($this);
 
         $billInfo = '';
+        $billafm = '';
 
-        if($billing['billaddress']){
+        if(isset($billing['billaddress'])){
             $billInfo .= $billing['billaddress'];
         }
 
-        if($billing['billaddressnum']){
+        if(isset($billing['billaddressnum'])){
             $billInfo .= ' ' . $billing['billaddressnum'];
         }
 
-        if($billing['billpostcode']){
+        if(isset($billing['billpostcode'])){
             $billInfo .= ' ' . $billing['billpostcode'];
         }
 
-        if($billing['billcity']){
+        if(isset($billing['billcity'])){
             $billInfo .= ' ' . $billing['billcity'];
         }
 
-    
+        if(isset($billing['billafm'])){
+            $billafm = $billing['billafm'];
+        }
     
         if($this->amount - floor($this->amount)>0){
             $data['amount'] = number_format ($this->amount , 2 , ',', '.');
@@ -122,7 +125,7 @@ class Invoice extends Model
         $data['billInfo'] = $billInfo ;
         $data['invoice'] = $this->invoice ;
         $data['country'] = 'Ελλάδα';
-        $data['vat'] = $billing['billafm'];
+        $data['vat'] = $billafm;
         $data['footer'] = $this->event->first()->paymentMethod->first() ? $this->event->first()->paymentMethod->first()->footer : '';
 
         $this->instalments_remaining = $this->instalments_remaining - 1;
@@ -169,21 +172,26 @@ class Invoice extends Model
         //dd($this->transaction);
 
         $billInfo = '';
+        $billafm = '';
 
-        if($billing['billaddress']){
+        if(isset($billing['billaddress'])){
             $billInfo .= $billing['billaddress'];
         }
 
-        if($billing['billaddressnum']){
+        if(isset($billing['billaddressnum'])){
             $billInfo .= ' ' . $billing['billaddressnum'];
         }
 
-        if($billing['billpostcode']){
+        if(isset($billing['billpostcode'])){
             $billInfo .= ' ' . $billing['billpostcode'];
         }
 
-        if($billing['billcity']){
+        if(isset($billing['billcity'])){
             $billInfo .= ' ' . $billing['billcity'];
+        }
+
+        if(isset($billing['billafm'])){
+            $billafm = $billing['billafm'];
         }
     
     
@@ -244,7 +252,7 @@ class Invoice extends Model
         $data['billInfo'] = $billInfo ;
         $data['invoice'] = $newInvoice->invoice ;
         $data['country'] = 'Ελλάδα';
-        $data['vat'] = $billing['billafm'];
+        $data['vat'] = $billafm;
         $data['footer'] = $newInvoice->event->first()->paymentMethod->first() ? $newInvoice->event->first()->paymentMethod->first()->footer : '';
 
         $contxt = stream_context_create([
@@ -276,23 +284,27 @@ class Invoice extends Model
         $billing = json_decode($this->transaction->first()->billing_details,true);
 
         $billInfo = '';
+        $billafm = '';
 
-        if($billing['billaddress']){
+        if(isset($billing['billaddress'])){
             $billInfo .= $billing['billaddress'];
         }
 
-        if($billing['billaddressnum']){
+        if(isset($billing['billaddressnum'])){
             $billInfo .= ' ' . $billing['billaddressnum'];
         }
 
-        if($billing['billpostcode']){
+        if(isset($billing['billpostcode'])){
             $billInfo .= ' ' . $billing['billpostcode'];
         }
 
-        if($billing['billcity']){
+        if(isset($billing['billcity'])){
             $billInfo .= ' ' . $billing['billcity'];
         }
-    
+
+        if(isset($billing['billafm'])){
+            $billafm = $billing['billafm'];
+        }
         if($this->amount - floor($this->amount)>0){
             $data['amount'] = number_format ($this->amount , 2 , ',', '.');
         }else{
@@ -304,7 +316,7 @@ class Invoice extends Model
         $data['billInfo'] = $billInfo ;
         $data['invoice'] = $this->invoice ;
         $data['country'] = 'Ελλάδα';
-        $data['vat'] = $billing['billafm'];
+        $data['vat'] = $billafm;
         $data['footer'] = $this->event->first()->paymentMethod->first() ? $this->event->first()->paymentMethod->first()->footer : '';
 
         $contxt = stream_context_create([
