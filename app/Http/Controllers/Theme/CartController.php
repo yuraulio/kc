@@ -46,6 +46,7 @@ class CartController extends Controller
         //$this->middleware('registration.check');
         $this->middleware('billing.check')->only('billingIndex','billing','checkoutIndex');
         
+        $fbp->sendPageViewEvent();
 
     }
 
@@ -497,7 +498,8 @@ class CartController extends Controller
             $data['kc_id'] = $ukcid;
         }
 
-        $this->fbp->sendLeaderEvent('Lead Event', $data['tigran']);
+        $this->fbp->sendLeaderEvent($data['tigran']);
+        $this->fbp->sendAddToCart($data);
 
         if($data['type'] == 1 || $data['type'] == 2 || $data['type'] == 5){
             return view('theme.cart.new_cart.participant_special', $data);
@@ -750,6 +752,8 @@ class CartController extends Controller
             $ukcid = $loggedin_user->kc_id;
         }
 
+        $this->fbp->sendCompleteRegistrationEvent($data);
+
         return view('theme.cart.new_cart.billing', $data);
             
 
@@ -836,8 +840,8 @@ class CartController extends Controller
             $data['installments'] = [];
         }
 
-
         $data = $this->initCartDetails($data);
+        $this->fbp->sendAddPaymentInfoEvent($data);
 
         return view('theme.cart.new_cart.checkout', $data);
             

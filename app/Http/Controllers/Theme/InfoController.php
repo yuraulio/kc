@@ -24,11 +24,14 @@ use Illuminate\Support\Str;
 use \Carbon\Carbon;
 use App\Model\CookiesSMS;
 use App\Notifications\WelcomeEmail;
+use App\Services\FBPixelService;
 
 class InfoController extends Controller
 {
 
-    public function __construct()
+    public $fbp;
+
+    public function __construct(FBPixelService $fbp)
     {
         
         if (Session::has('transaction_id')) {
@@ -44,6 +47,9 @@ class InfoController extends Controller
         } else {
             $this->transaction = [];
         }
+
+        $this->fbp = $fbp;
+        $this->fbp->sendPageViewEvent();
         //dd($this->transaction);
     }
 
@@ -163,6 +169,8 @@ class InfoController extends Controller
             }
             //$user->cart->delete();
         }
+
+        $this->fbp->sendPurchaseEvent($data);
 
         //DESTROY CART HERE AND SESSION vars
         Cart::instance('default')->destroy();

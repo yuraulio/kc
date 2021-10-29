@@ -6,9 +6,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
+use App\Services\FBPixelService;
 
 class ContactUsController extends Controller
 {
+
+    public function __construct(FBPixelService $fbp){
+        $this->fbp = $fbp;
+    }
+
     public function sendEnquery(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -53,6 +59,8 @@ class ContactUsController extends Controller
                 //$m->cc('periklis.d@gmail.com', 'Perry D');
                 //$m->bcc('info@darkpony.com', null);
             });
+
+            $this->fbp->sendContactEvent();
 
             return [
                 'status' => 1,

@@ -41,11 +41,11 @@ class HomeController extends Controller
 {
     private $fbp;
 
-    public function __construct(/*FBPixelService $fbp*/)
+    public function __construct(FBPixelService $fbp)
     {
-        //$this->fbp = $fbp;
+        $this->fbp = $fbp;
         $this->middleware('auth.sms')->except('getSMSVerification','smsVerification');
-
+        $fbp->sendPageViewEvent();
 
         /*$this->middleware(function ($request, $next) {
             if(Auth::user()){
@@ -612,6 +612,8 @@ class HomeController extends Controller
         if(Auth::user() && count(Auth::user()->events->where('id',$event->id)) > 0){
             $data['is_event_paid'] = 1;
         }
+
+        $this->fbp->sendViewContentEvent($data);
 
         return view('theme.event.' . $event->view_tpl,$data);
 

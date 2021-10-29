@@ -65,7 +65,10 @@ class FBPixelService
         array_push($events, $event);
         //TEST63100 knowcrunch
         //TEST9833
-        $request = (new EventRequest($this->pixelID,['test_event_code'=>'TEST63100']))
+        /*$request = (new EventRequest($this->pixelID,['test_event_code'=>'TEST63100']))
+            ->setEvents($events);*/
+
+        $request = (new EventRequest($this->pixelID))
             ->setEvents($events);
 
       
@@ -98,12 +101,14 @@ class FBPixelService
         return $user_data;
     }
 
-    public function sendLeaderEvent($event,$data){
+    public function sendLeaderEvent($data){
  
-        $eventData = ['event_id' => $data['Event_ID'],'event_name'=>'Lead Event','event_source_url'=>url('/'),'action_source'=>'website'];
+        $eventData = ['event_id' => $data['Event_ID'],'event_name'=>'Lead','event_source_url'=>url('/'),'action_source'=>'website'];
+        //$eventData = ['event_id' => $data['Event_ID'],'event_source_url'=>url('/'),'action_source'=>'website'];
         
-        $event = (new Event())
-                ->setEventName($event)
+
+        $event = (new Event($eventData))
+                //->setEventName('Lead')
                 ->setEventTime(time())
                 ->setUserData($this->getUserData());
         
@@ -111,7 +116,40 @@ class FBPixelService
         array_push($events, $event);
         //TEST63100 knowcrunch
         //TEST9833
-        $request = (new EventRequest($this->pixelID,['test_event_code'=>'TEST63100']))
+        /*$request = (new EventRequest($this->pixelID,['test_event_code'=>'TEST63100']))
+            ->setEvents($events);*/
+
+        $request = (new EventRequest($this->pixelID))
+            ->setEvents($events);
+      
+
+        $response = $request->execute();
+
+        //dd($response);
+
+    }
+
+    public function sendViewContentEvent($data){
+ 
+        $eventData = ['event_id' => $data['tigran']['Event_ID'],'event_name'=>'View Content','event_source_url'=>url('/'),
+                        'action_source'=>'website', 'content_type' => 'product', 'contents' => [$data['tigran']['Product_id']], 
+                        'content_name' => $data['tigran']['ProductName'], 'content_category' => $data['tigran']['ProductCatergory'],'currency' => 'eur',
+                        'value' => $data['tigran']['price']
+                    ];
+        
+        $event = (new Event($eventData))
+                //->setEventName('View Content')
+                ->setEventTime(time())
+                ->setUserData($this->getUserData());
+        
+        $events = array();
+        array_push($events, $event);
+        //TEST63100 knowcrunch
+        //TEST9833
+        /*$request = (new EventRequest($this->pixelID,['test_event_code'=>'TEST63100']))
+            ->setEvents($events);*/
+
+        $request = (new EventRequest($this->pixelID))
             ->setEvents($events);
 
       
@@ -120,6 +158,195 @@ class FBPixelService
 
         //dd($response);
 
+    }
+
+    public function sendAddToCart($data){
+ 
+        $eventData = ['event_id' => $data['tigran']['Event_ID'],'event_name'=>'AddtoCart','event_source_url'=>url('/'),
+                        'action_source'=>'website', 'content_type' => 'product', 'contents' => [$data['tigran']['Product_id']], 
+                        'content_name' => $data['tigran']['ProductName'], 'content_category' => $data['tigran']['ProductCatergory'],'currency' => 'eur',
+                        'value' => $data['tigran']['price']
+                    ];
+        
+        $event = (new Event($eventData))
+                //->setEventName('AddtoCart')
+                ->setEventTime(time())
+                ->setUserData($this->getUserData());
+        
+        $events = array();
+        array_push($events, $event);
+        //TEST63100 knowcrunch
+        //TEST9833
+       /*$request = (new EventRequest($this->pixelID,['test_event_code'=>'TEST63100']))
+            ->setEvents($events);*/
+
+        $request = (new EventRequest($this->pixelID))
+            ->setEvents($events);
+      
+
+        $response = $request->execute();
+
+        //dd($response);
+
+    }
+
+    public function sendPurchaseEvent($data){
+ 
+        $eventData = ['event_id' => $data['tigran']['Event_ID'],'event_name'=>'Purchase Event','event_source_url'=>url('/'),
+                        'action_source'=>'website', 'content_type' => 'product', 'content_ids' => [$data['tigran']['Product_id']], 
+                        'currency' => 'eur', 'value' => $data['tigran']['price']
+                    ];
+        
+        $event = (new Event($eventData))
+                //->setEventName('Purchase')
+                ->setEventTime(time())
+                ->setUserData($this->getUserData());
+        
+        $events = array();
+        array_push($events, $event);
+        //TEST63100 knowcrunch
+        //TEST9833
+        /*$request = (new EventRequest($this->pixelID,['test_event_code'=>'TEST63100']))
+            ->setEvents($events);*/
+
+        /*$request = (new EventRequest($this->pixelID,['test_event_code'=>'TEST63100']))
+            ->setEvents($events);*/
+
+            $request = (new EventRequest($this->pixelID))
+            ->setEvents($events);
+
+      
+
+        $response = $request->execute();
+
+        //dd($response);
+
+    }
+
+    public function sendPageViewEvent(){
+ 
+        $eventData = ['event_id' => 'KC-' . time(),'event_name'=>'PageView','event_source_url'=>url('/'),'action_source'=>'website'];
+        
+        $event = (new Event($eventData))
+                //->setEventName('PageView')
+                ->setEventTime(time())
+                ->setUserData($this->getUserData());
+        
+        $events = array();
+        array_push($events, $event);
+        //TEST63100 knowcrunch
+        //TEST9833
+        /*$request = (new EventRequest($this->pixelID,['test_event_code'=>'TEST63100']))
+            ->setEvents($events);*/
+
+            $request = (new EventRequest($this->pixelID))
+            ->setEvents($events);
+
+      
+
+        $response = $request->execute();
+
+        //dd($response);
+
+    }
+
+    public function sendAddPaymentInfoEvent($data){
+ 
+        $eventData = ['event_id' => $data['tigran']['Event_ID'],'event_name'=>'View Content','event_source_url'=>url('/'),
+            'action_source'=>'website', 'content_type' => 'product', 'contents' => [$data['tigran']['Product_id']], 
+            'content_name' => $data['tigran']['ProductName'], 'content_category' => $data['tigran']['ProductCatergory'],'currency' => 'eur',
+        ];
+        $event = (new Event($eventData))
+                //->setEventName('Add Payment Info')
+                ->setEventTime(time())
+                ->setUserData($this->getUserData());
+        
+        $events = array();
+        array_push($events, $event);
+        
+        //TEST63100 knowcrunch
+        //TEST9833
+        /*$request = (new EventRequest($this->pixelID,['test_event_code'=>'TEST63100']))
+            ->setEvents($events);*/
+
+            $request = (new EventRequest($this->pixelID))
+            ->setEvents($events);
+
+        $response = $request->execute();
+
+        //dd($response);
+
+    }
+
+    public function sendCompleteRegistrationEvent($data){
+        
+        $eventData = ['event_id' => $data['tigran']['Event_ID'],'event_name'=>'Complete Registration','event_source_url'=>url('/'),
+            'action_source'=>'website','content_name' => $data['tigran']['ProductName'], 'currency' => 'eur','status'=>true
+        ];
+
+        $event = (new Event($eventData))
+                //->setEventName('Add Payment Info')
+                ->setEventTime(time())
+                ->setUserData($this->getUserData());
+
+        $events = array();
+        array_push($events, $event);
+
+        //TEST63100 knowcrunch
+        //TEST9833
+        /*$request = (new EventRequest($this->pixelID,['test_event_code'=>'TEST63100']))
+            ->setEvents($events);*/
+
+            $request = (new EventRequest($this->pixelID))
+            ->setEvents($events);
+
+        $response = $request->execute();
+    }
+
+    public function sendContactEvent(){
+        
+        $eventData = ['event_id' => 'KC-' . time(),'event_name'=>'Contact','event_source_url'=>url('/'),'action_source'=>'website'];
+
+        $event = (new Event($eventData))
+                //->setEventName('Add Payment Info')
+                ->setEventTime(time())
+                ->setUserData($this->getUserData());
+
+        $events = array();
+        array_push($events, $event);
+
+        //TEST63100 knowcrunch
+        //TEST9833
+        /*$request = (new EventRequest($this->pixelID,['test_event_code'=>'TEST63100']))
+            ->setEvents($events);*/
+
+            $request = (new EventRequest($this->pixelID))
+            ->setEvents($events);
+
+        $response = $request->execute();
+    }
+
+    public function sendStartTrialEvent(){
+        
+        $eventData = ['event_id' => 'KC-' . time(),'event_name'=>'Start Trial','event_source_url'=>url('/'),'action_source'=>'website'];
+
+        $event = (new Event($eventData))
+                //->setEventName('Add Payment Info')
+                ->setEventTime(time())
+                ->setUserData($this->getUserData());
+
+        $events = array();
+        array_push($events, $event);
+
+        //TEST63100 knowcrunch
+        //TEST9833
+        /*$request = (new EventRequest($this->pixelID,['test_event_code'=>'TEST63100']))
+            ->setEvents($events);*/
+
+            $request = (new EventRequest($this->pixelID))
+            ->setEvents($events);
+
+        $response = $request->execute();
     }
 
 }
