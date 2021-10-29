@@ -102,10 +102,10 @@ class FBPixelService
     }
 
     public function sendLeaderEvent($data){
- 
+
         $eventData = ['event_id' => $data['Event_ID'],'event_name'=>'Lead','event_source_url'=>url('/'),'action_source'=>'website'];
         //$eventData = ['event_id' => $data['Event_ID'],'event_source_url'=>url('/'),'action_source'=>'website'];
-        
+   
 
         $event = (new Event($eventData))
                 //->setEventName('Lead')
@@ -133,7 +133,7 @@ class FBPixelService
  
         $eventData = ['event_id' => $data['tigran']['Event_ID'],'event_name'=>'View Content','event_source_url'=>url('/'),
                         'action_source'=>'website', 'content_type' => 'product', 'contents' => [$data['tigran']['Product_id']], 
-                        'content_name' => $data['tigran']['ProductName'], 'content_category' => $data['tigran']['ProductCatergory'],'currency' => 'eur',
+                        'content_name' => $data['tigran']['ProductName'], 'content_category' => $data['tigran']['ProductCategory'],'currency' => 'eur',
                         'value' => $data['tigran']['price']
                     ];
         
@@ -161,10 +161,10 @@ class FBPixelService
     }
 
     public function sendAddToCart($data){
- 
-        $eventData = ['event_id' => $data['tigran']['Event_ID'],'event_name'=>'AddtoCart','event_source_url'=>url('/'),
-                        'action_source'=>'website', 'content_type' => 'product', 'contents' => [$data['tigran']['Product_id']], 
-                        'content_name' => $data['tigran']['ProductName'], 'content_category' => $data['tigran']['ProductCatergory'],'currency' => 'eur',
+        
+        $eventData = ['event_id' => $data['tigran']['Event_ID'].'p','event_name'=>'Add To Cart','event_source_url'=>url('/'),
+                        'action_source'=>'website', 'content_type' => 'product', 'content_ids' => [$data['tigran']['Product_id']], 
+                        'content_name' => $data['tigran']['ProductName'], 'content_category' => $data['tigran']['ProductCategory'],'currency' => 'eur',
                         'value' => $data['tigran']['price']
                     ];
         
@@ -192,6 +192,10 @@ class FBPixelService
 
     public function sendPurchaseEvent($data){
  
+        if(!isset($data['tigran'])){
+            return;
+        }
+
         $eventData = ['event_id' => $data['tigran']['Event_ID'],'event_name'=>'Purchase Event','event_source_url'=>url('/'),
                         'action_source'=>'website', 'content_type' => 'product', 'content_ids' => [$data['tigran']['Product_id']], 
                         'currency' => 'eur', 'value' => $data['tigran']['price']
@@ -252,9 +256,9 @@ class FBPixelService
 
     public function sendAddPaymentInfoEvent($data){
  
-        $eventData = ['event_id' => $data['tigran']['Event_ID'],'event_name'=>'View Content','event_source_url'=>url('/'),
+        $eventData = ['event_id' => $data['tigran']['Event_ID'],'event_name'=>'Add Payment Info','event_source_url'=>url('/'),
             'action_source'=>'website', 'content_type' => 'product', 'contents' => [$data['tigran']['Product_id']], 
-            'content_name' => $data['tigran']['ProductName'], 'content_category' => $data['tigran']['ProductCatergory'],'currency' => 'eur',
+            'content_name' => $data['tigran']['ProductName'], 'content_category' => $data['tigran']['ProductCategory'],'currency' => 'eur',
         ];
         $event = (new Event($eventData))
                 //->setEventName('Add Payment Info')
