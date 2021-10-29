@@ -79,8 +79,8 @@ class InitCertificate extends Command
             }
 
 
-            $certificateNumber =  date('m',$certificate->create_date) . date('y',$certificate->create_date) . str_pad($months[date('Y_m',$certificate->create_date)], 6, '0', STR_PAD_LEFT);
-
+            //$certificateNumber =  date('m',$certificate->create_date) . date('y',$certificate->create_date) . str_pad($months[date('Y_m',$certificate->create_date)], 6, '0', STR_PAD_LEFT);
+            $certificateNumber = get_certifation_crendetial2(date('m',$certificate->create_date) . date('y',$certificate->create_date));
             $certificate->certificate_title = ($certificate->success && $certificate->event->first()->certificate_title) ? $certificate->event->first()->certificate_title : $certificate->event->first()->title;
             $certificate->firstname = $certificate->user->first()->firstname;
             $certificate->lastname = $certificate->user->first()->lastname;

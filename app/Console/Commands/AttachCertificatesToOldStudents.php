@@ -44,7 +44,7 @@ class AttachCertificatesToOldStudents extends Command
     public function handle()
     {
 
-        $nonEvents = [96,1347,4611,4612,4613,4614,2035,4616,1214];
+        $nonEvents = [96,1347,4611,4612,4613,4614,2035,4616];
 
         $fileName =  public_path() . '/certificates_import/Users with kc id and events.xlsx';
         $spreadsheet = new Spreadsheet();
