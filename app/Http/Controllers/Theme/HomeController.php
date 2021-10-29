@@ -520,7 +520,7 @@ class HomeController extends Controller
         if($data['page']['template'] == 'corporate-template'){
             //$data['page']['template'] = 'corporate-template';
             $data['benefits'] = $page->benefits;
-            $data['corporatebrands'] = Logos::with('medias')->where('type', 'brands')->get();
+            $data['corporatebrands'] = Logos::with('medias')->where('type', 'corporate_brands')->where('status', true)->get();
         }else if($data['page']['template'] == 'instructors'){
             $data['instructors'] =  Instructor::with('medias', 'slugable')->orderBy('subtitle','asc')->where('status', 1)->get();
         }else if($data['page']['id'] == 800){

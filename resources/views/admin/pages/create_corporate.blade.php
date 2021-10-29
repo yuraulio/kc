@@ -32,6 +32,10 @@
          <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#media" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Media</a>
       </li>
 
+      <li class="nav-item">
+            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-3-tab" data-toggle="tab" href="#images" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="far fa-images mr-2"></i>Corporate Brands</a>
+      </li>
+
       {{--<li class="nav-item">
          <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#media_version" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Media Version</a>
       </li>--}}
@@ -147,6 +151,74 @@
             <a href="{{ route('media2.eventImage', $media) }}" target="_blank" class="btn btn-primary">{{ __('Versions') }}</a>
         </div>
     @endif
+
+    <div class="tab-pane fade" id="images" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
+
+    <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row align-items-center">
+                            <div class="col-8">
+                                <h3 class="mb-0">{{ __('Corporate Brands') }}</h3>
+                            </div>
+                                <div class="col-4 text-right">
+                                    <?php
+                                    $arr = [];
+                                    $arr['template'] = 'corporate_brands';
+                                    ?>
+                                    <a href="{{ route('logos.create', $arr) }}" class="btn btn-sm btn-primary">{{ __('Add') }} {{ __('Corporate Brands') }}</a>
+                                </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 mt-2">
+                        @include('alerts.success')
+                        @include('alerts.errors')
+                    </div>
+
+                    <div class="table-responsive py-4">
+                        <table class="table table-flush"  id="datatable-basic101">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">{{ __('Title') }}</th>
+                                    <th scope="col">{{ __('Created') }}</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($brands as $item)
+                                    <tr>
+                                        <td><a href="{{ route('logos.edit', $item) }}">{{ $item->name }}</td>
+                                        <td>{{ $item->created_at->format('d/m/Y H:i') }}</td>
+                                        <td class="text-right">
+                                        <?php //dd($user); ?>
+                                            <div class="dropdown">
+                                                <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fas fa-ellipsis-v"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                                    <a class="dropdown-item" href="{{ route('logos.edit', $item) }}">{{ __('Edit') }}</a>
+                                                    {{--<form action="{{ route('user.destroy', $user) }}" method="post">
+                                                        @csrf
+                                                        @method('delete')
+
+                                                        <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
+                                                            {{ __('Delete') }}
+                                                        </button>
+                                                    </form>--}}
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
 
    {{--<div class="tab-pane fade" id="media_version" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
       <div class="row">

@@ -89,7 +89,7 @@
 
                             @include('alerts.feedback', ['field' => 'type'])
                         </div>--}}
-
+                        <input type="hidden" name="type" value="{{$template}}">
 
                         <div class="form-group{{ $errors->has('summary') ? ' has-danger' : '' }}">
                            <label class="form-control-label" for="input-summary">{{ __('Logo Summary') }}</label>
