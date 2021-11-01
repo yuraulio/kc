@@ -331,8 +331,10 @@ class CartController extends Controller
         }else{
             $tr_price = number_format($data['price'] , 0 , '.', '');
         }
-        
-        $data['tigran'] = ['price' => $tr_price.'.00','Product_id' => $data['eventId'], 'Product_SKU' => $data['eventId'],
+        $tr_price = $tr_price.'.00';
+
+
+        $data['tigran'] = ['price' => (double)$tr_price,'Product_id' => $data['eventId'], 'Product_SKU' => $data['eventId'],
                     'ProductCategory' => $data['categoryScript'], 'ProductName' =>  $ev->title, 'Quantity' => $totalitems,'TicketType'=>$ticketType,'Event_ID' => 'kc_' . time() 
         ];
 
