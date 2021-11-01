@@ -247,12 +247,15 @@ var routesObj = {
 @endif
 
 
-@if(isset($tigran) && env('APP_DEBUG'))
+@if(isset($tigran) && !env('APP_DEBUG'))
 
       <script>
 
          @foreach($tigran as $key => $ti)
-            dataLayer.push({"{{$key}}": "{{$ti}}"})
+
+			
+			dataLayer.push({"{{$key}}": "{{$ti}}"})
+		
          @endforeach
 
       </script>

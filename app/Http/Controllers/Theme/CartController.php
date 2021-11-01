@@ -331,10 +331,9 @@ class CartController extends Controller
         }else{
             $tr_price = number_format($data['price'] , 0 , '.', '');
         }
-        $tr_price = $tr_price.'.00';
+        $tr_price = strval($tr_price);
 
-
-        $data['tigran'] = ['price' => (double)$tr_price,'Product_id' => $data['eventId'], 'Product_SKU' => $data['eventId'],
+        $data['tigran'] = ['price' => $tr_price.".00",'Product_id' => $data['eventId'], 'Product_SKU' => $data['eventId'],
                     'ProductCategory' => $data['categoryScript'], 'ProductName' =>  $ev->title, 'Quantity' => $totalitems,'TicketType'=>$ticketType,'Event_ID' => 'kc_' . time() 
         ];
 
@@ -344,7 +343,7 @@ class CartController extends Controller
         }else{
             $data['tigran']['Visitor_id'] = session()->getId();
         }
-
+        
         return $data;
 
     }
