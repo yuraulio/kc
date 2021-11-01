@@ -436,6 +436,11 @@ class HomeController extends Controller
         $lessons = [];
         $instructor = Instructor::with('event.category', 'mediable', 'event.lessons', 'event.slugable', 'event.city', 'event.summary1')->where('status',1)->find($page['id']);
         //dd($instructor['event'][0]);
+
+        if(!$instructor){
+            abort(404);
+        }
+
         $category = array();
 
         $data['title'] = '';
@@ -630,6 +635,7 @@ class HomeController extends Controller
 
         $data['content'] = Event::with('category', 'city', 'topic',)->find($data['content']['id']);
         $data['eventtopics']= $data['content']->topicsLessonsInstructors()['topics'];
+        $topicDescription = [];
 
         foreach($data['eventtopics'] as $key => $topic){
             //dd($key);
