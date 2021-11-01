@@ -247,7 +247,7 @@ var routesObj = {
 @endif
 
 
-@if(isset($tigran) && !env('APP_DEBUG'))
+@if(isset($tigran) && env('APP_DEBUG'))
 
       <script>
 

@@ -326,7 +326,14 @@ class CartController extends Controller
 
         $data['totalitems'] = $totalitems;
 
-        $data['tigran'] = ['price' => $data['price'],'Product_id' => $data['eventId'], 'Product_SKU' => $data['eventId'],
+        if($data['price'] - floor($data['price'])>0){
+            $tr_price = number_format($data['price'] , 2 , '.', ',');
+        }else{
+            $tr_price = number_format($data['price'] , 0 , '.', '');
+        }
+        
+
+        $data['tigran'] = ['price' => $tr_price,'Product_id' => $data['eventId'], 'Product_SKU' => $data['eventId'],
                     'ProductCategory' => $data['categoryScript'], 'ProductName' =>  $ev->title, 'Quantity' => $totalitems,'TicketType'=>$ticketType,'Event_ID' => 'kc_' . time() 
         ];
 
