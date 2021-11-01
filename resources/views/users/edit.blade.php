@@ -123,7 +123,7 @@
 
                         @include('alerts.error_self_update', ['key' => 'not_allow_profile'])
                         <div class="pl-lg-4">
-                            @if(Auth::user()->isAdmin())
+                            @if(Auth::user()->isAdmin() || Auth::user()->isAdministrator())
                             <?php //dd($user->statusAccount()->first()['completed']); ?>
                                 <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
                                     <div style="display:inline-flex;">

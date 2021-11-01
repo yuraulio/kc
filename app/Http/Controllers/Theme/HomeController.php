@@ -613,7 +613,7 @@ class HomeController extends Controller
             $data['is_event_paid'] = 1;
         }
 
-        $this->fbp->sendViewContentEvent($data);
+        //$this->fbp->sendViewContentEvent($data);
 
         return view('theme.event.' . $event->view_tpl,$data);
 
