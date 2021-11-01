@@ -135,16 +135,22 @@ class FBPixelService
     public function sendViewContentEvent($data){
  
         $eventData = ['event_id' => $data['tigran']['Event_ID'],'event_name'=>'View Content','event_source_url'=>url('/'),
-                        'action_source'=>'website', 'content_type' => 'product', 'contents' => [$data['tigran']['Product_id']], 
-                        'content_name' => $data['tigran']['ProductName'], 'content_category' => $data['tigran']['ProductCategory'],'currency' => 'EUR',
-                        'value' => $data['tigran']['price']
+                        'action_source'=>'website'
                     ];
+
+        $customData = ['contents' => [$data['tigran']['Product_id']], 
+                    'content_name' => $data['tigran']['ProductName'], 'content_category' => $data['tigran']['ProductCategory'],'currency' => 'EUR',
+                    'value' => $data['tigran']['price']
+        ];
         
-        $event = (new Event($eventData))
-                //->setEventName('View Content')
-                ->setEventTime(time())
-                ->setUserData($this->getUserData());
-        
+         $custom_data = new CustomData($customData);
+
+         $event = (new Event($eventData))
+                 //->setEventName('AddtoCart')
+                 ->setEventTime(time())
+                 ->setUserData($this->getUserData())
+                 ->setCustomData($custom_data);
+    
         $events = array();
         array_push($events, $event);
         //TEST63100 knowcrunch
@@ -164,17 +170,23 @@ class FBPixelService
     }
 
     public function sendAddToCart($data){
-        
+
         $eventData = ['event_id' => $data['tigran']['Event_ID'].'p','event_name'=>'AddToCart','event_source_url'=>url('/'),
-                        'action_source'=>'website', 'content_type' => 'product', 'content_ids' => [$data['tigran']['Product_id']], 
-                        'content_name' => $data['tigran']['ProductName'], 'content_category' => $data['tigran']['ProductCategory'],'currency' => 'EUR',
-                        'value' => $data['tigran']['price']
+                        'action_source'=>'website'
                     ];
+
+        $customData = ['content_type' => 'product', 'content_ids' => [$data['tigran']['Product_id']], 
+        'content_name' => $data['tigran']['ProductName'], 'content_category' => $data['tigran']['ProductCategory'],'currency' => 'EUR',
+        'value' => $data['tigran']['price']
+        ];
         
+        $custom_data = new CustomData($customData);
+
         $event = (new Event($eventData))
                 //->setEventName('AddtoCart')
                 ->setEventTime(time())
-                ->setUserData($this->getUserData());
+                ->setUserData($this->getUserData())
+                ->setCustomData($custom_data);
         
         $events = array();
         array_push($events, $event);
@@ -200,14 +212,20 @@ class FBPixelService
         }
 
         $eventData = ['event_id' => $data['tigran']['Event_ID'],'event_name'=>'Purchase Event','event_source_url'=>url('/'),
-                        'action_source'=>'website', 'content_type' => 'product', 'content_ids' => [$data['tigran']['Product_id']], 
-                        'currency' => 'EUR', 'value' => $data['tigran']['price']
+                        'action_source'=>'website'
                     ];
         
+                    $customData = ['content_type' => 'product', 'content_ids' => [$data['tigran']['Product_id']], 
+                    'currency' => 'EUR', 'value' => $data['tigran']['price']
+                    ];
+                    
+                    $custom_data = new CustomData($customData);
+
         $event = (new Event($eventData))
-                //->setEventName('Purchase')
+                //->setEventName('AddtoCart')
                 ->setEventTime(time())
-                ->setUserData($this->getUserData());
+                ->setUserData($this->getUserData())
+                ->setCustomData($custom_data);
         
         $events = array();
         array_push($events, $event);
@@ -260,13 +278,20 @@ class FBPixelService
     public function sendAddPaymentInfoEvent($data){
  
         $eventData = ['event_id' => $data['tigran']['Event_ID'],'event_name'=>'Add Payment Info','event_source_url'=>url('/'),
-            'action_source'=>'website', 'content_type' => 'product', 'contents' => [$data['tigran']['Product_id']], 
-            'content_name' => $data['tigran']['ProductName'], 'content_category' => $data['tigran']['ProductCategory'],'currency' => 'EUR',
+            'action_source'=>'website'
         ];
+
+        $customData = ['content_type' => 'product', 'contents' => [$data['tigran']['Product_id']], 
+        'content_name' => $data['tigran']['ProductName'], 'content_category' => $data['tigran']['ProductCategory'],'currency' => 'EUR',
+        ];
+
+        $custom_data = new CustomData($customData);
+
         $event = (new Event($eventData))
-                //->setEventName('Add Payment Info')
+                //->setEventName('AddtoCart')
                 ->setEventTime(time())
-                ->setUserData($this->getUserData());
+                ->setUserData($this->getUserData())
+                ->setCustomData($custom_data);
         
         $events = array();
         array_push($events, $event);
@@ -287,14 +312,20 @@ class FBPixelService
 
     public function sendCompleteRegistrationEvent($data){
         
-        $eventData = ['event_id' => $data['tigran']['Event_ID'],'event_name'=>'Complete Registration','event_source_url'=>url('/'),
-            'action_source'=>'website','content_name' => $data['tigran']['ProductName'], 'currency' => 'EUR','status'=>true
+        $eventData = ['event_id' => $data['tigran']['Event_ID'],'event_name'=>'CompleteRegistration','event_source_url'=>url('/'),
+            'action_source'=>'website'
         ];
 
+        $customData = ['content_name' => $data['tigran']['ProductName'], 'currency' => 'EUR','status'=>true,'value'=>$data['tigran']['price']
+        ];
+
+        $custom_data = new CustomData($customData);
+
         $event = (new Event($eventData))
-                //->setEventName('Add Payment Info')
+                //->setEventName('AddtoCart')
                 ->setEventTime(time())
-                ->setUserData($this->getUserData());
+                ->setUserData($this->getUserData())
+                ->setCustomData($custom_data);
 
         $events = array();
         array_push($events, $event);
