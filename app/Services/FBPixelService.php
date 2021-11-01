@@ -138,7 +138,7 @@ class FBPixelService
                         'action_source'=>'website'
                     ];
 
-        $customData = ['contents' => [$data['tigran']['Product_id']], 
+        $customData = ['content_ids' => [$data['tigran']['Product_id']], 
                     'content_name' => $data['tigran']['ProductName'], 'content_category' => $data['tigran']['ProductCategory'],'currency' => 'EUR',
                     'value' => $data['tigran']['price']
         ];
@@ -281,7 +281,7 @@ class FBPixelService
             'action_source'=>'website'
         ];
 
-        $customData = ['content_type' => 'product', 'contents' => [$data['tigran']['Product_id']], 
+        $customData = ['content_type' => 'product', 'content_ids' => [$data['tigran']['Product_id']], 
         'content_name' => $data['tigran']['ProductName'], 'content_category' => $data['tigran']['ProductCategory'],'currency' => 'EUR',
         ];
 
