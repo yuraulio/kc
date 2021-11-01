@@ -10,12 +10,13 @@ use Auth;
 use \Stripe\Stripe;
 use Mail;
 use Session;
-
+use App\Services\FBPixelService;
 
 class SubscriptionController extends Controller
 {
-    public function __construct()
+    public function __construct(FBPixelService $fbp)
     {
+        $this->fbp = $fbp;
         $this->middleware('event.subscription')->only(['index','store']);
     }
 
@@ -428,6 +429,8 @@ class SubscriptionController extends Controller
         <p>An email with more information is on its way to your inbox.</p>';
         //$data['info']['transaction'] = $this->transaction;
         //$data['info']['statusClass'] = 'success';
+
+        $this->fbp->sendStartTrialEvent();
 
         return view('theme.myaccount.subscription.subscription-success', $data);
 

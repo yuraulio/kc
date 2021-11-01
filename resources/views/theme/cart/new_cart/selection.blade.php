@@ -9,13 +9,13 @@
 						<h2>My selection:</h2>
                     
 						    <h3>{{ $item->name }}</h3>	
-						    @if($duration)<datetime="YYYY-MM-DDThh:mm:ssTZD">Sep14 - Dec 4, 2021</datetime="YYYY-MM-DDThh:mm:ssTZD">@endif
+						    @if($duration)<datetime="YYYY-MM-DDThh:mm:ssTZD"><span class="datetime">{{$duration}}</span></datetime="YYYY-MM-DDThh:mm:ssTZD">@endif
 						    <div class="checkout-price-wrap">
 						    	<div class="checkout-price">
 						    		<p>Price:</p><span>@if(is_numeric($price)) €{{$price}} @else {{$price}} @endif</span>
 						    	</div>
 						    	<div class="checkout-participant">
-						    		<p>Participant(s):</p><span>1</span>
+						    		<p>Participant(s):</p><span>{{$totalitems}}</span>
 						    	</div>
 						    	<div class="checkout-total">
 						    		<p class="mb-0">Total amount:</p><span class="color-secondary checkout-total-amount">@if(is_numeric($price)) €{{$price}} @else {{$price}} @endif </span>

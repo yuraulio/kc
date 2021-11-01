@@ -61,6 +61,7 @@ class LogosController extends Controller
 
         $data['logo'] = $logo;
         $data['media'] = $logo->mediable;
+        $data['template'] = $logo->type;
 
         return view('admin.logos.create',$data);
 

@@ -15,6 +15,7 @@ use App\Model\Plan;
 use Laravel\Cashier\Subscription;
 use Laravel\Cashier\Payment;
 use Laravel\Cashier\Cashier;
+use Session;
 
 class WebhookController extends BaseWebhookController
 {
@@ -54,15 +55,15 @@ class WebhookController extends BaseWebhookController
 		$data = $payload['data']['object'];
 		
 		if(env('PAYMENT_PRODUCTION')){
-            Stripe::setApiKey($user->events->where('id',$eventId)->first()->paymentMethod->first()->processor_options['secret_key']);
-            //Stripe::setApiKey(Event::findOrFail($eventId)->paymentMethod->first()->processor_options['secret_key']);
+            //Stripe::setApiKey($user->events->where('id',$eventId)->first()->paymentMethod->first()->processor_options['secret_key']);
+            Stripe::setApiKey(Event::findOrFail($eventId)->paymentMethod->first()->processor_options['secret_key']);
 
         }else{
-            Stripe::setApiKey($user->events->where('id',$eventId)->first()->paymentMethod->first()->test_processor_options['secret_key']);
-			//Stripe::setApiKey(Event::findOrFail($eventId)->paymentMethod->first()->test_processor_options['secret_key']);
+            //Stripe::setApiKey($user->events->where('id',$eventId)->first()->paymentMethod->first()->test_processor_options['secret_key']);
+			Stripe::setApiKey(Event::findOrFail($eventId)->paymentMethod->first()->test_processor_options['secret_key']);
         }
-		session()->put('payment_method',$user->events->where('id',$eventId)->first()->paymentMethod->first()->id);
-        //session()->put('payment_method',Event::findOrFail($eventId)->paymentMethod->first()->id);
+		//session()->put('payment_method',$user->events->where('id',$eventId)->first()->paymentMethod->first()->id);
+        session()->put('payment_method',Event::findOrFail($eventId)->paymentMethod->first()->id);
 		$subscription->metadata = ['installments_paid' => $count, 'installments' => $totalinst];
 		$subscription->save();
 		
@@ -279,11 +280,17 @@ class WebhookController extends BaseWebhookController
 		}else{
 			$eventId = $subscription->event->first()->pivot->event_id;
 			if(env('PAYMENT_PRODUCTION')){
-				Stripe::setApiKey($subscription->event->first()->paymentMethod->first()->processor_options['secret_key']);
+				//Stripe::setApiKey($subscription->event->first()->paymentMethod->first()->processor_options['secret_key']);
+				Stripe::setApiKey(Event::findOrFail($eventId)->paymentMethod->first()->processor_options['secret_key']);
 			}else{
-				Stripe::setApiKey($subscription->event->first()->paymentMethod->first()->test_processor_options['secret_key']);
+				//Stripe::setApiKey($subscription->event->first()->paymentMethod->first()->test_processor_options['secret_key']);
+				Stripe::setApiKey(Event::findOrFail($eventId)->paymentMethod->first()->test_processor_options['secret_key']);
+
 			}
-			session()->put('payment_method',$subscription->event->first()->paymentMethod->first()->id);
+			//session()->put('payment_method',$subscription->event->first()->paymentMethod->first()->id);
+			session()->put('payment_method',Event::findOrFail($eventId)->paymentMethod->first()->id);
+			
+
 		}
 		
 		
@@ -399,7 +406,6 @@ class WebhookController extends BaseWebhookController
 	
 	}
 	
-
 	private function sendEmail($elearningInvoice,$pdf){
 
 		$adminemail = 'info@knowcrunch.com';
@@ -442,10 +448,13 @@ class WebhookController extends BaseWebhookController
             });
 	}
 
-
-	/*protected function handleInvoicePaymentActionRequired(array $payload)
+	protected function handleInvoicePaymentActionRequired(array $payload)
     {
+		return $this->successMethod();
 
+		if(session()->has('noActionEmail') && session()->get('noActionEmail') == true){
+			return $this->successMethod();
+		}
 		//return $payload['data']['object']['subscription'];
 
         if (is_null($notification = config('cashier.payment_notification'))) {
@@ -475,20 +484,76 @@ class WebhookController extends BaseWebhookController
         }
 
         session()->put('payment_method',Event::findOrFail($eventId)->paymentMethod->first()->id);
-
+		$paymentMethod = Event::findOrFail($eventId)->paymentMethod->first() ? Event::findOrFail($eventId)->paymentMethod->first()->id : -1;
         if ($user) {
             //if (in_array(Notifiable::class, class_uses_recursive($user))) {
-                $payment = new Payment(Cashier::stripe()->paymentIntents->retrieve(
+                /*$payment = new Payment(Cashier::stripe()->paymentIntents->retrieve(
                     $payload['data']['object']['payment_intent'],session()->get('input')
+                ));*/
+
+				$payment = new Payment(Cashier::stripe()->paymentIntents->retrieve(
+                    $payload['data']['object']['payment_intent']
                 ));
 
-                $user->notify(new $notification($payment));
+                $user->notify(new $notification($payment,$paymentMethod));
 				
             //}
 			
         }
 		
         return $this->successMethod();
-    }*/
+    }
+
+	protected function handlePaymentIntentRequiresAction(array $payload)
+    {
+	
+		//return $payload['data']['object']['subscription'];
+
+        if (is_null($notification = config('cashier.payment_notification'))) {
+            return $this->successMethod();
+        }
+		
+		
+
+		$user = $this->getUserByStripeId($payload['data']['object']['customer']);
+		$subscription = $user->eventSubscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first();
+
+		if($subscription){
+			$eventId = $subscription->event->first()->id;
+		}else{
+			$subscription = $user->subscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first();
+			$eventId = explode('_',$subscription->stripe_price)[3];
+		}
+
+	
+		if(env('PAYMENT_PRODUCTION')){
+            //Stripe::setApiKey($user->events->where('id',$eventId)->first()->paymentMethod->first()->processor_options['secret_key']);
+            Stripe::setApiKey(Event::findOrFail($eventId)->paymentMethod->first()->processor_options['secret_key']);
+
+        }else{
+            //Stripe::setApiKey($user->events->where('id',$eventId)->first()->paymentMethod->first()->test_processor_options['secret_key']);
+			Stripe::setApiKey(Event::findOrFail($eventId)->paymentMethod->first()->test_processor_options['secret_key']);
+        }
+
+        session()->put('payment_method',Event::findOrFail($eventId)->paymentMethod->first()->id);
+		$paymentMethod = Event::findOrFail($eventId)->paymentMethod->first() ? Event::findOrFail($eventId)->paymentMethod->first()->id : -1;
+        if ($user) {
+            //if (in_array(Notifiable::class, class_uses_recursive($user))) {
+                /*$payment = new Payment(Cashier::stripe()->paymentIntents->retrieve(
+                    $payload['data']['object']['payment_intent'],session()->get('input')
+                ));*/
+
+				$payment = new Payment(Cashier::stripe()->paymentIntents->retrieve(
+                    $payload['data']['object']['payment_intent']
+                ));
+
+                $user->notify(new $notification($payment,$paymentMethod));
+				
+            //}
+			
+        }
+		
+        return $this->successMethod();
+    }
 
 }

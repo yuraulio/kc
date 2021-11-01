@@ -296,6 +296,31 @@ if (!function_exists('get_certifation_crendetial')){
 
     }
 
+    if (!function_exists('get_certifation_crendetial2')){
+
+        function get_certifation_crendetial2($date = null){
+    
+            if(!$date){
+                $date = date('Y-m');
+            }
+    
+            $index = 1;
+    
+            $certNumber = $date . str_pad($index, 6, '0', STR_PAD_LEFT);
+
+            while(Certificate::where('credential',$certNumber)->first()){
+                $index += 1;
+                $certNumber = $date . str_pad($index, 6, '0', STR_PAD_LEFT);
+            }
+
+            
+            $certificateNumber =  $certNumber = $date . str_pad($index, 6, '0', STR_PAD_LEFT);
+    
+            return $certificateNumber;
+    
+        }
+    }
+
 }
 
 

@@ -82,8 +82,9 @@ class PagesController extends Controller
         $data['slug'] = $page->slugable;
         $data['metas'] = $page->metable;
         $data['media'] = $page->mediable;
-
-        if($page->template == 'corporate_page'){
+  
+        if($page->template == "corporate-template"){
+            $data['brands'] = Logos::with('medias')->where('type', 'corporate_brands')->get();
             return view('admin.pages.create_corporate',$data);
         }else if($page->template == 'logos_page'){
             if($page['id'] == 800){

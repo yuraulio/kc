@@ -30,18 +30,23 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use App\Model\CookiesSMS;
 use App\Notifications\WelcomeEmail;
+use App\Services\FBPixelService;
 
 class CartController extends Controller
 {
+    private $fbp;
 
-    public function __construct()
+    public function __construct(FBPixelService $fbp)
     {
+        $this->fbp = $fbp;
+
         $this->middleware('cart')->except('cartIndex','completeRegistration','validation','checkCode');
         $this->middleware('code.event')->only('completeRegistration');
         $this->middleware('registration.check')->except('cartIndex','completeRegistration','validation','checkCode','add');
         //$this->middleware('registration.check');
         $this->middleware('billing.check')->only('billingIndex','billing','checkoutIndex');
         
+        $fbp->sendPageViewEvent();
 
     }
 
@@ -229,6 +234,7 @@ class CartController extends Controller
         $totalitems = 0;
         $ticketType = '';
         $data['curStock'] = 1;
+        $tr_price = 0;
 
         $c = Cart::content()->count();
         if ($c > 0) {
@@ -247,6 +253,7 @@ class CartController extends Controller
             $ev = Event::find($event_id);
             if($ev) {
                 $data['eventId'] = $event_id;
+               
                 if($ev->view_tpl == 'event_free_coupon'){
                     $data['couponEvent'] = true;
                 }
@@ -296,6 +303,7 @@ class CartController extends Controller
                         $ticketType = $tvalue->type;
                         $data['curStock'] = $tvalue->pivot->quantity;
                         $data['price'] = $tvalue->pivot->price * $totalitems;
+                        $tr_price = $tvalue->pivot->price * $totalitems;
                     }
                 }
                 break;
@@ -304,32 +312,43 @@ class CartController extends Controller
 
         if(Session::get('coupon_code')){
             $data['price'] = Session::get('coupon_price') * $totalitems;
+            $tr_price = Session::get('coupon_price') * $totalitems;
         }
 
         if($data['type'] == 'free_code' ){
             $data['price'] = 'Upon Coupon';
             $data['show_coupon'] = false;
             $ticketType = 'Upon Coupon';
+            $tr_price = 0;
 
         }else if($data['type'] == 'free' ){
             $data['price'] = 'Free';
             $data['show_coupon'] = false;
             $ticketType = 'Free';
+            $tr_price = 0;
         }
 
 
         $data['totalitems'] = $totalitems;
 
-        $data['tigran'] = ['price' => $data['price'],'Product_id' => $data['eventId'], 'Product_SKU' => $data['eventId'],
-                    'ProductCatergory' => $data['categoryScript'], 'ProductName' =>  $ev->title, 'Quantity' => $totalitems,'TicketType'=>$ticketType
+        if($tr_price - floor($tr_price)>0){
+            $tr_price = number_format($tr_price , 2 , '.', ',');
+        }else{
+            $tr_price = number_format($tr_price , 0 , '.', '');
+        }
+        $tr_price = strval($tr_price);
+
+        $data['tigran'] = ['price' => $tr_price.".00",'Product_id' => $data['eventId'], 'Product_SKU' => $data['eventId'],
+                    'ProductCategory' => $data['categoryScript'], 'ProductName' =>  $ev->title, 'Quantity' => $totalitems,'TicketType'=>$ticketType,'Event_ID' => 'kc_' . time() 
         ];
 
+       
         if(Auth::user()){
             $data['tigran']['User_id'] = Auth::user()->id;
         }else{
             $data['tigran']['Visitor_id'] = session()->getId();
         }
-
+        
         return $data;
 
     }
@@ -491,6 +510,9 @@ class CartController extends Controller
             $ukcid = $loggedin_user->kc_id;
             $data['kc_id'] = $ukcid;
         }
+
+        $this->fbp->sendLeaderEvent($data['tigran']);
+        $this->fbp->sendAddToCart($data);
 
         if($data['type'] == 1 || $data['type'] == 2 || $data['type'] == 5){
             return view('theme.cart.new_cart.participant_special', $data);
@@ -743,6 +765,8 @@ class CartController extends Controller
             $ukcid = $loggedin_user->kc_id;
         }
 
+        $this->fbp->sendCompleteRegistrationEvent($data);
+
         return view('theme.cart.new_cart.billing', $data);
             
 
@@ -829,8 +853,8 @@ class CartController extends Controller
             $data['installments'] = [];
         }
 
-
         $data = $this->initCartDetails($data);
+        $this->fbp->sendAddPaymentInfoEvent($data);
 
         return view('theme.cart.new_cart.checkout', $data);
             

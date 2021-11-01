@@ -212,7 +212,7 @@ class StudentController extends Controller
                 //$data['user']['events'][$event->id]['topics'] = $event['topic']->unique()->groupBy('topic_id')->toArray();
                 $data['events'][$event->id]['videos_progress'] = 0;//intval($event->progress($user));
                 $data['events'][$event->id]['videos_seen'] = '0/0';//$event->video_seen($user);
-                $data['events'][$event->id]['certs'] = [];
+                $data['events'][$event->id]['certs'] = $event->certificatesByUser($user->id);
 
                 $data['events'][$event->id]['mySubscription'] = [];
                 $data['events'][$event->id]['plans'] = [];
@@ -239,9 +239,10 @@ class StudentController extends Controller
                     $user->eventSubscriptions()->wherePivot('event_id',$event['id'])->first()->id : -1;
 
             }else{
+      
                 $data['events'][$event->id]['topics'] = $event->topicsLessonsInstructors()['topics'];
                 $data['events'][$event->id]['exams'] = [];
-                $data['events'][$event->id]['certs'] = [];
+                $data['events'][$event->id]['certs'] = $event->certificatesByUser($user->id);
                 $data['events'][$event->id]['view_tpl'] = $event['view_tpl'];
                 $data['events'][$event->id]['category'] = $event['category'];
                 $data['events'][$event->id]['summary1'] = $event['summary1'];

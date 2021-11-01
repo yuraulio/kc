@@ -252,7 +252,11 @@ var routesObj = {
       <script>
 
          @foreach($tigran as $key => $ti)
-            dataLayer.push({"{{$key}}": "{{$ti}}"})
+			@if($key == 'price')
+				dataLayer.push({"{{$key}}": {{$ti}}})
+			@else
+				dataLayer.push({"{{$key}}": "{{$ti}}"})
+			@endif		
          @endforeach
 
       </script>

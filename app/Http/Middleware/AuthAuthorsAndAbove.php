@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Auth;
+use Session;
 
 class AuthAuthorsAndAbove
 {
@@ -27,7 +28,7 @@ class AuthAuthorsAndAbove
         if(!$this->auth){
             return redirect()->to('admin')->withErrors(['You must login first.']);
         }
-       
+        
         if(!$this->auth->statusAccount->completed){
             Auth::logout();
             Session::invalidate();

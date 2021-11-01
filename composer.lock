@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "edd13dfb6354e138ef61a4faabb91817",
+    "content-hash": "e4d428312e2bad7d9bbda5fcde070b00",
     "packages": [
         {
             "name": "alexusmai/laravel-file-manager",
@@ -273,16 +273,16 @@
         },
         {
             "name": "composer/ca-bundle",
-            "version": "1.2.11",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/ca-bundle.git",
-                "reference": "0b072d51c5a9c6f3412f7ea3ab043d6603cb2582"
+                "reference": "679333688725c7dd043ff35c547100ccf512f051"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/0b072d51c5a9c6f3412f7ea3ab043d6603cb2582",
-                "reference": "0b072d51c5a9c6f3412f7ea3ab043d6603cb2582",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/679333688725c7dd043ff35c547100ccf512f051",
+                "reference": "679333688725c7dd043ff35c547100ccf512f051",
                 "shasum": ""
             },
             "require": {
@@ -329,7 +329,7 @@
             "support": {
                 "irc": "irc://irc.freenode.org/composer",
                 "issues": "https://github.com/composer/ca-bundle/issues",
-                "source": "https://github.com/composer/ca-bundle/tree/1.2.11"
+                "source": "https://github.com/composer/ca-bundle/tree/1.3.0"
             },
             "funding": [
                 {
@@ -345,7 +345,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-09-25T20:32:43+00:00"
+            "time": "2021-10-27T07:42:23+00:00"
         },
         {
             "name": "composer/package-versions-deprecated",
@@ -1392,6 +1392,50 @@
             "time": "2020-06-29T00:56:53+00:00"
         },
         {
+            "name": "facebook/php-business-sdk",
+            "version": "11.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/facebook/facebook-php-business-sdk.git",
+                "reference": "bd11628ea43903a95a656b8a5ea2789e4613b859"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/facebook/facebook-php-business-sdk/zipball/bd11628ea43903a95a656b8a5ea2789e4613b859",
+                "reference": "bd11628ea43903a95a656b8a5ea2789e4613b859",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.5 || ^7.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "1.3.3",
+                "phpunit/phpunit": "~8",
+                "symfony/finder": "~2.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "FacebookAds\\": "src/FacebookAds/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "PHP SDK for Facebook Business",
+            "homepage": "https://developers.facebook.com/",
+            "keywords": [
+                "ads",
+                "business",
+                "facebook",
+                "instagram",
+                "page",
+                "sdk"
+            ],
+            "support": {
+                "source": "https://github.com/facebook/facebook-php-business-sdk/tree/11.0.0"
+            },
+            "time": "2021-06-10T18:59:41+00:00"
+        },
+        {
             "name": "fideloper/proxy",
             "version": "4.4.1",
             "source": {
@@ -1508,16 +1552,16 @@
         },
         {
             "name": "giggsey/libphonenumber-for-php",
-            "version": "8.12.35",
+            "version": "8.12.36",
             "source": {
                 "type": "git",
                 "url": "https://github.com/giggsey/libphonenumber-for-php.git",
-                "reference": "7853af278d8866328b3df98ae998dbf5d4a5c907"
+                "reference": "385660e434e7ad4bf023dde39302e561199b9bb4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/7853af278d8866328b3df98ae998dbf5d4a5c907",
-                "reference": "7853af278d8866328b3df98ae998dbf5d4a5c907",
+                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/385660e434e7ad4bf023dde39302e561199b9bb4",
+                "reference": "385660e434e7ad4bf023dde39302e561199b9bb4",
                 "shasum": ""
             },
             "require": {
@@ -1577,7 +1621,7 @@
                 "issues": "https://github.com/giggsey/libphonenumber-for-php/issues",
                 "source": "https://github.com/giggsey/libphonenumber-for-php"
             },
-            "time": "2021-10-12T15:51:07+00:00"
+            "time": "2021-10-26T09:45:49+00:00"
         },
         {
             "name": "giggsey/locale",
@@ -2432,16 +2476,16 @@
         },
         {
             "name": "laravel/cashier",
-            "version": "v13.5.5",
+            "version": "v13.5.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/cashier-stripe.git",
-                "reference": "33b3e43d1fd485e89493c0a93b3e51d912dbac80"
+                "reference": "9f52c7ff452d095626b09d4e7f68f506d9d6a70d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/cashier-stripe/zipball/33b3e43d1fd485e89493c0a93b3e51d912dbac80",
-                "reference": "33b3e43d1fd485e89493c0a93b3e51d912dbac80",
+                "url": "https://api.github.com/repos/laravel/cashier-stripe/zipball/9f52c7ff452d095626b09d4e7f68f506d9d6a70d",
+                "reference": "9f52c7ff452d095626b09d4e7f68f506d9d6a70d",
                 "shasum": ""
             },
             "require": {
@@ -2508,20 +2552,20 @@
                 "issues": "https://github.com/laravel/cashier/issues",
                 "source": "https://github.com/laravel/cashier"
             },
-            "time": "2021-10-19T15:01:32+00:00"
+            "time": "2021-10-26T15:15:14+00:00"
         },
         {
             "name": "laravel/framework",
-            "version": "v8.67.0",
+            "version": "v8.68.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "fc52acafd069aedc079bf8f17d1a4af4ef489b1e"
+                "reference": "abe985ff1fb82dd04aab03bc1dc56e83fe61a59f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/fc52acafd069aedc079bf8f17d1a4af4ef489b1e",
-                "reference": "fc52acafd069aedc079bf8f17d1a4af4ef489b1e",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/abe985ff1fb82dd04aab03bc1dc56e83fe61a59f",
+                "reference": "abe985ff1fb82dd04aab03bc1dc56e83fe61a59f",
                 "shasum": ""
             },
             "require": {
@@ -2613,6 +2657,7 @@
                 "aws/aws-sdk-php": "Required to use the SQS queue driver, DynamoDb failed job storage and SES mail driver (^3.198.1).",
                 "brianium/paratest": "Required to run tests in parallel (^6.0).",
                 "doctrine/dbal": "Required to rename columns and drop SQLite columns (^2.13.3|^3.1.2).",
+                "ext-bcmath": "Required to use the multiple_of validation rule.",
                 "ext-ftp": "Required to use the Flysystem FTP driver.",
                 "ext-gd": "Required to use Illuminate\\Http\\Testing\\FileFactory::image().",
                 "ext-memcached": "Required to use the memcache cache driver.",
@@ -2679,7 +2724,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2021-10-22T13:27:12+00:00"
+            "time": "2021-10-27T12:31:46+00:00"
         },
         {
             "name": "laravel/legacy-factories",
@@ -5173,16 +5218,16 @@
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "3.0.10",
+            "version": "3.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "62fcc5a94ac83b1506f52d7558d828617fac9187"
+                "reference": "6e794226a35159eb06f355efe59a0075a16551dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/62fcc5a94ac83b1506f52d7558d828617fac9187",
-                "reference": "62fcc5a94ac83b1506f52d7558d828617fac9187",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/6e794226a35159eb06f355efe59a0075a16551dd",
+                "reference": "6e794226a35159eb06f355efe59a0075a16551dd",
                 "shasum": ""
             },
             "require": {
@@ -5264,7 +5309,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpseclib/phpseclib/issues",
-                "source": "https://github.com/phpseclib/phpseclib/tree/3.0.10"
+                "source": "https://github.com/phpseclib/phpseclib/tree/3.0.11"
             },
             "funding": [
                 {
@@ -5280,7 +5325,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-08-16T04:24:45+00:00"
+            "time": "2021-10-27T03:01:46+00:00"
         },
         {
             "name": "predis/predis",
@@ -5350,16 +5395,16 @@
         },
         {
             "name": "propaganistas/laravel-phone",
-            "version": "4.3.1",
+            "version": "4.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Propaganistas/Laravel-Phone.git",
-                "reference": "d85ce8af34d39afa39f96176c5ae645f0784e83c"
+                "reference": "947247c7c9fc7c340eb1d12df49db40d299535c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Propaganistas/Laravel-Phone/zipball/d85ce8af34d39afa39f96176c5ae645f0784e83c",
-                "reference": "d85ce8af34d39afa39f96176c5ae645f0784e83c",
+                "url": "https://api.github.com/repos/Propaganistas/Laravel-Phone/zipball/947247c7c9fc7c340eb1d12df49db40d299535c6",
+                "reference": "947247c7c9fc7c340eb1d12df49db40d299535c6",
                 "shasum": ""
             },
             "require": {
@@ -5411,9 +5456,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Propaganistas/Laravel-Phone/issues",
-                "source": "https://github.com/Propaganistas/Laravel-Phone/tree/4.3.1"
+                "source": "https://github.com/Propaganistas/Laravel-Phone/tree/4.3.2"
             },
-            "time": "2021-05-10T07:25:05+00:00"
+            "time": "2021-10-27T07:08:01+00:00"
         },
         {
             "name": "psr/container",
@@ -5675,30 +5720,30 @@
         },
         {
             "name": "psr/log",
-            "version": "2.0.0",
+            "version": "1.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "ef29f6d262798707a9edd554e2b82517ef3a9376"
+                "reference": "d49695b909c3b7628b6289db5479a1c204601f11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/ef29f6d262798707a9edd554e2b82517ef3a9376",
-                "reference": "ef29f6d262798707a9edd554e2b82517ef3a9376",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/d49695b909c3b7628b6289db5479a1c204601f11",
+                "reference": "d49695b909c3b7628b6289db5479a1c204601f11",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.0.0"
+                "php": ">=5.3.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0.x-dev"
+                    "dev-master": "1.1.x-dev"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Psr\\Log\\": "src"
+                    "Psr\\Log\\": "Psr/Log/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -5719,9 +5764,9 @@
                 "psr-3"
             ],
             "support": {
-                "source": "https://github.com/php-fig/log/tree/2.0.0"
+                "source": "https://github.com/php-fig/log/tree/1.1.4"
             },
-            "time": "2021-07-14T16:41:46+00:00"
+            "time": "2021-05-03T11:20:27+00:00"
         },
         {
             "name": "psr/simple-cache",
@@ -9741,27 +9786,26 @@
         },
         {
             "name": "fzaninotto/faker",
-            "version": "dev-master",
+            "version": "v1.9.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fzaninotto/Faker.git",
-                "reference": "5ffe7db6c80f441f150fc88008d64e64af66634b"
+                "reference": "848d8125239d7dbf8ab25cb7f054f1a630e68c2e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/5ffe7db6c80f441f150fc88008d64e64af66634b",
-                "reference": "5ffe7db6c80f441f150fc88008d64e64af66634b",
+                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/848d8125239d7dbf8ab25cb7f054f1a630e68c2e",
+                "reference": "848d8125239d7dbf8ab25cb7f054f1a630e68c2e",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.3.3 || ^7.0 || ^8.0"
+                "php": "^5.3.3 || ^7.0"
             },
             "require-dev": {
                 "ext-intl": "*",
                 "phpunit/phpunit": "^4.8.35 || ^5.7",
                 "squizlabs/php_codesniffer": "^2.9.2"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -9790,10 +9834,10 @@
             ],
             "support": {
                 "issues": "https://github.com/fzaninotto/Faker/issues",
-                "source": "https://github.com/fzaninotto/Faker/tree/master"
+                "source": "https://github.com/fzaninotto/Faker/tree/v1.9.2"
             },
             "abandoned": true,
-            "time": "2020-12-11T09:59:14+00:00"
+            "time": "2020-12-11T09:56:16+00:00"
         },
         {
             "name": "hamcrest/hamcrest-php",
@@ -11979,5 +12023,5 @@
         "php": "^7.3.0|^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }

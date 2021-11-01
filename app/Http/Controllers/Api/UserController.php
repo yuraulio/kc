@@ -474,9 +474,9 @@ class UserController extends Controller
 
                                 if(isset($videos[$vimeo_id])){
 
-                                    $arr_lesson['video_info']['seen'] = $videos[$vimeo_id]['seen'];
-                                    $arr_lesson['video_info']['stop_time'] = $videos[$vimeo_id]['stop_time'];
-                                    $arr_lesson['video_info']['percentMinutes'] = $videos[$vimeo_id]['percentMinutes'];
+                                    $arr_lesson['video_info']['seen'] = strval($videos[$vimeo_id]['seen']);
+                                    $arr_lesson['video_info']['stop_time'] = strval($videos[$vimeo_id]['stop_time']);
+                                    $arr_lesson['video_info']['percentMinutes'] = strval($videos[$vimeo_id]['percentMinutes']);
                                 }else{
                                     $arr_lesson['video_info']['seen'] = "0";
                                     $arr_lesson['video_info']['stop_time'] = "0";
