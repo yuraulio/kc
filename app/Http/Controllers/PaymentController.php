@@ -10,6 +10,7 @@ use Laravel\Cashier\Payment;
 use App\Model\PaymentMethod;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
+use Session;
 
 class PaymentController extends Controller
 {
@@ -35,6 +36,8 @@ class PaymentController extends Controller
         $input = decrypt($input);
         $paymentMethod = $input['paymentMethod'];
         session()->put('payment_method',$paymentMethod);
+        Session::put('noActionEmail',true);
+
         $paymentMethod = PaymentMethod::find($paymentMethod);
 
         //dd($request->all());
