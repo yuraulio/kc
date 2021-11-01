@@ -463,7 +463,6 @@ Route::group(['middleware' => 'auth.elearning' ], function () {
     Route::post('getdropbox', [ 'as' => 'getDropbox' , 'uses' => 'Theme\StudentController@getDownloadLink' ]);
 });
 
-
 Route::group(['middleware' => ['web']], function () {
     //Authentication
     Route::post('checkoutlogin', 'Auth\LoginController@checkoutauth');
@@ -485,7 +484,6 @@ Route::group(['middleware' => 'auth'], function () {
 Route::group([ 'prefix' => 'print'], function () {
     Route::get('syllabus/{slug}', 'Theme\HomeController@printSyllabusBySlug');
 });
-
 
 Route::group([ 'prefix' => 'payment-dispatch'], function () {
 
@@ -588,6 +586,8 @@ Route::group(['middleware' => ['web']], function () {
 //Route::get('/stripe/payment/{id}/{paymentMethod}', 'PaymentController@show')->name('payment');
 Route::get('/stripe/payment/{id}/{input}', '\Laravel\Cashier\Http\Controllers\PaymentController@show')->name('payment');
 Route::post('/stripe/payment/securee', 'Theme\CartController@securePayment')->name('payment.secure');
+Route::get('/payment/required/{id}/{paymentMethod}', '\Laravel\Cashier\Http\Controllers\PaymentController@requiredAction')->name('payment.required');
+//Route::post('/stripe/payment/required', 'Theme\CartController@requiredAction')->name('payment.required');
 
 Route::group(['middleware' => ['preview','web','auth.sms']], function () {
 

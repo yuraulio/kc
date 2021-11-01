@@ -992,7 +992,7 @@ class CartController extends Controller
                         //./ngrok authtoken 69hUuQ1DgonuoGjunLYJv_3PVuHFueuq5Kiuz7S1t21
                         // Create the plan to subscribe
                         $desc = $installments . ' installments';
-                        $planid = 'plan_'.$dpuser->id.'_E_'.$ev->id.'_T_'.$ticket_id.'_x'.$installments;
+                        $planid = 'plan_'.$dpuser->id.'_Efshffsdfsddsgfdfsddf_'.$ev->id.'_T_'.$ticket_id.'_x'.$installments;
                         $name = $ev_title . ' ' . $ev_date_help . ' | ' . $desc;
                         //dd(str_replace('.','',$instamount) . '00');
 
@@ -1015,13 +1015,16 @@ class CartController extends Controller
                             ->onPlan($planid)
                             ->create(['metadata' => ['installments_paid' => 0, 'installments' => $installments]])
                         ;*/
-                        $input['paymentMethod'] = $payment_method_id;
-                        $input['amount'] = $namount;
-                        $input['couponCode'] = $couponCode;
-    
-                        $input = encrypt($input);
-                        session()->put('input',$input);
-                        ///try{
+
+                        $payment_method_id = -1;
+                        if($ev->paymentMethod->first()){
+                            
+                            $payment_method_id = $ev->paymentMethod->first()->id;
+                               
+                        }
+
+              
+                        try{
                             $charge = $dpuser->newSubscription($name, $plan->id)->create($input['payment_method'],
                             ['email' => $dpuser->email],
                                         ['metadata' => ['installments_paid' => 0, 'installments' => $installments]]);
@@ -1029,7 +1032,9 @@ class CartController extends Controller
                             $charge->metadata = json_encode(['installments_paid' => 0, 'installments' => $installments]);
                             $charge->price = $instamount;
                             $charge->save();
-                        /*}catch(\Laravel\Cashier\Exceptions\IncompletePayment $exception){
+
+                        
+                        }catch(\Laravel\Cashier\Exceptions\IncompletePayment $exception){
                             $payment_method_id = -1;
                             if($ev->paymentMethod->first()){
                                 
@@ -1043,9 +1048,11 @@ class CartController extends Controller
         
                             $input = encrypt($input);
                             session()->put('input',$input);
-                            return '/';
-                            ///return 'stripe/payment/' . $exception->payment->id . '/' . $input;
-                        }*/
+                            session()->put('noActionEmail',true);
+
+                            //return '/';
+                            return 'stripe/payment/' . $exception->payment->id . '/' . $input;
+                        }
 
                         
 

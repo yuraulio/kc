@@ -20,7 +20,7 @@ class PaymentController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(VerifyRedirectUrl::class);
+        //$this->middleware(VerifyRedirectUrl::class);
     }
 
     /**
@@ -31,6 +31,7 @@ class PaymentController extends Controller
      */
     public function show($id,$input)
     {
+        //dd('dfa');
         $input = decrypt($input);
         $paymentMethod = $input['paymentMethod'];
         session()->put('payment_method',$paymentMethod);
@@ -62,5 +63,46 @@ class PaymentController extends Controller
             'redirect' => url(request('redirect', '/')),
             'input' => $input,
         ]);
+    }
+
+    public function requiredAction($id,$paymentMethod)
+    {
+        $paymentMethod = decrypt($paymentMethod);
+        session()->put('payment_method',$paymentMethod);
+        $paymentMethod = PaymentMethod::find($paymentMethod);
+
+        $payment = new Payment(Cashier::stripe()->paymentIntents->retrieve(
+            $id, ['expand' => ['payment_method']])
+        );
+
+        $paymentIntent = Arr::only($payment->asStripePaymentIntent()->toArray(), [
+            'id', 'status', 'payment_method_types', 'client_secret', 'payment_method',
+        ]);
+
+        $paymentIntent['payment_method'] = Arr::only($paymentIntent['payment_method'] ?? [], 'id');
+    
+        $payment = new Payment(Cashier::stripe()->paymentIntents->retrieve(
+            $id, ['expand' => ['payment_method']])
+        );
+
+        $paymentIntent = Arr::only($payment->asStripePaymentIntent()->toArray(), [
+            'id', 'status', 'payment_method_types', 'client_secret', 'payment_method',
+        ]);
+
+        $paymentIntent['payment_method'] = Arr::only($paymentIntent['payment_method'] ?? [], 'id');
+
+        return view('cashier.action_required', [
+            'stripeKey' => env('PAYMENT_PRODUCTION') ? $paymentMethod->processor_options['key'] : $paymentMethod->test_processor_options['key'],
+            'amount' => $payment->amount(),
+            'payment' => $payment,
+            'paymentIntent' => array_filter($paymentIntent),
+            'paymentMethod' => (string) request('source_type', optional($payment->payment_method)->type),
+            'errorMessage' => request('redirect_status') === 'failed'
+                ? 'Something went wrong when trying to confirm the payment. Please try again.'
+                : '',
+            'customer' => $payment->customer(),
+            'redirect' => url(request('redirect', '/')),
+        ]);
+
     }
 }

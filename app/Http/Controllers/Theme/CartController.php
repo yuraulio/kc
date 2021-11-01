@@ -234,6 +234,7 @@ class CartController extends Controller
         $totalitems = 0;
         $ticketType = '';
         $data['curStock'] = 1;
+        $tr_price = 0;
 
         $c = Cart::content()->count();
         if ($c > 0) {
@@ -302,6 +303,7 @@ class CartController extends Controller
                         $ticketType = $tvalue->type;
                         $data['curStock'] = $tvalue->pivot->quantity;
                         $data['price'] = $tvalue->pivot->price * $totalitems;
+                        $tr_price = $tvalue->pivot->price * $totalitems;
                     }
                 }
                 break;
@@ -310,26 +312,29 @@ class CartController extends Controller
 
         if(Session::get('coupon_code')){
             $data['price'] = Session::get('coupon_price') * $totalitems;
+            $tr_price = Session::get('coupon_price') * $totalitems;
         }
 
         if($data['type'] == 'free_code' ){
             $data['price'] = 'Upon Coupon';
             $data['show_coupon'] = false;
             $ticketType = 'Upon Coupon';
+            $tr_price = 0;
 
         }else if($data['type'] == 'free' ){
             $data['price'] = 'Free';
             $data['show_coupon'] = false;
             $ticketType = 'Free';
+            $tr_price = 0;
         }
 
 
         $data['totalitems'] = $totalitems;
 
-        if($data['price'] - floor($data['price'])>0){
-            $tr_price = number_format($data['price'] , 2 , '.', ',');
+        if($tr_price - floor($tr_price)>0){
+            $tr_price = number_format($tr_price , 2 , '.', ',');
         }else{
-            $tr_price = number_format($data['price'] , 0 , '.', '');
+            $tr_price = number_format($tr_price , 0 , '.', '');
         }
         $tr_price = strval($tr_price);
 
