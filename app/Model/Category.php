@@ -142,5 +142,28 @@ class Category extends Model
         return $students;
     }
 
+    /*public function getEventStatus(){
+
+        return $this->morphedByMany(Event::class, 'categoryable')->latest('published_at');
+
+        $events = $this->events()->orderBy('published_at','desc');
+
+        //return $this->morphedByMany(Event::class, 'categoryable')->orderBy('published_at','desc')->first();
+        if($events->first() && $events->first()->status == 0){
+            return 'opened';
+        }else if($events->first() && $events->first()->status == 1){
+            return 'closed';
+        }
+        else if($events->first() && $events->first()->status == 2){
+            return 'soldout';
+        }
+        else if($events->first() && $events->first()->status == 3){
+            return 'completed';
+        }
+
+        return 'closed';
+
+    }*/
+
 
 }

@@ -26,8 +26,9 @@ class TopicController extends Controller
         $user = Auth::user();
         $topics = $model->with('category')->get();
 
+        //$categories = Category::with('topics','getEventStatus')->get();
         $categories = Category::with('topics')->get();
-        //dd($categories);
+        //dd($categories->first()['getEventStatus'][44]);
         return view('topics.index', ['topics' => $topics, 'user' => $user, 'categories' => $categories]);
     }
 

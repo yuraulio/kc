@@ -19,6 +19,23 @@
             <li class="breadcrumb-item"><a href="{{ route('topics.index') }}">{{ __('Topics Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
         @endcomponent
+
+        <div id="topics_info" class="row d-none">
+            <div class="col-xl-3 col-md-6">
+                <div class="card card-stats">
+                    <!-- Card body -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <h5 class="card-title text-uppercase text-muted mb-0">Total Topics:</h5>
+                                <span id="total" class="h2 font-weight-bold mb-0"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     @endcomponent
 
     <div class="container-fluid mt--6">
@@ -118,10 +135,10 @@
                     </div> -->
 
                     <div class="accordion" id="accordionTopicMain">
-
+                        
                         @foreach($categories as $category)
 
-                        <div id="{{$category['id']}}" class="card">
+                        <div id="{{$category['id']}}" class="card card-tables">
                             <div class="card-header" id="catt_{{$category['id']}}" data-toggle="collapse" data-target="#cat_{{$category['id']}}" aria-expanded="false" aria-controls="collapseOne">
                                 <h5 class="mb-0">{{$category->name}}</h5>
                             </div>
@@ -267,7 +284,7 @@
                 }
 
 
-
+                countTopics()
             })
 
             $.each(categories, function(key, value) {
@@ -276,6 +293,8 @@
                 `
                 $('#col1_filter').append(row)
             })
+
+            
         });
 
     </script>
@@ -438,6 +457,32 @@
 
     }
 
+</script>
+
+<script>
+
+
+    $(document).ready(function(){
+        countTopics();
+    })
+
+    function countTopics(){
+
+        let topicsSum = 0;
+
+        $('.card-tables').each(function(i, obj) {
+
+            if(!$(this).hasClass('d-none')){
+                topicsSum += $(this).find('.datatable-basic39').DataTable().rows().count();
+
+            }
+            
+        });
+
+        $("#total").text(topicsSum);
+        $('#topics_info').removeClass('d-none')
+    }
+   
 </script>
 
 @endpush
