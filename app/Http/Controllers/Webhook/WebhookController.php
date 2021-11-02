@@ -448,13 +448,13 @@ class WebhookController extends BaseWebhookController
             });
 	}
 
-	protected function handleInvoicePaymentActionRequired(array $payload)
+	/*protected function handleInvoicePaymentActionRequired(array $payload)
     {
 		
 
 		if( !isset($payload['data']['object']['billing_reason']) || (isset($payload['data']['object']['billing_reason']) && 
 				$payload['data']['object']['billing_reason'] == 'subscription_create' ) ){
-					
+
 			return $this->successMethod();
 		}
 		//return $payload['data']['object']['subscription'];
@@ -493,7 +493,7 @@ class WebhookController extends BaseWebhookController
                     $payload['data']['object']['payment_intent'],session()->get('input')
                 ));*/
 
-				$payment = new Payment(Cashier::stripe()->paymentIntents->retrieve(
+				/*$payment = new Payment(Cashier::stripe()->paymentIntents->retrieve(
                     $payload['data']['object']['payment_intent']
                 ));
 
@@ -504,7 +504,7 @@ class WebhookController extends BaseWebhookController
         }
 		
         return $this->successMethod();
-    }
+    }*/
 
 	
 
