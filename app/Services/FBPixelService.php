@@ -179,7 +179,11 @@ class FBPixelService
         'content_name' => $data['tigran']['ProductName'], 'content_category' => $data['tigran']['ProductCategory'],'currency' => 'EUR',
         'value' => $data['tigran']['price']
         ];
-        
+
+
+
+
+        //dd($customData);
         $custom_data = new CustomData($customData);
 
         $event = (new Event($eventData))
@@ -187,6 +191,7 @@ class FBPixelService
                 ->setEventTime(time())
                 ->setUserData($this->getUserData())
                 ->setCustomData($custom_data);
+        
         
         $events = array();
         array_push($events, $event);
@@ -198,10 +203,7 @@ class FBPixelService
         $request = (new EventRequest($this->pixelID))
             ->setEvents($events);
       
-
         $response = $request->execute();
-
-        //dd($response);
 
     }
 
