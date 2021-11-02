@@ -266,7 +266,7 @@ class FBPixelService
         /*$request = (new EventRequest($this->pixelID,['test_event_code'=>'TEST63100']))
             ->setEvents($events);*/
 
-            $request = (new EventRequest($this->pixelID))
+        $request = (new EventRequest($this->pixelID))
             ->setEvents($events);
 
       
