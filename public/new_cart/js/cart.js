@@ -33,6 +33,7 @@ $(document).on('click', '.registration', function(e) {
                 $('#participant-form').find("input[type=text]").removeClass('verror');
                 if (Number(data.status) === 0) {
                     //var html = '<ul>';
+                    $("#participant-form").valid();
                     $.each(data.errors, function (key, row) {
                         
                         key = Number(key.split('.')[1]);
@@ -42,7 +43,7 @@ $(document).on('click', '.registration', function(e) {
 
                     });
 
-                    $("#participant-form").valid();
+                    //$("#participant-form").valid();
                 } else {
 
                     $("#participant-form").submit();
