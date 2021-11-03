@@ -7,6 +7,7 @@ use App\Model\Logos;
 use Illuminate\Http\Request;
 use App\Http\Requests\PagesRequest;
 use Illuminate\Support\Facades\Auth;
+use App\Model\User;
 
 class PagesController extends Controller
 {
@@ -82,6 +83,8 @@ class PagesController extends Controller
         $data['slug'] = $page->slugable;
         $data['metas'] = $page->metable;
         $data['media'] = $page->mediable;
+
+        
   
         if($page->template == "corporate-template"){
             $data['brands'] = Logos::with('medias')->where('type', 'corporate_brands')->get();
@@ -108,6 +111,35 @@ class PagesController extends Controller
     public function update(Request $request, Pages $page)
     {
         $page->update($request->all());
+
+        if($page->id == 4754){
+
+            $users = User::all();
+            foreach($users as $user){
+                if($user->instructor->first()){
+                    continue;
+                }
+                if(!$request->terms){
+                    $user->terms = $request->terms;
+                    $user->save();
+                }
+                
+            }
+
+        }elseif($page->id == 4753){
+            
+            $users = User::all();
+            foreach($users as $user){
+                if(!$user->instructor->first()){
+                    continue;
+                }
+                if(!$request->terms){
+                    $user->terms = $request->terms;
+                    $user->save();
+                }
+            }
+        }
+
         return redirect()->route('pages.edit',$page->id)->withStatus(__('Page successfully updated.'));
         //return redirect()->route('pages.index')->withStatus(__('Page successfully updated.'));
     }

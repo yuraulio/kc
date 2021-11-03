@@ -11,6 +11,7 @@ use \Apifon\Resource\SMSResource;
 use Auth;
 use App\Model\User as DPUser;
 use App\Model\CookiesSMS;
+use App\Model\Pages;
 
 class CheckForSMSCoockie
 {
@@ -49,16 +50,16 @@ class CheckForSMSCoockie
         require_once("../app/Apifon/Model/SmsRequest.php");
         require_once("../app/Apifon/Model/SubscriberInformation.php");
        
-        if (Auth::guest() || env('APP_DEBUG') == true) {
-            //dd('fsda');
+        if (Auth::guest() /*|| env('APP_DEBUG') == true*/) {
             return $next($request);
         }
 
         $roles = Auth::user()->role->pluck('name')->toArray();
         if (in_array('Super Administrator',$roles) || in_array('Administrator',$roles) || in_array('Manager',$roles) || in_array('Author',$roles)) {
+           
             return $next($request);
         }else{
-   
+            
             $user = Auth::user();
             //dd($user);
 
@@ -149,12 +150,27 @@ class CheckForSMSCoockie
                     }
                     //return $next($request);
                     return redirect('/sms-verification/' . $cookie );
-                }else if(($user->consent == '' || $user->terms == 0)){
-                    if($request->is("data-privacy-policy") || $request->is("logmeout") || $request->is("update-consent")) {
+                }else if(($user->consent == '' || $user->terms == 0) && !$user->instructor->first()){
+                    
+                    $page = Pages::find(4754);
+                    $pageSlug = $page->slugable->slug;
+
+                    if($request->is($pageSlug) || $request->is("logmeout") || $request->is("update-consent")) {
                         return $next($request);
                     }
                     else {
-                        return redirect('/data-privacy-policy');
+                        return redirect($pageSlug);
+                    }
+                }else if(($user->consent == '' || $user->terms == 0) && $user->instructor->first()){
+
+                    $page = Pages::find(4753);
+                    $pageSlug = $page->slugable->slug;
+
+                    if($request->is($pageSlug) || $request->is("logmeout") || $request->is("update-consent")) {
+                        return $next($request);
+                    }
+                    else {
+                        return redirect($pageSlug);
                     }
                 }
             }

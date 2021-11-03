@@ -277,8 +277,6 @@
 
 <script>
 
-console.log('ede')
-
     $( "#select-image" ).click(function() {
         path = ''
         $.each( $('.fm-breadcrumb li'), function(key, value) {

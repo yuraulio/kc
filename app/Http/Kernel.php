@@ -77,6 +77,7 @@ class Kernel extends HttpKernel
 
         'registration.check' => \App\Http\Middleware\Registration::class,
         'billing.check' => \App\Http\Middleware\Billing::class,
+        'instructor-terms' => \App\Http\Middleware\CheckInstructorTermsPage::class,
 
     ];
 

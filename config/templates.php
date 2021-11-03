@@ -13,7 +13,8 @@ return[
         'Subscription Page' => 'subscription-template',
         /*'Trained-Media Page' => 'trained_media_page',*/
         'Logos Page' => 'logos_page',
-        'Consent' => 'consent'
+        'Consent' => 'consent',
+        'Instructor Terms' => 'instructor_terms'
     ],
 
     'events' => [

@@ -45,6 +45,7 @@ class HomeController extends Controller
     {
         $this->fbp = $fbp;
         $this->middleware('auth.sms')->except('getSMSVerification','smsVerification');
+        $this->middleware('instructor-terms');
         $fbp->sendPageViewEvent();
 
         /*$this->middleware(function ($request, $next) {

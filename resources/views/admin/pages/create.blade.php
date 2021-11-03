@@ -5,6 +5,7 @@
 'parentSection' => 'laravel',
 'elementName' => 'pages-management'
 ])
+
 @section('content')
 @component('layouts.headers.auth')
 @component('layouts.headers.breadcrumbs')
@@ -39,14 +40,17 @@
 <div class="tab-content" id="myTabContent">
    <div class="tab-pane fade show active" id="page" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
       @if(!$page->name)
-         <form method="post" action="{{ route('pages.store') }}" autocomplete="off" enctype="multipart/form-data">
+         <form method="post" id="page-form" action="{{ route('pages.store') }}" autocomplete="off" enctype="multipart/form-data">
       @else
-         <form method="post" action="{{ route('pages.update',$page->id) }}" autocomplete="off" enctype="multipart/form-data">
+         <form method="post" id="page-form" action="{{ route('pages.update',$page->id) }}" autocomplete="off" enctype="multipart/form-data">
          @method('put')
       @endif
          @csrf
          <div class="row">
             <div class="col-xl-9 order-xl-1">
+               @if($page->id == 4753 || $page->id == 4754)
+                  <input hidden name="terms" id="terms-value" value="1" >
+               @endif
                <div class="card">
                   <div class="card-header">
                      <div class="row align-items-center">
@@ -124,7 +128,7 @@
                      @endif
                      <div class="pl-lg-4">
                      <div class="text-center">
-                           <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
+                           <button type="button" class="btn btn-success mt-4 submit-button">{{ __('Save') }}</button>
                         </div>
                         </div>
                   </div>
@@ -170,3 +174,45 @@
    @include('layouts.footers.auth')
 </div>
 @endsection
+
+@push('js')
+<script src="{{ asset('argon') }}/vendor/sweetalert2/dist/sweetalert2.min.js"></script>
+
+<script>
+    
+   $(".submit-button").click(function(){
+      
+      @if($page->id == 4753 || $page->id == 4754)
+         
+         let user = "{{$page->id == 4753 ? 'instructors' : 'users'}}";
+
+          Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you want to update " + user + "' term?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+          }).then((result) => {
+             console.log(result)
+            if (result.value) {
+               $('#terms-value').val(0)
+               $("#page-form").submit();
+            }else{
+               $("#page-form").submit();
+            }
+            
+          })
+
+          
+      @else
+          $("#page-form").submit();
+      @endif
+
+   })
+
+</script>
+
+@endpush
