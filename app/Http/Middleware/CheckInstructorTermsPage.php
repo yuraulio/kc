@@ -25,6 +25,13 @@ class CheckInstructorTermsPage
             abort(404);
         }
 
+        $page = Pages::find(4754);
+        $pageSlug = $page->slugable->slug;
+        
+        if(!Auth::user() && $request->is($pageSlug)) {
+            abort(404);
+        }
+
         return $next($request);
     }
 }

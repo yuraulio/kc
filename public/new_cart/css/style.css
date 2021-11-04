@@ -214,10 +214,14 @@ label.custom-control-label{font-size:19px;}
 
 
 /* lioncode */
-
 .checkout-button-secondary img { margin-top: -4px; }
 .previous-participant-link img { margin-top: -4px; }
 .remove-participant img {margin-top: -2px;}
+.footer-payment{position: absolute;bottom: 0;width: 100%;}
+.stripe-payment-button{font-size: 18px!important; border-radius: 0!important;}
+
+.stripe-remember-text{font-size: 18px;align-items: end;}
+.stripe-remember-me{height: 23px; width:23px;}
 
 .coupon-successfull{
     display: block!important;

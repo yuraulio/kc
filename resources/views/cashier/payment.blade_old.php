@@ -1,7 +1,18 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-@extends('cashier.master')
+    <title>{{ __('Payment Confirmation') }} - {{ config('app.name', 'Laravel') }}</title>
 
-    @section('content')
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"></script>
+    <script src="https://js.stripe.com/v3"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body class="font-sans text-gray-600 bg-gray-100 leading-normal p-4 h-full">
     <div id="app" class="h-full md:flex md:justify-center md:items-center">
         <div class="w-full max-w-lg">
             <h1 class="text-4xl font-bold text-center p-4 sm:p-6 mt-4">
@@ -62,11 +73,11 @@
                         </p>
 
                         <!-- Payment Method -->
-                        {{--<label for="paymentMethod" class="inline-block text-sm text-gray-700 font-semibold mb-2">
+                        <label for="paymentMethod" class="inline-block text-sm text-gray-700 font-semibold mb-2">
                             Payment Method
                         </label>
 
-                       <div v-if="paymentMethods.length > 1">
+                        <div v-if="paymentMethods.length > 1">
                             <p class="text-sm mb-3">
                                 Please select the payment method which you'd like to use.
                             </p>
@@ -87,7 +98,7 @@
                             <p class="text-sm mb-3">
                                 Your payment will be processed by @{{ paymentMethodTitle }}.
                             </p>
-                        </div>--}}
+                        </div>
 
                         <!-- Name -->
                         <label for="name" class="inline-block text-sm text-gray-700 font-semibold mb-2">
@@ -126,12 +137,12 @@
 
                         <div v-if="(paymentMethod || {}).remember">
                             <!-- Remember Payment Method -->
-                            <label for="remember" class="inline-flex stripe-remember-text text-gray-700 mb-2">
+                            <label for="remember" class="inline-block text-sm text-gray-700 mb-2">
                                 <input
                                     id="remember"
                                     type="checkbox"
                                     required
-                                    class="stripe-remember-me mr-1 focus:outline-none"
+                                    class="inline-block mr-1 focus:outline-none"
                                     v-model="remember"
                                 />
 
@@ -142,14 +153,11 @@
                                 By providing your payment information and confirming this payment, you authorise (A) and Stripe, our payment service provider, to send instructions to your bank to debit your account and (B) your bank to debit your account in accordance with those instructions. As part of your rights, you are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited. Your rights are explained in a statement that you can obtain from your bank. You agree to receive notifications for future debits up to 2 days before they occur.
                             </p>
                         </div>
-
-
-
                     </div>
 
                     <!-- Confirm Payment Method Button -->
                     <button
-                        class="inline-block w-full px-4 py-3 mb-4 btn btn-3 checkout-button-primary stripe-payment-button"
+                        class="inline-block w-full px-4 py-3 mb-4 text-white rounded-lg hover:bg-blue-500"
                         :class="{ 'bg-blue-400': isPaymentProcessing, 'bg-blue-600': ! isPaymentProcessing }"
                         @click="confirmPaymentMethod"
                         :disabled="isPaymentProcessing"
@@ -164,30 +172,19 @@
                 </div>
 
                 <button @click="goBack" ref="goBackButton" data-redirect="{{ $redirect }}"
-                   class="inline-block w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 text-center text-gray-600 stripe-payment-button">
+                   class="inline-block w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 text-center text-gray-600 rounded-lg">
                     Go back
                 </button>
             </div>
 
-
+            <p class="text-center text-gray-500 text-sm mt-4 pb-4">
+                © {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
+            </p>
         </div>
     </div>
 
     <script>
-        window.stripe = Stripe('{{ $stripeKey }}',{
-		locale: 'en',
-	});
-
-    const elements =  window.stripe.elements({
-    	fonts: [
-    	    {
-					family: 'Foco',
-					src: `url("new_cart/font/Foco-Light.woff2") format("woff2"),
-							url("new_cart/font/Foco-Light.woff") format("woff")`,
-					weight: '100',
-			   	},
-    	]
-	});
+        window.stripe = Stripe('{{ $stripeKey }}');
 
         new Vue({
             el: '#app',
@@ -196,7 +193,7 @@
                 return {
                     paymentIntent: @json($paymentIntent),
                     paymentMethod: null,
-                    name: '{{ optional($customer)->firstname  }}' + ' {{ optional($customer)->lastname  }}',
+                    name: '{{ optional($customer)->stripeName() }}',
                     email: '{{ optional($customer)->stripeEmail() }}',
                     paymentElement: null,
                     remember: false,
@@ -269,17 +266,7 @@
                         const elements = stripe.elements();
 
                         this.paymentElement = elements.create(
-                            this.paymentMethod.element, this.paymentMethod.options ?? {},{
-		
-		style: {
-           base: {
-            	fontSize: '18px',
-				fontFamily: 'Foco',
-          },
-        },
-			
-        hidePostalCode: true,
-    }
+                            this.paymentMethod.element, this.paymentMethod.options ?? {}
                         );
                     }  else {
                         this.paymentElement = null;
@@ -418,6 +405,5 @@
             },
         })
     </script>
-    @stop
-
-
+</body>
+</html>

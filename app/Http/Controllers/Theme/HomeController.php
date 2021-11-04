@@ -435,7 +435,7 @@ class HomeController extends Controller
         $data['content'] = $page;
         $events = array();
         $lessons = [];
-        $instructor = Instructor::with('event.category', 'mediable', 'event.lessons', 'event.slugable', 'event.city', 'event.summary1')->where('status',1)->find($page['id']);
+        $instructor = Instructor::with('eventInstructorPage.category', 'mediable', 'eventInstructorPage.lessons', 'eventInstructorPage.slugable', 'eventInstructorPage.city', 'eventInstructorPage.summary1')->where('status',1)->find($page['id']);
         //dd($instructor['event'][0]);
 
         if(!$instructor){
@@ -456,7 +456,7 @@ class HomeController extends Controller
         }
         $data['title'] = trim($data['title']);
        
-        foreach($instructor['event'] as $key => $event){
+        foreach($instructor['eventInstructorPage'] as $key => $event){
             if(($event['status'] == 0 || $event['status'] == 2) && $event->is_inclass_course()){
                 foreach($event['lessons'] as $lesson){
 
@@ -478,7 +478,7 @@ class HomeController extends Controller
         }
         $category = array();
 
-        foreach($instructor['event'] as $key => $event){
+        foreach($instructor['eventInstructorPage'] as $key => $event){
 
                 //dd($event['status']);
                 if($key == 0){

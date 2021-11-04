@@ -52,7 +52,7 @@ class PaymentController extends Controller
 
         $paymentIntent['payment_method'] = Arr::only($paymentIntent['payment_method'] ?? [], 'id');
         $input = encrypt($input);
-       
+        
         return view('cashier.payment', [
             'stripeKey' => env('PAYMENT_PRODUCTION') ? $paymentMethod->processor_options['key'] : $paymentMethod->test_processor_options['key'],
             'amount' => $payment->amount(),

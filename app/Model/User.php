@@ -734,7 +734,6 @@ class User extends Authenticatable
             $lastVideoSeen = $statistic['lastVideoSeen'];
             $firstTime = false;
         }
-
         $countVideos = 1;
         $oldVideos = [];
         $change = 0;
@@ -759,15 +758,13 @@ class User extends Authenticatable
                     }
                     $countVideos += 1;
             }
-
             //$countVideos += 1;
+        }
 
-         }
-
-         if(!in_array($lastVideoSeen,$oldVideos) && isset($oldVideos[0])){
-             $lastVideoSeen =$oldVideos[0];
-         }
-
+        if(!in_array($lastVideoSeen,$oldVideos) && isset($oldVideos[0])){
+            $lastVideoSeen =$oldVideos[0];
+        }
+         
         if(!$this->statistic()->wherePivot('event_id', $event['id'])->first()){
             $this->statistic()->attach($event['id'],['videos'=>json_encode($videos), 'notes' => json_encode($notes), 'lastVideoSeen' => $lastVideoSeen,
                                         'created_at' => Carbon::now(),'updated_at' => Carbon::now()]);
