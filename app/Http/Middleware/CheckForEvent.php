@@ -36,12 +36,12 @@ class CheckForEvent
         $user = Auth::user();
 
         [$user,$instructor] = $user->instructor->first() ? [$user->instructor->first(),true] : [$user,false];
-
         if($instructor && $user->event->where('id',$eventId)->first()){
 
             return $next($request);
         }
 
+        $user = Auth::user();
         $event = $user->events->where('id',$eventId)->first();
         $eventSub = $user->subscriptionEvents->where('id',$eventId)->first();
         if(!$event && !$eventSub){

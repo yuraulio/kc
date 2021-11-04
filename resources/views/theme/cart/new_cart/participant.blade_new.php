@@ -43,7 +43,7 @@
 											
 										</div>
 									</div>					
-								</div>
+							</div>
 								<div class="form-row">
 									<div class="col-md-12 mb-4">
 										<label class="input-label">My e-mail is  <span class="checkout-required-data">(*)</span></label>							<div class="email-wrap">

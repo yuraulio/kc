@@ -263,6 +263,21 @@ var routesObj = {
 
    @endif
 
+   	<script>
+
+		function alphabetizeList(listField) {
+    		var sel = $(listField);
+    		var selected = sel.val(); // cache selected value, before reordering
+    		var opts_list = sel.find('option');
+    		opts_list.sort(function (a, b) {
+    		    return $(a).text().trim() > $(b).text().trim() ? 1 : -1;
+    		});
+    		sel.html('').append(opts_list);
+    		sel.val(selected); // set cached selected value
+		}
+
+	</script>
+
 @stack('scripts')
 
 </body>

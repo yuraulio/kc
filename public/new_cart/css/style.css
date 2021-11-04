@@ -215,6 +215,10 @@ label.custom-control-label{font-size:19px;}
 
 /* lioncode */
 
+.checkout-button-secondary img { margin-top: -4px; }
+.previous-participant-link img { margin-top: -4px; }
+.remove-participant img {margin-top: -2px;}
+
 .coupon-successfull{
     display: block!important;
     color: #80bb01;
@@ -396,8 +400,8 @@ select#country{font-size:16px;width:51%;}
    .prev-next-wrap a {width: 100%;}
    .prev-next-wrap a.link-color{font-size:22px;}
    .previous-participant-link { margin-left: -5px; }
-   .previous-participant-link img { margin-top: -5px; }
-   .checkout-button-secondary img { margin-top: -5px; }
+   .previous-participant-link img { margin-top: -4px; }
+   .checkout-button-secondary img { margin-top: -4px; }
    .checkout-btn-wrap.form-row { margin: 0; }
 }
 
