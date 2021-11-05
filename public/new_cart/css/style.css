@@ -214,6 +214,7 @@ label.custom-control-label{font-size:19px;}
 
 
 /* lioncode */
+#payment-element{border: 1px solid black !important;border-radius: 0;}
 .mt-4, .my-4 {margin-top: 6.5rem!important;}
 .checkout-button-secondary img { margin-top: -4px; }
 .previous-participant-link img { margin-top: -4px; }
