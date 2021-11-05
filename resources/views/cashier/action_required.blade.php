@@ -1,17 +1,7 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>{{ __('Payment Confirmation') }} - {{ config('app.name', 'Laravel') }}</title>
+@extends('cashier.master')
 
-    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"></script>
-    <script src="https://js.stripe.com/v3"></script>
-</head>
-<body class="font-sans text-gray-600 bg-gray-100 leading-normal p-4 h-full">
+    @section('content')
     <div id="app" class="h-full md:flex md:justify-center md:items-center">
         <div class="w-full max-w-lg">
             <h1 class="text-4xl font-bold text-center p-4 sm:p-6 mt-4">
@@ -72,7 +62,7 @@
                         </p>
 
                         <!-- Payment Method -->
-                        <label for="paymentMethod" class="inline-block text-sm text-gray-700 font-semibold mb-2">
+                        {{--<label for="paymentMethod" class="inline-block text-sm text-gray-700 font-semibold mb-2">
                             Payment Method
                         </label>
 
@@ -97,15 +87,16 @@
                             <p class="text-sm mb-3">
                                 Your payment will be processed by @{{ paymentMethodTitle }}.
                             </p>
-                        </div>
+                        </div>--}}
 
                         <!-- Name -->
-                        <label for="name" class="inline-block text-sm text-gray-700 font-semibold mb-2">
+                        <label v-if="seen" for="name" class="inline-block text-sm text-gray-700 font-semibold mb-2">
                             Full name
                         </label>
 
                         <input
-                            id="name"
+                        v-if="seen"
+                                                    id="name"
                             type="text" placeholder="Jane Doe"
                             required
                             class="inline-block bg-gray-100 border border-gray-300 rounded-lg w-full px-4 py-3 mb-3 focus:outline-none"
@@ -113,12 +104,13 @@
                         />
 
                         <!-- E-mail Address -->
-                        <label for="email" class="inline-block text-sm text-gray-700 font-semibold mb-2">
+                        <label v-if="seen" for="email" class="inline-block text-sm text-gray-700 font-semibold mb-2">
                             E-mail address
                         </label>
 
                         <input
                             id="email"
+                            v-if="seen"
                             type="text" placeholder="jane@example.com"
                             required
                             class="inline-block bg-gray-100 border border-gray-300 rounded-lg w-full px-4 py-3 mb-3 focus:outline-none"
@@ -134,7 +126,7 @@
                             <div id="payment-element" ref="paymentElement" class="bg-gray-100 border border-gray-300 rounded-lg p-4 mb-6"></div>
                         </div>
 
-                        <div v-if="(paymentMethod || {}).remember">
+                        {{--<div v-if="(paymentMethod || {}).remember">
                             <!-- Remember Payment Method -->
                             <label for="remember" class="inline-block text-sm text-gray-700 mb-2">
                                 <input
@@ -151,12 +143,12 @@
                             <p v-if="['bancontact', 'ideal', 'sepa_debit'].includes(paymentMethod.type)" class="text-xs text-gray-400 mb-6">
                                 By providing your payment information and confirming this payment, you authorise (A) and Stripe, our payment service provider, to send instructions to your bank to debit your account and (B) your bank to debit your account in accordance with those instructions. As part of your rights, you are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited. Your rights are explained in a statement that you can obtain from your bank. You agree to receive notifications for future debits up to 2 days before they occur.
                             </p>
-                        </div>
+                        </div>--}}
                     </div>
 
                     <!-- Confirm Payment Method Button -->
                     <button
-                        class="inline-block w-full px-4 py-3 mb-4 text-white rounded-lg hover:bg-blue-500"
+                        class="inline-block w-full px-4 py-3 mb-4 btn btn-3 checkout-button-primary stripe-payment-button"
                         :class="{ 'bg-blue-400': isPaymentProcessing, 'bg-blue-600': ! isPaymentProcessing }"
                         @click="confirmPaymentMethod"
                         :disabled="isPaymentProcessing"
@@ -171,19 +163,19 @@
                 </div>
 
                 <button @click="goBack" ref="goBackButton" data-redirect="{{ $redirect }}"
-                   class="inline-block w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 text-center text-gray-600 rounded-lg">
+                class="inline-block w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 text-center text-gray-600 stripe-payment-button">
                     Go back
                 </button>
             </div>
 
-            <p class="text-center text-gray-500 text-sm mt-4 pb-4">
-                © {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
-            </p>
+            
         </div>
     </div>
 
     <script>
-        window.stripe = Stripe('{{ $stripeKey }}');
+         window.stripe = Stripe('{{ $stripeKey }}',{
+		    locale: 'en',
+	    });
 
         new Vue({
             el: '#app',
@@ -192,12 +184,13 @@
                 return {
                     paymentIntent: @json($paymentIntent),
                     paymentMethod: null,
-                    name: '{{ optional($customer)->stripeName() }}',
+                    name: '{{ optional($customer)->firstname  }}' + ' {{ optional($customer)->lastname  }}',
                     email: '{{ optional($customer)->stripeEmail() }}',
                     paymentElement: null,
                     remember: false,
                     isPaymentProcessing: false,
-                    errorMessage: '{{ $errorMessage }}'
+                    errorMessage: '{{ $errorMessage }}',
+                    seen:false
                 }
             },
 
@@ -222,7 +215,7 @@
                         { title: 'iDEAL', type: 'ideal', remember: true, element: 'idealBank' },
                         { title: 'SEPA Debit', type: 'sepa_debit', remember: true, redirects: false, element: 'iban', options: { supportedCountries: ['SEPA'] }}
                     ].map(paymentMethod => {
-                        return { remember: false, redirects: true, options: {}, ...paymentMethod }
+                        return { remember: true, redirects: true, options: {}, ...paymentMethod }
                     })
 
                     return methods.filter(method => this.paymentIntent.payment_method_types.includes(method.type))
@@ -258,10 +251,29 @@
 
                     // Create the Stripe element based on the currently selected payment method...
                     if (this.paymentMethod.element) {
-                        const elements = stripe.elements();
-
+                        const elements = stripe.elements({
+                    	    fonts: [
+                    	        {
+	                        		family: 'Foco',
+	                        		src: `url("/new_cart/font/Foco-Light.woff2") format("woff2"),
+	                        				url("/new_cart/font/Foco-Light.woff") format("woff")`,
+	                        		weight: '100',
+	                        	},
+                    	    ]
+	                    });
+                        
                         this.paymentElement = elements.create(
-                            this.paymentMethod.element, this.paymentMethod.options ?? {}
+                            'card',{
+                                style: {
+                                   base: {
+                                    	fontSize: '18px',
+		                        		fontFamily: 'Foco',
+                                  },
+                                },
+                            
+                                hidePostalCode: true,
+		
+                            }
                         );
                     }  else {
                         this.paymentElement = null;
@@ -381,5 +393,4 @@
             },
         })
     </script>
-</body>
-</html>
+    @stop
