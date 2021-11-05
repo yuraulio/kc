@@ -18,7 +18,7 @@
                 <span class="ml-3">@{{ errorMessage }}</span>
             </p>
 
-            <div class="bg-white rounded-lg shadow-xl p-4 sm:p-6 mt-4">
+            <div class="bg-white rounded-lg p-4 sm:p-6 mt-4">
                 <div v-if="paymentIntent.status === 'succeeded'">
                     <h2 class="text-xl mb-4 text-gray-600">
                         Payment Successful
