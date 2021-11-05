@@ -169,6 +169,10 @@
                             </span>
                         </button>
                     </div>
+                    <button @click="goBack" ref="goBackButton" data-redirect="{{ $redirect }}"
+                   class="inline-block w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 text-center text-gray-600 stripe-payment-button">
+                    Go back
+                </button>
     </div>
 </div>
   
