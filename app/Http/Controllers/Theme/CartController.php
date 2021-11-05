@@ -162,7 +162,7 @@ class CartController extends Controller
         }
         $tr_price = strval($tr_price);
 
-        $data['tigran'] = ['price' => $tr_price.".00",'Product_id' => $data['eventId'], 'Product_SKU' => $data['eventId'],
+        $data['tigran'] = ['Price' => $tr_price.".00",'Product_id' => $data['eventId'], 'Product_SKU' => $data['eventId'],
                     'ProductCategory' => $data['categoryScript'], 'ProductName' =>  $ev->title, 'Quantity' => $totalitems,'TicketType'=>$ticketType,'Event_ID' => 'kc_' . time() 
         ];
 
@@ -1675,7 +1675,7 @@ class CartController extends Controller
             $data['info']['transaction'] = $transaction;
             $data['info']['statusClass'] = 'success';
 
-            $data['tigran'] = ['OrderSuccess_id' => $transaction['id'], 'OrderSuccess_total' => 0.00, 'price' => 0.00,'Product_id' => $content->id, 'Product_SKU' => $content->id,
+            $data['tigran'] = ['OrderSuccess_id' => $transaction['id'], 'OrderSuccess_total' => 0.00, 'Price' => 0.00,'Product_id' => $content->id, 'Product_SKU' => $content->id,
                         'ProductCategory' => $categoryScript, 'ProductName' =>  $content->title, 'Quantity' => $item->qty, 'TicketType'=>'Upon Coupon','Event_ID' => 'kc_' . time() 
                 ];
 

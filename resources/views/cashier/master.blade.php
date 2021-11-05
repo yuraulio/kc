@@ -54,7 +54,7 @@
     @yield('content')
 
 
-    <footer class="footer-payment">
+    <footer class="">
 		<div class="bank-details text-center">
 			<img src="{{cdn('new_cart/images/amex.svg')}}" alt="Amex" width="58px" height="37px">
 			<img src="{{cdn('new_cart/images/mastercard.svg')}}" alt="Mastercard" width="49px" height="38px">

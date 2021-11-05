@@ -46,14 +46,14 @@ class FBPixelService
         $content = (new Content())
             ->setProductId($data['Product_id'])
             ->setQuantity($data['Quantity']);
-            //->setItemPrice($data['price']);
+            //->setItemPrice($data['Price']);
             //->setDeliveryCategory($data['ProductCategory']);
 
         //dd($event);
         $custom_data = (new CustomData())
                 ->setContents(array($content))
                 ->setCurrency('EUR')
-                ->setValue($data['price']);
+                ->setValue($data['Price']);
         
         $event = (new Event())
                 ->setEventName($event)
@@ -140,7 +140,7 @@ class FBPixelService
 
         $customData = ['content_ids' => [$data['tigran']['Product_id']], 
                     'content_name' => $data['tigran']['ProductName'], 'content_category' => $data['tigran']['ProductCategory'],'currency' => 'EUR',
-                    'value' => $data['tigran']['price']
+                    'value' => $data['tigran']['Price']
         ];
         
          $custom_data = new CustomData($customData);
@@ -177,7 +177,7 @@ class FBPixelService
 
         $customData = ['content_type' => 'product', 'content_ids' => [$data['tigran']['Product_id']], 
         'content_name' => $data['tigran']['ProductName'], 'content_category' => $data['tigran']['ProductCategory'],'currency' => 'EUR',
-        'value' => $data['tigran']['price']
+        'value' => $data['tigran']['Price']
         ];
 
 
@@ -218,7 +218,7 @@ class FBPixelService
                     ];
         
                     $customData = ['content_type' => 'product', 'content_ids' => [$data['tigran']['Product_id']], 
-                    'currency' => 'EUR', 'value' => $data['tigran']['price']
+                    'currency' => 'EUR', 'value' => $data['tigran']['Price']
                     ];
                     
                     $custom_data = new CustomData($customData);
@@ -318,7 +318,7 @@ class FBPixelService
             'action_source'=>'website'
         ];
 
-        $customData = ['content_name' => $data['tigran']['ProductName'], 'currency' => 'EUR','status'=>true,'value'=>$data['tigran']['price']
+        $customData = ['content_name' => $data['tigran']['ProductName'], 'currency' => 'EUR','status'=>true,'value'=>$data['tigran']['Price']
         ];
 
         $custom_data = new CustomData($customData);

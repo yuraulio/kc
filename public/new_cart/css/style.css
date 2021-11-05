@@ -214,6 +214,7 @@ label.custom-control-label{font-size:19px;}
 
 
 /* lioncode */
+.mt-4, .my-4 {margin-top: 6.5rem!important;}
 .checkout-button-secondary img { margin-top: -4px; }
 .previous-participant-link img { margin-top: -4px; }
 .remove-participant img {margin-top: -2px;}
@@ -394,6 +395,7 @@ select#country{font-size:16px;width:51%;}
 .custom-control.custom-radio p{font-size:20px;line-height:1.6em;}
 .checkout-payment-flexibility{font-size:25px;}
 .checkout-button-primary {margin-left: 0;width:100%;margin-top:20px;}
+.stripe-payment-button {white-space: normal;}
 .input-label { font-size: 18px; }
 .checkout-button-secondary{width:100%;justify-content:center;margin-top:20px;margin-right:0;font-size:22px;}
 }

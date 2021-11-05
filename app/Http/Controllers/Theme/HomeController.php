@@ -613,7 +613,7 @@ class HomeController extends Controller
         }
         $categoryScript = $event->category->first() ? 'Event > ' . $event->category->first()->name : '';
         
-        $data['tigran'] = ['price' => $price,'Product_id' => $event->id,'Product_SKU' => $event->id,'ProductCategory' => $categoryScript, 'ProductName' =>  $event->title,'Event_ID' => 'kc_' . time() ];
+        $data['tigran'] = ['Price' => $price,'Product_id' => $event->id,'Product_SKU' => $event->id,'ProductCategory' => $categoryScript, 'ProductName' =>  $event->title,'Event_ID' => 'kc_' . time() ];
 
         if(Auth::user() && count(Auth::user()->events->where('id',$event->id)) > 0){
             $data['is_event_paid'] = 1;
