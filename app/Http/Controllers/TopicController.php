@@ -240,6 +240,47 @@ class TopicController extends Controller
         return redirect()->route('topics.index')->withStatus(__('Topics successfully deleted.'));
     }
 
+
+    public function detachTopic(Request $request)
+    {
+        //dd($request->all());
+        $catgegoriesAssignded = '';
+        $error = false;
+
+        if($request->topics){
+            foreach($request->topics as $key => $topic){
+
+                $topic = Topic::find($topic);
+                $category = $request->category[$key];
+
+                $topic->category()->wherePivot('category_id',$category)->detach();
+                $topic->lessonsCategory()->wherePivot('category_id',$category)->detach();
+
+                $category = Category::find($category);
+
+                foreach($category->events as $event){
+                    
+                    if($event->status != 0){
+                        continue;
+                    }
+
+                    $topic->lessons()->wherePivot('event_id',$event->id)->detach();
+
+                }
+
+
+                if( count($topic->category) == 0){
+                    $topic->delete();
+                }
+            }
+
+
+
+        }
+        return redirect()->route('topics.index')->withStatus(__('Topics successfully deleted.'));
+    }
+
+
     public function orderTopic(Request $request){
         //dd($request->all());
 

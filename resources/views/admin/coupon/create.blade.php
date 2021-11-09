@@ -48,13 +48,27 @@
                            @include('alerts.feedback', ['field' => 'name'])
                         </div>
 
+                        <div class="form-group{{ $errors->has('percentage') ? ' has-danger' : '' }} method">
+                           <label class="form-control-label" for="input-price">{{ __('Choose Coupon Method') }}</label>
+                           <div class="custom-control custom-radio mb-3">
+                             <input type="radio" id="customRadio1" name="customRadio" value="1" class="custom-control-input" @if( old('percentage',$coupon->percentage) ) checked @endif>
+                             <label class="custom-control-label" for="customRadio1">{{ __('Percentage') }}</label>
+                           </div>
+                           <div class="custom-control custom-radio">
+                             <input type="radio" id="customRadio2" name="customRadio" value="0" class="custom-control-input" @if( !old('percentage',$coupon->percentage) ) checked @endif>
+                             <label class="custom-control-label" for="customRadio2">{{ __('Price') }}</label>
+                           </div>
 
+                           <input id="percentage-price" name="percentage" value="{{ !old('percentage',$coupon->percentage) ? false : true }}" hidden>
+                        </div>
 
                         <div class="form-group{{ $errors->has('price') ? ' has-danger' : '' }}">
                            <label class="form-control-label" for="input-price">{{ __('Price') }}</label>
                            <input type="number" name="price" id="input-price" class="form-control{{ $errors->has('price') ? ' is-invalid' : '' }}" placeholder="{{ __('Price') }}" value="{{ old('price',$coupon->price) }}"  autofocus>
                            @include('alerts.feedback', ['field' => 'price'])
                         </div>
+
+                        
 
 
 
@@ -114,6 +128,9 @@
 @push('js')
 <script>
 
+   $('.method input').click(function(){
+      $("#percentage-price").val($(this).val())
+   })
 
 </script>
 

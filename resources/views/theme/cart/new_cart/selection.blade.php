@@ -77,7 +77,7 @@
 				   	headers: {
     	    		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     	 			},
-					data:{'coupon': couponCode} ,
+					data:{'coupon': couponCode, 'price': "{{$price / $totalitems}}"} ,
    					success: function(data) {
 		  				if(data['success']){
 							

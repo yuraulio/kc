@@ -41,12 +41,13 @@ class CouponController extends Controller
     }
 
     public function store(Request $request){
-
+        
 
         $coupon = new Coupon;
 
         $coupon->code_coupon = $request->name;
         $coupon->price = $request->price;
+        $coupon->percentage = $request->percentage;
         $coupon->status = $request->published == 'on' ? true : false;
         $coupon->save();
 
@@ -78,6 +79,7 @@ class CouponController extends Controller
 
             $coupon->price = $request->price;
             $coupon->status = $request->published == 'on' ? true : false;
+            $coupon->percentage = $request->percentage;
 
             $coupon->save();
             $coupon->event()->detach();

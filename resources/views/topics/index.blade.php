@@ -166,7 +166,8 @@
                                                         <td> 
                                                             <div class="input-group-prepend lesson-select">
                                                                 <div class="input-group-text">
-                                                                    <input data-topic-id="{{$topic->id}}" class="check-topic" type="checkbox" aria-label="Checkbox for following text input">
+                                                                    <input data-category-id="{{$category->id}}" data-topic-id="{{$topic->id}}" class="check-topic" type="checkbox" aria-label="Checkbox for following text input">
+                                                                    
                                                                 </div>
                                                             </div> 
                                                         </td>
@@ -190,10 +191,16 @@
 
                                                                                 <a class="dropdown-item" href="{{ route('topics.edit', $topic) }}">{{ __('Edit') }}</a>
 
-                                                                                <form id="deleteTopic" action="{{ route('topics.destroy', $topic) }}" method="post">
+                                                                                {{--<form id="deleteTopic" action="{{ route('topics.destroy', $topic) }}" method="post">
                                                                                     @csrf
                                                                                     @method('delete')
-                                                                                    {{-- this.parentElement.submit() --}}
+                                                                                    <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this topics?") }}') ? deleteTopics() : ''">
+                                                                                        {{ __('Delete') }}
+                                                                                    </button>
+                                                                                </form>--}}
+
+                                                                                <form id="deleteTopic" action="{{ route('topics.detach') }}" method="post">
+                                                                                    @csrf
                                                                                     <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this topics?") }}') ? deleteTopics() : ''">
                                                                                         {{ __('Delete') }}
                                                                                     </button>
@@ -440,9 +447,11 @@
 
     function deleteTopics(){
         let topics = [];
+        let category = [];
         $('.check-topic').each(function(index, value) {
             if ($(this).is(':checked')) {
                 topics.push($(this).data('topic-id'))
+                category.push($(this).data('category-id'))
             }
         });
 
@@ -451,9 +460,20 @@
             topicsInput += `<input class="hidden" name="topics[]" value="${value}">`
         });
 
-        $("#deleteTopic").append(topicsInput);
+        let categoryInput = '';
+        $.each( category, function( key, value ) {
+            categoryInput += `<input class="hidden" name="category[]" value="${value}">`
+        });
 
-        $("#deleteTopic").submit();
+        $("#deleteTopic").append(topicsInput);
+        $("#deleteTopic").append(categoryInput);
+
+        if(topics.length > 0){
+            $("#deleteTopic").submit();
+        }else{
+
+        }
+
 
     }
 

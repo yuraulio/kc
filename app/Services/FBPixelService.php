@@ -213,7 +213,7 @@ class FBPixelService
             return;
         }
 
-        $eventData = ['event_id' => $data['tigran']['Event_ID'],'event_name'=>'Purchase Event','event_source_url'=>url('/'),
+        $eventData = ['event_id' => $data['tigran']['Event_ID'],'event_name'=>'Purchase','event_source_url'=>url('/'),
                         'action_source'=>'website'
                     ];
         
@@ -270,6 +270,41 @@ class FBPixelService
             ->setEvents($events);
 
       
+
+        $response = $request->execute();
+
+        //dd($response);
+
+    }
+
+    public function sendAddBillingInfoEvent($data){
+ 
+        $eventData = ['event_id' => $data['tigran']['Event_ID'],'event_name'=>'Add Billing Info','event_source_url'=>url('/'),
+            'action_source'=>'website'
+        ];
+
+        $customData = ['content_type' => 'product', 'content_ids' => [$data['tigran']['Product_id']], 
+        'content_name' => $data['tigran']['ProductName'], 'content_category' => $data['tigran']['ProductCategory'],'currency' => 'EUR',
+        ];
+
+        $custom_data = new CustomData($customData);
+
+        $event = (new Event($eventData))
+                //->setEventName('AddtoCart')
+                ->setEventTime(time())
+                ->setUserData($this->getUserData())
+                ->setCustomData($custom_data);
+        
+        $events = array();
+        array_push($events, $event);
+        
+        //TEST63100 knowcrunch
+        //TEST9833
+        /*$request = (new EventRequest($this->pixelID,['test_event_code'=>'TEST63100']))
+            ->setEvents($events);*/
+
+            $request = (new EventRequest($this->pixelID))
+            ->setEvents($events);
 
         $response = $request->execute();
 

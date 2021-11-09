@@ -327,7 +327,7 @@ class CartController extends Controller
             $data['kc_id'] = $ukcid;
         }
 
-        $this->fbp->sendLeaderEvent($data['tigran']);
+        //$this->fbp->sendLeaderEvent($data['tigran']);
         $this->fbp->sendAddToCart($data);
 
         if($data['type'] == 1 || $data['type'] == 2 || $data['type'] == 5){
@@ -666,7 +666,8 @@ class CartController extends Controller
 
 
         $data = $this->initCartDetails($data);
-        $this->fbp->sendAddPaymentInfoEvent($data);
+        //$this->fbp->sendAddPaymentInfoEvent($data);
+        $this->fbp->sendAddBillingInfoEvent($data);
 
         return view('theme.cart.new_cart.checkout', $data);
             
@@ -831,7 +832,7 @@ class CartController extends Controller
 
         $input = $request->all();
         $payment_method_id = intval($input["payment_method_id"]);
-
+        $data = [];
         
         if(isset($input['installments'])){
             Session::put('installments', $input['installments']);
@@ -843,6 +844,8 @@ class CartController extends Controller
             $input['coupon'] = Session::get('coupon_code');
         }
         
+        $data = $this->initCartDetails($data);
+        $this->fbp->sendAddPaymentInfoEvent($data);
 
         if($payment_method_id != 1) {
 
@@ -929,7 +932,16 @@ class CartController extends Controller
                 $coupon = $coupon->first();
                 if (isset($input['coupon'])){
                     if($input['coupon'] && trim($input['coupon']) != '' && trim($coupon->code_coupon)!= '' && $coupon->status && trim($input['coupon']) == trim($coupon->code_coupon)){
-                        $amount = $coupon->price * $qty;
+                        
+                        if($coupon->percentage){
+                            $couponPrice = ($amount/Cart::count()) * $coupon->price / 100;
+                            $couponPrice = ($amount/Cart::count()) - $couponPrice;
+                            $amount =  $couponPrice * $qty;
+
+                        }else{
+                            $amount = $coupon->price * $qty;
+                        }
+                        
                         $couponCode = $input['coupon'];
                     }
                 }
@@ -1427,13 +1439,21 @@ class CartController extends Controller
 
             if(trim($request->coupon) === trim($coupon->code_coupon) && $coupon->status && trim($request->coupon) != ''){
 
+                if($coupon->percentage){
+                    $price = $request->price * $coupon->price / 100;
+                    $newPrice = $request->price - $price;
+                }else{
+                    $newPrice = $coupon->price;
+                }
+                //dd($request->price);
+                
                 Session::put('coupon_code',$request->coupon);
-                Session::put('coupon_price',$coupon->price);
+                Session::put('coupon_price',$newPrice);
                 return response()->json([
                     'success' => true,
-                    'new_price' => $coupon->price,
-                    'newPriceInt2' => round($coupon->price / 2, 2),
-                    'newPriceInt3' => round($coupon->price / 3, 2),
+                    'new_price' => $newPrice,
+                    'newPriceInt2' => round($newPrice / 2, 2),
+                    'newPriceInt3' => round($newPrice / 3, 2),
                     'message' => 'Success! Your coupon has been accepted.'
                 ]);
             }
