@@ -314,6 +314,8 @@ $(document).on('click', '.close-btn', function(e){
     </script>
 @endif
 
+
+
 @if(isset($tigran) && !env('APP_DEBUG'))
 
       <script>
@@ -325,6 +327,28 @@ $(document).on('click', '.close-btn', function(e){
       </script>
 
    @endif
+
+   
+   <script>
+
+        let url = window.location.href.split('#')
+        if(url[1]){
+
+            let target = "#" + url[1];
+            let activeTab = $('.tab-controls .active');
+            let self = $('a[href="#'+ url[1] + '"]');
+
+            $('.active-tab').removeClass('active-tab');
+            activeTab.toggleClass('active');
+            self.toggleClass('active');
+            self.next('.tab-controls-list').slideToggle(300);
+
+            $(target).addClass('active-tab');
+            $this.addClass('active');
+
+        }
+
+</script>
 
 </body>
 </html>
