@@ -137,19 +137,14 @@ class InfoController extends Controller
                     $tr_price = number_format($this->transaction['amount'] , 2 , '.', ',');
                 }else{
                     $tr_price = number_format($this->transaction['amount'] , 0 , '.', '');
+                    $tr_price = strval($tr_price);
+                    $tr_price.".00";
                 }
                             
                 $categoryScript = $thisevent->category->first() ? 'Event > ' . $thisevent->category->first()->name : '';
         
-                if($tr_price - floor($tr_price)>0){
-                    $tr_price = number_format($tr_price , 2 , '.', ',');
-                }else{
-                    $tr_price = number_format($tr_price , 0 , '.', '');
-                }
-                $tr_price = strval($tr_price);
-        
-
-                $data['tigran'] = ['OrderSuccess_id' => $this->transaction['id'], 'OrderSuccess_total' => $tr_price.".00", 'Price' =>$tr_price.".00",'Product_id' => $thisevent->id, 'Product_SKU' => $thisevent->id,
+                
+                $data['tigran'] = ['OrderSuccess_id' => $this->transaction['id'], 'OrderSuccess_total' => $tr_price, 'Price' =>$tr_price,'Product_id' => $thisevent->id, 'Product_SKU' => $thisevent->id,
                         'Product_SKU' => $thisevent->id,'ProductCategory' => $categoryScript, 'ProductName' =>  $thisevent->title, 'Quantity' => $item->qty, 'TicketType'=>$stockHelper->type,'Event_ID' => 'kc_' . time() 
                 ];
 

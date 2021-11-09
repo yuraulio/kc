@@ -170,11 +170,11 @@ class FBPixelService
     }
 
     public function sendAddToCart($data){
-
         $eventData = ['event_id' => $data['tigran']['Event_ID'].'p','event_name'=>'AddToCart','event_source_url'=>url('/'),
                         'action_source'=>'website'
                     ];
-
+        
+        
         $customData = ['content_type' => 'product', 'content_ids' => [$data['tigran']['Product_id']], 
         'content_name' => $data['tigran']['ProductName'], 'content_category' => $data['tigran']['ProductCategory'],'currency' => 'EUR',
         'value' => $data['tigran']['Price']
