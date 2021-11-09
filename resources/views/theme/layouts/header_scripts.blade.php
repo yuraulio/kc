@@ -89,7 +89,7 @@ $.ajaxSetup({headers:{'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content
 
 </script>
 
-{{--<script>
+<script>
 
 
 $(document).ready(function(){ 
@@ -138,12 +138,11 @@ function blackFriday(){
     var expires = "expires="+ d.toUTCString();
     document.cookie = 'blackFridayCooκie=blackfriday;' + expires + ";path=/";*/
 
-    localStorage.setItem("blackFridayCooκie", "blackfriday");
+    //localStorage.setItem("blackFridayCooκie", "blackfriday");
 
     return false;
     
 }
 
-</script>--}}
+</script>
 
-<?php // echo $frontHelp->activeSplash(); ?>

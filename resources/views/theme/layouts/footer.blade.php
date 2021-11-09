@@ -3,6 +3,8 @@ $social_media = get_social_media();
 ?>
 
 <footer id="footer">
+@include('theme.blackfriday.blackfriday')
+
    <div class="container">
       <div class="footer-row">
          <div class="footer-col-1">
