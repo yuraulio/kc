@@ -48,6 +48,9 @@ class CronjobsController extends Controller
 
         foreach($invoiceUsers as $invoiceUser){
 
+            if(!$invoiceUser->user->first()){
+                continue;
+            }
             $data = [];
             $data['name'] = $invoiceUser->user->first()->firstname . ' ' . $invoiceUser->user->first()->lastname ;
             $data['eventTitle'] = $invoiceUser->event->first()->title;
