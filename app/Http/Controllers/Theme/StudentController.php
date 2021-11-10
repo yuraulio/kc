@@ -514,7 +514,9 @@ class StudentController extends Controller
         }
 
         foreach($user['eventSubscriptions']->whereNotIn('id',$eventSubscriptions) as $key => $subEvent){
-            $event = $subEvent['event']->first();
+            if(!($event = $subEvent['event']->first())){
+            	continue;
+            }
             if($event->is_elearning_course()){
                 //$data['mySubscriptionEvents'][$key]['topics'] = $event['topic']->unique()->groupBy('topic_id');
                 $data['mySubscriptionEvents'][$key]['title'] = $event['title'];
