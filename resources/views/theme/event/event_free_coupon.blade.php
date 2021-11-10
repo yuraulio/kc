@@ -60,7 +60,7 @@
 
                      <li><a href="#topics">Topics</a></li>
                      <li><a href="#instructors">Instructors</a></li>
-                     <li><a href="#testimonials">Testimonials</a></li>
+                     @if(count($testimonials) > 0)<li><a href="#testimonials">Testimonials</a></li>@endif
                      @if(count($venues) > 0)<li><a href="#location">Location</a></li>@endif
                      <li><a href="#faq">FAQ</a></li>
                      @elseif($estatus == 3 || $estatus == 1 )
@@ -823,7 +823,7 @@ window.fbAsyncInit = function() {
 
 @if(isset($tigran) && !env('APP_DEBUG'))
 <script>
-	dataLayer.push({'Event_ID':"{{$tigran['Event_ID'].'p'}}", 'event': 'View Content', 'Product_id' : "{{$tigran['Product_id']}}", 'Price': "{{$tigran['Price']}}",'ProductCategory':"{{$tigran['ProductCategory']}}","product":"product"});
+	dataLayer.push({'Event_ID':"{{$tigran['Event_ID']}}", 'event': 'View Content', 'Product_id' : "{{$tigran['Product_id']}}", 'Price': "{{$tigran['Price']}}",'ProductCategory':"{{$tigran['ProductCategory']}}","product":"product"});
 </script>
 @endif
 

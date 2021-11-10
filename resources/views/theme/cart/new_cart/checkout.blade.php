@@ -143,6 +143,13 @@ $(".close-alert").on("click", function () {
 
 </script>
 
+<script>
+	@if(isset($tigran) && env('APP_DEBUG'))
+		$("#pay-now").click(function(){
+			dataLayer.push({'Event_ID':"{{$tigran['Event_ID']}}", 'event': 'Add Payment Info', 'Product_id' : "{{$tigran['Product_id']}}", 'Price': "{{$tigran['Price']}}",'ProductCategory':"{{$tigran['ProductCategory']}}","product":"product"});	
+		})
+	@endif
+</script>
 
 
 @endpush
