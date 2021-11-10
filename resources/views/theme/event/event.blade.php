@@ -70,7 +70,7 @@
                      <li><a href="#instructors">Instructors</a></li>
                      @endif
                   </ul>
-
+                  
                   @if($estatus == 0 && !$is_event_paid)
                   <a href="#seats" class="btn btn--lg btn--primary go-to-href">ENROLL NOW</a>
                   @elseif($estatus != 3 && $estatus != 1 && !$is_event_paid)

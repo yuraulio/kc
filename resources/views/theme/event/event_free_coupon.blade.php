@@ -68,7 +68,7 @@
                      <li><a href="#instructors">Instructors</a></li>
                      @endif
                   </ul>
-
+          
                   @if($is_event_paid==0)
                   <a href="javascript:void(0)" id="open-code-popup" class="btn btn--lg btn--primary">ENROLL NOW</a>
                  
@@ -403,53 +403,65 @@
                            @foreach($instructor as $inst)
                            <?php
                            
-                           $socialMedia = json_decode($inst['social_media'],true);
-                           $fb = isset($socialMedia['facebook']) ? $socialMedia['facebook'] : ''; 
-                           $twitter = isset($socialMedia['twitter']) ? $socialMedia['twitter'] : ''; 
-                           $instagram = isset($socialMedia['instagram']) ? $socialMedia['instagram'] : '';
-                           $linkedIn = isset($socialMedia['linkedin']) ? $socialMedia['linkedin']: '';
-                           $yt = isset($socialMedia['youtube']) ? $socialMedia['youtube'] : '';
+                              $socialMedia = json_decode($inst['social_media'],true);
+                              $fb = isset($socialMedia['facebook']) ? $socialMedia['facebook'] : ''; 
+                              $twitter = isset($socialMedia['twitter']) ? $socialMedia['twitter'] : ''; 
+                              $instagram = isset($socialMedia['instagram']) ? $socialMedia['instagram'] : '';
+                              $linkedIn = isset($socialMedia['linkedin']) ? $socialMedia['linkedin']: '';
+                              $yt = isset($socialMedia['youtube']) ? $socialMedia['youtube'] : '';
 
+                              $field2 = '';
+                              if(isset($inst['ext_url'])){
+                              
+                                 $field2 = $inst['ext_url'];
+                                 $field2 = str_replace ( "https://www.", "", $field2 );
+                                 $field2 = str_replace ( "https://.", "", $field2 );
+                                 $field2 = str_replace ( "http://www.", "", $field2 );  
+                                 $field2 = str_replace ( "https:", "", $field2 );
+                                 $field2 = str_replace ( "http:", "", $field2 );
+                                 $field2 = str_replace ( "/", "", $field2 );
+                              
+                              }
                            
 
                            ?>
                            <div class="col-3 col-md-4 col-sm-6 col-xs-12">
                               <div class="instructor-box">
                                  <div class="instructor-inner">
-
-                                    <div class="profile-img">
-                                      @if($inst['status'])
-                                          <a href="{{$inst['slugable']['slug']}}"><img src="{{cdn(get_image($inst['mediable'],'instructors-testimonials'))}}"  title="{{$inst['title']}}" alt="{{$inst['title']}}"></a>
-                                      @else
-                                          <img src="{{cdn(get_image($inst['mediable'],'instructors-testimonials'))}}"  title="{{$inst['title']}}" alt="{{$inst['title']}}">
-                                      @endif
+                              
+                                       <div class="profile-img">
+                                         @if($inst['status'])
+                                             <a href="{{$inst['slugable']['slug']}}"><img src="{{cdn(get_image($inst['mediable'],'instructors-testimonials'))}}"  title="{{$inst['title']}}" alt="{{$inst['title']}}"></a>
+                                         @else
+                                             <img src="{{cdn(get_image($inst['mediable'],'instructors-testimonials'))}}"  title="{{$inst['title']}}" alt="{{$inst['title']}}">
+                                         @endif
+                                       </div>
+                                       @if($inst['status'])
+                                          <h3><a href="{{$inst['slugable']['slug']}}">{{$inst['title']}} {{$inst['subtitle']}}</a></h3>
+                                       @else
+                                          <h3>{{$inst['title']}}</h3>
+                                       @endif
+                                       <p>{{$inst['header']}}, @if($inst['ext_url'] != '')<a target="_blank" title="{{$inst['header']}}"  href="{{$inst['ext_url']}}"  > {{$field2}}</a>.@endif</p>
+                                       <ul class="social-wrapper">
+                                          @if($fb != '')
+                                          <li><a target="_blank" href="{{$fb}}"><img class="replace-with-svg"  src="/theme/assets/images/icons/social/Facebook.svg" width="16" alt="Visit"></a></li>
+                                          @endif
+                                          @if($instagram !='')
+                                          <li><a target="_blank" href="{{$instagram}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Instagram.svg')}}" width="16" alt="Visit"></a></li>
+                                          @endif
+                                          @if($linkedIn !='')
+                                          <li><a target="_blank" href="{{$linkedIn}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Linkedin.svg')}}" width="16" alt="Visit"></a></li>
+                                          @endif
+                                          @if($twitter !='')
+                                          <li><a target="_blank" href="{{$twitter}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Twitter.svg')}}" width="16" alt="Visit"></a></li>
+                                          @endif
+                                          @if($yt !='')
+                                          <li><a target="_blank" href="{{$yt}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Youtube.svg')}}" width="16" alt="Visit"></a></li>
+                                          @endif
+                              
+                                       </ul>
+                                       <!-- /.instructor-inner -->
                                     </div>
-                                    @if($inst['status'])
-                                       <h3><a href="{{$inst['slugable']['slug']}}">{{$inst['title']}} {{$inst['subtitle']}}</a></h3>
-                                    @else
-                                       <h3>{{$inst['title']}}</h3>
-                                    @endif
-                                    <p>{{$inst['header']}}, <a target="_blank" title="{{$inst['header']}}" @if($inst['ext_url'] != '') href="{{$inst['ext_url']}}" @endif > test</a>.</p>
-                                    <ul class="social-wrapper">
-                                       @if($fb != '')
-                                       <li><a target="_blank" href="{{$fb}}"><img class="replace-with-svg"  src="/theme/assets/images/icons/social/Facebook.svg" width="16" alt="Visit"></a></li>
-                                       @endif
-                                       @if($instagram !='')
-                                       <li><a target="_blank" href="{{$instagram}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Instagram.svg')}}" width="16" alt="Visit"></a></li>
-                                       @endif
-                                       @if($linkedIn !='')
-                                       <li><a target="_blank" href="{{$linkedIn}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Linkedin.svg')}}" width="16" alt="Visit"></a></li>
-                                       @endif
-                                       @if($twitter !='')
-                                       <li><a target="_blank" href="{{$twitter}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Twitter.svg')}}" width="16" alt="Visit"></a></li>
-                                       @endif
-                                       @if($yt !='')
-                                       <li><a target="_blank" href="{{$yt}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Youtube.svg')}}" width="16" alt="Visit"></a></li>
-                                       @endif
-                                      
-                                    </ul>
-                                    <!-- /.instructor-inner -->
-                                 </div>
                                  <!-- /.instructor-box -->
                               </div>
                               <!-- /.col-3.col-sm-12 -->
