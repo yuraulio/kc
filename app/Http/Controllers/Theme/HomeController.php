@@ -619,9 +619,9 @@ class HomeController extends Controller
         }else{
             $tr_price = number_format($tr_price , 0 , '.', '');
             $tr_price = strval($tr_price);
-            $tr_price.".00";
+            $tr_price .= ".00";
+            
         }
-
         $data['tigran'] = ['Price' => $tr_price,'Product_id' => $event->id,'Product_SKU' => $event->id,'ProductCategory' => $categoryScript, 'ProductName' =>  $event->title,'Event_ID' => 'kc_' . time() ];
 
         if(Auth::user() && count(Auth::user()->events->where('id',$event->id)) > 0){

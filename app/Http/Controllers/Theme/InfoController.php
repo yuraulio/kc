@@ -138,7 +138,7 @@ class InfoController extends Controller
                 }else{
                     $tr_price = number_format($this->transaction['amount'] , 0 , '.', '');
                     $tr_price = strval($tr_price);
-                    $tr_price.".00";
+                    $tr_price .= ".00";
                 }
                             
                 $categoryScript = $thisevent->category->first() ? 'Event > ' . $thisevent->category->first()->name : '';

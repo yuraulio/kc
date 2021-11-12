@@ -160,7 +160,7 @@ class CartController extends Controller
         }else{
             $tr_price = number_format($tr_price , 0 , '.', '');
             $tr_price = strval($tr_price);
-            $tr_price.".00";
+            $tr_price .= ".00";
         }
 
 
