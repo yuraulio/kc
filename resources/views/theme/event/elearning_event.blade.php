@@ -719,7 +719,7 @@ window.fbAsyncInit = function() {
 
 @if(isset($tigran) && !env('APP_DEBUG'))
 <script>
-	dataLayer.push({'Event_ID':"{{$tigran['Event_ID']}}", 'event': 'View Content', 'Product_id' : "{{$tigran['Product_id']}}", 'Price': "{{$tigran['Price']}}",
+	dataLayer.push({'Event_ID':"{{$tigran['Event_ID']}}v", 'event': 'View Content', 'Product_id' : "{{$tigran['Product_id']}}", 'Price': "{{$tigran['Price']}}",
                      'ProductCategory':"{{$tigran['ProductCategory']}}","product":"product","ProductName":"{{$tigran['ProductName']}}"});
 </script>
 @endif

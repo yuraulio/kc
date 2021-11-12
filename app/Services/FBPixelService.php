@@ -134,7 +134,7 @@ class FBPixelService
 
     public function sendViewContentEvent($data){
  
-        $eventData = ['event_id' => $data['tigran']['Event_ID'],'event_name'=>'View Content','event_source_url'=>url('/'),
+        $eventData = ['event_id' => $data['tigran']['Event_ID'].'v','event_name'=>'View Content','event_source_url'=>url('/'),
                         'action_source'=>'website'
                     ];
 
