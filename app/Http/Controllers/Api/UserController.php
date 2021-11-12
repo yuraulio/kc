@@ -38,8 +38,19 @@ class UserController extends Controller
         $user1 = Auth::user();
 
         $user = User::with('image')->find($user1->id);
+        $billingDetails = $user['receipt_details'];
+        $billingDetails = json_decode($billingDetails,true);
 
-
+        $billing = [];
+        $billing['billname'] = isset($billingDetails['billname']) ? $billingDetails['billname'] : '';
+        $billing['billafm'] = isset($billingDetails['billafm']) ? $billingDetails['billafm'] : '';
+        $billing['billaddress'] = isset($billingDetails['billaddress']) ? $billingDetails['billaddress'] : ''; 
+        $billing['billaddressnum'] = isset($billingDetails['billaddressnum']) ? $billingDetails['billaddressnum'] : '' ;
+        $billing['billcity'] = isset($billingDetails['billcity']) ? $billingDetails['billcity'] : '' ;
+        $billing['billpostcode'] = isset($billingDetails['billpostcode']) ? $billingDetails['billpostcode'] : '' ;
+        $billing['billstate'] = isset($billingDetails['billstate']) ? $billingDetails['billstate'] : '' ;
+        $billing['bilcountry'] = isset($billingDetails['bilcountry']) ? $billingDetails['bilcountry'] : '' ;
+        $billing['billemail'] = isset($billingDetails['billemail']) ? $billingDetails['billemail'] : '' ;
 
         if(isset($user['image'])){
 
@@ -52,7 +63,8 @@ class UserController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $user
+            'data' => $user,
+            'billing' => $billing
         ]);
     }
 
@@ -631,6 +643,9 @@ class UserController extends Controller
     public function update(Request $request)
     {
         //dd($request->all());
+
+        
+
         if($request->password == $request->confirm_password){
             $hasPassword = $request->get("password");
         }else{
@@ -641,6 +656,18 @@ class UserController extends Controller
 
         $user1 = Auth::user();
 
+        $receiptDetails = [];//json_decode($user1->receipt_details,true);
+        $receiptDetails['billing'] = 1;
+        $receiptDetails['billname'] = $request->billname ? $request->billname : '';
+        $receiptDetails['billafm'] = $request->billafm ? $request->billafm : '';
+        $receiptDetails['billaddress'] = $request->billaddress ? $request->billaddress : '';
+        $receiptDetails['billaddressnum'] = $request->billaddressnum ? $request->billaddressnum : '';
+        $receiptDetails['billcity'] = $request->billcity ? $request->billcity : '';
+        $receiptDetails['billpostcode'] = $request->billpostcode ? $request->billpostcode : '';
+        $receiptDetails['billstate'] = $request->billstate ? $request->billstate : '';
+        $receiptDetails['billcountry'] = $request->billcountry ? $request->billcountry : '';
+        $receiptDetails['billemail'] = $request->billemail ? $request->billemail : '';
+        
         if($request->file('photo')){
             (new MediaController)->uploadProfileImage($request, $user1->image);
         }
@@ -652,11 +679,21 @@ class UserController extends Controller
 
         // );
 
-
-
+        $request->request->remove('billname');
+        $request->request->remove('billafm');
+        $request->request->remove('billaddress');
+        $request->request->remove('billaddressnum');
+        $request->request->remove('billcity');
+        $request->request->remove('billpostcode');
+        $request->request->remove('billstate');
+        $request->request->remove('billcountry');
+        $request->request->remove('billemail');
+        
+        
         $isUpdateUser = User::where('id',$user1->id)->update(
             $request->merge([
-            'password' => Hash::make($request->get('password'))
+            'password' => Hash::make($request->get('password')),
+            'receipt_details' => json_encode($receiptDetails)
         ])->except([$hasPassword ? '' : 'password', 'picture', 'photo', 'confirm_password']));
 
         // if($request->file('photo')){
@@ -693,16 +730,19 @@ class UserController extends Controller
         unset($updated_user['image']);
 
 
+        unset($receiptDetails['billing']);
 
         if($isUpdateUser == 1){
             return response()->json([
                 'message' => 'Update profile successfully',
-                'data' => $updated_user
+                'data' => $updated_user,
+                'billing' => $receiptDetails
             ]);
         }else{
             return response()->json([
                 'message' => 'Update profile failed',
-                'data' => $user
+                'data' => $user,
+                'billing' => $receiptDetails
             ]);
         }
 
