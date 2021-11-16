@@ -1101,3 +1101,5 @@ border-radius: 4px;
 
 .linkedin-post{margin-left:10px;}
 img.linkdein-image-add{width:36px!important;}
+
+.section-text-carousel.background.section--blue-gradient:nth-child(2n+1) {background: rgb(48, 114, 202);}
