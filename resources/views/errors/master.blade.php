@@ -6,6 +6,7 @@
 	  @yield('title')
       <meta name="description" content="">
       <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="csrf-token" content="{{ csrf_token() }}">
       @include('theme.layouts.favicons')
       <!-- Place favicon.ico in the root directory -->
       <link rel="stylesheet" href="theme/assets/css/old.css" />
@@ -237,49 +238,63 @@
                      </div>
                   </div>
                   <div class="footer-col-2">
-                     <div class="row clearfix">
-                        <div class="col6 col-sm-12">
-                           <h4 class="footer-title">About</h4>
-                           <div class="mobile-toggle">
-                              <ul class="footer-menu">
-                                 <li> <a  href='/about' title = 'about us'> about us </a> </li>
-                                 <li> <a  href='/brands-trained' title = 'trained by us'> trained by us </a> </li>
-                                 <li> <a  href='/in-the-media'  title = 'in the media'> in the media  </a> </li>
-                                 <li> <a  href='/instructors'  title = 'our instructors'> our instructors </a> </li>
-                                 <li> <a  href='/become-an-instructor' title = 'become an instructor'> become an instructor </a> </li>
-                                 <li> <a  href='/corporate-training'  title = 'corporate training'> corporate training </a> </li>
-                                 <li> <a  href='https://medium.com/@knowcrunch' target='_blank' title = 'blog'> blog </a> </li>
-                                 <li> <a  href='https://www.facebook.com/pg/KnowCrunch/jobs/' target='_blank' title = 'jobs'> jobs </a> </li>
-                                 <li> <a  href='/terms'  title = 'Terms & Conditions'> terms & conditions </a> </li>
-                                 <li> <a  href='/data-privacy-policy'  title = 'Data Privacy Policy'> data privacy policy </a> </li>
-                                 <li> <a  href='/contact'  title = 'in the media'> contact us </a> </li>
-                              </ul>
-                           </div>
-                        </div>
-                        <div class="col6 col-sm-12">
-                           <h4 class="footer-title">Education</h4>
-                           <div class="mobile-toggle">
-                              <ul class="footer-menu">
-                                 <li> <a  href='/in-class-courses' title = 'Diplomas'> diplomas </a> </li>
-                                 <li> <a  href='/certificates' title = 'Certificates'> certificates </a> </li>
-                                 <li> <a  href='/in-class-courses'  title = 'In-Class Courses'> in-class courses  </a> </li>
-                                 <li> <a  href='/e-learning-courses'  title = 'E-Learning Courses'> e-learning courses  </a> </li>
-                                 <li> <a  href='/crash-courses'  title = 'Crash Courses'> Crash Courses </a> </li>
-                              </ul>
-                           </div>
-                           <h4 class="footer-title ">Alumni</h4>
-                           <div class="mobile-toggle">
-                              <ul class="footer-menu">
-                                 <li> <a  href='/myaccount' title = 'Manage Account'> manage account </a> </li>
-                                 <li> <a  href='https://www.facebook.com/groups/socialmediagreece/' target='_blank' title = 'Digital Nation Group'> digital nation group </a> </li>
-                                 <li> <a  href='https://www.facebook.com/groups/KnowcrunchAlumni/' target='_blank' title = 'Alumni Group'> alumni group </a> </li>
-                                 <!--<li> <a  href='/terms'  title = 'Terms & Conditions'> terms & conditions </a> </li>
-                                    <li> <a  href='/data-privacy-policy'  title = 'Data Privacy Policy'> data privacy policy </a> </li>-->
-                              </ul>
-                           </div>
-                        </div>
-                     </div>
+            <div class="row clearfix">
+               <div class="col6 col-sm-12">
+                  <h4 class="footer-title">About</h4>
+                  <div class="mobile-toggle">
+                     <ul class="footer-menu">
+                     <li> <a  href='/about' title = 'about us'> about us </a> </li>
+                    <li> <a  href='/brands-trained' title = 'trained by us'> trained by us </a> </li>
+                    <li> <a  href='/in-the-media'  title = 'in the media'> in the media  </a> </li>
+                    <li> <a  href='/instructors'  title = 'our instructors'> our instructors </a> </li>
+                    <li> <a  href='/become-an-instructor' title = 'become an instructor'> become an instructor </a> </li>
+                    <li> <a  href='/corporate-training'  title = 'corporate training'> corporate training </a> </li>
+                    <li> <a  href='https://medium.com/@knowcrunch' target='_blank' title = 'blog'> blog </a> </li>
+                    <li> <a  href='https://www.facebook.com/pg/KnowCrunch/jobs/' target='_blank' title = 'jobs'> jobs </a> </li>
+                    <li> <a  href='/terms'  title = 'Terms & Conditions'> terms & conditions </a> </li>
+                    <li> <a  href='/data-privacy-policy'  title = 'Data Privacy Policy'> data privacy policy </a> </li>
+                    <li> <a  href='/contact'  title = 'in the media'> contact us </a> </li>
+                     </ul>
                   </div>
+               </div>
+               <div class="col6 col-sm-12">
+                  <h4 class="footer-title">Education</h4>
+                  <div class="mobile-toggle">
+                     <ul class="footer-menu">
+                        <li> <a  href='/in-class-courses'  title = 'In-Class Courses'> in-class courses  </a> </li>
+                        <li> <a  href='/video-on-demand-courses'  title = 'E-Learning Courses'> e-learning courses  </a> </li>
+                     </ul>
+                  </div>
+                  <h4 class="footer-title">Certifications</h4>
+                  <div class="mobile-toggle">
+                     <ul class="footer-menu">
+                        <li> <a  href='/diplomas' title = 'Diplomas'> diplomas </a> </li>
+                        <li> <a  href='/certificates' title = 'Certificates'> certificates </a> </li>
+
+                     </ul>
+                  </div>
+                  <h4 class="footer-title ">Students</h4>
+                  <div class="mobile-toggle">
+                     <ul class="footer-menu">
+                        <li class="account-menu">
+                        @if (Auth::check())
+                        <a href="/myaccount" title = 'Manage Account'> manage your account </a>
+
+                        @else
+                        <a href="javascript:void(0)" title = 'Manage Account'> manage your account </a>
+
+                        @endif
+                        </li>
+                        <li> <a  href='https://www.facebook.com/groups/KnowcrunchAlumni/' target='_blank' title = 'Official Alumni Group'> official alumni group </a> </li>
+                        <li> <a  href='https://www.facebook.com/groups/socialmediagreece/' target='_blank' title = 'Digital Nation Group'> digital nation group </a> </li>
+
+                        <!--<li> <a  href='/terms'  title = 'Terms & Conditions'> terms & conditions </a> </li>
+                        <li> <a  href='/data-privacy-policy'  title = 'Data Privacy Policy'> data privacy policy </a> </li>-->
+                     </ul>
+                  </div>
+               </div>
+            </div>
+         </div>
                   <div class="footer-col-3">
                      <div class="clearfix">
                         <ul class="footer-social-menu">
@@ -350,27 +365,33 @@
              $('#forgot-pass-input').hide()
          })
 
-		 function loginAjaxNew(){
+		   function loginAjaxNew(){
     var email = $('#email').val();
     var password = $('#password').val();
     var remember = document.getElementById("remember-me").checked;
 
     if (email.length > 4 && password.length > 4) {
-    $.ajax({ url: routesObj.baseUrl+"studentlogin", type: "post",
+        
+    $.ajax({ 
+            headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+            url: "/studentlogin", type: "post",
             data: {email:email, password:password, remember:remember},
             success: function(data) {
-                //console.log(data);
 
+                data = data.data
+                
                 switch (data.status) {
                     case 0:
                         if (data.message.length > 0) {
 
                             var p = document.getElementById('account-error').textContent = data['message'];
-                          //  var img = document.createElement('img');
-                           // img.setAttribute('src',"/theme/assets/images/icons/alert-icons/icon-error-alert.svg" )
-                          //  img.setAttribute('alt',"Info Alert" )
+                          /*  var img = document.createElement('img');
+                            img.setAttribute('src',"/theme/assets/images/icons/alert-icons/icon-error-alert.svg" )
+                            img.setAttribute('alt',"Info Alert" )
 
-                            //$('#account-error').append(img);
+                            $('#account-error').append(img);*/
                         //	console.log(p);
                             $('.alert-outer').show()
 

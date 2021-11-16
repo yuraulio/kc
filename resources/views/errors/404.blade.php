@@ -17,7 +17,7 @@
 										<p>Here are some helpful links instead:</p>
 										<p><a href="/" class="dark-bg">Homepage</a><br/>
 										<a href="/in-class-courses" class="dark-bg">In-class courses</a><br/>
-										<a href="/e-learning-courses" class="dark-bg">E-learning courses</a><br/>
+										<a href="/video-on-demand-courses" class="dark-bg">E-learning courses</a><br/>
 										<a href="/contact" class="dark-bg">Contact us</a></p>
 									</div>
 								</div>
