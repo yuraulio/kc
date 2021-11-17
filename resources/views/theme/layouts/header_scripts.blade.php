@@ -92,14 +92,14 @@ $.ajaxSetup({headers:{'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content
 <script>
 
 
-$(document).ready(function(){ 
+{{--$(document).ready(function(){ 
   
     if(blackFriday() == false){
         var favDialog = document.getElementById('myModal');
         favDialog.style.display = "block";
     }
 
-})
+})--}}
 
 
 function getCookie(c_name) {

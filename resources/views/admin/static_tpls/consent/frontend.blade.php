@@ -29,7 +29,7 @@
 
    </section>
 
-   @if(Auth::user() && !Auth::user()->terms)
+   @if(Auth::user() && (!Auth::user()->terms || !Auth::user()->consent))
    <section class="section-page-content">
    <div class="container">
         <form id="acceptconsent" method="POST" action="" class="content-text-area">
@@ -63,7 +63,7 @@
 </main>
 @endsection
 @section('scripts')
-@if(Auth::user() && !Auth::user()->terms)
+@if(Auth::user() && (!Auth::user()->terms || !Auth::user()->consent))
 <script type="text/javascript">
    $(document).on('click', '.conotSubmit', function(e) {
        e.preventDefault();
@@ -113,13 +113,13 @@
        }
        });
 
-   /*$(window).on("scroll", function() {
+   $(window).on("scroll", function() {
 
        if($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
            $('#botview').css('opacity', '1');
            $('#conotSubmit').css('opacity', '1');
             $('#coSubmit').css('opacity', '1');
-         //  $('#coSubmit').removeClass('btn btn--lg btn--secondary btn--completed');
+           $('#coSubmit').removeClass('btn btn--lg btn--secondary btn--completed');
           // $('#conotSubmit').removeClass('btn btn--lg btn--secondary btn--completed');
         // $('#conotSubmit').addClass('btn btn--lg btn--primary')
         // $('#coSubmit').addClass('btn btn--lg btn--secondary');
@@ -133,7 +133,7 @@
           //  $('#conotSubmit').addClass('btn btn--lg btn--secondary btn--completed')
         // $('#coSubmit').addClass('btn btn--lg btn--secondary btn--completed');
        }
-   });*/
+   });
 
 </script>
 @endif
