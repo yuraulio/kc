@@ -68,4 +68,40 @@
 </script>
 
 @endif
+
+@if(isset($ecommerce) && !env('APP_DEBUG'))
+
+<script>
+   
+   dataLayer.push({ ecommerce: null });
+   let ecommerce = [];
+   let items = [];
+
+   dataLayer.push({"event": 'purchase'})
+   
+   @foreach($ecommerce['ecommerce'] as $key => $ti)
+      
+      @if($ti != '')
+         ecommerce.push({"{{$key}}": "{{$ti}}"})
+      @endif
+      
+  
+   @endforeach
+
+   @foreach($ecommerce['items'] as $key => $ti)
+      
+      items.push({"{{$key}}": "{{$ti}}"})
+      
+   @endforeach
+
+   ecommerce.push({"items":items})
+   dataLayer.push({"ecommerce": ecommerce})
+
+
+
+</script>
+
+
+@endif
+
 @stop

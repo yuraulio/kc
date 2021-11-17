@@ -39,7 +39,6 @@
    <!-- /.search-results-heading -->
    @if($results > 0)
    <div class="search-results-wrapper">
-   <?php echo empty($list)?>
    @if (count($list) > 0)
       <div class="section section--dynamic-learning">
 
@@ -60,6 +59,7 @@
             $location = [];
             $eventtype = [];
             $advancedtag = 0;
+            $duration = '';
             if (isset($row->categories) && !empty($row->categories)) :
                 foreach ($row->categories as $category) :
                     if ($category->depth != 0 && $category->parent_id == 9) {
@@ -121,8 +121,7 @@
                      @if(count($row['city']) != 0)   <a href="{{ $row['city'][0]['slugable']['slug'] }}" class="location" title="{{ $row['city'][0]['name'] }}">
                      <img width="20" src="/theme/assets/images/icons/marker.svg" alt=""> <span class="@if($search1!==false) search-highlight @endif"> {{ $row['city'][0]['name'] }} </span></a> @else City @endif
                      <div class="duration"><img width="20" src="/theme/assets/images/icons/icon-calendar.svg" alt="">@if (isset($exp)) {{ $exp }} @else Date @endif</div>
-                     <div class="expire-date"><img width="20" src="/theme/assets/images/icons/Times.svg" alt="">{{ $duration }} h</div>
-                  </div>
+                     @if(isset($duration))<div class="expire-date"><img width="20" src="/theme/assets/images/icons/Times.svg" alt="">{{ $duration }} h</div>@endif                  </div>
                </div>
                <div class="right">
                   <?php  if (count($row['ticket']) != 0) {
@@ -133,7 +132,9 @@
 
                   @if($row['view_tpl'] == 'elearning_pending')
                      <div class="price">Pending</div>
-                  @else
+                  @elseif($row['view_tpl'] == 'elearning_free')
+                     <div class="price">free</div>
+                  @elseif($row['status'] == 0)
                      <div class="price">from €{{$price}}</div>
                   @endif
                   <a href="{{ $row['slugable']['slug'] }}" class="btn btn--secondary btn--md">Course Details</a>
@@ -146,7 +147,7 @@
                <div class="item">
                   <div class="left">
                      <h2>{{ $row['title'] }}</h2>
-                     <div class="expire-date"><img width="20" src="/theme/assets/images/icons/Times.svg" alt="">{{ $duration }} h</div>
+                     @if(isset($duration))<div class="expire-date"><img width="20" src="/theme/assets/images/icons/Times.svg" alt="">{{ $duration }} h</div>@endif
                   </div>
                   <div class="right">
 
@@ -156,7 +157,13 @@
                         $price = $row['ticket'][0]['pivot']['price'];
                     }
                         else { $price = 0; } ?>
+                   @if($row['view_tpl'] == 'elearning_pending')
+                     <div class="price">Pending</div>
+                  @elseif($row['view_tpl'] == 'elearning_free')
+                     <div class="price">free</div>
+                  @elseif($row['status'] == 0)
                      <div class="price">from €{{$price}}</div>
+                  @endif
                      <a href="{{ $row['slugable']['slug'] }}" class="btn btn--secondary btn--md">Course Details</a>
                   </div>
                   <!-- ./item -->
