@@ -124,8 +124,8 @@
                      @if(isset($duration))<div class="expire-date"><img width="20" src="/theme/assets/images/icons/Times.svg" alt="">{{ $duration }} h</div>@endif                  </div>
                </div>
                <div class="right">
-                  <?php  if (count($row['ticket']) != 0) {
-                     $price = $row['ticket'][0]['pivot']['price'];
+                  <?php  if (count($row['ticket']) > 1) {
+                     $price = $row['ticket'][1]['pivot']['price'];
 
                      }
                      else { $price = 0; } ?>
@@ -152,9 +152,9 @@
                   <div class="right">
 
                      <?php
-                    if(count($row['ticket']) != 0)
+                    if(count($row['ticket']) > 1)
                     {
-                        $price = $row['ticket'][0]['pivot']['price'];
+                        $price = $row['ticket'][1]['pivot']['price'];
                     }
                         else { $price = 0; } ?>
                    @if($row['view_tpl'] == 'elearning_pending')
