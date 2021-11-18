@@ -158,6 +158,7 @@ class TopicController extends Controller
      */
     public function update(TopicRequest $request, Topic $topic)
     {
+
         if($request->status)
         {
             $status = 1;
@@ -169,7 +170,20 @@ class TopicController extends Controller
         $request->request->add(['status' => $status]);
 
         $topic->update($request->all());
-        $topic->category()->sync($request->category_id);
+        
+        foreach($request->category_id as $category_id){
+
+            if(!in_array($category_id,$topic->category()->pluck('category_id')->toArray())){
+
+                $category = Category::find($category_id);
+
+                $topic->category()->attach($category_id,['priority' => count($category->topics)]);
+
+            }
+            //$topic->category()->sync($request->category_id);
+
+        }
+        
 
         return redirect()->route('topics.index')->withStatus(__('Topic successfully updated.'));
     }

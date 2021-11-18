@@ -302,7 +302,11 @@ class EventController extends Controller
             }
             if(!$found){
                 $unassigned[$allTopics['id']] = $allTopics;
-                $unassigned[$allTopics['id']]['lessons'] = Topic::with('lessonsCategory')->find($allTopics['id'])->lessonsCategory;
+
+                //$unassigned[$allTopics['id']]['lessons'] = Topic::with('lessonsCategory')->find($allTopics['id'])->lessonsCategory;
+                $unassigned[$allTopics['id']]['lessons'] =Topic::with('lessonsCategory')->find($allTopics['id'])->lessonsCategory()->wherePivot('category_id',219)->get();
+
+                
             }
         }
         //dd($unassigned);

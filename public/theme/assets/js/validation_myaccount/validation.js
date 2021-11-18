@@ -9,6 +9,17 @@ $(function() {
         "Enter valid email address."
     ); 
 
+    /*jQuery.validator.addMethod(
+        "symbols",
+        function(value, element) {
+            //var regex = /^[a-z][a-z\s]*$/;
+            var regex = /^[a-z][a-z\s\(~!@#$$%^^&*(),.<>?]*$/;
+            //var regex = /^[a-z][a-z\s\(+=&._-]*$/;
+            return !regex.test(String(value).toLowerCase())
+        },
+        "Enter valid email address."
+    );*/
+
     jQuery.validator.addMethod(
         "lettersonly",
         function(value, element) {
@@ -27,7 +38,8 @@ $(function() {
 
             'firstname': {
                 required: true,
-                lettersonly: true
+                lettersonly: true,
+                symbols:true
             },
             'lastname': {
                 required: true,
@@ -61,7 +73,8 @@ $(function() {
         messages: {
             'firstname': {
                 required: "This field is required, enter your name.",
-                lettersonly: "Please write everything in English."                
+                lettersonly: "Please write everything in English.",
+                symbols:'error',                
             },
             'lastname': {
                 required: "This field is required, enter your last name.",

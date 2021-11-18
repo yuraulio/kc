@@ -19,7 +19,7 @@ class Topic extends Model
 
     public function category()
     {
-        return $this->morphToMany(Category::class, 'categoryable');
+        return $this->morphToMany(Category::class, 'categoryable')->withPivot('category_id');
     }
 
     public function topic()
