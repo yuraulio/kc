@@ -286,7 +286,7 @@ class EventController extends Controller
         $data['instructors1'] = Instructor::with('medias')->where('status', 1)->get()->groupBy('id');
         $instructors = $event['instructors']->groupBy('lesson_id');
         //dd($instructors);
-        $topics = $event['topic']->unique()->groupBy('topic_id');
+        $topics = $event['allTopics']->unique()->groupBy('topic_id');
         $unassigned = [];
         //dd($allTopicsByCategory->topics[1]);
         //dd($allTopicsByCategory1);
@@ -303,8 +303,8 @@ class EventController extends Controller
             if(!$found){
                 $unassigned[$allTopics['id']] = $allTopics;
 
-                //$unassigned[$allTopics['id']]['lessons'] = Topic::with('lessonsCategory')->find($allTopics['id'])->lessonsCategory;
-                $unassigned[$allTopics['id']]['lessons'] =Topic::with('lessonsCategory')->find($allTopics['id'])->lessonsCategory()->wherePivot('category_id',219)->get();
+                $unassigned[$allTopics['id']]['lessons'] = Topic::with('lessonsCategory')->find($allTopics['id'])->lessonsCategory;
+                //$unassigned[$allTopics['id']]['lessons'] =Topic::with('lessonsCategory')->find($allTopics['id'])->lessonsCategory()->wherePivot('category_id',219)->get();
 
                 
             }

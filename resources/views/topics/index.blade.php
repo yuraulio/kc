@@ -366,7 +366,6 @@
                 topics[index] = order;
             }
 
-            //console.log('index = ' + index + ' order = ' + order)
         });
     
    }
