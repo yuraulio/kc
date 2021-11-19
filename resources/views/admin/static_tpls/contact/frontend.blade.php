@@ -80,8 +80,10 @@
 	                                                <input type="checkbox" id="accept" name="receive-messages" value="accept">
 	                                                <span></span>
 	                                            </div>
-	                                            <label for="receive-messages">I have read, agree upon & accept the <a href="/terms" target="_blank">terms & <br/>conditions</a> and <a href="/data-privacy-policy" target="_blank">data privacy policy</a>. </label>
-	                                        </div>
+	                                            {{--<label for="receive-messages">I have read, agree upon & accept the <a href="/terms" target="_blank">terms & <br/>conditions</a> and <a href="/data-privacy-policy" target="_blank">data privacy policy</a>. </label>--}}
+	                                            <label class="contact-form" for="receive-messages">I consent to the processing of my personal data according to the <a href="/data-privacy-policy" target="_blank">Privacy Policy</a>. </label>
+
+											</div>
 	                                        <div class="submit-area-custom">
 	                                        	<button type="button" id="sendme" class="btn btn--md btn--secondary contactUsSubmit">Apply Now</button>
 	                                        </div>

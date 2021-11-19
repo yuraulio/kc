@@ -235,6 +235,7 @@ class CartController extends Controller
         $ticketType = '';
         $data['curStock'] = 1;
         $tr_price = 0;
+        $data['elearning'] = false;
 
         $c = Cart::content()->count();
         if ($c > 0) {
@@ -252,6 +253,8 @@ class CartController extends Controller
 
             $ev = Event::find($event_id);
             if($ev) {
+
+                $data['elearning'] = $ev->delivery->first() && $ev->delivery->first()->id == 143 ? true : false;
                 $data['eventId'] = $event_id;
                
                 if($ev->view_tpl == 'event_free_coupon'){

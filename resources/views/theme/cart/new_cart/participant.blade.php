@@ -301,9 +301,18 @@
 								<div class="form-row">
 									<div class="custom-control custom-checkbox">
 										<input type="checkbox" name="terms_condition" class="custom-control-input" id="customCheck1">
-										<label class="custom-control-label" for="customCheck1"></label><p>I have read, agree upon & accept the <a href="/terms" class="link-color">terms & conditions</a> and <a href="/data-privacy-policy" class="link-color">data privacy policy.</a></p>
+										{{--<label class="custom-control-label" for="customCheck1"></label><p>I have read, agree upon & accept the <a href="/terms" class="link-color">terms & conditions</a> and <a href="/data-privacy-policy" class="link-color">data privacy policy.</a></p>--}}
+										<label class="custom-control-label" for="customCheck1"></label><p>I accept the <a href="/terms" class="link-color">Terms & Conditions</a> and I confirm that I have read the <a href="/data-privacy-policy" class="link-color">Data Privacy Policy.</a></p>
 										<label id="terms_condition-error" class="error" for="terms_condition" style="display:none;"> </label>
 									</div>
+									@if($elearning)
+									<div class="custom-control custom-checkbox">
+										<input type="checkbox" name="terms_condition2" class="custom-control-input" id="customCheck2">
+										<label class="custom-control-label" for="customCheck2"></label><p>I acknowledge and consent that by paying and accessing the course I lose the right to withdraw from this contract.</p>
+										<label id="terms_condition-error2" class="error" for="terms_condition2" style="display:none;"> </label>
+									</div>
+									@endif
+
 								</div>
 							</div>
 							{{--<div class="add-participant-wrap d-flex justify-content-between">												

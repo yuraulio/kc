@@ -159,6 +159,11 @@ $(function() {
     messages['terms_condition']['required'] = "  Confirm that you accept our terms & conditions and data privacy policy."
     rules['terms_condition']['required'] = true
 
+    messages['terms_condition2']={}
+    rules['terms_condition2']={}
+    messages['terms_condition2']['required'] = "  You need to consent to proceed."
+    rules['terms_condition2']['required'] = true
+
     $("form[name='participant-form']").validate({
 
         rules: rules,

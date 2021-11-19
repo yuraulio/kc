@@ -130,7 +130,7 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::post('ticket/remove_event', ['as' => 'ticket.remove_event', 'uses' => 'TicketController@remove_event']);
     Route::post('ticket/fetchTicketsById', ['as' => 'ticket.fetchTicketsById', 'uses' => 'TicketController@fetchTicketsById']);
     Route::post('ticket/fetchAllTickets', ['as' => 'ticket.fetchAllTickets', 'uses' => 'TicketController@fetchAllTickets']);
-
+    Route::get('ticket-active/{event}/{ticket}/{active}', 'TicketController@enableDisable');
 
     //custom Topic (inside event)
     Route::get('topics/index_event', ['as' => 'topics.index', 'uses' => 'TopicController@index']);

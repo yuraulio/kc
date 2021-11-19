@@ -50,8 +50,10 @@
                             <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-ellipsis-v"></i>
                             </a>
+                            
                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                                 <a class="dropdown-item edit-to-open" data-toggle="modal" data-target="#editTicketModal" data-id="{{$ticket->id}}" data-price="{{$ticket->price}}" data-quantity="{{$ticket->pivot->quantity}}">{{ __('Edit') }}</a>
+                                <a class="dropdown-item ticket-active ticket-active{{$ticket->id}}" data-ticket="{{$ticket->id}}" data-event="{{$event->id}}" data-active="{{$ticket->pivot->active ? 0 : 1}}">@if($ticket->pivot->active) <span class="ticket-span{{$ticket->id}}"> {{ __('Disable') }} </span> @else <span class="ticket-span{{$ticket->id}}"> {{ __('Enable') }} </span> @endif</a>
                                 <a class="dropdown-item" id="remove_ticket" data-ticket-id="{{ $ticket->id }}">{{ __('Delete') }}</a>
                             </div>
                         </div>
@@ -576,6 +578,34 @@
           "ordering": false
       });
    });
+
+
+   $('.ticket-active').click(function(){
+        
+        let ticket = $(this).data('ticket');
+        let event = $(this).data('event');
+        let active = $(this).data('active');
+
+        $.ajax({
+         type: 'GET',
+         headers: {
+         'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+         },
+         Accept: 'application/json',
+         url: "/admin/ticket-active/" + event + "/" + ticket + "/" + active,
+         success: function(data) {
+
+            console.log(data);
+            console.log('.ticket-span' + data.ticket)
+            console.log('.ticket-active' + $('.ticket-active' + data.ticket))
+
+            $('.ticket-span' + data.ticket).html(data.text);
+            //$('.ticket-active' + data.ticket).attr("data-active", data.active)
+            $('.ticket-active' + data.ticket).data("active", data.active)
+         }
+      });
+
+   })
 
 </script>
 

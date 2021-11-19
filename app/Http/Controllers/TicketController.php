@@ -263,4 +263,31 @@ class TicketController extends Controller
         }
 
     }
+
+    public function enableDisable(Event $event, $ticket, $active){
+
+        //$event->ticket()->wherePivot('ticket_id',$ticket)->first()->active = $active;
+        //$event->ticket()->wherePivot('ticket_id',$ticket)->first()->save();
+       
+        $event->ticket()->wherePivot('ticket_id',$ticket)->updateExistingPivot($ticket,[
+            'active' => $active
+        ], false);
+        
+        if($active == 1){
+            return response()->json([
+                'active' => 0,
+                'text' => 'Disable',
+                'ticket' => $ticket
+            ]);
+        }else{
+            return response()->json([
+                'active' => 1,
+                'text' => 'Enable',
+                'ticket' => $ticket
+
+            ]);
+        }
+
+    }
+
 }

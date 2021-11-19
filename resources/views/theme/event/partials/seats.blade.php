@@ -48,10 +48,14 @@
                continue;
             }
             
-
          ?>
-         <div class="@if($showAlumni) col-4 col-sm-12 @else col-6 col-sm-12 @endif 
-                        @if(!$showAlumni && ($ticket['type'] == 'Early Bird' || $ticket['type'] == 'Special')) ticket-right @endif">
+         <div class="@if($showAlumni && $showSpecial) col-4 col-sm-12 @elseif($showAlumni && !$showSpecial) col-6 col-sm-12 
+                     @elseif(!$showAlumni && $ticket['type'] !== 'Alumni' && !$showSpecial)  
+                     @else col-6 col-sm-12 @endif 
+                        
+                     @if(!$showAlumni && ($ticket['type'] == 'Early Bird' || $ticket['type'] == 'Special')) ticket-right 
+                     @elseif($ticket['type'] == 'Alumni' && !$showSpecial) ticket-right 
+                     @elseif(!$showAlumni && $ticket['type'] !== 'Alumni' && !$showSpecial) ticket-center  @endif">
        
             <div class="ticket-box-wrapper">
                <div class="ticket-box">

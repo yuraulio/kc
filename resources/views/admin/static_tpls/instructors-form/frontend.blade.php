@@ -87,7 +87,7 @@
 	                                                <input type="checkbox" id="accept" name="receive-messages" value="accept">
 	                                                <span></span>
 	                                            </div>
-	                                            <label for="receive-messages">I have read, agree upon & accept the <a href="/terms" target="_blank">terms & <br/>conditions</a> and <a href="/data-privacy-policy" target="_blank">data privacy policy</a>. </label>
+												<label class="insructor-form" for="receive-messages">I accept the  <a href="/terms" target="_blank"> Terms & Conditions </a> and I confirm that I have read the <a href="/data-privacy-policy" target="_blank">Data Privacy Policy.</a>. </label>
 	                                        </div>
 	                                        <div class="submit-area-custom">
 	                                        	<button type="button" class="btn btn--md btn--secondary beSubmit">Apply Now</button>

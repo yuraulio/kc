@@ -1092,6 +1092,13 @@ border-radius: 4px;
 
 }
 
+.ticket-center{
+    text-align: center;
+    text-align: -webkit-center;
+    text-align: -moz-center;
+
+}
+
 
 .social-icons{}
 .social-icons ul{display: flex!important;}
@@ -1103,3 +1110,5 @@ border-radius: 4px;
 img.linkdein-image-add{width:36px!important;}
 
 .section-text-carousel.background.section--blue-gradient:nth-child(2n+1) {background: rgb(48, 114, 202);}
+.insructor-form{ width: 342px!important; }
+.insructor-form{ width: 309px!important; }

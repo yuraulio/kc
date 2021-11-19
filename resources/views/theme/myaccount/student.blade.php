@@ -196,13 +196,13 @@
                                     <form id="update-form" method="post" action="{{ route('update.personalInfo') }}" autocomplete="off">
                                        {!! csrf_field() !!}
                                        <div class="col12">
-                                          <label>First name: <span>*</span></label>
+                                          <label>My first name is <span>(*)</span></label>
                                           <div class="input-safe-wrapper">
                                              <input class="required" type="text" name="firstname" id="firstname"  value="{{ old('firstname', $currentuser['firstname']) }}" >
                                           </div>
                                        </div>
                                        <div class="col12">
-                                          <label>Last name: <span>*</span></label>
+                                          <label>My last name is: <span>(*)</span></label>
                                           <div class="input-safe-wrapper">
                                              <input class="required"  type="text" name="lastname" id="lastname" value="{{ old('lastname', $currentuser['lastname']) }}" >
                                           </div>

@@ -99,7 +99,12 @@
                                         $row['ticket']->where('type','Special')->first()->pivot->quantity > 0){
                                            
                       $price = $row['ticket']->where('type','Special')->first()->pivot->price;
-                   }
+                   }else if(isset($row['ticket']->where('type','Regular')->first()->pivot->price) && 
+                   $row['ticket']->where('type','Regular')->first()->pivot->price > 0 && 
+                      $row['ticket']->where('type','Regular')->first()->pivot->quantity > 0){
+                         
+                     $price = $row['ticket']->where('type','Regular')->first()->pivot->price;
+                  }
                    else { 
                       $price = 0; 
                    }
@@ -181,7 +186,12 @@
                                                          $row['ticket']->where('type','Special')->first()->pivot->quantity > 0){
                                                             
                                        $price = $row['ticket']->where('type','Special')->first()->pivot->price;
-                                    }
+                                    }else if(isset($row['ticket']->where('type','Regular')->first()->pivot->price) && 
+                                    $row['ticket']->where('type','Regular')->first()->pivot->price > 0 && 
+                                       $row['ticket']->where('type','Regular')->first()->pivot->quantity > 0){
+                                          
+                                      $price = $row['ticket']->where('type','Regular')->first()->pivot->price;
+                                   }
                                     else { 
                                        $price = 0; 
                                     }
@@ -295,7 +305,12 @@
                                            $row['ticket']->where('type','Special')->first()->pivot->quantity > 0){
                                               
                          $price = $row['ticket']->where('type','Special')->first()->pivot->price;
-                      }
+                      }else if(isset($row['ticket']->where('type','Regular')->first()->pivot->price) && 
+                      $row['ticket']->where('type','Regular')->first()->pivot->price > 0 && 
+                         $row['ticket']->where('type','Regular')->first()->pivot->quantity > 0){
+                            
+                        $price = $row['ticket']->where('type','Regular')->first()->pivot->price;
+                     }
                       else { 
                          $price = 0; 
                       }
