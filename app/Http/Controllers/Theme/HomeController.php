@@ -596,9 +596,18 @@ class HomeController extends Controller
         $data['syllabus'] = $event->syllabus->toArray();
         $data['is_event_paid'] = 0;
         $data['sumStudents'] = $event->category[0]->getSumOfStudents();
-        $data['showSpecial'] = ($event->ticket()->where('type','Early Bird')->first() && $event->ticket()->where('type','Special')->first())  ? 
+        $data['showSpecial'] = false;
+
+        if($event->ticket()->where('type','Early Bird')->first()){
+            $data['showSpecial'] = ($event->ticket()->where('type','Early Bird')->first() && $event->ticket()->where('type','Special')->first())  ? 
                                     ($event->ticket()->where('type','Special')->first()->pivot->active 
                                         || ($event->ticket()->where('type','Early Bird')->first()->pivot->quantity > 0)) : false;
+        }else{
+            
+            $data['showSpecial'] = $event->ticket()->where('type','Special')->first() ? $event->ticket()->where('type','Special')->first()->pivot->active  : false;
+        }
+
+        
 
         $price = -1;
 
