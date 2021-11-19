@@ -84,7 +84,7 @@ setTimeout(timer1801,1801000);
 <!-- OneTrust Cookies Consent Notice (Production CDN, knowcrunch.com, en-GB) start -->
 @if(Agent::isDesktop())
 
-<script type="text/javascript">
+{{--<script type="text/javascript">
 var _iub = _iub || [];
 _iub.csConfiguration = {"whitelabel":false,"lang":"en","siteId":1874776,"cookiePolicyInOtherWindow":true,"consentOnDocument":true,"perPurposeConsent":true,"consentOnHorizontalScroll":true,"cookiePolicyId":76147833,"cookiePolicyUrl":"https://knowcrunch.com/data-privacy-policy", "banner":{ "acceptButtonDisplay":true,"acceptButtonColor":"#C8D151","acceptButtonCaptionColor":"white","position":"float-top-center","textColor":"black","backgroundColor":"white","customizeButtonDisplay":true,"customizeButtonColor":"#DADADA","customizeButtonCaptionColor":"#4D4D4D" }};
 </script>
@@ -94,7 +94,13 @@ _iub.csConfiguration = {"whitelabel":false,"lang":"en","siteId":1874776,"cookieP
 
 function OptanonWrapper() { }
 
+</script>--}}
+
+<script type="text/javascript">
+var _iub = _iub || [];
+_iub.csConfiguration = {"cookiePolicyInOtherWindow":true,"perPurposeConsent":true,"whitelabel":false,"lang":"en","siteId":1874776,"countryDetection":true,"gdprAppliesGlobally":false,"consentOnDocument":true,"cookiePolicyId":76147833,"cookiePolicyUrl":"https://knowcrunch.com/cookies-notice", "banner":{ "acceptButtonDisplay":true,"customizeButtonDisplay":true,"acceptButtonColor":"#c8d151","acceptButtonCaptionColor":"#010000","customizeButtonColor":"#DADADA","customizeButtonCaptionColor":"#4D4D4D","position":"float-top-center","textColor":"black","backgroundColor":"white","rejectButtonColor":"#0073CE","rejectButtonCaptionColor":"white" }};
 </script>
+<script type="text/javascript" src="//cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script>
 
 @endif
 
