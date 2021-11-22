@@ -752,7 +752,8 @@ $(document).ready(function() {
                 }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Sponsored'){
                     sponsored = sponsored + parseInt(value)
                     count_sponsored++
-                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early birds'){
+                }else if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Early Bird' || 
+                                $('#participants_table').DataTable().column( 2 ).data()[key] == 'Early birds'){
                     early = early + parseInt(value)
                     count_early++
                 }

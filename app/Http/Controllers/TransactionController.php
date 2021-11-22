@@ -105,7 +105,7 @@ class TransactionController extends Controller
 
         }
 
-
+        $earlyCount = 0;
         $data['transactions'] = [];
         foreach($transactions as $transaction){
             if(!$transaction->subscription->first() && $transaction->user->first() && $transaction->event->first()){
@@ -139,6 +139,9 @@ class TransactionController extends Controller
                     $coupon_code = '-';
                 }
 
+                if($ticketType == 'Early Bird'){
+                    $earlyCount += 1;
+                }
                 
                 $countUsers = count($transaction->user);
 
@@ -153,7 +156,7 @@ class TransactionController extends Controller
                     $videos = isset($videos) ? json_decode($videos->videos,true) : null;
                    
                     $data['transactions'][] = ['id' => $transaction['id'], 'user_id' => $u['id'],'name' => $u['firstname'].' '.$u['lastname'],
-                                                'event_id' => $transaction->event[0]['id'],'event_title' => $transaction->event[0]['title'].' / '.date('d-m-Y', strtotime($transaction->event[0]['published_at'])),'coupon_code' => $coupon_code, 'type' => $ticketType,'ticketName' => $ticketName,
+                                                'event_id' => $transaction->event[0]['id'],'event_title' => $transaction->event[0]['title'].' / '.date('d-m-Y', strtotime($transaction->event[0]['published_at'])),'coupon_code' => $coupon_code, 'type' => trim($ticketType),'ticketName' => $ticketName,
                                                 'date' => date_format($transaction['created_at'], 'Y-m-d'), 'amount' => $transaction['amount'] / $countUsers,
                                                 'is_elearning' => $isElearning,
                                                 'coupon_code' => $transaction['coupon_code'],'videos_seen' => $this->getVideosSeen($videos),'expiration'=>$expiration];

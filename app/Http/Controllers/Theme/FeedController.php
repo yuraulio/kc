@@ -24,7 +24,6 @@ class FeedController extends Controller
     public function generateSitemap()
     {
 
-    
         $custom = [
             ['loc' => $this->baseUrl, 'lastmod' => '', 'priority' => '', 'changefreq' => ''],
         ];
