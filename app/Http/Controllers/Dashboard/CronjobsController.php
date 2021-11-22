@@ -140,7 +140,7 @@ class CronjobsController extends Controller
             $amount = 0;
 
             foreach($event->ticket as $price){
-                if($price->pivot->price > 0 && $price->type != 'Alumni') {
+                if($price->pivot->price > 0 && $price->type != 'Alumni' && $price->type != 'Special') {
                     $amount = $price->pivot->price;
                 }
 
@@ -181,7 +181,7 @@ class CronjobsController extends Controller
             $amount = 0;
             
             foreach($event->ticket as $price){
-                if($price->pivot->price > 0 && $price->type != 'Alumni') {
+                if($price->pivot->price > 0 && $price->type != 'Alumni' && $price->type != 'Special') {
                     $amount = $price->pivot->price;
                 }
 
