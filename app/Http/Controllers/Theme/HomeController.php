@@ -411,8 +411,10 @@ class HomeController extends Controller
         Session::forget('user_id');
         Session::forget('coupon_code');
         Session::forget('coupon_price');
+        Session::forget('priceOf');
         
-        return redirect($content->slugable->slug);
+        return view('theme.cart.new_cart.thank_you_free');
+        //return redirect($content->slugable->slug);
     }
 
     private function city($page){

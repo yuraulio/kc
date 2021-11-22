@@ -214,6 +214,9 @@ label.custom-control-label{font-size:19px;}
 
 
 /* lioncode */
+.checkout-button-coupon{min-width:128px}
+.checkout-button-coupon.active{color: grey!important;border: 1px solid grey!important;}
+.coupon-successfull-message{margin-top:1.0rem!important;}
 #payment-element{border: 1px solid black !important;border-radius: 0;}
 .mt-4, .my-4 {margin-top: 6.5rem!important;}
 .checkout-button-secondary img { margin-top: -4px; }
@@ -233,17 +236,31 @@ label.custom-control-label{font-size:19px;}
 .input-coupon-successfull{
     color: #b8ff6b!important;
     text-align: center!important;
-    background: #419bff url(../images/checkbox-coupon-accepted.svg) no-repeat scroll 140px 15px!important;
     background-size: 16px!important;
-    margin-top:15px!important;
-    padding-top: 5px!important;
+    padding-top: 10px!important;
+    border-radius: 0;
+    border: 1px solid black;
+    background-color:rgb(29,129,237) ;
 }
 
+.input-coupon-successfull:after{
+    background-image: url(../images/checkbox-coupon-accepted.svg);
+    background-size: 20px;
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 26px;
+    height: 14px;
+    content:"";
+}
+.checkout-input-groups{width:100%;}
 
 
 .card-input{
     border: 1px solid;
     padding: 10px;
+}
+#card-error{
+    color:red;
 }
 
 /* ==========================================================================
@@ -376,7 +393,7 @@ label.custom-control-label{font-size:19px;}
 
 @media(max-width:992px){
 
-.input-coupon-successfull {background: url(../images/checkbox-coupon-accepted.svg) no-repeat scroll 200px 10px;background-size: 25px;}/*lioncode*/
+/*.input-coupon-successfull {background: url(../images/checkbox-coupon-accepted.svg) no-repeat scroll 200px 10px;background-size: 25px;}/*lioncode*/
 .remove-participant a {left: 0;}
 .header-logo a {max-width: 150px;}
 .checkout-step{padding:40px 0;}

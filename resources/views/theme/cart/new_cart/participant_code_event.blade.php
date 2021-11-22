@@ -280,7 +280,7 @@
 								</div>	
 								<div class="form-row">
 									<div class="col-md-12 mb-4">
-										<label class="input-label">Town or city I live in is</label>								
+										<label class="input-label">The town or city I live in is</label>								
 										<input type="text" name="city[]" class="form-control" value="{{old('city',$city[0])}}"  aria-describedby="inputGroupPrepend3">
 										<div class="invalid-feedback">										
 										</div>

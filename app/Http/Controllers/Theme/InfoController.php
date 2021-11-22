@@ -187,7 +187,7 @@ class InfoController extends Controller
         Session::forget('user_id');
         Session::forget('coupon_code');
         Session::forget('coupon_price');
-        
+        Session::forget('priceOf');
         ///dd($data);
         
         if (isset($this->transaction['payment_response'])) {

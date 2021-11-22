@@ -4,19 +4,19 @@
 
 <!---------------- checkout progress-bar start --------------->
 <div class="checkout-step">
-		<div class="container">		
-			<ul>
-				<li class="active"><span class="counter">1.</span><i>Participant(s)</i></li>
-				<li><span class="counter">2.</span><i>Billing</i></li>
-				<li><span class="counter">3.</span><i>Checkout</i></li>
-			</ul>
-		</div>
+	<div class="container">		
+		{{--<ul>
+			<li class="active"><span class="counter">1.</span><i>Participant(s)</i></li>
+			<li><span class="counter">2.</span><i>Billing</i></li>
+			<li><span class="counter">3.</span><i>Checkout</i></li>
+		</ul>--}}
 	</div>
+</div>
 
 <!---------------- checkout progress-bar end --------------->	
 <div class="form-wrap">
 		<div class="container">			
-			<h1>Participant(s)</h1>			
+			<h1>Participant</h1>			
 			<div class="row">
 				<!---------------- Participant form start--------------->
 				<div class="col-md-6 col-xl-6">
@@ -305,18 +305,18 @@
 										<label class="custom-control-label" for="customCheck1"></label><p>I accept the <a href="/terms" class="link-color">Terms & Conditions</a> and I confirm that I have read the <a href="/data-privacy-policy" class="link-color">Data Privacy Policy.</a></p>
 										<label id="terms_condition-error" class="error" for="terms_condition" style="display:none;"> </label>
 									</div>
-									@if($elearning)
+									{{--@if($elearning)
 									<div class="custom-control custom-checkbox">
 										<input type="checkbox" name="terms_condition2" class="custom-control-input" id="customCheck2">
 										<label class="custom-control-label" for="customCheck2"></label><p>I hereby acknowledge and consent that by proceeding to payment and accessing the course materials I lose the right to withdraw from this contract.</p>
 										<label id="terms_condition-error2" class="error" for="terms_condition2" style="display:none;"> </label>
 									</div>
-									@endif
+									@endif--}}
 								</div>
 							</div>
 							
 							<div class="checkout-btn-wrap form-row mb-4 my-md-5 align-items-center">
-								<button id="btn" type="submit" class="btn registration checkout-button-secondary do-checkout-free">Next: Billing <img src="{{cdn('new_cart/images/arrow-next-red.svg')}}" width="20px" height="12px" class="without-hover" alt=""> <img src="{{cdn('new_cart/images/arrow-next-red2.svg')}}" width="20px" height="12px" class="with-hover" alt=""> </button>
+								<button id="btn" type="submit" class="btn registration checkout-button-secondary do-checkout-free">Enroll Now <img src="{{cdn('new_cart/images/arrow-next-red.svg')}}" width="20px" height="12px" class="without-hover" alt=""> <img src="{{cdn('new_cart/images/arrow-next-red2.svg')}}" width="20px" height="12px" class="with-hover" alt=""> </button>
 							</div>
 						</form>	
 					</div>

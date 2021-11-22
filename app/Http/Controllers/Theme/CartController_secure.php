@@ -126,6 +126,7 @@ class CartController extends Controller
                     if ($tvalue->pivot->event_id == $item->options->event && $tvalue->ticket_id == $item->id) {
                         $ticketType = $tvalue->type;
                         $data['curStock'] = $tvalue->pivot->quantity;
+                        $data['oldPrice'] = $tvalue->pivot->price * $totalitems;
                         $data['price'] = $tvalue->pivot->price * $totalitems;
                         $tr_price = $tvalue->pivot->price * $totalitems;
                     }
@@ -136,7 +137,12 @@ class CartController extends Controller
 
         if(Session::get('coupon_code')){
             $data['price'] = Session::get('coupon_price') * $totalitems;
+            $data['savedPrice'] = $data['oldPrice'] - Session::get('coupon_price') * $totalitems;
             $tr_price = Session::get('coupon_price') * $totalitems;
+        }
+
+        if(Session::get('priceOf')){
+            $data['priceOf'] = Session::get('priceOf');
         }
 
         if($data['type'] == 'free_code' ){
@@ -457,6 +463,7 @@ class CartController extends Controller
             Session::forget('user_id');
             Session::forget('coupon_code');
             Session::forget('coupon_price');
+            Session::forget('priceOf');
         }
          
         Session::put('pay_seats_data', $seats_data);
@@ -1422,8 +1429,15 @@ class CartController extends Controller
 
     public function checkCoupon(Request $request, $event){
 
-        //$coupon = Coupon::where('code_coupon',$request->coupon)->where('status',true)->get();
+        if(Session::get('coupon_code')){
+            return response()->json([
+                'success' => 'used',
+                'message' => 'Your coupon has been declined. Please try again.'
+            ]);
+        }
 
+        //$coupon = Coupon::where('code_coupon',$request->coupon)->where('status',true)->get();
+        //dd($request->all());
         $event = Event::find($event);
         $coupon = $event->coupons()->where('status',true)->get();
         if(count($coupon) > 1){
@@ -1445,19 +1459,27 @@ class CartController extends Controller
                 if($coupon->percentage){
                     $price = $request->price * $coupon->price / 100;
                     $newPrice = $request->price - $price;
+                    $priceOf = $coupon->price . '%';
                 }else{
                     $newPrice = $coupon->price;
+                    $priceOf = ($coupon->price / $request->price) * 100;
+                    $priceOf = round($priceOf,2) . '%';
                 }
-                //dd($request->price);
-                
+
+                $savedPrice = $request->price - $newPrice;
                 Session::put('coupon_code',$request->coupon);
                 Session::put('coupon_price',$newPrice);
+                Session::put('priceOf',$priceOf);
+                
                 return response()->json([
                     'success' => true,
                     'new_price' => $newPrice,
+                    'savedPrice' => round($savedPrice, 2) ,
+                    'priceOf' => $priceOf,
                     'newPriceInt2' => round($newPrice / 2, 2),
                     'newPriceInt3' => round($newPrice / 3, 2),
-                    'message' => 'Success! Your coupon has been accepted.'
+                    'message' => 'Success! Your coupon has been accepted.',
+                    'coupon_code' => $request->coupon
                 ]);
             }
 

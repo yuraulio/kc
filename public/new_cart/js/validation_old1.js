@@ -10,65 +10,18 @@ $(function() {
     ); 
 
     jQuery.validator.addMethod(
-        "symbols",
-        function(value, element) {
-            
-            var numberRegex = /\d/;
-            return !String(value).toLowerCase().match(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/) && !numberRegex.test(String(value).toLowerCase());
-        },
-        "Enter valid data. Special characters are not allowed."
-    );
-    
-    jQuery.validator.addMethod(
         "lettersonly",
         function(value, element) {
             //var regex = /^[a-z][a-z\s]*$/;
-            var regex = /^[a-z][a-z\s]*$/;
+            var regex = /^[a-z][a-z\s\(~!@#$$%^^&*(),.<>?]*$/;
             //var regex = /^[a-z][a-z\s\(+=&._-]*$/;
             return regex.test(String(value).toLowerCase()) || String(value).toLowerCase() == '';
         },
         "Enter valid email address."
-    );
+    ); 
 
 
-    jQuery.validator.addMethod(
-        "lettersonlyEmail",
-        function(value, element) {
-            
-            var regex = /^[a-z][a-z0-9\s\(+=@!#$%^*)&._-]*$/;
-            
-            return regex.test(String(value).toLowerCase()) || String(value).toLowerCase() == '' ;
-        },
-        "Please write everything in English."
-    );
-
-
-    jQuery.validator.addMethod(
-        "billemail",
-        function(value, element) {
-            
-            var regex = /^[a-z][a-z0-9\s\(+=@!#$%^*)&._-]*$/;
-            var regex1 = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-            
-            return (regex1.test(String(value).toLowerCase())) || String(value).toLowerCase() == '' ;
-        },
-        "Enter valid email address."
-    );
-
-
-    jQuery.validator.addMethod(
-        "billemailGreek",
-        function(value, element) {
-            
-            var regex = /^[a-z][a-z0-9\s\(+=@!#$%^*)&._-]*$/;
-
-            
-            return (regex.test(String(value).toLowerCase())) || String(value).toLowerCase() == '' ;
-        },
-        "Please write everything in English."
-    );
-
+    
 
     let messages = {};
     let rules = {};
@@ -139,46 +92,38 @@ $(function() {
         //rules
         rules[`firstname[]`] = {}
         rules[`firstname[]`]['required'] = true
-        rules[`firstname[]`]['symbols'] = true
         rules[`firstname[]`]['lettersonly'] = true
 
         rules[`firstname[${index}]`] = {}
         rules[`firstname[${index}]`]['required'] = true
-        rules[`firstname[${index}]`]['symbols'] = true
         rules[`firstname[${index}]`]['lettersonly'] = true
-       
+
         rules[`lastname[]`] = {}
         rules[`lastname[]`]['required'] = true
-        rules[`lastname[]`]['symbols'] = true
         rules[`lastname[]`]['lettersonly'] = true
-        
+
         rules[`lastname[${index}]`] = {}
         rules[`lastname[${index}]`]['required'] = true
-        rules[`lastname[${index}]`]['symbols'] = true
         rules[`lastname[${index}]`]['lettersonly'] = true
 
         rules[`email[]`] = {}
         rules[`email[]`]['required'] = true
-        rules[`email[]`]['lettersonlyEmail'] = true
         rules[`email[]`]['emailWithDot'] = true
 
         rules[`email[${index}]`] = {}
         rules[`email[${index}]`]['required'] = true
-        rules[`email[${index}]`]['lettersonlyEmail'] = true
         rules[`email[${index}]`]['emailWithDot'] = true
 
         rules[`company[]`] = {}
-        rules[`company[]`]['lettersonlyEmail'] = true
+        rules[`company[]`]['lettersonly'] = true
 
         rules[`company[${index}]`] = {}
-        rules[`company[${index}]`]['lettersonlyEmail'] = true
+        rules[`company[${index}]`]['lettersonly'] = true
 
         rules[`city[]`] = {}
-        rules[`city[]`]['symbols'] = true
         rules[`city[]`]['lettersonly'] = true
 
         rules[`city[${index}]`] = {}
-        rules[`city[${index}]`]['symbols'] = true
         rules[`city[${index}]`]['lettersonly'] = true
 
         rules[`mobile[]`] = {}
@@ -190,8 +135,10 @@ $(function() {
         rules[`student_type_id[]`] = {}
         rules[`student_type_id[]`]['required'] =true
  
+
         rules[`student_type_id[${index}]`] = {}
         rules[`student_type_id[${index}]`]['required'] =true
+
 
         rules[`country_code[]`] = {}
         rules[`country_code[]`]['required'] = true
@@ -200,10 +147,10 @@ $(function() {
         rules[`country_code[${index}]`]['required'] = true
 
         rules[`jobtitle[]`] = {}
-        rules[`jobtitle[]`]['lettersonlyEmail'] = true
+        rules[`jobtitle[]`]['lettersonly'] = true
 
         rules[`jobtitle[${index}]`] = {}
-        rules[`jobtitle[${index}]`]['lettersonlyEmail'] = true
+        rules[`jobtitle[${index}]`]['lettersonly'] = true
 
     });
 
@@ -234,12 +181,12 @@ $(function() {
 
             'billname': {
                 required: true,
-                lettersonlyEmail: true,
+                lettersonly: true,
                 
             },
 
             'billafm': {
-                lettersonlyEmail: true,
+                required: true,
             },
             'billaddress': {
                 lettersonly: true,
@@ -257,12 +204,6 @@ $(function() {
                 lettersonly: true,
             },
 
-            'billemail':{
-                billemailGreek:true,
-                billemail:true
-                
-
-            }
 
          
         },
@@ -273,7 +214,9 @@ $(function() {
                 required: "This field is required, Enter Company or full name.",      
                 lettersonly: "Please write everything in English."         
             },
-               
+            'billafm': {
+                required: "This field is required, Enter VAT or tax ID.",                
+            },    
             'billaddress': {
                 lettersonly: "Please write everything in English."  
             },
@@ -287,11 +230,9 @@ $(function() {
             'billcountry': {
                 lettersonly: "Please write everything in English."  
             }, 
-
             'billemail': {
                 required: "This field is required, enter your email.",
             },
-           
         },
         submitHandler: function(form) {
             form.submit();

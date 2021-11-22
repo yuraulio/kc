@@ -38,8 +38,8 @@
         	?>
         	<div class="col-md-6 col-xl-6">
 				<div class="checkout-full-wrap">												
-					<h2 class="checkout-payment-flexibility">Payment flexibility</h2>
-					<p class="my-4">Some international credit cards and AMEX cards do not accept installments.</p>
+					<h2>Payment flexibility</h2>
+					<p {{--class="my-4"--}}>Some international credit cards and AMEX cards do not accept installments.</p>
 					<form id="checkout-form" action="{{route('userPaySbt')}}" method="post">
 						@csrf
 						<div class="radio-group">
@@ -60,6 +60,7 @@
 							<h2>Card information</h2>
 							<div class="card-input">
     		                    <div id="card-element"></div>
+								
 							</div>
 							<p>We do not store your card’s information.</p>
 							<div class="form-row my-5 align-items-center prev-next-wrap">									
@@ -119,13 +120,13 @@
 
 	const cardButton = document.getElementById('pay-now');
 	cardButton.addEventListener('click', async (e) => {
-
+        $("#card-error").remove();
     	const { paymentMethod, error } = await stripe.createPaymentMethod(
     	    'card', cardElement
     	);
 
     	if (error) {
-    	    // Display "error.message" to the user...
+			$('<p id="card-error">Enter valid data.</p>').insertAfter('.card-input')
     	} else {
 			$('#payment_method').val(paymentMethod.id);
 
