@@ -22,9 +22,7 @@ $(function() {
     jQuery.validator.addMethod(
         "lettersonly",
         function(value, element) {
-            //var regex = /^[a-z][a-z\s]*$/;
             var regex = /^[a-z][a-z\s]*$/;
-            //var regex = /^[a-z][a-z\s\(+=&._-]*$/;
             return regex.test(String(value).toLowerCase()) || String(value).toLowerCase() == '';
         },
         "Enter valid email address."
@@ -33,11 +31,22 @@ $(function() {
 
     jQuery.validator.addMethod(
         "lettersonlyEmail",
-        function(value, element) {
-            
-            var regex = /^[a-z][a-z0-9\s\(+=@!#$%^*)&._-]*$/;
-            
+        function(value, element) {       
+            var regex = /^[a-z][a-z0-9\s\(+=@!#$%^*)&._-]*$/;  
             return regex.test(String(value).toLowerCase()) || String(value).toLowerCase() == '' ;
+        },
+        "Please write everything in English."
+    );
+
+    jQuery.validator.addMethod(
+        "afm",
+        function(value, element) {       
+            var regex = /^[a-z][a-z0-9\s\(+=@!#$%^*)&._-]*$/;  
+            var numberRegex = /\d/;
+            
+            console.log(regex.test(String(value).toLowerCase()) || String(value).toLowerCase() == '' || numberRegex.test(String(value).toLowerCase()));
+            
+            return regex.test(String(value).toLowerCase()) || String(value).toLowerCase() == '' || numberRegex.test(String(value).toLowerCase()) ;
         },
         "Please write everything in English."
     );
@@ -239,7 +248,7 @@ $(function() {
             },
 
             'billafm': {
-                lettersonlyEmail: true,
+                afm: true,
             },
             'billaddress': {
                 lettersonly: true,

@@ -86,21 +86,9 @@ setTimeout(timer1801,1801000);
 
 {{--<script type="text/javascript">
 var _iub = _iub || [];
-_iub.csConfiguration = {"whitelabel":false,"lang":"en","siteId":1874776,"cookiePolicyInOtherWindow":true,"consentOnDocument":true,"perPurposeConsent":true,"consentOnHorizontalScroll":true,"cookiePolicyId":76147833,"cookiePolicyUrl":"https://knowcrunch.com/data-privacy-policy", "banner":{ "acceptButtonDisplay":true,"acceptButtonColor":"#C8D151","acceptButtonCaptionColor":"white","position":"float-top-center","textColor":"black","backgroundColor":"white","customizeButtonDisplay":true,"customizeButtonColor":"#DADADA","customizeButtonCaptionColor":"#4D4D4D" }};
-</script>
-<script type="text/javascript" src="//cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script>
-
-<script type="text/javascript">
-
-function OptanonWrapper() { }
-
-</script>--}}
-
-<script type="text/javascript">
-var _iub = _iub || [];
 _iub.csConfiguration = {"cookiePolicyInOtherWindow":true,"perPurposeConsent":true,"whitelabel":false,"lang":"en","siteId":1874776,"countryDetection":true,"gdprAppliesGlobally":false,"consentOnDocument":true,"cookiePolicyId":76147833,"cookiePolicyUrl":"https://knowcrunch.com/cookies-notice", "banner":{ "acceptButtonDisplay":true,"customizeButtonDisplay":true,"acceptButtonColor":"#c8d151","acceptButtonCaptionColor":"#010000","customizeButtonColor":"#DADADA","customizeButtonCaptionColor":"#4D4D4D","position":"float-top-center","textColor":"black","backgroundColor":"white","rejectButtonColor":"#0073CE","rejectButtonCaptionColor":"white" }};
 </script>
-<script type="text/javascript" src="//cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script>
+<script type="text/javascript" src="//cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script>--}}
 
 @endif
 
@@ -125,10 +113,18 @@ _iub.csConfiguration = {"cookiePolicyInOtherWindow":true,"perPurposeConsent":tru
 
 {{--<script src="https://js.stripe.com/v3/"></script>--}}
 
+@if(!env('APP_DEBUG'))
+<script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="7c5a111b-df1a-4a4a-bd31-fbee0d6593ba" data-blockingmode="auto" type="text/javascript"></script>
+@endif
+
+
 </head>
 
 <body>
 
+@if(!env('APP_DEBUG'))
+<script id="CookieDeclaration" src="https://consent.cookiebot.com/7c5a111b-df1a-4a4a-bd31-fbee0d6593ba/cd.js" type="text/javascript" async></script>
+@endif
 
 <!-- Load Facebook SDK for JavaScript -->
 

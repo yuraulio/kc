@@ -5,9 +5,78 @@ $social_media = get_social_media();
 <footer id="footer">
 {{--@include('theme.blackfriday.blackfriday')--}}
 
+
    <div class="container">
+      
+
+      
+
       <div class="footer-row">
-         <div class="footer-col-1">
+
+         <div class="col12 award-section">
+            <h4 class="footer-title award-title">Our awards</h4>
+            <div class="mobile-toggle">
+
+               {{--<div class="clearfix">
+                  <ul class="footer-award-menu">
+                     <li>
+                        <div>
+                           <div><img alt_text="social media award" src="{{cdn('/awards/1.png')}}"></div> 
+                           <p> Best Digital Marketing E-learning 
+                                 Award by <span class="text-highlight2"> Education Leaders </span> </p>  
+                        </div>
+
+                     </li>
+
+                     <li>
+                        <div>
+                        <div><img alt_text="social media award" src="{{cdn('/awards/2.png')}}"></div>
+                           <p> Best Social Media Learning Program 
+                            Award by <span class="text-highlight2"> Social Media World </span></p>
+                        </div>
+
+                        
+                     </li>
+
+                     <li>
+                        <div>
+                        <div><img alt_text="social media award" src="{{cdn('/awards/3.png')}}"></div>
+                           <p> Best Multi-Channel Content Strategy & Best Use of Multichannel Social Media in Content Marketing by <span class="text-highlight2">Digital Marketing Awards </span> </p>
+                        </div>
+                     </li>
+
+                  </ul>
+               </div>--}}
+
+               <div class="row clearfix footer-award-menu">
+
+            
+                  <div class="col4 col-sm-12 award-div">
+                     <div><img alt_text="social media award" src="{{cdn('/awards/1.png')}}"></div> 
+                     <p> Best Digital Marketing E-learning 
+                           Award by <span class="text-highlight2"> Education Leaders </span> </p>  
+                  </div>
+
+               
+                  <div class="col4 col-sm-12 award-div">
+                    <div><img alt_text="social media award" src="{{cdn('/awards/2.png')}}"></div>
+                     <p> Best Social Media Learning Program 
+                      Award by <span class="text-highlight2"> Social Media World </span></p>
+                  </div>
+
+                 
+                  <div class="col4 col-sm-12 award-div">
+                     <div><img alt_text="social media award" src="{{cdn('/awards/3.png')}}"></div>
+                     <p> Best Multi-Channel Content Strategy & Best Use of Multichannel Social Media in Content Marketing by <span class="text-highlight2">Digital Marketing Awards </span> </p>
+                  </div>
+                 
+               </div>
+
+            </div>
+         </div>
+
+         
+         <div class="footer-col-1 hidden-xs">
             <h4 class="footer-title">Get our news</h4>
             <div class="mobile-toggle">
                <div class="footer-form">

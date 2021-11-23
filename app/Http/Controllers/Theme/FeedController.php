@@ -38,9 +38,12 @@ class FeedController extends Controller
         $slugs = Slug::all();
 
         foreach($slugs as $slug){
+            
             if(!$slug->slugable){
                 continue;
-            } 
+            }else if(get_class($slug->slugable) == 'App\Model\Event' && !$slug->slugable->category->first()) {
+                continue;
+            }
 
             if(!get_status_by_slug($slug->slug)){
                 continue;

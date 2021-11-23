@@ -59,7 +59,7 @@
                              <label class="custom-control-label" for="customRadio2">{{ __('Price') }}</label>
                            </div>
 
-                           <input id="percentage-price" name="percentage" value="{{ !old('percentage',$coupon->percentage) ? false : true }}" hidden>
+                           <input id="percentage-price" name="percentage" value="{{ !old('percentage',$coupon->percentage) ? 0 : 1 }}" hidden>
                         </div>
 
                         <div class="form-group{{ $errors->has('price') ? ' has-danger' : '' }}">

@@ -33,8 +33,34 @@
         <h1>Checkout</h1>				
 			<div class="row">
         	<?php
+   
+                $instOne = $price;
+  
         	    $instTwo = round($price / 2, 2);
         	    $instThree = round($price / 3, 2);
+
+				$instTwo = number_format($instTwo , 2 , '.', '');
+				$instThree = number_format($instThree , 2 , '.', '');
+
+
+				if($instOne - floor($instOne)>0){
+                    $instOne = number_format($instOne , 2 , '.', ',');
+                }else{
+                    $instOne = number_format($instOne , 0 , '.', '');
+                }
+
+                if($instTwo - floor($instTwo)>0){
+                    $instTwo = number_format($instTwo , 2 , '.', ',');
+                }else{
+                    $instTwo = number_format($instTwo , 0 , '.', '');
+                }
+
+                if($instThree - floor($instThree)>0){
+                    $instThree = number_format($instThree , 2 , '.', ',');
+                }else{
+                    $instThree = number_format($instThree , 0 , '.', '');
+                }
+
         	?>
         	<div class="col-md-6 col-xl-6">
 				<div class="checkout-full-wrap">												
@@ -45,7 +71,7 @@
 						<div class="radio-group">
 							<div class="custom-control custom-radio mb-3">
 								<input type="radio" id="customRadio1" name="installments" value="1" checked="" class="custom-control-input">
-								<label class="custom-control-label" for="customRadio1"></label><p id="inst1">I will pay in full: €{{$price}}</p>
+								<label class="custom-control-label" for="customRadio1"></label><p id="inst1">I will pay in full: €{{$showPrice}}</p>
 							</div>
 							<div class="custom-control custom-radio mb-3">
 								<input type="radio" id="customRadio2" name="installments" value="2" class="custom-control-input">

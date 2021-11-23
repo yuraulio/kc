@@ -196,13 +196,13 @@
                                     <form id="update-form" method="post" action="{{ route('update.personalInfo') }}" autocomplete="off">
                                        {!! csrf_field() !!}
                                        <div class="col12">
-                                          <label>First name: <span>*</span></label>
+                                          <label>My first name is <span>(*)</span></label>
                                           <div class="input-safe-wrapper">
                                              <input class="required" type="text" name="firstname" id="firstname"  value="{{ old('firstname', $currentuser['firstname']) }}" >
                                           </div>
                                        </div>
                                        <div class="col12">
-                                          <label>Last name: <span>*</span></label>
+                                          <label>My last name is: <span>(*)</span></label>
                                           <div class="input-safe-wrapper">
                                              <input class="required"  type="text" name="lastname" id="lastname" value="{{ old('lastname', $currentuser['lastname']) }}" >
                                           </div>
@@ -485,157 +485,89 @@
                                     </form>
                                  </div>
                               </div>
-                              {{--<div id="subscriptions" class="in-tab-wrapper">
-                                 <div id="container" class="container">
-                                    <div class="row" id="cardList">
-                                       @if(count($defaultPaymetnt) > 0)
-                                       <table  style="width:100%">
-                                          <tr>
-                                             <th>Brand</th>
-                                             <th>Default</th>
-                                             <th>Last four</th>
-                                             <th>Expire Month</th>
-                                             <th>Expire Year</th>
-                                             <th>Actions</th>
-                                          </tr>
-                                          @foreach($defaultPaymetnt as $card)
-                                          <tr id="defalt-card">
-                                             <td>{{$card['brand']}}</td>
-                                             <td><i class="far fa-check-circle"></i>Yes</td>
-                                             <td>{{$card['last4']}}</td>
-                                             <td>{{$card['exp_month']}}</td>
-                                             <td>{{$card['exp_year']}}</td>
-                                          </tr>
-                                          @endforeach
-                                          @if(count($cards) > 1)
-                                          @foreach($cards as $card)
-                                          @if($card['id'] != $defaultPaymetntId)
-                                          <tr id="all-cards">
-                                             <td>{{$card['card']['brand']}}</td>
-                                             <td><i class="far fa-check-circle"></i>No</td>
-                                             <td>{{$card['card']['last4']}}</td>
-                                             <td>{{$card['card']['exp_month']}}</td>
-                                             <td>{{$card['card']['exp_year']}}</td>
-                                             <td>
-                                                <form action="{{route('payment_method.update')}}" method="post" id="payment-form">
-                                                   {{ csrf_field() }}
-                                                   <input type="hidden" name="card_id" value="{{$card['id']}}">
-                                                   <button class="btn btn--secondary btn--sm">Set default</button>
-                                                </form>
-                                                <form action="{{route('payment_method.remove')}}" method="post" id="payment-form">
-                                                   {{ csrf_field() }}
-                                                   <input type="hidden" name="card_id" value="{{$card['id']}}">
-                                                   <button id="removebtn" class="btn btn--secondary btn--sm">Remove</button>
-                                                </form>
-                                             </td>
-                                          </tr>
-                                          @endif
-                                          @endforeach
-                                          @endif
-                                       </table>
-                                       @else
-                                       <p>You don't have any credit/debit cards available. </p>
-                                       @endif
-                                       <div id="addCardBtn" class="col12 text-right">
-                                          <button type="button" id="addCard" class="btn btn--secondary btn--sm">Add New Card</button>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>--}}
+                        
                               <div id="billing-data" class="in-tab-wrapper">
-                                 <?php
-                                    /*'billemail' => 'Email',
-                                                'billmobile' => 'Mobile',*/
-                                        $hone = [
-                                                'billname' => 'First name',
-                                                'billsurname' => 'Last name',
-                                                'billaddress' => 'Street',
-                                                'billaddressnum' => 'Street number',
-                                                'billcity' => 'City',
-                                                'billpostcode' => 'PostCode',
-                                                'billafm' => 'VAT Number'
-                                            ];
-                                        $inv_data = [];
-                                        $htwo = [
-                                                'companyname' => 'Company name',
-                                                'companyprofession' => 'Profession',
-                                                'companyafm' => 'VAT Number',
-                                                'companydoy' => 'Tax Area',
-                                                'companyaddress' => 'Address',
-                                                'companyaddressnum' => 'Street Number',
-                                                'companycity' => 'City',
-                                                'companypostcode' => 'PostCode',
-                                                'companyemail' => 'Company email'
-                                            ];
-                                        $rec_data = [];
-
-
-                                    ?>
+                                 
                                  <div class="form-wrapper profile-form-wrapper">
-                                    {{--
-                                    <div class="form-action-upper">
-                                       <a href="#" class="edit-fields"><img src="/theme/assets/images/icons/icon-edit.svg" alt="Edit Fields"/><span>Edit</span></a>
-                                    </div>
-                                    --}}
-                                    <form >
-                                       <div class="custom-radio-wrapper">
-                                          <div class="custom-radio-box active">
-                                             <div class="crb-wrapper">
-                                                <input id="radio-receipt-control" type="radio" data-fieldset-target="receipt-fields" name="billing-receipt-invoice" checked="checked">
-                                                <span></span>
-                                             </div>
-                                             <div class="label-wrapper">
-                                                <label for="radio-receipt-control">Receipt</label>
-                                             </div>
-                                          </div>
-                                          <div class="custom-radio-box">
-                                             <div class="crb-wrapper">
-                                                <input id="radio-invoice-control" type="radio" data-fieldset-target="invoice-fields" name="billing-receipt-invoice">
-                                                <span></span>
-                                             </div>
-                                             <div class="label-wrapper">
-                                                <label for="radio-invoice-control">Invoice</label>
-                                             </div>
-                                          </div>
-                                       </div>
-                                       <?php //dd($receipt_info); ?>
-                                       <div id="receipt_add_edit_mode" class="hidden-fields-actions receipt-fields" style="display: block;">
-                                          <?php //dd($user['receipt_details']);?>
-                                          @if($user['receipt_details'] != '')
-                                          <?php $receipt_info = json_decode($user['receipt_details']);  ?>
-                                          @foreach($receipt_info as $k => $v)
-                                          @if($k != 'billing' && isset($hone[$k]))
+                         
+                                    <form action="myaccount/updrecbill" method="post" id="billing-data-form">
+                                    @csrf
+                                       <div >
+                                          <?php $billingDetails = json_decode($user['receipt_details'],true);?>
+                                        
+                             
+                                          
+                                          
                                           <div class="col12">
-                                             <label>{{$hone[$k]}}:</label>
+                                             <label>Company or full name:</label>
                                              <div class="input-safe-wrapper">
-                                                <input  type="text" id="{{$k}}" name="{{$k}}" value="{{ $v }}" >
+                                                <input  type="text" id="billname" name="billname" value="{{ isset($billingDetails['billname']) ? $billingDetails['billname'] : '' }}" >
                                              </div>
                                           </div>
-                                          @endif
-                                          @endforeach
+
+                                          <div class="col12">
+                                             <label>VAT or tax ID:</label>
+                                             <div class="input-safe-wrapper">
+                                                <input  type="text" id="billafm" name="billafm" value="{{ isset($billingDetails['billafm']) ? $billingDetails['billafm'] : '' }}" >
+                                             </div>
+                                          </div>
+
+                                          <div class="col12">
+                                             <label>Street:</label>
+                                             <div class="input-safe-wrapper">
+                                                <input  type="text" id="billaddress" name="billaddress" value="{{ isset($billingDetails['billaddress']) ? $billingDetails['billaddress'] : '' }}" >
+                                             </div>
+                                          </div>
+
+                                          <div class="col12">
+                                             <label>Street number:</label>
+                                             <div class="input-safe-wrapper">
+                                                <input  type="number" id="billaddressnum" name="billaddressnum" value="{{ isset($billingDetails['billaddressnum']) ? $billingDetails['billaddressnum'] : '' }}" >
+                                             </div>
+                                          </div>
+
+
+                                          <div class="col12">
+                                             <label>Town/city:</label>
+                                             <div class="input-safe-wrapper">
+                                                <input  type="text" id="billcity" name="billcity" value="{{ isset($billingDetails['billcity']) ? $billingDetails['billcity'] : '' }}" >
+                                             </div>
+                                          </div>
+
+                                          <div class="col12">
+                                             <label>Postcode:</label>
+                                             <div class="input-safe-wrapper">
+                                                <input  type="number" id="billpostcode" name="billpostcode" value="{{ isset($billingDetails['billpostcode']) ? $billingDetails['billpostcode'] : '' }}" >
+                                             </div>
+                                          </div>
+
+                                          <div class="col12">
+                                             <label>State:</label>
+                                             <div class="input-safe-wrapper">
+                                                <input  type="text" id="billstate" name="billstate" value="{{ isset($billingDetails['billstate']) ? $billingDetails['billstate'] : '' }}" >
+                                             </div>
+                                          </div>
+                                         
+                                          <div class="col12">
+                                             <label>Country:</label>
+                                             <div class="input-safe-wrapper">
+                                                <input  type="text" id="billcountry" name="billcountry" value="{{ isset($billingDetails['billcountry']) ? $billingDetails['billcountry'] : '' }}" >
+                                             </div>
+                                          </div>
+
+                                          <div class="col12">
+                                             <label>Bill email:</label>
+                                             <div class="input-safe-wrapper">
+                                                <input  type="text" id="billemail" name="billemail" value="{{ isset($billingDetails['billemail']) ? $billingDetails['billemail'] : '' }}" >
+                                             </div>
+                                          </div>
+                                        
                                           <div class="form-submit-area">
                                              <button id="save-receipt-data" type="button" class="btn btn--md btn--secondary">Update</button>
                                           </div>
-                                          @endif
+                                         
                                        </div>
-                                       <div id="invoice_add_edit_mode" class="hidden-fields-actions invoice-fields">
-                                          @if($user['invoice_details'] != '')
-                                          <?php $invoice_info = json_decode($user['invoice_details']);  ?>
-                                          @foreach($invoice_info as $k => $v)
-                                          @if($k != 'billing' && isset($htwo[$k]))
-                                          <div class="col12">
-                                             <label>{{$htwo[$k]}}:</label>
-                                             <div class="input-safe-wrapper">
-                                                <input  type="text" id="{{$k}}" name="{{$k}}" value="{{ $v }}" >
-                                             </div>
-                                          </div>
-                                          @endif
-                                          @endforeach
-                                          <div class="form-submit-area">
-                                             <button id="save-invoice-data" type="button" class="btn btn--md btn--secondary">Update</button>
-                                          </div>
-                                          @endif
-                                       </div>
+                                       
                                     </form>
                                     <?php //dd(); ?>
                                     <!-- /.form-wrapper.profile-form-wrapper -->
@@ -717,12 +649,16 @@
                                     <li class="active"><a href="#c-info-inner{{$tab}}">Info</a></li>
                                     <li><a href="#c-shedule-inner{{$tab}}">Schedule </a></li>
                                     <?php  $fa = strtotime(date('Y-m-d',strtotime($event['release_date_files']))) >= strtotime(date('Y-m-d'))?>
-                                    @if(!$instructor && isset($event['category'][0]['dropbox']) && count($event['category'][0]['dropbox']) != 0 &&
-                                    $event['status'] == 3 &&  $fa)
+                                    {{--@if(!$instructor && isset($event['category'][0]['dropbox']) && count($event['category'][0]['dropbox']) != 0 &&--}}
+                                    @if(isset($event['category'][0]['dropbox']) && count($event['category'][0]['dropbox']) != 0 &&
+                                       $event['status'] == 3 &&  $fa)
                                     <li><a href="#c-files-inner{{$tab}}">Files</a></li>
                                     @endif
                                     @if(isset($event['exams']) && count($event['exams']) >0 )
                                     <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
+                                    @endif
+                                    @if(count($event['certs']) > 0)
+                                    <li><a href="#c-cert-inner{{$tab}}">Certificate</a></li>
                                     @endif
                                     {{--
                                     <li><a href="#c-subs-inner{{$tab}}">Subscription</a></li>
@@ -965,6 +901,35 @@
                                     <!-- ./dynamic-courses-wrapper -->
                                  </div>
                                  @endif
+
+                                 @if(count($event['certs']) > 0)
+                                 <div id="c-cert-inner{{$tab}}" class="in-tab-wrapper">
+                                    <div class="bottom">
+                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="">@if(isset($newlayoutExamsEvent[$keyType]) && count($newlayoutExamsEvent[$keyType])>0)Certificate download after completing your exams. @else Your certification is ready @endif</div>
+                                       @foreach($event['certs'] as $certificate)
+                                       <?php
+                                             $expirationMonth = '';
+                                             $expirationYear = '';
+                                             $certUrl = trim(url('/') . '/mycertificate/' . base64_encode(Auth::user()->email."--".$certificate->id));
+                                             if($certificate->expiration_date){
+                                                $expirationMonth = date('m',$certificate->expiration_date);
+                                                $expirationYear = date('Y',$certificate->expiration_date);
+                                             }
+
+                                          ?>
+                                       <div class="right">
+                                          <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
+                                          <a class="linkedin-post" title="Add this certification to your LinkedIn profile" target="_blank" href="https://www.linkedin.com/profile/add?startTask={{urlencode($certificate->certificate_title)}}&name={{urlencode($certificate->certificate_title)}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
+                                                &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
+                                                <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
+                                          </a>
+                                        </div>
+
+                                      
+                                       @endforeach
+                                    </div>
+                                 </div>
+                                 @endif
                               </div>
                            </div>
                         </div>
@@ -1166,9 +1131,24 @@
                                     <div class="bottom">
                                        <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="">@if(isset($newlayoutExamsEvent[$keyType]) && count($newlayoutExamsEvent[$keyType])>0)Certificate download after completing your exams. @else Your certification is ready @endif</div>
                                        @foreach($event['certs'] as $certificate)
+                                          <?php
+                                             $expirationMonth = '';
+                                             $expirationYear = '';
+                                             $certUrl = trim(url('/') . '/mycertificate/' . base64_encode(Auth::user()->email."--".$certificate->id));
+                                             if($certificate->expiration_date){
+                                                $expirationMonth = date('m',$certificate->expiration_date);
+                                                $expirationYear = date('Y',$certificate->expiration_date);
+                                             }
+
+                                          ?>
                                        <div class="right">
-                                          <a  class="btn btn--secondary btn--md" target="_blank" href="/myaccount/mycertificate/{{$certificate->id}}" >DOWNLOAD </a>
+                                          <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
+                                          <a class="linkedin-post" title="Add this certification to your LinkedIn profile" target="_blank" href="https://www.linkedin.com/profile/add?startTask={{urlencode($certificate->certificate_title)}}&name={{urlencode($certificate->certificate_title)}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
+                                                &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
+                                                <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
+                                          </a>
                                        </div>
+
                                        @endforeach
                                     </div>
                                  </div>
@@ -1488,6 +1468,11 @@
 </main>
 @endsection
 @section('scripts')
+
+<script src="{{cdn('theme/assets/js/validation_myaccount/jquery.validate.min.js')}}" type="text/javascript" charset="utf-8" async defer></script>
+	<script src="{{cdn('theme/assets/js/validation_myaccount/additional-methods.min.js')}}" type="text/javascript" charset="utf-8" async defer></script>	
+	<script src="{{cdn('theme/assets/js/validation_myaccount/validation.js')}}" type="text/javascript" charset="utf-8" async defer></script>	
+
 {{--<script src="https://js.stripe.com/v3/"></script>
 <script>
    var stripeUserId = '{{ Auth::user()->createSetupIntent()->client_secret }}';
@@ -2029,9 +2014,9 @@
 
 
        $('#save-receipt-data').on('click', function() {
-           var receiptdata = $("#receipt_add_edit_mode :input").serialize();
+           //var receiptdata = $("#billing-data input").serialize();
            //console.log(receiptdata);
-           $.ajax({ url: "myaccount/updrecbill", type: "post",
+           /*$.ajax({ url: "myaccount/updrecbill", type: "post",
                data: receiptdata,
                success: function(data) {
                    if (Number(data.status) === 1) {
@@ -2042,7 +2027,9 @@
                        alert('Not saved. Please try again');
                    }
                }
-           });
+           });*/
+
+           $("#billing-data-form").submit();
        });
 
 

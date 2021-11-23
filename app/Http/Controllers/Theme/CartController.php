@@ -301,11 +301,12 @@ class CartController extends Controller
                 }
 
                 foreach ($data['eventtickets'] as $tkey => $tvalue) {
-                    
                     if ($tvalue->pivot->event_id == $item->options->event && $tvalue->ticket_id == $item->id) {
                         $ticketType = $tvalue->type;
                         $data['curStock'] = $tvalue->pivot->quantity;
-                        $data['oldPrice'] = $tvalue->pivot->price * $totalitems;
+                        $oldPrice = $tvalue->pivot->price * $totalitems;
+                        $data['oldPrice'] = number_format($tvalue->pivot->price * $totalitems, 2, ".", ",");//$tvalue->pivot->price * $totalitems;
+                        $data['showPrice'] = number_format($tvalue->pivot->price * $totalitems, 2, ".", ",");//$tvalue->pivot->price * $totalitems;
                         $data['price'] = $tvalue->pivot->price * $totalitems;
                         $tr_price = $tvalue->pivot->price * $totalitems;
                     }
@@ -317,7 +318,8 @@ class CartController extends Controller
         if(Session::get('coupon_code')){
            
             $data['price'] = Session::get('coupon_price') * $totalitems;
-            $data['savedPrice'] = $data['oldPrice'] - Session::get('coupon_price') * $totalitems;
+            $data['savedPrice'] = $oldPrice - Session::get('coupon_price') * $totalitems;
+            $data['showPrice'] = number_format($data['price'], 2, ".", ",");//$tvalue->pivot->price * $totalitems;
             $tr_price = Session::get('coupon_price') * $totalitems;
             
         }
@@ -337,6 +339,16 @@ class CartController extends Controller
             $data['show_coupon'] = false;
             $ticketType = 'Free';
             $tr_price = 0;
+        }
+
+ 
+        if(is_numeric($data['price']) && ($data['price'] - floor($data['price'])>0)){
+            $data['showPrice'] = number_format($data['price'] , 2 , '.', ',');
+            $data['oldPrice'] = number_format($data['price'] , 2 , '.', ',');
+        }else if(is_numeric($data['price'])){
+            $data['showPrice'] = number_format($data['price'] , 0 , '.', '');
+            $data['oldPrice'] = number_format($data['price'] , 0 , '.', '');
+
         }
 
 
@@ -1609,16 +1621,37 @@ class CartController extends Controller
                 Session::put('coupon_price',$newPrice);
                 Session::put('priceOf',$priceOf);
                 
+                $instOne = $newPrice;
+                $instTwo = round($newPrice / 2, 2);
+                $instThree = round($newPrice / 3, 2);
+
+                if($instOne - floor($instOne)>0){
+                    $instOne = number_format($instOne , 2 , '.', ',');
+                }else{
+                    $instOne = number_format($instOne , 0 , '.', '');
+                }
+
+                if($instTwo - floor($instTwo)>0){
+                    $instTwo = number_format($instTwo , 2 , '.', ',');
+                }else{
+                    $instTwo = number_format($instTwo , 0 , '.', '');
+                }
+
+                if($instThree - floor($instThree)>0){
+                    $instThree = number_format($instThree , 2 , '.', ',');
+                }else{
+                    $instThree = number_format($instThree , 0 , '.', '');
+                }
+
                 return response()->json([
                     'success' => true,
-                    'new_price' => $newPrice,
+                    'new_price' => $instOne,
                     'savedPrice' => round($savedPrice, 2) ,
                     'priceOf' => $priceOf,
-                    'newPriceInt2' => round($newPrice / 2, 2),
-                    'newPriceInt3' => round($newPrice / 3, 2),
+                    'newPriceInt2' => $instTwo,
+                    'newPriceInt3' => $instThree,
                     'message' => 'Success! Your coupon has been accepted.',
                     'coupon_code' => $request->coupon
-
                 ]);
             }
 
@@ -1863,7 +1896,7 @@ class CartController extends Controller
                         'ProductCategory' => $categoryScript, 'ProductName' =>  $content->title, 'Quantity' => $item->qty, 'TicketType'=>'Upon Coupon','Event_ID' => 'kc_' . time() 
                 ];
 
-            $this->fbp->sendPurchaseEvent($data);
+            //$this->fbp->sendPurchaseEvent($data);
 
 
         }

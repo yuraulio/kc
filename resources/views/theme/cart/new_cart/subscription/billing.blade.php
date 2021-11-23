@@ -31,8 +31,8 @@
 							</div>
 							<div class="form-row">
 								<div class="col-md-12 mb-4">
-									<label class="input-label">VAT or tax ID <span class="checkout-required-data">(*)</span></label>
-									<input type="text" name="billafm" value="{{old('billafm',$billafm)}}" class="form-control" placeholder="" aria-describedby="inputGroupPrepend3" required="">
+									<label class="input-label">VAT or tax ID</label>
+									<input type="text" name="billafm" value="{{old('billafm',$billafm)}}" class="form-control" placeholder="" aria-describedby="inputGroupPrepend3">
 									<div class="invalid-feedback">
 										
 									</div>
