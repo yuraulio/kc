@@ -244,6 +244,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 @yield('scripts')
 
 
+<script src="{{cdn('theme/assets/blackfriday/blackfriday.js')}}"> </script>
+
 @if(!Auth::check() && request()->login)
     <script>
         $(document).ready(function(){

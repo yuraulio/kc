@@ -92,14 +92,7 @@ $.ajaxSetup({headers:{'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content
 <script>
 
 
-{{--$(document).ready(function(){ 
-  
-    if(blackFriday() == false){
-        var favDialog = document.getElementById('myModal');
-        favDialog.style.display = "block";
-    }
 
-})--}}
 
 
 function getCookie(c_name) {
@@ -120,29 +113,7 @@ function getCookie(c_name) {
 }
 
 
-function blackFriday(){
 
-   
-    /*if(getCookie('blackFridayCooκie')){
-        
-        return true;
-    }*/
-
-    if(localStorage.getItem("blackFridayCooκie")){
-        
-        return true;
-    }
-
-    /*var d = new Date();
-    d.setTime(d.getTime() + (1*24*60*60*1000));
-    var expires = "expires="+ d.toUTCString();
-    document.cookie = 'blackFridayCooκie=blackfriday;' + expires + ";path=/";*/
-
-    //localStorage.setItem("blackFridayCooκie", "blackfriday");
-
-    return false;
-    
-}
 
 </script>
 

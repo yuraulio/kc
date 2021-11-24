@@ -346,8 +346,8 @@ class CartController extends Controller
             $data['showPrice'] = number_format($data['price'] , 2 , '.', ',');
             $data['oldPrice'] = number_format($data['price'] , 2 , '.', ',');
         }else if(is_numeric($data['price'])){
-            $data['showPrice'] = number_format($data['price'] , 0 , '.', '');
-            $data['oldPrice'] = number_format($data['price'] , 0 , '.', '');
+            $data['showPrice'] = number_format($data['price'] , 0 , '.', ',');
+            $data['oldPrice'] = number_format($data['price'] , 0 , '.', ',');
 
         }
 
@@ -357,7 +357,7 @@ class CartController extends Controller
         if($tr_price - floor($tr_price)>0){
             $tr_price = number_format($tr_price , 2 , '.', ',');
         }else{
-            $tr_price = number_format($tr_price , 0 , '.', '');
+            $tr_price = number_format($tr_price , 0 , '.', ',');
             $tr_price = strval($tr_price);
             $tr_price .= ".00";
         }
@@ -1628,19 +1628,19 @@ class CartController extends Controller
                 if($instOne - floor($instOne)>0){
                     $instOne = number_format($instOne , 2 , '.', ',');
                 }else{
-                    $instOne = number_format($instOne , 0 , '.', '');
+                    $instOne = number_format($instOne , 0 , '.', ',');
                 }
 
                 if($instTwo - floor($instTwo)>0){
                     $instTwo = number_format($instTwo , 2 , '.', ',');
                 }else{
-                    $instTwo = number_format($instTwo , 0 , '.', '');
+                    $instTwo = number_format($instTwo , 0 , '.', ',');
                 }
 
                 if($instThree - floor($instThree)>0){
                     $instThree = number_format($instThree , 2 , '.', ',');
                 }else{
-                    $instThree = number_format($instThree , 0 , '.', '');
+                    $instThree = number_format($instThree , 0 , '.', ',');
                 }
 
                 return response()->json([

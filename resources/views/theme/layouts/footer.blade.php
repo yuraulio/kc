@@ -3,7 +3,7 @@ $social_media = get_social_media();
 ?>
 
 <footer id="footer">
-{{--@include('theme.blackfriday.blackfriday')--}}
+@include('theme.blackfriday.blackfriday')
 
 
    <div class="container">
@@ -152,7 +152,7 @@ $social_media = get_social_media();
                   <div class="mobile-toggle">
                      <ul class="footer-menu">
                         <li> <a  href='/diplomas' title = 'Diplomas'> diplomas </a> </li>
-                        <li> <a  href='/certificates' title = 'Certificates'> certificates </a> </li>
+                        {{--<li> <a  href='/certificates' title = 'Certificates'> certificates </a> </li>--}}
 
                      </ul>
                   </div>

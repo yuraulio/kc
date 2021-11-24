@@ -5,53 +5,38 @@
 		<meta name="author" content="Epsilon-8">
 		<meta name="ad.size" content="width=300,height=250">
 		
-	   <script type="text/javascript">
-		  	var clickTag = window.location.origin + '/e-learning-digital-social-media-marketing?utm_source=PopUp&utm_medium=Banner&utm_campaign=DIGITAL_ELEARNING_BLACKFRIDAY';
-	   </script>
-		
 		<style>
 		
-         #myModal #container {				
-				width: 300px;
-				height: 250px;
-				overflow: hidden;
-				position: relative;
-				box-sizing: border-box;
-				box-shadow: 0 0 2px #cccccc;
-				cursor: pointer;
+         #myModal #container-modal {				
+				width: 300px!important;
+				height: 300px!important;
+				overflow: hidden!important;
+				position: relative!important;
+				box-sizing: border-box!important;
+				box-shadow: 0 0 2px #cccccc!important;
+				cursor: pointer!important;
 			}
-			#myModal #container:hover #cta {
-				filter: brightness(1.1);
+			#myModal #container-modal:hover #cta {
+				filter: brightness(1.1)!important;
 			}
 			#myModal .screen {
-				width: 100%;
-				height: 100%;
-				position: absolute;
-				left: 0; top: 0;
-				background-repeat: no-repeat;
+				width: 100%!important;
+				height: 100%!important;
+				position: absolute!important;
+				left: 0!important; top: 0!important;
+				background-repeat: no-repeat!important;
 			}
 			#myModal img {position: absolute;}
-			#myModal #container {
-				background-image: url(blackfriday/images/bg.jpg); 
+			#myModal #container-modal {
+				background-image: url(blackfriday/blackfriday21/knoqcrunch_black_friday.jpg); 
 				background-size: cover;
-			}
-			#myModal #text1 {
-				left: 0px;
-				top: 125px;
-			}
-			#myModal #text2 {
-				left: 20px;
-				top: 135px;
-			}
-			#myModal #cta {
-				left: 20px;
-				top: 200px;
 			}
            
             #myModal .close-btn{
-                top: 0;
-                position: absolute;
-                right: -30px;
+				top: 0!important;
+    			position: absolute!important;
+    			right: 13px!important;
+    			z-index: 10;
             }
 
             .modal-body{
@@ -59,17 +44,21 @@
             }
             @media(min-width: 981px){
                 #myModal{
-                outline: none;
-                position: fixed;
-                right: 0;
-                bottom: 0;
-                /* transform: translate(-50%, 50%); */
-                display: none;
-            }
+                	outline: none;
+                	position: fixed;
+                	right: 0;
+                	bottom: 0;
+                	/* transform: translate(-50%, 50%); */
+                	display: none;
+					overflow: unset!important;
+            	}
                 .modal-border{
-                    display: block;
-                    margin: 10px 80px;
-                    box-shadow: 0px 0px 13px #0000009e;
+					display: block;
+    				/* margin: 10px 80px; */
+    				margin: 580px 1489px;
+    				box-shadow: 0px 0px 13px #0000009e;
+    				width: fit-content;
+    				height: fit-content;
                 }
             }      
 
@@ -81,11 +70,14 @@
                     top: 50%;
                     transform: translate(-50%, 50%); 
                     display: none;
+					overflow: unset!important;
                 }
 
                 .modal-border{
                     margin: 10px -10px;
                     box-shadow: 0px 0px 13px #0000009e;
+					width: fit-content;
+    				height: fit-content;
                 }
             }
 
@@ -97,30 +89,14 @@
         <a href="#" class="close-btn"><img width="26" src="{{cdn('theme/assets/images/icons/icon-close.svg')}}" class="replace-with-svg" alt="Close"></a>
 
             <div class="modal-body">
-                <div id="container" onclick="javascript:void(window.location.href = clickTag)">
-        	    	<div class="screen" id="s1">
-        	    		<img id="text1" src="./blackfriday/images/text1.png" width="230" alt="ΠΡΟΣΦΟΡΑ"/>
-        	    		<img id="text2" src="./blackfriday/images/text2.png" width="211" alt="ΠΡΟΣΦΟΡΑ"/>
-        	    		<img id="cta" src="./blackfriday/images/cta.png" width="164" alt="ΠΡΟΣΦΟΡΑ"/>
-        	    	</div>
+                <div id="container-modal">
+        	    	
         	    </div>
             </div>
 
         </div>
 
-		
-		<script src="./blackfriday/js.js"></script>
-		<script type="text/javascript">
-			var sceneDuration = 4;
-			var tl = gsap.timeline({repeat: -1});
-			tl.from("#s1", 1, {opacity:0} )				
-				.from("#text1", 0.5, {x:-20, opacity:0, ease:Sine.easeInOut} )
-				.from("#cta", 0.5, {scale:0, opacity:0, ease:Back.easeOut }, "-=0.2" )
-				.from("#text2", 0.5, {x:-20, opacity:0, ease:Sine.easeInOut}, "+=4" )
-				.to("#text1", 0.5, {opacity:0, ease:Sine.easeInOut}, "-=0.5" )
-				.to("#s1", 0.2, {autoAlpha: 0, delay: sceneDuration })
-				.play();
-        </script>
+	
         
         <script>
             $("#myModal .close-btn").click(function(){
