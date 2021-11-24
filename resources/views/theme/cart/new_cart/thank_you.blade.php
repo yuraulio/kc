@@ -135,8 +135,6 @@
 
       gt3['transactionProducts'] = products;
 
-      console.log(gt3)
-
       dataLayer.push({
          gt3
       });
