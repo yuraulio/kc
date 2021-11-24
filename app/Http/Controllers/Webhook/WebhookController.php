@@ -16,6 +16,7 @@ use Laravel\Cashier\Subscription;
 use Laravel\Cashier\Payment;
 use Laravel\Cashier\Cashier;
 use Session;
+use App\Notifications\CourseInvoice;
 
 class WebhookController extends BaseWebhookController
 {
@@ -75,7 +76,7 @@ class WebhookController extends BaseWebhookController
 		if(count($invoices) > 0){
 			$invoice = $invoices->last();
 			//$invoice = $invoices->first();
-			$pdf = $invoice->generateCronjobInvoice();
+			[$pdf,$invoice] = $invoice->generateCronjobInvoice();
 			$this->sendEmail($invoice,$pdf);
 		}else{
 			if(!Invoice::doesntHave('subscription')->latest()->first()){
@@ -415,6 +416,9 @@ class WebhookController extends BaseWebhookController
         
 		$data = [];  
         $muser = [];
+
+		$user = $elearningInvoice->user->first();
+
         $muser['name'] = $elearningInvoice->user->first()->firstname;
         $muser['first'] = $elearningInvoice->user->first()->firstname;
         $muser['email'] = $elearningInvoice->user->first()->email;
@@ -432,20 +436,23 @@ class WebhookController extends BaseWebhookController
 			$m->subject($sub);
 			$m->attachData($pdf, "invoice.pdf");
 			
-			});
+		});
 
-			$sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf) {
+		$data['slugInvoice'] = encrypt($user->id . '-' . $elearningInvoice->id);
+		$user->notify(new CourseInvoice($data));
 
-                $fullname = $muser['name'];
-                $first = $muser['first'];
-                $sub =  'KnowCrunch |' . $first . ' – Payment Successful in ' . $muser['event_title'];;
-                $m->from($adminemail, 'Knowcrunch');
-                $m->to('info@knowcrunch.com', $fullname);
-                //$m->to('moulopoulos@lioncode.gr', $fullname);
-                $m->subject($sub);
-                $m->attachData($pdf, "invoice.pdf");
-                
-            });
+		/*$sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf) {
+
+            $fullname = $muser['name'];
+            $first = $muser['first'];
+            $sub =  'KnowCrunch |' . $first . ' – Payment Successful in ' . $muser['event_title'];;
+            $m->from($adminemail, 'Knowcrunch');
+            $m->to('info@knowcrunch.com', $fullname);
+            //$m->to('moulopoulos@lioncode.gr', $fullname);
+            $m->subject($sub);
+            $m->attachData($pdf, "invoice.pdf");
+            
+        });*/
 	}
 
 	/*protected function handleInvoicePaymentActionRequired(array $payload)

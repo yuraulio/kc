@@ -272,7 +272,7 @@ class Invoice extends Model
           $pdf->getDomPDF()->setHttpContext($contxt);
           $pdf->loadView('admin.invoices.elearning_invoice',compact('data'))->setPaper('a4', 'portrait');
         $fn = 'myinvoice' . '.pdf';
-        return $pdf;
+        return [$pdf,$newInvoice];
     
     }
 

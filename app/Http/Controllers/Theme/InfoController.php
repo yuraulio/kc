@@ -24,6 +24,7 @@ use Illuminate\Support\Str;
 use \Carbon\Carbon;
 use App\Model\CookiesSMS;
 use App\Notifications\WelcomeEmail;
+use App\Notifications\CourseInvoice;
 use App\Services\FBPixelService;
 
 class InfoController extends Controller
@@ -483,13 +484,13 @@ class InfoController extends Controller
                     $transaction->user()->save($checkemailuser);
                 //}
 
-                if($elearning){
+                //if($elearning){
                     $invoice = $transaction->invoice()->first();
                     if($invoice){
                         $invoice->user()->save($checkemailuser);
 
                     }
-                }
+                //}
 
                 if ($evid && $evid > 0) {
 
@@ -748,41 +749,10 @@ class InfoController extends Controller
             if(($user = User::where('email',$muser['email'])->first())){
                 $user->notify(new WelcomeEmail($user,$data));
             }
-
-            //dd($helperdetails);
-
-            /*if($elearning){
-  
-                $sent = Mail::send('emails.admin.info_new_registration_elearning', $data, function ($m) use ($adminemail, $muser) {
-
-    			    $fullname = $muser['name'];
-    			    $first = $muser['first'];
-                    $sub = 'Knowcrunch - ' . $first . ' your registration has been completed.';
-	                $m->from($adminemail, 'Knowcrunch');
-	                $m->to($muser['email'], $fullname);
-                    $m->subject($sub);
-                   // $m->attachData($pdf->output(), "invoice.pdf");
-                });
-
-            }else{
-                
-                $sent = Mail::send('emails.admin.info_new_registration', $data, function ($m) use ($adminemail, $muser) {
-
-    			    $fullname = $muser['name'];
-    			    $first = $muser['first'];
-                    $sub = 'Knowcrunch - ' . $first . ' your registration has been completed.';
-	                $m->from($adminemail, 'Knowcrunch');
-	                $m->to($muser['email'], $fullname);
-	                $m->subject($sub);
-                });
-            }*/
     	}
 
       
         if($stripe){
-
-            //dd($transaction);
-            //dd($transaction->invoice);
             
             $data = [];  
             $muser = [];
@@ -813,7 +783,11 @@ class InfoController extends Controller
                 
                 });
 
-                $sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf,$billingEmail) {
+                $data['slugInvoice'] = encrypt($muser['id'] . '-' . $transaction->invoice->first()->id);
+
+                $user->notify(new CourseInvoice($data));
+
+                /*$sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf,$billingEmail) {
 
                     $fullname = $muser['name'];
                     $first = $muser['first'];
@@ -823,31 +797,11 @@ class InfoController extends Controller
                     $m->subject($sub);
                     $m->attachData($pdf, "invoice.pdf");
                 
-                });
+                });*/
 
             }
 
-        
-            /*if($elearning){
-                $pathFile = url('/') . '/pdf/elearning/KnowCrunch - How to access our website & account.pdf';
-                $pathFile = str_replace(' ','%20',$pathFile);
-                $sent = Mail::send('emails.admin.elearning_after_register', $data, function ($m) use ($adminemail, $muser,$pathFile) {
     
-                    $fullname = $muser['name'];
-                    $first = $muser['first'];
-                    $sub = 'KnowCrunch |' . $first . ', welcome to ' . $muser['event_title'].'!';
-                    $m->from($adminemail, 'Knowcrunch');
-                    $m->to($muser['email'], $fullname);
-                    $m->subject($sub);
-                    $m->attach($pathFile);
-                        
-                });
-            }*/
-            
-
-            
-
-           
         }
 
 

@@ -148,14 +148,14 @@ $social_media = get_social_media();
                         <li> <a  href='/video-on-demand-courses'  title = 'E-Learning Courses'> e-learning courses  </a> </li>
                      </ul>
                   </div>
-                  <h4 class="footer-title">Certifications</h4>
+                  {{--<h4 class="footer-title">Certifications</h4>
                   <div class="mobile-toggle">
                      <ul class="footer-menu">
                         <li> <a  href='/diplomas' title = 'Diplomas'> diplomas </a> </li>
-                        {{--<li> <a  href='/certificates' title = 'Certificates'> certificates </a> </li>--}}
+                        <li> <a  href='/certificates' title = 'Certificates'> certificates </a> </li>
 
                      </ul>
-                  </div>
+                  </div>--}}
                   <h4 class="footer-title ">Students</h4>
                   <div class="mobile-toggle">
                      <ul class="footer-menu">

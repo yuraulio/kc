@@ -584,6 +584,14 @@ Route::group(['middleware' => ['web']], function () {
 
 });
 
+//DownloadInvoice
+Route::group(['middleware' => ['web']], function () {
+
+    Route::get('/myinvoice/{slug}', 'Theme\StudentController@downloadMyInvoice');
+
+
+});
+
 //Route::get('/stripe/payment/{id}/{paymentMethod}', 'PaymentController@show')->name('payment');
 Route::get('/stripe/payment/{id}/{input}', '\Laravel\Cashier\Http\Controllers\PaymentController@show')->name('payment');
 Route::post('/stripe/payment/securee', 'Theme\CartController@securePayment')->name('payment.secure');

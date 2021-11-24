@@ -26,6 +26,7 @@ use App\Model\PaymentMethod;
 use Validator;
 use Image;
 use App\Model\Plan;
+use App\Model\Invoice;
 
 class StudentController extends Controller
 {
@@ -1280,6 +1281,39 @@ class StudentController extends Controller
             'redirect' =>'/myaccount'
 
         ]);
+
+    }
+
+    public function downloadMyInvoice($slug){
+
+        $invoice = decrypt($slug);
+        $invoice = explode('-',$invoice);
+
+        if(count($invoice) != 2){
+            abort(404);
+        }
+
+        if( !$user = User::find($invoice[0]) ){
+            abort(404);
+        }
+
+        if( !$inv = Invoice::find($invoice[1]) ){
+            abort(404);
+        }
+    
+        $users = $inv->user;
+        $userIds = [];
+
+        foreach($users as $us){
+            $userIds[] = $us->id;
+        }
+
+    
+        if( !in_array($invoice[0], $userIds)){
+            abort(404);
+        }
+
+        return $inv->getInvoice();
 
     }
 
