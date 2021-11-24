@@ -77,7 +77,7 @@
    let ecommerce = {};
    let items = {};
 
-   dataLayer.push({"event": 'purchase'})
+   //dataLayer.push({"event": 'purchase'})
    
    @foreach($ecommerce['ecommerce'] as $key => $ti)
       
@@ -94,13 +94,53 @@
       
    @endforeach
    ecommerce["items"] = items;
-   dataLayer.push({"ecommerce": ecommerce})
+   //dataLayer.push({"ecommerce": ecommerce})
 
+   dataLayer.push({
+      "event": 'purchase',
+      'ecommerce': ecommerce
+   
+   
+   })
 
 
 </script>
 
 
+@endif
+
+
+@if(isset($gt3) && !env('APP_DEBUG'))
+   <script>
+      let gt3 = {};
+      let products = {};
+
+      @foreach($gt3['gt3'] as $key => $ti)
+      
+        @if($ti != '')
+            gt3["{{$key}}"] = "{{$ti}}"
+
+         @endif
+  
+      @endforeach
+
+      @foreach($gt3['transactionProducts'] as $key => $ti)
+      
+        @if($ti != '')
+            products["{{$key}}"] = "{{$ti}}"
+
+         @endif
+  
+      @endforeach
+
+      gt3['transactionProducts'] = products;
+
+      console.log(gt3)
+
+      dataLayer.push({
+         gt3
+      });
+   </script>
 @endif
 
 @stop

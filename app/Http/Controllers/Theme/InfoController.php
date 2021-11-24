@@ -150,6 +150,11 @@ class InfoController extends Controller
 
                 $data['ecommerce'] = ['ecommerce' => ['transaction_id' => $this->transaction['id'], 'value' => $tr_price, 'currency' => 'EUR', 'coupon' => $transaction->coupon_code], 
                                     'items' => ['item_name' => $thisevent->title, 'item_id' => $thisevent->id, 'price' => $tr_price, 'quantity' => 1, 'item_category' =>  $categoryScript] ];
+
+                $data['gt3'] = ['gt3' => ['transactionId' => $this->transaction['id'], 'transactionTotal' => $tr_price], 
+                                    'transactionProducts' => ['name' => $thisevent->title, 'sku' => $thisevent->id, 'price' => $tr_price, 'quantity' => 1, '' =>  $categoryScript] ];
+
+                
                
 	        }
 
@@ -176,18 +181,18 @@ class InfoController extends Controller
         $this->fbp->sendPurchaseEvent($data);
 
         //DESTROY CART HERE AND SESSION vars
-        Cart::instance('default')->destroy();
-        Session::forget('pay_seats_data');
-        Session::forget('transaction_id');
-        Session::forget('cardtype');
-        Session::forget('installments');
-        //Session::forget('pay_invoice_data');
-        Session::forget('pay_bill_data');
-        Session::forget('deree_user_data');
-        Session::forget('user_id');
-        Session::forget('coupon_code');
-        Session::forget('coupon_price');
-        Session::forget('priceOf');
+        //Cart::instance('default')->destroy();
+        //Session::forget('pay_seats_data');
+        //Session::forget('transaction_id');
+        //Session::forget('cardtype');
+        //Session::forget('installments');
+        ////Session::forget('pay_invoice_data');
+        //Session::forget('pay_bill_data');
+        //Session::forget('deree_user_data');
+        //Session::forget('user_id');
+        //Session::forget('coupon_code');
+        //Session::forget('coupon_price');
+        //Session::forget('priceOf');
         ///dd($data);
         
         if (isset($this->transaction['payment_response'])) {
