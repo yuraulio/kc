@@ -627,7 +627,7 @@ class HomeController extends Controller
         
         $tr_price = $price;
         if($tr_price - floor($tr_price)>0){
-            $tr_price = number_format($tr_price , 2 , '.', ',');
+            $tr_price = number_format($tr_price , 2 , '.', '');
         }else{
             $tr_price = number_format($tr_price , 0 , '.', '');
             $tr_price = strval($tr_price);

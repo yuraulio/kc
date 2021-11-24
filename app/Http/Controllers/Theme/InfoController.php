@@ -134,7 +134,7 @@ class InfoController extends Controller
                 }
 
                 if($this->transaction['amount'] - floor($this->transaction['amount'])>0){
-                    $tr_price = number_format($this->transaction['amount'] , 2 , '.', ',');
+                    $tr_price = number_format($this->transaction['amount'] , 2 , '.', '');
                 }else{
                     $tr_price = number_format($this->transaction['amount'] , 0 , '.', '');
                     $tr_price = strval($tr_price);

@@ -8,8 +8,8 @@
 		<style>
 		
          #myModal #container-modal {				
-				width: 300px!important;
-				height: 300px!important;
+				width: 400px!important;
+				height: 400px!important;
 				overflow: hidden!important;
 				position: relative!important;
 				box-sizing: border-box!important;
@@ -45,17 +45,17 @@
             @media(min-width: 981px){
                 #myModal{
                 	outline: none;
-                	position: fixed;
-                	right: 0;
-                	bottom: 0;
-                	/* transform: translate(-50%, 50%); */
-                	display: none;
-					overflow: unset!important;
+    				position: fixed;
+    				top: 50%;
+    				left: 50%;
+    				transform: translate(-50%, -50%);
+    				display: none;
+    				overflow: unset!important;
             	}
                 .modal-border{
 					display: block;
     				/* margin: 10px 80px; */
-    				margin: 580px 1489px;
+    				margin: 0 auto;
     				box-shadow: 0px 0px 13px #0000009e;
     				width: fit-content;
     				height: fit-content;
@@ -65,16 +65,16 @@
             @media(max-width: 980px){
                 #myModal{
                     outline: none;
-                    position: absolute;
+                    position: fixed;
                     left: 50%;
                     top: 50%;
-                    transform: translate(-50%, 50%); 
+                    transform: translate(-50%, -50%); 
                     display: none;
 					overflow: unset!important;
                 }
 
                 .modal-border{
-                    margin: 10px -10px;
+                    margin: 0 auto;
                     box-shadow: 0px 0px 13px #0000009e;
 					width: fit-content;
     				height: fit-content;
