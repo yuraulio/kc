@@ -250,6 +250,7 @@ label.custom-control-label{font-size:19px;}
     display: inline-block;
     width: 26px;
     height: 14px;
+    margin-left: 10px;
     content:"";
 }
 .checkout-input-groups{width:100%;}
