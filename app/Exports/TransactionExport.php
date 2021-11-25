@@ -158,12 +158,13 @@ class TransactionExport implements FromArray,WithHeadings
                     $name = $user->firstname;
                     $last = $user->lastname;
                     $email = $user->email;
-                    $mobile = $user->mobile;
+                    $mobile = '+'.strval($user->country_code).strval($user->mobile);
+                    //$mobile = $user->mobile;
                     $jobTitle = isset($statusHistory[0]['pay_seats_data']['jobtitles'][$keyU]) ? $statusHistory[0]['pay_seats_data']['jobtitles'][$keyU] : '' ;
                     $company = isset($statusHistory[0]['pay_seats_data']['companies'][$keyU]) ? $statusHistory[0]['pay_seats_data']['companies'][$keyU] : '' ;
                     $kcId =  $user->kc_id;
                     $partnerId = $user->partner_id;
-
+                   
                     $rowdata = array($event, $name, $last, $email, $mobile, $jobTitle,$companyName,$companyProfession,$companyafm,$companydoy,$companyaddress.' '.$companyaddressnum,
                     $companypostcode,$companycity,$city, $company, $kcId, $partnerId, $amount, $invoice, $ticketType, $seats, $datePlaced, 
                         $status, $bankDetails);
