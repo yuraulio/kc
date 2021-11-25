@@ -780,7 +780,7 @@ class InfoController extends Controller
                 
                 $pdf = $transaction->invoice->first()->generateInvoice();
                 $pdf = $pdf->output();
-                $sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf,$billingEmail) {
+                /*$sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf,$billingEmail) {
 
                     $fullname = $muser['name'];
                     $first = $muser['first'];
@@ -791,7 +791,7 @@ class InfoController extends Controller
                     $m->subject($sub);
                     $m->attachData($pdf, "invoice.pdf");
                 
-                });
+                });*/
 
                 $data['user'] =  $transaction->user->first();
                 $data['slugInvoice'] = encrypt($muser['id'] . '-' . $transaction->invoice->first()->id);
