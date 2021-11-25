@@ -91,12 +91,19 @@
                                             @csrf
                                             @method('put')
                                 <div class="form-group">
-                                <div class="form-group{{ $errors->has('certificate_title') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-hours">{{ __('Certificate Title') }}</label>
-                                    <input type="text" name="certificate_title" id="input-certificate_title" class="form-control{{ $errors->has('certificate_title') ? ' is-invalid' : '' }}" placeholder="{{ __('Certificate Title') }}" value="{{ old('certificate_title', $event->certificate_title) }}"autofocus>
+                                    <div class="form-group{{ $errors->has('fb_group') ? ' has-danger' : '' }}">
+                                        <label class="form-control-label" for="input-fb_group">{{ __('Facebook Group') }}</label>
+                                        <input type="text" name="fb_group" id="input-fb_group" class="form-control{{ $errors->has('fb_group') ? ' is-invalid' : '' }}" placeholder="{{ __('Facebook Group') }}" value="{{ old('fb_group', $event->fb_group) }}"autofocus>
 
-                                    @include('alerts.feedback', ['field' => 'certificate_title'])
-                                </div>
+                                        @include('alerts.feedback', ['field' => 'fb_group'])
+                                    </div>
+
+                                    <div class="form-group{{ $errors->has('fb_') ? ' has-danger' : '' }}">
+                                        <label class="form-control-label" for="input-hours">{{ __('Certificate Title') }}</label>
+                                        <input type="text" name="certificate_title" id="input-certificate_title" class="form-control{{ $errors->has('certificate_title') ? ' is-invalid' : '' }}" placeholder="{{ __('Certificate Title') }}" value="{{ old('certificate_title', $event->certificate_title) }}"autofocus>
+    
+                                        @include('alerts.feedback', ['field' => 'certificate_title'])
+                                    </div>
 
                                     <label class="form-control-label" for="input-method">{{ __('Method Payment') }}</label>
                                     <select name="payment_method" id="input-method" class="form-control" placeholder="{{ __('Method Payment') }}" no-mouseflow>

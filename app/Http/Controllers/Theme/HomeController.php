@@ -412,9 +412,21 @@ class HomeController extends Controller
         Session::forget('coupon_code');
         Session::forget('coupon_price');
         Session::forget('priceOf');
+
+        $data['info']['success'] = true;
+        $data['info']['title'] = '<h1>Booking successful</h1>';
+        $data['info']['message'] = '<h2>Thank you and congratulations!<br/>We are very excited about you joining us. We hope you are too!</h2>
+        <p>An email with more information is on its way to your inbox.</p>';
+        $data['info']['statusClass'] = 'success';
+
+        $data['event']['title'] = $content->title;
+        $data['event']['slug'] = $content->slugable->slug;
+        $data['event']['facebook'] = url('/') . '/' .$content->slugable->slug .'?utm_source=Facebook&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&quote='.urlencode("Proudly participating in ". $content->title . " by KnowCrunch.");
+        $data['event']['twitter'] = urlencode("Proudly participating in ". $content->title . " by KnowCrunch. 💙");
+        $data['event']['linkedin'] = urlencode(url('/') . '/' .$content->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $content->title . " by KnowCrunch. 💙");
         
-        return view('theme.cart.new_cart.thank_you_free');
-        //return redirect($content->slugable->slug);
+        return view('theme.cart.new_cart.thank_you_free',$data);
+
     }
 
     private function city($page){

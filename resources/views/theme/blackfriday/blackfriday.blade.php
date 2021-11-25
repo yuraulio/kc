@@ -32,12 +32,12 @@
 				background-size: cover;
 			}
            
-            #myModal .close-btn{
-				top: 0!important;
-    			position: absolute!important;
-    			right: 13px!important;
-    			z-index: 10;
-            }
+			#myModal .close-btn {
+			    top: -40px!important;
+			    position: absolute!important;
+			    right: 10px!important;
+			    z-index: 10;
+			}
 
             .modal-body{
                 background:#419cff;

@@ -25,6 +25,7 @@ use \Carbon\Carbon;
 use App\Model\CookiesSMS;
 use App\Notifications\WelcomeEmail;
 use App\Notifications\CourseInvoice;
+use App\Notifications\InstructionMail;
 use App\Services\FBPixelService;
 
 class InfoController extends Controller
@@ -598,12 +599,15 @@ class InfoController extends Controller
     		}
         }
 
-        $groupEmailLink = '';
+        /*$groupEmailLink = '';
         if ($evid && $evid == 2068) {
             $groupEmailLink = 'https://www.facebook.com/groups/846949352547091';
         }else{
             $groupEmailLink = 'https://www.facebook.com/groups/elearningdigital/';
-        }
+        }*/
+
+        $groupEmailLink = $thisevent && $thisevent->fb_group ? $thisevent->fb_group : '';
+
 		$extrainfo = [$tickettypedrop, $tickettypename, $eventname, $eventdate, $specialseats, 'YES',$eventcity,$groupEmailLink,$expiration_date];
 
         //Create new collected users
@@ -736,7 +740,9 @@ class InfoController extends Controller
         $adminemail = 'info@knowcrunch.com';
 
         $data = [];
-     
+        $data['fbGroup'] = $extrainfo[7];
+        $data['duration'] = $extrainfo[3];
+
     	foreach ($emailsCollector as $key => $muser) {
             $data['user'] = $muser;
             
@@ -748,6 +754,10 @@ class InfoController extends Controller
            
             if(($user = User::where('email',$muser['email'])->first())){
                 $user->notify(new WelcomeEmail($user,$data));
+
+                if($elearning){
+                    $user->notify(new InstructionMail($data));
+                }
             }
     	}
 
@@ -783,9 +793,10 @@ class InfoController extends Controller
                 
                 });
 
+                $data['user'] =  $transaction->user->first();
                 $data['slugInvoice'] = encrypt($muser['id'] . '-' . $transaction->invoice->first()->id);
 
-                $user->notify(new CourseInvoice($data));
+                $data['user']->notify(new CourseInvoice($data));
 
                 /*$sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf,$billingEmail) {
 

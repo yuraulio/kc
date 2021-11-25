@@ -7,6 +7,7 @@
 
 
  
+@if((isset($info) && isset($info['success'])) && $info['success'] === true)
 <main id="main-area" class="no-pad-top" role="main">
    <section class="section-text-img-blue">
       <div class="container">
@@ -14,14 +15,14 @@
             <div class="row row-flex">
                <div class="col-7 col-sm-12">
                   <div class="text-area">
-                    
-                     Please check your email to get access to your account and start watching for free.
+                     <?php echo ((isset($info) && isset($info['title'])) ? $info['title'] : 'Info') ?>
+                     {!! $info['message'] !!}
 
-                     <p>Proceed to <a href="/myaccount" class="dark-bg">your account</a>.</p>
+                     {{--<p>Proceed to <a href="/myaccount" class="dark-bg">your account</a>.</p>--}}
                   </div>
                   <div class="text-area social-icons">
                      <p></p>
-                     {{--<p>Share your experience with the world!</p>
+                  <p>Share your experience with the world!</p>
                     
 
                      <ul class="clearfix">
@@ -36,7 +37,7 @@
                         <li><a target="_blank" title="Share on LinkedIn" href="https://www.linkedin.com/shareArticle?mini=true&url={{$event['linkedin']}};" onclick="javascript:window.open(this.href,
                               '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;">
                               <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Linkedin.svg')}}" width="23" alt="Share on LinkedIn"></a></li>
-                     </ul>--}}
+                     </ul>
 
                   </div>
                </div>
@@ -50,6 +51,7 @@
       </div>
    </section>
 </main>
+@endif
 
 
 @stop

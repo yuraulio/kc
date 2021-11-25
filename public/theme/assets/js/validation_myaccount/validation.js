@@ -151,7 +151,7 @@ $(function() {
             },
 
             'mobile': {
-                required: "This field is required, enter your mobile phone number.",
+                required: "This field is required, enter your phone.",
             },
 
             'company': {

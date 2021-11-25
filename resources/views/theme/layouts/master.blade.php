@@ -104,12 +104,12 @@ _iub.csConfiguration = {"cookiePolicyInOtherWindow":true,"perPurposeConsent":tru
   s.parentNode.insertBefore(b, s);})();
 </script>--}}
 
-<script type="text/javascript">
+{{--<script type="text/javascript">
     var errorMessages = {
         requiredError: "Please fill in all mandatory data.",
         emailError: "Please enter a valid email address.",
     };
-</script>
+</script>--}}
 
 {{--<script src="https://js.stripe.com/v3/"></script>--}}
 
@@ -244,7 +244,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 @yield('scripts')
 
 
+@if(strtotime(date('Y-m-d')) == strtotime(env('BLACKFRIDAY')))
 <script src="{{cdn('theme/assets/blackfriday/blackfriday.js')}}"> </script>
+@endif
 
 @if(!Auth::check() && request()->login)
     <script>

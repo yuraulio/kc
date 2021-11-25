@@ -40,8 +40,8 @@ class StudentController extends Controller
 
         $validatorArray = [];
 
-        $validatorArray['firstname'] = 'required';
-        $validatorArray['lastname'] = 'required';
+        //$validatorArray['firstname'] = 'required';
+        //$validatorArray['lastname'] = 'required';
         $validatorArray['mobileCheck'] = 'phone:AUTO';
 
 
@@ -1286,34 +1286,44 @@ class StudentController extends Controller
 
     public function downloadMyInvoice($slug){
 
-        $invoice = decrypt($slug);
-        $invoice = explode('-',$invoice);
+        try{
 
-        if(count($invoice) != 2){
-            abort(404);
-        }
-
-        if( !$user = User::find($invoice[0]) ){
-            abort(404);
-        }
-
-        if( !$inv = Invoice::find($invoice[1]) ){
-            abort(404);
-        }
+            $invoice = decrypt($slug);
+            $invoice = explode('-',$invoice);
     
-        $users = $inv->user;
-        $userIds = [];
-
-        foreach($users as $us){
-            $userIds[] = $us->id;
-        }
-
+            if(count($invoice) != 2){
+                abort(404);
+            }
     
-        if( !in_array($invoice[0], $userIds)){
+            if( !$user = User::find($invoice[0]) ){
+                abort(404);
+            }
+    
+            if( !$inv = Invoice::find($invoice[1]) ){
+                abort(404);
+            }
+        
+            $users = $inv->user;
+            $userIds = [];
+    
+            foreach($users as $us){
+                $userIds[] = $us->id;
+            }
+    
+        
+            if( !in_array($invoice[0], $userIds)){
+                abort(404);
+            }
+    
+            return $inv->getInvoice();
+
+        }catch(\Exception $e){
+
             abort(404);
+
         }
 
-        return $inv->getInvoice();
+       
 
     }
 

@@ -240,228 +240,237 @@
                                           </div>
                                        </div>
                                        <div class="col12">
-                                          <span id="mobileCheck-error"></span>
+                                          
                                           <label>Mobile phone: <span>*</span></label>
                                           <div class="input-safe-wrapper is-flex full-width">
-                                             <select name="country_code" id="selectCountry" class="select2 form-control mb-3 custom-select country-select">
-                                                <option data-countryCode="DZ" value="213">DZ (+213)</option>
-                                                <option data-countryCode="AD" value="376">AD (+376)</option>
-                                                <option data-countryCode="AO" value="244">AO (+244)</option>
-                                                <option data-countryCode="AI" value="1264">AI (+1264)</option>
-                                                <option data-countryCode="AG" value="1268">AG (+1268)</option>
-                                                <option data-countryCode="AR" value="54">AR (+54)</option>
-                                                <option data-countryCode="AM" value="374">AM (+374)</option>
-                                                <option data-countryCode="AW" value="297">AW (+297)</option>
-                                                <option data-countryCode="AU" value="61">AU (+61)</option>
-                                                <option data-countryCode="AT" value="43">AT (+43)</option>
-                                                <option data-countryCode="AZ" value="994">AZ (+994)</option>
-                                                <option data-countryCode="BS" value="1242">BS (+1242)</option>
-                                                <option data-countryCode="BH" value="973">BH (+973)</option>
-                                                <option data-countryCode="BD" value="880">BD (+880)</option>
-                                                <option data-countryCode="BB" value="1246">BB (+1246)</option>
-                                                <option data-countryCode="BY" value="375">BY (+375)</option>
-                                                <option data-countryCode="BE" value="32">BE (+32)</option>
-                                                <option data-countryCode="BZ" value="501">BZ (+501)</option>
-                                                <option data-countryCode="BJ" value="229">BJ (+229)</option>
-                                                <option data-countryCode="BM" value="1441">BM (+1441)</option>
-                                                <option data-countryCode="BT" value="975">BT (+975)</option>
-                                                <option data-countryCode="BO" value="591">BO (+591)</option>
-                                                <option data-countryCode="BA" value="387">BA (+387)</option>
-                                                <option data-countryCode="BW" value="267">BW (+267)</option>
-                                                <option data-countryCode="BR" value="55">BR (+55)</option>
-                                                <option data-countryCode="BN" value="673">BN (+673)</option>
-                                                <option data-countryCode="BG" value="359">BG (+359)</option>
-                                                <option data-countryCode="BF" value="226">BF (+226)</option>
-                                                <option data-countryCode="BI" value="257">BI (+257)</option>
-                                                <option data-countryCode="KH" value="855">KH (+855)</option>
-                                                <option data-countryCode="CM" value="237">CM (+237)</option>
-                                                <option data-countryCode="CA" value="1">CA (+1)</option>
-                                                <option data-countryCode="CV" value="238">CV (+238)</option>
-                                                <option data-countryCode="KY" value="1345">KY (+1345)</option>
-                                                <option data-countryCode="CF" value="236">CF (+236)</option>
-                                                <option data-countryCode="CL" value="56">CL (+56)</option>
-                                                <option data-countryCode="CN" value="86">CN (+86)</option>
-                                                <option data-countryCode="CO" value="57">CO (+57)</option>
-                                                <option data-countryCode="KM" value="269">KM (+269)</option>
-                                                <option data-countryCode="CG" value="242">CG (+242)</option>
-                                                <option data-countryCode="CK" value="682">CK (+682)</option>
-                                                <option data-countryCode="CR" value="506">CR (+506)</option>
-                                                <option data-countryCode="HR" value="385">HR (+385)</option>
-                                                <option data-countryCode="CU" value="53">CU (+53)</option>
-                                                <option data-countryCode="CY" value="90392">CY (+90392)</option>
-                                                <option data-countryCode="CY" value="357">CY (+357)</option>
-                                                <option data-countryCode="CZ" value="420">CZ (+420)</option>
-                                                <option data-countryCode="DK" value="45">DK (+45)</option>
-                                                <option data-countryCode="DJ" value="253">DJ (+253)</option>
-                                                <option data-countryCode="DM" value="1809">DM (+1809)</option>
-                                                <option data-countryCode="DO" value="1809">DO (+1809)</option>
-                                                <option data-countryCode="EC" value="593">EC (+593)</option>
-                                                <option data-countryCode="EG" value="20">EG (+20)</option>
-                                                <option data-countryCode="SV" value="503">SV (+503)</option>
-                                                <option data-countryCode="GQ" value="240">GQ (+240)</option>
-                                                <option data-countryCode="ER" value="291">ER (+291)</option>
-                                                <option data-countryCode="EE" value="372">EE (+372)</option>
-                                                <option data-countryCode="ET" value="251">ET (+251)</option>
-                                                <option data-countryCode="FK" value="500">FK (+500)</option>
-                                                <option data-countryCode="FO" value="298">FO (+298)</option>
-                                                <option data-countryCode="FJ" value="679">FJ (+679)</option>
-                                                <option data-countryCode="FI" value="358">FI (+358)</option>
-                                                <option data-countryCode="FR" value="33">FR (+33)</option>
-                                                <option data-countryCode="GF" value="594">GF (+594)</option>
-                                                <option data-countryCode="PF" value="689">PF (+689)</option>
-                                                <option data-countryCode="GA" value="241">GA (+241)</option>
-                                                <option data-countryCode="GM" value="220">GM (+220)</option>
-                                                <option data-countryCode="GE" value="7880">GE (+7880)</option>
-                                                <option data-countryCode="DE" value="49">DE (+49)</option>
-                                                <option data-countryCode="GH" value="233">GH (+233)</option>
-                                                <option data-countryCode="GI" value="350">GI (+350)</option>
-                                                <option data-countryCode="GR" value="30" selected>GR (+30)</option>
-                                                <option data-countryCode="GL" value="299">GL (+299)</option>
-                                                <option data-countryCode="GD" value="1473">GD (+1473)</option>
-                                                <option data-countryCode="GP" value="590">GP (+590)</option>
-                                                <option data-countryCode="GU" value="671">GU (+671)</option>
-                                                <option data-countryCode="GT" value="502">GT (+502)</option>
-                                                <option data-countryCode="GN" value="224">GN (+224)</option>
-                                                <option data-countryCode="GW" value="245">GW (+245)</option>
-                                                <option data-countryCode="GY" value="592">GY (+592)</option>
-                                                <option data-countryCode="HT" value="509">HT (+509)</option>
-                                                <option data-countryCode="HN" value="504">HN (+504)</option>
-                                                <option data-countryCode="HK" value="852">HK (+852)</option>
-                                                <option data-countryCode="HU" value="36">HU (+36)</option>
-                                                <option data-countryCode="IS" value="354">IS (+354)</option>
-                                                <option data-countryCode="IN" value="91">IN (+91)</option>
-                                                <option data-countryCode="ID" value="62">ID (+62)</option>
-                                                <option data-countryCode="IR" value="98">IR (+98)</option>
-                                                <option data-countryCode="IQ" value="964">IQ (+964)</option>
-                                                <option data-countryCode="IE" value="353">IE (+353)</option>
-                                                <option data-countryCode="IL" value="972">IL (+972)</option>
-                                                <option data-countryCode="IT" value="39">IT (+39)</option>
-                                                <option data-countryCode="JM" value="1876">JM (+1876)</option>
-                                                <option data-countryCode="JP" value="81">JP (+81)</option>
-                                                <option data-countryCode="JO" value="962">JO (+962)</option>
-                                                <option data-countryCode="KZ" value="7">KZ (+7)</option>
-                                                <option data-countryCode="KE" value="254">KE (+254)</option>
-                                                <option data-countryCode="KI" value="686">KI (+686)</option>
-                                                <option data-countryCode="KP" value="850">KP (+850)</option>
-                                                <option data-countryCode="KR" value="82">KR (+82)</option>
-                                                <option data-countryCode="KW" value="965">KW (+965)</option>
-                                                <option data-countryCode="KG" value="996">KG (+996)</option>
-                                                <option data-countryCode="LA" value="856">LA (+856)</option>
-                                                <option data-countryCode="LV" value="371">LV (+371)</option>
-                                                <option data-countryCode="LB" value="961">LB (+961)</option>
-                                                <option data-countryCode="LS" value="266">LS (+266)</option>
-                                                <option data-countryCode="LR" value="231">LR (+231)</option>
-                                                <option data-countryCode="LY" value="218">LY (+218)</option>
-                                                <option data-countryCode="LI" value="417">LI (+417)</option>
-                                                <option data-countryCode="LT" value="370">LT (+370)</option>
-                                                <option data-countryCode="LU" value="352">LU (+352)</option>
-                                                <option data-countryCode="MO" value="853">MO (+853)</option>
-                                                <option data-countryCode="SK" value="389">SK (+389)</option>
-                                                <option data-countryCode="MG" value="261">MG (+261)</option>
-                                                <option data-countryCode="MW" value="265">MW (+265)</option>
-                                                <option data-countryCode="MY" value="60">MY (+60)</option>
-                                                <option data-countryCode="MV" value="960">MV (+960)</option>
-                                                <option data-countryCode="ML" value="223">ML (+223)</option>
-                                                <option data-countryCode="MT" value="356">MT (+356)</option>
-                                                <option data-countryCode="MH" value="692">MH (+692)</option>
-                                                <option data-countryCode="MQ" value="596">MQ (+596)</option>
-                                                <option data-countryCode="MR" value="222">MR (+222)</option>
-                                                <option data-countryCode="YT" value="269">YT (+269)</option>
-                                                <option data-countryCode="MX" value="52">MX (+52)</option>
-                                                <option data-countryCode="FM" value="691">FM (+691)</option>
-                                                <option data-countryCode="MD" value="373">MD (+373)</option>
-                                                <option data-countryCode="MC" value="377">MC (+377)</option>
-                                                <option data-countryCode="MN" value="976">MN (+976)</option>
-                                                <option data-countryCode="MS" value="1664">MS (+1664)</option>
-                                                <option data-countryCode="MA" value="212">MA (+212)</option>
-                                                <option data-countryCode="MZ" value="258">MZ (+258)</option>
-                                                <option data-countryCode="MN" value="95">MN (+95)</option>
-                                                <option data-countryCode="NA" value="264">NA (+264)</option>
-                                                <option data-countryCode="NR" value="674">NR (+674)</option>
-                                                <option data-countryCode="NP" value="977">NP (+977)</option>
-                                                <option data-countryCode="NL" value="31">NL (+31)</option>
-                                                <option data-countryCode="NC" value="687">NC (+687)</option>
-                                                <option data-countryCode="NZ" value="64">NZ (+64)</option>
-                                                <option data-countryCode="NI" value="505">NI (+505)</option>
-                                                <option data-countryCode="NE" value="227">NE (+227)</option>
-                                                <option data-countryCode="NG" value="234">NG (+234)</option>
-                                                <option data-countryCode="NU" value="683">NU (+683)</option>
-                                                <option data-countryCode="NF" value="672">NF (+672)</option>
-                                                <option data-countryCode="NP" value="670">NP (+670)</option>
-                                                <option data-countryCode="NO" value="47">NO (+47)</option>
-                                                <option data-countryCode="OM" value="968">OM (+968)</option>
-                                                <option data-countryCode="PW" value="680">PW (+680)</option>
-                                                <option data-countryCode="PA" value="507">PA (+507)</option>
-                                                <option data-countryCode="PG" value="675">PG (+675)</option>
-                                                <option data-countryCode="PY" value="595">PY (+595)</option>
-                                                <option data-countryCode="PE" value="51">PE (+51)</option>
-                                                <option data-countryCode="PH" value="63">PH (+63)</option>
-                                                <option data-countryCode="PL" value="48">PL (+48)</option>
-                                                <option data-countryCode="PT" value="351">PT (+351)</option>
-                                                <option data-countryCode="PR" value="1787">PR (+1787)</option>
-                                                <option data-countryCode="QA" value="974">QA (+974)</option>
-                                                <option data-countryCode="RE" value="262">RE (+262)</option>
-                                                <option data-countryCode="RO" value="40">RO (+40)</option>
-                                                <option data-countryCode="RU" value="7">RU (+7)</option>
-                                                <option data-countryCode="RW" value="250">RW (+250)</option>
-                                                <option data-countryCode="SM" value="378">SM (+378)</option>
-                                                <option data-countryCode="ST" value="239">ST (+239)</option>
-                                                <option data-countryCode="SA" value="966">SA (+966)</option>
-                                                <option data-countryCode="SN" value="221">SN (+221)</option>
-                                                <option data-countryCode="CS" value="381">CS (+381)</option>
-                                                <option data-countryCode="SC" value="248">SC (+248)</option>
-                                                <option data-countryCode="SL" value="232">SL (+232)</option>
-                                                <option data-countryCode="SG" value="65">SG (+65)</option>
-                                                <option data-countryCode="SK" value="421">SK (+421)</option>
-                                                <option data-countryCode="SI" value="386">SI (+386)</option>
-                                                <option data-countryCode="SB" value="677">SB (+677)</option>
-                                                <option data-countryCode="SO" value="252">SO (+252)</option>
-                                                <option data-countryCode="ZA" value="27">ZA (+27)</option>
-                                                <option data-countryCode="ES" value="34">ES (+34)</option>
-                                                <option data-countryCode="LK" value="94">LK (+94)</option>
-                                                <option data-countryCode="SH" value="290">SH (+290)</option>
-                                                <option data-countryCode="KN" value="1869">KN (+1869)</option>
-                                                <option data-countryCode="SC" value="1758">SC (+1758)</option>
-                                                <option data-countryCode="SD" value="249">SD (+249)</option>
-                                                <option data-countryCode="SR" value="597">SR (+597)</option>
-                                                <option data-countryCode="SZ" value="268">SZ (+268)</option>
-                                                <option data-countryCode="SE" value="46">SE (+46)</option>
-                                                <option data-countryCode="CH" value="41">CH (+41)</option>
-                                                <option data-countryCode="SI" value="963">SI (+963)</option>
-                                                <option data-countryCode="TW" value="886">TW (+886)</option>
-                                                <option data-countryCode="TJ" value="7">TJ (+7)</option>
-                                                <option data-countryCode="TH" value="66">Thailand (+66)</option>
-                                                <option data-countryCode="TG" value="228">TH (+228)</option>
-                                                <option data-countryCode="TO" value="676">TO (+676)</option>
-                                                <option data-countryCode="TT" value="1868">TT (+1868)</option>
-                                                <option data-countryCode="TN" value="216">TN (+216)</option>
-                                                <option data-countryCode="TR" value="90">TR (+90)</option>
-                                                <option data-countryCode="TM" value="7">TM (+7)</option>
-                                                <option data-countryCode="TM" value="993">TM (+993)</option>
-                                                <option data-countryCode="TC" value="1649">TC</option>
-                                                <option data-countryCode="TV" value="688">TV (+688)</option>
-                                                <option data-countryCode="UG" value="256">UG (+256)</option>
-                                                <option data-countryCode="GB" value="44">UK (+44)</option>
-                                                <option data-countryCode="UA" value="380">UA (+380)</option>
-                                                <option data-countryCode="AE" value="971">"AE (+971)</option>
-                                                <option data-countryCode="UY" value="598">UY (+598)</option>
-                                                <option data-countryCode="US" value="1">USA (+1)</option>
-                                                <option data-countryCode="UZ" value="7">UZ (+7)</option>
-                                                <option data-countryCode="VU" value="678">VU (+678)</option>
-                                                <option data-countryCode="VA" value="379">VA (+379)</option>
-                                                <option data-countryCode="VE" value="58">VE (+58)</option>
-                                                <option data-countryCode="VN" value="84">VN (+84)</option>
-                                                <option data-countryCode="VG" value="84">VG (+1284)</option>
-                                                <option data-countryCode="VI" value="84">VI (+1340)</option>
-                                                <option data-countryCode="WF" value="681">WF (+681)</option>
-                                                <option data-countryCode="YE" value="969">YE (North)(+969)</option>
-                                                <option data-countryCode="YE" value="967">YE (South)(+967)</option>
-                                                <option data-countryCode="ZM" value="260">ZM (+260)</option>
-                                                <option data-countryCode="ZW" value="263">ZW (+263)</option>
-                                             </select>
-                                             <input class="required" onkeyup="checkPhoneNumber(this)" type="text" name="mobile" id="mobile" value="{{{ old('mobile', $currentuser['mobile']) }}}" >
-                                             <input type="hidden" name="mobileCheck" id="mobileCheck" value="{{{ old('mobile', '+'.$currentuser['country_code'].$currentuser['mobile']) }}}">
+                                             <div class="col4">
+                                                <select name="country_code" id="selectCountry" class="form-control valid" aria-required="true" aria-invalid="false">
+                                                <option value="213" label="Algeria (+213)">Algeria </option>
+											               <option value="244" label="Angola (+244)">Angola </option>
+											               <option value="229" label="Benin (+229)">Benin </option>
+											               <option value="267" label="Botswana (+267)">Botswana </option>
+											               <option value="226" label="Burkina Faso (+226)">Burkina Faso </option>
+											               <option value="257" label="Burundi (+257)">Burundi </option>
+											               <option value="237" label="Cameroon (+237)">Cameroon </option>
+											               <option value="238" label="Cape Verde (+238)">Cape Verde </option>
+											               <option value="236" label="Central African Republic (+236)">Central African Republic </option>
+											               <option value="269" label="Comoros (+269)">Comoros </option>
+											               <option value="242" label="Congo - Brazzaville (+242)">Congo - Brazzaville </option>
+											               <option value="253" label="Djibouti (+253)">Djibouti </option>
+											               <option value="20" label="Egypt (+20)">Egypt </option>
+											               <option value="240" label="Equatorial Guinea (+240)">Equatorial Guinea</option>
+											               <option value="291" label="Eritrea (+291)">Eritrea </option>
+											               <option value="251" label="Ethiopia (+251)">Ethiopia </option>
+											               <option value="241" label="Gabon">Gabon</option>
+											               <option value="220" label="Gambia (+220)">Gambia </option>
+											               <option value="233" label="Ghana (+233)">Ghana </option>
+											               <option value="224" label="Guinea (+224)">Guinea </option>
+											               <option value="245" label="Guinea-Bissau (+245)">Guinea-Bissau </option>
+											               <option value="254" label="Kenya (+254)">Kenya</option>
+											               <option value="266" label="Lesotho (+266)">Lesotho</option>
+											               <option value="231" label="Liberia (+231)">Liberia</option>
+											               <option value="218" label="Libya (+218)">Libya</option>
+											               <option value="261" label="Madagascar (+261)">Madagascar</option>
+											               <option value="265" label="Malawi (+265)">Malawi</option>
+											               <option value="223" label="Mali (+223)">Mali</option>
+											               <option value="222" label="Mauritania (+222)">Mauritania</option>
+											               <option value="262" label="Mayotte (+262)">Mayotte </option>
+											               <option value="212" label="Morocco (+212)">Morocco</option>
+											               <option value="258" label="Mozambique (+258)">Mozambique</option>
+											               <option value="264" label="Namibia (+264)">Namibia</option>
+											               <option value="227" label="Niger (+227)">Niger</option>
+											               <option value="234" label="Nigeria (+234)">Nigeria</option>
+											               <option value="250" label="Rwanda (+250)">Rwanda</option>
+											               <option value="262" label="Réunion (+262)">Réunion</option>
+											               <option value="290" label="Saint Helena (+290)">Saint Helena</option>
+											               <option value="221" label="Senegal (+221)">Senegal</option>
+											               <option value="248" label="Seychelles (+248)">Seychelles</option>
+											               <option value="232" label="Sierra Leone (+232)">Sierra Leone</option>
+											               <option value="252" label="Somalia (+252)">Somalia</option>
+											               <option value="27" label="South Africa (+27)">South Africa</option>
+											               <option value="249" label="Sudan (+249)">Sudan</option>
+											               <option value="268" label="Swaziland (+268)">Swaziland</option>
+											               <option value="239" label="São Tomé and Príncipe (+239)">São Tomé and Príncipe</option>
+											               <option value="228" label="Togo (+228)">Togo</option>
+											               <option value="216" label="Tunisia (+216)">Tunisia</option>
+											               <option value="256" label="Uganda (+256)">Uganda</option>
+											               <option value="260" label="Zambia (+260)">Zambia</option>
+											               <option value="263" label="Zimbabwe (+263)">Zimbabwe</option>										
+											               <option value="1264" label="Anguilla (+1264)">Anguilla </option>
+											               <option value="595" label="Paraguay (+595)">Paraguay </option>
+											               <option value="51" label="Peru (+51)">Peru </option>
+											               <option value="1268" label="Antigua and Barbuda (+1268)">Antigua and Barbuda </option>
+											               <option value="54" label="Argentina (+54)">Argentina </option>
+											               <option value="297" label="Aruba (+297)">Aruba </option>
+											               <option value="1242" label="Bahamas (+1242)">Bahamas </option>
+											               <option value="1246" label="Barbados (+1246)">Barbados </option>
+											               <option value="501" label="Belize (+501)">Belize </option>
+											               <option value="1441" label="Bermuda (+1441)">Bermuda </option>
+											               <option value="591" label="Bolivia (+591)">Bolivia </option>
+											               <option value="55" label="Brazil (+55)">Brazil</option>
+											               <option value="84" label="British Virgin Islands (+84)">British Virgin Islands</option>
+											               <option value="1" label="Canada (+1)">Canada </option>
+											               <option value="1345" label="Cayman Islands (+1345)">Cayman Islands </option>
+											               <option value="56" label="Chile (+56)">Chile </option>
+											               <option value="57" label="Colombia (+57)">Colombia </option>
+											               <option value="506" label="Costa Rica (+506)">Costa Rica </option>
+											               <option value="53" label="Cuba (+53)">Cuba </option>
+											               <option value="90392" label="Northen Cyprus (+90392)">Northen Cyprus </option>
+											               <option value="1809" label="Dominica (+1809)">Dominica </option>
+											               <option value="1809" label="Dominican Republic (+1809)">Dominican Republic </option>
+											               <option value="593" label="Ecuador (+593)">Ecuador </option>
+											               <option value="503" label="El Salvador (+503)">El Salvador </option>
+											               <option value="500" label="Falkland Islands (+500)">Falkland Islands</option>
+											               <option value="594" label="French Guiana (+594)">French Guiana </option>
+											               <option value="299" label="Greenland (+299)">Greenland </option>
+											               <option value="1473" label="Grenada (+1473)">Grenada </option>
+											               <option value="590" label="Guadeloupe (+590)">Guadeloupe </option>
+											               <option value="502" label="Guatemala (+502)">Guatemala </option>
+											               <option value="592" label="Guyana (+592)">Guyana </option>
+											               <option value="509" label="Haiti (+509)">Haiti </option>
+											               <option value="504" label="Honduras (+504)">Honduras </option>
+											               <option value="1876" label="Jamaica (+1876)">Jamaica</option>
+											               <option value="596" label="Martinique (+596)">Martinique</option>
+											               <option value="52" label="Mexico (+52)">Mexico</option>
+											               <option value="1664" label="Montserrat (+1664)">Montserrat</option>
+											               <option value="AN" label="Netherlands Antilles">Netherlands Antilles</option>
+											               <option value="505" label="Nicaragua (+505)">Nicaragua</option>
+											               <option value="507" label="Panama (+507)">Panama</option>
+											               <option value="95" label="Myanmar (+95)">Myanmar</option>
+											               <option value="1787" label="Puerto Rico (+1787)">Puerto Rico</option>
+											               <option value="1869" label="Saint Kitts and Nevis (+1869)">Saint Kitts and Nevis</option>
+											               <option value="597" label="Suriname (+597)">Suriname</option>
+											               <option value="1868" label="Trinidad and Tobago (+1868)">Trinidad and Tobago</option>
+											               <option value="1649" label="Turks and Caicos Islands (+1649)">Turks and Caicos Islands</option>
+											               <option value="84" label="U.S. Virgin Islands (+84)">U.S. Virgin Islands</option>
+											               <option value="1" label="United States (+1)">United States</option>
+											               <option value="598" label="Uruguay (+598)">Uruguay</option>
+											               <option value="58" label="Venezuela (+58)">Venezuela</option>										
+											               <option value="374" label="Armenia (+374)">Armenia </option>
+											               <option value="994" label="Azerbaijan (+994)">Azerbaijan</option>
+											               <option value="973" label="Bahrain (+973)">Bahrain </option>
+											               <option value="880" label="Bangladesh  (+880)">Bangladesh</option>
+											               <option value="975" label="Bhutan (+975)">Bhutan </option>
+											               <option value="673" label="Brunei (+673)">Brunei </option>
+											               <option value="63" label="Philippines (+63)">Philippines  </option>
+											               <option value="855" label="Cambodia (+855)">Cambodia </option>
+											               <option value="86" label="China (+86)">China </option>
+											               <option value="7880" label="Georgia (+7880)">Georgia </option>
+											               <option value="852" label="Hong Kong SAR China (+852)">Hong Kong SAR China</option>
+											               <option value="91" label="India (+91)">India</option>
+											               <option value="62" label="Indonesia (+62)">Indonesia</option>
+											               <option value="98" label="Iran (+98)">Iran</option>
+											               <option value="964" label="Iraq (+964)">Iraq</option>
+											               <option value="972" label="Israel (+972)">Israel</option>
+											               <option value="81" label="Japan (+81)">Japan</option>
+											               <option value="962" label="Jordan (+962)">Jordan</option>
+											               <option value="7" label="Kazakhstan (+7)">Kazakhstan</option>
+											               <option value="965" label="Kuwait (+965)">Kuwait</option>
+											               <option value="856" label="Laos (+856)">Laos</option>
+											               <option value="961" label="Lebanon (+961)">Lebanon</option>
+											               <option value="853" label="Macau SAR China (+853)">Macau SAR China</option>
+											               <option value="60" label="Malaysia (+60)">Malaysia</option>
+											               <option value="960" label="Maldives (+960)">Maldives</option>
+											               <option value="976" label="Mongolia (+976)">Mongolia</option>
+											               <option value="977" label="Nepal (+977)">Nepal</option>
+											               <option value="850" label="North Korea (+850)">North Korea</option>
+											               <option value="968" label="Oman (+968)">Oman</option>
+											               <option value="PK" label="Pakistan">Pakistan</option>
+											               <option value="996" label="Kyrgyzstan (+996)"> Kyrgyzstan </option>
+											               <option value="974" label="Qatar (+974)">Qatar</option>
+											               <option value="966" label="Saudi Arabia (+966)">Saudi Arabia</option>
+											               <option value="65" label="Singapore (+65)">Singapore</option>
+											               <option value="82" label="South Korea (+82)">South Korea</option>
+											               <option value="94" label="Sri Lanka (+94)">Sri Lanka</option>
+											               <option value="963" label="Syria (+963)">Syria</option>
+											               <option value="886" label="Taiwan (+886)">Taiwan</option>
+											               <option value="389" label="Fyrom (+389)">Fyrom</option>
+											               <option value="7" label="Tajikistan (+7)">Tajikistan</option>
+											               <option value="66" label="Thailand (+6)">Thailand</option>
+											               <option value="90" label="Turkey (+90)">Turkey</option>
+											               <option value="993" label="Turkmenistan (+993)">Turkmenistan</option>
+											               <option value="971" label="United Arab Emirates (+971)">United Arab Emirates</option>
+											               <option value="7" label="Uzbekistan (+7)">Uzbekistan</option>
+											               <option value="84" label="Vietnam (+84)">Vietnam</option>
+											               <option value="967" label="Yemen (+967)">Yemen</option>									
+											               <option value="376" label="Andorra (+376)">Andorra </option>
+											               <option value="43" label="Austria (+43)">Austria </option>
+											               <option value="375" label="Belarus (+375)">Belarus </option>
+											               <option value="32" label="Belgium (+32)">Belgium </option>
+											               <option value="387" label="Bosnia and Herzegovina (+387)">Bosnia and Herzegovina </option>
+											               <option value="359" label="Bulgaria (+359)">Bulgaria </option>
+											               <option value="385" label="Croatia (+386)">Croatia </option>
+											               <option value="357" label="Cyprus (+357)">Cyprus </option>
+											               <option value="420" label="Czech Republic (+420)">Czech Republic </option>
+											               <option value="45" label="Denmark (+45)">Denmark</option>
+											               <option value="372" label="Estonia (+372)">Estonia </option>
+											               <option value="298" label="Faroe Islands  (+298)">Faroe Islands</option>
+											               <option value="358" label="Finland (+358)">Finland (+358)</option>
+											               <option value="33" label="France (+33)">France </option>
+											               <option value="49" label="Germany (+49)">Germany </option>
+											               <option value="350" label="Gibraltar (+350)">Gibraltar</option>
+											               <option selected value="30" label="Greece (+30)">Greece</option>
+											               <option value="36" label="Hungary (+36)">Hungary</option>
+											               <option value="354" label="Iceland (+354)">Iceland</option>
+											               <option value="353" label="Ireland (+353)">Ireland</option>
+											               <option value="39" label="Italy (+39)">Italy</option>
+											               <option value="371" label="Latvia (+371)">Latvia</option>
+											               <option value="417" label="Liechtenstein (+417)">Liechtenstein</option>
+											               <option value="1785" label="Saint Lucia (+1758)">Saint Lucia</option>
+											               <option value="370" label="Lithuania (+370)">Lithuania</option>
+											               <option value="352" label="Luxembourg (+352)">Luxembourg</option>
+											               <option value="356" label="Malta (+356)">Malta</option>
+											               <option value="373" label="Moldova (+373)">Moldova</option>
+											               <option value="377" label="Monaco (+377)">Monaco</option>
+											               <option value="31" label="Netherlands (+31)">Netherlands</option>
+											               <option value="47" label="Norway (+47)">Norway</option>
+											               <option value="48" label="Poland (+48)">Poland</option>
+											               <option value="351" label="Portugal (+351)">Portugal</option>
+											               <option value="40" label="Romania (+40)">Romania</option>
+											               <option value="7" label="Russia (+7)">Russia</option>
+											               <option value="378" label="San Marino (+378)">San Marino</option>
+											               <option value="381" label="Serbia and Montenegro (381)">Serbia and Montenegro</option>
+											               <option value="421" label="Slovakia (+421)">Slovakia</option>
+											               <option value="386" label="Slovenia (+386)">Slovenia</option>
+											               <option value="34" label="Spain (+34)">Spain</option>
+											               <option value="46" label="Sweden (+46)">Sweden</option>
+											               <option value="41" label="Switzerland (+41)">Switzerland</option>
+											               <option value="380" label="Ukraine (+380)">Ukraine</option>
+											               <option value="44" label="United Kingdom (+44)">United Kingdom</option>
+											               <option value="379" label="Vatican City(+379)">Vatican City</option>
+											               <option value="61" label="Australia (+61)">Australia </option>
+											               <option value="682" label="Cook Islands (+682)">Cook Islands</option>
+											               <option value="679" label="Fiji (+679)">Fiji</option>
+											               <option value="670" label="East Timor (+670)">East Timor</option>
+											               <option value="689" label="French Polynesia (+689)">French Polynesia</option>
+											               <option value="241" label="French Southern Territories (+241)">French Southern Territories</option>
+											               <option value="671" label="Guam (+671)">Guam</option>
+											               <option value="686" label="Kiribati (+686)">Kiribati</option>
+											               <option value="692" label="Marshall Islands (+692)">Marshall Islands</option>
+											               <option value="691" label="Micronesia (+691)">Micronesia</option>
+											               <option value="674" label="Nauru (+674)">Nauru</option>
+											               <option value="687" label="New Caledonia (+687)">New Caledonia</option>
+											               <option value="64" label="New Zealand (+64)">New Zealand</option>
+											               <option value="683" label="Niue (+683)">Niue</option>
+											               <option value="672" label="Norfolk Island (+672)">Norfolk Island</option>
+											               <option value="680" label="Palau (+680)">Palau</option>
+											               <option value="675" label="Papua New Guinea (+675)">Papua New Guinea</option>
+											               <option value="677" label="Solomon Islands (+677)">Solomon Islands</option>
+											               <option value="676" label="Tonga (+676)">Tonga</option>
+											               <option value="688" label="Tuvalu (+688)">Tuvalu</option>
+											               <option value="678" label="Vanuatu (+678)">Vanuatu</option>
+											               <option value="681" label="Wallis and Futuna (+681)">Wallis and Futuna</option>
+                                                </select>
+                                             </div>
+                                             <div class="col8">
+                                                <input class="required" onkeyup="checkPhoneNumber(this)" type="number" name="mobile" id="mobile" value="{{{ old('mobile', $currentuser['mobile']) }}}" >
+                                                <input type="hidden" name="mobileCheck" id="mobileCheck" value="{{{ old('mobile', '+'.$currentuser['country_code'].$currentuser['mobile']) }}}">
+                                                <label id="mobile-error1" style="display:none" class="error error-mobile" for="mobile"></label>
+
+                                             </div>
                                           </div>
+                                          
+
                                        </div>
                                        {{--
                                        <div class="checkbox-row">
@@ -631,11 +640,15 @@
 
                         <div class="bottom">
                            <div class="left">
-                              <div class="location">Get annual access to our course and get the updated videos and files first for 199€/year. Cancel anytime. 15 days free trial. </div>
+                              <div class="location">
+                              
+                              You are one of the selected graduates who have access to our annual subscription. Access all of our course's updated videos & files for €199/year. Free trial for 15 days. 
+
+                              </div>
                            </div>
                            <div class="right subscription-button">
                            @foreach($plans as $key => $plan)
-                              <a href="/myaccount/subscription/{{$plan->events->first()->title}}/{{ $plan->name }}" class="btn btn--primary btn--lg">START MY 15 FREE TRIAL PAY LATER</a>
+                              <a href="/myaccount/subscription/{{$plan->events->first()->title}}/{{ $plan->name }}" class="btn btn--primary btn--lg">START MY TRIAL NOW</a>
                            @endforeach
                            </div>
                         </div>
@@ -2025,9 +2038,7 @@
 <script>
    $(document).ready(function() {
 
-
-
-      $("#selectCountry").select2()
+      $("#selectCountry").select()
 
       @if("{{ old('country_code') }}")
 
@@ -2035,10 +2046,12 @@
 
       @endif
 
+      alphabetizeList('#selectCountry');
+
    });
 
 </script>
-<script>
+{{--<script>
    $("#update-personal-info").click(function(){
 
       fdata =$("#update-form").serialize();
@@ -2084,5 +2097,75 @@
 
    });
 
+</script>--}}
+
+<script>
+   $("#update-personal-info").click(function(){
+
+      let val = $("#firstname").val();
+      let newVal = val.charAt(0).toUpperCase() + val.slice(1).toLowerCase();
+      $("#firstname").val(newVal)
+
+      val = $("#lastname").val();
+      newVal = val.charAt(0).toUpperCase() + val.slice(1).toLowerCase();
+      $("#lastname").val(newVal)
+
+
+
+    var checkoutUrl = '/myaccount/validate-personal-info';
+    var fdata = $("#update-form").serialize();
+    $(".error-mobile").hide();
+	
+
+    $.ajax({ url: checkoutUrl, type: "post",
+         
+         headers: {
+             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+         },
+         data: fdata,
+         success: function(data) {
+           
+             $('#update-form').find("input[type=text]").removeClass('verror');
+             if (Number(data.status) === 0) {
+                 //var html = '<ul>';
+                 $("#update-form").valid();
+                 $.each(data.errors, function (key, row) {
+                     
+                     $("#mobile-error1").html(row);
+                     $("#mobile-error1").show()
+
+                 });
+
+                 //$("#participant-form").valid();
+             } else {
+
+               $('#update-form').submit();
+        
+             }
+         }
+            
+    });
+
+
+      
+   });
+
 </script>
+
+
+<script>
+
+		function alphabetizeList(listField) {
+    		var sel = $(listField);
+    		var selected = sel.val(); // cache selected value, before reordering
+    		var opts_list = sel.find('option');
+    		opts_list.sort(function (a, b) {
+    		    return $(a).text().trim() > $(b).text().trim() ? 1 : -1;
+    		});
+    		sel.html('').append(opts_list);
+    		sel.val(selected); // set cached selected value
+		}
+
+	</script>
+
 @stop

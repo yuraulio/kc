@@ -18,7 +18,7 @@
                      <?php $res = json_decode($info['transaction']['payment_response'], true); ?>
                      {!! $info['message'] !!}
 
-                     <p>Proceed to <a href="/myaccount" class="dark-bg">your account</a>.</p>
+                     {{--<p>Proceed to <a href="/myaccount" class="dark-bg">your account</a>.</p>--}}
                   </div>
                   <div class="text-area social-icons">
                      <p></p>
