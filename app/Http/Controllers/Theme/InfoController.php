@@ -183,18 +183,18 @@ class InfoController extends Controller
         $this->fbp->sendPurchaseEvent($data);
 
         //DESTROY CART HERE AND SESSION vars
-        //Cart::instance('default')->destroy();
-        //Session::forget('pay_seats_data');
-        //Session::forget('transaction_id');
-        //Session::forget('cardtype');
-        //Session::forget('installments');
-        ////Session::forget('pay_invoice_data');
-        //Session::forget('pay_bill_data');
-        //Session::forget('deree_user_data');
-        //Session::forget('user_id');
-        //Session::forget('coupon_code');
-        //Session::forget('coupon_price');
-        //Session::forget('priceOf');
+        Cart::instance('default')->destroy();
+        Session::forget('pay_seats_data');
+        Session::forget('transaction_id');
+        Session::forget('cardtype');
+        Session::forget('installments');
+        //Session::forget('pay_invoice_data');
+        Session::forget('pay_bill_data');
+        Session::forget('deree_user_data');
+        Session::forget('user_id');
+        Session::forget('coupon_code');
+        Session::forget('coupon_price');
+        Session::forget('priceOf');
         ///dd($data);
         
         if (isset($this->transaction['payment_response'])) {
