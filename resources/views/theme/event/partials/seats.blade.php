@@ -49,13 +49,16 @@
             }
             
          ?>
-         <div class="@if($showAlumni && $showSpecial) col-4 col-sm-12 @elseif($showAlumni && !$showSpecial) col-6 col-sm-12 
+         <div class="@if($showAlumni && $showSpecial) col-4 col-sm-12 @elseif($showAlumni && !$showSpecial && count($tickets) > 1) col-6 col-sm-12 
                      @elseif(!$showAlumni && $ticket['type'] !== 'Alumni' && !$showSpecial)  
-                     @else col-6 col-sm-12 @endif 
+                     @elseif(count($tickets) > 1) col-6 col-sm-12 @endif 
                         
                      @if(!$showAlumni && ($ticket['type'] == 'Early Bird' || $ticket['type'] == 'Special')) ticket-right 
                      @elseif($ticket['type'] == 'Alumni' && !$showSpecial) ticket-right 
-                     @elseif(!$showAlumni && $ticket['type'] !== 'Alumni' && !$showSpecial) ticket-center  @endif">
+                     @elseif(!$showAlumni && $ticket['type'] !== 'Alumni' && !$showSpecial) ticket-center  
+                     @elseif(count($tickets) == 1))
+                     ticket-center  
+                     @endif">
        
             <div class="ticket-box-wrapper">
                <div class="ticket-box">

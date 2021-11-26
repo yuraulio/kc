@@ -86,7 +86,7 @@
     
     
         <div id="myModal" class="modal hide fade modal-border" tabindex="-1" role="dialog" data-backdrop="true" aria-labelledby="myModalLabel" aria-hidden="true" hidden>
-        <a href="#" class="close-btn"><img width="26" src="{{cdn('theme/assets/images/icons/icon-close.svg')}}" class="replace-with-svg" alt="Close"></a>
+        <a href="javascript:void(0)" class="close-btn"><img width="26" src="{{cdn('theme/assets/images/icons/icon-close.svg')}}" class="replace-with-svg" alt="Close"></a>
 
             <div class="modal-body">
                 <div id="container-modal">
@@ -100,7 +100,7 @@
         
         <script>
             $("#myModal .close-btn").click(function(){
-    
+				
                 var favDialog = document.getElementById('myModal');
                 favDialog.style.display = "none";
 
