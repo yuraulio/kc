@@ -134,10 +134,8 @@
       @endforeach
 
       gt3['transactionProducts'] = products;
+      dataLayer.push(gt3);
 
-      dataLayer.push({
-         gt3
-      });
    </script>
 @endif
 
