@@ -1236,7 +1236,7 @@ class CartController extends Controller
             }
 
             $namount = (float)$amount;
-
+           
             $temp = [];
             if(isset($pay_bill_data)) {
                 $temp = $pay_bill_data;
@@ -1313,12 +1313,15 @@ class CartController extends Controller
              if($installments > 1) {
 
                 $instamount =  round($namount / $installments, 2);
+                
+                $planAmount = $instamount * 100;
 
-                if($instamount - floor($instamount)>0){
+                /*if($instamount - floor($instamount)>0){
                     $planAmount = str_replace('.','',$instamount);
                 }else{
                     $planAmount  = $instamount . '00';
-                }
+                }*/
+                
                     //$dpuser->subscription()->syncWithStripe();
                    // dd("Entity ready to be billed!");
                     // Check if the entity has any active subscription
@@ -1327,7 +1330,7 @@ class CartController extends Controller
                         //./ngrok authtoken 69hUuQ1DgonuoGjunLYJv_3PVuHFueuq5Kiuz7S1t21
                         // Create the plan to subscribe
                         $desc = $installments . ' installments';
-                        $planid = 'plan_'.$dpuser->id.'_E_'.$ev->id.'_T_'.$ticket_id.'_x'.$installments;
+                        $planid = 'plan_'.$dpuser->id.'_Ecc_'.$ev->id.'_T_'.$ticket_id.'_x'.$installments;
                         $name = $ev_title . ' ' . $ev_date_help . ' | ' . $desc;
                         //dd(str_replace('.','',$instamount) . '00');
 
@@ -1370,11 +1373,13 @@ class CartController extends Controller
             }
             else {
 
-                if($namount - floor($namount)>0){
+                /*if($namount - floor($namount)>0){
                     $stripeAmount = str_replace('.','',$namount);
                 }else{
                     $stripeAmount  = $namount . '00';
-                }
+                }*/
+
+                $stripeAmount = $namount * 100;
             
                 $dpuser->updateStripeCustomer([
                     'name' => $st_name,
