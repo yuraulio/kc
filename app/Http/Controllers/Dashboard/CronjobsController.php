@@ -11,6 +11,9 @@ use Mail;
 use App\Model\Event;
 use Illuminate\Support\Facades\File;
 use App\Model\Option;
+use App\Model\CartCache;
+use App\Notifications\AbandonedCart;
+use Carbon\Carbon;
 
 class CronjobsController extends Controller
 {
@@ -259,14 +262,6 @@ class CronjobsController extends Controller
                 }
             }
 
-
-
-
-
-
-
-
-
         }
 
     }
@@ -422,6 +417,43 @@ class CronjobsController extends Controller
                 $m->subject($sub);
 
             });
+        }
+
+    }
+
+    public function remindAbandonedUser()
+    {
+       
+        $abandoneds = CartCache::where('send_email',false)->get();
+        
+        foreach($abandoneds as $abandoned){
+
+
+            if($abandoned->created_at >= now()->subMinutes(5)){
+               continue;
+            }
+
+            if(!$user = $abandoned->user){
+                continue;
+            }
+
+            if(!$event = $abandoned->eventt){
+                continue;
+            }
+
+            if(!$event->published || $event->status!=0){
+                continue;
+            }
+
+            $data['firstName'] = $user->firstname;
+            $data['eventTitle'] = $event->title;
+            $data['faqs'] = url('/') . '/' . $event->slugable->slug . '/#faq';
+            $data['slug'] = url('/') . '/registration?cart=' . $abandoned->slug;
+
+            $user->notify(new AbandonedCart($data));
+            $abandoned->send_email = 1;
+            $abandoned->save();
+
         }
 
     }

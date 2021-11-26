@@ -554,7 +554,7 @@ Route::get('/fb-google-csv', 'Dashboard\CronjobsController@fbGoogleCsv');
 Route::get('/sendSubscriptionRemind', 'Dashboard\CronjobsController@sendSubscriptionRemind');
 Route::get('/update-status-field', 'Dashboard\CronjobsController@updateStatusField');
 Route::get('/deree-notification', 'Dashboard\CronjobsController@dereeIDNotification');
-//Route::get('/abanoded/user', 'Dashboard\CronjobsController@remindAbandonedUser');
+Route::get('/abanoded/user', 'Dashboard\CronjobsController@remindAbandonedUser');
 //Route::get('/sendInvoice', 'Dashboard\CronjobsController@sendInvoice');
 
 //SITEMAP

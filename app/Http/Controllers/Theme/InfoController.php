@@ -753,6 +753,11 @@ class InfoController extends Controller
             $data['eventslug'] = $eventslug;
            
             if(($user = User::where('email',$muser['email'])->first())){
+
+                if($user->cart){
+                    $user->cart->delete();
+                }
+
                 $user->notify(new WelcomeEmail($user,$data));
 
                 if($elearning){
