@@ -60,7 +60,7 @@
 									<button type="button" class="btn btn-2 checkout-button-coupon active">apply</button>
 									
 								</form>
-								<label class="mt-1 coupon-successfull-message"> Enjoy, your code was applied succesfully</label>
+								<label class="mt-1 coupon-successfull-message"> Enjoy, your code was applied successfully.</label>
 
 							@endif
 							
