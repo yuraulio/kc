@@ -8,8 +8,10 @@
 		<style>
 		
          #myModal #container-modal {				
-				width: 400px!important;
-				height: 400px!important;
+				/*width: 400px!important;
+				height: 400px!important;*/
+				width: 700px!important;
+    			height: 392px!important;
 				overflow: hidden!important;
 				position: relative!important;
 				box-sizing: border-box!important;
@@ -28,8 +30,9 @@
 			}
 			#myModal img {position: absolute;}
 			#myModal #container-modal {
-				background-image: url(blackfriday/blackfriday21/knoqcrunch_black_friday.jpg); 
-				background-size: cover;
+				background-image: url(blackfriday/cyberMonth21/kc-website-cyber-monday-modal-2x.jpg); 
+				background-size: contain;
+				background-repeat: no-repeat;
 			}
            
 			#myModal .close-btn {
@@ -79,6 +82,17 @@
 					width: fit-content;
     				height: fit-content;
                 }
+
+				#myModal #container-modal {
+    				width: 402px!important;
+    				height: 225px!important;
+				}
+
+				#myModal #container-modal {
+				    background-size: contain;
+				    background-repeat: no-repeat;
+				}
+
             }
 
 		</style>

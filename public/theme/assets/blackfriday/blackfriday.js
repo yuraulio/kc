@@ -8,10 +8,10 @@ $(document).ready(function(){
 
     function blackFriday(){
     
-        if(localStorage.getItem("blackFridayCooκie2021")){ 
+        if(localStorage.getItem("CyberMonthCooκie2021")){ 
             return true;
         }
-        localStorage.setItem("blackFridayCooκie2021",true)
+        localStorage.setItem("CyberMonthCooκie2021",true)
         return false;
         
     }
