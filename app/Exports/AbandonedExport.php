@@ -45,7 +45,7 @@ class AbandonedExport implements FromArray
         $abcart = ShoppingCart::with('user')->get()->keyBy('identifier');
 
         foreach($list as $user_id => $ucart) :
-            if($abcart[$user_id]->user != null){
+            if($abcart[$user_id]->user->first() != null){
             $fn = $abcart[$user_id]->user->first()['firstname'] . ' ' .$abcart[$user_id]->user->first()['lastname'];
 
             $evdate = 'No Date';
