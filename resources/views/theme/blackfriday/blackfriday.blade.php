@@ -103,7 +103,7 @@
         <a href="javascript:void(0)" class="close-btn"><img width="26" src="{{cdn('theme/assets/images/icons/icon-close.svg')}}" class="replace-with-svg" alt="Close"></a>
 
             <div class="modal-body">
-                <div id="container-modal">
+                <div id="container-modal" class="modal-cont">
         	    	
         	    </div>
             </div>

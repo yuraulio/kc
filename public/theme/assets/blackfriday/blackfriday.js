@@ -17,6 +17,17 @@ $(document).ready(function(){
     }
 
 
+    $(document).click(function(e){
+        
+        console.log($(e.target).hasClass('modal-cont'))
+        
+        if(!$(e.target).hasClass('modal-cont')){
+            var favDialog = document.getElementById('myModal');
+            favDialog.style.display = "none";
+        }
+        
+      });
+
 
 })
 
