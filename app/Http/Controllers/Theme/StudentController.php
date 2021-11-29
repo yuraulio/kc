@@ -124,7 +124,7 @@ class StudentController extends Controller
 
         $user = Auth::user();
         $data['user'] = User::with('image', 'instructor','events')->find($user->id);
-
+        $data['masterClassAccess'] = true;
         $instructor = $user->instructor->first();
 
         $data['elearningAccess'] = 0;
