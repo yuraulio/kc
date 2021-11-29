@@ -121,7 +121,7 @@
 							append(`<p id="coupon" class="form-control input-coupon-successfull">` + data['coupon_code'] + `</p>`)
 
 							//$('.checkout-coupon-code-wrap').empty()
-							$('<label class="mt-1 coupon-successfull-message"> Enjoy, your code was applied succesfully</label>').insertAfter('.coupon-form')
+							$('<label class="mt-1 coupon-successfull-message"> Enjoy, your code was applied successfully.</label>').insertAfter('.coupon-form')
 	
 							$(`<div class="checkout-participant price-of">
 						    		<p>Special offer:</p><span>`+ data['priceOf'] +`</span>
