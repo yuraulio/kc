@@ -1005,9 +1005,9 @@
                                     <li><a href="#c-cert-inner{{$tab}}">Certificate</a></li>
                                     @endif
                                     @endif
-                                    {{--@if($subscriptionAccess && count($event['plans']) > 0)
+                                    @if($event['mySubscription'])
                                     <li><a href="#c-subs-inner{{$tab}}">Subscription</a></li>
-                                    @endif--}}
+                                    @endif
                                  </ul>
                               </div>
                               <div class="inside-tabs-wrapper">
@@ -1026,7 +1026,7 @@
                                        @endif
                                     </div>
                                  </div>
-                                 {{--@if($subscriptionAccess)
+                                 @if($event['mySubscription'])
                                  <div id="c-subs-inner{{$tab}}" class="in-tab-wrapper">
                                     <div class="bottom">
                                        @if($event['mySubscription'])
@@ -1113,7 +1113,7 @@
                                        </div>
                                     </div>
                                  </div>
-                                 @endif--}}
+                                 @endif
                                  <?php //dd($event); ?>
                                  <div id="c-watch-inner{{$tab}}" class="in-tab-wrapper">
                                     <div class="bottom">
