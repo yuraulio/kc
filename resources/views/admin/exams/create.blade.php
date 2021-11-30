@@ -208,6 +208,7 @@
                                        </a>
                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                                           <a class="dropdown-item question-item" data-toggle="modal" data-target="#editModal" data-id="{{$key}}" data-question="{{json_encode(json_decode($exam->questions,true)[$key])}}">{{ __('Edit') }}</a>
+                                          <a class="dropdown-item delete-question" data-id="{{$key}}">{{ __('Delete') }}</a>
                                        </div>
                                     </div>
                                  </td>
@@ -819,6 +820,7 @@
    })
 
    @if($edit)
+      
       $(".add-question").click(function(){
 
        let question = {};
@@ -897,6 +899,27 @@
 
 
       })
+
+      $(".delete-question").click(function(){
+
+         let question =$(this).data('id');
+         $('#question-'+question).remove();
+
+         $.ajax({
+            type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+            },
+            Accept: 'application/json',
+            url: "{{ route ('exam.delete_question',$exam->id) }}",
+            data:{'question':question},
+            success: function(data) {
+               
+            }
+         });
+
+
+         })
 
       $(document).on('click','#update-question' ,function(){
 	   //$("edit-question").click(function(){

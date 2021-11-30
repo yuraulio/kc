@@ -262,30 +262,40 @@ class ExamController extends Controller
 
     }
 
+    public function deleteQuestion(Request $request, Exam $exam){
+
+       
+        $questions = json_decode($exam->questions) ? json_decode($exam->questions,true) : [];
+
+        if(isset($questions[$request->question])){
+            unset($questions[$request->question]);
+        }   
+        
+        $exam->questions = json_encode($questions);
+        $exam->save();
+
+    }
+
     public function updateQuestion(Request $request, Exam $exam){
-
-       
-       $oldQuestions = json_decode($exam->questions,true);
-       //dd($oldQuestion); 
+ 
+        $oldQuestions = json_decode($exam->questions,true);
+        //dd($oldQuestion); 
       
+        $question = $request->question;
+        $question['question'] = trim(str_replace(['"',"'"], "", html_entity_decode($request->question['question'])));
 
-       $question = $request->question;
-       $question['question'] = trim(str_replace(['"',"'"], "", html_entity_decode($request->question['question'])));
+        foreach($request->question['answers'] as $key => $answer){
+         $question['answers'][$key] = trim(str_replace(['"',"'"], "", html_entity_decode($answer)));
+        }
 
-       foreach($request->question['answers'] as $key => $answer){
-        $question['answers'][$key] = trim(str_replace(['"',"'"], "", html_entity_decode($answer)));
-       }
+        $oldQuestions[$request->key] = $question;
 
-       $oldQuestions[$request->key] = $question;
+        $exam->questions = json_encode($oldQuestions);
+        $exam->save();
 
-       
-
-       $exam->questions = json_encode($oldQuestions);
-       $exam->save();
-
-       return response()->json([
-        'questions' => $exam->questions
-    ]);
+        return response()->json([
+            'questions' => $exam->questions
+        ]);
 
     }
 
