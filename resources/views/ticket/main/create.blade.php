@@ -57,7 +57,7 @@
                                     <label class="form-control-label" for="input-type">{{ __('Type') }}</label>
                                     <select name="type" id="input-type" class="form-control" placeholder="{{ __('Type') }}">
                                         <option value="">-</option>
-                                        <option value="Early-bird">Early Bird</option>
+                                        <option value="Early Bird">Early Bird</option>
                                             <option value="Alumni">Alumni</option>
                                             <option value="Regular">Regular</option>
                                             <option value="Special">Special</option>

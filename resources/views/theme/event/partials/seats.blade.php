@@ -20,7 +20,7 @@
          
             <?php 
                $early = false;
-               $showAlumni = true;
+               //$showAlumni = true;
             ?>
          @foreach($tickets as $key => $ticket)
          <?php 
@@ -48,6 +48,8 @@
                continue;
             }
             
+            
+
          ?>
          <div class="@if($showAlumni && $showSpecial) col-4 col-sm-12 @elseif($showAlumni && !$showSpecial && count($tickets) > 1) col-6 col-sm-12 
                      @elseif(!$showAlumni && $ticket['type'] !== 'Alumni' && !$showSpecial)  

@@ -611,6 +611,8 @@ class HomeController extends Controller
         $data['is_event_paid'] = 0;
         $data['sumStudents'] = $event->category[0]->getSumOfStudents();
         $data['showSpecial'] = false;
+        $data['showAlumni'] = $event->ticket()->where('type','Alumni')->where('active',true)->first() ? true : false;;
+
 
         if($event->ticket()->where('type','Early Bird')->first()){
             $data['showSpecial'] = ($event->ticket()->where('type','Early Bird')->first() && $event->ticket()->where('type','Special')->first())  ? 
