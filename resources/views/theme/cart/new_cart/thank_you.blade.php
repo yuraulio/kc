@@ -82,7 +82,7 @@ $(document).ready(function(){
    @foreach($ecommerce['actionField'] as $key => $ti)
       
       @if($ti != '')
-         actionField["{{$key}}"] = "{{$ti}}"
+         actionField["{{$key}}"] =  $.parseHTML("{{$ti}}")[0].data
 
       @endif
   
@@ -90,7 +90,7 @@ $(document).ready(function(){
 
    @foreach($ecommerce['products'] as $key => $ti)
       @if($ti != '')
-         products["{{$key}}"] = "{{$ti}}"
+         products["{{$key}}"] = $.parseHTML("{{$ti}}")[0].data
       @endif
       
    @endforeach
