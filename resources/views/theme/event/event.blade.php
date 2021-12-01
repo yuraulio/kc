@@ -759,30 +759,39 @@ window.fbAsyncInit = function() {
 
 
 @if(isset($tigran) && !env('APP_DEBUG'))
+
+
 <script>
-	dataLayer.push({'Event_ID':"{{$tigran['Event_ID']}}v", 'event': 'View Content', 'Product_id' : "{{$tigran['Product_id']}}", 'Price': "{{$tigran['Price']}}",
+
+   $(document).ready(function(){
+      dataLayer.push({'Event_ID':"{{$tigran['Event_ID']}}v", 'event': 'View Content', 'Product_id' : "{{$tigran['Product_id']}}", 'Price': "{{$tigran['Price']}}",
                      'ProductCategory':"{{$tigran['ProductCategory']}}","product":"product","ProductName":$.parseHTML("{{ $tigran['ProductName'] }}")[0].data});
+   })
+
+	
 </script>
 
 <script>
    
-   dataLayer.push({ ecommerce: null });
+   $(document).ready(function(){
+      dataLayer.push({ ecommerce: null });  // Clear the previous ecommerce object.
+      dataLayer.push({
+        'ecommerce': {
+          'detail': {
+            'actionField': {'list': 'Apparel Gallery'},    // 'detail' actions have an optional list property.
+            'products': [{
+               'name': $.parseHTML("{{ $tigran['ProductName'] }}")[0].data,
+               'id': "{{$tigran['Product_id']}}",
+               'price': "{{$tigran['Price']}}",
+               'brand': 'KnowCrunch',
+               'category': "{{$tigran['ProductCategory']}}",
+             }]
+           }
+         }
+      });
+   }
 
-   dataLayer.push({
-  'ecommerce': {
-    'currencyCode': 'EUR',                       
-    'impressions': [
-     {
-       'name': $.parseHTML("{{ $tigran['ProductName'] }}")[0].data,
-       'id': "{{$tigran['Product_id']}}",
-       'price': "{{$tigran['Price']}}",
-       'brand': 'KnowCrunch',
-       'category': "{{$tigran['ProductCategory']}}",
-       'position': 1
-     },
-     ]
-  }
-});
+  
 
 
 </script>

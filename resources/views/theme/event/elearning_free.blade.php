@@ -715,12 +715,14 @@ window.fbAsyncInit = function() {
 
 @if(isset($tigran) && !env('APP_DEBUG'))
 <script>
+   $(document).ready(function(){
 	dataLayer.push({'Event_ID':"{{$tigran['Event_ID']}}v", 'event': 'View Content', 'Product_id' : "{{$tigran['Product_id']}}", 'Price': "{{$tigran['Price']}}",
                      'ProductCategory':"{{$tigran['ProductCategory']}}","product":"product","ProductName":$.parseHTML("{{ $tigran['ProductName'] }}")[0].data});
+   })
 </script>
 
 <script>
-   
+   $(document).ready(function(){
    dataLayer.push({ ecommerce: null });
 
    dataLayer.push({
@@ -738,7 +740,7 @@ window.fbAsyncInit = function() {
      ]
   }
 });
-
+   })
 
 </script>
 @endif

@@ -18,7 +18,7 @@
 @yield('header')
 @include('theme.layouts.header_scripts')
 
-@if(!env('APP_DEBUG'))
+@if(env('APP_DEBUG'))
 {{-- Google Tag Manager --}}
 {{--<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -322,14 +322,14 @@ $(document).on('click', '.close-btn', function(e){
 
 
 
-@if(isset($tigran) && !env('APP_DEBUG'))
+@if(isset($tigran) && env('APP_DEBUG'))
 
       <script>
-
-         @foreach($tigran as $key => $ti)
-            dataLayer.push({"{{$key}}": "{{$ti}}"})
-         @endforeach
-
+            $(document).ready(function(){
+                     @foreach($tigran as $key => $ti) 
+                        dataLayer.push({"{{$key}}": $.parseHTML("{{$ti}}")[0].data})
+                     @endforeach
+            });
       </script>
 
    @endif

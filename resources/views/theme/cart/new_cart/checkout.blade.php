@@ -171,15 +171,15 @@ $(".close-alert").on("click", function () {
 
 @if(isset($tigran) && !env('APP_DEBUG'))
 <script>
-
+$(document).ready(function(){
 		$("#pay-now").click(function(){
 			dataLayer.push({'Event_ID':"{{$tigran['Event_ID']}}", 'event': 'Add Payment Info', 'Product_id' : "{{$tigran['Product_id']}}", 'Price': "{{$tigran['Price']}}",'ProductCategory':"{{$tigran['ProductCategory']}}","product":"product"});	
 		})
-
+})
 </script>
 
 <script>
-
+$(document).ready(function(){
 dataLayer.push({ ecommerce: null });  // Clear the previous ecommerce object.
 dataLayer.push({
     'event': 'checkout',
@@ -197,7 +197,7 @@ dataLayer.push({
      }
    }
 });
-
+})
 </script>
 
 

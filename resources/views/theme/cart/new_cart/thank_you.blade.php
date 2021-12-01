@@ -60,11 +60,11 @@
 @if(isset($tigran) && !env('APP_DEBUG'))
 
 <script>
-
+$(document).ready(function(){
    @foreach($tigran as $key => $ti)
-      dataLayer.push({"{{$key}}": "{{$ti}}"})
+      dataLayer.push({"{{$key}}": $.parseHTML("{{$ti}}")[0].data})
    @endforeach
-
+})
 </script>
 
 @endif
@@ -72,7 +72,7 @@
 @if(isset($ecommerce) && !env('APP_DEBUG'))
 
 <script>
-   
+   $(document).ready(function(){
    dataLayer.push({ ecommerce: null });
    let ecommerce = {};
    let items = {};
@@ -103,7 +103,7 @@
    
    })
 
-
+   })
 </script>
 
 
@@ -112,6 +112,7 @@
 
 @if(isset($gt3) && !env('APP_DEBUG'))
    <script>
+      $(document).ready(function(){
       let gt3 = {};
       let products = {};
 
@@ -135,7 +136,7 @@
 
       gt3['transactionProducts'] = products;
       dataLayer.push(gt3);
-
+      })
    </script>
 @endif
 

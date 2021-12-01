@@ -250,15 +250,15 @@ var routesObj = {
 @if(isset($tigran) && !env('APP_DEBUG'))
 
       <script>
-
+$(document).ready(function(){
          @foreach($tigran as $key => $ti)
 			@if($key == 'price')
 				dataLayer.push({"{{$key}}": {{$ti}}})
 			@else
-				dataLayer.push({"{{$key}}": "{{$ti}}"})
+				dataLayer.push({"{{$key}}": $.parseHTML("{{$ti}}")[0].data})
 			@endif		
          @endforeach
-
+})
       </script>
 
    @endif

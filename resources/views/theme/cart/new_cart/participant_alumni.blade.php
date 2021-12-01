@@ -337,7 +337,7 @@
 </script>
 
 <script>
-
+$(document).ready(function(){
 dataLayer.push({ ecommerce: null });
 dataLayer.push({
   'event': 'addToCart',
@@ -355,7 +355,7 @@ dataLayer.push({
     }
   }
 });
-
+})
 </script>
 
 @endif
