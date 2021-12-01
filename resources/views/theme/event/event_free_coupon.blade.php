@@ -841,27 +841,27 @@ window.fbAsyncInit = function() {
 
    })
 </script>
-
 <script>
+   
    $(document).ready(function(){
-   dataLayer.push({ ecommerce: null });
-
-   dataLayer.push({
-  'ecommerce': {
-    'currencyCode': 'EUR',                       
-    'impressions': [
-     {
-       'name': $.parseHTML("{{ $tigran['ProductName'] }}")[0].data,
-       'id': "{{$tigran['Product_id']}}",
-       'price': "{{$tigran['Price']}}",
-       'brand': 'KnowCrunch',
-       'category': "{{$tigran['ProductCategory']}}",
-       'position': 1
-     },
-     ]
-  }
-});
+      dataLayer.push({ ecommerce: null });  // Clear the previous ecommerce object.
+      dataLayer.push({
+        'ecommerce': {
+          'detail': {
+            'actionField': {'list': 'Apparel Gallery'},    // 'detail' actions have an optional list property.
+            'products': [{
+               'name': $.parseHTML("{{ $tigran['ProductName'] }}")[0].data,
+               'id': "{{$tigran['Product_id']}}",
+               'price': "{{$tigran['Price']}}",
+               'brand': 'KnowCrunch',
+               'category': "{{$tigran['ProductCategory']}}",
+             }]
+           }
+         }
+      });
    })
+
+  
 
 
 </script>

@@ -789,7 +789,7 @@ window.fbAsyncInit = function() {
            }
          }
       });
-   }
+   })
 
   
 
