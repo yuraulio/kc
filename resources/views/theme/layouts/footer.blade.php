@@ -79,7 +79,7 @@ $social_media = get_social_media();
          </div>
 
          
-         <div class="footer-col-1 hidden-xs">
+         <div class="footer-col-1">
             <h4 class="footer-title">Get our news</h4>
             <div class="mobile-toggle">
                <div class="footer-form">
