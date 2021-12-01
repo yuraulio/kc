@@ -61,7 +61,7 @@ setTimeout(timer601,601000);
 setTimeout(timer1801,1801000);
 </script>--}}
 
-@if(env('APP_DEBUG'))
+@if(!env('APP_DEBUG'))
 <!-- NEW Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
