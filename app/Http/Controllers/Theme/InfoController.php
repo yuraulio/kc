@@ -150,8 +150,16 @@ class InfoController extends Controller
                         'Product_SKU' => $thisevent->id,'ProductCategory' => $categoryScript, 'ProductName' =>  $thisevent->title, 'Quantity' => $item->qty, 'TicketType'=>$stockHelper->type,'Event_ID' => 'kc_' . time() 
                 ];
 
-                $data['ecommerce'] = ['ecommerce' => ['transaction_id' => $this->transaction['id'], 'value' => $tr_price, 'currency' => 'EUR', 'coupon' => $transaction->coupon_code], 
-                                    'items' => ['item_name' => $thisevent->title, 'item_id' => $thisevent->id, 'price' => $tr_price, 'quantity' => 1, 'item_category' =>  $categoryScript] ];
+                /*$data['ecommerce'] = ['ecommerce' => ['transaction_id' => $this->transaction['id'], 'value' => $tr_price, 'currency' => 'EUR', 'coupon' => $transaction->coupon_code], 
+                                    'items' => ['item_name' => $thisevent->title, 'item_id' => $thisevent->id, 'price' => $tr_price, 'quantity' => 1, 'item_category' =>  $categoryScript] ];*/
+
+                $data['ecommerce'] = [
+                    'actionField' => ['id' => $this->transaction['id'],'revenue' => $tr_price, 'coupon' => $transaction->coupon_code], 
+                    'products' => ['name' => $thisevent->title, 'id' => $thisevent->id, 'brand'=>'KnowCrunch', 'price' => $tr_price, 
+                                    'category' => $categoryScript, 'coupon' => $transaction->coupon_code,'quantity' => Cart::content()->count()]
+                                        
+                ];
+
 
                 $data['gt3'] = ['gt3' => ['transactionId' => $this->transaction['id'], 'transactionTotal' => $tr_price], 
                                     'transactionProducts' => ['name' => $thisevent->title, 'sku' => $thisevent->id, 'price' => $tr_price, 'quantity' => 1, '' =>  $categoryScript] ];

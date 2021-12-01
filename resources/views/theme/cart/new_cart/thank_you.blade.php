@@ -74,34 +74,38 @@ $(document).ready(function(){
 <script>
    $(document).ready(function(){
    dataLayer.push({ ecommerce: null });
-   let ecommerce = {};
-   let items = {};
+   let actionField = {};
+   let products = {};
 
    //dataLayer.push({"event": 'purchase'})
    
-   @foreach($ecommerce['ecommerce'] as $key => $ti)
+   @foreach($ecommerce['actionField'] as $key => $ti)
       
       @if($ti != '')
-         ecommerce["{{$key}}"] = "{{$ti}}"
+         actionField["{{$key}}"] = "{{$ti}}"
 
       @endif
   
    @endforeach
 
-   @foreach($ecommerce['items'] as $key => $ti)
-      
-      items["{{$key}}"] = "{{$ti}}"
+   @foreach($ecommerce['products'] as $key => $ti)
+      @if($ti != '')
+         products["{{$key}}"] = "{{$ti}}"
+      @endif
       
    @endforeach
-   ecommerce["items"] = items;
+   
    //dataLayer.push({"ecommerce": ecommerce})
 
+
    dataLayer.push({
-      "event": 'purchase',
-      'ecommerce': ecommerce
-   
-   
-   })
+  'ecommerce': {
+    'purchase': {
+      'actionField': actionField,
+      'products': [products]
+    }
+  }
+});
 
    })
 </script>
@@ -111,7 +115,7 @@ $(document).ready(function(){
 
 
 @if(isset($gt3) && !env('APP_DEBUG'))
-   <script>
+   {{--<script>
       $(document).ready(function(){
       let gt3 = {};
       let products = {};
@@ -137,7 +141,7 @@ $(document).ready(function(){
       gt3['transactionProducts'] = products;
       dataLayer.push(gt3);
       })
-   </script>
+   </script>--}}
 @endif
 
 @stop
