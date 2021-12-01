@@ -99,6 +99,7 @@ $(document).ready(function(){
 
 
    dataLayer.push({
+  'event': 'purchase',
   'ecommerce': {
     'purchase': {
       'actionField': actionField,
