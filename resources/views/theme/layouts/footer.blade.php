@@ -55,21 +55,21 @@ $social_media = get_social_media();
 
             
                   <div class="col4 col-sm-12 award-div">
-                     <div><img alt_text="social media award" width="62" height="35" src="{{cdn('/awards/knowcrunch-award-marketing-education-leaders-2x.png')}}"></div> 
+                     <div><img alt_text="social media award" width="58" height="37" src="{{cdn('/awards/knowcrunch-award-marketing-education-leaders-2x.png')}}"></div> 
                      <p> Best Digital Marketing E-learning 
                            Award by <span class="text-highlight2"> Education Leaders </span> </p>  
                   </div>
 
                
                   <div class="col4 col-sm-12 award-div">
-                    <div><img alt_text="social media award" width="58" height="37" src="{{cdn('/awards/knowcrunch-award-marketing-education-best-social-media-learning-program-2x.png')}}"></div>
+                    <div><img alt_text="social media award" width="41" height="38"  src="{{cdn('/awards/knowcrunch-award-marketing-education-best-social-media-learning-program-2x.png')}}"></div>
                      <p> Best Social Media Learning Program 
                       Award by <span class="text-highlight2"> Social Media World </span></p>
                   </div>
 
                  
                   <div class="col4 col-sm-12 award-div">
-                     <div><img alt_text="social media award" width="41" height="38" src="{{cdn('/awards/knowcrunch-award-marketing-best-content-strategy-2x.png')}}"></div>
+                     <div><img alt_text="social media award" width="62" height="35"  src="{{cdn('/awards/knowcrunch-award-marketing-best-content-strategy-2x.png')}}"></div>
                      <p> Best Multi-Channel Content Strategy & Best Use of Multichannel Social Media in Content Marketing by <span class="text-highlight2">Digital Marketing Awards </span> </p>
                   </div>
                  
