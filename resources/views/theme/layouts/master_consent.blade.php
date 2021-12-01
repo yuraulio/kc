@@ -27,14 +27,14 @@
 	})(window,document,'script','dataLayer','GTM-ML7649C');
 </script>
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-859787100"></script>
+{{--<script async src="https://www.googletagmanager.com/gtag/js?id=AW-859787100"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'AW-859787100');
-</script>
+  gtag('config', 'AW-859787100');--}}
+</script>--}}
 
 @endif
 

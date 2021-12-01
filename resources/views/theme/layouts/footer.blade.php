@@ -24,7 +24,7 @@ $social_media = get_social_media();
                   <ul class="footer-award-menu">
                      <li>
                         <div>
-                           <div><img alt_text="social media award" src="{{cdn('/awards/1.png')}}"></div> 
+                           <div><img alt_text="social media award" width="62" height="35" src="{{cdn('/awards/knowcrunch-award-marketing-education-leaders-2x.png')}}"></div> 
                            <p> Best Digital Marketing E-learning 
                                  Award by <span class="text-highlight2"> Education Leaders </span> </p>  
                         </div>
@@ -33,7 +33,7 @@ $social_media = get_social_media();
 
                      <li>
                         <div>
-                        <div><img alt_text="social media award" src="{{cdn('/awards/2.png')}}"></div>
+                        <div><img alt_text="social media award" width="58" height="37" src="{{cdn('/awards/knowcrunch-award-marketing-education-best-social-media-learning-program-2x.png')}}"></div>
                            <p> Best Social Media Learning Program 
                             Award by <span class="text-highlight2"> Social Media World </span></p>
                         </div>
@@ -43,7 +43,7 @@ $social_media = get_social_media();
 
                      <li>
                         <div>
-                        <div><img alt_text="social media award" src="{{cdn('/awards/3.png')}}"></div>
+                        <div><img alt_text="social media award" width="41" height="38" src="{{cdn('/awards/knowcrunch-award-marketing-best-content-strategy-2x.png')}}"></div>
                            <p> Best Multi-Channel Content Strategy & Best Use of Multichannel Social Media in Content Marketing by <span class="text-highlight2">Digital Marketing Awards </span> </p>
                         </div>
                      </li>
