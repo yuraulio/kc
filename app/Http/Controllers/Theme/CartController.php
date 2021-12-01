@@ -1409,20 +1409,61 @@ class CartController extends Controller
                 $temp['customer'] = $dpuser->email;
                 $nevent = $ev_title . ' ' . $ev_date_help;
 
-                
-                $charge = $dpuser->charge(
-                    $stripeAmount,
-                    $input['payment_method'],
-                    [
-                        'currency' => 'eur',
-                        'amount' => $stripeAmount,
-                        'description' => $nevent,
-                        //'shipping' => ['name' => $st_name, 'address' => ['line1' => $st_line1,'postal_code' => 59100,'city' => 'gsdf','country' => 'GR']],
-                        'customer' => $dpuser->stripe_id,
-                        //'metadata' => $temp,
+                try{
+                    $charge = $dpuser->charge(
+                        $stripeAmount,
+                        $input['payment_method'],
+                        [
+                            'currency' => 'eur',
+                            'amount' => $stripeAmount,
+                            'description' => $nevent,
+                            //'shipping' => ['name' => $st_name, 'address' => ['line1' => $st_line1,'postal_code' => 59100,'city' => 'gsdf','country' => 'GR']],
+                            'customer' => $dpuser->stripe_id,
+                            //'metadata' => $temp,
 
-                    ]
-                );
+                        ]
+                    );
+                }catch (Exception $e) {
+                    //dd('edwww2');
+                     \Session::put('dperror',$e->getMessage());
+                      return '/checkout';
+                    // return redirect('/info/order_error');
+                }
+                catch(\Stripe\Exception\CardErrorException $e) {
+                    //dd('edwww3');
+                    \Session::put('dperror',$e->getMessage());
+                      return '/checkout';
+                     //return redirect('/info/order_error');
+                }
+                catch(\Stripe\Exception\InvalidRequestException $e) {
+                    //dd($e);
+                    \Session::put('dperror',$e->getMessage());
+                    //return redirect('/info/order_error');
+                    return '/checkout';
+                }
+                catch(\Stripe\Exception\MissingParameterException $e) {
+                    //dd($e);
+                    \Session::put('dperror',$e->getMessage());
+                    //return redirect('/info/order_error');
+                    return '/checkout';
+                }
+                catch(\Stripe\Api\Exception\ServerErrorException $e) {
+                    //dd($e);
+                    \Session::put('dperror',$e->getMessage());
+                    //return redirect('/info/order_error');
+                    return '/checkout';
+                }catch(\Stripe\Exception\CardException $e) {
+                    //dd($e);
+                    \Session::put('dperror',$e->getMessage());
+                    //return redirect('/info/order_error');
+                    return '/checkout';
+                }
+                catch(\Laravel\Cashier\Exceptions\IncompletePayment $e){
+                    //dd($e);
+                    \Session::put('dperror',$e->getMessage());
+                    //return redirect('/info/order_error');
+                    return '/checkout';
+                }
 
             }
 
@@ -1550,6 +1591,12 @@ class CartController extends Controller
             //return redirect('/info/order_error');
             return '/checkout';
         }catch(\Stripe\Exception\CardException $e) {
+            //dd($e);
+            \Session::put('dperror',$e->getMessage());
+            //return redirect('/info/order_error');
+            return '/checkout';
+        }
+        catch(\Laravel\Cashier\Exceptions\IncompletePayment $e){
             //dd($e);
             \Session::put('dperror',$e->getMessage());
             //return redirect('/info/order_error');

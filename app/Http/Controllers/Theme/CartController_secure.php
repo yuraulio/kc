@@ -1342,7 +1342,13 @@ class CartController extends Controller
             \Session::put('dperror',$e->getMessage());
             //return redirect('/info/order_error');
             return '/checkout';
+        }catch(\Laravel\Cashier\Exceptions\IncompletePayment $e){
+            //dd($e);
+            \Session::put('dperror',$e->getMessage());
+            //return redirect('/info/order_error');
+            return '/checkout';
         }
+
 
 
     }
