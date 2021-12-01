@@ -344,6 +344,8 @@
 </script>
 
 <script>
+	$( document ).ready(function() {
+window.dataLayer = window.dataLayer || [];
 
 dataLayer.push({ ecommerce: null });
 dataLayer.push({
@@ -362,7 +364,7 @@ dataLayer.push({
     }
   }
 });
-
+	});
 </script>
 
 @endif
