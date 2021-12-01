@@ -143,7 +143,7 @@ class InfoController extends Controller
                     $tr_price .= ".00";
                 }
                             
-                $categoryScript = $thisevent->category->first() ? 'Event > ' . $thisevent->category->first()->name : '';
+                $categoryScript = $thisevent->delivery->first() && $thisevent->delivery->first()->id == 143 ? 'Video e-learning courses' : 'In-class courses'; // $thisevent->category->first() ? 'Event > ' . $thisevent->category->first()->name : '';
         
                 
                 $data['tigran'] = ['OrderSuccess_id' => $this->transaction['id'], 'OrderSuccess_total' => $tr_price, 'Price' =>$tr_price,'Product_id' => $thisevent->id, 'Product_SKU' => $thisevent->id,

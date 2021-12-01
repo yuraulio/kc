@@ -169,13 +169,41 @@ $(".close-alert").on("click", function () {
 
 </script>
 
+@if(isset($tigran) && !env('APP_DEBUG'))
 <script>
-	@if(isset($tigran) && !env('APP_DEBUG'))
+
 		$("#pay-now").click(function(){
 			dataLayer.push({'Event_ID':"{{$tigran['Event_ID']}}", 'event': 'Add Payment Info', 'Product_id' : "{{$tigran['Product_id']}}", 'Price': "{{$tigran['Price']}}",'ProductCategory':"{{$tigran['ProductCategory']}}","product":"product"});	
 		})
-	@endif
+
 </script>
+
+<script>
+
+dataLayer.push({ ecommerce: null });  // Clear the previous ecommerce object.
+dataLayer.push({
+    'event': 'checkout',
+    'ecommerce': {
+      'checkout': {
+		'actionField': {'step': 1, 'option': 'Stripe'},
+  		'products': [{
+			'name': $.parseHTML("{{ $tigran['ProductName'] }}")[0].data,
+        	'id': "{{$tigran['Product_id']}}",
+        	'price': "{{$tigran['Price']}}",
+        	'brand': 'KnowCrunch',
+        	'category': "{{$tigran['ProductCategory']}}",
+  		  	'quantity': "{{$totalitems}}"
+       	}]
+     }
+   }
+});
+
+</script>
+
+
+
+@endif
+
 
 
 @endpush

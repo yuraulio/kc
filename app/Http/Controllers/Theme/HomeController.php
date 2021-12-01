@@ -597,6 +597,7 @@ class HomeController extends Controller
     }
 
     private function event($event){
+
         $data = $event->topicsLessonsInstructors();
         $data['event'] = $event;
         $data['benefits'] = $event->benefits->toArray();
@@ -637,7 +638,7 @@ class HomeController extends Controller
         if($price <= 0){
             $price = (float) 0;
         }
-        $categoryScript = $event->category->first() ? 'Event > ' . $event->category->first()->name : '';
+        $categoryScript = $event->delivery->first() && $event->delivery->first()->id == 143 ? 'Video e-learning courses' : 'In-class courses'; //$event->category->first() ? 'Event > ' . $event->category->first()->name : '';
         
         $tr_price = $price;
         if($tr_price - floor($tr_price)>0){

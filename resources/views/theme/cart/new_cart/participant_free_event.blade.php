@@ -337,6 +337,29 @@
 <script>
 	dataLayer.push({'Event_ID':"{{$tigran['Event_ID'].'p'}}", 'event': 'Add To Cart', 'Product_id' : "{{$tigran['Product_id']}}", 'Price': "{{$tigran['Price']}}",'ProductCategory':"{{$tigran['ProductCategory']}}"});
 </script>
+
+<script>
+
+dataLayer.push({ ecommerce: null });
+dataLayer.push({
+  'event': 'addToCart',
+  'ecommerce': {
+    'currencyCode': 'EUR',
+    'add': {                                
+      'products': [{                       
+        'name': $.parseHTML("{{ $tigran['ProductName'] }}")[0].data",
+        'id': "{{$tigran['Product_id']}}",
+        'price': "{{$tigran['Price']}}",
+        'brand': 'KnowCrunch',
+        'category': "{{$tigran['ProductCategory']}}",
+        'quantity': 1
+       }]
+    }
+  }
+});
+
+</script>
+
 @endif
 
 <script>

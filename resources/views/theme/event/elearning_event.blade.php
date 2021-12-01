@@ -720,7 +720,31 @@ window.fbAsyncInit = function() {
 @if(isset($tigran) && !env('APP_DEBUG'))
 <script>
 	dataLayer.push({'Event_ID':"{{$tigran['Event_ID']}}v", 'event': 'View Content', 'Product_id' : "{{$tigran['Product_id']}}", 'Price': "{{$tigran['Price']}}",
-                     'ProductCategory':"{{$tigran['ProductCategory']}}","product":"product","ProductName":"{{$tigran['ProductName']}}"});
+                     'ProductCategory':"{{$tigran['ProductCategory']}}","product":"product","ProductName":$.parseHTML("{{ $tigran['ProductName'] }}")[0].data});
 </script>
+
+<script>
+   
+   dataLayer.push({ ecommerce: null });
+
+   dataLayer.push({
+  'ecommerce': {
+    'currencyCode': 'EUR',                       
+    'impressions': [
+     {
+       'name': $.parseHTML("{{ $tigran['ProductName'] }}")[0].data,
+       'id': "{{$tigran['Product_id']}}",
+       'price': "{{$tigran['Price']}}",
+       'brand': 'KnowCrunch',
+       'category': "{{$tigran['ProductCategory']}}",
+       'position': 1
+     },
+     ]
+  }
+});
+
+
+</script>
+
 @endif
 @stop

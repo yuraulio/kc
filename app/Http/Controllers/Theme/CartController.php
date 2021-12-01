@@ -265,7 +265,7 @@ class CartController extends Controller
                 $data['city_event'] = $ev->city->first() ? '' : '';
                 $data['duration'] = '';
 
-                $categoryScript = 'Event > ' . $ev->category->first()->name;
+                $categoryScript = $ev->delivery->first() && $ev->delivery->first()->id == 143 ? 'Video e-learning courses' : 'In-class courses'; // 'Event > ' . $ev->category->first()->name;
                 //dd($categoryScript);
 
                 $data['stripe_key'] = '';
@@ -373,7 +373,7 @@ class CartController extends Controller
         }else{
             $data['tigran']['Visitor_id'] = session()->getId();
         }
-        
+
         return $data;
 
     }
@@ -1948,7 +1948,7 @@ class CartController extends Controller
             $data['event']['twitter'] = urlencode("Proudly participating in ". $content->title . " by KnowCrunch. 💙");
             $data['event']['linkedin'] = urlencode(url('/') . '/' .$content->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $content->title . " by KnowCrunch. 💙");
 
-            $categoryScript = 'Event > ' . $content->category->first()->name;
+            $categoryScript = $content->delivery->first() && $event->content->first()->id == 143 ? 'Video e-learning courses' : 'In-class courses'; // 'Event > ' . $content->category->first()->name;
 
             $KC = "KC-";
             $time = strtotime($transaction->placement_date);
