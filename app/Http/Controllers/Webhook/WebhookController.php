@@ -84,6 +84,60 @@ class WebhookController extends BaseWebhookController
 			}else{
 
 				$transaction = $user->events->where('id',$eventId)->first()->transactionsByUser($user->id)->first();
+
+				if(!$transaction){
+					
+					$charge['status'] = 'succeeded';
+					$charge['type'] = $totalinst . ' Installments';
+				
+					$pay_seats_data = ["names" => [$user->firstname],"surnames" => [$user->lastname],"emails" => [$user->email],
+            							"mobiles" => [$user->mobile],"addresses" => [$user->address],"addressnums" => [$user->address_num],
+            							"postcodes" => [$user->postcode],"cities" => [$user->city],"jobtitles" => [$user->job_title],
+            							"companies" => [$user->company],"students" => [""], "afms" => [$user->afm]];
+
+					$status_history = [];
+                	//$payment_cardtype = intval($input["cardtype"]);
+                	 $status_history[] = [
+                	    'datetime' => Carbon::now()->toDateTimeString(),
+                	    'status' => 1,
+                	    'user' => [
+                	        'id' => $user->id,
+                	        'email' => $user->email
+                	    ],
+                	    'pay_seats_data' => $pay_seats_data,
+                	    'pay_bill_data' => $user->receipt_details,
+                	    'deree_user_data' => [$user->email => ''],
+                	    //'cardtype' => $payment_cardtype,
+                	    'installments' => $totalinst,
+                	
+                	];
+                	$transaction_arr = [
+
+                	    "payment_method_id" => 100,//$input['payment_method_id'],
+                	    "account_id" => 17,
+                	    "payment_status" => 2,
+                	    "billing_details" => $user->receipt_details,
+                	    "status_history" => json_encode($status_history),
+                	    "placement_date" => Carbon::now()->toDateTimeString(),
+                	    "ip_address" => \Request::ip(),
+                	    "status" => 1, //2 PENDING, 0 FAILED, 1 COMPLETED
+                	    "is_bonus" => 0,
+                	    "order_vat" => 0,
+                	    "payment_response" => json_encode($charge),
+                	    "surcharge_amount" => 0,
+                	    "discount_amount" => 0,
+                	    "coupon_code" => '',
+                	    "amount" => $subscription->price,
+                	    "total_amount" => $subscription->price * $totalinst,
+                	    'trial' => false,
+                	];
+
+                	$transaction = Transaction::create($transaction_arr);
+
+					$transaction->event()->save($user->events->where('id',$eventId)->first());
+					$transaction->user()->save($user);
+
+				}
 			
 				//$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;
 				$invoiceNumber = Invoice::latest()->doesntHave('subscription')->first()->invoice;
