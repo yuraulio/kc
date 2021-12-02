@@ -127,7 +127,7 @@ class WebhookController extends BaseWebhookController
                 	    "surcharge_amount" => 0,
                 	    "discount_amount" => 0,
                 	    "coupon_code" => '',
-                	    "amount" => $subscription->price,
+                	    "amount" => $subscription->price * $totalinst,
                 	    "total_amount" => $subscription->price * $totalinst,
                 	    'trial' => false,
                 	];
