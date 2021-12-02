@@ -1752,18 +1752,21 @@ class CartController extends Controller
                     $priceOf = $coupon->price . '%';
                 }else{
                     $newPrice = $coupon->price;
-                    $priceOf = ($coupon->price / $request->price) * 100;
+                    $priceOf = 100 - ($coupon->price / $request->price) * 100;
                     $priceOf = round($priceOf,2) . '%';
                 }
 
+                
+
                 $savedPrice = $request->price - $newPrice;
+
                 Session::put('coupon_code',$request->coupon);
                 Session::put('coupon_price',$newPrice);
                 Session::put('priceOf',$priceOf);
                 
-                $instOne = $newPrice;
-                $instTwo = round($newPrice / 2, 2);
-                $instThree = round($newPrice / 3, 2);
+                $instOne = $newPrice * $request->totalItems;
+                $instTwo = round($newPrice / 2, 2) * $request->totalItems;
+                $instThree = round($newPrice / 3, 2) * $request->totalItems;
 
                 if($instOne - floor($instOne)>0){
                     $instOne = number_format($instOne , 2 , '.', ',');
@@ -1783,6 +1786,8 @@ class CartController extends Controller
                     $instThree = number_format($instThree , 0 , '.', ',');
                 }
 
+                //dd($instOne);
+
                 return response()->json([
                     'success' => true,
                     'new_price' => $instOne,
@@ -1791,7 +1796,8 @@ class CartController extends Controller
                     'newPriceInt2' => $instTwo,
                     'newPriceInt3' => $instThree,
                     'message' => 'Success! Your coupon has been accepted.',
-                    'coupon_code' => $request->coupon
+                    'coupon_code' => $request->coupon,
+
                 ]);
             }
 

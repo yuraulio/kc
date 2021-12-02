@@ -96,17 +96,17 @@
 				   	headers: {
     	    		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     	 			},
-					data:{'coupon': couponCode, 'price': "{{$price / $totalitems}}"} ,
+					data:{'coupon': couponCode, 'price': "{{$price / $totalitems}}",'totalItems':"{{$totalitems}}"} ,
    					success: function(data) {
 
 		  				if(data['success'] == true){
 							
 							//$('.checkout-price span').text('€' + "{{ $item->qty }}" * data['new_price']);
-							$('.checkout-total-amount').text('€' + "{{ $item->qty }}" * data['new_price']);
+							$('.checkout-total-amount').text('€' + data['new_price']);
 
-							$("#inst1").html('I will pay in full: €' + "{{ $item->qty }}" * data['new_price']);
-							$("#inst2").text('I will pay in 2 installments: 2x €' + "{{ $item->qty }}" * data['newPriceInt2']);
-							$("#inst3").text('I will pay in 3 installments: 3x €' + "{{ $item->qty }}" * data['newPriceInt3']);
+							$("#inst1").html('I will pay in full: €' +  data['new_price']);
+							$("#inst2").text('I will pay in 2 installments: 2x €' + data['newPriceInt2']);
+							$("#inst3").text('I will pay in 3 installments: 3x €' +  data['newPriceInt3']);
 
 							//let p = `<p><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-success-alert.svg')}}" alt="Info Alert">` + data['message']+ `</p>`
 
