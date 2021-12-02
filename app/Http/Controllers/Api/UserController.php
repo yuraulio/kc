@@ -54,9 +54,9 @@ class UserController extends Controller
 
         if(isset($user['image'])){
 
-            $user['profileImage'] = asset(get_profile_image($user['image']));
+            $user['profileImage'] = cdn(get_profile_image($user['image']));
         }else{
-            $user['profileImage'] = null;
+            $user['profileImage'] = cdn('/theme/assets/images/icons/user-profile-placeholder-image.png');
         }
 
         unset($user['image']);
