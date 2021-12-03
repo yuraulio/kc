@@ -207,7 +207,7 @@
 
                                 <li class="nav-item active">
                                     <a class="nav-link active" href="#navbar-faqs" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-faqs">
-                                        <i class="far fa-question-circle" style="color: #f4645f;"></i>
+                                        {{--<i class="far fa-question-circle" style="color: #f4645f;"></i>--}}
                                         <span class="nav-link-text" style="color: #f4645f;">{{ __('Questions & Answers') }}</span>
                                     </a>
                                     <div class="collapse" id="navbar-faqs">
@@ -237,7 +237,7 @@
                             <ul class="nav nav-sm flex-column">
                            
                                     <li class="nav-item  {{ $elementName == 'participants-management' ? 'active' : '' }}">
-                                        <a href="{{ route('transaction.participants') }}" class="nav-link">{{ __('Revenue') }}</a>
+                                        <a href="{{ route('transaction.participants') }}" class="nav-link">{{ __('Registrations') }}</a>
                                     </li>
                                     @can('manage-users', App\Model\User::class)
                                     <li class="nav-item  {{ $elementName == 'subscriptions-management' ? 'active' : '' }}">
