@@ -195,8 +195,11 @@ class ExamController extends Controller
                 $start_at = explode('T', $syncData->started_at);
                 $finish_at = explode(' ', $syncData->finish_at);
 
+                /*$liveResults[] = array('id'=>$syncData->id,'name'=>$syncData->student->firstname . ' ' . $syncData->student->lastname,
+                'answered' =>  $answered . ' / ' . count($allAnswers), 'correct' => $correct . '/' . $answered  , 'started_at'=> $start_at[1],'finish_at' => $finish_at[1]) ;*/
+
                 $liveResults[] = array('id'=>$syncData->id,'name'=>$syncData->student->firstname . ' ' . $syncData->student->lastname,
-                'answered' =>  $answered . ' / ' . count($allAnswers), 'correct' => $correct . '/' . $answered  , 'started_at'=> $start_at[1],'finish_at' => $finish_at[1]) ;
+                'answered' =>  $answered, 'correct' => $correct, 'totalAnswers' => count($allAnswers), 'started_at'=> $start_at[1],'finish_at' => $finish_at[1]) ;
                 
                 
             }
@@ -360,8 +363,11 @@ class ExamController extends Controller
             $start_at = explode('T', $syncData->started_at);
             $finish_at = explode(' ', $syncData->finish_at);
 
+            /*$liveResults[] = array('id'=>$syncData->id,'name'=>$syncData->student->firstname . ' ' . $syncData->student->lastname,
+                'answered' =>  $answered . ' / ' . count($allAnswers), 'correct' => $correct . '/' . $answered  , 'started_at'=> $start_at[1],'finish_at' => $finish_at[1]) ;*/
+
             $liveResults[] = array('id'=>$syncData->id,'name'=>$syncData->student->firstname . ' ' . $syncData->student->lastname,
-                'answered' =>  $answered . ' / ' . count($allAnswers), 'correct' => $correct . '/' . $answered  , 'started_at'=> $start_at[1],'finish_at' => $finish_at[1]) ;
+                'answered' =>  $answered, 'correct' => $correct, 'started_at'=> $start_at[1],'finish_at' => $finish_at[1]) ;
             
         }
 

@@ -429,20 +429,22 @@
 
             <div class="row">
                  
-                  <div class="col-xs-12">
+                  <div class="col-sm-12">
                      <div class="box">
                         <div class="box-header">
                            <h3 class="box-title">Live Results</h3>
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">
-                           <table id="liveResultTable" class="table table-bordered table-striped">
+                           <table class="table align-items-center table-flush"  id="liveResultTable">
+
                               <thead>
                                  <tr>
                                     <th>SL No.</th>
                                     <th>Name</th>
                                     <th>Answered</th>
                                     <th>Correct</th>
+                                    <th>Total Questions</th>
                                     <th>Started At</th>
                                     {{--<th>Remaining Time</th>--}}
                                     <th>Finished At</th>
@@ -457,6 +459,7 @@
                                     <td>{{$resultt['name']}}</td>
                                     <td id="{{$resultt['id']}}">{{ $resultt['answered'] }}</td>
                                     <td id="correct-{{$resultt['id']}}">{{ $resultt['correct'] }}</td>
+                                    <td id="total-{{$resultt['id']}}">{{ $resultt['totalAnswers'] }}</td>
                                     <td>{{ $resultt['started_at'] }}</td>
                                     
                                     <!--<input type="hidden" name="time_spent" id="time_spent{{$resultt['id']}}" value="0">
@@ -480,6 +483,7 @@
                                     <th>Name</th>
                                     <th>Answered</th>
                                     <th>Correct</th>
+                                    <th>Total Questions</th>
                                     <th>Started At</th>
                                     {{--<th>Remaining Time</th>--}}
                                     <th>Finished At</th>
@@ -1059,6 +1063,15 @@
 
    $(document).ready( function () {
     $('#results-table').DataTable( {
+        language: {
+            paginate: {
+                next: '&#187;', // or '→'
+                previous: '&#171;' // or '←'
+            }
+        }
+       });
+
+       $('#liveResultTable').DataTable( {
         language: {
             paginate: {
                 next: '&#187;', // or '→'
