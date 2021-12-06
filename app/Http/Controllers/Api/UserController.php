@@ -52,7 +52,7 @@ class UserController extends Controller
         $billing['bilcountry'] = isset($billingDetails['bilcountry']) ? $billingDetails['bilcountry'] : '' ;
         $billing['billemail'] = isset($billingDetails['billemail']) ? $billingDetails['billemail'] : '' ;
 
-        if(isset($user['image'])){
+        if(isset($user['image']) && get_profile_image($user['image'])){
 
             $user['profileImage'] = cdn(get_profile_image($user['image']));
         }else{
