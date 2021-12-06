@@ -731,7 +731,9 @@ class StudentController extends Controller
         //dd('from remove');
         $user = Auth::user();
         $media = $user->image;
-
+        if(!$media){
+            return;
+        }
         $path_crop = explode('.', $media['original_name']);
         $path_crop = $media['path'].$path_crop[0].'-crop'.$media['ext'];
         $path_crop = substr_replace($path_crop, "", 0, 1);
@@ -764,11 +766,16 @@ class StudentController extends Controller
     }
 
     public function uploadProfileImage(Request $request){
+       
         $this->removeProfileImage();
-
+        
         $user = Auth::user();
         $media = $user->image;
 
+        if(!$media){
+            $user->createMedia();
+            $media = $user->image;
+        }
 
         $content = $request->file('dp_fileupload');
         $name1 = explode(".",$content->getClientOriginalName());
