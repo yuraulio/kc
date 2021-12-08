@@ -796,4 +796,9 @@ class User extends Authenticatable
     {
         return true;
     }
+
+    public function getNameAttribute()
+    {
+        return "$this->firstname $this->lastname";
+    }
 }
