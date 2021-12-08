@@ -30,6 +30,31 @@
 }
 
 
+.blog_pagination {
+    display: inline-block;
+    margin-top: 20px;
+  }
+
+  .blog_pagination a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+  }
+
+  .blog_pagination a.active {
+    background-color: #407bc9;
+    color: white;
+  }
+
+  .blog_pagination a:hover:not(.active) {background-color: #ddd;}
+
+  .center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 /* Remove fixed high for small devices */
 @media only screen and (max-width: 768px) {
     /* For mobile phones: */

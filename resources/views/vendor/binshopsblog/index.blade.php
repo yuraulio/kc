@@ -16,7 +16,21 @@
                     <div class='alert alert-danger'>No posts!</div>
                 </div>
             @endforelse
-            </div
+            @if ($posts->hasPages())
+                <div class="blog_pagination">
+                    @if (!$posts->onFirstPage())
+                        <a  href="{{ $posts->previousPageUrl() }}">&laquo;</a>
+                    @endif
+
+                    @foreach ( $posts->getUrlRange(max(1, $posts->currentPage() - 2), min($posts->count() + 3, $posts->count() + 1)) as $page => $url)
+                        <a @if($posts->currentPage() == $page) class="active" @endif href="{{ $url }}">{{ $page }}</a>
+                    @endforeach
+
+                    @if ($posts->hasMorePages())
+                        <a href="{{  $posts->nextPageUrl()  }}">&raquo;</a>
+                    @endif
+                </div>
+            @endif
        </div>
     </div>
 </main>

@@ -2,14 +2,6 @@
 
 @section('blog-custom-css')
     <link type="text/css" href="{{ asset('binshops-blog.css') }}" rel="stylesheet">
-    <style>
-        .center {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-
-}
-        </style>
 @endsection
 
 @section("content")
