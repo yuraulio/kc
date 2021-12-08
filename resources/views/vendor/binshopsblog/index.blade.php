@@ -1,0 +1,33 @@
+@extends("theme.layouts.master",['title'=>$title])
+
+@section('blog-custom-css')
+    <link type="text/css" href="{{ asset('binshops-blog.css') }}" rel="stylesheet">
+@endsection
+
+@section("content")
+
+<main id="main-area" role="main">
+    <div class="section section--dynamic-learning">
+       <div class="container">
+            @if (config('binshopsblog.search.search_enabled') )
+                @include('binshopsblog::sitewide.search_form')
+            @endif
+
+            <div class="row">
+                @forelse($posts as $post)
+                    @include("binshopsblog::partials.index_loop")
+                @empty
+                    <div class="col-md-12">
+                        <div class='alert alert-danger'>No posts!</div>
+                    </div>
+                @endforelse
+            </div>
+       </div>
+    </div>
+</main>
+
+    <main id="main-area" class="with-hero" role="main">
+
+    </main>
+
+@endsection

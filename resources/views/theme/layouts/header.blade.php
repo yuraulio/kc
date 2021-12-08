@@ -98,6 +98,9 @@
                                         <a title="{{ $row['data']['name'] }}" href="{{ $row['data']['slugable']['slug'] }}">{{ $row['data']['name'] }}</a>
                                     </li>
 								@endforeach
+                                <li>
+                                    <a title="Blog" href="/en/blog">Blog</a>
+                                </li>
 								{{--<li>
 								<a title="Corporate Training" href="/corporate-training">Corporate Training</a>
 								</li>--}}

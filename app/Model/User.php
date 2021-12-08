@@ -791,4 +791,9 @@ class User extends Authenticatable
         return $this->hasMany(OauthAccessToken::class);
     }
 
+    // TODO setup role & permission correctly
+    public function canManageBinshopsBlogPosts()
+    {
+        return true;
+    }
 }

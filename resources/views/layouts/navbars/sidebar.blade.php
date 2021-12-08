@@ -136,7 +136,7 @@
                                         <a href="{{ route('pages.index') }}" class="nav-link">{{ __('Pages') }}</a>
                                     </li>
                                     <li class="nav-item {{ $elementName == 'user2-management' ? 'active' : '' }}">
-                                        <a href="#" class="nav-link">{{ __('Blog posts') }}</a>
+                                        <a href="{{ route('binshopsblog.admin.index') }}" class="nav-link">{{ __('Blog posts') }}</a>
                                     </li>
 
                             </ul>

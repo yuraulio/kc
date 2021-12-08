@@ -117,6 +117,7 @@ _iub.csConfiguration = {"cookiePolicyInOtherWindow":true,"perPurposeConsent":tru
 {{--<script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="7c5a111b-df1a-4a4a-bd31-fbee0d6593ba" data-blockingmode="auto" type="text/javascript"></script>--}}
 @endif
 
+@yield('blog-custom-css')
 
 </head>
 
@@ -355,5 +356,7 @@ $(document).on('click', '.close-btn', function(e){
         }
 
 </script>
+
+@yield('blog-custom-js')
 </body>
 </html>
