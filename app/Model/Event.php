@@ -435,6 +435,7 @@ class Event extends Model
     }
 
     public function examAccess( $user,$successPer = 0.8){
+       
         $seenPercent =  $this->progress($user);
         $studentsEx = [1353,1866,1753,1882,1913,1923];
 
@@ -444,10 +445,9 @@ class Event extends Model
 
         //$event = EventStudent::where('student_id',$this->user_id)->where('event_id',$this->event_id)->first()->created_at;
         $event = $this;
-        if(!$event->created_at || $event->comment == 'enroll' || $event->view_tpl == 'elearning_free'){
+        if(!$event->created_at || $event->pivot->comment == 'enroll' || $event->view_tpl == 'elearning_free'){
              return false;
         }
-
 
         return $seenPercent >=  ($successPer * 100);
 
