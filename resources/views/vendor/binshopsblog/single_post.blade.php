@@ -23,7 +23,7 @@
     {{--https://binshops.binshops.com/laravel/packages/binshopsblog-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-binshopsblog#guide_to_views--}}
 
     <main id="main-area" role="main">
-        <div class="section section--dynamic-learning">
+        <div class="section section--dynamic-learning blog">
            <div class="container">
 
                 @include("binshopsblog::partials.show_errors")
