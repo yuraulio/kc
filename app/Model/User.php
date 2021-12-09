@@ -794,7 +794,7 @@ class User extends Authenticatable
     // TODO setup role & permission correctly
     public function canManageBinshopsBlogPosts()
     {
-        return true;
+        return $this->role->whereIn('name', ['Super Administrator', 'Administrator', 'Author'])->isNotEmpty();
     }
 
     public function getNameAttribute()

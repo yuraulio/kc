@@ -1,7 +1,8 @@
-{{-- @if(\Auth::check() && \Auth::user()->canManageBinshopsBlogPosts())
-    <a href="{{$post->edit_url()}}" class="btn btn-outline-secondary btn-sm pull-right float-right">Edit
-        Post</a>
-@endif --}}
+@if(\Auth::check() && \Auth::user()->canManageBinshopsBlogPosts())
+<div style="float: right;">
+    <a href="{{$post->edit_url()}}" class="btn btn--sm btn--primary">Edit Post</a>
+</div>
+@endif
 
 <h1 class='blog_title'>{{$post->title}}</h1>
 <h5 class='blog_subtitle'>{{$post->subtitle}}</h5>

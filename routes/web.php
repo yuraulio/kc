@@ -809,7 +809,7 @@ Route::group(['middleware' => ['web'], 'namespace' => '\BinshopsBlog\Controllers
 
 
         // throttle to a max of 10 attempts in 3 minutes:
-        Route::group(['middleware' => 'throttle:10,3'], function () {
+        Route::group(['middleware' => ['auth', 'throttle:10,3']], function () {
 
             Route::post(
                 'save_comment/{blogPostSlug}',

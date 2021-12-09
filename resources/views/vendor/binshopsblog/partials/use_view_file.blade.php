@@ -5,20 +5,5 @@
     @include("custom_blog_posts." . $post->use_view_file, ['post' =>$post])
 
 @else
-
-    {{--uh oh! the view file wasn't there. Show a detailed error if user is logged in and can manage the blog, otherwise show generic error.--}}
-
-    @if(\Auth::check() && \Auth::user()->canManageBinshopsBlogPosts())
-         {{--is logged in + canManageBinshopsBlogPosts() == true, so show a detailed error--}}
-        <div class='alert alert-danger'>Custom blog post blade view file
-                        (<code>{{$post->full_view_file_path()}}</code>) not found. <a
-                    href='https://binshops.binshops.com/laravel/packages/help-documentation/laravel-blog-package-binshopsblog'
-                    target='_blank'>See Laravel Blog Package help here</a>.
-                    </div>
-
-    @else
-        {{--is not logged in, or User::canManageBinshopsBlogPosts() for current user == false--}}
-        {{--show basic error message--}}
-        <div class='alert alert-danger'>Sorry, but there is an error showing that blog post. Please come back later.</div>
-    @endif
+    <div class='alert alert-danger'>Sorry, but there is an error showing that blog post. Please come back later.</div>
 @endif
