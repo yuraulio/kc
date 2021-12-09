@@ -784,7 +784,7 @@ Route::group(['middleware' => ['preview','web','auth.sms']], function () {
 
 Route::group(['middleware' => ['web'], 'namespace' => '\BinshopsBlog\Controllers'], function () {
     /** The main public facing blog routes - show all posts, view a category, rss feed, view a single post, also the add comment route */
-    Route::group(['prefix' => "/{locale}/" . config('binshopsblog.blog_prefix', 'blog')], function () {
+    Route::group(['prefix' => "/{locale?}/" . config('binshopsblog.blog_prefix', 'blog')], function () {
 
         Route::get('/', 'BinshopsReaderController@index')
             ->name('binshopsblog.index');
@@ -792,14 +792,8 @@ Route::group(['middleware' => ['web'], 'namespace' => '\BinshopsBlog\Controllers
         Route::get('/search', 'BinshopsReaderController@search')
             ->name('binshopsblog.search');
 
-        Route::get('/feed', 'BinshopsRssFeedController@feed')
-            ->name('binshopsblog.feed'); //RSS feed
 
         Route::get('/category{subcategories}', 'BinshopsReaderController@view_category')->where('subcategories', '^[a-zA-Z0-9-_\/]+$')->name('binshopsblog.view_category');
-
-        //        Route::get('/category/{categorySlug}',
-        //            'BinshopsReaderController@view_category')
-        //            ->name('binshopsblog.view_category');
 
         Route::get(
             '/{blogPostSlug}',
