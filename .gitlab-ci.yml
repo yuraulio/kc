@@ -1,0 +1,66 @@
+image: gitlab.qed.services:5050/devops/qed-deployer:7.4
+
+variables:
+  NODE_VERSION: "12.10.0"
+  ROOT_PROJECT_NAME: "knowncrunch"
+  GIT_SUBMODULE_STRATEGY: recursive
+
+stages:
+  - review
+  - stage
+  - production
+
+cache:
+  key: $CI_PROJECT_ID
+  paths:
+    - node_modules/
+    - vendor/
+
+default:
+  before_script:
+    - export GIT_SSL_NO_VERIFY=1
+    - git submodule update --init --recursive
+    - git submodule update --remote
+    - cp "$CI_PROJECT_DIR"/inventory.yml "$CI_PROJECT_DIR"/ansible
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - export DEPLOY_TIMESTAMP=$(date +%Y%m%d%H%M%S)
+    - cd "$CI_PROJECT_DIR"
+    - composer install --prefer-dist --no-scripts -q -o --optimize-autoloader --no-interaction
+    - source /root/.nvm/nvm.sh && nvm install "$NODE_VERSION" && nvm use "$NODE_VERSION" && nvm alias default "$NODE_VERSION"
+    - export PATH=/root/.nvm/versions/node/v"$NODE_VERSION"/bin/:$PATH
+    - chmod 755 "$CI_PROJECT_DIR"/ansible
+  after_script:
+    - echo "Cleaning build artifacts"
+    - rm -f /builds/"$CI_PROJECT_NAME"-"$DEPLOY_TIMESTAMP".tar.gz
+
+deploy_review:
+  stage: review
+  script:
+    - npm run development
+    - cd "$CI_PROJECT_DIR"/ansible
+    - ansible-playbook application.yml -i inventory.yml -l development -u deployer --private-key=~/.ssh/id_rs -e "ansible_become_pass=${SUDO_PASS} DEPLOY_TIMESTAMP=${DEPLOY_TIMESTAMP} CI_JOB_STAGE=${CI_JOB_STAGE} CI_COMMIT_REF_NAME=${CI_COMMIT_REF_NAME} CI_PROJECT_NAME=${CI_PROJECT_NAME} CI_PROJECT_DIR=${CI_PROJECT_DIR} ROOT_PROJECT_NAME=${ROOT_PROJECT_NAME} NODE_VERSION=${NODE_VERSION} CI_MERGE_REQUEST_LABELS=${CI_MERGE_REQUEST_LABELS} APP_URL=${URL}"
+  variables:
+    URL: https://$CI_COMMIT_REF_NAME-knowncrunch.qedcode.dev
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /(DEPLOY_REVIEW|deploy_review)/'
+      when: always
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: manual
+
+deploy_stage:
+  stage: stage
+  script:
+    - npm run development
+    - cd "$CI_PROJECT_DIR"/ansible
+    - ansible-playbook application.yml -i inventory.yml -l development -u deployer --private-key=~/.ssh/id_rs -e "ansible_become_pass=${SUDO_PASS} DEPLOY_TIMESTAMP=${DEPLOY_TIMESTAMP} CI_JOB_STAGE=${CI_JOB_STAGE} CI_COMMIT_REF_NAME=${CI_COMMIT_REF_NAME} CI_PROJECT_NAME=${CI_PROJECT_NAME} CI_PROJECT_DIR=${CI_PROJECT_DIR} ROOT_PROJECT_NAME=${ROOT_PROJECT_NAME} CI_MERGE_REQUEST_LABELS=${CI_MERGE_REQUEST_LABELS} NODE_VERSION=${NODE_VERSION} APP_URL=${URL}"
+  variables:
+    URL: https://knowncrunch.qedcode.dev
+  when: manual
+  only:
+    - stage
