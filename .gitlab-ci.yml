@@ -34,6 +34,7 @@ default:
     - composer install --prefer-dist --no-scripts -q -o --optimize-autoloader --no-interaction
     - source /root/.nvm/nvm.sh && nvm install "$NODE_VERSION" && nvm use "$NODE_VERSION" && nvm alias default "$NODE_VERSION"
     - export PATH=/root/.nvm/versions/node/v"$NODE_VERSION"/bin/:$PATH
+    - npm install
     - chmod 755 "$CI_PROJECT_DIR"/ansible
   after_script:
     - echo "Cleaning build artifacts"
@@ -60,7 +61,5 @@ deploy_stage:
     - cd "$CI_PROJECT_DIR"/ansible
     - ansible-playbook application.yml -i inventory.yml -l development -u deployer --private-key=~/.ssh/id_rs -e "ansible_become_pass=${SUDO_PASS} DEPLOY_TIMESTAMP=${DEPLOY_TIMESTAMP} CI_JOB_STAGE=${CI_JOB_STAGE} CI_COMMIT_REF_NAME=${CI_COMMIT_REF_NAME} CI_PROJECT_NAME=${CI_PROJECT_NAME} CI_PROJECT_DIR=${CI_PROJECT_DIR} ROOT_PROJECT_NAME=${ROOT_PROJECT_NAME} CI_MERGE_REQUEST_LABELS=${CI_MERGE_REQUEST_LABELS} NODE_VERSION=${NODE_VERSION} APP_URL=${URL}"
   variables:
-    URL: https://knowncrunch.qedcode.dev
+    URL: https://knowcrunch.qedcode.dev
   when: manual
-  only:
-    - stage
