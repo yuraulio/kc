@@ -1,5 +1,5 @@
 [development]
-knowcrunch.qedcode.dev
+knowcrunch.qedcode.dev ansible_host=167.71.14.131
 
 [production]
 #not up
