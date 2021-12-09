@@ -50,7 +50,7 @@ class CheckForSMSCoockie
         require_once("../app/Apifon/Model/SmsRequest.php");
         require_once("../app/Apifon/Model/SubscriberInformation.php");
        
-        if (Auth::guest() || env('APP_DEBUG') == true) {
+        if (Auth::guest() /*|| env('APP_DEBUG') == true*/) {
             return $next($request);
         }
 
