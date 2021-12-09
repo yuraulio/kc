@@ -84,4 +84,43 @@
         height: auto !important;
         min-width: 0;
     }
+
+    .comment_author img {
+        width: 25px !important;
+    }
   }
+
+  #comment {
+    width: 100%;
+    background: white;
+    color: black;
+    border: solid burlywood 1px;
+    resize: none;
+  }
+
+
+.comment_block {
+    overflow: scroll;
+    height: 300px;
+}
+
+.comment_author {
+    float: left;
+    color: #419cff !important;
+}
+
+.comment_date {
+    float: right;
+    color: #E16036 !important;
+    font-style: italic !important;
+    font-size: small;
+}
+
+.single_comment {
+    display: grid;
+    margin-bottom: 20px;
+}
+
+.single_comment_text {
+    margin-bottom: 10px !important;
+}
