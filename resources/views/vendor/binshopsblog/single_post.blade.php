@@ -19,6 +19,7 @@
            <div class="container">
 
                 @include("binshopsblog::partials.show_errors")
+                @include("global.social", ['summary' => $post->gen_seo_title(), 'title' => $post->gen_seo_title()])
                 @include("binshopsblog::partials.full_post_details")
 
 
