@@ -1,4 +1,17 @@
-@extends("theme.layouts.master",['title'=>$title])
+@extends("theme.layouts.master")
+
+@section('metas')
+    <meta charset="UTF-8">
+    <meta name="description" content="KnowCrunch is offering high level professional training and specialized educational courses dedicated to fostering knowledge to others">
+    <meta name="keywords" content="training, εκπαίδευση, seminars, σεμινάρια, events, courses, diplomas, certificates, business, marketing, digital marketing, εκπαίδευση στελεχών, executive training, knowcrunch, kc">
+    <meta name="author" content="KnowCrunch">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@endsection
+
+@section('header')
+    <title>KnowCrunch Blog</title>
+@endsection
+
 
 @section('blog-custom-css')
     <link type="text/css" href="{{ asset('binshops-blog.css') }}" rel="stylesheet">
