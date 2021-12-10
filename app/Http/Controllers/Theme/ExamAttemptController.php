@@ -435,35 +435,36 @@ class ExamAttemptController extends Controller
 
                 }
 
-                $adminemail = 'info@knowcrunch.com';
+                if($exam->event_id === 1350 || $exam->event_id === 2304)
+                    $adminemail = 'info@knowcrunch.com';
 
-                $muser = [];
-                $muser['email'] = $examResultData->user->email;
-                $muser['fullname'] = $examResultData->user->firstname . ' ' . $examResultData->user->lastname;
-                $muser['first'] = $examResultData->user->firstname;
+                    $muser = [];
+                    $muser['email'] = $examResultData->user->email;
+                    $muser['fullname'] = $examResultData->user->firstname . ' ' . $examResultData->user->lastname;
+                    $muser['first'] = $examResultData->user->firstname;
 
-                $data['firstName'] = $examResultData->user->firstname;
-                
-                if($exam->event_id === 1350){
-                    $view_email = 'emails.student.after_exam_old';
-                }else{
-                    $view_email = 'emails.student.after_exam';
+                    $data['firstName'] = $examResultData->user->firstname;
+
+                    if($exam->event_id === 1350){
+                        $view_email = 'emails.student.after_exam_old';
+                    }else{
+                        $view_email = 'emails.student.after_exam';
+                    }
+
+                    $pathFile = url('/') . '/pdf/elearning/KnowCrunch - How to add your certification in Social Media.pdf';
+                    $pathFile = str_replace(' ','%20',$pathFile);
+
+                    $sent = Mail::send($view_email, $data,function ($m) use ($adminemail, $muser,$pathFile) {
+
+                        $sub =  'KnowCrunch |' . $muser['first'] . ', Final Evaluation Surveys & how to add your certification in Social Media';
+                        $m->from($adminemail, 'Knowcrunch');
+                        $m->to($muser['email'], $muser['fullname']);
+                        $m->subject($sub);
+                        $m->attach($pathFile);
+
+                    });
+
                 }
-
-                $pathFile = url('/') . '/pdf/elearning/KnowCrunch - How to add your certification in Social Media.pdf';
-                $pathFile = str_replace(' ','%20',$pathFile);
-                
-                $sent = Mail::send($view_email, $data,function ($m) use ($adminemail, $muser,$pathFile) {
-
-                    $sub =  'KnowCrunch |' . $muser['first'] . ', Final Evaluation Surveys & how to add your certification in Social Media';
-                    $m->from($adminemail, 'Knowcrunch');
-                    $m->to($muser['email'], $muser['fullname']);
-                    $m->subject($sub);
-                    $m->attach($pathFile);
-                    
-                });
-
-                
 
                 
                 if($examResultData) {
