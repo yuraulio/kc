@@ -2,10 +2,24 @@
 
 @section('metas')
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{-- Basic --}}
     <meta name="description" content="{{ $post->meta_desc }}">
     <meta name="keywords" content="KnowCrunch, education, blog">
+    <meta name="image" content="{{ $post->image_url() }}">
     <meta name="author" content="KnowCrunch">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--  Essential META Tags -->
+    <meta property="og:title" content="KnowCrunch | {{ $post->gen_seo_title() }}">
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="{{ $post->image_url() }}">
+    <meta property="og:url" content="{{ $post->url('en') }}">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!--  Non-Essential, But Recommended -->
+    <meta property="og:description" content="{{ $post->meta_desc }}">
+    <meta property="og:site_name" content="{{ $post->title }}">
+    <meta name="twitter:image:alt" content="{{ $post->title }}">
 @endsection
 
 @section('header')
