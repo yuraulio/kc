@@ -140,13 +140,17 @@
         <div class="main-content">
             @include('layouts.navbars.navbar')
             <div class="container-fluid mt-3">
-                {{-- <div class="row">
-                    <div class="col"> --}}
-                        {{-- <div class="card"> --}}
-                            @yield('content')
-                        {{-- </div> --}}
-                    {{-- </div>
-                </div> --}}
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+                            <div class="row p-5">
+                                <div class="col">
+                                    @yield('content')
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
