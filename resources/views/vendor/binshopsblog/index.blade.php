@@ -22,6 +22,9 @@
 <main id="main-area" role="main">
     <div class="section section--dynamic-learning">
        <div class="container">
+            @if (config('binshopsblog.search.search_enabled') )
+                @include('binshopsblog::sitewide.search_form')
+            @endif
             @forelse($posts as $post)
                 @include("binshopsblog::partials.index_loop")
             @empty
