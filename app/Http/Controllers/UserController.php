@@ -354,6 +354,8 @@ class UserController extends Controller
         foreach($user->transactions()->get() as $key => $tran){
             if(count($tran->status_history) != 0){
 
+                
+
                 $title = $tran->status_history[0]['cart_data']['manualtransaction']['name'];
                 //dd($title);
                 if($event['title'] == $title){
@@ -364,7 +366,11 @@ class UserController extends Controller
 
         }
         if($found != 0){
-            Transaction::find($found)->delete();
+            
+            $transaction = Transaction::find($found);
+            $transaction->event()->detach($request->event_id);
+            $transaction->user()->detach($request->user_id);
+            $transaction->delete();
         }
         //$user->ticket()->attach($ticket_id, ['event_id' => $event_id]);
         //dd($user->transactions()->get());
