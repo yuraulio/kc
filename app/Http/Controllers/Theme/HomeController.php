@@ -140,7 +140,7 @@ class HomeController extends Controller
         $data['elearningFree'] = [];
         $data['inclassFree'] = [];
 
-        $categories =Category::with('slugable','events.slugable','events.city','events','events.mediable')->where('show_homepage', 1)->get()->toArray();
+        $categories =Category::with('slugable','events.slugable','events.city','events','events.mediable')->where('show_homepage', 1)->orderBy('priority','asc')->get()->toArray();
 
 
         foreach($categories as $category){
@@ -589,8 +589,21 @@ class HomeController extends Controller
 
         $data['title'] = $delivery['name'];
         $data['delivery'] = $delivery;
-        $data['openlist'] = $delivery->event()->has('slugable')->with('category', 'city', 'ticket')->where('published',true)->where('status', 0)->orderBy('created_at','desc')->get();
+        $data['openlistt'] = $delivery->event()->has('slugable')->with('category', 'city', 'ticket')->where('published',true)->where('status', 0)->orderBy('created_at','desc')->get();
         $data['completedlist'] = $delivery->event()->has('slugable')->with('category','slugable', 'city', 'ticket')->where('published',true)->where('status', 3)->orderBy('created_at','desc')->get();
+
+        $data['openlist'] = [];
+        
+        foreach($data['openlistt'] as $openlist){
+            $index = $openlist->category->first()->priority ?  $openlist->category->first()->priority : 0;
+
+            while(in_array($index,array_keys($data['openlist']))){
+                $index++;
+            }
+            
+            $data['openlist'][$index] = $openlist;
+        }
+        ksort($data['openlist']);
         //dd($data['completedlist']);
         //dd($data['openlist']);
         return view('theme.pages.category' ,$data);

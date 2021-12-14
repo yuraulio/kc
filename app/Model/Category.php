@@ -36,7 +36,7 @@ class Category extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'description', 'parent', 'hours', 'show_homepage'];
+    protected $fillable = ['name', 'description', 'parent', 'hours', 'show_homepage','priority'];
 
     /**
      * Get all of the events that are assigned this tag.

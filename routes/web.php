@@ -320,6 +320,9 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::post('/sort-topics', 'TopicController@orderTopic')->name('sort-topics');
     Route::post('/detach-topic', 'TopicController@detachTopic')->name('topics.detach');
 
+    //Categories
+    Route::post('/sort-categories', 'CategoryController@orderCategory')->name('sort-categories');
+
 });
 
 /*Route::group(['prefix' => 'cart','middleware' => ['web']], function () {

@@ -22,6 +22,7 @@ use App\Model\User;
 use App\Model\Dropbox;
 use App\Model\Category;
 use App\Http\Requests\CategoryRequest;
+use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
@@ -40,7 +41,7 @@ class CategoryController extends Controller
     {
 
 
-        return view('global_settings.categories.index', ['categories' => $model->all()]);
+        return view('global_settings.categories.index', ['categories' => $model->orderBy('priority','asc')->get()]);
     }
 
     /**
@@ -83,7 +84,10 @@ class CategoryController extends Controller
             $show_homepage = 0;
         }
 
+        $countCategory = count(Category::all()) + 1;
+
         $request->request->add(['show_homepage' => $show_homepage]);
+        $request->request->add(['priority' => $countCategory]);
 
         $model = $model->create($request->all());
         $model->createSlug($request->slug);
@@ -198,4 +202,23 @@ class CategoryController extends Controller
 
         return redirect()->route('global.index')->withStatus(__('Category successfully deleted.'));
     }
+
+    public function orderCategory(Request $request){
+        foreach($request->order as $key => $order){
+
+            if(!$category = Category::find($key)){
+                continue;
+            }
+
+            $category->priority = $order;
+            $category->save();
+
+        }
+
+        return response()->json([
+            'success' => true 
+        ]);
+
+    }
+
 }
