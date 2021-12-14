@@ -107,8 +107,14 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.9.2/jquery.ui.position.js" integrity="sha512-vBR2rismjmjzdH54bB2Gx+xSe/17U0iHpJ1gkyucuqlTeq+Q8zwL8aJDIfhQtnWMVbEKMzF00pmFjc9IPjzR7w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
-
+        <script>
+            let headx = {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            };
+            $.ajaxSetup({
+                headers: headx
+            });
+        </script>
         @stack('js')
 
         <!-- Argon JS -->
