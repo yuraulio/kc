@@ -32,7 +32,7 @@
                     <div class='alert alert-danger'>No posts!</div>
                 </div>
             @endforelse
-            @if ($posts->hasPages())
+            @if (!is_array($posts) && $posts->hasPages())
                 <div class="blog_pagination">
                     @if (!$posts->onFirstPage())
                         <a  href="{{ $posts->previousPageUrl() }}">&laquo;</a>
