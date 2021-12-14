@@ -43,6 +43,7 @@ default:
 deploy_review:
   stage: review
   script:
+    - cat $CI_PROJECT_DIR/.env.dev > $CI_PROJECT_DIR/.env
     - npm run development
     - cd "$CI_PROJECT_DIR"/ansible
     - ansible-playbook application.yml -i inventory.yml -l development -u deployer --private-key=~/.ssh/id_rs -e "ansible_become_pass=${SUDO_PASS} DEPLOY_TIMESTAMP=${DEPLOY_TIMESTAMP} CI_JOB_STAGE=${CI_JOB_STAGE} CI_COMMIT_REF_NAME=${CI_COMMIT_REF_NAME} CI_PROJECT_NAME=${CI_PROJECT_NAME} CI_PROJECT_DIR=${CI_PROJECT_DIR} ROOT_PROJECT_NAME=${ROOT_PROJECT_NAME} NODE_VERSION=${NODE_VERSION} CI_MERGE_REQUEST_LABELS=${CI_MERGE_REQUEST_LABELS} APP_URL=${URL}"
@@ -57,6 +58,7 @@ deploy_review:
 deploy_stage:
   stage: stage
   script:
+    - cat $CI_PROJECT_DIR/.env.dev > $CI_PROJECT_DIR/.env
     - npm run development
     - cd "$CI_PROJECT_DIR"/ansible
     - ansible-playbook application.yml -i inventory.yml -l development -u deployer --private-key=~/.ssh/id_rs -e "ansible_become_pass=${SUDO_PASS} DEPLOY_TIMESTAMP=${DEPLOY_TIMESTAMP} CI_JOB_STAGE=${CI_JOB_STAGE} CI_COMMIT_REF_NAME=${CI_COMMIT_REF_NAME} CI_PROJECT_NAME=${CI_PROJECT_NAME} CI_PROJECT_DIR=${CI_PROJECT_DIR} ROOT_PROJECT_NAME=${ROOT_PROJECT_NAME} CI_MERGE_REQUEST_LABELS=${CI_MERGE_REQUEST_LABELS} NODE_VERSION=${NODE_VERSION} APP_URL=${URL}"
