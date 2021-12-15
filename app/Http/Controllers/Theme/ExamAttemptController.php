@@ -26,6 +26,7 @@ class ExamAttemptController extends Controller
 
     public function attemptExam($ex_id) {       
 
+    
         $exam = Exam::find($ex_id);
         $event = $exam->event->first();
         return view('exams.exam_instructions',['event' => $event, 'exam' => $exam,'event_title' => $event->title,
@@ -187,7 +188,7 @@ class ExamAttemptController extends Controller
     }
 
     public function saveData(Request $request) {
-
+     
         if(isset($request->examJson) && isset($request->exam_id) && isset($request->student_id) && isset($request->start_time)){ 
 
 
@@ -435,7 +436,7 @@ class ExamAttemptController extends Controller
 
                 }
 
-                if($exam->event_id === 1350 || $exam->event_id === 2304)
+                if($exam->event_id === 1350 || $exam->event_id === 2304){
                     $adminemail = 'info@knowcrunch.com';
 
                     $muser = [];
