@@ -738,8 +738,7 @@ class User extends Authenticatable
         $oldVideos = [];
         $change = 0;
         foreach($event->topicsLessonsInstructors()['topics'] as $key => $topic){
-            //dd($topic);
-
+        
             foreach($topic['lessons'] as $key1 => $lesson){
                 // if(isset($lesson) && $lesson['vimeo_video'] != null){
                     //dd($lesson);
@@ -763,6 +762,12 @@ class User extends Authenticatable
 
         if(!in_array($lastVideoSeen,$oldVideos) && isset($oldVideos[0])){
             $lastVideoSeen =$oldVideos[0];
+        }
+
+        foreach($videos as $key => $videoId){
+            if(!in_array($key,$oldVideos)){
+                unset($videos[$key]);
+            }
         }
          
         if(!$this->statistic()->wherePivot('event_id', $event['id'])->first()){

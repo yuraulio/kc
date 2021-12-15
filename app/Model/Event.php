@@ -351,7 +351,7 @@ class Event extends Model
 
 
         }
-      
+     
         $data['topics'] = $topics;
         $data['instructors'] = $instructors;
         foreach($data['topics'] as $key => $topics){
@@ -369,7 +369,7 @@ class Event extends Model
             $data['topics'][$key]['topic_duration'] = $data['keys'][$topic_id];
 
         }
-
+        
         return $data;
     }
 
