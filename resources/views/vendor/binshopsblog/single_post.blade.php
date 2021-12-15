@@ -43,7 +43,7 @@
 
     <main id="main-area" role="main">
         <div class="section section--dynamic-learning blog">
-           <div class="container">
+           <div class="container blogx-container">
 
                 @include("binshopsblog::partials.show_errors")
                 @include("global.social", ['summary' => $post->gen_seo_title(), 'title' => $post->gen_seo_title()])

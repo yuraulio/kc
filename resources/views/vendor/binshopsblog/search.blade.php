@@ -27,11 +27,13 @@
                 @if(isset($result->indexable))
                     @php $search_count += $search_count + 1; @endphp
                     @php $post = $result->indexable;@endphp
+                    <div class="blogpagex dynamic-courses-wrapper">
                     @if($post && is_a($post,\BinshopsBlog\Models\BinshopsPostTranslation::class))
                         @include("binshopsblog::partials.index_loop")
                     @else
                         <div class='alert alert-danger'>Unable to show this search result - unknown type</div>
                     @endif
+                    </div>
                 @endif
             @endforeach
         </div>

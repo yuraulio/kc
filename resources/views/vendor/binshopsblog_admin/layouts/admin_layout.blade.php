@@ -115,6 +115,14 @@
                 headers: headx
             });
         </script>
+        <script src="//cdn.ckeditor.com/4.15.0/full/ckeditor.js"></script>
+
+        <script>
+            if( typeof(CKEDITOR) !== "undefined" && document.getElementById("category_description")) {
+                CKEDITOR.replace('category_description');
+            }
+        </script>
+
         @stack('js')
 
         <!-- Argon JS -->

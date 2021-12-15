@@ -10,7 +10,7 @@
 
 <?=$post->image_tag("large", false, 'center'); ?>
 
-<p class="blog_body_content">
+<div class="blog_body_content">
     {!! $post->post_body_output() !!}
 
     {{--@if(config("binshopsblog.use_custom_view_files")  && $post->use_view_file)--}}
@@ -20,7 +20,7 @@
     {{--   {!! $post->post_body !!}        // unsafe, echoing the plain html/js--}}
     {{--   {{ $post->post_body }}          // for safe escaping --}}
     {{--@endif--}}
-</p>
+</div>
 
 <hr/>
 

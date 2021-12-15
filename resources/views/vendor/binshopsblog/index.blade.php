@@ -25,13 +25,32 @@
             @if (config('binshopsblog.search.search_enabled') )
                 @include('binshopsblog::sitewide.search_form')
             @endif
+            @if($category)
+                <h1>{{$category->category_name}}</h1>
+
+                <div class="blogpagex dynamic-courses-wrapper catx">
+                    <div class="catx-sub">{!! $category->category_description !!}</div>
+                    @forelse(collect($posts)->slice(0, 1) as $post)
+                        @php
+                            $post->inter = true;
+                        @endphp
+                        @include("binshopsblog::partials.index_loop")
+                    @empty
+
+                    @endforelse
+                </div>
+            @endif
+            <div class="blogpagex dynamic-courses-wrapper">
             @forelse($posts as $post)
-                @include("binshopsblog::partials.index_loop")
+                @if(!$post->inter)
+                    @include("binshopsblog::partials.index_loop")
+                @endif
             @empty
                 <div class="col-md-12">
                     <div class='alert alert-danger'>No posts!</div>
                 </div>
             @endforelse
+            </div>
             @if (!is_array($posts) && $posts->hasPages())
                 <div class="blog_pagination">
                     @if (!$posts->onFirstPage())
