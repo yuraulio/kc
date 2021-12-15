@@ -751,7 +751,7 @@ class User extends Authenticatable
                     }
                     if(!isset($videos[$vimeo_id])){
                        $change+=1;
-                       $videos[$vimeo_id] = ['seen' => 0, 'tab' =>$tab.$countVideos, 'lesson' => $lesson['id'], 'stop_time' => 0,
+                       $videos[$vimeo_id] = ['seen' => 0, 'tab' =>$tab.$vimeo_id, 'lesson' => $lesson['id'], 'stop_time' => 0,
                                                'percentMinutes' => 0];
                        $notes[$vimeo_id] = '';
                     }

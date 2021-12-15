@@ -51,7 +51,7 @@ class InitStatisticsTabs extends Command
                     //$video['tab']
                     //$video['tab']
                     //$video['tab']
-                    $video['tab'] = preg_replace('/[0-9]+/', '', $video['tab']) . $count;
+                    $video['tab'] = preg_replace('/[0-9]+/', '', $video['tab']) . $key;
                     /*if($user->id == 3594){
                         dd($key);
 
