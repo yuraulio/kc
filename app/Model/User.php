@@ -734,7 +734,7 @@ class User extends Authenticatable
             $lastVideoSeen = $statistic['lastVideoSeen'];
             $firstTime = false;
         }
-        $countVideos = 1;
+        $countVideos = $videos ? count($videos) + 1 : 1;
         $oldVideos = [];
         $change = 0;
         foreach($event->topicsLessonsInstructors()['topics'] as $key => $topic){

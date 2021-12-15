@@ -42,6 +42,7 @@ class Kernel extends ConsoleKernel
        Commands\InitCertificate::class,
        Commands\SyncBillingData::class,
        Commands\FixUsersName::class,
+       Commands\InitStatisticsTabs::class,
 
     ];
 
