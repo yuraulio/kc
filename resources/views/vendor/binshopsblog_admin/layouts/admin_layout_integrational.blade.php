@@ -79,12 +79,36 @@
 
         <div class="main-content">
             @include('layouts.navbars.navbar')
-            <div class="container-fluid mt-3">
+            @component('layouts.headers.auth')
+                @component('layouts.headers.breadcrumbs')
+                    @slot('title')
+                        {{ __('') }}
+                    @endslot
+                    @yield('crumbs')
+                @endcomponent
+                <div class="row">
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card card-stats">
+                            <!-- Card body -->
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        @yield('cardy')
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            @endcomponent
+
+            <div class="container-fluid mt--6">
                 <div class="row">
                     <div class="col">
                         <div class="card">
                             <div class="row">
-                                <div class="col p-5">
+                                <div class="col">
                                     @yield('content')
                                 </div>
                             </div>

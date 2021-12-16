@@ -51,9 +51,9 @@
                                     <li class="nav-item {{ isset($elementName) and $elementName == 'user2-management' ? 'active' : '' }}">
                                         <a href="{{ route('binshopsblog.admin.index') }}" class="nav-link">{{ __('Posts') }}</a>
                                     </li>
-                                    <li class="nav-item {{ isset($elementName) and $elementName == 'user2-management' ? 'active' : '' }}">
+                                    {{-- <li class="nav-item {{ isset($elementName) and $elementName == 'user2-management' ? 'active' : '' }}">
                                         <a href="{{ route('binshopsblog.admin.create_post') }}" class="nav-link">{{ __('Create Post') }}</a>
-                                    </li>
+                                    </li> --}}
                                     <hr class="mt-1 mb-1"/>
                                     <li class="nav-item {{ isset($elementName) and $elementName == 'user2-management' ? 'active' : '' }}">
                                         <a href="{{ route('binshopsblog.admin.comments.index') }}" class="nav-link">{{ __('Comments') }}</a>
