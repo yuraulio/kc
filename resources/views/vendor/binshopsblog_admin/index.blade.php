@@ -15,10 +15,13 @@
     <div class="card-header" style="border-bottom: 0px">
        <div class="row align-items-center">
           <div class="col-8">
-             <h3 class="mb-0">Posts</h3>
-          </div>
+             <a href="{{ route('binshopsblog.admin.comments.index') }}" class="btn btn-sm btn-info"> <i class="fas fa-comments"></i> {{ __('Comments') }}</a>
+             <a href="{{ route('binshopsblog.admin.categories.index') }}" class="btn btn-sm btn-success"><i class="fas fa-stream"></i> {{ __('Categories') }}</a>
+             <a href="{{ route('binshopsblog.admin.images.all') }}" class="btn btn-sm btn-warning"><i class="fas fa-images"></i> {{ __('Images') }}</a>
+             <a href="{{ route('binshopsblog.admin.languages.index') }}" class="btn btn-sm btn-danger"><i class="fas fa-globe"></i> {{ __('Languages') }}</a>
+            </div>
           <div class="col-4 text-right">
-            <a href="{{ route('binshopsblog.admin.create_post') }}" class="btn btn-sm btn-primary">{{ __('Create Post') }}</a>
+            <a href="{{ route('binshopsblog.admin.create_post') }}" class="btn btn-sm btn-primary"><i class="fas fa-plus-circle"></i> {{ __('Create Post') }}</a>
           </div>
        </div>
     </div>
@@ -105,7 +108,7 @@
                          </td>
                       </tr>
                       @empty
-        <div class='alert alert-warning'>No posts to show you. Why don't you add one?</div>
+                        <div class='alert alert-warning'>No posts to show you. Why don't you add one?</div>
                       @endforelse
                    </tbody>
                 </table>

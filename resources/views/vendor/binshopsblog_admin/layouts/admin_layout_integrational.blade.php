@@ -72,7 +72,7 @@
             </form>
             @if (!in_array(request()->route()->getName(), ['welcome', 'page.pricing', 'page.lock']))
 
-                @include('binshopsblog_admin::layouts.sidebar')
+                @include('layouts.navbars.sidebar')
             @endif
         @endauth
 
