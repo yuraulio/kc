@@ -43,6 +43,8 @@ class Kernel extends ConsoleKernel
        Commands\SyncBillingData::class,
        Commands\FixUsersName::class,
        Commands\InitStatisticsTabs::class,
+       Commands\deteleAbandoned::class,
+       Commands\AttachInvociceTranasactionToUser::class,
 
     ];
 
