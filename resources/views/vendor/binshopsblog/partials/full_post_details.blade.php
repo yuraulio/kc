@@ -4,7 +4,7 @@
 </div>
 @endif
 
-<h1 class='blog_title'>{{$post->title}}</h1>
+<h1 class='blog_title' style="margin-top: 20px;">{{$post->title}}</h1>
 <h5 class='blog_subtitle'>{{$post->subtitle}}</h5>
 
 
