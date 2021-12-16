@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use \Cart as Cart; 
 use App\Model\CartCache;
+use App\Model\Ticket;
 
 class Registration
 {
@@ -25,7 +26,7 @@ class Registration
             
             if($cartCache){
                Cart::add($cartCache->ticket_id, $cartCache->product_title, $cartCache->quantity, $cartCache->price, 
-                ['type' => $cartCache->type, 'event' => $cartCache->event])->associate('PostRider\Content');
+                ['type' => $cartCache->type, 'event' => $cartCache->event])->associate(Ticket::class);
             }
 
           
