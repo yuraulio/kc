@@ -35,6 +35,7 @@
                     @endforeach
                 </div>
             </div>
+            <div class="maralign">
             @if($category)
                 <h1>{{$category->category_name}}</h1>
                 <div class="blogpagex dynamic-courses-wrapper catx">
@@ -49,6 +50,7 @@
                     @endforelse
                 </div>
             @endif
+            </div>
             <div class="blogpagex dynamic-courses-wrapper">
             @forelse($posts as $post)
                 @if(!$post->inter)
@@ -61,18 +63,8 @@
             @endforelse
             </div>
             @if (!is_array($posts) && $posts->hasPages())
-                <div class="blog_pagination">
-                    @if (!$posts->onFirstPage())
-                        <a  href="{{ $posts->previousPageUrl() }}">&laquo;</a>
-                    @endif
-
-                    @foreach ( $posts->getUrlRange(max(1, $posts->currentPage() - 2), min($posts->count() + 3, $posts->count() + 1)) as $page => $url)
-                        <a @if($posts->currentPage() == $page) class="active" @endif href="{{ $url }}">{{ $page }}</a>
-                    @endforeach
-
-                    @if ($posts->hasMorePages())
-                        <a href="{{  $posts->nextPageUrl()  }}">&raquo;</a>
-                    @endif
+                <div class="blog_pagination" >
+                    {{ $posts->links('vendor.binshopsblog_admin.custom') }}
                 </div>
             @endif
        </div>
