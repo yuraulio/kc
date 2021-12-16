@@ -76,34 +76,6 @@
     margin-right: auto;
 }
 
-
-/* Remove fixed high for small devices */
-@media only screen and (max-width: 768px) {
-    /* For mobile phones: */
-    .blog img, iframe, table{
-        width: auto !important;
-        height: auto !important;
-        min-width: 0;
-    }
-
-    .comment_author img {
-        width: 25px !important;
-    }
-
-    .blogpagex.item {
-        flex: 0 0 100% !important;                       /* don't grow, don't shrink, width */
-      }
-      .blogpagex.catx > .catx-sub {
-        flex: 0 0 100% !important;
-    }
-    .blogpagex.item-inter {
-        flex: 0 0 100% !important;
-    }
-    .blogx-container > .blog_body_content {
-        padding: 5px 10px !important;
-    }
-  }
-
   #comment {
     width: 100%;
     background: white;
@@ -272,3 +244,73 @@
 .smallimg img {
     height: 25px !important;
 }
+
+.badge {
+    border-radius: 5px;
+    padding: 4px 8px;
+    cursor: pointer;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-right: 5px;
+    display: inline-block;
+  }
+
+  .primary {
+      border: 1.5px solid #407bc9;
+      color: #407bc9;
+      background-color: #fff;
+} /* Green */
+
+.badge.primary:hover {
+    color: #fff;
+    background-color: #407bc9;
+}
+
+.badgelink {
+    text-decoration: none !important;
+}
+.marbot {
+    margin-bottom: 20px !important;
+}
+
+.maralign {
+    margin-right: 1.5% !important;
+    margin-left: 1.5%;
+}
+
+/* Remove fixed high for small devices */
+@media only screen and (max-width: 768px) {
+    /* For mobile phones: */
+    .blog img, iframe, table{
+        width: auto !important;
+        height: auto !important;
+        min-width: 0;
+    }
+
+    .comment_author img {
+        width: 25px !important;
+    }
+
+    .blogpagex.item {
+        flex: 0 0 100% !important;                       /* don't grow, don't shrink, width */
+      }
+      .blogpagex.catx > .catx-sub {
+        flex: 0 0 100% !important;
+    }
+    .blogpagex.item-inter {
+        flex: 0 0 100% !important;
+    }
+    .blogx-container > .blog_body_content {
+        padding: 5px 10px !important;
+    }
+    .maralign {
+        margin-right: 0% !important;
+        margin-left: 0%;
+    }
+
+    .blogpagex.item {
+        margin-right: 0% !important;
+        margin-left: 0% !important;
+      }
+  }

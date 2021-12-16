@@ -43,6 +43,7 @@ class BinshopsReaderController extends Controller
         $title = 'Blog Page'; // default title...
         $category = null;
         $categoryChain = null;
+        $subcategories = [];
         $posts = array();
         if ($category_slug) {
             $category = BinshopsCategoryTranslation::where("slug", $category_slug)->with('category')->firstOrFail()->category;
@@ -59,6 +60,12 @@ class BinshopsReaderController extends Controller
                 $trans->post = $post;
                 array_push($posts, $trans);
             }
+            $category->loadSiblings();
+            $subcategories = $category->siblings->load('categoryTranslations')->map(
+                function ($cat) use ($request) {
+                    return $cat->categoryTranslations->where('lang_id', $request->get('lang_id'))->first();
+                }
+            );
             $category = $category->categoryTranslations()->where('lang_id', $request->get('lang_id'))->first();
 
             // at the moment we handle this special case (viewing a category) by hard coding in the following two lines.
@@ -73,6 +80,12 @@ class BinshopsReaderController extends Controller
                 ->where('posted_at', '<', Carbon::now()->format('Y-m-d H:i:s'))
                 ->orderBy("posted_at", "desc")
                 ->paginate(config("binshopsblog.per_page", 10));
+
+            $subcategories = BinshopsCategory::whereParentId(0)->orWhereNull('parent_id')->get()->load('categoryTranslations')->map(
+                    function ($cat) use ($request) {
+                        return $cat->categoryTranslations->where('lang_id', $request->get('lang_id'))->first();
+                    }
+                );
         }
 
         //load category hierarchy
@@ -87,7 +100,8 @@ class BinshopsReaderController extends Controller
             'categories' => $rootList,
             'posts' => $posts,
             'title' => $title,
-            'category' => $category
+            'category' => $category,
+            'subcategories' => $subcategories
         ]);
     }
 

@@ -11,7 +11,9 @@
                 @php
                 $cat = $category->categoryTranslations->where('lang_id', $lang_id)->first();
                 @endphp
-                    <a href="{{"/en/blog/categories/$cat->slug"}}">{{ $cat->category_name }}</a>
+                    @if(!$category->parent_id)
+                        <a href="{{"/en/blog/categories/$cat->slug"}}">{{ $cat->category_name }}</a>
+                    @endif
                 @empty
                     Uncategorized
                 @endforelse
