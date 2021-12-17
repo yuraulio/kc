@@ -1,0 +1,113 @@
+{
+    "name": "laravel/laravel",
+    "type": "project",
+    "description": "The Laravel Framework.",
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^7.3.0|^8.0",
+        "alexusmai/laravel-file-manager": "^2.5",
+        "barryvdh/laravel-dompdf": "^1.0.2",
+        "doctrine/dbal": "^3.1",
+        "dompdf/dompdf": "^1.0",
+        "embed/embed": "^3.0",
+        "fideloper/proxy": "^4.0",
+        "hardevine/shoppingcart": "^3.0",
+        "intervention/image": "^2.5",
+        "jenssegers/agent": "^2.6",
+        "laravel/cashier": "^13.3",
+        "laravel/framework": "^8.0",
+        "laravel/legacy-factories": "^1.0",
+        "laravel/passport": "^10.1",
+        "laravel/tinker": "^2.0",
+        "laravel/ui": "^3.0",
+        "maatwebsite/excel": "^3.1",
+        "propaganistas/laravel-phone": "^4.3",
+        "spatie/flysystem-dropbox": "^1.0",
+        "stripe/stripe-php": "^7.87",
+        "vemcogroup/laravel-sparkpost-driver": "^4.0",
+        "vimeo/vimeo-api": "^3.0",
+        "watson/sitemap": "^4.0",
+        "facebook/php-business-sdk": "11.0.0"
+    },
+    "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.5",
+        "beyondcode/laravel-dump-server": "^1.0",
+        "facade/ignition": "^2.3.6",
+        "filp/whoops": "^2.0",
+        "fzaninotto/faker": "^1.9",
+        "mockery/mockery": "^1.0",
+        "nunomaduro/collision": "^5.0",
+        "phpunit/phpunit": "^9.0"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": []
+        }
+    },
+    "autoload": {
+        
+        "psr-4": {
+            "App\\": "app/",
+            "Laravel\\Cashier\\": "app/Model",
+            "Laravel\\Cashier\\Http\\Controllers\\": "app/Http/Controllers",
+            "Alexusmai\\LaravelFileManager\\Controllers\\": "app/overrides/file-manager/",
+            "Alexusmai\\LaravelFileManager\\":"app/overrides/file-manager/model/",
+            "Laravel\\Cashier\\Concerns\\": "app/Concerns",
+            "Library\\": "app/Library/",
+            "Dompdf\\Adapter\\": "app/overrides/Dompdf/Adapter",
+            "Dompdf\\": "app/overrides/Dompdf/",
+            "Dompdf\\FontMetrics\\": "app/overrides/Dompdf/FontMetrics/",
+            "Dompdf\\Image\\": "app/overrides/Dompdf/Image/"
+            
+
+        },
+        "classmap": [
+            "database/seeds",
+            "database/factories",
+            "app/overrides/Dompdf/lib",
+            "app/overrides/dompdf"
+        ]
+
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "LaravelFrontendPresets\\ArgonPreset\\": "packages/LaravelFrontendPresets/ArgonPreset/src",
+            "Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
+        ],
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "@php artisan key:generate --ansi"
+        ],
+        "post-install-cmd": [
+            "@php artisan pcl:post-install"
+        ],
+        "post-update-cmd": [
+            "@php artisan pcl:post-update"
+        ]
+    },
+    "repositories": {
+        "cartalyst": {
+            "type": "composer",
+            "url": "https://packages.cartalyst.com"
+        }
+    }
+}
