@@ -2190,16 +2190,16 @@
         },
         {
             "name": "intervention/image",
-            "version": "2.7.0",
+            "version": "2.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Intervention/image.git",
-                "reference": "9a8cc99d30415ec0b3f7649e1647d03a55698545"
+                "reference": "744ebba495319501b873a4e48787759c72e3fb8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Intervention/image/zipball/9a8cc99d30415ec0b3f7649e1647d03a55698545",
-                "reference": "9a8cc99d30415ec0b3f7649e1647d03a55698545",
+                "url": "https://api.github.com/repos/Intervention/image/zipball/744ebba495319501b873a4e48787759c72e3fb8c",
+                "reference": "744ebba495319501b873a4e48787759c72e3fb8c",
                 "shasum": ""
             },
             "require": {
@@ -2258,7 +2258,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Intervention/image/issues",
-                "source": "https://github.com/Intervention/image/tree/2.7.0"
+                "source": "https://github.com/Intervention/image/tree/2.7.1"
             },
             "funding": [
                 {
@@ -2270,7 +2270,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-10-03T14:17:12+00:00"
+            "time": "2021-12-16T16:49:26+00:00"
         },
         {
             "name": "intervention/imagecache",
@@ -3110,41 +3110,43 @@
         },
         {
             "name": "lcobucci/jwt",
-            "version": "4.1.5",
+            "version": "4.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lcobucci/jwt.git",
-                "reference": "fe2d89f2eaa7087af4aa166c6f480ef04e000582"
+                "reference": "55564265fddf810504110bd68ca311932324b0e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/fe2d89f2eaa7087af4aa166c6f480ef04e000582",
-                "reference": "fe2d89f2eaa7087af4aa166c6f480ef04e000582",
+                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/55564265fddf810504110bd68ca311932324b0e9",
+                "reference": "55564265fddf810504110bd68ca311932324b0e9",
                 "shasum": ""
             },
             "require": {
-                "ext-hash": "*",
-                "ext-json": "*",
                 "ext-mbstring": "*",
                 "ext-openssl": "*",
-                "ext-sodium": "*",
                 "lcobucci/clock": "^2.0",
                 "php": "^7.4 || ^8.0"
             },
             "require-dev": {
-                "infection/infection": "^0.21",
+                "infection/infection": "^0.20",
                 "lcobucci/coding-standard": "^6.0",
-                "mikey179/vfsstream": "^1.6.7",
-                "phpbench/phpbench": "^1.0",
+                "mikey179/vfsstream": "^1.6",
+                "phpbench/phpbench": "^0.17",
                 "phpstan/extension-installer": "^1.0",
                 "phpstan/phpstan": "^0.12",
                 "phpstan/phpstan-deprecation-rules": "^0.12",
                 "phpstan/phpstan-phpunit": "^0.12",
                 "phpstan/phpstan-strict-rules": "^0.12",
                 "phpunit/php-invoker": "^3.1",
-                "phpunit/phpunit": "^9.5"
+                "phpunit/phpunit": "^9.4"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.0-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Lcobucci\\JWT\\": "src"
@@ -3168,7 +3170,7 @@
             ],
             "support": {
                 "issues": "https://github.com/lcobucci/jwt/issues",
-                "source": "https://github.com/lcobucci/jwt/tree/4.1.5"
+                "source": "https://github.com/lcobucci/jwt/tree/4.0.4"
             },
             "funding": [
                 {
@@ -3180,7 +3182,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2021-09-28T19:34:56+00:00"
+            "time": "2021-09-28T19:18:28+00:00"
         },
         {
             "name": "league/commonmark",
@@ -4838,20 +4840,23 @@
         },
         {
             "name": "phenx/php-font-lib",
-            "version": "0.5.2",
+            "version": "0.5.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/PhenX/php-font-lib.git",
-                "reference": "ca6ad461f032145fff5971b5985e5af9e7fa88d8"
+                "url": "https://github.com/dompdf/php-font-lib.git",
+                "reference": "dd448ad1ce34c63d09baccd05415e361300c35b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PhenX/php-font-lib/zipball/ca6ad461f032145fff5971b5985e5af9e7fa88d8",
-                "reference": "ca6ad461f032145fff5971b5985e5af9e7fa88d8",
+                "url": "https://api.github.com/repos/dompdf/php-font-lib/zipball/dd448ad1ce34c63d09baccd05415e361300c35b4",
+                "reference": "dd448ad1ce34c63d09baccd05415e361300c35b4",
                 "shasum": ""
             },
+            "require": {
+                "ext-mbstring": "*"
+            },
             "require-dev": {
-                "phpunit/phpunit": "^4.8.35 || ^5 || ^6 || ^7"
+                "symfony/phpunit-bridge": "^3 || ^4 || ^5"
             },
             "type": "library",
             "autoload": {
@@ -4872,10 +4877,10 @@
             "description": "A library to read, parse, export and make subsets of different types of font files.",
             "homepage": "https://github.com/PhenX/php-font-lib",
             "support": {
-                "issues": "https://github.com/PhenX/php-font-lib/issues",
-                "source": "https://github.com/PhenX/php-font-lib/tree/0.5.2"
+                "issues": "https://github.com/dompdf/php-font-lib/issues",
+                "source": "https://github.com/dompdf/php-font-lib/tree/0.5.4"
             },
-            "time": "2020-03-08T15:31:32+00:00"
+            "time": "2021-12-17T19:44:54+00:00"
         },
         {
             "name": "phenx/php-svg-lib",
@@ -11949,5 +11954,5 @@
         "php": "^7.3.0|^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.0.0"
 }
