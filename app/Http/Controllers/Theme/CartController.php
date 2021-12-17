@@ -1130,6 +1130,9 @@ class CartController extends Controller
                                    
                             }
         
+                            $ev->users()->where('id',$dpuser->id)->detach();
+                            $ev->users()->save($dpuser,['paid'=>false,'payment_method'=>$payment_method_id]);
+
                             $input['paymentMethod'] = $payment_method_id;
                             $input['amount'] = $namount;
                             $input['couponCode'] = $couponCode;
@@ -1202,6 +1205,9 @@ class CartController extends Controller
                         $payment_method_id = $ev->paymentMethod->first()->id;
                            
                     }
+
+                    $ev->users()->where('id',$dpuser->id)->detach();
+                    $ev->users()->save($dpuser,['paid'=>false,'payment_method'=>$payment_method_id]);
 
                     $input['paymentMethod'] = $payment_method_id;
                     $input['amount'] = $namount;
