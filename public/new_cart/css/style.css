@@ -264,6 +264,13 @@ label.custom-control-label{font-size:19px;}
     color:red;
 }
 
+#app .previous-participant-link img{height: 15px!important;}
+#app h1{padding-left:0!important;}
+#app .prev-next-wrap{margin-bottom: 10px!important;}
+#app .summary{max-width: 405px;}
+#secure3ds .checkout-price-wrap{border-bottom: 0!important; height:45px!important;}
+
+
 /* ==========================================================================
    ALERTS
    ========================================================================== */

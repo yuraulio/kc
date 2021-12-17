@@ -186,7 +186,7 @@ class User extends Authenticatable
 
     public function events()
     {
-        return $this->belongsToMany(Event::class, 'event_user')->withPivot('paid', 'expiration','comment')->with('summary1','category','slugable');
+        return $this->belongsToMany(Event::class, 'event_user')->withPivot('paid', 'expiration','comment','payment_method')->with('summary1','category','slugable')->wherePivot('paid',true);
     }
 
     public function events_for_user_list()
@@ -196,7 +196,7 @@ class User extends Authenticatable
 
     public function subscriptionEvents()
     {
-        return $this->belongsToMany(Event::class, 'subscription_user_event')->withPivot('expiration','event_id');
+        return $this->belongsToMany(Event::class, 'subscription_user_event')->withPivot('expiration','event_id','payment_method');
     }
 
     public function ticket()

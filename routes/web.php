@@ -371,8 +371,9 @@ Route::group(['middleware' => ['web']], function () {
             Route::get('/checkout', [ 'as' => 'checkout.index', 'uses' => 'Theme\CartController@checkoutIndex' ]);
 
             Route::get('/remove/{item}', [ 'as' => 'cart.remove-item', 'uses' => 'Theme\CartController@dpremove']);
+            Route::get('/summary/remove/{item}', [ 'as' => 'cart.remove-item', 'uses' => 'Theme\CartController@dpremove']);
 
-            Route::post('/cart/update', [ 'as' => 'cart.update', 'uses' => 'Theme\CartController@update' ]);
+            Route::post('/cart/update', [ 'as' => 'cart.update', 'uses' => 'PaymentController@update' ]);
 
             Route::get('/enroll-for-free/{content}', 'Theme\HomeController@enrollToFreeEvent')->name('enrollForFree');
 

@@ -127,12 +127,12 @@ class EventController extends Controller
     public function assignPaymentMethod(Request $request, Event $event)
     {
 
-        if(count($event->users) > 0){
+        /*if(count($event->users) > 0){
             return response()->json([
                 'success' => false,
                 'message' => 'Payment Method Cannot Changed'
             ]);
-        }
+        }*/
 
         $event->paymentMethod()->detach();
         $event->paymentMethod()->attach($request->payment_method);

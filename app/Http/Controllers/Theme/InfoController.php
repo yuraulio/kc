@@ -418,9 +418,11 @@ class InfoController extends Controller
             $expirationDate = '';
             $eventslug = '';
             $stripe = false;
+            $paymentMethodId = 0;
 
             if ($thisevent) {
 
+                $paymentMethodId = $thisevent->paymentMethod->first() ? $thisevent->paymentMethod->first()->id : 0;
                 $stripe = ($thisevent->paymentMethod->first() && $thisevent->paymentMethod->first()->id !== 1);
                 if($thisevent->view_tpl === 'elearning_event'){
 
@@ -510,17 +512,17 @@ class InfoController extends Controller
                         $monthsExp = '+' . $thisevent->expiration .'months';
                         $expiration_date = date('Y-m-d', strtotime($monthsExp, strtotime($today)));
                     }
-
+                    $thisevent->users()->where('id',$checkemailuser)->detach();
                     if($tickettypedrop == 7){
                         //$tmp = EventStudent::firstOrCreate(['event_id' => $evid, 'student_id' => $checkemailuser->id, 'trans_id' => $transaction->id,'comment'=>'unilever']);
-                        $thisevent->users()->save($checkemailuser,['comment'=>'unilever','expiration'=>$expiration_date,'paid'=>true]);
+                        $thisevent->users()->save($checkemailuser,['comment'=>'unilever','expiration'=>$expiration_date,'paid'=>true,'payment_method'=>$paymentMethodId]);
                     }else{
 
                         if($transaction->coupon_code != ''){
                             //$tmp = EventStudent::firstOrCreate(['event_id' => $evid, 'student_id' => $checkemailuser->id, 'trans_id' => $transaction->id,'comment'=>'coupon']);
-                            $thisevent->users()->save($checkemailuser,['comment'=>'coupon','expiration'=>$expiration_date,'paid'=>true]);
+                            $thisevent->users()->save($checkemailuser,['comment'=>'coupon','expiration'=>$expiration_date,'paid'=>true,'payment_method'=>$paymentMethodId]);
                         }else{
-                            $thisevent->users()->save($checkemailuser,['expiration'=>$expiration_date,'paid'=>true]);
+                            $thisevent->users()->save($checkemailuser,['expiration'=>$expiration_date,'paid'=>true,'payment_method'=>$paymentMethodId]);
                         }
 
                     }
@@ -712,13 +714,13 @@ class InfoController extends Controller
                 }
 
                 if($tickettypedrop == 7){
-                        $thisevent->users()->save($user,['comment'=>'unilever','expiration'=>$expiration_date,'paid'=>true]);
+                        $thisevent->users()->save($user,['comment'=>'unilever','expiration'=>$expiration_date,'paid'=>true,'payment_method'=>$paymentMethodId]);
                 }else{
 
                     if($transaction->coupon_code != ''){
-                        $thisevent->users()->save($user,['comment'=>'coupon','expiration'=>$expiration_date,'paid'=>true]);
+                        $thisevent->users()->save($user,['comment'=>'coupon','expiration'=>$expiration_date,'paid'=>true,'payment_method'=>$paymentMethodId]);
                     }else{
-                        $thisevent->users()->save($user,['expiration'=>$expiration_date,'paid'=>true]);
+                        $thisevent->users()->save($user,['expiration'=>$expiration_date,'paid'=>true,'payment_method'=>$paymentMethodId]);
                     }
 
                 }

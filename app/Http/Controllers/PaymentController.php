@@ -38,6 +38,8 @@ class PaymentController extends Controller
         session()->put('payment_method',$paymentMethod);
         Session::put('noActionEmail',true);
 
+        $duration = isset($input['duration']) ? $input['duration'] : '';
+
         $paymentMethod = PaymentMethod::find($paymentMethod);
 
         //dd($request->all());
@@ -53,10 +55,14 @@ class PaymentController extends Controller
         $paymentIntent['payment_method'] = Arr::only($paymentIntent['payment_method'] ?? [], 'id');
         $input = encrypt($input);
         
+        $price = $payment->amount();
+
         return view('cashier.payment', [
             'stripeKey' => env('PAYMENT_PRODUCTION') ? $paymentMethod->processor_options['key'] : $paymentMethod->test_processor_options['key'],
             'amount' => $payment->amount(),
             'payment' => $payment,
+            'price' => $price,
+            'duration' => $duration,
             'paymentIntent' => array_filter($paymentIntent),
             'paymentMethod' => (string) request('source_type', optional($payment->payment_method)->type),
             'errorMessage' => request('redirect_status') === 'failed'
@@ -108,4 +114,54 @@ class PaymentController extends Controller
         ]);
 
     }
+
+
+    public function dpremove($item)
+    {
+        
+        //dd('sex');
+        /*$t = Cart::get($id);
+        $t->remove($id);*/
+        $id = $item;
+        Cart::remove($id);
+
+        //UPDATE SAVED CART IF USER LOGGED
+        if($user = Auth::user()) {
+
+           // dd($user->cart);
+            $existingcheck = ShoppingCart::where('identifier', $user->id)->first();
+
+            if($existingcheck) {
+                $existingcheck->delete($user->id);
+
+            }
+
+            if($user->cart){
+               $user->cart->delete();
+            }
+        }
+
+
+        $isAjax = request()->ajax();
+
+        if ($isAjax) {
+            return response([ 'message' => 'success', 'id' => $id ]);
+        }
+
+        Cart::instance('default')->destroy();
+        Session::forget('pay_seats_data');
+        Session::forget('transaction_id');
+        Session::forget('cardtype');
+        Session::forget('installments');
+        //Session::forget('pay_invoice_data');
+        Session::forget('pay_bill_data');
+        Session::forget('deree_user_data');
+        Session::forget('user_id');
+        Session::forget('coupon_code');
+        Session::forget('coupon_price');
+
+        return Redirect::to('/');
+
+    }
+
 }

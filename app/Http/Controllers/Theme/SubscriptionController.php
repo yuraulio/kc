@@ -350,7 +350,7 @@ class SubscriptionController extends Controller
                     $user->events()->attach($event->id);
                 }*/
 
-                $user->subscriptionEvents()->attach($event->id,['subscription_id'=>$charge['id']]);
+                $user->subscriptionEvents()->attach($event->id,['subscription_id'=>$charge['id'],'payment_method'=>$event->paymentMethod->first()->id]);
 
             
                 $data = [];  

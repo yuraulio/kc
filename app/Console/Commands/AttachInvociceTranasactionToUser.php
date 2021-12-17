@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Model\Invoice;
 use App\Model\User;
+use App\Model\Event;
 use App\Model\Transaction;
 use Carbon\Carbon;
 
@@ -44,6 +45,11 @@ class AttachInvociceTranasactionToUser extends Command
         $user = User::find($this->argument('user'));
 
         if(!$user){
+            return 0;
+        }
+
+        $event = Event::find($this->argument('event'));//$user->events->where('id',$this->argument('event'))->first();
+        if(!$event){
             return 0;
         }
 
@@ -102,7 +108,7 @@ class AttachInvociceTranasactionToUser extends Command
         }
 
        
-        $event = $user->events->where('id',$this->argument('event'))->first();
+        
 		$transaction->event()->save($event);
 		$transaction->user()->save($user);
 
