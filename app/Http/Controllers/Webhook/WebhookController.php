@@ -55,9 +55,8 @@ class WebhookController extends BaseWebhookController
 		$eventId = explode('_',$subscription->stripe_price)[3];
 
 		//$subscriptionPaymentMethod = $user->events->where('id',$eventId)->first();
-		$subscriptionPaymentMethod = $user->events_for_user_list->where('id',$eventId)->first();
-
-		
+		$subscriptionPaymentMethod = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first();
+		return print_r($subscriptionPaymentMethod->id);
 		$paymentMethod = PaymentMethod::find($subscriptionPaymentMethod->pivot->payment_method);
 
 		$data = $payload['data']['object'];

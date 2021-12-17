@@ -1067,11 +1067,12 @@ class CartController extends Controller
 
                 $instamount =  round($namount / $installments, 2);
 
-                if($instamount - floor($instamount)>0){
+                /*if($instamount - floor($instamount)>0){
                     $planAmount = str_replace('.','',$instamount);
                 }else{
                     $planAmount  = $instamount . '00';
-                }
+                }*/
+                $planAmount  = $instamount * 100 ;
                     //$dpuser->subscription()->syncWithStripe();
                    // dd("Entity ready to be billed!");
                     // Check if the entity has any active subscription
@@ -1159,12 +1160,8 @@ class CartController extends Controller
             }
             else {
 
-                if($namount - floor($namount)>0){
-                    $stripeAmount = str_replace('.','',$namount);
-                }else{
-                    $stripeAmount  = $namount . '00';
-                }
-            
+         
+                $stripeAmount = $namount * 100;
                 $dpuser->updateStripeCustomer([
                     'name' => $st_name,
                     'email' => $dpuser->email,
