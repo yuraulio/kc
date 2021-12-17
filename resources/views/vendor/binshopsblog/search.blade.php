@@ -9,7 +9,7 @@
 <main id="main-area" role="main">
     <div class="section section--dynamic-learning">
        <div class="container">
-            <div class="search-results-head">
+            <div class="search-results-head search-form-outer maralign marbot">
                 @php
                     $results = count ($search_results);
                     $search_term = \Request::get('s');
@@ -23,19 +23,21 @@
             </div>
 
             @php $search_count = 0;@endphp
+            <div class="blogpagex dynamic-courses-wrapper">
             @forelse($search_results as $result)
                 @if(isset($result->indexable))
                     @php $search_count += $search_count + 1; @endphp
                     @php $post = $result->indexable;@endphp
-                    <div class="blogpagex dynamic-courses-wrapper">
+
                     @if($post && is_a($post,\BinshopsBlog\Models\BinshopsPostTranslation::class))
                         @include("binshopsblog::partials.index_loop")
                     @else
                         <div class='alert alert-danger'>Unable to show this search result - unknown type</div>
                     @endif
-                    </div>
+
                 @endif
             @endforeach
+        </div>
         </div>
     </div>
 </main>
