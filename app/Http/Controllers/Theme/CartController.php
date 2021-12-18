@@ -1114,6 +1114,10 @@ class CartController extends Controller
 
               
                         try{
+                            
+                            $ev->users()->wherePivot('user_id',$dpuser->id)->detach();
+                            $ev->users()->save($dpuser,['paid'=>false,'payment_method'=>$payment_method_id]);
+
                             $charge = $dpuser->newSubscription($name, $plan->id)->create($input['payment_method'],
                             ['email' => $dpuser->email],
                                         ['metadata' => ['installments_paid' => 0, 'installments' => $installments]]);
@@ -1131,7 +1135,7 @@ class CartController extends Controller
                                    
                             }
         
-                            $ev->users()->where('id',$dpuser->id)->detach();
+                            $ev->users()->wherePivot('user_id',$dpuser->id)->detach();
                             $ev->users()->save($dpuser,['paid'=>false,'payment_method'=>$payment_method_id]);
 
                             $input['paymentMethod'] = $payment_method_id;
@@ -1180,6 +1184,9 @@ class CartController extends Controller
                
                 try{
                     
+                    //$ev->users()->where('id',$dpuser->id)->detach();
+                    //$ev->users()->save($dpuser,['paid'=>false,'payment_method'=>$payment_method_id]);
+
                     $charge = $dpuser->charge(
                         $stripeAmount,
                         $input['payment_method'],
@@ -1203,7 +1210,7 @@ class CartController extends Controller
                            
                     }
 
-                    $ev->users()->where('id',$dpuser->id)->detach();
+                    $ev->users()->wherePivot('user_id',$dpuser->id)->detach();
                     $ev->users()->save($dpuser,['paid'=>false,'payment_method'=>$payment_method_id]);
 
                     $input['paymentMethod'] = $payment_method_id;

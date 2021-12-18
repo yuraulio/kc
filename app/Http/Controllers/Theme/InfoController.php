@@ -512,7 +512,8 @@ class InfoController extends Controller
                         $monthsExp = '+' . $thisevent->expiration .'months';
                         $expiration_date = date('Y-m-d', strtotime($monthsExp, strtotime($today)));
                     }
-                    $thisevent->users()->where('id',$checkemailuser->id)->detach();
+                    //$thisevent->users()->where('id',$checkemailuser)->detach();
+                    $thisevent->users()->wherePivot('user_id',$checkemailuser->id)->detach();
                     if($tickettypedrop == 7){
                         //$tmp = EventStudent::firstOrCreate(['event_id' => $evid, 'student_id' => $checkemailuser->id, 'trans_id' => $transaction->id,'comment'=>'unilever']);
                         $thisevent->users()->save($checkemailuser,['comment'=>'unilever','expiration'=>$expiration_date,'paid'=>true,'payment_method'=>$paymentMethodId]);
