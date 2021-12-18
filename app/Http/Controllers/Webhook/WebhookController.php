@@ -56,7 +56,8 @@ class WebhookController extends BaseWebhookController
 
 		//$subscriptionPaymentMethod = $user->events->where('id',$eventId)->first();
 		$subscriptionPaymentMethod = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first();
-		return print_r($subscriptionPaymentMethod->id);
+		//$subscriptionPaymentMethod = $user->events()->wherePivot('event_id',$eventId)->first();
+		//return print_r(count($user->events_for_user_list));
 		$paymentMethod = PaymentMethod::find($subscriptionPaymentMethod->pivot->payment_method);
 
 		$data = $payload['data']['object'];
@@ -83,7 +84,7 @@ class WebhookController extends BaseWebhookController
 		$stripeSubscription->save(); 
 
 		//$invoices = $user->events->where('id',$eventId)->first()->invoicesByUser($user->id)->get();
-		$invoices = $user->events_for_user_list->where('id',$eventId)->first()->invoicesByUser($user->id)->get();
+		$invoices = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first()->invoicesByUser($user->id)->get();
 		
 		if(count($invoices) > 0){
 			$invoice = $invoices->last();
@@ -148,7 +149,8 @@ class WebhookController extends BaseWebhookController
                 	$transaction = Transaction::create($transaction_arr);
 
 					//$transaction->event()->save($user->events->where('id',$eventId)->first());
-					$transaction->events_for_user_list()->save($user->events->where('id',$eventId)->first());
+					$transaction->event()->save($user->events_for_user_list()->wherePivot('event_id',$eventId)->first());
+					
 					$transaction->user()->save($user);
 
 				}
@@ -169,7 +171,8 @@ class WebhookController extends BaseWebhookController
                 $elearningInvoice->save();
 
                 $elearningInvoice->user()->save($user);
-                $elearningInvoice->event()->save($user->events->where('id',$eventId)->first());
+                $elearningInvoice->event()->save($user->events_for_user_list()->wherePivot('event_id',$eventId)->first());
+				//$elearningInvoice->event()->save($user->events()->wherePivot('id',$eventId)->first());
                 $elearningInvoice->transaction()->save($transaction);
 				
 				$pdf = $elearningInvoice->generateInvoice();
