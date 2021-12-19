@@ -315,3 +315,16 @@
         margin-left: 0% !important;
       }
   }
+
+
+.blog ol li {
+    list-style-type: decimal !important;
+}
+
+.blog ul {
+    padding-left: 40px !important;
+}
+
+.blog ul li {
+    list-style-type: circle !important;
+}
