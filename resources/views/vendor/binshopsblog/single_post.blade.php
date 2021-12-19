@@ -51,8 +51,8 @@
 
 
                 @if(config("binshopsblog.comments.type_of_comments_to_show","built_in") !== 'disabled')
-                    <div class="" id='maincommentscontainer'>
-                        <h2 class='text-center' id='binshopsblogcomments'>Comments</h2>
+                    <div style="margin-top: 20px" id='maincommentscontainer'>
+                        <h2 id='binshopsblogcomments'>Comments</h2>
                         @include("binshopsblog::partials.show_comments")
                     </div>
                 @else

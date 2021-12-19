@@ -22,12 +22,17 @@
 <main id="main-area" role="main">
     <div class="section section--dynamic-learning">
        <div class="container ">
-            @if (config('binshopsblog.search.search_enabled') )
-                @include('binshopsblog::sitewide.search_form')
-            @endif
-            <div class="row mb-5">
-                <div class="col-lg-12 marbot maralign">
-                    {{-- <span>Top Categories:</span> --}}
+           <div class="row mb-5">
+               <div class="col-lg-12 marbot">
+                    @if ($category)
+                        <h1>{{$category->category_name}}</h1>
+                    @else
+                        <h1>Our Blog</h1>
+                    @endif
+               </div>
+           </div>
+           <div class="row mb-5">
+                <div class="col-lg-12 marbot">
                     @foreach($subcategories as $subcategory)
                         <a class="badgelink" href="/en/blog/categories/{{$subcategory->slug}}">
                             <label class="badge primary">{{ $subcategory->category_name }}</label>
@@ -35,9 +40,8 @@
                     @endforeach
                 </div>
             </div>
-            <div class="maralign">
+            <div class="">
             @if($category)
-                <h1>{{$category->category_name}}</h1>
                 <div class="blogpagex dynamic-courses-wrapper catx">
                     <div class="catx-sub">{!! $category->category_description !!}</div>
                     @forelse(collect($posts)->slice(0, 1) as $post)

@@ -24,7 +24,8 @@
 
 <hr/>
 
-Posted <strong>{{$post->post->posted_at->diffForHumans()}}</strong>
+{{-- Posted <strong>{{$post->post->posted_at->diffForHumans()}}</strong> --}}
+@include("global.social", ['summary' => $post->gen_seo_title(), 'title' => $post->gen_seo_title()])
 
 @includeWhen($post->author,"binshopsblog::partials.author",['post'=>$post])
 @includeWhen($post->categories,"binshopsblog::partials.categories",['post'=>$post])

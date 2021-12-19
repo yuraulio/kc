@@ -174,14 +174,14 @@
 }
 .blogpagex.item {
     flex: 0 0 30%;                       /* don't grow, don't shrink, width */
-    margin-bottom: 5px !important;
+    margin-bottom: 25px !important;
     padding: 0px !important;
     flex-direction: column !important;
     align-content: flex-start !important;
     box-shadow: none !important;
     justify-content: unset !important;
-    margin-right: 1.5% !important;
-    margin-left: 1.5%;
+    margin-right: 3% !important;
+    /* margin-left: 1.5%; */
   }
   .blogpagex.dynamic-courses-wrapper :last-child{
     margin-right: 0% !important;                   /* enable flex items to wrap */
@@ -237,10 +237,10 @@
     overflow: hidden;
 }
 .blogx-container > .blog_body_content {
-    padding: 50px 100px;
+    padding: 50px 50px;
 }
 .blogx-container {
-    max-width: 1100px !important;
+    max-width: 1200px !important;
 }
 .smallimg img {
     height: 25px !important;
