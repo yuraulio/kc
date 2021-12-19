@@ -38,11 +38,11 @@
 								@endif
 
                                 @if (Auth::check())
-								
+
 								<?php
 
 									$img_src = get_profile_image(Auth::user()->image);
-									
+
 								?>
 
                                 <li class="account-menu login-pad">
@@ -74,10 +74,18 @@
                                 <li class="header-search-area">
 									<a href="javascript:void(0)" title="Search" class="search-toggle"><img src="{{cdn('/theme/assets/images/icons/icon-magnifier.svg')}}" class="replace-with-svg" alt="Search"></a>
 									<div class="header-search-wrapper">
-										<form method="get" action="search/term">
-                                        {{ csrf_field() }}
-											<input id="sat" type="text" name="search_term"  class="search-input" placeholder="Search">
-										</form>
+
+                                        @if(request()->segment(2) == 'blog')
+                                            <form method='get' action='{{route("binshopsblog.search", app('request')->get('locale'))}}' class='text-center'>
+                                                {{ csrf_field() }}
+                                                <input type="input" class="search-input" name="s" placeholder="Search" id='name' value="{{ \Request::get('s') }}"/>
+                                            </form>
+                                        @else
+                                            <form method="get" action="search/term">
+                                                {{ csrf_field() }}
+                                                <input id="sat" type="text" name="search_term"  class="search-input" placeholder="Search">
+                                            </form>
+                                        @endif
 									</div>
 
 
@@ -88,7 +96,7 @@
 						</div>
 
 						<ul class="main-menu">
-                       
+
 
                             @if (!empty($header_menus))
                                 @foreach ($header_menus['menu']['Header'] as $key => $row)
@@ -98,6 +106,9 @@
                                         <a title="{{ $row['data']['name'] }}" href="{{ $row['data']['slugable']['slug'] }}">{{ $row['data']['name'] }}</a>
                                     </li>
 								@endforeach
+                                <li>
+                                    <a title="Blog" href="/en/blog">Blog</a>
+                                </li>
 								{{--<li>
 								<a title="Corporate Training" href="/corporate-training">Corporate Training</a>
 								</li>--}}
