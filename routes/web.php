@@ -21,9 +21,9 @@ Auth::routes(['register' => false]);
 Route::get('pricing', 'PageController@pricing')->name('page.pricing');
 Route::get('lock', 'PageController@lock')->name('page.lock');
 
-Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function () {
+Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function () {
 
-    Route::get('/','HomeController@index')->name('home');
+    Route::get('/', 'HomeController@index')->name('home');
 
     Route::resource('category', 'CategoryController', ['except' => ['show']]);
     Route::resource('tag', 'TagController', ['except' => ['show']]);
@@ -40,10 +40,10 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::resource('faqs', 'FaqController', ['except' => ['show']]);
     Route::resource('career', 'CareerController', ['except' => ['show']]);
     Route::resource('city', 'CityController', ['except' => ['show']]);
-    Route::resource('section', 'SectionController', ['except' => ['show','index','edit','create']]);
+    Route::resource('section', 'SectionController', ['except' => ['show', 'index', 'edit', 'create']]);
     Route::resource('ticket', 'TicketController', ['except' => ['show']]);
-    Route::resource('summary', 'SummaryController', ['except' => ['show','index','edit','create']]);
-    Route::resource('benefit', 'BenefitController', ['except' => ['show','index','edit','create']]);
+    Route::resource('summary', 'SummaryController', ['except' => ['show', 'index', 'edit', 'create']]);
+    Route::resource('benefit', 'BenefitController', ['except' => ['show', 'index', 'edit', 'create']]);
     Route::resource('venue', 'VenueController', ['except' => ['show']]);
     Route::resource('partner', 'PartnerController', ['except' => ['show']]);
     Route::resource('exams', 'ExamController', ['except' => ['show']]);
@@ -161,9 +161,9 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::put('profile/update_billing', ['as' => 'profile.update_billing', 'uses' => 'ProfileController@update_billing']);
 
     //Edit Instructor
-    Route::post ('lesson/edit_instructor', ['as' => 'lesson.edit_instructor', 'uses' => 'LessonController@edit_instructor']);
-    Route::post ('lesson/save_instructor', ['as' => 'lesson.save_instructor', 'uses' => 'LessonController@save_instructor']);
-    Route::post ('lesson/remove_lesson', ['as' => 'lesson.remove_lesson', 'uses' => 'LessonController@remove_lesson']);
+    Route::post('lesson/edit_instructor', ['as' => 'lesson.edit_instructor', 'uses' => 'LessonController@edit_instructor']);
+    Route::post('lesson/save_instructor', ['as' => 'lesson.save_instructor', 'uses' => 'LessonController@save_instructor']);
+    Route::post('lesson/remove_lesson', ['as' => 'lesson.remove_lesson', 'uses' => 'LessonController@remove_lesson']);
 
     //Route::post('lesson/destroy_from_topic1', ['as' => 'lesson.destroy_from_topic1', 'uses' => 'LessonController@destroy_from_topic1']);
 
@@ -179,7 +179,7 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::put('profile/updateRole', ['as' => 'profile.updateRole', 'uses' => 'ProfileController@updateRole']);
     Route::get('events/fetchAllEvents', ['as' => 'events.fetchAllEvents', 'uses' => 'EventController@fetchAllEvents']);
     Route::post('events/fetchElearningInfos', ['as' => 'events.fetchElearningInfos', 'uses' => 'EventController@elearning_infos_user_table']);
-    Route::get('events/export-certificates/{event}','Theme\CertificateController@exportCertificates');
+    Route::get('events/export-certificates/{event}', 'Theme\CertificateController@exportCertificates');
 
 
     //Notification
@@ -194,10 +194,10 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::post('events/assign_ticket/{id}', ['as' => 'events.assign_ticket_store', 'uses' => 'EventController@assign_ticket_store']);
 
     //Event assign method
-    Route::post('events/assing-method/{event}','EventController@assignPaymentMethod')->name('event.assing-method');
+    Route::post('events/assing-method/{event}', 'EventController@assignPaymentMethod')->name('event.assing-method');
 
     //EventAssingCoupon
-    Route::post('events/assing-coupon/{event}/{coupon}','EventController@assignCoupon')->name('event.assign_coupon');
+    Route::post('events/assing-coupon/{event}/{coupon}', 'EventController@assignCoupon')->name('event.assign_coupon');
 
 
     Route::post('/events/fetchTopics', ['as' => 'events.fetchTopics', 'uses' => 'EventController@fetchTopics']);
@@ -206,22 +206,22 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::get('/pages/{page}', ['as' => 'page.index', 'uses' => 'PageController@index']);
 
     /////Slug
-    Route::get('/slug/create/{slug}','SlugController@create');
-    Route::post('/slug/update/{slug}','SlugController@update');
+    Route::get('/slug/create/{slug}', 'SlugController@create');
+    Route::post('/slug/update/{slug}', 'SlugController@update');
 
     /////Metas
-    Route::post('/metas/update/{metas}','MetasController@update')->name('metas.update');
+    Route::post('/metas/update/{metas}', 'MetasController@update')->name('metas.update');
 
 
     ///DashboardController
-    Route::get('/search-user/{search_term}','Dashboard\DashboardController@searchUser');
+    Route::get('/search-user/{search_term}', 'Dashboard\DashboardController@searchUser');
 
     ///PaymentMethods
-    Route::get('/payment-methods','Dashboard\PaymentMethodsController@index')->name('payments.index');
-    Route::get('/payment-methods/create','Dashboard\PaymentMethodsController@create')->name('payments.create');
-    Route::post('/payment-methods/store','Dashboard\PaymentMethodsController@store')->name('payments.store');
-    Route::get('/payment-methods/edit/{method}','Dashboard\PaymentMethodsController@edit')->name('payments.edit');
-    Route::post('/payment-methods/update/{method}','Dashboard\PaymentMethodsController@update')->name('payments.update');
+    Route::get('/payment-methods', 'Dashboard\PaymentMethodsController@index')->name('payments.index');
+    Route::get('/payment-methods/create', 'Dashboard\PaymentMethodsController@create')->name('payments.create');
+    Route::post('/payment-methods/store', 'Dashboard\PaymentMethodsController@store')->name('payments.store');
+    Route::get('/payment-methods/edit/{method}', 'Dashboard\PaymentMethodsController@edit')->name('payments.edit');
+    Route::post('/payment-methods/update/{method}', 'Dashboard\PaymentMethodsController@update')->name('payments.update');
 
     //media2
     Route::get('media2/index', ['as' => 'media2.index', 'uses' => 'MediaController@index']);
@@ -266,27 +266,27 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::get('/live-results/{exam?}', 'ExamController@getLiveResults');
 
     //ExamsResult
-    Route::get('/student-summary/{exam_id}/{user_id}','Dashboard\ExamResultController@showResult');
+    Route::get('/student-summary/{exam_id}/{user_id}', 'Dashboard\ExamResultController@showResult');
 
     //Plan
     Route::get('plans', 'Dashboard\PlanController@index')->name('plans');
-    Route::get('create/plan','Dashboard\PlanController@create')->name('plan.create');
-    Route::post('store/plan','Dashboard\PlanController@store')->name('plan.store');
-    Route::get('edit/plan/{plan}','Dashboard\PlanController@edit')->name('plan.edit');
-    Route::put('update/plan/{plan}','Dashboard\PlanController@update')->name('plan.update');
+    Route::get('create/plan', 'Dashboard\PlanController@create')->name('plan.create');
+    Route::post('store/plan', 'Dashboard\PlanController@store')->name('plan.store');
+    Route::get('edit/plan/{plan}', 'Dashboard\PlanController@edit')->name('plan.edit');
+    Route::put('update/plan/{plan}', 'Dashboard\PlanController@update')->name('plan.update');
 
     //Coupons
     Route::get('coupons', 'Dashboard\CouponController@index')->name('coupons');
-    Route::get('create/coupon','Dashboard\CouponController@create')->name('coupon.create');
-    Route::post('store/coupon','Dashboard\CouponController@store')->name('coupon.store');
-    Route::get('edit/coupon/{coupon}','Dashboard\CouponController@edit')->name('coupon.edit');
-    Route::put('update/coupon/{coupon}','Dashboard\CouponController@update')->name('coupon.update');
+    Route::get('create/coupon', 'Dashboard\CouponController@create')->name('coupon.create');
+    Route::post('store/coupon', 'Dashboard\CouponController@store')->name('coupon.store');
+    Route::get('edit/coupon/{coupon}', 'Dashboard\CouponController@edit')->name('coupon.edit');
+    Route::put('update/coupon/{coupon}', 'Dashboard\CouponController@update')->name('coupon.update');
 
     //Options
     Route::get('options', 'Dashboard\OptionsController@index')->name('options');
-    Route::get('create/option','Dashboard\OptionsController@create')->name('option.create');
-    Route::get('edit/option/{option}','Dashboard\OptionsController@edit')->name('option.edit');
-    Route::put('update/option/{option}','Dashboard\OptionsController@update')->name('option.update');
+    Route::get('create/option', 'Dashboard\OptionsController@create')->name('option.create');
+    Route::get('edit/option/{option}', 'Dashboard\OptionsController@edit')->name('option.edit');
+    Route::put('update/option/{option}', 'Dashboard\OptionsController@update')->name('option.update');
 
     //Abandoned
     Route::get('abandoned', 'Dashboard\AbandonedController@index')->name('abandoned.index');
@@ -294,9 +294,9 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::get('abandoned/exportcsv', ['as' => 'abandoned.exportcsv', 'uses' => 'Dashboard\AbandonedController@exportCsv']);
 
     //Notification Messages
-    Route::post('status-inform', [ 'as' => 'student.status.inform', 'uses' => 'Dashboard\StudentController@statusInform' ]);
-    Route::post('password-inform', [ 'as' => 'student.password.inform', 'uses' => 'Dashboard\StudentController@passwordInform' ]);
-    Route::post('activation-inform', [ 'as' => 'student.activation.inform', 'uses' => 'Dashboard\StudentController@activationInform' ]);
+    Route::post('status-inform', ['as' => 'student.status.inform', 'uses' => 'Dashboard\StudentController@statusInform']);
+    Route::post('password-inform', ['as' => 'student.password.inform', 'uses' => 'Dashboard\StudentController@passwordInform']);
+    Route::post('activation-inform', ['as' => 'student.activation.inform', 'uses' => 'Dashboard\StudentController@activationInform']);
 
     //Transaction Update
     Route::post('transaction/update', 'TransactionController@update');
@@ -310,11 +310,11 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::post('/move-multiple-lessons', 'LessonController@moveMultipleLessonToTopic')->name('move-multiple-lessons');
 
     //CLONE
-    Route::post('clone-event/{event}','EventController@cloneEvent')->name('event.clone');
-    Route::get('clone-exam/{exam}','ExamController@cloneExam')->name('exam.clone');
+    Route::post('clone-event/{event}', 'EventController@cloneEvent')->name('event.clone');
+    Route::get('clone-exam/{exam}', 'ExamController@cloneExam')->name('exam.clone');
 
     //EnrollToElearning
-    Route::get('enroll-to-elearning/{event}/{enroll}','Dashboard\DashboardController@enrollStudendsToElearning');
+    Route::get('enroll-to-elearning/{event}/{enroll}', 'Dashboard\DashboardController@enrollStudendsToElearning');
 
     //Topics
     Route::post('/sort-topics', 'TopicController@orderTopic')->name('sort-topics');
@@ -324,167 +324,53 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
     Route::post('/sort-categories', 'CategoryController@orderCategory')->name('sort-categories');
     /* Admin backend routes - CRUD for posts, categories, and approving/deleting submitted comments */
     Route::group(['prefix' => config('binshopsblog.admin_prefix', 'blog_admin'), 'namespace' => '\BinshopsBlog\Controllers'], function () {
+        // Setup
+        Route::get('/setup', 'BinshopsAdminSetupController@setup')->name('binshopsblog.admin.setup');
+        Route::post('/setup-submit', 'BinshopsAdminSetupController@setup_submit')->name('binshopsblog.admin.setup_submit');
 
-        Route::get('/setup', 'BinshopsAdminSetupController@setup')
-            ->name('binshopsblog.admin.setup');
-
-        Route::post('/setup-submit', 'BinshopsAdminSetupController@setup_submit')
-            ->name('binshopsblog.admin.setup_submit');
-
-        Route::get('/', 'BinshopsAdminController@index')
-            ->name('binshopsblog.admin.index');
-
-        Route::get(
-            '/add_post',
-            'BinshopsAdminController@create_post'
-        )
-            ->name('binshopsblog.admin.create_post');
-
-
-        Route::post(
-            '/add_post',
-            'BinshopsAdminController@store_post'
-        )
-            ->name('binshopsblog.admin.store_post');
-
-        Route::post(
-            '/add_post_toggle',
-            'BinshopsAdminController@store_post_toggle'
-        )
-            ->name('binshopsblog.admin.store_post_toggle');
-
-        Route::get(
-            '/edit_post/{blogPostId}',
-            'BinshopsAdminController@edit_post'
-        )
-            ->name('binshopsblog.admin.edit_post');
-
-        Route::get(
-            '/edit_post_toggle/{blogPostId}',
-            'BinshopsAdminController@edit_post_toggle'
-        )
-            ->name('binshopsblog.admin.edit_post_toggle');
-
-        Route::patch(
-            '/edit_post/{blogPostId}',
-            'BinshopsAdminController@update_post'
-        )
-            ->name('binshopsblog.admin.update_post');
+        // Post Operations
+        Route::get('/', 'BinshopsAdminController@index')->name('binshopsblog.admin.index');
+        Route::get('/add_post', 'BinshopsAdminController@create_post')->name('binshopsblog.admin.create_post');
+        Route::post('/add_post', 'BinshopsAdminController@store_post')->name('binshopsblog.admin.store_post');
+        Route::post('/add_post_toggle', 'BinshopsAdminController@store_post_toggle')->name('binshopsblog.admin.store_post_toggle');
+        Route::get('/edit_post/{blogPostId}', 'BinshopsAdminController@edit_post')->name('binshopsblog.admin.edit_post');
+        Route::get('/edit_post_toggle/{blogPostId}', 'BinshopsAdminController@edit_post_toggle')->name('binshopsblog.admin.edit_post_toggle');
+        Route::patch('/edit_post/{blogPostId}', 'BinshopsAdminController@update_post')->name('binshopsblog.admin.update_post');
 
         //Removes post's photo
-        Route::get(
-            '/remove_photo/{slug}/{lang_id}',
-            'BinshopsAdminController@remove_photo'
-        )
-            ->name('binshopsblog.admin.remove_photo');
+        Route::get('/remove_photo/{slug}/{lang_id}', 'BinshopsAdminController@remove_photo')->name('binshopsblog.admin.remove_photo');
 
         Route::group(['prefix' => "image_uploads",], function () {
-
             Route::get("/", "BinshopsImageUploadController@index")->name("binshopsblog.admin.images.all");
-
             Route::get("/upload", "BinshopsImageUploadController@create")->name("binshopsblog.admin.images.upload");
             Route::post("/upload", "BinshopsImageUploadController@store")->name("binshopsblog.admin.images.store");
         });
 
-
-        Route::delete(
-            '/delete_post/{blogPostId}',
-            'BinshopsAdminController@destroy_post'
-        )
-            ->name('binshopsblog.admin.destroy_post');
+        Route::delete('/delete_post/{blogPostId}', 'BinshopsAdminController@destroy_post')->name('binshopsblog.admin.destroy_post');
 
         Route::group(['prefix' => 'comments',], function () {
-
-            Route::get(
-                '/',
-                'BinshopsCommentsAdminController@index'
-            )
-                ->name('binshopsblog.admin.comments.index');
-
-            Route::patch(
-                '/{commentId}',
-                'BinshopsCommentsAdminController@approve'
-            )
-                ->name('binshopsblog.admin.comments.approve');
-            Route::delete(
-                '/{commentId}',
-                'BinshopsCommentsAdminController@destroy'
-            )
-                ->name('binshopsblog.admin.comments.delete');
+            Route::get('/', 'BinshopsCommentsAdminController@index')->name('binshopsblog.admin.comments.index');
+            Route::patch('/{commentId}', 'BinshopsCommentsAdminController@approve')->name('binshopsblog.admin.comments.approve');
+            Route::delete('/{commentId}', 'BinshopsCommentsAdminController@destroy')->name('binshopsblog.admin.comments.delete');
         });
 
         Route::group(['prefix' => 'categories'], function () {
-
-            Route::get(
-                '/',
-                'BinshopsCategoryAdminController@index'
-            )
-                ->name('binshopsblog.admin.categories.index');
-
-            Route::get(
-                '/add_category',
-                'BinshopsCategoryAdminController@create_category'
-            )
-                ->name('binshopsblog.admin.categories.create_category');
-            Route::post(
-                '/store_category',
-                'BinshopsCategoryAdminController@store_category'
-            )
-                ->name('binshopsblog.admin.categories.store_category');
-
-            Route::get(
-                '/edit_category/{categoryId}',
-                'BinshopsCategoryAdminController@edit_category'
-            )
-                ->name('binshopsblog.admin.categories.edit_category');
-
-            Route::patch(
-                '/edit_category/{categoryId}',
-                'BinshopsCategoryAdminController@update_category'
-            )
-                ->name('binshopsblog.admin.categories.update_category');
-
-            Route::delete(
-                '/delete_category/{categoryId}',
-                'BinshopsCategoryAdminController@destroy_category'
-            )
-                ->name('binshopsblog.admin.categories.destroy_category');
+            Route::get('/', 'BinshopsCategoryAdminController@index')->name('binshopsblog.admin.categories.index');
+            Route::get('/add_category', 'BinshopsCategoryAdminController@create_category')->name('binshopsblog.admin.categories.create_category');
+            Route::post('/store_category', 'BinshopsCategoryAdminController@store_category')->name('binshopsblog.admin.categories.store_category');
+            Route::get('/edit_category/{categoryId}', 'BinshopsCategoryAdminController@edit_category')->name('binshopsblog.admin.categories.edit_category');
+            Route::patch('/edit_category/{categoryId}', 'BinshopsCategoryAdminController@update_category')->name('binshopsblog.admin.categories.update_category');
+            Route::delete('/delete_category/{categoryId}', 'BinshopsCategoryAdminController@destroy_category')->name('binshopsblog.admin.categories.destroy_category');
         });
-
 
         Route::group(['prefix' => 'languages'], function () {
-
-            Route::get(
-                '/',
-                'BinshopsLanguageAdminController@index'
-            )
-                ->name('binshopsblog.admin.languages.index');
-
-            Route::get(
-                '/add_language',
-                'BinshopsLanguageAdminController@create_language'
-            )
-                ->name('binshopsblog.admin.languages.create_language');
-            Route::post(
-                '/add_language',
-                'BinshopsLanguageAdminController@store_language'
-            )
-                ->name('binshopsblog.admin.languages.store_language');
-
-            Route::delete(
-                '/delete_language/{languageId}',
-                'BinshopsLanguageAdminController@destroy_language'
-            )
-                ->name('binshopsblog.admin.languages.destroy_language');
-
-            Route::post(
-                '/toggle_language/{languageId}',
-                'BinshopsLanguageAdminController@toggle_language'
-            )
-                ->name('binshopsblog.admin.languages.toggle_language');
+            Route::get('/', 'BinshopsLanguageAdminController@index')->name('binshopsblog.admin.languages.index');
+            Route::get('/add_language', 'BinshopsLanguageAdminController@create_language')->name('binshopsblog.admin.languages.create_language');
+            Route::post('/add_language', 'BinshopsLanguageAdminController@store_language')->name('binshopsblog.admin.languages.store_language');
+            Route::delete('/delete_language/{languageId}', 'BinshopsLanguageAdminController@destroy_language')->name('binshopsblog.admin.languages.destroy_language');
+            Route::post('/toggle_language/{languageId}', 'BinshopsLanguageAdminController@toggle_language')->name('binshopsblog.admin.languages.toggle_language');
         });
     });
-
 });
 
 /*Route::group(['prefix' => 'cart','middleware' => ['web']], function () {
@@ -505,32 +391,32 @@ Route::group(['middleware' => 'auth.aboveauthor','prefix'=>'admin'], function ()
 
             //Route::group([ 'prefix' => '{id}' ], function() {
             //    /*Route::post('/dpremove', [ 'as' => 'cart.remove-item', 'uses' => 'Theme\CartController@dpremove']);*/
-            //    Route::get('/{ticket}/{type}/add', [ 'as' => 'cart.add-item', 'uses' => 'Theme\CartController@add']);
+//    Route::get('/{ticket}/{type}/add', [ 'as' => 'cart.add-item', 'uses' => 'Theme\CartController@add']);
 
-            //    //Route::get('move', [ 'as' => 'cart.move-item', 'uses' => 'Theme\CartController@move']);
+//    //Route::get('move', [ 'as' => 'cart.move-item', 'uses' => 'Theme\CartController@move']);
 
-            //});
-   /*     });
+//});
+/*     });
     });
 });*/
 
-Route::get('/cart', function(){
+Route::get('/cart', function () {
     return redirect('/registration');
 });
 Route::group(['middleware' => ['web']], function () {
-    Route::group(['middleware' => 'free.event' ], function() {
-        Route::group(['middleware' => 'auth.sms' ], function () {
+    Route::group(['middleware' => 'free.event'], function () {
+        Route::group(['middleware' => 'auth.sms'], function () {
 
-            Route::post('checkCoupon/{event}','Theme\CartController@checkCoupon');
+            Route::post('checkCoupon/{event}', 'Theme\CartController@checkCoupon');
 
-            Route::get('/registration', [ 'as' => 'registration.index', 'uses' => 'Theme\CartController@registrationIndex' ]);
-            Route::post('/registration', [ 'as' => 'registration', 'uses' => 'Theme\CartController@registration' ]);
+            Route::get('/registration', ['as' => 'registration.index', 'uses' => 'Theme\CartController@registrationIndex']);
+            Route::post('/registration', ['as' => 'registration', 'uses' => 'Theme\CartController@registration']);
             Route::post('/mobile-check',  'Theme\CartController@mobileCheck');
 
-            Route::get('/billing', [ 'as' => 'billing.index', 'uses' => 'Theme\CartController@billingIndex' ]);
-            Route::post('/billing', [ 'as' => 'billing', 'uses' => 'Theme\CartController@billing' ]);
+            Route::get('/billing', ['as' => 'billing.index', 'uses' => 'Theme\CartController@billingIndex']);
+            Route::post('/billing', ['as' => 'billing', 'uses' => 'Theme\CartController@billing']);
 
-            Route::get('/checkout', [ 'as' => 'checkout.index', 'uses' => 'Theme\CartController@checkoutIndex' ]);
+            Route::get('/checkout', ['as' => 'checkout.index', 'uses' => 'Theme\CartController@checkoutIndex']);
 
             Route::get('/remove/{item}', [ 'as' => 'cart.remove-item', 'uses' => 'Theme\CartController@dpremove']);
             Route::get('/summary/remove/{item}', [ 'as' => 'cart.remove-item', 'uses' => 'Theme\CartController@dpremove']);
@@ -538,8 +424,6 @@ Route::group(['middleware' => ['web']], function () {
             Route::post('/cart/update', [ 'as' => 'cart.update', 'uses' => 'PaymentController@update' ]);
 
             Route::get('/enroll-for-free/{content}', 'Theme\HomeController@enrollToFreeEvent')->name('enrollForFree');
-
-
         });
     });
 });
@@ -556,7 +440,7 @@ Route::post('pay-sbt', [
     'as' => 'userPaySbt', 'uses' => 'Theme\CartController@userPaySbt'
 ]);
 
-Route::group([ 'prefix' => 'info'], function () {
+Route::group(['prefix' => 'info'], function () {
     Route::get('order_error', [
         'as' => 'info.Order.Error', 'uses' => 'Theme\InfoController@orderError'
     ]);
@@ -570,36 +454,36 @@ Route::get('thankyou', [
 ]);
 
 
-Route::group([ 'prefix' => '{id}' ], function() {
+Route::group(['prefix' => '{id}'], function () {
     /*Route::post('/dpremove', [ 'as' => 'cart.remove-item', 'uses' => 'Theme\CartController@dpremove']);*/
-    Route::get('/{ticket}/{type}/add', [ 'as' => 'cart.add-item', 'uses' => 'Theme\CartController@add']);
+    Route::get('/{ticket}/{type}/add', ['as' => 'cart.add-item', 'uses' => 'Theme\CartController@add']);
 
     //Route::get('move', [ 'as' => 'cart.move-item', 'uses' => 'Theme\CartController@move']);
 
 });
 
-Route::post('webhook/stripe', [ 'as' => 'stripe.webhook', 'uses' => 'Webhook\WebhookController@handleWebhook' ]);
+Route::post('webhook/stripe', ['as' => 'stripe.webhook', 'uses' => 'Webhook\WebhookController@handleWebhook']);
 
 Route::get('/file-manager/search', '\Alexusmai\LaravelFileManager\Controllers\FileManagerController@search')
-        ->name('fm.search');
+    ->name('fm.search');
 
 Route::get('/file-manager/fetchAlt', '\Alexusmai\LaravelFileManager\Controllers\FileManagerController@fetchAlt')
-        ->name('fm.fetchAltText');
+    ->name('fm.fetchAltText');
 Route::post('/file-manager/saveAlt', '\Alexusmai\LaravelFileManager\Controllers\FileManagerController@saveAlt')
-        ->name('fm.saveAltText');
+    ->name('fm.saveAltText');
 
-Route::get('search/term', [ 'as' => 'search.term', 'uses' => 'Theme\SearchController@searchForTerm' ]);
+Route::get('search/term', ['as' => 'search.term', 'uses' => 'Theme\SearchController@searchForTerm']);
 
-Route::group(['middleware' => ['auth'], 'prefix'=>'myaccount'], function () {
-    Route::group(['middleware' => 'auth.sms' ], function () {
-        Route::get('/','Theme\StudentController@index')->name('myaccount');
-        Route::post('/remove-avatar','Theme\StudentController@removeProfileImage')->name('remove.avatar');
-        Route::post('/upload-profile-image','Theme\StudentController@uploadProfileImage')->name('add.profileImage');
-        Route::post('/validate-personal-info','Theme\StudentController@infoValidation')->name('validate.personalInfo');
-        Route::post('/update-personal-info','Theme\StudentController@updatePersonalInfo')->name('update.personalInfo');
-        Route::post('/updinvbill', [ 'as' => 'updinvbill' , 'uses' => 'Theme\StudentController@updateInvoiceBilling' ]);
-        Route::post('/updrecbill', [ 'as' => 'updrecbill' , 'uses' => 'Theme\StudentController@updateReceiptBilling' ]);
-        Route::get('/mydata', [ 'as' => 'festudent.mydata' , 'uses' => 'Theme\StudentController@downloadMyData' ]);
+Route::group(['middleware' => ['auth'], 'prefix' => 'myaccount'], function () {
+    Route::group(['middleware' => 'auth.sms'], function () {
+        Route::get('/', 'Theme\StudentController@index')->name('myaccount');
+        Route::post('/remove-avatar', 'Theme\StudentController@removeProfileImage')->name('remove.avatar');
+        Route::post('/upload-profile-image', 'Theme\StudentController@uploadProfileImage')->name('add.profileImage');
+        Route::post('/validate-personal-info', 'Theme\StudentController@infoValidation')->name('validate.personalInfo');
+        Route::post('/update-personal-info', 'Theme\StudentController@updatePersonalInfo')->name('update.personalInfo');
+        Route::post('/updinvbill', ['as' => 'updinvbill', 'uses' => 'Theme\StudentController@updateInvoiceBilling']);
+        Route::post('/updrecbill', ['as' => 'updrecbill', 'uses' => 'Theme\StudentController@updateReceiptBilling']);
+        Route::get('/mydata', ['as' => 'festudent.mydata', 'uses' => 'Theme\StudentController@downloadMyData']);
 
 
         Route::get('/elearning/{course?}',  'Theme\StudentController@elearning');
@@ -619,24 +503,23 @@ Route::group(['middleware' => ['auth'], 'prefix'=>'myaccount'], function () {
         Route::post('/card/store_from_payment_myaccount',  'Theme\CardController@storePaymentMyaccount')->name('payment_method.store');
         Route::post('/update-methodPayment', 'Theme\CardController@updatePaymentMethod')->name('payment_method.update');
         Route::post('/remove-methodPayment', 'Theme\CardController@removePaymentMethod')->name('payment_method.remove');
-
     });
 });
 
-Route::group(['middleware' => 'auth.elearning' ], function () {
+Route::group(['middleware' => 'auth.elearning'], function () {
     Route::put('/elearning/saveNote', 'Theme\StudentController@saveNote');
     Route::put('/elearning/save', 'Theme\StudentController@saveElearning');
 
     //Dropbox Link
-    Route::post('getdropbox', [ 'as' => 'getDropbox' , 'uses' => 'Theme\StudentController@getDownloadLink' ]);
+    Route::post('getdropbox', ['as' => 'getDropbox', 'uses' => 'Theme\StudentController@getDownloadLink']);
 });
 
 Route::group(['middleware' => ['web']], function () {
     //Authentication
     Route::post('checkoutlogin', 'Auth\LoginController@checkoutauth');
-    Route::post('studentlogin','Auth\LoginController@studentauth');
+    Route::post('studentlogin', 'Auth\LoginController@studentauth');
     Route::post('kcregister', 'Auth\RegisterController@kcRegister');
-    Route::get('/logout', [ 'as' => 'logout' , 'uses' => 'Theme\StudentController@logout']);
+    Route::get('/logout', ['as' => 'logout', 'uses' => 'Theme\StudentController@logout']);
     Route::get('/logmeout', 'Theme\StudentController@logout');
 
     Route::get('/mycertificate/{certificate}', 'Theme\CertificateController@getCertificate');
@@ -649,11 +532,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('sync-data', 'Theme\ExamAttemptController@syncData')->name('sync-data');
     Route::post('save-data', 'Theme\ExamAttemptController@saveData')->name('save-data');
 });
-Route::group([ 'prefix' => 'print'], function () {
+Route::group(['prefix' => 'print'], function () {
     Route::get('syllabus/{slug}', 'Theme\HomeController@printSyllabusBySlug');
 });
 
-Route::group([ 'prefix' => 'payment-dispatch'], function () {
+Route::group(['prefix' => 'payment-dispatch'], function () {
 
 
     Route::get('checkout/{trans_id?}', [
@@ -682,18 +565,17 @@ Route::group([ 'prefix' => 'payment-dispatch'], function () {
     ]);
 });
 
-Route::get('/sms-verification/{slug}',['as' => 'user.sms.auth', 'uses' => 'Theme\HomeController@getSMSVerification']);
-Route::post('/smsVerification','Theme\HomeController@smsVerification');
+Route::get('/sms-verification/{slug}', ['as' => 'user.sms.auth', 'uses' => 'Theme\HomeController@getSMSVerification']);
+Route::post('/smsVerification', 'Theme\HomeController@smsVerification');
 Route::get('myaccount/activate/{code}', 'Theme\StudentController@activate');
 
 //ContactUS
 Route::group(['middleware' => ['web']], function () {
-    Route::get('contact-us', function(){
+    Route::get('contact-us', function () {
         return redirect('contact');
     });
-    Route::post('contact-us', [ 'as' => 'contactUs' , 'uses' => 'Theme\ContactUsController@sendEnquery' ]);
-    Route::post('applyforbe', [ 'as' => 'beaninstructor', 'uses' => 'Theme\ContactUsController@beaninstructor' ]);
-
+    Route::post('contact-us', ['as' => 'contactUs', 'uses' => 'Theme\ContactUsController@sendEnquery']);
+    Route::post('applyforbe', ['as' => 'beaninstructor', 'uses' => 'Theme\ContactUsController@beaninstructor']);
 });
 
 Route::group(['middleware' => ['web']], function () {
@@ -702,15 +584,14 @@ Route::group(['middleware' => ['web']], function () {
 
 //passwordReset
 Route::group(['middleware' => ['web']], function () {
-    Route::post('/myaccount/reset','Auth\ForgotPasswordController@sendResetLinkEmail');
-    Route::get('/myaccount/reset/{id}/{code}','Auth\ForgotPasswordController@getChangePass');
+    Route::post('/myaccount/reset', 'Auth\ForgotPasswordController@sendResetLinkEmail');
+    Route::get('/myaccount/reset/{id}/{code}', 'Auth\ForgotPasswordController@getChangePass');
     Route::post('myaccount/reset/{id}/{code}', 'Auth\ForgotPasswordController@changePass');
-
 });
 
 
 //cronjobs
-Route::get('/dropbox/KUBnqOX1FNyTh72','DropboxController@cacheDropboxCLI');
+Route::get('/dropbox/KUBnqOX1FNyTh72', 'DropboxController@cacheDropboxCLI');
 Route::get('/unroll-elearning-users', 'Dashboard\CronjobsController@unroll');
 Route::get('/sendNonpaymentEmail', 'Dashboard\CronjobsController@sendNonPayment');
 Route::get('/sendSubscriptionNonPayment', 'Dashboard\CronjobsController@sendSubscriptionNonPayment');
@@ -724,20 +605,19 @@ Route::get('/abanoded/user', 'Dashboard\CronjobsController@remindAbandonedUser')
 //Route::get('/sendInvoice', 'Dashboard\CronjobsController@sendInvoice');
 
 //SITEMAP
-Route::get('feed/{feed_type?}','Theme\FeedController@index');
+Route::get('feed/{feed_type?}', 'Theme\FeedController@index');
 
 //UPDATE CONSENT
 Route::post('/update-consent', 'Theme\StudentController@updateConsent');
 
 Route::group(['middleware' => ['web']], function () {
-    Route::get('home',function(){
+    Route::get('home', function () {
         return redirect('/');
     });
 
-    Route::get('terms-privacy',function(){
+    Route::get('terms-privacy', function () {
         return redirect('terms');
     });
-
 });
 
 //Create Your Password
@@ -746,16 +626,12 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::get('/create-your-password/{slug}', 'Theme\StudentController@createPassIndex')->name('create.index');
     Route::post('/create-your-password/{slug}', 'Theme\StudentController@createPassStore')->name('create.store');
-
-
 });
 
 //DownloadInvoice
 Route::group(['middleware' => ['web']], function () {
 
     Route::get('/myinvoice/{slug}', 'Theme\StudentController@downloadMyInvoice');
-
-
 });
 
 //Route::get('/stripe/payment/{id}/{paymentMethod}', 'PaymentController@show')->name('payment');
@@ -764,20 +640,19 @@ Route::post('/stripe/payment/securee', 'Theme\CartController@securePayment')->na
 Route::get('/payment/required/{id}/{paymentMethod}', '\Laravel\Cashier\Http\Controllers\PaymentController@requiredAction')->name('payment.required');
 //Route::post('/stripe/payment/required', 'Theme\CartController@requiredAction')->name('payment.required');
 
-Route::group(['middleware' => ['preview','web','auth.sms']], function () {
+Route::group(['middleware' => ['preview', 'web', 'auth.sms']], function () {
 
-    Route::get('/regularly-mentioned-in-media', function(){
+    Route::get('/regularly-mentioned-in-media', function () {
         return redirect('/in-the-media');
     });
 
-    Route::get('/they-trust-us', function(){
+    Route::get('/they-trust-us', function () {
         return redirect('/brands-trained');
     });
 
     Route::get('/', 'Theme\HomeController@homePage')->name('homepage');
     Route::post('/add-payment-method', 'Theme\HomeController@addPaymentMethod')->name('add.paymentMethod');
     Route::get('{slug?}', 'Theme\HomeController@index');
-
 });
 /// tipota apo edw katw
 Route::group(['prefix' => "/{locale?}/" . config('binshopsblog.blog_prefix', 'blog')], function () {
