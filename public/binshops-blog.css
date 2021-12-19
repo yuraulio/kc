@@ -317,14 +317,14 @@
   }
 
 
-.blog ol li {
+.blog_body_content ol li {
     list-style-type: decimal !important;
 }
 
-.blog ul {
+.blog_body_content ul {
     padding-left: 40px !important;
 }
 
-.blog ul li {
+.blog_body_content ul li {
     list-style-type: circle !important;
 }
