@@ -78,14 +78,13 @@
                                </a>
                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                                   <a href="{{$comment->post->postTranslations()->get()[0]->url(app('request')->get('locale'))}}" class="dropdown-item ">
-                                    <i class="fa fa-file-text-o"></i>View Post
+                                    View Post
                                 </a>
                                 <form onsubmit="return confirm('Are you sure you want to delete this blog post comment?\n You cannot undo this action!');"
                                         method='post' action='{{route("binshopsblog.admin.comments.delete", $comment->id)}}'>
                                     @csrf
                                     <input name="_method" type="hidden" value="DELETE"/>
-                                    <button type='submit' class='dropdown-item'>
-                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                    <button type='submit' class='dropdown-item text-danger'>
                                     Delete
                                     </button>
                                 </form>

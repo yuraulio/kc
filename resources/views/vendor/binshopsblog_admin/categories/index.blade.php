@@ -68,17 +68,13 @@
                                <i class="fas fa-ellipsis-v"></i>
                                </a>
                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                  <a href="{{$category->url(app('request')->get('locale'))}}" class="dropdown-item ">
-                                    <i class="fa fa-file-text-o"></i>View Posts
-                                </a>
+                                <a href="{{$category->url(app('request')->get('locale'))}}" class="dropdown-item">View Posts</a>
+                                <a href="{{$category->edit_url()}}" class="dropdown-item">Edit Category</a>
                                 <form onsubmit="return confirm('Are you sure you want to delete this blog post category?\n You cannot undo this action!');"
-                                    method='post' action='{{route("binshopsblog.admin.categories.destroy_category", $category->category_id)}}' class='float-right'>
+                                    method='post' action='{{route("binshopsblog.admin.categories.destroy_category", $category->category_id)}}'>
                                     @csrf
                                     <input name="_method" type="hidden" value="DELETE"/>
-                                    <button type='submit' class='dropdown-item'>
-                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
-                                    Delete
-                                    </button>
+                                    <button type='submit' class='dropdown-item text-danger'>Delete</button>
                                 </form>
                                </div>
                             </div>

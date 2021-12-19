@@ -88,18 +88,15 @@
                                <i class="fas fa-ellipsis-v"></i>
                                </a>
                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                  <a href="{{$post->url(app('request')->get('locale'))}}" class="dropdown-item "><i class="fa fa-file-text-o"
-                                    ></i>
+                                  <a href="{{$post->url(app('request')->get('locale'))}}" class="dropdown-item ">
                                     View Post</a>
                                     <a href="{{$post->edit_url()}}" class="dropdown-item">
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                     Edit Post</a>
                                     <form onsubmit="return confirm('Are you sure you want to delete this blog post?\n You cannot undo this action!');"
                                     method='post' style="padding: 0px; cursor: pointer !important" action='{{route("binshopsblog.admin.destroy_post", $post->post_id)}}' class='float-right dropdown-item'>
                                     @csrf
                                     <input name="_method" type="hidden" value="DELETE"/>
-                                    <button type='submit' class='dropdown-item'>
-                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                    <button type='submit' class='dropdown-item text-danger'>
                                     Delete
                                     </button>
                                     </form>
