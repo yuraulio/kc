@@ -54,8 +54,10 @@ class WebhookController extends BaseWebhookController
 		$subscription = $user->subscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first();
 		$eventId = explode('_',$subscription->stripe_price)[3];
 
-		$subscriptionPaymentMethod = $user->events->where('id',$eventId)->first();
-
+		//$subscriptionPaymentMethod = $user->events->where('id',$eventId)->first();
+		$subscriptionPaymentMethod = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first();
+		//$subscriptionPaymentMethod = $user->events()->wherePivot('event_id',$eventId)->first();
+		//return print_r(count($user->events_for_user_list));
 		$paymentMethod = PaymentMethod::find($subscriptionPaymentMethod->pivot->payment_method);
 
 		$data = $payload['data']['object'];
@@ -81,7 +83,9 @@ class WebhookController extends BaseWebhookController
 		$stripeSubscription->metadata = ['installments_paid' => $count, 'installments' => $totalinst];
 		$stripeSubscription->save(); 
 
-		$invoices = $user->events->where('id',$eventId)->first()->invoicesByUser($user->id)->get();
+		//$invoices = $user->events->where('id',$eventId)->first()->invoicesByUser($user->id)->get();
+		$invoices = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first()->invoicesByUser($user->id)->get();
+		
 		if(count($invoices) > 0){
 			$invoice = $invoices->last();
 			//$invoice = $invoices->first();
@@ -92,8 +96,9 @@ class WebhookController extends BaseWebhookController
 				$invoiceNumber = sprintf('%04u', 1);
 			}else{
 
-				$transaction = $user->events->where('id',$eventId)->first()->transactionsByUser($user->id)->first();
-
+				//$transaction = $user->events->where('id',$eventId)->first()->transactionsByUser($user->id)->first();
+				$transaction = $user->events_for_user_list->where('id',$eventId)->first()->transactionsByUser($user->id)->first();
+				
 				if(!$transaction){
 					
 					$charge['status'] = 'succeeded';
@@ -143,7 +148,9 @@ class WebhookController extends BaseWebhookController
 
                 	$transaction = Transaction::create($transaction_arr);
 
-					$transaction->event()->save($user->events->where('id',$eventId)->first());
+					//$transaction->event()->save($user->events->where('id',$eventId)->first());
+					$transaction->event()->save($user->events_for_user_list()->wherePivot('event_id',$eventId)->first());
+					
 					$transaction->user()->save($user);
 
 				}
@@ -164,7 +171,8 @@ class WebhookController extends BaseWebhookController
                 $elearningInvoice->save();
 
                 $elearningInvoice->user()->save($user);
-                $elearningInvoice->event()->save($user->events->where('id',$eventId)->first());
+                $elearningInvoice->event()->save($user->events_for_user_list()->wherePivot('event_id',$eventId)->first());
+				//$elearningInvoice->event()->save($user->events()->wherePivot('id',$eventId)->first());
                 $elearningInvoice->transaction()->save($transaction);
 				
 				$pdf = $elearningInvoice->generateInvoice();
@@ -553,12 +561,16 @@ class WebhookController extends BaseWebhookController
 
 			$eventId = $subscription->event->first()->id;
 			$paymentMethod = PaymentMethod::find($subscription->pivot->payment_method);
+			$subscriptionCheckout = 1;
 
 		}else{
 
 			$subscription = $user->subscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first();
 			$eventId = explode('_',$subscription->stripe_price)[3];
-			$paymentMethod = Event::findOrFail($eventId)->paymentMethod->first();
+			$event = $user->events()->wherePivot('event_id',$eventId)->first();
+			$paymentMethod =  PaymentMethod::find($event->pivot->payment_method);
+			$subscriptionCheckout = 0;
+
 		}
 
 		if(env('PAYMENT_PRODUCTION')){
@@ -585,7 +597,7 @@ class WebhookController extends BaseWebhookController
                     $payload['data']['object']['payment_intent']
                 ));
 
-                $user->notify(new $notification($payment,$paymentMethod));
+                $user->notify(new $notification($payment,$paymentMethod,$eventId,$subscriptionCheckout));
 				
             //}
 			

@@ -40,8 +40,8 @@ class StripeRequiredAction extends Notification
         $this->paymentId = $payment->id;
         $this->amount = $payment->amount();
         $this->paymentMethod = $paymentMethod;
-        $this->event $eventId;
-        $this->$subscriptionCheckout = $subscriptionCheckout;
+        $this->event = $eventId;
+        $this->subscriptionCheckout = $subscriptionCheckout;
     }
 
     /**
@@ -63,7 +63,7 @@ class StripeRequiredAction extends Notification
      */
     public function toMail($notifiable)
     {
-        $url = route('payment.required', ['id' => $this->paymentId, 'event'=>$this->event, 'paymentMethod' => encrypt($this->paymentMethod),'$subscriptionCheckout' => $subscriptionCheckout]);
+        $url = route('payment.required', ['id' => $this->paymentId, 'event'=>$this->event, 'paymentMethod' => encrypt($this->paymentMethod),'subscriptionCheckout' => $this->subscriptionCheckout]);
 
         return (new MailMessage)
             ->subject(__('Confirm Payment'))

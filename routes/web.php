@@ -677,7 +677,7 @@ Route::group(['middleware' => ['web'], 'namespace' => '\BinshopsBlog\Controllers
     });
 });
 
-
+//must be at the end of file
 Route::group(['middleware' => ['preview', 'web', 'auth.sms']], function () {
 
     Route::get('/regularly-mentioned-in-media', function () {
@@ -692,5 +692,5 @@ Route::group(['middleware' => ['preview', 'web', 'auth.sms']], function () {
     Route::post('/add-payment-method', 'Theme\HomeController@addPaymentMethod')->name('add.paymentMethod');
     Route::get('{slug?}', 'Theme\HomeController@index');
 });
-/// tipota apo edw katw
+/// If you want to add a new route, please add it above the comment "must be at the end of file"!
 

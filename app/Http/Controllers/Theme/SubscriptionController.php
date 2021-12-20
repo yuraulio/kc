@@ -11,22 +11,28 @@ use \Stripe\Stripe;
 use Mail;
 use Session;
 use App\Services\FBPixelService;
+use App\Model\PaymentMethod;
 
 class SubscriptionController extends Controller
 {
+
+    private $paymentMethod;
+
     public function __construct(FBPixelService $fbp)
     {
         $this->fbp = $fbp;
+        $this->paymentMethod = PaymentMethod::find(2);
         $this->middleware('event.subscription')->only(['index','store']);
     }
 
     public function index($event,$plan)
     {     
+
         $plan = Plan::where('name',$plan)->first();
         $event = Event::where('title',$event)->first();
-        session()->put('payment_method',$event->paymentMethod->first()->id);
+        session()->put('payment_method',$this->paymentMethod->id);
 
-        $secretKey = env('PAYMENT_PRODUCTION') ? $event->paymentMethod->first()->processor_options['secret_key'] : $event->paymentMethod->first()->test_processor_options['secret_key'];
+        $secretKey = env('PAYMENT_PRODUCTION') ? $this->paymentMethod->processor_options['secret_key'] : $this->paymentMethod->test_processor_options['secret_key'];
         Stripe::setApiKey($secretKey);
         
         $user = Auth::user();
@@ -36,8 +42,8 @@ class SubscriptionController extends Controller
         $data['eventId'] = $event->id;
         $data['cur_user'] = $user;
        
-        $data['stripe_key'] = env('PAYMENT_PRODUCTION') ? $event->paymentMethod->first()->processor_options['key'] : 
-                                                                $event->paymentMethod->first()->test_processor_options['key'];
+        $data['stripe_key'] = env('PAYMENT_PRODUCTION') ? $this->paymentMethod->processor_options['key'] : 
+                                                                $this->paymentMethod->test_processor_options['key'];
 
 
         if (Session::has('pay_seats_data')) {
@@ -145,9 +151,9 @@ class SubscriptionController extends Controller
 
         $plan = Plan::where('name',$plan)->first();
         $event = Event::where('title',$event)->first();
-        session()->put('payment_method',$event->paymentMethod->first()->id);
+        session()->put('payment_method',$this->paymentMethod->id);
 
-        $secretKey = env('PAYMENT_PRODUCTION') ? $event->paymentMethod->first()->processor_options['secret_key'] : $event->paymentMethod->first()->test_processor_options['secret_key'];
+        $secretKey = env('PAYMENT_PRODUCTION') ? $this->paymentMethod->processor_options['secret_key'] : $this->paymentMethod->test_processor_options['secret_key'];
         Stripe::setApiKey($secretKey);
         
         $user = Auth::user();
@@ -157,8 +163,8 @@ class SubscriptionController extends Controller
         $data['eventId'] = $event->id;
         $data['cur_user'] = $user;
        
-        $data['stripe_key'] = env('PAYMENT_PRODUCTION') ? $event->paymentMethod->first()->processor_options['key'] : 
-                                                                $event->paymentMethod->first()->test_processor_options['key'];
+        $data['stripe_key'] = env('PAYMENT_PRODUCTION') ? $this->paymentMethod->processor_options['key'] : 
+                                                                $this->paymentMethod->test_processor_options['key'];
 
 
         if (Session::has('pay_seats_data')) {
@@ -255,11 +261,11 @@ class SubscriptionController extends Controller
         $event = Event::where('title',$event)->first();
 
         if(env('PAYMENT_PRODUCTION')){
-            Stripe::setApiKey($event->paymentMethod->first()->processor_options['secret_key']);
+            Stripe::setApiKey($this->paymentMethod->processor_options['secret_key']);
         }else{
-            Stripe::setApiKey($event->paymentMethod->first()->test_processor_options['secret_key']);
+            Stripe::setApiKey($this->paymentMethod->test_processor_options['secret_key']);
         }
-		session()->put('payment_method',$event->paymentMethod->first()->id);
+		session()->put('payment_method',$this->paymentMethod->id);
 
     
         if (Session::has('pay_bill_data')) {
@@ -350,7 +356,7 @@ class SubscriptionController extends Controller
                     $user->events()->attach($event->id);
                 }*/
 
-                $user->subscriptionEvents()->attach($event->id,['subscription_id'=>$charge['id'],'payment_method'=>$event->paymentMethod->first()->id]);
+                $user->subscriptionEvents()->attach($event->id,['subscription_id'=>$charge['id'],'payment_method'=>$this->paymentMethod->id]);
 
             
                 $data = [];  

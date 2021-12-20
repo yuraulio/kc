@@ -11,6 +11,7 @@ use App\Model\PaymentMethod;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use Session;
+use App\Model\Event;
 
 class PaymentController extends Controller
 {
@@ -74,7 +75,7 @@ class PaymentController extends Controller
         ]);
     }
 
-    public function requiredAction($id,Event $event,$paymentMethod,$subscriptionCheckout)
+    public function requiredAction($id,Event $event,$paymentMethod,$subscriptionCheckout=false)
     {
         $paymentMethod = decrypt($paymentMethod);
         session()->put('payment_method',$paymentMethod);
@@ -118,7 +119,8 @@ class PaymentController extends Controller
             'customer' => $payment->customer(),
             'redirect' => url(request('redirect', '/')),
             'price' => $price,
-            'duration' => $duration
+            'duration' => $duration,
+            'eventName' => $event->title
         ]);
 
     }

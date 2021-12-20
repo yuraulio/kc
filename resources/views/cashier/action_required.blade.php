@@ -2,175 +2,162 @@
 @extends('cashier.master')
 
     @section('content')
-    <div id="app" class="h-full md:flex md:justify-center md:items-center">
-        <div class="w-full max-w-lg">
-            <h1 class="text-4xl font-bold text-center p-4 sm:p-6 mt-4">
-                Your {{ $amount }} payment
-            </h1>
+    <div class="checkout-step">
+   <div class="container">
+      <ul>
+         <li><span class="counter">1.</span><i>Participant(s)</i></li>
+         <li><span class="counter">2.</span><i>Billing</i></li>
+         <li class="active"><span class="counter">3.</span><i>Checkout</i></li>
+      </ul>
+   </div>
+</div>
+<div class="form-wrap">
+   <div class="container">
+   <h1> Order Summary </h1>
+      <div class="row">
+         <div class="col-md-6 col-xl-6">
+            <div class="checkout-full-wrap">
+               <div class="form-wrap md:flex md:justify-center md:items-center">
+                  <div class="w-full max-w-lg">
+                     <div class="row">
+                        <div id="app" >
+                           
+                           <!-- Status Messages -->
+                           <p class="flex items-center bg-red-100 border border-red-200 px-5 py-2 rounded-lg text-red-500" v-if="errorMessage">
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="flex-shrink-0 w-6 h-6">
+                                 <path class="fill-current text-red-300" d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20z"/>
+                                 <path class="fill-current text-red-500" d="M12 18a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm1-5.9c-.13 1.2-1.88 1.2-2 0l-.5-5a1 1 0 0 1 1-1.1h1a1 1 0 0 1 1 1.1l-.5 5z"/>
+                              </svg>
+                              <span class="ml-3">@{{ errorMessage }}</span>
+                           </p>
+                       
+                              <div v-if="paymentIntent.status === 'succeeded'">
+                                 <h2 class="text-xl mb-4 text-gray-600">
+                                    Payment Successful
+                                 </h2>
+                                 <p class="mb-6">
+                                    This payment was successfully confirmed.
+                                 </p>
+                              </div>
+                              <div v-else-if="paymentIntent.status === 'processing'">
+                                 <h2 class="text-xl mb-4 text-gray-600">
+                                    Payment Processing
+                                 </h2>
+                                 <p class="mb-6">
+                                    This payment is currently processing. Refresh this page from time to time to see its status.
+                                 </p>
+                              </div>
+                              <div v-else-if="paymentIntent.status === 'canceled'">
+                                 <h2 class="text-xl mb-4 text-gray-600">
+                                    Payment Cancelled
+                                 </h2>
+                                 <p class="mb-6">
+                                    This payment was cancelled.
+                                 </p>
+                              </div>
+                              <div v-else>
+                                 <div v-if="paymentIntent.status === 'requires_payment_method'" class="mb-3">
+                                    <!-- Instructions -->
+                                    <h2 class="text-xl mb-4 text-gray-600">
+                                       Confirm Your Payment
+                                    </h2>
+                                    <p class="mb-6">
+                                       A valid payment method is needed to process your payment. Please confirm your payment by filling out your payment details below.
+                                    </p>
+                                    <!-- Payment Method -->
+                                
+                                    <!-- Name -->
+                                    <label v-if="seen" for="name" class="inline-block text-sm text-gray-700 font-semibold mb-2">
+                                    Full name
+                                    </label>
+                                    <input
+                                       v-if="seen"
+                                       id="name"
+                                       type="text" placeholder="Jane Doe"
+                                       required
+                                       class="inline-block bg-gray-100 border border-gray-300 rounded-lg w-full px-4 py-3 mb-3 focus:outline-none"
+                                       v-model="name"
+                                       />
+                                    <!-- E-mail Address -->
+                                    <label v-if="seen" for="email" class="inline-block text-sm text-gray-700 font-semibold mb-2">
+                                    E-mail address
+                                    </label>
+                                    <input
+                                       v-if="seen"
+                                       id="email"
+                                       type="text" placeholder="jane@example.com"
+                                       required
+                                       class="inline-block bg-gray-100 border border-gray-300 rounded-lg w-full px-4 py-3 mb-3 focus:outline-none"
+                                       v-model="email"
+                                       />
+                                    <div v-if="paymentElement">
+                                       <!-- Stripe Payment Element -->
+                                       <label for="payment-element" class="inline-block text-sm text-gray-700 font-semibold mb-2">
+                                       Payment details
+                                       </label>
+                                       <div id="payment-element" ref="paymentElement" class="bg-gray-100 border border-gray-300 rounded-lg p-4 mb-6"></div>
+                                    </div>
+                                   
+                                 </div>
 
-            <!-- Status Messages -->
-            <p class="flex items-center bg-red-100 border border-red-200 px-5 py-2 rounded-lg text-red-500" v-if="errorMessage">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="flex-shrink-0 w-6 h-6">
-                    <path class="fill-current text-red-300" d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20z"/>
-                    <path class="fill-current text-red-500" d="M12 18a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm1-5.9c-.13 1.2-1.88 1.2-2 0l-.5-5a1 1 0 0 1 1-1.1h1a1 1 0 0 1 1 1.1l-.5 5z"/>
-                </svg>
+                                 <p class="summary">This is the summary of your transaction with your card. 
+                                     Please check and confirm before you pay.
+                                 </p>
 
-                <span class="ml-3">@{{ errorMessage }}</span>
-            </p>
-
-            <div class="bg-white rounded-lg p-4 sm:p-6 mt-4">
-                <div v-if="paymentIntent.status === 'succeeded'">
-                    <h2 class="text-xl mb-4 text-gray-600">
-                        Payment Successful
-                    </h2>
-
-                    <p class="mb-6">
-                        This payment was successfully confirmed.
-                    </p>
-                </div>
-
-                <div v-else-if="paymentIntent.status === 'processing'">
-                    <h2 class="text-xl mb-4 text-gray-600">
-                        Payment Processing
-                    </h2>
-
-                    <p class="mb-6">
-                        This payment is currently processing. Refresh this page from time to time to see its status.
-                    </p>
-                </div>
-
-                <div v-else-if="paymentIntent.status === 'canceled'">
-                    <h2 class="text-xl mb-4 text-gray-600">
-                        Payment Cancelled
-                    </h2>
-
-                    <p class="mb-6">
-                        This payment was cancelled.
-                    </p>
-                </div>
-
-                <div v-else>
-                    <!-- Payment Method Form -->
-                    <div v-if="paymentIntent.status === 'requires_payment_method'" class="mb-3">
-                        <!-- Instructions -->
-                        <h2 class="text-xl mb-4 text-gray-600">
-                            Confirm Your Payment
-                        </h2>
-
-                        <p class="mb-6">
-                            A valid payment method is needed to process your payment. Please confirm your payment by filling out your payment details below.
-                        </p>
-
-                        <!-- Payment Method -->
-                        {{--<label for="paymentMethod" class="inline-block text-sm text-gray-700 font-semibold mb-2">
-                            Payment Method
-                        </label>
-
-                        <div v-if="paymentMethods.length > 1">
-                            <p class="text-sm mb-3">
-                                Please select the payment method which you'd like to use.
-                            </p>
-
-                            <select
-                                id="paymentMethod"
-                                required
-                                class="inline-block bg-gray-100 border border-gray-300 rounded-lg w-full px-4 py-3 mb-3 focus:outline-none"
-                                v-model="paymentMethod"
-                                @change="configureStripeElements"
-                            >
-                                <option v-for="option in paymentMethods" v-bind:value="option">
-                                    @{{ option.title }}
-                                </option>
-                            </select>
+                                 <div class="form-row my-5 align-items-center prev-next-wrap">									
+								<div class="d-flex align-items-center previous-participant-link">
+									<img src="{{cdn('new_cart/images/arrow-previous-green.svg')}}" width="20px" height="12px" class="without-hover" alt="">
+									<img src="{{cdn('new_cart/images/arrow-previous-green2.svg')}}" width="20px" height="12px" class="with-hover" alt="">
+									<a href="/checkout" class="link-color">Return to previous page</a>
+								</div>
+							</div>
+                                 <button
+                                    class="py-3 btn btn-3 checkout-button-primary stripe-payment-button"
+                                    :class="{ 'bg-blue-400': isPaymentProcessing, 'bg-blue-600': ! isPaymentProcessing }"
+                                    @click="confirmPaymentMethod"
+                                    :disabled="isPaymentProcessing"
+                                    >
+                                 <span v-if="isPaymentProcessing">
+                                 Processing...
+                                 </span>
+                                 <span v-else>
+                                 Confirm your payment
+                                 </span>
+                                 </button>
+                              </div>
+                          
                         </div>
-                        <div v-else>
-                            <p class="text-sm mb-3">
-                                Your payment will be processed by @{{ paymentMethodTitle }}.
-                            </p>
-                        </div>--}}
-
-                        <!-- Name -->
-                        <label v-if="seen" for="name" class="inline-block text-sm text-gray-700 font-semibold mb-2">
-                            Full name
-                        </label>
-
-                        <input
-                        v-if="seen"
-                                                    id="name"
-                            type="text" placeholder="Jane Doe"
-                            required
-                            class="inline-block bg-gray-100 border border-gray-300 rounded-lg w-full px-4 py-3 mb-3 focus:outline-none"
-                            v-model="name"
-                        />
-
-                        <!-- E-mail Address -->
-                        <label v-if="seen" for="email" class="inline-block text-sm text-gray-700 font-semibold mb-2">
-                            E-mail address
-                        </label>
-
-                        <input
-                            id="email"
-                            v-if="seen"
-                            type="text" placeholder="jane@example.com"
-                            required
-                            class="inline-block bg-gray-100 border border-gray-300 rounded-lg w-full px-4 py-3 mb-3 focus:outline-none"
-                            v-model="email"
-                        />
-
-                        <div v-if="paymentElement">
-                            <!-- Stripe Payment Element -->
-                            <label for="payment-element" class="inline-block text-sm text-gray-700 font-semibold mb-2">
-                                Payment details
-                            </label>
-
-                            <div id="payment-element" ref="paymentElement" class="bg-gray-100 border border-gray-300 rounded-lg p-4 mb-6"></div>
-                        </div>
-
-                        {{--<div v-if="(paymentMethod || {}).remember">
-                            <!-- Remember Payment Method -->
-                            <label for="remember" class="inline-block text-sm text-gray-700 mb-2">
-                                <input
-                                    id="remember"
-                                    type="checkbox"
-                                    required
-                                    class="inline-block mr-1 focus:outline-none"
-                                    v-model="remember"
-                                />
-
-                                Remember payment method for future usage
-                            </label>
-
-                            <p v-if="['bancontact', 'ideal', 'sepa_debit'].includes(paymentMethod.type)" class="text-xs text-gray-400 mb-6">
-                                By providing your payment information and confirming this payment, you authorise (A) and Stripe, our payment service provider, to send instructions to your bank to debit your account and (B) your bank to debit your account in accordance with those instructions. As part of your rights, you are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited. Your rights are explained in a statement that you can obtain from your bank. You agree to receive notifications for future debits up to 2 days before they occur.
-                            </p>
-                        </div>--}}
-                    </div>
-
-                    <!-- Confirm Payment Method Button -->
-                    <button
-                        class="inline-block w-full px-4 py-3 mb-4 btn btn-3 checkout-button-primary stripe-payment-button"
-                        :class="{ 'bg-blue-400': isPaymentProcessing, 'bg-blue-600': ! isPaymentProcessing }"
-                        @click="confirmPaymentMethod"
-                        :disabled="isPaymentProcessing"
-                    >
-                        <span v-if="isPaymentProcessing">
-                            Processing...
-                        </span>
-                        <span v-else>
-                            Confirm your {{ $amount }} payment with @{{ paymentMethodTitle }}
-                        </span>
-                    </button>
-                </div>
-
-                <button @click="goBack" ref="goBackButton" data-redirect="{{ $redirect }}"
-                class="inline-block w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 text-center text-gray-600 stripe-payment-button">
-                    Go back
-                </button>
+                     </div>
+                  </div>
+               </div>
             </div>
+         </div>
 
-            
-        </div>
-    </div>
+         <div class="col-md-6 col-xl-6">
+					<div class="checkout-selection-wrap">
+						
+                        
+                           
+						    <h2>My selection:</h2>
+                    
+						    <h3> {{$eventName}} </h3>	
+						    @if($duration)<datetime="YYYY-MM-DDThh:mm:ssTZD"><span class="datetime">{{$duration}}</span></datetime="YYYY-MM-DDThh:mm:ssTZD">@endif
+						    <div class="checkout-price-wrap">
+						    	
+
+						    	<div class="checkout-total">
+						    		<p class="mb-0">Amount to be paid:</p><span class="color-secondary checkout-total-amount"> {{$price}} </span>
+						    	</div>
+						    </div>
+                       
+						
+						
+						
+					</div>
+				</div>
+      </div>
+   </div>
+</div>
 
     <script>
          window.stripe = Stripe('{{ $stripeKey }}',{
@@ -307,7 +294,7 @@
                     // Set a return url to redirect the user back to the payment
                     // page after handling the off session payment confirmation.
                     if (this.paymentMethod.redirects) {
-                        data.return_url = '{{ route('cashier.payment', $paymentIntent['id']).'?redirect='.$redirect }}';
+                        data.return_url = "{{ route('cashier.payment', $paymentIntent['id']).'?redirect='.$redirect }}";
                     }
 
                     if (this.paymentMethod.type === 'card') {
@@ -373,6 +360,8 @@
                         }
                     } else {
                         this.configurePayment(result.paymentIntent);
+
+                        window.location.href = '/';
                     }
                 },
 
