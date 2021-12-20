@@ -64,27 +64,6 @@ fi
 #Clone db, init mongo and update env for review
 if [ {{ CI_JOB_STAGE }} == 'review' ];
 then
-    if grep -q "^DB_CONNECTION=pgsql" "$app_dir/current/.env"; then
-        echo "Clone PostgresDB"
-        {{ APP_DEPLOY_FOLDER }}/clonedb.sh $review_db
-        echo "Change DB_DATABASE in .env vars"
-        sed -i "s@DB_DATABASE=.*@DB_DATABASE=$review_db@" "$app_dir/current/.env"
-    fi
-    if grep -q "^DB_CONNECTION=mysql" "$app_dir/current/.env"; then
-        echo "Clone MySQL"
-        {{ APP_DEPLOY_FOLDER }}/clonemysql.sh $branch
-        echo "Change DB_DATABASE in .env vars"
-        sed -i "s@DB_DATABASE=.*@DB_DATABASE=$branch@" "$app_dir/current/.env"
-    fi
-    #Clone Mongo
-    if grep -q "^MONGO_DB_DATABASE" "$app_dir/current/.env"; then
-        echo "Init MongoDB"
-        {{ APP_DEPLOY_FOLDER }}/initmongo.sh $branch
-        echo "Change MongoDB .env vars for review"
-        sed -i "s@MONGO_DB_DATABASE=.*@MONGO_DB_DATABASE=$branch@" "$app_dir/current/.env"
-        sed -i "s@MONGO_DB_USERNAME=.*@MONGO_DB_USERNAME=$branch@" "$app_dir/current/.env"
-        sed -i "s@MONGO_DB_PASSWORD=.*@MONGO_DB_PASSWORD=$branch@" "$app_dir/current/.env"
-    fi
     #Edit env vars
     echo "Change env vars for review"
     sed -i "s@APP_ENV=.*@APP_ENV=review@" "$app_dir/current/.env"
