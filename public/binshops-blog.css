@@ -237,10 +237,10 @@
     overflow: hidden;
 }
 .blogx-container > .blog_body_content {
-    padding: 50px 50px;
+    padding: 50px 0px;
 }
 .blogx-container {
-    max-width: 1200px !important;
+    max-width: 680px !important;
 }
 .smallimg img {
     height: 25px !important;
@@ -327,4 +327,12 @@
 
 .blog_body_content ul li {
     list-style-type: circle !important;
+}
+
+.blogx-container .social-share {
+    margin-bottom: 35px;
+}
+
+img.blog-full-width {
+    width: 100%;
 }

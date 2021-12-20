@@ -43,23 +43,18 @@
 
     <main id="main-area" role="main">
         <div class="section section--dynamic-learning blog">
-           <div class="container blogx-container">
-
-                @include("binshopsblog::partials.show_errors")
-                @include("global.social", ['summary' => $post->gen_seo_title(), 'title' => $post->gen_seo_title()])
-                @include("binshopsblog::partials.full_post_details")
+            @include("binshopsblog::partials.show_errors")
+            @include("binshopsblog::partials.full_post_details")
 
 
                 @if(config("binshopsblog.comments.type_of_comments_to_show","built_in") !== 'disabled')
-                    <div style="margin-top: 20px" id='maincommentscontainer'>
+                    <div style="margin-top: 20px" class="container blogx-container" id='maincommentscontainer'>
                         <h2 id='binshopsblogcomments'>Comments</h2>
                         @include("binshopsblog::partials.show_comments")
                     </div>
                 @else
                     {{--Comments are disabled--}}
                 @endif
-
-            </div>
         </div>
     </main>
 
