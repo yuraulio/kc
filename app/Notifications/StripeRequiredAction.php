@@ -26,17 +26,22 @@ class StripeRequiredAction extends Notification
      */
     public $amount;
     public $paymentMethod;
+    public $event;
+    public $subscriptionCheckout;
+
     /**
      * Create a new payment confirmation notification.
      *
      * @param  \Laravel\Cashier\Payment  $payment
      * @return void
      */
-    public function __construct(Payment $payment,$paymentMethod)
+    public function __construct(Payment $payment,$paymentMethod,$eventId,$subscriptionCheckout)
     {
         $this->paymentId = $payment->id;
         $this->amount = $payment->amount();
         $this->paymentMethod = $paymentMethod;
+        $this->event $eventId;
+        $this->$subscriptionCheckout = $subscriptionCheckout;
     }
 
     /**
@@ -58,7 +63,7 @@ class StripeRequiredAction extends Notification
      */
     public function toMail($notifiable)
     {
-        $url = route('payment.required', ['id' => $this->paymentId,'paymentMethod' => encrypt($this->paymentMethod)]);
+        $url = route('payment.required', ['id' => $this->paymentId, 'event'=>$this->event, 'paymentMethod' => encrypt($this->paymentMethod),'$subscriptionCheckout' => $subscriptionCheckout]);
 
         return (new MailMessage)
             ->subject(__('Confirm Payment'))

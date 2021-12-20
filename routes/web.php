@@ -637,24 +637,9 @@ Route::group(['middleware' => ['web']], function () {
 //Route::get('/stripe/payment/{id}/{paymentMethod}', 'PaymentController@show')->name('payment');
 Route::get('/stripe/payment/{id}/{input}', '\Laravel\Cashier\Http\Controllers\PaymentController@show')->name('payment');
 Route::post('/stripe/payment/securee', 'Theme\CartController@securePayment')->name('payment.secure');
-Route::get('/payment/required/{id}/{paymentMethod}', '\Laravel\Cashier\Http\Controllers\PaymentController@requiredAction')->name('payment.required');
+Route::get('/payment/required/{id}/{event}/{paymentMethod}/{subscriptionCheckout}', '\Laravel\Cashier\Http\Controllers\PaymentController@requiredAction')->name('payment.required');
 //Route::post('/stripe/payment/required', 'Theme\CartController@requiredAction')->name('payment.required');
 
-Route::group(['middleware' => ['preview', 'web', 'auth.sms']], function () {
-
-    Route::get('/regularly-mentioned-in-media', function () {
-        return redirect('/in-the-media');
-    });
-
-    Route::get('/they-trust-us', function () {
-        return redirect('/brands-trained');
-    });
-
-    Route::get('/', 'Theme\HomeController@homePage')->name('homepage');
-    Route::post('/add-payment-method', 'Theme\HomeController@addPaymentMethod')->name('add.paymentMethod');
-    Route::get('{slug?}', 'Theme\HomeController@index');
-});
-/// tipota apo edw katw
 Route::group(['prefix' => "/{locale?}/" . config('binshopsblog.blog_prefix', 'blog')], function () {
 
     Route::get('/', 'BinshopsReaderController@index')
@@ -691,3 +676,21 @@ Route::group(['middleware' => ['web'], 'namespace' => '\BinshopsBlog\Controllers
         });
     });
 });
+
+
+Route::group(['middleware' => ['preview', 'web', 'auth.sms']], function () {
+
+    Route::get('/regularly-mentioned-in-media', function () {
+        return redirect('/in-the-media');
+    });
+
+    Route::get('/they-trust-us', function () {
+        return redirect('/brands-trained');
+    });
+
+    Route::get('/', 'Theme\HomeController@homePage')->name('homepage');
+    Route::post('/add-payment-method', 'Theme\HomeController@addPaymentMethod')->name('add.paymentMethod');
+    Route::get('{slug?}', 'Theme\HomeController@index');
+});
+/// tipota apo edw katw
+

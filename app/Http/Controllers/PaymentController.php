@@ -74,7 +74,7 @@ class PaymentController extends Controller
         ]);
     }
 
-    public function requiredAction($id,$paymentMethod)
+    public function requiredAction($id,Event $event,$paymentMethod,$subscriptionCheckout)
     {
         $paymentMethod = decrypt($paymentMethod);
         session()->put('payment_method',$paymentMethod);
@@ -83,6 +83,8 @@ class PaymentController extends Controller
         $payment = new Payment(Cashier::stripe()->paymentIntents->retrieve(
             $id, ['expand' => ['payment_method']])
         );
+
+        $price = $payment->amount();
 
         $paymentIntent = Arr::only($payment->asStripePaymentIntent()->toArray(), [
             'id', 'status', 'payment_method_types', 'client_secret', 'payment_method',
@@ -100,6 +102,10 @@ class PaymentController extends Controller
 
         $paymentIntent['payment_method'] = Arr::only($paymentIntent['payment_method'] ?? [], 'id');
 
+        if(!$subscriptionCheckout){
+            $duration = $event->summary1->where('section','date')->first() ? $event->summary1->where('section','date')->first()->title : 'date';
+        }
+
         return view('cashier.action_required', [
             'stripeKey' => env('PAYMENT_PRODUCTION') ? $paymentMethod->processor_options['key'] : $paymentMethod->test_processor_options['key'],
             'amount' => $payment->amount(),
@@ -111,10 +117,11 @@ class PaymentController extends Controller
                 : '',
             'customer' => $payment->customer(),
             'redirect' => url(request('redirect', '/')),
+            'price' => $price,
+            'duration' => $duration
         ]);
 
     }
-
 
     public function dpremove($item)
     {
