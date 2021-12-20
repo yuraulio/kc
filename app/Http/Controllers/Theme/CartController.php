@@ -1150,7 +1150,8 @@ class CartController extends Controller
                             session()->put('noActionEmail',true);
 
                             //return '/';
-                            return 'stripe/payment/' . $exception->payment->id . '/' . $input;
+                            //return 'stripe/payment/' . $exception->payment->id . '/' . $input;
+                            return 'summary/' . $exception->payment->id . '/' . $input;
                         }
 
                         
@@ -1222,7 +1223,8 @@ class CartController extends Controller
 
                     $input = encrypt($input);
                     
-                    return 'stripe/payment/' . $exception->payment->id . '/' . $input;
+                    //return 'stripe/payment/' . $exception->payment->id . '/' . $input;
+                    return 'summary/' . $exception->payment->id . '/' . $input;
                     //return '/stripe/payment/'.$exception->payment->id;
 
                 }

@@ -635,8 +635,10 @@ Route::group(['middleware' => ['web']], function () {
 });
 
 //Route::get('/stripe/payment/{id}/{paymentMethod}', 'PaymentController@show')->name('payment');
-Route::get('/stripe/payment/{id}/{input}', '\Laravel\Cashier\Http\Controllers\PaymentController@show')->name('payment');
-Route::post('/stripe/payment/securee', 'Theme\CartController@securePayment')->name('payment.secure');
+//Route::get('/stripe/payment/{id}/{input}', '\Laravel\Cashier\Http\Controllers\PaymentController@show')->name('payment');
+Route::get('/summary/{id}/{input}', '\Laravel\Cashier\Http\Controllers\PaymentController@show')->name('payment');
+Route::post('/summary/securee', 'Theme\CartController@securePayment')->name('payment.secure');
+//Route::post('/stripe/payment/securee', 'Theme\CartController@securePayment')->name('payment.secure');
 Route::get('/payment/required/{id}/{event}/{paymentMethod}/{subscriptionCheckout}', '\Laravel\Cashier\Http\Controllers\PaymentController@requiredAction')->name('payment.required');
 //Route::post('/stripe/payment/required', 'Theme\CartController@requiredAction')->name('payment.required');
 
