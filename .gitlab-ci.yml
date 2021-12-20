@@ -3,7 +3,6 @@ image: gitlab.qed.services:5050/devops/qed-deployer:7.4
 variables:
   NODE_VERSION: "12.14.0"
   ROOT_PROJECT_NAME: "knowcrunch"
-  GIT_SUBMODULE_STRATEGY: recursive
 
 stages:
   - review
@@ -18,9 +17,6 @@ cache:
 
 default:
   before_script:
-    - export GIT_SSL_NO_VERIFY=1
-    - git submodule update --init --recursive
-    - git submodule update --remote
     - cp "$CI_PROJECT_DIR"/inventory.yml "$CI_PROJECT_DIR"/ansible
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)
