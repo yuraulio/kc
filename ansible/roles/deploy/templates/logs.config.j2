@@ -1,0 +1,23 @@
+{% if 'review' in CI_JOB_STAGE %}
+   - targets:
+      - localhost
+     labels:
+      job: laravel_{{ CI_JOB_STAGE }}
+      host: {{ ansible_hostname }}
+      log_name: laravel_{{ CI_JOB_STAGE }}_{{ CI_PROJECT_NAME }}_{{ CI_COMMIT_REF_NAME | lower }}
+      env: dev
+      __path__: /var/www/{{ ROOT_PROJECT_NAME }}/{{ CI_JOB_STAGE }}/{{ CI_PROJECT_NAME }}/{{ CI_COMMIT_REF_NAME | lower }}/current/storage/logs/laravel.log
+{% else %}
+   - targets:
+      - localhost
+     labels:
+      job: laravel_{{ CI_JOB_STAGE }}
+      host: {{ ansible_hostname }}
+      log_name: laravel_{{ CI_JOB_STAGE }}_{{ CI_PROJECT_NAME }}
+{% if 'production' in CI_JOB_STAGE %}
+      env: prod
+      {% else %}
+      env: dev
+      {% endif %}
+__path__: /var/www/{{ ROOT_PROJECT_NAME }}/{{ CI_JOB_STAGE }}/{{ CI_PROJECT_NAME | lower }}/current/storage/logs/laravel.log
+{% endif %}

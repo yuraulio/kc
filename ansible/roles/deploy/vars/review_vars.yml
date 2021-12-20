@@ -1,0 +1,5 @@
+---
+
+APP_DEPLOY_FOLDER: "/var/www/{{ ROOT_PROJECT_NAME }}/{{ CI_JOB_STAGE }}/{{ CI_PROJECT_NAME }}/{{ CI_COMMIT_REF_NAME | lower }}/releases/{{ DEPLOY_TIMESTAMP }}"
+CURRENT_APP: "/var/www/{{ ROOT_PROJECT_NAME }}/{{ CI_JOB_STAGE }}/{{ CI_PROJECT_NAME }}/{{ CI_COMMIT_REF_NAME | lower }}/current"
+RELEASES_FOLDER: "/var/www/{{ ROOT_PROJECT_NAME }}/{{ CI_JOB_STAGE }}/{{ CI_PROJECT_NAME }}/{{ CI_COMMIT_REF_NAME | lower }}/releases/"

@@ -1,0 +1,59 @@
+---
+
+- name: Load variables for deploy
+  include_vars: deploy_vars.yml
+  when: CI_JOB_STAGE != 'review'
+
+- name: Load variables for review
+  include_vars: review_vars.yml
+  when: CI_JOB_STAGE == 'review'
+
+- name: Create application deployment folder
+  file:
+    path: "{{ APP_DEPLOY_FOLDER }}"
+    state: directory
+    recurse: yes
+    owner: deployer
+    group: deployer
+    mode: u=rwx,g=rwx,o=rx
+  become: yes
+
+- name: Compress with tar
+  command: tar --exclude='{{ CI_PROJECT_DIR }}/node_modules' -czf /builds/{{ CI_PROJECT_NAME }}-{{ DEPLOY_TIMESTAMP }}.tar.gz {{ CI_PROJECT_DIR }}
+  delegate_to: 127.0.0.1
+
+- name: Copy application to deployment folder
+  copy:
+    src: "/builds/{{ CI_PROJECT_NAME }}-{{ DEPLOY_TIMESTAMP }}.tar.gz"
+    dest: "{{ APP_DEPLOY_FOLDER }}"
+    owner: deployer
+    group: deployer
+    mode: u=rwx,g=rwx,o=r
+    force: yes
+
+- name: Uncompress artifacts
+  unarchive:
+   src: "{{ APP_DEPLOY_FOLDER }}/{{ CI_PROJECT_NAME }}-{{ DEPLOY_TIMESTAMP }}.tar.gz"
+   dest: "{{ APP_DEPLOY_FOLDER }}/"
+   extra_opts: [--strip-components=3]
+   remote_src: yes
+
+- name: Remove artifacts archive from remote
+  file:
+    path: "{{ APP_DEPLOY_FOLDER }}/{{ CI_PROJECT_NAME }}-{{ DEPLOY_TIMESTAMP }}.tar.gz"
+    state: absent
+
+- name: Remove artifacts archive from docker runner
+  file:
+    path: "/builds/{{ CI_PROJECT_NAME }}-{{ DEPLOY_TIMESTAMP }}.tar.gz"
+    state: absent  
+  delegate_to: 127.0.0.1
+
+- name: Link current release
+  file:
+    src: "{{ APP_DEPLOY_FOLDER }}"
+    dest: "{{ CURRENT_APP }}"
+    state: link
+    owner: deployer
+    group: deployer
+  
