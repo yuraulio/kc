@@ -17,7 +17,7 @@ class UserPolicy
      */
     public function viewAny(User $user)
     {
-       
+
         return $user->isAdmin();
     }
 
@@ -65,8 +65,13 @@ class UserPolicy
     public function manageUsers(User $user)
     {
         $roles = $user->role->pluck('name')->toArray();
-        return (in_array('Super Administrator',$roles) || in_array('Administrator',$roles) || in_array('Manager',$roles) || 
+        return (in_array('Super Administrator',$roles) || in_array('Administrator',$roles) || in_array('Manager',$roles) ||
                         in_array('Author',$roles));
+    }
+
+    public function managePosts(User $user)
+    {
+        return $user->canManageBinshopsBlogPosts();
     }
 
 }
