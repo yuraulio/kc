@@ -10,6 +10,7 @@ use App\Model\Category;
 use \Stripe\Plan;
 use \Stripe\Stripe;
 use \Stripe\StripeClient;
+use App\Model\PaymentMethod;
 
 class PlanController extends Controller
 {
@@ -59,6 +60,8 @@ class PlanController extends Controller
         //$skey = env('STRIPE_SECRET');
         //$stripe = Stripe::make($skey);    
 
+        $paymentMethod = PaymentMethod::find(2);
+
         $eventsAttach = [];
         foreach($request->events as $eventId){
             
@@ -69,9 +72,12 @@ class PlanController extends Controller
 
                 $eventsAttach[] = $eventId;
                 
-                $secretKey = env('PAYMENT_PRODUCTION') ? $event->paymentMethod->first()->processor_options['secret_key'] : $event->paymentMethod->first()->test_processor_options['secret_key'];
-                session()->put('payment_method',$event->paymentMethod->first()->id);
-    
+                //$secretKey = env('PAYMENT_PRODUCTION') ? $event->paymentMethod->first()->processor_options['secret_key'] : $event->paymentMethod->first()->test_processor_options['secret_key'];
+                //session()->put('payment_method',$event->paymentMethod->first()->id);
+
+                $secretKey = env('PAYMENT_PRODUCTION') ? $paymentMethod->processor_options['secret_key'] : $paymentMethod->test_processor_options['secret_key'];
+                session()->put('payment_method',$paymentMethod->id);
+
                 Stripe::setApiKey($secretKey);
                 $id = 'plan'.time();
                 $plan = Plan::create([

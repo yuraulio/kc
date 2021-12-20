@@ -597,7 +597,7 @@ class WebhookController extends BaseWebhookController
                     $payload['data']['object']['payment_intent']
                 ));
 
-                $user->notify(new $notification($payment,$paymentMethod,$eventId,$subscriptionCheckout));
+                $user->notify(new $notification($payment,$paymentMethod,$eventId,$subscriptionCheckout,$user));
 				
             //}
 			

@@ -1128,6 +1128,7 @@ class CartController extends Controller
 
                         
                         }catch(\Laravel\Cashier\Exceptions\IncompletePayment $exception){
+
                             $payment_method_id = -1;
                             if($ev->paymentMethod->first()){
                                 
@@ -1139,7 +1140,8 @@ class CartController extends Controller
                             $ev->users()->save($dpuser,['paid'=>false,'payment_method'=>$payment_method_id]);
 
                             $input['paymentMethod'] = $payment_method_id;
-                            $input['amount'] = $namount;
+                            $input['amount'] = $instamount;
+                            $input['total_amount'] = $namount;
                             $input['couponCode'] = $couponCode;
                             $input['duration'] = $ev_date_help;
 
@@ -1215,6 +1217,7 @@ class CartController extends Controller
 
                     $input['paymentMethod'] = $payment_method_id;
                     $input['amount'] = $namount;
+                    $input['total_amount'] = $namount;
                     $input['couponCode'] = $couponCode;
 
                     $input = encrypt($input);
@@ -1510,19 +1513,23 @@ class CartController extends Controller
                     $newPrice = $request->price - $price;
                     $priceOf = $coupon->price . '%';
                 }else{
+                    
                     $newPrice = $coupon->price;
-                    $priceOf = ($coupon->price / $request->price) * 100;
+                    $priceOf = 100 - ($coupon->price / $request->price) * 100;
                     $priceOf = round($priceOf,2) . '%';
                 }
 
+                
+
                 $savedPrice = $request->price - $newPrice;
+
                 Session::put('coupon_code',$request->coupon);
                 Session::put('coupon_price',$newPrice);
                 Session::put('priceOf',$priceOf);
                 
-                $instOne = $newPrice;
-                $instTwo = round($newPrice / 2, 2);
-                $instThree = round($newPrice / 3, 2);
+                $instOne = $newPrice * $request->totalItems;
+                $instTwo = round($newPrice / 2, 2) * $request->totalItems;
+                $instThree = round($newPrice / 3, 2) * $request->totalItems;
 
                 if($instOne - floor($instOne)>0){
                     $instOne = number_format($instOne , 2 , '.', ',');
@@ -1542,6 +1549,8 @@ class CartController extends Controller
                     $instThree = number_format($instThree , 0 , '.', ',');
                 }
 
+                //dd($instOne);
+
                 return response()->json([
                     'success' => true,
                     'new_price' => $instOne,
@@ -1550,7 +1559,8 @@ class CartController extends Controller
                     'newPriceInt2' => $instTwo,
                     'newPriceInt3' => $instThree,
                     'message' => 'Success! Your coupon has been accepted.',
-                    'coupon_code' => $request->coupon
+                    'coupon_code' => $request->coupon,
+
                 ]);
             }
 
@@ -1930,7 +1940,7 @@ class CartController extends Controller
 
         $input = decrypt($request->input);
         $charge = $request->paymentIntent;
-        $namount = $input['amount'];
+        $namount = $input['total_amount'];
 
         $dpuser = Auth::user() ? Auth::user() : User::find(Session::get('user_id'));
         $cart = Cart::content();
@@ -2062,8 +2072,8 @@ class CartController extends Controller
                 "surcharge_amount" => 0,
                 "discount_amount" => 0,
                 "coupon_code" => $input['couponCode'],
-                "amount" => $input['amount'],
-                "total_amount" => $input['amount'],
+                "amount" => $input['total_amount'],
+                "total_amount" => $input['total_amount'],
                 'trial' => false,
             ];
 

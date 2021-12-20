@@ -371,7 +371,8 @@
                        this.configureStripeElements();
                    }
                } else {
-   
+                    
+                    this.isPaymentProcessing = true;
                    //this.configurePayment(result.paymentIntent);
    
                    const dataa = {'input':"{{$input}}", 'paymentIntent':result.paymentIntent};
