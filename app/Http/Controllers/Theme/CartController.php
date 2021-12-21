@@ -1813,7 +1813,10 @@ class CartController extends Controller
         }
         //$this->fbp->sendPurchaseEvent($data);
 
-        return view('theme.cart.new_cart.thank_you',$data);
+        Session::put('thankyouData',$data);
+        return redirect('/thankyou');
+
+        //return view('theme.cart.new_cart.thank_you',$data);
        
     }
 
