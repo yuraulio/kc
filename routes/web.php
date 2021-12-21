@@ -621,7 +621,6 @@ Route::group(['middleware' => ['web']], function () {
 });
 
 //Create Your Password
-
 Route::group(['middleware' => ['web']], function () {
 
     Route::get('/create-your-password/{slug}', 'Theme\StudentController@createPassIndex')->name('create.index');
