@@ -60,6 +60,7 @@ class CartController extends Controller
         $data['curStock'] = 1;
         $tr_price = 0;
         $data['elearning'] = false;
+        $data['eventFree'] = false;
 
         $c = Cart::content()->count();
         if ($c > 0) {
@@ -158,11 +159,14 @@ class CartController extends Controller
             $ticketType = 'Upon Coupon';
             $tr_price = 0;
 
+            $data['eventFree'] = true;
+
         }else if($data['type'] == 'free' ){
             $data['price'] = 'Free';
             $data['show_coupon'] = false;
             $ticketType = 'Free';
             $tr_price = 0;
+            $data['eventFree'] = true;
         }
 
  
@@ -197,7 +201,7 @@ class CartController extends Controller
         }else{
             $data['tigran']['Visitor_id'] = session()->getId();
         }
-        
+
         return $data;
 
     }
@@ -1316,7 +1320,7 @@ class CartController extends Controller
                     \Session::put('transaction_id', $transaction->id);
                 }
 
-                return '/thankyou';
+                return '/order-success';
                 //return '/info/order_success';
 
             } else {
@@ -1797,9 +1801,8 @@ class CartController extends Controller
             $this->sendEmails($transaction,$content,$user);
 
             $data['info']['success'] = true;
-            $data['info']['title'] = '<h1>Booking successful</h1>';
-            $data['info']['message'] = '<h2>Thank you and congratulations!<br/>We are very excited about you joining us. We hope you are too!</h2>
-            <p>An email with more information is on its way to your inbox.</p>';
+            $data['info']['title'] = __('thank_you_page.title');
+            $data['info']['message'] = __('thank_you_page.message');
             $data['info']['transaction'] = $transaction;
             $data['info']['statusClass'] = 'success';
 
@@ -2121,7 +2124,7 @@ class CartController extends Controller
 
             return response()->json([
                 'success' => true,
-                'redirect' => '/thankyou',
+                'redirect' => '/order-success',
             ]);
         
         }

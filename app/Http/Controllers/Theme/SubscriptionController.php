@@ -41,7 +41,8 @@ class SubscriptionController extends Controller
         $data['event'] = $event;
         $data['eventId'] = $event->id;
         $data['cur_user'] = $user;
-       
+        $data['eventFree'] = false;
+
         $data['stripe_key'] = env('PAYMENT_PRODUCTION') ? $this->paymentMethod->processor_options['key'] : 
                                                                 $this->paymentMethod->test_processor_options['key'];
 
@@ -162,7 +163,8 @@ class SubscriptionController extends Controller
         $data['event'] = $event;
         $data['eventId'] = $event->id;
         $data['cur_user'] = $user;
-       
+        $data['eventFree'] = false;
+        
         $data['stripe_key'] = env('PAYMENT_PRODUCTION') ? $this->paymentMethod->processor_options['key'] : 
                                                                 $this->paymentMethod->test_processor_options['key'];
 

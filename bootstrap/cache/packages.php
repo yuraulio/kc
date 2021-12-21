@@ -35,23 +35,6 @@
       0 => 'BeyondCode\\DumpServer\\DumpServerServiceProvider',
     ),
   ),
-  'binshops/laravel-blog' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'BinshopsBlog\\BinshopsBlogServiceProvider',
-    ),
-    'aliases' => 
-    array (
-    ),
-  ),
-  'cviebrock/eloquent-sluggable' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Cviebrock\\EloquentSluggable\\ServiceProvider',
-    ),
-  ),
   'facade/ignition' => 
   array (
     'providers' => 
@@ -124,13 +107,6 @@
       0 => 'Laravel\\Passport\\PassportServiceProvider',
     ),
   ),
-  'laravel/sail' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Laravel\\Sail\\SailServiceProvider',
-    ),
-  ),
   'laravel/tinker' => 
   array (
     'providers' => 
@@ -143,17 +119,6 @@
     'providers' => 
     array (
       0 => 'Laravel\\Ui\\UiServiceProvider',
-    ),
-  ),
-  'laravelium/feed' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Laravelium\\Feed\\FeedServiceProvider',
-    ),
-    'aliases' => 
-    array (
-      'Feed' => 'Laravelium\\Feed\\Feed',
     ),
   ),
   'maatwebsite/excel' => 
@@ -186,18 +151,6 @@
     'providers' => 
     array (
       0 => 'Propaganistas\\LaravelPhone\\PhoneServiceProvider',
-    ),
-  ),
-  'sentry/sentry-laravel' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Sentry\\Laravel\\ServiceProvider',
-      1 => 'Sentry\\Laravel\\Tracing\\ServiceProvider',
-    ),
-    'aliases' => 
-    array (
-      'Sentry' => 'Sentry\\Laravel\\Facade',
     ),
   ),
   'vemcogroup/laravel-sparkpost-driver' => 

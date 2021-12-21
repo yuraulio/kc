@@ -106,7 +106,7 @@
 								<div class="d-flex align-items-center previous-participant-link">
 									<img src="{{cdn('new_cart/images/arrow-previous-green.svg')}}" width="20px" height="12px" class="without-hover" alt="">
 									<img src="{{cdn('new_cart/images/arrow-previous-green2.svg')}}" width="20px" height="12px" class="with-hover" alt="">
-									<a href="/checkout" class="link-color">Return to previous page</a>
+									<a href="/checkout" class="link-color">Go back</a>
 								</div>
 							</div>
                                  <button

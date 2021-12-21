@@ -13,7 +13,7 @@ class Venue extends Model
     protected $table = 'venues';
 
     protected $fillable = [
-        'name', 'address', 'longitude', 'latitude'
+        'name', 'address', 'longitude', 'latitude','direction_description'
     ];
 
 

@@ -37,6 +37,8 @@
 				<div class="header-logo">
 					<a href="{{url('/')}}"><img src="{{cdn('new_cart/images/kc-logo.svg')}}" alt="KC Logo"></a>
 				</div>
+
+				@if(!$eventFree)
 				<div class="d-flex align-items-center strip-ssl-wrap">
 					<div class="d-flex justify-content-between ssl-lock-wrp">
 						<img src="{{cdn('new_cart/images/ssl.svg')}}" alt="ssl" width="21px" height="21px">
@@ -44,6 +46,7 @@
 					</div>
 						<img src="{{cdn('new_cart/images/powered-by-stripe.svg')}}" alt="Powered By Stripe" width="119px" height="28px">					
 				</div>
+				@endif
 			</div>
 		</div>
 
@@ -137,6 +140,7 @@
 
 
     <footer>
+	@if(!$eventFree)
 		<div class="bank-details text-center">
 			<img src="{{cdn('new_cart/images/amex.svg')}}" alt="Amex" width="58px" height="37px">
 			<img src="{{cdn('new_cart/images/mastercard.svg')}}" alt="Mastercard" width="49px" height="38px">
@@ -144,6 +148,7 @@
 			<img src="{{cdn('new_cart/images/discover.svg')}}" alt="Discover" width="58px" height="37px">
 			<img src="{{cdn('new_cart/images/china-unionpay.svg')}}" alt="Unionpay" width="59px" height="37px">
 		</div>
+		@endif
 		<div class="address text-center">
 			KnowCrunch Inc., 2035 Sunset Lake Road, Delaware, USA.
 		</div>		

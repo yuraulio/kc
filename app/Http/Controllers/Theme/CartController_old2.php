@@ -1551,7 +1551,7 @@ class CartController extends Controller
                     \Session::put('transaction_id', $transaction->id);
                 }
 
-                return '/thankyou';
+                return '/order-success';
                 //return '/info/order_success';
 
             } else {

@@ -14,25 +14,27 @@
 						    	<div class="checkout-price">
 						    		<p>Price:</p><span>@if(is_numeric($price)) €{{$oldPrice}} @else {{$price}} @endif</span>
 						    	</div>
-						    	<div class="checkout-participant">
-						    		<p>Participant(s):</p><span>{{$totalitems}}</span>
-						    	</div>
-
-								@if(isset($priceOf))
-								<div class="checkout-participant price-of">
-						    		<p>Special offer:</p><span>{{$priceOf}}</span>
-						    	</div>
+								@if(!$eventFree)
+						    		<div class="checkout-participant">
+						    			<p>Participant(s):</p><span>{{$totalitems}}</span>
+						    		</div>
+	
+									@if(isset($priceOf))
+									<div class="checkout-participant price-of">
+						    			<p>Special offer:</p><span>{{$priceOf}}</span>
+						    		</div>
+									@endif
+	
+									@if(isset($savedPrice))
+									<div class="checkout-participant">
+						    			<p>You save:</p><span>{{$savedPrice}}</span>
+						    		</div>
+									@endif
+	
+						    		<div class="checkout-total">
+						    			<p class="mb-0">Total amount:</p><span class="color-secondary checkout-total-amount">@if(is_numeric($price)) €{{$showPrice}} @else {{$price}} @endif </span>
+						    		</div>
 								@endif
-
-								@if(isset($savedPrice))
-								<div class="checkout-participant">
-						    		<p>You save:</p><span>{{$savedPrice}}</span>
-						    	</div>
-								@endif
-
-						    	<div class="checkout-total">
-						    		<p class="mb-0">Total amount:</p><span class="color-secondary checkout-total-amount">@if(is_numeric($price)) €{{$showPrice}} @else {{$price}} @endif </span>
-						    	</div>
 						    </div>
                         @endforeach
 						

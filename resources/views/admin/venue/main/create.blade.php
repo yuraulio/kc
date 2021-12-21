@@ -53,6 +53,13 @@
                                     @include('alerts.feedback', ['field' => 'address'])
                                 </div>
 
+                                <div class="form-group{{ $errors->has('direction_description') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-address">{{ __('Direction description') }}</label>
+                                    {{--<input type="text" name="direction_description" id="input-direction_description" class="form-control{{ $errors->has('direction_description') ? ' is-invalid' : '' }}" placeholder="{{ __('Direction description') }}" value="{{ old('direction_description', $venue->direction_description) }}" autofocus>--}}
+                                    <textarea name="direction_description" id="input-direction_description"  class="ckeditor form-control{{ $errors->has('direction_description') ? ' is-invalid' : '' }}" placeholder="{{ __('Direction description') }}" required autofocus>{{ old('direction_description') }}</textarea>
+                                    @include('alerts.feedback', ['field' => 'direction_description'])
+                                </div>
+
                                 <div class="form-group{{ $errors->has('longitude') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-longitude">{{ __('Longitude') }}</label>
                                     <input type="number" name="longitude" id="input-longitude" class="form-control{{ $errors->has('Longitude') ? ' is-invalid' : '' }}" placeholder="{{ __('longitude') }}" value="{{ old('longitude') }}" autofocus>

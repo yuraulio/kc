@@ -316,7 +316,7 @@
 							</div>
 							
 							<div class="checkout-btn-wrap form-row mb-4 my-md-5 align-items-center">
-								<button id="btn" type="submit" class="btn registration checkout-button-secondary do-checkout-free">Enroll Now <img src="{{cdn('new_cart/images/arrow-next-red.svg')}}" width="20px" height="12px" class="without-hover" alt=""> <img src="{{cdn('new_cart/images/arrow-next-red2.svg')}}" width="20px" height="12px" class="with-hover" alt=""> </button>
+								<button id="btn" type="submit" class="btn registration checkout-button-secondary do-checkout-free">Complete Registration <img src="{{cdn('new_cart/images/arrow-next-red.svg')}}" width="20px" height="12px" class="without-hover" alt=""> <img src="{{cdn('new_cart/images/arrow-next-red2.svg')}}" width="20px" height="12px" class="with-hover" alt=""> </button>
 							</div>
 						</form>	
 					</div>

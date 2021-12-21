@@ -79,9 +79,8 @@ class InfoController extends Controller
         }
 
         $data['info']['success'] = true;
-        $data['info']['title'] = '<h1>Booking Successful!</h1>';
-        $data['info']['message'] = '<h2>Congratulations for your registration. We are very excited to have you in our course & we thank you for your trust!</h2>
-        <p>An email with more information is on its way to your inbox.</p>';
+        $data['info']['title'] = __('thank_you_page.title');
+        $data['info']['message'] = __('thank_you_page.message');
         $data['info']['transaction'] = $this->transaction;
         $data['info']['statusClass'] = 'success';
         $data['event'] = [];
@@ -205,8 +204,11 @@ class InfoController extends Controller
         Session::forget('priceOf');
         ///dd($data);
         
+        
         if (isset($this->transaction['payment_response'])) {
-        	return view('theme.cart.new_cart.thank_you', $data);
+            Session::put('thankyouData',$data);
+            return redirect('/thankyou');
+        	//return view('theme.cart.new_cart.thank_you', $data);
         }
         else {
         	return Redirect::to('/');

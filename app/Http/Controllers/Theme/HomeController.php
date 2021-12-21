@@ -361,41 +361,41 @@ class HomeController extends Controller
             if ($transaction) {
                     // set transaction id in session
 
-                    $pay_seats_data = ["names" => [$user->first_name],"surnames" => [$user->last_name],"emails" => [$user->email],
-                    "mobiles" => [$user->mobile],"addresses" => [$user->address],"addressnums" => [$user->address_num],
-                    "postcodes" => [$user->postcode],"cities" => [$user->city],"jobtitles" => [$user->job_title],
-                    "companies" => [$user->company],"students" => [""], "afms" => [$user->afm]];
+                $pay_seats_data = ["names" => [$user->first_name],"surnames" => [$user->last_name],"emails" => [$user->email],
+                "mobiles" => [$user->mobile],"addresses" => [$user->address],"addressnums" => [$user->address_num],
+                "postcodes" => [$user->postcode],"cities" => [$user->city],"jobtitles" => [$user->job_title],
+                "companies" => [$user->company],"students" => [""], "afms" => [$user->afm]];
 
 
-                    $deree_user_data = [$user->email => $user->partner_id];
-                    $cart_data = ["manualtransaction" => ["rowId" => "manualtransaction","id" => 'free',"name" => $content->title,"qty" => "1","price" => $amount,"options" => ["type" => "8","event"=> $content->id],"tax" => 0,"subtotal" => $amount]];
+                $deree_user_data = [$user->email => $user->partner_id];
+                $cart_data = ["manualtransaction" => ["rowId" => "manualtransaction","id" => 'free',"name" => $content->title,"qty" => "1","price" => $amount,"options" => ["type" => "8","event"=> $content->id],"tax" => 0,"subtotal" => $amount]];
 
-                    $status_history[] = [
-                    'datetime' => Carbon::now()->toDateTimeString(),
-                    'status' => 1,
-                    'user' => [
-                        'id' => $user->id, //0, $this->current_user->id,
-                        'email' => $user->email,//$this->current_user->email
-                        ],
-                    'pay_seats_data' => $pay_seats_data,//$data['pay_seats_data'],
-                    'pay_bill_data' => [],
-                    'cardtype' => 8,
-                    'installments' => 1,
-                    'deree_user_data' => $deree_user_data, //$data['deree_user_data'],
-                    'cart_data' => $cart_data //$cart
-                    ];
+                $status_history[] = [
+                'datetime' => Carbon::now()->toDateTimeString(),
+                'status' => 1,
+                'user' => [
+                    'id' => $user->id, //0, $this->current_user->id,
+                    'email' => $user->email,//$this->current_user->email
+                    ],
+                'pay_seats_data' => $pay_seats_data,//$data['pay_seats_data'],
+                'pay_bill_data' => [],
+                'cardtype' => 8,
+                'installments' => 1,
+                'deree_user_data' => $deree_user_data, //$data['deree_user_data'],
+                'cart_data' => $cart_data //$cart
+                ];
 
-                    $transaction->update(['status_history' => json_encode($status_history)/*, 'billing_details' => $tbd*/]);
+                $transaction->update(['status_history' => json_encode($status_history)/*, 'billing_details' => $tbd*/]);
 
-                    $today = date('Y/m/d');
-                    $expiration_date = '';
+                $today = date('Y/m/d');
+                $expiration_date = '';
 
-                    if($content->expiration){
-                        $monthsExp = '+' . $content->expiration .'months';
-                        $expiration_date = date('Y-m-d', strtotime($monthsExp, strtotime($today)));
-                    }
+                if($content->expiration){
+                    $monthsExp = '+' . $content->expiration .'months';
+                    $expiration_date = date('Y-m-d', strtotime($monthsExp, strtotime($today)));
+                }
 
-                    $content->users()->save($user,['comment'=>'free','expiration'=>$expiration_date,'paid'=>true]);
+                $content->users()->save($user,['comment'=>'free','expiration'=>$expiration_date,'paid'=>true]);
 
             }
         }
@@ -414,9 +414,8 @@ class HomeController extends Controller
         Session::forget('priceOf');
 
         $data['info']['success'] = true;
-        $data['info']['title'] = '<h1>Booking successful</h1>';
-        $data['info']['message'] = '<h2>Thank you and congratulations!<br/>We are very excited about you joining us. We hope you are too!</h2>
-        <p>An email with more information is on its way to your inbox.</p>';
+        $data['info']['title'] = __('thank_you_page.title');
+        $data['info']['message'] = __('thank_you_page.message');
         $data['info']['statusClass'] = 'success';
 
         $data['event']['title'] = $content->title;
@@ -425,7 +424,9 @@ class HomeController extends Controller
         $data['event']['twitter'] = urlencode("Proudly participating in ". $content->title . " by KnowCrunch. 💙");
         $data['event']['linkedin'] = urlencode(url('/') . '/' .$content->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $content->title . " by KnowCrunch. 💙");
         
-        return view('theme.cart.new_cart.thank_you_free',$data);
+        Session::put('thankyouData',$data);
+        return redirect('/thankyou');
+        //return view('theme.cart.new_cart.thank_you_free',$data);
 
     }
 
@@ -821,6 +822,29 @@ class HomeController extends Controller
            'message' => 'Τhank you for your participation',
        ];
 
+    }
+
+
+    public function thankyou(){
+
+        
+        if($data = Session::get('thankyouData')){
+            Session::forget('thankyouData');
+            return view('theme.cart.new_cart.thank_you', $data);
+        }
+
+        return redirect('/');
+    }
+
+    public function thankyouInstallments(Request $request){
+
+        
+       if($data = json_decode($request->data,true)){
+            Session::forget('thankyouData');
+            return view('theme.cart.new_cart.thank_you', $data);
+        }
+
+        return redirect('/');
     }
 
 

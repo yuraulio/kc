@@ -15,7 +15,7 @@
                <div class="col-7 col-sm-12">
                   <div class="text-area">
                      <?php echo ((isset($info) && isset($info['title'])) ? $info['title'] : 'Info') ?>
-                     <?php $res = json_decode($info['transaction']['payment_response'], true); ?>
+                     <?php ///$res = json_decode($info['transaction']['payment_response'], true); ?>
                      {!! $info['message'] !!}
 
                      {{--<p>Proceed to <a href="/myaccount" class="dark-bg">your account</a>.</p>--}}

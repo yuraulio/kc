@@ -107,6 +107,15 @@ class PaymentController extends Controller
             $duration = $event->summary1->where('section','date')->first() ? $event->summary1->where('section','date')->first()->title : 'date';
         }
 
+        $data['info']['success'] = true;
+        $data['info']['title'] = __('thank_you_page.title');
+        $data['info']['message'] = __('thank_you_page.message');
+        $data['event']['title'] = $event->title;
+        $data['event']['slug'] = $event->slugable->slug;
+        $data['event']['facebook'] = url('/') . '/' .$event->slugable->slug .'?utm_source=Facebook&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&quote='.urlencode("Proudly participating in ". $event->title . " by KnowCrunch.");
+        $data['event']['twitter'] = urlencode("Proudly participating in ". $event->title . " by KnowCrunch. 💙");
+        $data['event']['linkedin'] = urlencode(url('/') . '/' .$event->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $event->title . " by KnowCrunch. 💙");
+
         return view('cashier.action_required', [
             'stripeKey' => env('PAYMENT_PRODUCTION') ? $paymentMethod->processor_options['key'] : $paymentMethod->test_processor_options['key'],
             'amount' => $payment->amount(),
@@ -120,7 +129,8 @@ class PaymentController extends Controller
             'redirect' => url(request('redirect', '/')),
             'price' => $price,
             'duration' => $duration,
-            'eventName' => $event->title
+            'eventName' => $event->title,
+            'data' => $data
         ]);
 
     }
