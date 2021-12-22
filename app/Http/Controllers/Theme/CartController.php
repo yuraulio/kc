@@ -387,7 +387,8 @@ class CartController extends Controller
         $data = [];
         $data = $this->initCartDetails($data);
         //dd($data['type']!=3);
-    
+        $user = false;
+
         if((!$userCheck && !($user = User::where('email',$request->email[0])->first())) &&  $data['type'] != 3){
             $input = [];
             $formData = $request->all();
@@ -421,6 +422,7 @@ class CartController extends Controller
             $existingcheck = ShoppingCart::where('identifier', $user->id)->first();
             //Cart::restore($user->id
             if($existingcheck) {
+                
                 //$user edww
                 if($user->cart){
                     $user->cart->delete();
@@ -431,15 +433,86 @@ class CartController extends Controller
                 $timecheck->created_at = Carbon::now();
                 $timecheck->updated_at = Carbon::now();
                 $timecheck->save();
+
+                
             }
             else {
+               
                 Cart::store($user->id);
                 $timecheck = ShoppingCart::where('identifier', $user->id)->first();
                 $timecheck->created_at = Carbon::now();
                 $timecheck->updated_at = Carbon::now();
                 $timecheck->save();
+
             }
+
+            $cart = Cart::content();
+            $event = $cart->first()->options->event;
+            $tid = $cart->first()->id;
+
+            if($user->cart){
+                $user->cart->delete();
+            }
+
+            $cartCache = new CartCache;
+
+            $cartCache->ticket_id = ($tid == 'free') ? 0 : $tid;
+            $cartCache->product_title = $cart->first()->name;
+            $cartCache->quantity = $cart->first()->qty;
+            $cartCache->price = $cart->first()->price;
+            $cartCache->type = ($cart->first()->options->type == 'free') ? 0 : $cart->first()->options->type;
+            $cartCache->event = $event;
+            $cartCache->user_id = $user->id;
+            $cartCache->slug =  base64_encode($tid. $user->id . $event);
+            $cartCache->save();
  
+        }else if($user || $user = $userCheck){
+            $existingcheck = ShoppingCart::where('identifier', $user->id)->first();
+            //Cart::restore($user->id
+            if($existingcheck) {
+                
+                //$user edww
+                if($user->cart){
+                    $user->cart->delete();
+                }
+                $existingcheck->delete($user->id);
+                Cart::store($user->id);
+                $timecheck = ShoppingCart::where('identifier', $user->id)->first();
+                $timecheck->created_at = Carbon::now();
+                $timecheck->updated_at = Carbon::now();
+                $timecheck->save();
+
+                
+            }
+            else {
+               
+                Cart::store($user->id);
+                $timecheck = ShoppingCart::where('identifier', $user->id)->first();
+                $timecheck->created_at = Carbon::now();
+                $timecheck->updated_at = Carbon::now();
+                $timecheck->save();
+
+            }
+
+            $cart = Cart::content();
+            $event = $cart->first()->options->event;
+            $tid = $cart->first()->id;
+
+            if($user->cart){
+                $user->cart->delete();
+            }
+
+            $cartCache = new CartCache;
+
+            $cartCache->ticket_id = ($tid == 'free') ? 0 : $tid;
+            $cartCache->product_title = $cart->first()->name;
+            $cartCache->quantity = $cart->first()->qty;
+            $cartCache->price = $cart->first()->price;
+            $cartCache->type = ($cart->first()->options->type == 'free') ? 0 : $cart->first()->options->type;
+            $cartCache->event = $event;
+            $cartCache->user_id = $user->id;
+            $cartCache->slug =  base64_encode($tid. $user->id . $event);
+            $cartCache->save();
         }
 
         $seats_data = array();
@@ -1847,7 +1920,8 @@ class CartController extends Controller
         $data['trans'] = $transaction;
         $data['extrainfo'] = $extrainfo;
         $data['helperdetails'] = $helperdetails;
-        $data['eventslug'] = $content->slug;
+        $data['eventslug'] = url('/') . '/' . $content->getSlug();
+        $data['duration'] =  $content->summary1->where('section','date')->first() ? $content->summary1->where('section','date')->first()->title : '';
 
         $sent = Mail::send('emails.admin.info_new_registration', $data, function ($m) use ($adminemail,$muser) {
 

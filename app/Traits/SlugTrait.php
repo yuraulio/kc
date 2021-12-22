@@ -27,7 +27,7 @@ trait SlugTrait
     }
 
     public function getSlug(){
-        return $this->slug;
+        return $this->slugable ? $this->slugable->slug : '';
     }
 
 }

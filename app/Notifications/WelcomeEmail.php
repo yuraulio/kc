@@ -60,8 +60,7 @@ class WelcomeEmail extends Notification
             $this->user->statusAccount->completed_at = Carbon::now();
             $this->user->statusAccount->save();
         }
-       
-        
+               
         return (new MailMessage)
                     ->from('info@knowcrunch.com', 'Knowcrunch')
                     ->subject('Knowcrunch - Welcome')

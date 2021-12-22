@@ -323,7 +323,9 @@ class HomeController extends Controller
         $data['user']['name'] = $user->firstname . ' ' . $user->lastname;
         $data['user']['email'] = $user->email;
         $data['extrainfo'] = ['','',$content->title];
-        
+        $data['duration'] =  $content->summary1->where('section','date')->first() ? $content->summary1->where('section','date')->first()->title : '';
+
+        $data['eventSlug'] =  url('/') . '/' . $content->getSlug();
         $user->notify(new WelcomeEmail($user,$data));
 
         
