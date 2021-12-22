@@ -13,7 +13,7 @@
 
             <li class="breadcrumb-item active" aria-current="page">{{ __('Dashboard') }}</li>
         @endcomponent
-        {{--@include('layouts.headers.cards')--}}
+        @include('layouts.headers.cards')
     @endcomponent
     @can('manage-users', App\Model\User::class)
     <div class="container-fluid mt--10">

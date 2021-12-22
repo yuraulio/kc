@@ -524,7 +524,7 @@ class WebhookController extends BaseWebhookController
 		$data['slugInvoice'] = encrypt($user->id . '-' . $elearningInvoice->id);
 		$user->notify(new CourseInvoice($data));
 
-		/*$sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf) {
+		$sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf) {
 
             $fullname = $muser['name'];
             $first = $muser['first'];
@@ -535,7 +535,7 @@ class WebhookController extends BaseWebhookController
             $m->subject($sub);
             $m->attachData($pdf, "invoice.pdf");
             
-        });*/
+        });
 	}
 
 	protected function handleInvoicePaymentActionRequired(array $payload)

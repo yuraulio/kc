@@ -4515,14 +4515,15 @@ a.ui-button:active,
 .footer-menu li a:visited{ color: #ffffff; }
 .footer-menu li a:hover{ color: #d2ff00; }
 
-.footer-social-menu{ float: right; text-align: right; }
+.footer-social-menu{ float: right; /*text-align: right;*/ max-width: 200px; text-align: left;}
 .footer-social-menu li{ display: inline-block; }
-.footer-social-menu li:not(:first-child){ margin-left: 12px; }
+/*.footer-social-menu li:not(:first-child){ margin-left: 12px; }*/
+.footer-social-menu li{margin-left: 12px;margin: 0px 0 10px 12px;}
 .footer-social-menu li a{ display: block; }
 .footer-social-menu li a img,
-.footer-social-menu li a svg{ width: 23px; }
+.footer-social-menu li a svg{ width: 23px; height: 23px;}
 .footer-social-menu li a path{ stroke: #ffffff !important; transition: 300ms all ease; }
-.footer-social-menu li a:hover path{ stroke: #81bbfc !important; }
+.footer-social-menu li a:hover path{ stroke: #81bbfc !important; stroke-width: 1.5;}
 
 .copyright-wrapper{ margin-top: 80px; }
 .copyright-wrapper p{ color: #ffffff; font-size: 13px; text-align: right; line-height: 1.6; }

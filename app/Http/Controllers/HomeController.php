@@ -20,6 +20,8 @@ use App\Model\Transaction;
 use Illuminate\Http\Request;
 use Auth;
 use App\Model\User;
+use App\Model\Instructor;
+use App\Model\Event;
 
 class HomeController extends Controller
 {
@@ -96,8 +98,43 @@ class HomeController extends Controller
 
         $users = User::all();
 
+        $adminUsers = 0;
+        foreach($users as $user){
+            if($user->isAdmin()){
+                $adminUsers += 1;
+            }
+        }
+
+        $instructors = Instructor::where('status',true)->has('event')->get();
+
         $data['users'] =  count($users);
-        //dd($users);
+        $data['adminUsers'] = $adminUsers;
+        $data['instructors'] = count($instructors);
+
+        $data['usersElearning'] = [];
+        $data['usersInclass'] = [];
+        $data['usersGranduates'] = [];
+
+        $events = Event::where('published',true)->with('delivery','type','users')->get();
+        $ee = 0;
+        foreach($events as $event){
+
+            if($event->delivery->first() && $event->delivery->first()->id == 143){
+                //dd($event->users()->pluck('user_id')->toArray());
+                $data['usersElearning'] = array_merge($data['usersElearning'],$event->users()->pluck('user_id')->toArray());
+            }else if($event->delivery->first() && $event->delivery->first()->id == 139){
+                $data['usersInclass'] = array_merge($data['usersInclass'],$event->users()->pluck('user_id')->toArray());
+            }
+
+            if(count($event->type()->whereIn('id',[13,14])->get()) > 0){
+                $data['usersGranduates'] = array_merge($data['usersGranduates'],$event->users()->pluck('user_id')->toArray());
+            }             
+        }
+        $data['usersElearning'] = count(array_unique($data['usersElearning']));
+        $data['usersInclass'] = count(array_unique($data['usersInclass']));
+        $data['totalsStudents'] = $data['usersElearning'] + $data['usersInclass'];
+        $data['usersGranduates'] = count(array_unique($data['usersGranduates']));
+
         return view('pages.dashboard', $data);
     }
 
