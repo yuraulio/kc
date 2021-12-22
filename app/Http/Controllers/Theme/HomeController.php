@@ -624,7 +624,7 @@ class HomeController extends Controller
         $data['venues'] = $event->venues->toArray();
         $data['syllabus'] = $event->syllabus->toArray();
         $data['is_event_paid'] = 0;
-        $data['sumStudents'] = $event->category[0]->getSumOfStudents();
+        $data['sumStudents'] = isset($event->category[0]) ? $event->category[0]->getSumOfStudents() : 0; 
         $data['showSpecial'] = false;
         $data['showAlumni'] = $event->ticket()->where('type','Alumni')->where('active',true)->first() ? true : false;;
 
