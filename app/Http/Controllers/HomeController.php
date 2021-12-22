@@ -19,6 +19,7 @@ namespace App\Http\Controllers;
 use App\Model\Transaction;
 use Illuminate\Http\Request;
 use Auth;
+use App\Model\User;
 
 class HomeController extends Controller
 {
@@ -39,6 +40,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+        
         $transactions = (new TransactionController)->participants()['transactions'];
 
         //dd($transactions);
@@ -91,6 +93,11 @@ class HomeController extends Controller
 
 
         $data['booking'] = $transactions;// (new SubscriptionController)->subs_for_dashboard();
+
+        $users = User::all();
+
+        $data['users'] =  count($users);
+        //dd($users);
         return view('pages.dashboard', $data);
     }
 

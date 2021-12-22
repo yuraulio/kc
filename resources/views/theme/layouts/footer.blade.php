@@ -186,6 +186,7 @@ $social_media = get_social_media();
                <ul class="footer-social-menu">
 
 
+
                   @if($social_media['facebook']['url'] != '')
                     <li><a target="_blank" title="{{ $social_media['facebook']['title'] }}" href="{{ $social_media['facebook']['url'] }}">
                            <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Facebook.svg')}}" width="23" alt="{{ $social_media['facebook']['title'] }}">
@@ -218,9 +219,13 @@ $social_media = get_social_media();
                      </li>
                   @endif
 
-                  @if($social_media['pinterest']['url'] != '')
-                    <li><a target="_blank" title="{{ $social_media['pinterest']['title'] }}" href="{{ $social_media['pinterest']['url'] }}">
-                        <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Pinterest.svg')}}" width="23" alt="{{ $social_media['pinterest']['title'] }}"> </a>
+                  
+
+                  
+
+                  {{--@if($social_media['tiktok']['url'] != '')
+                    <li><a target="_blank" title="{{ $social_media['tiktok']['title'] }}" href="{{ $social_media['tiktok']['url'] }}">
+                        <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Medium.svg')}}" width="23" alt="{{ $social_media['tiktok']['title'] }}"> </a>
                      </li>
                   @endif
 
@@ -229,6 +234,20 @@ $social_media = get_social_media();
                         <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Medium.svg')}}" width="23" alt="{{ $social_media['medium']['title'] }}"> </a>
                      </li>
                   @endif
+
+                  @if($social_media['pinterest']['url'] != '')
+                    <li><a target="_blank" title="{{ $social_media['pinterest']['title'] }}" href="{{ $social_media['pinterest']['url'] }}">
+                        <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Pinterest.svg')}}" width="23" alt="{{ $social_media['pinterest']['title'] }}"> </a>
+                     </li>
+                  @endif
+
+                  @if($social_media['spotify']['url'] != '')
+                    <li><a target="_blank" title="{{ $social_media['spotify']['title'] }}" href="{{ $social_media['spotify']['url'] }}">
+                        <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Pinterest.svg')}}" width="23" alt="{{ $social_media['spotify']['title'] }}"> </a>
+                     </li>
+                  @endif--}}
+
+
                </ul>
             </div>
             <div class="copyright-wrapper">
