@@ -55,10 +55,10 @@
                         </div>
 
                     </div>
-                    <p class="mt-3 mb-0 text-sm">
+                    <p class="mb-0 text-sm">
                         <span class="text-nowrap">IN-CLASS COURSES: {{$usersInclass}}</span>
                     </p>
-                    <p class="mt-3 mb-0 text-sm">
+                    <p class="mb-0 text-sm">
                         <span class="text-nowrap">E-LEARNING COURSES: {{$usersElearning}}</span>
                     </p>
                 </div>
