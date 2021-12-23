@@ -609,6 +609,7 @@ Route::get('/abanoded/user', 'Dashboard\CronjobsController@remindAbandonedUser')
 Route::get('/send-expiration-emails', 'Dashboard\CronjobsController@sendExpirationEmails');//in
 Route::get('/sendPaymentReminder', 'Dashboard\CronjobsController@sendPaymentReminder');//in
 Route::get('/sendHalfPeriod', 'Dashboard\CronjobsController@sendHalfPeriod');//in
+Route::get('/sendSurveyMail', 'Dashboard\CronjobsController@sendSurveyMail');//in
 
 //SITEMAP
 Route::get('feed/{feed_type?}', 'Theme\FeedController@index');

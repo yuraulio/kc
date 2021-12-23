@@ -14,6 +14,7 @@ use Mail;
 use App\Model\Event;
 use \Carbon\Carbon;
 use App\Model\Certificate;
+use App\Notifications\CertificateAvaillable;
 
 class ExamAttemptController extends Controller
 {
@@ -436,7 +437,15 @@ class ExamAttemptController extends Controller
 
                 }
 
-                if($exam->event_id === 1350 || $exam->event_id === 2304){
+                $data['firstName'] = $student->firstname;
+                $data['eventTitle'] = $eventType->title;
+                $data['fbGroup'] = $eventType->fb_group;
+                $data['subject'] = 'Knowcrunch - ' . $data['firstName'] .' you certification is ready';
+                $data['template'] = 'emails.user.certificate';
+                $data['certUrl'] = trim(url('/') . '/mycertificate/' . base64_encode($student->email."--".$cert->id));
+                $student->notify(new CertificateAvaillable($data));
+
+                /*if($exam->event_id === 1350 || $exam->event_id === 2304){
                     $adminemail = 'info@knowcrunch.com';
 
                     $muser = [];
@@ -465,7 +474,7 @@ class ExamAttemptController extends Controller
 
                     });
 
-                }
+                }*/
 
                 
                 if($examResultData) {

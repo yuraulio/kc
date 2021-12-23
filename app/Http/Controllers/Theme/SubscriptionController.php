@@ -12,6 +12,7 @@ use Mail;
 use Session;
 use App\Services\FBPixelService;
 use App\Model\PaymentMethod;
+use App\Notifications\SubscriptionWelcome;
 
 class SubscriptionController extends Controller
 {
@@ -362,18 +363,29 @@ class SubscriptionController extends Controller
 
             
                 $data = [];  
-                $muser = [];
+                /*$muser = [];
                 $muser['name'] = $user->firstname;
                 $muser['first'] = $user->firstname;
-                $muser['email'] = $user->email;
+                $muser['email'] = $user->email;*/
                 //$muser['event_title'] = $sub->eventable->event->title;
 
+                $subEnds = $plan->trial_days && $plan->trial_days > 0 ? $plan->trial_days : $plan->getDays();
+                $subEnds=date('d-m-Y', strtotime("+$subEnds days"));
+
                 $data['firstName'] = $user->firstname;
-                $data['sub_type'] = $plan->name;
+                $data['eventTitle'] = $event->title;
+                $data['eventFaq'] = url('/') . '/' .$event->getSlug().'#faq';
+                $data['eventSlug'] = url('/') . '/myaccount/elearning/' . $event->title;
+                $data['subject'] = 'Knowcrunch - ' . $data['firstName'] .' to our annual subscription';
+                $data['template'] = 'emails.user.subscription_welcome';
+                $data['subscriptionEnds'] = $subEnds;
+                /*$data['sub_type'] = $plan->name;
                 $data['sub_price'] = $plan->cost;
-                $data['sub_period'] = $plan->period();
+                $data['sub_period'] = $plan->period();*/
         
-                $adminemail = 'info@knowcrunch.com';
+                $user->notify(new SubscriptionWelcome($data));
+
+                /*$adminemail = 'info@knowcrunch.com';
         
                 $sent = Mail::send('emails.student.subscription.subscription_first', $data, function ($m) use ($adminemail, $muser) {
         
@@ -384,7 +396,7 @@ class SubscriptionController extends Controller
                     $m->to($muser['email'], $fullname);
                     $m->subject($sub);
                 
-                });
+                });*/
   
                 Session::forget('pay_seats_data');
                 Session::forget('transaction_id');
