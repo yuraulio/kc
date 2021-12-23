@@ -1829,7 +1829,7 @@ class CartController extends Controller
             //Transaction::where('id', $transaction['id'])
             $transaction->update(['status_history' => json_encode($status_history)/*, 'billing_details' => $tbd*/]);
 
-            $user->events()->attach($content->id,['comment' => 'upon coupon']);
+            $user->events()->attach($content->id,['comment' => 'upon coupon', 'paid' => true]);
 
             if($user->cart){
                 $user->cart->delete();
@@ -1920,7 +1920,7 @@ class CartController extends Controller
         $data['trans'] = $transaction;
         $data['extrainfo'] = $extrainfo;
         $data['helperdetails'] = $helperdetails;
-        $data['eventslug'] = url('/') . '/' . $content->getSlug();
+        $data['eventSlug'] = url('/') . '/' . $content->getSlug();
         $data['duration'] =  $content->summary1->where('section','date')->first() ? $content->summary1->where('section','date')->first()->title : '';
 
         $sent = Mail::send('emails.admin.info_new_registration', $data, function ($m) use ($adminemail,$muser) {

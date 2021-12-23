@@ -1238,6 +1238,8 @@ class StudentController extends Controller
 
     public function createPassIndex($slug){
 
+        decrypt($slug);
+
         try{
             $user = decrypt($slug);
 

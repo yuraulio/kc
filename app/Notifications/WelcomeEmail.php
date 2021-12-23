@@ -53,7 +53,7 @@ class WelcomeEmail extends Notification
         
         $slug = encrypt($slug);
 
-        $this->data['slug'] = $slug;
+        $this->data['slug'] = url('/') . '/create-your-password/' . $slug;
 
         if($this->user->statusAccount){
             $this->user->statusAccount->completed = true;
