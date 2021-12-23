@@ -27,6 +27,7 @@ use Validator;
 use Image;
 use App\Model\Plan;
 use App\Model\Invoice;
+use App\Notifications\ExamActive;
 
 class StudentController extends Controller
 {
@@ -1146,7 +1147,18 @@ class StudentController extends Controller
 
                     $adminemail = 'info@knowcrunch.com';
 
-                    $muser['name'] = $user->firstname . ' ' . $user->lastname;
+                   
+
+                     
+                    $data['firstName'] = $user->firstname;
+                    $data['eventTitle'] = $event->title;
+                    $data['fbGroup'] = $event->fb_group;
+                    $data['subject'] = 'Knowcrunch - ' . $data['firstName'] .'  you exams are active now';
+                    $data['template'] = 'emails.user.exam_activate';
+
+                    $user->notify(new ExamActive($data));
+
+                    /*$muser['name'] = $user->firstname . ' ' . $user->lastname;
                     $muser['first'] = $user->firstname;
                     $muser['eventTitle'] =  $event->title;
                     $muser['email'] = $user->email;
@@ -1164,7 +1176,7 @@ class StudentController extends Controller
                         //$m->cc($adminemail);
                         $m->subject($sub);
 
-                    });
+                    });*/
 
                 }
 
