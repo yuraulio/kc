@@ -15,11 +15,12 @@
 
 <!---------------- checkout progress-bar end --------------->	
 <div class="form-wrap">
-		<div class="container">			
-			<h1>Participant(s)</h1>			
+		<div class="container padding-no">			
+		<h1 class="hidden-xs">Participant(s)</h1>			
 			<div class="row">
 				<!---------------- Participant form start--------------->
-				<div class="col-md-6 col-xl-6">
+				<div class="col-md-6 col-xl-6 selection-order ">
+				<h1 class="hidden-lg">Participant(s)</h1>
 					<div class="participant-full-wrap">
 					@if(!Auth::check())<p class="login-link">Already have an account? <a href="#" class="link-color">Log in</a></p>@endif								
 						<form action="{{route('registration')}}" method="post" id="participant-form" name="participant-form">

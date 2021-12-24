@@ -36,6 +36,10 @@ mix.js('resources/js/app.js', 'public/js')
           'public/theme/assets/css/select2.css',
       ], 'public/theme/assets/css/style_ver.css');
 
+      mix.styles([
+        'public/new_cart/css/style.css',
+    ], 'public/new_cart/version/style_ver.css');
+
       /* */
 
       mix.scripts([
@@ -51,6 +55,7 @@ mix.js('resources/js/app.js', 'public/js')
       mix.version([
           'public/theme/assets/css/style_ver.css',
           'public/theme/assets/js/front.js',
+          'public/new_cart/version/style_ver.css',
       ]);
   //});
 

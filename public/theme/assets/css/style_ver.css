@@ -1167,6 +1167,14 @@ select#selectCountry {
     background-size: 17px;
 }
 
+.accordion-wrapper .accordion-item img{
+
+    max-height: 353px;
+    width: 100%;
+    max-width: 500px;
+    
+}
+
 @media only screen and (min-width: 993px) {
     .sub-blue-form {
         margin-top: -200px!important;

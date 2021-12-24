@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use App\Model\Menu;
 use App\Model\Exam;
 use App\Model\Certificate;
+use App\Model\Category;
 
 function get_social_media(){
     $social_media = Option::where('name', 'social_media')->get();
@@ -317,6 +318,55 @@ if (!function_exists('get_certifation_crendetial')){
             $certificateNumber =  $certNumber = $date . str_pad($index, 6, '0', STR_PAD_LEFT);
     
             return $certificateNumber;
+    
+        }
+    }
+
+
+    if (!function_exists('get_sum_students_course')){
+
+        function get_sum_students_course($category){
+            //dd($category);
+            if(!$category){
+                return 0;
+            }
+            
+            $sumStudents = $category->getSumOfStudents();
+
+           if($category->id == 276){
+                $category = Category::find(49);
+
+                if($category){
+                    $sumStudents += $category->getSumOfStudents();
+                }
+
+           }else if($category->id == 219){
+                $categories = Category::whereIn([104,268]);
+
+                foreach($categories as $category){
+                    $sumStudents += $category->getSumOfStudents();
+                }
+
+            }
+            else if($category->id == 183){
+                $categories = Category::whereIn([277]);
+
+                foreach($categories as $category){
+                    $sumStudents += $category->getSumOfStudents();
+                }
+
+            }
+
+            /*else if($category->id == 183){
+                $categories = Category::whereIn([50,244]);
+
+                foreach($categories as $category){
+                    $sumStudents += $category->getSumOfStudents();
+                }
+
+            }*/
+    
+            return $sumStudents;
     
         }
     }

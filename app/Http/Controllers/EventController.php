@@ -350,7 +350,7 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
-        
+        //dd($request->all());
         if($request->published == 'on')
         {
             $published = 1;

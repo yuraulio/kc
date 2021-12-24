@@ -1,4 +1,4 @@
-<div class="col-md-6 col-xl-6">
+<div class="col-md-6 col-xl-6 padding-no selection-background">
 					<div class="checkout-selection-wrap">
 						
                         @foreach (Cart::content() as $item)

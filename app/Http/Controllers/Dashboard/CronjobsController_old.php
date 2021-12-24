@@ -217,6 +217,7 @@ class CronjobsController extends Controller
         $this->generateCSVForFB();
     }
 
+
     public function sendSubscriptionRemind(){
 
         $adminemail = 'info@knowcrunch.com';
@@ -407,6 +408,7 @@ class CronjobsController extends Controller
 
     }
 
+
     public function sendPaymentReminder(){
 
         $today = date('Y-m-d');
@@ -531,7 +533,8 @@ class CronjobsController extends Controller
 
     }
 
-    public function sendElearningFQ(){
+
+    public function sendSurveyMail(){
 
         
         $adminemail = 'info@knowcrunch.com';
@@ -543,11 +546,21 @@ class CronjobsController extends Controller
         $count = 0;
         foreach($events as $event){
             
-            if(!$event['transactions']->first() || count($event->getExams()) <= 0 || !$event->expiration){
+    
+            if(!$event['transactions']->first()){
                 continue;
             }
             
+            
+           
+
             foreach($event['users'] as $user){
+
+
+                if( !$event->expiration ){
+                    continue;
+                }
+
 
                 if(! ($trans = $event->transactionsByUser($user->id)->first()) ){
                     continue;
@@ -558,6 +571,9 @@ class CronjobsController extends Controller
                 $date = date_diff($date, $today);
 
                 if( $date->y==0 && $date->m == 0  && $date->d == 15 ){
+
+
+                    // dd('edww');
                     
                     $data['firstName'] = $user->firstname;
                     $data['eventTitle'] = $event->title;
@@ -568,10 +584,199 @@ class CronjobsController extends Controller
 
                     $user->notify(new ElearningFQ($data));
                     
+
                 }
             }
         }
 
+
+       
+
+
     }
 
+    /*public function sendInvoice(){
+
+        $invoices = InvoiceElearning::where('instalments_remaining','>=',1)->get();
+
+        $generalInfo = \Config::get('dpoptions.website_details.settings');
+        $adminemail = $generalInfo['admin_email'];
+
+
+    	foreach ($invoices as $invoice) {
+
+            $data = [];
+            $date1 = strtotime($invoice->date);
+            $date2 = strtotime(Carbon::today()->toDateString());
+
+            $subUsers = DB::select('select * from stripe_subscriptions where billable_id = '  . $invoice->user_id);
+
+            $paid = false;
+
+            foreach($subUsers as $subUser){
+                $event = explode('_',json_decode($subUser->plan)->id)[3];
+                if($event == $invoice->event_id){
+                    $insta = json_decode($subUser->metadata);
+                    //dd($insta->installments - $insta->installments_paid);
+                    if(($insta->installments - $insta->installments_paid) < $invoice->instalments_remaining){
+                    //if($insta->installments == $insta->installments_paid){
+                        $paid = true;
+                    }
+
+                }
+
+            }
+
+            if($date2 >= $date1 && $invoice->instalments_remaining >=1 && $invoice->transaction->status == 1 && $paid){
+
+                $pdf = $invoice->generateCronjobInvoice();
+                $pdf = $pdf->output();
+
+                $muser = [];
+                $muser['name'] = $invoice->user->first_name;
+                $muser['first'] = $invoice->user->first_name;
+                $muser['email'] = $invoice->user->email;
+
+                $data['firstName'] = $invoice->user->first_name;
+                $data['eventTitle'] = $invoice->event->title;
+
+                $sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf) {
+
+                    $fullname = $muser['name'];
+                    $first = $muser['first'];
+                    $sub =  $first . '– H απόδειξη για την πληρωμή σου';
+                    $m->from($adminemail, 'Knowcrunch');
+                    $m->to($muser['email'], $fullname);
+                    $m->subject($sub);
+                    $m->attachData($pdf, "invoice.pdf");
+
+                });
+
+                $sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf) {
+
+                    $fullname = $muser['name'];
+                    $first = $muser['first'];
+                    $sub =  $first . '– H απόδειξη για την πληρωμή σου';
+                    $m->from($adminemail, 'Knowcrunch');
+                    $m->to('info@knowcrunch.com', $fullname);
+                    $m->subject($sub);
+                    $m->attachData($pdf, "invoice.pdf");
+
+                });
+
+            }
+
+        }
+
+        //$this->sendOldInvoice();
+
+    }*/
+
+    /*public function sendElearningWarning(){
+
+
+        $adminemail = 'info@knowcrunch.com';
+        $events = Event::has('transactions')->with('users')->where('view_tpl','elearning_event')->get();
+
+        $today = date_create( date('Y/m/d'));
+        $today1 = date('Y-m-d');
+
+        foreach($events as $event){
+
+            foreach($event['users'] as $user){
+
+                if(!($user->pivot->expiration >= $today1) || !$user->pivot->expiration){
+                    continue;
+                }
+
+
+                $date = date_create($user->pivot->expiration);
+                $date = date_diff($date, $today);
+
+                if( ($date->y == 0 && $date->m == 1 && $date->d == 0) || ($date->y == 0 && $date->m ==  0 && $date->d == 7 )){
+
+                    // dd('edww');
+                    $muser['name'] = $user->firstname . ' ' . $user->lastname;
+                    $muser['first'] = $user->firstname;
+                    $muser['eventTitle'] =  $event->title;
+                    $muser['email'] = $user->email;
+
+                    $data['firstName'] = $user->firstname;
+                    $data['eventTitle'] = $event->title;
+                    $data['expirationDate'] = $user->pivot->expiration;
+
+                    $sent = Mail::send('emails.admin.remind_elearning', $data, function ($m) use ($adminemail, $muser) {
+
+                        $fullname = $muser['name'];
+                        $first = $muser['first'];
+                        $sub =  $first . '– A reminder about the ' . $muser['eventTitle'];
+                        $m->from($adminemail, 'Knowcrunch');
+                        $m->to($muser['email'], $fullname);
+                        $m->cc($adminemail);
+                        $m->subject($sub);
+
+                    });
+
+                }
+            }
+
+        }
+
+    }*/
+
+    /*public function sendElearningHalfPeriod(){
+
+
+        $adminemail = 'info@knowcrunch.com';
+
+        $events = Event::has('transactions')->with('users')->where('view_tpl','elearning_event')->get();
+
+        $today = date_create( date('Y/m/d'));
+        $today1 = date('Y-m-d');
+
+
+        foreach($events as $event){
+
+
+
+
+            foreach($event['users'] as $user){
+
+                if(!($user->pivot->expiration >= $today1) || !$user->pivot->expiration){
+                    continue;
+                }
+
+
+                $date = date_create($user->pivot->expiration);
+                $date = date_diff($date, $today);
+
+                if( $date->y==0 && $date->m == 2  && $date->d == 0){
+
+                    // dd('edww');
+                    $muser['name'] = $user->firstname . ' ' . $user->lastname;
+                    $muser['first'] = $user->firstname;
+                    $muser['eventTitle'] =  $event->title;
+                    $muser['email'] = $user->email;
+
+                    $data['firstName'] = $user->firstname;
+                    $data['eventTitle'] = $event->title;
+                    $data['expirationDate'] = $user->pivot->expiration;
+
+                    $sent = Mail::send('emails.student.elearning_half_period', $data, function ($m) use ($adminemail, $muser) {
+
+                        $fullname = $muser['name'];
+                        $first = $muser['first'];
+                        $sub = 'KnowCrunch |' . $first . ' kind reminder for ' . $muser['eventTitle'];
+                        $m->from($adminemail, 'Knowcrunch');
+                        $m->to($muser['email'], $fullname);
+                        //$m->cc($adminemail);
+                        $m->subject($sub);
+
+                    });
+
+                }
+            }
+        }
+
+    }*/
 }
