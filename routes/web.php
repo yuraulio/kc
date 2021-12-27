@@ -359,7 +359,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
             Route::get('/add_category', 'BinshopsCategoryAdminController@create_category')->name('binshopsblog.admin.categories.create_category');
             Route::post('/store_category', 'BinshopsCategoryAdminController@store_category')->name('binshopsblog.admin.categories.store_category');
             Route::get('/edit_category/{categoryId}', 'BinshopsCategoryAdminController@edit_category')->name('binshopsblog.admin.categories.edit_category');
-            Route::patch('/edit_category/{categoryId}', 'BinshopsCategoryAdminController@update_category')->name('binshopsblog.admin.categories.update_category')->middleware(\App\Http\Middleware\BlogCategoryMiddleware::class);
+            Route::patch('/edit_category/{categoryId}', '\App\Http\Controllers\BinshopsCategoryAdminControllerExtended@update_category')->name('binshopsblog.admin.categories.update_category');
             Route::delete('/delete_category/{categoryId}', 'BinshopsCategoryAdminController@destroy_category')->name('binshopsblog.admin.categories.destroy_category');
         });
 
