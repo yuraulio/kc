@@ -373,7 +373,7 @@
                </tr>
             </thead>
             <tbody id="resultsBody">
-            {{--@foreach($results as $key => $result)
+           @foreach($results as $key => $result)
                <tr>
                   <td>
                      {{ $key + 1 }}
@@ -413,7 +413,7 @@
                      </div>
                   </td>
                </tr>
-              @endforeach--}}
+              @endforeach
             </tbody>
          </table>
       </div>
@@ -1129,7 +1129,7 @@
 
 
 
-{{--@if(count($liveResults) > 0)--}}
+@if(count($liveResults) > 0)
 <script>
    var HOURS = [];
    var MINUTES = [];
@@ -1350,7 +1350,7 @@ function tictac(){
    @endforeach
 }
 </script>
-{{--@endif--}}
+@endif
 
 
 
