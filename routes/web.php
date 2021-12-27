@@ -598,14 +598,19 @@ Route::get('/dropbox/KUBnqOX1FNyTh72', 'DropboxController@cacheDropboxCLI');
 Route::get('/unroll-elearning-users', 'Dashboard\CronjobsController@unroll');
 Route::get('/sendNonpaymentEmail', 'Dashboard\CronjobsController@sendNonPayment');
 Route::get('/sendSubscriptionNonPayment', 'Dashboard\CronjobsController@sendSubscriptionNonPayment');
-Route::get('/sendWarningElearning', 'Dashboard\CronjobsController@sendElearningWarning');
-Route::get('/sendHalfPeriodElearning', 'Dashboard\CronjobsController@sendElearningHalfPeriod');
+//Route::get('/sendWarningElearning', 'Dashboard\CronjobsController@sendElearningWarning');//out
+//Route::get('/sendHalfPeriodElearning', 'Dashboard\CronjobsController@sendElearningHalfPeriod');//out
 Route::get('/fb-google-csv', 'Dashboard\CronjobsController@fbGoogleCsv');
 Route::get('/sendSubscriptionRemind', 'Dashboard\CronjobsController@sendSubscriptionRemind');
 Route::get('/update-status-field', 'Dashboard\CronjobsController@updateStatusField');
 Route::get('/deree-notification', 'Dashboard\CronjobsController@dereeIDNotification');
 Route::get('/abanoded/user', 'Dashboard\CronjobsController@remindAbandonedUser');
-//Route::get('/sendInvoice', 'Dashboard\CronjobsController@sendInvoice');
+
+Route::get('/send-expiration-emails', 'Dashboard\CronjobsController@sendExpirationEmails');//in
+Route::get('/sendPaymentReminder', 'Dashboard\CronjobsController@sendPaymentReminder');//in
+Route::get('/sendHalfPeriod', 'Dashboard\CronjobsController@sendHalfPeriod');//in
+Route::get('/sendElearningFQ', 'Dashboard\CronjobsController@sendElearningFQ');//in
+Route::get('/sendSurveyMail', 'Dashboard\CronjobsController@sendSurveyMail');//in
 
 //SITEMAP
 Route::get('feed/{feed_type?}', 'Theme\FeedController@index');

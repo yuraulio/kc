@@ -1167,6 +1167,14 @@ select#selectCountry {
     background-size: 17px;
 }
 
+.accordion-wrapper .accordion-item img{
+
+    max-height: 353px;
+    width: 100%;
+    max-width: 500px;
+    
+}
+
 @media only screen and (min-width: 993px) {
     .sub-blue-form {
         margin-top: -200px!important;
@@ -5001,7 +5009,7 @@ body.compensate-for-scrollbar { overflow: hidden; }
 		#footer .footer-title:after{ content: ''; width: 20px; height: 20px; display: block; background: url('/theme/assets/images/icons/icon-arrow-down-white.svg') no-repeat center; position: absolute; top: 18px; right: 24px; pointer-events: none; transition: 300ms all ease; }
 		#footer .footer-title.active:after{ transform: rotate(180deg); }
 		#footer .mobile-toggle + .footer-title{ margin-top: 0; }
-		.footer-social-menu{ margin-top: 40px; float: none; display: block; width: 100%; text-align: center; }
+		.footer-social-menu{ margin-top: 40px; float: none; display: block; width: 100%; text-align: center; margin: 30px auto 0 auto;}
 		.footer-social-menu li{ float: none; display: inline-block; }
 		.copyright-wrapper{ margin-top: 30px; }
 		.copyright-wrapper p{ max-width: 220px; margin: 0 auto; text-align: center; }

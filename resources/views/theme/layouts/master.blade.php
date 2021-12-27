@@ -340,7 +340,7 @@ $(document).on('click', '.close-btn', function(e){
 
         let url = window.location.href.split('#')
         if(url[1]){
-
+            url[1] = url[1].split("?")[0]
             let target = "#" + url[1];
             let activeTab = $('.tab-controls .active');
             let self = $('a[href="#'+ url[1] + '"]');

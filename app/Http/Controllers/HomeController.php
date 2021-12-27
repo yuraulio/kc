@@ -81,8 +81,6 @@ class HomeController extends Controller
         $data['revenueByEvent'] = group_by('event_id', $revenueByYear);
         //dd($data['revenueByEvent']);
 
-
-
         $data['elearningByYear'] = group_by('month', $elearningByYear);
         //dd($data['elearningByYear']);
         $data['elearningByEvent'] = group_by('event_id', $elearningByYear);

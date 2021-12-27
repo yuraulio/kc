@@ -45,7 +45,10 @@
                             <div class="preview_event_btn">@include('admin.preview.preview',['slug' => isset($slug) ? $slug : null])</div>
 
                         </div>
-
+                        <form method="post" id="event_edit_form" method="POST" action="{{ route('events.update', $event) }}" autocomplete="off"
+                                            enctype="multipart/form-data">
+                                            @csrf
+                                            @method('put')
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
                           
@@ -86,17 +89,9 @@
                                 </div>
                                 @endif
 
-                                <form method="post" id="event_edit_form" method="POST" action="{{ route('events.update', $event) }}" autocomplete="off"
-                                            enctype="multipart/form-data">
-                                            @csrf
-                                            @method('put')
+                              
                                 <div class="form-group">
-                                    <div class="form-group{{ $errors->has('fb_group') ? ' has-danger' : '' }}">
-                                        <label class="form-control-label" for="input-fb_group">{{ __('Facebook Group') }}</label>
-                                        <input type="text" name="fb_group" id="input-fb_group" class="form-control{{ $errors->has('fb_group') ? ' is-invalid' : '' }}" placeholder="{{ __('Facebook Group') }}" value="{{ old('fb_group', $event->fb_group) }}"autofocus>
-
-                                        @include('alerts.feedback', ['field' => 'fb_group'])
-                                    </div>
+                                    
 
                                     <div class="form-group{{ $errors->has('fb_') ? ' has-danger' : '' }}">
                                         <label class="form-control-label" for="input-hours">{{ __('Certificate Title') }}</label>
@@ -335,6 +330,9 @@
                                         <li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-9-tab_inside" data-toggle="tab" href="#videos" role="tab" aria-controls="videos" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Videos</a>
                                         </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-9-tab_inside" data-toggle="tab" href="#email_fields" role="tab" aria-controls="email_fields" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Email Fields</a>
+                                        </li>
 
                                     </ul>
                                 </div>
@@ -353,7 +351,7 @@
 
                                                         <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
                                                             <label class="form-control-label" for="input-title">{{ __('Title') }}</label>
-                                                            <input type="text" name="title" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title', $event->title) }}" required autofocus>
+                                                            <input type="text" name="eventTitle" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title', $event->title) }}" required autofocus>
 
                                                             @include('alerts.feedback', ['field' => 'title'])
                                                         </div>
@@ -411,7 +409,7 @@
 
 
                                             </div>
-                                            </form>
+                                            
                                             <div class="tab-pane fade" id="tabs-icons-text-2_inside" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab_inside">
                                                 @include('admin.summary.summary', ['model' => $event])
                                             </div>
@@ -469,6 +467,45 @@
                                                 @include('admin.videos.event.index',['model' => $event])
                                             </div>
 
+                                            <div class="tab-pane fade" id="email_fields" role="tabpanel" aria-labelledby="tabs-icons-text-9-tab_inside">
+                                                <div class="form-group">
+                                                    <div class="form-group{{ $errors->has('fb_group') ? ' has-danger' : '' }}">
+                                                        <label class="form-control-label" for="input-fb_group">{{ __('Facebook Group') }}</label>
+                                                        <input type="text" name="fb_group" id="input-fb_group" class="form-control{{ $errors->has('fb_group') ? ' is-invalid' : '' }}" placeholder="{{ __('Facebook Group') }}" value="{{ old('fb_group', $event->fb_group) }}"autofocus>
+
+                                                        @include('alerts.feedback', ['field' => 'fb_group'])
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="form-group{{ $errors->has('evaluate_instructors') ? ' has-danger' : '' }}">
+                                                        <label class="form-control-label" for="input-evaluate_instructors">{{ __('Evaluate Instructors') }}</label>
+                                                        <input type="text" name="evaluate_instructors" id="input-evaluate_instructors" class="form-control{{ $errors->has('evaluate_instructors') ? ' is-invalid' : '' }}" placeholder="{{ __('Evaluate Instructors') }}" value="{{ old('evaluate_instructors', $event->evaluate_instructors) }}"autofocus>
+
+                                                        @include('alerts.feedback', ['field' => 'evaluate_instructors'])
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="form-group{{ $errors->has('evaluate_topics') ? ' has-danger' : '' }}">
+                                                        <label class="form-control-label" for="input-evaluate_topics">{{ __('Evaluate Topics') }}</label>
+                                                        <input type="text" name="evaluate_topics" id="input-evaluate_topics" class="form-control{{ $errors->has('evaluate_topics') ? ' is-invalid' : '' }}" placeholder="{{ __('Evaluate Topics') }}" value="{{ old('evaluate_topics', $event->evaluate_topics) }}"autofocus>
+
+                                                        @include('alerts.feedback', ['field' => 'evaluate_topics'])
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="form-group{{ $errors->has('fb_testimonial') ? ' has-danger' : '' }}">
+                                                        <label class="form-control-label" for="input-fb_testimonial">{{ __('Facebook Testimonial') }}</label>
+                                                        <input type="text" name="fb_testimonial" id="input-fb_testimonial" class="form-control{{ $errors->has('fb_testimonial') ? ' is-invalid' : '' }}" placeholder="{{ __('Facebook Testimonial') }}" value="{{ old('fb_testimonial', $event->fb_testimonial) }}"autofocus>
+
+                                                        @include('alerts.feedback', ['field' => 'fb_testimonial'])
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
                                             <div class="tab-pane fade" id="tabs-icons-text-3_inside" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab_inside">
                                                 @include('admin.benefits.benefits',['model' => $event])
                                             </div>
@@ -517,6 +554,7 @@
                             </div>
 
                         </div>
+                                                </form>
                     </div>
                 </div>
             </div>

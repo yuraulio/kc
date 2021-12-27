@@ -8,7 +8,8 @@
 	<title>KnowCrunch Billing</title>
 	@include('theme.layouts.favicons')	
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">	
-	<link rel="stylesheet" type="text/css" href="{{cdn('new_cart/css/style.css')}}">
+	{{--<link rel="stylesheet" type="text/css" href="{{cdn('new_cart/css/style.css')}}">--}}
+	<link href="{{ cdn(mix('new_cart/version/style_ver.css')) }}" rel="stylesheet" media="all" />
 
 	<!-- Google Tag Manager -->
 	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':

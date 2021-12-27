@@ -53,7 +53,7 @@ class userChangePassword extends Notification
         ]);
 
         return (new MailMessage)
-                    ->subject('Reset or Create your account password.')
+                    ->subject('Knowcrunch - Welcome ' .$this->user->firstname . ' change your password')
                     ->view( 'activation.emails.student-reminder', ['user'=> $this->user, 'code' => $token]);
     }
 

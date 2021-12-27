@@ -395,16 +395,55 @@ label.custom-control-label{font-size:19px;}
         height: inherit;
         width: inherit;
     }
+    
+    #clone-box{
+        border:none;
+    }
 
+    .selection-order h1{
+        padding-left: 0!important;
+    }
 
 /* responsive media */
 
+@media(min-width:993px){
+
+    .hidden-lg{
+        display: none!important;
+    }
+}
+
 @media(max-width:992px){
+
+    .checkout-input-groups{width:235px;}
+    .checkout-coupon-code-wrap .btn-2 { width: 100px; /* margin-top: 10px; */}
+
+    .padding-no{
+        padding: 0!important;
+    }
+
+    .selection-background{
+        background: #ebebeb;
+    }
+
+    .checkout-selection-wrap{
+        border:none;
+    }
+
+    .hidden-xs{
+        display: none!important;
+    }
+
+    .selection-order{
+        order: 2;
+        padding-top: 40px;
+    }
 
 /*.input-coupon-successfull {background: url(../images/checkbox-coupon-accepted.svg) no-repeat scroll 200px 10px;background-size: 25px;}/*lioncode*/
 .remove-participant a {left: 0;}
 .header-logo a {max-width: 150px;}
-.checkout-step{padding:40px 0;}
+/*.checkout-step{padding:40px 0;}*/
+.checkout-step{padding:40px 2px;}
 .checkout-step ul .counter{width:45px;height:45px;font-size:21px;}
 .checkout-step li{font-size:14px;}
 .checkout-step ul li:after{width:83px;}
@@ -457,9 +496,8 @@ label.custom-control-label{font-size:16px;}
 .checkout-selection-wrap .datetime{font-size:16px;line-height:1.2em;}
 .checkout-price-wrap p{font-size:16px;}
 .checkout-button-coupon {margin-left: 0;}
-.checkout-coupon-code-wrap form { flex-direction: column; }
-.checkout-coupon-code-wrap .btn-2 {width:100%;margin-top:10px;}
-.checkout-selection-wrap{padding:60px 20px 40px;}
+/*.checkout-coupon-code-wrap form { flex-direction: column; }*/
+.checkout-selection-wrap{padding:60px 18px 40px;}
 .bank-details img {max-width:40px;}
 footer .bank-details{padding:20px 0;margin-top:50px;}
 .address{padding:25px 0px;font-size:15px;}
@@ -473,7 +511,6 @@ footer .bank-details{padding:20px 0;margin-top:50px;}
 form input[type="text"], form input[type="email"]{font-size:15px;}
 .header-logo{max-width:95px;}
 .strip-ssl-wrap {max-width: 190px;}
-.checkout-input-groups{width:100%;}
 .custom-control.custom-radio p {font-size: 20px;}
 }
 

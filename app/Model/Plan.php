@@ -36,6 +36,16 @@ class Plan extends Model
         }
     }
 
+    public function getDays(){
+        if($this->interval == 'day'){
+            return $this->interval;
+        }elseif($this->interval == 'month'){
+            return $this->interval * 30;
+        }elseif($this->interval == 'year'){
+            return 365;
+        }
+    }
+
     public function events(){
         return $this->belongsToMany(Event::class,'plan_events');
     }

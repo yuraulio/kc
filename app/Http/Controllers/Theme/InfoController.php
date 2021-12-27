@@ -755,6 +755,7 @@ class InfoController extends Controller
         $data = [];
         $data['fbGroup'] = $extrainfo[7];
         $data['duration'] = $extrainfo[3];
+        $data['eventSlug'] = $transaction->event->first() ? url('/') . '/' . $transaction->event->first()->getSlug() : url('/');
 
     	foreach ($emailsCollector as $key => $muser) {
             $data['user'] = $muser;
@@ -773,9 +774,9 @@ class InfoController extends Controller
 
                 $user->notify(new WelcomeEmail($user,$data));
 
-                if($elearning){
+                /*if($elearning){
                     $user->notify(new InstructionMail($data));
-                }
+                }*/
             }
     	}
 

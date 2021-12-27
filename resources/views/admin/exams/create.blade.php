@@ -331,11 +331,11 @@
                 <div class="progress-label">
                   <span>The average percentage of the exam</span>
                
-                  <span>{{$averageScore}}%</span>
+                  <span id="avScore">{{$averageScore}}%</span>
                 </div>
               </div>
               <div class="progress">
-                <div class="progress-bar bg-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{$averageScore}}%;"></div>
+                <div id="avScoreBar" class="progress-bar bg-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{$averageScore}}%;"></div>
               </div>
             </div>
 
@@ -348,7 +348,7 @@
                 <div class="progress-label">
                   <span>The average time of every participant</span>
                
-                  <span>{{$averageHour}}</span>
+                  <span id="avHour">{{$averageHour}}</span>
                 </div>
               </div>
               <div class="progress">
@@ -372,8 +372,8 @@
 
                </tr>
             </thead>
-            <tbody >
-               @foreach($results as $key => $result)
+            <tbody id="resultsBody">
+           @foreach($results as $key => $result)
                <tr>
                   <td>
                      {{ $key + 1 }}
@@ -413,7 +413,7 @@
                      </div>
                   </td>
                </tr>
-               @endforeach
+              @endforeach
             </tbody>
          </table>
       </div>
@@ -1063,6 +1063,7 @@
 
    $(document).ready( function () {
     $('#results-table').DataTable( {
+      destroy: true,
         language: {
             paginate: {
                 next: '&#187;', // or '→'
@@ -1072,7 +1073,8 @@
        });
 
        $('#liveResultTable').DataTable( {
-        language: {
+         "lengthMenu": [[50, 10, 25,  -1], [50, 10, 25,  "All"]],
+         language: {
             paginate: {
                 next: '&#187;', // or '→'
                 previous: '&#171;' // or '←'
@@ -1151,8 +1153,94 @@
                   
 
               })
-				
+
+              //$('avScoreBar')
+               $('#avScore').html(data['averageScore'])
+               $('#avHour').html(data['averageHour'])
+
+               let resultsHtml = '';
+               var t = $('#results-table').DataTable();
+               t.clear();
+               $.each(data['results'], function(key1, value1) {
+               
+
+                  /*resultsHtml += `<tr><td>${key1+1}</td>
+                     <td>
+                        ${value1['first_name'] } ${ value1['last_name'] }
+                     </td>
+
+                     <td>
+                        ${ value1['score'] }
+                     </td>
+
+                     <td>
+                        ${ value1['scorePerc'] }
+                     </td>
+
+                     <td>
+                        ${ value1['start_time'] }
+                     </td>
+
+                     <td>
+                        ${ value1['end_time'] }
+                     </td>
+
+                     <td>
+                        ${ value1['total_time'] }
+                     </td>
+
+                     <td class="text-right">
+                        <div class="dropdown">
+                           <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                           <i class="fas fa-ellipsis-v"></i>
+                           </a>
+                           <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                              <a class="dropdown-item" href="/admin/student-summary/${value1['exam_id']}/${value1['user_id']}" target="_blank">{{ __('Show') }}</a>
+                           </div>
+                        </div>
+                     </td></tr>`*/
               
+              
+                  
+                  t.row.add([
+                     key1+1,
+                     value1['first_name'] + ' ' + value1['last_name'],
+                     value1['score'],
+                     value1['scorePerc'],
+                     value1['start_time'],
+                     value1['end_time'],
+                     value1['total_time'],
+                     `  <div class="dropdown">
+                              <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <i class="fas fa-ellipsis-v"></i>
+                              </a>
+                              <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                 <a class="dropdown-item" href="/admin/student-summary/${value1['exam_id']}/${value1['user_id']}" target="_blank">{{ __('Show') }}</a>
+                              </div>
+                           </div>`
+                  ]).draw()
+               })
+      
+               
+
+               /*$('#results-table').dataTable().fnDestroy();
+               table = $('#results-table').DataTable({
+                   destroy: true,
+                   
+                   language: {
+                     paginate: {
+                         next: '&#187;', // or '→'
+                         previous: '&#171;' // or '←'
+                     }
+                  }
+               });
+
+               
+
+
+               $("#resultsBody").empty();
+               $("#resultsBody").append(resultsHtml)*/
+            
             }
     });
    },1000 * 60)
