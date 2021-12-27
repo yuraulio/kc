@@ -9,7 +9,7 @@
 @endsection
 
 @section('header')
-    <title>KnowCrunch Blog</title>
+    <title>{{ _('KnowCrunch Blog') }}</title>
 @endsection
 
 
@@ -27,16 +27,18 @@
                     @if ($category)
                         <h1>{{$category->category_name}}</h1>
                     @else
-                        <h1>Our Blog</h1>
+                        <h1>{{ _('Our blog') }}</h1>
                     @endif
                </div>
            </div>
            <div class="row mb-5">
                 <div class="col-lg-12 marbot">
                     @foreach($subcategories as $subcategory)
-                        <a class="badgelink" href="/en/blog/categories/{{$subcategory->slug}}">
-                            <label class="badge primary">{{ $subcategory->category_name }}</label>
-                        </a>
+                        @if ($subcategory->category->posts->isNotEmpty())
+                            <a class="badgelink" href="/en/blog/categories/{{$subcategory->slug}}">
+                                <label class="badge primary">{{ $subcategory->category_name }}</label>
+                            </a>
+                        @endif
                     @endforeach
                 </div>
             </div>
