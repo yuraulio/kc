@@ -359,7 +359,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
             Route::get('/add_category', 'BinshopsCategoryAdminController@create_category')->name('binshopsblog.admin.categories.create_category');
             Route::post('/store_category', 'BinshopsCategoryAdminController@store_category')->name('binshopsblog.admin.categories.store_category');
             Route::get('/edit_category/{categoryId}', 'BinshopsCategoryAdminController@edit_category')->name('binshopsblog.admin.categories.edit_category');
-            Route::patch('/edit_category/{categoryId}', 'BinshopsCategoryAdminController@update_category')->name('binshopsblog.admin.categories.update_category');
+            Route::patch('/edit_category/{categoryId}', 'BinshopsCategoryAdminController@update_category')->name('binshopsblog.admin.categories.update_category')->middleware(\App\Http\Middleware\BlogCategoryMiddleware::class);
             Route::delete('/delete_category/{categoryId}', 'BinshopsCategoryAdminController@destroy_category')->name('binshopsblog.admin.categories.destroy_category');
         });
 
@@ -418,10 +418,10 @@ Route::group(['middleware' => ['web']], function () {
 
             Route::get('/checkout', ['as' => 'checkout.index', 'uses' => 'Theme\CartController@checkoutIndex']);
 
-            Route::get('/remove/{item}', [ 'as' => 'cart.remove-item', 'uses' => 'Theme\CartController@dpremove']);
-            Route::get('/summary/remove/{item}', [ 'as' => 'cart.remove-item', 'uses' => 'Theme\CartController@dpremove']);
+            Route::get('/remove/{item}', ['as' => 'cart.remove-item', 'uses' => 'Theme\CartController@dpremove']);
+            Route::get('/summary/remove/{item}', ['as' => 'cart.remove-item', 'uses' => 'Theme\CartController@dpremove']);
 
-            Route::post('/cart/update', [ 'as' => 'cart.update', 'uses' => 'PaymentController@update' ]);
+            Route::post('/cart/update', ['as' => 'cart.update', 'uses' => 'PaymentController@update']);
 
             Route::get('/enroll-for-free/{content}', 'Theme\HomeController@enrollToFreeEvent')->name('enrollForFree');
         });
@@ -697,4 +697,3 @@ Route::group(['middleware' => ['preview', 'web', 'auth.sms']], function () {
     Route::get('{slug?}', 'Theme\HomeController@index');
 });
 /// If you want to add a new route, please add it above the comment "must be at the end of file"!
-
