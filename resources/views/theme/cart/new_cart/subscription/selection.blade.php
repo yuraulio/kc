@@ -1,5 +1,5 @@
-<div class="col-md-6 col-xl-6">
-					<div class="checkout-selection-wrap">
+<div class="col-md-6 col-xl-6 selection-background">
+					<div class="sub-wrap checkout-selection-wrap">
 						
                         
                         <div class="remove-from-cart">

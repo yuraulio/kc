@@ -415,6 +415,10 @@ label.custom-control-label{font-size:19px;}
 
 @media(max-width:992px){
 
+    .sub-wrap.checkout-selection-wrap{
+        padding: 60px 8px 40px!important;
+    }
+
     .checkout-input-groups{width:235px;}
     .checkout-coupon-code-wrap .btn-2 { width: 100px; /* margin-top: 10px; */}
 
@@ -498,6 +502,7 @@ label.custom-control-label{font-size:16px;}
 .checkout-button-coupon {margin-left: 0;}
 /*.checkout-coupon-code-wrap form { flex-direction: column; }*/
 .checkout-selection-wrap{padding:60px 18px 40px;}
+.sub-wrap.checkout-selection-wrap{padding: 60px 8px 40px!important;}
 .bank-details img {max-width:40px;}
 footer .bank-details{padding:20px 0;margin-top:50px;}
 .address{padding:25px 0px;font-size:15px;}

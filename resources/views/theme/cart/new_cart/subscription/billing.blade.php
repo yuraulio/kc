@@ -13,11 +13,12 @@
 	</div>
 <!---------------- checkout progress-bar end --------------->	
 <div class="form-wrap">
-		<div class="container">			
-			<h1>Billing</h1>			
+		<div class="container padding-no">			
+			<h1 class="hidden-xs">Billing</h1>			
 			<div class="row">
 				<!---------------- billing form start--------------->
-				<div class="col-md-6 col-xl-6">
+				<div class="col-md-6 col-xl-6 selection-order">
+					<h1 class="hidden-lg">Billing</h1>	
 					<div class="billing-full-wrap">
 						<form action="{{route('subscription.checkoutIndex',[$event->title,$plan->name])}}" method="post" name="billing">
 						@csrf

@@ -120,7 +120,7 @@ class HomeController extends Controller
             if($event->delivery->first() && $event->delivery->first()->id == 143){
                 //dd($event->users()->pluck('user_id')->toArray());
                 $data['usersElearning'] = array_merge($data['usersElearning'],$event->users()->pluck('user_id')->toArray());
-            }else if($event->delivery->first() && $event->delivery->first()->id == 139){
+            }else /*if($event->delivery->first() && $event->delivery->first()->id == 139)*/{
                 $data['usersInclass'] = array_merge($data['usersInclass'],$event->users()->pluck('user_id')->toArray());
             }
 
