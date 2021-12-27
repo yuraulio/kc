@@ -29,8 +29,8 @@
     <?php Session::forget('dperror') ?>
    @endif
 <div class="form-wrap">
-	<div class="container">			
-        <h1>Checkout</h1>				
+	<div class="container padding-no">			
+        <h1 class="hidden-xs">Checkout</h1>				
 			<div class="row">
         	<?php
    
@@ -61,7 +61,9 @@
                 }
 
         	?>
-        	<div class="col-md-6 col-xl-6">
+        	<div class="col-md-6 col-xl-6 selection-order">
+			<h1 class="hidden-lg">Checkout</h1>				
+
 				<div class="checkout-full-wrap">												
 					<h2>Payment flexibility</h2>
 					<p {{--class="my-4"--}}>Some international credit cards and AMEX cards do not accept installments.</p>
