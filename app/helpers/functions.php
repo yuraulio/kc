@@ -341,7 +341,7 @@ if (!function_exists('get_certifation_crendetial')){
                 }
 
            }else if($category->id == 219){
-                $categories = Category::whereIn([104,268]);
+                $categories = Category::whereIn('id',[104,268])->get();
 
                 foreach($categories as $category){
                     $sumStudents += $category->getSumOfStudents();
@@ -349,22 +349,20 @@ if (!function_exists('get_certifation_crendetial')){
 
             }
             else if($category->id == 183){
-                $categories = Category::whereIn([277]);
+                $categories = Category::whereIn('id',[277])->get();
+
+                foreach($categories as $category){
+                    $sumStudents += $category->getSumOfStudents();
+                }
+
+            }else if($category->id == 250){
+                $categories = Category::whereIn('id',[50,244])->get();
 
                 foreach($categories as $category){
                     $sumStudents += $category->getSumOfStudents();
                 }
 
             }
-
-            /*else if($category->id == 183){
-                $categories = Category::whereIn([50,244]);
-
-                foreach($categories as $category){
-                    $sumStudents += $category->getSumOfStudents();
-                }
-
-            }*/
     
             return $sumStudents;
     

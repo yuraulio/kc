@@ -373,7 +373,7 @@
                </tr>
             </thead>
             <tbody id="resultsBody">
-            @foreach($results as $key => $result)
+            {{--@foreach($results as $key => $result)
                <tr>
                   <td>
                      {{ $key + 1 }}
@@ -413,7 +413,7 @@
                      </div>
                   </td>
                </tr>
-               @endforeach
+              @endforeach--}}
             </tbody>
          </table>
       </div>
@@ -1129,7 +1129,7 @@
 
 
 
-@if(count($liveResults) > 0)
+{{--@if(count($liveResults) > 0)--}}
 <script>
    var HOURS = [];
    var MINUTES = [];
@@ -1155,14 +1155,16 @@
               })
 
               //$('avScoreBar')
-              $('#avScore').html(data['averageScore'])
-              $('#avHour').html(data['averageHour'])
+               $('#avScore').html(data['averageScore'])
+               $('#avHour').html(data['averageHour'])
 
-              let resultsHtml = '';
+               let resultsHtml = '';
+               var t = $('#results-table').DataTable();
+               t.clear();
                $.each(data['results'], function(key1, value1) {
                
 
-                  resultsHtml += `<tr><td>${key1+1}</td>
+                  /*resultsHtml += `<tr><td>${key1+1}</td>
                      <td>
                         ${value1['first_name'] } ${ value1['last_name'] }
                      </td>
@@ -1196,13 +1198,32 @@
                               <a class="dropdown-item" href="/admin/student-summary/${value1['exam_id']}/${value1['user_id']}" target="_blank">{{ __('Show') }}</a>
                            </div>
                         </div>
-                     </td></tr>`
+                     </td></tr>`*/
               
+              
+                  
+                  t.row.add([
+                     key1+1,
+                     value1['first_name'] + ' ' + value1['last_name'],
+                     value1['score'],
+                     value1['scorePerc'],
+                     value1['start_time'],
+                     value1['end_time'],
+                     value1['total_time'],
+                     `  <div class="dropdown">
+                              <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <i class="fas fa-ellipsis-v"></i>
+                              </a>
+                              <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                 <a class="dropdown-item" href="/admin/student-summary/${value1['exam_id']}/${value1['user_id']}" target="_blank">{{ __('Show') }}</a>
+                              </div>
+                           </div>`
+                  ]).draw()
                })
       
                
 
-               $('#results-table').dataTable().fnDestroy();
+               /*$('#results-table').dataTable().fnDestroy();
                table = $('#results-table').DataTable({
                    destroy: true,
                    
@@ -1218,7 +1239,7 @@
 
 
                $("#resultsBody").empty();
-               $("#resultsBody").append(resultsHtml)
+               $("#resultsBody").append(resultsHtml)*/
             
             }
     });
@@ -1329,7 +1350,7 @@ function tictac(){
    @endforeach
 }
 </script>
-@endif
+{{--@endif--}}
 
 
 

@@ -351,7 +351,7 @@
 
                                                         <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
                                                             <label class="form-control-label" for="input-title">{{ __('Title') }}</label>
-                                                            <input type="text" name="title" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title', $event->title) }}" required autofocus>
+                                                            <input type="text" name="eventTitle" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title', $event->title) }}" required autofocus>
 
                                                             @include('alerts.feedback', ['field' => 'title'])
                                                         </div>

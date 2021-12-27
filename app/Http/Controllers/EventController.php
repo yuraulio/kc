@@ -350,7 +350,7 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
-        //dd($request->all());
+       
         if($request->published == 'on')
         {
             $published = 1;
@@ -366,7 +366,9 @@ class EventController extends Controller
        
         $launchDate = date('Y-m-d',strtotime($request->launch_date));
 
-        $request->request->add(['published' => $published, 'published_at' => $published_at, 'release_date_files' => date('Y-m-d', strtotime($request->release_date_files)),'launch_date'=>$launchDate]);
+        $request->request->add(['published' => $published, 'published_at' => $published_at, 
+            'release_date_files' => date('Y-m-d', strtotime($request->release_date_files)),
+            'launch_date'=>$launchDate,'title'=>$request->eventTitle]);
         $ev = $event->update($request->all());
 
         /*if($request->image_upload != null && $ev){

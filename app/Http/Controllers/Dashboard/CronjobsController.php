@@ -19,6 +19,8 @@ use App\Notifications\FailedPayment;
 use App\Notifications\PaymentReminder;
 use App\Notifications\HalfPeriod;
 use App\Notifications\ElearningFQ;
+use App\Notifications\SurveyEMail;
+use App\Notifications\SubscriptionReminder;
 use App\Model\Pages;
 
 class CronjobsController extends Controller
@@ -251,6 +253,13 @@ class CronjobsController extends Controller
                         $m->subject($sub);
 
                     });
+
+                    /*$data['firstName'] = $subscription->user->firstname;
+                    $data['eventTitle'] = $subscription->event->first()->title;
+                    $data['expirationDate'] = date('d/m/Y',strtotime($subscription->event->first()->pivot->expiration));*/
+
+                    //$user->notify(new SubscriptionReminder($data));
+
                 }
             }
         }
@@ -571,6 +580,104 @@ class CronjobsController extends Controller
                 }
             }
         }
+
+    }
+
+    public function sendSurveyMail(){
+
+    
+        $events = Event::has('transactions')->with('users')->where('view_tpl','elearning_event')->get();
+        //$events = Event::has('transactions')->where('published','true')->with('users')->get();
+ 
+        $today = date('Y/m/d');
+        $today = date('Y-m-d', strtotime('-1 day', strtotime($today)));
+        foreach($events as $event){
+        
+            $sendEmail = false;
+            foreach($event['users'] as $user){
+
+                if( $user->pivot->expiration !== $today || !$user->pivot->expiration){
+                    continue;
+                }
+ 
+                if($event->evaluate_instructors){
+                    $sendEmail = true;
+                }else if($event->evaluate_topics){
+                    $sendEmail = true;
+                }else if($event->fb_testimonial){
+                    $sendEmail = true;
+                }
+
+                $data['firstName'] = $user->firstname;
+                $data['subject'] = 'Knowcrunch - ' . $data['firstName'] . ' please take our survey';
+                $data['template'] = 'emails.user.survey_email';
+                $data['fb_group'] = $event->fb_group;
+                $data['evaluateTopics'] = $event->evaluate_topics;
+                $data['evaluateInstructors'] = $event->evaluate_instructors;
+                $data['fbTestimonial'] = $event->fb_testimonial;
+
+                if($sendEmail){
+                    $user->notify(new SurveyEMail($data));
+                }
+                    
+                
+            }
+        }
+
+
+        $events = Event::has('transactions')->with('users')->where('view_tpl','event')->get();
+
+        foreach($events as $event){
+        
+            $sendEmail = false;
+            foreach($event['users'] as $user){
+
+                $lessons = $event->topicsLessonsInstructors();
+
+
+                if(!isset($lessons['topics'])){
+                    continue;
+                }
+ 
+                $lesson = end($lessons['topics']);
+
+                if(!isset($lesson['lessons'])){
+                    continue;
+                }
+
+                $lesson = end($lesson['lessons']);
+                $lastDayLesson = date('Y-m-d',strtotime($lesson['pivot']['time_ends']));
+
+                if( $lastDayLesson !== $today ){
+                    continue;
+                }
+ 
+                if($event->evaluate_instructors){
+                    $sendEmail = true;
+                }else if($event->evaluate_topics){
+                    $sendEmail = true;
+                }else if($event->fb_testimonial){
+                    $sendEmail = true;
+                }
+
+                $data['firstName'] = $user->firstname;
+                $data['subject'] = 'Knowcrunch - ' . $data['firstName'] . ' please take our survey';
+                $data['template'] = 'emails.user.survey_email';
+                $data['fb_group'] = $event->fb_group;
+                $data['evaluateTopics'] = $event->evaluate_topics;
+                $data['evaluateInstructors'] = $event->evaluate_instructors;
+                $data['fbTestimonial'] = $event->fb_testimonial;
+
+                if($sendEmail){
+                    $user->notify(new SurveyEMail($data));
+                }
+                    
+                
+            }
+        }
+
+
+        
 
     }
 
