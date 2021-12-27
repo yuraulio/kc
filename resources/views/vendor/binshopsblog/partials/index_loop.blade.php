@@ -22,7 +22,7 @@
             </div>
         </div>
        <div class="">
-        <h2 class=''><a href='{{$post->url($locale)}}'>{{mb_strimwidth($post->title, 0, 70, "...") }}</a></h2>
+        <h2 class=''><a href='{{$post->url($locale)}}'>{{ $post->title }}</a></h2>
         {{-- @if (config('binshopsblog.show_full_text_at_list'))
             <p>{!! $post->post_body_output() !!}</p>
         @else
