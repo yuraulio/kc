@@ -37,15 +37,15 @@
                <div class="collapse" id="collapseExample">
                   <div class="container">
                      <div class="row">
-                        <div class="col" id="filter_col1" data-column="3">
+                        <div class="col" id="filter_col1" data-column="2">
                            <label>Event</label>
-                           <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="event" class="column_filter" id="col3_filter">
+                           <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="event" class="column_filter" id="col2_filter">
                               <option selected value> -- All -- </option>
                            </select>
                         </div>
-                        <div class="col" id="filter_col4" data-column="4">
+                        <div class="col" id="filter_col3" data-column="3">
                            <label>Status</label>
-                           <select data-toggle="select" data-live-search="true" class="column_filter" id="col4_filter" placeholder="Status">
+                           <select data-toggle="select" data-live-search="true" class="column_filter" id="col3_filter" placeholder="Status">
 
                                 <option selected value> -- All -- </option>
                                 <option value="trialing"> Trialing </option>
@@ -82,36 +82,13 @@
                      </div>
                   </div>
                </div>
-               {{--
-               <div class="card bg-gradient-default">
-                  <div class="card-body">
-                     <!-- <h3 class="card-title text-white">Testimonial</h3>
-                        <blockquote class="blockquote text-white mb-0">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                            <footer class="blockquote-footer text-danger">Someone famous in <cite title="Source Title">Source Title</cite></footer>
-                        </blockquote> -->
-                     <div class="container">
-                        <div class="row">
-                           <div class="col-sm">
-                              <h4 class="card-title text-white">Total Amount:</h4>
-                              <div class="text-white" id="total"></div>
-                           </div>
-                           <hr id="participantHr">
-                        </div>
-                     </div>
-                     <div style="margin-top:10px" class="container">
-                        <div class="row" id="participants_info">
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               --}}
+              
                <table class="table align-items-center table-flush"  id="subscriptions_table">
                   <thead class="thead-light">
                      <tr>
                         <th scope="col">{{ __('Id') }}</th>
                         <th scope="col">{{ __('Student') }}</th>
-                        <th scope="col">{{ __('Plan') }}</th>
+                        {{--<th scope="col">{{ __('Plan') }}</th>--}}
                         <th scope="col">{{ __('Event Name') }}</th>
                         <th scope="col">{{ __('Status') }}</th>
                         {{--
@@ -124,14 +101,18 @@
                   </thead>
                   <tfoot>
                      <tr>
-                        <th>{{ __('Id') }}</th>
-                        <th>{{ __('Student') }}</th>
-                        {{--<th>{{ __('Plan') }}</th>--}}
-                        <th>{{ __('Event Name') }}</th>
-                        <th>{{ __('Status') }}</th>
-                        <th>{{ __('Sub end at') }}</th>
-                        <th>{{ __('Amount') }}</th>
-                        <th class="">{{ __('Create Date') }}</th>
+                     <th scope="col">{{ __('Id') }}</th>
+                        <th scope="col">{{ __('Student') }}</th>
+                        {{--<th scope="col">{{ __('Plan') }}</th>--}}
+                        <th scope="col">{{ __('Event Name') }}</th>
+                        <th scope="col">{{ __('Status') }}</th>
+                        {{--
+                        <th scope="col">{{ __('Trials Sub end at') }}</th>
+                        --}}
+                        <th scope="col">{{ __('Sub end at') }}</th>
+                        <th scope="col">{{ __('Amount') }}</th>
+                        <th class="" scope="col">{{ __('Create Date') }}</th>
+                        
                      </tr>
                   </tfoot>
                   <tbody>
@@ -186,7 +167,7 @@
            var max = maxDate;
    
    
-           var date = new Date(data[7]);
+           var date = new Date(data[6]);
    
            date = moment(date).format('MM/DD/YYYY')
    
@@ -210,20 +191,20 @@
         let cancelled = 0 ;
         //returns 'filtered' or visible rows
         table.rows({filter: 'applied'}).every( function ( rowIdx, tableLoop, rowLoop ) {
-            var status = this.data()[4];
-            var amount = this.data()[6];
+            var statuss = this.data()[3];
+            var amount = this.data()[5];
             amount = parseInt(amount.replace("€",""))
 
-            if( $("#col4_filter").val() !== 'cancelled' &&  $("#filter_col4").val() !== 'trialing' ){
+            if( $("#col3_filter").val() !== 'cancelled' &&  $("#filter_col3").val() !== 'trialing' ){
 
                 sum = sum + amount
             }
 
             
 
-            if(status == 'trialing'){
+            if(statuss == 'trialing'){
                 trial += 1
-            }else if(status == 'cancelled'){
+            }else if(statuss == 'cancelled'){
                 cancelled += 1;
             }
         
@@ -239,22 +220,23 @@
     }
    
     function fillSelectedBox(){
-        events = table.column(3).data().unique().sort()
+        events = table.column(2).data().unique().sort()
         $.each(events, function(key, value){
-            $('#col3_filter').append('<option value="'+value+'">'+value+'</option>')
+            $('#col2_filter').append('<option value="'+value+'">'+value+'</option>')
         })
     }
    
     function filterColumn ( i ) {
-        if(i == 4){ //Status filter
+        if(i == 3){ //Status filter
             if($('#col'+i+'_filter').val() != ''){
                 status = $('#col'+i+'_filter').val()
+                
             }else{
                 status = ''
             }
-            value = status
+            value = status.trim()
    
-        }else if(i == 3){ // Event filter
+        }else if(i == 2){ // Event filter
             if($('#col'+i+'_filter').val() != ''){
                 value = $('#col'+i+'_filter').val()
             }else{
@@ -262,7 +244,14 @@
             }
    
         }
-        table.column( i ).search(value).draw();
+
+        if(value.trim()){
+         table.column( i ).search("^" + value.trim() + "$", true, false, true).draw()
+        }else{
+         table.column( i ).search(value.trim()).draw();
+        }
+        
+        
         initStats();
 
     }
@@ -270,7 +259,7 @@
    
     // DataTables initialisation
     var table = $('#subscriptions_table').DataTable({
-        "order": [[ 7, "desc" ]],
+        "order": [[ 6, "desc" ]],
         language: {
             paginate: {
             next: '&#187;', // or '→'

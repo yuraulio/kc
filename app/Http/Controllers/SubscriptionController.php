@@ -32,26 +32,26 @@ class SubscriptionController extends Controller
                 }
                 $status = $sub['subscription'][0]['stripe_status'];
 
-                if($status == 'cancel'){
+                if($sub['trial'] && $status == 'trialing'){
+                    $status = 'trialing';
+                }else if($status == 'active' && $sub['subscription'][0]['status'] && !$sub['trial']){
+                    $status = 'active';
+                }else if(($status == 'cancelled' || $status == 'cancel') && !$sub['trial']){
+                    $status = 'paid_and_cancelled';
+                }else if(($status == 'cancelled' || $status == 'cancel') && $sub['trial']){
                     $status = 'cancelled';
                 }
-
-                if($sub['trial']){
-                    $status = 'trialing';
-                }
                 
-                
-
                 $name = $sub['user'][0]['firstname'] . ' ' . $sub['user'][0]['lastname'];
                 $amount = '€'.number_format(intval($sub['total_amount']), 2, '.', '');
                 
-                $subscriptions[]=['user' => $name, 'plan_name' => $sub['subscription'][0]['name'], 
+                /*$subscriptions[]=['user' => $name, 'plan_name' => $sub['subscription'][0]['name'], 
+                    'event_title' => $sub['subscription'][0]['event'][0]['title'], 'status' => trim($status),'ends_at'=>$sub['ends_at'],
+                    'amount' => $amount,'created_at'=>date('Y-m-d',strtotime($sub['created_at'])),'id'=>$sub['id']];*/
+  
+                $subscriptions[$sub['subscription'][0]['stripe_id']]=['user' => $name, 'plan_name' => $sub['subscription'][0]['name'], 
                     'event_title' => $sub['subscription'][0]['event'][0]['title'], 'status' => $status,'ends_at'=>$sub['ends_at'],
                     'amount' => $amount,'created_at'=>date('Y-m-d',strtotime($sub['created_at'])),'id'=>$sub['id']];
-  
-                /*$subscriptions[$sub['subscription'][0]['stripe_id']]=['user' => $name, 'plan_name' => $sub['subscription'][0]['name'], 
-                    'event_title' => $sub['subscription'][0]['event'][0]['title'], 'status' => $status,'ends_at'=>$sub['ends_at'],
-                    'amount' => $amount,'created_at'=>$sub['created_at'],'id'=>$sub['id']];*/
 
             }
 
