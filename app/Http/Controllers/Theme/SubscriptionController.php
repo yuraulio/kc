@@ -464,24 +464,32 @@ class SubscriptionController extends Controller
 
         $sub_id_stripe = $subscription['stripe_id'];
 
-        if($request->status == 'Cancel'){
+        try{
+            if($request->status == 'Cancel'){
                         
+                $subscription->status = false;
+                $subscription->stripe_status = 'cancel';
+                $subscription->save();
+                $subscription = $subscription->cancel();
+             
+    
+            }else if($request->status == 'Active'){
+    
+    
+                $subscription->status = true;
+                $subscription->stripe_status = 'active';
+                $subscription->save();
+                $subscription = $subscription->resume();
+            
+    
+            }
+        }catch(\Stripe\Exception\InvalidArgumentException $e){
+            //dd($subscription);
             $subscription->status = false;
-            $subscription->stripe_status = 'cancel';
             $subscription->save();
-            $subscription = $subscription->cancel();
-         
-
-        }else if($request->status == 'Active'){
-
-
-            $subscription->status = true;
-            $subscription->stripe_status = 'active';
-            $subscription->save();
-            $subscription = $subscription->resume();
-        
-
         }
+
+        
 
         echo json_encode($subscription);
 
