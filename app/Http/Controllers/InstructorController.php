@@ -68,6 +68,7 @@ class InstructorController extends Controller
 
             $isCreate->createMedia();
             $isCreate->createSlug($request->subtitle);
+            $isCreate->createMetas($request->all());
             //attach instructor-user
             if($request->user_id != null){
                 $isCreate->user()->attach(['user_id' => $request->user_id]);
@@ -98,7 +99,8 @@ class InstructorController extends Controller
     public function edit(Instructor $instructor)
     {
         $users = User::all();
-        return view('instructors.edit', compact('instructor', 'users'));
+        $metas = $instructor->metable;
+        return view('instructors.edit', compact('instructor', 'users','metas'));
     }
 
     /**
