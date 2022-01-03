@@ -3,7 +3,6 @@
 
     <title>{{ $page['name'] }}</title>
    {!! $page->metable->getMetas() !!}
-
 @endsection
 @section('content')
 @include('theme.preview.preview_warning', ["id" => $page['id'], "type" => "page", "status" => $page['status']])

@@ -1101,7 +1101,7 @@ class CartController extends Controller
                     }
                     
                     
-               //     $st_phone = $temp['billmobile'];
+                    //$st_phone = $temp['billmobile'];
 
                 }
                 else {
@@ -1150,90 +1150,90 @@ class CartController extends Controller
                     $planAmount  = $instamount . '00';
                 }*/
                 $planAmount  = $instamount * 100 ;
-                    //$dpuser->subscription()->syncWithStripe();
-                   // dd("Entity ready to be billed!");
-                    // Check if the entity has any active subscription
+                //$dpuser->subscription()->syncWithStripe();
+                // dd("Entity ready to be billed!");
+                // Check if the entity has any active subscription
 
 
-                        //./ngrok authtoken 69hUuQ1DgonuoGjunLYJv_3PVuHFueuq5Kiuz7S1t21
-                        // Create the plan to subscribe
-                        $desc = $installments . ' installments';
-                        $planid = 'plan_'.$dpuser->id.'_E_'.$ev->id.'_T_'.$ticket_id.'_x'.$installments.'_'.date('his');
-                        $name = $ev_title . ' ' . $ev_date_help . ' | ' . $desc;
-                        //dd(str_replace('.','',$instamount) . '00');
+                //./ngrok authtoken 69hUuQ1DgonuoGjunLYJv_3PVuHFueuq5Kiuz7S1t21
+                // Create the plan to subscribe
+                $desc = $installments . ' installments';
+                $planid = 'plan_'.$dpuser->id.'_E_'.$ev->id.'_T_'.$ticket_id.'_x'.$installments.'_'.date('his');
+                $name = $ev_title . ' ' . $ev_date_help . ' | ' . $desc;
+                //dd(str_replace('.','',$instamount) . '00');
 
-                        $plan = Plan::create([
-                            'id'                   => $planid,
-                            "product" => array(
-                                'name'                 => $name,
-                              ),
+                $plan = Plan::create([
+                    'id'                   => $planid,
+                    "product" => array(
+                        'name'                 => $name,
+                      ),
 
-                            'amount'               => $planAmount,
-                            'currency'             => 'eur',
-                            'interval'             => 'month',
-                            //'statement_descriptor' => $desc,
+                    'amount'               => $planAmount,
+                    'currency'             => 'eur',
+                    'interval'             => 'month',
+                    //'statement_descriptor' => $desc,
 
-                        ]);
+                ]);
 
 
-                        /*$sub = $dpuser
-                            ->subscription()
-                            ->onPlan($planid)
-                            ->create(['metadata' => ['installments_paid' => 0, 'installments' => $installments]])
-                        ;*/
+                /*$sub = $dpuser
+                    ->subscription()
+                    ->onPlan($planid)
+                    ->create(['metadata' => ['installments_paid' => 0, 'installments' => $installments]])
+                ;*/
 
-                        $payment_method_id = -1;
-                        if($ev->paymentMethod->first()){
-                            
-                            $payment_method_id = $ev->paymentMethod->first()->id;
-                               
-                        }
+                $payment_method_id = -1;
+                if($ev->paymentMethod->first()){
+                    
+                    $payment_method_id = $ev->paymentMethod->first()->id;
+                       
+                }
 
               
-                        try{
-                            
-                            $ev->users()->wherePivot('user_id',$dpuser->id)->detach();
-                            $ev->users()->save($dpuser,['paid'=>false,'payment_method'=>$payment_method_id]);
+                try{
+                    
+                    $ev->users()->wherePivot('user_id',$dpuser->id)->detach();
+                    $ev->users()->save($dpuser,['paid'=>false,'payment_method'=>$payment_method_id]);
 
-                            $charge = $dpuser->newSubscription($name, $plan->id)->create($input['payment_method'],
-                            ['email' => $dpuser->email],
-                                        ['metadata' => ['installments_paid' => 0, 'installments' => $installments]]);
+                    $charge = $dpuser->newSubscription($name, $plan->id)->create($input['payment_method'],
+                    ['email' => $dpuser->email],
+                                ['metadata' => ['installments_paid' => 0, 'installments' => $installments]]);
     
-                            $charge->metadata = json_encode(['installments_paid' => 0, 'installments' => $installments]);
-                            $charge->price = $instamount;
-                            $charge->save();
+                    $charge->metadata = json_encode(['installments_paid' => 0, 'installments' => $installments]);
+                    $charge->price = $instamount;
+                    $charge->save();
 
+                
+                }catch(\Laravel\Cashier\Exceptions\IncompletePayment $exception){
+
+                    $payment_method_id = -1;
+                    if($ev->paymentMethod->first()){
                         
-                        }catch(\Laravel\Cashier\Exceptions\IncompletePayment $exception){
-
-                            $payment_method_id = -1;
-                            if($ev->paymentMethod->first()){
-                                
-                                $payment_method_id = $ev->paymentMethod->first()->id;
-                                   
-                            }
+                        $payment_method_id = $ev->paymentMethod->first()->id;
+                           
+                    }
         
-                            $ev->users()->wherePivot('user_id',$dpuser->id)->detach();
-                            $ev->users()->save($dpuser,['paid'=>false,'payment_method'=>$payment_method_id]);
+                    $ev->users()->wherePivot('user_id',$dpuser->id)->detach();
+                    $ev->users()->save($dpuser,['paid'=>false,'payment_method'=>$payment_method_id]);
 
-                            $input['paymentMethod'] = $payment_method_id;
-                            $input['amount'] = $instamount;
-                            $input['total_amount'] = $namount;
-                            $input['couponCode'] = $couponCode;
-                            $input['duration'] = $ev_date_help;
+                    $input['paymentMethod'] = $payment_method_id;
+                    $input['amount'] = $instamount;
+                    $input['total_amount'] = $namount;
+                    $input['couponCode'] = $couponCode;
+                    $input['duration'] = $ev_date_help;
 
-                            $input = encrypt($input);
-                            session()->put('input',$input);
-                            session()->put('noActionEmail',true);
+                    $input = encrypt($input);
+                    session()->put('input',$input);
+                    session()->put('noActionEmail',true);
 
-                            //return '/';
-                            //return 'stripe/payment/' . $exception->payment->id . '/' . $input;
-                            return 'summary/' . $exception->payment->id . '/' . $input;
-                        }
+                    //return '/';
+                    //return 'stripe/payment/' . $exception->payment->id . '/' . $input;
+                    return 'summary/' . $exception->payment->id . '/' . $input;
+                }
 
-                        
+                
 
-                        //$namount = $instamount;
+                //$namount = $instamount;
              }
 
              

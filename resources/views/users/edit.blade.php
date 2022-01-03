@@ -411,19 +411,29 @@
                     <table class="table align-items-center table-flush"  id="datatable-basic44">
                         <thead class="thead-light">
                             <tr>
-                                <th scope="col">{{ __('Event') }}</th>
+                                {{--<th scope="col">{{ __('Event') }}</th>
                                 <th scope="col">{{ __('Ticket') }}</th>
                                 <th scope="col">{{ __('Initial Expiration Date') }}</th>
                                 <th scope="col">{{ __('New Expiration Date') }}</th>
+                                <th scope="col"></th>--}}
+
+                                <th scope="col">{{ __('Event') }}</th>
+                                <th scope="col">{{ __('Ticket Price') }}</th>
+                                <th scope="col">{{ __('Registration Date') }}</th>
+                                <th scope="col">{{ __('Expiration Date') }}</th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody id="assigned_ticket_users">
                             @foreach ($user->events as $user_event)
+
+                                <?php $trans = $user_event->transactionsByUser($user->id)->first() ?>
+
                                 <tr id="event_{{$user_event->id}}">
                                     <td>{{ $user_event->title }}</td>
-                                    <td>{{ $user_event->ticket_title }}</td>
-                                    <td class="exp_{{$user_event->id}}"><?= ($user_event->pivot->expiration != null) ? date_format( new DateTime($user_event->pivot->expiration),'m/d/Y') : ''; ?></td>
+                                    <td>@if($trans) {{ $trans->amount }} @endif</td>
+                                    {{--<td class="exp_{{$user_event->id}}"><?= ($user_event->pivot->expiration != null) ? date_format( new DateTime($user_event->pivot->expiration),'m/d/Y') : ''; ?></td>--}}
+                                   <td> @if($trans) {{date('d-m-Y',strtotime($trans->created_at))}} @endif</td>
                                     <td>
                                         <div style="display: inline-flex;">
                                             <input id="{{$user_event->id}}" class="form-control datepicker" placeholder="Select date" type="text" value="<?= ($user_event->pivot->expiration != null) ? date_format( new DateTime($user_event->pivot->expiration), 'm/d/Y') : ''; ?>">
@@ -732,7 +742,8 @@
                                                                 <tbody>
 
                                                                         <th scope="col"> {{$invoice['id']}} </th>
-                                                                        <th scope="col"> {{$tra['amount']}} </th>
+                                                                        {{--<th scope="col"> {{$tra['amount']}} </th>--}}
+                                                                        <th scope="col"> {{$invoice['amount']}} </th>
                                                                         <th scope="col"> {{date('d-m-y H:i',strtotime($invoice['created_at']))}} </th>
                                                                         <th scope="col"> <a href="/admin/invoice/{{ $invoice['id'] }}">view </a> </th>
 

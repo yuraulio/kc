@@ -14,6 +14,9 @@
             <li class="breadcrumb-item"><a href="{{ route('events.index') }}">{{ __('Events Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('Edit Event') }}</li>
         @endcomponent
+
+        @include('event.layouts.event_card')
+
     @endcomponent
     <?php //dd($event->type); ?>
     <div class="container-fluid mt--6">
@@ -22,14 +25,18 @@
                 <div class="nav-wrapper">
                     <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i>Settings</a>
+                            <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true"><i class="ni ni-settings-gear-65 mr-2"></i>Settings</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#tabs-icons-text-2" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Info</a>
+                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#tabs-icons-text-2" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-folder-17 mr-2"></i>Content</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-3-tab" data-toggle="tab" href="#tabs-icons-text-3" role="tab" aria-controls="tabs-icons-text-3" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Students</a>
+                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-4-tab" data-toggle="tab" href="#emails_fields" role="tab" aria-controls="tabs-icons-text-4" aria-selected="false"><i class="ni ni-world mr-2"></i>Links</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-3-tab" data-toggle="tab" href="#tabs-icons-text-3" role="tab" aria-controls="tabs-icons-text-3" aria-selected="false"><i class="ni ni-hat-3 mr-2"></i>Students</a>
+                        </li>
+                      
                     </ul>
                 </div>
                 <div class="card shadow">
@@ -330,9 +337,7 @@
                                         <li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-9-tab_inside" data-toggle="tab" href="#videos" role="tab" aria-controls="videos" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Videos</a>
                                         </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-9-tab_inside" data-toggle="tab" href="#email_fields" role="tab" aria-controls="email_fields" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Email Fields</a>
-                                        </li>
+                                       
 
                                     </ul>
                                 </div>
@@ -467,44 +472,7 @@
                                                 @include('admin.videos.event.index',['model' => $event])
                                             </div>
 
-                                            <div class="tab-pane fade" id="email_fields" role="tabpanel" aria-labelledby="tabs-icons-text-9-tab_inside">
-                                                <div class="form-group">
-                                                    <div class="form-group{{ $errors->has('fb_group') ? ' has-danger' : '' }}">
-                                                        <label class="form-control-label" for="input-fb_group">{{ __('Facebook Group') }}</label>
-                                                        <input type="text" name="fb_group" id="input-fb_group" class="form-control{{ $errors->has('fb_group') ? ' is-invalid' : '' }}" placeholder="{{ __('Facebook Group') }}" value="{{ old('fb_group', $event->fb_group) }}"autofocus>
-
-                                                        @include('alerts.feedback', ['field' => 'fb_group'])
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <div class="form-group{{ $errors->has('evaluate_instructors') ? ' has-danger' : '' }}">
-                                                        <label class="form-control-label" for="input-evaluate_instructors">{{ __('Evaluate Instructors') }}</label>
-                                                        <input type="text" name="evaluate_instructors" id="input-evaluate_instructors" class="form-control{{ $errors->has('evaluate_instructors') ? ' is-invalid' : '' }}" placeholder="{{ __('Evaluate Instructors') }}" value="{{ old('evaluate_instructors', $event->evaluate_instructors) }}"autofocus>
-
-                                                        @include('alerts.feedback', ['field' => 'evaluate_instructors'])
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <div class="form-group{{ $errors->has('evaluate_topics') ? ' has-danger' : '' }}">
-                                                        <label class="form-control-label" for="input-evaluate_topics">{{ __('Evaluate Topics') }}</label>
-                                                        <input type="text" name="evaluate_topics" id="input-evaluate_topics" class="form-control{{ $errors->has('evaluate_topics') ? ' is-invalid' : '' }}" placeholder="{{ __('Evaluate Topics') }}" value="{{ old('evaluate_topics', $event->evaluate_topics) }}"autofocus>
-
-                                                        @include('alerts.feedback', ['field' => 'evaluate_topics'])
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <div class="form-group{{ $errors->has('fb_testimonial') ? ' has-danger' : '' }}">
-                                                        <label class="form-control-label" for="input-fb_testimonial">{{ __('Facebook Testimonial') }}</label>
-                                                        <input type="text" name="fb_testimonial" id="input-fb_testimonial" class="form-control{{ $errors->has('fb_testimonial') ? ' is-invalid' : '' }}" placeholder="{{ __('Facebook Testimonial') }}" value="{{ old('fb_testimonial', $event->fb_testimonial) }}"autofocus>
-
-                                                        @include('alerts.feedback', ['field' => 'fb_testimonial'])
-                                                    </div>
-                                                </div>
-
-                                            </div>
+                                       
 
                                             <div class="tab-pane fade" id="tabs-icons-text-3_inside" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab_inside">
                                                 @include('admin.benefits.benefits',['model' => $event])
@@ -551,6 +519,47 @@
                             </div>
                             <div class="tab-pane fade" id="tabs-icons-text-3" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
                                 @include('event.students')
+                            </div>
+
+                            <div class="tab-pane fade" id="emails_fields" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
+                            <p class="text-sm mb-0">
+                                                    {{ __("Please submit the full links for for this course's automated emails.") }}
+                                                </p>
+                                                <div class="form-group">
+                                                    <div class="form-group{{ $errors->has('fb_group') ? ' has-danger' : '' }}">
+                                                        <label class="form-control-label" for="input-fb_group">{{ __("Course's Facebook group:") }}</label>
+                                                        <input type="text" name="fb_group" id="input-fb_group" class="form-control{{ $errors->has('fb_group') ? ' is-invalid' : '' }}" placeholder='Example: https:/facebook.com/groups/yourgroup' value="{{ old('fb_group', $event->fb_group) }}"autofocus>
+
+                                                        @include('alerts.feedback', ['field' => 'fb_group'])
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="form-group{{ $errors->has('evaluate_instructors') ? ' has-danger' : '' }}">
+                                                        <label class="form-control-label" for="input-evaluate_instructors">{{ __("Course's evaluation survey for instructors:") }}</label>
+                                                        <input type="text" name="evaluate_instructors" id="input-evaluate_instructors" class="form-control{{ $errors->has('evaluate_instructors') ? ' is-invalid' : '' }}" placeholder='Example: https:/typeform.com/yoursurvey' value="{{ old('evaluate_instructors', $event->evaluate_instructors) }}"autofocus>
+
+                                                        @include('alerts.feedback', ['field' => 'evaluate_instructors'])
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="form-group{{ $errors->has('evaluate_topics') ? ' has-danger' : '' }}">
+                                                        <label class="form-control-label" for="input-evaluate_topics">{{ __("Course's evaluation survey for topics:") }}</label>
+                                                        <input type="text" name="evaluate_topics" id="input-evaluate_topics" class="form-control{{ $errors->has('evaluate_topics') ? ' is-invalid' : '' }}" placeholder='Example: https:/typeform.com/yoursurvey' value="{{ old('evaluate_topics', $event->evaluate_topics) }}"autofocus>
+
+                                                        @include('alerts.feedback', ['field' => 'evaluate_topics'])
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="form-group{{ $errors->has('fb_testimonial') ? ' has-danger' : '' }}">
+                                                        <label class="form-control-label" for="input-fb_testimonial">{{ __("Course's testimonial survey:") }}</label>
+                                                        <input type="text" name="fb_testimonial" id="input-fb_testimonial" class="form-control{{ $errors->has('fb_testimonial') ? ' is-invalid' : '' }}" placeholder='Example: https:/typeform.com/yoursurvey' value="{{ old('fb_testimonial', $event->fb_testimonial) }}"autofocus>
+
+                                                        @include('alerts.feedback', ['field' => 'fb_testimonial'])
+                                                    </div>
+                                                </div>
                             </div>
 
                         </div>

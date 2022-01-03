@@ -1,6 +1,8 @@
 @extends('theme.layouts.master')
 @section('metas')
     <title>{{ $title }}</title>
+    {!! $instructor->metable->getMetas() !!}
+
 @endsection
 @section('content')
 @include('theme.preview.preview_warning', ["id" => $content->id, "type" => "content", "status" => $content->status])

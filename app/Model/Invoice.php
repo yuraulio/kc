@@ -137,6 +137,9 @@ class Invoice extends Model
 
         $this->save();
 
+        $data['description'] = $this->event->first()->summary1->where('section','date')->first() ? $this->event->first()->summary1->where('section','date')->first()->title : '';
+        $data['installments']= ($this->instalments > 1) ? ($this->instalments - $this->instalments_remaining) . ' of ' . $this->instalments : '';
+
         //dd($data);
         
         $contxt = stream_context_create([
@@ -155,7 +158,8 @@ class Invoice extends Model
 
           $pdf->getDomPDF()->setHttpContext($contxt);
           $pdf->loadView('admin.invoices.elearning_invoice',compact('data'))->setPaper('a4', 'portrait');
-        $fn = 'myinvoice' . '.pdf';
+         //$fn = 'myinvoice' . '.pdf';
+         $fn = date('Y-m-d',strtotime($this->created_at)) . ' - Invoice - ' . $this->invoice . '.pdf';
         return $pdf;
     
     }
@@ -254,6 +258,8 @@ class Invoice extends Model
         $data['country'] = 'Ελλάδα';
         $data['vat'] = $billafm;
         $data['footer'] = $newInvoice->event->first()->paymentMethod->first() ? $newInvoice->event->first()->paymentMethod->first()->footer : '';
+        $data['description'] =  $newInvoice->event->first()->summary1->where('section','date')->first() ?  $newInvoice->event->first()->summary1->where('section','date')->first()->title : '';
+        $data['installments']= ( $newInvoice->instalments > 1) ? ( $newInvoice->instalments -  $newInvoice->instalments_remaining) . ' of ' . $newInvoice->instalments : '';
 
         $contxt = stream_context_create([
             'ssl' => [
@@ -271,7 +277,8 @@ class Invoice extends Model
 
           $pdf->getDomPDF()->setHttpContext($contxt);
           $pdf->loadView('admin.invoices.elearning_invoice',compact('data'))->setPaper('a4', 'portrait');
-        $fn = 'myinvoice' . '.pdf';
+        //$fn = 'myinvoice' . '.pdf';
+        $fn = date('Y-m-d',strtotime($this->created_at)) . ' - Invoice - ' . $this->invoice . '.pdf';
         return [$pdf,$newInvoice];
     
     }
@@ -318,6 +325,10 @@ class Invoice extends Model
         $data['country'] = 'Ελλάδα';
         $data['vat'] = $billafm;
         $data['footer'] = $this->event->first()->paymentMethod->first() ? $this->event->first()->paymentMethod->first()->footer : '';
+        $data['description'] = $this->event->first()->summary1->where('section','date')->first() ? $this->event->first()->summary1->where('section','date')->first()->title : '';
+        $data['installments']= ($this->instalments > 1) ? ($this->instalments - $this->instalments_remaining) . ' of ' . $this->instalments : '';
+
+        
 
         $contxt = stream_context_create([
             'ssl' => [
@@ -336,7 +347,8 @@ class Invoice extends Model
           $pdf->getDomPDF()->setHttpContext($contxt);
           $pdf->loadView('admin.invoices.elearning_invoice',compact('data'))->setPaper('a4', 'portrait');
 
-        $fn = 'myinvoice' . '.pdf';
+         //$fn = 'myinvoice' . '.pdf';
+         $fn = date('Y-m-d',strtotime($this->created_at)) . '-Invoice-' . $this->invoice . '.pdf';
         return $pdf->stream($fn);
     
     }

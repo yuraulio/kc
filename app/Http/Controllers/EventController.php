@@ -260,6 +260,9 @@ class EventController extends Controller
         //$faq = Faq::find(16);
         //dd($faq->category);
 
+        $data['sumOfStudents'] = count($event->users);
+        $data['totalRevenue'] = $event->transactions->sum('amount');
+
         $user = Auth::user();
         $id = $event['id'];
         //$event = $event->with('coupons','delivery','category', 'summary1', 'benefits', 'ticket', 'city', 'venues', 'topic', 'lessons', 'instructors', 'users', 'partners', 'sections','paymentMethod','slugable','metable', 'medias', 'sectionVideos');
