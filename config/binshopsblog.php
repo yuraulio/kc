@@ -66,12 +66,12 @@ return [
 
 
         'image_large' => [ // this key must start with 'image_'. This is what the DB column must be named
-            'w' => 1200, // width in pixels
-            'h' => 700, //height
+            'w' => 3840, // width in pixels
+            'h' => 2160, //height
             'basic_key' => "large", // same as the main key, but WITHOUT 'image_'.
             'name' => "Large", // description, used in the admin panel
             'enabled' => true, // see note above
-            'crop' => true, // if true then we will crop and resize to exactly w/h. If false then it will maintain proportions, with a max width of 'w' and max height of 'h'
+            'crop' => false, // if true then we will crop and resize to exactly w/h. If false then it will maintain proportions, with a max width of 'w' and max height of 'h'
         ],
         'image_medium' => [ // this key must start with 'image_'. This is what the DB column must be named
             'w' => 680, // width in pixels
@@ -79,7 +79,7 @@ return [
             'basic_key' => "medium", // same as the main key, but WITHOUT 'image_'.
             'name' => "Medium", // description, used in the admin panel
             'enabled' => true, // see note above
-            'crop' => true, // if true then we will crop and resize to exactly w/h. If false then it will maintain proportions, with a max width of 'w' and max height of 'h'. If you use these images as part of your website template then you should probably have this to true.
+            'crop' => false, // if true then we will crop and resize to exactly w/h. If false then it will maintain proportions, with a max width of 'w' and max height of 'h'. If you use these images as part of your website template then you should probably have this to true.
         ],
         'image_thumbnail' => [ // this key must start with 'image_'. This is what the DB column must be named
             'w' => 150, // width in pixels
@@ -88,7 +88,7 @@ return [
             'name' => "Thumbnail", // description, used in the admin panel
             'enabled' => true, // see note above
         ],
-
+        // 'image_fullsize' => []
         // you can add more fields here, but make sure that you create the relevant database columns too!
         // They must be in the same format as the default ones - image_xxxxx (and this db column must exist on the binshops_posts table)
 
