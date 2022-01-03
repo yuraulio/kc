@@ -18,11 +18,11 @@
         @include('event.layouts.event_card')
 
     @endcomponent
-    <?php //dd($event->type); ?>
-    <div class="container-fluid mt--6">
+    <?php //container-fluid mt--6 ?>
+    <div class="">
         <div class="row">
             <div class="col">
-                <div class="nav-wrapper">
+                <div class="nav-wrapper tab-buttons">
                     <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
                         <li class="nav-item">
                             {{--<a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true"><i class="ni ni-settings-gear-65 mr-2"></i>Settings</a>--}}

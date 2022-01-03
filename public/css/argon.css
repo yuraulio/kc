@@ -16013,3 +16013,9 @@ button#move-lesson {
 #results .progress-label span {
   font-size: 1rem !important; }
 
+.tab-buttons {
+  padding: 1rem 1.5rem !important; }
+
+.tab-buttons li {
+  flex: none !important; }
+
