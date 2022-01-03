@@ -25,16 +25,32 @@
                 <div class="nav-wrapper">
                     <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true"><i class="ni ni-settings-gear-65 mr-2"></i>Settings</a>
+                            {{--<a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true"><i class="ni ni-settings-gear-65 mr-2"></i>Settings</a>--}}
+                            <button class="btn btn-icon btn-primary" data-toggle="tab"  href="#tabs-icons-text-1" role="tab" type="button">
+                            	<span class="btn-inner--icon"><i class="ni ni-settings-gear-65"></i></span>
+                                <span class="btn-inner--text">Settings</span>
+                            </button>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#tabs-icons-text-2" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-folder-17 mr-2"></i>Content</a>
+                            {{--<a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#tabs-icons-text-2" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-folder-17 mr-2"></i>Content</a>--}}
+                            <button class="btn btn-icon btn-primary" data-toggle="tab"  href="#tabs-icons-text-2" role="tab" type="button">
+                            	<span class="btn-inner--icon"><i class="ni ni-folder-17"></i></span>
+                                <span class="btn-inner--text">Content</span>
+                            </button>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-4-tab" data-toggle="tab" href="#emails_fields" role="tab" aria-controls="tabs-icons-text-4" aria-selected="false"><i class="ni ni-world mr-2"></i>Links</a>
+                            {{--<a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-4-tab" data-toggle="tab" href="#emails_fields" role="tab" aria-controls="tabs-icons-text-4" aria-selected="false"><i class="ni ni-world mr-2"></i>Links</a>--}}
+                            <button class="btn btn-icon btn-primary" data-toggle="tab"  href="#emails_fields" role="tab" type="button">
+                            	<span class="btn-inner--icon"><i class="ni ni-world"></i></span>
+                                <span class="btn-inner--text">Links</span>
+                            </button>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-3-tab" data-toggle="tab" href="#tabs-icons-text-3" role="tab" aria-controls="tabs-icons-text-3" aria-selected="false"><i class="ni ni-hat-3 mr-2"></i>Students</a>
+                            {{--<a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-3-tab" data-toggle="tab" href="#tabs-icons-text-3" role="tab" aria-controls="tabs-icons-text-3" aria-selected="false"><i class="ni ni-hat-3 mr-2"></i>Students</a>--}}
+                            <button class="btn btn-icon btn-primary" data-toggle="tab"  href="#tabs-icons-text-3" role="tab" type="button">
+                            	<span class="btn-inner--icon"><i class="ni ni-hat-3"></i></span>
+                                <span class="btn-inner--text">Students</span>
+                            </button>
                         </li>
                       
                     </ul>
