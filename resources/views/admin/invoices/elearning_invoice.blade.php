@@ -123,14 +123,30 @@ td p{
         color:#bbbbbb
     }
 
+    .header-invoice{
+        font-size:35px;
+    }
+
+    .details{
+        margin:0;
+        color:#bbbbbb
+    }
+
     </style>
 
 </head>
 <body>
 
 <header>
-        <img src="{{url('/theme/assets/images/logo-knowcrunch-seminars.svg')}}">
-    </header>
+    <table class="invoice-info" width="100%">
+        <tbody>
+            <tr>
+                <td  align="left"><img src="{{url('/theme/assets/images/logo-knowcrunch-seminars.svg')}}"></td>
+                <td class="header-invoice" align="right">Invoice</td>
+            </tr>
+        </tbody>
+    </table>
+</header>
 
 
 <div class="invoice">
@@ -188,7 +204,11 @@ td p{
 
         <tbody>
         <tr class="date event-amount">
-            <td  align="left">{{$data['title']}}</td>
+            <td  align="left">
+                <p class="details">{{$data['title']}}</p>
+                @if($data['description'])<p class="details">{{$data['description']}}</p>@endif
+                @if($data['installments'])<p class="details">{{$data['installments']}}</p>@endif
+            </td>
             <td align="right">€{{$data['amount']}}</td>
         </tr>
   

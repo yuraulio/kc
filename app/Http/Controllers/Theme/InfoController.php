@@ -741,16 +741,18 @@ class InfoController extends Controller
         $option->value=$next;
         $option->save();
         
-        $this->sendEmails($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug, $stripe,$billingEmail);
+        $paymentMethod = PaymentMethod::find($paymentMethodId);
+
+        $this->sendEmails($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug, $stripe,$billingEmail,$paymentMethod);
 
     }
 
-    public function sendEmails($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug,$stripe,$billingEmail)
+    public function sendEmails($transaction, $emailsCollector, $extrainfo, $helperdetails, $elearning, $eventslug,$stripe,$billingEmail,$paymentMethod = null)
     {
        // dd($elearning);
         // 5 email, admin, user, 2 deree, darkpony
     	//$generalInfo = \Config::get('dpoptions.website_details.settings');
-        $adminemail = 'info@knowcrunch.com';
+        $adminemail = ($paymentMethod && $paymentMethod->payment_email) ? $paymentMethod->payment_email : 'info@knowcrunch.com'; 
 
         $data = [];
         $data['fbGroup'] = $extrainfo[7];
@@ -798,17 +800,20 @@ class InfoController extends Controller
             if(Session::has('installments') && Session::get('installments') <= 1){
                 
                 $pdf = $transaction->invoice->first()->generateInvoice();
+
+                $fn = date('Y-m-d') . '-Invoice-' . $transaction->invoice->first()->invoice . '.pdf';
+
                 $pdf = $pdf->output();
-                $sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf,$billingEmail) {
+                $sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf,$billingEmail,$fn) {
 
                     $fullname = $muser['name'];
                     $first = $muser['first'];
                     $sub =  'KnowCrunch |' . $first . ' – Payment Successful in ' . $muser['event_title'];;
-                    $m->from($adminemail, 'Knowcrunch');
-                    $m->to('info@knowcrunch.com', $fullname);
+                    $m->from('info@knowcrunch.com', 'Knowcrunch');
+                    $m->to($adminemail, $fullname);
                     //$m->to('moulopoulos@lioncode.gr', $fullname);
                     $m->subject($sub);
-                    $m->attachData($pdf, "invoice.pdf");
+                    $m->attachData($pdf, $fn);
                 
                 });
 
@@ -847,8 +852,8 @@ class InfoController extends Controller
             if($transaction->payment_method_id == 100) {
                 $sentadmin = Mail::send('emails.admin.admin_info_new_registration', $transdata, function ($m) use ($adminemail) {
 
-                    $m->from($adminemail, 'Knowcrunch');
-                    $m->to($adminemail, 'Knowcrunch');
+                    $m->from('info@knowcrunch.com', 'Knowcrunch');
+                    $m->to('info@knowcrunch.com', 'Knowcrunch');
            
                     $m->subject('Knowcrunch - New Registration');
                 });
@@ -856,8 +861,8 @@ class InfoController extends Controller
             else {
                 $sentadmin = Mail::send('emails.admin.admin_info_new_registration', $transdata, function ($m) use ($adminemail) {
 
-                    $m->from($adminemail, 'Knowcrunch');
-                    $m->to($adminemail, 'Knowcrunch');
+                    $m->from('info@knowcrunch.com', 'Knowcrunch');
+                    $m->to('info@knowcrunch.com', 'Knowcrunch');
              
                     $m->subject('Knowcrunch - New Registration');
                 });

@@ -90,7 +90,7 @@ class WebhookController extends BaseWebhookController
 			$invoice = $invoices->last();
 			//$invoice = $invoices->first();
 			[$pdf,$invoice] = $invoice->generateCronjobInvoice();
-			$this->sendEmail($invoice,$pdf);
+			$this->sendEmail($invoice,$pdf,$paymentMethod);
 		}else{
 			if(!Invoice::doesntHave('subscription')->latest()->first()){
 				$invoiceNumber = sprintf('%04u', 1);
@@ -179,7 +179,7 @@ class WebhookController extends BaseWebhookController
 
 	
 
-				$this->sendEmail($elearningInvoice,$pdf);
+				$this->sendEmail($elearningInvoice,$pdf,$paymentMethod);
 
 			}
 		}
@@ -355,6 +355,8 @@ class WebhookController extends BaseWebhookController
 			$user->subscriptionEvents()->wherePivot('event_id',$eventId)->detach();
 			$user->subscriptionEvents()->attach($eventId,['subscription_id'=>$subscription->id,'payment_method' => $paymentMethodId]);
 
+			$paymentMethod = PaymentMethod::find($paymentMethodId);
+
 		}else{
 			$subscriptionPaymentMethod = $user->subscriptionEvents()->where('subscription_id',$subscription->id)->first();
 			$paymentMethod = PaymentMethod::find($subscriptionPaymentMethod->pivot->payment_method);
@@ -485,14 +487,14 @@ class WebhookController extends BaseWebhookController
 
 
 
-				$this->sendEmail($elearningInvoice,$pdf);
+				$this->sendEmail($elearningInvoice,$pdf,$paymentMethod);
 			}
 	
 	}
 	
-	private function sendEmail($elearningInvoice,$pdf){
+	private function sendEmail($elearningInvoice,$pdf,$paymentMethod = null){
 
-		$adminemail = 'info@knowcrunch.com';
+		$adminemail = ($paymentMethod && $paymentMethod->payment_email) ? $paymentMethod->payment_email : 'info@knowcrunch.com';
 
 		//$pdf = $transaction->elearningInvoice()->first()->generateInvoice();
         $pdf = $pdf->output();
@@ -524,16 +526,18 @@ class WebhookController extends BaseWebhookController
 		$data['slugInvoice'] = encrypt($user->id . '-' . $elearningInvoice->id);
 		$user->notify(new CourseInvoice($data));
 
-		$sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf) {
+		$fn = date('Y-m-d') . '-Invoice-' . $elearningInvoice->invoice . '.pdf';
+
+		$sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf,$fn) {
 
             $fullname = $muser['name'];
             $first = $muser['first'];
             $sub =  'KnowCrunch |' . $first . ' – Payment Successful in ' . $muser['event_title'];;
-            $m->from($adminemail, 'Knowcrunch');
-            $m->to('info@knowcrunch.com', $fullname);
+            $m->from('info@knowcrunch.com', 'Knowcrunch');
+            $m->to($adminemail, $fullname);
             //$m->to('moulopoulos@lioncode.gr', $fullname);
             $m->subject($sub);
-            $m->attachData($pdf, "invoice.pdf");
+            $m->attachData($pdf, $fn);
             
         });
 	}

@@ -454,7 +454,8 @@ class HomeController extends Controller
         $lessons = [];
         $instructor = Instructor::with('eventInstructorPage.category', 'mediable', 'eventInstructorPage.lessons', 'eventInstructorPage.slugable', 'eventInstructorPage.city', 'eventInstructorPage.summary1')->where('status',1)->find($page['id']);
         //dd($instructor['event'][0]);
-
+        $data['instructor'] = $instructor;
+        
         if(!$instructor){
             abort(404);
         }

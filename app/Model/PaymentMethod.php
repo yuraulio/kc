@@ -29,6 +29,7 @@ class PaymentMethod extends Model
         'surcharge_amount',
         'type',
         'footer',
+        'payment_email',
 
     ];
 

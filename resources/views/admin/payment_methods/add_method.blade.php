@@ -85,6 +85,13 @@
                               <input type="text" name="footer" id="input-footer" class="form-control{{ $errors->has('footer') ? ' is-invalid' : '' }}" placeholder="{{ __('Footer') }}" value="{{ old('footer',$method['footer']) }}" required autofocus>
                               @include('alerts.feedback', ['field' => 'footer'])
                            </div>
+
+                           <div class="form-group{{ $errors->has('footer') ? ' has-danger' : '' }}">
+                              <label class="form-control-label" for="input-email">{{ __('Email') }}</label>
+                              <input type="text" name="payment_email" id="input-email" class="form-control{{ $errors->has('payment_email') ? ' is-invalid' : '' }}" placeholder="{{ __('Email') }}" value="{{ old('payment_email',$method['payment_email']) }}" required autofocus>
+                              @include('alerts.feedback', ['field' => 'payment_email'])
+                           </div>
+
                            {{--<div class="form-group{{ $errors->has('type') ? ' has-danger' : '' }}">
                               <label class="form-control-label" for="input-status">{{ __('Type') }}</label>
                               <select name="type" id="input-status" class="form-control" placeholder="{{ __('Type') }}">

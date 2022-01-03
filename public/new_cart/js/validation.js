@@ -282,6 +282,9 @@ $(function() {
                 required: "This field is required, Enter Company or full name.",      
                 lettersonly: "Please write everything in English."         
             },
+            'billafm': {
+                required: "This field is required, Enter VAT or tax ID.",      
+            },
                
             'billaddress': {
                 lettersonly: "Please write everything in English."  
