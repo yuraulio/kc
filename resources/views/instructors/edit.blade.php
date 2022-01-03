@@ -28,6 +28,10 @@
                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#tabs-icons-text-2" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="far fa-images mr-2"></i>Image</a>
                         </li>
 
+                        <li class="nav-item">
+                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-3-tab" data-toggle="tab" href="#metas" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="far fa-images mr-2"></i>Metas</a>
+                        </li>
+
                     </ul>
                 </div>
             <div>
@@ -177,14 +181,17 @@
                                 </form>
                             </div>
                             <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
-                            @include('admin.upload.upload', ['event' => ( isset($instructor) && $instructor->medias != null) ? $instructor->medias : null, 'versions' => ['instructors-testimonials', 'instructors-small']])
+                                @include('admin.upload.upload', ['event' => ( isset($instructor) && $instructor->medias != null) ? $instructor->medias : null, 'versions' => ['instructors-testimonials', 'instructors-small']])
 
-                            @if($instructor->medias != null && $instructor->medias['name'] != '')
-                                <div id="version-btn" style="margin-bottom:20px" class="col">
-                                    <a href="{{ route('media2.eventImage', $instructor->medias) }}" target="_blank" class="btn btn-primary">{{ __('Versions') }}</a>
-                                </div>
-                            @endif
-                        </div>
+                                @if($instructor->medias != null && $instructor->medias['name'] != '')
+                                    <div id="version-btn" style="margin-bottom:20px" class="col">
+                                        <a href="{{ route('media2.eventImage', $instructor->medias) }}" target="_blank" class="btn btn-primary">{{ __('Versions') }}</a>
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="tab-pane fade" id="metas" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
+                            @include('admin.metas.metas',['metas' => $metas])
+                            </div>
                         </div>
                     </div>
                 </div>
