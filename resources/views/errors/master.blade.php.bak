@@ -2,7 +2,7 @@
 <html class="no-js" lang="">
    <head>
       <meta charset="utf-8">
-	 
+
 	  @yield('title')
       <meta name="description" content="">
       <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -49,14 +49,14 @@
                   <span class="hamburger-box">
                   <span class="hamburger-inner"></span>
                   </span>
-                  </button> 
+                  </button>
                   <div class="header-actions clearfix">
                      <ul class="actions-list">
-                       
+
                         @if($data['cartitems'] > 0)
                         <li>
                            <a href="/cart" title="Cart">
-                              <img src="{{cdn('/theme/assets/images/icons/icon-cart.svg')}}" class="replace-with-svg" width="18" alt="Cart"> 
+                              <img src="{{cdn('/theme/assets/images/icons/icon-cart.svg')}}" class="replace-with-svg" width="18" alt="Cart">
                               <!--  <span class="badge defaultCount">{{ Cart::content()->count() }}</span>-->
                            </a>
                         </li>
@@ -101,7 +101,7 @@
                   </ul>
                </div>
 			</div>
-			
+
          </header>
 		 <div class="mobile-menu">
    <div class="mob-menu-inner">
@@ -129,8 +129,8 @@
             </li>
             @else
             <li class="account-menu">
-				   <a href="javascript:void(0)" title="Superhero Login">Account</a>				
-            </li>		      
+				   <a href="javascript:void(0)" title="Superhero Login">Account</a>
+            </li>
             @endif
          </ul>
       </div>
@@ -158,7 +158,7 @@
             <h2>Account login</h2>
             <p>Access your courses, schedule & files.</p>
         </div>
-    
+
             <div class="input-wrapper input-wrapper--text input-wrapper--email">
                 <span class="icon"><img width="14" src="{{cdn('/theme/assets/images/icons/icon-email.svg')}}" class="replace-with-svg" alt=""></span>
                 <input type="text" placeholder="Email" id="email">
@@ -172,7 +172,7 @@
                 <a id="forgot-pass" href="javascript:void(0)">Forgot password?</a>
             </div>
             <input type="submit" onclick="loginAjaxNew()" value="LOGIN">
-        
+
     </div><!-- ./login-popup -->
 
     <div id="forgot-pass-input" class="login-popup" hidden>
@@ -187,7 +187,7 @@
                 <span class="icon"><img width="14" src="{{cdn('theme/assets/images/icons/icon-email.svg')}}" alt=""></span>
                 <input type="text" placeholder="Email" name="email" id="email-forgot">
             </div>
-           
+
             <input type="submit"  value="Change">
         </form>
     </div><!-- ./login-popup -->
@@ -244,7 +244,7 @@
                                  <li> <a  href='/instructors'  title = 'our instructors'> our instructors </a> </li>
                                  <li> <a  href='/become-an-instructor' title = 'become an instructor'> become an instructor </a> </li>
                                  <li> <a  href='/corporate-training'  title = 'corporate training'> corporate training </a> </li>
-                                 <li> <a  href='https://medium.com/@knowcrunch' target='_blank' title = 'blog'> blog </a> </li>
+                                 <li> <a  href='/en/blog' title = 'blog'> blog </a> </li>
                                  <li> <a  href='https://www.facebook.com/pg/KnowCrunch/jobs/' target='_blank' title = 'jobs'> jobs </a> </li>
                                  <li> <a  href='/terms'  title = 'Terms & Conditions'> terms & conditions </a> </li>
                                  <li> <a  href='/data-privacy-policy'  title = 'Data Privacy Policy'> data privacy policy </a> </li>
@@ -317,12 +317,12 @@
 
                            @if($social_media[1]['medium']['url'] != '')
                            <li><a target="_blank" title="{{ $social_media[1]['medium']['title'] }}" href="{{ $social_media[1]['medium']['url'] }}">
-                                 <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Medium.svg')}}" width="23" alt="{{ $social_media[1]['medium']['title'] }}"> </a>                 
+                                 <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/Medium.svg')}}" width="23" alt="{{ $social_media[1]['medium']['title'] }}"> </a>
                               </li>
                            @endif
                         </ul>
                      </div>
-                     
+
                   </div>
                </div>
             </div>
@@ -334,29 +334,29 @@
 <script src="{{cdn('/theme/assets/js/new_js/jquery-ui.js')}}"></script>
 <script src="{{cdn('/theme/assets/js/new_js//plugins.js')}}"></script>
 <script src="{{cdn('/theme/assets/js/new_js//main.js')}}"></script>
-    
+
       <script>
          $(document).on('click', '#forgot-pass', function(e){
              $('#login-popup').hide()
-             $('#forgot-pass-input').show()    
+             $('#forgot-pass-input').show()
          })
-         
+
          $(document).on('click', '.close-btn', function(e){
              $('#login-popup').show()
-             $('#forgot-pass-input').hide()    
+             $('#forgot-pass-input').hide()
          })
-         
+
 		 function loginAjaxNew(){
     var email = $('#email').val();
     var password = $('#password').val();
     var remember = document.getElementById("remember-me").checked;
-   
+
     if (email.length > 4 && password.length > 4) {
     $.ajax({ url: routesObj.baseUrl+"studentlogin", type: "post",
             data: {email:email, password:password, remember:remember},
             success: function(data) {
                 //console.log(data);
-                
+
                 switch (data.status) {
                     case 0:
                         if (data.message.length > 0) {
@@ -371,12 +371,12 @@
                             $('.alert-outer').show()
 
                         } else {
-                          
+
 
                         }
                         break;
                     case 1:
-                      
+
                         setTimeout( function(){
                             window.location.replace(data.redirect);
                         }, 1000 );
@@ -387,9 +387,9 @@
                         shakeModal();
                         break;
                 }
-                
-           
-   
+
+
+
             },
             error: function(data) {
                 //shakeModal();

@@ -10,9 +10,9 @@ $social_media = get_social_media();
 
 
    <div class="container">
-      
 
-      
+
+
 
       <div class="footer-row">
 
@@ -24,9 +24,9 @@ $social_media = get_social_media();
                   <ul class="footer-award-menu">
                      <li>
                         <div>
-                           <div><img alt_text="social media award" width="62" height="35" src="{{cdn('/awards/knowcrunch-award-marketing-education-leaders-2x.png')}}"></div> 
-                           <p> Best Digital Marketing E-learning 
-                                 Award by <span class="text-highlight2"> Education Leaders </span> </p>  
+                           <div><img alt_text="social media award" width="62" height="35" src="{{cdn('/awards/knowcrunch-award-marketing-education-leaders-2x.png')}}"></div>
+                           <p> Best Digital Marketing E-learning
+                                 Award by <span class="text-highlight2"> Education Leaders </span> </p>
                         </div>
 
                      </li>
@@ -34,11 +34,11 @@ $social_media = get_social_media();
                      <li>
                         <div>
                         <div><img alt_text="social media award" width="58" height="37" src="{{cdn('/awards/knowcrunch-award-marketing-education-best-social-media-learning-program-2x.png')}}"></div>
-                           <p> Best Social Media Learning Program 
+                           <p> Best Social Media Learning Program
                             Award by <span class="text-highlight2"> Social Media World </span></p>
                         </div>
 
-                        
+
                      </li>
 
                      <li>
@@ -53,32 +53,32 @@ $social_media = get_social_media();
 
                <div class="row clearfix footer-award-menu">
 
-            
+
                   <div class="col4 col-sm-12 award-div">
-                     <div><img alt_text="social media award" width="58" height="37" src="{{cdn('/awards/knowcrunch-award-marketing-education-leaders-2x.png')}}"></div> 
-                     <p> Best Digital Marketing E-learning 
-                           Award by <span class="text-highlight2"> Education Leaders </span> </p>  
+                     <div><img alt_text="social media award" width="58" height="37" src="{{cdn('/awards/knowcrunch-award-marketing-education-leaders-2x.png')}}"></div>
+                     <p> Best Digital Marketing E-learning
+                           Award by <span class="text-highlight2"> Education Leaders </span> </p>
                   </div>
 
-               
+
                   <div class="col4 col-sm-12 award-div">
                     <div><img alt_text="social media award" width="41" height="38"  src="{{cdn('/awards/knowcrunch-award-marketing-education-best-social-media-learning-program-2x.png')}}"></div>
-                     <p> Best Social Media Learning Program 
+                     <p> Best Social Media Learning Program
                       Award by <span class="text-highlight2"> Social Media World </span></p>
                   </div>
 
-                 
+
                   <div class="col4 col-sm-12 award-div">
                      <div><img alt_text="social media award" width="62" height="35"  src="{{cdn('/awards/knowcrunch-award-marketing-best-content-strategy-2x.png')}}"></div>
                      <p> Best Multi-Channel Content Strategy & Best Use of Multichannel Social Media in Content Marketing by <span class="text-highlight2">Digital Marketing Awards </span> </p>
                   </div>
-                 
+
                </div>
 
             </div>
          </div>
 
-         
+
          <div class="footer-col-1">
             <h4 class="footer-title">Get our news</h4>
             <div class="mobile-toggle">
@@ -103,7 +103,7 @@ $social_media = get_social_media();
                         <div class="response" id="mce-error-response" style="display:none"></div>
                         <div class="response" id="mce-success-response" style="display:none"></div>
                      </div>
-                     
+
                      <p>We respect your personal data. By subscribing, you agree that we can contact you to share our news or for marketing purposes according to our <a href="/data-privacy-policy" class="dark-bg">Data Privacy Policy.</a></p>
                     <!-- <script type='text/javascript' src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></script>-->
                      <script type='text/javascript'>(function($) {window.fnames = new Array(); window.ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';fnames[1]='FNAME';ftypes[1]='text';fnames[2]='LNAME';ftypes[2]='text';});</script>
@@ -134,7 +134,7 @@ $social_media = get_social_media();
                     <li> <a  href='/instructors'  title = 'our instructors'> our instructors </a> </li>
                     <li> <a  href='/become-an-instructor' title = 'become an instructor'> become an instructor </a> </li>
                     <li> <a  href='/corporate-training'  title = 'corporate training'> corporate training </a> </li>
-                    <li> <a  href='https://medium.com/@knowcrunch' target='_blank' title = 'blog'> blog </a> </li>
+                    <li> <a  href='/en/blog' title = 'blog'> blog </a> </li>
                     <li> <a  href='https://www.facebook.com/pg/KnowCrunch/jobs/' target='_blank' title = 'jobs'> jobs </a> </li>
                     <li> <a  href='/terms'  title = 'Terms & Conditions'> terms & conditions </a> </li>
                     <li> <a  href='/cookies-notice'  title = ' COOKIES NOTICE'>  cookies notice </a> </li>

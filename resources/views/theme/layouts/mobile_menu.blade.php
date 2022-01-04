@@ -15,6 +15,9 @@
             <a title="{{ $row['data']['name'] }}" href="{{ $row['data']['slugable']['slug'] }}">{{ $row['data']['name'] }}</a>
             </li>
             @endforeach
+            <li class="nav-item uppercase-item">
+                <a title="Blog" href="/en/blog">Blog</a>
+            </li>
             @endif
             @if (Auth::check())
             <li class="nav-item">
