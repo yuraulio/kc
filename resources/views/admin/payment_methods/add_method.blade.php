@@ -87,8 +87,8 @@
                            </div>
 
                            <div class="form-group{{ $errors->has('footer') ? ' has-danger' : '' }}">
-                              <label class="form-control-label" for="input-email">{{ __('Email') }}</label>
-                              <input type="text" name="payment_email" id="input-email" class="form-control{{ $errors->has('payment_email') ? ' is-invalid' : '' }}" placeholder="{{ __('Email') }}" value="{{ old('payment_email',$method['payment_email']) }}" required autofocus>
+                              <label class="form-control-label" for="input-email">{{ __('Email to send receipts:') }}</label>
+                              <input type="text" name="payment_email" id="input-email" class="form-control{{ $errors->has('payment_email') ? ' is-invalid' : '' }}" placeholder="{{ __('Email to send receipts') }}" value="{{ old('payment_email',$method['payment_email']) }}" required autofocus>
                               @include('alerts.feedback', ['field' => 'payment_email'])
                            </div>
 
