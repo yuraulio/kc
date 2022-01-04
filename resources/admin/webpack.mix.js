@@ -5,7 +5,7 @@ const fs = require("fs");
 const folder = {
     src: "resources/", // source files
     dist: "public/", // build files
-    dist_assets: "../public/admin_assets/", //build assets files
+    dist_assets: "../../public/admin_assets/", //build assets files
 };
 
 /*
