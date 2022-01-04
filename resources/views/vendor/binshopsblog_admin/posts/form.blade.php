@@ -134,7 +134,7 @@
     <label for="blog_short_description">Keywords (separate keywords with commas)</label>
     <textarea class="form-control" id="blog_short_description" aria-describedby="blog_short_description_help"
               name='short_description'>{{old("short_description",$post_translation->short_description)}}</textarea>
-    <small id="blog_short_description_help" class="form-text text-muted">Short description (optional - only useful if you use in your template views)</small>
+    <small id="blog_short_description_help" class="form-text text-muted">Keywords (eg. knowcrunch, educational, digital marketing, media)</small>
 </div>
 
 @if(config("binshopsblog.image_upload_enabled",true))
