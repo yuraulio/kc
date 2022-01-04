@@ -1076,8 +1076,8 @@
 
 
     $('.enroll-toggle').change(function(){
-
-        let enroll = $("#input-enroll").is(":checked");
+       
+        let enroll = $("#input-enroll").is(":checked") ? 1 : 0;
 
         $.ajax({
             type: 'get',
