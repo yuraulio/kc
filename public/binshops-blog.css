@@ -233,7 +233,7 @@
     flex: 0 0 45%;
 }
 .blogpagex-blog-image {
-    max-height: 230px !important;
+    height: 200px !important;
     overflow: hidden;
 }
 .blogx-container > .blog_body_content {
@@ -335,4 +335,8 @@
 
 img.blog-full-width {
     width: 100%;
+}
+
+.blog_body_content ul {
+    margin-bottom: 20px !important;
 }
