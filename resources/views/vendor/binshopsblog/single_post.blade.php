@@ -23,7 +23,7 @@
 @endsection
 
 @section('header')
-    <title>KnowCrunch | {{ $post->gen_seo_title() }}</title>
+    <title>{{ $post->gen_seo_title() }}</title>
 @endsection
 
 
