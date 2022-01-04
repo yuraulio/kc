@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {{-- Basic --}}
     <meta name="description" content="{{ $post->meta_desc }}">
-    <meta name="keywords" content="KnowCrunch, education, blog">
+    <meta name="keywords" content="{{ $post->short_description }}">
     <meta name="image" content="{{ $post->image_url() }}">
     <meta name="author" content="KnowCrunch">
 
     <!--  Essential META Tags -->
-    <meta property="og:title" content="KnowCrunch | {{ $post->gen_seo_title() }}">
+    <meta property="og:title" content="{{ $post->gen_seo_title() }}">
     <meta property="og:type" content="article" />
     <meta property="og:image" content="{{ $post->image_url() }}">
     <meta property="og:url" content="{{ $post->url('en') }}">
@@ -23,7 +23,7 @@
 @endsection
 
 @section('header')
-    <title>KnowCrunch | {{ $post->gen_seo_title() }}</title>
+    <title>{{ $post->gen_seo_title() }}</title>
 @endsection
 
 
