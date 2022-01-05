@@ -42,21 +42,6 @@
                     @endforeach
                 </div>
             </div>
-            <div class="">
-            @if($category)
-                <div class="blogpagex dynamic-courses-wrapper catx">
-                    <div class="catx-sub">{!! $category->category_description !!}</div>
-                    @forelse(collect($posts)->slice(0, 1) as $post)
-                        @php
-                            $post->inter = true;
-                        @endphp
-                        @include("binshopsblog::partials.index_loop")
-                    @empty
-
-                    @endforelse
-                </div>
-            @endif
-            </div>
             <div class="blogpagex dynamic-courses-wrapper">
             @forelse($posts as $post)
                 @if(!$post->inter)
