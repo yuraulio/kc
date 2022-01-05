@@ -4,11 +4,11 @@
 
 @font-face {
     font-family: "footable";
-    src: url("/assets/fonts/footable.eot");
-    src: url("/assets/fonts/footable.eot?#iefix") format("embedded-opentype"),
-        url("/assets/fonts/footable.woff") format("woff"),
-        url("/assets/fonts/footable.ttf") format("truetype"),
-        url("/assets/fonts/footable.svg#footable") format("svg");
+    src: url("/admin_assets/fonts/footable.eot");
+    src: url("/admin_assets/fonts/footable.eot?#iefix") format("embedded-opentype"),
+        url("/admin_assets/fonts/footable.woff") format("woff"),
+        url("/admin_assets/fonts/footable.ttf") format("truetype"),
+        url("/admin_assets/fonts/footable.svg#footable") format("svg");
     font-weight: normal;
     font-style: normal;
 }
@@ -16,7 +16,7 @@
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
     @font-face {
         font-family: "footable";
-        src: url("/assets/fonts/footable.svg#footable") format("svg");
+        src: url("/admin_assets/fonts/footable.svg#footable") format("svg");
         font-weight: normal;
         font-style: normal;
     }
