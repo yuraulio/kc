@@ -588,7 +588,7 @@ class CronjobsController extends Controller
     
         $events = Event::has('transactions')->with('users')->where('view_tpl','elearning_event')->get();
         //$events = Event::has('transactions')->where('published','true')->with('users')->get();
- 
+     
         $today = date('Y/m/d');
         $today = date('Y-m-d', strtotime('-1 day', strtotime($today)));
         foreach($events as $event){
@@ -599,7 +599,6 @@ class CronjobsController extends Controller
                 if( $user->pivot->expiration !== $today || !$user->pivot->expiration){
                     continue;
                 }
- 
                 if($event->evaluate_instructors){
                     $sendEmail = true;
                 }else if($event->evaluate_topics){
@@ -615,7 +614,7 @@ class CronjobsController extends Controller
                 $data['evaluateTopics'] = $event->evaluate_topics;
                 $data['evaluateInstructors'] = $event->evaluate_instructors;
                 $data['fbTestimonial'] = $event->fb_testimonial;
-
+               
                 if($sendEmail){
                     $user->notify(new SurveyEMail($data));
                 }
@@ -624,18 +623,17 @@ class CronjobsController extends Controller
             }
         }
 
-
+       
         $events = Event::has('transactions')->with('users')->where('view_tpl','event')->get();
-
+        
         foreach($events as $event){
         
             $sendEmail = false;
+            //$lessons = $event->topicsLessonsInstructors();
+            $lessons = $event->lessons;
             foreach($event['users'] as $user){
 
-                $lessons = $event->topicsLessonsInstructors();
-
-
-                if(!isset($lessons['topics'])){
+                /*if(!isset($lessons['topics'])){
                     continue;
                 }
  
@@ -645,7 +643,13 @@ class CronjobsController extends Controller
                     continue;
                 }
 
-                $lesson = end($lesson['lessons']);
+                $lesson = end($lesson['lessons']);*/
+                $lesson = $lessons->last();
+
+                if(!isset($lesson['pivot']['time_ends'])){
+                    continue;
+                }
+            
                 $lastDayLesson = date('Y-m-d',strtotime($lesson['pivot']['time_ends']));
 
                 if( $lastDayLesson !== $today ){
@@ -675,9 +679,6 @@ class CronjobsController extends Controller
                 
             }
         }
-
-
-        
 
     }
 
