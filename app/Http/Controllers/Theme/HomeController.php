@@ -731,7 +731,7 @@ class HomeController extends Controller
         //dd($user->cookiesSMS()->where('coockie_value',10001)->first());
         //dd($user->cookiesSMS()->where('coockie_value',$request->cookie_value)->first());
 
-        if($user->cookiesSMS()->where('coockie_value',$request->cookie_value)->first()){
+        if($user && $user->cookiesSMS()->where('coockie_value',$request->cookie_value)->first()){
 
             $cookieSms = $user->cookiesSMS()->where('coockie_value',$request->cookie_value)->first();
             $sms_code = $cookieSms->sms_code;
