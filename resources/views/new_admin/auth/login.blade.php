@@ -22,7 +22,7 @@
                                 <div class="auth-logo">
                                     <a href="{{route('admin-dashboard')}}" class="logo logo-dark text-center">
                                         <span class="logo-lg">
-                                            <img src="{{asset('admin_assets/images/logo-dark.png')}}" alt="" height="22">
+                                            <img src="{{asset('admin_assets/images/logo-dark.svg')}}" alt="" height="22">
                                         </span>
                                     </a>
                                 </div>

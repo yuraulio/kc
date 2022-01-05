@@ -37,7 +37,7 @@
     </div>
     <!-- END wrapper -->
 
-    @include('new_admin.layouts.shared/right-sidebar')
+    {{-- @include('new_admin.layouts.shared/right-sidebar') --}}
 
     @include('new_admin.layouts.shared/footer-script')
 

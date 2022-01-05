@@ -44,33 +44,39 @@
 
             <ul id="side-menu">
 
-                <li class="menu-title">Navigation</li>
+                <li>
+                    <a href="{{route('admin-dashboard')}}">Dashboard</a>
+                </li>
+
+                {{-- <li class="menu-title">CMS</li> --}}
 
                 <li>
                     <a href="#sidebarDashboards" data-bs-toggle="collapse">
                         <i data-feather="airplay"></i>
                         <span class="badge bg-success rounded-pill float-end">4</span>
-                        <span> Dashboards </span>
+                        <span> CMS </span>
                     </a>
                     <div class="collapse" id="sidebarDashboards">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="{{route('admin-adshboard', 'index')}}">Dashboard 1</a>
+                                <a href="{{route('admin-dashboard', 'index')}}">Item 1</a>
                             </li>
                             <li>
-                                <a href="{{route('admin-adshboard', 'dashboard-2')}}">Dashboard 2</a>
+                                <a href="{{route('admin-dashboard', 'dashboard-2')}}">Item 2</a>
                             </li>
                             <li>
-                                <a href="{{route('admin-adshboard', 'dashboard-3')}}">Dashboard 3</a>
+                                <a href="{{route('admin-dashboard', 'dashboard-3')}}">Item 3</a>
                             </li>
                             <li>
-                                <a href="{{route('admin-adshboard', 'dashboard-4')}}">Dashboard 4</a>
+                                <a href="{{route('admin-dashboard', 'dashboard-4')}}">Item 4</a>
                             </li>
                         </ul>
                     </div>
                 </li>
 
-                <li class="menu-title mt-2">Apps</li>
+                <li>
+                    <a href="{{"http://" . env("APP_URL") . "/admin"}}"><span class="badge bg-secondary mt-0">Old</span> Dashboard</a>
+                </li>
 
             </ul>
 
