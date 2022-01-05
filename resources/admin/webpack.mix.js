@@ -4,9 +4,11 @@ const fs = require("fs");
 
 const folder = {
     src: "resources/", // source files
-    dist: "public/", // build files
-    dist_assets: "../../public/admin_assets/", //build assets files
+    dist: "./../../public/admin_assets/", // build files
+    dist_assets: "./../../public/admin_assets/", //build assets files
 };
+
+mix.setPublicPath(folder.dist_assets);
 
 /*
  |--------------------------------------------------------------------------
@@ -339,7 +341,7 @@ var third_party_assets = {
         {
             name: "jquery.scrollto",
             assets: [
-                "./node_modules/jquery.scrollto/dist/jquery.scrollTo.min.js",
+                "./node_modules/jquery.scrollto/jquery.scrollTo.min.js",
             ],
         },
         {
@@ -432,10 +434,10 @@ var third_party_assets = {
             name: "raphael",
             assets: ["./node_modules/raphael/raphael.min.js"],
         },
-        {
-            name: "run",
-            assets: ["./node_modules/run/run.js"],
-        },
+        // {
+        //     name: "run",
+        //     assets: ["./node_modules/run/run.js"],
+        // },
         {
             name: "select2",
             assets: [
@@ -496,8 +498,8 @@ var third_party_assets = {
         {
             name: "toastr",
             assets: [
-                "./node_modules/toastr/dist/toastr.min.js",
-                "./node_modules/toastr/dist/toastr.min.css",
+                "./node_modules/toastr/build/toastr.min.js",
+                "./node_modules/toastr/build/toastr.min.css",
             ],
         },
         {
