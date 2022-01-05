@@ -43,7 +43,8 @@
                                        $yt = '';
                                        $name = $lvalue['title'] . ' ' . $lvalue['subtitle'];
                                        $field1 = '';
-                                       $field2 ='';
+                                       $field2 =$lvalue['company'];
+                                       //$company = $lvalue['company'];
 
                                        //dd($lvalue);
 
@@ -55,7 +56,7 @@
                                          $field1 =  $lvalue['header'];
                                        }
 
-                                       if(isset($lvalue['ext_url'])){
+                                       /*if(isset($lvalue['ext_url'])){
                                             $field2 = $lvalue['ext_url'];
                                             $field2 = str_replace ( "https://www.", "", $field2 );
                                             $field2 = str_replace ( "https://.", "", $field2 );
@@ -64,7 +65,7 @@
                                             $field2 = str_replace ( "http:", "", $field2 );
                                             $field2 = str_replace ( "/", "", $field2 );
                                          
-                                       }
+                                       }*/
                                        $socialMedia = json_decode($lvalue['social_media'],true);
 
                                        if(isset($socialMedia['facebook'])){

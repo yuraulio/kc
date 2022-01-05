@@ -18,6 +18,11 @@
                 <th scope="col">{{ __('Lastname') }}</th>
                 <th scope="col">{{ __('Email') }}</th>
                 <th scope="col">{{ __('Mobile') }}</th>
+
+                @if(!$isInclassCourse)
+                <th scope="col">{{ __('Videos Seen') }}</th>
+                <th scope="col">{{ __('Progress') }}</th>
+                @endif
             </tr>
         </thead>
         <tbody>
@@ -29,6 +34,11 @@
                     <td>{{ $user['lastname'] }}</td>
                     <td><a href="mailto:{{ $user['email'] }}">{{ $user['email'] }}</a> </td>
                     <td>{{ $user['mobile'] }}</td>
+
+                    @if(!$isInclassCourse)
+                        <td>{{ $event->video_seen($user) }}</td>
+                        <td>{{ round($event->progress($user),2)  }}%</td>
+                    @endif
                 </tr>
             @endforeach
         </tbody>

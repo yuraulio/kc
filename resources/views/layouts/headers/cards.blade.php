@@ -2,12 +2,54 @@
     <div class="col-xl-3 col-md-6">
         <div class="card card-stats">
             <!-- Card body -->
-            <div class="card-body">
+            {{--<div class="card-body">
                 <div class="row">
                     <div class="col">
                         <h5 class="card-title text-uppercase text-muted mb-0">TOTAL USERS</h5>
                         <span class="h2 font-weight-bold mb-0">{{$users}}</span>
                     </div>
+                </div>
+            </div>--}}
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <h5 class="card-title text-uppercase text-muted mb-0">TOTAL STUDENTS</h5>
+                        <span class="h2 font-weight-bold mb-0">{{$totalsStudents}}</span>
+                    </div>
+
+                </div>
+            </div>
+           
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+        <div class="card card-stats">
+        
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <h5 class="card-title text-uppercase text-muted mb-0">TOTAL IN-CLASS STUDENTS</h5>
+                        <span class="h2 font-weight-bold mb-0"> {{$usersInclass}}</span>
+                    </div>
+
+                </div>
+            </div>
+           
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+        <div class="card card-stats">
+        
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <h5 class="card-title text-uppercase text-muted mb-0">TOTAL E-LEARNING STUDENTS</h5>
+                        <span class="h2 font-weight-bold mb-0"> {{$usersElearning}} </span>
+                    </div>
+
                 </div>
             </div>
            
@@ -44,7 +86,9 @@
             </div>
         </div>
     </div>
-    <div class="col-xl-3 col-md-6">
+
+
+    {{--<div class="col-xl-3 col-md-6">
         <div class="card card-stats">
             <!-- Card body -->
             <div class="card-body">
@@ -64,7 +108,7 @@
             </div>
         
         </div>
-    </div>
+    </div>--}}
 
 
     <div class="col-xl-3 col-md-6">

@@ -104,6 +104,13 @@
                                         </div>
 
                                         <div class="form-group{{ $errors->has('ext_url') ? ' has-danger' : '' }}">
+                                            <label class="form-control-label" for="input-ext_url">{{ __('Company') }}</label>
+                                            <input type="text" name="company" id="input-ext_url" class="form-control{{ $errors->has('company') ? ' is-invalid' : '' }}" placeholder="{{ __('Company') }}" value="{{ old('company', $instructor->company) }}"autofocus>
+
+                                            @include('alerts.feedback', ['field' => 'company'])
+                                        </div>
+
+                                        <div class="form-group{{ $errors->has('ext_url') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-ext_url">{{ __('External url') }}</label>
                                             <input type="text" name="ext_url" id="input-ext_url" class="form-control{{ $errors->has('ext_url') ? ' is-invalid' : '' }}" placeholder="{{ __('External url') }}" value="{{ old('ext_url', $instructor->ext_url) }}"autofocus>
 

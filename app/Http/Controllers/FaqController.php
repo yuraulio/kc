@@ -284,6 +284,10 @@ class FaqController extends Controller
       //  dd($event->faqs->pluck('id')->toArray());
         foreach($event->faqs as $faq){
             
+            if(!isset($request->all()['faqs'][$faq['id']])){
+                $event->faqs()->wherePivot('faq_id',$faq['id'])->detach();
+                continue;
+            }
             $faq->pivot->priority = $request->all()['faqs'][$faq['id']];
             $faq->pivot->save();
 
