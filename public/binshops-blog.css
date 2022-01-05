@@ -85,12 +85,6 @@
     resize: none;
   }
 
-
-.comment_block {
-    overflow: scroll;
-    height: 300px;
-}
-
 .comment_author {
     float: left;
     color: #419cff !important;
@@ -339,4 +333,21 @@ img.blog-full-width {
 
 .blog_body_content ul {
     margin-bottom: 20px !important;
+}
+
+.comment_block::-webkit-scrollbar {
+    width: 5px;  /* Remove scrollbar space */
+    background-color: lightgrey; /* Optional: just make scrollbar invisible */
+    border-radius: 10px;
+}
+/* Optional: show position indicator in red */
+.comment_block::-webkit-scrollbar-thumb {
+    background: grey;
+    border-radius: 10px;
+}
+
+.comment_block {
+    overflow-y: auto;
+    max-height: 300px;
+    padding-right: 10px;
 }
