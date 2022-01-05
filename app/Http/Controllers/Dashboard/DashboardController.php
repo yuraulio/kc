@@ -27,7 +27,7 @@ class DashboardController extends Controller
 
         //dd($enroll);
     
-        if($enroll=='true'){
+        if($enroll){
             
             $elearningEvent = Event::find(2304);
             
@@ -60,7 +60,7 @@ class DashboardController extends Controller
             
             $elearningEvent->users()->wherePivotIn('user_id',$students)->wherePivot('comment','enroll')->detach();
 
-            $event->enroll = true;
+            $event->enroll = false;
             $event->save();
 
         }

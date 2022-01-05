@@ -72,9 +72,16 @@
                   <div class="card-body">
                      <h6 class="heading-small text-muted mb-4">{{ __('Page information') }}</h6>
                      <div class="pl-lg-4">
+                     
+                        <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
+                           <label class="form-control-label" for="input-title">{{ __('Name') }}</label>
+                           <input type="text" name="name" id="input-title" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" placeholder="{{ __('Name') }}" value="{{ old('name',$page->name) }}"  required autofocus>
+                           @include('alerts.feedback', ['field' => 'name'])
+                        </div>
+
                         <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
                            <label class="form-control-label" for="input-title">{{ __('Title') }}</label>
-                           <input type="text" name="title" id="input-title" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title',$page->name) }}"  required autofocus>
+                           <input type="text" name="title" id="input-title" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title',$page->title) }}"  required autofocus>
                            @include('alerts.feedback', ['field' => 'title'])
                         </div>
                         @include('admin.slug.slug',['slug' => isset($slug) ? $slug : null])

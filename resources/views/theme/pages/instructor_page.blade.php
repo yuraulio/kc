@@ -47,13 +47,15 @@
                                 </div>
                                 <div class="col8 col-xs-12">
                                 <?php
-                                    if(isset($content['ext_url'])){
+                                    /*if(isset($content['ext_url'])){
                                         $field2 = $content['ext_url'];
                                         $field2 = str_replace ( "https://www.", "", $field2 );
                                         $field2 = str_replace ( "https://.", "", $field2 );
                                         $field2 = str_replace ( "http://www.", "", $field2 );
                                         
-                                    }
+                                    }*/
+
+                                    $field2 = $content['company'];
                                 ?>
                                     <div class="text-area">
 

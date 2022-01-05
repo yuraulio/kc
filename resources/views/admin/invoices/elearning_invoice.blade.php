@@ -205,9 +205,9 @@ td p{
         <tbody>
         <tr class="date event-amount">
             <td  align="left">
-                <p class="details">{{$data['title']}}</p>
-                @if($data['description'])<p class="details">{{$data['description']}}</p>@endif
-                @if($data['installments'])<p class="details">{{$data['installments']}}</p>@endif
+                <p class="details">{{$data['title']}}
+                @if($data['description']), {{$data['description']}}@endif
+                @if($data['installments']), payment {{$data['installments']}}</p>@endif
             </td>
             <td align="right">€{{$data['amount']}}</td>
         </tr>

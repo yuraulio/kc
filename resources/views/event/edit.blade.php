@@ -7,9 +7,7 @@
 @section('content')
     @component('layouts.headers.auth')
     @component('layouts.headers.breadcrumbs')
-            @slot('title')
-                {{ __($event['title']) }}
-            @endslot
+       
 
             <li class="breadcrumb-item"><a href="{{ route('events.index') }}">{{ __('Events Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('Edit Event') }}</li>
@@ -22,6 +20,14 @@
     <div class="">
         <div class="row">
             <div class="col">
+            <div class="">
+            <div class="card-header">
+                        <div class="row align-items-center">
+                            <div class="col-8">
+                                <h3 class="mb-0 ml-1">{{ $event['title'] }}</h3>
+                            </div>
+                        </div>
+                    </div>
                 <div class="nav-wrapper tab-buttons">
                     <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
                         <li class="nav-item">
@@ -315,6 +321,9 @@
                                             <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab_inside" data-toggle="tab" href="#tabs-icons-text-1_inside" role="tab" aria-controls="tabs-icons-text-1_inside" aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i>Overview</a>
                                         </li>
                                         <li class="nav-item">
+                                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab_inside" data-toggle="tab" href="#metas" role="tab" aria-controls="metas" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Metas</a>
+                                        </li>
+                                        <li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab_inside" data-toggle="tab" href="#tabs-icons-text-2_inside" role="tab" aria-controls="tabs-icons-text-2_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Summary </a>
                                         </li>
                                         <li class="nav-item">
@@ -347,9 +356,7 @@
                                         <li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab_inside" data-toggle="tab" href="#coupons" role="tab" aria-controls="metas" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Coupons</a>
                                         </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab_inside" data-toggle="tab" href="#metas" role="tab" aria-controls="metas" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Metas</a>
-                                        </li>
+                                      
                                         <li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-9-tab_inside" data-toggle="tab" href="#videos" role="tab" aria-controls="videos" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Videos</a>
                                         </li>
@@ -559,14 +566,14 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="form-group">
+                                                {{--<div class="form-group">
                                                     <div class="form-group{{ $errors->has('evaluate_topics') ? ' has-danger' : '' }}">
                                                         <label class="form-control-label" for="input-evaluate_topics">{{ __("Course's evaluation survey for topics:") }}</label>
                                                         <input type="text" name="evaluate_topics" id="input-evaluate_topics" class="form-control{{ $errors->has('evaluate_topics') ? ' is-invalid' : '' }}" placeholder='Example: https:/typeform.com/yoursurvey' value="{{ old('evaluate_topics', $event->evaluate_topics) }}"autofocus>
 
                                                         @include('alerts.feedback', ['field' => 'evaluate_topics'])
                                                     </div>
-                                                </div>
+                                                </div>--}}
 
                                                 <div class="form-group">
                                                     <div class="form-group{{ $errors->has('fb_testimonial') ? ' has-danger' : '' }}">
@@ -583,6 +590,7 @@
                     </div>
                 </div>
             </div>
+                                                </div>
         </div>
         @include('layouts.footers.auth')
     </div>
@@ -1076,8 +1084,8 @@
 
 
     $('.enroll-toggle').change(function(){
-
-        let enroll = $("#input-enroll").is(":checked");
+       
+        let enroll = $("#input-enroll").is(":checked") ? 1 : 0;
 
         $.ajax({
             type: 'get',

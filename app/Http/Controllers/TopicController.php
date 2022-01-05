@@ -320,16 +320,15 @@ class TopicController extends Controller
         foreach($request->order as $key => $orderTopic){
             $orderTopics[] = explode('-',$key)[1];
         }*/
-        
+      
         foreach($category->topics as $topic){
             //dd($category->id);
             $index = $category->id . '-' . $topic->id;
             if(!isset($request->order[$index])){
                 continue;
             }
-           
             $topic->pivot->priority = $request->order[$index];
-            //$topic->pivot->save();
+            $topic->pivot->save();
             
         }
 

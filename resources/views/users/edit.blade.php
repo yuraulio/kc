@@ -545,7 +545,7 @@
 
 
                                                                 <div>
-                                                                    <label class="form-control-label" for="input-method">{{ __('Total Amount') }}: </label> {{$tran['amount']}}
+                                                                    <label class="form-control-label" for="input-method">{{ __('Total Amount') }}: </label> {{number_format($tran['amount'] , 2 , '.', '')}}
                                                                 </div>
 
                                                                 <div>
@@ -743,7 +743,7 @@
 
                                                                         <th scope="col"> {{$invoice['id']}} </th>
                                                                         {{--<th scope="col"> {{$tra['amount']}} </th>--}}
-                                                                        <th scope="col"> {{$invoice['amount']}} </th>
+                                                                        <th scope="col"> {{number_format($invoice['amount'] , 2 , '.', '')}} </th>
                                                                         <th scope="col"> {{date('d-m-y H:i',strtotime($invoice['created_at']))}} </th>
                                                                         <th scope="col"> <a href="/admin/invoice/{{ $invoice['id'] }}">view </a> </th>
 

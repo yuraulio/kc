@@ -412,8 +412,8 @@
                               $linkedIn = isset($socialMedia['linkedin']) ? $socialMedia['linkedin']: '';
                               $yt = isset($socialMedia['youtube']) ? $socialMedia['youtube'] : '';
                                                       
-                              $field2 = '';
-                              if(isset($inst['ext_url'])){
+                              $field2 = $inst['company'];
+                              /*if(isset($inst['ext_url'])){
                               
                                  $field2 = $inst['ext_url'];
                                  $field2 = str_replace ( "https://www.", "", $field2 );
@@ -423,7 +423,7 @@
                                  $field2 = str_replace ( "http:", "", $field2 );
                                  $field2 = str_replace ( "/", "", $field2 );
                               
-                              }
+                              }*/
                               
                               ?>
                               <div class="col-3 col-md-4 col-sm-6 col-xs-12">

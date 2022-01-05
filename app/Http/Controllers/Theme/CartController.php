@@ -977,8 +977,6 @@ class CartController extends Controller
     public function postPaymentWithStripe($input)
     {
      
-
-        
         Session::forget('dperror');
         Session::forget('error');
 
@@ -1310,7 +1308,7 @@ class CartController extends Controller
             }
 
 
-            if( (is_array($charge)  &&  $charge['status'] == 'succeeded' ) || $charge->status == 'succeeded') {
+            if( (is_array($charge)  &&  $charge['status'] == 'succeeded' ) || (isset($charge) && $charge->status == 'succeeded')) {
                  /**
                  * Write Here Your Database insert logic.
                  */
@@ -2120,7 +2118,7 @@ class CartController extends Controller
             }
         }
 
-        if( (is_array($charge)  &&  $charge['status'] == 'succeeded' ) || $charge->status == 'succeeded') {
+        if( (is_array($charge)  &&  $charge['status'] == 'succeeded' ) || (isset($charge) && $charge->status == 'succeeded') ) {
             $status_history = [];
             //$payment_cardtype = intval($input["cardtype"]);
              $status_history[] = [

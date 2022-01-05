@@ -336,9 +336,23 @@ class EventController extends Controller
         $data['delivery'] = Delivery::all();
         $data['isInclassCourse'] = $event->is_inclass_course();
         $data['eventFaqs'] = $event->faqs->pluck('id')->toArray();
-        $data['eventUsers'] = $event->users->toArray();
+        $data['eventUsers'] = $event->users;//$event->users->toArray();
         $data['coupons'] = Coupon::all();
+        $data['activeMembers'] = 0;
 
+        $today = strtotime(date('Y-m-d'));
+        if(!$data['isInclassCourse']){
+
+            foreach($data['eventUsers'] as $activeUser){
+                if(!$activeUser['pivot']['expiration'] || $today <= strtotime($activeUser['pivot']['expiration'])){
+                    $data['activeMembers'] += 1;
+                }
+            }
+
+
+        }
+
+        
         //dd($data['topics']);
 
         return view('event.edit', $data);

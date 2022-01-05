@@ -249,7 +249,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     Route::post('/tickets/{event}', 'TicketController@sortTickets')->name('sort-tickets');
 
     //Faqs
-    Route::post('/faqs/{event}', 'FaqController@sortFaqs')->name('sort-faqs');
+    Route::post('/sort-faqs/{event}', 'FaqController@sortFaqs')->name('sort-faqs');
 
     //Logos
     Route::get('/logos', 'Dashboard\LogosController@index')->name('logos.index');
