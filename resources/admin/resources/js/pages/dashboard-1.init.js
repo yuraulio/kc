@@ -31,8 +31,8 @@ var options = {
 	labels: ['Revenue'],
 };
 
-var chart = new ApexCharts(document.querySelector("#total-revenue"), options);
-chart.render();
+// var chart = new ApexCharts(document.querySelector("#total-revenue"), options);
+// chart.render();
 
 
 //
@@ -110,8 +110,8 @@ var options = {
 	}]
 };
 
-var chart = new ApexCharts(document.querySelector("#sales-analytics"), options);
-chart.render();
+// var chart = new ApexCharts(document.querySelector("#sales-analytics"), options);
+// chart.render();
 
 // Datepicker
 $('#dash-daterange').flatpickr({
