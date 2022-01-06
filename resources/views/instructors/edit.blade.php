@@ -67,7 +67,7 @@
 
                                             @include('alerts.feedback', ['field' => 'title'])
                                         </div>
-
+                                        @include('admin.slug.slug',['slug' => $instructor->slugable])
                                         <div class="form-group{{ $errors->has('short_title') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-short_title">{{ __('Short title') }}</label>
                                             <input type="text" name="short_title" id="input-short_title" class="form-control{{ $errors->has('short_title') ? ' is-invalid' : '' }}" placeholder="{{ __('short_title') }}" value="{{ old('Short title', $instructor->short_title) }}" autofocus>
