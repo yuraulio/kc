@@ -31,7 +31,7 @@ default:
     - export OP_DEVICE="$OP_DEVICE"
     - export OP_SESSION_qedcode=$(echo $OP_PASS | op signin qedcode.1password.com devops@qedcode.net $OP_KEY --raw)
     - cd "$CI_PROJECT_DIR"
-    - composer install --prefer-dist --no-scripts -q -o --optimize-autoloader --no-interaction
+    - composer install --prefer-dist --no-scripts -q -o --optimize-autoloader --no-interaction --ignore-platform-reqs
     - source /root/.nvm/nvm.sh && nvm install "$NODE_VERSION" && nvm use "$NODE_VERSION" && nvm alias default "$NODE_VERSION"
     - export PATH=/root/.nvm/versions/node/v"$NODE_VERSION"/bin/:$PATH
     - npm install --silent
