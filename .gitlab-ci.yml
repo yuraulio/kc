@@ -69,4 +69,5 @@ deploy_stage:
   variables:
     URL: https://knowcrunch.qedcode.dev
   when: manual
-  only: qed_master
+  only:
+    - qed_master
