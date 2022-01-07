@@ -44,6 +44,8 @@
 
             <ul id="side-menu">
 
+                <li class="menu-title">Overview</li>
+
                 <li>
                     <a href="{{route('admin-dashboard')}}">
                         <i data-feather="clipboard"></i>
@@ -51,37 +53,42 @@
                     </a>
                 </li>
 
-                {{-- <li class="menu-title">CMS</li> --}}
-
-                {{-- <li>
-                    <a href="#sidebarDashboards" data-bs-toggle="collapse">
-                        <i data-feather="airplay"></i>
-                        <span class="badge bg-success rounded-pill float-end">4</span>
-                        <span> CMS </span>
-                    </a>
-                    <div class="collapse" id="sidebarDashboards">
-                        <ul class="nav-second-level">
-                            <li>
-                                <a href="{{route('admin-dashboard', 'index')}}">Item 1</a>
-                            </li>
-                            <li>
-                                <a href="{{route('admin-dashboard', 'dashboard-2')}}">Item 2</a>
-                            </li>
-                            <li>
-                                <a href="{{route('admin-dashboard', 'dashboard-3')}}">Item 3</a>
-                            </li>
-                            <li>
-                                <a href="{{route('admin-dashboard', 'dashboard-4')}}">Item 4</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li> --}}
-
                 <li>
                     <a href="{{"http://" . env("APP_URL") . "/admin"}}">
                         <i data-feather="clipboard"></i>
                         <span> <span class="badge bg-secondary mt-0 align-middle">Old</span> Dashboard </span>
                     </a>
+                </li>
+
+                <li class="menu-title">Management</li>
+
+                <li>
+                    <a href="#sidebarCMS" data-bs-toggle="collapse">
+                        <i data-feather="airplay"></i>
+                        <span> CMS <span class="badge bg-primary mt-0 align-middle">Comming soon</span></span>
+                    </a>
+                    <div class="collapse" id="sidebarCMS">
+                        <ul class="nav-second-level">
+                            <li>
+                                <a href="#">Template management</a>
+                            </li>
+                            <li>
+                                <a href="#">Categories management</a>
+                            </li>
+                            <li>
+                                <a href="#">Pages management</a>
+                            </li>
+                            <li>
+                                <a href="#">Comments management</a>
+                            </li>
+                            <li>
+                                <a href="#">Menu management</a>
+                            </li>
+                            <li>
+                                <a href="#">Images management</a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
 
             </ul>
