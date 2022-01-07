@@ -45,15 +45,16 @@ deploy_review:
   script:
     - op get item "$CI_PROJECT_NAME"_ENV-DEV --fields notesplain > "$CI_PROJECT_DIR"/.env
     - cat "$CI_PROJECT_DIR"/.env.dev >> "$CI_PROJECT_DIR"/.env
+    - cd "$CI_PROJECT_DIR"/resources/admin && npm install && npm run dev
     - npm run development
     - cd "$CI_PROJECT_DIR"/ansible
     - ansible-playbook application.yml -i inventory.yml -l development -u deployer --private-key=~/.ssh/id_rs -e "ansible_become_pass=${SUDO_PASS} DEPLOY_TIMESTAMP=${DEPLOY_TIMESTAMP} CI_JOB_STAGE=${CI_JOB_STAGE} CI_COMMIT_REF_NAME=${CI_COMMIT_REF_NAME} CI_PROJECT_NAME=${CI_PROJECT_NAME} CI_PROJECT_DIR=${CI_PROJECT_DIR} ROOT_PROJECT_NAME=${ROOT_PROJECT_NAME} NODE_VERSION=${NODE_VERSION} CI_MERGE_REQUEST_LABELS=${CI_MERGE_REQUEST_LABELS} APP_URL=${URL}"
   variables:
     URL: https://$CI_COMMIT_REF_NAME-knowncrunch.qedcode.dev
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /(DEPLOY_REVIEW|deploy_review)/'
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "qed_stage" && $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /(DEPLOY_REVIEW|deploy_review)/'
       when: always
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "qed_stage" && $CI_PIPELINE_SOURCE == "merge_request_event"'
       when: manual
 
 deploy_stage:
@@ -61,9 +62,11 @@ deploy_stage:
   script:
     - op get item "$CI_PROJECT_NAME"_ENV-DEV --fields notesplain > "$CI_PROJECT_DIR"/.env
     - cat "$CI_PROJECT_DIR"/.env.dev >> "$CI_PROJECT_DIR"/.env
+    - cd "$CI_PROJECT_DIR"/resources/admin && npm install && npm run dev
     - npm run development
     - cd "$CI_PROJECT_DIR"/ansible
     - ansible-playbook application.yml -i inventory.yml -l development -u deployer --private-key=~/.ssh/id_rs -e "ansible_become_pass=${SUDO_PASS} DEPLOY_TIMESTAMP=${DEPLOY_TIMESTAMP} CI_JOB_STAGE=${CI_JOB_STAGE} CI_COMMIT_REF_NAME=${CI_COMMIT_REF_NAME} CI_PROJECT_NAME=${CI_PROJECT_NAME} CI_PROJECT_DIR=${CI_PROJECT_DIR} ROOT_PROJECT_NAME=${ROOT_PROJECT_NAME} CI_MERGE_REQUEST_LABELS=${CI_MERGE_REQUEST_LABELS} NODE_VERSION=${NODE_VERSION} APP_URL=${URL}"
   variables:
     URL: https://knowcrunch.qedcode.dev
   when: manual
+  only: qed_master
