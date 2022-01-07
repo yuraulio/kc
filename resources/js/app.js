@@ -17,6 +17,11 @@
 import Vue from 'vue';
 window.axios = require('axios').default;
 
+import 'vue-loaders/dist/vue-loaders.css';
+import VueLoaders from 'vue-loaders';
+Vue.use(VueLoaders);
+
+
 Vue.component('dashboard-widget', require('./components/dashboard-widget.vue').default);
 
 new Vue({

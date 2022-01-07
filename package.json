@@ -50,6 +50,7 @@
         "vue-image-compare2": "^1.0.0",
         "vue-infinite-loading": "^2.4.5",
         "vue-input-autowidth": "^1.0.11",
+        "vue-loaders": "^4.1.4",
         "vue-ls": "^3.2.2",
         "vue-notif": "^2.0.0",
         "vue-tippy": "^2.1.3",

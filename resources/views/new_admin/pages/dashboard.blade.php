@@ -39,44 +39,32 @@
 
     <div class="row">
         
-        <dashboard-widget
+        {{-- <dashboard-widget
             title="TOTAL USERS"
             type="users"
             icon="fe-user"
             color="primary"
             key="1"
-        ></dashboard-widget>
+        ></dashboard-widget> --}}
 
         <dashboard-widget
-            title="TOTAL ADMINS"
+            title="ADMINS"
             type="admins"
-            icon="fe-user-check"
-            color="success"
-            key="2"
         ></dashboard-widget>
 
         <dashboard-widget
-            title="TOTAL INSTRUCTORS ACTIVE"
+            title="ACTIVE INSTRUCTORS"
             type="instructors"
-            icon="fe-user-plus"
-            color="info"
-            key="3"
         ></dashboard-widget>
 
         <dashboard-widget
-            title="TOTAL STUDENTS"
+            title="STUDENTS"
             type="students"
-            icon="fe-users"
-            color="secondary"
-            key="4"
         ></dashboard-widget>
 
         <dashboard-widget
-            title="TOTAL SUCCESSFUL GRADUATES"
+            title="SUCCESSFUL GRADUATES"
             type="graduates"
-            icon="fe-user-check"
-            color="warning"
-            key="5"
         ></dashboard-widget>
 
 

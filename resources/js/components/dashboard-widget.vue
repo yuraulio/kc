@@ -1,22 +1,23 @@
+<style scoped>
+    .widget-min-height {
+        min-height: 168px;
+    }
+</style>
+
 <template>
-    <div class="col-md-6 col-xl-4">
-        <div class="widget-rounded-circle card">
+
+
+    <div class="col-md-6 col-xl-3">
+        <div class="card widget-min-height" id="tooltip-container">
             <div class="card-body">
-                <div class="row">
-                    <div class="col-3">
-                        <div :class="'avatar-lg rounded-circle bg-soft-' + color + ' border-' + color + ' border'">
-                            <i :class="icon + ' font-22 avatar-title text-' + color"></i>
-                        </div>
-                    </div>
-                    <div class="col-9">
-                        <div class="text-end">
-                        <p class="text-muted mb-1 text-truncate">{{ title }}</p>
-                            <h3 class="text-dark mt-1"><span>{{value}}</span></h3>
-                            <p v-if="students_in_class" class="text-muted mb-1 text-truncate">IN-CLASS COURSES: {{ students_in_class }}</p>
-                            <p v-if="students_in_online" class="text-muted mb-1 text-truncate">E-LEARNING COURSES: {{ students_in_online }}</p>
-                        </div>
-                    </div>
-                </div>
+                <i class="fe-info text-muted float-end" data-bs-container="#tooltip-container" data-bs-toggle="tooltip" 
+                data-bs-placement="bottom" :title="title"></i>
+                <h4 class="mt-0 font-16">{{ title }}</h4>
+                <h2 v-if="value" class="text-primary my-3 text-center"><span>{{value}}</span></h2>
+                <vue-loaders-ball-beat v-else color="#6658dd" scale="1" class="mt-4 text-center d-block"></vue-loaders-ball-beat>
+                <p v-if="students_in_class" class="text-muted mb-0">In class: {{students_in_class}} 
+                    <span class="float-end">Online: {{students_in_online}}</span>
+                </p>
             </div>
         </div>
     </div>
@@ -28,12 +29,10 @@
         props: {
             title: String,
             type: String,
-            icon: String,
-            color: String,
         },
         data() {
             return {
-                value: "-",
+                value: 0,
                 students_in_class: 0,
                 students_in_online: 0,
             }

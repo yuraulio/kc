@@ -65,7 +65,7 @@ class Dashboard extends Controller
             if ($event->delivery->first() && $event->delivery->first()->id == 143) {
                 //dd($event->users()->pluck('user_id')->toArray());
                 $students_online = array_merge($students_online, $event->users()->pluck('user_id')->toArray());
-            } elseif ($event->delivery->first() && $event->delivery->first()->id == 139) {
+            } else {
                 $students_in_class = array_merge($students_in_class, $event->users()->pluck('user_id')->toArray());
             }
         }
