@@ -15,6 +15,7 @@
 
 
 import Vue from 'vue';
+window.axios = require('axios').default;
 
 Vue.component('dashboard-widget', require('./components/dashboard-widget.vue').default);
 

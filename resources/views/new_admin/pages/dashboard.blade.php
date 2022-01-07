@@ -1,4 +1,4 @@
-@extends('new_admin/layouts.vertical', ["page_title"=> "Dashboard", "mode" => $mode ?? "", "demo" => $demo ?? ""])
+@extends('new_admin/layouts.vertical', ["page_title"=> "Dashboard"])
 
 @section('css')
 <!-- third party css -->
@@ -38,87 +38,46 @@
     <!-- end page title -->
 
     <div class="row">
-        <div class="col-md-6 col-xl-3">
-            <div class="widget-rounded-circle card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="avatar-lg rounded-circle bg-soft-primary border-primary border">
-                                <i class="fe-heart font-22 avatar-title text-primary"></i>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="text-end">
-                                <h3 class="text-dark mt-1">$<span data-plugin="counterup">58,947</span></h3>
-                                <p class="text-muted mb-1 text-truncate">Total Revenue</p>
-                            </div>
-                        </div>
-                    </div> <!-- end row-->
-                </div>
-            </div> <!-- end widget-rounded-circle-->
-        </div> <!-- end col-->
+        
+        <dashboard-widget
+            title="TOTAL USERS"
+            type="users"
+            icon="fe-user"
+            color="primary"
+            key="1"
+        ></dashboard-widget>
 
-        <div class="col-md-6 col-xl-3">
-            <div class="widget-rounded-circle card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="avatar-lg rounded-circle bg-soft-success border-success border">
-                                <i class="fe-shopping-cart font-22 avatar-title text-success"></i>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="text-end">
-                                <h3 class="text-dark mt-1"><span data-plugin="counterup">127</span></h3>
-                                <p class="text-muted mb-1 text-truncate">Today's Sales</p>
-                            </div>
-                        </div>
-                    </div> <!-- end row-->
-                </div>
-            </div> <!-- end widget-rounded-circle-->
-        </div> <!-- end col-->
+        <dashboard-widget
+            title="TOTAL ADMINS"
+            type="admins"
+            icon="fe-user-check"
+            color="success"
+            key="2"
+        ></dashboard-widget>
 
-        <div class="col-md-6 col-xl-3">
-            <div class="widget-rounded-circle card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="avatar-lg rounded-circle bg-soft-info border-info border">
-                                <i class="fe-bar-chart-line- font-22 avatar-title text-info"></i>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="text-end">
-                                <h3 class="text-dark mt-1"><span data-plugin="counterup">0.58</span>%</h3>
-                                <p class="text-muted mb-1 text-truncate">Conversion</p>
-                            </div>
-                        </div>
-                    </div> <!-- end row-->
-                </div>
-            </div> <!-- end widget-rounded-circle-->
-        </div> <!-- end col-->
+        <dashboard-widget
+            title="TOTAL INSTRUCTORS ACTIVE"
+            type="instructors"
+            icon="fe-user-plus"
+            color="info"
+            key="3"
+        ></dashboard-widget>
 
-        <div class="col-md-6 col-xl-3">
-            <div class="widget-rounded-circle card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="avatar-lg rounded-circle bg-soft-warning border-warning border">
-                                <i class="fe-eye font-22 avatar-title text-warning"></i>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="text-end">
-                                <h3 class="text-dark mt-1"><span data-plugin="counterup">78.41</span>k</h3>
-                                <p class="text-muted mb-1 text-truncate">Today's Visits</p>
-                            </div>
-                        </div>
-                    </div> <!-- end row-->
-                </div>
-            </div> <!-- end widget-rounded-circle-->
-        </div> <!-- end col-->
+        <dashboard-widget
+            title="TOTAL STUDENTS"
+            type="students"
+            icon="fe-users"
+            color="secondary"
+            key="4"
+        ></dashboard-widget>
 
-        <dashboard-widget></dashboard-widget>
+        <dashboard-widget
+            title="TOTAL SUCCESSFUL GRADUATES"
+            type="graduates"
+            icon="fe-user-check"
+            color="warning"
+            key="5"
+        ></dashboard-widget>
 
 
 
