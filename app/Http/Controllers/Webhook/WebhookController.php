@@ -537,7 +537,7 @@ class WebhookController extends BaseWebhookController
             $m->to($adminemail, $fullname);
             //$m->to('moulopoulos@lioncode.gr', $fullname);
             $m->subject($sub);
-            $m->attachData($pdf, $fn);
+            //$m->attachData($pdf, $fn);
             
         });
 	}
