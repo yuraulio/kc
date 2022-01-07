@@ -799,6 +799,9 @@ class InfoController extends Controller
 
             if(Session::has('installments') && Session::get('installments') <= 1){
                 
+
+                $data['slugInvoice'] = encrypt($muser['id'] . '-' . $transaction->invoice->first()->id);
+
                 $pdf = $transaction->invoice->first()->generateInvoice();
 
                 $fn = date('Y-m-d') . '-Invoice-' . $transaction->invoice->first()->invoice . '.pdf';
@@ -813,26 +816,13 @@ class InfoController extends Controller
                     $m->to($adminemail, $fullname);
                     //$m->to('moulopoulos@lioncode.gr', $fullname);
                     $m->subject($sub);
-                    $m->attachData($pdf, $fn);
                 
                 });
 
                 $data['user'] =  $transaction->user->first();
-                $data['slugInvoice'] = encrypt($muser['id'] . '-' . $transaction->invoice->first()->id);
 
                 $data['user']->notify(new CourseInvoice($data));
 
-                /*$sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf,$billingEmail) {
-
-                    $fullname = $muser['name'];
-                    $first = $muser['first'];
-                    $sub = 'KnowCrunch |' . $first . ' – Payment Successful in ' . $muser['event_title'];;
-                    $m->from($adminemail, 'Knowcrunch');
-                    $m->to($billingEmail ? $billingEmail : $muser['email'], $fullname);
-                    $m->subject($sub);
-                    $m->attachData($pdf, "invoice.pdf");
-                
-                });*/
 
             }
 
