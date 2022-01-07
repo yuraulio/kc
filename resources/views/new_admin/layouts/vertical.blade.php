@@ -20,7 +20,7 @@
         <!-- Start Page Content here -->
         <!-- ============================================================== -->
 
-        <div class="content-page">
+        <div id="app" class="content-page">
             <div class="content">
                 @yield('content')
             </div>

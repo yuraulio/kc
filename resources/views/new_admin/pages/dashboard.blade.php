@@ -17,7 +17,7 @@
             <div class="page-title-box">
                 <div class="page-title-right">
                     <form class="d-flex align-items-center mb-3">
-                        <div class="input-group input-group-sm">
+                        {{-- <div class="input-group input-group-sm">
                             <input type="text" class="form-control border" id="dash-daterange">
                             <span class="input-group-text bg-blue border-blue text-white">
                                 <i class="mdi mdi-calendar-range"></i>
@@ -25,7 +25,7 @@
                         </div>
                         <a href="javascript: void(0);" class="btn btn-blue btn-sm ms-2">
                             <i class="mdi mdi-autorenew"></i>
-                        </a>
+                        </a> --}}
                         {{-- <a href="javascript: void(0);" class="btn btn-blue btn-sm ms-1">
                             <i class="mdi mdi-filter-variant"></i>
                         </a> --}}
@@ -117,6 +117,11 @@
                 </div>
             </div> <!-- end widget-rounded-circle-->
         </div> <!-- end col-->
+
+        <dashboard-widget></dashboard-widget>
+
+
+
     </div>
     <!-- end row-->    
 

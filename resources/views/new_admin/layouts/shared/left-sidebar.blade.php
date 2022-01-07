@@ -45,12 +45,15 @@
             <ul id="side-menu">
 
                 <li>
-                    <a href="{{route('admin-dashboard')}}">Dashboard</a>
+                    <a href="{{route('admin-dashboard')}}">
+                        <i data-feather="clipboard"></i>
+                        <span> Dashboard </span>
+                    </a>
                 </li>
 
                 {{-- <li class="menu-title">CMS</li> --}}
 
-                <li>
+                {{-- <li>
                     <a href="#sidebarDashboards" data-bs-toggle="collapse">
                         <i data-feather="airplay"></i>
                         <span class="badge bg-success rounded-pill float-end">4</span>
@@ -72,10 +75,13 @@
                             </li>
                         </ul>
                     </div>
-                </li>
+                </li> --}}
 
                 <li>
-                    <a href="{{"http://" . env("APP_URL") . "/admin"}}"><span class="badge bg-secondary mt-0">Old</span> Dashboard</a>
+                    <a href="{{"http://" . env("APP_URL") . "/admin"}}">
+                        <i data-feather="clipboard"></i>
+                        <span> <span class="badge bg-secondary mt-0 align-middle">Old</span> Dashboard </span>
+                    </a>
                 </li>
 
             </ul>

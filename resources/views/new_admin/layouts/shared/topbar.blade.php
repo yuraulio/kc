@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <ul class="list-unstyled topnav-menu float-end mb-0">
 
-            <li class="d-none d-lg-block">
+            {{-- <li class="d-none d-lg-block">
                 <form class="app-search">
                     <div class="app-search-box dropdown">
                         <div class="input-group">
@@ -14,9 +14,9 @@
                         </div>
                     </div>
                 </form>
-            </li>
+            </li> --}}
 
-            <li class="dropdown notification-list topbar-dropdown">
+            {{-- <li class="dropdown notification-list topbar-dropdown">
                 <a class="nav-link dropdown-toggle waves-effect waves-light" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                     <i class="fe-bell noti-icon"></i>
                     <span class="badge bg-danger rounded-circle noti-icon-badge">0</span>
@@ -37,14 +37,14 @@
                     <div class="noti-scroll" data-simplebar>
 
                         <!-- item-->
-                        {{-- <a href="javascript:void(0);" class="dropdown-item notify-item">
+                        <a href="javascript:void(0);" class="dropdown-item notify-item">
                             <div class="notify-icon bg-primary">
                                 <i class="mdi mdi-comment-account-outline"></i>
                             </div>
                             <p class="notify-details">Caleb Flakelar commented on Admin
                                 <small class="text-muted">1 min ago</small>
                             </p>
-                        </a> --}}
+                        </a>
 
                         <a href="javascript:void(0);" class="dropdown-item notify-item">
                             No notifications
@@ -57,7 +57,7 @@
                     </a>
 
                 </div>
-            </li>
+            </li> --}}
 
             <li class="dropdown notification-list topbar-dropdown">
                 <a class="nav-link dropdown-toggle nav-user me-0 waves-effect waves-light" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
@@ -73,22 +73,22 @@
                     </div>
 
                     <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item">
+                    {{-- <a href="javascript:void(0);" class="dropdown-item notify-item">
                         <i class="fe-user"></i>
                         <span>My Account</span>
-                    </a>
+                    </a> --}}
 
                     <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item">
+                    {{-- <a href="javascript:void(0);" class="dropdown-item notify-item">
                         <i class="fe-settings"></i>
                         <span>Settings</span>
-                    </a>
+                    </a> --}}
 
                     <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item">
+                    {{-- <a href="javascript:void(0);" class="dropdown-item notify-item">
                         <i class="fe-lock"></i>
                         <span>Lock Screen</span>
-                    </a>
+                    </a> --}}
 
                     <div class="dropdown-divider"></div>
 
@@ -109,23 +109,12 @@
 
         <!-- LOGO -->
         <div class="logo-box">
-            <a href="{{route('admin-dashboard', 'index')}}" class="logo logo-dark text-center">
-                <span class="logo-sm">
-                    <img src="{{asset('admin_assets/images/logo-sm.png')}}" alt="" height="22">
-                    <!-- <span class="logo-lg-text-light">UBold</span> -->
-                </span>
-                <span class="logo-lg">
-                    <img src="{{asset('admin_assets/images/logo-dark.svg')}}" alt="" height="20">
-                    <!-- <span class="logo-lg-text-light">U</span> -->
-                </span>
-            </a>
-
             <a href="{{route('admin-dashboard', 'index')}}" class="logo logo-light text-center">
                 <span class="logo-sm">
-                    <img src="{{asset('admin_assets/images/logo-sm.png')}}" alt="" height="22">
+                    <img src="{{asset('admin_assets/images/logo-sm.svg')}}" alt="" height="50">
                 </span>
                 <span class="logo-lg">
-                    <img src="{{asset('admin_assets/images/logo-light.svg')}}" alt="" height="20">
+                    <img src="{{asset('admin_assets/images/logo-light.svg')}}" alt="" height="50">
                 </span>
             </a>
         </div>

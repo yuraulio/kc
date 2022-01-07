@@ -624,6 +624,6 @@ getFiles(folder.src + "js/pages").forEach(function (filepath) {
 
 // app theme file
 mix.combine(
-    [folder.src + "js/layout.js", folder.src + "js/app.js"],
-    folder.dist_assets + "js/app.js"
-).minify(folder.dist_assets + "js/app.js");
+    [folder.src + "js/layout.js", folder.src + "js/theme_app.js"],
+    folder.dist_assets + "js/theme_app.js"
+).minify(folder.dist_assets + "js/theme_app.js");

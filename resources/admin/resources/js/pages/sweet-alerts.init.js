@@ -127,7 +127,7 @@ document.getElementById("sa-image").addEventListener("click", function() {
   Swal.fire({
       title: 'UBold',
       text: 'Responsive Bootstrap 4 Admin Dashboard',
-      imageUrl: '../assets/images/logo-sm.png',
+      imageUrl: '../assets/images/logo-sm.svg',
       imageHeight: 50,
       confirmButtonColor: "#4a4fea",
       animation: false

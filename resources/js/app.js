@@ -9,10 +9,15 @@
 //window.Vue = require('vue').default;
 //
 //// mix v6
-//import Vue from 'vue'
-//
-//require('../assets/vendor/MediaManager/js/manager')
-//
-//new Vue({
-//    el: '#app'
-//})
+// require('../assets/vendor/MediaManager/js/manager')
+
+
+
+
+import Vue from 'vue';
+
+Vue.component('dashboard-widget', require('./components/dashboard-widget.vue').default);
+
+new Vue({
+   el: '#app'
+})
