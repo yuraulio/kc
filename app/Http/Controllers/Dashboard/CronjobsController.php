@@ -22,6 +22,7 @@ use App\Notifications\ElearningFQ;
 use App\Notifications\SurveyEMail;
 use App\Notifications\SubscriptionReminder;
 use App\Model\Pages;
+use App\Model\Transaction;
 
 class CronjobsController extends Controller
 {
@@ -540,15 +541,32 @@ class CronjobsController extends Controller
 
     }
 
-    public function sendElearningFQ(){
+    /*public function sendElearningFQ(){
 
-        
+        $today = date('Y-m-d', strtotime('-15 day', strtotime(date('Y-m-d'))));
+
+        //$today = date_create( $today);
+        //dd($today);
         $adminemail = 'info@knowcrunch.com';
 
-        $events = Event::has('transactions')->with('users','transactions')->where('view_tpl','elearning_event')->get();
         //$events = Event::has('transactions')->where('published','true')->with('users')->get();
+        //$events = Event::has('transactions')->with('users')->where('view_tpl','elearning_event')->get();
 
+        $events = Event::with('users')->where(function ($q) use($today) {
+            $q->whereHas('transactions', function ($query) use($today){
+                //$query->whereBetween('created_at', [$today,$today]);
+                //$query->where('created_at',$today);
+                $query->whereDay('created_at',date('d',strtotime($today)))
+                ->whereMonth('created_at',date('m',strtotime($today)))
+                ->whereYear('created_at',date('Y',strtotime($today)));
+            });
+            
+        })->get();
+
+    
         $today = date_create( date('Y/m/d'));
+
+
         $count = 0;
         foreach($events as $event){
             
@@ -578,6 +596,45 @@ class CronjobsController extends Controller
                     $user->notify(new ElearningFQ($data));
                     
                 }
+            }
+        }
+
+    }*/
+
+    public function sendElearningFQ(){
+
+        $today = date('Y-m-d', strtotime('-15 day', strtotime(date('Y-m-d'))));
+        $adminemail = 'info@knowcrunch.com';
+        $transactions = Transaction::with('event','user')->whereDay('created_at',date('d',strtotime($today)))
+                        ->whereMonth('created_at',date('m',strtotime($today)))
+                        ->whereYear('created_at',date('Y',strtotime($today)))
+                        ->where(function ($q) use($today) {
+                            $q->whereHas('event', function ($query) use($today){
+                                $query->whereViewTpl('elearning_event');
+                            });
+                        })->get();
+ 
+        foreach($transactions as $transaction){
+            if( !( $event = $transaction->event->first() ) ){
+                continue;
+            }
+
+            if(count($event->getExams()) <= 0 || !$event->expiration){
+                continue;
+            }
+            
+            foreach($transaction['user'] as $user){
+   
+                $data['firstName'] = $user->firstname;
+                $data['eventTitle'] = $event->title;
+                $data['subject'] = 'Knowcrunch - ' . $data['firstName'] .' enjoying ' . $event->title .'?';
+                $data['elearningSlug'] = url('/') . '/myaccount/elearning/' . $event->title;
+                $data['expirationDate'] = date('d-m-Y',strtotime($user->pivot->expiration));
+                $data['template'] = 'emails.user.elearning_f&qemail';
+
+                $user->notify(new ElearningFQ($data));
+                    
+                
             }
         }
 
