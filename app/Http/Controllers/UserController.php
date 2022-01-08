@@ -263,13 +263,13 @@ class UserController extends Controller
 
        $billingDetails = [];
 
-       if($request->billing == 1){
+       //if($request->billing == 1){
         $billingDetails = json_decode($user['receipt_details'],true);
         $billingDetails['billing'] = 1;
-       }else{
+       /*}else{
         $billingDetails = json_decode($user['invoice_details'],true);
         $billingDetails['billing'] = 2;
-       }
+       }*/
        
        $transaction = new Transaction;
        $transaction->placement_date = Carbon::now();
