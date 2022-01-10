@@ -148,18 +148,21 @@
 	const cardButton = document.getElementById('pay-now');
 	cardButton.addEventListener('click', async (e) => {
         $("#card-error").remove();
+		$("#pay-now").prop('disabled',true);
     	const { paymentMethod, error } = await stripe.createPaymentMethod(
     	    'card', cardElement
     	);
 
     	if (error) {
 			$('<p id="card-error">Enter valid data.</p>').insertAfter('.card-input')
+			$("#pay-now").prop('disabled',false);
     	} else {
 			$('#payment_method').val(paymentMethod.id);
 
 			$("#checkout-form").submit();
 
     	}
+
 	});
 
 
@@ -167,6 +170,11 @@ $(".close-alert").on("click", function () {
 
 	$('.alert-outer').hide()
 
+});
+
+
+$('form').submit(function() {
+  $("#pay-now").prop('disabled',true);
 });
 
 </script>
