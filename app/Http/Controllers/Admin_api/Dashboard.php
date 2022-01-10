@@ -28,12 +28,9 @@ class Dashboard extends Controller
     {
         $users = User::all();
 
-        $adminUsers = 0;
-        foreach ($users as $user) {
-            if ($user->isAdmin()) {
-                $adminUsers += 1;
-            }
-        }
+        $adminUsers = User::whereHas('role', function ($q) {
+            return $q->where('roles.id', 1);
+        })->count();
 
         return response()->json(['data' => $adminUsers], 200);
     }
