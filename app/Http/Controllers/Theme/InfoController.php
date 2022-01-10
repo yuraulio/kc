@@ -811,7 +811,7 @@ class InfoController extends Controller
 
                     $fullname = $muser['name'];
                     $first = $muser['first'];
-                    $sub =  'KnowCrunch |' . $first . ' – Payment Successful in ' . $muser['event_title'];;
+                    $sub =  'KnowCrunch -' . $first . ' – download your receipt';
                     $m->from('info@knowcrunch.com', 'Knowcrunch');
                     $m->to($adminemail, $fullname);
                     //$m->to('moulopoulos@lioncode.gr', $fullname);
