@@ -75,7 +75,7 @@ class CronjobsController extends Controller
             $invoiceUser->user->first()->notify(new FailedPayment($data));
 
 
-            /*$adminemail = $invoiceUser->event->first()->paymentMethod->first() && $invoiceUser->event->first()->paymentMethod->first()->payment_email ?
+            $adminemail = $invoiceUser->event->first()->paymentMethod->first() && $invoiceUser->event->first()->paymentMethod->first()->payment_email ?
                 $invoiceUser->event->first()->paymentMethod->first()->payment_email : 'info@knowcrunch.com';
 
             $sent = Mail::send('emails.admin.failed_stripe_payment', $data, function ($m) use ($adminemail,$data) {
@@ -85,9 +85,7 @@ class CronjobsController extends Controller
                 $m->to($adminemail, $data['firstName']);
                 $m->subject($sub);
             
-            });*/
-
-
+            });
 
             $invoiceUser->email_sent = true;
             $invoiceUser->save();
@@ -241,17 +239,19 @@ class CronjobsController extends Controller
         $today = date_create( date('Y/m/d'));
         foreach($subscriptions as $subscription){
 
-            if($subscription->event->first() && $subscription->event->first()->pivot->expiration){
+            if($subscription->event->first() && $subscription->event->first()->pivot->expiration && $subscription->user){
                 $date = date_create($subscription->event->first()->pivot->expiration);
                 $date = date_diff($date, $today);
 
-                if( $date->y==0 && ( ($date->m == 1 &&  $date->d == 0) || ($date->m ==  0 && $date->d == 7))){
+                //if( $date->y==0 && ( ($date->m == 1 &&  $date->d == 0) || ($date->m ==  0 && $date->d == 7))){
+                if( $date->y==0 && $date->m == 0 && $date->d == 7 ) {
+
                     $muser['name'] = $subscription->user->firstname . ' ' . $subscription->user->lastname;
                     $muser['first'] = $subscription->user->firstname;
                     $muser['eventTitle'] =  $subscription->event->first()->title;
                     $muser['email'] = $subscription->user->email;
 
-                    $data['firstName'] = $subscription->user->firstname;
+                    /*$data['firstName'] = $subscription->user->firstname;
                     $data['eventTitle'] = $subscription->event->first()->title;
                     $data['expirationDate'] = date('d/m/Y',strtotime($subscription->event->first()->pivot->expiration));
 
@@ -265,13 +265,14 @@ class CronjobsController extends Controller
                         //$m->cc($adminemail);
                         $m->subject($sub);
 
-                    });
+                    });*/
 
-                    /*$data['firstName'] = $subscription->user->firstname;
+                    $data['subject'] = 'Knowcrunch - '. $subscription->user->firstname . ' your subscription will be renewed soon';
+                    $data['firstName'] = $subscription->user->firstname;
                     $data['eventTitle'] = $subscription->event->first()->title;
-                    $data['expirationDate'] = date('d/m/Y',strtotime($subscription->event->first()->pivot->expiration));*/
-
-                    //$user->notify(new SubscriptionReminder($data));
+                    $data['expirationDate'] = date('d/m/Y',strtotime($subscription->event->first()->pivot->expiration));
+                    $data['template'] = 'emails.user.subscription_reminder';
+                    $subscription->user->notify(new SubscriptionReminder($data));
 
                 }
             }
@@ -396,7 +397,7 @@ class CronjobsController extends Controller
                 $date = date_diff($date, $today);
 
                 if( $event->id == 2304 && ($date->y == 0 && $date->m ==  0 && $date->d == 7 )){
-
+                    
                     $data['firstName'] = $user->firstname;
                     $data['eventTitle'] = $event->title;
                     $data['expirationDate'] = date('d-m-Y',strtotime($user->pivot->expiration));
