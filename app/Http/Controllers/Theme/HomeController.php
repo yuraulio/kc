@@ -685,7 +685,8 @@ class HomeController extends Controller
         //Request $request
         $data = array();
 
-        $slug = Slug::where('slug', $slug)->first();
+        // If someone tries not existing slug we should redirect them to the 404 page
+        $slug = Slug::where('slug', $slug)->firstOrFail();
         $data['content'] = $slug->slugable;
 
         $data['content'] = Event::with('category', 'city', 'topic',)->find($data['content']['id']);
