@@ -117,6 +117,7 @@
                                                                               <div>
                                                                                  <p style="margin: 0px;"><span style="font-family: Tahoma, geneva, sans-serif;">Your subscription is successful. </span></p>
                                                                                  <p style="margin: 0px;"> </p>
+                                                                                 <br>
                                                                                  <p style="margin: 0px;"><span style="font-family: Tahoma, geneva, sans-serif;">You are one of the privileged students who have annual access to our updated videos, files and of course your personal notes for <strong>{{$eventTitle}}</strong>. We are glad to have you back to our course. Enjoy!  </span></p>
                                                                               </div>
                                                                            </td>

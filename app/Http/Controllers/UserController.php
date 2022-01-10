@@ -37,7 +37,9 @@ use App\Http\Controllers\Dashboard\CouponController;
 use App\Notifications\userActivationLink;
 use Mail;
 use App\Model\Option;
-
+use App\Model\Invoice;
+use App\Notifications\CourseInvoice;
+use App\Notifications\WelcomeEmail;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -235,41 +237,17 @@ class UserController extends Controller
        $event = Event::find($event_id);
        $price = $event->ticket()->wherePivot('ticket_id',$ticket_id)->first()->pivot->price;
 
-
-
-
-       //fetch user information
-       /*$person_details = [];
-       $person_details['billing'] = $billing;
-       $person_details['billname'] = $user['name'];
-       $person_details['billsurname'] = $user['surname'];
-       //dd($user);
-        if($user['address'] != null){
-            $person_details['billaddress'] = $user['address'];
-        }
-        if($user['address_num'] != null){
-            $person_details['billaddressnum'] = $user['address_num'];
-        }
-        if($user['postcode'] != null){
-            $person_details['billpostcode'] = $user['postcode'];
-        }
-        if($user['city'] != null){
-            $person_details['billcity'] = $user['city'];
-        }
-
-        $person_details = json_encode($person_details);*/
-        
        //Create Transaction
 
        $billingDetails = [];
 
-       if($request->billing == 1){
+       //if($request->billing == 1){
         $billingDetails = json_decode($user['receipt_details'],true);
         $billingDetails['billing'] = 1;
-       }else{
+       /*}else{
         $billingDetails = json_decode($user['invoice_details'],true);
         $billingDetails['billing'] = 2;
-       }
+       }*/
        
        $transaction = new Transaction;
        $transaction->placement_date = Carbon::now();
@@ -315,6 +293,33 @@ class UserController extends Controller
        $transaction->event()->attach($event_id);
 
 
+       if(!Invoice::latest()->doesntHave('subscription')->first()){
+        //if(!Invoice::has('event')->latest()->first()){
+            $invoiceNumber = sprintf('%04u', 1);
+        }else{
+            //$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;
+            $invoiceNumber = Invoice::latest()->doesntHave('subscription')->first()->invoice;
+            $invoiceNumber = (int) $invoiceNumber + 1;
+            $invoiceNumber = sprintf('%04u', $invoiceNumber);
+        }
+
+
+        $elearningInvoice = new Invoice;
+        $elearningInvoice->name = isset($billingDetails['billname']) ? $billingDetails['billname'] : '';;
+        $elearningInvoice->amount = $price;
+        $elearningInvoice->invoice = $invoiceNumber;
+        $elearningInvoice->date = date('Y-m-d');//Carbon::today()->toDateString();
+        $elearningInvoice->instalments_remaining = 1;
+        $elearningInvoice->instalments = 1;
+
+        $elearningInvoice->save();
+
+
+        //$elearningInvoice->user()->save($dpuser);
+        $elearningInvoice->event()->save($event);
+        $elearningInvoice->transaction()->save($transaction);
+        $elearningInvoice->user()->save($user);
+
        $response_data['ticket']['event'] = $data['event']['title'];
        $response_data['ticket']['ticket_title'] = $ticket['title'];
        $response_data['ticket']['exp'] = $exp_date;
@@ -324,7 +329,10 @@ class UserController extends Controller
        $response_data['ticket']['type'] = $ticket['type'];;
 
 
-       $this->sendEmails($transaction,$event,$response_data);
+        $pdf = $elearningInvoice->generateInvoice();
+
+	    $this->sendEmail($elearningInvoice,$pdf,0);
+        //$this->sendEmails($transaction,$event,$response_data);
 
        return response()->json([
             'success' => __('Ticket assigned succesfully.'),
@@ -344,34 +352,22 @@ class UserController extends Controller
     public function remove_ticket_user(Request $request)
     {
 
+        //dd($request->all());
+
         $user = User::find($request->user_id);
         $event = Event::find($request->event_id);
         //dd($event);
         $user->ticket()->wherePivot('event_id', '=', $request->event_id)->wherePivot('ticket_id', '=', $request->ticket_id)->detach($request->ticket_id);
         $user->events()->wherePivot('event_id', '=', $request->event_id)->detach($request->event_id);
         //dd($user->transactions()->get());
-        $found = 0;
-        foreach($user->transactions()->get() as $key => $tran){
-            if(count($tran->status_history) != 0){
-
-                
-
-                $title = $tran->status_history[0]['cart_data']['manualtransaction']['name'];
-                //dd($title);
-                if($event['title'] == $title){
-                    $found = $tran['id'];
-                }
-                //dd($tran->status_history['cart_data']['manualtransaction']['name']);
-            }
-
-        }
-        if($found != 0){
-            
-            $transaction = Transaction::find($found);
-            $transaction->event()->detach($request->event_id);
-            $transaction->user()->detach($request->user_id);
-            $transaction->delete();
-        }
+        
+    
+        $transaction = $event->transactionsByUser($user->id)->first();
+        
+        $transaction->event()->detach($request->event_id);
+        $transaction->user()->detach($request->user_id);
+        $transaction->delete();
+    
         //$user->ticket()->attach($ticket_id, ['event_id' => $event_id]);
         //dd($user->transactions()->get());
         $user->events()->wherePivot('event_id', '=', $request->event_id)->detach();
@@ -507,7 +503,7 @@ class UserController extends Controller
     }
 
 
-    public function sendEmails($transaction,$content,$ticket)
+    /*public function sendEmails($transaction,$content,$ticket)
     {
 
         $user = $transaction->user()->first();//Auth::user();
@@ -594,7 +590,73 @@ class UserController extends Controller
             $m->subject('Knowcrunch - New Registration');
         });
 
-    }
+    }*/
+
+    private function sendEmail($elearningInvoice,$pdf,$paymentMethod = null){
+
+		$adminemail = ($paymentMethod && $paymentMethod->payment_email) ? $paymentMethod->payment_email : 'info@knowcrunch.com';
+
+		//$pdf = $transaction->elearningInvoice()->first()->generateInvoice();
+        $pdf = $pdf->output();
+        
+		$data = [];  
+        $muser = [];
+
+		$user = $elearningInvoice->user->first();
+
+        $muser['name'] = $elearningInvoice->user->first()->firstname;
+        $muser['first'] = $elearningInvoice->user->first()->firstname;
+        $muser['email'] = $elearningInvoice->user->first()->email;
+        $muser['event_title'] = $elearningInvoice->event->first()->title;
+        $data['firstName'] = $elearningInvoice->user->first()->firstname;
+        $data['eventTitle'] = $elearningInvoice->event->first()->title;
+
+        $data['fbGroup'] = $elearningInvoice->event->first()->fb_group;
+        $data['duration'] = $elearningInvoice->event->first()->summary1->where('section','date')->first() ? $elearningInvoice->event->first()->summary1->where('section','date')->first()->title : '';
+        $data['eventSlug'] = $elearningInvoice->event->first() ? url('/') . '/' . $elearningInvoice->event->first()->getSlug() : url('/');
+        $data['user']['createAccount'] = false;
+        $data['user']['name'] = $elearningInvoice->user->first()->firstname;
+
+        $extrainfo = ['','',$data['eventTitle']];
+
+        $data['extrainfo'] = $extrainfo;
+
+		/*$sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf) {
+
+			$fullname = $muser['name'];
+			$first = $muser['first'];
+			$sub = 'KnowCrunch |' . $first . ' – Payment Successful in ' . $muser['event_title'];;
+			$m->from($adminemail, 'Knowcrunch');
+			$m->to($muser['email'], $fullname);
+			$m->subject($sub);
+			$m->attachData($pdf, "invoice.pdf");
+			
+		});*/
+
+		$data['slugInvoice'] = encrypt($user->id . '-' . $elearningInvoice->id);
+
+        if($user->cart){
+            $user->cart->delete();
+        }
+
+        $user->notify(new WelcomeEmail($user,$data));
+		$user->notify(new CourseInvoice($data));
+
+		$fn = date('Y-m-d') . '-Invoice-' . $elearningInvoice->invoice . '.pdf';
+
+		$sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf,$fn) {
+
+            $fullname = $muser['name'];
+            $first = $muser['first'];
+            $sub =  'KnowCrunch |' . $first . ' – Payment Successful in ' . $muser['event_title'];;
+            $m->from('info@knowcrunch.com', 'Knowcrunch');
+            $m->to($adminemail, $fullname);
+            //$m->to('moulopoulos@lioncode.gr', $fullname);
+            $m->subject($sub);
+            //$m->attachData($pdf, $fn);
+            
+        });
+	}
 
 
     public function createKC(Request $request){

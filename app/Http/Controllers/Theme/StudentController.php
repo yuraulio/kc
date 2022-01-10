@@ -773,9 +773,8 @@ class StudentController extends Controller
         $user = Auth::user();
         $media = $user->image;
 
-        if(!$media){
-            $user->createMedia();
-            $media = $user->image;
+        if(!$media){        
+            $media = $user->createMedia();
         }
 
         $content = $request->file('dp_fileupload');

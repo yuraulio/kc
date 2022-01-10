@@ -124,6 +124,7 @@
                                                                               <div>
                                                                                  <p style="margin: 0px;"><span style="font-family: Tahoma, geneva, sans-serif;">Your enrollment is successful. </span></p>
                                                                                  <p style="margin: 0px;"> </p>
+                                                                                 <br>
                                                                                  <p style="margin: 0px;"><span style="font-family: Tahoma, geneva, sans-serif;">You are one of the privileged students of <strong>{{ $extrainfo[2] }}</strong>. We are glad you have chosen us and we promise you a wonderful experience full of inspiration &amp; creativity! </span></p>
                                                                               </div>
                                                                            </td>

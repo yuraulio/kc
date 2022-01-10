@@ -779,4 +779,64 @@ class CronjobsController extends Controller
         }
 
     }*/
+
+        /*public function sendElearningFQ(){
+
+        $today = date('Y-m-d', strtotime('-15 day', strtotime(date('Y-m-d'))));
+
+        //$today = date_create( $today);
+        //dd($today);
+        $adminemail = 'info@knowcrunch.com';
+
+        //$events = Event::has('transactions')->where('published','true')->with('users')->get();
+        //$events = Event::has('transactions')->with('users')->where('view_tpl','elearning_event')->get();
+
+        $events = Event::with('users')->where(function ($q) use($today) {
+            $q->whereHas('transactions', function ($query) use($today){
+                //$query->whereBetween('created_at', [$today,$today]);
+                //$query->where('created_at',$today);
+                $query->whereDay('created_at',date('d',strtotime($today)))
+                ->whereMonth('created_at',date('m',strtotime($today)))
+                ->whereYear('created_at',date('Y',strtotime($today)));
+            });
+            
+        })->get();
+
+    
+        $today = date_create( date('Y/m/d'));
+
+
+        $count = 0;
+        foreach($events as $event){
+            
+            if(!$event['transactions']->first() || count($event->getExams()) <= 0 || !$event->expiration){
+                continue;
+            }
+            
+            foreach($event['users'] as $user){
+
+                if(! ($trans = $event->transactionsByUser($user->id)->first()) ){
+                    continue;
+                }
+
+                $date  = date('Y-m-d',strtotime($trans->created_at));
+                $date = date_create($date);
+                $date = date_diff($date, $today);
+
+                if( $date->y==0 && $date->m == 0  && $date->d == 15 ){
+                    
+                    $data['firstName'] = $user->firstname;
+                    $data['eventTitle'] = $event->title;
+                    $data['subject'] = 'Knowcrunch - ' . $data['firstName'] .' enjoying ' . $event->title .'?';
+                    $data['elearningSlug'] = url('/') . '/myaccount/elearning/' . $event->title;
+                    $data['expirationDate'] = date('d-m-Y',strtotime($user->pivot->expiration));
+                    $data['template'] = 'emails.user.elearning_f&qemail';
+
+                    $user->notify(new ElearningFQ($data));
+                    
+                }
+            }
+        }
+
+    }*/
 }

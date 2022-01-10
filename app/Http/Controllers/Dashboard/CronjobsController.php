@@ -22,6 +22,7 @@ use App\Notifications\ElearningFQ;
 use App\Notifications\SurveyEMail;
 use App\Notifications\SubscriptionReminder;
 use App\Model\Pages;
+use App\Model\Transaction;
 
 class CronjobsController extends Controller
 {
@@ -59,7 +60,7 @@ class CronjobsController extends Controller
 
         foreach($invoiceUsers as $invoiceUser){
 
-            if(!$invoiceUser->user->first()){
+            if(!$invoiceUser->user->first() || !$invoiceUser->event->first()){
                 continue;
             }
             $data = [];
@@ -71,10 +72,20 @@ class CronjobsController extends Controller
             $data['template'] = 'emails.user.failed_payment';
             //$data['installments'] =
 
-
             $invoiceUser->user->first()->notify(new FailedPayment($data));
 
 
+            $adminemail = $invoiceUser->event->first()->paymentMethod->first() && $invoiceUser->event->first()->paymentMethod->first()->payment_email ?
+                $invoiceUser->event->first()->paymentMethod->first()->payment_email : 'info@knowcrunch.com';
+
+            $sent = Mail::send('emails.admin.failed_stripe_payment', $data, function ($m) use ($adminemail,$data) {
+
+                $sub =  $data['subject'];
+                $m->from('info@knowcrunch.com', 'Knowcrunch');
+                $m->to($adminemail, $data['firstName']);
+                $m->subject($sub);
+            
+            });
 
             $invoiceUser->email_sent = true;
             $invoiceUser->save();
@@ -228,17 +239,19 @@ class CronjobsController extends Controller
         $today = date_create( date('Y/m/d'));
         foreach($subscriptions as $subscription){
 
-            if($subscription->event->first() && $subscription->event->first()->pivot->expiration){
+            if($subscription->event->first() && $subscription->event->first()->pivot->expiration && $subscription->user){
                 $date = date_create($subscription->event->first()->pivot->expiration);
                 $date = date_diff($date, $today);
 
-                if( $date->y==0 && ( ($date->m == 1 &&  $date->d == 0) || ($date->m ==  0 && $date->d == 7))){
+                //if( $date->y==0 && ( ($date->m == 1 &&  $date->d == 0) || ($date->m ==  0 && $date->d == 7))){
+                if( $date->y==0 && $date->m == 0 && $date->d == 7 ) {
+
                     $muser['name'] = $subscription->user->firstname . ' ' . $subscription->user->lastname;
                     $muser['first'] = $subscription->user->firstname;
                     $muser['eventTitle'] =  $subscription->event->first()->title;
                     $muser['email'] = $subscription->user->email;
 
-                    $data['firstName'] = $subscription->user->firstname;
+                    /*$data['firstName'] = $subscription->user->firstname;
                     $data['eventTitle'] = $subscription->event->first()->title;
                     $data['expirationDate'] = date('d/m/Y',strtotime($subscription->event->first()->pivot->expiration));
 
@@ -252,13 +265,14 @@ class CronjobsController extends Controller
                         //$m->cc($adminemail);
                         $m->subject($sub);
 
-                    });
+                    });*/
 
-                    /*$data['firstName'] = $subscription->user->firstname;
+                    $data['subject'] = 'Knowcrunch - '. $subscription->user->firstname . ' your subscription will be renewed soon';
+                    $data['firstName'] = $subscription->user->firstname;
                     $data['eventTitle'] = $subscription->event->first()->title;
-                    $data['expirationDate'] = date('d/m/Y',strtotime($subscription->event->first()->pivot->expiration));*/
-
-                    //$user->notify(new SubscriptionReminder($data));
+                    $data['expirationDate'] = date('d/m/Y',strtotime($subscription->event->first()->pivot->expiration));
+                    $data['template'] = 'emails.user.subscription_reminder';
+                    $subscription->user->notify(new SubscriptionReminder($data));
 
                 }
             }
@@ -383,7 +397,7 @@ class CronjobsController extends Controller
                 $date = date_diff($date, $today);
 
                 if( $event->id == 2304 && ($date->y == 0 && $date->m ==  0 && $date->d == 7 )){
-
+                    
                     $data['firstName'] = $user->firstname;
                     $data['eventTitle'] = $event->title;
                     $data['expirationDate'] = date('d-m-Y',strtotime($user->pivot->expiration));
@@ -542,42 +556,38 @@ class CronjobsController extends Controller
 
     public function sendElearningFQ(){
 
-        
+        $today = date('Y-m-d', strtotime('-15 day', strtotime(date('Y-m-d'))));
         $adminemail = 'info@knowcrunch.com';
+        $transactions = Transaction::with('event','user')->whereDay('created_at',date('d',strtotime($today)))
+                        ->whereMonth('created_at',date('m',strtotime($today)))
+                        ->whereYear('created_at',date('Y',strtotime($today)))
+                        ->where(function ($q) use($today) {
+                            $q->whereHas('event', function ($query) use($today){
+                                $query->whereViewTpl('elearning_event');
+                            });
+                        })->get();
+ 
+        foreach($transactions as $transaction){
+            if( !( $event = $transaction->event->first() ) ){
+                continue;
+            }
 
-        $events = Event::has('transactions')->with('users','transactions')->where('view_tpl','elearning_event')->get();
-        //$events = Event::has('transactions')->where('published','true')->with('users')->get();
-
-        $today = date_create( date('Y/m/d'));
-        $count = 0;
-        foreach($events as $event){
-            
-            if(!$event['transactions']->first() || count($event->getExams()) <= 0 || !$event->expiration){
+            if(count($event->getExams()) <= 0 || !$event->expiration){
                 continue;
             }
             
-            foreach($event['users'] as $user){
+            foreach($transaction['user'] as $user){
+   
+                $data['firstName'] = $user->firstname;
+                $data['eventTitle'] = $event->title;
+                $data['subject'] = 'Knowcrunch - ' . $data['firstName'] .' enjoying ' . $event->title .'?';
+                $data['elearningSlug'] = url('/') . '/myaccount/elearning/' . $event->title;
+                $data['expirationDate'] = date('d-m-Y',strtotime($user->pivot->expiration));
+                $data['template'] = 'emails.user.elearning_f&qemail';
 
-                if(! ($trans = $event->transactionsByUser($user->id)->first()) ){
-                    continue;
-                }
-
-                $date  = date('Y-m-d',strtotime($trans->created_at));
-                $date = date_create($date);
-                $date = date_diff($date, $today);
-
-                if( $date->y==0 && $date->m == 0  && $date->d == 15 ){
+                $user->notify(new ElearningFQ($data));
                     
-                    $data['firstName'] = $user->firstname;
-                    $data['eventTitle'] = $event->title;
-                    $data['subject'] = 'Knowcrunch - ' . $data['firstName'] .' enjoying ' . $event->title .'?';
-                    $data['elearningSlug'] = url('/') . '/myaccount/elearning/' . $event->title;
-                    $data['expirationDate'] = date('d-m-Y',strtotime($user->pivot->expiration));
-                    $data['template'] = 'emails.user.elearning_f&qemail';
-
-                    $user->notify(new ElearningFQ($data));
-                    
-                }
+                
             }
         }
 
