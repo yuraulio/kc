@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin_api\Categories;
 use App\Http\Controllers\Admin_api\Dashboard;
 use Illuminate\Support\Facades\Route;
 
@@ -9,4 +10,9 @@ Route::domain('admin.' . env('APP_URL'))->group(function () {
     Route::get('get_widget_data/instructors', [Dashboard::class, 'get_widget_data_instructors']);
     Route::get('get_widget_data/students', [Dashboard::class, 'get_widget_data_students']);
     Route::get('get_widget_data/graduates', [Dashboard::class, 'get_widget_data_graduates']);
+
+    // categories
+    Route::get('categories', [Categories::class, 'list']);
+    Route::post('categories/add', [Categories::class, 'add']);
+    Route::get('categories/get/{id}', [Categories::class, 'get']);
 });

@@ -2,9 +2,10 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class AddPaymentEmailToPaymentMethods extends Migration
+class CreateDatabaseNewkc2 extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +14,7 @@ class AddPaymentEmailToPaymentMethods extends Migration
      */
     public function up()
     {
-        Schema::table('payment_methods', function (Blueprint $table) {
-            $table->string('payment_email')->after('footer')->nullable();
-        });
+        DB::statement('CREATE DATABASE newkc2');
     }
 
     /**
@@ -25,8 +24,6 @@ class AddPaymentEmailToPaymentMethods extends Migration
      */
     public function down()
     {
-        Schema::table('payment_methods', function (Blueprint $table) {
-            $table->dropColumn('payment_email');
-        });
+        DB::statement('DROP DATABASE newkc2');
     }
 }

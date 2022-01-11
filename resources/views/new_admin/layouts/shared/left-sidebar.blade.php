@@ -70,10 +70,10 @@
                     <div class="collapse" id="sidebarCMS">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="#">Template management</a>
+                                <a href="{{route('admin-categories')}}">Categories management</a>
                             </li>
                             <li>
-                                <a href="#">Categories management</a>
+                                <a href="{{route('admin-templates')}}">Template management</a>
                             </li>
                             <li>
                                 <a href="#">Pages management</a>

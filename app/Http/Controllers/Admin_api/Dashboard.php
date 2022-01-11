@@ -6,15 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Model\Instructor;
 use App\Model\User;
 use App\Model\Event;
+use Illuminate\Http\JsonResponse;
 
 class Dashboard extends Controller
 {
     /**
      * Return user count
      *
-     * @return \Illuminate\View\View
+     * @return JsonResponse
      */
-    public function get_widget_data_users()
+    public function get_widget_data_users(): JsonResponse
     {
         return response()->json(['data' => User::count()], 200);
     }
@@ -22,9 +23,9 @@ class Dashboard extends Controller
     /**
      * Return admin count
      *
-     * @return \Illuminate\View\View
+     * @return JsonResponse
      */
-    public function get_widget_data_admins()
+    public function get_widget_data_admins(): JsonResponse
     {
         $users = User::all();
 
@@ -38,9 +39,9 @@ class Dashboard extends Controller
     /**
      * Return active instructors count
      *
-     * @return \Illuminate\View\View
+     * @return JsonResponse
      */
-    public function get_widget_data_instructors()
+    public function get_widget_data_instructors(): JsonResponse
     {
         $instructors = Instructor::where('status', true)->has('event')->get();
 
@@ -50,9 +51,9 @@ class Dashboard extends Controller
     /**
      * Return active students count
      *
-     * @return \Illuminate\View\View
+     * @return JsonResponse
      */
-    public function get_widget_data_students()
+    public function get_widget_data_students(): JsonResponse
     {
         $students_in_class = [];
         $students_online = [];
@@ -72,9 +73,9 @@ class Dashboard extends Controller
     /**
      * Return active graduates count
      *
-     * @return \Illuminate\View\View
+     * @return JsonResponse
      */
-    public function get_widget_data_graduates()
+    public function get_widget_data_graduates(): JsonResponse
     {
         $graduates = [];
         $events = Event::where('published', true)->with('delivery', 'type', 'users')->get();

@@ -21,8 +21,14 @@ import 'vue-loaders/dist/vue-loaders.css';
 import VueLoaders from 'vue-loaders';
 Vue.use(VueLoaders);
 
-
 Vue.component('dashboard-widget', require('./components/dashboard-widget.vue').default);
+Vue.component('templates', require('./components/templates.vue').default);
+Vue.component('row-box', require('./components/row-box.vue').default);
+Vue.component('categories', require('./components/categories.vue').default);
+Vue.component('add-edit', require('./components/add-edit.vue').default);
+Vue.component('text-field', require('./components/inputs/text.vue').default);
+
+Vue.component('avatar', require('vue-avatar').default);
 
 new Vue({
    el: '#app'

@@ -28,7 +28,9 @@ class AddFieldsToEvent extends Migration
     public function down()
     {
         Schema::table('events', function (Blueprint $table) {
-            //
+            $table->dropColumn('evaluate_topics');
+            $table->dropColumn('evaluate_instructors');
+            $table->dropColumn('fb_testimonial');
         });
     }
 }

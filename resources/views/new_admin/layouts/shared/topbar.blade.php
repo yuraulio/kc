@@ -61,7 +61,14 @@
 
             <li class="dropdown notification-list topbar-dropdown">
                 <a class="nav-link dropdown-toggle nav-user me-0 waves-effect waves-light" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                    <img src="https://eu.ui-avatars.com/api/?background=6658dd&color=fff&name={{Auth::user()->name}}" alt="user-image" class="rounded-circle">
+                    <avatar
+                        class="d-inline-block align-self-center me-0 rounded-circle"
+                        username="{{ auth()->user()->name }}"
+                        background-color="#6658dd"
+                        color="#fff"
+                        :size="32"
+                    >
+                    </avatar>
                     <span class="pro-user-name ms-1">
                         {{ auth()->user()->name }} <i class="mdi mdi-chevron-down"></i>
                     </span>

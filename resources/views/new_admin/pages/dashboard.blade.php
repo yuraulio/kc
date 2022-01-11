@@ -2,8 +2,7 @@
 
 @section('css')
 <!-- third party css -->
-<link href="{{asset('admin_assets/libs/flatpickr/flatpickr.min.css')}}" rel="stylesheet" type="text/css" />
-<link href="{{asset('admin_assets/libs/selectize/selectize.min.css')}}" rel="stylesheet" type="text/css" />
+
 <!-- third party css end -->
 @endsection
 
@@ -77,12 +76,6 @@
 
 @section('script')
 <!-- third party js -->
-<script src="{{asset('admin_assets/libs/flatpickr/flatpickr.min.js')}}"></script>
-<script src="{{asset('admin_assets/libs/apexcharts/apexcharts.min.js')}}"></script>
-<script src="{{asset('admin_assets/libs/selectize/selectize.min.js')}}"></script>
-<!-- third party js ends -->
 
-<!-- demo app -->
-<script src="{{asset('admin_assets/js/pages/dashboard-1.init.js')}}"></script>
-<!-- end demo js-->
+<!-- third party js ends -->
 @endsection

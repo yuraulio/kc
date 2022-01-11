@@ -9,6 +9,8 @@ Route::domain('admin.' . env('APP_URL'))->group(function () {
     Route::post('/authenticate', [AdminLoginController::class, 'authenticate'])->name("admin-authenticate");
 
     Route::group(['middleware' => 'auth'], function () {
-        Route::get('/', [Dashboard::class, 'index'])->name("admin-dashboard");
+        Route::get('/', [Dashboard::class, 'dashboard'])->name("admin-dashboard");
+        Route::get('/categories', [Dashboard::class, 'categories'])->name("admin-categories");
+        Route::get('/templates', [Dashboard::class, 'templates'])->name("admin-templates");
     });
 });

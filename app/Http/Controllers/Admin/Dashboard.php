@@ -14,8 +14,28 @@ class Dashboard extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function dashboard()
     {
         return view('new_admin.pages.dashboard');
+    }
+
+    /**
+     * Show the application categories.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function categories()
+    {
+        return view('new_admin.pages.categories');
+    }
+
+    /**
+     * Show the application templates.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function templates()
+    {
+        return view('new_admin.pages.templates');
     }
 }
