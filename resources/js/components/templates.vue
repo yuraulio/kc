@@ -6,7 +6,7 @@
     <div>
 
         <div v-if="mode == 'list'">
-    
+
             <div class="card mb-2">
                 <div class="card-body">
                     <div class="row justify-content-between">
@@ -24,8 +24,8 @@
                     </div> <!-- end row -->
                 </div> <!-- end card-body-->
             </div> <!-- end card-->
-        
-            <row-box 
+            <div v-if="!loading">
+            <row-box
                 v-for="template in templates"
                 v-bind:key="template.id"
                 :title="template.title"
@@ -36,7 +36,10 @@
                 @updatetitle="updatetitle"
             >
             </row-box>
-
+            </div>
+            <div style="margin-top: 150px" class="text-center" v-else>
+                <vue-loaders-ball-grid-beat	 color="#6658dd" scale="1" class="mt-4 text-center"></vue-loaders-ball-grid-beat	>
+            </div>
         </div>
 
         <div v-if="mode == 'new'">
@@ -84,7 +87,7 @@
 
     export default {
         props: {
-            
+
         },
         data() {
             return {
@@ -93,6 +96,7 @@
                 id: null,
                 title: null,
                 filter: "",
+                loading: false
             }
         },
         watch: {
@@ -102,7 +106,23 @@
         },
         methods: {
             updatemode(variable){
-                this.mode = variable;
+                if (variable == "delete") {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, delete it!'
+                        }).then((result) => {
+                        if (result.isConfirmed) {
+                            this.remove();
+                        }
+                     })
+                } else {
+                    this.mode = variable;
+                }
             },
             updateid(variable){
                 this.id = variable;
@@ -111,14 +131,42 @@
                 this.title = variable;
             },
             getData(){
+                this.loading = true;
                 axios.get('/api/templates?filter=' + this.filter)
                     .then((response) => {
                         this.templates = response.data["data"];
+                        this.loading = false;
                     })
                     .catch((error) => {
                         console.log(error)
+                        this.loading = false;
                     });
             },
+            remove(){
+                this.errors = null;
+                axios
+                .delete('/api/templates/delete/' + this.id)
+                .then((response) => {
+                    if (response.status == 200){
+                        this.templates.splice(_.findIndex(this.templates, { 'id' : this.id }), 1);
+                        this.$emit('updatemode', 'list');
+                    }
+                    Swal.fire(
+                        'Deleted!',
+                        'Item has been deleted.',
+                        'success'
+                    )
+                })
+                .catch((error) => {
+                    console.log(error)
+                    Swal.fire(
+                        'Not Deleted!',
+                        'Deleteing has failed.',
+                        'error'
+                    )
+                    this.loading = false;
+                });
+            }
         },
         mounted() {
             this.getData();

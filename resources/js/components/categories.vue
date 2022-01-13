@@ -25,18 +25,22 @@
                 </div> <!-- end card-body-->
             </div> <!-- end card-->
 
-            <row-box
-                v-for="category in categories"
-                v-bind:key="category.id"
-                :title="category.title"
-                :description="category.description"
-                @updatemode="updatemode"
-                :id="category.id"
-                @updateid="updateid"
-                @updatetitle="updatetitle"
-            >
-            </row-box>
-
+            <div v-if="!loading">
+                <row-box
+                    v-for="category in categories"
+                    v-bind:key="category.id"
+                    :title="category.title"
+                    :description="category.description"
+                    @updatemode="updatemode"
+                    :id="category.id"
+                    @updateid="updateid"
+                    @updatetitle="updatetitle"
+                >
+                </row-box>
+            </div>
+            <div style="margin-top: 150px" class="text-center" v-else>
+                <vue-loaders-ball-grid-beat	 color="#6658dd" scale="1" class="mt-4 text-center"></vue-loaders-ball-grid-beat	>
+            </div>
         </div>
 
         <div v-if="mode == 'new'">
@@ -74,7 +78,7 @@
                 :id="id"
             ></delete>
         </div>
-    <tc></tc>
+    <!--<tc></tc>-->
     </div>
 </template>
 
@@ -94,6 +98,7 @@
                 id: null,
                 title: null,
                 filter: "",
+                loading: false
             }
         },
         watch: {
@@ -103,7 +108,23 @@
         },
         methods: {
             updatemode(variable){
-                this.mode = variable;
+                if (variable == "delete") {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, delete it!'
+                        }).then((result) => {
+                        if (result.isConfirmed) {
+                            this.remove();
+                        }
+                     })
+                } else {
+                    this.mode = variable;
+                }
             },
             updateid(variable){
                 this.id = variable;
@@ -112,14 +133,42 @@
                 this.title = variable;
             },
             getData(){
+                this.loading = true;
                 axios.get('/api/categories?filter=' + this.filter)
                     .then((response) => {
                         this.categories = response.data["data"];
+                        this.loading = false;
                     })
                     .catch((error) => {
                         console.log(error)
+                        this.loading = false;
                     });
             },
+            remove(){
+                this.errors = null;
+                axios
+                .delete('/api/categories/delete/' + this.id)
+                .then((response) => {
+                    if (response.status == 200){
+                        this.categories.splice(_.findIndex(this.categories, { 'id' : this.id }), 1);
+                        this.$emit('updatemode', 'list');
+                    }
+                    Swal.fire(
+                        'Deleted!',
+                        'Item has been deleted.',
+                        'success'
+                    )
+                })
+                .catch((error) => {
+                    console.log(error)
+                    Swal.fire(
+                        'Not Deleted!',
+                        'Deleteing has failed.',
+                        'error'
+                    )
+                    this.loading = false;
+                });
+            }
         },
         mounted() {
             this.getData();

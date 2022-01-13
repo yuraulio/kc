@@ -17,6 +17,9 @@
 import Vue from 'vue';
 window.axios = require('axios').default;
 
+window.Swal = require('sweetalert2');
+var _ = require("lodash");
+
 import 'vue-loaders/dist/vue-loaders.css';
 import VueLoaders from 'vue-loaders';
 Vue.use(VueLoaders);
