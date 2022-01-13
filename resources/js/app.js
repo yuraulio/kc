@@ -31,6 +31,9 @@ Vue.component('delete', require('./components/delete.vue').default);
 Vue.component('rows', require('./components/inputs/rows.vue').default);
 Vue.component('row', require('./components/inputs/row.vue').default);
 Vue.component('component-field', require('./components/inputs/component.vue').default);
+Vue.component('dropdown', require('./components/inputs/dropdown.vue').default);
+Vue.component('pages', require('./components/pages.vue').default);
+Vue.component('page', require('./components/inputs/page.vue').default);
 
 Vue.component('avatar', require('vue-avatar').default);
 

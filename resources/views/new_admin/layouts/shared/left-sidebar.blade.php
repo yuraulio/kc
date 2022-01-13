@@ -76,7 +76,7 @@
                                 <a href="{{route('admin-templates')}}">Template management</a>
                             </li>
                             <li>
-                                <a href="#">Pages management</a>
+                                <a href="{{route('admin-pages')}}">Pages management</a>
                             </li>
                             <li>
                                 <a href="#">Comments management</a>

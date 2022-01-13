@@ -38,4 +38,14 @@ class Dashboard extends Controller
     {
         return view('new_admin.pages.templates');
     }
+
+    /**
+     * Show the application pages.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function pages()
+    {
+        return view('new_admin.pages.pages');
+    }
 }

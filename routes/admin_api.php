@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin_api\Categories;
+use App\Http\Controllers\Admin_api\Pages;
 use App\Http\Controllers\Admin_api\Templates;
 use App\Http\Controllers\Admin_api\Dashboard;
 use Illuminate\Support\Facades\Route;
@@ -25,4 +26,11 @@ Route::domain('admin.' . env('APP_URL'))->group(function () {
     Route::post('templates/edit/{id}', [Templates::class, 'edit']);
     Route::post('templates/delete/{id}', [Templates::class, 'delete']);
     Route::get('templates/get/{id}', [Templates::class, 'get']);
+
+    // pages
+    Route::get('pages', [Pages::class, 'list']);
+    Route::post('pages/add', [Pages::class, 'add']);
+    Route::post('pages/edit/{id}', [Pages::class, 'edit']);
+    Route::post('pages/delete/{id}', [Pages::class, 'delete']);
+    Route::get('pages/get/{id}', [Pages::class, 'get']);
 });

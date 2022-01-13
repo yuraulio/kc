@@ -23,6 +23,13 @@
                     :prop-value="description_value"
                 ></text-field>
 
+                <dropdown
+                    v-if="category"
+                    title="Category"
+                    @updatevalue="update_category"
+                    :prop-value="category_value"
+                    route="categories"
+                ></dropdown>
             
                 <rows
                     v-if="rows"
@@ -31,6 +38,14 @@
                     @updatevalue="update_rows"
                     :prop-value="rows_value"
                 ></rows>
+
+                <page
+                    v-if="page"
+                    title="Content"
+                    required=1
+                    @updatevalue="update_page"
+                    :prop-value="rows_value"
+                ></page>
                 
 
             </div> <!-- end col-->
@@ -61,6 +76,7 @@
             title: String,
             description: String,
             rows: String,
+            category: String,
             route: String,
             type: String,
             id: Number,
@@ -70,6 +86,7 @@
                 title_value: null,
                 description_value: null,
                 rows_value: null,
+                category_value: null,
                 errors: null,
                 test: null
             }
@@ -84,6 +101,9 @@
             update_rows(value){
                 this.rows_value = value;
             },
+            update_category(value){
+                this.category_value = value;
+            },
             add(){
                 this.errors = null;
                 axios
@@ -92,6 +112,7 @@
                         title: this.title_value,
                         description: this.description_value,
                         rows: JSON.stringify(this.rows_value),
+                        category_id: this.category_value,
                     }
                 )
                 .then((response) => {
@@ -113,6 +134,7 @@
                         title: this.title_value,
                         description: this.description_value,
                         rows: JSON.stringify(this.rows_value),
+                        category_id: this.category_value,
                     }
                 )
                 .then((response) => {
@@ -134,7 +156,10 @@
                         var data = response.data.data;
                         this.title_value = data.title;
                         this.description_value = data.description;
-                        this.rows_value = JSON.parse(data.rows);
+                        if (data.rows){
+                            this.rows_value = JSON.parse(data.rows ?? "");
+                        }
+                        this.category_value = data.category_id;
                     }
                 })
                 .catch((error) => {

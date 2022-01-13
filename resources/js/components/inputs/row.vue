@@ -77,15 +77,6 @@
             }
         },
         watch: {
-            // "columnsNumber": function() {
-            //     this.row.columns = [];
-            //     for (let i = 0; i < this.columnsNumber; i++) {
-            //         this.row.columns.push({
-            //             order: i,
-            //             component: "Select component",
-            //         });
-            //     }
-            // },
             "row": {
                 handler: function() {
                     this.$emit('updatevalue', this.row);
