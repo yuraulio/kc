@@ -464,11 +464,20 @@ class SubscriptionController extends Controller
 
         $sub_id_stripe = $subscription['stripe_id'];
 
+        $paymentMethod = PaymentMethod::find(2);
+        if(env('PAYMENT_PRODUCTION')){
+            Stripe::setApiKey($paymentMethod->processor_options['secret_key']);
+        }else{
+            Stripe::setApiKey($paymentMethod->test_processor_options['secret_key']);
+        }
+        session()->put('payment_method',$paymentMethod->id);
+
+
         try{
             if($request->status == 'Cancel'){
                         
                 $subscription->status = false;
-                $subscription->stripe_status = 'cancel';
+                $subscription->stripe_status = 'cancelled';
                 $subscription->save();
                 $subscription = $subscription->cancel();
              
