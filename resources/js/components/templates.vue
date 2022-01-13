@@ -58,6 +58,7 @@
                 @refreshcategories="getData"
                 title="true"
                 description="true"
+                rows="true"
                 type="edit"
                 route="templates"
                 page-title="Edit Template"

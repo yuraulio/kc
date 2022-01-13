@@ -8,6 +8,8 @@
         v-bind:key="row.order"
         :order="row.order"
         @updatevalue="updatevalue"
+        :prop-value="row"
+        @removeRow="removeRow"
     ></row>
 
     <div class="row">
@@ -34,6 +36,12 @@
         watch: {
             "propValue": function() {
                 this.rows = this.propValue;
+            },
+            "rows": {
+                handler: function() {
+                    this.$emit('updatevalue', this.rows);
+                },
+                deep: true 
             }
         },
         methods: {
@@ -56,12 +64,16 @@
                     }
                 );
             },
-            updatevalue(value){
-                // console.log(value);
-                var test = this.rows.findIndex(function(row) {
-                    return row.order == value.order;
+            updatevalue(new_row){
+                var index = this.rows.findIndex(function(row) {
+                    return row.order == new_row.order;
                 });
-                console.log(value);
+                this.rows[index] = new_row;
+            },
+            removeRow(remove_order) {
+                this.rows = this.rows.filter(function(row) {
+                    return row.order !== remove_order
+                });
             }
         },
         mounted() {

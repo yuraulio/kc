@@ -44,7 +44,7 @@ class Templates extends Controller
             $template = new Template();
             $template->title = $request->title;
             $template->description = $request->description;
-            $template->rows = json_encode($request->rows);
+            $template->rows = $request->rows;
             $template->save();
 
             return response()->json(['message' => 'success'], 200);
@@ -78,7 +78,7 @@ class Templates extends Controller
     public function edit(Request $request, int $id): JsonResponse
     {
         $request->validate([
-            'title' => 'required|unique:cms_templates',
+            'title' => 'required|unique:cms_templates,title,'. $id,
             'rows' => 'required',
         ]);
 
@@ -86,7 +86,7 @@ class Templates extends Controller
             $template = Template::find($id);
             $template->title = $request->title;
             $template->description = $request->description;
-            $template->rows = json_encode($request->rows);
+            $template->rows = $request->rows;
             $template->save();
 
             return response()->json(['message' => 'success'], 200);

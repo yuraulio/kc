@@ -75,7 +75,7 @@ class Categories extends Controller
     public function edit(Request $request, int $id): JsonResponse
     {
         $request->validate([
-            'title' => 'required|unique:cms_categories',
+            'title' => 'required|unique:cms_categories,title,' . $id,
         ]);
 
         try {

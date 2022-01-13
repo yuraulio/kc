@@ -28,6 +28,8 @@
                     v-if="rows"
                     title="Content"
                     required=1
+                    @updatevalue="update_rows"
+                    :prop-value="rows_value"
                 ></rows>
                 
 
@@ -67,7 +69,9 @@
             return {
                 title_value: null,
                 description_value: null,
-                errors: null
+                rows_value: null,
+                errors: null,
+                test: null
             }
         },
         methods: {
@@ -77,6 +81,9 @@
             update_description(value){
                 this.description_value = value;
             },
+            update_rows(value){
+                this.rows_value = value;
+            },
             add(){
                 this.errors = null;
                 axios
@@ -84,6 +91,7 @@
                     {
                         title: this.title_value,
                         description: this.description_value,
+                        rows: JSON.stringify(this.rows_value),
                     }
                 )
                 .then((response) => {
@@ -104,6 +112,7 @@
                     {
                         title: this.title_value,
                         description: this.description_value,
+                        rows: JSON.stringify(this.rows_value),
                     }
                 )
                 .then((response) => {
@@ -122,9 +131,10 @@
                 .get('/api/' + this.route + '/get/' + this.id)
                 .then((response) => {
                     if (response.status == 200){
-                        var category = response.data.data;
-                        this.title_value = category.title;
-                        this.description_value = category.description;
+                        var data = response.data.data;
+                        this.title_value = data.title;
+                        this.description_value = data.description;
+                        this.rows_value = JSON.parse(data.rows);
                     }
                 })
                 .catch((error) => {

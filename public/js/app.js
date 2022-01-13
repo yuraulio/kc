@@ -1899,6 +1899,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     pageTitle: String,
@@ -1913,7 +1915,9 @@ __webpack_require__.r(__webpack_exports__);
     return {
       title_value: null,
       description_value: null,
-      errors: null
+      rows_value: null,
+      errors: null,
+      test: null
     };
   },
   methods: {
@@ -1923,13 +1927,17 @@ __webpack_require__.r(__webpack_exports__);
     update_description: function update_description(value) {
       this.description_value = value;
     },
+    update_rows: function update_rows(value) {
+      this.rows_value = value;
+    },
     add: function add() {
       var _this = this;
 
       this.errors = null;
       axios.post('/api/' + this.route + '/add', {
         title: this.title_value,
-        description: this.description_value
+        description: this.description_value,
+        rows: JSON.stringify(this.rows_value)
       }).then(function (response) {
         if (response.status == 200) {
           _this.$emit('refreshcategories');
@@ -1947,7 +1955,8 @@ __webpack_require__.r(__webpack_exports__);
       this.errors = null;
       axios.post('/api/' + this.route + '/edit/' + this.id, {
         title: this.title_value,
-        description: this.description_value
+        description: this.description_value,
+        rows: JSON.stringify(this.rows_value)
       }).then(function (response) {
         if (response.status == 200) {
           _this2.$emit('refreshcategories');
@@ -1964,9 +1973,10 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get('/api/' + this.route + '/get/' + this.id).then(function (response) {
         if (response.status == 200) {
-          var category = response.data.data;
-          _this3.title_value = category.title;
-          _this3.description_value = category.description;
+          var data = response.data.data;
+          _this3.title_value = data.title;
+          _this3.description_value = data.description;
+          _this3.rows_value = JSON.parse(data.rows);
         }
       })["catch"](function (error) {
         console.log(error);
@@ -2284,10 +2294,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     propValue: null,
-    required: false
+    required: false,
+    order: Number
   },
   data: function data() {
     return {
@@ -2297,10 +2313,17 @@ __webpack_require__.r(__webpack_exports__);
   watch: {
     "propValue": function propValue() {
       this.value = this.propValue;
+    },
+    "value": function value() {
+      this.$emit('updatecomponent', [this.value, this.order]);
     }
   },
   methods: {},
-  mounted: function mounted() {}
+  mounted: function mounted() {
+    if (this.propValue) {
+      this.value = this.propValue;
+    }
+  }
 });
 
 /***/ }),
@@ -2316,6 +2339,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2388,22 +2417,15 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   watch: {
-    "propValue": function propValue() {
-      this.row = this.propValue;
-    },
-    "columnsNumber": function columnsNumber() {
-      this.row.columns = [];
-
-      for (var i = 0; i < this.columnsNumber; i++) {
-        this.row.columns.push({
-          order: i,
-          component: null
-        });
-      }
-    },
-    "order": function order() {
-      console.log("test"); // this.row.order = this.order;
-    },
+    // "columnsNumber": function() {
+    //     this.row.columns = [];
+    //     for (let i = 0; i < this.columnsNumber; i++) {
+    //         this.row.columns.push({
+    //             order: i,
+    //             component: "Select component",
+    //         });
+    //     }
+    // },
     "row": {
       handler: function handler() {
         this.$emit('updatevalue', this.row);
@@ -2411,9 +2433,34 @@ __webpack_require__.r(__webpack_exports__);
       deep: true
     }
   },
-  methods: {},
+  methods: {
+    updatecomponent: function updatecomponent(component) {
+      var index = this.row.columns.findIndex(function (column) {
+        return column.order == component[1];
+      });
+      this.row.columns[index].component = component[0];
+    },
+    changeColumns: function changeColumns() {
+      this.row.columns = [];
+
+      for (var i = 0; i < this.columnsNumber; i++) {
+        this.row.columns.push({
+          order: i,
+          component: "Select component"
+        });
+      }
+    },
+    removeRow: function removeRow() {
+      this.$emit('removeRow', this.order);
+    }
+  },
   mounted: function mounted() {
     this.row.order = this.order;
+
+    if (this.propValue) {
+      this.row = this.propValue;
+      this.columnsNumber = this.row.columns.length;
+    }
   }
 });
 
@@ -2451,6 +2498,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     title: String,
@@ -2465,6 +2514,12 @@ __webpack_require__.r(__webpack_exports__);
   watch: {
     "propValue": function propValue() {
       this.rows = this.propValue;
+    },
+    "rows": {
+      handler: function handler() {
+        this.$emit('updatevalue', this.rows);
+      },
+      deep: true
     }
   },
   methods: {
@@ -2485,12 +2540,16 @@ __webpack_require__.r(__webpack_exports__);
         }]
       });
     },
-    updatevalue: function updatevalue(value) {
-      // console.log(value);
-      var test = this.rows.findIndex(function (row) {
-        return row.order == value.order;
+    updatevalue: function updatevalue(new_row) {
+      var index = this.rows.findIndex(function (row) {
+        return row.order == new_row.order;
       });
-      console.log(value);
+      this.rows[index] = new_row;
+    },
+    removeRow: function removeRow(remove_order) {
+      this.rows = this.rows.filter(function (row) {
+        return row.order !== remove_order;
+      });
     }
   },
   mounted: function mounted() {}
@@ -2632,6 +2691,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
 //
 //
 //
@@ -4412,7 +4472,14 @@ var render = function() {
               : _vm._e(),
             _vm._v(" "),
             _vm.rows
-              ? _c("rows", { attrs: { title: "Content", required: "1" } })
+              ? _c("rows", {
+                  attrs: {
+                    title: "Content",
+                    required: "1",
+                    "prop-value": _vm.rows_value
+                  },
+                  on: { updatevalue: _vm.update_rows }
+                })
               : _vm._e()
           ],
           1
@@ -4862,15 +4929,29 @@ var render = function() {
       [
         _c("option", { attrs: { selected: "" } }, [_vm._v("Select component")]),
         _vm._v(" "),
-        _c("option", { attrs: { value: "Component2" } }, [
-          _vm._v("Component1")
+        _c("option", { attrs: { value: "text_editor" } }, [
+          _vm._v("Text editor")
         ]),
         _vm._v(" "),
-        _c("option", { attrs: { value: "Component3" } }, [
-          _vm._v("Component2")
+        _c("option", { attrs: { value: "image" } }, [_vm._v("Image")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "hero" } }, [_vm._v("Hero")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "content_box" } }, [
+          _vm._v("Content box")
         ]),
         _vm._v(" "),
-        _c("option", { attrs: { value: "Component4" } }, [_vm._v("Component3")])
+        _c("option", { attrs: { value: "references" } }, [
+          _vm._v("References")
+        ]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "timeline" } }, [_vm._v("Timeline")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "categories" } }, [
+          _vm._v("Categories")
+        ]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "posts" } }, [_vm._v("Posts")])
       ]
     )
   ])
@@ -4932,7 +5013,7 @@ var render = function() {
         _vm._v("\n            Columns:\n        ")
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-3" }, [
+      _c("div", { staticClass: "col-2" }, [
         _c(
           "select",
           {
@@ -4946,19 +5027,24 @@ var render = function() {
             ],
             staticClass: "form-select my-1 my-md-0",
             on: {
-              change: function($event) {
-                var $$selectedVal = Array.prototype.filter
-                  .call($event.target.options, function(o) {
-                    return o.selected
-                  })
-                  .map(function(o) {
-                    var val = "_value" in o ? o._value : o.value
-                    return val
-                  })
-                _vm.columnsNumber = $event.target.multiple
-                  ? $$selectedVal
-                  : $$selectedVal[0]
-              }
+              change: [
+                function($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function(o) {
+                      return o.selected
+                    })
+                    .map(function(o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.columnsNumber = $event.target.multiple
+                    ? $$selectedVal
+                    : $$selectedVal[0]
+                },
+                function($event) {
+                  return _vm.changeColumns()
+                }
+              ]
             }
           },
           [
@@ -4970,6 +5056,22 @@ var render = function() {
             _vm._v(" "),
             _c("option", { attrs: { value: "4" } }, [_vm._v("4")])
           ]
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-1 text-end" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-danger waves-effect waves-light",
+            attrs: { type: "button" },
+            on: {
+              click: function($event) {
+                return _vm.removeRow()
+              }
+            }
+          },
+          [_c("i", { staticClass: "fe-x" })]
         )
       ])
     ]),
@@ -4986,7 +5088,12 @@ var render = function() {
           [
             _c("component-field", {
               staticClass: "border",
-              attrs: { required: "true" }
+              attrs: {
+                required: "true",
+                order: column.order,
+                "prop-value": column.component
+              },
+              on: { updatecomponent: _vm.updatecomponent }
             })
           ],
           1
@@ -5031,8 +5138,8 @@ var render = function() {
       _vm._l(_vm.rows, function(row) {
         return _c("row", {
           key: row.order,
-          attrs: { order: row.order },
-          on: { updatevalue: _vm.updatevalue }
+          attrs: { order: row.order, "prop-value": row },
+          on: { updatevalue: _vm.updatevalue, removeRow: _vm.removeRow }
         })
       }),
       _vm._v(" "),
@@ -5360,6 +5467,7 @@ var render = function() {
               attrs: {
                 title: "true",
                 description: "true",
+                rows: "true",
                 type: "edit",
                 route: "templates",
                 "page-title": "Edit Template",

@@ -25,13 +25,16 @@
         <div class="col-3">
             Columns:
         </div>
-        <div class="col-3">
-            <select v-model="columnsNumber" class="form-select my-1 my-md-0">
+        <div class="col-2">
+            <select @change="changeColumns()" v-model="columnsNumber" class="form-select my-1 my-md-0">
                 <option selected="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
                 <option value="4">4</option>
             </select>
+        </div>
+        <div class="col-1 text-end">
+            <button @click="removeRow()" type="button" class="btn btn-danger waves-effect waves-light"><i class="fe-x"></i></button>
         </div>
     </div>
 
@@ -42,6 +45,9 @@
                 <component-field
                     class="border"
                     required="true"
+                    @updatecomponent="updatecomponent"
+                    :order="column.order"
+                    :prop-value="column.component"
                 ></component-field>
             </div>
     </div>
@@ -71,22 +77,15 @@
             }
         },
         watch: {
-            "propValue": function() {
-                this.row = this.propValue;
-            },
-            "columnsNumber": function() {
-                this.row.columns = [];
-                for (let i = 0; i < this.columnsNumber; i++) {
-                    this.row.columns.push({
-                        order: i,
-                        component: null,
-                    });
-                }
-            },
-            "order": function() {
-                console.log("test");
-                // this.row.order = this.order;
-            },
+            // "columnsNumber": function() {
+            //     this.row.columns = [];
+            //     for (let i = 0; i < this.columnsNumber; i++) {
+            //         this.row.columns.push({
+            //             order: i,
+            //             component: "Select component",
+            //         });
+            //     }
+            // },
             "row": {
                 handler: function() {
                     this.$emit('updatevalue', this.row);
@@ -95,10 +94,31 @@
             }
         },
         methods: {
-            
+            updatecomponent(component) {
+                var index = this.row.columns.findIndex(function(column) {
+                    return column.order == component[1];
+                });
+                this.row.columns[index].component = component[0];
+            },
+            changeColumns(){
+                this.row.columns = [];
+                for (let i = 0; i < this.columnsNumber; i++) {
+                    this.row.columns.push({
+                        order: i,
+                        component: "Select component",
+                    });
+                }
+            },
+            removeRow(){
+                this.$emit('removeRow', this.order);
+            }
         },
         mounted() {
             this.row.order = this.order;
+            if (this.propValue) {
+                this.row = this.propValue;
+                this.columnsNumber = this.row.columns.length;
+            }
         }
     }
 </script>
