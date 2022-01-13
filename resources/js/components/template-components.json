@@ -1,0 +1,85 @@
+{
+    "hero" : {
+        "title": "Hero Header",
+        "key": "hero_header_component",
+        "inputs": [
+            {
+                "type": "image",
+                "key": "hero_image",
+                "label": "Image"
+            },
+            {
+                "type": "text",
+                "key": "hero_title",
+                "label": "Title"
+            },
+            {
+                "type": "text",
+                "key": "hero_subtitle",
+                "label": "Subtitle"
+            }
+        ]
+    },
+    "text_box" : {
+        "title": "Text Box",
+        "key": "text_box_component",
+        "inputs": [
+            {
+                "type": "text",
+                "key": "text_box_title",
+                "label": "Title"
+            },
+            {
+                "type": "text",
+                "key": "text_box_subtitle",
+                "label": "Subtitle"
+            },
+            {
+                "type": "textarea",
+                "key": "text_box_summary",
+                "label": "Short Summary"
+            }
+        ]
+    },
+    "content_box" : {
+        "title": "Content Box",
+        "key": "content_box_component",
+        "inputs": [
+            {
+                "type": "image",
+                "key": "content_box_image",
+                "label": "Content Box Image"
+            },
+            {
+                "type": "text",
+                "key": "content_box_title",
+                "label": "Title"
+            },
+            {
+                "type": "text",
+                "key": "content_box_title_url",
+                "label": "Title Url"
+            },
+            {
+                "type": "text",
+                "key": "content_box_subtitle_url",
+                "label": "Subtitle Url"
+            },
+            {
+                "type": "text",
+                "key": "content_box_subtitle",
+                "label": "Subtitle"
+            },
+            {
+                "type": "text",
+                "key": "content_box_btn_text",
+                "label": "Button Text"
+            },
+            {
+                "type": "text",
+                "key": "content_box_btn_link",
+                "label": "Button Link"
+            }
+        ]
+    }
+}

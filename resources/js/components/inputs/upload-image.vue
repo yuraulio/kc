@@ -1,0 +1,158 @@
+<template>
+  <div class="example-avatar" style="max-height:400px; width: 100%; overflow: hidden">
+    <div v-show="$refs[keyput] && $refs[keyput].dropActive" class="drop-active">
+      <h3>Drop files to upload</h3>
+    </div>
+    <div class="avatar-upload"  v-show="!edit">
+      <div class="text-center">
+        <label :name="'avatar'+ keyput" style="width: 100%">
+            <form method="post" class="dropzone dz-clickable" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
+                <div class="dz-message needsclick">
+                    <i class="h1 text-muted dripicons-cloud-upload"></i>
+                    <div class="text-center">
+        <file-upload
+          extensions="gif,jpg,jpeg,png,webp"
+          accept="image/png,image/gif,image/jpeg,image/webp"
+          :name="'avatar' + keyput"
+          :id="'avatar' + keyput"
+          post-action="/upload/post"
+          :drop="!edit"
+          v-model="files[keyput]"
+          @input-filter="inputFilter"
+          @input-file="inputFile"
+          :ref="keyput">
+        </file-upload>
+        <h3>Drop files here or click to upload.</h3>
+      </div>
+
+                    <span class="text-muted font-13">(This is just a demo dropzone. Selected files are
+                        <strong>not</strong> actually uploaded.)</span>
+                </div>
+            </form>
+        </label>
+      </div>
+      <div class="text-center">
+        <file-upload
+          extensions="gif,jpg,jpeg,png,webp"
+          accept="image/png,image/gif,image/jpeg,image/webp"
+          :name="'avatar' + keyput"
+          :id="'avatar' + keyput"
+          post-action="/upload/post"
+          :drop="!edit"
+          v-model="files[keyput]"
+          @input-filter="inputFilter"
+          @input-file="inputFile"
+          :ref="keyput">
+        </file-upload>
+      </div>
+    </div>
+
+    <div class="avatar-edit" v-if="files[keyput] != null && files[keyput].length && edit">
+      <div class="avatar-edit-image" v-if="files[keyput].length">
+        <img ref="editImage" :src="files[keyput][0].url" />
+      </div>
+      <div class="text-center p-4" style="margin-top: -100px;">
+          <button type="button" @click.prevent="$refs[keyput].clear" class="btn btn-danger waves-effect waves-light float-right"><i class="mdi mdi-close"></i> Cancel</button>
+        <!--<button type="submit" class="btn btn-primary" @click.prevent="editSave">Save</button>-->
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import Cropper from 'cropperjs'
+import FileUpload from 'vue-upload-component'
+export default {
+    props: ['keyput'],
+  components: {
+    FileUpload,
+  },
+
+  data() {
+    return {
+      files: [],
+      edit: false,
+      cropper: false,
+    }
+  },
+
+  mounted() {
+      console.log("keyput", this.$refs[this.keyput])
+  },
+
+  methods: {
+    inputFile(newFile, oldFile, prevent) {
+      this.$set(this.files, this.keyput, [newFile]);
+      console.log(this.files)
+      this.$forceUpdate();
+      this.edit = true;
+    },
+
+    inputFilter(newFile, oldFile, prevent) {
+      if (newFile && !oldFile) {
+        if (!/\.(gif|jpg|jpeg|png|webp)$/i.test(newFile.name)) {
+          this.alert('Your choice is not a picture')
+          return prevent()
+        }
+      }
+
+      if (newFile && (!oldFile || newFile.file !== oldFile.file)) {
+        newFile.url = ''
+        let URL = window.URL || window.webkitURL
+        if (URL && URL.createObjectURL) {
+          newFile.url = URL.createObjectURL(newFile.file)
+        }
+      }
+    }
+  }
+}
+</script>
+
+<style>
+.example-avatar .avatar-upload .rounded-circle {
+  width: 200px;
+  height: 200px;
+}
+.example-avatar .text-center .btn {
+  margin: 0 .5rem
+
+}
+.example-avatar .avatar-edit-image {
+    align-content: center;
+  max-width: 100%;
+  max-height: 400px;
+  object-fit:scale-down;
+}
+
+.example-avatar .avatar-edit-image img {
+    width: 100%; /* or any custom size */
+    height: 100%;
+    object-fit: contain;
+}
+
+.example-avatar .drop-active {
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  position: fixed;
+  z-index: 9999;
+  opacity: .6;
+  text-align: center;
+  background: #000;
+}
+
+.example-avatar .drop-active h3 {
+  margin: -.5em 0 0;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  font-size: 40px;
+  color: #fff;
+  padding: 0;
+}
+</style>

@@ -6,7 +6,7 @@
     <div>
 
         <div v-if="mode == 'list'">
-    
+
             <div class="card mb-2">
                 <div class="card-body">
                     <div class="row justify-content-between">
@@ -24,8 +24,8 @@
                     </div> <!-- end row -->
                 </div> <!-- end card-body-->
             </div> <!-- end card-->
-        
-            <row-box 
+
+            <row-box
                 v-for="category in categories"
                 v-bind:key="category.id"
                 :title="category.title"
@@ -74,15 +74,18 @@
                 :id="id"
             ></delete>
         </div>
-
+    <tc></tc>
     </div>
 </template>
 
 <script>
-
+    import tc from './tc.vue'
     export default {
+        components: {
+            tc
+        },
         props: {
-            
+
         },
         data() {
             return {
