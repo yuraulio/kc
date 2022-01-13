@@ -17,13 +17,13 @@
 <div class="border spacing mb-3 background">
     <div class="row">
         <div class="col-1">
-           Row:
+           <span class="mt-1 d-flex">Row:</span>
         </div>
         <div class="col-5">
           <input type="text" class="form-control" :placeholder="'Enter title'" v-model="row.description">
         </div>
         <div class="col-3">
-            Columns:
+            <span class="mt-1 d-flex">Columns:</span>
         </div>
         <div class="col-2">
             <select @change="changeColumns()" v-model="columnsNumber" class="form-select my-1 my-md-0">

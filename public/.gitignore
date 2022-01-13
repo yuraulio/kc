@@ -10,3 +10,4 @@
 /config/cdn_setup.php
 /admin_assets/*
 mix-manifest.json
+app.js
