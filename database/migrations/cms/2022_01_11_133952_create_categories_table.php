@@ -2,10 +2,9 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDatabaseNewkc2 extends Migration
+class CreateCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +13,12 @@ class CreateDatabaseNewkc2 extends Migration
      */
     public function up()
     {
-        DB::statement('CREATE DATABASE newkc2');
+        Schema::create('cms_categories', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->string("title");
+            $table->string("description")->nullable();
+        });
     }
 
     /**
@@ -24,6 +28,6 @@ class CreateDatabaseNewkc2 extends Migration
      */
     public function down()
     {
-        DB::statement('DROP DATABASE newkc2');
+        Schema::dropIfExists('cms_categories');
     }
 }

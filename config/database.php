@@ -56,22 +56,6 @@ return [
             'engine' => null,
         ],
 
-        'mysql2' => [
-            'driver' => 'mysql',
-            'host' => env('DB_HOST', (getenv("CLEARDB_DATABASE_URL") ? parse_url(getenv("CLEARDB_DATABASE_URL"))["host"] : '127.0.0.1')),
-            'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE2', (getenv("CLEARDB_DATABASE_URL") ? substr(parse_url(getenv("CLEARDB_DATABASE_URL"))["path"], 1) : 'forge')),
-            'username' => env('DB_USERNAME', (getenv("CLEARDB_DATABASE_URL") ? parse_url(getenv("CLEARDB_DATABASE_URL"))["user"] : 'forge')),
-            'password' => env('DB_PASSWORD', (getenv("CLEARDB_DATABASE_URL") ? parse_url(getenv("CLEARDB_DATABASE_URL"))["pass"] : '')),
-            'unix_socket' => env('DB_SOCKET', ''),
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-            'prefix' => '',
-            'prefix_indexes' => true,
-            'strict' => false,
-            'engine' => null,
-        ],
-
         'pgsql' => [
             'driver' => 'pgsql',
             'host' => env('DB_HOST', '127.0.0.1'),

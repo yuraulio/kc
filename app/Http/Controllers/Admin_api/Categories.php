@@ -35,7 +35,7 @@ class Categories extends Controller
     public function add(Request $request): JsonResponse
     {
         $request->validate([
-            'title' => 'required|unique:mysql2.categories',
+            'title' => 'required|unique:cms_categories',
         ]);
 
         try {
@@ -75,7 +75,7 @@ class Categories extends Controller
     public function edit(Request $request, int $id): JsonResponse
     {
         $request->validate([
-            'title' => 'required|unique:mysql2.categories',
+            'title' => 'required|unique:cms_categories',
         ]);
 
         try {

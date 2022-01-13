@@ -11,7 +11,7 @@ class Category extends Model
     use HasFactory;
     use SearchFilter;
 
-    protected $connection= 'mysql2';
+    protected $table = 'cms_categories';
     public $asYouType = true;
 
     /**

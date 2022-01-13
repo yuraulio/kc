@@ -13,7 +13,7 @@ class CreateTemplatesTable extends Migration
      */
     public function up()
     {
-        Schema::connection('mysql2')->create('templates', function (Blueprint $table) {
+        Schema::create('cms_templates', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->string("title");
@@ -29,6 +29,6 @@ class CreateTemplatesTable extends Migration
      */
     public function down()
     {
-        Schema::connection('mysql2')->dropIfExists('templates');
+        Schema::dropIfExists('cms_templates');
     }
 }

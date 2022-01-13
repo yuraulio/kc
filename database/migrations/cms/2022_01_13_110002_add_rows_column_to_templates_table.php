@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCategoriesTable extends Migration
+class AddRowsColumnToTemplatesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class CreateCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::connection('mysql2')->create('categories', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-            $table->string("title");
-            $table->string("description")->nullable();
+        Schema::table('cms_templates', function (Blueprint $table) {
+            $table->text("rows");
         });
     }
 
@@ -28,6 +25,8 @@ class CreateCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::connection('mysql2')->dropIfExists('categories');
+        Schema::table('cms_templates', function (Blueprint $table) {
+            $table->dropColumn('rows');
+        });
     }
 }
