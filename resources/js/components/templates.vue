@@ -46,6 +46,7 @@
             <add-edit
                 @updatemode="updatemode"
                 @refreshcategories="getData"
+                @created="created"
                 title="true"
                 description="true"
                 rows="true"
@@ -105,21 +106,45 @@
             }
         },
         methods: {
+            created($event) {
+                console.log($event);
+                this.templates.unshift($event);
+            },
             updatemode(variable){
                 if (variable == "delete") {
-                    Swal.fire({
+                     Swal.fire({
                         title: 'Are you sure?',
                         text: "You won't be able to revert this!",
                         icon: 'warning',
                         showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, delete it!'
+                        confirmButtonText: 'Yes, delete it!',
+                        showLoaderOnConfirm: true,
+                        preConfirm: () => {
+                            return axios
+                                .delete('/api/templates/delete/' + this.id)
+                                .then((response) => {
+                                    if (response.status == 200){
+                                        this.templates.splice(_.findIndex(this.templates, { 'id' : this.id }), 1);
+                                        this.$emit('updatemode', 'list');
+                                    }
+
+                                })
+                                .catch(error => {
+                                Swal.showValidationMessage(
+                                `Request failed: ${error}`
+                                )
+                            })
+                        },
+                        allowOutsideClick: () => !Swal.isLoading()
                         }).then((result) => {
-                        if (result.isConfirmed) {
-                            this.remove();
-                        }
-                     })
+                            if (result.isConfirmed) {
+                                Swal.fire(
+                                        'Deleted!',
+                                        'Item has been deleted.',
+                                        'success'
+                                    )
+                            }
+                        })
                 } else {
                     this.mode = variable;
                 }
@@ -142,31 +167,6 @@
                         this.loading = false;
                     });
             },
-            remove(){
-                this.errors = null;
-                axios
-                .delete('/api/templates/delete/' + this.id)
-                .then((response) => {
-                    if (response.status == 200){
-                        this.templates.splice(_.findIndex(this.templates, { 'id' : this.id }), 1);
-                        this.$emit('updatemode', 'list');
-                    }
-                    Swal.fire(
-                        'Deleted!',
-                        'Item has been deleted.',
-                        'success'
-                    )
-                })
-                .catch((error) => {
-                    console.log(error)
-                    Swal.fire(
-                        'Not Deleted!',
-                        'Deleteing has failed.',
-                        'error'
-                    )
-                    this.loading = false;
-                });
-            }
         },
         mounted() {
             this.getData();

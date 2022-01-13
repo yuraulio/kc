@@ -48,7 +48,7 @@ class Templates extends Controller
             $template->rows = $request->rows;
             $template->save();
 
-            return response()->json(['message' => 'success'], 200);
+            return response()->json($template, 200);
         } catch (Exception $e) {
             Log::error("Failed to add new template. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
@@ -90,7 +90,7 @@ class Templates extends Controller
             $template->rows = $request->rows;
             $template->save();
 
-            return response()->json(['message' => 'success'], 200);
+            return response()->json($template, 200);
         } catch (Exception $e) {
             Log::error("Failed to edit template. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);

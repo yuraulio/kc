@@ -19,7 +19,7 @@ class Categories extends Controller
     public function list(Request $request): JsonResponse
     {
         try {
-            $categories = Category::lookForOriginal($request->filter)->get();
+            $categories = Category::lookForOriginal($request->filter)->orderBy('created_at', 'desc')->get();
             return response()->json(['data' => $categories], 200);
         } catch (Exception $e) {
             Log::error("Failed to get categories. " . $e->getMessage());
@@ -44,7 +44,7 @@ class Categories extends Controller
             $category->description = $request->description;
             $category->save();
 
-            return response()->json(['message' => 'success'], 200);
+            return response()->json($category, 200);
         } catch (Exception $e) {
             Log::error("Failed to add new category. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
@@ -84,7 +84,7 @@ class Categories extends Controller
             $category->description = $request->description;
             $category->save();
 
-            return response()->json(['message' => 'success'], 200);
+            return response()->json($category, 200);
         } catch (Exception $e) {
             Log::error("Failed to edit category. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);

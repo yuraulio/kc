@@ -19,7 +19,15 @@ window.axios = require('axios').default;
 
 window.Swal = require('sweetalert2');
 var _ = require("lodash");
+import VModal from 'vue-js-modal'
+Vue.use(VModal)
+import VueToast from 'vue-toast-notification';
+// Import one of the available themes
+//import 'vue-toast-notification/dist/theme-default.css';
+import 'vue-toast-notification/dist/theme-sugar.css';
 
+Vue.use(VueToast);
+//Vue.$toast.open({/*
 import 'vue-loaders/dist/vue-loaders.css';
 import VueLoaders from 'vue-loaders';
 Vue.use(VueLoaders);
@@ -37,6 +45,7 @@ Vue.component('component-field', require('./components/inputs/component.vue').de
 Vue.component('dropdown', require('./components/inputs/dropdown.vue').default);
 Vue.component('pages', require('./components/pages.vue').default);
 Vue.component('page', require('./components/inputs/page.vue').default);
+//Vue.component('modal', require('./components/modal.vue').default);
 
 Vue.component('avatar', require('vue-avatar').default);
 

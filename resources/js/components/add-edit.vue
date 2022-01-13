@@ -7,8 +7,8 @@
 
         <div class="row">
             <div class="col-xl-12">
-                
-                <text-field 
+
+                <text-field
                     v-if="title"
                     title="Title"
                     @updatevalue="update_title"
@@ -16,7 +16,7 @@
                     required=1
                 ></text-field>
 
-                <text-field 
+                <text-field
                     v-if="description"
                     title="Description"
                     @updatevalue="update_description"
@@ -30,7 +30,7 @@
                     :prop-value="category_value"
                     route="categories"
                 ></dropdown>
-            
+
                 <rows
                     v-if="rows"
                     title="Content"
@@ -39,14 +39,14 @@
                     :prop-value="rows_value"
                 ></rows>
 
-                <page
+                <!--<page
                     v-if="page"
                     title="Content"
                     required=1
                     @updatevalue="update_page"
                     :prop-value="rows_value"
-                ></page>
-                
+                ></page>-->
+
 
             </div> <!-- end col-->
         </div>
@@ -58,8 +58,8 @@
 
         <div class="row mt-3">
             <div class="col-12 text-center">
-                <button v-if="type == 'new'" @click="add()" type="button" class="btn btn-success waves-effect waves-light m-1"><i class="fe-check-circle me-1"></i> Create</button>
-                <button v-if="type == 'edit'" @click="edit()" type="button" class="btn btn-success waves-effect waves-light m-1"><i class="mdi mdi-square-edit-outline me-1"></i> Edit</button>
+                <button v-if="type == 'new'" @click="add()" type="button" class="btn btn-success waves-effect waves-light m-1" :disabled="loading"><i v-if="!loading" class="fe-check-circle me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Create</button>
+                <button v-if="type == 'edit'" :disabled="loading" @click="edit()" type="button" class="btn btn-success waves-effect waves-light m-1"><i v-if="!loading" class="mdi mdi-square-edit-outline me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Edit</button>
                 <button @click="$emit('updatemode', 'list')" type="button" class="btn btn-light waves-effect waves-light m-1"><i class="fe-x me-1"></i> Cancel</button>
             </div>
         </div>
@@ -80,6 +80,7 @@
             route: String,
             type: String,
             id: Number,
+            data: {}
         },
         data() {
             return {
@@ -88,7 +89,8 @@
                 rows_value: null,
                 category_value: null,
                 errors: null,
-                test: null
+                test: null,
+                loading: false
             }
         },
         methods: {
@@ -106,6 +108,7 @@
             },
             add(){
                 this.errors = null;
+                this.loading = true;
                 axios
                 .post('/api/' + this.route + '/add',
                     {
@@ -117,16 +120,21 @@
                 )
                 .then((response) => {
                     if (response.status == 200){
-                        this.$emit('refreshcategories');
+                        //this.$emit('refreshcategories');
+                        this.$emit('created', response.data);
                         this.$emit('updatemode', 'list');
+                        this.$toast.success('Created Successfully!')
                     }
+                    this.loading = false;
                 })
                 .catch((error) => {
                     console.log(error)
                     this.errors = error.response.data.errors;
+                    this.loading = false;
                 });
             },
             edit(){
+                this.loading = true;
                 this.errors = null;
                 axios
                 .post('/api/' + this.route + '/edit/' + this.id,
@@ -139,12 +147,15 @@
                 )
                 .then((response) => {
                     if (response.status == 200){
-                        this.$emit('refreshcategories');
+                        this.route == 'categories' ? this.$emit('edited', response.data) : this.$emit('refreshcategories');
                         this.$emit('updatemode', 'list');
+                        this.$toast.success('Edited Successfully!')
+                        this.loading = false;
                     }
                 })
                 .catch((error) => {
                     console.log(error)
+                    this.loading = false;
                     this.errors = error.response.data.errors;
                 });
             },
@@ -169,7 +180,18 @@
         },
         mounted() {
             if (this.type == "edit"){
-                this.get();
+                if (this.data) {
+                    var data = this.data;
+                    this.title_value = data.title;
+                    this.description_value = data.description;
+                    if (data.rows){
+                        this.rows_value = JSON.parse(data.rows ?? "");
+                    }
+                    this.category_value = data.category_id;
+                } else {
+                    this.get()
+                }
+
             }
         }
     }

@@ -4,7 +4,33 @@
 
 <template>
     <div>
-
+        <modal name="create-modal" :resizable="true" height="auto" :adaptive="true">
+                <add-edit
+                    @updatemode="$modal.hide('create-modal');"
+                    @refreshcategories="getData"
+                    title="true"
+                    description="true"
+                    type="new"
+                    route="categories"
+                    @created="created"
+                    page-title="New Category"
+                ></add-edit>
+        </modal>
+        <modal name="edit-modal" :resizable="true" height="auto" :adaptive="true">
+                <add-edit
+                    @updatemode="$modal.hide('edit-modal');"
+                    @refreshcategories="getData"
+                    title="true"
+                    description="true"
+                    type="edit"
+                    route="categories"
+                    @edited="edited"
+                    :key="id"
+                    page-title="Edit Category"
+                    :data="lodash.find(categories, { 'id': id })"
+                    :id="id"
+                ></add-edit>
+        </modal>
         <div v-if="mode == 'list'">
 
             <div class="card mb-2">
@@ -18,7 +44,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="text-md-end mt-3 mt-md-0">
-                                <button @click="mode='new'" type="button" class="btn btn-danger waves-effect waves-light"><i class="mdi mdi-plus-circle me-1"></i> Add New</button>
+                                <button @click="$modal.show('create-modal');" type="button" class="btn btn-danger waves-effect waves-light"><i class="mdi mdi-plus-circle me-1"></i> Add New</button>
                             </div>
                         </div><!-- end col-->
                     </div> <!-- end row -->
@@ -41,31 +67,6 @@
             <div style="margin-top: 150px" class="text-center" v-else>
                 <vue-loaders-ball-grid-beat	 color="#6658dd" scale="1" class="mt-4 text-center"></vue-loaders-ball-grid-beat	>
             </div>
-        </div>
-
-        <div v-if="mode == 'new'">
-            <add-edit
-                @updatemode="updatemode"
-                @refreshcategories="getData"
-                title="true"
-                description="true"
-                type="new"
-                route="categories"
-                page-title="New Category"
-            ></add-edit>
-        </div>
-
-        <div v-if="mode == 'edit'">
-            <add-edit
-                @updatemode="updatemode"
-                @refreshcategories="getData"
-                title="true"
-                description="true"
-                type="edit"
-                route="categories"
-                page-title="Edit Category"
-                :id="id"
-            ></add-edit>
         </div>
 
         <div v-if="mode == 'delete'">
@@ -98,7 +99,8 @@
                 id: null,
                 title: null,
                 filter: "",
-                loading: false
+                loading: false,
+                lodash: _
             }
         },
         watch: {
@@ -107,6 +109,16 @@
             }
         },
         methods: {
+            created($event) {
+                console.log($event);
+                this.categories.unshift($event);
+                this.$modal.hide('create-modal');
+            },
+            edited($event) {
+                console.log($event);
+                this.categories.splice(_.findIndex(this.categories, { 'id': $event.id }), 1, $event);
+                this.$modal.hide('edit-modal');
+            },
             updatemode(variable){
                 if (variable == "delete") {
                     Swal.fire({
@@ -114,15 +126,38 @@
                         text: "You won't be able to revert this!",
                         icon: 'warning',
                         showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, delete it!'
+                        confirmButtonText: 'Yes, delete it!',
+                        showLoaderOnConfirm: true,
+                        preConfirm: () => {
+                            return axios
+                                .delete('/api/categories/delete/' + this.id)
+                                .then((response) => {
+                                    if (response.status == 200){
+                                        this.categories.splice(_.findIndex(this.categories, { 'id' : this.id }), 1);
+                                        this.$emit('updatemode', 'list');
+                                    }
+
+                                })
+                                .catch(error => {
+                                Swal.showValidationMessage(
+                                `Request failed: ${error}`
+                                )
+                            })
+                        },
+                        allowOutsideClick: () => !Swal.isLoading()
                         }).then((result) => {
-                        if (result.isConfirmed) {
-                            this.remove();
-                        }
-                     })
-                } else {
+                            if (result.isConfirmed) {
+                                Swal.fire(
+                                        'Deleted!',
+                                        'Item has been deleted.',
+                                        'success'
+                                    )
+                            }
+                        })
+                } else if (variable == "edit") {
+                    this.$modal.show('edit-modal');
+                }
+                else {
                     this.mode = variable;
                 }
             },
@@ -144,31 +179,6 @@
                         this.loading = false;
                     });
             },
-            remove(){
-                this.errors = null;
-                axios
-                .delete('/api/categories/delete/' + this.id)
-                .then((response) => {
-                    if (response.status == 200){
-                        this.categories.splice(_.findIndex(this.categories, { 'id' : this.id }), 1);
-                        this.$emit('updatemode', 'list');
-                    }
-                    Swal.fire(
-                        'Deleted!',
-                        'Item has been deleted.',
-                        'success'
-                    )
-                })
-                .catch((error) => {
-                    console.log(error)
-                    Swal.fire(
-                        'Not Deleted!',
-                        'Deleteing has failed.',
-                        'error'
-                    )
-                    this.loading = false;
-                });
-            }
         },
         mounted() {
             this.getData();
