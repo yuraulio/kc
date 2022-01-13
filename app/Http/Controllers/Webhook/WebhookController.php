@@ -97,7 +97,7 @@ class WebhookController extends BaseWebhookController
 			}else{
 
 				//$transaction = $user->events->where('id',$eventId)->first()->transactionsByUser($user->id)->first();
-				$transaction = $user->events_for_user_list->where('id',$eventId)->first()->transactionsByUser($user->id)->first();
+				$transaction = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first()->transactionsByUser($user->id)->first();
 				
 				if(!$transaction){
 					
