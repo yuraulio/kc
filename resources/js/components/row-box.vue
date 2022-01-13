@@ -33,7 +33,7 @@
                 <div class="col-sm-2">
                     <div class="text-sm-end">
                         <a @click="edit()" href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
-                        <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
+                        <a @click="remove()" href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
                     </div>
                 </div> <!-- end col-->
             </div> <!-- end row -->
@@ -58,7 +58,13 @@
         methods: {
             edit(){
                 this.$emit('updateid', this.id);
+                this.$emit('updatetitle', this.title);
                 this.$emit('updatemode', 'edit');
+            },
+            remove(){
+                this.$emit('updateid', this.id);
+                this.$emit('updatetitle', this.title);
+                this.$emit('updatemode', 'delete');
             }
         },
         mounted() {

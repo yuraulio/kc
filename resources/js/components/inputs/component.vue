@@ -1,8 +1,12 @@
 <template>
 
-<div class="mb-3">
-    <label for="projectname" class="form-label">{{title}} <span v-if="required">*</span> </label>
-    <input @input="$emit('updatevalue', value)" type="text" class="form-control" :placeholder="'Enter ' + title" v-model="value">
+<div >
+    <select v-model="value" class="form-select my-1 my-md-0">
+        <option selected="">Select component</option>
+        <option value="Component2">Component1</option>
+        <option value="Component3">Component2</option>
+        <option value="Component4">Component3</option>
+    </select>
 </div>
 
 </template>
@@ -10,13 +14,12 @@
 <script>
     export default {
         props: {
-            title: String,
-            propValue: "",
+            propValue: null,
             required: false
         },
         data() {
             return {
-                value: "",
+                value: "Select component",
             }
         },
         watch: {

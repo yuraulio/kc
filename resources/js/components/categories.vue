@@ -13,7 +13,7 @@
                         <div class="col-auto">
                             <label for="inputPassword2" class="visually-hidden">Search</label>
                             <div class="me-3">
-                                <input type="search" class="form-control my-1 my-md-0" id="inputPassword2" placeholder="Search...">
+                                <input v-model="filter" type="search" class="form-control my-1 my-md-0" id="inputPassword2" placeholder="Search...">
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -33,6 +33,7 @@
                 @updatemode="updatemode"
                 :id="category.id"
                 @updateid="updateid"
+                @updatetitle="updatetitle"
             >
             </row-box>
 
@@ -63,6 +64,17 @@
             ></add-edit>
         </div>
 
+        <div v-if="mode == 'delete'">
+            <delete
+                @updatemode="updatemode"
+                @refreshcategories="getData"
+                :title="title"
+                route="categories"
+                page-title="Delete Category"
+                :id="id"
+            ></delete>
+        </div>
+
     </div>
 </template>
 
@@ -77,6 +89,13 @@
                 mode: "list",
                 categories: [],
                 id: null,
+                title: null,
+                filter: "",
+            }
+        },
+        watch: {
+            filter: function() {
+                this.getData();
             }
         },
         methods: {
@@ -86,8 +105,11 @@
             updateid(variable){
                 this.id = variable;
             },
+            updatetitle(variable){
+                this.title = variable;
+            },
             getData(){
-                axios.get('/api/categories/')
+                axios.get('/api/categories?filter=' + this.filter)
                     .then((response) => {
                         this.categories = response.data["data"];
                     })

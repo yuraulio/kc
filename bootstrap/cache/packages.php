@@ -131,6 +131,13 @@
       0 => 'Laravel\\Sail\\SailServiceProvider',
     ),
   ),
+  'laravel/scout' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Laravel\\Scout\\ScoutServiceProvider',
+    ),
+  ),
   'laravel/tinker' => 
   array (
     'providers' => 
@@ -198,6 +205,13 @@
     'aliases' => 
     array (
       'Sentry' => 'Sentry\\Laravel\\Facade',
+    ),
+  ),
+  'teamtnt/laravel-scout-tntsearch-driver' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'TeamTNT\\Scout\\TNTSearchScoutServiceProvider',
     ),
   ),
   'vemcogroup/laravel-sparkpost-driver' => 
