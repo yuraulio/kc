@@ -23,13 +23,22 @@
                     :prop-value="description_value"
                 ></text-field>
 
-                <dropdown
+                <multidropdown
                     v-if="category"
-                    title="Category"
+                    title="Template"
+                    :multi="false"
+                    @updatevalue="update_template"
+                    :prop-value="template_value"
+                    route="templates"
+                ></multidropdown>
+
+                <multidropdown
+                    v-if="category"
+                    title="Categories"
                     @updatevalue="update_category"
                     :prop-value="category_value"
                     route="categories"
-                ></dropdown>
+                ></multidropdown>
 
                 <rows
                     v-if="rows"
@@ -49,6 +58,10 @@
 
 
             </div> <!-- end col-->
+        </div>
+
+        <div v-if="category">
+            <tc v-if="template_value" :template="template_value"></tc>
         </div>
         <!-- end row -->
 
@@ -70,7 +83,10 @@
 </template>
 
 <script>
+import multidropdown from './inputs/multidropdown.vue';
+import Tc from './tc.vue';
     export default {
+  components: { multidropdown, Tc },
         props: {
             pageTitle: String,
             title: String,
@@ -90,6 +106,7 @@
                 category_value: null,
                 errors: null,
                 test: null,
+                template_value: null,
                 loading: false
             }
         },
@@ -106,6 +123,9 @@
             },
             update_category(value){
                 this.category_value = value;
+            },
+            update_template(value){
+                this.template_value = value;
             },
             add(){
                 this.errors = null;

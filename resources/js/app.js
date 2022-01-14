@@ -27,6 +27,10 @@ import VueToast from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 
 Vue.use(VueToast);
+import Multiselect from 'vue-multiselect'
+
+  // register globally
+  Vue.component('multiselect', Multiselect)
 //Vue.$toast.open({/*
 import 'vue-loaders/dist/vue-loaders.css';
 import VueLoaders from 'vue-loaders';

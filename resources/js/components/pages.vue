@@ -1,12 +1,14 @@
-vue<style scoped>
+<style scoped>
 
 </style>
 
 <template>
     <div>
+        <div class="row">
 
+        </div>
         <div v-if="mode == 'list'">
-    
+
             <div class="card mb-2">
                 <div class="card-body">
                     <div class="row justify-content-between">
@@ -24,8 +26,8 @@ vue<style scoped>
                     </div> <!-- end row -->
                 </div> <!-- end card-body-->
             </div> <!-- end card-->
-        
-            <row-box 
+
+            <row-box
                 v-for="page in pages"
                 v-bind:key="page.id"
                 :title="page.title"
@@ -84,7 +86,7 @@ vue<style scoped>
 
     export default {
         props: {
-            
+
         },
         data() {
             return {
@@ -114,6 +116,7 @@ vue<style scoped>
                 axios.get('/api/pages?filter=' + this.filter)
                     .then((response) => {
                         this.pages = response.data["data"];
+                        console.log(this.pages)
                     })
                     .catch((error) => {
                         console.log(error)
