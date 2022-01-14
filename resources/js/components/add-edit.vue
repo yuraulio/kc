@@ -44,7 +44,7 @@
                     v-if="rows"
                     title="Content"
                     required=1
-                    
+                    @updatevalue="update_rows"
                     :prop-value="rows_value"
                 ></rows>
 
@@ -130,7 +130,6 @@ import Tc from './tc.vue';
                 this.description_value = value;
             },
             update_rows(value){
-                console.log("updated");
                 this.rows_value = value;
             },
             update_category(value){
@@ -223,7 +222,7 @@ import Tc from './tc.vue';
                     this.title_value = data.title;
                     this.description_value = data.description;
                     if (data.rows){
-                        // this.rows_value = JSON.parse(data.rows);
+                        this.rows_value = JSON.parse(data.rows);
                     }
                     this.category_value = data.category_id;
                 } else {
