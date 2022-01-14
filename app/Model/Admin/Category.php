@@ -24,11 +24,8 @@ class Category extends Model
         return $this->toArray();
     }
 
-    /**
-     * Get pages for category.
-     */
     public function pages()
     {
-        return $this->hasMany(Page::class, "category_id");
+        return $this->belongsToMany(Page::class, 'cms_link_pages_categories', 'category_id', 'page_id');
     }
 }

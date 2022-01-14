@@ -45,10 +45,12 @@ class Pages extends Controller
             $page = new Page();
             $page->title = $request->title;
             $page->description = $request->description;
-            $page->category_id = $request->category_id;
+            $page->template_id = $request->template_id;
             $page->save();
 
-            return response()->json(['message' => 'success'], 200);
+            $page->categories()->sync(collect($request->category_id ?? [])->pluck('id')->toArray());
+
+            return response()->json($page, 200);
         } catch (Exception $e) {
             Log::error("Failed to add new page. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
