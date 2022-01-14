@@ -33,7 +33,7 @@
         <div class="modal-background">
             <h4 class="pt-3 mt-0">Select Component</h4>
             <div class="row p-3">
-                <div @click="selectComponent('hero_header_component', 'fas fa-expand', 'Hero')" class="col-3">
+                <div @click="selectComponent('hero', 'fas fa-expand', 'Hero')" class="col-3">
                     <div class="card mb-0" >
                         <i class="fas fa-expand text-center p-2"></i>
                         <div class="card-body">
@@ -42,7 +42,7 @@
                     </div>
                 </div>
 
-                <div @click="selectComponent('text_box_component', 'fas fa-pen', 'Text')" class="col-3">
+                <div @click="selectComponent('text_box', 'fas fa-pen', 'Text')" class="col-3">
                     <div class="card mb-0" >
                         <i class="fas fa-pen text-center p-2"></i>
                         <div class="card-body">
@@ -51,7 +51,7 @@
                     </div>
                 </div>
 
-                <div @click="selectComponent('content_box_component', 'fas fa-stop', 'Feature')" class="col-3">
+                <div @click="selectComponent('content_box', 'fas fa-stop', 'Feature')" class="col-3">
                     <div class="card mb-0" >
                         <i class="fas fa-stop text-center p-2"></i>
                         <div class="card-body">
