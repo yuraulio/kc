@@ -61,6 +61,8 @@
                     :id="category.id"
                     @updateid="updateid"
                     @updatetitle="updatetitle"
+                    user="anto cabraja"
+                    :pages="category.pages"
                 >
                 </row-box>
             </div>
@@ -110,12 +112,10 @@
         },
         methods: {
             created($event) {
-                console.log($event);
                 this.categories.unshift($event);
                 this.$modal.hide('create-modal');
             },
             edited($event) {
-                console.log($event);
                 this.categories.splice(_.findIndex(this.categories, { 'id': $event.id }), 1, $event);
                 this.$modal.hide('edit-modal');
             },

@@ -43,11 +43,13 @@
     <div class="row">
             <div v-for="column in row.columns" :class="'col-md-' + (12/columnsNumber)">
                 <component-field
-                    class="border"
+                    class="border text-center"
                     required="true"
                     @updatecomponent="updatecomponent"
                     :order="column.order"
-                    :prop-value="column.component"
+                    :prop-value="column.value"
+                    :prop-icon="column.component_icon"
+                    :prop-title="column.title"
                 ></component-field>
             </div>
     </div>
@@ -71,7 +73,9 @@
                     description: "",
                     columns: [{
                         order: 0,
-                        component: null,
+                        value: null,
+                        component_icon: null,
+                        title: null,
                     }],
                 },
             }
@@ -89,14 +93,19 @@
                 var index = this.row.columns.findIndex(function(column) {
                     return column.order == component[1];
                 });
-                this.row.columns[index].component = component[0];
+                // console.log(component[0]);
+                this.row.columns[index].value = component[0];
+                this.row.columns[index].component_icon = component[2];
+                this.row.columns[index].title = component[3];
             },
             changeColumns(){
                 this.row.columns = [];
                 for (let i = 0; i < this.columnsNumber; i++) {
                     this.row.columns.push({
                         order: i,
-                        component: "Select component",
+                        value: null,
+                        component_icon: null,
+                        title: null,
                     });
                 }
             },

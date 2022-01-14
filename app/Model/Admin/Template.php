@@ -23,4 +23,12 @@ class Template extends Model
     {
         return $this->toArray();
     }
+
+    /**
+     * Get pages.
+     */
+    public function pages()
+    {
+        return $this->hasMany(Page::class, "template_id");
+    }
 }

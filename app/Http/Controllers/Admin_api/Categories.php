@@ -7,6 +7,7 @@ use App\Model\Admin\Category;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class Categories extends Controller
@@ -19,7 +20,7 @@ class Categories extends Controller
     public function list(Request $request): JsonResponse
     {
         try {
-            $categories = Category::lookForOriginal($request->filter)->orderBy('created_at', 'desc')->get();
+            $categories = Category::lookForOriginal($request->filter)->orderBy('created_at', 'desc')->get()->load("pages");
             return response()->json(['data' => $categories], 200);
         } catch (Exception $e) {
             Log::error("Failed to get categories. " . $e->getMessage());
@@ -34,6 +35,7 @@ class Categories extends Controller
      */
     public function add(Request $request): JsonResponse
     {
+        Log::debug($request->user());
         $request->validate([
             'title' => 'required|unique:cms_categories',
         ]);

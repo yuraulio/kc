@@ -21,7 +21,7 @@ class Templates extends Controller
     public function list(Request $request): JsonResponse
     {
         try {
-            $templates = Template::lookForOriginal($request->filter)->get();
+            $templates = Template::lookForOriginal($request->filter)->get()->load("pages");
             return response()->json(['data' => $templates], 200);
         } catch (Exception $e) {
             Log::error("Failed to get templates. " . $e->getMessage());

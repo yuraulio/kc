@@ -32,6 +32,9 @@ import 'vue-loaders/dist/vue-loaders.css';
 import VueLoaders from 'vue-loaders';
 Vue.use(VueLoaders);
 
+import UUID from "vue-uuid";
+Vue.use(UUID);
+
 Vue.component('dashboard-widget', require('./components/dashboard-widget.vue').default);
 Vue.component('templates', require('./components/templates.vue').default);
 Vue.component('row-box', require('./components/row-box.vue').default);

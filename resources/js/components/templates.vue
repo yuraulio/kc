@@ -34,6 +34,8 @@
                 :id="template.id"
                 @updateid="updateid"
                 @updatetitle="updatetitle"
+                user="anto cabraja"
+                :pages="template.pages"
             >
             </row-box>
             </div>

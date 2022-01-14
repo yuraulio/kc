@@ -23,4 +23,12 @@ class Category extends Model
     {
         return $this->toArray();
     }
+
+    /**
+     * Get pages for category.
+     */
+    public function pages()
+    {
+        return $this->hasMany(Page::class, "category_id");
+    }
 }
