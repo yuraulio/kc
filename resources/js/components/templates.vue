@@ -105,7 +105,7 @@
         watch: {
             filter: function() {
                 this.getData();
-            }
+            },
         },
         methods: {
             created($event) {

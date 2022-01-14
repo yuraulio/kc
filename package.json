@@ -10,6 +10,7 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "devDependencies": {
+        "@ckeditor/ckeditor5-alignment": "^31.1.0",
         "axios": "^0.21.1",
         "bootstrap": "^4.0.0",
         "cross-env": "^5.1",
@@ -31,6 +32,8 @@
         "webpack-dev-server": "^4.0.0"
     },
     "dependencies": {
+        "@ckeditor/ckeditor5-build-classic": "^31.1.0",
+        "@ckeditor/ckeditor5-vue2": "^1.0.5",
         "annyang": "^2.6.1",
         "buffer": "^6.0.3",
         "cropperjs": "^1.5.12",
@@ -62,6 +65,7 @@
         "vue-touch": "^2.0.0-beta.4",
         "vue-upload-component": "^2.8.22",
         "vue-uuid": "^2.0.2",
-        "vue2-filters": "^0.12.0"
+        "vue2-filters": "^0.12.0",
+        "vuedraggable": "^2.24.3"
     }
 }

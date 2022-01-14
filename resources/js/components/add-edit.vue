@@ -61,7 +61,18 @@
         </div>
 
         <div v-if="category">
-            <tc v-if="template_value" :template="template_value"></tc>
+            <tc ref="tc" :template="template_value"></tc>
+            <label style="width: 100%">
+            <form @click.prevent="$emit('add-custom-component')" class="dropzone dz-clickable" style="min-height:100px" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
+                <div class="dz-message needsclick" style="margin: 0px !important">
+                    <i class="h1 text-muted dripicons-view-apps"></i>
+                    <div class="text-center">
+                    <span class="text-muted font-13">
+                        <strong>Click to Add Custom Component</strong></span>
+                </div>
+                </div>
+            </form>
+        </label>
         </div>
         <!-- end row -->
 
@@ -96,7 +107,8 @@ import Tc from './tc.vue';
             route: String,
             type: String,
             id: Number,
-            data: {}
+            data: {},
+            additionalTemplates: {}
         },
         data() {
             return {
@@ -126,6 +138,9 @@ import Tc from './tc.vue';
             },
             update_template(value){
                 this.template_value = value;
+            },
+            rearange() {
+                this.$refs.tc.rearange();
             },
             add(){
                 this.errors = null;
@@ -215,6 +230,16 @@ import Tc from './tc.vue';
                     this.get()
                 }
 
+            }
+        },
+        watch: {
+            additionalTemplates() {
+                if (this.template_value) {
+                    this.template_value.concat(this.additionalTemplates)
+                } else {
+                    this.template_value = this.additionalTemplates
+                    console.log('TM', this.template_value)
+                }
             }
         }
     }

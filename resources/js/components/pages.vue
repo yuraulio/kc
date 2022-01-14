@@ -4,8 +4,86 @@
 
 <template>
     <div>
-        <div class="row">
 
+        <modal name="component-modal" :resizable="true" height="auto" :adaptive="true">
+        <div class="p-4 row">
+            <div class="col-md-6 col-xl-6">
+                <div @click="selectComponent('text_editor')" class="widget-rounded-circle card bg-grey">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <div class="avatar-lg mt-2">
+                                    <i style="font-size: 4em" class="h1 text-muted  dripicons-document-edit"></i>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h5 class="mb-1 mt-2 font-16">Rich Text</h5>
+                                <p class="mb-2 text-muted">The Editor</p>
+                            </div>
+                        </div> <!-- end row-->
+                    </div>
+                </div> <!-- end widget-rounded-circle-->
+            </div> <!-- end col-->
+
+            <div class="col-md-6 col-xl-6">
+                <div @click="selectComponent('content_box')" class="widget-rounded-circle card bg-grey">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <div class="avatar-lg mt-2">
+                                    <i style="font-size: 4em" class="h1 text-muted dripicons-article"></i>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h5 class="mb-1 mt-2 font-16">Content Box</h5>
+                                <p class="mb-2 text-muted">Teaser</p>
+                            </div>
+                        </div> <!-- end row-->
+                    </div>
+                </div> <!-- end widget-rounded-circle-->
+            </div> <!-- end col-->
+
+            <div class="col-md-6 col-xl-6">
+                <div @click="selectComponent('hero')" class="widget-rounded-circle card bg-grey">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <div class="avatar-lg mt-2">
+                                    <i style="font-size: 4em" class="h1 text-muted dripicons-monitor"></i>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h5 class="mb-1 mt-2 font-16">Hero Header</h5>
+                                <p class="mb-2 text-muted">Page header</p>
+                            </div>
+                        </div> <!-- end row-->
+                    </div>
+                </div> <!-- end widget-rounded-circle-->
+            </div> <!-- end col-->
+
+            <div class="col-md-6 col-xl-6">
+                <div @click="selectComponent('image')" class="widget-rounded-circle card bg-grey">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <div class="avatar-lg mt-2">
+                                    <i style="font-size: 4em" class="h1 text-muted  dripicons-photo-group
+                                            "></i>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h5 class="mb-1 mt-2 font-16">Image</h5>
+                                <p class="mb-2 text-muted">Full size img</p>
+                            </div>
+                        </div> <!-- end row-->
+                    </div>
+                </div> <!-- end widget-rounded-circle-->
+            </div> <!-- end col-->
+            <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions" @click="rearange()" class="btn btn-lg btn-secondary waves-effect waves-light">Rearange</button>
+        </div>
+        </modal>
+        <div class="row">
+            <!-- <page></page> -->
         </div>
         <div v-if="mode == 'list'">
 
@@ -27,6 +105,7 @@
                 </div> <!-- end card-body-->
             </div> <!-- end card-->
 
+            <div v-if="!isLoading">
             <row-box
                 v-for="page in pages"
                 v-bind:key="page.id"
@@ -38,18 +117,24 @@
                 @updatetitle="updatetitle"
             >
             </row-box>
-
+            </div>
+            <div style="margin-top: 150px" class="text-center" v-else>
+                <vue-loaders-ball-grid-beat	 color="#6658dd" scale="1" class="mt-4 text-center"></vue-loaders-ball-grid-beat	>
+            </div>
         </div>
 
         <div v-if="mode == 'new'">
             <add-edit
+                ref="adit"
                 @updatemode="updatemode"
                 @refreshcategories="getData"
+                @add-custom-component="addCustomComponent"
                 title="true"
                 description="true"
                 category="true"
                 type="new"
                 route="pages"
+                :additionalTemplates="additionalTemplates"
                 page-title="New Page"
             ></add-edit>
         </div>
@@ -81,10 +166,13 @@
 
     </div>
 </template>
-
 <script>
+import page from './page.vue'
 
     export default {
+        components: {
+            page
+        },
         props: {
 
         },
@@ -95,6 +183,8 @@
                 id: null,
                 title: null,
                 filter: "",
+                isLoading: false,
+                additionalTemplates: []
             }
         },
         watch: {
@@ -103,6 +193,33 @@
             }
         },
         methods: {
+            selectComponent(component) {
+                var tm = {
+
+                "rows": [
+                                    {
+                                    "order":1,
+                                    "description":"",
+                                    "columns":[
+                                        {
+                                            "order":0,
+                                            "component": component
+                                        }
+                                    ]
+                                    }
+                ]
+                };
+                //this.additionalTemplates = tm;
+                this.$modal.hide("component-modal")
+            },
+            addCustomComponent() {
+                this.$modal.show("component-modal")
+            },
+            rearange() {
+                this.$modal.hide("component-modal")
+                console.log(this.$refs.adit)
+                this.$refs.adit.rearange();
+            },
             updatemode(variable){
                 this.mode = variable;
             },
@@ -113,13 +230,16 @@
                 this.title = variable;
             },
             getData(){
+                this.isLoading = true;
                 axios.get('/api/pages?filter=' + this.filter)
                     .then((response) => {
                         this.pages = response.data["data"];
                         console.log(this.pages)
+                        this.isLoading = false;
                     })
                     .catch((error) => {
                         console.log(error)
+                        this.isLoading = false;
                     });
             },
         },
@@ -128,3 +248,14 @@
         }
     }
 </script>
+
+<style>
+.widget-rounded-circle {
+    transition: box-shadow .5s;
+    cursor: pointer;
+    box-shadow: 0 0 11px rgba(33,33,33,.2);
+}
+.widget-rounded-circle:hover {
+  box-shadow: 0 0 11px rgba(33,33,33,.4);
+}
+</style>

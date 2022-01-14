@@ -31,28 +31,15 @@
             </form>
         </label>
       </div>
-      <div class="text-center">
-        <file-upload
-          extensions="gif,jpg,jpeg,png,webp"
-          accept="image/png,image/gif,image/jpeg,image/webp"
-          :name="'avatar' + keyput"
-          :id="'avatar' + keyput"
-          post-action="/upload/post"
-          :drop="!edit"
-          v-model="files[keyput]"
-          @input-filter="inputFilter"
-          @input-file="inputFile"
-          :ref="keyput">
-        </file-upload>
-      </div>
+
     </div>
 
     <div class="avatar-edit" v-if="files[keyput] != null && files[keyput].length && edit">
-      <div class="avatar-edit-image" v-if="files[keyput].length">
+      <div class="avatar-edit-image" v-if="files[keyput].length && files[keyput][0]">
         <img ref="editImage" :src="files[keyput][0].url" />
       </div>
       <div class="text-center p-4" style="margin-top: -100px;">
-          <button type="button" @click.prevent="$refs[keyput].clear" class="btn btn-danger waves-effect waves-light float-right"><i class="mdi mdi-close"></i> Cancel</button>
+          <button type="button" @click.prevent="$set(files, keyput, []); $refs[keyput].clear" class="btn btn-danger waves-effect waves-light float-right"><i class="mdi mdi-close"></i> Cancel</button>
         <!--<button type="submit" class="btn btn-primary" @click.prevent="editSave">Save</button>-->
       </div>
     </div>
@@ -82,10 +69,17 @@ export default {
 
   methods: {
     inputFile(newFile, oldFile, prevent) {
-      this.$set(this.files, this.keyput, [newFile]);
-      console.log(this.files)
-      this.$forceUpdate();
-      this.edit = true;
+        if (newFile) {
+            this.$set(this.files, this.keyput, [newFile]);
+            console.log(this.files)
+            this.edit = true;
+            this.$forceUpdate();
+            this.$emit('updatedimage', newFile.url);
+        } else {
+            this.edit = false;
+        }
+
+
     },
 
     inputFilter(newFile, oldFile, prevent) {

@@ -81,5 +81,27 @@
                 "label": "Button Link"
             }
         ]
+    },
+    "text_editor" : {
+        "title": "Rich Text Editor",
+        "key": "text_editor_component",
+        "inputs": [
+            {
+                "type": "text_editor",
+                "key": "rich_text_box_title",
+                "label": "Text"
+            }
+        ]
+    },
+    "image" : {
+        "title": "Full size image",
+        "key": "full_sixe_image_component",
+        "inputs": [
+            {
+                "type": "image",
+                "key": "full_size_image",
+                "label": "Image"
+            }
+        ]
     }
 }
