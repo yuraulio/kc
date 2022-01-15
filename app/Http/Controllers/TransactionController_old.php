@@ -98,28 +98,36 @@ class TransactionController extends Controller
             $from = date($start_date);
             $to = date($end_date);
 
-            $transactions = Transaction::with('user.statisticGroupByEvent','user.events','user.ticket','subscription','event','event.delivery','event.category')->whereBetween('created_at', [$from,$to])->orderBy('created_at','desc')->get();
+            $transactions = Transaction::with('user.statisticGroupByEvent','user.events','user.ticket','subscription','event','event.delivery','event.category','user')->whereBetween('created_at', [$from,$to])->orderBy('created_at','desc')->get();
 
         }else{
             //$transactions = Transaction::with('user.statisticGroupByEvent','user.events','user.ticket','subscription','event','event.delivery','event.category')->where('status', 1)->orderBy('created_at','desc')->get();
             $transactions = Transaction::with('user.statisticGroupByEvent','user.events','user.ticket','subscription','event','event.delivery','event.category')
             ->where(function ($q)  {
 
-                $q->doesntHave('subscription');
+                $q
                 
-                $q->whereHas('user',function($q1){
+                ->has('user')
+
+                /*->whereHas('user',function($q1){
                     return $q1->whereHas('ticket');
-                });
+                })*/
                
-                $q->whereHas('event',function($q1){
+                /*->whereHas('event',function($q1){
                     return $q1->has('category');
-                });
+                })*/
+                
+                //->doesntHave('subscription')
+                ;
                
             })
             ->where('status', 1)
             ->orderBy('created_at','desc')
             ->get();
         }
+
+        dd('fdsf');
+
         $earlyCount = 0;
         $data['transactions'] = [];
         foreach($transactions as $transaction){
