@@ -70,6 +70,7 @@ class CronjobsController extends Controller
             $data['subject'] = 'Knowcrunch - ' . $data['firstName'] .' your payment failed';
             $data['amount'] = round($invoiceUser->amount,2);
             $data['template'] = 'emails.user.failed_payment';
+            $data['userLink'] = url('/') . '/admin/user/' . $invoiceUser->user->first()->id . '/edit'; 
             //$data['installments'] =
 
             $invoiceUser->user->first()->notify(new FailedPayment($data));

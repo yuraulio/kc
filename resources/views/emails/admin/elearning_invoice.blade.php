@@ -186,7 +186,7 @@
          </tr>
          <tr>
             <td align="" class="r19-c">
-               <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r6-o" style="table-layout: fixed; width: 100%;">
+               <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r6-o" style="table-layout: fixed; width: 600px; margin:auto;">
                   <!-- -->
                   <tr>
                      <td valign="top" class="r20-i" style="background-color: #eff2f7;">
