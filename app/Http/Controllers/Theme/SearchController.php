@@ -77,15 +77,15 @@ class SearchController extends Controller
                 $q->whereHas('category', function ($query) use ($data) {
                     $query->where('name', 'like', '%' . $data['search_term'] . '%');
                 })
-                    ->orWhereHas('topic', function ($query) use ($data) {
-                        $query->where('title', 'like', '%' . $data['search_term'] . '%');
-                    })
-                    ->orWhereHas('city', function ($query) use ($data) {
-                        $query->where('name', 'like', '%' . $data['search_term'] . '%');
-                    })
-                    ->orWhereHas('lessons', function ($query) use ($data) {
-                        $query->where('title', 'like', '%' . $data['search_term'] . '%');
-                    });
+                ->orWhereHas('topic', function ($query) use ($data) {
+                    $query->where('title', 'like', '%' . $data['search_term'] . '%');
+                })
+                ->orWhereHas('city', function ($query) use ($data) {
+                    $query->where('name', 'like', '%' . $data['search_term'] . '%');
+                })
+                ->orWhereHas('lessons', function ($query) use ($data) {
+                    $query->where('title', 'like', '%' . $data['search_term'] . '%');
+                });
             })
             ->whereStatus(0)
             ->wherePublished(1)
