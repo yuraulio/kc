@@ -578,6 +578,7 @@ Route::group(['middleware' => ['web']], function () {
         return redirect('contact');
     });
     Route::post('contact-us', ['as' => 'contactUs', 'uses' => 'Theme\ContactUsController@sendEnquery']);
+    Route::post('corporate', 'Theme\ContactUsController@corporate')->name('corporate');
     Route::post('applyforbe', ['as' => 'beaninstructor', 'uses' => 'Theme\ContactUsController@beaninstructor']);
 });
 

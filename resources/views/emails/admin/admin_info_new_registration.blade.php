@@ -1,56 +1,8 @@
 <?php
-    /**
-     * Inform admin about a new company registration
-     * @user : the new registration user (object)
-     * @account : the account (array), has the following linked arrays
-     * @account['default_store']
-     * @account['users']
-     */
-?>
-@extends('emails.email_master_tpl')
-@section('content')
-<?php $res = $trans->payment_response;
-	if ($res) {
-		$res = json_decode($res, true);
-	}
- ?>
-
-<h1>
-New registration has been received
-</h1>
-<?php
-	switch ($extrainfo[0]) {
-		case 1:
-			$type = 'UNEMPLOYED';
-			break;
-		case 2:
-			$type = 'STUDENT';
-			break;
-		case 3:
-			$type = 'KNOWCRUNCH ALUMNI';
-			break;
-		case 4:
-			$type = 'DEREE ALUMNI';
-			break;
-		case 5:
-			$type = 'GROUP OF 2+';
-			break;
 
 
-		default:
-			$type = 'REGULAR';
-			break;
-	}
+$tickettype = $extrainfo[1];
 
-//check ticket type, if dropdown special seat show speciality otherwise show ticket name
-if ($extrainfo[4] == 1) {
-
-    $tickettype = $type;
-}
-else {
-
-    $tickettype = $extrainfo[1];
-}
 
 if(isset($helperdetails[$user['email']])) {
 
@@ -85,28 +37,317 @@ else {
 }
 ?>
 
-<p>
-<strong>EVENT NAME:</strong> {{ $extrainfo[2] }}<br /><br />
-<strong>EVENT DATE:</strong> {{ $extrainfo[3] }}<br /><br />
-<strong>{{$type}} ID:</strong> {{$stId}}<br /><br />
-<strong>FULL NAME:</strong> {{ $user['name'] }}<br /><br />
-<strong>EMAIL:</strong> {{ $user['email'] }}<br /><br />
-<strong>MOBILE PHONE:</strong> {{ $mob }}<br /><br />
-<strong>JOB TITLE:</strong> {{ $job }}<br /><br />
-<strong>COMPANY NAME:</strong> {{ $com }}<br /><br />
 
-<strong>TICKET TYPE:</strong> {{ $tickettype }} <br /><br />
-<strong>TICKET PRICE:</strong> @if($trans->total_amount == 0) Free @else {{ $trans->total_amount }} @endif<br /><br />
 
-<strong>INVOICE:</strong> {{ $extrainfo[5] }}<br /><br />
-<strong>CITY:</strong> {{ $extrainfo[6] }}<br /><br />
+@extends('emails.user.layouts.master')
+@section('email_body')
 
-@if(isset($trans->coupon_code) && $trans->coupon_code != '') <strong>COUPON CODE:</strong> {{ $trans->coupon_code }}<br /><br />@endif
-@if(isset($user['id']))<a target="_blank" href="http://www.knowcrunch.com/admin/user/{{$user['id']}}/edit">Check the registration details online</a>.<br /><br />@endif
-<!--<a target="_blank" href="https://kclioncode.j.scaleforce.net/admin/transaction/edit/{{ $trans->id }}">Check the registration details online</a>.<br /><br />-->
+<tr>
+   <td align="center" class="r0-c">
+      <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="600" class="r1-o" style="table-layout: fixed; width: 600px;">
+         <tr>
+                     <td valign="top" class="">
+                        <table width="100%" cellspacing="0" cellpadding="0" border="0" role="presentation">
+                           <tr>
+                              <td class="r2-c" align="center">
+                                 <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r3-o" style="table-layout: fixed; width: 100%;">
+                                    <!-- -->
+                                    <tr class="nl2go-responsive-hide">
+                                       <td height="20" style="font-size: 20px; line-height: 20px; background-color: #ffffff;">­</td>
+                                    </tr>
+                                    <tr>
+                                       <td class="r4-i" style="background-color: #ffffff;">
+                                          <table width="100%" cellspacing="0" cellpadding="0" border="0" role="presentation">
+                                             <tr>
+                                                <th width="100%" valign="top" class="r5-c">
+                                                   <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r6-o" style="table-layout: fixed; width: 100%;">
+                                                      <!-- -->
+                                                      <tr>
+                                                         <td class="nl2go-responsive-hide" width="15" style="font-size: 0px; line-height: 1px;">­ </td>
+                                                         <td valign="top" class="r7-i">
+                                                            <table width="100%" cellspacing="0" cellpadding="0" border="0" role="presentation">
+                                                               <tr>
+                                                                  <td class="r8-c" align="left">
+                                                                     <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="200" class="r9-o" style="table-layout: fixed; width: 200px;">
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                           <td class="r10-i"> <a href="https://knowcrunch.com/?utm_source=Knowcrunch.com&utm_medium=Failed_Payment_Email" target="_blank" style="color: #0092ff; text-decoration: underline;"> <img src="https://img.mailinblue.com/4113051/images/rnb/original/61a340aa5576f4034d329fac.png" width="200" alt="Knowcrunch logo" border="0" class="" style="display: block; width: 100%;"></a> </td>
+                                                                        </tr>
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                     </table>
+                                                                  </td>
+                                                               </tr>
+                                                            </table>
+                                                         </td>
+                                                         <td class="nl2go-responsive-hide" width="15" style="font-size: 0px; line-height: 1px;">­ </td>
+                                                      </tr>
+                                                   </table>
+                                                </th>
+                                             </tr>
+                                          </table>
+                                       </td>
+                                    </tr>
+                                    <tr class="nl2go-responsive-hide">
+                                       <td height="20" style="font-size: 20px; line-height: 20px; background-color: #ffffff;">­</td>
+                                    </tr>
+                                 </table>
+                              </td>
+                           </tr>
+                           <tr>
+                              <td class="r2-c" align="center">
+                                 <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r3-o" style="table-layout: fixed; width: 100%;">
+                                    <!-- -->
+                                    <tr class="nl2go-responsive-hide">
+                                       <td height="20" style="font-size: 20px; line-height: 20px; background-color: #ffffff;">­</td>
+                                    </tr>
+                                    <tr>
+                                       <td class="r11-i" style="background-color: #ffffff;">
+                                          <table width="100%" cellspacing="0" cellpadding="0" border="0" role="presentation">
+                                             <tr>
+                                                <th width="100%" valign="top" class="r5-c">
+                                                   <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r6-o" style="table-layout: fixed; width: 100%;">
+                                                      <!-- -->
+                                                      <tr>
+                                                         <td class="nl2go-responsive-hide" width="10" style="font-size: 0px; line-height: 1px;">­ </td>
+                                                         <td valign="top" class="r7-i">
+                                                            <table width="100%" cellspacing="0" cellpadding="0" border="0" role="presentation">
+                                                               <tr>
+                                                                  <td class="r12-c" align="left">
+                                                                     <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r13-o" style="table-layout: fixed; width: 100%;">
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                           <td align="left" valign="top" class="r14-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
+                                                                              <div>
+                                                                                 <h2 class="default-heading2" style="color: #1F2D3D; font-family: arial,helvetica,sans-serif; font-size: 32px; margin: 0px;">New registration</h2>
+                                                                              </div>
+                                                                           </td>
+                                                                        </tr>
+                                                                     </table>
+                                                                  </td>
+                                                               </tr>
+                                                               <tr>
+                                                                  <td class="r12-c" align="left">
+                                                                     <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r13-o" style="table-layout: fixed; width: 100%;">
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                           <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
+                                                                              <div>
+                                                                                 <p style="margin: 0px;"><strong>COURSE</strong></p>
+                                                                              </div>
+                                                                           </td>
+                                                                        </tr>
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                     </table>
+                                                                  </td>
+                                                               </tr>
+                                                               <tr>
+                                                                  <td class="r12-c" align="left">
+                                                                     <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r13-o" style="table-layout: fixed; width: 100%;">
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                           <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
+                                                                              <div>
+                                                                                 <p style="margin: 0px;"><span style="font-family: Tahoma, geneva, sans-serif;">{{ $extrainfo[2] }}</span></p>
+                                                                              </div>
+                                                                           </td>
+                                                                        </tr>
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                     </table>
+                                                                  </td>
+                                                               </tr>
+                                                               <tr>
+                                                                  <td class="r12-c" align="left">
+                                                                     <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r13-o" style="table-layout: fixed; width: 100%;">
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                           <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
+                                                                              <div>
+                                                                                 <p style="margin: 0px;"><strong>CUSTOMER DATA</strong></p>
+                                                                              </div>
+                                                                           </td>
+                                                                        </tr>
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                     </table>
+                                                                  </td>
+                                                               </tr>
+                                                               <tr>
+                                                                  <td class="r12-c" align="left">
+                                                                     <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r13-o" style="table-layout: fixed; width: 100%;">
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                           <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
+                                                                              <div>
+                                                                                 <p style="margin: 0px;">{{ $user['name'] }}</p>
+                                                                              </div>
+                                                                           </td>
+                                                                        </tr>
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                     </table>
+                                                                  </td>
+                                                               </tr>
+                                                               <tr>
+                                                                  <td class="r12-c" align="left">
+                                                                     <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r13-o" style="table-layout: fixed; width: 100%;">
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                           <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
+                                                                              <div>
+                                                                                 <p style="margin: 0px;">Email: {{ $user['email'] }}, Phone: {{$mob}}</p>
+                                                                              </div>
+                                                                           </td>
+                                                                        </tr>
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                     </table>
+                                                                  </td>
+                                                               </tr>
 
-</p>
+                                                               <tr>
+                                                                  <td class="r12-c" align="left">
+                                                                     <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r13-o" style="table-layout: fixed; width: 100%;">
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                           <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
+                                                                              <div>
+                                                                                 <p style="margin: 0px;">Position: {{$job}}@if(isset($comp)), Company: {{$com}}@endif</p>
+                                                                              </div>
+                                                                           </td>
 
-@include('emails.partials.the_team')
+                                                                        </tr>
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                     </table>
+                                                                  </td>
+                                                               </tr>
+                                                               <tr>
+                                                                  <td class="r12-c" align="left">
+                                                                     <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r13-o" style="table-layout: fixed; width: 100%;">
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                           <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
+                                                                              <div>
+                                                                                 <p style="margin: 0px;"><strong>TRANSACTION DATA</strong></p>
+                                                                              </div>
+                                                                           </td>
+                                                                        </tr>
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                     </table>
+                                                                  </td>
+                                                               </tr>
+                                                               <tr>
+                                                                  <td class="r12-c" align="left">
+                                                                     <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r13-o" style="table-layout: fixed; width: 100%;">
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                           <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
+                                                                              <div><strong>TICKET TYPE:</strong>  <br /><br />
 
-@endsection
+                                                                                 <p style="margin: 0px;">Ticket: {{ $tickettype }}, @if($trans->total_amount == 0) Free @else {{ round($trans->total_amount,2) }} @endif</p>
+                                                                              </div>
+                                                                           </td>
+                                                                        </tr>
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                     </table>
+                                                                  </td>
+                                                               </tr>
+                                                               <tr>
+                                                                  <td class="r12-c" align="left">
+                                                                     <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r13-o" style="table-layout: fixed; width: 100%;">
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                           <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
+                                                                              <div>
+                                                                                 <p style="margin: 0px;">Amount paid: @if($trans->total_amount == 0) Free @else {{  round($trans->total_amount,2) }} @endif </p>
+                                                                              </div>
+                                                                           </td>
+                                                                        </tr>
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                     </table>
+                                                                  </td>
+                                                               </tr>
+                                                               <tr>
+                                                                  <td class="r12-c" align="left">
+                                                                     <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="290" class="r16-o" style="table-layout: fixed; width: 290px;">
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                           <td height="18" align="center" valign="top" class="r17-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5;">
+                                                                     
+                                                                              <a href="http://www.knowcrunch.com/admin/user/{{$user['id']}}/edit" class="r18-r default-button" target="_blank" data-btn="1" style="line-height: 1.15; text-decoration: none; border-style: solid; display: inline-block; -webkit-text-size-adjust: none; mso-hide: all; background-color: #c8d151; border-color: #c8d151; border-radius: 4px; border-width: 0px; color: #ffffff; font-family: arial,helvetica,sans-serif; font-size: 16px; height: 18px; padding-bottom: 12px; padding-left: 5px; padding-right: 5px; padding-top: 12px; width: 280px;">
+                                                                                 <p style="margin: 0px;"><span style="color: #3b3f44;"><strong>Check this customer</strong></span></p>
+                                                                              </a>
+                                                                          
+                                                                           </td>
+                                                                        </tr>
+                                                                        <tr class="nl2go-responsive-hide">
+                                                                           <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
+                                                                        </tr>
+                                                                     </table>
+                                                                  </td>
+                                                               </tr>
+                                                            </table>
+                                                         </td>
+                                                         <td class="nl2go-responsive-hide" width="10" style="font-size: 0px; line-height: 1px;">­ </td>
+                                                      </tr>
+                                                   </table>
+                                                </th>
+                                             </tr>
+                                          </table>
+                                       </td>
+                                    </tr>
+                                    <tr class="nl2go-responsive-hide">
+                                       <td height="20" style="font-size: 20px; line-height: 20px; background-color: #ffffff;">­</td>
+                                    </tr>
+                                 </table>
+                              </td>
+                           </tr>
+                        </table>
+                     </td>
+         </tr>
+      </table>
+   </td>
+</tr>
+
+@stop
+        

@@ -119,4 +119,52 @@ class ContactUsController extends Controller
             ];
         }
     }
+
+    public function corporate(Request $request){
+
+        //dd($request->all());
+
+        $validator = Validator::make($request->all(), [
+            'csurname' => 'required',
+            'ccompany' => 'required',
+            'cjob' => 'required',
+            'ctel' => 'required',
+            'cemail' => 'required|email',
+            
+        ]);
+
+        if ($validator->fails()) {
+            return [
+                'status' => 0,
+                'errors' => $validator->errors(),
+                'message' => '',
+            ];
+        } else {
+            $data = $request->all();
+
+
+
+
+
+            Mail::send('theme.emails.contact.corporate', $data, function ($m) use ($data) {
+
+            	$fullname = $data['csurname'];
+
+            	$adminemail = 'info@knowcrunch.com';
+        
+                $subject = 'Knowcrunch - Corporate training';
+                
+
+                //$emails = ['socratous12@gmail.com', 'info@darkpony.com'];
+                $m->subject($subject);
+                $m->from($adminemail, 'Knowcrunch');
+                $m->replyTo($data['cemail'], $fullname);
+               // $m->to('nathanailidis@lioncode.gr', 'Chysafis');
+                $m->to($adminemail, 'Knowcrunch');
+                //$m->cc('periklis.d@gmail.com', 'Perry D');
+                //$m->bcc('info@darkpony.com', null);
+            });
+        }
+    }
+
 }

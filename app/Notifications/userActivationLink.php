@@ -56,6 +56,8 @@ class userActivationLink extends Notification
        
         $activation = Activation::firstOrCreate(array('user_id' => $this->user['id']));
 
+        $email = $this->user['email'];
+        $firstName = $this->user['firstname'];
         
         if($activation->code == ''){
             $activation->code = Str::random(40);
@@ -67,10 +69,10 @@ class userActivationLink extends Notification
         $code = $activation->code;
         
          //send the user
-
+        
         return (new MailMessage)
-                    ->subject('Activate Your Student Account')
-                    ->view( $loadForm, ['code' => $code]);
+                    ->subject('Knowcrunch - ' . $firstName . ' your account​ is active')
+                    ->view( $loadForm, ['code' => $code,'email'=>$email,'firstName'=>$firstName]);
     }
 
     /**

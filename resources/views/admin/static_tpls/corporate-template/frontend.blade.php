@@ -265,7 +265,7 @@ alert("Please Fill Required Fields");
 
 $.ajax({
             type: "POST",
-            url: "corpkc.php",
+            url: "{{route('corporate')}}",
 
             data: {
 //'cname': name,

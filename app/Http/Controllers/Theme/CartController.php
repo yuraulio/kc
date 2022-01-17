@@ -1921,17 +1921,7 @@ class CartController extends Controller
         $data['eventSlug'] = url('/') . '/' . $content->getSlug();
         $data['duration'] =  $content->summary1->where('section','date')->first() ? $content->summary1->where('section','date')->first()->title : '';
 
-        $sent = Mail::send('emails.admin.info_new_registration', $data, function ($m) use ($adminemail,$muser) {
-
-            $fullname = $muser['name'];
-            $first = $muser['first'];
-            $sub = 'Knowcrunch - ' . $first . ' your registration has been completed.';
-            $m->from($adminemail, 'Knowcrunch');
-            $m->to($muser['email'], $fullname);
-            $m->subject($sub);
-        });
-
-
+  
         //send elearning Invoice
         $transdata = [];
         $transdata['trans'] = $transaction;

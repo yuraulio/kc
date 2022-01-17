@@ -373,6 +373,15 @@ class SubscriptionController extends Controller
                 $subEnds=date('d-m-Y', strtotime("+$subEnds days"));
 
                 $data['firstName'] = $user->firstname;
+
+                $data['name'] = $user->firstname . ' ' . $user->lastname;
+                $data['email'] = $user->email;
+                $data['amount'] = $charge->price;
+                $data['position'] = $user->job_title;
+                $data['company'] = $user->company;
+                $data['mobile'] = $user->mobile;
+                $data['userLink'] = url('/') . "/admin/user/" . $user['id'] ."/edit";
+
                 $data['eventTitle'] = $event->title;
                 $data['eventFaq'] = url('/') . '/' .$event->getSlug().'#faq';
                 $data['eventSlug'] = url('/') . '/myaccount/elearning/' . $event->title;
@@ -385,18 +394,17 @@ class SubscriptionController extends Controller
         
                 $user->notify(new SubscriptionWelcome($data));
 
-                /*$adminemail = 'info@knowcrunch.com';
+                $adminemail = 'info@knowcrunch.com';
         
-                $sent = Mail::send('emails.student.subscription.subscription_first', $data, function ($m) use ($adminemail, $muser) {
+                $sent = Mail::send('emails.admin.admin_info_subscription_registration', $data, function ($m) use ($adminemail) {
         
-                    $fullname = $muser['name'];
-                    $first = $muser['first'];
-                    $sub = 'KnowCrunch |' . $first . ' – Your subscription has been activated!';
+                    
+                    $sub = 'Knowcrunch - New subscription';
                     $m->from($adminemail, 'Knowcrunch');
-                    $m->to($muser['email'], $fullname);
+                    $m->to($adminemail, 'Knowcrunch');
                     $m->subject($sub);
                 
-                });*/
+                });
   
                 Session::forget('pay_seats_data');
                 Session::forget('transaction_id');

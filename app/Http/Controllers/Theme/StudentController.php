@@ -1218,7 +1218,7 @@ class StudentController extends Controller
             Session::flash('opmessage', 'Your account is now activated. You may login now!');
             Session::flash('opstatus', 1);
 
-            return redirect('/cart?reg=1')->withInput()->with('message','Your account is now activated. You may login now!');
+            return redirect('/myaccount')->withInput()->with('message','Your account is now activated. You may login now!');
         }
 
         return redirect('/')->withErrors('Invalid or expired activation code.');

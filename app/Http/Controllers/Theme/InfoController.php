@@ -839,26 +839,16 @@ class InfoController extends Controller
         	$transdata['extrainfo'] = $extrainfo;
         	$transdata['helperdetails'] = $helperdetails;
            
-            if($transaction->payment_method_id == 100) {
-                $sentadmin = Mail::send('emails.admin.admin_info_new_registration', $transdata, function ($m) use ($adminemail) {
+            
+            $sentadmin = Mail::send('emails.admin.admin_info_new_registration', $transdata, function ($m) use ($adminemail) {
 
-                    $m->from('info@knowcrunch.com', 'Knowcrunch');
-                    $m->to('info@knowcrunch.com', 'Knowcrunch');
+                $m->from('info@knowcrunch.com', 'Knowcrunch');
+                $m->to('info@knowcrunch.com', 'Knowcrunch');
            
-                    $m->subject('Knowcrunch - New Registration');
-                });
-            }
-            else {
-                $sentadmin = Mail::send('emails.admin.admin_info_new_registration', $transdata, function ($m) use ($adminemail) {
-
-                    $m->from('info@knowcrunch.com', 'Knowcrunch');
-                    $m->to('info@knowcrunch.com', 'Knowcrunch');
-             
-                    $m->subject('Knowcrunch - New Registration');
-                });
-            }
-
-
+                $m->subject('Knowcrunch - New Registration');
+            });
+            
+           
         }
 
     }
