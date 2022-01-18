@@ -6,7 +6,7 @@ use App\Http\Controllers\Admin_api\Templates;
 use App\Http\Controllers\Admin_api\Dashboard;
 use Illuminate\Support\Facades\Route;
 
-Route::domain('admin.' . env('APP_URL'))->group(function () {
+Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
     Route::get('get_widget_data/users', [Dashboard::class, 'get_widget_data_users']);
     Route::get('get_widget_data/admins', [Dashboard::class, 'get_widget_data_admins']);
     Route::get('get_widget_data/instructors', [Dashboard::class, 'get_widget_data_instructors']);
@@ -31,7 +31,8 @@ Route::domain('admin.' . env('APP_URL'))->group(function () {
     Route::get('pages', [Pages::class, 'list']);
     Route::post('pages/add', [Pages::class, 'add']);
     Route::post('pages/edit/{id}', [Pages::class, 'edit']);
-    Route::post('pages/delete/{id}', [Pages::class, 'delete']);
+    Route::delete('pages/delete/{id}', [Pages::class, 'delete']);
     Route::get('pages/get/{id}', [Pages::class, 'get']);
     Route::put('pages/update_published/{id}', [Pages::class, 'updatePublished']);
+    Route::post('pages/upload_image', [Pages::class, 'uploadImage']);
 });

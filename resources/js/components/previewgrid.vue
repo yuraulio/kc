@@ -11,7 +11,7 @@
             <div class="">
             <draggable v-model="data">
                 <transition-group>
-                    <div :class="'row ' + (value.width == 'full' ? '' : 'col-lg-8 offset-lg-2')" v-for="(value, ind) in data" :key="ind + 'drag'">
+                    <div :class="'row ' + (value.width == 'full' ? '' : (value.width == 'content' ? 'col-lg-8 offset-lg-2' : 'col-lg-6 offset-lg-3'))" v-for="(value, ind) in data" :key="ind + 'drag'">
                             <div  :class="'col-lg-' + (12 / value.columns.length)" v-for="(column, indr) in value.columns" :key="indr + 'dragi'">
                                 <div v-if="column.component != 'meta'">
                                 <div v-if="column.component == 'hero'" class="card  text-white" style="background-color: #6c757d !important">
@@ -43,23 +43,46 @@
                                             porta. Mauris massa.
                                         </div>
 
-                                        <div v-if="(preview && lodash.find(column.template.inputs, {'key': 'rich_text_box_title' }).value)" class="font-16 fst-italic text-dark" v-html="lodash.find(column.template.inputs, {'key': 'rich_text_box_title' }).value">
+                                        <div v-if="(preview && lodash.find(column.template.inputs, {'key': 'rich_text_box_title' }).value)" class="font-16 text-dark" v-html="lodash.find(column.template.inputs, {'key': 'rich_text_box_title' }).value">
 
                                         </div>
                                     </div>
                                 </div>
                                 <div v-else-if="column.component == 'content_box'" class="card">
-                                    <div class="card-img img-fluid text-center cimgfl" style="min-height: 200px; background-color: #6c757dd6" alt="Card image">
+                                    <img style="height: 200px; background-color: #6c757dd6" v-if="(preview && lodash.find(column.template.inputs, {'key': 'content_box_image' }).value)" class="card-img-top img-fluid" :src="lodash.find(column.template.inputs, {'key': 'content_box_image' }).value" alt="Card image cap">
+
+                                    <div v-else class="card-img img-fluid text-center cimgfl" style="min-height: 200px; background-color: #6c757dd6" alt="Card image">
                                         <i class="h1 text-muted  dripicons-photo-group
                                         " style="font-size: 8em;"></i>
                                     </div>
+
                                     <div class="card-body text-center">
-                                        <h5 class="card-title">Card title</h5>
-                                        <p class="card-text">This is a wider card with supporting text below as a
+                                        <h5 v-if="(preview && lodash.find(column.template.inputs, {'key': 'content_box_title' }).value)" class="card-title">{{lodash.find(column.template.inputs, {'key': 'content_box_title' }).value}}</h5>
+                                        <h5 v-else class="card-title">Card title</h5>
+
+                                        <p v-if="(preview && lodash.find(column.template.inputs, {'key': 'content_box_subtitle' }).value)" class="card-text">{{lodash.find(column.template.inputs, {'key': 'content_box_subtitle' }).value}}</p>
+
+                                        <p v-else class="card-text">This is a wider card with supporting text below as a
                                             natural.</p>
-                                        <p class="card-text text-center">
+
+                                        <p v-if="(preview && lodash.find(column.template.inputs, {'key': 'content_box_btn_text' }).value)" class="card-text text-center">
+                                            <button class="btn btn-secondary">{{lodash.find(column.template.inputs, {'key': 'content_box_btn_text' }).value}}</button>
+                                        </p>
+
+                                        <p v-else class="card-text text-center">
                                             <button class="btn btn-secondary">Button</button>
                                         </p>
+                                    </div>
+                                </div>
+                                <div v-else-if="column.component == 'blog_header'" class="card">
+                                    <div class="text-center">
+                                        <h2 v-if="(preview && lodash.find(column.template.inputs, {'key': 'blog_header_title' }).value)" >{{lodash.find(column.template.inputs, {'key': 'blog_header_title' }).value}}</h2>
+                                        <h2 v-else>Blog Title</h2>
+                                        <p v-if="(preview && lodash.find(column.template.inputs, {'key': 'blog_header_subtitle' }).value)" class="card-text">{{lodash.find(column.template.inputs, {'key': 'blog_header_subtitle' }).value}}</p>
+                                        <h4 v-else class="">
+                                            This is a wider card with supporting text below as a
+                                            natural.
+                                        </h4>
                                     </div>
                                 </div>
                                 <div v-else class="card border rounded bg-grey col-12" >

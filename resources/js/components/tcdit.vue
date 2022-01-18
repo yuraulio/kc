@@ -17,11 +17,12 @@
             <div v-if="val.width" class="row">
             <div  class="btn-group" style="width: 20%;margin-left: 40%;margin-right: 40%;">
                 <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                {{ val.width == 'full' ? 'Full' : 'Content' }} Width<i class="mdi mdi-chevron-down"></i>
+                                {{ val.width == 'full' ? 'Full' : (val.width == 'content' ? 'Content' :'Blog') }} Width<i class="mdi mdi-chevron-down"></i>
                             </button>
                 <div class="dropdown-menu dropdown-menu-center" style="" data-popper-placement="bottom-start">
                     <a @click.prevent="val.width = 'full'" :class="'dropdown-item ' + (val.width == 'full' ? 'active' : '')" href="#">Full Width</a>
                     <a @click.prevent="val.width = 'content'" :class="'dropdown-item ' + (val.width == 'content' ? 'active' : '')" href="#">Content Width</a>
+                    <a @click.prevent="val.width = 'blog'" :class="'dropdown-item ' + (val.width == 'blog' ? 'active' : '')" href="#">Blog Width</a>
                 </div>
             </div>
             </div>
@@ -69,11 +70,12 @@
                         <transition-group tag="div" class="row" key="subcols"> -->
                         <div v-if="val.width" class="btn-group" style="width: 20%;margin-left: 40%;margin-right: 40%;">
                             <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                {{ val.width == 'full' ? 'Full' : 'Content' }} Width<i class="mdi mdi-chevron-down"></i>
+                                {{ val.width == 'full' ? 'Full' : (val.width == 'content' ? 'Content' :'Blog') }} Width<i class="mdi mdi-chevron-down"></i>
                             </button>
                             <div class="dropdown-menu dropdown-menu-center" style="" data-popper-placement="bottom-start">
                                 <a @click.prevent="val.width = 'full'" :class="'dropdown-item ' + (val.width == 'full' ? 'active' : '')" href="#">Full Width</a>
                                 <a @click.prevent="val.width = 'content'" :class="'dropdown-item ' + (val.width == 'content' ? 'active' : '')" href="#">Content Width</a>
+                                <a @click.prevent="val.width = 'blog'" :class="'dropdown-item ' + (val.width == 'blog' ? 'active' : '')" href="#">Blog Width</a>
                             </div>
                         </div>
                         <div v-for="(column, indr) in val.columns" :key="'column' + indr" :class="'col-lg-' + (12 / val.columns.length)">

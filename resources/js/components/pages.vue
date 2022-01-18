@@ -59,6 +59,7 @@
                 ref="adit"
                 @updatemode="updatemode"
                 @refreshcategories="getData"
+                @created="created"
                 @add-custom-component="addCustomComponent"
                 title="true"
                 description="true"
@@ -127,6 +128,10 @@ import pageseditable from './pageseditable.vue'
             }
         },
         methods: {
+            created($event) {
+                console.log($event);
+                this.pages.unshift($event);
+            },
             addCustomComponent() {
                 this.$modal.show("component-modal")
             },
@@ -135,9 +140,46 @@ import pageseditable from './pageseditable.vue'
                 console.log(this.$refs.adit)
                 this.$refs.adit.rearange();
             },
-            updatemode(variable, id){
-                this.id = id ?? this.id;
-                this.mode = variable;
+            updatemode(variable){
+                if (variable == "delete") {
+                     Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, delete it!',
+                        showLoaderOnConfirm: true,
+                        preConfirm: () => {
+                            return axios
+                                .delete('/api/pages/delete/' + this.id)
+                                .then((response) => {
+                                    if (response.status == 200){
+                                        this.pages.splice(_.findIndex(this.pages, { 'id' : this.id }), 1);
+                                        this.$emit('updatemode', 'list');
+                                    }
+
+                                })
+                                .catch(error => {
+                                Swal.showValidationMessage(
+                                `Request failed: ${error}`
+                                )
+                            })
+                        },
+                        allowOutsideClick: () => !Swal.isLoading()
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                Swal.fire(
+                                        'Deleted!',
+                                        'Item has been deleted.',
+                                        'success'
+                                    )
+                            }
+                        })
+                } else if (variable == 'edit') {
+                    this.mode = variable;
+                } else {
+                    this.mode = variable;
+                }
             },
             updateid(variable){
                 this.id = variable;

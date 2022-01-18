@@ -1,10 +1,6 @@
 <template>
     <modal name="component-modal" :resizable="true" height="auto" :adaptive="true" @before-open="getParams">
-        <div slot="top-right">
-      <button @click="$modal.hide('component-modal')">
-        <i class="dripicons-cross"></i>
-      </button>
-    </div>
+
         <div class="p-4 row">
             <div class="col-md-6 col-xl-6">
                 <div @click="selectComponent('text_editor')" class="widget-rounded-circle card bg-grey">
@@ -78,7 +74,81 @@
                     </div>
                 </div> <!-- end widget-rounded-circle-->
             </div> <!-- end col-->
-            <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions" @click="rearange()" class="btn btn-lg btn-secondary waves-effect waves-light">Rearange</button>
+
+             <div class="col-md-6 col-xl-6">
+                <div @click="selectComponent('text_box')" class="widget-rounded-circle card bg-grey">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <div class="avatar-lg mt-2">
+                                    <i style="font-size: 4em" class="h1 text-muted dripicons-article"></i>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h5 class="mb-1 mt-2 font-16">Text Area</h5>
+                                <p class="mb-2 text-muted">Free input field</p>
+                            </div>
+                        </div> <!-- end row-->
+                    </div>
+                </div> <!-- end widget-rounded-circle-->
+            </div> <!-- end col-->
+
+            <div class="col-md-6 col-xl-6">
+                <div @click="selectComponent('blog_header')" class="widget-rounded-circle card bg-grey">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <div class="avatar-lg mt-2">
+                                    <i style="font-size: 4em" class="h1 text-muted dripicons-article"></i>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h5 class="mb-1 mt-2 font-16">Blog Header </h5>
+                                <p class="mb-2 text-muted">Title/Subtitle</p>
+                            </div>
+                        </div> <!-- end row-->
+                    </div>
+                </div> <!-- end widget-rounded-circle-->
+            </div>
+
+             <div class="col-md-6 col-xl-6">
+                <div @click="selectComponent('comments')" class="widget-rounded-circle card bg-grey">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <div class="avatar-lg mt-2">
+                                    <i style="font-size: 4em" class="h1 text-muted dripicons-article"></i>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h5 class="mb-1 mt-2 font-16">Comments </h5>
+                                <p class="mb-2 text-muted">Pre component</p>
+                            </div>
+                        </div> <!-- end row-->
+                    </div>
+                </div> <!-- end widget-rounded-circle-->
+            </div> <!-- end col-->
+            <div class="col-md-6 col-xl-6">
+                <div @click="selectComponent('social_bar')" class="widget-rounded-circle card bg-grey">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <div class="avatar-lg mt-2">
+                                    <i style="font-size: 4em" class="h1 text-muted dripicons-article"></i>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h5 class="mb-1 mt-2 font-16">Social </h5>
+                                <p class="mb-2 text-muted">Social Bar</p>
+                            </div>
+                        </div> <!-- end row-->
+                    </div>
+                </div> <!-- end widget-rounded-circle-->
+            </div>
+            <div class="col-lg-12 sm-auto">
+            <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions" @click="rearange()" class="btn btn-block btn-soft-info rounded-pill waves-effect waves-light m-1t">Rearange</button>
+            <button @click="$modal.hide('component-modal')" type="button" class="btn btn-block btn-soft-danger rounded-pill waves-effect waves-light m-1t">Close</button>
+            </div>
         </div>
         </modal>
 </template>

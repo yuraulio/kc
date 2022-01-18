@@ -33,12 +33,12 @@
 
     </div>
 
-    <div class="avatar-edit" v-if="files[keyput] != null && files[keyput].length && edit">
-      <div class="avatar-edit-image" v-if="files[keyput].length && files[keyput][0]">
-        <img ref="editImage" :src="files[keyput][0].url" />
+    <div class="avatar-edit" v-if="(files[keyput] != null && files[keyput].length && edit) || value">
+      <div class="avatar-edit-image" v-if="(files[keyput].length && files[keyput][0]) || value">
+        <img style="min-height: 200px"  ref="editImage" :src="value ? value : files[keyput][0].url" />
       </div>
       <div class="text-center p-4" style="margin-top: -100px;">
-          <button type="button" @click.prevent="$set(files, keyput, []); $refs[keyput].clear" class="btn btn-danger waves-effect waves-light float-right"><i class="mdi mdi-close"></i> Cancel</button>
+          <button type="button" @click.prevent="$set(files, keyput, []); $refs[keyput].clear; value = null" class="btn btn-danger waves-effect waves-light float-right"><i class="mdi mdi-close"></i> Cancel</button>
         <!--<button type="submit" class="btn btn-primary" @click.prevent="editSave">Save</button>-->
       </div>
     </div>
@@ -49,7 +49,7 @@
 import Cropper from 'cropperjs'
 import FileUpload from 'vue-upload-component'
 export default {
-    props: ['keyput'],
+    props: ['keyput', 'prevalue'],
   components: {
     FileUpload,
   },
@@ -59,21 +59,46 @@ export default {
       files: [],
       edit: false,
       cropper: false,
+      value: null
     }
   },
 
   mounted() {
+      if (this.prevalue) {
+          this.edit = true;
+          this.$set(this.files, this.keyput, [{'url': this.prevalue }]);
+      }
+
+      //this.value = this.prevalue;
+      console.log("val", this.value)
       //console.log("keyput", this.$refs[this.keyput])
   },
 
   methods: {
     inputFile(newFile, oldFile, prevent) {
         if (newFile) {
-            this.$set(this.files, this.keyput, [newFile]);
-            console.log(this.files)
-            this.edit = true;
-            this.$forceUpdate();
-            this.$emit('updatedimage', newFile.url);
+            var formData = new FormData();
+            var imagefile = newFile;
+            console.log('imgfile', imagefile)
+            if (imagefile.file) {
+                formData.append("file", imagefile.file);
+                axios.post('/api/pages/upload_image', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }).then((response) => {
+                    this.$set(this.files, this.keyput, [newFile]);
+                    console.log(response.data)
+                    this.edit = true;
+                    this.$forceUpdate();
+                    this.$emit('updatedimage', response.data['url']);
+                    console.log(response)
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+            }
+
         } else {
             this.edit = false;
         }

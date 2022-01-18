@@ -12,12 +12,14 @@
 
     <div v-if="type == 'image'" class="mb-3">
         <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
-        <uploadImage @updatedimage="updatedimage" :key="keyput" :keyput="keyput"></uploadImage>
+        <uploadImage @updatedimage="updatedimage" :key="keyput" :prevalue="value"  :keyput="keyput"></uploadImage>
     </div>
 
     <div v-if="type == 'text_editor'" class="mb-3">
         <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
-        <ckeditor :height="300" :editor="editor" :id="keyput" v-model="editorData" :config="editorConfig"></ckeditor>
+        <ckeditor v-if="texteditor == 'ck'" :height="300" :editor="editor" :id="keyput" v-model="editorData" :config="editorConfig"></ckeditor>
+
+        <editor-content v-if="texteditor == 'tiny'" :editor="editorT" />
     </div>
 
     <div v-if="type == 'contentComponent'" class="mb-3">
@@ -32,12 +34,15 @@
 import uploadImage from './upload-image.vue'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import contentComponent from './content-components.vue'
+import { Editor, EditorContent } from '@tiptap/vue-2'
+import StarterKit from '@tiptap/starter-kit'
 
 export default {
     components: {
         uploadImage,
         ClassicEditor,
-        contentComponent
+        contentComponent,
+        EditorContent
     },
     props: {
         type: {
@@ -56,8 +61,10 @@ export default {
     },
     data() {
         return {
+            texteditor: 'ck',
             editor: ClassicEditor,
             editorData: this.value,
+            editorT: null,
             editorConfig: {
                 height: 300,
                 toolbar: {
@@ -96,7 +103,16 @@ export default {
         if (this.value) {
             this.editorData = this.value;
         }
-    }
+        this.editorT = new Editor({
+            content: this.editorData,
+            extensions: [
+                StarterKit,
+            ],
+        })
+    },
+    beforeDestroy() {
+        this.editorT.destroy()
+    },
 }
 </script>
 

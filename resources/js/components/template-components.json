@@ -127,5 +127,39 @@
                 "size": "col-lg-12"
             }
         ]
+    },
+    "comments" : {
+        "width": "content",
+        "title": "Comment Box",
+        "key": "comment_box_component",
+        "inputs": [
+
+        ]
+    },
+    "social_bar" : {
+        "width": "blog",
+        "title": "Social Bar",
+        "key": "social_bar_component",
+        "inputs": [
+
+        ]
+    },
+    "blog_header" : {
+        "title": "Blog Header",
+        "width": "blog",
+        "icon": "dripicons-document-edit",
+        "key": "blog_header_component",
+        "inputs": [
+            {
+                "type": "text",
+                "key": "blog_header_title",
+                "label": "Blog Title"
+            },
+            {
+                "type": "text",
+                "key": "blog_header_subtitle",
+                "label": "Blog Subtitle"
+            }
+        ]
     }
 }

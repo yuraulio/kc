@@ -10,6 +10,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class Pages extends Controller
 {
@@ -97,7 +98,7 @@ class Pages extends Controller
 
             $page->categories()->sync(collect($request->category_id ?? [])->pluck('id')->toArray());
 
-            return response()->json(['message' => 'success'], 200);
+            return response()->json($page, 200);
         } catch (Exception $e) {
             Log::error("Failed to edit page. " , [$e]);
             return response()->json(['message' => $e->getMessage()], 400);
@@ -113,6 +114,7 @@ class Pages extends Controller
     {
         try {
             $page = Page::find($id);
+            $page->categories()->detach();
             $page->delete();
 
             return response()->json(['message' => 'success'], 200);
@@ -132,6 +134,18 @@ class Pages extends Controller
             return response()->json(['message' => 'success'], 200);
         } catch (Exception $e) {
             Log::error("Failed to publish page. " . $e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 400);
+        }
+    }
+
+    public function uploadImage(Request $request): JsonResponse
+    {
+        try {
+            $path = Storage::disk('public')->putFile('page_files', $request->file('file'), 'public');
+            $url = config('app.url'). "/uploads/" . $path;
+            return response()->json(['url' => $url], 200);
+        } catch (Exception $e) {
+            Log::error("Failed update file . " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }

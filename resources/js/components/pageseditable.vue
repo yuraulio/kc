@@ -42,6 +42,7 @@
                             :prop-value="title_value"
                             required=1
                         ></text-field>
+                        <ul v-if="errors && errors['title']" class="parsley-errors-list filled" id="parsley-id-7" aria-hidden="false"><li class="parsley-required">{{errors['title'][0]}}</li></ul>
 
                         <text-field
                             v-if="description"

@@ -67,7 +67,7 @@
             remove(){
                 this.$emit('updateid', this.page.id);
                 this.$emit('updatetitle', this.page.title);
-                this.$emit('updatemode', 'edit', this.page.id);
+                this.$emit('updatemode', 'delete', this.page.id);
             },
             changePublish() {
                 this.loading = true;
