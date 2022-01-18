@@ -22,11 +22,22 @@ class Page extends Model
      */
     public function toSearchableArray()
     {
-        return $this->toArray();
+        $array =  [
+            'id'    => $this->id,
+            'title'    => $this->title,
+            'description' => $this->description
+        ];
+
+        return $array;
     }
 
     public function categories()
     {
         return $this->belongsToMany(Category::class, 'cms_link_pages_categories', 'page_id', 'category_id');
+    }
+
+    public function template()
+    {
+        return $this->belongsTo(Template::class, 'template_id', 'id');
     }
 }

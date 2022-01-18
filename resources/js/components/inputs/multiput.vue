@@ -1,5 +1,5 @@
 <template>
-<div :class="type == 'text' ? 'col-lg-6' : ''">
+<div :class="type == 'text' && !size ? 'col-lg-6' : size">
     <div v-if="type == 'text'" class="mb-3 ">
         <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
         <input v-model="editorData" type="text" :id="keyput" class="form-control">
@@ -19,6 +19,11 @@
         <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
         <ckeditor :height="300" :editor="editor" :id="keyput" v-model="editorData" :config="editorConfig"></ckeditor>
     </div>
+
+    <div v-if="type == 'contentComponent'" class="mb-3">
+        <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
+        <contentComponent @updatedimage="updatedimage" :key="keyput" :keyput="keyput"></contentComponent>
+    </div>
 </div>
 </template>
 
@@ -26,11 +31,13 @@
 
 import uploadImage from './upload-image.vue'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import contentComponent from './content-components.vue'
 
 export default {
     components: {
         uploadImage,
-        ClassicEditor
+        ClassicEditor,
+        contentComponent
     },
     props: {
         type: {
@@ -41,12 +48,16 @@ export default {
             required: true
         },
         label: {},
-        value: {}
+        value: {},
+        size: {
+            type: String,
+            default: ''
+        }
     },
     data() {
         return {
             editor: ClassicEditor,
-            editorData: null,
+            editorData: this.value,
             editorConfig: {
                 height: 300,
                 toolbar: {
@@ -72,7 +83,8 @@ export default {
     },
     methods: {
         updatedimage($event) {
-            this.$emit('inputed', { 'data': this.$event, 'key': this.keyput})
+            console.log("SSS, ", $event)
+            this.$emit('inputed', { 'data': $event, 'key': this.keyput})
         }
     },
     watch: {

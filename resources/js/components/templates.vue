@@ -45,21 +45,22 @@
         </div>
 
         <div v-if="mode == 'new'">
-            <add-edit
+            <editable
                 @updatemode="updatemode"
                 @refreshcategories="getData"
                 @created="created"
                 title="true"
+                :fields="fields"
                 description="true"
                 rows="true"
                 type="new"
                 route="templates"
                 page-title="New Template"
-            ></add-edit>
+            ></editable>
         </div>
 
         <div v-if="mode == 'edit'">
-            <add-edit
+            <editable
                 @updatemode="updatemode"
                 @refreshcategories="getData"
                 title="true"
@@ -68,8 +69,11 @@
                 type="edit"
                 route="templates"
                 page-title="Edit Template"
+                :predata="templates && id ? JSON.parse(lodash.find(templates, {'id': id}).rows) : null"
+                :fields="fields"
+                :data="lodash.find(templates, { 'id': id })"
                 :id="id"
-            ></add-edit>
+            ></editable>
         </div>
 
         <div v-if="mode == 'delete'">
@@ -87,6 +91,7 @@
 </template>
 
 <script>
+    import templatesList from './templates.json'
 
     export default {
         props: {
@@ -99,7 +104,9 @@
                 id: null,
                 title: null,
                 filter: "",
-                loading: false
+                loading: false,
+                fields: templatesList,
+                lodash: _
             }
         },
         watch: {
@@ -147,6 +154,10 @@
                                     )
                             }
                         })
+                } else if (variable == 'edit') {
+                    console.log('hooo',_.find(this.templates, {'id': this.id}))
+
+                    this.mode = variable;
                 } else {
                     this.mode = variable;
                 }

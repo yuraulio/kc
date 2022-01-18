@@ -44,10 +44,8 @@
         </div>
         </div> <!-- end offcanvas-body-->
     </div>
-    <modal name="rearang-modal" height="auto" :adaptive="true">
 
-    </modal>
-    <div v-if="template">
+    <div v-if="data">
         <div v-for="(val, index, key) in data" :key="key" class="col-12 mb-1">
             <div v-for="(column, indr, key) in val.columns" :key="key">
                 <div :key="activeChange" v-show="column.template && column.active" class="card bg-grey">
@@ -83,6 +81,16 @@
         </div>
 
     </div>
+
+    <form @click.prevent="addCustomComponent" class="dropzone dz-clickable" style="min-height:100px" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
+            <div class="dz-message needsclick" style="margin: 0px !important">
+                <i class="h1 text-muted dripicons-view-apps"></i>
+                <div class="text-center">
+                <span class="text-muted font-13">
+                    <strong>Click to Add Custom Component</strong></span>
+            </div>
+            </div>
+        </form>
 </div>
 </template>
 
@@ -97,7 +105,7 @@ export default {
     data() {
         return {
             lodash: _,
-            data: [],
+            data: null,
             activeChange: false
         }
     },
@@ -119,12 +127,14 @@ export default {
             this.$forceUpdate();
         },
         inputed($event, value) {
-            console.log('inputed', $event, value)
             value.value = $event.data;
         },
         rearange() {
-                this.$modal.show("rearange-modal")
-            },
+            this.$modal.show("rearange-modal")
+        },
+        addCustomComponent() {
+            this.$modal.show("component-modal", {"data": 'test'})
+        },
     },
 
     watch: {
@@ -134,7 +144,7 @@ export default {
         }
         var parsed = typeof this.template.rows === 'string' || this.template.rows instanceof String ? JSON.parse(this.template.rows) : this.template.rows;
 
-        console.log(parsed)
+        console.log("PARSED", parsed)
         parsed.forEach(element => {
             element.columns.forEach(column => {
                 column.active = column.order < 1 ? true : false;
@@ -148,8 +158,16 @@ export default {
         });
 
         this.data = parsed;
-        console.log(JSON.parse(this.template ? this.template.rows : ''))
+        console.log("data", this.data);
     }
+    },
+    mounted() {
+        eventHub.$on('component-added', ((component) => {
+            console.log('component--', component)
+        }));
+    },
+    beforeDestroy() {
+        eventHub.$off('component-added');
     }
 }
 </script>

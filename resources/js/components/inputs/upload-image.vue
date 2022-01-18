@@ -7,26 +7,25 @@
       <div class="text-center">
         <label :name="'avatar'+ keyput" style="width: 100%">
             <form method="post" class="dropzone dz-clickable" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
-                <div class="dz-message needsclick">
+                <div class="dz-message needsclick" style="margin: 1rem 0;">
                     <i class="h1 text-muted dripicons-cloud-upload"></i>
                     <div class="text-center">
-        <file-upload
-          extensions="gif,jpg,jpeg,png,webp"
-          accept="image/png,image/gif,image/jpeg,image/webp"
-          :name="'avatar' + keyput"
-          :id="'avatar' + keyput"
-          post-action="/upload/post"
-          :drop="!edit"
-          v-model="files[keyput]"
-          @input-filter="inputFilter"
-          @input-file="inputFile"
-          :ref="keyput">
-        </file-upload>
-        <h3>Drop files here or click to upload.</h3>
-      </div>
+                        <file-upload
+                        extensions="gif,jpg,jpeg,png,webp"
+                        accept="image/png,image/gif,image/jpeg,image/webp"
+                        :name="'avatar' + keyput"
+                        :id="'avatar' + keyput"
+                        post-action="/upload/post"
+                        :drop="!edit"
+                        v-model="files[keyput]"
+                        @input-filter="inputFilter"
+                        @input-file="inputFile"
+                        :ref="keyput">
+                        </file-upload>
+                        <span class="font-16">Drop files here or click to upload</span>
+                    </div>
 
-                    <span class="text-muted font-13">(This is just a demo dropzone. Selected files are
-                        <strong>not</strong> actually uploaded.)</span>
+
                 </div>
             </form>
         </label>
@@ -64,7 +63,7 @@ export default {
   },
 
   mounted() {
-      console.log("keyput", this.$refs[this.keyput])
+      //console.log("keyput", this.$refs[this.keyput])
   },
 
   methods: {

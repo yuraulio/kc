@@ -1,0 +1,20 @@
+{
+    "components" : {
+        "columns": [
+            {
+                "active": true,
+                "template":{
+                    "title": "Content",
+                    "key": "content_component",
+                    "inputs": [
+                        {
+                            "type": "content_components",
+                            "key": "content_components",
+                            "label": "Content"
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

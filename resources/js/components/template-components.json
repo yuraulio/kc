@@ -1,6 +1,8 @@
 {
     "hero" : {
         "title": "Hero Header",
+        "width": "full",
+        "icon": "dripicons-document-edit",
         "key": "hero_header_component",
         "inputs": [
             {
@@ -21,6 +23,7 @@
         ]
     },
     "text_box" : {
+        "width": "content",
         "title": "Text Box",
         "key": "text_box_component",
         "inputs": [
@@ -42,7 +45,9 @@
         ]
     },
     "content_box" : {
+        "width": "content",
         "title": "Content Box",
+        "icon": "dripicons-article",
         "key": "content_box_component",
         "inputs": [
             {
@@ -83,7 +88,9 @@
         ]
     },
     "text_editor" : {
+        "width": "content",
         "title": "Rich Text Editor",
+        "icon": "dripicons-document-edit",
         "key": "text_editor_component",
         "inputs": [
             {
@@ -94,13 +101,40 @@
         ]
     },
     "image" : {
+        "width": "full",
         "title": "Full size image",
+        "icon": "dripicons-photo-group",
         "key": "full_sixe_image_component",
         "inputs": [
             {
                 "type": "image",
                 "key": "full_size_image",
                 "label": "Image"
+            }
+        ]
+    },
+    "meta" : {
+        "visible": false,
+        "title": "Meta",
+        "icon": "dripicons-rocket",
+        "key": "meta_component",
+        "inputs": [
+            {
+                "type": "text",
+                "key": "meta_title",
+                "label": "Meta Title",
+                "size": "col-lg-12"
+            },
+            {
+                "type": "textarea",
+                "key": "meta_description",
+                "label": "Meta Description"
+            },
+            {
+                "type": "text",
+                "key": "meta_keyword",
+                "label": "Meta Keywords",
+                "size": "col-lg-12"
             }
         ]
     }

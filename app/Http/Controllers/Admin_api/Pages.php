@@ -22,7 +22,7 @@ class Pages extends Controller
     public function list(Request $request): JsonResponse
     {
         try {
-            $pages = Page::lookForOriginal($request->filter)->get();
+            $pages = Page::lookForOriginal($request->filter)->with('template')->orderBy('created_at', 'desc')->get();
             return response()->json(['data' => $pages], 200);
         } catch (Exception $e) {
             Log::error("Failed to get pages. " . $e->getMessage());
@@ -46,6 +46,7 @@ class Pages extends Controller
             $page->title = $request->title;
             $page->description = $request->description;
             $page->template_id = $request->template_id;
+            $page->content = $request->content;
             $page->save();
 
             $page->categories()->sync(collect($request->category_id ?? [])->pluck('id')->toArray());
@@ -88,12 +89,15 @@ class Pages extends Controller
             $page = Page::find($id);
             $page->title = $request->title;
             $page->description = $request->description;
-            $page->category_id = $request->category_id;
+            $page->template_id = $request->template_id;
+            $page->content = $request->content;
             $page->save();
+
+            $page->categories()->sync(collect($request->category_id ?? [])->pluck('id')->toArray());
 
             return response()->json(['message' => 'success'], 200);
         } catch (Exception $e) {
-            Log::error("Failed to edit page. " . $e->getMessage());
+            Log::error("Failed to edit page. " , [$e]);
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }

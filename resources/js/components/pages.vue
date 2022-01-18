@@ -4,84 +4,6 @@
 
 <template>
     <div>
-
-        <modal name="component-modal" :resizable="true" height="auto" :adaptive="true">
-        <div class="p-4 row">
-            <div class="col-md-6 col-xl-6">
-                <div @click="selectComponent('text_editor')" class="widget-rounded-circle card bg-grey">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <div class="avatar-lg mt-2">
-                                    <i style="font-size: 4em" class="h1 text-muted  dripicons-document-edit"></i>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <h5 class="mb-1 mt-2 font-16">Rich Text</h5>
-                                <p class="mb-2 text-muted">The Editor</p>
-                            </div>
-                        </div> <!-- end row-->
-                    </div>
-                </div> <!-- end widget-rounded-circle-->
-            </div> <!-- end col-->
-
-            <div class="col-md-6 col-xl-6">
-                <div @click="selectComponent('content_box')" class="widget-rounded-circle card bg-grey">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <div class="avatar-lg mt-2">
-                                    <i style="font-size: 4em" class="h1 text-muted dripicons-article"></i>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <h5 class="mb-1 mt-2 font-16">Content Box</h5>
-                                <p class="mb-2 text-muted">Teaser</p>
-                            </div>
-                        </div> <!-- end row-->
-                    </div>
-                </div> <!-- end widget-rounded-circle-->
-            </div> <!-- end col-->
-
-            <div class="col-md-6 col-xl-6">
-                <div @click="selectComponent('hero')" class="widget-rounded-circle card bg-grey">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <div class="avatar-lg mt-2">
-                                    <i style="font-size: 4em" class="h1 text-muted dripicons-monitor"></i>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <h5 class="mb-1 mt-2 font-16">Hero Header</h5>
-                                <p class="mb-2 text-muted">Page header</p>
-                            </div>
-                        </div> <!-- end row-->
-                    </div>
-                </div> <!-- end widget-rounded-circle-->
-            </div> <!-- end col-->
-
-            <div class="col-md-6 col-xl-6">
-                <div @click="selectComponent('image')" class="widget-rounded-circle card bg-grey">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <div class="avatar-lg mt-2">
-                                    <i style="font-size: 4em" class="h1 text-muted  dripicons-photo-group
-                                            "></i>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <h5 class="mb-1 mt-2 font-16">Image</h5>
-                                <p class="mb-2 text-muted">Full size img</p>
-                            </div>
-                        </div> <!-- end row-->
-                    </div>
-                </div> <!-- end widget-rounded-circle-->
-            </div> <!-- end col-->
-            <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions" @click="rearange()" class="btn btn-lg btn-secondary waves-effect waves-light">Rearange</button>
-        </div>
-        </modal>
         <div class="row">
             <!-- <page></page> -->
         </div>
@@ -106,7 +28,16 @@
             </div> <!-- end card-->
 
             <div v-if="!isLoading">
-            <row-box
+                <page
+                v-for="page in pages"
+                v-bind:key="page.id"
+                :page="page"
+                :description="page.description"
+                @updatemode="updatemode"
+                @updateid="updateid"
+                @updatetitle="updatetitle"
+                ></page>
+            <!-- <row-box
                 v-for="page in pages"
                 v-bind:key="page.id"
                 :title="page.title"
@@ -116,7 +47,7 @@
                 @updateid="updateid"
                 @updatetitle="updatetitle"
             >
-            </row-box>
+            </row-box> -->
             </div>
             <div style="margin-top: 150px" class="text-center" v-else>
                 <vue-loaders-ball-grid-beat	 color="#6658dd" scale="1" class="mt-4 text-center"></vue-loaders-ball-grid-beat	>
@@ -124,7 +55,7 @@
         </div>
 
         <div v-if="mode == 'new'">
-            <add-edit
+            <pageseditable
                 ref="adit"
                 @updatemode="updatemode"
                 @refreshcategories="getData"
@@ -136,11 +67,11 @@
                 route="pages"
                 :additionalTemplates="additionalTemplates"
                 page-title="New Page"
-            ></add-edit>
+            ></pageseditable>
         </div>
 
         <div v-if="mode == 'edit'">
-            <add-edit
+            <pageseditable
                 @updatemode="updatemode"
                 @refreshcategories="getData"
                 title="true"
@@ -149,8 +80,9 @@
                 type="edit"
                 route="pages"
                 page-title="Edit Page"
+                :data="lodash.find(pages, { 'id': id })"
                 :id="id"
-            ></add-edit>
+            ></pageseditable>
         </div>
 
         <div v-if="mode == 'delete'">
@@ -168,10 +100,11 @@
 </template>
 <script>
 import page from './page.vue'
-
+import pageseditable from './pageseditable.vue'
     export default {
         components: {
-            page
+            page,
+            pageseditable
         },
         props: {
 
@@ -184,7 +117,8 @@ import page from './page.vue'
                 title: null,
                 filter: "",
                 isLoading: false,
-                additionalTemplates: []
+                additionalTemplates: [],
+                lodash: _
             }
         },
         watch: {
@@ -193,25 +127,6 @@ import page from './page.vue'
             }
         },
         methods: {
-            selectComponent(component) {
-                var tm = {
-
-                "rows": [
-                                    {
-                                    "order":1,
-                                    "description":"",
-                                    "columns":[
-                                        {
-                                            "order":0,
-                                            "component": component
-                                        }
-                                    ]
-                                    }
-                ]
-                };
-                //this.additionalTemplates = tm;
-                this.$modal.hide("component-modal")
-            },
             addCustomComponent() {
                 this.$modal.show("component-modal")
             },
@@ -220,7 +135,8 @@ import page from './page.vue'
                 console.log(this.$refs.adit)
                 this.$refs.adit.rearange();
             },
-            updatemode(variable){
+            updatemode(variable, id){
+                this.id = id ?? this.id;
                 this.mode = variable;
             },
             updateid(variable){

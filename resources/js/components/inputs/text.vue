@@ -11,12 +11,12 @@
     export default {
         props: {
             title: String,
-            propValue: "",
+            propValue: {},
             required: false
         },
         data() {
             return {
-                value: "",
+                value: this.propValue,
             }
         },
         watch: {
@@ -28,6 +28,7 @@
 
         },
         mounted() {
+            console.log("prop", this.propValue)
         }
     }
 </script>

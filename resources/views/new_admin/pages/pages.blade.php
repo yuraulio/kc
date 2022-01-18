@@ -16,7 +16,7 @@
             <div class="page-title-box">
                 <div class="page-title-right">
                     <form class="d-flex align-items-center mb-3">
-                       
+
                         {{-- <a href="javascript: void(0);" class="btn btn-blue btn-sm ms-2">
                             <i class="mdi mdi-autorenew"></i>
                         </a> --}}
@@ -29,11 +29,11 @@
     <!-- end page title -->
 
     <div class="row">
-
+        <component-modal></component-modal>
         <pages></pages>
 
     </div>
-    <!-- end row-->    
+    <!-- end row-->
 
 </div> <!-- container -->
 @endsection

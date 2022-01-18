@@ -5,7 +5,7 @@
 
     @media screen and (max-width: 575px) {
         .mobile-align-center {
-            text-align: center !important; 
+            text-align: center !important;
         }
     }
 </style>
@@ -64,23 +64,23 @@
         },
         data() {
             return {
-                
+
             }
         },
         methods: {
             edit(){
                 this.$emit('updateid', this.id);
                 this.$emit('updatetitle', this.title);
-                this.$emit('updatemode', 'edit');
+                this.$emit('updatemode', 'edit', this.id);
             },
             remove(){
                 this.$emit('updateid', this.id);
                 this.$emit('updatetitle', this.title);
-                this.$emit('updatemode', 'delete');
+                this.$emit('updatemode', 'delete', this.id);
             }
         },
         mounted() {
-            
+
         }
     }
 </script>
