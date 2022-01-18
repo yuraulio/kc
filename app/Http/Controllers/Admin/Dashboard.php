@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Model\Admin\Page;
 
 class Dashboard extends Controller
 {
@@ -47,5 +48,16 @@ class Dashboard extends Controller
     public function pages()
     {
         return view('new_admin.pages.pages');
+    }
+
+    /**
+     * Show the application pages.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function page($id)
+    {
+        $page = Page::whereId($id)->with('template')->first();
+        return view('new_admin.pages.page', ['content' => json_decode($page->content)]);
     }
 }

@@ -151,12 +151,12 @@
         "key": "blog_header_component",
         "inputs": [
             {
-                "type": "text",
+                "type": "textarea",
                 "key": "blog_header_title",
                 "label": "Blog Title"
             },
             {
-                "type": "text",
+                "type": "textarea",
                 "key": "blog_header_subtitle",
                 "label": "Blog Subtitle"
             }

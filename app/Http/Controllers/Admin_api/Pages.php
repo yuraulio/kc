@@ -14,6 +14,16 @@ use Illuminate\Support\Facades\Storage;
 
 class Pages extends Controller
 {
+    public function show($id): JsonResponse
+    {
+        try {
+            $page = Page::whereId($id)->with('template')->first();
+            return response()->json(['content' => json_encode($page)], 200);
+        } catch (Exception $e) {
+            Log::error("Failed to get pages. " . $e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 400);
+        }
+    }
 
     /**
      * Get pages
@@ -52,6 +62,7 @@ class Pages extends Controller
             $page->save();
 
             $page->categories()->sync(collect($request->category_id ?? [])->pluck('id')->toArray());
+            $page->load('template', 'categories');
 
             return response()->json($page, 200);
         } catch (Exception $e) {
@@ -97,6 +108,7 @@ class Pages extends Controller
             $page->save();
 
             $page->categories()->sync(collect($request->category_id ?? [])->pluck('id')->toArray());
+            $page->load('template', 'categories');
 
             return response()->json($page, 200);
         } catch (Exception $e) {

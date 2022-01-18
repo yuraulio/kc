@@ -14,7 +14,7 @@
                     </div>
                 </div> --> <!-- end dropdown -->
                 <!-- Title-->
-                <h4 class="mt-0"><a href="project-detail.html" class="text-dark">{{ page.title }}</a></h4>
+                <h4 class="mt-0"><a :href="'/new_page/' + page.id" target="_blank" class="text-dark">{{ page.title }}</a></h4>
                 <p class="text-muted text-uppercase"><i class="mdi mdi-account-circle"></i> <small v-if="page.template">{{ page.template.title }}</small></p>
                 <div v-for="cat in page.categories" class="badge bg-info text-white mb-3 mr-2 font-14" style="margin-right: 5px">{{ cat.title }}</div>
                 <!-- Desc-->

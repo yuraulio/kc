@@ -14,4 +14,8 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
         Route::get('/templates', [Dashboard::class, 'templates'])->name("admin-templates");
         Route::get('/pages', [Dashboard::class, 'pages'])->name("admin-pages");
     });
+
+    Route::get('/new_page/{id}', [Dashboard::class, 'page'])->name("new-page");
 });
+
+
