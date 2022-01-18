@@ -25,75 +25,82 @@
                 </div> <!-- end card-body -->
             </div>
         </div>
-        <div class="card col-lg-3 sticky">
-    <div class="card-body">
+        <div class="col-lg-3">
+            <div class="position-fixed" style="width:20%">
+        <div class="card ">
+            <div class="card-body">
 
-        <h4 class="mb-2">{{pageTitle}}</h4>
+                <h4 class="mb-2">{{pageTitle}}</h4>
 
-        <div class="row">
-            <div class="col-xl-12">
+                <div class="row">
+                    <div class="col-xl-12">
 
-                <text-field
-                    v-if="title"
-                    title="Title"
-                    @updatevalue="update_title"
-                    :prop-value="title_value"
-                    required=1
-                ></text-field>
+                        <text-field
+                            v-if="title"
+                            title="Title"
+                            @updatevalue="update_title"
+                            :prop-value="title_value"
+                            required=1
+                        ></text-field>
 
-                <text-field
-                    v-if="description"
-                    title="Description"
-                    @updatevalue="update_description"
-                    :prop-value="description_value"
-                ></text-field>
+                        <text-field
+                            v-if="description"
+                            title="Description"
+                            @updatevalue="update_description"
+                            :prop-value="description_value"
+                        ></text-field>
 
-                <multidropdown
-                    v-if="category"
-                    title="Template"
-                    :key="template_value ? template_value.id : 'temmult'"
-                    :multi="false"
-                    @updatevalue="update_template"
-                    :prop-value="template_value"
-                    route="templates"
-                ></multidropdown>
+                        <multidropdown
+                            v-if="category"
+                            title="Template"
+                            :key="template_value ? template_value.id : 'temmult'"
+                            :multi="false"
+                            @updatevalue="update_template"
+                            :prop-value="template_value"
+                            route="templates"
+                        ></multidropdown>
 
-                <multidropdown
-                    v-if="category"
-                    title="Categories"
-                    @updatevalue="update_category"
-                    :prop-value="category_value"
-                    route="categories"
-                ></multidropdown>
+                        <multidropdown
+                            v-if="category"
+                            title="Categories"
+                            @updatevalue="update_category"
+                            :prop-value="category_value"
+                            route="categories"
+                        ></multidropdown>
 
-                <rows
-                    v-if="rows"
-                    title="Content"
-                    required=1
-                    @updatevalue="update_rows"
-                    :prop-value="rows_value"
-                ></rows>
+                        <rows
+                            v-if="rows"
+                            title="Content"
+                            required=1
+                            @updatevalue="update_rows"
+                            :prop-value="rows_value"
+                        ></rows>
 
-                <!--<page
-                    v-if="page"
-                    title="Content"
-                    required=1
-                    @updatevalue="update_page"
-                    :prop-value="rows_value"
-                ></page>-->
+                        <!--<page
+                            v-if="page"
+                            title="Content"
+                            required=1
+                            @updatevalue="update_page"
+                            :prop-value="rows_value"
+                        ></page>-->
+                        <div :key="'ck'"  class="form-check form-switch mb-1" style="display: inline-block; cursor: pointer">
+                            <input :key="'on'" @click="published = !published" :id="'cinput'" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :for="'cinput'" :checked="published">
+                            <label class="form-check-label" for="light-mode-check">Published</label>
+                        </div>
+                        <div class="row mt-3">
+                    <div class="col-12 text-center mb-3 d-grid">
+                        <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions" :disabled="!template_value" @click="rearange()" class="btn btn-block btn-soft-info rounded-pill waves-effect waves-light m-1">Preview</button>
+                        <button v-if="type == 'new'" @click="add()" type="button" class="btn btn-soft-success rounded-pill waves-effect waves-light m-1" :disabled="loading"><i v-if="!loading" class="fe-check-circle me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Create</button>
+                        <button v-if="type == 'edit'" :disabled="loading" @click="edit()" type="button" class="btn btn-soft-success rounded-pill waves-effect waves-light m-1"><i v-if="!loading" class="mdi mdi-square-edit-outline me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Edit</button>
 
-                <div class="row mt-3">
-            <div class="col-12 text-center mb-3 d-grid">
-                <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions" :disabled="!template_value" @click="rearange()" class="btn btn-block btn-soft-info rounded-pill waves-effect waves-light m-1">Preview</button>
-                <button v-if="type == 'new'" @click="add()" type="button" class="btn btn-soft-success rounded-pill waves-effect waves-light m-1" :disabled="loading"><i v-if="!loading" class="fe-check-circle me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Create</button>
-                <button v-if="type == 'edit'" :disabled="loading" @click="edit()" type="button" class="btn btn-soft-success rounded-pill waves-effect waves-light m-1"><i v-if="!loading" class="mdi mdi-square-edit-outline me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Edit</button>
-
-                <button @click="$emit('updatemode', 'list')" type="button" class="btn btn-soft-danger rounded-pill waves-effect waves-light m-1"><i class="fe-x me-1"></i> Cancel</button>
+                        <button @click="$emit('updatemode', 'list')" type="button" class="btn btn-soft-danger rounded-pill waves-effect waves-light m-1"><i class="fe-x me-1"></i> Cancel</button>
+                    </div>
+                </div>
+                    </div> <!-- end col-->
+                </div>
+        </div> <!-- end col-->
+        </div>
             </div>
-        </div>
-            </div> <!-- end col-->
-        </div>
-</div> <!-- end col-->
         </div>
         <!-- end row -->
 
@@ -142,6 +149,7 @@ export default {
                 test: null,
                 template_value: null,
                 loading: false,
+                published: false,
                 lodash: _
             }
         },
@@ -180,7 +188,8 @@ export default {
                         rows: JSON.stringify(this.rows_value),
                         content: this.template_value ? JSON.stringify(this.$refs.tc.data) : '',
                         category_id: this.category_value,
-                        template_id: this.template_value ? this.template_value.id : null
+                        template_id: this.template_value ? this.template_value.id : null,
+                        published: this.published
                     }
                 )
                 .then((response) => {
@@ -209,7 +218,8 @@ export default {
                         rows: JSON.stringify(this.rows_value),
                         category_id: this.category_value,
                         content: this.template_value ? JSON.stringify(this.$refs.tc.data) : '',
-                        template_id: this.template_value ? this.template_value.id : null
+                        template_id: this.template_value ? this.template_value.id : null,
+                        published: this.published
                     }
                 )
                 .then((response) => {
@@ -235,6 +245,7 @@ export default {
                         this.data = data;
                         this.title_value = data.title;
                         this.description_value = data.description;
+                        this.published = data.published
                         if (data.rows){
                             console.log(data.rows);
                             this.rows_value = JSON.parse(data.rows);
@@ -256,6 +267,7 @@ export default {
                     this.title_value = data.title;
                     this.description_value = data.description;
                     this.template_value = data.template;
+                    this.published = data.published
                     if (data.rows){
                         this.rows_value = JSON.parse(data.rows);
                     }
@@ -284,9 +296,5 @@ export default {
 </script>
 
 <style>
-div.sticky {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-}
+
 </style>

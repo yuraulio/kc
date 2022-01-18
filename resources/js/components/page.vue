@@ -2,7 +2,8 @@
     <div class="col-12">
         <div class="card project-box ribbon-box">
             <div class="card-body">
-                <div class="ribbon ribbon-success float-end"><i class="mdi mdi-access-point me-1"></i> Published</div>
+                <div v-if="page.published == true" class="ribbon ribbon-success float-end"><i class="mdi mdi-access-point me-1"></i> Published</div>
+                <div v-else class="ribbon ribbon-danger float-end"><i class="mdi mdi-access-point me-1"></i> Not Published</div>
                 <!-- <div class="dropdown float-end">
                     <a href="#" class="dropdown-toggle card-drop arrow-none" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="mdi mdi-dots-horizontal m-0 text-muted h3"></i>
@@ -30,8 +31,8 @@
                     </span>
 
                     <span class="text-sm-start" style="flat: right">
-                        <div class="form-check form-switch mb-1" style="display: inline-block;">
-                            <input type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" id="light-mode-check" checked="">
+                        <div :key="page.id"  class="form-check form-switch mb-1" style="display: inline-block; cursor: pointer">
+                            <input :key="page.id + 'on'" @click="changePublish()" :id="page.id + 'input'" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :for="page.id + 'input'" :checked="page.published">
                             <label class="form-check-label" for="light-mode-check">Published</label>
                         </div>
                     </span>
@@ -54,7 +55,7 @@
         },
         data() {
             return {
-
+                loading: false
             }
         },
         methods: {
@@ -67,6 +68,22 @@
                 this.$emit('updateid', this.page.id);
                 this.$emit('updatetitle', this.page.title);
                 this.$emit('updatemode', 'edit', this.page.id);
+            },
+            changePublish() {
+                this.loading = true;
+                axios
+                .put('/api/pages/update_published/' + this.page.id)
+                .then((response) => {
+                    if (response.status == 200){
+                        this.page.published = !this.page.published;
+                        this.$toast.success('Published Status Updated Successfully!')
+                    }
+                    this.loading = false;
+                })
+                .catch((error) => {
+                    console.log(error)
+                    this.loading = false;
+                });
             }
         },
         mounted() {

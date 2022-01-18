@@ -47,6 +47,7 @@ class Pages extends Controller
             $page->description = $request->description;
             $page->template_id = $request->template_id;
             $page->content = $request->content;
+            $page->published = $request->published;
             $page->save();
 
             $page->categories()->sync(collect($request->category_id ?? [])->pluck('id')->toArray());
@@ -91,6 +92,7 @@ class Pages extends Controller
             $page->description = $request->description;
             $page->template_id = $request->template_id;
             $page->content = $request->content;
+            $page->published = $request->published;
             $page->save();
 
             $page->categories()->sync(collect($request->category_id ?? [])->pluck('id')->toArray());
@@ -116,6 +118,20 @@ class Pages extends Controller
             return response()->json(['message' => 'success'], 200);
         } catch (Exception $e) {
             Log::error("Failed to delete page. " . $e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 400);
+        }
+    }
+
+    public function updatePublished(int $id): JsonResponse
+    {
+        try {
+            $page = Page::find($id);
+            $page->published = !$page->published;
+            $page->save();
+
+            return response()->json(['message' => 'success'], 200);
+        } catch (Exception $e) {
+            Log::error("Failed to publish page. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }

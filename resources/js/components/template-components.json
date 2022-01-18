@@ -28,16 +28,6 @@
         "key": "text_box_component",
         "inputs": [
             {
-                "type": "text",
-                "key": "text_box_title",
-                "label": "Title"
-            },
-            {
-                "type": "text",
-                "key": "text_box_subtitle",
-                "label": "Subtitle"
-            },
-            {
                 "type": "textarea",
                 "key": "text_box_summary",
                 "label": "Short Summary"

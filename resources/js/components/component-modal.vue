@@ -1,5 +1,10 @@
 <template>
     <modal name="component-modal" :resizable="true" height="auto" :adaptive="true" @before-open="getParams">
+        <div slot="top-right">
+      <button @click="$modal.hide('component-modal')">
+        <i class="dripicons-cross"></i>
+      </button>
+    </div>
         <div class="p-4 row">
             <div class="col-md-6 col-xl-6">
                 <div @click="selectComponent('text_editor')" class="widget-rounded-circle card bg-grey">

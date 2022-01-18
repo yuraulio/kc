@@ -33,4 +33,5 @@ Route::domain('admin.' . env('APP_URL'))->group(function () {
     Route::post('pages/edit/{id}', [Pages::class, 'edit']);
     Route::post('pages/delete/{id}', [Pages::class, 'delete']);
     Route::get('pages/get/{id}', [Pages::class, 'get']);
+    Route::put('pages/update_published/{id}', [Pages::class, 'updatePublished']);
 });
