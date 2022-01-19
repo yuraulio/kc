@@ -804,18 +804,18 @@ class HomeController extends Controller
         $giveAway->company = $request->ccompany;
 
         $giveAway->save();
-        $mail_data = $request->all();
+        $data = $request->all();
 
-        Mail::send('theme.emails.give_away.give_away_email', ['mail_data' => $mail_data], function ($m) use ($mail_data) {
+        Mail::send('emails.admin.give_away', $data, function ($m) use ($data) {
 
-            $fullname = $mail_data['cname'] . ' ' . $mail_data['csurname'];
+            $fullname = $data['cname'] . ' ' . $data['csurname'];
             $adminemail = 'info@knowcrunch.com';
             $subject = 'Knowcrunch - Give Away';
 
             //$emails = ['socratous12@gmail.com', 'info@darkpony.com'];
             $m->subject($subject);
             $m->from($adminemail, 'Knowcrunch');
-            $m->replyTo($mail_data['cemail'], $fullname);
+            $m->replyTo($data['cemail'], $fullname);
              // $m->to('nathanailidis@lioncode.gr', 'Chysafis');
             $m->to($adminemail, 'Knowcrunch');
         });
