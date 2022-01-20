@@ -287,7 +287,7 @@ class CronjobsController extends Controller
     }
 
     public function updateStatusField(){
-        $subscriptions = Subscription::whereIn('stripe_status',['canceled','cancel'])->get();
+        $subscriptions = Subscription::whereIn('stripe_status',['canceled','cancel','cancelled'])->get();
 
         foreach($subscriptions as $subscription){
             $subscription->status = false;
@@ -303,8 +303,10 @@ class CronjobsController extends Controller
             }
 
             if(strtotime($subscription->trial_ends_at) < strtotime($subscription->ends_at)){
+
                 $subscription->stripe_status = 'active';
                 $subscription->save();
+                
             }
 
             

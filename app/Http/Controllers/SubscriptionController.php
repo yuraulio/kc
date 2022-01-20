@@ -36,9 +36,9 @@ class SubscriptionController extends Controller
                     $status = 'trialing';
                 }else if($status == 'active' && $sub['subscription'][0]['status'] && !$sub['trial']){
                     $status = 'active';
-                }else if(($status == 'cancelled' || $status == 'cancel') && !$sub['trial']){
+                }else if(($status == 'cancelled' || $status == 'cancel' || $status == 'canceled') && !$sub['trial']){
                     $status = 'paid_and_cancelled';
-                }else if(($status == 'cancelled' || $status == 'cancel') && $sub['trial']){
+                }else if(($status == 'cancelled' || $status == 'cancel' || $status == 'canceled') && $sub['trial']){
                     $status = 'cancelled';
                 }
                 
