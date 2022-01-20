@@ -1,7 +1,7 @@
 @extends('emails.user.layouts.master')
 
 @section('email_body')
-   <tr>
+    <tr>
             <td align="center" class="r0-c">
                <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="600" class="r1-o" style="table-layout: fixed; width: 600px;">
                   <tr>
@@ -83,7 +83,7 @@
                                                                         <tr>
                                                                            <td align="left" valign="top" class="r14-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                               <div>
-                                                                                 <h2 class="default-heading2" style="color: #1F2D3D; font-family: arial,helvetica,sans-serif; font-size: 32px; margin: 0px;"><span style="font-family: Tahoma, geneva, sans-serif;">Dear {{ $firstName }}</span></h2>
+                                                                                 <h2 class="default-heading2" style="color: #1F2D3D; font-family: arial,helvetica,sans-serif; font-size: 32px; margin: 0px;"><span style="font-family: Tahoma, geneva, sans-serif;">Dear {{$firstName}}</span></h2>
                                                                               </div>
                                                                            </td>
                                                                         </tr>
@@ -99,12 +99,12 @@
                                                                         <tr>
                                                                            <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                               <div>
-                                                                                 <p style="margin: 0px;"><span style="font-family: Tahoma, geneva, sans-serif;">Your payment of <strong>{{$amount}}</strong> for the {{$eventTitle}} did not go through. </span></p>
+                                                                                 <p style="margin: 0px;"><span style="font-family: Tahoma, geneva, sans-serif;">Your payment for your subscription of <strong>{{$amount}}</strong> for the {{$eventTitle}} did not go through and your subscription plan cannot be renewed at the moment. </span></p>
                                                                                  <p style="margin: 0px;"> </p>
                                                                                  <br>
                                                                                  <p style="margin: 0px;"><span style="font-family: Tahoma, geneva, sans-serif;">Our system will retry <strong>3 more times</strong> in the next 7 days. Please make sure you will have funds available in your bank in order to keep having access to your course. </span></p>
-                                                                                 <p style="margin: 0px;"> </p>
                                                                                  <br>
+                                                                                 <p style="margin: 0px;"> </p>
                                                                                  <p style="margin: 0px;"><span style="font-family: Tahoma, geneva, sans-serif;">Please contact us if you need any assistance regarding your payment. </span></p>
                                                                               </div>
                                                                            </td>
@@ -136,6 +136,6 @@
                   </tr>
                </table>
             </td>
-   </tr>
+    </tr>
 @stop
        

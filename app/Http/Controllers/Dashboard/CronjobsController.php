@@ -102,11 +102,10 @@ class CronjobsController extends Controller
         $adminemail = 'info@knowcrunch.com';
 
         $today = strtotime( date('Y-m-d'));
-
         $subscriptions = Subscription::where('must_be_updated','<',$today)->whereIn('stripe_status',['active','trialing'])->where('email_send',false)->where('must_be_updated','!=', 0)->get();
         
         foreach($subscriptions as $subscription){
-
+          
             $subscription->email_send = true;
             $subscription->save();
 
@@ -121,9 +120,15 @@ class CronjobsController extends Controller
 
             $data['firstName'] = $user->firstname;
             $data['eventTitle'] = $event->title;
+            $data['subject'] = 'KnowCrunch |' . $data['firstName'] . ' - Subscription Payment Declined';;
             $data['expirationDate'] = $event->pivot->expiration;
+            $data['template'] = 'emails.user.subscription_non_payment';
+            $data['amount'] = round($subscription->price,2);
 
-            $sent = Mail::send('emails.student.subscription.subscription_payment_declined', $data, function ($m) use ($adminemail, $muser) {
+            $user->first()->notify(new FailedPayment($data));
+
+
+            /*$sent = Mail::send('emails.student.subscription.subscription_payment_declined', $data, function ($m) use ($adminemail, $muser) {
 
                 $fullname = $muser['name'];
                 $first = $muser['first'];
@@ -133,7 +138,7 @@ class CronjobsController extends Controller
                 //$m->cc($adminemail);
                 $m->subject($sub);
 
-            });
+            });*/
 
 
         }
