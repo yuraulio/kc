@@ -20,7 +20,8 @@ class Categories extends Controller
     public function list(Request $request): JsonResponse
     {
         try {
-            $categories = Category::lookForOriginal($request->filter)->orderBy('created_at', 'desc')->get()->load("pages");
+            $categories = Category::lookForOriginal($request->filter)->where("parent_id", null)
+            ->orderBy('created_at', 'desc')->get()->load(["pages", "subcategories", "user"]);
             return response()->json(['data' => $categories], 200);
         } catch (Exception $e) {
             Log::error("Failed to get categories. " . $e->getMessage());
@@ -43,7 +44,8 @@ class Categories extends Controller
         try {
             $category = new Category();
             $category->title = $request->title;
-            $category->description = $request->description;
+            $category->parent_id = $request->parent_id ?? null;
+            $category->user_id = Auth::user()->id;
             $category->save();
 
             return response()->json($category, 200);
@@ -61,7 +63,7 @@ class Categories extends Controller
     public function get(Request $request, int $id): JsonResponse
     {
         try {
-            $category = Category::find($id);
+            $category = Category::find($id)->load("subcategories");
             return response()->json(['data' => $category], 200);
         } catch (Exception $e) {
             Log::error("Failed to get categories. " . $e->getMessage());
@@ -83,7 +85,6 @@ class Categories extends Controller
         try {
             $category = Category::find($id);
             $category->title = $request->title;
-            $category->description = $request->description;
             $category->save();
 
             return response()->json($category, 200);

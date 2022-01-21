@@ -23,18 +23,23 @@
                     >
                     </avatar>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-3">
                     <div class="d-flex align-items-start">
                         <div class="w-100">
                             <h4 class="mt-0 mb-2 font-16">{{title}}</h4>
-                            <p class="mb-1">{{description}}</p>
+                            <p v-if="description" class="mb-1">{{description}}</p>
                         </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="text-center button-list">
+                        <span v-for="item in list" class="badge bg-primary me-1 mb-1">{{item.title}}</span>
                     </div>
                 </div>
                 <div class="col-sm-3">
                     <div class="d-flex align-items-start">
                         <div class="w-100">
-                            <p v-if="user" class="mb-1">Created by: {{user}}</p>
+                            <p v-if="user" class="mb-1">Created by: {{user.firstname + " " + user.lastname}}</p>
                             <p v-if="pages" class="mb-1">Pages: {{pages.length}}</p>
                             <div v-if="category" class="badge font-14 bg-soft-info text-info p-1">{{category}}</div>
                         </div>
@@ -60,7 +65,8 @@
             category: String,
             id: Number,
             pages: Array,
-            user: String,
+            user: Object,
+            list: Array,
         },
         data() {
             return {

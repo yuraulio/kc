@@ -9,7 +9,6 @@
                     @updatemode="$modal.hide('create-modal');"
                     @refreshcategories="getData"
                     title="true"
-                    description="true"
                     type="new"
                     route="categories"
                     @created="created"
@@ -21,7 +20,7 @@
                     @updatemode="$modal.hide('edit-modal');"
                     @refreshcategories="getData"
                     title="true"
-                    description="true"
+                    subcategories="true"
                     type="edit"
                     route="categories"
                     @edited="edited"
@@ -56,13 +55,13 @@
                     v-for="category in categories"
                     v-bind:key="category.id"
                     :title="category.title"
-                    :description="category.description"
                     @updatemode="updatemode"
                     :id="category.id"
                     @updateid="updateid"
                     @updatetitle="updatetitle"
-                    user="anto cabraja"
+                    :user="category.user"
                     :pages="category.pages"
+                    :list="category.subcategories"
                 >
                 </row-box>
             </div>

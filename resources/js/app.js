@@ -59,6 +59,7 @@ Vue.component('page', require('./components/inputs/page.vue').default);
 Vue.component('editable', require('./components/editable.vue').default);
 Vue.component('multiput', require('./components/inputs/multiput.vue').default);
 Vue.component('component-modal', require('./components/component-modal.vue').default);
+Vue.component('list', require('./components/inputs/list.vue').default);
 
 Vue.component('avatar', require('vue-avatar').default);
 

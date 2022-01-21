@@ -88,6 +88,16 @@
             </div>
         </div>
 
+        <list
+            v-if="subcategories"
+            title="Subcategories"
+            :prop-value="subcategories_value"
+            route="categories"
+            :id="id"
+            class="mt-3"
+            placeholder="Add new subcategory"
+        ></list>
+
     </div> <!-- end card-body -->
 </div> <!-- end card-->
 
@@ -104,6 +114,7 @@ import Tc from './tc.vue';
             description: String,
             rows: String,
             category: String,
+            subcategories: String,
             route: String,
             type: String,
             id: Number,
@@ -119,7 +130,8 @@ import Tc from './tc.vue';
                 errors: null,
                 test: null,
                 template_value: null,
-                loading: false
+                loading: false,
+                subcategories_value: null,
             }
         },
         methods: {
@@ -208,6 +220,7 @@ import Tc from './tc.vue';
                             console.log(JSON.stringify(this.rows_value));
                         }
                         this.category_value = data.category_id;
+                        this.subcategories_value = data.subcategories;
                     }
                 })
                 .catch((error) => {
@@ -225,6 +238,7 @@ import Tc from './tc.vue';
                         this.rows_value = JSON.parse(data.rows);
                     }
                     this.category_value = data.category_id;
+                    this.subcategories_value = data.subcategories;
                 } else {
                     this.get()
                 }

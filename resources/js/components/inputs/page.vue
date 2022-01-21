@@ -3,7 +3,7 @@
 <div class="mb-3">
     <label class="form-label">{{title}} <span v-if="required">*</span> </label>
 
-    <row v-for="row in rows" >
+    <row v-for="row in rows" v-bind:key="row.order">
 
         <div v-for="column in row.columns" :class="'col-md-' + (12/row.columns.length)">
             gdfgfd

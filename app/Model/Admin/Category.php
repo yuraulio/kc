@@ -2,6 +2,7 @@
 
 namespace App\Model\Admin;
 
+use App\Model\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\SearchFilter;
@@ -27,5 +28,15 @@ class Category extends Model
     public function pages()
     {
         return $this->belongsToMany(Page::class, 'cms_link_pages_categories', 'category_id', 'page_id');
+    }
+
+    public function subcategories()
+    {
+        return $this->hasMany(Category::class, "parent_id");
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, "user_id");
     }
 }
