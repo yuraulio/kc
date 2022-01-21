@@ -285,10 +285,11 @@ class Invoice extends Model
 
 
     public function getInvoice(){
-
+        
         $data=[];
        
         $billing = json_decode($this->transaction->first()->billing_details,true);
+        //$billing = json_decode($this->user->first()->billing_details,true);
 
         $billInfo = '';
         $billafm = '';
@@ -320,6 +321,7 @@ class Invoice extends Model
         $data['date'] = $this->created_at->format('d-F-Y');//date('d') . '-' . date('F') . '-' . date('Y');
         $data['title'] = $this->event->first()->title;
         $data['name'] = $this->name;
+        //$data['name'] = isset($billing['billname']) ? $billing['billname'] : '';
         $data['billInfo'] = $billInfo ;
         $data['invoice'] = $this->invoice ;
         $data['country'] = 'Ελλάδα';
