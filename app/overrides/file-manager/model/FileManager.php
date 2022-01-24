@@ -137,12 +137,14 @@ class FileManager
     public function upload($disk, $path, $files, $overwrite)
     {
         $fileNotUploaded = false;
-
+        
         foreach ($files as $file) {
+            $name = preg_replace('/\s+/', '_', $file->getClientOriginalName());
             // skip or overwrite files
             if (!$overwrite[0]
-                && Storage::disk($disk)
-                    ->exists($path.'/'.$file->getClientOriginalName())
+                && (Storage::disk($disk)
+                    ->exists($path.'/'.$file->getClientOriginalName()) || Storage::disk($disk)
+                                                                            ->exists($path.'/'.$name))
             ) {
                 continue;
             }
@@ -174,7 +176,7 @@ class FileManager
                 Storage::disk($disk)->putFileAs(
                     $path,
                     $file,
-                    $file->getClientOriginalName()
+                    $name
                 );
             }else{
                 $this->compressImage($file,$path1,70);
@@ -216,9 +218,9 @@ class FileManager
 
         elseif ($info['mime'] == 'image/png')
         $image = imagecreatefrompng($source);
-
-
-        imagejpeg($image, $destination.'/'.$source->getClientOriginalName(), $quality);
+        $name = preg_replace('/\s+/', '_', $source->getClientOriginalName());
+        
+        imagejpeg($image, $destination.'/'.$name, $quality);
 
     }
 

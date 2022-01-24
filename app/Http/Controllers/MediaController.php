@@ -66,7 +66,7 @@ class MediaController extends Controller
         $folders =substr($mediaKey, 0,strrpos($mediaKey, '/'));
         $path = explode(".",$id);
         //dd(public_path('/').$mediaKey);
-
+        //dd($mediaKey);
         $image = Image::make(public_path('/').$mediaKey);
 
         $media->original_name = $id;
