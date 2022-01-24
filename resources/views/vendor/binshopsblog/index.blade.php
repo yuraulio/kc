@@ -9,7 +9,7 @@
 @endsection
 
 @section('header')
-    <title>{{ _('KnowCrunch Blog') }}</title>
+    <title>{{ __('KnowCrunch Blog') }}</title>
 @endsection
 
 
@@ -27,7 +27,7 @@
                     @if ($category)
                         <h1>{{$category->category_name}}</h1>
                     @else
-                        <h1>{{ _('Our blog') }}</h1>
+                        <h1>{{ __('Our blog') }}</h1>
                     @endif
                </div>
            </div>

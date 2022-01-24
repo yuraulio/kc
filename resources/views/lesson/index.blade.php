@@ -116,7 +116,7 @@
                                             </div> 
                                         </td>
                                         <td><?= ($lesson->status == 1) ? 'Published' : 'Unpublished'; ?></td>
-                                        <td class="lesson-title-{{$lesson->id}}"><a href="{{ route('lessons.edit', $lesson) }}">{{ $lesson->title }}</a></td>
+                                        <td class="lesson-title-{{$lesson->id}}"><a href="{{ route('lessons.edit', [$lesson,'selectedCategory' => $lesson->category[$key]['id']]) }}">{{ $lesson->title }}</a></td>
                                         <td id="{{$lesson->category[$key]['id']}}-{{$topic->id}}-{{$lesson->id}}">
                                        
                                             {{ $topic->title }},

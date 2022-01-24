@@ -487,12 +487,12 @@ class WebhookController extends BaseWebhookController
 
 
 
-				$this->sendEmail($elearningInvoice,$pdf,$paymentMethod);
+				$this->sendEmail($elearningInvoice,$pdf,$paymentMethod,true);
 			}
 	
 	}
 	
-	private function sendEmail($elearningInvoice,$pdf,$paymentMethod = null){
+	private function sendEmail($elearningInvoice,$pdf,$paymentMethod = null,$planSubscription = false){
 
 		$adminemail = ($paymentMethod && $paymentMethod->payment_email) ? $paymentMethod->payment_email : 'info@knowcrunch.com';
 
@@ -523,7 +523,7 @@ class WebhookController extends BaseWebhookController
 			
 		});*/
 
-		$data['slugInvoice'] = encrypt($user->id . '-' . $elearningInvoice->id);
+		$data['slugInvoice'] = encrypt($user->id . '-' . $elearningInvoice->id . '-' . $planSubscription);
 		$user->notify(new CourseInvoice($data));
 
 		$fn = date('Y-m-d') . '-Invoice-' . $elearningInvoice->invoice . '.pdf';

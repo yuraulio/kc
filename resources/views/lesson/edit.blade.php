@@ -200,7 +200,7 @@
             placeholder: "By Category",
             allowClear: true
         });
-
+         
         $.each(topics, function(key, value) {
             
 
@@ -210,7 +210,14 @@
 
                 if(uniqueTopics[categoryName] === undefined){
                     uniqueTopics[categoryName] = categoryName
-                    $('#category').append(`<option value="${value1.id}">${categoryName}</option>`)
+
+                    let selected = '';
+                    
+                    if(value1.id == "{{ $selectedCategory }}"){
+                        selected = 'selected'
+                    }
+
+                    $('#category').append(`<option ${selected} value="${value1.id}">${categoryName}</option>`)
                 }
             });
             

@@ -199,11 +199,12 @@ class LessonController extends Controller
      * @param  \App\Model\Lesson  $lesson
      * @return \Illuminate\Http\Response
      */
-    public function edit(Lesson $lesson)
+    public function edit(Request $request,Lesson $lesson)
     {
+        
         $lesson = $lesson->with('topic', 'category','type')->find($lesson['id']);
         $topics = Topic::with('category')->get();
-
+        $selectedCategory = $request->get('selectedCategory') ?: $request->get('selectedCategory');
         // //dd($topics);
         // $new_topics = [];
 
@@ -218,11 +219,9 @@ class LessonController extends Controller
         // $topics = $new_topics;
         // dd($topics);
 
-
         $types = Type::all();
-
-
-        return view('lesson.edit', compact('lesson', 'topics', 'types'));
+ 
+        return view('lesson.edit', compact('lesson', 'topics', 'types', 'selectedCategory'));
     }
 
     public function save_instructor(Request $request)
@@ -520,7 +519,7 @@ class LessonController extends Controller
                     
             }
 
-        }else{
+        }else {
 
 
             $category = Category::find($request->category);

@@ -1311,7 +1311,7 @@ class StudentController extends Controller
             $invoice = decrypt($slug);
             $invoice = explode('-',$invoice);
     
-            if(count($invoice) != 2){
+            if(count($invoice) < 2 || count($invoice) > 3){
                 abort(404);
             }
     
@@ -1322,6 +1322,8 @@ class StudentController extends Controller
             if( !$inv = Invoice::find($invoice[1]) ){
                 abort(404);
             }
+
+            $planDescription = isset($invoice[2]) ? $invoice[2] : false;
         
             $users = $inv->user;
             $userIds = [];
@@ -1335,7 +1337,7 @@ class StudentController extends Controller
                 abort(404);
             }
     
-            return $inv->getInvoice();
+            return $inv->getInvoice($planDescription);
 
         }catch(\Exception $e){
 

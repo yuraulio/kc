@@ -284,7 +284,7 @@ class Invoice extends Model
     }
 
 
-    public function getInvoice(){
+    public function getInvoice($planDecription = false){
         
         $data=[];
        
@@ -327,10 +327,19 @@ class Invoice extends Model
         $data['country'] = 'Ελλάδα';
         $data['vat'] = $billafm;
         $data['footer'] = $this->event->first()->paymentMethod->first() ? $this->event->first()->paymentMethod->first()->footer : '';
-        $data['description'] = $this->event->first()->summary1->where('section','date')->first() ? $this->event->first()->summary1->where('section','date')->first()->title : '';
         $data['installments']= ($this->instalments > 1) ? ($this->instalments - $this->instalments_remaining) . ' of ' . $this->instalments : '';
 
-        
+        if($planDecription){
+
+            $plan = $this->event->first()->plans->first();
+            $data['description'] = $plan->name;
+            
+        }else{
+            $data['description'] = $this->event->first()->summary1->where('section','date')->first() ? $this->event->first()->summary1->where('section','date')->first()->title : '';
+
+        }
+
+
 
         $contxt = stream_context_create([
             'ssl' => [

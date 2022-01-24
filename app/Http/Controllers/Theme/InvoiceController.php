@@ -12,8 +12,12 @@ class InvoiceController extends Controller
 
        
         $invoice = Invoice::where('id',$invoice)->first();
+
+
+        $planDescription = $invoice->subscription->first() ? true : false;
+
         if($invoice){
-            return $invoice->getInvoice();
+            return $invoice->getInvoice($planDescription);
         }
 
     }
