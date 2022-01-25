@@ -265,7 +265,7 @@
 
 <script>
 
-$(".logo-button").click(function(){
+/*$(".logo-button").click(function(){
 
    let logo = $(this).attr('data-item');
 
@@ -286,6 +286,29 @@ $(".logo-button").click(function(){
       });
 
    }
+})*/
+
+$(document).on('click','.logo-button',function(){
+
+let logo = $(this).attr('data-item');
+
+if (confirm('Are you sure you want to delete this {{strtolower($title)}}?')){
+
+   $.ajax({
+       headers: {
+           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+       },
+       type: 'delete',
+       url: `/admin/logos/delete/${logo}`,
+       
+       success: function (data) {
+         if(data['success']){
+            $(`tr#item-${logo}`).empty()
+         }
+       }
+   });
+
+}
 })
 
 
