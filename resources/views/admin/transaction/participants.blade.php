@@ -358,6 +358,13 @@ $(document).ready(function() {
         min = moment(min).format('MM/DD/YYYY')
         max = moment(max).format('MM/DD/YYYY')
 
+        coupons = table.column(4,{filter: 'applied'}).data().unique().sort();
+        $('#col4_filter').empty();
+        $('#col4_filter').append('<option value>-- All --</option>')
+        $.each(coupons, function(key, value){
+            $('#col4_filter').append('<option value="'+value+'">'+value+'</option>')
+        })
+
         stats_non_elearning()
 
 
@@ -382,7 +389,6 @@ $(document).ready(function() {
         initCounters()
 
         let sum = 0
-
         //returns 'filtered' or visible rows
         table.rows({filter: 'applied'}).every( function ( rowIdx, tableLoop, rowLoop ) {
             var coupon = this.data()[2];
@@ -410,6 +416,8 @@ $(document).ready(function() {
 
         } );
 
+
+        
 
         $('#total').text('€'+sum)
         $('#special').text('€'+special)
