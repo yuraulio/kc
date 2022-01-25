@@ -437,6 +437,8 @@ $(document).ready(function() {
 
     function filterColumn ( i ) {
         
+        console.log('fds');
+
         if($('#col'+i+'_filter').val()){
             $('#participants_table').DataTable().column( i ).search(
                 '^'+$('#col'+i+'_filter').val()+'$', true,true
@@ -460,8 +462,21 @@ $(document).ready(function() {
             $('.participant_elearning').addClass('none')
         }
 
+       
         //console.log(removeSpecial($('#col'+i+'_filter').val()))
         stats_non_elearning()
+
+        if(i!=4){
+            coupons = table.column(4,{filter: 'applied'}).data().unique().sort();
+            $('#col4_filter').empty();
+            $('#col4_filter').append('<option value>-- All --</option>')
+            $.each(coupons, function(key, value){
+                $('#col4_filter').append('<option value="'+value+'">'+value+'</option>')
+            })
+        }
+
+        
+
       
     }
 
