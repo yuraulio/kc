@@ -548,7 +548,7 @@ class HomeController extends Controller
         }else if($data['page']['template'] == 'instructors'){
             $data['instructors'] =  Instructor::with('medias', 'slugable')->orderBy('subtitle','asc')->where('status', 1)->get();
         }else if($data['page']['id'] == 800){
-            $data['brands'] = Logos::with('medias')->where('type', 'brands')->get();
+            $data['brands'] = Logos::with('medias')->where('type', 'brands')->orderBy('name','asc')->get();
             return view('admin.static_tpls.logos.backend' ,$data);
         }else if($data['page']['id'] == 801){
             $data['logos'] = Logos::with('medias')->where('type', 'logos')->get();

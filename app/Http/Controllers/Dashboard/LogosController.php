@@ -85,12 +85,18 @@ class LogosController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Model\Logos  $pages
+     * @param  \App\Model\Logos  $logo
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Logos $pages)
+    public function destroy(Request $request, Logos $logo)
     {
-        //
+        $logo->medias()->delete();
+        $logo->delete();
+
+        return response()->json([
+            'success' => true
+        ]);
+        
     }
 
 }

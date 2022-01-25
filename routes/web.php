@@ -257,6 +257,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     Route::post('/logos/store', 'Dashboard\LogosController@store')->name('logos.store');
     Route::get('/logos/edit/{logo}', 'Dashboard\LogosController@edit')->name('logos.edit');
     Route::put('/logos/update/{logo}', 'Dashboard\LogosController@update')->name('logos.update');
+    Route::delete('/logos/delete/{logo}', 'Dashboard\LogosController@destroy')->name('logos.delete');
 
     //Exams
     Route::post('/exams/add-question/{exam}', 'ExamController@addQuestion')->name('exam.add_question');

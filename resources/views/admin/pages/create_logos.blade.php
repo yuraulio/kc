@@ -192,25 +192,25 @@
                             </thead>
                             <tbody>
                                 @foreach ($data as $item)
-                                    <tr>
+                                    <tr id="item-{{$item->id}}">
                                         <td><a href="{{ route('logos.edit', $item) }}">{{ $item->name }}</td>
                                         <td>{{ $item->created_at->format('d/m/Y H:i') }}</td>
                                         <td class="text-right">
-                                        <?php //dd($user); ?>
-                                            <div class="dropdown">
+          
+                                        <div class="dropdown">
                                                 <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <i class="fas fa-ellipsis-v"></i>
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                                                     <a class="dropdown-item" href="{{ route('logos.edit', $item) }}">{{ __('Edit') }}</a>
-                                                    {{--<form action="{{ route('user.destroy', $user) }}" method="post">
+                                                    {{--<form action="{{ route('logos.delete', $item) }}" method="post">
                                                         @csrf
-                                                        @method('delete')
+                                                        @method('delete')--}}
 
-                                                        <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
+                                                        <button type="button" class="dropdown-item logo-button" data-item="{{$item->id}}">
                                                             {{ __('Delete') }}
                                                         </button>
-                                                    </form>--}}
+                                                    {{--</form>--}}
                                                 </div>
                                             </div>
                                         </td>
@@ -260,6 +260,38 @@
             }
         }
     });
+</script>
+
+
+<script>
+
+$(".logo-button").click(function(){
+
+   let logo = $(this).attr('data-item');
+
+   if (confirm('Are you sure you want to delete this {{strtolower($title)}}?')){
+
+      $.ajax({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          },
+          type: 'delete',
+          url: `/admin/logos/delete/${logo}`,
+          
+          success: function (data) {
+            if(data['success']){
+               $(`tr#item-${logo}`).empty()
+            }
+          }
+      });
+
+   }
+})
+
+
+
+
+
 </script>
 
 @endpush
