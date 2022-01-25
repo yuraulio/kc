@@ -8,7 +8,7 @@ use App\Model\User;
 use App\Model\Event;
 use Illuminate\Http\JsonResponse;
 
-class Dashboard extends Controller
+class DashboardController extends Controller
 {
     /**
      * Return user count

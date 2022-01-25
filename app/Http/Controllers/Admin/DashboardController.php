@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Model\Admin\Page;
 
-class Dashboard extends Controller
+class DashboardController extends Controller
 {
 
 

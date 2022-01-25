@@ -96,6 +96,7 @@
             :id="id"
             class="mt-3"
             placeholder="Add new subcategory"
+            @refresh="refreshCategories"
         ></list>
 
     </div> <!-- end card-body -->
@@ -153,11 +154,14 @@ import Tc from './tc.vue';
             rearange() {
                 this.$refs.tc.rearange();
             },
+            refreshCategories(){
+                this.$emit('refreshcategories');
+            },
             add(){
                 this.errors = null;
                 this.loading = true;
                 axios
-                .post('/api/' + this.route + '/add',
+                .post('/api/' + this.route,
                     {
                         title: this.title_value,
                         description: this.description_value,
@@ -166,9 +170,9 @@ import Tc from './tc.vue';
                     }
                 )
                 .then((response) => {
-                    if (response.status == 200){
+                    if (response.status == 201){
                         //this.$emit('refreshcategories');
-                        this.$emit('created', response.data);
+                        this.$emit('created', response.data.data);
                         this.$emit('updatemode', 'list');
                         this.$toast.success('Created Successfully!')
                     }
@@ -184,17 +188,18 @@ import Tc from './tc.vue';
                 this.loading = true;
                 this.errors = null;
                 axios
-                .post('/api/' + this.route + '/edit/' + this.id,
+                .patch('/api/' + this.route + '/' + this.id,
                     {
                         title: this.title_value,
                         description: this.description_value,
                         rows: JSON.stringify(this.rows_value),
                         category_id: this.category_value,
+                        id: this.id,
                     }
                 )
                 .then((response) => {
                     if (response.status == 200){
-                        this.route == 'categories' ? this.$emit('edited', response.data) : this.$emit('refreshcategories');
+                        this.route == 'categories' ? this.$emit('edited', response.data.data) : this.$emit('refreshcategories');
                         this.$emit('updatemode', 'list');
                         this.$toast.success('Edited Successfully!')
                         this.loading = false;
@@ -208,7 +213,7 @@ import Tc from './tc.vue';
             },
             get(){
                 axios
-                .get('/api/' + this.route + '/get/' + this.id)
+                .get('/api/' + this.route + '/' + this.id)
                 .then((response) => {
                     if (response.status == 200){
                         var data = response.data.data;

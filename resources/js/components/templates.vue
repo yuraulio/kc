@@ -25,19 +25,27 @@
                 </div> <!-- end card-body-->
             </div> <!-- end card-->
             <div v-if="!loading">
-            <row-box
-                v-for="template in templates"
-                v-bind:key="template.id"
-                :title="template.title"
-                :description="template.description"
-                @updatemode="updatemode"
-                :id="template.id"
-                @updateid="updateid"
-                @updatetitle="updatetitle"
-                user="anto cabraja"
-                :pages="template.pages"
-            >
-            </row-box>
+                <row-box
+                    v-for="template in templates['data']"
+                    v-bind:key="template.id"
+                    :title="template.title"
+                    :description="template.description"
+                    @updatemode="updatemode"
+                    :id="template.id"
+                    @updateid="updateid"
+                    @updatetitle="updatetitle"
+                    :user="template.user"
+                    :pages="template.pages"
+                >
+                </row-box>
+
+                <pagination v-if="templates['meta']" class="mt-3" 
+                :data="templates['meta']" 
+                @pagination-change-page="getData"
+                :limit = 5
+                align = "center"
+                :show-disabled = "true"
+                ></pagination>
             </div>
             <div style="margin-top: 150px" class="text-center" v-else>
                 <vue-loaders-ball-grid-beat	 color="#6658dd" scale="1" class="mt-4 text-center"></vue-loaders-ball-grid-beat	>
@@ -69,7 +77,7 @@
                 type="edit"
                 route="templates"
                 page-title="Edit Template"
-                :predata="templates && id ? JSON.parse(lodash.find(templates, {'id': id}).rows) : null"
+                :predata="templates['data'] && id ? JSON.parse(lodash.find(templates['data'], {'id': id}).rows) : null"
                 :fields="fields"
                 :data="lodash.find(templates, { 'id': id })"
                 :id="id"
@@ -117,7 +125,7 @@
         methods: {
             created($event) {
                 console.log($event);
-                this.templates.unshift($event);
+                this.templates['data'].unshift($event);
             },
             updatemode(variable){
                 if (variable == "delete") {
@@ -130,10 +138,10 @@
                         showLoaderOnConfirm: true,
                         preConfirm: () => {
                             return axios
-                                .delete('/api/templates/delete/' + this.id)
+                                .delete('/api/templates/' + this.id)
                                 .then((response) => {
                                     if (response.status == 200){
-                                        this.templates.splice(_.findIndex(this.templates, { 'id' : this.id }), 1);
+                                        this.templates['data'].splice(_.findIndex(this.templates['data'], { 'id' : this.id }), 1);
                                         this.$emit('updatemode', 'list');
                                     }
 
@@ -155,7 +163,7 @@
                             }
                         })
                 } else if (variable == 'edit') {
-                    console.log('hooo',_.find(this.templates, {'id': this.id}))
+                    // console.log('hooo',_.find(this.templates, {'id': this.id}))
 
                     this.mode = variable;
                 } else {
@@ -168,11 +176,11 @@
             updatetitle(variable){
                 this.title = variable;
             },
-            getData(){
+            getData(page = 1){
                 this.loading = true;
-                axios.get('/api/templates?filter=' + this.filter)
+                axios.get('/api/templates?filter=' + this.filter + '&page=' + page)
                     .then((response) => {
-                        this.templates = response.data["data"];
+                        this.templates = response.data;
                         this.loading = false;
                     })
                     .catch((error) => {

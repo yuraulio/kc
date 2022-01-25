@@ -8,7 +8,7 @@
                         v-if="title"
                         title="Template Title"
                         @updatevalue="update_title"
-                        :prop-value="data ? data.title : ''"
+                        :prop-value="title_value"
                         required=1
                     ></text-field>
                     <ul v-if="errors && errors['title']" class="parsley-errors-list filled" id="parsley-id-7" aria-hidden="false"><li class="parsley-required">{{errors['title'][0]}}</li></ul>
@@ -129,7 +129,7 @@ export default {
                 this.errors = null;
                 this.loading = true;
                 axios
-                .post('/api/' + this.route + '/add',
+                .post('/api/' + this.route,
                     {
                         title: this.title_value,
                         description: this.description_value,
@@ -138,9 +138,9 @@ export default {
                     }
                 )
                 .then((response) => {
-                    if (response.status == 200){
+                    if (response.status == 201){
                         //this.$emit('refreshcategories');
-                        this.$emit('created', response.data);
+                        this.$emit('created', response.data.data);
                         this.$emit('updatemode', 'list');
                         this.$toast.success('Created Successfully!')
                     }
@@ -156,17 +156,18 @@ export default {
                 this.loading = true;
                 this.errors = null;
                 axios
-                .post('/api/' + this.route + '/edit/' + this.id,
+                .patch('/api/' + this.route + '/' + this.id,
                     {
                         title: this.title_value,
                         description: this.description_value,
                         rows: this.$refs.tc ? JSON.stringify(this.$refs.tc.data) : null,
                         category_id: this.category_value,
+                        id: this.id,
                     }
                 )
                 .then((response) => {
                     if (response.status == 200){
-                        this.route == 'categories' ? this.$emit('edited', response.data) : this.$emit('refreshcategories');
+                        this.route == 'categories' ? this.$emit('edited', response.data.data) : this.$emit('refreshcategories');
                         this.$emit('updatemode', 'list');
                         this.$toast.success('Edited Successfully!')
                         this.loading = false;
@@ -180,16 +181,16 @@ export default {
             },
             get(){
                 axios
-                .get('/api/' + this.route + '/get/' + this.id)
+                .get('/api/' + this.route + '/' + this.id)
                 .then((response) => {
                     if (response.status == 200){
                         var data = response.data.data;
                         this.title_value = data.title;
                         this.description_value = data.description;
                         if (data.rows){
-                            console.log(data.rows);
+                            // console.log(data.rows);
                             this.rows_value = JSON.parse(data.rows);
-                            console.log(JSON.stringify(this.rows_value));
+                            // console.log(JSON.stringify(this.rows_value));
                         }
                         this.category_value = data.category_id;
                     }
@@ -200,7 +201,7 @@ export default {
             }
         },
         mounted() {
-console.log("fields", this.predata)
+// console.log("fields", this.predata)
             if (this.type == "edit"){
                 if (this.data) {
                     var data = this.data;

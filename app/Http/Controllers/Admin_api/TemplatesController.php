@@ -3,26 +3,32 @@
 namespace App\Http\Controllers\Admin_api;
 
 use App\Http\Controllers\Controller;
-use App\Model\Admin\Category;
+use App\Http\Requests\CreateAdminTemplateRequest;
+use App\Http\Requests\UpdateAdminTemplateRequest;
+use App\Http\Resources\TemplateResource;
 use App\Model\Admin\Template;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
-class Templates extends Controller
+class TemplatesController extends Controller
 {
 
     /**
      * Get templates
      *
-     * @return JsonResponse
+     * @return AnonymousResourceCollection
      */
-    public function list(Request $request): JsonResponse
+    public function index(Request $request): AnonymousResourceCollection
     {
+        $this->authorize('viewAny', Template::class, Auth::user());
+
         try {
-            $templates = Template::lookForOriginal($request->filter)->get()->load("pages");
-            return response()->json(['data' => $templates], 200);
+            $templates = Template::lookForOriginal($request->filter)->with(["pages", "user"])->paginate(100);
+            return TemplateResource::collection($templates);
         } catch (Exception $e) {
             Log::error("Failed to get templates. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
@@ -32,23 +38,21 @@ class Templates extends Controller
     /**
      * Add template
      *
-     * @return JsonResponse
+     * @return TemplateResource
      */
-    public function add(Request $request): JsonResponse
+    public function store(CreateAdminTemplateRequest $request): TemplateResource
     {
-        $request->validate([
-            'title' => 'required|unique:cms_templates',
-            'rows' => 'required',
-        ]);
+        $this->authorize('create', Template::class, Auth::user());
 
         try {
             $template = new Template();
             $template->title = $request->title;
             $template->description = $request->description;
             $template->rows = $request->rows;
+            $template->user_id = Auth::user()->id;
             $template->save();
 
-            return response()->json($template, 200);
+            return new TemplateResource($template);
         } catch (Exception $e) {
             Log::error("Failed to add new template. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
@@ -58,13 +62,16 @@ class Templates extends Controller
     /**
      * Get template
      *
-     * @return JsonResponse
+     * @return TemplateResource
      */
-    public function get(int $id): JsonResponse
+    public function show(int $id): TemplateResource
     {
         try {
             $template = Template::find($id);
-            return response()->json(['data' => $template], 200);
+
+            $this->authorize('view', $template, Auth::user());
+
+            return new TemplateResource($template);
         } catch (Exception $e) {
             Log::error("Failed to get template. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
@@ -74,23 +81,21 @@ class Templates extends Controller
     /**
      * Edit template
      *
-     * @return JsonResponse
+     * @return TemplateResource
      */
-    public function edit(Request $request, int $id): JsonResponse
+    public function update(UpdateAdminTemplateRequest $request, int $id): TemplateResource
     {
-        $request->validate([
-            'title' => 'required|unique:cms_templates,title,'. $id,
-            'rows' => 'required',
-        ]);
-
         try {
             $template = Template::find($id);
+
+            $this->authorize('update', $template, Auth::user());
+
             $template->title = $request->title;
             $template->description = $request->description;
             $template->rows = $request->rows;
             $template->save();
 
-            return response()->json($template, 200);
+            return new TemplateResource($template);
         } catch (Exception $e) {
             Log::error("Failed to edit template. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
@@ -102,10 +107,13 @@ class Templates extends Controller
      *
      * @return JsonResponse
      */
-    public function delete(int $id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         try {
             $template = Template::find($id);
+
+            $this->authorize('delete', $template, Auth::user());
+
             $template->delete();
 
             return response()->json(['message' => 'success'], 200);

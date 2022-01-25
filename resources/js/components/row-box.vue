@@ -40,7 +40,7 @@
                     <div class="d-flex align-items-start">
                         <div class="w-100">
                             <p v-if="user" class="mb-1">Created by: {{user.firstname + " " + user.lastname}}</p>
-                            <p v-if="pages" class="mb-1">Pages: {{pages.length}}</p>
+                            <p class="mb-1">Pages: {{pages}}</p>
                             <div v-if="category" class="badge font-14 bg-soft-info text-info p-1">{{category}}</div>
                         </div>
                     </div>
@@ -64,7 +64,7 @@
             description: String,
             category: String,
             id: Number,
-            pages: Array,
+            pages: Number,
             user: Object,
             list: Array,
         },

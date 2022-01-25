@@ -3,38 +3,33 @@
 namespace App\Http\Controllers\Admin_api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreateAdminPageRequest;
+use App\Http\Resources\PageResource;
 use App\Model\Admin\Category;
 use App\Model\Admin\Page;
 use App\Model\Admin\Template;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
-class Pages extends Controller
+class PagesController extends Controller
 {
-    public function show($id): JsonResponse
-    {
-        try {
-            $page = Page::whereId($id)->with('template')->first();
-            return response()->json(['content' => json_encode($page)], 200);
-        } catch (Exception $e) {
-            Log::error("Failed to get pages. " . $e->getMessage());
-            return response()->json(['message' => $e->getMessage()], 400);
-        }
-    }
-
     /**
      * Get pages
      *
-     * @return JsonResponse
+     * @return AnonymousResourceCollection
      */
-    public function list(Request $request): JsonResponse
+    public function index(Request $request): AnonymousResourceCollection
     {
+        $this->authorize('viewAny', Page::class, Auth::user());
+
         try {
-            $pages = Page::lookForOriginal($request->filter)->with('template')->orderBy('created_at', 'desc')->get();
-            return response()->json(['data' => $pages], 200);
+            $pages = Page::lookForOriginal($request->filter)->with('template')->orderBy('created_at', 'desc')->paginate(100);
+            return PageResource::collection($pages);
         } catch (Exception $e) {
             Log::error("Failed to get pages. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
@@ -44,13 +39,11 @@ class Pages extends Controller
     /**
      * Add page
      *
-     * @return JsonResponse
+     * @return PageResource
      */
-    public function add(Request $request): JsonResponse
+    public function store(CreateAdminPageRequest $request): PageResource
     {
-        $request->validate([
-            'title' => 'required|unique:cms_pages',
-        ]);
+        $this->authorize('create', Page::class, Auth::user());
 
         try {
             $page = new Page();
@@ -59,12 +52,13 @@ class Pages extends Controller
             $page->template_id = $request->template_id;
             $page->content = $request->content;
             $page->published = $request->published;
+            $page->user_id = Auth::user()->id;
             $page->save();
 
             $page->categories()->sync(collect($request->category_id ?? [])->pluck('id')->toArray());
             $page->load('template', 'categories');
 
-            return response()->json($page, 200);
+            return new PageResource($page);
         } catch (Exception $e) {
             Log::error("Failed to add new page. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
@@ -74,13 +68,16 @@ class Pages extends Controller
     /**
      * Get page
      *
-     * @return JsonResponse
+     * @return PageResource
      */
-    public function get(int $id): JsonResponse
+    public function show(int $id): PageResource
     {
         try {
-            $page = Page::find($id);
-            return response()->json(['data' => $page], 200);
+            $page = Page::whereId($id)->with('template')->first();
+
+            $this->authorize('view', $page, Auth::user());
+
+            return new PageResource($page);
         } catch (Exception $e) {
             Log::error("Failed to get page. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
@@ -90,9 +87,9 @@ class Pages extends Controller
     /**
      * Edit page
      *
-     * @return JsonResponse
+     * @return PageResource
      */
-    public function edit(Request $request, int $id): JsonResponse
+    public function update(Request $request, int $id): PageResource
     {
         $request->validate([
             'title' => 'required|unique:cms_pages,title,'. $id,
@@ -100,6 +97,9 @@ class Pages extends Controller
 
         try {
             $page = Page::find($id);
+
+            $this->authorize('update', $page, Auth::user());
+
             $page->title = $request->title;
             $page->description = $request->description;
             $page->template_id = $request->template_id;
@@ -110,9 +110,9 @@ class Pages extends Controller
             $page->categories()->sync(collect($request->category_id ?? [])->pluck('id')->toArray());
             $page->load('template', 'categories');
 
-            return response()->json($page, 200);
+            return new PageResource($page);
         } catch (Exception $e) {
-            Log::error("Failed to edit page. " , [$e]);
+            Log::error("Failed to edit page. ", [$e]);
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
@@ -122,10 +122,13 @@ class Pages extends Controller
      *
      * @return JsonResponse
      */
-    public function delete(int $id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         try {
             $page = Page::find($id);
+
+            $this->authorize('delete', $page, Auth::user());
+
             $page->categories()->detach();
             $page->delete();
 
@@ -140,6 +143,9 @@ class Pages extends Controller
     {
         try {
             $page = Page::find($id);
+
+            $this->authorize('publish', $page, Auth::user());
+
             $page->published = !$page->published;
             $page->save();
 
@@ -152,6 +158,8 @@ class Pages extends Controller
 
     public function uploadImage(Request $request): JsonResponse
     {
+        $this->authorize('imgUpload', Page::class, Auth::user());
+
         try {
             $path = Storage::disk('public')->putFile('page_files', $request->file('file'), 'public');
             $url = config('app.url'). "/uploads/" . $path;

@@ -52,7 +52,7 @@
 
             <div v-if="!loading">
                 <row-box
-                    v-for="category in categories"
+                    v-for="category in categories['data']"
                     v-bind:key="category.id"
                     :title="category.title"
                     @updatemode="updatemode"
@@ -64,6 +64,15 @@
                     :list="category.subcategories"
                 >
                 </row-box>
+                
+                <pagination v-if="categories['meta']" class="mt-3" 
+                :data="categories['meta']" 
+                @pagination-change-page="getData"
+                :limit = 5
+                align = "center"
+                :show-disabled = "true"
+                ></pagination>
+
             </div>
             <div style="margin-top: 150px" class="text-center" v-else>
                 <vue-loaders-ball-grid-beat	 color="#6658dd" scale="1" class="mt-4 text-center"></vue-loaders-ball-grid-beat	>
@@ -111,11 +120,12 @@
         },
         methods: {
             created($event) {
-                this.categories.unshift($event);
+                console.log($event);
+                this.categories['data'].unshift($event);
                 this.$modal.hide('create-modal');
             },
             edited($event) {
-                this.categories.splice(_.findIndex(this.categories, { 'id': $event.id }), 1, $event);
+                this.categories['data'].splice(_.findIndex(this.categories['data'], { 'id': $event.id }), 1, $event);
                 this.$modal.hide('edit-modal');
             },
             updatemode(variable){
@@ -129,10 +139,10 @@
                         showLoaderOnConfirm: true,
                         preConfirm: () => {
                             return axios
-                                .delete('/api/categories/delete/' + this.id)
+                                .delete('/api/categories/' + this.id)
                                 .then((response) => {
                                     if (response.status == 200){
-                                        this.categories.splice(_.findIndex(this.categories, { 'id' : this.id }), 1);
+                                        this.categories['data'].splice(_.findIndex(this.categories['data'], { 'id' : this.id }), 1);
                                         this.$emit('updatemode', 'list');
                                     }
 
@@ -166,11 +176,11 @@
             updatetitle(variable){
                 this.title = variable;
             },
-            getData(){
+            getData(page = 1){
                 this.loading = true;
-                axios.get('/api/categories?filter=' + this.filter)
+                axios.get('/api/categories?filter=' + this.filter + '&page=' + page)
                     .then((response) => {
-                        this.categories = response.data["data"];
+                        this.categories = response.data;
                         this.loading = false;
                     })
                     .catch((error) => {

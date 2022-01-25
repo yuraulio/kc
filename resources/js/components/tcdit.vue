@@ -210,7 +210,7 @@ export default {
         }
     },
     mounted() {
-        console.log("TCEDIT MOUNTED")
+        // console.log("TCEDIT MOUNTED")
         /* if (this.predata) {
             this.data = this.predata;
             return;
@@ -240,7 +240,7 @@ export default {
             this.data.push(comp);
             }
         }
-console.log("mmm", this.pseudo, this.mode)
+// console.log("mmm", this.pseudo, this.mode)
         if (this.pseudo == false) {
             console.log("PSEUDO", this.pseudo, this.predata)
             var parsed = this.predata;
@@ -294,12 +294,12 @@ console.log("mmm", this.pseudo, this.mode)
         }));
 
         eventHub.$on('order-changed', ((data) => {
-            console.log('order-changed')
+            // console.log('order-changed')
             this.data = data;
         }));
     },
     beforeDestroy() {
-        console.log("TCEDIT DESTROYED")
+        // console.log("TCEDIT DESTROYED")
         eventHub.$off('component-added');
         eventHub.$off('component-rearange');
         eventHub.$off('order-changed');

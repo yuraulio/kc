@@ -12,7 +12,7 @@
 <div class="mb-3">
     <h5>{{title}}</h5>
     <ul class="list-group list-group-flush">
-        <li v-for="(item, index) in list" class="list-group-item">
+        <li v-for="(item, index) in list" class="list-group-item ps-0 pe-0">
             <div v-if="item.edit == true">
                 <input type="text" v-model="item.title" class="form-control input">
                 <a @click="edit(index, item.title, item.id)" href="javascript:void(0);" class="action-icon float-end">
@@ -33,7 +33,7 @@
                 </a>
             </div>
         </li>
-        <li class="list-group-item">
+        <li class="list-group-item ps-0 pe-0">
             <input type="text" v-model="new_item" :placeholder="placeholder" class="form-control input">
             <a @click="add()" href="javascript:void(0);" class="action-icon float-end">
                 <i v-if="!loading" class="mdi mdi-check"></i>
@@ -83,10 +83,11 @@
                         showLoaderOnConfirm: true,
                         preConfirm: () => {
                             return axios
-                                .delete('/api/' + this.route + '/delete/' + id)
+                                .delete('/api/' + this.route + '/' + id)
                                 .then((response) => {
                                     if (response.status == 200){
                                         this.list.splice(_.findIndex(this.list, { 'id' : id }), 1);
+                                        this.$emit('refresh');
                                     }
 
                                 })
@@ -110,16 +111,17 @@
             add(){
                 this.loading = true;
                 axios
-                .post('/api/' + this.route + '/add',
+                .post('/api/' + this.route,
                     {
                         title: this.new_item,
                         parent_id: this.id,
                     }
                 )
                 .then((response) => {
-                    if (response.status == 200){
-                        this.list.push(response.data);
+                    if (response.status == 201){
+                        this.list.push(response.data.data);
                         this.$toast.success('Created Successfully!')
+                        this.$emit('refresh');
                     }
                     this.loading = false;
                     this.new_item = "";
@@ -140,7 +142,7 @@
             edit(index, value, id) {
                 this.loading = true;
                 axios
-                .post('/api/' + this.route + '/edit/' + id,
+                .patch('/api/' + this.route + '/' + id,
                     {
                         title: value,
                     }
@@ -150,6 +152,7 @@
                         this.$toast.success('Edited Successfully!')
                         this.loading = false;
                         this.list[index].edit = false;
+                        this.$emit('refresh');
                     }
                 })
                 .catch((error) => {

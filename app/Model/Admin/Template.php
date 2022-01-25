@@ -5,6 +5,7 @@ namespace App\Model\Admin;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\SearchFilter;
+use App\Model\User;
 
 class Template extends Model
 {
@@ -30,5 +31,10 @@ class Template extends Model
     public function pages()
     {
         return $this->hasMany(Page::class, "template_id");
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, "user_id");
     }
 }

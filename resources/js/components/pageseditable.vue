@@ -52,7 +52,6 @@
                         ></text-field>
 
                         <multidropdown
-                            v-if="category"
                             title="Template"
                             :key="template_value ? template_value.id : 'temmult'"
                             :multi="false"
@@ -62,7 +61,6 @@
                         ></multidropdown>
 
                         <multidropdown
-                            v-if="category"
                             title="Categories"
                             @updatevalue="update_category"
                             :prop-value="category_value"
@@ -151,7 +149,8 @@ export default {
                 template_value: null,
                 loading: false,
                 published: false,
-                lodash: _
+                lodash: _,
+                page: {},
             }
         },
         methods: {
@@ -182,7 +181,7 @@ export default {
                 this.errors = null;
                 this.loading = true;
                 axios
-                .post('/api/' + this.route + '/add',
+                .post('/api/' + this.route,
                     {
                         title: this.title_value,
                         description: this.description_value,
@@ -194,9 +193,9 @@ export default {
                     }
                 )
                 .then((response) => {
-                    if (response.status == 200){
+                    if (response.status == 201){
                         //this.$emit('refreshcategories');
-                        this.$emit('created', response.data);
+                        this.$emit('created', response.data.data);
                         this.$emit('updatemode', 'list');
                         this.$toast.success('Created Successfully!')
                     }
@@ -211,8 +210,9 @@ export default {
             edit(){
                 this.loading = true;
                 this.errors = null;
+                console.log(JSON.stringify(this.$refs.tc.data));
                 axios
-                .post('/api/' + this.route + '/edit/' + this.data.id,
+                .patch('/api/' + this.route + '/' + this.data.id,
                     {
                         title: this.title_value,
                         description: this.description_value,
@@ -220,7 +220,8 @@ export default {
                         category_id: this.category_value,
                         content: this.template_value ? JSON.stringify(this.$refs.tc.data) : '',
                         template_id: this.template_value ? this.template_value.id : null,
-                        published: this.published
+                        published: this.published,
+                        id: this.data.id,
                     }
                 )
                 .then((response) => {
@@ -239,7 +240,7 @@ export default {
             },
             get(){
                 axios
-                .get('/api/' + this.route + '/get/' + this.id)
+                .get('/api/' + this.route + '/' + this.id)
                 .then((response) => {
                     if (response.status == 200){
                         var data = response.data.data;
@@ -252,7 +253,8 @@ export default {
                             this.rows_value = JSON.parse(data.rows);
                             console.log(JSON.stringify(this.rows_value));
                         }
-                        this.category_value = data.category_id;
+                        this.category_value = data.categories;
+                        this.template_value = data.template;
                     }
                 })
                 .catch((error) => {

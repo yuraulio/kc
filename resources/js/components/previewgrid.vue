@@ -124,7 +124,7 @@ export default {
         draggable
     },
     mounted() {
-        console.log("prev", this.data)
+        // console.log("prev", this.data)
         this.data = this.gedata;
     },
     watch: {
@@ -140,7 +140,7 @@ export default {
         gedata: {
             deep: true,
             handler(val) {
-                console.log("PREDATA CHANGED")
+                // console.log("PREDATA CHANGED")
                 this.data = this.gedata
             }
         }

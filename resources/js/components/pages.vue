@@ -29,7 +29,7 @@
 
             <div v-if="!isLoading">
                 <page
-                v-for="page in pages"
+                v-for="page in pages['data']"
                 v-bind:key="page.id"
                 :page="page"
                 :description="page.description"
@@ -37,18 +37,16 @@
                 @updateid="updateid"
                 @updatetitle="updatetitle"
                 ></page>
-            <!-- <row-box
-                v-for="page in pages"
-                v-bind:key="page.id"
-                :title="page.title"
-                :description="page.description"
-                @updatemode="updatemode"
-                :id="page.id"
-                @updateid="updateid"
-                @updatetitle="updatetitle"
-            >
-            </row-box> -->
+
+                <pagination v-if="pages['meta']" class="mt-3" 
+                :data="pages['meta']" 
+                @pagination-change-page="getData"
+                :limit = 5
+                align = "center"
+                :show-disabled = "true"
+                ></pagination>
             </div>
+
             <div style="margin-top: 150px" class="text-center" v-else>
                 <vue-loaders-ball-grid-beat	 color="#6658dd" scale="1" class="mt-4 text-center"></vue-loaders-ball-grid-beat	>
             </div>
@@ -129,15 +127,15 @@ import pageseditable from './pageseditable.vue'
         },
         methods: {
             created($event) {
-                console.log($event);
-                this.pages.unshift($event);
+                // console.log($event);
+                this.pages['data'].unshift($event);
             },
             addCustomComponent() {
                 this.$modal.show("component-modal")
             },
             rearange() {
                 this.$modal.hide("component-modal")
-                console.log(this.$refs.adit)
+                // console.log(this.$refs.adit)
                 this.$refs.adit.rearange();
             },
             updatemode(variable){
@@ -151,10 +149,10 @@ import pageseditable from './pageseditable.vue'
                         showLoaderOnConfirm: true,
                         preConfirm: () => {
                             return axios
-                                .delete('/api/pages/delete/' + this.id)
+                                .delete('/api/pages/' + this.id)
                                 .then((response) => {
                                     if (response.status == 200){
-                                        this.pages.splice(_.findIndex(this.pages, { 'id' : this.id }), 1);
+                                        this.pages['data'].splice(_.findIndex(this.pages['data'], { 'id' : this.id }), 1);
                                         this.$emit('updatemode', 'list');
                                     }
 
@@ -187,12 +185,12 @@ import pageseditable from './pageseditable.vue'
             updatetitle(variable){
                 this.title = variable;
             },
-            getData(){
+            getData(page = 1){
                 this.isLoading = true;
-                axios.get('/api/pages?filter=' + this.filter)
+                axios.get('/api/pages?filter=' + this.filter + '&page=' + page)
                     .then((response) => {
-                        this.pages = response.data["data"];
-                        console.log(this.pages)
+                        this.pages = response.data;
+                        // console.log(this.pages)
                         this.isLoading = false;
                     })
                     .catch((error) => {

@@ -28,7 +28,7 @@
 
         },
         mounted() {
-            console.log("prop", this.propValue)
+            // console.log("prop", this.propValue)
         }
     }
 </script>

@@ -40,7 +40,9 @@
             }
         },
         watch: {
-
+            "propValue": function() {
+                this.value = this.propValue;
+            }
         },
         methods: {
             inputed($event) {
@@ -53,8 +55,8 @@
                     if (response.status == 200){
                         var data = response.data.data;
                         this.list = data;
-                        this.value = this.propValue
-                        console.log(data)
+                        // this.value = this.propValue;
+                        // console.log(data)
                     }
                 })
                 .catch((error) => {
