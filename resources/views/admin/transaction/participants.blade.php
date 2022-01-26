@@ -460,8 +460,6 @@ $(document).ready(function() {
 
     function filterColumn ( i ) {
         
-        console.log('fds');
-
         if($('#col'+i+'_filter').val()){
             $('#participants_table').DataTable().column( i ).search(
                 '^'+$('#col'+i+'_filter').val()+'$', true,true
