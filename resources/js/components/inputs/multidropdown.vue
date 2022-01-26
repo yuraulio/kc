@@ -14,9 +14,11 @@
         v-model="value"
         placeholder="Pick some"
         :multiple="multi"
+        :taggable="taggable"
         label="title"
         track-by="id"
         :options="list"
+        @tag="addedTag"
     ></multiselect>
 </div>
 
@@ -31,7 +33,13 @@
             route: String,
             multi: {
                 default: true
-            }
+            },
+            fetch: {
+                default: true
+            },
+            taggable: {
+                default: false
+            },
         },
         data() {
             return {
@@ -45,6 +53,15 @@
             }
         },
         methods: {
+            addedTag(tag) {
+                var arr = JSON.parse(JSON.stringify(this.value));
+                arr.push({
+                    title: tag,
+                    id: tag,
+                    new: true
+                });
+                this.$emit('updatevalue', arr)
+            },
             inputed($event) {
                 this.$emit('updatevalue', $event)
             },
@@ -65,7 +82,9 @@
             }
         },
         mounted() {
-            this.get();
+            if (this.fetch) {
+                this.get();
+            }
         }
     }
 </script>

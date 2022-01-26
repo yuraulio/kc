@@ -26,6 +26,18 @@
         <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
         <contentComponent @updatedimage="updatedimage" :key="keyput" :keyput="keyput"></contentComponent>
     </div>
+
+    <div v-if="type == 'multidropdown'" class="mb-3">
+        <multidropdown
+            :title="title"
+            @updatevalue="updated"
+            :prop-value="existingValue"
+            :route="route"
+            :fetch="false"
+            :multi="multi"
+            :taggable="taggable"
+        ></multidropdown>
+    </div>
 </div>
 </template>
 
@@ -36,13 +48,15 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import contentComponent from './content-components.vue'
 import { Editor, EditorContent } from '@tiptap/vue-2'
 import StarterKit from '@tiptap/starter-kit'
+import multidropdown from './multidropdown.vue'
 
 export default {
     components: {
         uploadImage,
         ClassicEditor,
         contentComponent,
-        EditorContent
+        EditorContent,
+        multidropdown
     },
     props: {
         type: {
@@ -57,7 +71,12 @@ export default {
         size: {
             type: String,
             default: ''
-        }
+        },
+        existingValue: {},
+        title: {},
+        route: {},
+        taggable: {},
+        multi: {}
     },
     data() {
         return {
@@ -90,6 +109,10 @@ export default {
     },
     methods: {
         updatedimage($event) {
+            console.log("SSS, ", $event)
+            this.$emit('inputed', { 'data': $event, 'key': this.keyput})
+        },
+        updated($event) {
             console.log("SSS, ", $event)
             this.$emit('inputed', { 'data': $event, 'key': this.keyput})
         }

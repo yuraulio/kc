@@ -75,6 +75,17 @@
         </label>
         </div>
         <!-- end row -->
+        <multiput
+            type="multidropdown"
+            v-if="subcategories"
+            title="Subcategories"
+            :multi="true"
+            :taggable="true"
+            @inputed="update_subcategories"
+            route="subcategories"
+            :existing-value="subcategories_value"
+            :keyput="'subcategories'"
+        ></multiput>
 
         <div v-if="errors" class="row mt-3">
             <span class="text-danger" v-for="error in errors">{{error[0]}}</span>
@@ -106,9 +117,10 @@
 
 <script>
 import multidropdown from './inputs/multidropdown.vue';
+import Multiput from './inputs/multiput.vue';
 import Tc from './tc.vue';
     export default {
-  components: { multidropdown, Tc },
+  components: { multidropdown, Tc, Multiput },
         props: {
             pageTitle: String,
             title: String,
@@ -136,6 +148,10 @@ import Tc from './tc.vue';
             }
         },
         methods: {
+            update_subcategories(value) {
+                this.subcategories_value = value.data;
+                console.log('SCV', this.subcategories_value)
+            },
             update_title(value){
                 this.title_value = value;
             },
@@ -167,6 +183,7 @@ import Tc from './tc.vue';
                         description: this.description_value,
                         rows: JSON.stringify(this.rows_value),
                         category_id: this.category_value,
+                        subcategories: this.subcategories_value
                     }
                 )
                 .then((response) => {
@@ -195,6 +212,7 @@ import Tc from './tc.vue';
                         rows: JSON.stringify(this.rows_value),
                         category_id: this.category_value,
                         id: this.id,
+                        subcategories: this.subcategories_value
                     }
                 )
                 .then((response) => {

@@ -92,6 +92,8 @@ class CategoriesController extends Controller
             $category->title = $request->title;
             $category->save();
 
+            $this->syncSubcategories($category, $request->subcategories);
+
             return new CategoryResource($category->load(["pages", "subcategories", "user"]));
         } catch (Exception $e) {
             Log::error("Failed to edit category. " . $e->getMessage());
@@ -117,6 +119,33 @@ class CategoriesController extends Controller
         } catch (Exception $e) {
             Log::error("Failed to delete category. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
+        }
+    }
+
+    /**
+     * Sync Subcategories
+     *
+     * @param Category $category
+     * @param Category $subcategories
+     * @return void
+     */
+    public function syncSubcategories($category, $subcategories)
+    {
+        $currentSubcategories = $category->subcategories()->get();
+        foreach ($currentSubcategories ?? [] as $value) {
+            if (!in_array($value->id, collect($subcategories)->pluck('id')->toArray())) {
+                $value->delete();
+            }
+        }
+
+        foreach ($subcategories ?? [] as $sub) {
+            if (array_key_exists('new', $sub) && $sub['new']) {
+                $cat = new Category();
+                $cat->title = $sub['title'];
+                $cat->parent_id = $category->id ?? null;
+                $cat->user_id = Auth::user()->id;
+                $cat->save();
+            }
         }
     }
 }
