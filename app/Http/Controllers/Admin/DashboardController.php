@@ -65,6 +65,16 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\View\View
      */
+    public function media()
+    {
+        return view('new_admin.pages.media');
+    }
+
+    /**
+     * Show the application pages.
+     *
+     * @return \Illuminate\View\View
+     */
     public function page($id)
     {
         $page = Page::whereId($id)->with('template')->first();

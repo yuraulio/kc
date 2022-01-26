@@ -66,6 +66,7 @@ Vue.component('datepicker-component', require('./components/inputs/datepicker-co
 Vue.component('comments', require('./components/comments.vue').default);
 
 Vue.component('avatar', require('vue-avatar').default);
+Vue.component('media-manager', require('./components/media-manager.vue').default);
 
 
 

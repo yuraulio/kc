@@ -105,7 +105,7 @@
                                 <a href="{{route('admin-comments')}}">Comments management</a>
                             </li>
                             <li>
-                                <a href="#">Assets <span class="badge bg-warning mt-0 align-middle">In proggress</span> </a>
+                                <a href="{{route('admin-media')}}">Assets <span class="badge bg-warning mt-0 align-middle">In proggress</span> </a>
                             </li>
                             <li>
                                 <a href="#">Menu <span class="badge bg-primary mt-0 align-middle">Comming soon</span> </a>
