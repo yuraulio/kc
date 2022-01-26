@@ -19,10 +19,14 @@ class PageResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'content' => $this->content,
-            'user' => [
-                'firstname' => $this->user->firstname,
-                'lastname' => $this->user->lastname,
-            ],
+            'user' => $this->when(
+                $this->user, function () {
+                    return [
+                        'firstname' => $this->user->firstname,
+                        'lastname' => $this->user->lastname,
+                    ];
+                }
+            ),
             'published' => $this->published,
             'template' => $this->template,
             'categories' => $this->categories,

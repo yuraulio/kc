@@ -17,10 +17,14 @@ class CategoryResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'user' => [
-                'firstname' => $this->user->firstname,
-                'lastname' => $this->user->lastname,
-            ],
+            'user' => $this->when(
+                $this->user, function () {
+                    return [
+                        'firstname' => $this->user->firstname,
+                        'lastname' => $this->user->lastname,
+                    ];
+                }
+            ),
             'pages' => count($this->pages),
             'subcategories' => $this->subcategories,
         ];
