@@ -9,6 +9,7 @@
                     @updatemode="$modal.hide('create-modal');"
                     @refreshcategories="getData"
                     title="true"
+                    subcategories="true"
                     type="new"
                     route="categories"
                     @created="created"

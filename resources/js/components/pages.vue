@@ -79,7 +79,7 @@
                 type="edit"
                 route="pages"
                 page-title="Edit Page"
-                :data="lodash.find(pages, { 'id': id })"
+                :data="lodash.find(pages.data, { 'id': id })"
                 :id="id"
             ></pageseditable>
         </div>

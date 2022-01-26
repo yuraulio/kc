@@ -185,7 +185,7 @@ export default {
         },
         rearange(preview) {
             if (preview && preview === true) {
-                console.log("PPPPPREE")
+                // console.log("PPPPPREE")
                 this.spreview = false;
                 this.preview = true;
                 this.spreview = true;

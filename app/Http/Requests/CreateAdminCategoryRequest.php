@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CreateAdminCategoryRequest extends FormRequest
 {
@@ -25,6 +26,11 @@ class CreateAdminCategoryRequest extends FormRequest
     {
         return [
             'title' => 'required|unique:cms_categories',
+            'subcategories.*.title' => [
+                "unique:cms_categories,title",
+                Rule::notIn([$this->title]),
+            ],
+
         ];
     }
 }

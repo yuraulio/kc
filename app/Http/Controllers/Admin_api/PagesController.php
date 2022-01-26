@@ -23,7 +23,7 @@ class PagesController extends Controller
      *
      * @return AnonymousResourceCollection
      */
-    public function index(Request $request): AnonymousResourceCollection
+    public function index(Request $request)
     {
         $this->authorize('viewAny', Page::class, Auth::user());
 
@@ -41,7 +41,7 @@ class PagesController extends Controller
      *
      * @return PageResource
      */
-    public function store(CreateAdminPageRequest $request): PageResource
+    public function store(CreateAdminPageRequest $request)
     {
         $this->authorize('create', Page::class, Auth::user());
 
@@ -70,7 +70,7 @@ class PagesController extends Controller
      *
      * @return PageResource
      */
-    public function show(int $id): PageResource
+    public function show(int $id)
     {
         try {
             $page = Page::whereId($id)->with('template')->first();
@@ -89,7 +89,7 @@ class PagesController extends Controller
      *
      * @return PageResource
      */
-    public function update(Request $request, int $id): PageResource
+    public function update(Request $request, int $id)
     {
         $request->validate([
             'title' => 'required|unique:cms_pages,title,'. $id,

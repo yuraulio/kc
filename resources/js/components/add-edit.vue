@@ -99,6 +99,7 @@
             </div>
         </div>
 
+        <!--
         <list
             v-if="subcategories"
             title="Subcategories"
@@ -108,7 +109,8 @@
             class="mt-3"
             placeholder="Add new subcategory"
             @refresh="refreshCategories"
-        ></list>
+        ></list> 
+        -->
 
     </div> <!-- end card-body -->
 </div> <!-- end card-->
@@ -150,7 +152,7 @@ import Tc from './tc.vue';
         methods: {
             update_subcategories(value) {
                 this.subcategories_value = value.data;
-                console.log('SCV', this.subcategories_value)
+                // console.log('SCV', this.subcategories_value)
             },
             update_title(value){
                 this.title_value = value;

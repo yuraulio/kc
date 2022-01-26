@@ -28,7 +28,7 @@
     export default {
         props: {
             title: String,
-            propValue: {},
+            propValue: null,
             required: false,
             route: String,
             multi: {
@@ -43,7 +43,7 @@
         },
         data() {
             return {
-                value: this.propValue,
+                value: [],
                 list: [],
             }
         },
@@ -55,6 +55,7 @@
         methods: {
             addedTag(tag) {
                 var arr = JSON.parse(JSON.stringify(this.value));
+                console.log(this.value);
                 arr.push({
                     title: tag,
                     id: tag,
@@ -82,6 +83,10 @@
             }
         },
         mounted() {
+            if (this.propValue){
+                this.value = this.propValue;
+            }
+            
             if (this.fetch) {
                 this.get();
             }

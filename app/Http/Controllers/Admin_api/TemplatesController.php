@@ -22,7 +22,7 @@ class TemplatesController extends Controller
      *
      * @return AnonymousResourceCollection
      */
-    public function index(Request $request): AnonymousResourceCollection
+    public function index(Request $request)
     {
         $this->authorize('viewAny', Template::class, Auth::user());
 
@@ -40,7 +40,7 @@ class TemplatesController extends Controller
      *
      * @return TemplateResource
      */
-    public function store(CreateAdminTemplateRequest $request): TemplateResource
+    public function store(CreateAdminTemplateRequest $request)
     {
         $this->authorize('create', Template::class, Auth::user());
 
@@ -64,7 +64,7 @@ class TemplatesController extends Controller
      *
      * @return TemplateResource
      */
-    public function show(int $id): TemplateResource
+    public function show(int $id)
     {
         try {
             $template = Template::find($id);
@@ -83,7 +83,7 @@ class TemplatesController extends Controller
      *
      * @return TemplateResource
      */
-    public function update(UpdateAdminTemplateRequest $request, int $id): TemplateResource
+    public function update(UpdateAdminTemplateRequest $request, int $id)
     {
         try {
             $template = Template::find($id);

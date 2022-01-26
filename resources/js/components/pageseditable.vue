@@ -2,7 +2,13 @@
 <div class="row">
 
         <div class="col-lg-9" >
-            <tcedit v-if="template_value" :mode="type" ref="tc" :pseudo="false" :predata="template_value ? JSON.parse(template_value.rows) : null"></tcedit>
+            <tcedit 
+                v-if="template_value" 
+                :mode="type" 
+                ref="tc" 
+                :pseudo="false" 
+                :predata="template_value ? JSON.parse(template_value.rows) : null"
+            ></tcedit>
             <div v-else class="card">
                 <div class="card-body p-4">
                     <div class="error-ghost text-center">
@@ -212,7 +218,7 @@ export default {
                 this.errors = null;
                 console.log(JSON.stringify(this.$refs.tc.data));
                 axios
-                .patch('/api/' + this.route + '/' + this.data.id,
+                .patch('/api/' + this.route + '/' + this.id,
                     {
                         title: this.title_value,
                         description: this.description_value,
@@ -221,7 +227,7 @@ export default {
                         content: this.template_value ? JSON.stringify(this.$refs.tc.data) : '',
                         template_id: this.template_value ? this.template_value.id : null,
                         published: this.published,
-                        id: this.data.id,
+                        id: this.id,
                     }
                 )
                 .then((response) => {
@@ -244,7 +250,7 @@ export default {
                 .then((response) => {
                     if (response.status == 200){
                         var data = response.data.data;
-                        this.data = data;
+                        // this.data = data;
                         this.title_value = data.title;
                         this.description_value = data.description;
                         this.published = data.published
@@ -265,7 +271,7 @@ export default {
         mounted() {
             if (this.type == "edit"){
                 if (this.data) {
-                    console.log("edit", this.data)
+                    // console.log("edit", this.data)
                     var data = this.data;
                     this.title_value = data.title;
                     this.description_value = data.description;

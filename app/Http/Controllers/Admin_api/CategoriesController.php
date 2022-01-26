@@ -40,7 +40,7 @@ class CategoriesController extends Controller
      *
      * @return CategoryResource
      */
-    public function store(CreateAdminCategoryRequest $request): CategoryResource
+    public function store(CreateAdminCategoryRequest $request)
     {
         $this->authorize('create', Category::class, Auth::user());
 
@@ -50,6 +50,18 @@ class CategoriesController extends Controller
             $category->parent_id = $request->parent_id ?? null;
             $category->user_id = Auth::user()->id;
             $category->save();
+
+            $parent_id = $category->id;
+
+            if ($request->subcategories) {
+                foreach ($request->subcategories as $item) {
+                    $subcategory = new Category();
+                    $subcategory->title = $item["title"];
+                    $subcategory->parent_id = $parent_id;
+                    $subcategory->user_id = Auth::user()->id;
+                    $subcategory->save();
+                }
+            }
 
             return new CategoryResource($category);
         } catch (Exception $e) {
@@ -63,7 +75,7 @@ class CategoriesController extends Controller
      *
      * @return CategoryResource
      */
-    public function show(Request $request, int $id): CategoryResource
+    public function show(Request $request, int $id)
     {
         try {
             $category = Category::find($id)->load("subcategories");
@@ -82,7 +94,7 @@ class CategoriesController extends Controller
      *
      * @return CategoryResource
      */
-    public function update(UpdateAdminCategoryRequest $request, int $id): CategoryResource
+    public function update(UpdateAdminCategoryRequest $request, int $id)
     {
         try {
             $category = Category::find($id);
@@ -112,6 +124,8 @@ class CategoriesController extends Controller
             $category = Category::find($id);
 
             $this->authorize('delete', $category, Auth::user());
+
+            $this->syncSubcategories($category, []);
 
             $category->delete();
 
