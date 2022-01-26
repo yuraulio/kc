@@ -8,6 +8,7 @@ use App\Model\Event;
 use App\Model\User;
 use Auth;
 use Excel;
+use App\Model\PaymentMethod;
 use App\Exports\TransactionExport;
 
 class TransactionController extends Controller
@@ -89,6 +90,13 @@ class TransactionController extends Controller
     public function participants($start_date = null, $end_date = null){
         $userRole = Auth::user()->role->pluck('id')->toArray();
 
+        $paymentMethods = [];
+
+        foreach(PaymentMethod::all() as $paymentMethod){
+            $paymentMethods[$paymentMethod->id] =  $paymentMethod->method_name;
+        }
+        
+        
         if($start_date && $end_date){
             $start_date = date_create($start_date);
             $start_date = date_format($start_date,"Y-m-d");
@@ -154,13 +162,17 @@ class TransactionController extends Controller
 
                     $events = $u->events->groupBy('id');
                     $expiration = isset($events[$transaction->event->first()->id]) ? $events[$transaction->event->first()->id]->first()->pivot->expiration : null;
+                    $paymentMethodId = isset($events[$transaction->event->first()->id]) ? $events[$transaction->event->first()->id]->first()->pivot->payment_method : 0;
                     $videos = isset($videos) ? json_decode($videos->videos,true) : null;
-                   
+
+                    $paymentMethod = isset($paymentMethods[$paymentMethodId]) ? $paymentMethods[$paymentMethodId] :'Alpha Bank';
+
                     $data['transactions'][] = ['id' => $transaction['id'], 'user_id' => $u['id'],'name' => $u['firstname'].' '.$u['lastname'],
                                                 'event_id' => $transaction->event[0]['id'],'event_title' => $transaction->event[0]['title'].' / '.date('d-m-Y', strtotime($transaction->event[0]['published_at'])),'coupon_code' => $coupon_code, 'type' => trim($ticketType),'ticketName' => $ticketName,
                                                 'date' => date_format($transaction['created_at'], 'Y-m-d'), 'amount' => $transaction['amount'] / $countUsers,
                                                 'is_elearning' => $isElearning,
-                                                'coupon_code' => $transaction['coupon_code'],'videos_seen' => $this->getVideosSeen($videos),'expiration'=>$expiration];
+                                                'coupon_code' => $transaction['coupon_code'],'videos_seen' => $this->getVideosSeen($videos),'expiration'=>$expiration,
+                                                'paymentMethod' => $paymentMethod];
                 }
                
             }

@@ -59,6 +59,14 @@
                                 <option selected value> -- All -- </option>
                                 </select>
                             </div>
+
+                            <div class="col-sm-3 filter_col" id="filter_col8" data-column="8">
+                                <label>Payment Method</label>
+                                <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col8_filter" placeholder="Payment Method">
+                                <option selected value> -- All -- </option>
+                                </select>
+                            </div>
+
                             <div class="col-sm-3 filter_col">
                                 <div class="form-group">
                                     <label>From:</label>
@@ -89,6 +97,7 @@
                             <th class="participant_elearning none">{{ __('Video Seen') }}</th>
                             <th scope="col">{{ __('Registration Date') }}</th>
                             <th class="participant_elearning none">{{ __('Expiration Date') }}</th>
+                            <th class="col">{{ __('Payment Method') }}</th>
                             <th hidden>{{ __('Event ID') }}</th>
                             {{--<th class="participant_elearning none">{{ __('New Expiration Date') }}</th>--}}
                         </tr>
@@ -104,6 +113,7 @@
                             <th class="participant_elearning none">{{ __('Video Seen') }}</th>
                             <th>{{ __('Registration Date') }}</th>
                             <th class="participant_elearning none">{{ __('Expiration Date') }}</th>
+                            <th> {{ __('Payment Method') }} </th>
                             <th hidden>{{ __('Event ID') }}</th>
                             {{--<th class="participant_elearning none">{{ __('New Expiration Date') }}</th>--}}
                         </tr>
@@ -128,6 +138,7 @@
 
 
                                 </td>
+                                <td> {{$transaction['paymentMethod']}} </td>
                                 <td hidden>{{$transaction['event_id']}}</td>
                                 {{--<td class="participant_elearning none">
                                     <input id="{{$transaction['id']}}" class="form-control datepicker" placeholder="Select date" type="text" value="<?= ($transaction['expiration'] != null) ? $transaction['expiration'] : ''; ?>">
@@ -284,6 +295,7 @@ $(document).ready(function() {
 
     events = table.column(1).data().unique().sort()
     coupons = table.column(4).data().unique().sort()
+    paymentMethods = table.column(8).data().unique().sort()
     prices = table.column(3).data()
 
     let sum = 0
@@ -339,6 +351,10 @@ $(document).ready(function() {
         $('#col4_filter').append('<option value="'+value+'">'+value+'</option>')
     })
 
+    $.each(paymentMethods, function(key, value){
+        $('#col8_filter').append('<option value="'+value+'">'+value+'</option>')
+    })
+
     //Refilter the table
     $('#min, #max').on('change', function () {
         //console.log('from change min!!')
@@ -363,6 +379,13 @@ $(document).ready(function() {
         $('#col4_filter').append('<option value>-- All --</option>')
         $.each(coupons, function(key, value){
             $('#col4_filter').append('<option value="'+value+'">'+value+'</option>')
+        })
+
+        paymentMethods = table.column(8,{filter: 'applied'}).data().unique().sort();
+        $('#col8_filter').empty();
+        $('#col8_filter').append('<option value>-- All --</option>')
+        $.each(paymentMethods, function(key, value){
+            $('#col8_filter').append('<option value="'+value+'">'+value+'</option>')
         })
 
         stats_non_elearning()
