@@ -272,7 +272,7 @@ export default {
         }));
 
         eventHub.$on('component-added', ((component) => {
-            console.log('component--', component)
+            // console.log('component--', component)
             this.data = this.data ?? [];
             var comp = {
                 "id": this.$uuid.v4(),

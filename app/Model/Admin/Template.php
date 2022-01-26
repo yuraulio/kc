@@ -6,11 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\SearchFilter;
 use App\Model\User;
+use App\Traits\PaginateTable;
 
 class Template extends Model
 {
     use HasFactory;
     use SearchFilter;
+    use PaginateTable;
 
     protected $table = 'cms_templates';
     public $asYouType = true;

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class TemplateResource extends JsonResource
@@ -19,14 +20,13 @@ class TemplateResource extends JsonResource
             'title' => $this->title,
             'rows' => $this->rows,
             'user' => $this->when(
-                $this->user, function () {
-                    return [
-                        'firstname' => $this->user->firstname,
-                        'lastname' => $this->user->lastname,
-                    ];
+                $this->user,
+                function () {
+                    return $this->user->firstname . " " . $this->user->lastname;
                 }
             ),
             'pages' => count($this->pages),
+            'created_at' => Carbon::parse($this->created_at)->format("Y-m-d"),
         ];
     }
 }

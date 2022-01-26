@@ -162,10 +162,10 @@ export default {
     },
     methods: {
         getParams(params) {
-            console.log("params", params)
+            // console.log("params", params)
         },
         selectComponent(component) {
-            console.log("sending component")
+            // console.log("sending component")
             eventHub.$emit('component-added', component);
         },
         rearange() {

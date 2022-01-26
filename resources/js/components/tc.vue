@@ -163,7 +163,7 @@ export default {
     },
     mounted() {
         eventHub.$on('component-added', ((component) => {
-            console.log('component--', component)
+            // console.log('component--', component)
         }));
     },
     beforeDestroy() {
