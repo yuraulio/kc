@@ -7,7 +7,7 @@
 
     <div v-if="type == 'textarea'" class="mb-3">
         <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
-        <textarea :id="keyput" v-model="editorData" class="form-control" maxlength="225" rows="3" placeholder=""></textarea>
+        <textarea :id="keyput" v-model="editorData" class="form-control" maxlength="500" rows="3" placeholder=""></textarea>
     </div>
 
     <div v-if="type == 'image'" class="mb-3">

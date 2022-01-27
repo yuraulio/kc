@@ -2,8 +2,9 @@
     "hero" : {
         "title": "Hero Header",
         "width": "full",
-        "icon": "dripicons-document-edit",
+        "icon": "dripicons-monitor",
         "key": "hero_header_component",
+        "one_column": true,
         "inputs": [
             {
                 "type": "image",
@@ -26,6 +27,7 @@
         "width": "content",
         "title": "Text Box",
         "key": "text_box_component",
+        "icon": "dripicons-document-edit",
         "inputs": [
             {
                 "type": "textarea",
@@ -104,10 +106,11 @@
         ]
     },
     "meta" : {
-        "visible": false,
         "title": "Meta",
         "icon": "dripicons-rocket",
         "key": "meta_component",
+        "one_column": true,
+        "changable": false,
         "inputs": [
             {
                 "type": "text",
@@ -132,6 +135,8 @@
         "width": "content",
         "title": "Comment Box",
         "key": "comment_box_component",
+        "one_column": true,
+        "icon": "dripicons-align-justify",
         "inputs": [
 
         ]
@@ -140,26 +145,83 @@
         "width": "blog",
         "title": "Social Bar",
         "key": "social_bar_component",
+        "icon": "dripicons-web",
         "inputs": [
 
         ]
     },
     "blog_header" : {
-        "title": "Blog Header",
+        "title": "Title/Subtitle",
         "width": "blog",
-        "icon": "dripicons-document-edit",
+        "icon": "dripicons-browser",
         "key": "blog_header_component",
         "inputs": [
             {
                 "type": "textarea",
                 "key": "blog_header_title",
-                "label": "Blog Title"
+                "label": "Title"
             },
             {
                 "type": "textarea",
                 "key": "blog_header_subtitle",
-                "label": "Blog Subtitle"
+                "label": "Subtitle"
             }
         ]
+    },
+    "youtube" : {
+        "title": "Yutube video",
+        "width": "content",
+        "icon": "dripicons-camcorder",
+        "key": "youtube_component",
+        "inputs": [
+            {
+                "type": "text",
+                "key": "youtube_embed",
+                "label": "Video code"
+            }
+        ]
+    },
+    "html" : {
+        "title": "Embed htlm",
+        "width": "content",
+        "icon": "dripicons-code",
+        "key": "html_component",
+        "inputs": [
+            {
+                "type": "textarea",
+                "key": "html_embed",
+                "label": "Html code"
+            }
+        ]
+    },
+    "contact_form" : {
+        "title": "Contact form",
+        "width": "content",
+        "icon": "dripicons-mail",
+        "key": "contact_form_component",
+        "inputs": [
+            {
+                "type": "text",
+                "key": "title",
+                "label": "Title"
+            },
+            {
+                "type": "text",
+                "key": "button_text",
+                "label": "Button text"
+            },
+            {
+                "type": "textarea",
+                "key": "consent_text",
+                "label": "Consent text"
+            }
+        ]
+    },
+    "empty" : {
+        "title": "Empty space",
+        "width": "content",
+        "icon": "dripicons-wrong",
+        "key": "empty_component",
+        "inputs": []
     }
 }

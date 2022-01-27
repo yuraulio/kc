@@ -82,23 +82,22 @@
                             <div class="" style="position: relative">
                                 <div @click.prevent="" :key="'pseudo' + indr" class="dropzone  mb-2" style="min-height:150px">
                                     <div class="dz-message needsclick" style="margin: 0px !important; display: flex; justify-content: center; flex-direction: column">
-                                        <i :class="'h1 text-muted ' + column.template.icon"></i>
-                                        <div class="text-center">
-                                        <span class="text-muted font-13">
-                                            <strong>{{ column.template.title }} {{ val.order }}</strong></span>
-                                            <small class="text-muted font-11">
-                                            {{ column.order }}</small>
-
+                                        <div @click="changeComponent(index, indr, column.template)">
+                                            <i :class="'h1 text-muted ' + column.template.icon"></i>
+                                            <div class="text-center">
+                                                <span class="text-muted font-13">
+                                                    <strong>{{ column.template.title }} {{ val.order }}</strong>
+                                                </span>
+                                                <small class="text-muted font-11">{{ column.order }}</small>
+                                            </div>
                                         </div>
-
-                                        <span class="text-muted font-13">
+                                        <span v-if="column.template.one_column != true" class="text-muted font-13">
                                             <i @click="split(val.columns, indr, 'push')" v-if="val.columns.length < 3" class="success dripicons-stack mr-2"></i>
-                                        <i v-if="val.columns.length <= 3 && val.columns.length > 1 && indr > 0" @click="split(val.columns, indr, 'splice')" class="danger dripicons-trash mr-2"></i>
-                                        <!-- <i v-if="val.columns.length <= 3 && val.columns.length > 1 && indr > 0" @click="split(val.columns, indr, 'splice')" class="dripicons-swap mr-2"></i> -->
+                                            <i v-if="val.columns.length <= 3 && val.columns.length > 1 && indr > 0" @click="split(val.columns, indr, 'splice')" class="danger dripicons-trash mr-2"></i>
                                         </span>
                                     </div>
                                 </div>
-                                <span @click="removeRow(index)" v-if="indr == (val.columns.length - 1)" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="cursor: pointer">
+                                <span @click="removeRow(index)" v-if="indr == (val.columns.length - 1) && column.template.key != 'meta_component'" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="cursor: pointer">
                                     Remove
                                 <span class="visually-hidden"></span>
                             </span>
@@ -115,14 +114,20 @@
 
 
     <form @click.prevent="addCustomComponent" class="dropzone dz-clickable" style="min-height:80px; border: 2px dashed #6658dd !important" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
-            <div class="dz-message needsclick" style="margin: 0px !important; color: #6658dd">
-                <i class="h1  dripicons-view-apps" style="color: #6658dd"></i>
-                <div class="text-center">
-                <span class="text-muted font-13">
-                    <strong>Click to Add Custom Component</strong></span>
-            </div>
-            </div>
-        </form>
+        <div class="dz-message needsclick" style="margin: 0px !important; color: #6658dd">
+            <i class="h1  dripicons-view-apps" style="color: #6658dd"></i>
+            <div class="text-center">
+            <span class="text-muted font-13">
+                <strong>Click to Add Custom Component</strong></span>
+        </div>
+        </div>
+    </form>
+
+    <component-modal
+        :row="row_index"
+        :column="column_index"
+    ></component-modal>
+
 </div>
 </template>
 
@@ -149,7 +154,9 @@ export default {
             data: null,
             activeChange: false,
             preview: false,
-            spreview: true
+            spreview: true,
+            row_index: null,
+            column_index: null,
         }
     },
     components: {
@@ -194,6 +201,8 @@ export default {
             }
         },
         addCustomComponent() {
+            this.row_index = null;
+            this.column_index = null;
             this.$modal.show("component-modal", {"data": 'test'})
         },
         reupdateTemplate() {
@@ -201,6 +210,13 @@ export default {
         },
         removeRow(index) {
             this.data.splice(index, 1);
+        },
+        changeComponent(row_index, column_index, component) {
+            if (component.changable !== false) {
+                this.row_index = row_index;
+                this.column_index = column_index;
+                this.$modal.show("component-modal");
+            }
         }
     },
 
@@ -242,7 +258,7 @@ export default {
         }
 // console.log("mmm", this.pseudo, this.mode)
         if (this.pseudo == false) {
-            console.log("PSEUDO", this.pseudo, this.predata)
+            // console.log("PSEUDO", this.pseudo, this.predata)
             var parsed = this.predata;
             if (this.mode != "edit") {
                 parsed.forEach(element => {
@@ -291,6 +307,16 @@ export default {
             }
 
             this.data.push(comp);
+        }));
+
+        eventHub.$on('component-change', ((data) => {
+            var component = data[0];
+            var row_index = data[1];
+            var column_index = data[2];
+            this.data[row_index].columns[column_index].component = component;
+            this.data[row_index].columns[column_index].template = this.extractedComponents[component];
+
+            this.$modal.hide("component-modal");
         }));
 
         eventHub.$on('order-changed', ((data) => {

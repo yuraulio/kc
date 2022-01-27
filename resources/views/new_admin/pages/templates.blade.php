@@ -29,7 +29,6 @@
     <!-- end page title -->
 
     <div class="row">
-        <component-modal></component-modal>
         <templates></templates>
 
     </div>
