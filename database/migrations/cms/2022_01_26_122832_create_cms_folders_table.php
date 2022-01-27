@@ -15,10 +15,11 @@ class CreateCmsFoldersTable extends Migration
     {
         Schema::create('cms_folders', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->string('name')->index();
             $table->string('path')->nullable();
             $table->string('url')->nullable();
-            $table->integer('user_id')->unsigned()->index();
+            $table->unsignedBigInteger("parent_id")->nullable();
+            $table->integer('user_id')->unsigned()->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -42,6 +42,10 @@ Vue.use(VueLoaders);
 import UUID from "vue-uuid";
 Vue.use(UUID);
 
+import VueNestable from 'vue-nestable'
+
+Vue.use(VueNestable)
+
 Vue.component('dashboard-widget', require('./components/dashboard-widget.vue').default);
 Vue.component('dashboard-table', require('./components/dashboard-table.vue').default);
 Vue.component('templates', require('./components/templates.vue').default);
@@ -66,7 +70,7 @@ Vue.component('datepicker-component', require('./components/inputs/datepicker-co
 Vue.component('comments', require('./components/comments.vue').default);
 
 Vue.component('avatar', require('vue-avatar').default);
-Vue.component('media-manager', require('./components/media-manager.vue').default);
+Vue.component('media-manager', require('./components/media/media-manager.vue').default);
 
 
 

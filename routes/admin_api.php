@@ -2,8 +2,9 @@
 
 use App\Http\Controllers\Admin_api\CommentsController;
 use App\Http\Controllers\Admin_api\PagesController;
-use App\Http\Controllers\Admin_api\TemplatesController;
+use App\Http\Controllers\Admin_api\MediaController;
 use App\Http\Controllers\Admin_api\DashboardController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
@@ -40,5 +41,10 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
 
         Route::put('pages/update_published/{id}', [PagesController::class, 'updatePublished']);
         Route::post('pages/upload_image', [PagesController::class, 'uploadImage']);
+        Route::resource('media_manager', Admin_api\MediaController::class)->only([
+            'index', 'store', 'update', 'destroy'
+        ]);
+        Route::post('media_manager/upload_image', [MediaController::class, 'uploadImage']);
+        Route::get('media_manager/files', [MediaController::class, 'files']);
     });
 });

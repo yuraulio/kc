@@ -54,8 +54,8 @@ class Kernel extends ConsoleKernel
        Commands\GenerateInvoices::class,
        Commands\ExportAllUserByCategory::class,
        Commands\AttachCerficateByEvent::class,
-       Commands\SubscriptionsEnds::class
-
+       Commands\SubscriptionsEnds::class,
+       Commands\NewAdminMediaManager::class
     ];
 
     /**

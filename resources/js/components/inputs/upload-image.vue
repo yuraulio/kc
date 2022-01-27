@@ -49,7 +49,13 @@
 import Cropper from 'cropperjs'
 import FileUpload from 'vue-upload-component'
 export default {
-    props: ['keyput', 'prevalue'],
+    props: {
+        keyput: {},
+        prevalue: {},
+        direct: {
+            default: true
+        }
+    },
   components: {
     FileUpload,
   },
@@ -77,7 +83,8 @@ export default {
         if (newFile) {
             var formData = new FormData();
             var imagefile = newFile;
-            if (imagefile.file) {
+            console.log('imgfile', imagefile)
+            if (imagefile.file && this.direct) {
                 formData.append("file", imagefile.file);
                 axios.post('/api/pages/upload_image', formData, {
                     headers: {
@@ -91,6 +98,10 @@ export default {
                 })
                 .catch((error) => {
                 })
+            } else {
+                this.$set(this.files, this.keyput, [newFile]);
+                this.edit = true;
+                this.$emit('inputed', newFile);
             }
 
         } else {

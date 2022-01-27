@@ -18,10 +18,11 @@ class CreateCmsFilesTable extends Migration
             $table->string('name');
             $table->string('path')->nullable();
             $table->string('url')->nullable();
+            $table->string('extension')->nullable();
             $table->double('size')->nullable();
-            $table->unsignedBigInteger("folder_id");
-            $table->foreign('folder_id')->references('id')->on('cms_folders');
-            $table->integer('user_id')->unsigned()->index();
+            $table->unsignedBigInteger("folder_id")->nullable();
+            $table->unsignedBigInteger("parent_id")->nullable();
+            $table->integer('user_id')->unsigned()->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
