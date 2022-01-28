@@ -95,7 +95,7 @@
     "image" : {
         "width": "full",
         "title": "Full size image",
-        "icon": "dripicons-photo-group",
+        "icon": "dripicons-photo",
         "key": "full_sixe_image_component",
         "inputs": [
             {
@@ -148,6 +148,14 @@
         "icon": "dripicons-web",
         "inputs": [
 
+        ]
+    },
+    "galery" : {
+        "width": "content",
+        "title": "Galery",
+        "key": "galery_component",
+        "icon": "dripicons-photo-group",
+        "inputs": [
         ]
     },
     "blog_header" : {

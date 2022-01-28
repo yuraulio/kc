@@ -29,7 +29,7 @@
     <!-- end page title -->
 
     <div class="row">
-        <component-modal></component-modal>
+        {{-- <component-modal></component-modal> --}}
         <pages></pages>
 
     </div>

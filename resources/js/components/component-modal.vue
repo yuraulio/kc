@@ -69,13 +69,32 @@
                         <div class="row align-items-center">
                             <div class="col-auto">
                                 <div class="avatar-lg mt-2">
-                                    <i style="font-size: 4em" class="h1 text-muted  dripicons-photo-group
+                                    <i style="font-size: 4em" class="h1 text-muted  dripicons-photo
                                             "></i>
                                 </div>
                             </div>
                             <div class="col">
                                 <h5 class="mb-1 mt-2 font-16">Image</h5>
                                 <p class="mb-2 text-muted">Full size img</p>
+                            </div>
+                        </div> <!-- end row-->
+                    </div>
+                </div> <!-- end widget-rounded-circle-->
+            </div> <!-- end col-->
+
+            <div class="col-md-6 col-xl-6">
+                <div @click="selectComponent('galery')" class="widget-rounded-circle card bg-grey">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <div class="avatar-lg mt-2">
+                                    <i style="font-size: 4em" class="h1 text-muted  dripicons-photo-group
+                                            "></i>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h5 class="mb-1 mt-2 font-16">Galery</h5>
+                                <p class="mb-2 text-muted">Image galery</p>
                             </div>
                         </div> <!-- end row-->
                     </div>
