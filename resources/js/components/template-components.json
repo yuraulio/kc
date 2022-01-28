@@ -150,10 +150,10 @@
 
         ]
     },
-    "galery" : {
+    "gallery" : {
         "width": "content",
         "title": "Galery",
-        "key": "galery_component",
+        "key": "gallery_component",
         "icon": "dripicons-photo-group",
         "inputs": [
         ]

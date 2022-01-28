@@ -83,7 +83,7 @@
             </div> <!-- end col-->
 
             <div class="col-md-6 col-xl-6">
-                <div @click="selectComponent('galery')" class="widget-rounded-circle card bg-grey">
+                <div @click="selectComponent('gallery')" class="widget-rounded-circle card bg-grey">
                     <div class="card-body">
                         <div class="row align-items-center">
                             <div class="col-auto">
@@ -94,7 +94,7 @@
                             </div>
                             <div class="col">
                                 <h5 class="mb-1 mt-2 font-16">Galery</h5>
-                                <p class="mb-2 text-muted">Image galery</p>
+                                <p class="mb-2 text-muted">Image gallery</p>
                             </div>
                         </div> <!-- end row-->
                     </div>

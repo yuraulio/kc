@@ -35,7 +35,7 @@
                                 <img v-else class="card-img img-fluid" style="object-fit: cover; max-height: 400px" :src="lodash.find(column.template.inputs, {'key': 'full_size_image' }).value" alt="Card image">
                             </div>
 
-                            <div v-else-if="column.component == 'galery'" class="card text-center text-white" style="background-color: #6c757dd6 !important">
+                            <div v-else-if="column.component == 'gallery'" class="card text-center text-white" style="background-color: #6c757dd6 !important">
                             <h4 class="card-title text-white mt-3">Galery</h4>
                                 <div v-if="!preview || (preview && !lodash.find(column.template.inputs, {'key': 'full_size_image' }).value)" class="card-img img-fluid text-center cimgfl" style="min-height: 200px" alt="Card image">
                                     <i class="h1 text-muted  dripicons-photo-group
