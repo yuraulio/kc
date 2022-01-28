@@ -49,13 +49,6 @@
                             ></text-field>
                             <ul v-if="errors && errors['title']" class="parsley-errors-list filled" id="parsley-id-7" aria-hidden="false"><li class="parsley-required">{{errors['title'][0]}}</li></ul>
 
-                            <text-field
-                                v-if="description"
-                                title="Description"
-                                @updatevalue="update_description"
-                                :prop-value="description_value"
-                            ></text-field>
-
                             <multidropdown
                                 title="Template"
                                 :key="template_value ? template_value.id : 'temmult'"
@@ -133,7 +126,6 @@ export default {
         props: {
             pageTitle: String,
             title: String,
-            description: String,
             rows: String,
             category: String,
             route: String,
@@ -145,7 +137,6 @@ export default {
         data() {
             return {
                 title_value: null,
-                description_value: null,
                 rows_value: null,
                 category_value: null,
                 errors: null,
@@ -163,9 +154,6 @@ export default {
             },
             update_title(value){
                 this.title_value = value;
-            },
-            update_description(value){
-                this.description_value = value;
             },
             update_rows(value){
                 this.rows_value = value;
@@ -188,7 +176,6 @@ export default {
                 .post('/api/' + this.route,
                     {
                         title: this.title_value,
-                        description: this.description_value,
                         rows: JSON.stringify(this.rows_value),
                         content: this.template_value ? JSON.stringify(this.$refs.tc.data) : '',
                         category_id: this.category_value,
@@ -219,7 +206,6 @@ export default {
                 .patch('/api/' + this.route + '/' + this.id,
                     {
                         title: this.title_value,
-                        description: this.description_value,
                         rows: JSON.stringify(this.rows_value),
                         category_id: this.category_value,
                         content: this.template_value ? JSON.stringify(this.$refs.tc.data) : '',
@@ -250,7 +236,6 @@ export default {
                         var data = response.data.data;
                         // this.data = data;
                         this.title_value = data.title;
-                        this.description_value = data.description;
                         this.published = data.published
                         if (data.rows){
                             console.log(data.rows);
@@ -272,7 +257,6 @@ export default {
                     // console.log("edit", this.data)
                     var data = this.data;
                     this.title_value = data.title;
-                    this.description_value = data.description;
                     this.template_value = data.template;
                     this.published = data.published
                     if (data.rows){

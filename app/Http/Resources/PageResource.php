@@ -17,10 +17,10 @@ class PageResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'description' => $this->description,
             'content' => $this->content,
             'user' => $this->when(
-                $this->user, function () {
+                $this->user,
+                function () {
                     return [
                         'firstname' => $this->user->firstname,
                         'lastname' => $this->user->lastname,

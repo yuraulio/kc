@@ -48,7 +48,6 @@ class PagesController extends Controller
         try {
             $page = new Page();
             $page->title = $request->title;
-            $page->description = $request->description;
             $page->template_id = $request->template_id;
             $page->content = $request->content;
             $page->published = $request->published;
@@ -101,7 +100,6 @@ class PagesController extends Controller
             $this->authorize('update', $page, Auth::user());
 
             $page->title = $request->title;
-            $page->description = $request->description;
             $page->template_id = $request->template_id;
             $page->content = $request->content;
             $page->published = $request->published;
