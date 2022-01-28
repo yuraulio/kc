@@ -14,22 +14,30 @@
     <div v-if="data && !pseudo">
         <div  v-for="(val, index, key) in data" :key="key" class="col-12 mb-1 card">
 
-            <div v-if="val.width" class="row">
-            <div  class="btn-group" style="width: 20%;margin-left: 40%;margin-right: 40%;">
-                <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                {{ val.width == 'full' ? 'Full' : (val.width == 'content' ? 'Content' :'Blog') }} Width<i class="mdi mdi-chevron-down"></i>
-                            </button>
-                <div class="dropdown-menu dropdown-menu-center" style="" data-popper-placement="bottom-start">
-                    <a @click.prevent="val.width = 'full'" :class="'dropdown-item ' + (val.width == 'full' ? 'active' : '')" href="#">Full Width</a>
-                    <a @click.prevent="val.width = 'content'" :class="'dropdown-item ' + (val.width == 'content' ? 'active' : '')" href="#">Content Width</a>
-                    <a @click.prevent="val.width = 'blog'" :class="'dropdown-item ' + (val.width == 'blog' ? 'active' : '')" href="#">Blog Width</a>
+            <div class="row">
+                <div class="col-2">
+                    <button @click="toggleCollapse(val)" class="btn btn-secondary" type="button" data-bs-toggle="collapse" :data-bs-target="'#collapseelement' + index" aria-expanded="false" aria-controls="collapseExample">
+                        <i v-if="val.collapsed == true" class="mdi mdi-chevron-down"></i>
+                        <i v-else class="mdi mdi-chevron-up"></i>
+                    </button>
                 </div>
-            </div>
+                <div class="col-10">
+                    <div v-if="val.width" class="btn-group">
+                        <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            {{ val.width == 'full' ? 'Full' : (val.width == 'content' ? 'Content' :'Blog') }} Width<i class="mdi mdi-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-center" style="" data-popper-placement="bottom-start">
+                            <a @click.prevent="val.width = 'full'" :class="'dropdown-item ' + (val.width == 'full' ? 'active' : '')" href="#">Full Width</a>
+                            <a @click.prevent="val.width = 'content'" :class="'dropdown-item ' + (val.width == 'content' ? 'active' : '')" href="#">Content Width</a>
+                            <a @click.prevent="val.width = 'blog'" :class="'dropdown-item ' + (val.width == 'blog' ? 'active' : '')" href="#">Blog Width</a>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div v-for="(column, indr, key) in val.columns" :key="key">
 
                 <div :key="activeChange" v-show="column.template && column.active" class="">
-                    <div class="card-body pb-0">
+                    <div class="card-body pb-3">
                         <div v-if="val.columns.length > 1">
                             <ul class="nav nav-pills navtab-bg nav-justified">
                                 <li v-for="(v, ind) in val.columns" :key="ind" class="nav-item">
@@ -39,23 +47,25 @@
                                 </li>
                             </ul>
                         </div>
-                        <h5 v-else class="card-title">{{ column.template.title }}</h5>
+                        <h5 v-else class="card-title mb-0">{{ column.template.title }}</h5>
                     </div>
-                    <div class="tab-content" style="padding-top: 0px" >
-                        <div v-for="(vl, indx) in val.columns" :key="'tabpane' + indx" :class="'tab-pane ' + (vl.active === true ? ' active' : '')">
-                            <div v-show="column.active" class="card-body row">
-                                <multiput
-                                    v-for="input in column.template.inputs"
-                                    :key="input.key"
-                                    :keyput="input.key"
-                                    :label="input.label"
-                                    :type="input.type"
-                                    :value="input.value"
-                                    :size="input.size"
-                                    @inputed="inputed($event, input)"
-                                />
+                    <div :class="'tab-content collapse pb-3 ' + (val.initialCollapsed ? '' : 'show')" :id="'collapseelement' + index" style="padding-top: 0px" >
+                        
+                            <div v-for="(vl, indx) in val.columns" :key="'tabpane' + indx" :class="'tab-pane ' + (vl.active === true ? ' active' : '')">
+                                <div v-show="column.active" class="card-body row pb-0 pt-0">
+                                    <multiput
+                                        v-for="input in column.template.inputs"
+                                        :key="input.key"
+                                        :keyput="input.key"
+                                        :label="input.label"
+                                        :type="input.type"
+                                        :value="input.value"
+                                        :size="input.size"
+                                        @inputed="inputed($event, input)"
+                                    />
+                                </div>
                             </div>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -217,6 +227,13 @@ export default {
                 this.column_index = column_index;
                 this.$modal.show("component-modal");
             }
+        },
+        toggleCollapse(val) {
+            if (val.collapsed) {
+                val.collapsed = !val.collapsed;
+            } else {
+                this.$set(val, 'collapsed', true);
+            }
         }
     },
 
@@ -260,18 +277,24 @@ export default {
         if (this.pseudo == false) {
             // console.log("PSEUDO", this.pseudo, this.predata)
             var parsed = this.predata;
+
+            parsed.forEach(element => {
+                element.initialCollapsed = element.collapsed ? element.collapsed : false;
+            });
+
             if (this.mode != "edit") {
                 parsed.forEach(element => {
-                element.columns.forEach(column => {
-                    column.active = column.order < 1 ? true : false;
-                    console.log("ORDER", column.active)
-                    if (this.extractedComponents[column.component] != null) {
-                        column.template = this.extractedComponents[column.component];
-                        //column.template.inputs.forEach((input) => { input.key = input.key + column.order; })
-                    }
+                    element.columns.forEach(column => {
+                        column.active = column.order < 1 ? true : false;
+                        // console.log("ORDER", column.active)
+                        if (this.extractedComponents[column.component] != null) {
+                            column.template = this.extractedComponents[column.component];
+                            //column.template.inputs.forEach((input) => { input.key = input.key + column.order; })
+                        }
 
+                    });
                 });
-            });}
+            }
 
             this.data = parsed;
 
@@ -295,6 +318,7 @@ export default {
                 "width": this.extractedComponents[component].width,
                 "order": this.data.length + 1,
                 "description": "",
+                "collapsed": false,
                 "columns": [
                     {
                         "id": this.$uuid.v4(),

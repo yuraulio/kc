@@ -1,33 +1,33 @@
 <template>
 <div :class="type == 'text' && !size ? 'col-lg-6' : size">
-    <div v-if="type == 'text'" class="mb-3 ">
+    <div v-if="type == 'text'" class="">
         <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
         <input v-model="editorData" type="text" :id="keyput" class="form-control">
     </div>
 
-    <div v-if="type == 'textarea'" class="mb-3">
+    <div v-if="type == 'textarea'" class="">
         <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
         <textarea :id="keyput" v-model="editorData" class="form-control" maxlength="500" rows="3" placeholder=""></textarea>
     </div>
 
-    <div v-if="type == 'image'" class="mb-3">
+    <div v-if="type == 'image'" class="">
         <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
         <uploadImage @updatedimage="updatedimage" :key="keyput" :prevalue="value"  :keyput="keyput"></uploadImage>
     </div>
 
-    <div v-if="type == 'text_editor'" class="mb-3">
+    <div v-if="type == 'text_editor'" class="">
         <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
         <ckeditor v-if="texteditor == 'ck'" :height="300" :editor="editor" :id="keyput" v-model="editorData" :config="editorConfig"></ckeditor>
 
         <editor-content v-if="texteditor == 'tiny'" :editor="editorT" />
     </div>
 
-    <div v-if="type == 'contentComponent'" class="mb-3">
+    <div v-if="type == 'contentComponent'" class="">
         <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
         <contentComponent @updatedimage="updatedimage" :key="keyput" :keyput="keyput"></contentComponent>
     </div>
 
-    <div v-if="type == 'multidropdown'" class="mb-3">
+    <div v-if="type == 'multidropdown'" class="">
         <multidropdown
             :title="title"
             @updatevalue="updated"
