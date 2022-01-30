@@ -15,33 +15,9 @@
             </div>
         </div>
     </modal>
-    <modal name="upload-media-modal" :resizable="true" height="auto" :adaptive="true">
+    <modal name="upload-media-modal" :resizable="true" height="auto" :adaptive="true" :minWidth="1000" :scrollable="true">
         <div class="row p-4">
-            <div class="col-lg-12">
-                <folders :mediaFolders="mediaFolders" :selectable="true" @folder-selected=selectedFolders($event) title="Select Folder"></folders>
-                <h5 class="mb-2 mt-3">Upload Media</h5>
-                <div class="card">
-                    <upload-image
-                        :keyput="'mediaManager'"
-                        :direct="false"
-                        :prevalue="currentImage ? currentImage.url : null"
-                        @inputed="imageAdded"
-                    >
-                    </upload-image>
-                </div>
-
-                <div v-if="currentImage" class="form-group">
-
-                <h5 class="mb-2 mt-3">Sizes to upload</h5>
-
-                <div>
-                    <div v-for="size in sizes" :key="size.key"  class="form-check form-switch mb-1" style="display: block; cursor: pointer">
-                        <input :key="size.key + 'on'" @click="size.enabled = !size.enabled" :id="size.key + 'input'" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :for="size.key + 'input'" :checked="size.enabled">
-                        <label class="form-check-label" for="light-mode-check">{{ size.title }}</label>
-                    </div>
-                </div>
-            </div>
-            </div>
+            <cropperer @upload="imageAdded" ref="crpr" :prevalue="selectedFile ? selectedFile.url : null"></cropperer>
         </div>
     </modal>
    <!-- Right Sidebar -->
@@ -103,16 +79,15 @@
             <div class="inbox-rightbar">
 
                <div class="d-md-flex justify-content-between align-items-center">
-                  <form class="search-bar">
+                  <div class="search-bar">
                      <div class="position-relative">
-                        <input type="text" class="form-control form-control-light" placeholder="Search files...">
+                        <input v-model="searchFilter" @keyup.enter.prevent="getFolders(folderId)" type="text" class="form-control form-control-light" placeholder="Search files...">
                         <span class="mdi mdi-magnify"></span>
                      </div>
-                  </form>
+                  </div>
                   <div class="mt-2 mt-md-0">
-                     <button type="submit" class="btn btn-sm btn-white"><i class="mdi mdi-format-list-bulleted"></i></button>
-                     <button type="submit" class="btn btn-sm btn-white"><i class="mdi mdi-view-grid"></i></button>
-                     <button type="submit" class="btn btn-sm btn-white"><i class="mdi mdi-information-outline"></i></button>
+                     <button @click.prevent="view = 'list'" class="btn btn-sm btn-white"><i class="mdi mdi-format-list-bulleted"></i></button>
+                     <button @click.prevent="view = 'cards'" class="btn btn-sm btn-white"><i class="mdi mdi-view-grid"></i></button>
                   </div>
                </div>
 
@@ -124,7 +99,7 @@
                 <div v-else>
                     <folders :selectable="true" @selected="getFolders($event)" v-if="inMediaFolders && inMediaFolders.length && !loading" :mediaFolders="inMediaFolders" title="Quick Access"></folders>
                     <!-- end .mt-3-->
-                    <files v-if="!loading" :mediaFiles="mediaFiles"></files>
+                    <files :key="view" :view="view" v-if="!loading" :mediaFiles="mediaFiles" @selected="userSelectedFiles"></files>
                     <!-- end .mt-3-->
                 </div>
             </div>
@@ -142,11 +117,16 @@
 import uploadImage from '../inputs/upload-image.vue';
 import folders from './folders.vue'
 import files from './files.vue'
+import cropperer from './cropperer.vue';
 
 export default {
-  components: { uploadImage, folders, files },
+  components: { uploadImage, folders, files, cropperer },
     data() {
         return {
+            selectedFile: null,
+            folderId: null,
+            searchFilter: '',
+            view: 'list',
             uncolapsed: [],
             loading: false,
             folderName: '',
@@ -199,19 +179,23 @@ export default {
             this.currentImage = $event;
             var formData = new FormData();
             var imagefile = $event;
+            console.log(this.$refs)
+            formData.append('imgname', this.$refs.crpr.imgname);
             if (this.selectedFolder) {
                 formData.append('directory', this.selectedFolder.id);
             }
             console.log('imgfile', imagefile)
-            if (imagefile.file) {
-                formData.append("file", imagefile.file);
+            if (imagefile) {
+                formData.append("file", imagefile);
                 axios.post('/api/media_manager/upload_image', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
                 }).then((response) => {
                     console.log(response.data)
-                    this.selectedFolder = null;
+                    //this.selectedFolder = null;
+                    this.$toast.success('Uploaded Successfully!');
+                    this.mediaFiles.push(response.data.data);
                     console.log(response)
                 })
                 .catch((error) => {
@@ -244,12 +228,14 @@ export default {
             });
         },
         getFolders(folderId) {
+            this.folderId = folderId;
             this.errors = null;
             this.loading = true;
             axios
             .get('/api/media_manager', {
                 params: {
-                    folder_id: folderId
+                    folder_id: folderId,
+                    //filter: this.searchFilter
                 }
             })
             .then((response) => {
@@ -275,7 +261,8 @@ export default {
             axios
             .get('/api/media_manager/files', {
                 params: {
-                    folder_id: folderId
+                    folder_id: folderId,
+                    filter: this.searchFilter
                 }
             })
             .then((response) => {
@@ -288,8 +275,10 @@ export default {
                 this.errors = error.response.data.errors;
                 this.loading = false;
             });
-
-
+        },
+        userSelectedFiles($event) {
+            this.selectedFile = $event;
+            this.$modal.show('upload-media-modal');
         }
     },
     mounted() {
@@ -492,5 +481,8 @@ li {
     line-height: 1;
     text-align: center;
     font-weight: 700;
+}
+.vm-modal {
+    margin-top: 30px !important;
 }
 </style>

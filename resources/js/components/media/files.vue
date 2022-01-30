@@ -1,6 +1,7 @@
 <template>
-    <div class="mt-3">
-        <h5 class="mb-3">Recent Files</h5>
+<div>
+    <div v-if="view == 'list'" class="mt-3">
+        <h5 class="mb-3">Files</h5>
         <div class="table-responsive">
             <table class="table table-centered table-nowrap mb-0">
             <thead class="table-light">
@@ -8,8 +9,6 @@
                     <th class="border-0">Name</th>
                     <th class="border-0">Last Modified</th>
                     <th class="border-0">Size</th>
-                    <th class="border-0">Owner</th>
-                    <th class="border-0">Members</th>
                     <th class="border-0" style="width: 80px;">Action</th>
                 </tr>
             </thead>
@@ -27,30 +26,11 @@
                     </td>
                     <td>{{ parseFloat(file.size * 0.000001).toFixed(1) }} MB</td>
                     <td>
-                        <span v-if="file.user">
-                            {{ file.user.firstname }}
-                            {{ file.user.lastname }}
-                    </span>
-                    </td>
-                    <td id="tooltips-container">
-                        <div class="avatar-group">
-                        <a href="javascript: void(0);" class="avatar-group-item mb-0" data-bs-container="#tooltips-container" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Mat Helme">
-                        </a>
-                        <a href="javascript: void(0);" class="avatar-group-item mb-0" data-bs-container="#tooltips-container" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Michael Zenaty">
-                        </a>
-                        <a href="javascript: void(0);" class="avatar-group-item mb-0" data-bs-container="#tooltips-container" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="James Anderson">
-                        </a>
-                        <a href="javascript: void(0);" class="avatar-group-item mb-0" data-bs-container="#tooltips-container" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Username">
-                        </a>
-                        </div>
-                    </td>
-                    <td>
                         <div class="btn-group dropdown">
                         <a href="javascript: void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-xs" data-bs-toggle="dropdown" aria-expanded="false"><i class="mdi mdi-dots-horizontal"></i></a>
                         <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="#"><i class="mdi mdi-share-variant me-2 text-muted vertical-middle"></i>Share</a>
                             <a class="dropdown-item" href="#"><i class="mdi mdi-link me-2 text-muted vertical-middle"></i>Get Sharable Link</a>
-                            <a class="dropdown-item" href="#"><i class="mdi mdi-pencil me-2 text-muted vertical-middle"></i>Rename</a>
+                            <a class="dropdown-item" href="#" @click.prevent="editFile(file)"><i class="mdi mdi-pencil me-2 text-muted vertical-middle"></i>Edit</a>
                             <a class="dropdown-item" href="#"><i class="mdi mdi-download me-2 text-muted vertical-middle"></i>Download</a>
                             <a class="dropdown-item" href="#"><i class="mdi mdi-delete me-2 text-muted vertical-middle"></i>Remove</a>
                         </div>
@@ -61,12 +41,66 @@
             </table>
         </div>
     </div>
+    <div v-if="view == 'cards'" class="mt-3">
+        <h5 class="mb-3">Files</h5>
+        <div class="row">
+        <div v-for="file in mediaFiles" :key="file.id + 'card'" class="col-md-3 col-xl-3">
+            <div class="card product-box">
+                <div class="card-body" style="padding: 0.5rem">
+                    <div class="product-action">
+                        <a href="javascript: void(0);" class="btn btn-success btn-xs waves-effect waves-light"><i class="mdi mdi-pencil"></i></a>
+                        <a href="javascript: void(0);" class="btn btn-danger btn-xs waves-effect waves-light"><i class="mdi mdi-close"></i></a>
+                    </div>
+
+                    <div class="bg-light" style="">
+                        <img :src="file.url" alt="product-pic" class="img-fluid rounded" style="height: 100px; width: 100%; object-fit: dover">
+                    </div>
+
+                    <div class="product-info">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h5 class="font-12 mt-0 sp-line-1"><a href="#" class="text-dark">{{file.name}}</a> </h5>
+                                <h5 class="m-0"> <span class="text-muted"> {{parseFloat(file.size * 0.000001).toFixed(1) }} MB</span></h5>
+                            </div>
+                            <div class="col-12">
+                                <div class="product-price-tag mt-1">
+                                    <i class="mdi mdi-download me-2 text-muted vertical-middle"></i>
+                                    <i class="mdi mdi-link me-2 text-muted vertical-middle"></i>
+                                </div>
+                            </div>
+                        </div> <!-- end row -->
+                    </div> <!-- end product info-->
+                </div>
+            </div> <!-- end card-->
+        </div> <!-- end col-->
+        </div>
+    </div>
+</div>
 </template>
 
 <script>
 export default {
     props: {
-        mediaFiles: {}
+        mediaFiles: {},
+        view: {
+            default: 'list'
+        }
     },
+    methods: {
+        editFile(file) {
+            this.$emit('selected', file);
+        }
+    }
 }
 </script>
+
+<style scoped>
+.card {
+    transition: box-shadow .5s;
+    box-shadow: 0 0 11px rgb(33 33 33 / 25%);
+}
+.card:hover {
+    transition: box-shadow .5s;
+    scale: 1.1;
+}
+</style>

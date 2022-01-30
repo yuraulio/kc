@@ -99,7 +99,7 @@ class MediaController extends Controller
         $image = $request->file('file');
 
         try {
-            $cname = $this->getRealName($image->getClientOriginalName());
+            $cname = $this->getRealName($request->imgname ? $request->imgname .".". $image->extension() :  $image->getClientOriginalName());
             if ($request->directory) {
                 $mediaFolder = MediaFolder::findOrFail($request->directory);
                 $path = $mediaFolder->path;
@@ -120,21 +120,21 @@ class MediaController extends Controller
                     $mediaFolder->save();
                 }
             }
-            $imgpath = $path . '/'. $image->getClientOriginalName();
+            $imgpath = $path . '/'. ($request->imgname ? $request->imgname .".". $image->extension() :  $image->getClientOriginalName());
 
-            $file = Storage::disk('public')->putFileAs($path, $request->file('file'), $image->getClientOriginalName(), 'public');
+            $file = Storage::disk('public')->putFileAs($path, $request->file('file'), $request->imgname ? $request->imgname .".". $image->extension() :  $image->getClientOriginalName(), 'public');
 
-            $this->storeFile($image->getClientOriginalName(), $imgpath, $mediaFolder->id, $image->getSize(), true);
+            $mfile = $this->storeFile(($request->imgname ? $request->imgname .".". $image->extension() : $image->getClientOriginalName()), $imgpath, $mediaFolder->id, $image->getSize(), true);
 
-            $img = Image::make($request->file('file'));
+            /* $img = Image::make($request->file('file'));
             $img->resize(3840, 2160, function ($const) {
                 $const->aspectRatio();
             })->save(public_path().'/uploads'.$path.$this->getRealName($image->getClientOriginalName()) . '_3840x2160.'. $image->extension());
 
-            $this->storeFile($this->getRealName($image->getClientOriginalName()) . '_3840x2160.'. $image->extension(), $path.$this->getRealName($image->getClientOriginalName()) . '_3840x2160.'. $image->extension(), $mediaFolder->id, strlen((string) $img->encode('png')), false);
+            $this->storeFile($this->getRealName($image->getClientOriginalName()) . '_3840x2160.'. $image->extension(), $path.$this->getRealName($image->getClientOriginalName()) . '_3840x2160.'. $image->extension(), $mediaFolder->id, strlen((string) $img->encode('png')), false); */
 
             $url = config('app.url'). "/uploads/" . $path;
-            return response()->json(['url' => $url], 200);
+            return response()->json(['data' => $mfile], 200);
         } catch (Exception $e) {
             Log::error("Failed update file . " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
@@ -143,23 +143,17 @@ class MediaController extends Controller
 
     public function storeFile($name, $path, $folderId, $size, $parent = false)
     {
-        //$this->authorize('create', Page::class, Auth::user());
+        $mediaFile = new MediaFile();
+        $mediaFile->name = $name;
+        $mediaFile->path = $path;
+        $mediaFile->folder_id = $folderId;
+        $mediaFile->size = $size;
+        $mediaFile->parent_id = $parent;
+        $mediaFile->url = config('app.url'). "/uploads/" . $path;
+        $mediaFile->user_id = Auth::user()->id;
+        $mediaFile->save();
 
-        try {
-            $mediaFile = new MediaFile();
-            $mediaFile->name = $name;
-            $mediaFile->path = $path;
-            $mediaFile->folder_id = $folderId;
-            $mediaFile->size = $size;
-            $mediaFile->parent = $parent;
-            $mediaFile->url = config('app.url'). "/uploads" . $path;;
-            $mediaFile->user_id = Auth::user()->id;
-            $mediaFile->save();
-
-        } catch (Exception $e) {
-            Log::error("Failed to add new mediaFolder. " . $e->getMessage());
-            return response()->json(['message' => $e->getMessage()], 400);
-        }
+        return $mediaFile;
     }
 
     public function getRealName($string)

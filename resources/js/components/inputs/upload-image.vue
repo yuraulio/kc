@@ -46,7 +46,6 @@
 </template>
 
 <script>
-import Cropper from 'cropperjs'
 import FileUpload from 'vue-upload-component'
 export default {
     props: {
@@ -64,7 +63,6 @@ export default {
     return {
       files: [],
       edit: false,
-      cropper: false,
       value: null
     }
   },
