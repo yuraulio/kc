@@ -65,6 +65,14 @@
                                 route="categories"
                             ></multidropdown>
 
+                            <multidropdown
+                                title="Subcategories"
+                                @updatevalue="update_subcategory"
+                                :prop-value="subcategory_value"
+                                :fetch="false"
+                                :data="subcategories"
+                            ></multidropdown>
+
                             <rows
                                 v-if="rows"
                                 title="Content"
@@ -138,7 +146,7 @@ export default {
             return {
                 title_value: null,
                 rows_value: null,
-                category_value: null,
+                category_value: [],
                 errors: null,
                 test: null,
                 template_value: null,
@@ -146,6 +154,8 @@ export default {
                 published: false,
                 lodash: _,
                 page: {},
+                subcategories: null,
+                subcategory_value: null,
             }
         },
         methods: {
@@ -160,6 +170,10 @@ export default {
             },
             update_category(value){
                 this.category_value = value;
+                // this.subcategory_value = [];
+            },
+            update_subcategory(value){
+                this.subcategory_value = value;
             },
             update_template(value){
                 console.log('tem', value)
@@ -208,6 +222,7 @@ export default {
                         title: this.title_value,
                         rows: JSON.stringify(this.rows_value),
                         category_id: this.category_value,
+                        subcategories: this.subcategory_value,
                         content: this.template_value ? JSON.stringify(this.$refs.tc.data) : '',
                         template_id: this.template_value ? this.template_value.id : null,
                         published: this.published,
@@ -243,6 +258,7 @@ export default {
                             console.log(JSON.stringify(this.rows_value));
                         }
                         this.category_value = data.categories;
+                        this.subcategory_value = data.subcategories;
                         this.template_value = data.template;
                     }
                 })
@@ -267,6 +283,7 @@ export default {
                         this.template_value.rows = data.content;
                     }
                     this.category_value = data.categories;
+                    this.subcategory_value = data.subcategories;
                 } else {
                     this.get()
                 }
@@ -274,14 +291,18 @@ export default {
             }
         },
         watch: {
-            /* additionalTemplates() {
-                if (this.template_value) {
-                    this.template_value.concat(this.additionalTemplates)
-                } else {
-                    this.template_value = this.additionalTemplates
-                    console.log('TM', this.template_value)
+            "category_value": function() {
+                var subcategories = [];
+                console.log("category value", this.category_value);
+                if (this.category_value) {
+                    this.category_value.forEach(function(category, index) {
+                        category.subcategories.forEach(function(subcategory, index) {
+                            subcategories.push(subcategory);
+                        });
+                    });
+                    this.subcategories = subcategories;
                 }
-            } */
+            }
         }
     }
 </script>

@@ -28,7 +28,7 @@ class PagesController extends Controller
         $this->authorize('viewAny', Page::class, Auth::user());
 
         try {
-            $pages = Page::lookForOriginal($request->filter)->with('template')->orderBy('created_at', 'desc')->paginate(100);
+            $pages = Page::lookForOriginal($request->filter)->with('template', 'categories.subcategories')->orderBy('created_at', 'desc')->paginate(100);
             return PageResource::collection($pages);
         } catch (Exception $e) {
             Log::error("Failed to get pages. " . $e->getMessage());
@@ -55,7 +55,9 @@ class PagesController extends Controller
             $page->save();
 
             $page->categories()->sync(collect($request->category_id ?? [])->pluck('id')->toArray());
-            $page->load('template', 'categories');
+            $page->subcategories()->sync(collect($request->subcategories ?? [])->pluck('id')->toArray());
+
+            $page->load('template', 'categories.subcategories');
 
             return new PageResource($page);
         } catch (Exception $e) {
@@ -106,6 +108,8 @@ class PagesController extends Controller
             $page->save();
 
             $page->categories()->sync(collect($request->category_id ?? [])->pluck('id')->toArray());
+            $page->subcategories()->sync(collect($request->subcategories ?? [])->pluck('id')->toArray());
+
             $page->load('template', 'categories');
 
             return new PageResource($page);

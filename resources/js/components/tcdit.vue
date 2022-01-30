@@ -16,7 +16,7 @@
 
             <div class="row">
                 <div class="col-2">
-                    <button @click="toggleCollapse(val)" class="btn btn-secondary" type="button" data-bs-toggle="collapse" :data-bs-target="'#collapseelement' + index" aria-expanded="false" aria-controls="collapseExample">
+                    <button @click="toggleCollapse(val)" class="btn btn-sm btn-secondary" type="button" data-bs-toggle="collapse" :data-bs-target="'#collapseelement' + index" aria-expanded="false" aria-controls="collapseExample">
                         <i v-if="val.collapsed == true" class="mdi mdi-chevron-down"></i>
                         <i v-else class="mdi mdi-chevron-up"></i>
                     </button>

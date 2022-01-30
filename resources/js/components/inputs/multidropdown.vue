@@ -40,6 +40,7 @@
             taggable: {
                 default: false
             },
+            data: null,
         },
         data() {
             return {
@@ -50,6 +51,9 @@
         watch: {
             "propValue": function() {
                 this.value = this.propValue;
+            },
+            "data": function() {
+                this.list = this.data;
             }
         },
         methods: {
