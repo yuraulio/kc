@@ -90,6 +90,10 @@
             if (this.propValue){
                 this.value = this.propValue;
             }
+
+            if (this.data) {
+                this.list = this.data;
+            }
             
             if (this.fetch) {
                 this.get();

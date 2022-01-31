@@ -47,7 +47,17 @@
                                 :prop-value="title_value"
                                 required=1
                             ></text-field>
+
                             <ul v-if="errors && errors['title']" class="parsley-errors-list filled" id="parsley-id-7" aria-hidden="false"><li class="parsley-required">{{errors['title'][0]}}</li></ul>
+
+                            <multidropdown
+                                title="Type"
+                                :multi="false"
+                                @updatevalue="update_type"
+                                :prop-value="type_value"
+                                :fetch="false"
+                                :data="type_list"
+                            ></multidropdown>
 
                             <multidropdown
                                 title="Template"
@@ -164,6 +174,29 @@ export default {
                 subcategory_value: null,
                 published_from_value: null,
                 published_to_value: null,
+                type_value: null,
+                type_list: [
+                    {
+                        'id': 1,
+                        'title':'Article'
+                    },
+                    {
+                        'id': 2,
+                        'title':'Blog'
+                    },
+                    {
+                        'id': 3,
+                        'title':'Course page'
+                    },
+                    {
+                        'id': 4,
+                        'title':'Trainer page'
+                    },
+                    {
+                        'id': 5,
+                        'title':'General'
+                    }
+                ],
             }
         },
         methods: {
@@ -189,6 +222,9 @@ export default {
             update_published_to(value){
                 this.published_to_value = value;
             },
+            update_type(value){
+                this.type_value = value;
+            },
             update_template(value){
                 console.log('tem', value)
                 this.template_value = value;
@@ -212,6 +248,7 @@ export default {
                         published: this.published,
                         published_from: this.published_from_value,
                         published_to: this.published_to_value,
+                        type: this.type_value.title,
 
                     }
                 )
@@ -247,6 +284,7 @@ export default {
                         id: this.id,
                         published_from: this.published_from_value,
                         published_to: this.published_to_value,
+                        type: this.type_value.title,
                     }
                 )
                 .then((response) => {
@@ -306,6 +344,11 @@ export default {
                     this.subcategory_value = data.subcategories;
                     this.published_from_value = data.published_from;
                     this.published_to_value = data.published_to;
+
+                    var index = this.type_list.findIndex(function(type) {
+                        return type.title ==  data.type;
+                    });
+                    this.type_value = this.type_list[index];
                 } else {
                     this.get()
                 }
