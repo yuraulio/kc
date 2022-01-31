@@ -23,7 +23,7 @@
                                 <i v-else class="mdi mdi-chevron-up"></i>
                             </button>
                         </div>
-                        <div class="col-9">
+                        <div class="col-4 text-center">
                             <div v-if="val.width" class="btn-group">
                                 <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                     {{ val.width == 'full' ? 'Full' : (val.width == 'content' ? 'Content' :'Blog') }} Width<i class="mdi mdi-chevron-down"></i>
@@ -35,7 +35,47 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-1"></div>
+                        <div class="col-4 text-center">
+                            <div v-if="val.columns[0].component != 'meta'" class="btn-group">
+                                <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    <template v-if="val.color == 'white'">
+                                        White <i class="mdi mdi-chevron-down"></i>
+                                    </template>
+                                    <template v-if="val.color == 'blue_gradient'">
+                                        Blue gradient <i class="mdi mdi-chevron-down"></i>
+                                    </template>
+                                    <template v-if="val.color == 'blue'">
+                                        Blue <i class="mdi mdi-chevron-down"></i>
+                                    </template>
+                                    <template v-if="val.color == 'gray'">
+                                        Gray <i class="mdi mdi-chevron-down"></i>
+                                    </template>
+                                    
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-center" style="">
+                                    <a @click.prevent="val.color = 'white'" 
+                                        :class="'dropdown-item ' + (val.color == 'white' ? 'active' : '')" 
+                                        href="#">White
+                                    </a>
+
+                                    <a @click.prevent="val.color = 'blue_gradient'" 
+                                        :class="'dropdown-item ' + (val.color == 'blue_gradient' ? 'active' : '')" 
+                                        href="#">Blue gradient
+                                    </a>
+
+                                    <a @click.prevent="val.color = 'blue'" 
+                                        :class="'dropdown-item ' + (val.color == 'blue' ? 'active' : '')" 
+                                        href="#">Blue
+                                    </a>
+
+                                    <a @click.prevent="val.color = 'gray'" 
+                                        :class="'dropdown-item ' + (val.color == 'gray' ? 'active' : '')" 
+                                        href="#">Gray
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2"></div>
                     </div>
                     <div v-for="(column, indr, key) in val.columns" :key="key">
 
@@ -279,16 +319,8 @@ export default {
     },
 
     watch: {
-        predata() {
-
-        }
     },
     mounted() {
-        // console.log("TCEDIT MOUNTED")
-        /* if (this.predata) {
-            this.data = this.predata;
-            return;
-        } */
         if (this.pseudo) {
             if (this.predata) {
                 this.data = this.predata;
@@ -341,6 +373,12 @@ export default {
 
         }
 
+        this.data.forEach(row => {
+            if (!row.color){
+                this.$set(row, 'color', 'white');
+            }
+        });
+
         eventHub.$on('component-rearange', ((preview) => {
             if (preview && preview === true) {
                 this.spreview = false;
@@ -360,6 +398,7 @@ export default {
                 "order": this.data.length + 1,
                 "description": "",
                 "collapsed": false,
+                "color": 'white',
                 "columns": [
                     {
                         "id": this.$uuid.v4(),
@@ -403,10 +442,10 @@ export default {
     background-color: rgb(234 237 239 / 48%) !important;
 }
 .dropdown-menu-center {
-  left: 50% !important;
+  /* left: 50% !important; */
   right: auto !important;
   text-align: center !important;
-  transform: translate(-50%, 0) !important;
+  /* transform: translate(-50%, 0) !important; */
 }
 .close-button {
     transform: translateX(-40px);
