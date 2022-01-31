@@ -6,11 +6,13 @@ use App\Model\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\SearchFilter;
+use App\Traits\SlugTrait;
 
 class Page extends Model
 {
     use HasFactory;
     use SearchFilter;
+    use SlugTrait;
 
     protected $table = 'cms_pages';
     public $asYouType = true;

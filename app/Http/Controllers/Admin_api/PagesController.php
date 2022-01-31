@@ -57,6 +57,8 @@ class PagesController extends Controller
             $page->type = $request->type;
             $page->save();
 
+            $page->createSlug($request->title);
+
             $page->categories()->sync(collect($request->category_id ?? [])->pluck('id')->toArray());
             $page->subcategories()->sync(collect($request->subcategories ?? [])->pluck('id')->toArray());
 

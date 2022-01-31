@@ -248,7 +248,7 @@ export default {
                         published: this.published,
                         published_from: this.published_from_value,
                         published_to: this.published_to_value,
-                        type: this.type_value.title,
+                        type: this.type_value ? this.type_value.title : null,
 
                     }
                 )
@@ -284,7 +284,7 @@ export default {
                         id: this.id,
                         published_from: this.published_from_value,
                         published_to: this.published_to_value,
-                        type: this.type_value.title,
+                        type: this.type_value ? this.type_value.title : null,
                     }
                 )
                 .then((response) => {
