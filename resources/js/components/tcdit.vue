@@ -61,7 +61,7 @@
                                             </a>
                                         </li>
                                         <li v-if="val.columns.length < 3">
-                                            <button @click="split(val.columns, indr, 'push')" class="btn btn-success add-column-button">
+                                            <button @click="split(val.columns, indr, 'push')" class="btn btn-success add-column-button ms-1">
                                                 <i class="dripicons-plus"></i>
                                             </button>
                                         </li>

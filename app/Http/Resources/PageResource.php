@@ -31,6 +31,8 @@ class PageResource extends JsonResource
             'template' => $this->template,
             'categories' => $this->categories,
             'subcategories' => $this->subcategories,
+            'published_from' => $this->published_from,
+            'published_to' => $this->published_to,
         ];
     }
 }

@@ -81,17 +81,23 @@
                                 :prop-value="rows_value"
                             ></rows>
 
-                            <!--<page
-                                v-if="page"
-                                title="Content"
-                                required=1
-                                @updatevalue="update_page"
-                                :prop-value="rows_value"
-                            ></page>-->
-                            <div :key="'ck'"  class="form-check form-switch mb-1" style="display: inline-block; cursor: pointer">
+                            <div :key="'ck'"  class="form-check form-switch mb-3" style="display: inline-block; cursor: pointer">
                                 <input :key="'on'" @click="published = !published" :id="'cinput'" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :for="'cinput'" :checked="published">
                                 <label class="form-check-label" for="light-mode-check">Published</label>
                             </div>
+
+                            <datepicker-component
+                                title="Publish from"
+                                @updatevalue="update_published_from"
+                                :prop-value="published_from_value"
+                            ></datepicker-component>
+
+                            <datepicker-component
+                                title="Publish to"
+                                @updatevalue="update_published_to"
+                                :prop-value="published_to_value"
+                            ></datepicker-component>
+
                             <div class="row mt-3">
                                 <div class="col-12 text-center mb-3 d-grid">
                                     <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions" :disabled="!template_value" @click="rearange()" class="btn btn-block btn-soft-info rounded-pill waves-effect waves-light m-1">Preview</button>
@@ -156,6 +162,8 @@ export default {
                 page: {},
                 subcategories: null,
                 subcategory_value: null,
+                published_from_value: null,
+                published_to_value: null,
             }
         },
         methods: {
@@ -175,6 +183,12 @@ export default {
             update_subcategory(value){
                 this.subcategory_value = value;
             },
+            update_published_from(value){
+                this.published_from_value = value;
+            },
+            update_published_to(value){
+                this.published_to_value = value;
+            },
             update_template(value){
                 console.log('tem', value)
                 this.template_value = value;
@@ -193,8 +207,12 @@ export default {
                         rows: JSON.stringify(this.rows_value),
                         content: this.template_value ? JSON.stringify(this.$refs.tc.data) : '',
                         category_id: this.category_value,
+                        subcategories: this.subcategory_value,
                         template_id: this.template_value ? this.template_value.id : null,
-                        published: this.published
+                        published: this.published,
+                        published_from: this.published_from_value,
+                        published_to: this.published_to_value,
+
                     }
                 )
                 .then((response) => {
@@ -227,6 +245,8 @@ export default {
                         template_id: this.template_value ? this.template_value.id : null,
                         published: this.published,
                         id: this.id,
+                        published_from: this.published_from_value,
+                        published_to: this.published_to_value,
                     }
                 )
                 .then((response) => {
@@ -284,6 +304,8 @@ export default {
                     }
                     this.category_value = data.categories;
                     this.subcategory_value = data.subcategories;
+                    this.published_from_value = data.published_from;
+                    this.published_to_value = data.published_to;
                 } else {
                     this.get()
                 }

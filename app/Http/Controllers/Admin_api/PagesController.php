@@ -52,6 +52,8 @@ class PagesController extends Controller
             $page->content = $request->content;
             $page->published = $request->published;
             $page->user_id = Auth::user()->id;
+            $page->published_from = $request->published_from;
+            $page->published_to = $request->published_to;
             $page->save();
 
             $page->categories()->sync(collect($request->category_id ?? [])->pluck('id')->toArray());
@@ -105,6 +107,8 @@ class PagesController extends Controller
             $page->template_id = $request->template_id;
             $page->content = $request->content;
             $page->published = $request->published;
+            $page->published_from = $request->published_from;
+            $page->published_to = $request->published_to;
             $page->save();
 
             $page->categories()->sync(collect($request->category_id ?? [])->pluck('id')->toArray());

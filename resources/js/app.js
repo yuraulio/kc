@@ -61,6 +61,7 @@ Vue.component('multiput', require('./components/inputs/multiput.vue').default);
 Vue.component('component-modal', require('./components/component-modal.vue').default);
 Vue.component('list', require('./components/inputs/list.vue').default);
 Vue.component('pagination', require('laravel-vue-pagination'));
+Vue.component('datepicker-component', require('./components/inputs/datepicker-component.vue').default);
 
 Vue.component('avatar', require('vue-avatar').default);
 
