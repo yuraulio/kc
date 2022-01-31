@@ -55,12 +55,12 @@ class PagesController extends Controller
     public function store(PagesRequest $request, Pages $model)
     {
 
-      //  dd($request->all());
+        //dd($request->all());
         $input = $request->all();
         unset($input['slug']);
         $model = $model->create($input);
 
-        $model->createSlug($request->slug);
+        $model->createSlug($request->slug ? $request->slug : $request->name);
         $model->createMetas($input);
         $model->createMedia();
 

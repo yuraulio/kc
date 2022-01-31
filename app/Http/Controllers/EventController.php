@@ -193,7 +193,7 @@ class EventController extends Controller
         }
         //dd($request->all());
 
-        $event->createSlug($request->slug);
+        $event->createSlug($request->slug ? $request->slug : $request->title);
         $event->createMetas($request->all());
 
         if($request->category_id != null){

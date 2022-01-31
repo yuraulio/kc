@@ -40,7 +40,7 @@
                             <h6 class="heading-small text-muted mb-4">{{ __('Ticket information') }}</h6>
                             <div class="pl-lg-4">
                                 <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-title">{{ __('Title') }}</label>
+                                    <label class="form-control-label" for="input-title">{{ __('Title for the administration view') }}</label>
                                     <input type="text" name="title" id="input-title" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title', $ticket->title) }}" autofocus>
 
                                     @include('alerts.feedback', ['field' => 'title'])

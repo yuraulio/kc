@@ -84,6 +84,9 @@
         <li class="nav-item">
             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab" data-toggle="tab" href="#tabs-icons-text-8" role="tab" aria-controls="tabs-icons-text-8" aria-selected="false"><i class="fas fa-images mr-2"></i>Profile image</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab" data-toggle="tab" href="#notes" role="tab" aria-controls="tabs-icons-text-8" aria-selected="false"><i class="fas fa-images mr-2"></i>Notes</a>
+        </li>
     </ul>
 </div>
 <?php //dd($user); ?>
@@ -419,6 +422,7 @@
 
                                 <th scope="col">{{ __('Event') }}</th>
                                 <th scope="col">{{ __('Ticket Price') }}</th>
+                                <th scope="col">{{ __('Paid') }}</th>
                                 <th scope="col">{{ __('Registration Date') }}</th>
                                 <th scope="col">{{ __('Expiration Date') }}</th>
                                 <th scope="col"></th>
@@ -428,10 +432,15 @@
                             @foreach ($user->events as $user_event)
 
                                 <?php $trans = $user_event->transactionsByUser($user->id)->first() ?>
-
                                 <tr id="event_{{$user_event->id}}">
                                     <td>{{ $user_event->title }}</td>
-                                    <td>@if($trans) {{ $trans->amount }} @endif</td>
+                                    <td>@if($trans) {{ number_format($trans->amount , 2 , '.', '')}} @endif</td>
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" data-user_id="{{$user_event->pivot->user_id}}" data-event_id="{{$user_event->id}}" @if($user_event->pivot->paid) checked @endif class="paid custom-control-input" id="customCheck1">
+                                            <label class="custom-control-label" for="customCheck1"></label>
+                                        </div>
+                                    </td>
                                     {{--<td class="exp_{{$user_event->id}}"><?= ($user_event->pivot->expiration != null) ? date_format( new DateTime($user_event->pivot->expiration),'m/d/Y') : ''; ?></td>--}}
                                    <td> @if($trans) {{date('d-m-Y',strtotime($trans->created_at))}} @endif</td>
                                     <td>
@@ -981,6 +990,17 @@
                 </div>
 
             </div>
+
+            <div class="tab-pane fade" id="notes" role="tabpanel" aria-labelledby="notes-tab">
+                
+                <div class="form-group">
+                    <label for="exampleFormControlTextarea1">Notes</label>
+                    <textarea name="notes" class="form-control" id="notes" rows="10">{{ $user->notes }} </textarea>
+
+                    <button id="save-notes" type="button" class="btn btn-success mt-4">{{ __('Save') }}</button>
+                </div>
+               
+            </div>
         </div>
     </div>
 </div>
@@ -1351,7 +1371,53 @@ $(document).on('click', '.ticket-card', function () {
 
 </script>
 
+<script>
 
+    $(document).on('click','.paid',function(){
+
+        let paid = $(this).is(':checked')
+        let user_id = $(this).data('user_id')
+        let event_id =  $(this).data('event_id')
+
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: 'post',
+            url: '/admin/user/change-paid-status',
+            data: {'user_id': user_id ,'event_id': event_id , 'paid': paid},
+            success: function (data) {
+               
+            }
+        });
+
+
+        
+    })
+    
+    $(document).on('click','#save-notes',function(){
+
+        
+        let user_id = "{{ $user['id'] }}"
+        let notes =  $("textarea#notes").val();
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: 'post',
+            url: '/admin/user/save-notes',
+            data: {'user_id': user_id , 'notes': notes},
+            success: function (data) {
+            
+            }
+        });
+
+
+
+    })
+    
+
+</script>
 
 @endpush
 

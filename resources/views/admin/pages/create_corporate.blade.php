@@ -25,7 +25,7 @@
          <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#benefits" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Benefits</a>
       </li>
       <li class="nav-item">
-         <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#metas" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Metas</a>
+         <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#metas" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-world mr-2"></i>Seo</a>
       </li>
 
       <li class="nav-item">
@@ -84,7 +84,6 @@
                            <input type="text" name="title" id="input-title" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title',$page->title) }}"  required autofocus>
                            @include('alerts.feedback', ['field' => 'title'])
                         </div>
-                        @include('admin.slug.slug',['slug' => isset($slug) ? $slug : null])
                         <div class="form-group{{ $errors->has('permissions') ? ' has-danger' : '' }}">
                            <label class="form-control-label" for="input-permissions">{{ __('Page Editor') }}</label>
                            <textarea name="content" id="input-content"  class="ckeditor form-control{{ $errors->has('content') ? ' is-invalid' : '' }}" placeholder="{{ __('Page editor') }}"  required autofocus>{{ old('content',$page->content) }}</textarea>
@@ -132,6 +131,8 @@
    <div class="tab-pane fade" id="metas" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
       <div class="row">
          <div class="col-xl-12 order-xl-1">
+            @include('admin.slug.slug',['slug' => isset($slug) ? $slug : null])
+
             @include('admin.metas.metas',['metas' => $metas])
          </div>
       </div>

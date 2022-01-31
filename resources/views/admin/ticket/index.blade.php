@@ -1,9 +1,7 @@
 <div class="row align-items-center">
     <div class="col-8">
         <h3 class="mb-0">{{ __('Tickets') }}</h3>
-        <p class="text-sm mb-0">
-                {{ __('This is an example of Ticket management.') }}
-            </p>
+        
     </div>
     @can('create', App\Model\User::class)
         <div class="col-4 text-right">
@@ -22,26 +20,33 @@
     <table class="table align-items-center table-flush ticket-table"  id="datatable-basic19">
         <thead class="thead-light">
             <tr>
+                <th scope="col">{{ __('Visible/Not Visible') }}</th>
                 <th scope="col">{{ __('Title') }}</th>
-                <th scope="col">{{ __('Subtitle') }}</th>
+                {{--<th scope="col">{{ __('Subtitle') }}</th>--}}
                 <th scope="col">{{ __('Type') }}</th>
                 <th scope="col">{{ __('Quantity') }}</th>
                 <th scope="col">{{ __('Price') }}</th>
-                <th scope="col">{{ __('Created at') }}</th>
+                {{--<th scope="col">{{ __('Created at') }}</th>--}}
                 <th scope="col"></th>
             </tr>
         </thead>
         <tbody class="ticket-body ticket-order">
             @foreach ($event->ticket as $ticket)
                 <tr id="ticket_{{$ticket->id}}" data-id="{{$ticket->id}}" class="ticket-list">
-                    <td><a id="edit-ticket-btn" href="#">{{ $ticket->title }}</a></td>
-                    <td>{{ $ticket->subtitle }}</td>
+                    <td>
+                        <div class="custom-control custom-checkbox visible-ticket">
+                          <input  class="custom-control-input" type="checkbox" data-ticket="{{$ticket->id}}" data-event="{{$event->id}}" @if($ticket->pivot->active) checked @endif>
+                          <label class="custom-control-label" for="">Enable</label>
+                        </div>
+                    </td>
+                    <td><a class="admin_title_ticket_{{$ticket->id}}" id="edit-ticket-btn" href="#">{{ $ticket->title }}</a></td>
+                    {{--<td>{{ $ticket->subtitle }}</td>--}}
                     <td>{{ $ticket->type }}</td>
 
                     <td id="quantity-{{$ticket->id}}"> {{ $ticket->pivot->quantity }}</td>
                     <td id="price-{{$ticket->id}}">{{ $ticket->pivot->price }}</td>
 
-                    <td>{{ date_format($ticket->created_at, 'Y-m-d' ) }}</td>
+                    {{--<td>{{ date_format($ticket->created_at, 'Y-m-d' ) }}</td>--}}
                     <td class="d-none" id="options-{{ $ticket->id }}" >{{ $ticket->pivot->options }}</td>
                     <td class="d-none" id="features-{{ $ticket->id }}" >{{ $ticket->pivot->features }}</td>
 
@@ -53,7 +58,7 @@
                             
                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                                 <a class="dropdown-item edit-to-open" data-toggle="modal" data-target="#editTicketModal" data-id="{{$ticket->id}}" data-price="{{$ticket->price}}" data-quantity="{{$ticket->pivot->quantity}}">{{ __('Edit') }}</a>
-                                <a class="dropdown-item ticket-active ticket-active{{$ticket->id}}" data-ticket="{{$ticket->id}}" data-event="{{$event->id}}" data-active="{{$ticket->pivot->active ? 0 : 1}}">@if($ticket->pivot->active) <span class="ticket-span{{$ticket->id}}"> {{ __('Disable') }} </span> @else <span class="ticket-span{{$ticket->id}}"> {{ __('Enable') }} </span> @endif</a>
+                                {{--<a class="dropdown-item ticket-active ticket-active{{$ticket->id}}" data-ticket="{{$ticket->id}}" data-event="{{$event->id}}" data-active="{{$ticket->pivot->active ? 0 : 1}}">@if($ticket->pivot->active) <span class="ticket-span{{$ticket->id}}"> {{ __('Disable') }} </span> @else <span class="ticket-span{{$ticket->id}}"> {{ __('Enable') }} </span> @endif</a>--}}
                                 <a class="dropdown-item" id="remove_ticket" data-ticket-id="{{ $ticket->id }}">{{ __('Delete') }}</a>
                             </div>
                         </div>
@@ -152,6 +157,12 @@
          <div class="modal-body">
             <h6 class="heading-small text-muted mb-4">{{ __('Ticket information') }}</h6>
             <div class="pl-lg-4">
+
+                <div class="form-group">
+                  <label class="form-control-label" for="edit-price">{{ __('Title for the administration view') }}</label>
+                  <input type="text" id="edit-title-ticket" class="form-control" value="{{ old('price') }}" readonly>
+                </div>
+
                <div class="form-group{{ $errors->has('price') ? ' has-danger' : '' }}">
                   <label class="form-control-label" for="edit-price">{{ __('Price') }}</label>
                   <input type="text" name="price" id="edit-price" class="form-control{{ $errors->has('price') ? ' is-invalid' : '' }}" placeholder="{{ __('Price') }}" value="{{ old('price') }}" required autofocus>
@@ -414,6 +425,7 @@
          id = e.relatedTarget.dataset.id
          //name = e.relatedTarget.dataset.name,
          //description =e.relatedTarget.dataset.description;
+         title = $(".admin_title_ticket_"+id).text(),
          price = $("#price-"+id).text(),
          //alert(price)
          quantity = $("#quantity-"+id).text();
@@ -463,7 +475,7 @@
         })
 
 
-
+        modal.find("#edit-title-ticket").val(title)
       modal.find("#edit-price").val(price);
       modal.find("#edit-quantity1").val(quantity);
    	modal.find("#ticket-id").val(id)
@@ -580,7 +592,7 @@
    });
 
 
-   $('.ticket-active').click(function(){
+   {{--$('.ticket-active').click(function(){
         
         let ticket = $(this).data('ticket');
         let event = $(this).data('event');
@@ -595,17 +607,37 @@
          url: "/admin/ticket-active/" + event + "/" + ticket + "/" + active,
          success: function(data) {
 
-            console.log(data);
-            console.log('.ticket-span' + data.ticket)
-            console.log('.ticket-active' + $('.ticket-active' + data.ticket))
-
             $('.ticket-span' + data.ticket).html(data.text);
             //$('.ticket-active' + data.ticket).attr("data-active", data.active)
             $('.ticket-active' + data.ticket).data("active", data.active)
          }
       });
 
-   })
+   })--}}
+
+    $(document).on('click', '.visible-ticket',function(){
+        let ticket = $(this).find('input').data('ticket');
+        let event = $(this).find('input').data('event');
+        let active = $(this).find('input').is(':checked') ? 0 : 1;
+
+        $(this).find('input').prop('checked', active);
+
+        $.ajax({
+         type: 'GET',
+         headers: {
+         'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+         },
+         Accept: 'application/json',
+         url: "/admin/ticket-active/" + event + "/" + ticket + "/" + active,
+         success: function(data) {
+
+            $('.ticket-span' + data.ticket).html(data.text);
+            //$('.ticket-active' + data.ticket).attr("data-active", data.active)
+            $('.ticket-active' + data.ticket).data("active", data.active)
+         }
+      });
+    })
+  
 
 </script>
 

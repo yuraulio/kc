@@ -29,7 +29,7 @@
                         </div>
                     </div>
                 <div class="nav-wrapper tab-buttons">
-                    <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
+                    <ul class="nav nav-pills nav-fill flex-column flex-md-row event-tabs" id="tabs-icons-text" role="tablist">
                         <li class="nav-item">
                             {{--<a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true"><i class="ni ni-settings-gear-65 mr-2"></i>Settings</a>--}}
                             <button class="btn btn-icon btn-primary" data-toggle="tab"  href="#tabs-icons-text-1" role="tab" type="button">
@@ -37,6 +37,17 @@
                                 <span class="btn-inner--text">Settings</span>
                             </button>
                         </li>
+
+
+                        <li class="nav-item">
+                            <button class="btn btn-icon btn-primary" data-toggle="tab"  href="#metas" role="tab" type="button">
+                            	<span class="btn-inner--icon"><i class="ni ni-world"></i></span>
+                                <span class="btn-inner--text">Seo</span>
+                            </button>
+                        </li>
+
+                    
+
                         <li class="nav-item">
                             {{--<a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#tabs-icons-text-2" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-folder-17 mr-2"></i>Content</a>--}}
                             <button class="btn btn-icon btn-primary" data-toggle="tab"  href="#tabs-icons-text-2" role="tab" type="button">
@@ -320,9 +331,9 @@
                                         <li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab_inside" data-toggle="tab" href="#tabs-icons-text-1_inside" role="tab" aria-controls="tabs-icons-text-1_inside" aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i>Overview</a>
                                         </li>
-                                        <li class="nav-item">
+                                        {{--<li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab_inside" data-toggle="tab" href="#metas" role="tab" aria-controls="metas" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Metas</a>
-                                        </li>
+                                        </li>--}}
                                         <li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab_inside" data-toggle="tab" href="#tabs-icons-text-2_inside" role="tab" aria-controls="tabs-icons-text-2_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Summary </a>
                                         </li>
@@ -383,7 +394,7 @@
 
                                                             @include('alerts.feedback', ['field' => 'title'])
                                                         </div>
-                                                        @include('admin.slug.slug',['slug' => isset($slug) ? $slug : null])
+                                                        {{--@include('admin.slug.slug',['slug' => isset($slug) ? $slug : null])--}}
                                                         <div class="form-group{{ $errors->has('htmlTitle') ? ' has-danger' : '' }}">
                                                             <label class="form-control-label" for="input-htmlTitle">{{ __('HTML Title') }}</label>
                                                             <input type="text" name="htmlTitle" id="input-htmlTitle" class="form-control{{ $errors->has('htmlTitle') ? ' is-invalid' : '' }}" placeholder="{{ __('HTML Title') }}" value="{{ old('Short title', $event->htmlTitle) }}" autofocus>
@@ -441,9 +452,9 @@
                                             <div class="tab-pane fade" id="tabs-icons-text-2_inside" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab_inside">
                                                 @include('admin.summary.summary', ['model' => $event])
                                             </div>
-                                            <div class="tab-pane fade" id="metas" role="tabpanel" aria-labelledby="tabs-icons-text-8-tab_inside">
+                                            {{--<div class="tab-pane fade" id="metas" role="tabpanel" aria-labelledby="tabs-icons-text-8-tab_inside">
                                                 @include('admin.metas.metas',['metas' => $metas])
-                                            </div>
+                                            </div>--}}
 
                                             <div class="tab-pane fade" id="coupons" role="tabpanel" aria-labelledby="tabs-icons-text-8-tab_inside">
 
@@ -540,6 +551,12 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="tab-pane fade" id="metas" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
+                                @include('admin.slug.slug',['slug' => isset($slug) ? $slug : null])
+                                @include('admin.metas.metas',['metas' => $metas])
+                            </div>
+
                             <div class="tab-pane fade" id="tabs-icons-text-3" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
                                 @include('event.students')
                             </div>

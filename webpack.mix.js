@@ -34,6 +34,7 @@ mix.js('resources/js/app.js', 'public/js')
           'public/theme/assets/css/main.css',
           'public/theme/assets/css/fontawesome/css/kcfonts.css',
           'public/theme/assets/css/select2.css',
+          'public/theme/assets/css/my_datepicker.css',
       ], 'public/theme/assets/css/style_ver.css');
 
       mix.styles([

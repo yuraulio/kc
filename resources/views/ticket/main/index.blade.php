@@ -38,10 +38,10 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col">{{ __('Title') }}</th>
-                                    <th scope="col">{{ __('Subtitle') }}</th>
+                                    {{-- <th scope="col">{{ __('Subtitle') }}</th> --}}
                                     <th scope="col">{{ __('Type') }}</th>
-                                    <th scope="col">{{ __('features') }}</th>
-                                    <th scope="col">{{ __('Assiged to event') }}</th>
+                                    {{-- <th scope="col">{{ __('features') }}</th> --}}
+                                    {{-- <th scope="col">{{ __('Assiged to event') }} </th> --}}
                                     <th scope="col">{{ __('Created at') }}</th>
                                     <th scope="col"></th>
                                 </tr>
@@ -50,19 +50,19 @@
                                 @foreach ($tickets as $ticket)
                                     <tr>
                                         <td><a href="{{ route('ticket.edit_main', $ticket) }}">{{ $ticket->title }}</a></td>
-                                        <td>{{ $ticket->subtitle }}</td>
+                                        {{--<td>{{ $ticket->subtitle }}</td>--}}
                                         <td>{{ $ticket->type }}</td>
-                                        <td>{{ $ticket->features }}</td>
+                                        {{--<td>{{ $ticket->features }}</td>
                                         <td>
                                             @if(count($ticket->events) != 0)
                                                 @foreach($ticket->events as $event)
                                                     {{ $event->title }}
                                                 @endforeach
                                             @endif
-                                        </td>
+                                        </td>--}}
 
                                         <td>{{ date_format($ticket->created_at, 'Y-m-d' ) }}</td>
-					                        <td class="text-right">
+					                        {{--<td class="text-right">
                                                 <div class="dropdown">
                                                     <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         <i class="fas fa-ellipsis-v"></i>
@@ -80,7 +80,18 @@
                                                         </form>
                                                     </div>
                                                 </div>
-                                            </td>
+                                        </td>--}}
+                                        <td>
+                                            <form action="{{ route('ticket.destroy', $ticket) }}" method="post">
+                                                @csrf
+                                                @method('delete')
+
+                                                <button type="button" class="btn btn-primary" onclick="confirm('{{ __("Are you sure you want to delete this Ticket?") }}') ? this.parentElement.submit() : ''">
+                                                    {{ __('Delete') }}
+                                                </button>
+                                            </form>
+                                        </td>
+
                                     </tr>
                                 @endforeach
                             </tbody>

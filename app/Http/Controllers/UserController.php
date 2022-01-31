@@ -724,4 +724,24 @@ class UserController extends Controller
     }
 
 
+    public function changePaidStatus(Request $request){
+
+
+        $user = User::findOrFail($request->user_id);
+
+        $paid = $request->paid == 'true' ? 1 : 0;
+
+        $user->events_for_user_list()->wherePivot('event_id',$request->event_id)->updateExistingPivot($request->event_id,[
+            'paid' => $paid
+        ], false);
+    }
+
+    public function saveNotes(Request $request){
+
+        $user = User::findOrFail($request->user_id);
+
+        $user->notes = $request->notes;
+        $user->save();
+    }
+
 }

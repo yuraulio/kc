@@ -24,7 +24,7 @@
          </li>
          @if($page->name || in_array($page->template,$noEditablePages))
          <li class="nav-item">
-            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-1-tab" data-toggle="tab" href="#metas" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Metas</a>
+            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-1-tab" data-toggle="tab" href="#metas" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-world mr-2"></i>Seo</a>
          </li>
          @endif
 
@@ -72,9 +72,7 @@
                            <input type="text" name="name" id="input-name" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" placeholder="{{ __('Name') }}" value="{{ old('name',$page->name) }}"  required autofocus>
                            @include('alerts.feedback', ['field' => 'name'])
                         </div>
-                        @if(!in_array($page->template,$noEditablePages))
-                           @include('admin.slug.slug',['slug' => isset($slug) ? $slug : null])
-                        @endif
+                        
 
                         <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
                            <label class="form-control-label" for="input-title">{{ __('Title') }}</label>
@@ -142,6 +140,9 @@
    <div class="tab-pane fade" id="metas" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
       <div class="row">
          <div class="col-xl-12 order-xl-1">
+         @if(!in_array($page->template,$noEditablePages))
+                           @include('admin.slug.slug',['slug' => isset($slug) ? $slug : null])
+                        @endif
             @include('admin.metas.metas',['metas' => $metas])
          </div>
       </div>

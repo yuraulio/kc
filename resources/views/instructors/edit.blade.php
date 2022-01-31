@@ -29,7 +29,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-3-tab" data-toggle="tab" href="#metas" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="far fa-images mr-2"></i>Metas</a>
+                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-3-tab" data-toggle="tab" href="#metas" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="ni ni-world mr-2"></i>Seo</a>
                         </li>
 
                     </ul>
@@ -67,7 +67,6 @@
 
                                             @include('alerts.feedback', ['field' => 'title'])
                                         </div>
-                                        @include('admin.slug.slug',['slug' => $instructor->slugable])
                                         <div class="form-group{{ $errors->has('short_title') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-short_title">{{ __('Short title') }}</label>
                                             <input type="text" name="short_title" id="input-short_title" class="form-control{{ $errors->has('short_title') ? ' is-invalid' : '' }}" placeholder="{{ __('short_title') }}" value="{{ old('Short title', $instructor->short_title) }}" autofocus>
@@ -197,6 +196,8 @@
                                 @endif
                             </div>
                             <div class="tab-pane fade" id="metas" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
+                            @include('admin.slug.slug',['slug' => $instructor->slugable])
+
                             @include('admin.metas.metas',['metas' => $metas])
                             </div>
                         </div>

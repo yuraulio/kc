@@ -77,8 +77,9 @@ class CronjobsController extends Controller
 
 
             $adminemail = $invoiceUser->event->first()->paymentMethod->first() && $invoiceUser->event->first()->paymentMethod->first()->payment_email ?
-                $invoiceUser->event->first()->paymentMethod->first()->payment_email : 'info@knowcrunch.com';
+            $invoiceUser->event->first()->paymentMethod->first()->payment_email : 'info@knowcrunch.com';
 
+            $data['subject'] = 'Knowcrunch - All payments failed';
             $sent = Mail::send('emails.admin.failed_stripe_payment', $data, function ($m) use ($adminemail,$data) {
 
                 $sub =  $data['subject'];

@@ -177,12 +177,16 @@ class WebhookController extends BaseWebhookController
 				
 				$pdf = $elearningInvoice->generateInvoice();
 
-	
-
+				
 				$this->sendEmail($elearningInvoice,$pdf,$paymentMethod);
 
 			}
 		}
+
+		$user->events_for_user_list()->wherePivot('event_id',$eventId)->updateExistingPivot($eventId,[
+			'paid' => 1
+		], false);
+
 
 		if ((int)$count >= (int)$totalinst) {
 			$subscription->cancelNow();
@@ -571,7 +575,7 @@ class WebhookController extends BaseWebhookController
 
 			$subscription = $user->subscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first();
 			$eventId = explode('_',$subscription->stripe_price)[3];
-			$event = $user->events()->wherePivot('event_id',$eventId)->first();
+			$event = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first();
 			$paymentMethod =  PaymentMethod::find($event->pivot->payment_method);
 			$subscriptionCheckout = 0;
 
@@ -609,6 +613,29 @@ class WebhookController extends BaseWebhookController
 		
         return $this->successMethod();
     }
+
+
+	protected function handleInvoicePaymentFailed(array $payload){
+		if ($user = $this->getUserByStripeId($payload['data']['object']['customer'])) {
+			
+			$sub = $payload['data']['object']['lines']['data'][0];
+			if(isset($sub['metadata']['installments'])){
+			
+				$subscription = $user->subscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first();
+				$eventId = explode('_',$subscription->stripe_price)[3];
+
+				if($payload['data']['object']['attempt_count'] == 4){
+
+					$user->events_for_user_list()->wherePivot('event_id',$eventId)->updateExistingPivot($eventId,[
+						'paid' => 0
+					], false);
+
+				}
+
+			}
+    
+        }
+	}
 
 	
 }

@@ -7,12 +7,12 @@
    @include('alerts.feedback', ['field' => 'slug'])
 </div>
 @else
-<div class="form-group{{ $errors->has('slug') ? ' has-danger' : '' }}">
+<div class="form-group{{ $errors->has('slug') ? ' has-danger' : '' }} pl-lg-4">
    <label class="form-control-label" for="input-title">{{ __('Slug') }}</label>
    <input type="text" id="input-old-slug" value="{{ $slug->slug }}" hidden>
 
    <div class="d-flex">
-      <input type="text" name="slug" id="input-slug" class="form-control{{ $errors->has('slug') ? ' is-invalid' : '' }} col-9" placeholder="{{ __('Slug') }}" value="{{ old('slug',$slug->slug) }}"  required autofocus readonly>
+      <input type="text" name="slug" id="input-slug" class="form-control{{ $errors->has('slug') ? ' is-invalid' : '' }}" placeholder="{{ __('Slug') }}" value="{{ old('slug',$slug->slug) }}"  required autofocus readonly>
       <button class="btn btn-primary" id="edit-slug" type="button"> Edit </edit>
       <button class="btn btn-success" style="display:none" id="update-slug" type="button" > Update </edit>
       <button class="btn btn-danger" style="display:none" id="cancel-slug" type="button"> Cancel </edit>

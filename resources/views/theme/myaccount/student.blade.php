@@ -2,6 +2,7 @@
 @section('metas')
 <title>{{ 'My Account' }}</title>
 @endsection
+
 @section('content')
 <?php $bonusFiles = ['_Bonus', 'Bonus', 'Bonus Files', 'Βonus', '_Βonus', 'Βonus', 'Βonus Files'] ?>
 <?php $currentuser = $user ?>
@@ -210,9 +211,14 @@
                                        <div class="col12">
                                           <?php $birthday = date('j F Y',strtotime($currentuser['birthday']))?>
                                           <label>Date of birth:</label>
-                                          <div class="input-wrapper">
-                                             <input type="text" class="datepicker-jqui with-arrow" name="birthday" value="{{$birthday}}">
-                                          </div>
+                                     
+
+                                          <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
+                                            </div>
+                                            <input id="birthday" type="text" class="form-control datepicker" name="birthday" value="{{$birthday}}">
+                                        </div>
                                        </div>
                                        <div class="col12">
                                           <label>Company/Employer:</label>
@@ -1389,172 +1395,10 @@
 @section('scripts')
 
 <script src="{{cdn('theme/assets/js/validation_myaccount/jquery.validate.min.js')}}" type="text/javascript" charset="utf-8" async defer></script>
-	<script src="{{cdn('theme/assets/js/validation_myaccount/additional-methods.min.js')}}" type="text/javascript" charset="utf-8" async defer></script>	
-	<script src="{{cdn('theme/assets/js/validation_myaccount/validation.js')}}" type="text/javascript" charset="utf-8" async defer></script>	
+<script src="{{cdn('theme/assets/js/validation_myaccount/additional-methods.min.js')}}" type="text/javascript" charset="utf-8" async defer></script>	
+<script src="{{cdn('theme/assets/js/validation_myaccount/validation.js')}}" type="text/javascript" charset="utf-8" async defer></script>	
+<script src="{{ asset('argon') }}/vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 
-{{--<script src="https://js.stripe.com/v3/"></script>
-<script>
-   var stripeUserId = '{{ Auth::user()->createSetupIntent()->client_secret }}';
-   $(document).on('click', '#addCard', function(e){
-
-     /*$('<script>')
-      .attr('src', 'https://js.stripe.com/v3/')
-      .attr('id', 'stripe-js')
-      .appendTo('head');*/
-
-
-
-     $('#addCard').prop('disabled', true);
-     $('.msg_save_card').remove();
-     $('#container').append(`<div id="paymentMethodAdd">
-        <input id="card-holder-name" type="text">
-        <!-- Stripe Elements Placeholder -->
-        <div id="card-element"></div>
-        <button id="card-button" type="button" class="btn btn--secondary btn--sm" data-secret="${stripeUserId}">
-            Update Payment Method
-        </button></div>`)
-
-
-        $('<script>')
-      .text(`var stripe = Stripe('{{$stripe_key}}',{locale: 'en'});
-              var elements = stripe.elements();
-              var cardElement = elements.create('card',{
-                 style: {
-                    base: {
-
-                       fontSize: '18px',
-
-                    },
-                 },
-                 hidePostalCode: true,
-                 });
-              cardElement.mount('#card-element');`)
-
-      .attr('id', 'stripe-form')
-      .appendTo('head');
-
-
-
-
-   })
-
-</script>
-<script>
-   $(document).on('click',"#card-button",async (e) => {
-      var cardHolderName = document.getElementById('card-holder-name');
-      var cardButton = document.getElementById('card-button');
-      var clientSecret = cardButton.dataset.secret;
-      let { setupIntent, error } = await stripe.confirmCardSetup(
-           clientSecret, {
-               payment_method: {
-                   card: cardElement,
-                   billing_details: { name: cardHolderName.value }
-               }
-           }
-       ).then(function (result) {
-            if (result.error) {
-               console.log('error = ', result.error)
-                //$('#card-errors').text(result.error.message)
-                //$('button.pay').removeAttr('disabled')
-            } else {
-               paymentMethod = result.setupIntent.payment_method
-               $('button').prop('disabled', true);
-               $.ajax({
-                  type:'POST',
-                  url:'myaccount/card/store_from_payment_myaccount',
-                  headers: {
-                   'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-                  },
-                  data:{ 'payment_method' : paymentMethod},
-                  success:function(data) {
-                     stripeUserId = data.id;
-                     if(data['success']){
-
-                        let defaultPaymetntID = data['defaultPaymetntId'];
-                        let defaultCard = data['default_card'];
-                        let cards = data['cards'];
-
-                        let html = ` <table  style="width:100%"><tr>
-                              <th>Brand</th>
-                              <th>Default</th>
-                              <th>Last four</th>
-                              <th>Expire Month</th>
-                              <th>Expire Year</th>
-                              <th>Actions</th>
-                           </tr>`;
-
-                        $.each( defaultCard, function( key, value ) {
-
-                           html +=`<tr><td>` + value['brand'] + `</td>` +
-                           `<td><i class="far fa-check-circle"></i>Yes</td>`+
-                                 `<td>` + value['last4'] + `</td>` +
-                                 `<td>` + value['exp_month'] + `</td>` +
-                                 `<td>` + value['exp_year'] + `</td></tr>` ;
-                        });
-
-                        $.each( cards, function( key, value ) {
-                           if(value['id'] != defaultPaymetntID){
-                              html +=`<tr><td>` + value['card']['brand'] + `</td>` +
-                              `<td><i class="far fa-check-circle"></i>no</td>`+
-                                 `<td>` + value['card']['last4'] + `</td>` +
-                                 `<td>` + value['card']['exp_month'] + `</td>` +
-                                 `<td>` + value['card']['exp_year'] + `</td>` +
-                                 `<td>
-
-                                       <form action="{{route('payment_method.update')}}" method="post" id="payment-form">
-                                          {{ csrf_field() }}
-                                          <input type="hidden" name="card_id" value="`+ value['id'] +`">
-                                          <button class="btn btn--secondary btn--sm">Set default</button>
-                                       </form>
-
-                                       <form action="{{route('payment_method.remove')}}" method="post" id="payment-form">
-                                          {{ csrf_field() }}
-                                          <input type="hidden" name="card_id" value="`+ value['id'] +`">
-                                          <button id="removebtn" class="btn btn--secondary btn--sm">Remove</button>
-                                       </form>
-                                 </td></tr>`;
-                           }
-
-                        });
-                        html += '</table>'
-                        $("#cardList").empty();
-                        $("#cardList").append(html);
-
-                        $("#stripe-form").remove();
-                        $("#stripe-js").remove();
-
-                        $('#paymentMethodAdd').children().remove();
-
-                        $('#container').append(`<p class="normal msg_save_card"> Successfully added card!!</p>`)
-                        $('#addCard').prop('disabled', false);
-                        $('button').prop('disabled', false);
-                     }else{
-                        let message = `<img src="{{cdn('theme/assets/images/icons/alert-icons/icon-error-alert.svg')}}" alt="Info Alert">` + data['message'];
-                        $("#card-message").html( message)
-
-                        var favDialogCard = document.getElementById('favDialogCardNumberFailed');
-                        favDialogCard.style.display = "block";
-
-                        $('#addCard').prop('disabled', false);
-                        $('button').prop('disabled', false);
-                        $("#stripe-form").remove();
-                     $("#stripe-js").remove();
-                     }
-
-
-
-                  },
-
-               });
-            }
-         });
-
-   })
-
-
-
-
-</script>--}}
 <script>
    function cvv(input) {
 
@@ -2051,53 +1895,6 @@
    });
 
 </script>
-{{--<script>
-   $("#update-personal-info").click(function(){
-
-      fdata =$("#update-form").serialize();
-      var firstError = false;
-      $.ajax({ url: "{{route('validate.personalInfo')}}", type: "post",
-            data: fdata,
-            success: function(data) {
-                //console.log(data);
-                //return;
-                $('#update-form').find("input").removeClass('verror');
-                if (Number(data.status) === 0) {
-                    //var html = '<ul>';
-                    $.each(data.errors, function (key, row) {
-                        //console.log(data.errors);
-                        var newkey = key.replace('.', '');
-
-                        $('#update-form').find('input#'+newkey).addClass(['verror','validate-error']);
-
-                        if(!firstError){
-                            elementsHeight = Math.round($('#header').outerHeight()) - document.getElementById(newkey).getBoundingClientRect().top +30
-                            firstError = true;
-
-                            $('html, body').animate({
-                                scrollTop: elementsHeight
-                            }, 300);
-                        }
-
-                        $('#'+newkey+'-error').text(row[0]);
-                        //var s = $('#update-form').find('input#'+newkey).attr('placeholder');
-                        var pl =  row[0] ;
-
-                        $('#update-form').find('input#'+newkey).attr('placeholder', pl);
-
-                    });
-
-
-
-                } else {
-                  $('#update-form').submit();
-                }
-            }
-        });
-
-   });
-
-</script>--}}
 
 <script>
    $("#update-personal-info").click(function(){
@@ -2152,7 +1949,6 @@
 
 </script>
 
-
 <script>
 
 		function alphabetizeList(listField) {
@@ -2166,6 +1962,17 @@
     		sel.val(selected); // set cached selected value
 		}
 
-	</script>
+</script>
+
+<script>
+   var datePickerOptions = {
+        format: 'dd-mm-yyyy',
+        changeMonth: true,
+        changeYear: true,
+    }
+    $("#birthday").datepicker(datePickerOptions);
+
+
+</script>
 
 @stop
