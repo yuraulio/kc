@@ -12,64 +12,96 @@
     </div>
 
     <div v-if="data && !pseudo">
-        <div  v-for="(val, index, key) in data" :key="key" class="col-12 mb-1 card">
+        <draggable v-model="data" key="cols">
+            <transition-group tag="div" >
+                <div  v-for="(val, index, key) in data" :key="'prim'+ index" class="col-12 mb-1 card">
 
-            <div class="row">
-                <div class="col-2">
-                    <button @click="toggleCollapse(val)" class="btn btn-sm btn-secondary" type="button" data-bs-toggle="collapse" :data-bs-target="'#collapseelement' + index" aria-expanded="false" aria-controls="collapseExample">
-                        <i v-if="val.collapsed == true" class="mdi mdi-chevron-down"></i>
-                        <i v-else class="mdi mdi-chevron-up"></i>
-                    </button>
-                </div>
-                <div class="col-10">
-                    <div v-if="val.width" class="btn-group">
-                        <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            {{ val.width == 'full' ? 'Full' : (val.width == 'content' ? 'Content' :'Blog') }} Width<i class="mdi mdi-chevron-down"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-center" style="" data-popper-placement="bottom-start">
-                            <a @click.prevent="val.width = 'full'" :class="'dropdown-item ' + (val.width == 'full' ? 'active' : '')" href="#">Full Width</a>
-                            <a @click.prevent="val.width = 'content'" :class="'dropdown-item ' + (val.width == 'content' ? 'active' : '')" href="#">Content Width</a>
-                            <a @click.prevent="val.width = 'blog'" :class="'dropdown-item ' + (val.width == 'blog' ? 'active' : '')" href="#">Blog Width</a>
+                    <div class="row">
+                        <div class="col-2">
+                            <button @click="toggleCollapse(val)" class="btn btn-sm btn-secondary" type="button" data-bs-toggle="collapse" :data-bs-target="'#collapseelement' + index" aria-expanded="false" aria-controls="collapseExample">
+                                <i v-if="val.collapsed == true" class="mdi mdi-chevron-down"></i>
+                                <i v-else class="mdi mdi-chevron-up"></i>
+                            </button>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div v-for="(column, indr, key) in val.columns" :key="key">
-
-                <div :key="activeChange" v-show="column.template && column.active" class="">
-                    <div class="card-body pb-3">
-                        <div v-if="val.columns.length > 1">
-                            <ul class="nav nav-pills navtab-bg nav-justified">
-                                <li v-for="(v, ind) in val.columns" :key="ind" class="nav-item">
-                                    <a href="#home1" @click="setTabActive(index, ind)" data-bs-toggle="tab" aria-expanded="false" :class="'nav-link' + (v.active === true ? ' active' : '')">
-                                        {{ v.template.title }} #{{ ind + 1 }}
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <h5 v-else class="card-title mb-0">{{ column.template.title }}</h5>
-                    </div>
-                    <div :class="'tab-content collapse pb-3 ' + (val.initialCollapsed ? '' : 'show')" :id="'collapseelement' + index" style="padding-top: 0px" >
-                        
-                            <div v-for="(vl, indx) in val.columns" :key="'tabpane' + indx" :class="'tab-pane ' + (vl.active === true ? ' active' : '')">
-                                <div v-show="column.active" class="card-body row pb-0 pt-0">
-                                    <multiput
-                                        v-for="input in column.template.inputs"
-                                        :key="input.key"
-                                        :keyput="input.key"
-                                        :label="input.label"
-                                        :type="input.type"
-                                        :value="input.value"
-                                        :size="input.size"
-                                        @inputed="inputed($event, input)"
-                                    />
+                        <div class="col-9">
+                            <div v-if="val.width" class="btn-group">
+                                <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    {{ val.width == 'full' ? 'Full' : (val.width == 'content' ? 'Content' :'Blog') }} Width<i class="mdi mdi-chevron-down"></i>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-center" style="" data-popper-placement="bottom-start">
+                                    <a @click.prevent="val.width = 'full'" :class="'dropdown-item ' + (val.width == 'full' ? 'active' : '')" href="#">Full Width</a>
+                                    <a @click.prevent="val.width = 'content'" :class="'dropdown-item ' + (val.width == 'content' ? 'active' : '')" href="#">Content Width</a>
+                                    <a @click.prevent="val.width = 'blog'" :class="'dropdown-item ' + (val.width == 'blog' ? 'active' : '')" href="#">Blog Width</a>
                                 </div>
                             </div>
-                        
+                        </div>
+                        <div class="col-1"></div>
+                    </div>
+                    <div v-for="(column, indr, key) in val.columns" :key="key">
+
+                        <span @click="removeRow(index)" v-if="indr == (val.columns.length - 1) && column.template.key != 'meta_component'" class="position-absolute top-0 start-100 close-button" style="cursor: pointer">
+                            <button class="btn btn-sm btn-danger" type="button">
+                                <i class="dripicons-cross"></i>
+                            </button>
+                        </span>
+
+                        <div :key="activeChange" v-show="column.template && column.active" class="">
+                            <div class="card-body pb-3">
+                                <div v-if="val.columns.length > 1">
+                                    <ul class="nav nav-pills navtab-bg nav-justified">
+                                        <li v-for="(v, ind) in val.columns" :key="ind" class="nav-item">
+                                            <a href="#home1" @click="setTabActive(index, ind)" data-bs-toggle="tab" aria-expanded="false" :class="'nav-link' + (v.active === true ? ' active' : '')">
+                                                {{ v.template.title }}
+                                                <div @click.stop="removeColumn(val.columns, column.id, index, ind)" class="d-inline-block float-end ms-1">
+                                                    <i class="dripicons-cross"></i>
+                                                </div>
+                                                <div @click="changeComponent(index, indr, column.template)" class="d-inline-block float-end">
+                                                    <i class="dripicons-return"></i>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li v-if="val.columns.length < 3">
+                                            <button @click="split(val.columns, indr, 'push')" class="btn btn-success add-column-button">
+                                                <i class="dripicons-plus"></i>
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <h5 v-else class="card-title mb-0">
+                                    <div @click="changeComponent(index, indr, column.template)" class="d-inline-block cursor-pointer">
+                                        {{ column.template.title }}
+                                    </div>
+                                    <span v-if="column.template.one_column != true" class="text-muted font-13 float-end">
+                                        <div @click="split(val.columns, indr, 'push')" class="mr-2 d-inline-block cursor-pointer">
+                                            Add column
+                                        </div>
+                                    </span>
+                                </h5>
+
+                            </div>
+                            <div :class="'tab-content collapse pb-3 ' + (val.initialCollapsed ? '' : 'show')" :id="'collapseelement' + index" style="padding-top: 0px" >
+                                
+                                    <div v-for="(vl, indx) in val.columns" :key="'tabpane' + indx" :class="'tab-pane ' + (vl.active === true ? ' active' : '')">
+                                        <div v-show="column.active" class="card-body row pb-0 pt-0">
+                                            <multiput
+                                                v-for="input in column.template.inputs"
+                                                :key="input.key"
+                                                :keyput="input.key"
+                                                :label="input.label"
+                                                :type="input.type"
+                                                :value="input.value"
+                                                :size="input.size"
+                                                @inputed="inputed($event, input)"
+                                            />
+                                        </div>
+                                    </div>
+                                
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </transition-group>
+        </draggable>
     </div>
 
     <div v-if="data && pseudo">
@@ -109,8 +141,8 @@
                                 </div>
                                 <span @click="removeRow(index)" v-if="indr == (val.columns.length - 1) && column.template.key != 'meta_component'" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="cursor: pointer">
                                     Remove
-                                <span class="visually-hidden"></span>
-                            </span>
+                                    <span class="visually-hidden"></span>
+                                </span>
                             </div>
 
                         </div>
@@ -185,6 +217,7 @@ export default {
                 var col = JSON.parse(JSON.stringify(columns[indr]));
                 col.order = columns.length + 1;
                 col.id = this.$uuid.v4();
+                col.active = false;
                 columns.push(col);
             } else {
                 columns.splice(1, indr);
@@ -234,6 +267,14 @@ export default {
             } else {
                 this.$set(val, 'collapsed', true);
             }
+        },
+        removeColumn(columns, column_id, row_index, column_index) {
+            var index = columns.findIndex(function(column) {
+                return column.id == column_id;
+            });
+            console.log(index);
+            columns.splice(index, 1);
+            this.setTabActive(row_index, 0);
         }
     },
 
@@ -366,5 +407,21 @@ export default {
   right: auto !important;
   text-align: center !important;
   transform: translate(-50%, 0) !important;
+}
+.close-button {
+    transform: translateX(-40px);
+}
+.close-button i {
+    transform: translateY(2px);
+}
+.cursor-pointer {
+    cursor: pointer;
+}
+.add-column-button {
+    height: 37px
+}
+.add-column-button>i {
+    font-size: 25px;
+    transform: translateY(-3px);
 }
 </style>

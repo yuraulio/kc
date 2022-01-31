@@ -120,6 +120,9 @@ export default {
     watch: {
         editorData() {
             this.$emit('inputed', { 'data': this.editorData, 'key': this.keyput })
+        },
+        "value": function() {
+            this.editorData = this.value;
         }
     },
     mounted() {
