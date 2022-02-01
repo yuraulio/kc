@@ -2,7 +2,7 @@
 <div>
     <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel" style="visibility: visible; width: 100%" aria-modal="true" role="dialog">
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Backdroped with scrolling</h5>
+            <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Rearange components</h5>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div> <!-- end offcanvas-header-->
 

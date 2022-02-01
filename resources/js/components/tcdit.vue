@@ -3,7 +3,7 @@
 
     <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel" style="visibility: visible; width: 100%" aria-modal="true" role="dialog">
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Backdroped with scrolling</h5>
+            <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Rearange components</h5>
             <button @click="preview = false" type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div> <!-- end offcanvas-header-->
 
@@ -14,7 +14,7 @@
 
     <div v-if="data && !pseudo">
 
-        <div v-if="pageTitle" class="row mb-2">
+        <div v-if="pageTitle" class="">
             <div class="col-sm-12 mt-2 mb-2">
                 <div class="page-title-box">
                     <h4 class="page-title">{{pageTitle}}</h4>
@@ -156,7 +156,7 @@
 
     <div v-if="data && pseudo">
 
-        <div class="row mb-2">
+        <div class="row">
             <div class="col-sm-12 mt-2 mb-2">
                 <div class="page-title-box d-flex justify-content-between align-items-center">
                     <h4 class="page-title d-inline-block">{{pageTitle}}</h4>
