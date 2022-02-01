@@ -120,7 +120,7 @@ class PagesController extends Controller
             $page->load('template', 'categories');
 
             $new_slug = $page->slug;
-            if ($new_slug != $old_slug) {
+            if ($old_slug && $new_slug != $old_slug) {
                 $redirect = new Redirect();
                 $redirect->page_id = $page->id;
                 $redirect->old_slug = $old_slug;
