@@ -429,7 +429,7 @@
                             </tr>
                         </thead>
                         <tbody id="assigned_ticket_users">
-                            @foreach ($user->events as $user_event)
+                            @foreach ($user->events_for_user_list as $user_event)
 
                                 <?php $trans = $user_event->transactionsByUser($user->id)->first() ?>
                                 <tr id="event_{{$user_event->id}}">

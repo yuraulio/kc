@@ -177,16 +177,12 @@ class WebhookController extends BaseWebhookController
 				
 				$pdf = $elearningInvoice->generateInvoice();
 
-				
+	
+
 				$this->sendEmail($elearningInvoice,$pdf,$paymentMethod);
 
 			}
 		}
-
-		$user->events_for_user_list()->wherePivot('event_id',$eventId)->updateExistingPivot($eventId,[
-			'paid' => 1
-		], false);
-
 
 		if ((int)$count >= (int)$totalinst) {
 			$subscription->cancelNow();
@@ -489,28 +485,6 @@ class WebhookController extends BaseWebhookController
 				
 				$pdf = $elearningInvoice->generateInvoice();
 
-				$adminemail = 'info@knowcrunch.com';
-				$data = [];
-
-				$data['firstName'] = $user->firstname;
-				$data['name'] = $user->firstname . ' ' . $user->lastname;
-				$data['email'] = $user->email;
-				$data['amount'] = $transaction->amount;
-				$data['position'] = $user->job_title;
-				$data['company'] = $user->company;
-				$data['mobile'] = $user->mobile;
-				$data['userLink'] = url('/') . "/admin/user/" . $user['id'] ."/edit";
-				$data['eventTitle'] = $subscription->event->first()->title;
-
-				$sent = Mail::send('emails.admin.admin_info_subscription_registration', $data, function ($m) use ($adminemail) {
-        
-                    
-                    $sub = 'Knowcrunch - New subscription';
-                    $m->from($adminemail, 'Knowcrunch');
-                    $m->to($adminemail, 'Knowcrunch');
-                    $m->subject($sub);
-                
-                });
 
 
 				$this->sendEmail($elearningInvoice,$pdf,$paymentMethod,true);
@@ -597,7 +571,7 @@ class WebhookController extends BaseWebhookController
 
 			$subscription = $user->subscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first();
 			$eventId = explode('_',$subscription->stripe_price)[3];
-			$event = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first();
+			$event = $user->events()->wherePivot('event_id',$eventId)->first();
 			$paymentMethod =  PaymentMethod::find($event->pivot->payment_method);
 			$subscriptionCheckout = 0;
 
@@ -635,53 +609,6 @@ class WebhookController extends BaseWebhookController
 		
         return $this->successMethod();
     }
-
-
-	protected function handleInvoicePaymentFailed(array $payload){
-		if ($user = $this->getUserByStripeId($payload['data']['object']['customer'])) {
-			
-			$sub = $payload['data']['object']['lines']['data'][0];
-			if(isset($sub['metadata']['installments'])){
-			
-				$subscription = $user->subscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first();
-				$eventId = explode('_',$subscription->stripe_price)[3];
-				$event = $user->events_for_user_list()->first();
-
-				if($payload['data']['object']['attempt_count'] >= 4){
-
-					$adminemail = $event->paymentMethod->first() && $event->paymentMethod->first()->payment_email ?
-            															$event->paymentMethod->first()->payment_email : 'info@knowcrunch.com';
-					
-            		$data['subject'] = 'Knowcrunch - All payments failed';
-					$data['name'] = $user->firstname . ' ' . $user->lastname ;
-					$data['firstName'] = $user->firstname;
-					$data['eventTitle'] = $event->title;
-
-					$amount = $payload['data']['object']['lines']['data'][0]['amount'] / 100;
-					$data['amount'] = round($amount,2);
-
-					$data['template'] = 'emails.user.failed_payment';
-					$data['userLink'] = url('/') . '/admin/user/' . $user->id . '/edit'; 
-
-            		$sent = Mail::send('emails.admin.failed_stripe_payment', $data, function ($m) use ($adminemail,$data) {
-					
-            		    $sub =  $data['subject'];
-            		    $m->from('info@knowcrunch.com', 'Knowcrunch');
-            		    $m->to($adminemail, $data['firstName']);
-            		    $m->subject($sub);
-					
-            		});
-
-					$user->events_for_user_list()->wherePivot('event_id',$eventId)->updateExistingPivot($eventId,[
-						'paid' => 0
-					], false);
-
-				}
-
-			}
-    
-        }
-	}
 
 	
 }

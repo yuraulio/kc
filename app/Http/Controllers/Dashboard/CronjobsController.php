@@ -19,7 +19,7 @@ use App\Notifications\FailedPayment;
 use App\Notifications\PaymentReminder;
 use App\Notifications\HalfPeriod;
 use App\Notifications\ElearningFQ;
-use App\Notifications\SurveyEMail;
+use App\Notifications\SurveyEmail;
 use App\Notifications\SubscriptionReminder;
 use App\Model\Pages;
 use App\Model\Transaction;
@@ -76,7 +76,7 @@ class CronjobsController extends Controller
             $invoiceUser->user->first()->notify(new FailedPayment($data));
 
 
-            $adminemail = $invoiceUser->event->first()->paymentMethod->first() && $invoiceUser->event->first()->paymentMethod->first()->payment_email ?
+            /*$adminemail = $invoiceUser->event->first()->paymentMethod->first() && $invoiceUser->event->first()->paymentMethod->first()->payment_email ?
             $invoiceUser->event->first()->paymentMethod->first()->payment_email : 'info@knowcrunch.com';
 
             $data['subject'] = 'Knowcrunch - All payments failed';
@@ -87,7 +87,7 @@ class CronjobsController extends Controller
                 $m->to($adminemail, $data['firstName']);
                 $m->subject($sub);
             
-            });
+            });*/
 
             $invoiceUser->email_sent = true;
             $invoiceUser->save();
@@ -635,7 +635,7 @@ class CronjobsController extends Controller
                 $data['fbTestimonial'] = $event->fb_testimonial;
                
                 if($sendEmail){
-                    $user->notify(new SurveyEMail($data));
+                    $user->notify(new SurveyEmail($data));
                 }
                     
                 
@@ -692,7 +692,7 @@ class CronjobsController extends Controller
                 $data['fbTestimonial'] = $event->fb_testimonial;
 
                 if($sendEmail){
-                    $user->notify(new SurveyEMail($data));
+                    $user->notify(new SurveyEmail($data));
                 }
                     
                 

@@ -230,7 +230,7 @@ class StudentController extends Controller
                 $data['events'][$event->id]['slugable'] = $event['slugable']->toArray();
                 $data['events'][$event->id]['title'] = $event['title'];
                 $data['events'][$event->id]['release_date_files'] = $event->release_date_files;
-                $data['events'][$event->id]['expiration'] = $event->pivot->expiration;
+                $data['events'][$event->id]['expiration'] = date('d M Y',strtotime($event->pivot->expiration));
                 $data['events'][$event->id]['status'] = $event->status;
                 //$data['user']['events'][$event->id]['exam_results'] = $user->examAccess(0.8,$event->id);
 
@@ -612,7 +612,7 @@ class StudentController extends Controller
                 $data['events'][$event->id]['slugable'] = $event['slugable']->toArray();
                 $data['events'][$event->id]['title'] = $event['title'];
                 $data['events'][$event->id]['release_date_files'] = $event->release_date_files;
-                $data['events'][$event->id]['expiration'] = $event->pivot->expiration;
+                $data['events'][$event->id]['expiration'] = $event->pivot->expiration ? date('d M Y',strtotime($event->pivot->expiration)) : '';
                 $data['events'][$event->id]['status'] = $event->status;
                 //$data['user']['events'][$event->id]['exam_results'] = $user->examAccess(0.8,$event->id);
 

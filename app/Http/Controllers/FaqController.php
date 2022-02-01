@@ -254,10 +254,13 @@ class FaqController extends Controller
      */
     public function destroy(Faq $faq)
     {
-        if (!$faq->category->isEmpty()) {
+        /*if (!$faq->category->isEmpty()) {
             return redirect()->route('faqs.index')->withErrors(__('This faq has items attached and can\'t be deleted.'));
-        }
+        }*/
 
+        $faq->category()->detach();
+        $faq->categoryEvent()->detach();
+        $faq->event()->detach();
         $faq->delete();
 
         return redirect()->route('faqs.index')->withStatus(__('Faq successfully deleted.'));

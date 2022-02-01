@@ -421,19 +421,19 @@ class UserController extends Controller
         $data['events'] = Event::has('ticket')->whereIn('status',[0,2])->get();
 
         //dd($data['events']);
-        $data['user'] = $user::with('ticket','role','events','image','transactions')->find($user['id']);
+        $data['user'] = $user::with('ticket','role','events_for_user_list','image','transactions')->find($user['id']);
 
         $data['transactions'] = [];
 
-        foreach($user->events as $key => $value){
+        foreach($user->events_for_user_list as $key => $value){
 
             $user_id = $value->pivot->user_id;
             $event_id = $value->pivot->event_id;
             $event = Event::find($event_id);
             $ticket = $event->tickets()->wherePivot('event_id', '=', $event_id)->wherePivot('user_id', '=', $user_id)->first();
 
-            $data['user']['events'][$key]['ticket_id'] = isset($ticket->pivot) ? $ticket->pivot->ticket_id : null;
-            $data['user']['events'][$key]['ticket_title'] = isset($ticket['title']) ? $ticket['title'] : '';
+            $data['user']['events_for_user_list'][$key]['ticket_id'] = isset($ticket->pivot) ? $ticket->pivot->ticket_id : null;
+            $data['user']['events_for_user_list'][$key]['ticket_title'] = isset($ticket['title']) ? $ticket['title'] : '';
 
             if(!key_exists($value['title'],$data['transactions'])){
                 $data['transactions'][$value['title']] = [];
@@ -459,7 +459,7 @@ class UserController extends Controller
         }else{
             $data['invoice'] = null;
         }
-        //dd($data['subscriptions']);
+        //dd($data['transactions']);
         return view('users.edit', ['subscriptions'=>$data['subscriptions'], 'transactions'=>$data['transactions'],'events' => $data['events'] ,'user' => $data['user'],'receipt' => $data['receipt'],'invoice' => $data['invoice'] ,'roles' => $model->all()]);
     }
 

@@ -396,7 +396,7 @@ class SubscriptionController extends Controller
 
                 $adminemail = 'info@knowcrunch.com';
         
-                $sent = Mail::send('emails.admin.admin_info_subscription_registration', $data, function ($m) use ($adminemail) {
+                /*$sent = Mail::send('emails.admin.admin_info_subscription_registration', $data, function ($m) use ($adminemail) {
         
                     
                     $sub = 'Knowcrunch - New subscription';
@@ -404,7 +404,7 @@ class SubscriptionController extends Controller
                     $m->to($adminemail, 'Knowcrunch');
                     $m->subject($sub);
                 
-                });
+                });*/
   
                 Session::forget('pay_seats_data');
                 Session::forget('transaction_id');

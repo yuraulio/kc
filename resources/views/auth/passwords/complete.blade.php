@@ -21,7 +21,7 @@
 <body>
 <div class="page-wrapper">
 
-<div  class="login-popup-wrapper " style="opacity:1; display:block; pointer-events:all">
+<div  class="login-popup-wrapper reset-password" style="opacity:1; display:block; pointer-events:all">
 
 
 
@@ -50,17 +50,18 @@
                            </div>
                         <!-- /.alert-outer -->
                         </div>
-
+            <label> New password <span class="required">(*)</span></label> <span data-id="password" class="icon"><img width="20" src="{{cdn('/theme/assets/images/icons/eye-password.svg')}}" alt="">Show</span>
             <div class="input-wrapper input-wrapper--text input-wrapper--email">
-				<span class="icon"><img width="10" src="{{cdn('/theme/assets/images/icons/icon-lock.svg')}}" alt=""></span>
-				<input type="password" placeholder="New password" id="password">
+            	<input type="password" id="password">
             </div>
-            <div class="input-wrapper input-wrapper--text">
-                <span class="icon"><img width="10" src="{{cdn('/theme/assets/images/icons/icon-lock.svg')}}" alt=""></span>
-                <input type="password" placeholder="Confirm new password" id="confirm-password">
+            </br>
+            <label> Retype new password <span class="required">(*)</span></label><span data-id="confirm-password" class="icon"><img width="20" src="{{cdn('/theme/assets/images/icons/eye-password.svg')}}" alt="">Show</span>
+            <div class="input-wrapper input-wrapper--text">    
+                <input type="password" id="confirm-password">
             </div>
+          
 </br>
-            <input type="button" class="btn btn--lg btn--secondary change-password" value="CHANGE">
+            <input type="button" class="btn btn--lg btn--secondary change-password" value="CREATE/RESET PASSWORD">
         
     </div><!-- ./login-popup -->
 
@@ -131,6 +132,26 @@ $.ajaxSetup({headers:{'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content
 
 </script>
 
+<script>
+
+    $('.icon').click(function(){
+        let input = $(`#${$(this).data('id')}`);
+        console.log(input.attr('type'));
+
+        if(input.attr('type') === "password"){
+            input.attr('type','text')
+
+            $(this).find('img').attr('src', "{{cdn('/theme/assets/images/icons/eye-password-active.svg')}}");
+
+
+        }else{
+            input.attr('type','password')
+            $(this).find('img').attr('src', "{{cdn('/theme/assets/images/icons/eye-password.svg')}}");
+        }
+
+    })
+
+</script>
 
 </body>
 </html>
