@@ -144,26 +144,23 @@ export default {
         }
         var parsed = typeof this.template.rows === 'string' || this.template.rows instanceof String ? JSON.parse(this.template.rows) : this.template.rows;
 
-        console.log("PARSED", parsed)
         parsed.forEach(element => {
             element.columns.forEach(column => {
                 column.active = column.order < 1 ? true : false;
 
                 if (this.extractedComponents[column.component] != null) {
                     column.template = this.extractedComponents[column.component];
-                    column.template.inputs.forEach((input) => { input.key = input.key + column.order; console.log(input)})
+                    column.template.inputs.forEach((input) => { input.key = input.key + column.order;})
                 }
 
             });
         });
 
         this.data = parsed;
-        console.log("data", this.data);
     }
     },
     mounted() {
         eventHub.$on('component-added', ((component) => {
-            // console.log('component--', component)
         }));
     },
     beforeDestroy() {

@@ -4,10 +4,11 @@
 
 <template>
     <div>
-        <div class="row">
-            <!-- <page></page> -->
-        </div>
         <div v-if="mode == 'list'">
+
+            <div class="page-title-box mt-3 mb-3">
+                <h4 class="page-title">Pages</h4>
+            </div>
 
             <div class="card mb-2">
                 <div class="card-body">
@@ -20,7 +21,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="text-md-end mt-3 mt-md-0">
-                                <button @click="mode='new'" type="button" class="btn btn-danger waves-effect waves-light"><i class="mdi mdi-plus-circle me-1"></i> Add New</button>
+                                <button @click="mode='new'" type="button" class="btn btn-soft-danger waves-effect waves-light"><i class="mdi mdi-plus-circle me-1"></i> Add New</button>
                             </div>
                         </div><!-- end col-->
                     </div> <!-- end row -->
@@ -125,7 +126,6 @@ import pageseditable from './pageseditable.vue'
         },
         methods: {
             created($event) {
-                // console.log($event);
                 this.pages['data'].unshift($event);
             },
             addCustomComponent() {
@@ -133,18 +133,22 @@ import pageseditable from './pageseditable.vue'
             },
             rearange() {
                 this.$modal.hide("component-modal")
-                // console.log(this.$refs.adit)
                 this.$refs.adit.rearange();
             },
             updatemode(variable){
                 if (variable == "delete") {
                      Swal.fire({
                         title: 'Are you sure?',
-                        text: "You won't be able to revert this!",
+                        text: "You won't be able to revert this! Delete page '" + this.title + "'?",
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonText: 'Yes, delete it!',
                         showLoaderOnConfirm: true,
+                        buttonsStyling: false,
+                        customClass : {
+                            cancelButton: 'btn btn-soft-secondary',
+                            confirmButton: 'btn btn-soft-danger',
+                        },
                         preConfirm: () => {
                             return axios
                                 .delete('/api/pages/' + this.id)
@@ -188,7 +192,6 @@ import pageseditable from './pageseditable.vue'
                 axios.get('/api/pages?filter=' + this.filter + '&page=' + page)
                     .then((response) => {
                         this.pages = response.data;
-                        // console.log(this.pages)
                         this.isLoading = false;
                     })
                     .catch((error) => {

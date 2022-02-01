@@ -22,7 +22,11 @@ class Category extends Model
      */
     public function toSearchableArray()
     {
-        return $this->toArray();
+        $array = $this->toArray();
+
+        $array['subcategoryes'] = $this->subcategories;
+
+        return $array;
     }
 
     public function pages()

@@ -70,8 +70,6 @@ export default {
       }
 
       //this.value = this.prevalue;
-      console.log("val", this.value)
-      //console.log("keyput", this.$refs[this.keyput])
   },
 
   methods: {
@@ -79,7 +77,6 @@ export default {
         if (newFile) {
             var formData = new FormData();
             var imagefile = newFile;
-            console.log('imgfile', imagefile)
             if (imagefile.file) {
                 formData.append("file", imagefile.file);
                 axios.post('/api/pages/upload_image', formData, {
@@ -88,14 +85,11 @@ export default {
                     }
                 }).then((response) => {
                     this.$set(this.files, this.keyput, [newFile]);
-                    console.log(response.data)
                     this.edit = true;
                     this.$forceUpdate();
                     this.$emit('updatedimage', response.data['url']);
-                    console.log(response)
                 })
                 .catch((error) => {
-                    console.log(error)
                 })
             }
 

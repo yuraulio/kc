@@ -93,7 +93,6 @@
                 var index = this.row.columns.findIndex(function(column) {
                     return column.order == component[1];
                 });
-                // console.log(component[0]);
                 this.row.columns[index].value = component[0];
                 this.row.columns[index].component_icon = component[2];
                 this.row.columns[index].title = component[3];

@@ -13,17 +13,9 @@
     <!-- start page title -->
     <div class="row">
         <div class="col-12">
-            <div class="page-title-box">
-                <div class="page-title-right">
-                    <form class="d-flex align-items-center mb-3">
-
-                        {{-- <a href="javascript: void(0);" class="btn btn-blue btn-sm ms-2">
-                            <i class="mdi mdi-autorenew"></i>
-                        </a> --}}
-                    </form>
-                </div>
+            {{-- <div class="page-title-box">
                 <h4 class="page-title">Templates</h4>
-            </div>
+            </div> --}}
         </div>
     </div>
     <!-- end page title -->

@@ -1,5 +1,6 @@
 <template>
 <div>
+
     <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel" style="visibility: visible; width: 100%" aria-modal="true" role="dialog">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Backdroped with scrolling</h5>
@@ -12,13 +13,22 @@
     </div>
 
     <div v-if="data && !pseudo">
+
+        <div v-if="pageTitle" class="row mb-2">
+            <div class="col-sm-12 mt-2 mb-2">
+                <div class="page-title-box">
+                    <h4 class="page-title">{{pageTitle}}</h4>
+                </div>
+            </div>
+        </div>
+
         <draggable v-model="data" key="cols">
             <transition-group tag="div" >
                 <div  v-for="(val, index, key) in data" :key="'prim'+ index" class="col-12 mb-1 card">
 
                     <div class="row">
                         <div class="col-2">
-                            <button @click="toggleCollapse(val)" class="btn btn-sm btn-secondary" type="button" data-bs-toggle="collapse" :data-bs-target="'#collapseelement' + index" aria-expanded="false" aria-controls="collapseExample">
+                            <button @click="toggleCollapse(val)" class="btn btn-sm btn-soft-secondary" type="button" data-bs-toggle="collapse" :data-bs-target="'#collapseelement' + index" aria-expanded="false" aria-controls="collapseExample">
                                 <i v-if="val.collapsed == true" class="mdi mdi-chevron-down"></i>
                                 <i v-else class="mdi mdi-chevron-up"></i>
                             </button>
@@ -80,7 +90,7 @@
                     <div v-for="(column, indr, key) in val.columns" :key="key">
 
                         <span @click="removeRow(index)" v-if="indr == (val.columns.length - 1) && column.template.key != 'meta_component'" class="position-absolute top-0 start-100 close-button" style="cursor: pointer">
-                            <button class="btn btn-sm btn-danger" type="button">
+                            <button class="btn btn-sm btn-soft-danger" type="button">
                                 <i class="dripicons-cross"></i>
                             </button>
                         </span>
@@ -145,6 +155,16 @@
     </div>
 
     <div v-if="data && pseudo">
+
+        <div class="row mb-2">
+            <div class="col-sm-12 mt-2 mb-2">
+                <div class="page-title-box d-flex justify-content-between align-items-center">
+                    <h4 class="page-title d-inline-block">{{pageTitle}}</h4>
+                    <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions" @click="rearange()" class="btn btn-block btn-soft-info waves-effect waves-light m-1t ">Rearange</button>
+                </div>
+            </div>
+        </div>
+
         <draggable v-model="data" key="cols">
             <transition-group tag="div" >
                 <div v-for="(val, index) in data" :key="'prim'+ index" class="row mb-1">
@@ -228,7 +248,8 @@ export default {
             default: false
         },
         predata: {},
-        mode: {}
+        mode: {},
+        pageTitle: null,
     },
     data() {
         return {
@@ -275,7 +296,6 @@ export default {
         },
         rearange(preview) {
             if (preview && preview === true) {
-                // console.log("PPPPPREE")
                 this.spreview = false;
                 this.preview = true;
                 this.spreview = true;
@@ -312,7 +332,6 @@ export default {
             var index = columns.findIndex(function(column) {
                 return column.id == column_id;
             });
-            console.log(index);
             columns.splice(index, 1);
             this.setTabActive(row_index, 0);
         }
@@ -346,9 +365,7 @@ export default {
             this.data.push(comp);
             }
         }
-// console.log("mmm", this.pseudo, this.mode)
         if (this.pseudo == false) {
-            // console.log("PSEUDO", this.pseudo, this.predata)
             var parsed = this.predata;
 
             parsed.forEach(element => {
@@ -359,10 +376,8 @@ export default {
                 parsed.forEach(element => {
                     element.columns.forEach(column => {
                         column.active = column.order < 1 ? true : false;
-                        // console.log("ORDER", column.active)
                         if (this.extractedComponents[column.component] != null) {
                             column.template = this.extractedComponents[column.component];
-                            //column.template.inputs.forEach((input) => { input.key = input.key + column.order; })
                         }
 
                     });
@@ -390,7 +405,6 @@ export default {
         }));
 
         eventHub.$on('component-added', ((component) => {
-            // console.log('component--', component)
             this.data = this.data ?? [];
             var comp = {
                 "id": this.$uuid.v4(),
@@ -424,12 +438,10 @@ export default {
         }));
 
         eventHub.$on('order-changed', ((data) => {
-            // console.log('order-changed')
             this.data = data;
         }));
     },
     beforeDestroy() {
-        // console.log("TCEDIT DESTROYED")
         eventHub.$off('component-added');
         eventHub.$off('component-rearange');
         eventHub.$off('order-changed');

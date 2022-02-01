@@ -29,7 +29,10 @@ class Page extends Model
         $array =  [
             'id'    => $this->id,
             'title'    => $this->title,
-            'description' => $this->description
+            'description' => $this->description,
+            'categoryes' => $this->categories,
+            'subcategories' => $this->subcategories,
+            'template' => $this->template["title"],
         ];
 
         return $array;

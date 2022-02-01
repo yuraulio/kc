@@ -121,7 +121,6 @@
         },
         methods: {
             created($event) {
-                console.log($event);
                 this.categories['data'].unshift($event);
                 this.$modal.hide('create-modal');
             },
@@ -133,11 +132,16 @@
                 if (variable == "delete") {
                     Swal.fire({
                         title: 'Are you sure?',
-                        text: "You won't be able to revert this!",
+                        text: "You won't be able to revert this! Delete category '" + this.title + "'?",
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonText: 'Yes, delete it!',
                         showLoaderOnConfirm: true,
+                        buttonsStyling: false,
+                        customClass : {
+                            cancelButton: 'btn btn-soft-secondary',
+                            confirmButton: 'btn btn-soft-danger',
+                        },
                         preConfirm: () => {
                             return axios
                                 .delete('/api/categories/' + this.id)
@@ -192,6 +196,11 @@
         },
         mounted() {
             this.getData();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get("filter")) {
+                this.filter = urlParams.get("filter");
+            }
         }
     }
 </script>

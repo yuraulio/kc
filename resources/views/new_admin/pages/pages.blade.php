@@ -11,21 +11,13 @@
 <div class="container-fluid">
 
     <!-- start page title -->
-    <div class="row">
+    {{-- <div class="row">
         <div class="col-12">
             <div class="page-title-box">
-                <div class="page-title-right">
-                    <form class="d-flex align-items-center mb-3">
-
-                        {{-- <a href="javascript: void(0);" class="btn btn-blue btn-sm ms-2">
-                            <i class="mdi mdi-autorenew"></i>
-                        </a> --}}
-                    </form>
-                </div>
                 <h4 class="page-title">Pages</h4>
             </div>
         </div>
-    </div>
+    </div> --}}
     <!-- end page title -->
 
     <div class="row">

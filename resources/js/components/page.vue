@@ -15,8 +15,12 @@
                 </div> --> <!-- end dropdown -->
                 <!-- Title-->
                 <h4 class="mt-0"><a :href="'/new_page/' + page.id" target="_blank" class="text-dark">{{ page.title }}</a></h4>
-                <p class="text-muted text-uppercase"><i class="mdi mdi-account-circle"></i> <small v-if="page.template">{{ page.template.title }}</small></p>
-                <div v-for="cat in page.categories" class="badge bg-info text-white mb-3 mr-2 font-14" style="margin-right: 5px">{{ cat.title }}</div>
+                <p class="text-muted text-uppercase"><i class="mdi mdi-account-circle"></i> <small v-if="page.template"><a :href="'/templates?filter=' + page.template.title">{{ page.template.title }}</a></small></p>
+                <template v-for="cat in page.categories">
+                    <a :href="'/categories?filter=' + cat.title">
+                        <div class="badge bg-info text-white mb-3 mr-2 font-14" style="margin-right: 5px">{{ cat.title }}</div>
+                    </a>
+                </template>
                 <!-- Desc-->
                 <p v-if="page.description" class="text-muted font-13 mb-3 sp-line-2">{{ page.description }}
                 </p>

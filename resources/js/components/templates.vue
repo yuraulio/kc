@@ -7,6 +7,10 @@
 
         <div v-if="mode == 'list'">
 
+            <div class="page-title-box mt-3 mb-3">
+                <h4 class="page-title">Templates</h4>
+            </div>
+
             <div class="card mb-2">
                 <div class="card-body">
                     <div class="row justify-content-between">
@@ -18,7 +22,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="text-md-end mt-3 mt-md-0">
-                                <button @click="mode='new'" type="button" class="btn btn-danger waves-effect waves-light"><i class="mdi mdi-plus-circle me-1"></i> Add New</button>
+                                <button @click="mode='new'" type="button" class="btn btn-soft-danger waves-effect waves-light"><i class="mdi mdi-plus-circle me-1"></i> Add New</button>
                             </div>
                         </div><!-- end col-->
                     </div> <!-- end row -->
@@ -79,8 +83,8 @@
                         >
                             <template slot="actions" slot-scope="props">
                                 <div class="text-sm-end">
-                                    <a @click="edit(props.rowData.id)" href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
-                                    <a @click="remove(props.rowData.id)" href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
+                                    <a @click="edit(props.rowData.id, props.rowData.title)" href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
+                                    <a @click="remove(props.rowData.id, props.rowData.title)" href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
                                 </div>
                             </template>
                         </vuetable>
@@ -126,7 +130,7 @@
                 rows="true"
                 type="edit"
                 route="templates"
-                page-title="Edit Template"
+                :page-title="'Edit Template: ' + title"
                 :predata="templates['data'] && id ? JSON.parse(lodash.find(templates['data'], {'id': id}).rows) : null"
                 :fields="fields"
                 :data="lodash.find(templates, { 'id': id })"
@@ -178,18 +182,22 @@
         },
         methods: {
             created($event) {
-                console.log($event);
                 this.templates['data'].unshift($event);
             },
             updatemode(variable){
                 if (variable == "delete") {
                      Swal.fire({
                         title: 'Are you sure?',
-                        text: "You won't be able to revert this!",
+                        text: "You won't be able to revert this! Delete template '" + this.title + "'?",
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonText: 'Yes, delete it!',
                         showLoaderOnConfirm: true,
+                        buttonsStyling: false,
+                        customClass : {
+                            cancelButton: 'btn btn-soft-secondary',
+                            confirmButton: 'btn btn-soft-danger',
+                        },
                         preConfirm: () => {
                             return axios
                                 .delete('/api/templates/' + this.id)
@@ -218,8 +226,6 @@
                             }
                         })
                 } else if (variable == 'edit') {
-                    // console.log('hooo',_.find(this.templates, {'id': this.id}))
-
                     this.mode = variable;
                 } else {
                     this.mode = variable;
@@ -243,12 +249,14 @@
                         this.loading = false;
                     });
             },
-            edit(id){
+            edit(id, title){
                 this.id = id;
+                this.title = title;
                 this.updatemode("edit");
             },
-            remove(id){
+            remove(id, title){
                 this.id = id;
+                this.title = title;
                 this.updatemode("delete");
             },
             onPaginationData (paginationData) {
@@ -258,6 +266,10 @@
         },
         mounted() {
             this.getData();
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get("filter")) {
+                this.filter = urlParams.get("filter");
+            }
         }
     }
 </script>

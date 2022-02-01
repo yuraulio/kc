@@ -8,7 +8,16 @@
 <template>
     <modal name="component-modal" :resizable="true" height="auto" :adaptive="true" @before-open="getParams">
 
-        <div class="p-4 row modal-size">
+        <div class="row pt-2 ps-4 pe-4">
+            <div class="col-6 sm-auto">
+                <h3>Select component</h3>
+            </div>
+            <div class="col-6 sm-auto text-end">
+                    <i @click="$modal.hide('component-modal')" class="dripicons-cross fs-1"></i>
+            </div>
+        </div>
+
+        <div class="p-4 pt-2 pe-3 row modal-size">
             <div class="col-md-6 col-xl-6">
                 <div @click="selectComponent('text_editor')" class="widget-rounded-circle card bg-grey">
                     <div class="card-body">
@@ -244,11 +253,6 @@
                     </div>
                 </div> <!-- end widget-rounded-circle-->
             </div>
-
-            <div class="col-lg-12 sm-auto">
-            <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions" @click="rearange()" class="btn btn-block btn-soft-info rounded-pill waves-effect waves-light m-1t">Rearange</button>
-            <button @click="$modal.hide('component-modal')" type="button" class="btn btn-block btn-soft-danger rounded-pill waves-effect waves-light m-1t">Close</button>
-            </div>
         </div>
         </modal>
 </template>
@@ -266,10 +270,8 @@ export default {
     },
     methods: {
         getParams(params) {
-            // console.log("params", params)
         },
         selectComponent(component) {
-            // console.log("sending component")
             if (this.row !== null && this.column !== null){
                 eventHub.$emit('component-change', [component, this.row, this.column]);
             } else {

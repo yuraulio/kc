@@ -93,9 +93,9 @@
 
         <div class="row mt-3">
             <div class="col-12 text-center">
-                <button v-if="type == 'new'" @click="add()" type="button" class="btn btn-success waves-effect waves-light m-1" :disabled="loading"><i v-if="!loading" class="fe-check-circle me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Create</button>
-                <button v-if="type == 'edit'" :disabled="loading" @click="edit()" type="button" class="btn btn-success waves-effect waves-light m-1"><i v-if="!loading" class="mdi mdi-square-edit-outline me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Save</button>
-                <button @click="$emit('updatemode', 'list')" type="button" class="btn btn-light waves-effect waves-light m-1"><i class="fe-x me-1"></i> Cancel</button>
+                <button v-if="type == 'new'" @click="add()" type="button" class="btn btn-soft-success waves-effect waves-light m-1" :disabled="loading"><i v-if="!loading" class="fe-check-circle me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Create</button>
+                <button v-if="type == 'edit'" :disabled="loading" @click="edit()" type="button" class="btn btn-soft-success waves-effect waves-light m-1"><i v-if="!loading" class="mdi mdi-square-edit-outline me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Save</button>
+                <button @click="$emit('updatemode', 'list')" type="button" class="btn btn-soft-secondary waves-effect waves-light m-1"><i class="fe-x me-1"></i> Cancel</button>
             </div>
         </div>
 
@@ -152,7 +152,6 @@ import Tc from './tc.vue';
         methods: {
             update_subcategories(value) {
                 this.subcategories_value = value.data;
-                // console.log('SCV', this.subcategories_value)
             },
             update_title(value){
                 this.title_value = value;
@@ -240,9 +239,7 @@ import Tc from './tc.vue';
                         this.title_value = data.title;
                         this.description_value = data.description;
                         if (data.rows){
-                            console.log(data.rows);
                             this.rows_value = JSON.parse(data.rows);
-                            console.log(JSON.stringify(this.rows_value));
                         }
                         this.category_value = data.category_id;
                         this.subcategories_value = data.subcategories;
@@ -276,7 +273,6 @@ import Tc from './tc.vue';
                     this.template_value.concat(this.additionalTemplates)
                 } else {
                     this.template_value = this.additionalTemplates
-                    console.log('TM', this.template_value)
                 }
             }
         }

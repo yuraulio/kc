@@ -13,7 +13,7 @@
     <!-- start page title -->
     <div class="row">
         <div class="col-12">
-            <div class="page-title-box">
+            <div class="page-title-box mt-3 mb-3">
                 <div class="page-title-right">
                     <form class="d-flex align-items-center mb-3">
                        

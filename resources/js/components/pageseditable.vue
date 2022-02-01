@@ -1,6 +1,13 @@
 <template>
 <div class="row">
 
+        <div class="col-sm-12 mt-3 mb-3">
+            <div class="page-title-box">
+                <h4 v-if="title_value" class="page-title">Edit page: {{title_value}}</h4>
+                <h4 v-else class="page-title">New page</h4>
+            </div>
+        </div>
+
         <div class="col-lg-9" >
             <tcedit 
                 v-if="template_value" 
@@ -116,11 +123,11 @@
 
                             <div class="row mt-3">
                                 <div class="col-12 text-center mb-3 d-grid">
-                                    <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions" :disabled="!template_value" @click="rearange()" class="btn btn-block btn-soft-info rounded-pill waves-effect waves-light m-1">Preview</button>
-                                    <button v-if="type == 'new'" @click="add()" type="button" class="btn btn-soft-success rounded-pill waves-effect waves-light m-1" :disabled="loading"><i v-if="!loading" class="fe-check-circle me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Create</button>
-                                    <button v-if="type == 'edit'" :disabled="loading" @click="edit()" type="button" class="btn btn-soft-success rounded-pill waves-effect waves-light m-1"><i v-if="!loading" class="mdi mdi-square-edit-outline me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Save</button>
+                                    <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions" :disabled="!template_value" @click="rearange()" class="btn btn-block btn-soft-info waves-effect waves-light m-1">Preview</button>
+                                    <button v-if="type == 'new'" @click="add()" type="button" class="btn btn-soft-success waves-effect waves-light m-1" :disabled="loading"><i v-if="!loading" class="fe-check-circle me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Create</button>
+                                    <button v-if="type == 'edit'" :disabled="loading" @click="edit()" type="button" class="btn btn-soft-success waves-effect waves-light m-1"><i v-if="!loading" class="mdi mdi-square-edit-outline me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Save</button>
 
-                                    <button @click="$emit('updatemode', 'list')" type="button" class="btn btn-soft-danger rounded-pill waves-effect waves-light m-1"><i class="fe-x me-1"></i> Cancel</button>
+                                    <button @click="$emit('updatemode', 'list')" type="button" class="btn btn-soft-secondary waves-effect waves-light m-1"><i class="fe-x me-1"></i> Cancel</button>
                                 </div>
                             </div>
                         </div> <!-- end col-->
@@ -236,7 +243,6 @@ export default {
                 this.type_value = value;
             },
             update_template(value){
-                console.log('tem', value)
                 this.template_value = value;
                 this.$forceUpdate()
             },
@@ -280,7 +286,6 @@ export default {
             edit(){
                 this.loading = true;
                 this.errors = null;
-                console.log(JSON.stringify(this.$refs.tc.data));
                 axios
                 .patch('/api/' + this.route + '/' + this.id,
                     {
@@ -322,9 +327,7 @@ export default {
                         this.title_value = data.title;
                         this.published = data.published
                         if (data.rows){
-                            console.log(data.rows);
                             this.rows_value = JSON.parse(data.rows);
-                            console.log(JSON.stringify(this.rows_value));
                         }
                         this.category_value = data.categories;
                         this.subcategory_value = data.subcategories;
@@ -339,7 +342,6 @@ export default {
         mounted() {
             if (this.type == "edit"){
                 if (this.data) {
-                    // console.log("edit", this.data)
                     var data = this.data;
                     this.title_value = data.title;
                     this.template_value = data.template;
@@ -348,7 +350,6 @@ export default {
                         this.rows_value = JSON.parse(data.rows);
                     }
                     if (data.content){
-                        console.log("datas", JSON.parse(data.content))
                         this.template_value.rows = data.content;
                     }
                     this.category_value = data.categories;
@@ -370,7 +371,6 @@ export default {
         watch: {
             "category_value": function() {
                 var subcategories = [];
-                console.log("category value", this.category_value);
                 if (this.category_value) {
                     this.category_value.forEach(function(category, index) {
                         category.subcategories.forEach(function(subcategory, index) {

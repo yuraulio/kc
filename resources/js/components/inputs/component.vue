@@ -93,14 +93,12 @@
                 this.title = this.propTitle;
             },
             "value": function() {
-                console.log(this.value);
                 this.$emit('updatecomponent', [this.value, this.order, this.icon_class, this.title]);
             }
         },
         methods: {
             selectComponent(value, icon_class, title){
                 this.value = value;
-                console.log(this.value);
                 this.icon_class = icon_class;
                 this.title = title;
                 this.$modal.hide('component-' + this.id)

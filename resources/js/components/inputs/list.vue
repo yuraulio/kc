@@ -81,6 +81,11 @@
                         showCancelButton: true,
                         confirmButtonText: 'Yes, delete it!',
                         showLoaderOnConfirm: true,
+                        buttonsStyling: false,
+                        customClass : {
+                            cancelButton: 'btn btn-soft-secondary',
+                            confirmButton: 'btn btn-soft-danger',
+                        },
                         preConfirm: () => {
                             return axios
                                 .delete('/api/' + this.route + '/' + id)

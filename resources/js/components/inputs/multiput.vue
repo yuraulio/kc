@@ -109,11 +109,9 @@ export default {
     },
     methods: {
         updatedimage($event) {
-            // console.log("SSS, ", $event)
             this.$emit('inputed', { 'data': $event, 'key': this.keyput})
         },
         updated($event) {
-            // console.log("SSS, ", $event)
             this.$emit('inputed', { 'data': $event, 'key': this.keyput})
         }
     },

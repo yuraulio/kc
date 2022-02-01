@@ -14,9 +14,9 @@
                     <ul v-if="errors && errors['title']" class="parsley-errors-list filled" id="parsley-id-7" aria-hidden="false"><li class="parsley-required">{{errors['title'][0]}}</li></ul>
                 </div>
                 <div class="col-lg-12 text-center mt-3">
-                    <button v-if="type == 'new'" @click="add()" type="button" class="btn btn-soft-success rounded-pill waves-effect waves-light" :disabled="loading"><i v-if="!loading" class="fe-check-circle me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Save</button>
-                    <button v-if="type == 'edit'" :disabled="loading" @click="edit()" type="button" class="btn btn-soft-success rounded-pill waves-effect waves-light"><i v-if="!loading" class="mdi mdi-square-edit-outline me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Edit</button>
-                    <button @click="$modal.hide('save-modal')" type="button" class="btn btn-soft-danger rounded-pill waves-effect waves-light"><i class="fe-x me-1"></i> Cancel</button>
+                    <button v-if="type == 'new'" @click="add()" type="button" class="btn btn-soft-success  waves-effect waves-light" :disabled="loading"><i v-if="!loading" class="fe-check-circle me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Save</button>
+                    <button v-if="type == 'edit'" :disabled="loading" @click="edit()" type="button" class="btn btn-soft-success  waves-effect waves-light"><i v-if="!loading" class="mdi mdi-square-edit-outline me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Save</button>
+                    <button @click="$modal.hide('save-modal')" type="button" class="btn btn-soft-secondary  waves-effect waves-light"><i class="fe-x me-1"></i> Cancel</button>
                 </div>
 
                 <!-- <div v-show="$refs.tc" class="col-lg-12">
@@ -61,11 +61,18 @@
             </div>
         </div>
         </div>
-        <tcdit v-if="fields" ref="tc" :pseudo="true" :mode="type" :predata="type == 'edit' ? predata : null"></tcdit>
+        <tcdit 
+            v-if="fields" 
+            ref="tc" 
+            :pseudo="true" 
+            :mode="type" 
+            :predata="type == 'edit' ? predata : null"
+            :pageTitle="pageTitle"
+        ></tcdit>
 
         <div class="col-lg-12 text-center mt-3">
-            <button v-if="type == 'new' || type == 'edit'" @click="$modal.show('save-modal'); $forceUpdate()" type="button" class="btn btn-soft-success rounded-pill waves-effect waves-light" ><i class="fe-check-circle me-1"></i> Save</button>
-            <button @click="$emit('updatemode', 'list')" type="button" class="btn btn-soft-danger rounded-pill waves-effect waves-light"><i class="fe-x me-1"></i> Cancel</button>
+            <button v-if="type == 'new' || type == 'edit'" @click="$modal.show('save-modal'); $forceUpdate()" type="button" class="btn btn-soft-success waves-effect waves-light" ><i class="fe-check-circle me-1"></i> Save</button>
+            <button @click="$emit('updatemode', 'list')" type="button" class="btn btn-soft-secondary waves-effect waves-light"><i class="fe-x me-1"></i> Cancel</button>
         </div>
 </div> <!-- end card-->
 
@@ -125,7 +132,6 @@ export default {
                 this.$refs.tc.rearange();
             },
             add(){
-                console.log("row", this.$refs.tc)
                 this.errors = null;
                 this.loading = true;
                 axios
@@ -188,9 +194,7 @@ export default {
                         this.title_value = data.title;
                         this.description_value = data.description;
                         if (data.rows){
-                            // console.log(data.rows);
                             this.rows_value = JSON.parse(data.rows);
-                            // console.log(JSON.stringify(this.rows_value));
                         }
                         this.category_value = data.category_id;
                     }
@@ -201,7 +205,6 @@ export default {
             }
         },
         mounted() {
-// console.log("fields", this.predata)
             if (this.type == "edit"){
                 if (this.data) {
                     var data = this.data;
@@ -211,7 +214,6 @@ export default {
                         this.rows_value = JSON.parse(data.rows);
                     }
                     this.category_value = data.category_id;
-                    console.log("templates", this.data)
                 } else {
                     this.get()
                 }
@@ -224,7 +226,6 @@ export default {
                     this.template_value.concat(this.additionalTemplates)
                 } else {
                     this.template_value = this.additionalTemplates
-                    console.log('TM', this.template_value)
                 }
             } */
         }

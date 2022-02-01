@@ -59,7 +59,6 @@
         methods: {
             addedTag(tag) {
                 var arr = JSON.parse(JSON.stringify(this.value));
-                console.log(this.value);
                 arr.push({
                     title: tag,
                     id: tag,
@@ -78,7 +77,6 @@
                         var data = response.data.data;
                         this.list = data;
                         // this.value = this.propValue;
-                        // console.log(data)
                     }
                 })
                 .catch((error) => {
