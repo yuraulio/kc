@@ -7,12 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\SearchFilter;
 use App\Traits\SlugTrait;
+use Cviebrock\EloquentSluggable\Sluggable;
 
 class Page extends Model
 {
     use HasFactory;
     use SearchFilter;
-    use SlugTrait;
+    use Sluggable;
 
     protected $table = 'cms_pages';
     public $asYouType = true;
@@ -52,5 +53,20 @@ class Page extends Model
     public function user()
     {
         return $this->belongsTo(User::class, "user_id");
+    }
+
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'title',
+                'onUpdate' => false,
+            ]
+        ];
     }
 }

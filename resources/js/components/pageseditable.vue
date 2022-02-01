@@ -50,6 +50,12 @@
 
                             <ul v-if="errors && errors['title']" class="parsley-errors-list filled" id="parsley-id-7" aria-hidden="false"><li class="parsley-required">{{errors['title'][0]}}</li></ul>
 
+                            <text-field
+                                title="Slug"
+                                @updatevalue="update_slug"
+                                :prop-value="slug_value"
+                            ></text-field>
+
                             <multidropdown
                                 title="Type"
                                 :multi="false"
@@ -197,6 +203,7 @@ export default {
                         'title':'General'
                     }
                 ],
+                slug_value: null,
             }
         },
         methods: {
@@ -208,6 +215,9 @@ export default {
             },
             update_rows(value){
                 this.rows_value = value;
+            },
+            update_slug(value){
+                this.slug_value = value;
             },
             update_category(value){
                 this.category_value = value;
@@ -285,6 +295,7 @@ export default {
                         published_from: this.published_from_value,
                         published_to: this.published_to_value,
                         type: this.type_value ? this.type_value.title : null,
+                        slug: this.slug_value,
                     }
                 )
                 .then((response) => {
@@ -349,6 +360,7 @@ export default {
                         return type.title ==  data.type;
                     });
                     this.type_value = this.type_list[index];
+                    this.slug_value = data.slug;
                 } else {
                     this.get()
                 }

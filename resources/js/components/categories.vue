@@ -44,7 +44,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="text-md-end mt-3 mt-md-0">
-                                <button @click="$modal.show('create-modal');" type="button" class="btn btn-danger waves-effect waves-light"><i class="mdi mdi-plus-circle me-1"></i> Add New</button>
+                                <button @click="$modal.show('create-modal');" type="button" class="btn btn-soft-danger waves-effect waves-light"><i class="mdi mdi-plus-circle me-1"></i> Add New</button>
                             </div>
                         </div><!-- end col-->
                     </div> <!-- end row -->

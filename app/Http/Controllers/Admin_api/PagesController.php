@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin_api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateAdminPageRequest;
+use App\Http\Requests\UpdateAdminPageRequest;
 use App\Http\Resources\PageResource;
 use App\Model\Admin\Category;
 use App\Model\Admin\Page;
+use App\Model\Admin\Redirect;
 use App\Model\Admin\Template;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -57,8 +59,6 @@ class PagesController extends Controller
             $page->type = $request->type;
             $page->save();
 
-            $page->createSlug($request->title);
-
             $page->categories()->sync(collect($request->category_id ?? [])->pluck('id')->toArray());
             $page->subcategories()->sync(collect($request->subcategories ?? [])->pluck('id')->toArray());
 
@@ -95,16 +95,14 @@ class PagesController extends Controller
      *
      * @return PageResource
      */
-    public function update(Request $request, int $id)
+    public function update(UpdateAdminPageRequest $request, int $id)
     {
-        $request->validate([
-            'title' => 'required|unique:cms_pages,title,'. $id,
-        ]);
-
         try {
             $page = Page::find($id);
 
             $this->authorize('update', $page, Auth::user());
+
+            $old_slug = $page->slug;
 
             $page->title = $request->title;
             $page->template_id = $request->template_id;
@@ -113,12 +111,21 @@ class PagesController extends Controller
             $page->published_from = $request->published_from;
             $page->published_to = $request->published_to;
             $page->type = $request->type;
+            $page->slug = $request->slug;
             $page->save();
 
             $page->categories()->sync(collect($request->category_id ?? [])->pluck('id')->toArray());
             $page->subcategories()->sync(collect($request->subcategories ?? [])->pluck('id')->toArray());
 
             $page->load('template', 'categories');
+
+            $new_slug = $page->slug;
+            if ($new_slug != $old_slug) {
+                $redirect = new Redirect();
+                $redirect->page_id = $page->id;
+                $redirect->old_slug = $old_slug;
+                $redirect->save();
+            }
 
             return new PageResource($page);
         } catch (Exception $e) {
