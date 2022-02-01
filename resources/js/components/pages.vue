@@ -202,6 +202,11 @@ import pageseditable from './pageseditable.vue'
         },
         mounted() {
             this.getData();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get("filter")) {
+                this.filter = urlParams.get("filter");
+            }
         }
     }
 </script>

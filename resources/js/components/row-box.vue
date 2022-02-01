@@ -43,7 +43,7 @@
                                 Created by: <a :href="'/users/' + user.id">{{user.firstname + " " + user.lastname}}</a>
                             </p>
                             <p class="mb-1">
-                                <a href="/pages">Pages: {{pages}}</a>
+                                <a :href="'/pages?filter=' + title">Pages: {{pages}}</a>
                             </p>
                             <div v-if="category" class="badge font-14 bg-soft-info text-info p-1">{{category}}</div>
                         </div>
