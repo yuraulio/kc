@@ -64,7 +64,7 @@
         <tcdit v-if="fields" ref="tc" :pseudo="true" :mode="type" :predata="type == 'edit' ? predata : null"></tcdit>
 
         <div class="col-lg-12 text-center mt-3">
-            <button v-if="type == 'new' || type == 'edit'" @click="$modal.show('save-modal'); $forceUpdate()" type="button" class="btn btn-soft-success rounded-pill waves-effect waves-light" ><i class="fe-check-circle me-1"></i> Review & Save</button>
+            <button v-if="type == 'new' || type == 'edit'" @click="$modal.show('save-modal'); $forceUpdate()" type="button" class="btn btn-soft-success rounded-pill waves-effect waves-light" ><i class="fe-check-circle me-1"></i> Save</button>
             <button @click="$emit('updatemode', 'list')" type="button" class="btn btn-soft-danger rounded-pill waves-effect waves-light"><i class="fe-x me-1"></i> Cancel</button>
         </div>
 </div> <!-- end card-->
