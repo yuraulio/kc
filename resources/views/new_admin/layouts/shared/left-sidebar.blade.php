@@ -54,7 +54,7 @@
                 </li>
 
                 <li>
-                    <a href="{{"http://" . env("APP_URL") . "/admin"}}">
+                    <a href="{{env("APP_URL") . "/admin"}}">
                         <i data-feather="clipboard"></i>
                         <span> <span class="badge bg-secondary mt-0 align-middle">Old</span> Dashboard </span>
                     </a>
@@ -79,7 +79,7 @@
                                 <a href="{{route('admin-pages')}}">Pages management</a>
                             </li>
                             <li>
-                                <a href="#">Comments management</a>
+                                <a href="{{route('admin-comments')}}">Comments management</a>
                             </li>
                             <li>
                                 <a href="#">Menu management</a>

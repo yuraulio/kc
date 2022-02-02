@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin_api\CommentsController;
 use App\Http\Controllers\new_web\MainController;
 
 /*
@@ -16,5 +17,9 @@ use App\Http\Controllers\new_web\MainController;
 
 Route::prefix('v2')->group(function () {
     Route::get('/', [MainController::class, 'index']);
-    Route::get('/blog/{slug}', [MainController::class, 'blogPost']);
+    Route::get('/{slug}', [MainController::class, 'page']);
+});
+
+Route::middleware('auth')->group(function () {
+    Route::post('comments/store', [CommentsController::class, 'store']);
 });

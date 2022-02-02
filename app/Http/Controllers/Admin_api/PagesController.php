@@ -17,6 +17,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class PagesController extends Controller
 {
@@ -57,6 +58,7 @@ class PagesController extends Controller
             $page->published_from = $request->published_from;
             $page->published_to = $request->published_to;
             $page->type = $request->type;
+            $page->type_slug = Str::slug($request->type, '-');
             $page->save();
 
             $page->categories()->sync(collect($request->category_id ?? [])->pluck('id')->toArray());
@@ -111,6 +113,7 @@ class PagesController extends Controller
             $page->published_from = $request->published_from;
             $page->published_to = $request->published_to;
             $page->type = $request->type;
+            $page->type_slug = Str::slug($request->type, '-');
             $page->slug = $request->slug;
             $page->save();
 

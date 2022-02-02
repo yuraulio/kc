@@ -58,6 +58,11 @@ class Page extends Model
         return $this->belongsTo(User::class, "user_id");
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class)->orderBy('created_at', "desc");
+    }
+
     /**
      * Return the sluggable configuration array for this model.
      *

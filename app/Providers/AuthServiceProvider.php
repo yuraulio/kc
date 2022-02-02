@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Model\Admin\Category;
+use App\Model\Admin\Comment;
 use App\Model\Admin\Page;
 use App\Model\Admin\Template;
 use App\Model\User;
@@ -11,6 +12,7 @@ use App\Policies\ItemPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\UserPolicy;
 use App\Policies\CategoryPolicy;
+use App\Policies\CommentPolicy;
 use App\Policies\PagePolicy;
 use App\Policies\TemplatePolicy;
 use Illuminate\Support\Facades\Gate;
@@ -29,6 +31,7 @@ class AuthServiceProvider extends ServiceProvider
         Category::class => CategoryPolicy::class,
         Template::class => TemplatePolicy::class,
         Page::class => PagePolicy::class,
+        Comment::class => CommentPolicy::class,
     ];
 
     /**

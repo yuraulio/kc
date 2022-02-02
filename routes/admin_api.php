@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin_api\CommentsController;
 use App\Http\Controllers\Admin_api\PagesController;
 use App\Http\Controllers\Admin_api\TemplatesController;
 use App\Http\Controllers\Admin_api\DashboardController;
@@ -26,6 +27,11 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
         // pages
         Route::resource('pages', Admin_api\PagesController::class)->only([
             'index', 'store', 'update', 'show', 'destroy'
+        ]);
+
+        // comments
+        Route::resource('comments', Admin_api\CommentsController::class)->only([
+            'index', 'destroy'
         ]);
 
         Route::put('pages/update_published/{id}', [PagesController::class, 'updatePublished']);

@@ -29,7 +29,17 @@
     <main id="main-area" role="main">
         <div class="section section--dynamic-learning blog">
             <div class="container blogx-container">
+
+                @foreach (json_decode($page->content) as $key => $page_data)
+                    {{$page_data}}
+                    @foreach ($page_data->rows as $row)
+                        {{$row}}
+                    @endforeach
+                @endforeach 
+
+
                 <?php $test1="test data"; ?>
+
                 @include("new_web.components.blog_header", ['test2' => $test1])
 
 

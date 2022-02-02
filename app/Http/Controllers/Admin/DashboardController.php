@@ -51,6 +51,16 @@ class DashboardController extends Controller
     }
 
     /**
+     * Show the application comments.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function comments()
+    {
+        return view('new_admin.pages.comments');
+    }
+
+    /**
      * Show the application pages.
      *
      * @return \Illuminate\View\View
@@ -58,6 +68,10 @@ class DashboardController extends Controller
     public function page($id)
     {
         $page = Page::whereId($id)->with('template')->first();
-        return view('new_admin.pages.page', ['content' => json_decode($page->content)]);
+        return view('new_web.page', [
+            'content' => json_decode($page->content),
+            'page_id' => $page->id,
+            'comments' => $page->comments->take(500),
+        ]);
     }
 }

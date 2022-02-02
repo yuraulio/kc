@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Model\Admin\Category;
+use App\Model\Admin\Comment;
 use App\Model\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class CategoryPolicy
+class CommentPolicy
 {
     use HandlesAuthorization;
 
@@ -25,10 +25,10 @@ class CategoryPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Model\User  $user
-     * @param  \App\Model\Admin\Category $category
+     * @param  \App\Model\Admin\Comment $comment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Category $category)
+    public function view(User $user, Comment $comment)
     {
         return true;
     }
@@ -48,10 +48,10 @@ class CategoryPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Model\User  $user
-     * @param  \App\Model\Admin\Category $category
+     * @param  \App\Model\Admin\Comment $comment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Category $category)
+    public function update(User $user, Comment $comment)
     {
         return true;
     }
@@ -60,10 +60,10 @@ class CategoryPolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Model\User  $user
-     * @param  \App\Model\Admin\Category $category
+     * @param  \App\Model\Admin\Comment $comment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Category $category)
+    public function delete(User $user, Comment $comment)
     {
         return true;
     }
