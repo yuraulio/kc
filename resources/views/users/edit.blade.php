@@ -429,16 +429,16 @@
                             </tr>
                         </thead>
                         <tbody id="assigned_ticket_users">
-                            @foreach ($user->events_for_user_list as $user_event)
+                            @foreach ($user->events_for_user_list as $key => $user_event)
 
-                                <?php $trans = $user_event->transactionsByUser($user->id)->first() ?>
+                                <?php $trans = $user_event->transactionsByUser($user->id)->first()?>
                                 <tr id="event_{{$user_event->id}}">
                                     <td>{{ $user_event->title }}</td>
                                     <td>@if($trans) {{ number_format($trans->amount , 2 , '.', '')}} @endif</td>
                                     <td>
                                         <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" data-user_id="{{$user_event->pivot->user_id}}" data-event_id="{{$user_event->id}}" @if($user_event->pivot->paid) checked @endif class="paid custom-control-input" id="customCheck1">
-                                            <label class="custom-control-label" for="customCheck1"></label>
+                                            <input type="checkbox" data-user_id="{{$user_event->pivot->user_id}}" data-event_id="{{$user_event->id}}" @if($user_event->pivot->paid) checked @endif class="paid custom-control-input" id="customCheck{{$key}}">
+                                            <label class="custom-control-label" for="customCheck{{$key}}"></label>
                                         </div>
                                     </td>
                                     {{--<td class="exp_{{$user_event->id}}"><?= ($user_event->pivot->expiration != null) ? date_format( new DateTime($user_event->pivot->expiration),'m/d/Y') : ''; ?></td>--}}
