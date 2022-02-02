@@ -147,6 +147,7 @@ class PagesController extends Controller
             $this->authorize('delete', $page, Auth::user());
 
             $page->categories()->detach();
+            $page->subcategories()->detach();
             $page->delete();
 
             return response()->json(['message' => 'success'], 200);
