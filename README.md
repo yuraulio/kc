@@ -1,6 +1,8 @@
+Requirements:\
 Composer: 2\
 PHP: 8\
-Node Version: 15.10
+Node Version: 15.10\
+Python2
 
 # Argon Pro Theme for Laravel Framework 8.x and Up
 
