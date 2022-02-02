@@ -40,6 +40,38 @@ class TicketCheck
                     return redirect($event->slugable->slug);
                 }
             }
+        }else{
+
+            $cart = Cart::content();
+            $event_id = -1;
+            $ticket_id = -1;
+            
+            foreach ($cart as $item){
+
+                $event_id = $item->options->event;
+                $ticket_id = $item->id;
+                            
+                break;
+            }
+            $event = Event::where('id',$event_id)->with('ticket')->first();
+
+            if($event){
+                if($event->view_tpl == 'event_free_coupon'){
+                    $stock = 1;
+                }else{
+                    $stock = $event->ticket->where('ticket_id',$ticket_id)->first() ? $event->ticket->where('ticket_id',$ticket_id)->first()->pivot->quantity : 0;
+    
+                }
+    
+                if($stock <= 0){
+                    Cart::instance('default')->destroy();
+                    return redirect($event->slugable->slug);
+                }
+            }
+
+            
+
+
         }
         
       //  dd('edw');

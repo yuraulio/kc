@@ -40,6 +40,7 @@ class CartController extends Controller
         $this->fbp = $fbp;
 
         $this->middleware('cart')->except('cartIndex','completeRegistration','validation','checkCode');
+        //$this->middleware('cart')->except('cartIndex','validation','checkCode');
         $this->middleware('code.event')->only('completeRegistration');
         $this->middleware('registration.check')->except('cartIndex','completeRegistration','validation','checkCode','add');
         //$this->middleware('registration.check');
