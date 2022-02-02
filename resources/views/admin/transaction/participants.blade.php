@@ -285,7 +285,7 @@ $(document).ready(function() {
 
     } );
 
-    let eventIDS = table.column(8).data().unique()
+    let eventIDS = table.column(9).data().unique()
     let events = table.column(1).data().unique();
 
     $.each(events, function(key, value) {
