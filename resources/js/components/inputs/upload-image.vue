@@ -35,7 +35,7 @@
 
     <div class="avatar-edit" v-if="(files[keyput] != null && files[keyput].length && edit) || value">
       <div class="avatar-edit-image" v-if="(files[keyput].length && files[keyput][0]) || value">
-        <img style="min-height: 200px"  ref="editImage" :src="value ? value : files[keyput][0].url" />
+        <img style="min-height: 200px"  ref="editImage" :src="'http://' + (value ? value : files[keyput][0].url)" />
       </div>
       <div class="text-center p-4" style="margin-top: -100px;">
           <button type="button" @click.prevent="$set(files, keyput, []); $refs[keyput].clear; value = null" class="btn btn-danger waves-effect waves-light float-right"><i class="mdi mdi-close"></i> Cancel</button>
