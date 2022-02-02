@@ -22,7 +22,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="text-md-end mt-3 mt-md-0">
-                                <button @click="mode='new'" type="button" class="btn btn-soft-danger waves-effect waves-light"><i class="mdi mdi-plus-circle me-1"></i> Add New</button>
+                                <button @click="mode='new'" type="button" class="btn btn-soft-info waves-effect waves-light"><i class="mdi mdi-plus-circle me-1"></i> Add New</button>
                             </div>
                         </div><!-- end col-->
                     </div> <!-- end row -->
@@ -90,15 +90,15 @@
                         </vuetable>
                     </div>
                 </div>
-        
-                <pagination v-if="templates['meta']" class="mt-3" 
-                :data="templates['meta']" 
+
+                <pagination v-if="templates['meta']" class="mt-3"
+                :data="templates['meta']"
                 @pagination-change-page="getData"
                 :limit = 5
                 align = "center"
                 :show-disabled = "true"
                 ></pagination>
-                
+
 
             </div>
             <div style="margin-top: 150px" class="text-center" v-else>

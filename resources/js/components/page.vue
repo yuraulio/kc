@@ -14,33 +14,42 @@
                     </div>
                 </div> --> <!-- end dropdown -->
                 <!-- Title-->
-                <h4 class="mt-0"><a :href="'/new_page/' + page.id" target="_blank" class="text-dark">{{ page.title }}</a></h4>
-                <p class="text-muted text-uppercase"><i class="mdi mdi-account-circle"></i> <small v-if="page.template"><a :href="'/templates?filter=' + page.template.title">{{ page.template.title }}</a></small></p>
-                <template v-for="cat in page.categories">
-                    <a :href="'/categories?filter=' + cat.title">
-                        <div class="badge bg-info text-white mb-3 mr-2 font-14" style="margin-right: 5px">{{ cat.title }}</div>
-                    </a>
-                </template>
-                <!-- Desc-->
-                <p v-if="page.description" class="text-muted font-13 mb-3 sp-line-2">{{ page.description }}
-                </p>
-                <!-- Task info-->
-                <p class="mb-0 pb-0">
-                    <span class="text-nowrap d-inline-block" style="float: right">
-                        <a @click="remove()" href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
-                    </span>
+                <div class="row">
+                    <div class="col-1">
+                        <img width="100%" src="/admin_assets/images/pg-image.png">
+                    </div>
+                    <div class="col-11">
+                        <h4 class="mt-0"><a :href="'/new_page/' + page.id" target="_blank" class="text-dark">{{ page.title }}</a></h4>
+                        <p class="text-muted text-uppercase"><i class="mdi mdi-account-circle"></i> <small v-if="page.template"><a :href="'/templates?filter=' + page.template.title">{{ page.template.title }}</a></small></p>
+                        <template v-for="(cat, index) in page.categories">
+                            <a :href="'/categories?filter=' + cat.title" :key="index">
+                                <div class="badge bg-primary text-white mb-3 mr-2 font-14" style="margin-right: 5px">{{ cat.title }}</div>
+                            </a>
+                        </template>
+                        <!-- Desc-->
+                        <p v-if="page.description" class="text-muted font-13 mb-3 sp-line-2">{{ page.description }}
+                        </p>
+                        <!-- Task info-->
+                        <p class="mb-0 pb-0">
+                            <span class="text-nowrap d-inline-block" style="float: right">
+                                <a @click="remove()" href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
+                            </span>
 
-                    <span class="pe-2 text-nowrap d-inline-block" style="float: right">
-                        <a @click="edit()" href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
-                    </span>
+                            <span class="pe-2 text-nowrap d-inline-block" style="float: right">
+                                <a @click="edit()" href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
+                            </span>
 
-                    <span class="text-sm-start" style="flat: right">
-                        <div :key="page.id"  class="form-check form-switch mb-1" style="display: inline-block; cursor: pointer">
-                            <input :key="page.id + 'on'" @click="changePublish()" :id="page.id + 'input'" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :for="page.id + 'input'" :checked="page.published">
-                            <label class="form-check-label" for="light-mode-check">Published</label>
-                        </div>
-                    </span>
-                </p>
+                            <span class="text-sm-start" style="flat: right">
+                                <span v-if="page.published_from">The page will be published automatically {{ page.published_from }}. </span>
+                                <span v-if="page.published_to">The page will be unpublished automatically {{ page.published_to }}</span>
+                                <div v-if="!page.published_from && !page.published_to" :key="page.id"  class="form-check form-switch mb-1" style="display: inline-block; cursor: pointer">
+                                    <input :key="page.id + 'on'" @click="changePublish()" :id="page.id + 'input'" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :for="page.id + 'input'" :checked="page.published">
+                                    <label class="form-check-label" for="light-mode-check">Publish</label>
+                                </div>
+                            </span>
+                        </p>
+                    </div>
+                </div>
             </div>
         </div> <!-- end card box-->
     </div>
@@ -48,7 +57,8 @@
 
 <script>
 
-    export default {
+
+    export default{
         props: {
             page: {},
             description: String,
