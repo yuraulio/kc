@@ -55,6 +55,8 @@ mix.js('resources/js/app.js', 'public/js')
         'public/theme/assets/css'
     );
 
+    mix.js('resources/js/blog.js', 'public/js')
+
       mix.styles([
         'public/new_cart/css/style.css',
     ], 'public/new_cart/version/style_ver.css');

@@ -7,6 +7,7 @@ use App\Http\Requests\CreateAdminPageRequest;
 use App\Http\Requests\UpdateAdminPageRequest;
 use App\Http\Resources\PageResource;
 use App\Model\Admin\Category;
+use App\Model\Admin\Comment;
 use App\Model\Admin\Page;
 use App\Model\Admin\Redirect;
 use App\Model\Admin\Template;
@@ -31,7 +32,22 @@ class PagesController extends Controller
         $this->authorize('viewAny', Page::class, Auth::user());
 
         try {
-            $pages = Page::lookForOriginal($request->filter)->with('template', 'categories.subcategories')->orderBy('created_at', 'desc')->paginate(100);
+            $pages = Page::lookForOriginal($request->filter)->with('template', 'categories.subcategories')->orderBy('created_at', 'desc');
+            if ($request->type) {
+                $pages->whereType($request->type);
+            }
+            if ($request->category) {
+                $pages->whereHas("categories", function ($q) use ($request) {
+                    $q->where("id", $request->category);
+                });
+            }
+            if ($request->subcategory) {
+                $pages->whereHas("subcategories", function ($q) use ($request) {
+                    $q->where("id", $request->subcategory);
+                });
+            }
+            
+            $pages = $pages->paginate(100);
             return PageResource::collection($pages);
         } catch (Exception $e) {
             Log::error("Failed to get pages. " . $e->getMessage());
@@ -151,6 +167,9 @@ class PagesController extends Controller
 
             $page->categories()->detach();
             $page->subcategories()->detach();
+
+            Comment::where("page_id", $page->id)->delete();
+
             $page->delete();
 
             return response()->json(['message' => 'success'], 200);

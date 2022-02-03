@@ -253,6 +253,25 @@
                     </div>
                 </div> <!-- end widget-rounded-circle-->
             </div>
+
+            <div class="col-md-6 col-xl-6">
+                <div @click="selectComponent('post_feature')" class="widget-rounded-circle card bg-grey">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <div class="avatar-lg mt-2">
+                                    <i style="font-size: 4em" class="h1 text-muted dripicons-blog"></i>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h5 class="mb-1 mt-2 font-16">Post feature</h5>
+                                <p class="mb-2 text-muted">Content for blog post list. Not visible on post page.</p>
+                            </div>
+                        </div> <!-- end row-->
+                    </div>
+                </div> <!-- end widget-rounded-circle-->
+            </div>
+
         </div>
         </modal>
 </template>

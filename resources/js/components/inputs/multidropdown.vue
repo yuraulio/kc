@@ -1,7 +1,7 @@
 <template>
 
 <div class="mb-3">
-    <label for="projectname" class="form-label">{{title}} <span v-if="required">*</span> </label>
+    <label v-if="title" for="projectname" class="form-label">{{title}} <span v-if="required">*</span> </label>
 
     <!-- <select @change="$emit('updatevalue', value)" v-model="value" class="form-select my-1 my-md-0">
         <option v-for="item in list" :value="item.id">{{item.title}}</option>
@@ -12,7 +12,7 @@
         selectLabel=""
         @input="inputed"
         v-model="value"
-        placeholder="Pick some"
+        :placeholder="placeholder"
         :multiple="multi"
         :taggable="taggable"
         label="title"
@@ -41,11 +41,15 @@
                 default: false
             },
             data: null,
+            placeholder: {
+                default: "Pick some"
+            },
         },
         data() {
             return {
                 value: [],
                 list: [],
+
             }
         },
         watch: {

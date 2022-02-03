@@ -3,10 +3,15 @@
 namespace App\Http\Controllers\Admin_api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CommentResource;
+use App\Http\Resources\PageResource;
+use App\Model\Admin\Comment;
+use App\Model\Admin\Page;
 use App\Model\Instructor;
 use App\Model\User;
 use App\Model\Event;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class DashboardController extends Controller
 {
@@ -87,5 +92,29 @@ class DashboardController extends Controller
         }
 
         return response()->json(['data' => count(array_unique($graduates))], 200);
+    }
+
+    /**
+     * Return last 5 comments
+     *
+     * @return JsonResponse
+     */
+    public function get_widget_comments(): AnonymousResourceCollection
+    {
+        $comments = Comment::orderBy("created_at", "desc")->limit(5)->get();
+
+        return CommentResource::collection($comments);
+    }
+
+    /**
+     * Return last 5 comments
+     *
+     * @return JsonResponse
+     */
+    public function get_widget_pages(): AnonymousResourceCollection
+    {
+        $pages = Page::orderBy("created_at", "desc")->limit(5)->get();
+
+        return PageResource::collection($pages);
     }
 }

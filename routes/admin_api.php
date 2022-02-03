@@ -8,11 +8,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
     Route::middleware('auth:api')->group(function () {
-        Route::get('get_widget_data/users', [DashboardController::class, 'get_widget_data_users']);
-        Route::get('get_widget_data/admins', [DashboardController::class, 'get_widget_data_admins']);
-        Route::get('get_widget_data/instructors', [DashboardController::class, 'get_widget_data_instructors']);
-        Route::get('get_widget_data/students', [DashboardController::class, 'get_widget_data_students']);
-        Route::get('get_widget_data/graduates', [DashboardController::class, 'get_widget_data_graduates']);
+        Route::prefix('get_widget_data')->group(function () {
+            Route::get('users', [DashboardController::class, 'get_widget_data_users']);
+            Route::get('admins', [DashboardController::class, 'get_widget_data_admins']);
+            Route::get('instructors', [DashboardController::class, 'get_widget_data_instructors']);
+            Route::get('students', [DashboardController::class, 'get_widget_data_students']);
+            Route::get('graduates', [DashboardController::class, 'get_widget_data_graduates']);
+            Route::get('comments', [DashboardController::class, 'get_widget_comments']);
+            Route::get('pages', [DashboardController::class, 'get_widget_pages']);
+        });
 
         // categories
         Route::resource('categories', Admin_api\CategoriesController::class)->only([

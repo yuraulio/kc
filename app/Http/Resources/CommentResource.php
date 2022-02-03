@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 class CommentResource extends JsonResource
 {
@@ -27,6 +28,7 @@ class CommentResource extends JsonResource
             'page' => '<a target="_blank" href="/new_page/' . $this->page->id . '">' . $this->page->title . "</a>",
             'created_at_formated' => Carbon::parse($this->created_at)->format("Y-m-d G:i:s"),
             'created_at' => $this->created_at,
+            'diffForHumans' => $this->created_at->diffForHumans(),
         ];
     }
 }

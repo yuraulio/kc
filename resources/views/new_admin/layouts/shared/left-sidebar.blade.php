@@ -65,7 +65,30 @@
                 <li>
                     <a href="#sidebarCMS" data-bs-toggle="collapse">
                         <i data-feather="airplay"></i>
-                        <span> CMS <span class="badge bg-primary mt-0 align-middle">Comming soon</span></span>
+                        <span> Users <span class="badge bg-primary mt-0 align-middle">Comming soon</span> </span>
+                    </a>
+                    <div class="collapse" id="sidebarCMS">
+                        <ul class="nav-second-level">
+                            <li>
+                                <a href="#">Admins</a>
+                            </li>
+                            <li>
+                                <a href="#">Users</a>
+                            </li>
+                            <li>
+                                <a href="#">Instructors</a>
+                            </li>
+                            <li>
+                                <a href="#">Roles</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li>
+                    <a href="#sidebarCMS" data-bs-toggle="collapse">
+                        <i data-feather="airplay"></i>
+                        <span> CMS</span>
                     </a>
                     <div class="collapse" id="sidebarCMS">
                         <ul class="nav-second-level">
@@ -82,10 +105,10 @@
                                 <a href="{{route('admin-comments')}}">Comments management</a>
                             </li>
                             <li>
-                                <a href="#">Menu management</a>
+                                <a href="#">Assets <span class="badge bg-warning mt-0 align-middle">In proggress</span> </a>
                             </li>
                             <li>
-                                <a href="#">Images management</a>
+                                <a href="#">Menu <span class="badge bg-primary mt-0 align-middle">Comming soon</span> </a>
                             </li>
                         </ul>
                     </div>

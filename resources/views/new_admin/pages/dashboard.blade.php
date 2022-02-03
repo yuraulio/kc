@@ -37,14 +37,6 @@
     <!-- end page title -->
 
     <div class="row">
-        
-        {{-- <dashboard-widget
-            title="TOTAL USERS"
-            type="users"
-            icon="fe-user"
-            color="primary"
-            key="1"
-        ></dashboard-widget> --}}
 
         <dashboard-widget
             title="ADMINS"
@@ -66,10 +58,70 @@
             type="graduates"
         ></dashboard-widget>
 
+    </div> 
 
+    <div class="row">
+    
+        <dashboard-table
+            title="COMMENTS"
+            type="comments"
+            description="Latest comments"
+            :fields="[
+                {
+                    name: 'comment',
+                    title: 'Comment',
+                    width: '50%',
+                    formatter (source) {
+                        return source.length > 50 ? source.slice(0, 50 - 1) + '…' : source;
+                    }
+                },
+                {
+                    name: 'user',
+                    title: 'Created by',
+                    dataClass: 'text-center',
+                    titleClass: 'text-center',
+                },
+                {
+                    name: 'page',
+                    title: 'Page',
+                    dataClass: 'text-center',
+                    titleClass: 'text-end',
+                }
+            ]"
+        ></dashboard-table>
 
+        <dashboard-table
+            title="PAGES"
+            type="pages"
+            description="Latest pages"
+            :fields="[
+                {
+                    name: 'title',
+                    title: 'Title',
+                    width: '50%',
+                    formatter (source) {
+                        return source.length > 30 ? source.slice(0, 30 - 1) + '…' : source;
+                    }
+                },
+                {
+                    name: 'user',
+                    title: 'Created by',
+                    dataClass: 'text-center',
+                    titleClass: 'text-center',
+                    formatter (source) {
+                        return source.firstname + ' ' + source.lastname;
+                    }
+                },
+                {
+                    name: 'type',
+                    title: 'Type',
+                    dataClass: 'text-center',
+                    titleClass: 'text-end',
+                }
+            ]"
+        ></dashboard-table>
+    
     </div>
-    <!-- end row-->    
 
 </div> <!-- container -->
 @endsection

@@ -4,10 +4,15 @@ namespace App\Http\Controllers\new_web;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PageResource;
+use App\Model\Admin\Category;
 use App\Model\Admin\Page;
 use App\Model\Admin\Redirect;
 use Carbon\Carbon;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class MainController extends Controller
@@ -62,5 +67,38 @@ class MainController extends Controller
                 'comments' => $page->comments->take(500),
             ]);
         }
+    }
+
+    public function blog(Request $request)
+    {
+        $c = $request->c;
+
+        if ($c = $request->c) {
+            $category = Category::find($c);
+
+            $categories = $category->subcategories()->whereHas("subPages", function ($q) {
+                $q->whereType("Blog");
+            })->get();
+
+            $blog = $category->pages()->whereType("Blog")->get();
+            $blog = $blog->merge($category->subPages()->whereType("Blog")->get());
+
+            return view('new_web.blog.index', [
+                'blog' => $blog,
+                'categories' => $categories,
+                'category' => $category,
+            ]);
+        }
+
+        $blog = Page::whereType("Blog")->get();
+        $categories = Category::whereHas("pages", function ($q) {
+            $q->whereType("Blog");
+        })->get();
+
+        return view('new_web.blog.index', [
+            'blog' => $blog,
+            'categories' => $categories,
+            'category' => null,
+        ]);
     }
 }

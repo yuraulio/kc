@@ -6592,3 +6592,6 @@ body.compensate-for-scrollbar { overflow: hidden; }
 .container-fluid {
     padding: 0px !important;
 }
+.social-share {
+    margin-bottom: 0px!important;
+}

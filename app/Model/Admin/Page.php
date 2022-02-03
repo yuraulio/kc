@@ -77,4 +77,25 @@ class Page extends Model
             ]
         ];
     }
+
+    public function featureData()
+    {
+        $content = json_decode($this->content);
+        foreach ($content as $row) {
+            foreach ($row->columns as $column) {
+                if ($column->component == "post_feature") {
+                    $feature_data = [];
+                    foreach ($column->template->inputs as $input) {
+                        $feature_data[$input->key] = $input->value;
+                    }
+                    return $feature_data;
+                }
+            }
+        }
+        return [
+            "feature_title" => $this->title,
+            "feature_description" => "",
+            "feature_image" => "",
+        ];
+    }
 }

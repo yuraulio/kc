@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateAdminTemplateRequest;
 use App\Http\Resources\CommentResource;
 use App\Http\Resources\TemplateResource;
 use App\Model\Admin\Comment;
+use App\Model\Admin\Page;
 use App\Model\Admin\Template;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -54,7 +55,7 @@ class CommentsController extends Controller
             $comment->user_id = Auth::user()->id;
             $comment->save();
 
-            return redirect()->back();
+            return new CommentResource($comment);
         } catch (Exception $e) {
             Log::error("Failed to add new comment. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
@@ -80,5 +81,11 @@ class CommentsController extends Controller
             Log::error("Failed to delete comment. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
         }
+    }
+
+    public function getPageComments($page_id)
+    {
+        $comments = Comment::where('page_id', $page_id)->with(["page", "user"])->orderBy("created_at", "desc")->limit(500)->get();
+        return CommentResource::collection($comments);
     }
 }

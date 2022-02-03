@@ -128,6 +128,23 @@
                 "key": "meta_keyword",
                 "label": "Meta Keywords",
                 "size": "col-lg-12"
+            },
+            {
+                "type": "image",
+                "key": "meta_image",
+                "label": "Meta image"
+            },
+            {
+                "type": "text",
+                "key": "meta_author",
+                "label": "Meta Author",
+                "size": "col-lg-12"
+            },
+            {
+                "type": "text",
+                "key": "meta_type",
+                "label": "Meta Type",
+                "size": "col-lg-12"
             }
         ]
     },
@@ -231,5 +248,28 @@
         "icon": "dripicons-wrong",
         "key": "empty_component",
         "inputs": []
+    },
+    "post_feature" : {
+        "title": "Post feature",
+        "width": "content",
+        "icon": "dripicons-blog",
+        "key": "post_feature_component",
+        "inputs": [
+            {
+                "type": "text",
+                "key": "feature_title",
+                "label": "Feature title"
+            },
+            {
+                "type": "textarea",
+                "key": "feature_description",
+                "label": "Feature description"
+            },
+            {
+                "type": "image",
+                "key": "feature_image",
+                "label": "Feature image"
+            }
+        ]
     }
 }

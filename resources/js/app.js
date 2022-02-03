@@ -43,6 +43,7 @@ import UUID from "vue-uuid";
 Vue.use(UUID);
 
 Vue.component('dashboard-widget', require('./components/dashboard-widget.vue').default);
+Vue.component('dashboard-table', require('./components/dashboard-table.vue').default);
 Vue.component('templates', require('./components/templates.vue').default);
 Vue.component('row-box', require('./components/row-box.vue').default);
 Vue.component('categories', require('./components/categories.vue').default);

@@ -8,6 +8,18 @@
             </div>
         </div>
 
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body pb-0">
+                    <text-field
+                        title="Slug"
+                        @updatevalue="update_slug"
+                        :prop-value="slug_value"
+                    ></text-field>
+                </div>
+            </div>
+        </div>
+
         <div class="col-lg-9" >
             <tcedit 
                 v-if="template_value" 
@@ -56,12 +68,6 @@
                             ></text-field>
 
                             <ul v-if="errors && errors['title']" class="parsley-errors-list filled" id="parsley-id-7" aria-hidden="false"><li class="parsley-required">{{errors['title'][0]}}</li></ul>
-
-                            <text-field
-                                title="Slug"
-                                @updatevalue="update_slug"
-                                :prop-value="slug_value"
-                            ></text-field>
 
                             <multidropdown
                                 title="Type"

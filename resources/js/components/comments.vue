@@ -31,6 +31,7 @@
                                 {
                                     name: 'comment',
                                     title: 'Comment',
+                                    width: '50%',
                                 },
                                 {
                                     name: 'page',
