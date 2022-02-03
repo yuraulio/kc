@@ -19,7 +19,11 @@
                         <img width="100%" src="/admin_assets/images/pg-image.png">
                     </div>
                     <div class="col-11">
-                        <h4 class="mt-0"><a :href="'/new_page/' + page.id" target="_blank" class="text-dark">{{ page.title }}</a></h4>
+                        <h4 class="mt-0">
+                            <template v-if="">
+                            <a :href="'/new_page/' + page.id" target="_blank" class="text-dark">{{ page.title }}</a>
+                            </template>
+                        </h4>
                         <p class="text-muted text-uppercase"><i class="mdi mdi-account-circle"></i> <small v-if="page.template"><a :href="'/templates?filter=' + page.template.title">{{ page.template.title }}</a></small></p>
                         <template v-for="(cat, index) in page.categories">
                             <a :href="'/categories?filter=' + cat.title" :key="index">

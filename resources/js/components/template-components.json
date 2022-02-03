@@ -251,9 +251,10 @@
     },
     "post_feature" : {
         "title": "Post feature",
-        "width": "content",
         "icon": "dripicons-blog",
         "key": "post_feature_component",
+        "one_column": true,
+        "changable": false,
         "inputs": [
             {
                 "type": "text",

@@ -46,7 +46,7 @@
                             </div>
                         </div>
                         <div class="col-4 text-center">
-                            <div v-if="val.columns[0].component != 'meta'" class="btn-group">
+                            <div v-if="val.columns[0].component != 'meta' && val.columns[0].component != 'post_feature'" class="btn-group">
                                 <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                     <template v-if="val.color == 'white'">
                                         White <i class="mdi mdi-chevron-down"></i>
