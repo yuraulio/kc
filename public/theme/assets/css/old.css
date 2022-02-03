@@ -220,6 +220,11 @@
 }
 
 @media (max-width:980px) {
+
+    .section-course-tabs .content-wrapper .tabs-wrapper .tab-controls .btn.elearning-free {
+        padding: 13px 0;
+    }
+
     .xs-flex {
         display: inline-flex;
     }

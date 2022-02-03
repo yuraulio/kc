@@ -65,7 +65,7 @@
                   </ul>
                   {{--@if($is_event_paid==0 && !Auth::user())--}}
                   @if($is_event_paid==0)
-                  <a href="{{ route('cart.add-item', [ $event->id,'free', 8 ]) }}" class="btn btn--lg btn--primary hidden-sm go-to-href">ENROLL FOR FREE</a>
+                  <a href="{{ route('cart.add-item', [ $event->id,'free', 8 ]) }}" class="btn btn--lg btn--primary go-to-href elearning-free">ENROLL FOR FREE</a>
                   @endif
                   {{--@elseif($is_event_paid==0 && Auth::user())
                   <a href="{{ route('enrollForFree',  $event->id) }}" class="btn btn--lg btn--primary hidden-sm go-to-href">ENROLL FOR FREE</a>
