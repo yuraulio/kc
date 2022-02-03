@@ -38,6 +38,24 @@ mix.js('resources/js/app.js', 'public/js')
       ], 'public/theme/assets/css/style_ver.css');
 
       mix.styles([
+        'public/theme/assets/css/old.css',
+        'public/theme/assets/css/normalize.css',
+        'public/theme/assets/css/jquery.mCustomScrollbar.css',
+        'public/theme/assets/css/jquery-ui.css',
+        'public/theme/assets/css/grid.css',
+        'public/theme/assets/css/grid-flex.css',
+        'public/theme/assets/css/global.css',
+        'public/theme/assets/css/main.css',
+        'public/theme/assets/css/fontawesome/css/kcfonts.css',
+        'public/theme/assets/css/select2.css',
+        'resources/assets/css/custom.css',
+    ], 'public/theme/assets/css/style_ver_new.css');
+
+    mix.sass('resources/assets/scss/bootstrap5/bootstrap5-grid.scss',
+        'public/theme/assets/css'
+    );
+
+      mix.styles([
         'public/new_cart/css/style.css',
     ], 'public/new_cart/version/style_ver.css');
 
