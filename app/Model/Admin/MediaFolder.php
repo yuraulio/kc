@@ -48,7 +48,7 @@ class MediaFolder extends Model
     public function getSizeAttribute()
     {
         $file_size = $this->mediaFiles()->sum('size') * 0.000001;
-        foreach ($this->children as $child) {
+        foreach ($this->children()->get() as $child) {
             $file_size += $child->mediaFiles()->sum('size') * 0.000001;
         }
 
