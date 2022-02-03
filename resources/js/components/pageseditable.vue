@@ -129,7 +129,10 @@
 
                             <div class="row mt-3">
                                 <div class="col-12 text-center mb-3 d-grid">
-                                    <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions" :disabled="!template_value" @click="rearange()" class="btn btn-block btn-soft-info waves-effect waves-light m-1">Preview</button>
+                                    <a :href="'/new_page/' + id" target="_blank" class="btn btn-block btn-soft-warning waves-effect waves-light m-1">
+                                        Live preview
+                                    </a>
+                                    <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions" :disabled="!template_value" @click="rearange()" class="btn btn-block btn-soft-info waves-effect waves-light m-1">Pseudo preview</button>
                                     <button v-if="type == 'new'" @click="add()" type="button" class="btn btn-soft-success waves-effect waves-light m-1" :disabled="loading"><i v-if="!loading" class="fe-check-circle me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Create</button>
                                     <button v-if="type == 'edit'" :disabled="loading" @click="edit()" type="button" class="btn btn-soft-success waves-effect waves-light m-1"><i v-if="!loading" class="mdi mdi-square-edit-outline me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Save</button>
 

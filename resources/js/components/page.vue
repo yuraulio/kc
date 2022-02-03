@@ -20,9 +20,13 @@
                     </div>
                     <div class="col-11">
                         <h4 class="mt-0">
-                            <template v-if="">
-                            <a :href="'/new_page/' + page.id" target="_blank" class="text-dark">{{ page.title }}</a>
+                            <template v-if="page.type == 'Blog'">
+                                <a :href="'/v2/blog/' + page.slug" target="_blank" class="text-dark">{{ page.title }}</a>
                             </template>
+                            <template v-else>
+                                <a :href="'/v2/' + page.slug" target="_blank" class="text-dark">{{ page.title }}</a>
+                            </template>
+
                         </h4>
                         <p class="text-muted text-uppercase"><i class="mdi mdi-account-circle"></i> <small v-if="page.template"><a :href="'/templates?filter=' + page.template.title">{{ page.template.title }}</a></small></p>
                         <template v-for="(cat, index) in page.categories">

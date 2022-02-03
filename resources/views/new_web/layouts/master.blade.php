@@ -121,7 +121,7 @@ _iub.csConfiguration = {"cookiePolicyInOtherWindow":true,"perPurposeConsent":tru
 
 </head>
 
-<body>
+<body style="display: none;">
 
 @if(!env('APP_DEBUG'))
 {{--<script id="CookieDeclaration" src="https://consent.cookiebot.com/7c5a111b-df1a-4a4a-bd31-fbee0d6593ba/cd.js" type="text/javascript" async></script>--}}
@@ -356,7 +356,15 @@ $(document).on('click', '.close-btn', function(e){
 
 </script>
 
+@stack('components-scripts')
+
 @yield('blog-custom-js')
+
+<script>
+    setTimeout(function(){
+        $("body").show();
+    }, 200);
+</script>
 
 </body>
 </html>

@@ -63,6 +63,8 @@ class CategoriesController extends Controller
                 }
             }
 
+            $category->load("subcategories");
+
             return new CategoryResource($category);
         } catch (Exception $e) {
             Log::error("Failed to add new category. " . $e->getMessage());

@@ -19,7 +19,7 @@ Route::prefix('v2')->group(function () {
     Route::get('/', [MainController::class, 'index']);
     Route::get('/blog', [MainController::class, 'blog']);
     Route::get('/{slug}', [MainController::class, 'page']);
-    Route::get('/blog/{slug}', [MainController::class, 'getPost']);
+    Route::get('/blog/{slug}', [MainController::class, 'page']);
 });
 
 Route::get('get-page-comments/{page_id}', [CommentsController::class, 'getPageComments']);
