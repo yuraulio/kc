@@ -63,11 +63,11 @@
                 <li class="menu-title">Management</li>
 
                 <li>
-                    <a href="#sidebarCMS" data-bs-toggle="collapse">
+                    <a href="#usersCMS" data-bs-toggle="collapse">
                         <i data-feather="airplay"></i>
                         <span> Users <span class="badge bg-primary mt-0 align-middle">Comming soon</span> </span>
                     </a>
-                    <div class="collapse" id="sidebarCMS">
+                    <div class="collapse" id="usersCMS">
                         <ul class="nav-second-level">
                             <li>
                                 <a href="#">Admins</a>
