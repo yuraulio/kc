@@ -53,6 +53,7 @@ class TicketCheck
                             
                 break;
             }
+            //dd($event_id);
             $event = Event::where('id',$event_id)->with('ticket')->first();
 
             if($event){
