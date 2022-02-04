@@ -5,7 +5,7 @@
 
     <title>{{$homePage->metable->meta_title}}</title>
 
-   {!! $homePage->metable->getMetas() !!}
+   {!! $homePage->metable->getMetas(true) !!}
 
 @endsection
 @section('content')
