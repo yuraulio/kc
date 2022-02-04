@@ -144,6 +144,36 @@
                                                 @inputed="inputed($event, input)"
                                             />
                                         </div>
+
+                                        <template v-if="column.component == 'youtube'">
+                                            <div class="card-body row pb-0 pt-0">
+                                                <div class="col-12">
+                                                    <label class="form-label mt-2">Preview</label>
+                                                    <div class="text-center">
+                                                        <iframe 
+                                                            :width="findInputValue(column.template.inputs, 'youtube_width') || '100%'" 
+                                                            :height="findInputValue(column.template.inputs, 'youtube_height') || '400'" 
+                                                            :src="'https://www.youtube.com/embed/' + findInputValue(column.template.inputs, 'youtube_embed')" 
+                                                            title="YouTube video player" 
+                                                            frameborder="0" 
+                                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                                            allowfullscreen
+                                                        ></iframe>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </template>
+
+                                        <template v-if="column.component == 'html'">
+                                            <div class="card-body row pb-0 pt-0">
+                                                <div class="col-12">
+                                                    <label class="form-label mt-2">Preview</label>
+                                                    <br>
+                                                    <p v-html="findInputValue(column.template.inputs, 'html_embed')"></p>
+                                                </div>
+                                            </div>
+                                        </template>
+
                                     </div>
                                 
                             </div>
@@ -334,6 +364,12 @@ export default {
             });
             columns.splice(index, 1);
             this.setTabActive(row_index, 0);
+        },
+        findInputValue(inputs, key){
+            var index = inputs.findIndex(function(input) {
+                return input.key == key;
+            });
+            return inputs[index].value;
         }
     },
 

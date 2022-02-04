@@ -1,5 +1,5 @@
 <template>
-<div :class="type == 'text' && !size ? 'col-lg-6' : size">
+<div :class="(type == 'text' && !size ? 'col-lg-6' : size) + ' mt-2'">
     <div v-if="type == 'text'" class="">
         <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
         <input v-model="editorData" type="text" :id="keyput" class="form-control">
@@ -25,6 +25,16 @@
     <div v-if="type == 'contentComponent'" class="">
         <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
         <contentComponent @updatedimage="updatedimage" :key="keyput" :keyput="keyput"></contentComponent>
+    </div>
+
+    <div v-if="type == 'checkbox'" class="">
+        <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
+        <input v-model="editorData" type="checkbox" :id="keyput" class="form-check-input d-block">
+    </div>
+
+    <div v-if="type == 'number'" class="">
+        <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
+        <input v-model="editorData" type="number" :id="keyput" class="form-control">
     </div>
 
     <div v-if="type == 'multidropdown'" class="">

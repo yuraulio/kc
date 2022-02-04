@@ -20,7 +20,7 @@
         </div>
     </div>
 @elseif(isset($data->width) && $data->width == "content")
-    <div class="container">
+    <div class="container ps-4 pe-4">
         <div class="row mb-5">
             @foreach ($data->columns as $column)
                 <div class="col-md-{{ 12 / count($data->columns) }}">

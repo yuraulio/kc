@@ -200,9 +200,22 @@
         "key": "youtube_component",
         "inputs": [
             {
+                "type": "number",
+                "key": "youtube_height",
+                "label": "Video height (px)",
+                "size": "col-lg-6"
+            },
+            {
+                "type": "number",
+                "key": "youtube_width",
+                "label": "Video width (px)",
+                "size": "col-lg-6"
+            },
+            {
                 "type": "text",
                 "key": "youtube_embed",
-                "label": "Video code"
+                "label": "Video code",
+                "size": "col-lg-12"
             }
         ]
     },
@@ -236,7 +249,20 @@
                 "label": "Button text"
             },
             {
-                "type": "textarea",
+                "type": "text",
+                "key": "success_text",
+                "label": "Success message",
+                "size": "col-lg-6"
+            },
+            {
+                "type": "checkbox",
+                "key": "enable_consent",
+                "label": "Enable consent",
+                "value": true,
+                "size": "col-lg-6"
+            },
+            {
+                "type": "text_editor",
                 "key": "consent_text",
                 "label": "Consent text"
             }

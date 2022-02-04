@@ -10,8 +10,8 @@ use App\Services\FBPixelService;
 
 class ContactUsController extends Controller
 {
-
-    public function __construct(FBPixelService $fbp){
+    public function __construct(FBPixelService $fbp)
+    {
         $this->fbp = $fbp;
     }
 
@@ -39,6 +39,7 @@ class ContactUsController extends Controller
 
 
             Mail::send('theme.emails.contact.send_us_email', ['mail_data' => $mail_data], function ($m) use ($mail_data) {
+                $fullname = $mail_data['cname'] . ' ' . $mail_data['csurname'];
 
             	 $fullname = $mail_data['cname'] . ' ' . $mail_data['csurname'];
 
@@ -54,7 +55,7 @@ class ContactUsController extends Controller
                 $m->subject($subject);
                 $m->from($adminemail, 'Knowcrunch');
                 $m->replyTo($mail_data['cemail'], $fullname);
-               // $m->to('nathanailidis@lioncode.gr', 'Chysafis');
+                // $m->to('nathanailidis@lioncode.gr', 'Chysafis');
                 $m->to($adminemail, 'Knowcrunch');
                 //$m->cc('periklis.d@gmail.com', 'Perry D');
                 //$m->bcc('info@darkpony.com', null);
@@ -62,9 +63,11 @@ class ContactUsController extends Controller
 
             $this->fbp->sendContactEvent();
 
+            $message = $mail_data['success'] ?? 'Thank you! We will contact you shortly.';
+
             return [
                 'status' => 1,
-                'message' => 'Thank you! We will contact you shortly.',
+                'message' => $message,
                 'mail_data' => $mail_data,
             ];
         }
@@ -97,8 +100,7 @@ class ContactUsController extends Controller
             //dd($mail_data);
 
             Mail::send('theme.emails.contact.instructor_email', ['mail_data' => $mail_data], function ($m) use ($mail_data) {
-
-                 $fullname = $mail_data['iform-name'] . ' ' . $mail_data['iform-surname'];
+                $fullname = $mail_data['iform-name'] . ' ' . $mail_data['iform-surname'];
                 
 
                 $adminemail = 'info@knowcrunch.com';
