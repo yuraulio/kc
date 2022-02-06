@@ -21502,7 +21502,8 @@ button#move-lesson {
 }
 
 .tab-buttons li {
-  flex: none !important; }
+  flex: none !important;
+}
 
 .event-tabs button {
   background: white;
