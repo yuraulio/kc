@@ -1,6 +1,6 @@
 <template>
 
-<div class="mb-3">
+<div :class="marginbottom">
     <label v-if="title" for="projectname" class="form-label">{{title}} <span v-if="required">*</span> </label>
 
     <!-- <select @change="$emit('updatevalue', value)" v-model="value" class="form-select my-1 my-md-0">
@@ -43,6 +43,9 @@
             data: null,
             placeholder: {
                 default: "Pick some"
+            },
+            marginbottom: {
+                default: "mb-3"
             },
         },
         data() {

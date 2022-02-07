@@ -32,7 +32,15 @@ class PagesController extends Controller
         $this->authorize('viewAny', Page::class, Auth::user());
 
         try {
-            $pages = Page::lookForOriginal($request->filter)->with('template', 'categories.subcategories')->orderBy('created_at', 'desc');
+            $pages = Page::lookForOriginal($request->filter)->with('template', 'categories.subcategories');
+            if ($request->order) {
+                $pages->orderBy("created_at", $request->order);
+            } else {
+                $pages->orderBy("created_at", "desc");
+            }
+            if ($request->published !== null) {
+                $pages->wherePublished($request->published);
+            }
             if ($request->type) {
                 $pages->whereType($request->type);
             }
@@ -47,7 +55,7 @@ class PagesController extends Controller
                 });
             }
             
-            $pages = $pages->paginate(100);
+            $pages = $pages->paginate(10);
             return PageResource::collection($pages);
         } catch (Exception $e) {
             Log::error("Failed to get pages. " . $e->getMessage());

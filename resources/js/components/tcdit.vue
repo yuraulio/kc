@@ -374,12 +374,14 @@ export default {
     },
 
     watch: {
+        "predata": function(val) {
+            this.data = this.predata;
+        }
     },
     mounted() {
         if (this.pseudo) {
             if (this.predata) {
                 this.data = this.predata;
-
             } else {
             this.data = this.data ?? [];
             var comp = {

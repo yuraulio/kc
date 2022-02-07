@@ -35,7 +35,18 @@
                             </template>
 
                         </h4>
-                        <p class="text-muted text-uppercase"><i class="mdi mdi-account-circle"></i> <small v-if="page.template"><a :href="'/templates?filter=' + page.template.title">{{ page.template.title }}</a></small></p>
+                        <div class="text-muted d-flex justify-content-between mb-2">
+                            <div v-if="page.template" class="text-uppercase">
+                                <i class="mdi mdi-account-circle"></i> 
+                                <small>
+                                    <a :href="'/templates?id=' + page.template.id + '&preview=' + true">{{ page.template.title }}</a>
+                                </small>
+                            </div>
+                            <div v-if="page.type">
+                                Type: 
+                                {{ page.type }}
+                            </div>
+                        </div>
                         <template v-for="(cat, index) in page.categories">
                             <a :href="'/categories?filter=' + cat.title" :key="index">
                                 <div class="badge bg-primary text-white mb-3 mr-2 font-14" style="margin-right: 5px">{{ cat.title }}</div>

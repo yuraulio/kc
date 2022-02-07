@@ -27,7 +27,7 @@ class TemplatesController extends Controller
         $this->authorize('viewAny', Template::class, Auth::user());
 
         try {
-            $templates = Template::lookForOriginal($request->filter)->with(["pages", "user"])->tableSort($request->sort)->paginate(100);
+            $templates = Template::lookForOriginal($request->filter)->with(["pages", "user"])->tableSort($request->sort)->paginate(10);
             return TemplateResource::collection($templates);
         } catch (Exception $e) {
             Log::error("Failed to get templates. " . $e->getMessage());

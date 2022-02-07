@@ -12,64 +12,102 @@
 
             <div class="card mb-2">
                 <div class="card-body">
-                    <div class="row justify-content-between">
+                    <div class="row mb-2">
 
-                        <div class="col-md-12 mb-3">
-                            <div class="text-md-end mt-3 mt-md-0">
-                                <button @click="mode='new'" type="button" class="btn btn-soft-info waves-effect waves-light"><i class="mdi mdi-plus-circle me-1"></i> Add New</button>
+                            <div class="col-md-3">
+                                <label for="inputPassword2" class="visually-hidden">Search</label>
+                                <input v-model="filter" type="search" class="form-control my-1 my-md-0" id="inputPassword2" placeholder="Search...">
                             </div>
-                        </div><!-- end col-->
 
-                        <div class="col-3">
-                            <label for="inputPassword2" class="visually-hidden">Search</label>
-                                <input v-model="filter" type="search" class="form-control my-1 my-md-0" style="height: 43px;" id="inputPassword2" placeholder="Search...">
-                        </div>
-                        <div class="col-md-3">
-                            <div class="text-md-end mt-3 mt-md-0">
-                                
-                                <multidropdown
-                                    :multi="false"
-                                    @updatevalue="update_type"
-                                    :prop-value="type_value"
-                                    :fetch="false"
-                                    :data="type_list"
-                                    placeholder="Pick type"
-                                ></multidropdown>
 
+                            <div class="col-md-9 d-flex justify-content-between">
+                                    <button @click="toggleOrder()" class="btn btn-soft-secondary waves-effect waves-light text-start">
+                                        Created by order
+                                        <i v-if="order" class="mdi mdi-chevron-down ms-1"></i>
+                                        <i v-else class="mdi mdi-chevron-up ms-1"></i>
+                                    </button>
+
+                                    <button @click="mode='new'" type="button" class="btn btn-soft-info waves-effect waves-light ms-2"><i class="mdi mdi-plus-circle me-1"></i> Add New</button>
                             </div>
-                        </div><!-- end col-->
+                            
+                    </div>
 
+                    <div class="row">
+                            <div class="col-3">
+                                <div class="text-md-end mt-3 mt-md-0">
+
+                                    <multidropdown
+                                        :multi="false"
+                                        @updatevalue="update_published"
+                                        :prop-value="published_value"
+                                        :fetch="false"
+                                        :data="[
+                                            {
+                                                title: 'Published',
+                                                id: 1
+                                            },
+                                            {
+                                                title: 'Unpublished',
+                                                id: 0
+                                            }
+                                        ]"
+                                        placeholder="Pick publishing"
+                                        marginbottom="mb-0"
+                                    ></multidropdown>
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="text-md-end mt-3 mt-md-0">
+                                    
+                                    <multidropdown
+                                        :multi="false"
+                                        @updatevalue="update_type"
+                                        :prop-value="type_value"
+                                        :fetch="false"
+                                        :data="type_list"
+                                        placeholder="Pick type"
+                                        marginbottom="mb-0"
+                                    ></multidropdown>
+
+                                </div>
+                            </div><!-- end col-->
+
+                            
+                            <div class="col-md-3">
+                                <div class="text-md-end mt-3 mt-md-0">
+
+                                    <multidropdown
+                                        :multi="false"
+                                        @updatevalue="update_category"
+                                        :prop-value="category_value"
+                                        route="categories"
+                                        placeholder="Pick category"
+                                        @change="getData()"
+                                        marginbottom="mb-0"
+                                    ></multidropdown>
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="text-md-end mt-3 mt-md-0">
+
+                                    <multidropdown
+                                        :multi="false"
+                                        @updatevalue="update_subcategory"
+                                        :prop-value="subcategory_value"
+                                        :fetch="false"
+                                        :data="subcategories"
+                                        placeholder="Pick subcategory"
+                                        @change="getData()"
+                                        marginbottom="mb-0"
+                                    ></multidropdown>
+
+                                </div>
+                            </div>
                         
-                        <div class="col-md-3">
-                            <div class="text-md-end mt-3 mt-md-0">
-
-                                <multidropdown
-                                    :multi="false"
-                                    @updatevalue="update_category"
-                                    :prop-value="category_value"
-                                    route="categories"
-                                    placeholder="Pick category"
-                                    @change="getData()"
-                                ></multidropdown>
-
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="text-md-end mt-3 mt-md-0">
-
-                                <multidropdown
-                                    :multi="false"
-                                    @updatevalue="update_subcategory"
-                                    :prop-value="subcategory_value"
-                                    :fetch="false"
-                                    :data="subcategories"
-                                    placeholder="Pick subcategory"
-                                    @change="getData()"
-                                ></multidropdown>
-
-                            </div>
-                        </div>
 
                     </div> <!-- end row -->
                 </div> <!-- end card-body-->
@@ -193,6 +231,8 @@ import multidropdown from './inputs/multidropdown.vue';
                     }
                 ],
                 subcategories: [],
+                published_value: null,
+                order: true,
             }
         },
         watch: {
@@ -276,6 +316,8 @@ import multidropdown from './inputs/multidropdown.vue';
                         type: this.type_value ? this.type_value.title : null,
                         category: this.category_value ? this.category_value.id : null,
                         subcategory: this.subcategory_value ? this.subcategory_value.id : null,
+                        published: this.published_value ? this.published_value.id : null,
+                        order: this.order ? 'desc' : 'asc',
                     }
                 }
                 )
@@ -308,6 +350,14 @@ import multidropdown from './inputs/multidropdown.vue';
                 this.type_value = value;
                 this.getData();
             },
+            update_published(value){
+                this.published_value = value;
+                this.getData();
+            },
+            toggleOrder() {
+                this.order = !this.order;
+                this.getData();
+            }
         },
         mounted() {
             this.getData();

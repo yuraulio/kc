@@ -270,6 +270,10 @@
             if (urlParams.get("filter")) {
                 this.filter = urlParams.get("filter");
             }
+            if (urlParams.get("id")) {
+                this.id = Number(urlParams.get("id"));
+                this.updatemode("edit");
+            }
         }
     }
 </script>

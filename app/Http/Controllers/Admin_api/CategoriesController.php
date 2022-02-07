@@ -27,7 +27,7 @@ class CategoriesController extends Controller
 
         try {
             $categories = Category::lookForOriginal($request->filter)->where("parent_id", null)
-            ->orderBy('created_at', 'desc')->with(["pages", "subcategories", "user"])->paginate(100);
+            ->orderBy('created_at', 'desc')->with(["pages", "subcategories", "user"])->paginate(10);
             return CategoryResource::collection($categories);
         } catch (Exception $e) {
             Log::error("Failed to get categories. " . $e->getMessage());
