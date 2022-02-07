@@ -1,3 +1,9 @@
+<style scoped>
+.img-align {
+    align-items: center;
+}
+</style>
+
 <template>
     <div class="col-12">
         <div class="card project-box ribbon-box">
@@ -15,8 +21,9 @@
                 </div> --> <!-- end dropdown -->
                 <!-- Title-->
                 <div class="row">
-                    <div class="col-1">
-                        <img width="100%" src="/admin_assets/images/pg-image.png">
+                    <div class="col-1 d-flex img-align">
+                        <img v-if="getMetaImage()" class="" width="100%" :src="getMetaImage()">
+                        <img v-else width="100%" src="/admin_assets/images/pg-image.png">
                     </div>
                     <div class="col-11">
                         <h4 class="mt-0">
@@ -77,7 +84,7 @@
         },
         data() {
             return {
-                loading: false
+                loading: false,
             }
         },
         methods: {
@@ -106,10 +113,28 @@
                     console.log(error)
                     this.loading = false;
                 });
-            }
+            },
+            getMetaImage() {
+                var image = null;
+                var content = JSON.parse(this.page.content);
+                content.forEach(function(row, index) {
+                    row.columns.forEach(function(column, index2) {
+                        if (column.component == "meta") {
+                            var index3 = column.template.inputs.findIndex(function(input) {
+                                return input.key == "meta_image";
+                            });
+
+                            if (column.template.inputs[index3]) {
+                                image = column.template.inputs[index3].value;
+                            }
+                        }
+                    });
+                });
+
+                return image;
+            },
         },
         mounted() {
-
         }
     }
 </script>
