@@ -242,6 +242,11 @@ import Tc from './tc.vue';
                             this.rows_value = JSON.parse(data.rows);
                         }
                         this.category_value = data.category_id;
+
+                        data.subcategories.forEach(function(category){
+                            category.edit = false;
+                        });
+
                         this.subcategories_value = data.subcategories;
                     }
                 })

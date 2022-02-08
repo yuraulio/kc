@@ -154,9 +154,13 @@ class CategoriesController extends Controller
     public function syncSubcategories($category, $subcategories)
     {
         $currentSubcategories = $category->subcategories()->get();
-        foreach ($currentSubcategories ?? [] as $value) {
-            if (!in_array($value->id, collect($subcategories)->pluck('id')->toArray())) {
-                $value->delete();
+        foreach ($currentSubcategories ?? [] as $currentSubcategory) {
+            if (!in_array($currentSubcategory->id, collect($subcategories)->pluck('id')->toArray())) {
+                $currentSubcategory->delete();
+            } else {
+                $key = array_search($currentSubcategory->id, array_column($subcategories, 'id'));
+                $currentSubcategory->title = $subcategories[$key]['title'] ?? $currentSubcategory->title;
+                $currentSubcategory->save();
             }
         }
 

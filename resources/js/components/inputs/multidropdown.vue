@@ -19,7 +19,25 @@
         track-by="id"
         :options="list"
         @tag="addedTag"
-    ></multiselect>
+    >
+        <template v-if="route == 'subcategories'" slot="tag" slot-scope="props">
+           
+                <div v-if="props.option.edit == true" class="d-inline-block">
+                    <span class="multiselect__tag">
+                        <input class="edit-input" v-model="props.option.title">
+                        <i @click="props.option.edit = false" aria-hidden="true" tabindex="1" class="multiselect__tag-icon dripicons-checkmark confirm-icon"></i>
+                    </span>
+                </div>
+                <div v-else class="d-inline-block">
+                    <span class="multiselect__tag multiselect__tag-padding">
+                        <span>{{ props.option.title }}</span> 
+                        <i @click="props.option.edit = true" aria-hidden="true" tabindex="1" class="multiselect__tag-icon dripicons-return edit-icon"></i>
+                        <i @click="removeTag(props.option.title)" aria-hidden="true" tabindex="1" class="multiselect__tag-icon"></i>
+                    </span>
+                </div>
+          
+        </template>
+    </multiselect>
 </div>
 
 </template>
@@ -52,7 +70,7 @@
             return {
                 value: [],
                 list: [],
-
+                editTag: false,
             }
         },
         watch: {
@@ -69,7 +87,8 @@
                 arr.push({
                     title: tag,
                     id: tag,
-                    new: true
+                    new: true,
+                    edit: false,
                 });
                 this.$emit('updatevalue', arr)
             },
@@ -89,6 +108,12 @@
                 .catch((error) => {
                     console.log(error)
                 });
+            },
+            removeTag(title){
+                var index = this.value.findIndex(function(tag) {
+                    return tag.title == title;
+                });
+                this.value.splice(index, 1);
             }
         },
         mounted() {
@@ -137,5 +162,34 @@
 }
 .multiselect__tag-icon::after {
     color: white !important;
+}
+
+.edit-icon::after {
+    content: "";
+}
+.edit-icon::before {
+    margin-top: 2px;
+}
+.edit-icon {
+    right: 20px;
+    top: 1px;
+}
+.confirm-icon::after {
+    content: "";
+}
+.confirm-icon::before {
+    margin-top: 3px;
+}
+.confirm-icon {
+    right: 0px;
+    top: 1px;
+}
+
+
+.multiselect__tag-padding {
+    padding-right: 50px;
+}
+.edit-input {
+    height: 15px;
 }
 </style>
