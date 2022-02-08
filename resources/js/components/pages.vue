@@ -20,14 +20,16 @@
                             </div>
 
 
-                            <div class="col-md-9 d-flex justify-content-between">
-                                    <button @click="toggleOrder()" class="btn btn-soft-secondary waves-effect waves-light text-start">
-                                        Created by order
-                                        <i v-if="order" class="mdi mdi-chevron-down ms-1"></i>
-                                        <i v-else class="mdi mdi-chevron-up ms-1"></i>
-                                    </button>
+                            <div class="col-md-9 text-end">
+                                <!--
+                                <button @click="toggleOrder()" class="btn btn-soft-secondary waves-effect waves-light text-start">
+                                    Created by order
+                                    <i v-if="order" class="mdi mdi-chevron-down ms-1"></i>
+                                    <i v-else class="mdi mdi-chevron-up ms-1"></i>
+                                </button>
+                                -->
 
-                                    <button @click="mode='new'" type="button" class="btn btn-soft-info waves-effect waves-light ms-2"><i class="mdi mdi-plus-circle me-1"></i> Add New</button>
+                                <button @click="mode='new'" type="button" class="btn btn-soft-info waves-effect waves-light ms-2"><i class="mdi mdi-plus-circle me-1"></i> Add New</button>
                             </div>
                             
                     </div>

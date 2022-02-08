@@ -178,7 +178,7 @@
     content: "";
 }
 .confirm-icon::before {
-    margin-top: 3px;
+    margin-top: 10px;
 }
 .confirm-icon {
     right: 0px;
@@ -190,6 +190,6 @@
     padding-right: 50px;
 }
 .edit-input {
-    height: 15px;
+    height: 30px;
 }
 </style>

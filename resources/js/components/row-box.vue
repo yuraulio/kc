@@ -40,10 +40,10 @@
                     <div class="d-flex align-items-start">
                         <div class="w-100">
                             <p v-if="user" class="mb-1">
-                                Created by: <a :href="'/users/' + user.id">{{user.firstname + " " + user.lastname}}</a>
+                                Created by: {{user.firstname + " " + user.lastname}}
                             </p>
                             <p class="mb-1">
-                                <a :href="'/pages?filter=' + title">Pages: {{pages}}</a>
+                                Pages: {{pages}}
                             </p>
                             <div v-if="category" class="badge font-14 bg-soft-info text-info p-1">{{category}}</div>
                         </div>
