@@ -65,6 +65,8 @@ class CategoriesController extends Controller
 
             $category->load("subcategories");
 
+            Category::all()->searchable();
+
             return new CategoryResource($category);
         } catch (Exception $e) {
             Log::error("Failed to add new category. " . $e->getMessage());
@@ -108,6 +110,8 @@ class CategoriesController extends Controller
 
             $this->syncSubcategories($category, $request->subcategories);
 
+            Category::all()->searchable();
+
             return new CategoryResource($category->load(["pages", "subcategories", "user"]));
         } catch (Exception $e) {
             Log::error("Failed to edit category. " . $e->getMessage());
@@ -130,6 +134,8 @@ class CategoriesController extends Controller
             $this->syncSubcategories($category, []);
 
             $category->delete();
+
+            Category::all()->searchable();
 
             return response()->json(['message' => 'success'], 200);
         } catch (Exception $e) {

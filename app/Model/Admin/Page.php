@@ -36,12 +36,12 @@ class Page extends Model
 
     public function categories()
     {
-        return $this->belongsToMany(Category::class, 'cms_link_pages_categories', 'page_id', 'category_id');
+        return $this->belongsToMany(Category::class, 'cms_link_pages_categories', 'page_id', 'category_id')->whereNull("parent_id");
     }
 
     public function subcategories()
     {
-        return $this->belongsToMany(Category::class, 'cms_link_pages_subcategories', 'page_id', 'category_id');
+        return $this->belongsToMany(Category::class, 'cms_link_pages_categories', 'page_id', 'category_id')->whereNotNull("parent_id");
     }
 
     public function template()

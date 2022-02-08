@@ -8,7 +8,7 @@ use App\Http\Controllers\Admin_api\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
-    Route::middleware('auth:api')->group(function () {
+    Route::middleware('auth:admin_api')->group(function () {
         Route::prefix('get_widget_data')->group(function () {
             Route::get('users', [DashboardController::class, 'get_widget_data_users']);
             Route::get('admins', [DashboardController::class, 'get_widget_data_admins']);

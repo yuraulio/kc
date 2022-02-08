@@ -36,7 +36,7 @@ class Category extends Model
 
     public function subPages()
     {
-        return $this->belongsToMany(Page::class, 'cms_link_pages_subcategories', 'category_id', 'page_id');
+        return $this->belongsToMany(Page::class, 'cms_link_pages_categories', 'category_id', 'page_id');
     }
 
     public function subcategories()

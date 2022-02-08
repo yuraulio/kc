@@ -91,10 +91,10 @@ class MainController extends Controller
         }
 
         $blog = Page::whereType("Blog")->get();
-        $categories = Category::whereHas("pages", function ($q) {
+        $categories = Category::whereNull("parent_id")->whereHas("pages", function ($q) {
             $q->whereType("Blog");
         })->get();
-
+        // dd($categories);
         return view('new_web.blog.index', [
             'blog' => $blog,
             'categories' => $categories,

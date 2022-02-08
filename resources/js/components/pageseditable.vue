@@ -300,7 +300,7 @@ export default {
                     {
                         title: this.title_value,
                         rows: JSON.stringify(this.rows_value),
-                        category_id: this.category_value,
+                        categories: this.category_value,
                         subcategories: this.subcategory_value,
                         content: this.template_value ? JSON.stringify(this.$refs.tc.data) : '',
                         template_id: this.template_value ? this.template_value.id : null,

@@ -85,8 +85,10 @@ class PagesController extends Controller
             $page->type_slug = Str::slug($request->type, '-');
             $page->save();
 
-            $page->categories()->sync(collect($request->category_id ?? [])->pluck('id')->toArray());
-            $page->subcategories()->sync(collect($request->subcategories ?? [])->pluck('id')->toArray());
+            $categories = $request->categories ?? [];
+            $subcategories = $request->subcategories ?? [];
+
+            $page->categories()->sync(collect(array_merge($categories, $subcategories) ?? [])->pluck('id')->toArray());
 
             $page->load('template', 'categories.subcategories');
 
@@ -141,8 +143,10 @@ class PagesController extends Controller
             $page->slug = $request->slug;
             $page->save();
 
-            $page->categories()->sync(collect($request->category_id ?? [])->pluck('id')->toArray());
-            $page->subcategories()->sync(collect($request->subcategories ?? [])->pluck('id')->toArray());
+            $categories = $request->categories ?? [];
+            $subcategories = $request->subcategories ?? [];
+
+            $page->categories()->sync(collect(array_merge($categories, $subcategories) ?? [])->pluck('id')->toArray());
 
             $page->load('template', 'categories');
 

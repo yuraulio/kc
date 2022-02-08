@@ -7,8 +7,6 @@
         <div class="bottom">
             <div class="duration">
                 @forelse($post->categories as $category)
-                @php
-                @endphp
                     @if(!$category->parent_id)
                         <a href="{{"/v2/blog?c=$category->id"}}">{{ $category->title }}</a>
                     @endif
