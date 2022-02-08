@@ -1,38 +1,34 @@
 <template>
-  <div>
-
-
-
-    <div class="content">
-      <section class="cropper-area">
-        <div v-if="imgSrc" class="img-cropper">
-          <vue-cropper
-            ref="cropper"
-            :aspect-ratio="16 / 9"
-            :src="imgSrc"
-            preview=".preview"
-          />
-        </div>
-        <label v-else :name="'image'" style="width: 100%">
-            <form method="post" class="dropzone dz-clickable" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
-                <div class="dz-message needsclick" style="margin: 1rem 0;">
-                    <i class="h1 text-muted dripicons-cloud-upload"></i>
-                    <div class="text-center">
-                        <input
-                            ref="input"
-                            type="file"
-                            name="image"
-                            accept="image/*"
-                            @change="setImage"
-                            />
-                        <span class="font-16">Drop files here or click to upload</span>
-                    </div>
-
-
-                </div>
-            </form>
-        </label>
-        <!-- <div v-else>
+  <div class="row">
+    <div class="col-lg-8">
+      <div v-show="imgSrc" class="img-cropper">
+        <vue-cropper ref="cropper" :src="imgSrc" preview=".preview" />
+      </div>
+      <label v-show="imgSrc == null" :name="'image'" style="width: 100%; min-height: 300px">
+        <form
+          method="post"
+          class="dropzone dz-clickable"
+          id="myAwesomeDropzone"
+          data-plugin="dropzone"
+          data-previews-container="#file-previews"
+          data-upload-preview-template="#uploadPreviewTemplate"
+        >
+          <div class="dz-message needsclick" style="margin: 0 auto; min-height: 300px">
+            <i class="h1 text-muted dripicons-cloud-upload"></i>
+            <div class="text-center">
+              <input
+                ref="input"
+                type="file"
+                name="image"
+                accept="image/*"
+                @change="setImage"
+              />
+              <span class="font-16">Drop files here or click to upload</span>
+            </div>
+          </div>
+        </form>
+      </label>
+      <!-- <div v-else>
             <div class="card">
                 <upload-image
                     :keyput="'mediaManagera'"
@@ -43,193 +39,337 @@
                 </upload-image>
             </div>
         </div> -->
-        <div class="actions">
-          <a
-            href="#"
-            role="button"
-            @click.prevent="zoom(0.2)"
-          >
-            Zoom In
-          </a>
-          <a
-            href="#"
-            role="button"
-            @click.prevent="zoom(-0.2)"
-          >
-            Zoom Out
-          </a>
-          <a
-            href="#"
-            role="button"
-            @click.prevent="move(-10, 0)"
-          >
-            Move Left
-          </a>
-          <a
-            href="#"
-            role="button"
-            @click.prevent="move(10, 0)"
-          >
-            Move Right
-          </a>
-          <a
-            href="#"
-            role="button"
-            @click.prevent="move(0, -10)"
-          >
-            Move Up
-          </a>
-          <a
-            href="#"
-            role="button"
-            @click.prevent="move(0, 10)"
-          >
-            Move Down
-          </a>
-          <a
-            href="#"
-            role="button"
-            @click.prevent="rotate(90)"
-          >
-            Rotate +90deg
-          </a>
-          <a
-            href="#"
-            role="button"
-            @click.prevent="rotate(-90)"
-          >
-            Rotate -90deg
-          </a>
-          <a
-            ref="flipX"
-            href="#"
-            role="button"
-            @click.prevent="flipX"
-          >
-            Flip X
-          </a>
-          <a
-            ref="flipY"
-            href="#"
-            role="button"
-            @click.prevent="flipY"
-          >
-            Flip Y
-          </a>
-          <a
-            href="#"
-            role="button"
-            @click.prevent="cropImage"
-          >
-            Crop
-          </a>
-          <a
-            href="#"
-            role="button"
-            @click.prevent="reset"
-          >
-            Reset
-          </a>
-          <a
-            href="#"
-            role="button"
-            @click.prevent="getData"
-          >
-            Get Data
-          </a>
-          <a
-            href="#"
-            role="button"
-            @click.prevent="setData"
-          >
-            Set Data
-          </a>
-          <a
-            href="#"
-            role="button"
-            @click.prevent="getCropBoxData"
-          >
-            Get CropBox Data
-          </a>
-          <a
-            href="#"
-            role="button"
-            @click.prevent="setCropBoxData"
-          >
-            Set CropBox Data
-          </a>
-          <a
-            href="#"
-            role="button"
-            @click.prevent="showFileChooser"
-          >
-            Upload Image
-          </a>
+      <div class="btn-group mb-2 mt-2">
+        <button
+          type="button"
+          class="btn btn-soft-primary"
+          @click.prevent="zoom(0.2)"
+        >
+          <i class="mdi mdi-magnify-plus-outline"></i>
+        </button>
+        <button
+          type="button"
+          class="btn btn-soft-primary"
+          @click.prevent="zoom(-0.2)"
+        >
+          <i class="mdi mdi-magnify-minus-outline"></i>
+        </button>
+      </div>
+      <div class="btn-group mb-2 mt-2">
+        <button
+          type="button"
+          class="btn btn-soft-primary"
+          @click.prevent="move(-10, 0)"
+        >
+          <i class="mdi mdi-arrow-left"></i>
+        </button>
+        <button
+          type="button"
+          class="btn btn-soft-primary"
+          @click.prevent="move(10, 0)"
+        >
+          <i class="mdi mdi-arrow-right"></i>
+        </button>
+        <button
+          type="button"
+          class="btn btn-soft-primary"
+          @click.prevent="move(0, 10)"
+        >
+          <i class="mdi mdi-arrow-up"></i>
+        </button>
+        <button
+          type="button"
+          class="btn btn-soft-primary"
+          @click.prevent="move(0, -10)"
+        >
+          <i class="mdi mdi-arrow-down"></i>
+        </button>
+      </div>
+
+      <div class="btn-group mb-2 mt-2">
+        <button
+          type="button"
+          class="btn btn-soft-primary"
+          @click.prevent="rotate(90)"
+        >
+          <i class="mdi mdi-rotate-right"></i>
+        </button>
+        <button
+          type="button"
+          class="btn btn-soft-primary"
+          @click.prevent="rotate(-90)"
+        >
+          <i class="mdi mdi-rotate-left"></i>
+        </button>
+        <button
+          type="button"
+          class="btn btn-soft-primary"
+          @click.prevent="flipX"
+        >
+          <i class="mdi mdi-flip-horizontal"></i>
+        </button>
+        <button
+          type="button"
+          class="btn btn-soft-primary"
+          @click.prevent="flipY"
+        >
+          <i class="mdi mdi-flip-vertical"></i>
+        </button>
+      </div>
+
+      <div class="btn-group mb-2 mt-2" style="float: right">
+        <button
+          type="button"
+          class="btn btn-soft-primary"
+          @click.prevent="reset"
+        >
+          Reset
+        </button>
+        <button
+          type="button"
+          class="btn btn-soft-primary"
+          @click.prevent="cropImage"
+        >
+          Crop
+        </button>
+        <button
+          type="button"
+          class="btn btn-soft-primary"
+          @click.prevent="imgSrc = null; showFileChooser"
+        >
+          Reupload
+        </button>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6">
+          <h4 class="header-title mt-lg-0 my-3">Image Data</h4>
+
+          <div class="row g-2">
+            <div class="col-md">
+              <div class="form-floating">
+                <input
+                  v-model="imgData.x"
+                  type="number"
+                  class="form-control"
+                  id="floatingInputGrid1"
+                  placeholder=""
+                  value=""
+                />
+                <label for="floatingInputGrid1">X offset</label>
+              </div>
+            </div>
+          </div>
+          <div class="row g-2">
+            <div class="col-md">
+              <div class="form-floating">
+                <input
+                  v-model="imgData.y"
+                  type="number"
+                  class="form-control"
+                  id="floatingInputGrid2"
+                  placeholder=""
+                  value=""
+                />
+                <label for="floatingInputGrid2">Y offset</label>
+              </div>
+            </div>
+          </div>
+          <div class="row g-2">
+            <div class="col-md">
+              <div class="form-floating">
+                <input
+                  v-model="imgData.width"
+                  type="number"
+                  class="form-control"
+                  id="floatingInputGrid3"
+                  placeholder=""
+                  value=""
+                />
+                <label for="floatingInputGrid3">Width</label>
+              </div>
+            </div>
+          </div>
+          <div class="row g-2">
+            <div class="col-md">
+              <div class="form-floating">
+                <input
+                  v-model="imgData.height"
+                  type="number"
+                  class="form-control"
+                  id="floatingInputGrid4"
+                  placeholder=""
+                  value=""
+                />
+                <label for="floatingInputGrid4">Height</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="btn-group mb-2 mt-2">
+            <button
+              type="button"
+              class="btn btn-soft-primary"
+              @click.prevent="getData"
+            >
+              Get Data
+            </button>
+            <button
+              type="button"
+              class="btn btn-soft-primary"
+              @click.prevent="setData"
+            >
+              Set Data
+            </button>
+          </div>
         </div>
 
-        <textarea v-model="data" />
-      </section>
-      <section class="preview-area">
+        <div class="col-lg-6">
+          <h4 class="header-title mt-lg-0 my-3">CropBox Data</h4>
+
+          <div class="row g-2">
+            <div class="col-md">
+              <div class="form-floating">
+                <input
+                  v-model="cropBoxData.left"
+                  type="number"
+                  class="form-control"
+                  id="floatingInputGrid11"
+                  placeholder=""
+                  value=""
+                />
+                <label for="floatingInputGrid11">Left</label>
+              </div>
+            </div>
+          </div>
+          <div class="row g-2">
+            <div class="col-md">
+              <div class="form-floating">
+                <input
+                  v-model="cropBoxData.top"
+                  type="number"
+                  class="form-control"
+                  id="floatingInputGrid21"
+                  placeholder=""
+                  value=""
+                />
+                <label for="floatingInputGrid21">Top</label>
+              </div>
+            </div>
+          </div>
+          <div class="row g-2">
+            <div class="col-md">
+              <div class="form-floating">
+                <input
+                  v-model="cropBoxData.width"
+                  type="number"
+                  class="form-control"
+                  id="floatingInputGrid31"
+                  placeholder=""
+                  value=""
+                />
+                <label for="floatingInputGrid31">Width</label>
+              </div>
+            </div>
+          </div>
+          <div class="row g-2">
+            <div class="col-md">
+              <div class="form-floating">
+                <input
+                  v-model="cropBoxData.height"
+                  type="number"
+                  class="form-control"
+                  id="floatingInputGrid41"
+                  placeholder=""
+                  value=""
+                />
+                <label for="floatingInputGrid41">Height</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="btn-group mb-2 mt-2">
+            <button
+              type="button"
+              class="btn btn-soft-primary"
+              @click.prevent="getCropBoxData"
+            >
+              Get Data
+            </button>
+            <button
+              type="button"
+              class="btn btn-soft-primary"
+              @click.prevent="setCropBoxData"
+            >
+              Set Data
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-lg-4">
+      <div class="col-lg-12">
         <p>Preview</p>
         <div class="preview" />
         <p>Cropped Image</p>
         <div class="cropped-image">
-          <img
-            v-if="cropImg"
-            :src="cropImg"
-            alt="Cropped Image"
-          />
+          <img v-if="cropImg" :src="cropImg" alt="Cropped Image" />
           <div v-else class="crop-placeholder" />
         </div>
 
-        <div class="mb-3 ">
-            <label class="form-label">Name</label>
-            <input v-model="imgname" type="text" class="form-control">
+        <div class="mb-3">
+          <label class="form-label">Name</label>
+          <input v-model="imgname" type="text" class="form-control" />
         </div>
 
-        <button @click="upload" class="btn btn-primary btn-block mt-1">Upload</button>
-      </section>
+        <button @click="upload" class="btn btn-primary btn-block mt-1">
+          Upload
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import VueCropper from 'vue-cropperjs';
-import 'cropperjs/dist/cropper.css';
-import uploadImage from '../inputs/upload-image.vue';
-import Button from '../../../assets/vendor/MediaManager/js/components/globalSearch/button.vue';
+import VueCropper from "vue-cropperjs";
+import "cropperjs/dist/cropper.css";
+import uploadImage from "../inputs/upload-image.vue";
+import Button from "../../../assets/vendor/MediaManager/js/components/globalSearch/button.vue";
 
 export default {
-    props: {
-        prevalue: {}
-    },
+  props: {
+    prevalue: {},
+  },
   components: {
     VueCropper,
     uploadImage,
-    Button
+    Button,
   },
   data() {
     return {
       imgSrc: null,
-      cropImg: '',
+      cropImg: "",
       data: null,
-      imgname: ''
+      imgname: "",
+      cropBoxData: {},
+      imgData: {},
     };
   },
   mounted() {
-      if (this.prevalue) {
-          this.imgSrc = this.prevalue;
-      }
+    if (this.prevalue) {
+      this.imgSrc = this.prevalue;
+    }
   },
   methods: {
-      upload() {
-          this.$refs.cropper.getCroppedCanvas().toBlob((blob) => {
-            this.$emit('upload', blob);
-          });
-      },
-      imageAdded($event) {
-          this.imgSrc = $event.url
-      },
+    upload() {
+      this.$refs.cropper.getCroppedCanvas().toBlob((blob) => {
+        this.$emit("upload", blob);
+      });
+    },
+    imageAdded($event) {
+      this.imgSrc = $event.url;
+    },
     cropImage() {
       // get image data for post processing, e.g. upload or setting image src
       this.cropImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
@@ -256,23 +396,29 @@ export default {
     },
     flipX() {
       const dom = this.$refs.flipX;
-      let scale = dom.getAttribute('data-scale');
+      let scale = dom.getAttribute("data-scale");
       scale = scale ? -scale : -1;
       this.$refs.cropper.scaleX(scale);
-      dom.setAttribute('data-scale', scale);
+      dom.setAttribute("data-scale", scale);
     },
     flipY() {
       const dom = this.$refs.flipY;
-      let scale = dom.getAttribute('data-scale');
+      let scale = dom.getAttribute("data-scale");
       scale = scale ? -scale : -1;
       this.$refs.cropper.scaleY(scale);
-      dom.setAttribute('data-scale', scale);
+      dom.setAttribute("data-scale", scale);
     },
     getCropBoxData() {
-      this.data = JSON.stringify(this.$refs.cropper.getCropBoxData(), null, 4);
+      //this.data = JSON.stringify(this.$refs.cropper.getCropBoxData());
+      this.cropBoxData = JSON.parse(
+        JSON.stringify(this.$refs.cropper.getCropBoxData())
+      );
     },
     getData() {
       this.data = JSON.stringify(this.$refs.cropper.getData(), null, 4);
+      this.imgData = JSON.parse(
+        JSON.stringify(this.$refs.cropper.getData(), null, 4)
+      );
     },
     move(offsetX, offsetY) {
       this.$refs.cropper.move(offsetX, offsetY);
@@ -284,20 +430,27 @@ export default {
       this.$refs.cropper.rotate(deg);
     },
     setCropBoxData() {
-      if (!this.data) return;
-      this.$refs.cropper.setCropBoxData(JSON.parse(this.data));
+      for (const [key, value] of Object.entries(this.cropBoxData)) {
+        this.$set(this.cropBoxData, key, parseFloat(value));
+      }
+      if (!this.cropBoxData) return;
+      this.$refs.cropper.setCropBoxData(this.cropBoxData);
     },
     setData() {
-      if (!this.data) return;
-      this.$refs.cropper.setData(JSON.parse(this.data));
+      for (const [key, value] of Object.entries(this.imgData)) {
+        this.$set(this.imgData, key, parseFloat(value));
+      }
+      if (!this.imgData) return;
+      this.$refs.cropper.setData(this.imgData);
     },
     setImage(e) {
+      console.log("set Image", e);
       const file = e.target.files[0];
-      if (file.type.indexOf('image/') === -1) {
-        alert('Please select an image file');
+      if (file.type.indexOf("image/") === -1) {
+        alert("Please select an image file");
         return;
       }
-      if (typeof FileReader === 'function') {
+      if (typeof FileReader === "function") {
         const reader = new FileReader();
         reader.onload = (event) => {
           this.imgSrc = event.target.result;
@@ -306,7 +459,7 @@ export default {
         };
         reader.readAsDataURL(file);
       } else {
-        alert('Sorry, FileReader API not supported');
+        alert("Sorry, FileReader API not supported");
       }
     },
     showFileChooser() {
@@ -320,7 +473,17 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style scoped>
+.dz-message {
+        margin: 0px auto;
+    display: flex;
+    min-height: 300px;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+
+}
 input[type="file"] {
   display: none;
 }

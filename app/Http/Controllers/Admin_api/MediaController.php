@@ -164,4 +164,16 @@ class MediaController extends Controller
 
         return $string;
     }
+
+    public function deleteFile(Request $request, $id)
+    {
+        $file = MediaFile::findOrFail($id);
+
+        if (Storage::disk('public')->exists($file->path)) {
+            Storage::disk('public')->delete($file->path);
+        }
+        $file->delete();
+
+        return response()->json('success', 200);
+    }
 }

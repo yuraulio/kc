@@ -46,5 +46,6 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
         ]);
         Route::post('media_manager/upload_image', [MediaController::class, 'uploadImage']);
         Route::get('media_manager/files', [MediaController::class, 'files']);
+        Route::delete('media_manager/file/{id}', [MediaController::class, 'deleteFile']);
     });
 });

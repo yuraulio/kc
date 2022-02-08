@@ -9,11 +9,11 @@
 </head>
 
 
-<body class="loading" data-layout='{"mode": "{{$theme ?? "light" }}", "width": "fluid", "menuPosition": "fixed", "sidebar": { "color": "{{$theme ?? "light" }}", "size": "default", "showuser": false}, "topbar": {"color": "dark"}, "showRightSidebarOnPageLoad": true}' @yield('body-extra')>
+<body class="loading right-bar-enabled" data-layout='{"mode": "{{$theme ?? "light" }}", "width": "fluid", "menuPosition": "fixed", "sidebar": { "color": "{{$theme ?? "light" }}", "size": "default", "showuser": false}, "topbar": {"color": "dark"}, "showRightSidebarOnPageLoad": true}' @yield('body-extra')>
     <div id="app">
         <!-- Begin page -->
         <div id="wrapper">
-        
+
                 @include('new_admin.layouts.shared/topbar')
 
                 @include('new_admin.layouts.shared/left-sidebar')
@@ -37,7 +37,7 @@
                 <!-- ============================================================== -->
             </div>
 
-    
+
         <!-- END wrapper -->
 
     </div>
