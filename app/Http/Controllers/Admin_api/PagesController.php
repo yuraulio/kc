@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Ramsey\Uuid\Uuid;
 
 class PagesController extends Controller
 {
@@ -83,6 +84,7 @@ class PagesController extends Controller
             $page->published_to = $request->published_to;
             $page->type = $request->type;
             $page->type_slug = Str::slug($request->type, '-');
+            $page->uuid = Uuid::uuid4();
             $page->save();
 
             $categories = $request->categories ?? [];
@@ -141,6 +143,7 @@ class PagesController extends Controller
             $page->type = $request->type;
             $page->type_slug = Str::slug($request->type, '-');
             $page->slug = $request->slug;
+            $page->uuid = $page->uuid ?? Uuid::uuid4();
             $page->save();
 
             $categories = $request->categories ?? [];

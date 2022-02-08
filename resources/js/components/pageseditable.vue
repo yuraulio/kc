@@ -129,7 +129,7 @@
 
                             <div class="row mt-3">
                                 <div class="col-12 text-center mb-3 d-grid">
-                                    <a :href="'/new_page/' + id" target="_blank" class="btn btn-block btn-soft-warning waves-effect waves-light m-1">
+                                    <a :href="'/new_page/' + uuid" target="_blank" class="btn btn-block btn-soft-warning waves-effect waves-light m-1">
                                         Live preview
                                     </a>
                                     <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions" :disabled="!template_value" @click="rearange()" class="btn btn-block btn-soft-info waves-effect waves-light m-1">Pseudo preview</button>
@@ -177,6 +177,7 @@ export default {
             route: String,
             type: String,
             id: Number,
+            uuid: String,
             data: {},
             additionalTemplates: {}
         },

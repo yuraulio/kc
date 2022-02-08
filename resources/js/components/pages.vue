@@ -121,6 +121,7 @@
                 :description="page.description"
                 @updatemode="updatemode"
                 @updateid="updateid"
+                @updateuuid="updateuuid"
                 @updatetitle="updatetitle"
                 ></page>
 
@@ -165,6 +166,7 @@
                 page-title="Edit Page"
                 :data="lodash.find(pages.data, { 'id': id })"
                 :id="id"
+                :uuid="uuid"
             ></pageseditable>
         </div>
 
@@ -200,6 +202,7 @@ import multidropdown from './inputs/multidropdown.vue';
                 mode: "list",
                 pages: [],
                 id: null,
+                uuid: null,
                 title: null,
                 filter: "",
                 isLoading: false,
@@ -302,6 +305,9 @@ import multidropdown from './inputs/multidropdown.vue';
             },
             updateid(variable){
                 this.id = variable;
+            },
+            updateuuid(variable){
+                this.uuid = variable;
             },
             updatetitle(variable){
                 this.title = variable;

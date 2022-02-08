@@ -101,6 +101,7 @@
         methods: {
             edit(){
                 this.$emit('updateid', this.page.id);
+                this.$emit('updateuuid', this.page.uuid);
                 this.$emit('updatetitle', this.page.title);
                 this.$emit('updatemode', 'edit', this.page.id);
             },

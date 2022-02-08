@@ -67,15 +67,15 @@ class DashboardController extends Controller
      */
     public function media()
     {
-/*         $path = public_path('/uploads');
-        $directories = \Storage::disk('public')->directories('/');
-        //dd($directories);
-    $files = \File::files($path. '/pages_media');
-foreach ($files as $key => $file) {
-    $path = explode('uploads', $file->getPath())[1];
-    dd(basename($file),$file->getExtension(), $path, $file->getRealPath(), $file->getSize(), filemtime($file), $file);
-}
-        dd($files); */
+        /*         $path = public_path('/uploads');
+                $directories = \Storage::disk('public')->directories('/');
+                //dd($directories);
+            $files = \File::files($path. '/pages_media');
+        foreach ($files as $key => $file) {
+            $path = explode('uploads', $file->getPath())[1];
+            dd(basename($file),$file->getExtension(), $path, $file->getRealPath(), $file->getSize(), filemtime($file), $file);
+        }
+                dd($files); */
 
         return view('new_admin.pages.media');
     }
@@ -85,9 +85,9 @@ foreach ($files as $key => $file) {
      *
      * @return \Illuminate\View\View
      */
-    public function page($id)
+    public function page($uuid)
     {
-        $page = Page::whereId($id)->with('template')->first();
+        $page = Page::whereUuid($uuid)->with('template')->first();
         return view('new_web.page', [
             'content' => json_decode($page->content),
             'page_id' => $page->id,
