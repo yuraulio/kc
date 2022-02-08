@@ -33,7 +33,7 @@ class PagesController extends Controller
         $this->authorize('viewAny', Page::class, Auth::user());
 
         try {
-            $pages = Page::lookForOriginal($request->filter)->with('template', 'categories.subcategories');
+            $pages = Page::withoutGlobalScope('published')->lookForOriginal($request->filter)->with('template', 'categories.subcategories');
             if ($request->order) {
                 $pages->orderBy("created_at", $request->order);
             } else {
@@ -109,7 +109,7 @@ class PagesController extends Controller
     public function show(int $id)
     {
         try {
-            $page = Page::whereId($id)->with('template')->first();
+            $page = Page::withoutGlobalScope('published')->whereId($id)->with('template')->first();
 
             $this->authorize('view', $page, Auth::user());
 
@@ -128,7 +128,7 @@ class PagesController extends Controller
     public function update(UpdateAdminPageRequest $request, int $id)
     {
         try {
-            $page = Page::find($id);
+            $page = Page::withoutGlobalScope('published')->find($id);
 
             $this->authorize('update', $page, Auth::user());
 
@@ -176,7 +176,7 @@ class PagesController extends Controller
     public function destroy(int $id): JsonResponse
     {
         try {
-            $page = Page::find($id);
+            $page = Page::withoutGlobalScope('published')->find($id);
 
             $this->authorize('delete', $page, Auth::user());
 
@@ -197,7 +197,7 @@ class PagesController extends Controller
     public function updatePublished(int $id): JsonResponse
     {
         try {
-            $page = Page::find($id);
+            $page = Page::withoutGlobalScope('published')->find($id);
 
             $this->authorize('publish', $page, Auth::user());
 

@@ -66,9 +66,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        if (env('IS_DEMO')){
+        if (env('IS_DEMO')) {
             $schedule->command('db:seed')->daily();
         }
+
+        $schedule->command('publishCheck')->everyHour();
     }
 
     /**

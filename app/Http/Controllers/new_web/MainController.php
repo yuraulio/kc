@@ -43,24 +43,13 @@ class MainController extends Controller
         if (!$page) {
             $redirect = Redirect::where("old_slug", $slug)->first();
             if ($redirect) {
-                $page = Page::where("id", $redirect->page_id)->wherePublished(true)->first();
+                $page = Page::where("id", $redirect->page_id)->first();
             }
         }
 
         if (!$page) {
             abort(404);
         } else {
-            if ($page->published_from) {
-                if (Carbon::parse($page->published_from)->startOfDay() > Carbon::now()->startOfDay()) {
-                    abort(404);
-                }
-            }
-            if ($page->published_to) {
-                if (Carbon::parse($page->published_to)->startOfDay() < Carbon::now()->startOfDay()) {
-                    abort(404);
-                }
-            }
-            
             return view('new_web.page', [
                 'content' => json_decode($page->content),
                 'page_id' => $page->id,

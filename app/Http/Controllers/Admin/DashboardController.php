@@ -87,7 +87,7 @@ class DashboardController extends Controller
      */
     public function page($uuid)
     {
-        $page = Page::whereUuid($uuid)->with('template')->first();
+        $page = Page::withoutGlobalScope('published')->whereUuid($uuid)->with('template')->first();
         return view('new_web.page', [
             'content' => json_decode($page->content),
             'page_id' => $page->id,

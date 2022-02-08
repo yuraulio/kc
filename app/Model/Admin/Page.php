@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Traits\SearchFilter;
 use App\Traits\SlugTrait;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Database\Eloquent\Builder;
 
 class Page extends Model
 {
@@ -18,6 +19,18 @@ class Page extends Model
     protected $table = 'cms_pages';
     public $asYouType = true;
     protected $with = ['categories'];
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::addGlobalScope('published', function (Builder $builder) {
+            $builder->wherePublished(true);
+        });
+    }
 
     /**
      * Get the indexable data array for the model.
