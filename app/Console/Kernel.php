@@ -45,7 +45,8 @@ class Kernel extends ConsoleKernel
        Commands\InitStatisticsTabs::class,
        Commands\deteleAbandoned::class,
        Commands\AttachInvociceTranasactionToUser::class,
-       Commands\AttachPaymentMethod::class
+       Commands\AttachPaymentMethod::class,
+       Commands\UpdateCavenTransactionDetails::class
 
     ];
 

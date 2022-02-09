@@ -570,7 +570,7 @@
 
                                                                 @if($billing)
 
-                                                                    @if($billing['billing'] == 1)
+                                                                    @if(!isset($billing['billing']) || $billing['billing'] == 1)
                                                                     <h6 class="heading-small text-muted mb-4">{{ __('Receipt Details') }}</h6>
                                                                     @if(isset($billing['billname']))<p><label class="form-control-label" for="input-method">{{ __('Name') }}: </label> {{$billing['billname']}} </p>@endif
                                                                     @if(isset($billing['billsurname']))<p><label class="form-control-label" for="input-method">{{ __('Surname') }}: </label> {{$billing['billsurname']}} </p>@endif

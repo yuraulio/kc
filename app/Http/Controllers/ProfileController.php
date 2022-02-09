@@ -59,6 +59,7 @@ class ProfileController extends Controller
         if($user['receipt_details'] != null){
             $data['receipt'] = json_decode($user['receipt_details'], true);
 
+            $receipt['billing'] = 1;
             $receipt['billname'] = $request->billname;
             $receipt['billsurname'] = $request->billsurname;
             $receipt['billaddress'] = $request->billaddress;
@@ -68,8 +69,11 @@ class ProfileController extends Controller
             $receipt['billstate'] = $request->billcity;
             $receipt['billcountry'] = $request->billcountry;
             $receipt['billemail'] = $request->billemail;
+            $receipt['billafm'] = $request->billafm;
 
         }else{
+            
+            $receipt['billing'] = 1;
             $receipt['billname'] = $request->billname;
             $receipt['billsurname'] = $request->billsurname;
             $receipt['billaddress'] = $request->billaddress;
@@ -79,6 +83,7 @@ class ProfileController extends Controller
             $receipt['billstate'] = $request->billcity;
             $receipt['billcountry'] = $request->billcountry;
             $receipt['billemail'] = $request->billemail;
+            $receipt['billafm'] = $request->billafm;
         }
 
         if($user['invoice_details'] != null){

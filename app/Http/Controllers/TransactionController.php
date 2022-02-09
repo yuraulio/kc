@@ -10,6 +10,8 @@ use Auth;
 use Excel;
 use App\Model\PaymentMethod;
 use App\Exports\TransactionExport;
+use ZipArchive;
+use File;
 
 class TransactionController extends Controller
 {
@@ -301,5 +303,61 @@ class TransactionController extends Controller
         Excel::store(new TransactionExport($request), 'TransactionsExport.xlsx', 'export');
         return Excel::download(new TransactionExport($request), 'TransactionsExport.xlsx');
     }
+
+    public function exportInvoices(Request $request){
+
+
+      
+        $transactions = Transaction::whereIn('id', $request->transactions)->
+                                with('user.events','user.ticket','subscription','event','event.delivery','event.category')->get();
+        $userRole = Auth::user()->role->pluck('id')->toArray();
+
+        $fileName = 'invoices.zip';
+        File::deleteDirectory(public_path('invoices_folder'));
+        File::makeDirectory(public_path('invoices_folder'));
+
+        if(File::exists(public_path($fileName))){
+            unlink(public_path($fileName));
+        }
+
+        $invoicesNumber = [];
+
+        $zip = new ZipArchive();
+        if ($zip->open(public_path($fileName), ZipArchive::CREATE) === TRUE) {
+            
+            foreach($transactions as $transaction){
+               
+
+                if(in_array(9,$userRole)){
+                    continue;
+                }
+
+
+
+                foreach($transaction->invoice as $invoice){
+                    
+                    $invoicesNumber = $invoice->getZipOfInvoices($zip,$planDecription = false,$invoicesNumber);
+
+                   // $zip->addFile(public_path('invoices_folder/'.$invoice->getInvoice()), $invoice->getInvoice());
+
+                }
+                    
+                
+
+
+            }
+
+        }
+
+        $zip->close();
+        File::deleteDirectory(public_path('invoices_folder'));
+       
+        return response()->json(['zip' => url('/') .'/invoices.zip']);
+
+        //return response()->download(public_path($fileName));
+       
+    }
+
+   
 
 }

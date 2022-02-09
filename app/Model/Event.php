@@ -355,11 +355,22 @@ class Event extends Model
         $data['topics'] = $topics;
         $data['instructors'] = $instructors;
         foreach($data['topics'] as $key => $topics){
-           
-            if(!isset($topics['lessons'][0]['topic_id'])){
+
+            //if(!isset($topics['lessons'][0]['topic_id'])){
+            if( !isset( $topics['lessons'] )){
                 continue;
             }
-            $topic_id = $topics['lessons'][0]['topic_id'];
+
+            if(!$topics = reset($topics['lessons'])){
+                continue;
+            }
+
+            if(!isset($topics['topic_id'])){
+                continue;
+            }
+
+            //$topic_id = $topics['lessons'][0]['topic_id'];
+            $topic_id = $topics['topic_id'];
             //if(isset($topics['lessons'][0])){
             //    $topic_id = $topics['lessons'][0]['topic_id'];
             //}else{

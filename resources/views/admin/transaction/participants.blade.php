@@ -99,6 +99,7 @@
                             <th class="participant_elearning none">{{ __('Expiration Date') }}</th>
                             <th class="col">{{ __('Payment Method') }}</th>
                             <th hidden>{{ __('Event ID') }}</th>
+                            <th hidden>{{ __('Transaction ID') }}</th>
                             {{--<th class="participant_elearning none">{{ __('New Expiration Date') }}</th>--}}
                         </tr>
                     </thead>
@@ -115,6 +116,7 @@
                             <th class="participant_elearning none">{{ __('Expiration Date') }}</th>
                             <th> {{ __('Payment Method') }} </th>
                             <th hidden>{{ __('Event ID') }}</th>
+                            <th hidden>{{ __('Transaction ID') }}</th>
                             {{--<th class="participant_elearning none">{{ __('New Expiration Date') }}</th>--}}
                         </tr>
                     </tfoot>
@@ -140,6 +142,7 @@
                                 </td>
                                 <td> {{$transaction['paymentMethod']}} </td>
                                 <td hidden>{{$transaction['event_id']}}</td>
+                                <td hidden>{{$transaction['id']}}</td>
                                 {{--<td class="participant_elearning none">
                                     <input id="{{$transaction['id']}}" class="form-control datepicker" placeholder="Select date" type="text" value="<?= ($transaction['expiration'] != null) ? $transaction['expiration'] : ''; ?>">
                                     <button class="update_exp btn btn-info btn-sm" style="margin-top:10px;" type="button" data-id="{{$transaction['id']}}" >Update</button>
@@ -609,10 +612,16 @@ $(document).ready(function() {
 
             $('#participants_table_filter').append(
                 `<div class='excel-button'>
-                        <button class="btn btn-icon btn-primary" type="button">
+                        <button title="export transactions to csv" class="btn btn-icon btn-primary" type="button">
                         	<span class="btn-inner--icon"><i class="ni ni-cloud-download-95"></i></span>
                         </button>
-                    </div>`
+                    </div>
+                    <div class='invoice-button'>
+                        <button title="download invoices" class="btn btn-icon btn-primary" type="button">
+                        	<span class="btn-inner--icon"><i class="ni ni-folder-17"></i></span>
+                        </button>
+                    </div>
+                    `
             )
 
         })
@@ -636,6 +645,31 @@ $(document).ready(function() {
 
                     window.location.href = '/tmp/exports/TransactionsExport.xlsx'
 
+                }
+            });
+
+        });
+
+
+        $(document).on("click",".invoice-button",function() {
+
+            let transactionsData = table.column(10,{filter: 'applied'}).data().unique().sort();
+            let transactions = []; 
+            $.each(transactionsData, function(key, value){
+                transactions.push(value)
+            })
+
+            console.log(transactions);
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{route('transaction.export-invoice')}}",
+                type: "POST",
+                data:{transactions:transactions} ,
+                success: function(data) {
+                    window.location.href = data.zip         
                 }
             });
 

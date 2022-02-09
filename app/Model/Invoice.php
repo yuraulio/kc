@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Model\User;
 use App\Model\Transaction;
 use App\Model\Event;
+use App\Model\PaymentMethod;
 use Laravel\Cashier\Subscription;
 use PDF;
 
@@ -85,6 +86,18 @@ class Invoice extends Model
 
         $data=[];
         
+        $eventId = $this->event->first() ? $this->event->first()->id : -1;
+        $paymentMethodId = 2;
+        if( $user = $this->user->first() ){
+        
+            if($event = $user->events()->wherePivot('event_id',$eventId)->first()){
+
+                $paymentMethodId = $event->pivot->payment_method;
+
+            }
+        
+        }
+
         $billing = json_decode($this->transaction->first()->billing_details,true);
 
         //dd($this);
@@ -126,7 +139,7 @@ class Invoice extends Model
         $data['invoice'] = $this->invoice ;
         $data['country'] = 'Ελλάδα';
         $data['vat'] = $billafm;
-        $data['footer'] = $this->event->first()->paymentMethod->first() ? $this->event->first()->paymentMethod->first()->footer : '';
+        $data['footer'] = ($paymentMethod = PaymentMethod::find($paymentMethodId)) ? $paymentMethod->footer : '';
 
         $this->instalments_remaining = $this->instalments_remaining - 1;
         if( $this->instalments_remaining >=1){
@@ -171,6 +184,19 @@ class Invoice extends Model
         $remainingInst=0;
         $date = '-';
        
+
+        $eventId = $this->event->first() ? $this->event->first()->id : -1;
+        $paymentMethodId = 2;
+        if( $user = $this->user->first() ){
+        
+            if($event = $user->events()->wherePivot('event_id',$eventId)->first()){
+
+                $paymentMethodId = $event->pivot->payment_method;
+
+            }
+        
+        }
+
         $billing = json_decode($this->transaction()->first()->billing_details,true);
 
         //dd($this->transaction);
@@ -257,7 +283,7 @@ class Invoice extends Model
         $data['invoice'] = $newInvoice->invoice ;
         $data['country'] = 'Ελλάδα';
         $data['vat'] = $billafm;
-        $data['footer'] = $newInvoice->event->first()->paymentMethod->first() ? $newInvoice->event->first()->paymentMethod->first()->footer : '';
+        $data['footer'] = ($paymentMethod = PaymentMethod::find($paymentMethodId)) ? $paymentMethod->footer : '';
         $data['description'] =  $newInvoice->event->first()->summary1->where('section','date')->first() ?  $newInvoice->event->first()->summary1->where('section','date')->first()->title : '';
         $data['installments']= ( $newInvoice->instalments > 1) ? ( $newInvoice->instalments -  $newInvoice->instalments_remaining) . ' of ' . $newInvoice->instalments : '';
 
@@ -283,10 +309,22 @@ class Invoice extends Model
     
     }
 
-
     public function getInvoice($planDecription = false){
-        
+              
         $data=[];
+
+        $eventId = $this->event->first() ? $this->event->first()->id : -1;
+        $paymentMethodId = 2;
+        if( $user = $this->user->first() ){
+        
+            if($event = $user->events()->wherePivot('event_id',$eventId)->first()){
+
+                $paymentMethodId = $event->pivot->payment_method;
+
+            }
+        
+        }
+
        
         $billing = json_decode($this->transaction->first()->billing_details,true);
         //$billing = json_decode($this->user->first()->billing_details,true);
@@ -326,7 +364,8 @@ class Invoice extends Model
         $data['invoice'] = $this->invoice ;
         $data['country'] = 'Ελλάδα';
         $data['vat'] = $billafm;
-        $data['footer'] = $this->event->first()->paymentMethod->first() ? $this->event->first()->paymentMethod->first()->footer : '';
+        //$data['footer'] = $this->event->first()->paymentMethod->first() ? $this->event->first()->paymentMethod->first()->footer : '';
+        $data['footer'] = ($paymentMethod = PaymentMethod::find($paymentMethodId)) ? $paymentMethod->footer : '';
         $data['installments']= ($this->instalments > 1) ? ($this->instalments - $this->instalments_remaining) . ' of ' . $this->instalments : '';
 
         if($planDecription){
@@ -363,4 +402,110 @@ class Invoice extends Model
         return $pdf->stream($fn);
     
     }
+
+    function getZipOfInvoices($zip, $planDecription = false,$invoicesNumber){
+
+
+        $data=[];
+        $installments = 1;
+        $eventId = $this->event->first() ? $this->event->first()->id : -1;
+        $paymentMethodId = 2;
+        if( $user = $this->user->first() ){
+        
+            if($event = $user->events()->wherePivot('event_id',$eventId)->first()){
+
+                if(!isset($invoicesNumber[$user->id.'-'.$eventId])){
+                    $invoicesNumber[$user->id.'-'.$eventId] = 0;
+                }
+                $invoicesNumber[$user->id.'-'.$eventId] += 1;
+                $installments = $invoicesNumber[$user->id.'-'.$eventId];
+                $paymentMethodId = $event->pivot->payment_method;
+
+            }
+        
+        }
+
+       
+        $billing = json_decode($this->transaction->first()->billing_details,true);
+        //$billing = json_decode($this->user->first()->billing_details,true);
+
+        $billInfo = '';
+        $billafm = '';
+
+        if(isset($billing['billaddress'])){
+            $billInfo .= $billing['billaddress'];
+        }
+
+        if(isset($billing['billaddressnum'])){
+            $billInfo .= ' ' . $billing['billaddressnum'];
+        }
+
+        if(isset($billing['billpostcode'])){
+            $billInfo .= ' ' . $billing['billpostcode'];
+        }
+
+        if(isset($billing['billcity'])){
+            $billInfo .= ' ' . $billing['billcity'];
+        }
+
+        if(isset($billing['billafm'])){
+            $billafm = $billing['billafm'];
+        }
+        if($this->amount - floor($this->amount)>0){
+            $data['amount'] = number_format ($this->amount , 2 , ',', '.');
+        }else{
+            $data['amount'] = number_format ($this->amount , 0 , ',', '.');
+        }
+        $data['date'] = $this->created_at->format('d-F-Y');//date('d') . '-' . date('F') . '-' . date('Y');
+        $data['title'] = $this->event->first()->title;
+        $data['name'] = $this->name;
+        //$data['name'] = isset($billing['billname']) ? $billing['billname'] : '';
+        $data['billInfo'] = $billInfo ;
+        $data['invoice'] = $this->invoice ;
+        $data['country'] = 'Ελλάδα';
+        $data['vat'] = $billafm;
+        //$data['footer'] = $this->event->first()->paymentMethod->first() ? $this->event->first()->paymentMethod->first()->footer : '';
+        $data['footer'] = ($paymentMethod = PaymentMethod::find($paymentMethodId)) ? $paymentMethod->footer : '';
+        $data['installments']=  $installments . ' of ' . $this->instalments;
+
+        if($planDecription){
+
+            $plan = $this->event->first()->plans->first();
+            $data['description'] = $plan->name;
+            
+        }else{
+            $data['description'] = $this->event->first()->summary1->where('section','date')->first() ? $this->event->first()->summary1->where('section','date')->first()->title : '';
+
+        }
+
+
+        $contxt = stream_context_create([
+            'ssl' => [
+            'verify_peer' => FALSE,
+            'verify_peer_name' => FALSE,
+            'allow_self_signed'=> TRUE
+            ]
+          ]);
+  
+          $pdf = PDF::setOptions([
+            'isHtml5ParserEnabled'=> true,
+            'isRemoteEnabled' => true,
+          
+          ]);
+  
+         
+          $pdf->getDomPDF()->setHttpContext($contxt);
+  
+          $pdf;
+
+          //$fn = 'myinvoice' . '.pdf';
+          $fn = date('Y-m-d',strtotime($this->created_at)) . '-Invoice-' . $this->invoice . '.pdf';        
+          $pdf->loadView('admin.invoices.elearning_invoice',compact('data'))->setPaper('a4', 'portrait')->save(public_path('invoices_folder/'.$fn))->stream($fn);
+
+          $zip->addFile(public_path('invoices_folder/'.$fn), $fn);
+          //dd('gfdg');
+          return $invoicesNumber;
+
+    }
+
 }

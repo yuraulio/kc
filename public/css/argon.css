@@ -15983,6 +15983,11 @@ body {
   right: 20em;
   top: -10px; }
 
+.invoice-button {
+  position: absolute;
+  right: 25em;
+  top: -10px; }
+
 .toggle-bold {
   width: 65px !important;
   left: 30px !important;

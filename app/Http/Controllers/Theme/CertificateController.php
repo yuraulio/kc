@@ -116,7 +116,9 @@ class CertificateController extends Controller
     File::deleteDirectory(public_path('certificates_folders'));
     File::makeDirectory(public_path('certificates_folders'));
     //ZipArchive::deleteName(public_path($fileName));
-    unlink(public_path($fileName));
+    if(File::exists(public_path($fileName))){
+      unlink(public_path($fileName));
+    }
     //dd($zip->open(public_path($fileName), ZipArchive::CREATE));
 
     if ($zip->open(public_path($fileName), ZipArchive::CREATE) === TRUE) {
