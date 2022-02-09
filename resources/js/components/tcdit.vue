@@ -22,11 +22,15 @@
             </div>
         </div>
 
-        <draggable v-model="data" key="cols">
+        <draggable 
+            v-model="data" 
+            key="cols"
+            handle=".handle"
+        >
             <transition-group tag="div" >
                 <div  v-for="(val, index, key) in data" :key="'prim'+ index" class="col-12 mb-1 card">
 
-                    <div class="row">
+                    <div class="row handle">
                         <div class="col-2">
                             <button @click="toggleCollapse(val)" class="btn btn-sm btn-soft-secondary" type="button" data-bs-toggle="collapse" :data-bs-target="'#collapseelement' + index" aria-expanded="false" aria-controls="collapseExample">
                                 <i v-if="val.collapsed == true" class="mdi mdi-chevron-down"></i>
@@ -99,7 +103,7 @@
                             <div class="card-body pb-3">
                                 <div v-if="val.columns.length > 1">
                                     <ul class="nav nav-pills navtab-bg nav-justified">
-                                        <li v-for="(v, ind) in val.columns" :key="ind" class="nav-item">
+                                        <li v-for="(v, ind) in val.columns" :key="ind" :class="'nav-item ' + getColumnWidth(column, val.columns)">
                                             <a href="#home1" @click="setTabActive(index, ind)" data-bs-toggle="tab" aria-expanded="false" :class="'nav-link' + (v.active === true ? ' active' : '')">
                                                 {{ v.template.title }}
                                                 <div @click.stop="removeColumn(val.columns, column.id, index, ind)" class="d-inline-block float-end ms-1">
@@ -109,15 +113,22 @@
                                                     <i class="dripicons-return"></i>
                                                 </div>
                                             </a>
+                                            <div v-if="val.columns.length > 1" class="mt-1">
+                                                Width: {{v.width}} / 6
+                                                <input @click="calculateWidth(val.columns, ind, $event, index)" :value="v.width" class="w-100" type="range" maxlength="1" min="1" max="6">
+                                            </div>
                                         </li>
                                         <li v-if="val.columns.length < 3">
                                             <button @click="split(val.columns, indr, 'push')" class="btn btn-success add-column-button ms-1">
                                                 <i class="dripicons-plus"></i>
                                             </button>
                                         </li>
+                                        <li v-if="val.tooBig">
+                                            <span class="badge bg-warning">Row too wide</span>
+                                        </li>
                                     </ul>
                                 </div>
-                                <h5 v-else class="card-title mb-0">
+                                <h5 v-else :class="'card-title mb-0 ' + getColumnWidth(column, val.columns)">
                                     <div @click="changeComponent(index, indr, column.template)" class="d-inline-block cursor-pointer">
                                         {{ column.template.title }}
                                     </div>
@@ -195,7 +206,11 @@
             </div>
         </div>
 
-        <draggable v-model="data" key="cols">
+        <draggable 
+            v-model="data" 
+            key="cols"
+            handle=".handle"
+        >
             <transition-group tag="div" >
                 <div v-for="(val, index) in data" :key="'prim'+ index" class="row mb-1">
                     <!-- <draggable v-model="val.columns">
@@ -210,12 +225,12 @@
                                 <a @click.prevent="val.width = 'blog'" :class="'dropdown-item ' + (val.width == 'blog' ? 'active' : '')" href="#">Blog Width</a>
                             </div>
                         </div>
-                        <div v-for="(column, indr) in val.columns" :key="'column' + indr" :class="'col-lg-' + (12 / val.columns.length)">
+                        <div v-for="(column, indr) in val.columns" :key="'column' + indr" :class="'col-lg-' + getColumnWidth(column, val.columns)">
                             <div class="" style="position: relative">
                                 <div @click.prevent="" :key="'pseudo' + indr" class="dropzone  mb-2" style="min-height:150px">
                                     <div class="dz-message needsclick" style="margin: 0px !important; display: flex; justify-content: center; flex-direction: column">
                                         <div @click="changeComponent(index, indr, column.template)">
-                                            <i :class="'h1 text-muted ' + column.template.icon"></i>
+                                            <i :class="'h1 handle text-muted ' + column.template.icon"></i>
                                             <div class="text-center">
                                                 <span class="text-muted font-13">
                                                     <strong>{{ column.template.title }} {{ val.order }}</strong>
@@ -226,6 +241,11 @@
                                         <span v-if="column.template.one_column != true" class="text-muted font-13">
                                             <i @click="split(val.columns, indr, 'push')" v-if="val.columns.length < 3" class="success dripicons-stack mr-2"></i>
                                             <i v-if="val.columns.length <= 3 && val.columns.length > 1 && indr > 0" @click="split(val.columns, indr, 'splice')" class="danger dripicons-trash mr-2"></i>
+                                            <br>
+                                            <template v-if="val.columns.length > 1">
+                                                Width: {{column.width}} / 6
+                                                <input @click.stop="calculateWidth(val.columns, indr, $event, index)" :value="column.width" class="w-100" type="range" maxlength="1" min="1" max="6">
+                                            </template>
                                         </span>
                                     </div>
                                 </div>
@@ -309,6 +329,14 @@ export default {
                 col.order = columns.length + 1;
                 col.id = this.$uuid.v4();
                 col.active = false;
+
+                // set columns width
+                var colWidth = 6 / (columns.length + 1);
+                col.width = colWidth;
+                columns.forEach(function(column) {
+                    column.width = colWidth;
+                });
+
                 columns.push(col);
             } else {
                 columns.splice(1, indr);
@@ -370,12 +398,66 @@ export default {
                 return input.key == key;
             });
             return inputs[index].value;
+        },
+        getColumnWidth(column, columns) {
+            console.log("getColumnWidth started");
+            if (column.width) {
+                return column.width * 2;
+            } 
+            var width = (12 / columns.length) / 2;
+            this.$set(column, "width", Number(width));
+            console.log("property added");
+            return width * 2;
+        },
+        calculateWidth(columns, index, event, rowIndex) {
+            columns[index].width = Number(event.target.value);
+
+            var width = 0;
+            columns.forEach(function(column) {
+                width = width + Number(column.width);
+            });
+
+            var nextIndex = index + 1;
+            if (!columns[nextIndex]) {
+                nextIndex = 0;
+            }
+
+            columns[nextIndex].width = columns[nextIndex].width - (width - 6);
+
+            var finalWidth = 0;
+            columns.forEach(function(column) {
+                if (columns.length == 3){
+                    if (column.width > 4) {
+                        column.width = 4;
+                    }
+                }
+                if (columns.length == 2){
+                    if (column.width > 5) {
+                        column.width = 5;
+                    }
+                }
+                if (columns.length == 1){
+                    if (column.width > 6) {
+                        column.width = 6;
+                    }
+                }
+                if (column.width < 1) {
+                    column.width = 1;
+                }
+                finalWidth = finalWidth + column.width;
+            });
+
+            if (finalWidth > 6) {
+                this.$set(this.data[rowIndex], "tooBig", true);
+            } else {
+                this.$set(this.data[rowIndex], "tooBig", false);
+            }
         }
     },
 
     watch: {
         "predata": function(val) {
-            this.data = this.predata;
+            // this.data = this.predata;
         }
     },
     mounted() {

@@ -316,8 +316,8 @@ export default {
                 .then((response) => {
                     if (response.status == 200){
                         this.route == 'categories' ? this.$emit('edited', response.data) : this.$emit('refreshcategories');
-                        this.$emit('updatemode', 'list');
-                        this.$toast.success('Edited Successfully!')
+                        // this.$emit('updatemode', 'list');
+                        this.$toast.success('Saved Successfully!')
                         this.loading = false;
                     }
                 })

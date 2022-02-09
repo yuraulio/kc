@@ -11,7 +11,7 @@
         <draggable v-model="data" class="border pt-3">
             <transition-group>
                 <div :class="'row ' + (value.width == 'full' ? '' : (value.width == 'content' ? 'col-lg-8 offset-lg-2' : 'col-lg-6 offset-lg-3'))" v-for="(value, ind) in data" :key="ind + 'drag'">
-                    <div :class="'col-lg-' + (12 / value.columns.length)" v-for="(column, indr) in value.columns" :key="indr + 'dragi'">
+                    <div :class="'col-lg-' + (column.width * 2)" v-for="(column, indr) in value.columns" :key="indr + 'dragi'">
                         <div v-if="column.component != 'meta'">
 
                             <div v-if="column.component == 'hero'" class="card  text-white" style="background-color: #838b91 !important">

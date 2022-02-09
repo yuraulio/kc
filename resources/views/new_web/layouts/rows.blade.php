@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <div class="row  mb-5">
             @foreach ($data->columns as $column)
-                <div class="col-md-{{ 12 / count($data->columns) }}">
+                <div class="col-md-{{ $column->width * 2 }}">
                     @includeIf("new_web.components." . $column->template->key)
                 </div>
             @endforeach
@@ -13,7 +13,7 @@
     <div class="container blogx-container">
         <div class="row mb-5">
             @foreach ($data->columns as $column)
-                <div class="col-md-{{ 12 / count($data->columns) }}">
+                <div class="col-md-{{ $column->width * 2 }}">
                     @includeIf("new_web.components." . $column->template->key)
                 </div>
             @endforeach
@@ -23,7 +23,7 @@
     <div class="container ps-4 pe-4">
         <div class="row mb-5">
             @foreach ($data->columns as $column)
-                <div class="col-md-{{ 12 / count($data->columns) }}">
+                <div class="col-md-{{ $column->width * 2 }}">
                     @includeIf("new_web.components." . $column->template->key)
                 </div>
             @endforeach
