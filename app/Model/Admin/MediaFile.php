@@ -36,4 +36,9 @@ class MediaFile extends Model
     {
         return $this->belongsTo(User::class, "user_id");
     }
+
+    public function subfiles()
+    {
+        return $this->hasMany(MediaFile::class, "parent_id", "id");
+    }
 }

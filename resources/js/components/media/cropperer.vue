@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-lg-8">
-      <div v-show="imgSrc" class="img-cropper">
+      <div v-show="imgSrc" :key="imgSrc ? imgSrc.url : 'emp'" class="img-cropper">
         <vue-cropper ref="cropper" :src="imgSrc" preview=".preview" />
       </div>
       <label v-show="imgSrc == null" :name="'image'" style="width: 100%; min-height: 300px">
@@ -309,24 +309,60 @@
 
     </div>
     <div class="col-lg-4">
-      <div class="col-lg-12">
-        <p>Preview</p>
-        <div class="preview" />
-        <p>Cropped Image</p>
-        <div class="cropped-image">
-          <img v-if="cropImg" :src="cropImg" alt="Cropped Image" />
-          <div v-else class="crop-placeholder" />
+        <div class="card">
+            <div class="card-body bg-light" style="max-height: 95vh; overflow: hidden; overflow-y: scroll;">
+                <ul class="nav nav-pills navtab-bg nav-justified">
+                    <li class="nav-item">
+                        <a href="#home1" data-bs-toggle="tab" aria-expanded="false" class="nav-link active">
+                            Uploading
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#profile1" data-bs-toggle="tab" aria-expanded="true" class="nav-link">
+                            Versions
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane show active" id="home1">
+                        <div class="col-lg-12 d-grid">
+                            <p>Preview</p>
+                            <div class="cropped-image preview" />
+                            <p>Cropped Image</p>
+                            <div class="cropped-image">
+                            <img v-if="cropImg" :src="cropImg" alt="Cropped Image" />
+                            <div v-else class="crop-placeholder" />
+                            </div>
+
+                            <div class="mt-3 mb-3">
+                            <label class="form-label">Name</label>
+                            <small>(Keep filename same for resizes to be child images)</small>
+                            <input v-model="imgname" type="text" class="form-control" />
+                            </div>
+
+                            <div class="mb-3">
+                            <label class="form-label">Alt Text</label>
+                            <input v-model="alttext" type="text" class="form-control" />
+                            </div>
+
+                            <button @click="upload" class="btn btn-soft-success btn-block mt-1" :disabled="isUploading">
+                            <span v-if="isUploading"><i class="fas fa-spinner fa-spin"></i>  Uploading...</span>
+                            <span v-else>Upload</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="profile1">
+                        <div v-for="im in uploadedVersions" class="col-sm-12">
+                            <img :src="im.url" alt="image" class="img-fluid rounded">
+                            <p class="mb-0">
+                                <code>{{im.name}}</code>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="mb-3">
-          <label class="form-label">Name</label>
-          <input v-model="imgname" type="text" class="form-control" />
-        </div>
-
-        <button @click="upload" class="btn btn-primary btn-block mt-1">
-          Upload
-        </button>
-      </div>
     </div>
   </div>
 </template>
@@ -348,17 +384,26 @@ export default {
   },
   data() {
     return {
+        isUploading: false,
+        originalFile: null,
+        uploadedVersions: [],
       imgSrc: null,
       cropImg: "",
       data: null,
       imgname: "",
+      alttext: "",
       cropBoxData: {},
       imgData: {},
     };
   },
   mounted() {
     if (this.prevalue) {
-      this.imgSrc = this.prevalue;
+        console.log(this.prevalue);
+        //this.originalFile = this.prevalue;
+      this.imgSrc = this.prevalue.url;
+      this.uploadedVersions = this.prevalue.subfiles;
+      this.$refs.cropper.replace(this.prevalue.url);
+      this.$forceUpdate();
     }
   },
   methods: {
@@ -450,6 +495,7 @@ export default {
         alert("Please select an image file");
         return;
       }
+      this.originalFile = file;
       if (typeof FileReader === "function") {
         const reader = new FileReader();
         reader.onload = (event) => {
@@ -469,6 +515,9 @@ export default {
       this.$refs.cropper.relativeZoom(percent);
     },
   },
+  beforeDestroy() {
+      this.imgSrc = null;
+  }
 };
 </script>
 

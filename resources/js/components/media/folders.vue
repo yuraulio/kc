@@ -47,7 +47,7 @@ export default {
     methods: {
         selectFolder(folder) {
             if (!this.selectable) {
-                return;
+                //return;
             }
             this.selectedFolder = folder;
             this.$emit('selected', this.selectedFolder.id);

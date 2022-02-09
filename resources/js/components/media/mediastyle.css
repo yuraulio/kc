@@ -203,6 +203,9 @@
     z-index: 1500 !important;
     overflow-y: auto !important;
   }
+  .v-toast {
+      z-index: 1501 !important;
+  }
   .carousel-inner {
     position: relative;
     width: 100%;

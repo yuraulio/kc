@@ -52,12 +52,17 @@ class MediaController extends Controller
 
         try {
             $files = MediaFile::lookForOriginal($request->filter)
+                                ->when($request->parent != false && $request->parent != 'false', function ($q) {
+                                    return $q->whereNull('parent_id');
+                                })
                                 ->with('user')
                                 ->when($request->folder_id != null, function ($q) use ($request) {
                                     return $q->where('folder_id', $request->folder_id);
                                 })
                                 ->orderBy('created_at', 'desc')->paginate(20);
-
+            if ($request->parent != false && $request->parent != 'false') {
+                $files->load('subfiles');
+            }
             return MediaFileResource::collection($files);
         } catch (Exception $e) {
             Log::error("Failed to get files. " . $e->getMessage());
@@ -97,12 +102,13 @@ class MediaController extends Controller
     public function uploadImage(Request $request): JsonResponse
     {
         $image = $request->file('file');
+        $originalImage = $request->file('original_file');
 
         try {
             $cname = $this->getRealName($request->imgname ? $request->imgname .".". $image->extension() :  $image->getClientOriginalName());
             if ($request->directory) {
                 $mediaFolder = MediaFolder::findOrFail($request->directory);
-                $path = $mediaFolder->path;
+                $path = $mediaFolder->path . "/";
             } else {
                 $path = "/pages_media/random/";
 
@@ -120,11 +126,31 @@ class MediaController extends Controller
                     $mediaFolder->save();
                 }
             }
-            $imgpath = $path . '/'. ($request->imgname ? $request->imgname .".". $image->extension() :  $image->getClientOriginalName());
 
-            $file = Storage::disk('public')->putFileAs($path, $request->file('file'), $request->imgname ? $request->imgname .".". $image->extension() :  $image->getClientOriginalName(), 'public');
+            if ($originalImage) {
+                // Store original image
+                $originalImagePath = $path . ''. ($request->imgname ? $request->imgname .".". $originalImage->extension() :  $originalImage->getClientOriginalName());
 
-            $mfile = $this->storeFile(($request->imgname ? $request->imgname .".". $image->extension() : $image->getClientOriginalName()), $imgpath, $mediaFolder->id, $image->getSize(), true);
+                if (!Storage::disk('public')->exists($originalImagePath)) {
+                    $file = Storage::disk('public')->putFileAs($path, $request->file('original_file'), $request->imgname ? $request->imgname .".". $originalImage->extension() :  $originalImage->getClientOriginalName(), 'public');
+
+                    $originalFile = $this->storeFile(($request->imgname ? $request->imgname .".". $originalImage->extension() : $image->getClientOriginalName()), $originalImagePath, $mediaFolder->id, $originalImage->getSize(), null,$request->alttext);
+                } else {
+                    $originalFile = MediaFile::wherePath($originalImagePath)->first();
+                }
+            }
+
+            if ($request->edited) {
+                $originalFile = MediaFile::findOrFail($request->edited);
+            }
+
+            // Store edited image
+            \Log::info("size", [getimagesize($image)]);
+            $imgpath = $path . ''. (($request->imgname ? $request->imgname . "_" . getimagesize($image)[0] . "x" . getimagesize($image)[1] . ".". $image->extension() : $image->getClientOriginalName()));
+
+            $file = Storage::disk('public')->putFileAs($path, $request->file('file'), ($request->imgname ? $request->imgname . "_" . getimagesize($image)[0] . "x" . getimagesize($image)[1] . ".". $image->extension() : $image->getClientOriginalName()), 'public');
+
+            $mfile = $this->storeFile(($request->imgname ? $request->imgname . "_" . getimagesize($image)[0] . "x" . getimagesize($image)[1] . ".". $image->extension() : $image->getClientOriginalName()), $imgpath, $mediaFolder->id, $image->getSize(), $originalFile->id, $request->alttext);
 
             /* $img = Image::make($request->file('file'));
             $img->resize(3840, 2160, function ($const) {
@@ -133,23 +159,25 @@ class MediaController extends Controller
 
             $this->storeFile($this->getRealName($image->getClientOriginalName()) . '_3840x2160.'. $image->extension(), $path.$this->getRealName($image->getClientOriginalName()) . '_3840x2160.'. $image->extension(), $mediaFolder->id, strlen((string) $img->encode('png')), false); */
 
-            $url = config('app.url'). "/uploads/" . $path;
-            return response()->json(['data' => $mfile], 200);
+            $url = config('app.url'). "/uploads" . $path;
+            return response()->json(['data' => [$mfile]], 200);
         } catch (Exception $e) {
             Log::error("Failed update file . " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
 
-    public function storeFile($name, $path, $folderId, $size, $parent = false)
+    public function storeFile($name, $path, $folderId, $size, $parent = null, $altext = null)
     {
         $mediaFile = new MediaFile();
         $mediaFile->name = $name;
         $mediaFile->path = $path;
+        $mediaFile->full_path = "/uploads" . $path;
+        $mediaFile->alt_text = $altext;
         $mediaFile->folder_id = $folderId;
         $mediaFile->size = $size;
         $mediaFile->parent_id = $parent;
-        $mediaFile->url = config('app.url'). "/uploads/" . $path;
+        $mediaFile->url = config('app.url'). "/uploads" . $path;
         $mediaFile->user_id = Auth::user()->id;
         $mediaFile->save();
 

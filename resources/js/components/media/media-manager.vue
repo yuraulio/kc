@@ -57,7 +57,7 @@
         <cropperer
           @upload="imageAdded"
           ref="crpr"
-          :prevalue="selectedFile ? selectedFile.url : null"
+          :prevalue="selectedFile"
         ></cropperer>
       </div>
     </modal>
@@ -114,12 +114,12 @@
             <div class="mail-list mt-3">
               <a
                 href="#"
-                @click.prevent="getFolders()"
+                @click.prevent="getFolders(); filesView = false"
                 class="list-group-item border-0 font-14"
                 ><i class="mdi mdi-folder-outline font-18 align-middle me-2"></i
-                >My Folders</a
+                >Recents</a
               >
-              <a href="#" class="list-group-item border-0 font-14"
+              <a href="#" @click.prevent="getFiles();filesView = true;" class="list-group-item border-0 font-14"
                 ><i class="mdi mdi-file-outline font-18 align-middle me-2"></i
                 >My Files</a
               >
@@ -167,7 +167,7 @@
                     >
                       <i class="mdi mdi-minus font-18"></i>
                     </button>
-                    <div @click="getFolders(item.id)" class="dd-handle">
+                    <div @click="selectedFolder = item; getFolders(item.id)" class="dd-handle">
                       <i
                         class="mdi mdi-folder-outline font-18 align-middle me-2"
                       ></i
@@ -178,7 +178,7 @@
               </vue-nestable>
             </div>
 
-            <div class="mt-5">
+            <!-- <div class="mt-5">
               <h4>
                 <span class="badge rounded-pill p-1 px-2 badge-soft-secondary"
                   >FREE</span
@@ -196,7 +196,7 @@
                 ></div>
               </div>
               <p class="text-muted font-12 mb-0">7.02 GB (46%) of 15 GB used</p>
-            </div>
+            </div> -->
           </div>
           <!-- End Left sidebar -->
           <div class="inbox-rightbar">
@@ -213,6 +213,10 @@
                   <span class="mdi mdi-magnify"></span>
                 </div>
               </div>
+              <div @click.prevent="onlyParent = !onlyParent; getFiles()" :key="onlyParent + 'parent'" class="form-check form-switch mb-1" style="display: inline-block; cursor: pointer">
+                <input  :id="'toginput'" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :for="'toginput'" :checked="onlyParent">
+                <label class="form-check-label" for="light-mode-check">Show Only Parent Images</label>
+            </div>
               <div class="mt-2 mt-md-0">
                 <button
                   @click.prevent="view = 'list'"
@@ -238,24 +242,38 @@
                 ></vue-loaders-ball-grid-beat>
               </div>
             </div>
-            <div v-else>
-              <folders
-                :selectable="true"
-                @selected="getFolders($event)"
-                v-if="inMediaFolders && inMediaFolders.length && !loading"
-                :mediaFolders="inMediaFolders"
-                title="Quick Access"
-              ></folders>
-              <!-- end .mt-3-->
-              <files
-                :key="view"
-                :view="view"
-                v-if="!loading"
-                :mediaFiles="mediaFiles"
-                @selected="userSelectedFiles"
-                @delete="deleteFile"
-                @open="openFile"
-              ></files>
+            <div v-if="!loading && loadstart">
+                <div v-if="!filesView">
+                    <folders
+                        :selectable="true"
+                        @selected="getFolders($event)"
+                        v-if="inMediaFolders && inMediaFolders.length && !loading"
+                        :mediaFolders="inMediaFolders"
+                        title="Quick Access"
+                    ></folders>
+                    <!-- end .mt-3-->
+
+                    <files
+                        :key="view"
+                        :view="view"
+                        v-if="!loading"
+                        :mediaFiles="mediaFiles"
+                        @selected="userSelectedFiles"
+                        @delete="deleteFile"
+                        @open="openFile"
+                    ></files>
+                </div>
+                <div v-else>
+                    <files
+                        :key="view"
+                        :view="view"
+                        v-if="!loading"
+                        :mediaFiles="mediaFiles"
+                        @selected="userSelectedFiles"
+                        @delete="deleteFile"
+                        @open="openFile"
+                    ></files>
+                </div>
               <!-- end .mt-3-->
             </div>
           </div>
@@ -278,10 +296,17 @@ import mediaMixin from "./mediamixin";
 import "./mediastyle.css";
 import Gallery from "./gallery.vue";
 export default {
+    props: {
+        loadstart: {
+            default: true
+        }
+    },
   mixins: [mediaMixin],
   components: { uploadImage, folders, files, cropperer, Gallery },
   data() {
     return {
+        onlyParent: true,
+        filesView: false,
       opImage: null,
       selectedFile: null,
       folderId: null,
@@ -322,8 +347,22 @@ export default {
   },
   methods: {},
   mounted() {
-    this.getFolders();
+      if (this.loadstart) {
+          console.log('setted');
+          this.getFolders();
+      }
   },
+  beforeDestroy() {
+      console.log('unsetted');
+  },
+  watch: {
+      loadstart() {
+          console.log("watching load")
+          if (this.loadstart == true) {
+              this.getFolders();
+          }
+      }
+  }
 };
 </script>
 

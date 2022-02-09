@@ -37,9 +37,11 @@
                         </div>
                     </td>
                 </tr>
+
             </tbody>
             </table>
         </div>
+        <infinite-loading @infinite="infiniteHandler"></infinite-loading>
     </div>
     <div v-if="view == 'cards'" class="mt-3">
         <h5 class="mb-3">Files</h5>
@@ -79,11 +81,20 @@
 </template>
 
 <script>
+
+import InfiniteLoading from 'vue-infinite-loading';
+
 export default {
+    components: { InfiniteLoading },
     props: {
         mediaFiles: {},
         view: {
             default: 'list'
+        }
+    },
+    data() {
+        return {
+            page: 2
         }
     },
     methods: {
@@ -95,7 +106,34 @@ export default {
         },
         openFile(file) {
             this.$emit('open', file)
-        }
+        },
+        infiniteHandler($state) {
+            console.log('parent',this.$parent)
+            axios
+                .get('/api/media_manager/files', {
+                    params: {
+                        folder_id: this.$parent.folderId,
+                        filter: this.$parent.searchFilter,
+                        parent: this.$parent.onlyParent,
+                        page: this.page,
+                    }
+                })
+                .then((response) => {
+                    console.log(response.data);
+                    if (response.data.data.length) {
+                        this.page += 1;
+                        this.$parent.mediaFiles.push(...response.data.data);
+                        $state.loaded();
+                        } else {
+                        $state.complete();
+                        }
+
+                })
+                .catch((error) => {
+                    console.log(error)
+                    this.$parent.errors = error.response.data.errors;
+                });
+        },
     }
 }
 </script>

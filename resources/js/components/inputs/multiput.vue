@@ -5,15 +5,38 @@
         <input v-model="editorData" type="text" :id="keyput" class="form-control">
     </div>
 
+    <div v-if="type == 'image'" :key="keyput + 'media'" >
+            <div :ref="keyput + 'media'" class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" :id="'mediaCanvas' + keyput" aria-labelledby="mediaCanvasLabel" style="visibility: visible; width: 100%" aria-modal="true" role="dialog">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="mediaCanvasLabel"></h5>
+                <button :ref="(keyput + 'mediabtn')" type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div> <!-- end offcanvas-header-->
+
+            <div class="offcanvas-body" style="padding: 0px !important">
+                <media-manager v-if="loadstart[(keyput + 'media')]" :loadstart="loadstart[(keyput + 'media')]" @updatedimg="updatedmedia($event,(keyput + 'media'))" :key="keyput"></media-manager>
+            </div> <!-- end offcanvas-body-->
+        </div>
+        <div class="text-center">
+            <div class="d-grid text-center" v-if="value" style="display: block;">
+                <img :src="value" alt="image" class="img-fluid rounded" >
+
+            <button @click="$set(loadstart, (keyput + 'media'),  true)" style="margin-top: -60px" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput"  aria-controls="offcanvasScrolling"  class="btn btn-primary">Change Media</button>
+            </div>
+            <div v-else>
+                <button @click="$set(loadstart, (keyput + 'media'),  false)" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" aria-controls="offcanvasScrolling"  class="btn btn-soft-primary">Add Media</button>
+            </div>
+        </div>
+    </div>
+
     <div v-if="type == 'textarea'" class="">
         <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
         <textarea :id="keyput" v-model="editorData" class="form-control" maxlength="500" rows="3" placeholder=""></textarea>
     </div>
 
-    <div v-if="type == 'image'" class="">
+    <!-- <div v-if="type == 'image'" class="">
         <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
         <uploadImage @updatedimage="updatedimage" :key="keyput" :prevalue="value"  :keyput="keyput"></uploadImage>
-    </div>
+    </div> -->
 
     <div v-if="type == 'text_editor'" class="">
         <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
@@ -59,6 +82,8 @@ import contentComponent from './content-components.vue'
 import { Editor, EditorContent } from '@tiptap/vue-2'
 import StarterKit from '@tiptap/starter-kit'
 import multidropdown from './multidropdown.vue'
+import Button from '../../../assets/vendor/MediaManager/js/components/globalSearch/button.vue';
+import MediaManager from '../media/media-manager.vue';
 
 export default {
     components: {
@@ -66,7 +91,9 @@ export default {
         ClassicEditor,
         contentComponent,
         EditorContent,
-        multidropdown
+        multidropdown,
+        Button,
+        MediaManager
     },
     props: {
         type: {
@@ -86,10 +113,12 @@ export default {
         title: {},
         route: {},
         taggable: {},
-        multi: {}
+        multi: {},
+
     },
     data() {
         return {
+            loadstart: {},
             texteditor: 'ck',
             editor: ClassicEditor,
             editorData: this.value,
@@ -118,6 +147,14 @@ export default {
         };
     },
     methods: {
+        updatedmedia($event, ref) {
+            this.$emit('inputed', { 'data': $event, 'key': this.keyput})
+            this.$refs[ref+'btn'].click()
+            this.$set(this.loadstart, ref,  false);
+            //this.$refs[ref].destroy();
+
+            console.log(this.$refs[ref+'btn'])
+        },
         updatedimage($event) {
             this.$emit('inputed', { 'data': $event, 'key': this.keyput})
         },

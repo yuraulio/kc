@@ -1,5 +1,9 @@
 var mediaMixin = {
     methods: {
+        updatedMediaImage(img) {
+            console.log('updatedmedia', img)
+            this.$emit('updatedimg', img);
+        },
         openFile(file, ref) {
             this.opImage = file;
             this.$modal.show('gallery-modal', file);
@@ -15,20 +19,28 @@ var mediaMixin = {
             })
         },
         selectedFolders($event) {
+            this.filesView = false;
             this.selectedFolder = $event;
         },
         imageAdded($event) {
-            console.log($event)
+
+            console.log($event, this.selectedFolder)
             this.currentImage = $event;
             var formData = new FormData();
             var imagefile = $event;
             console.log(this.$refs)
             formData.append('imgname', this.$refs.crpr.imgname);
+            formData.append('alttext', this.$refs.crpr.alttext);
+            if (this.$refs.crpr.prevalue) {
+                formData.append('edited', this.$refs.crpr.prevalue.id);
+            }
+            formData.append('original_file', this.$refs.crpr.originalFile);
             if (this.selectedFolder) {
                 formData.append('directory', this.selectedFolder.id);
             }
             console.log('imgfile', imagefile)
             if (imagefile) {
+                this.$refs.crpr.isUploading = true;
                 formData.append("file", imagefile);
                 axios.post('/api/media_manager/upload_image', formData, {
                     headers: {
@@ -38,12 +50,18 @@ var mediaMixin = {
                     console.log(response.data)
                     //this.selectedFolder = null;
                     this.$toast.success('Uploaded Successfully!');
-                    this.mediaFiles.push(response.data.data);
-                    console.log(response)
-                })
-                    .catch((error) => {
-                        console.log(error)
+                    //this.$modal.hide('upload-media-modal');
+                    response.data.data.forEach((element) => {
+                        this.mediaFiles.push(element);
+                        this.$refs.crpr.uploadedVersions.push(element);
                     })
+                    console.log(response)
+                    this.$refs.crpr.isUploading = false;
+                })
+                .catch((error) => {
+                    console.log(error)
+                    this.$refs.crpr.isUploading = false;
+                })
             }
         },
         addFolder() {
@@ -71,9 +89,13 @@ var mediaMixin = {
                 });
         },
         getFolders(folderId) {
+            this.filesView = false;
             this.folderId = folderId;
             this.errors = null;
             this.loading = true;
+            if (folderId) {
+                this.selectedFolder = _.find(this.mediaFolders, { id: folderId });
+            }
             axios
                 .get('/api/media_manager', {
                     params: {
@@ -105,7 +127,8 @@ var mediaMixin = {
                 .get('/api/media_manager/files', {
                     params: {
                         folder_id: folderId,
-                        filter: this.searchFilter
+                        filter: this.searchFilter,
+                        parent: this.onlyParent
                     }
                 })
                 .then((response) => {
