@@ -20,7 +20,15 @@
       <div  class="carousel-inner" role="listbox">
         <div v-for="img in selectedImage ? [selectedImage] : images" :class="'carousel-item ' + (activeImg == img.id ? ' active' : '')">
             <template v-if="!lodash.find(img.subfiles, {'subselected' : true})">
+                <div
+                  v-if="img.extension == 'pdf'"
+                  style="width: 100%; height: 300px"
+                  class=" text-secondary rounded text-center"
+                >
+                  <i class="mdi mdi-file-pdf-outline font-28"></i>
+                </div>
                 <img
+                    v-else
                     :src="img.url"
                     alt="..."
                     class="d-block img-fluid"
@@ -74,10 +82,8 @@
 </template>
 
 <script>
-import button from '../../../assets/vendor/MediaManager/js/components/globalSearch/button.vue';
 
 export default {
-  components: { button },
   props: {
     images: {},
     opImage: {}
@@ -103,7 +109,12 @@ export default {
   },
   methods: {
       confirmSelection() {
-          this.$parent.$parent.updatedMediaImage(this.selectedImages[0].url);
+          if (this.$parent.$parent.mode == 'single') {
+              this.$parent.$parent.updatedMediaImage(this.selectedImages[0].url);
+          } else {
+              this.$parent.$parent.updatedMediaImage(this.selectedImages);
+          }
+
           this.$modal.hide('gallery-modal');
           this.$toast.success('New image selected!');
       },
@@ -142,6 +153,7 @@ export default {
                     if (element.selected == true) {
                         this.selectedImages.push(element);
                     }
+                    element.subfiles = element.subfiles ?? [];
                     element.subfiles.forEach((sub) => {
                         if (sub.selected == true) {
                             this.selectedImages.push(sub);

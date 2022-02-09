@@ -20,10 +20,39 @@
             <div class="d-grid text-center" v-if="value" style="display: block;">
                 <img :src="value" alt="image" class="img-fluid rounded" >
 
-            <button @click="$set(loadstart, (keyput + 'media'),  true)" style="margin-top: -60px" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput"  aria-controls="offcanvasScrolling"  class="btn btn-primary">Change Media</button>
+            <button @click="$set(loadstart, (keyput + 'media'),  true)" style="margin-top: -60px" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput"  aria-controls="offcanvasScrolling"  class="btn btn-soft-primary">Change Media</button>
             </div>
             <div v-else>
-                <button @click="$set(loadstart, (keyput + 'media'),  false)" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" aria-controls="offcanvasScrolling"  class="btn btn-soft-primary">Add Media</button>
+                <button @click="$set(loadstart, (keyput + 'media'),  true)" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" aria-controls="offcanvasScrolling"  class="btn btn-soft-primary">Add Media</button>
+            </div>
+        </div>
+    </div>
+
+    <div v-if="type == 'gallery'" :key="keyput + 'media'" >
+            <div :ref="keyput + 'media'" class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" :id="'mediaCanvas' + keyput" aria-labelledby="mediaCanvasLabel" style="visibility: visible; width: 100%" aria-modal="true" role="dialog">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="mediaCanvasLabel"></h5>
+                <button :ref="(keyput + 'mediabtn')" type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div> <!-- end offcanvas-header-->
+
+            <div class="offcanvas-body" style="padding: 0px !important">
+                <media-manager v-if="loadstart[(keyput + 'media')]" mode="gallery" :loadstart="loadstart[(keyput + 'media')]" @updatedimg="updatedgallery($event,(keyput + 'media'))" :key="keyput"></media-manager>
+            </div> <!-- end offcanvas-body-->
+        </div>
+        <div class="text-center">
+            <div class="d-grid text-center" v-if="value" style="display: block;">
+                <div class="row" >
+                    <div v-for="val in value" class="col-sm-3" style="height: 200px">
+                            <img :src="val.url" alt="image" class="img-fluid img-thumbnail" width="200" height="200">
+                            <p class="mb-0">
+                                <code>{{val.name}}</code>
+                            </p>
+                        </div>
+                </div>
+            <button @click="$set(loadstart, (keyput + 'media'),  true)" style="margin-top: 00px" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput"  aria-controls="offcanvasScrolling"  class="btn btn-soft-primary">Change Media</button>
+            </div>
+            <div v-else>
+                <button @click="$set(loadstart, (keyput + 'media'),  true)" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" aria-controls="offcanvasScrolling"  class="btn btn-soft-primary">Add Media</button>
             </div>
         </div>
     </div>
@@ -82,7 +111,6 @@ import contentComponent from './content-components.vue'
 import { Editor, EditorContent } from '@tiptap/vue-2'
 import StarterKit from '@tiptap/starter-kit'
 import multidropdown from './multidropdown.vue'
-import Button from '../../../assets/vendor/MediaManager/js/components/globalSearch/button.vue';
 import MediaManager from '../media/media-manager.vue';
 
 export default {
@@ -92,7 +120,6 @@ export default {
         contentComponent,
         EditorContent,
         multidropdown,
-        Button,
         MediaManager
     },
     props: {
@@ -148,6 +175,14 @@ export default {
     },
     methods: {
         updatedmedia($event, ref) {
+            this.$emit('inputed', { 'data': $event, 'key': this.keyput})
+            this.$refs[ref+'btn'].click()
+            this.$set(this.loadstart, ref,  false);
+            //this.$refs[ref].destroy();
+
+            console.log(this.$refs[ref+'btn'])
+        },
+        updatedgallery($event, ref) {
             this.$emit('inputed', { 'data': $event, 'key': this.keyput})
             this.$refs[ref+'btn'].click()
             this.$set(this.loadstart, ref,  false);

@@ -20,6 +20,8 @@ class MediaFileResource extends JsonResource
             'path' => $this->path,
             'size' => $this->size,
             'url' => $this->url,
+            'extension' => $this->extension,
+            'full_path' => $this->full_path,
             'subfiles' => $this->whenLoaded('subfiles', $this->subfiles, []),
             'user' => $this->when(
                 $this->user, function () {

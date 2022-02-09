@@ -335,15 +335,20 @@
                             </div>
 
                             <div class="mt-3 mb-3">
+                                <label for="example-range" class="form-label">Compression Quality (0-100)</label>
+                                <input v-model="compression" class="form-range" id="example-range" type="range" name="range" min="0" max="100">
+                            </div>
+
+                            <div class="mb-3">
                             <label class="form-label">Name</label>
                             <small>(Keep filename same for resizes to be child images)</small>
                             <input v-model="imgname" type="text" class="form-control" />
                             </div>
 
-                            <div class="mb-3">
+                            <!-- <div class="mb-3">
                             <label class="form-label">Alt Text</label>
                             <input v-model="alttext" type="text" class="form-control" />
-                            </div>
+                            </div> -->
 
                             <button @click="upload" class="btn btn-soft-success btn-block mt-1" :disabled="isUploading">
                             <span v-if="isUploading"><i class="fas fa-spinner fa-spin"></i>  Uploading...</span>
@@ -371,7 +376,6 @@
 import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
 import uploadImage from "../inputs/upload-image.vue";
-import Button from "../../../assets/vendor/MediaManager/js/components/globalSearch/button.vue";
 
 export default {
   props: {
@@ -380,7 +384,6 @@ export default {
   components: {
     VueCropper,
     uploadImage,
-    Button,
   },
   data() {
     return {
@@ -394,6 +397,7 @@ export default {
       alttext: "",
       cropBoxData: {},
       imgData: {},
+      compression: 100
     };
   },
   mounted() {
@@ -408,16 +412,17 @@ export default {
   },
   methods: {
     upload() {
+        console.log(this.compression)
       this.$refs.cropper.getCroppedCanvas().toBlob((blob) => {
         this.$emit("upload", blob);
-      });
+      },'image/jpeg', this.compression / 100);
     },
     imageAdded($event) {
       this.imgSrc = $event.url;
     },
     cropImage() {
       // get image data for post processing, e.g. upload or setting image src
-      this.cropImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
+      this.cropImg = this.$refs.cropper.getCroppedCanvas().toDataURL('image/jpeg', this.compression / 100);
 
       /*this.$refs.cropper.getCroppedCanvas().toBlob((blob) => {
         const formData = new FormData();
@@ -486,7 +491,7 @@ export default {
         this.$set(this.imgData, key, parseFloat(value));
       }
       if (!this.imgData) return;
-      this.$refs.cropper.setData(this.imgData);
+      this.$refs.cropper.setCanvasData(this.imgData);
     },
     setImage(e) {
       console.log("set Image", e);

@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 var mediaMixin = {
     methods: {
         updatedMediaImage(img) {
@@ -22,8 +24,39 @@ var mediaMixin = {
             this.filesView = false;
             this.selectedFolder = $event;
         },
+        uploadRegFile() {
+            var formData = new FormData();
+            var imagefile = this.regFile;
+            if (this.selectedFolder) {
+                formData.append('directory', this.selectedFolder.id);
+            }
+            if (imagefile) {
+                this.loading = true;
+                formData.append("file", imagefile);
+                axios.post('/api/media_manager/upload_reg_file', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }).then((response) => {
+                    console.log(response.data)
+                    //this.selectedFolder = null;
+                    this.$toast.success('Uploaded Successfully!');
+                    //this.$modal.hide('upload-media-modal');
+                    response.data.data.forEach((element) => {
+                        this.mediaFiles.push(element);
+                    })
+                    this.$modal.hide('upload-file-modal');
+                    console.log(response)
+                    this.loading = false;
+                    this.regFile = null;
+                })
+                .catch((error) => {
+                    console.log(error)
+                    this.loading = false;
+                })
+            }
+        },
         imageAdded($event) {
-
             console.log($event, this.selectedFolder)
             this.currentImage = $event;
             var formData = new FormData();
@@ -31,6 +64,7 @@ var mediaMixin = {
             console.log(this.$refs)
             formData.append('imgname', this.$refs.crpr.imgname);
             formData.append('alttext', this.$refs.crpr.alttext);
+            formData.append('compression', this.$refs.crpr.compression);
             if (this.$refs.crpr.prevalue) {
                 formData.append('edited', this.$refs.crpr.prevalue.id);
             }
@@ -52,8 +86,13 @@ var mediaMixin = {
                     this.$toast.success('Uploaded Successfully!');
                     //this.$modal.hide('upload-media-modal');
                     response.data.data.forEach((element) => {
-                        this.mediaFiles.push(element);
+                        //this.mediaFiles.push(element);
                         this.$refs.crpr.uploadedVersions.push(element);
+                    })
+                    response.data.original.forEach((element) => {
+                        if (!_.find(this.mediaFiles, { id: element.id })) {
+                            this.mediaFiles.unshift(element);
+                        }
                     })
                     console.log(response)
                     this.$refs.crpr.isUploading = false;

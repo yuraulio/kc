@@ -63,6 +63,34 @@
     </modal>
 
     <modal
+      name="upload-file-modal"
+      ref="fmodal"
+      :resizable="true"
+      height="auto"
+      :adaptive="true"
+      :scrollable="true"
+    >
+      <div class="row p-4">
+          <div class="d-grid col-lg-12">
+              <div class="mb-3">
+                <label for="example-fileinput" class="form-label">Pick a file</label>
+                <input @change="registerFile" type="file" id="example-fileinput" class="form-control">
+            </div>
+
+            <button
+            @click="uploadRegFile()"
+            type="button"
+            class="btn btn-success waves-effect waves-light"
+            :disabled="loading"
+          >
+            <i v-if="!loading" class="fe-check-circle me-1"></i
+            ><i v-else class="fas fa-spinner fa-spin"></i> Upload
+          </button>
+          </div>
+      </div>
+    </modal>
+
+    <modal
       name="gallery-modal"
       ref="gmodal"
       :resizable="true"
@@ -107,7 +135,14 @@
                   class="dropdown-item"
                   href="#"
                   @click.prevent="$modal.show('upload-media-modal')"
-                  ><i class="mdi mdi-upload me-1"></i> Upload</a
+                  ><i class="mdi mdi-image me-1"></i> Image</a
+                >
+
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  @click.prevent="$modal.show('upload-file-modal')"
+                  ><i class="mdi mdi-upload me-1"></i> File</a
                 >
               </div>
             </div>
@@ -299,12 +334,16 @@ export default {
     props: {
         loadstart: {
             default: true
+        },
+        mode: {
+            default: 'single'
         }
     },
   mixins: [mediaMixin],
   components: { uploadImage, folders, files, cropperer, Gallery },
   data() {
     return {
+        regFile: null,
         onlyParent: true,
         filesView: false,
       opImage: null,
@@ -322,30 +361,16 @@ export default {
       selectedFolder: null,
       currentImage: null,
       sizes: [
-        /* {
-                    key: 'full_size',
-                    enabled: true,
-                    title: 'Full size (no resizing)'
-                }, */
-        {
-          key: "large_size",
-          enabled: true,
-          title: "Large - 3840 x 2160px",
-        },
-        {
-          key: "medium_size",
-          enabled: true,
-          title: "Medium - 680 x 320px",
-        },
-        {
-          key: "thumbnail_size",
-          enabled: true,
-          title: "Thumbnail - 150 x 150px",
-        },
+
       ],
     };
   },
-  methods: {},
+  methods: {
+      registerFile($event) {
+          this.regFile = $event.target.files[0];
+      },
+
+  },
   mounted() {
       if (this.loadstart) {
           console.log('setted');

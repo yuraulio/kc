@@ -13,6 +13,11 @@
             },
             {
                 "type": "text",
+                "key": "hero_image_alt_text",
+                "label": "Alt Text"
+            },
+            {
+                "type": "text",
                 "key": "hero_title",
                 "label": "Title"
             },
@@ -46,6 +51,11 @@
                 "type": "image",
                 "key": "content_box_image",
                 "label": "Content Box Image"
+            },
+            {
+                "type": "text",
+                "key": "content_box_image_alt_text",
+                "label": "Alt Text"
             },
             {
                 "type": "text",
@@ -102,6 +112,11 @@
                 "type": "image",
                 "key": "full_size_image",
                 "label": "Image"
+            },
+            {
+                "type": "text",
+                "key": "full_size_image_alt_text",
+                "label": "Alt Text"
             }
         ]
     },
@@ -133,6 +148,11 @@
                 "type": "image",
                 "key": "meta_image",
                 "label": "Meta image"
+            },
+            {
+                "type": "text",
+                "key": "meta_image_alt_text",
+                "label": "Alt Text"
             },
             {
                 "type": "text",
@@ -173,6 +193,11 @@
         "key": "gallery_component",
         "icon": "dripicons-photo-group",
         "inputs": [
+            {
+                "type": "gallery",
+                "key": "gallery_title_title",
+                "label": "Title"
+            }
         ]
     },
     "blog_header" : {
@@ -296,6 +321,11 @@
                 "type": "image",
                 "key": "feature_image",
                 "label": "Feature image"
+            },
+            {
+                "type": "text",
+                "key": "feature_image_alt_text",
+                "label": "Alt Text"
             }
         ]
     }
