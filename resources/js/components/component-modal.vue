@@ -3,10 +3,13 @@
         overflow-y: scroll;
         height: 70vh;
     }
+    .components .card {
+        width: 115px;
+    }
 </style>
 
 <template>
-    <modal name="component-modal" :resizable="true" height="auto" :adaptive="true" @before-open="getParams">
+    <modal name="component-modal" :adaptive="true" height="auto" @before-open="getParams">
 
         <div class="row pt-2 ps-4 pe-4">
             <div class="col-6 sm-auto">
@@ -17,263 +20,106 @@
             </div>
         </div>
 
-        <div class="p-4 pt-2 pe-3 row modal-size">
-            <div class="col-md-6 col-xl-6">
-                <div @click="selectComponent('text_editor')" class="widget-rounded-circle card bg-grey">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <div class="avatar-lg mt-2">
-                                    <i style="font-size: 4em" class="h1 text-muted  dripicons-document-edit"></i>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <h5 class="mb-1 mt-2 font-16">Rich Text</h5>
-                                <p class="mb-2 text-muted">The Editor</p>
-                            </div>
-                        </div> <!-- end row-->
-                    </div>
-                </div> <!-- end widget-rounded-circle-->
-            </div> <!-- end col-->
-
-            <div class="col-md-6 col-xl-6">
-                <div @click="selectComponent('content_box')" class="widget-rounded-circle card bg-grey">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <div class="avatar-lg mt-2">
-                                    <i style="font-size: 4em" class="h1 text-muted dripicons-article"></i>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <h5 class="mb-1 mt-2 font-16">Content Box</h5>
-                                <p class="mb-2 text-muted">Teaser</p>
-                            </div>
-                        </div> <!-- end row-->
-                    </div>
-                </div> <!-- end widget-rounded-circle-->
-            </div> <!-- end col-->
-
-            <div v-if="column === null" class="col-md-6 col-xl-6">
-                <div @click="selectComponent('hero')" class="widget-rounded-circle card bg-grey">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <div class="avatar-lg mt-2">
-                                    <i style="font-size: 4em" class="h1 text-muted dripicons-monitor"></i>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <h5 class="mb-1 mt-2 font-16">Hero Header</h5>
-                                <p class="mb-2 text-muted">Page header</p>
-                            </div>
-                        </div> <!-- end row-->
-                    </div>
-                </div> <!-- end widget-rounded-circle-->
-            </div> <!-- end col-->
-
-            <div class="col-md-6 col-xl-6">
-                <div @click="selectComponent('image')" class="widget-rounded-circle card bg-grey">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <div class="avatar-lg mt-2">
-                                    <i style="font-size: 4em" class="h1 text-muted  dripicons-photo
-                                            "></i>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <h5 class="mb-1 mt-2 font-16">Image</h5>
-                                <p class="mb-2 text-muted">Full size img</p>
-                            </div>
-                        </div> <!-- end row-->
-                    </div>
-                </div> <!-- end widget-rounded-circle-->
-            </div> <!-- end col-->
-
-            <div class="col-md-6 col-xl-6">
-                <div @click="selectComponent('gallery')" class="widget-rounded-circle card bg-grey">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <div class="avatar-lg mt-2">
-                                    <i style="font-size: 4em" class="h1 text-muted  dripicons-photo-group
-                                            "></i>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <h5 class="mb-1 mt-2 font-16">Galery</h5>
-                                <p class="mb-2 text-muted">Image gallery</p>
-                            </div>
-                        </div> <!-- end row-->
-                    </div>
-                </div> <!-- end widget-rounded-circle-->
-            </div> <!-- end col-->
-
-             <div class="col-md-6 col-xl-6">
-                <div @click="selectComponent('text_box')" class="widget-rounded-circle card bg-grey">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <div class="avatar-lg mt-2">
-                                    <i style="font-size: 4em" class="h1 text-muted dripicons-document-edit"></i>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <h5 class="mb-1 mt-2 font-16">Text Area</h5>
-                                <p class="mb-2 text-muted">Free input field</p>
-                            </div>
-                        </div> <!-- end row-->
-                    </div>
-                </div> <!-- end widget-rounded-circle-->
-            </div> <!-- end col-->
-
-            <div class="col-md-6 col-xl-6">
-                <div @click="selectComponent('blog_header')" class="widget-rounded-circle card bg-grey">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <div class="avatar-lg mt-2">
-                                    <i style="font-size: 4em" class="h1 text-muted dripicons-browser"></i>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <h5 class="mb-1 mt-2 font-16">Title/Subtitle </h5>
-                                <p class="mb-2 text-muted">Title and subtitle</p>
-                            </div>
-                        </div> <!-- end row-->
-                    </div>
-                </div> <!-- end widget-rounded-circle-->
+        <div class="row ps-4 pe-4 mb-2">
+            <div class="col-12">
+                <nav class="nav nav-pills nav-justified">
+                    <a @click="type = 'general'" :class="'nav-link ' + getActive('general')" aria-current="page" href="#">General input</a>
+                    <a @click="type = 'plugins'" :class="'nav-link ' + getActive('plugins')" href="#">Plugins</a>
+                    <a @click="type = 'type-related'" :class="'nav-link ' + getActive('type-related')" href="#">Type related</a>
+                </nav>
             </div>
-
-             <div v-if="column === null" class="col-md-6 col-xl-6">
-                <div @click="selectComponent('comments')" class="widget-rounded-circle card bg-grey">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <div class="avatar-lg mt-2">
-                                    <i style="font-size: 4em" class="h1 text-muted dripicons-align-justify"></i>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <h5 class="mb-1 mt-2 font-16">Comments </h5>
-                                <p class="mb-2 text-muted">Pre component</p>
-                            </div>
-                        </div> <!-- end row-->
-                    </div>
-                </div> <!-- end widget-rounded-circle-->
-            </div> <!-- end col-->
-
-            <div class="col-md-6 col-xl-6">
-                <div @click="selectComponent('social_bar')" class="widget-rounded-circle card bg-grey">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <div class="avatar-lg mt-2">
-                                    <i style="font-size: 4em" class="h1 text-muted dripicons-web"></i>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <h5 class="mb-1 mt-2 font-16">Social </h5>
-                                <p class="mb-2 text-muted">Social Bar</p>
-                            </div>
-                        </div> <!-- end row-->
-                    </div>
-                </div> <!-- end widget-rounded-circle-->
-            </div>
-
-            <div class="col-md-6 col-xl-6">
-                <div @click="selectComponent('youtube')" class="widget-rounded-circle card bg-grey">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <div class="avatar-lg mt-2">
-                                    <i style="font-size: 4em" class="h1 text-muted dripicons-camcorder"></i>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <h5 class="mb-1 mt-2 font-16">Youtube </h5>
-                                <p class="mb-2 text-muted">Embed youtube video</p>
-                            </div>
-                        </div> <!-- end row-->
-                    </div>
-                </div> <!-- end widget-rounded-circle-->
-            </div>
-
-            <div class="col-md-6 col-xl-6">
-                <div @click="selectComponent('html')" class="widget-rounded-circle card bg-grey">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <div class="avatar-lg mt-2">
-                                    <i style="font-size: 4em" class="h1 text-muted dripicons-code"></i>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <h5 class="mb-1 mt-2 font-16">Embed htlm </h5>
-                                <p class="mb-2 text-muted">Html code</p>
-                            </div>
-                        </div> <!-- end row-->
-                    </div>
-                </div> <!-- end widget-rounded-circle-->
-            </div>
-
-            <div class="col-md-6 col-xl-6">
-                <div @click="selectComponent('contact_form')" class="widget-rounded-circle card bg-grey">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <div class="avatar-lg mt-2">
-                                    <i style="font-size: 4em" class="h1 text-muted dripicons-mail"></i>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <h5 class="mb-1 mt-2 font-16">Contact form </h5>
-                                <p class="mb-2 text-muted">Contact us</p>
-                            </div>
-                        </div> <!-- end row-->
-                    </div>
-                </div> <!-- end widget-rounded-circle-->
-            </div>
-
-            <div class="col-md-6 col-xl-6">
-                <div @click="selectComponent('empty')" class="widget-rounded-circle card bg-grey">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <div class="avatar-lg mt-2">
-                                    <i style="font-size: 4em" class="h1 text-muted dripicons-wrong"></i>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <h5 class="mb-1 mt-2 font-16">Empty space</h5>
-                                <p class="mb-2 text-muted">No content</p>
-                            </div>
-                        </div> <!-- end row-->
-                    </div>
-                </div> <!-- end widget-rounded-circle-->
-            </div>
-
-            <div class="col-md-6 col-xl-6">
-                <div @click="selectComponent('post_feature')" class="widget-rounded-circle card bg-grey">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <div class="avatar-lg mt-2">
-                                    <i style="font-size: 4em" class="h1 text-muted dripicons-blog"></i>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <h5 class="mb-1 mt-2 font-16">Post feature</h5>
-                                <p class="mb-2 text-muted">Content for blog post list. Not visible on post page.</p>
-                            </div>
-                        </div> <!-- end row-->
-                    </div>
-                </div> <!-- end widget-rounded-circle-->
-            </div>
-
         </div>
-        </modal>
+
+        <div class="p-4 pt-2 pe-3 row modal-size">
+            <div class="col-12 components">
+
+                <template v-if="type == 'general'">
+
+                    <div @click="selectComponent('text_editor')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
+                        <i style="font-size: 20px" class="text-muted dripicons-document-edit d-block mt-1"></i>
+                        <span class="text-muted m-2 mt-1">Rich Text</span>
+                    </div>
+
+                    <div @click="selectComponent('content_box')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
+                        <i style="font-size: 20px" class="text-muted dripicons-article d-block mt-1"></i>
+                        <span class="text-muted m-2 mt-1">Content Box</span>
+                    </div>
+
+                    <div @click="selectComponent('hero')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
+                        <i style="font-size: 20px" class="text-muted dripicons-monitor d-block mt-1"></i>
+                        <span class="text-muted m-2 mt-1">Hero Header</span>
+                    </div>
+
+                    <div @click="selectComponent('image')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
+                        <i style="font-size: 20px" class="text-muted dripicons-photo d-block mt-1"></i>
+                        <span class="text-muted m-2 mt-1">Image</span>
+                    </div>
+
+                    <div @click="selectComponent('gallery')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
+                        <i style="font-size: 20px" class="text-muted dripicons-photo-group d-block mt-1"></i>
+                        <span class="text-muted m-2 mt-1">Galery</span>
+                    </div>
+
+                    <div @click="selectComponent('text_box')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
+                        <i style="font-size: 20px" class="text-muted dripicons-document-edit d-block mt-1"></i>
+                        <span class="text-muted m-2 mt-1">Text Area</span>
+                    </div>
+
+                    <div @click="selectComponent('blog_header')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
+                        <i style="font-size: 20px" class="text-muted dripicons-browser d-block mt-1"></i>
+                        <span class="text-muted m-2 mt-1">Title/Subtitle</span>
+                    </div>
+
+                    <div @click="selectComponent('social_bar')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
+                        <i style="font-size: 20px" class="text-muted dripicons-web d-block mt-1"></i>
+                        <span class="text-muted m-2 mt-1">Social</span>
+                    </div>
+
+                    <div @click="selectComponent('youtube')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
+                        <i style="font-size: 20px" class="text-muted dripicons-camcorder d-block mt-1"></i>
+                        <span class="text-muted m-2 mt-1">Youtube</span>
+                    </div>
+
+                    <div @click="selectComponent('html')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
+                        <i style="font-size: 20px" class="text-muted dripicons-code d-block mt-1"></i>
+                        <span class="text-muted m-2 mt-1">Embed htlm</span>
+                    </div>
+
+                    <div @click="selectComponent('contact_form')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
+                        <i style="font-size: 20px" class="text-muted dripicons-mail d-block mt-1"></i>
+                        <span class="text-muted m-2 mt-1">Contact form</span>
+                    </div>
+
+                    <div @click="selectComponent('empty')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
+                        <i style="font-size: 20px" class="text-muted dripicons-wrong d-block mt-1"></i>
+                        <span class="text-muted m-2 mt-1">Empty space</span>
+                    </div>
+
+                    
+
+                </template>
+
+                <template v-if="type == 'plugins'">
+
+                    <div v-if="column === null" @click="selectComponent('comments')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
+                        <i style="font-size: 20px" class="text-muted dripicons-align-justify d-block mt-1"></i>
+                        <span class="text-muted m-2 mt-1">Comments</span>
+                    </div>
+                
+                </template>
+
+                <template v-if="type == 'type-related'">
+                
+                    <div @click="selectComponent('post_feature')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
+                        <i style="font-size: 20px" class="text-muted dripicons-blog d-block mt-1"></i>
+                        <span class="text-muted m-2 mt-1">Post feature</span>
+                    </div>
+
+                </template>
+
+            </div>
+        </div>
+    </modal>
 </template>
 
 <script>
@@ -284,7 +130,7 @@ export default {
     },
     data() {
         return {
-            //
+            type: "general",
         }
     },
     methods: {
@@ -300,6 +146,13 @@ export default {
         rearange() {
             eventHub.$emit('component-rearange')
         },
+        getActive(tab){
+            if (tab == this.type) {
+                return "active";
+            }
+
+            return "";
+        }
     }
 }
 </script>
