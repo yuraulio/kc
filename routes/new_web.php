@@ -1,7 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin_api\CommentsController;
-use App\Http\Controllers\new_web\MainController;
+use App\Http\Controllers\New_web\MainController;
+use App\Http\Controllers\New_web\SitemapXmlController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,9 +19,14 @@ use App\Http\Controllers\new_web\MainController;
 Route::prefix('v2')->group(function () {
     Route::get('/', [MainController::class, 'index']);
     Route::get('/blog', [MainController::class, 'blog']);
+    Route::get('/sitemap.xml', [SitemapXmlController::class, 'index']);
+    Route::get('/feed', [SitemapXmlController::class, 'index']);
+
     Route::get('/{slug}', [MainController::class, 'page']);
     Route::get('/blog/{slug}', [MainController::class, 'page']);
 });
+
+// Route::get('/sitemap.xml', [SitemapXmlController::class, 'index']);
 
 Route::get('get-page-comments/{page_id}', [CommentsController::class, 'getPageComments']);
 

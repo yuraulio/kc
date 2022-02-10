@@ -340,6 +340,12 @@ export default {
                 columns.push(col);
             } else {
                 columns.splice(1, indr);
+
+                // set columns width
+                var colWidth = 6 / (columns.length);
+                columns.forEach(function(column) {
+                    column.width = colWidth;
+                });
             }
         },
         setTabActive(index, ind) {
@@ -391,6 +397,13 @@ export default {
                 return column.id == column_id;
             });
             columns.splice(index, 1);
+
+            // set columns width
+            var colWidth = 6 / (columns.length);
+            columns.forEach(function(column) {
+                column.width = colWidth;
+            });
+
             this.setTabActive(row_index, 0);
         },
         findInputValue(inputs, key){
