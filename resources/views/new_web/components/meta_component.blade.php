@@ -3,7 +3,7 @@
     @php
         $meta = [];
         foreach ($column->template->inputs as $input){
-            $meta[$input->key] = $input->value;
+            $meta[$input->key] = $input->value ?? "";
         }
     @endphp
 

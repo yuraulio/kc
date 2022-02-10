@@ -95,7 +95,7 @@ class Page extends Model
                 if ($column->component == "post_feature") {
                     $feature_data = [];
                     foreach ($column->template->inputs as $input) {
-                        $feature_data[$input->key] = $input->value;
+                        $feature_data[$input->key] = $input->value ?? "";
                     }
                     return $feature_data;
                 }

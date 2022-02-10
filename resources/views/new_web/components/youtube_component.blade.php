@@ -1,7 +1,7 @@
 @php
     $youtube = [];
     foreach ($column->template->inputs as $input){
-        $youtube[$input->key] = $input->value;
+        $youtube[$input->key] = $input->value ?? "";
     }
 @endphp
 

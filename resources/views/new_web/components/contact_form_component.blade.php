@@ -1,7 +1,7 @@
 @php
     $form = [];
     foreach ($column->template->inputs as $input){
-        $form[$input->key] = $input->value ;
+        $form[$input->key] = $input->value ?? "";
     }
 @endphp
 

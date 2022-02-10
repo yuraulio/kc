@@ -1,7 +1,7 @@
 @php
     $hero = [];
     foreach ($column->template->inputs as $input){
-        $hero[$input->key] = $input->value;
+        $hero[$input->key] = $input->value ?? "";
     }
 @endphp
 
