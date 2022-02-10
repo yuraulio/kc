@@ -3,10 +3,10 @@
     <div class="col-lg-8">
       <div
         v-show="imgSrc"
-        :key="imgSrc ? imgSrc.url : 'emp'"
+        :key="imgSrc ? imgSrc : 'emp'"
         class="img-cropper"
       >
-        <vue-cropper ref="cropper" :checkCrossOrigin="false" :src="imgSrc" preview=".preview" />
+        <vue-cropper ref="cropper" :checkCrossOrigin="true" :src="imgSrc" preview=".preview" />
       </div>
       <label
         v-show="imgSrc == null"
@@ -364,7 +364,7 @@
                 <div class="cropped-image preview" />
                 <p>Cropped Image</p>
                 <div class="cropped-image">
-                  <img v-if="cropImg" :src="cropImg" alt="Cropped Image" />
+                  <img crossorigin="anonymous" v-if="cropImg" :src="cropImg" alt="Cropped Image" />
                   <div v-else class="crop-placeholder" />
                 </div>
 
@@ -410,7 +410,7 @@
             </div>
             <div class="tab-pane" id="profile1">
               <div v-for="im in uploadedVersions" class="col-sm-12">
-                <img :src="im.url" alt="image" class="img-fluid rounded" />
+                <img crossorigin="anonymous" :src="im.url" alt="image" class="img-fluid rounded" />
                 <p class="mb-0">
                   <code>{{ im.name }}</code>
                 </p>
@@ -533,28 +533,26 @@ export default {
       //this.originalFile = this.prevalue;
       this.imgSrc = this.prevalue.url;
       this.uploadedVersions = this.prevalue.subfiles;
-      axios.get(this.imgSrc, {
-      responseType: 'blob'
-    }).then((r) =>
-      {
-          var file = r.data;
-          this.imgname = this.prevalue ? this.prevalue.name.replace(/(\.[^.]*)$/, '') : '';
+      this.originalFile = this.prevalue;
+
+      this.imgname = this.originalFile ? this.originalFile.name.replace(/(\.[^.]*)$/, '') : '';
+
       if (typeof FileReader === "function") {
         const reader = new FileReader();
         reader.onload = (event) => {
           this.imgSrc = event.target.result;
+          this.imgSrc.setAttribute('crossorigin', 'anonymous');
           // rebuild cropperjs with the updated source
-          this.$refs.cropper.replace(event.target.result);
+          this.$refs.cropper.replace(this.imgSrc);
           setTimeout(() => {
             this.getData();
             this.getCropBoxData();
           }, 600);
         };
-        reader.readAsDataURL(file);
+
+        //reader.readAsDataURL(file);
       this.$forceUpdate();
       }
-      });
-
     }
   },
   methods: {
