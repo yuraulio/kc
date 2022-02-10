@@ -218,3 +218,4 @@
     max-height: 600px;
     /* object-fit: contain; */
 }
+.table-responsive{overflow: inherit !important;}
