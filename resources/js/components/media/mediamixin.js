@@ -265,7 +265,14 @@ var mediaMixin = {
                         .delete('/api/media_manager/file/' + $event.id)
                         .then((response) => {
                             if (response.status == 200) {
-                                this.mediaFiles.splice(_.findIndex(this.mediaFiles, { 'id': $event.id }), 1);
+                                if (_.findIndex(this.mediaFiles, { 'id': $event.id }) > -1) {
+                                    this.mediaFiles.splice(_.findIndex(this.mediaFiles, { 'id': $event.id }), 1);
+                                } else {
+                                    this.mediaFiles.forEach((element) => {
+                                        element.subfiles.splice(_.findIndex(element.subfiles, { 'id': $event.id }), 1);
+                                    })
+                                }
+
                             }
                         })
                         .catch(error => {

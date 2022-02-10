@@ -206,6 +206,11 @@
   .v-toast {
       z-index: 1501 !important;
   }
+
+
+.swal2-container {
+    z-index: 1501 !important;
+}
   .carousel-inner {
     position: relative;
     width: 100%;

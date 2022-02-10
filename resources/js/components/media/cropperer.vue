@@ -508,6 +508,22 @@ export default {
           version: "social-media-sharing",
           description: "Applies to: Social media sharing default image",
         },
+        {
+          w: 680,
+          h: 320,
+          q: 60,
+          fit: "crop",
+          version: "blog-content",
+          description: "Applies to: Blog content image",
+        },
+        {
+          w: 343,
+          h: 193,
+          q: 60,
+          fit: "crop",
+          version: "blog-featured",
+          description: "Applies to: Blog Featured image",
+        },
       ],
     };
   },
@@ -608,6 +624,8 @@ export default {
     },
     reset() {
       this.$refs.cropper.reset();
+      this.selectedVersion = null;
+      this.getCropBoxData();
     },
     rotate(deg) {
       this.$refs.cropper.rotate(deg);
@@ -634,6 +652,7 @@ export default {
         return;
       }
       this.originalFile = file;
+      this.imgname = this.originalFile ? this.originalFile.name.replace(/(\.[^.]*)$/, '') : '';
       if (typeof FileReader === "function") {
         const reader = new FileReader();
         reader.onload = (event) => {

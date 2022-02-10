@@ -7,7 +7,10 @@
       <div  v-for="im in activeImg ? lodash.find(images, {id: activeImg}).subfiles : []" class="col-sm-2" style="cursor: pointer">
             <img @click="selectImg(im)" :src="im.url" alt="image" class="img-fluid rounded" width="200" :style="'height: 100px; width: auto; ' + (im.subselected ? '    border: 4px solid #1abc9c;' : '')">
             <p class="mb-0">
-                <code>{{im.name}}</code>
+
+                <code>{{im.name}} <i
+                    @click="deleteFile(im)"    class="mdi mdi-delete me-2 text-muted vertical-middle"
+                ></i></code>
             </p>
         </div>
     </div>
@@ -108,6 +111,9 @@ export default {
     },
   },
   methods: {
+      deleteFile(file) {
+        this.$parent.$parent.deleteFile(file);
+        },
       confirmSelection() {
           if (this.$parent.$parent.mode == 'single') {
               this.$parent.$parent.updatedMediaImage(this.selectedImages[0].url);
