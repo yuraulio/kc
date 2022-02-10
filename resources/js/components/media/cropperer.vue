@@ -533,8 +533,28 @@ export default {
       //this.originalFile = this.prevalue;
       this.imgSrc = this.prevalue.url;
       this.uploadedVersions = this.prevalue.subfiles;
-      this.$refs.cropper.replace(this.prevalue.url);
+      axios.get(this.imgSrc, {
+      responseType: 'blob'
+    }).then((r) =>
+      {
+          var file = r.data;
+          this.imgname = this.prevalue ? this.prevalue.name.replace(/(\.[^.]*)$/, '') : '';
+      if (typeof FileReader === "function") {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          this.imgSrc = event.target.result;
+          // rebuild cropperjs with the updated source
+          this.$refs.cropper.replace(event.target.result);
+          setTimeout(() => {
+            this.getData();
+            this.getCropBoxData();
+          }, 600);
+        };
+        reader.readAsDataURL(file);
       this.$forceUpdate();
+      }
+      });
+
     }
   },
   methods: {
