@@ -6,7 +6,7 @@
         :key="imgSrc ? imgSrc.url : 'emp'"
         class="img-cropper"
       >
-        <vue-cropper ref="cropper" :src="imgSrc" preview=".preview" />
+        <vue-cropper ref="cropper" :checkCrossOrigin="false" :src="imgSrc" preview=".preview" />
       </div>
       <label
         v-show="imgSrc == null"
