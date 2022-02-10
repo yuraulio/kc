@@ -1,15 +1,14 @@
 <style scoped>
     .modal-size {
-        overflow-y: scroll;
-        height: 70vh;
+        overflow: hidden;
     }
     .components .card {
-        width: 115px;
+        width: 120px;
     }
 </style>
 
 <template>
-    <modal name="component-modal" :adaptive="true" height="auto" @before-open="getParams">
+    <modal name="component-modal" :adaptive="true" :height="400" @before-open="getParams">
 
         <div class="row pt-2 ps-4 pe-4">
             <div class="col-6 sm-auto">
