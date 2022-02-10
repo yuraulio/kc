@@ -1,10 +1,18 @@
 <template>
   <div class="row">
     <div class="col-lg-8">
-      <div v-show="imgSrc" :key="imgSrc ? imgSrc.url : 'emp'" class="img-cropper">
+      <div
+        v-show="imgSrc"
+        :key="imgSrc ? imgSrc.url : 'emp'"
+        class="img-cropper"
+      >
         <vue-cropper ref="cropper" :src="imgSrc" preview=".preview" />
       </div>
-      <label v-show="imgSrc == null" :name="'image'" style="width: 100%; min-height: 300px">
+      <label
+        v-show="imgSrc == null"
+        :name="'image'"
+        style="width: 100%; min-height: 300px"
+      >
         <form
           method="post"
           class="dropzone dz-clickable"
@@ -13,7 +21,10 @@
           data-previews-container="#file-previews"
           data-upload-preview-template="#uploadPreviewTemplate"
         >
-          <div class="dz-message needsclick" style="margin: 0 auto; min-height: 300px">
+          <div
+            class="dz-message needsclick"
+            style="margin: 0 auto; min-height: 300px"
+          >
             <i class="h1 text-muted dripicons-cloud-upload"></i>
             <div class="text-center">
               <input
@@ -135,7 +146,10 @@
         <button
           type="button"
           class="btn btn-soft-primary"
-          @click.prevent="imgSrc = null; showFileChooser"
+          @click.prevent="
+            imgSrc = null;
+            showFileChooser;
+          "
         >
           Reupload
         </button>
@@ -149,14 +163,14 @@
             <div class="col-md">
               <div class="form-floating">
                 <input
-                  v-model="imgData.x"
+                  v-model="imgData.scaleX"
                   type="number"
                   class="form-control"
                   id="floatingInputGrid1"
                   placeholder=""
                   value=""
                 />
-                <label for="floatingInputGrid1">X offset</label>
+                <label for="floatingInputGrid1">Scale X</label>
               </div>
             </div>
           </div>
@@ -164,14 +178,14 @@
             <div class="col-md">
               <div class="form-floating">
                 <input
-                  v-model="imgData.y"
+                  v-model="imgData.scaleY"
                   type="number"
                   class="form-control"
                   id="floatingInputGrid2"
                   placeholder=""
                   value=""
                 />
-                <label for="floatingInputGrid2">Y offset</label>
+                <label for="floatingInputGrid2">Scale Y</label>
               </div>
             </div>
           </div>
@@ -227,10 +241,18 @@
         <div class="col-lg-6">
           <h4 class="header-title mt-lg-0 my-3">CropBox Data</h4>
 
-          <div class="row g-2">
+          <div class="row g-2 mb-3">
             <div class="col-md">
               <div class="form-floating">
-                <input
+                <multiselect
+                  v-model="selectedVersion"
+                  :options="versions"
+                  :custom-label="nameWithLang"
+                  @input="versionSelected"
+                  :disabled="!imgSrc"
+                  placeholder="Select predefined" label="version" track-by="version"
+                ></multiselect>
+                <!-- <input
                   v-model="cropBoxData.left"
                   type="number"
                   class="form-control"
@@ -238,14 +260,14 @@
                   placeholder=""
                   value=""
                 />
-                <label for="floatingInputGrid11">Left</label>
+                <label for="floatingInputGrid11">Left</label> -->
               </div>
             </div>
           </div>
           <div class="row g-2">
             <div class="col-md">
               <div class="form-floating">
-                <input
+                <!-- <input
                   v-model="cropBoxData.top"
                   type="number"
                   class="form-control"
@@ -253,7 +275,7 @@
                   placeholder=""
                   value=""
                 />
-                <label for="floatingInputGrid21">Top</label>
+                <label for="floatingInputGrid21">Top</label> -->
               </div>
             </div>
           </div>
@@ -306,68 +328,97 @@
           </div>
         </div>
       </div>
-
     </div>
     <div class="col-lg-4">
-        <div class="card">
-            <div class="card-body bg-light" style="max-height: 95vh; overflow: hidden; overflow-y: scroll;">
-                <ul class="nav nav-pills navtab-bg nav-justified">
-                    <li class="nav-item">
-                        <a href="#home1" data-bs-toggle="tab" aria-expanded="false" class="nav-link active">
-                            Uploading
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#profile1" data-bs-toggle="tab" aria-expanded="true" class="nav-link">
-                            Versions
-                        </a>
-                    </li>
-                </ul>
-                <div class="tab-content">
-                    <div class="tab-pane show active" id="home1">
-                        <div class="col-lg-12 d-grid">
-                            <p>Preview</p>
-                            <div class="cropped-image preview" />
-                            <p>Cropped Image</p>
-                            <div class="cropped-image">
-                            <img v-if="cropImg" :src="cropImg" alt="Cropped Image" />
-                            <div v-else class="crop-placeholder" />
-                            </div>
+      <div class="card">
+        <div
+          class="card-body bg-light"
+          style="max-height: 95vh; overflow: hidden; overflow-y: scroll"
+        >
+          <ul class="nav nav-pills navtab-bg nav-justified">
+            <li class="nav-item">
+              <a
+                href="#home1"
+                data-bs-toggle="tab"
+                aria-expanded="false"
+                class="nav-link active"
+              >
+                Uploading
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                href="#profile1"
+                data-bs-toggle="tab"
+                aria-expanded="true"
+                class="nav-link"
+              >
+                Versions
+              </a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane show active" id="home1">
+              <div class="col-lg-12 d-grid">
+                <p>Preview</p>
+                <div class="cropped-image preview" />
+                <p>Cropped Image</p>
+                <div class="cropped-image">
+                  <img v-if="cropImg" :src="cropImg" alt="Cropped Image" />
+                  <div v-else class="crop-placeholder" />
+                </div>
 
-                            <div class="mt-3 mb-3">
-                                <label for="example-range" class="form-label">Compression Quality (0-100)</label>
-                                <input v-model="compression" class="form-range" id="example-range" type="range" name="range" min="0" max="100">
-                            </div>
+                <div class="mt-3 mb-3">
+                  <label for="example-range" class="form-label"
+                    >Compression Quality ({{ compression }})</label
+                  >
+                  <input
+                    v-model="compression"
+                    class="form-range"
+                    id="example-range"
+                    type="range"
+                    name="range"
+                    min="0"
+                    max="100"
+                  />
+                </div>
 
-                            <div class="mb-3">
-                            <label class="form-label">Name</label>
-                            <small>(Keep filename same for resizes to be child images)</small>
-                            <input v-model="imgname" type="text" class="form-control" />
-                            </div>
+                <div class="mb-3">
+                  <label class="form-label">Name</label>
+                  <small
+                    >(Keep filename same for resizes to be child images)</small
+                  >
+                  <input v-model="imgname" type="text" class="form-control" />
+                </div>
 
-                            <!-- <div class="mb-3">
+                <!-- <div class="mb-3">
                             <label class="form-label">Alt Text</label>
                             <input v-model="alttext" type="text" class="form-control" />
                             </div> -->
 
-                            <button @click="upload" class="btn btn-soft-success btn-block mt-1" :disabled="isUploading">
-                            <span v-if="isUploading"><i class="fas fa-spinner fa-spin"></i>  Uploading...</span>
-                            <span v-else>Upload</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="tab-pane" id="profile1">
-                        <div v-for="im in uploadedVersions" class="col-sm-12">
-                            <img :src="im.url" alt="image" class="img-fluid rounded">
-                            <p class="mb-0">
-                                <code>{{im.name}}</code>
-                            </p>
-                        </div>
-                    </div>
-                </div>
+                <button
+                  @click="upload"
+                  class="btn btn-soft-success btn-block mt-1"
+                  :disabled="isUploading"
+                >
+                  <span v-if="isUploading"
+                    ><i class="fas fa-spinner fa-spin"></i> Uploading...</span
+                  >
+                  <span v-else>Upload</span>
+                </button>
+              </div>
             </div>
+            <div class="tab-pane" id="profile1">
+              <div v-for="im in uploadedVersions" class="col-sm-12">
+                <img :src="im.url" alt="image" class="img-fluid rounded" />
+                <p class="mb-0">
+                  <code>{{ im.name }}</code>
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-
+      </div>
     </div>
   </div>
 </template>
@@ -387,9 +438,10 @@ export default {
   },
   data() {
     return {
-        isUploading: false,
-        originalFile: null,
-        uploadedVersions: [],
+      selectedVersion: null,
+      isUploading: false,
+      originalFile: null,
+      uploadedVersions: [],
       imgSrc: null,
       cropImg: "",
       data: null,
@@ -397,13 +449,72 @@ export default {
       alttext: "",
       cropBoxData: {},
       imgData: {},
-      compression: 100
+      compression: 100,
+      versions: [
+        {
+          w: 470,
+          h: 470,
+          q: 60,
+          fit: "crop",
+          version: "instructors-testimonials",
+          description:
+            "Applies to : Our Instructor Page (Footer) & Event -> Instructors",
+        },
+        {
+          w: 542,
+          h: 291,
+          q: 60,
+          fit: "crop",
+          version: "event-card",
+          description: "Applies to : Homepage Events list",
+        },
+        {
+          w: 470,
+          h: 470,
+          q: 60,
+          fit: "crop",
+          version: "users",
+          description: "Applies to : Testimonial square image",
+        },
+        {
+          w: 2880,
+          h: 1248,
+          q: 60,
+          fit: "crop",
+          version: "header-image",
+          description: "Applies to: Event header carousel (Main event page)",
+        },
+        {
+          w: 90,
+          h: 90,
+          q: 60,
+          fit: "crop",
+          version: "instructors-small",
+          description: "Applies to : Event -> Topics (syllabus-block)",
+        },
+        {
+          w: 300,
+          h: 300,
+          q: 60,
+          fit: "crop",
+          description: "feed-image",
+          version: "feed-image",
+        },
+        {
+          w: 1920,
+          h: 832,
+          q: 60,
+          fit: "crop",
+          version: "social-media-sharing",
+          description: "Applies to: Social media sharing default image",
+        },
+      ],
     };
   },
   mounted() {
     if (this.prevalue) {
-        console.log(this.prevalue);
-        //this.originalFile = this.prevalue;
+      console.log(this.prevalue);
+      //this.originalFile = this.prevalue;
       this.imgSrc = this.prevalue.url;
       this.uploadedVersions = this.prevalue.subfiles;
       this.$refs.cropper.replace(this.prevalue.url);
@@ -411,18 +522,40 @@ export default {
     }
   },
   methods: {
+      versionSelected() {
+          if (this.selectedVersion) {
+              this.$set(this.cropBoxData, 'width', this.selectedVersion.w)
+              this.$set(this.cropBoxData, 'height', this.selectedVersion.h)
+              this.setCropBoxData();
+          }
+      },
+      nameWithLang ({ version, description }) {
+      return `${version} — [${description}]`
+    },
     upload() {
-        console.log(this.compression)
-      this.$refs.cropper.getCroppedCanvas().toBlob((blob) => {
-        this.$emit("upload", blob);
-      },'image/jpeg', this.compression / 100);
+      console.log(this.compression);
+      this.$refs.cropper.getCroppedCanvas({
+          width: this.cropBoxData.width,
+          height: this.cropBoxData.height,
+        }).toBlob(
+        (blob) => {
+          this.$emit("upload", blob);
+        },
+        "image/jpeg",
+        this.compression / 100
+      );
     },
     imageAdded($event) {
       this.imgSrc = $event.url;
     },
     cropImage() {
       // get image data for post processing, e.g. upload or setting image src
-      this.cropImg = this.$refs.cropper.getCroppedCanvas().toDataURL('image/jpeg', this.compression / 100);
+      this.cropImg = this.$refs.cropper
+        .getCroppedCanvas({
+          width: this.cropBoxData.width,
+          height: this.cropBoxData.height,
+        })
+        .toDataURL("image/jpeg", this.compression / 100);
 
       /*this.$refs.cropper.getCroppedCanvas().toBlob((blob) => {
         const formData = new FormData();
@@ -491,7 +624,7 @@ export default {
         this.$set(this.imgData, key, parseFloat(value));
       }
       if (!this.imgData) return;
-      this.$refs.cropper.setCanvasData(this.imgData);
+      this.$refs.cropper.setData(this.imgData);
     },
     setImage(e) {
       console.log("set Image", e);
@@ -507,6 +640,10 @@ export default {
           this.imgSrc = event.target.result;
           // rebuild cropperjs with the updated source
           this.$refs.cropper.replace(event.target.result);
+          setTimeout(() => {
+            this.getData();
+            this.getCropBoxData();
+          }, 600);
         };
         reader.readAsDataURL(file);
       } else {
@@ -521,7 +658,12 @@ export default {
     },
   },
   beforeDestroy() {
-      this.imgSrc = null;
+    this.imgSrc = null;
+  },
+  watch: {
+      compression() {
+          this.cropImage();
+      }
   }
 };
 </script>
@@ -529,14 +671,13 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .dz-message {
-        margin: 0px auto;
-    display: flex;
-    min-height: 300px;
-    flex-direction: column;
-    justify-content: center;
-    align-content: center;
-    align-items: center;
-
+  margin: 0px auto;
+  display: flex;
+  min-height: 300px;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
 }
 input[type="file"] {
   display: none;
