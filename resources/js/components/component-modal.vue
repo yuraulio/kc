@@ -114,6 +114,11 @@
                         <span class="text-muted m-2 mt-1">Post feature</span>
                     </div>
 
+                    <div @click="selectComponent('menus')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
+                        <i style="font-size: 20px" class="text-muted dripicons-menu d-block mt-1"></i>
+                        <span class="text-muted m-2 mt-1">Menus</span>
+                    </div>
+
                 </template>
 
             </div>

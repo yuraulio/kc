@@ -153,6 +153,9 @@
                                                 :value="input.value"
                                                 :size="input.size"
                                                 @inputed="inputed($event, input)"
+                                                :route="input.route"
+                                                :multi="false"
+                                                :existingValue="input.value"
                                             />
                                         </div>
 

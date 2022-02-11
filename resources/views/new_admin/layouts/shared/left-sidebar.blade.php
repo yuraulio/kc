@@ -105,10 +105,10 @@
                                 <a href="{{route('admin-comments')}}">Comments management</a>
                             </li>
                             <li>
-                                <a href="{{route('admin-media')}}">Assets <span class="badge bg-warning mt-0 align-middle">In proggress</span> </a>
+                                <a href="{{route('admin-media')}}">Assets management</a>
                             </li>
                             <li class="{{ \Request::is('menus/*') ? 'menuitem-active' : ''}}">
-                                <a href="{{route('admin-menu')}}">Menus <span class="badge bg-primary mt-0 align-middle ">Comming soon</span> </a>
+                                <a href="{{route('admin-menu')}}">Menus management</a>
                             </li>
                         </ul>
                     </div>

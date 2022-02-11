@@ -15,7 +15,7 @@
         :placeholder="placeholder"
         :multiple="multi"
         :taggable="taggable"
-        label="title"
+        :label="label"
         track-by="id"
         :options="list"
         @tag="addedTag"
@@ -71,6 +71,7 @@
                 value: [],
                 list: [],
                 editTag: false,
+                label: "title",
             }
         },
         watch: {
@@ -100,9 +101,14 @@
                 .get('/api/' + this.route)
                 .then((response) => {
                     if (response.status == 200){
-                        var data = response.data.data;
-                        this.list = data;
-                        // this.value = this.propValue;
+                        if (this.route == "getMenus"){
+                            // console.log(response.data.menus);
+                            this.label = "name";
+                            this.list = response.data.menus;
+                        } else {
+                            var data = response.data.data;
+                            this.list = data;
+                        }
                     }
                 })
                 .catch((error) => {

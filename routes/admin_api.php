@@ -48,5 +48,7 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
         Route::post('media_manager/upload_reg_file', [MediaController::class, 'uploadRegFile']);
         Route::get('media_manager/files', [MediaController::class, 'files']);
         Route::delete('media_manager/file/{id}', [MediaController::class, 'deleteFile']);
+
+        Route::get('getMenus', '\CodexShaper\Menu\Http\Controllers\MenuController@getMenus');
     });
 });

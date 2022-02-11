@@ -66,7 +66,12 @@
             </div>
 
             <ul class="main-menu">
-                @if (!empty($header_menus))
+                
+                @yield('main-menu')
+
+                {{-- @menu('main-menu') --}}
+
+                {{-- @if (!empty($header_menus))
                     @foreach ($header_menus['menu']['Header'] as $key => $row)
                         <li>
                             <a title="{{ $row['data']['name'] }}" href="{{ $row['data']['slugable']['slug'] }}">{{ $row['data']['name'] }}</a>
@@ -75,7 +80,7 @@
                     <li>
                         <a title="Blog" href="/en/blog">Blog</a>
                     
-                @endif
+                @endif --}}
             </ul>
         </div>
     </div>

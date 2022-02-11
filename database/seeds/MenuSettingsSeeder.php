@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use CodexShaper\Menu\Models\MenuSetting;
 use Illuminate\Database\Seeder;
 

@@ -90,12 +90,13 @@
     </div>
 
     <div v-if="type == 'multidropdown'" class="">
+        <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
         <multidropdown
             :title="title"
             @updatevalue="updated"
             :prop-value="existingValue"
             :route="route"
-            :fetch="false"
+            :fetch="true"
             :multi="multi"
             :taggable="taggable"
         ></multidropdown>

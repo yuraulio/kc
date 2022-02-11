@@ -337,5 +337,38 @@
                 "label": "Alt Text"
             }
         ]
+    },
+    "menus" : {
+        "title": "Menus",
+        "icon": "dripicons-menu",
+        "key": "menu_component",
+        "one_column": true,
+        "changable": false,
+        "inputs": [
+            {
+                "type": "multidropdown",
+                "key": "main_menu",
+                "label": "Main menu",
+                "route": "getMenus"
+            },
+            {
+                "type": "multidropdown",
+                "key": "footer_menu_1",
+                "label": "Footer menu 1",
+                "route": "getMenus"
+            },
+            {
+                "type": "multidropdown",
+                "key": "footer_menu_2",
+                "label": "Footer menu 2",
+                "route": "getMenus"
+            },
+            {
+                "type": "multidropdown",
+                "key": "footer_menu_3",
+                "label": "Footer menu 3",
+                "route": "getMenus"
+            }
+        ]
     }
 }

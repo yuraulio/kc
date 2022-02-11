@@ -142,7 +142,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 @endif
 
 <div class="page-wrapper non-pointer">
-@include('theme.layouts.header')
+@include('new_web.layouts.header')
 @include('theme.layouts.mobile_menu')
 
 @if (!Auth::check())
@@ -237,7 +237,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 </div>
 {{--include('theme.home.partials.newsletter')--}}
-@include('theme.layouts.footer')
+@include('new_web.layouts.footer')
 <a href="#" class="go-top-btn"><i class="icon-up-open"></i></a>
 </div>
 @include('theme.layouts.footer_scripts')
