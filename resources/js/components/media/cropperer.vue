@@ -6,7 +6,7 @@
         :key="imgSrc ? imgSrc : 'emp'"
         class="img-cropper"
       >
-        <vue-cropper ref="cropper" :checkCrossOrigin="true" :src="imgSrc" preview=".preview" />
+        <vue-cropper ref="cropper" :checkCrossOrigin="false" :src="imgSrc" preview=".preview" />
       </div>
       <label
         v-show="imgSrc == null"
@@ -542,6 +542,7 @@ export default {
         reader.onload = (event) => {
           this.imgSrc = event.target.result;
           this.imgSrc.setAttribute('crossorigin', 'anonymous');
+
           // rebuild cropperjs with the updated source
           this.$refs.cropper.replace(this.imgSrc);
           setTimeout(() => {
@@ -584,12 +585,18 @@ export default {
     },
     cropImage() {
       // get image data for post processing, e.g. upload or setting image src
-      this.cropImg = this.$refs.cropper
-        .getCroppedCanvas({
-          width: this.cropBoxData.width,
-          height: this.cropBoxData.height,
-        })
-        .toDataURL("image/jpeg", this.compression / 100);
+       let canvas_img = window.document.querySelector('img.cropper-hide');
+        //let src = canvas_img.getAttribute('src');
+        canvas_img.setAttribute('crossorigin', 'anonymous')
+        setTimeout(() => {
+            this.cropImg = this.$refs.cropper
+            .getCroppedCanvas({
+            width: this.cropBoxData.width,
+            height: this.cropBoxData.height,
+            })
+            .toDataURL("image/jpeg", this.compression / 100);
+        }, 300)
+
 
       /*this.$refs.cropper.getCroppedCanvas().toBlob((blob) => {
         const formData = new FormData();
@@ -696,6 +703,7 @@ export default {
   },
   beforeDestroy() {
     this.imgSrc = null;
+    this.$parent.$parent.selectedFile = null;
   },
   watch: {
       compression() {
