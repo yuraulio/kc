@@ -9,8 +9,6 @@
                 <a href="#"
                 style="    margin-top: 2px"
                     class="btn btn-soft-info"
-                    data-toggle="modal"
-                    data-target="#editMenuItemModal"
                     v-on:click="editMenuItem(list.id)"
                     :data-id="list.id"><i class=" mdi mdi-square-edit-outline"></i></a>
                 <a

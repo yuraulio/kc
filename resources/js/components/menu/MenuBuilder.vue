@@ -9,19 +9,17 @@
                             <button
                                 v-on:click="showAddMenuItemForm"
                                 class="btn btn-success"
-                                data-toggle="modal"
                                 data-target="#addMenuItemModal">Add Menu Item</button>
                             <button
                                 v-on:click="showSettingsForm"
                                 class="btn btn-info edit-info"
-                                data-toggle="modal"
                                 data-target="#settingsModal">Settings</button>
                             <button
+                            @click="showDesignModal"
                                 id="show_menu_design"
                                 class="btn btn-info edit-info"
                                 :data-id="menu.id"
                                 :data-prefix="prefix"
-                                data-toggle="modal"
                                 data-target="#showMenuModel"> View Design</button>
                         </div>
 
@@ -128,10 +126,16 @@
                 })
                 .catch(err => console.log(err));
             },
-            showSettingsForm: function(){},
+            showSettingsForm: function(){
+                $('#settingsModal').modal('show');
+            },
+            showDesignModal() {
+                $('#showMenuModel').modal('show');
+            },
             showAddMenuItemForm: function(){
                 this.errors.title = "";
                 this.resetForm();
+                $('#addMenuItemModal').modal('show');
             },
             addMenuItem: function(item){
                 event.preventDefault();
@@ -182,6 +186,7 @@
                     }
                 })
                 .catch(err => console.log(err));
+                $('#editMenuItemModal').modal('show');
             },
             updateMenuItem: function(item){
                 event.preventDefault();
@@ -208,6 +213,7 @@
 
                 })
                 .catch(err => console.log(err));
+                $('.modal').modal('hide');
             },
             deleteMenuItem: function(id){
                 event.preventDefault();
@@ -302,7 +308,7 @@
             },
             closeModal: function(){
                 $('.modal').modal('hide');
-                $('.modal-backdrop').remove();
+                //$('.modal-backdrop').remove();
             },
         }
     };

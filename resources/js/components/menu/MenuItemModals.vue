@@ -97,7 +97,7 @@
 
                             </div>
                             <div class="m-footer pull-right">
-                                <button type="button" class="btn btn-danger cs-danger" data-dismiss="modal">Close</button>
+                                <button @click="closeModal" type="button" class="btn btn-danger cs-danger" data-dismiss="modal">Close</button>
                                 <button type="submit" id="add_menu_item_btn" class="btn btn-info edit-info">Add Item</button>
                             </div>
                         </div>
@@ -212,7 +212,7 @@
 
                             </div>
                             <div class="mo-footer pull-right">
-                                <button type="button" class="btn btn-danger cs-danger" data-dismiss="modal">Close</button>
+                                <button type="button" @click="closeModal" class="btn btn-danger cs-danger" data-dismiss="modal">Close</button>
                              <button type="submit" id="edit_menu_item_btn" class="btn btn-info edit-info">Update</button>
                             </div>
                         </div>
@@ -247,7 +247,7 @@
 
                             </div>
                             <div class="mo-footer pull-right">
-                                <button type="button" class="btn btn-danger cs-danger" data-dismiss="modal">Close</button>
+                                <button type="button" @click="closeModal" class="btn btn-danger cs-danger" data-dismiss="modal">Close</button>
                              <button type="submit" id="add_menu_setting" class="btn btn-info edit-info">Update</button>
                             </div>
                         </div>
@@ -266,7 +266,7 @@
                     <div class="modal-body">
                         <div class="menu_items"></div>
                         <div class="m-footer">
-                            <button type="button" class="btn btn-danger cs-danger float-right" data-dismiss="modal">Close</button>
+                            <button @click="closeModal" type="button" class="btn btn-danger cs-danger float-right" data-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>
@@ -298,6 +298,9 @@
             }
         },
         methods: {
+            closeModal() {
+                $('.modal').modal('hide');
+            },
             addParam: function(){
                 let paramItems = [...this.item.paramItems];
                 this.$delete(this.item, 'paramItems');
