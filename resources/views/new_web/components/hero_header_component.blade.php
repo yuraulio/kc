@@ -5,12 +5,12 @@
     }
 @endphp
 
-<section class="section-hero" style="background-image:url({{ $hero["hero_image"] }})">
+<section class="section-hero" style="background-image:url({{ $hero["hero_image"] ?? "" }})">
     <div class="overlay"></div>
     <div class="container">
         <div class="hero-message pad-r-col-6">
-            <h1>{{ $hero["hero_title"] }}</h1>
-            <h2>{{ $hero["hero_subtitle"] }}</h2>
+            <h1>{{ $hero["hero_title"] ?? "" }}</h1>
+            <h2>{{ $hero["hero_subtitle"] ?? "" }}</h2>
         </div>
     </div>
 </section>

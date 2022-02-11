@@ -5,4 +5,4 @@
     }
 @endphp
 
-{!! $html["html_embed"] !!}
+{!! $html["html_embed"] ?? "" !!}

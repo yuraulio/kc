@@ -152,7 +152,8 @@
             {
                 "type": "text",
                 "key": "meta_image_alt_text",
-                "label": "Alt Text"
+                "label": "Alt Text",
+                "size": "col-lg-12"
             },
             {
                 "type": "text",
@@ -175,7 +176,6 @@
         "one_column": true,
         "icon": "dripicons-align-justify",
         "inputs": [
-
         ]
     },
     "social_bar" : {
@@ -184,7 +184,16 @@
         "key": "social_bar_component",
         "icon": "dripicons-web",
         "inputs": [
-
+            {
+                "type": "text",
+                "key": "social_title",
+                "label": "Title"
+            },
+            {
+                "type": "text",
+                "key": "social_summary",
+                "label": "Summary"
+            }
         ]
     },
     "gallery" : {

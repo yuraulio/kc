@@ -9,7 +9,7 @@
     <div class="form-area-wrapper m-0">
         <div class="form-wrapper blue-form w-m-bottom" style="margin-top: -315px;">
             <form id="doall" method="POST" class="contactUsForm" novalidate="">
-                <h3 class="form-h3">{{ $form["title"] }}</h3>
+                <h3 class="form-h3">{{ $form["title"] ?? "" }}</h3>
                 <label>First name <span>*</span></label>
                 <div class="input-safe-wrapper">
                     <input class="required" type="text" id="cname" name="cname">
@@ -39,16 +39,16 @@
                         </div>
                         
                         <label class="contact-form" for="receive-messages">
-                            {!! $form["consent_text"] !!}
+                            {!! $form["consent_text"] ?? "" !!}
                         </label>
 
                     </div>
                 @endif
 
-                <input type="hidden" name="success" value="{{ $form["success_text"] }}">
+                <input type="hidden" name="success" value="{{ $form["success_text"] ?? "" }}">
 
                 <div class="submit-area-custom">
-                    <button onClick="contactUsSubmit()" type="button" id="sendme" class="btn btn--md btn--secondary contactUsSubmit">{{ $form["button_text"] }} </button>
+                    <button onClick="contactUsSubmit()" type="button" id="sendme" class="btn btn--md btn--secondary contactUsSubmit">{{ $form["button_text"] ?? "" }} </button>
                 </div>
             </form>
             <div class="alert-outer" hidden="">
