@@ -190,7 +190,7 @@
                         !uncolapsed.includes(item.children[0].id)
                       "
                     >
-                      <i class="mdi mdi-plus font-18"></i>
+                      <button class="dd-collapse" data-action="collapse" type="button">Collapse</button>
                     </button>
                     <button
                       @click="uncollapse(item)"

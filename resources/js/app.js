@@ -5,7 +5,7 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-//require('./bootstrap');
+require('./bootstrap');
 //window.Vue = require('vue').default;
 //
 //// mix v6
@@ -16,7 +16,7 @@
 
 import Vue from 'vue';
 window.eventHub = new Vue()
-window.axios = require('axios').default;
+//window.axios = require('axios').default;
 
 window.Swal = require('sweetalert2');
 var _ = require("lodash");
@@ -45,6 +45,8 @@ Vue.use(UUID);
 import VueNestable from 'vue-nestable'
 
 Vue.use(VueNestable)
+require('datatables.net-bs4');
+require('nestable2');
 
 Vue.component('dashboard-widget', require('./components/dashboard-widget.vue').default);
 Vue.component('dashboard-table', require('./components/dashboard-table.vue').default);
@@ -71,7 +73,11 @@ Vue.component('comments', require('./components/comments.vue').default);
 
 Vue.component('avatar', require('vue-avatar').default);
 Vue.component('media-manager', require('./components/media/media-manager.vue').default);
+Vue.component('menu-header', require('./components/menu/layouts/Header.vue').default);
+Vue.component('menu-left-sidebar', require('./components/menu/layouts/LeftSidebar.vue').default);
 
+Vue.component('draggable-menu', require('./components/menu/MenuBuilder.vue').default);
+Vue.component('nest-menu', require('./components/menu/NestMenu.vue').default);
 
 
 new Vue({

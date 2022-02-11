@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b58390cb39507b095a3ba1d1b86f85a6",
+    "content-hash": "fc65075519184418daf34e68d921de8b",
     "packages": [
         {
             "name": "alexusmai/laravel-file-manager",
@@ -487,6 +487,69 @@
                 "source": "https://github.com/cocur/slugify/tree/master"
             },
             "time": "2019-12-14T13:04:14+00:00"
+        },
+        {
+            "name": "codexshaper/laravel-menu-builder",
+            "version": "v2.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Codexshaper/laravel-menu-builder.git",
+                "reference": "0dd9152c9560db9da38cdb25845dc7708a419ff1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Codexshaper/laravel-menu-builder/zipball/0dd9152c9560db9da38cdb25845dc7708a419ff1",
+                "reference": "0dd9152c9560db9da38cdb25845dc7708a419ff1",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "~5.5.40|~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0|^8.0",
+                "php": "~5.4|~5.5|5.6|~7.0|~7.1|^7.2|^7.3"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "CodexShaper\\Menu\\MenuServiceProvider"
+                    ],
+                    "aliases": {
+                        "MenuBuilder": "CodexShaper\\Menu\\Facades\\Menu"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "CodexShaper\\Menu\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Md Abu Ahsan Basir",
+                    "email": "maab.career@gmail.com"
+                }
+            ],
+            "description": "Laravel Drag and Drop Menu Builder",
+            "homepage": "https://github.com/Codexshaper/laravel-menu-builder",
+            "keywords": [
+                "MenuBuilder",
+                "drag",
+                "draggable",
+                "drop",
+                "jquery",
+                "laravel",
+                "menu",
+                "nestable",
+                "vuejs2"
+            ],
+            "support": {
+                "issues": "https://github.com/Codexshaper/laravel-menu-builder/issues",
+                "source": "https://github.com/Codexshaper/laravel-menu-builder"
+            },
+            "time": "2020-09-27T22:26:27+00:00"
         },
         {
             "name": "composer/ca-bundle",

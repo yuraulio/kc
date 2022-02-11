@@ -94,4 +94,9 @@ class DashboardController extends Controller
             'comments' => $page->comments->take(500),
         ]);
     }
+
+    public function menu()
+    {
+        return view('new_admin.pages.menu');
+    }
 }

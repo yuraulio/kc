@@ -85,12 +85,12 @@
                     </div>
                 </li>
 
-                <li>
+                <li class="{{ \Request::is('menus/*') ? 'menuitem-active' : ''}}">
                     <a href="#sidebarCMS" data-bs-toggle="collapse">
                         <i data-feather="airplay"></i>
                         <span> CMS</span>
                     </a>
-                    <div class="collapse" id="sidebarCMS">
+                    <div class="collapse {{ \Request::is('menus/*') ? ' show' : ''}}" id="sidebarCMS">
                         <ul class="nav-second-level">
                             <li>
                                 <a href="{{route('admin-categories')}}">Categories management</a>
@@ -107,8 +107,8 @@
                             <li>
                                 <a href="{{route('admin-media')}}">Assets <span class="badge bg-warning mt-0 align-middle">In proggress</span> </a>
                             </li>
-                            <li>
-                                <a href="#">Menu <span class="badge bg-primary mt-0 align-middle">Comming soon</span> </a>
+                            <li class="{{ \Request::is('menus/*') ? 'menuitem-active' : ''}}">
+                                <a href="{{route('admin-menu')}}">Menus <span class="badge bg-primary mt-0 align-middle ">Comming soon</span> </a>
                             </li>
                         </ul>
                     </div>

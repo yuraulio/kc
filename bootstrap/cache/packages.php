@@ -45,6 +45,17 @@
     array (
     ),
   ),
+  'codexshaper/laravel-menu-builder' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'CodexShaper\\Menu\\MenuServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'MenuBuilder' => 'CodexShaper\\Menu\\Facades\\Menu',
+    ),
+  ),
   'cviebrock/eloquent-sluggable' => 
   array (
     'providers' => 
