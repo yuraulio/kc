@@ -586,8 +586,10 @@ export default {
     cropImage() {
       // get image data for post processing, e.g. upload or setting image src
        let canvas_img = window.document.querySelector('img.cropper-hide');
-        //let src = canvas_img.getAttribute('src');
-        canvas_img.setAttribute('crossorigin', 'anonymous')
+        let src = canvas_img.getAttribute('src');
+         canvas_img.setAttribute('crossorigin', 'anonymous')
+         /*Somehow src needs to be set again in order for crossorigin to work */
+         canvas_img.setAttribute('src', src)
         setTimeout(() => {
             this.cropImg = this.$refs.cropper
             .getCroppedCanvas({
@@ -595,7 +597,7 @@ export default {
             height: this.cropBoxData.height,
             })
             .toDataURL("image/jpeg", this.compression / 100);
-        }, 300)
+        }, 100)
 
 
       /*this.$refs.cropper.getCroppedCanvas().toBlob((blob) => {
