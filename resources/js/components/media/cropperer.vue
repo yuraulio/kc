@@ -410,7 +410,7 @@
             </div>
             <div class="tab-pane" id="profile1">
               <div v-for="im in uploadedVersions" class="col-sm-12">
-                <img crossorigin="anonymous" :src="im.url" alt="image" class="img-fluid rounded" />
+                <img crossorigin="anonymous" :src="'/uploads/' + im.path" alt="image" class="img-fluid rounded" />
                 <p class="mb-0">
                   <code>{{ im.name }}</code>
                 </p>
@@ -531,7 +531,7 @@ export default {
     if (this.prevalue) {
       console.log(this.prevalue);
       //this.originalFile = this.prevalue;
-      this.imgSrc = this.prevalue.url;
+      this.imgSrc = '/uploads/' + this.prevalue.path;
       this.uploadedVersions = this.prevalue.subfiles;
       this.originalFile = this.prevalue;
 
@@ -585,11 +585,7 @@ export default {
     },
     cropImage() {
       // get image data for post processing, e.g. upload or setting image src
-       let canvas_img = window.document.querySelector('img.cropper-hide');
-        let src = canvas_img.getAttribute('src');
-         canvas_img.setAttribute('crossorigin', 'anonymous')
-         /*Somehow src needs to be set again in order for crossorigin to work */
-         canvas_img.setAttribute('src', src)
+
         setTimeout(() => {
             this.cropImg = this.$refs.cropper
             .getCroppedCanvas({
