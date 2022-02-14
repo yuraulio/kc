@@ -25,7 +25,7 @@ If you don't already have an Apache local environment with PHP and MySQL, use on
 - Mac: https://wpshout.com/quick-guides/how-to-install-mamp-on-your-mac
 
 You will also need to install Composer: https://getcomposer.org/doc/00-intro.md
-.
+..
 
 
 ## Installation
