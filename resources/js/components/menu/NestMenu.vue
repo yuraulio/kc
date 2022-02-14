@@ -39,6 +39,13 @@
                                                 Edit
                                             </button>
                                             <button
+                                                class="btn btn-soft-warning"
+                                                title="clone menu"
+                                                v-on:click="cloneMenu(menu.id)"
+                                                :data-id="menu.id">
+                                                Clone
+                                            </button>
+                                            <button
                                                 class="btn btn-soft-danger cs-danger"
                                                 title="delete menu"
                                                 v-on:click="deleteMenu(menu.id)"
@@ -192,11 +199,27 @@
                     } else if (result.dismiss === Swal.DismissReason.cancel) {
                         Swal.fire(
                             'Cancelled',
-                            'Your imaginary file is safe :)',
+                            'Your Menu is safe',
                             'error'
                         )
                     }
                 });
+            },
+            cloneMenu(id) {
+                let url = this.prefix+'/menu/clone/'+id;
+                axios({
+                    url: url,
+                    method: 'POST',
+                    responseType: 'json'
+                })
+                .then(res => {
+                    if (res.data.success == true) {
+                        this.fetchMenus();
+                        this.$toast.success('Menu cloned Successfully!');
+                    }
+
+                })
+                .catch(err => console.log(err));
             },
             resetForm: function(){
                 this.menu = {};

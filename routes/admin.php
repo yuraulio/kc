@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin_api\MenuController;
 use App\Http\Controllers\Auth\AdminLoginController;
 use Illuminate\Support\Facades\Route;
 
@@ -39,6 +40,7 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
     Route::post('menu/sort', '\CodexShaper\Menu\Http\Controllers\MenuController@sort');
     Route::put('menu', '\CodexShaper\Menu\Http\Controllers\MenuController@update');
     Route::delete('menu/{id}', '\CodexShaper\Menu\Http\Controllers\MenuController@destroy');
+    Route::post('menu/clone/{id}', [MenuController::class, 'clone']);
     // Menu Items
     Route::get('menu/items/{menu_id}', '\CodexShaper\Menu\Http\Controllers\MenuItemController@getMenuItems');
     Route::get('menu/{menu_id}/item/{id}', '\CodexShaper\Menu\Http\Controllers\MenuItemController@getMenuItem');
