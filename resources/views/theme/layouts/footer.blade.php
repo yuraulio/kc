@@ -247,8 +247,8 @@ $social_media = get_social_media();
                </ul>
             </div>
             <div class="copyright-wrapper">
-					<p>Copyright © 2019, <br/>KnowCrunch Inc., <br/>2035 Sunset Lake Road, <br/>Delaware, USA.</p>
-               <p>KnowCrunch Inc. © <?php echo date('Y')?></p>
+					<p> <br/>Knowcrunch Inc., <br/>2035 Sunset Lake Road, <br/>Delaware, USA.</p>
+               <p>Knowcrunch Inc. © <?php echo date('Y')?></p>
 
 				</div>
          </div>
