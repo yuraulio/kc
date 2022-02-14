@@ -8,9 +8,15 @@
             <img @click="selectImg(im)" :src="im.url" alt="image" class="img-fluid rounded" width="200" :style="'height: 100px; width: auto; ' + (im.subselected ? '    border: 4px solid #1abc9c;' : '')">
             <p class="mb-0">
 
-                <code>{{im.name}} <i
-                    @click="deleteFile(im)"    class="mdi mdi-delete me-2 text-muted vertical-middle"
-                ></i></code>
+                <code>
+                    <template v-if="im.name.length < 20">
+                        {{ im.name }}
+                    </template>
+                    <template v-else>
+                        {{ limit(im.name, 20) }}...
+                    </template>
+                    <i @click="deleteFile(im)"    class="mdi mdi-delete me-2 text-muted vertical-middle"></i>
+                </code>
             </p>
         </div>
     </div>
@@ -37,7 +43,13 @@
                     class="d-block img-fluid"
                 />
                 <div class="carousel-caption d-none d-md-block card bg-dark" style="margin-bottom: -60px">
-                    <h3 class="text-white">{{ img.name }}
+                    <h3 class="text-white">
+                        <template v-if="img.name.length < 40">
+                            {{ img.name }}
+                        </template>
+                        <template v-else>
+                            {{ limit(img.name, 40) }}...
+                        </template>
                         <span @click="$set(img, 'selected', false)" v-if="img.selected" class="badge bg-success rounded-pill float-end pr-2" style="line-height: 1.1;margin-right: 5px; margin-top: -25px;cursor: pointer"><i class="mdi mdi-check"></i></span>
                         <span @click="$set(img, 'selected', true)" v-else class="badge bg-light rounded-pill text-dark float-end pr-2" style="line-height: 1.1;margin-right: 5px; margin-top: -25px;cursor: pointer"><i class="mdi mdi-check"></i></span>
                     </h3>
@@ -87,71 +99,74 @@
 <script>
 
 export default {
-  props: {
-    images: {},
-    opImage: {}
-  },
-  data() {
-    return {
-        selectedImage: null,
-        activeImg: null,
-        lodash: _,
-        beforeActive: null,
-        subactiveImg: null,
-        selectedImages: []
-    };
-  },
-  computed: {
-    currentImages() {
-      return this.images
-        ? _.map(this.images, function (o) {
-            return o.url;
-          })
-        : [];
+    props: {
+        images: {},
+        opImage: {}
     },
-  },
-  methods: {
-      deleteFile(file) {
-        this.$parent.$parent.deleteFile(file);
+    data() {
+        return {
+            selectedImage: null,
+            activeImg: null,
+            lodash: _,
+            beforeActive: null,
+            subactiveImg: null,
+            selectedImages: []
+        };
+    },
+    computed: {
+        currentImages() {
+        return this.images
+            ? _.map(this.images, function (o) {
+                return o.url;
+            })
+            : [];
         },
-      confirmSelection() {
-          if (this.$parent.$parent.mode == 'single') {
-              this.$parent.$parent.updatedMediaImage(this.selectedImages[0].url);
-          } else {
-              this.$parent.$parent.updatedMediaImage(this.selectedImages);
-          }
+    },
+    methods: {
+        deleteFile(file) {
+            this.$parent.$parent.deleteFile(file);
+        },
+        confirmSelection() {
+            if (this.$parent.$parent.mode == 'single') {
+                this.$parent.$parent.updatedMediaImage(this.selectedImages[0].url);
+            } else {
+                this.$parent.$parent.updatedMediaImage(this.selectedImages);
+            }
 
-          this.$modal.hide('gallery-modal');
-          this.$toast.success('New image selected!');
-      },
-      selectImg(img) {
-          var subfiles = _.find(this.images, {id: this.activeImg}).subfiles;
-          if (img && !img.subselected) {
-              this.$set(img, 'subselected', true);
-          } else {
-              this.$set(img, 'subselected', false);
-          }
-          subfiles.forEach(element => {
-              if (element.id != img.id) {
-                  this.$set(element, 'subselected', false);
-              }
-          });
-      },
-      list(type) {
-          if (type == 'back') {
-              this.activeImg = _.findIndex(this.images, {id : this.activeImg }) > 0 ?
-              this.images[_.findIndex(this.images, {id : this.activeImg }) - 1].id : this.images[this.images.length - 1].id
-          } else {
-              this.activeImg = _.findIndex(this.images, {id : this.activeImg }) != this.images.length - 1 ?
-              this.images[_.findIndex(this.images, {id : this.activeImg }) + 1].id : this.images[0].id
-          }
-      }
-  },
-  mounted() {
-      this.activeImg = this.opImage ? this.opImage.id : null;
-    //console.log("cim", this.currentImages);
-  },
-  watch: {
+            this.$modal.hide('gallery-modal');
+            this.$toast.success('New image selected!');
+        },
+        selectImg(img) {
+            var subfiles = _.find(this.images, {id: this.activeImg}).subfiles;
+            if (img && !img.subselected) {
+                this.$set(img, 'subselected', true);
+            } else {
+                this.$set(img, 'subselected', false);
+            }
+            subfiles.forEach(element => {
+                if (element.id != img.id) {
+                    this.$set(element, 'subselected', false);
+                }
+            });
+        },
+        list(type) {
+            if (type == 'back') {
+                this.activeImg = _.findIndex(this.images, {id : this.activeImg }) > 0 ?
+                this.images[_.findIndex(this.images, {id : this.activeImg }) - 1].id : this.images[this.images.length - 1].id
+            } else {
+                this.activeImg = _.findIndex(this.images, {id : this.activeImg }) != this.images.length - 1 ?
+                this.images[_.findIndex(this.images, {id : this.activeImg }) + 1].id : this.images[0].id
+            }
+        },
+        limit (string = '', limit = 0) {  
+            return string.substring(0, limit)
+        }
+    },
+    mounted() {
+        this.activeImg = this.opImage ? this.opImage.id : null;
+        //console.log("cim", this.currentImages);
+    },
+    watch: {
         "images": {
             handler: function() {
                 this.selectedImages = [];
@@ -166,7 +181,7 @@ export default {
                         }
                     })
                 })
-console.log("selectedimgs", this.selectedImages, this.$parent)
+                // console.log("selectedimgs", this.selectedImages, this.$parent)
 
             },
             deep: true
