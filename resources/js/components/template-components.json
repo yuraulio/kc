@@ -349,25 +349,41 @@
                 "type": "multidropdown",
                 "key": "main_menu",
                 "label": "Main menu",
-                "route": "getMenus"
+                "route": "getMenus",
+                "value": {
+                    "name": "Main menu",
+                    "slug": "main-menu"
+                }
             },
             {
                 "type": "multidropdown",
                 "key": "footer_menu_1",
                 "label": "Footer menu 1",
-                "route": "getMenus"
+                "route": "getMenus",
+                "value": {
+                    "name": "About",
+                    "slug": "about"
+                }
             },
             {
                 "type": "multidropdown",
                 "key": "footer_menu_2",
                 "label": "Footer menu 2",
-                "route": "getMenus"
+                "route": "getMenus",
+                "value": {
+                    "name": "Education",
+                    "slug": "education"
+                }
             },
             {
                 "type": "multidropdown",
                 "key": "footer_menu_3",
                 "label": "Footer menu 3",
-                "route": "getMenus"
+                "route": "getMenus",
+                "value": {
+                    "name": "Students",
+                    "slug": "students"
+                }
             }
         ]
     }
