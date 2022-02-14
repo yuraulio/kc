@@ -21,6 +21,15 @@
                 </div>
             </div>
         </div>
+        
+        <div class="col-12 card">
+            <div class="">
+                <button @click="toggleCollapseAll()" class="btn btn-sm btn-soft-secondary" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapseExample">
+                    <i v-if="collapseAll == true" class="mdi mdi-chevron-up"></i>
+                    <i v-else class="mdi mdi-chevron-down"></i>
+                </button>
+            </div>
+        </div>
 
         <draggable 
             v-model="data" 
@@ -28,7 +37,7 @@
             handle=".handle"
         >
             <transition-group tag="div" >
-                <div  v-for="(val, index, key) in data" :key="'prim'+ index" class="col-12 mb-1 card">
+                <div  v-for="(val, index, key) in data" :key="'prim'+ index" class="col-12 mb-1 card toggle-card">
 
                     <div class="row handle">
                         <div class="col-2">
@@ -313,6 +322,7 @@ export default {
             spreview: true,
             row_index: null,
             column_index: null,
+            collapseAll: false,
         }
     },
     components: {
@@ -395,6 +405,25 @@ export default {
                 this.$set(val, 'collapsed', true);
             }
         },
+        toggleCollapseAll() {
+            if (this.collapseAll) {
+                $('.toggle-card .collapse').collapse('show');
+            } else {
+                $('.toggle-card .collapse').collapse('hide');
+            }
+
+            var collapseAll = this.collapseAll;
+            this.data.forEach(row => {
+                if (typeof row.collapsed !== 'undefined') {
+                    row.collapsed = collapseAll;
+                } else {
+                    this.$set(val, 'collapsed', collapseAll);
+                }
+            });
+
+            this.collapseAll = !this.collapseAll;
+
+        },
         removeColumn(columns, column_id, row_index, column_index) {
             var index = columns.findIndex(function(column) {
                 return column.id == column_id;
@@ -416,13 +445,13 @@ export default {
             return inputs[index].value;
         },
         getColumnWidth(column, columns) {
-            console.log("getColumnWidth started");
+            // console.log("getColumnWidth started");
             if (column.width) {
                 return column.width * 2;
             } 
             var width = (12 / columns.length) / 2;
             this.$set(column, "width", Number(width));
-            console.log("property added");
+            // console.log("property added");
             return width * 2;
         },
         calculateWidth(columns, index, event, rowIndex) {
