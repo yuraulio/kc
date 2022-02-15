@@ -41,7 +41,7 @@
 
                     <div @click="selectComponent('content_box')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
                         <i style="font-size: 20px" class="text-muted dripicons-article d-block mt-1"></i>
-                        <span class="text-muted m-2 mt-1">Content Box</span>
+                        <span class="text-muted m-2 mt-1">Teaser</span>
                     </div>
 
                     <div @click="selectComponent('hero')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
@@ -59,19 +59,16 @@
                         <span class="text-muted m-2 mt-1">Galery</span>
                     </div>
 
+                    <!--
                     <div @click="selectComponent('text_box')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
                         <i style="font-size: 20px" class="text-muted dripicons-document-edit d-block mt-1"></i>
                         <span class="text-muted m-2 mt-1">Text Area</span>
                     </div>
+                    -->
 
                     <div @click="selectComponent('blog_header')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
                         <i style="font-size: 20px" class="text-muted dripicons-browser d-block mt-1"></i>
-                        <span class="text-muted m-2 mt-1">Title/Subtitle</span>
-                    </div>
-
-                    <div @click="selectComponent('social_bar')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
-                        <i style="font-size: 20px" class="text-muted dripicons-web d-block mt-1"></i>
-                        <span class="text-muted m-2 mt-1">Social</span>
+                        <span class="text-muted m-2 mt-1">Title & Subtitle</span>
                     </div>
 
                     <div @click="selectComponent('youtube')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
@@ -84,17 +81,15 @@
                         <span class="text-muted m-2 mt-1">Embed htlm</span>
                     </div>
 
-                    <div @click="selectComponent('contact_form')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
-                        <i style="font-size: 20px" class="text-muted dripicons-mail d-block mt-1"></i>
-                        <span class="text-muted m-2 mt-1">Contact form</span>
-                    </div>
-
                     <div @click="selectComponent('empty')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
                         <i style="font-size: 20px" class="text-muted dripicons-wrong d-block mt-1"></i>
                         <span class="text-muted m-2 mt-1">Empty space</span>
                     </div>
 
-                    
+                    <div @click="selectComponent('horizintal_line')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
+                        <i style="font-size: 20px" class="text-muted dripicons-minus d-block mt-1"></i>
+                        <span class="text-muted m-2 mt-1">Horizontal line</span>
+                    </div>
 
                 </template>
 
@@ -104,6 +99,21 @@
                         <i style="font-size: 20px" class="text-muted dripicons-align-justify d-block mt-1"></i>
                         <span class="text-muted m-2 mt-1">Comments</span>
                     </div>
+
+                    <div @click="selectComponent('social_bar')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
+                        <i style="font-size: 20px" class="text-muted dripicons-web d-block mt-1"></i>
+                        <span class="text-muted m-2 mt-1">Social</span>
+                    </div>
+
+                    <div @click="selectComponent('contact_form')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
+                        <i style="font-size: 20px" class="text-muted dripicons-mail d-block mt-1"></i>
+                        <span class="text-muted m-2 mt-1">Contact form</span>
+                    </div>
+
+                    <div @click="selectComponent('menus')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
+                        <i style="font-size: 20px" class="text-muted dripicons-menu d-block mt-1"></i>
+                        <span class="text-muted m-2 mt-1">Menus</span>
+                    </div>
                 
                 </template>
 
@@ -112,11 +122,6 @@
                     <div @click="selectComponent('post_feature')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
                         <i style="font-size: 20px" class="text-muted dripicons-blog d-block mt-1"></i>
                         <span class="text-muted m-2 mt-1">Post feature</span>
-                    </div>
-
-                    <div @click="selectComponent('menus')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
-                        <i style="font-size: 20px" class="text-muted dripicons-menu d-block mt-1"></i>
-                        <span class="text-muted m-2 mt-1">Menus</span>
                     </div>
 
                 </template>

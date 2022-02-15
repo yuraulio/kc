@@ -322,7 +322,7 @@ export default {
             spreview: true,
             row_index: null,
             column_index: null,
-            collapseAll: false,
+            collapseAll: true,
         }
     },
     components: {
@@ -407,9 +407,9 @@ export default {
         },
         toggleCollapseAll() {
             if (this.collapseAll) {
-                $('.toggle-card .collapse').collapse('show');
-            } else {
                 $('.toggle-card .collapse').collapse('hide');
+            } else {
+                $('.toggle-card .collapse').collapse('show');
             }
 
             var collapseAll = this.collapseAll;
