@@ -78,6 +78,7 @@
                                 :data="type_list"
                             ></multidropdown>
 
+                            <!--
                             <multidropdown
                                 title="Template"
                                 :key="template_value ? template_value.id : 'temmult'"
@@ -86,6 +87,7 @@
                                 :prop-value="template_value"
                                 route="templates"
                             ></multidropdown>
+                            -->
 
                             <multidropdown
                                 title="Categories"
