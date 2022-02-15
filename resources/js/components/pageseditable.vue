@@ -12,6 +12,16 @@
             <div class="card">
                 <div class="card-body pb-0">
                     <text-field
+                        v-if="title"
+                        title="Title"
+                        @updatevalue="update_title"
+                        :prop-value="title_value"
+                        required=1
+                    ></text-field>
+
+                    <ul v-if="errors && errors['title']" class="parsley-errors-list filled" id="parsley-id-7" aria-hidden="false"><li class="parsley-required">{{errors['title'][0]}}</li></ul>
+
+                    <text-field
                         title="Slug"
                         @updatevalue="update_slug"
                         :prop-value="slug_value"
@@ -58,16 +68,6 @@
 
                     <div class="row">
                         <div class="col-xl-12">
-
-                            <text-field
-                                v-if="title"
-                                title="Title"
-                                @updatevalue="update_title"
-                                :prop-value="title_value"
-                                required=1
-                            ></text-field>
-
-                            <ul v-if="errors && errors['title']" class="parsley-errors-list filled" id="parsley-id-7" aria-hidden="false"><li class="parsley-required">{{errors['title'][0]}}</li></ul>
 
                             <multidropdown
                                 title="Type"
