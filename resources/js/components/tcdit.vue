@@ -21,15 +21,6 @@
                 </div>
             </div>
         </div>
-        
-        <div class="col-12 card">
-            <div class="">
-                <button @click="toggleCollapseAll()" class="btn btn-sm btn-soft-secondary" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapseExample">
-                    <i v-if="collapseAll == true" class="mdi mdi-chevron-up"></i>
-                    <i v-else class="mdi mdi-chevron-down"></i>
-                </button>
-            </div>
-        </div>
 
         <draggable 
             v-model="data" 
@@ -312,6 +303,7 @@ export default {
         predata: {},
         mode: {},
         pageTitle: null,
+        collapseAllProp: Boolean,
     },
     data() {
         return {
@@ -503,6 +495,9 @@ export default {
     watch: {
         "predata": function(val) {
             // this.data = this.predata;
+        },
+        "collapseAllProp": function() {
+            this.toggleCollapseAll();
         }
     },
     mounted() {

@@ -37,6 +37,7 @@
                 ref="tc" 
                 :pseudo="false" 
                 :predata="template_value ? JSON.parse(template_value.rows) : null"
+                :collapseAllProp="collapseAll"
             ></tcedit>
             <div v-else class="card">
                 <div class="card-body p-4">
@@ -63,6 +64,17 @@
         <div class="col-lg-3">
             <div class="card ">
                 <div class="card-body">
+
+                    <button @click="collapseAll = !collapseAll" class="btn btn-sm btn-soft-secondary w-100 mb-3" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapseExample">
+                        <template v-if="collapseAll == true">
+                            Collaps All
+                        </template>
+                        <template v-else>
+                            Expand All
+                        </template>
+                        
+                        
+                    </button>
 
                     <h4 class="mb-2">{{pageTitle}}</h4>
 
@@ -223,6 +235,7 @@ export default {
                     }
                 ],
                 slug_value: null,
+                collapseAll: true,
             }
         },
         methods: {
