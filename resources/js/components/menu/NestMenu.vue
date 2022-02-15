@@ -21,6 +21,7 @@
                                     <tr>
                                         <th width="120">Id</th>
                                         <th> Name </th>
+                                        <th> Title </th>
                                         <th class="action-head text-right" >Action </th>
                                     </tr>
                                 </thead>
@@ -28,10 +29,14 @@
                                     <tr v-for="menu in menus" :key="menu.id">
                                         <td>{{ menu.id }}</td>
                                         <td>{{ menu.name }}</td>
+                                        <td>{{ menu.custom_class }}</td>
                                         <td class="action-buttons text-right">
-                                            <a :href="prefix+'/menus/builder/'+menu.id" class="btn  btn-soft-primary" title="menu build"><i class="material-icons"></i>Builder</a>
+                                            <a :href="prefix+'/menus/builder/'+menu.id" class="btn btn-soft-primary me-1 mb-1" title="menu build">
+                                                <i class="material-icons"></i>
+                                                Builder
+                                            </a>
                                             <button
-                                                class="btn btn-soft-info edit-info"
+                                                class="btn btn-soft-info edit-info me-1 mb-1"
                                                 title="edit menu"
                                                 data-target="#editMenuModal"
                                                 v-on:click="showEditMenuForm(menu.id)"
@@ -39,14 +44,14 @@
                                                 Edit
                                             </button>
                                             <button
-                                                class="btn btn-soft-warning"
+                                                class="btn btn-soft-warning me-1 mb-1"
                                                 title="clone menu"
                                                 v-on:click="cloneMenu(menu.id)"
                                                 :data-id="menu.id">
                                                 Clone
                                             </button>
                                             <button
-                                                class="btn btn-soft-danger cs-danger"
+                                                class="btn btn-soft-danger cs-danger me-1 mb-1"
                                                 title="delete menu"
                                                 v-on:click="deleteMenu(menu.id)"
                                                 :data-id="menu.id">
@@ -165,7 +170,24 @@
                         self.fetchMenus();
                         self.resetForm();
                         self.closeModal();
-                        this.$toast.success('Updated Successfully!')
+                        this.$toast.success('Updated Successfully!');
+                        this.updateMenuOnPages(menu);
+                    }else if(res.data.success == false) {
+                        self.errors.name = res.data.errors.name[0];
+                    }
+                })
+                .catch(err => console.log(err));
+            },
+            updateMenuOnPages(menu) {
+                axios({
+                    url: this.prefix+'/menu/updatePages',
+                    method: 'POST',
+                    data: menu,
+                    responseType: 'json'
+                })
+                .then(res => {
+                    if(res.data.success == true) {
+                        
                     }else if(res.data.success == false) {
                         self.errors.name = res.data.errors.name[0];
                     }

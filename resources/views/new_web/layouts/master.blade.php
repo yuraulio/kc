@@ -143,7 +143,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <div class="page-wrapper non-pointer">
 @include('new_web.layouts.header')
-@include('theme.layouts.mobile_menu')
+@include('new_web.layouts.mobile_menu')
 
 @if (!Auth::check())
 

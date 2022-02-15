@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Admin_api;
 
 use App\Http\Controllers\Controller;
+use App\Model\Admin\Page;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use CodexShaper\Menu\Models\Menu;
 use Illuminate\Support\Str;
 use CodexShaper\Menu\Models\MenuItem;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class MenuController extends Controller
@@ -72,6 +74,50 @@ class MenuController extends Controller
             ]);
         } catch (Exception $e) {
             Log::error("Failed to clone menu. " . $e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 400);
+        }
+    }
+
+    public function updatePages(Request $request)
+    {
+        try {
+            $id = $request->id;
+            $pages = Page::withoutGlobalScope('published')->get();
+            foreach ($pages as $page) {
+                $content = $page->content;
+                $content = json_decode($content);
+
+                $edit = false;
+
+                foreach ($content as $rowKey => $row) {
+                    foreach ($row->columns as $columnKey => $column) {
+                        if ($column->template->key == 'menu_component') {
+                            foreach ($column->template->inputs as $inputKey => $menu) {
+                                if ($menu->value->id == $id) {
+                                    $contentMenuValues = $content[$rowKey]->columns[$columnKey]->template->inputs[$inputKey]->value;
+
+                                    $contentMenuValues->custom_class = $request->custom_class;
+                                    $contentMenuValues->name = $request->name;
+                                    $contentMenuValues->slug = $request->slug;
+
+                                    $edit = true;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if ($edit) {
+                    $page->content = json_encode($content);
+                    $page->save();
+                }
+            }
+
+            return response()->json([
+                'success' => true,
+            ]);
+        } catch (Exception $e) {
+            Log::error("Failed to update menues on pages. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }

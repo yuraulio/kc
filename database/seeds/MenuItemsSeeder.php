@@ -22,6 +22,7 @@ class MenuItemsSeeder extends Seeder
         $menu->slug = Str::slug('Main menu');
         $menu->url = '/';
         $menu->order = 1;
+        $menu->custom_class = 'Main menu';
         $menu->save();
 
         // main menu items
@@ -79,6 +80,7 @@ class MenuItemsSeeder extends Seeder
         $menu->slug = Str::slug('About');
         $menu->url = '/';
         $menu->order = 2;
+        $menu->custom_class = 'About';
         $menu->save();
 
         // footer menu about items
@@ -280,6 +282,7 @@ class MenuItemsSeeder extends Seeder
         $menu->slug = Str::slug('Education');
         $menu->url = '/';
         $menu->order = 1;
+        $menu->custom_class = 'Education';
         $menu->save();
 
         // footer menu education items
@@ -321,6 +324,7 @@ class MenuItemsSeeder extends Seeder
         $menu->slug = Str::slug('Students');
         $menu->url = '/';
         $menu->order = 1;
+        $menu->custom_class = 'Students';
         $menu->save();
 
         // footer menu students items

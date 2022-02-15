@@ -21,7 +21,7 @@
 
                             </div>
                             <div class="form-group mb-3">
-                                <label for="add_menu_custom_class" class="form-label">Custom Class</label>
+                                <label for="add_menu_custom_class" class="form-label">Title</label>
                                 <input type="text" id="add_menu_custom_class" name="custom_class" class="form-control input-field" v-model="menu.custom_class">
 
                             </div>
@@ -59,7 +59,7 @@
 
                             </div>
                             <div class="form-group mb-3">
-                                <label for="url" class="form-label">Custom Class</label>
+                                <label for="url" class="form-label">Title</label>
                                 <input type="text" name="custom_class" class="form-control input-field " v-model="menu.custom_class" placeholder="Custom Class">
 
                             </div>

@@ -105,6 +105,8 @@
                             // console.log(response.data.menus);
                             this.label = "name";
                             this.list = response.data.menus;
+
+                            this.setMenuIds();
                         } else {
                             var data = response.data.data;
                             this.list = data;
@@ -120,6 +122,16 @@
                     return tag.title == title;
                 });
                 this.value.splice(index, 1);
+            },
+            setMenuIds() {
+                var value = this.value;
+                if (!('id' in this.value)) {
+                    var index = this.list.findIndex(function(menu) {
+                        return menu.name == value.name;
+                    });
+
+                    this.value.id = this.list[index].id;
+                }
             }
         },
         mounted() {

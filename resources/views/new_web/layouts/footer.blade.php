@@ -68,61 +68,57 @@
             <div class="row clearfix">
             <div class="col6 col-sm-12">
 
-                @yield('footer-menu-1-title')
-
-                <div class="mobile-toggle">
+                {{-- footer menu 1 desktop --}}
+                @yield('footer_menu_1_title_desktop')
+                <div class="mobile-toggle menu-desktop">
                     <ul class="footer-menu">
-                        @yield('footer-menu-1')
-
-                        {{-- @menu('about') --}}
-
-                        {{-- <li> <a  href='/about' title = 'about us'> about us </a> </li>
-                        <li> <a  href='/brands-trained' title = 'trained by us'> trained by us </a> </li>
-                        <li> <a  href='/in-the-media'  title = 'in the media'> in the media  </a> </li>
-                        <li> <a  href='/instructors'  title = 'our instructors'> our instructors </a> </li>
-                        <li> <a  href='/become-an-instructor' title = 'become an instructor'> become an instructor </a> </li>
-                        <li> <a  href='/corporate-training'  title = 'corporate training'> corporate training </a> </li>
-                        <li> <a  href='/en/blog' title = 'blog'> blog </a> </li>
-                        <li> <a  href='https://www.facebook.com/pg/KnowCrunch/jobs/' target='_blank' title = 'jobs'> jobs </a> </li>
-                        <li> <a  href='/terms'  title = 'Terms & Conditions'> terms & conditions </a> </li>
-                        <li> <a  href='/cookies-notice'  title = ' COOKIES NOTICE'>  cookies notice </a> </li>
-                        <li> <a  href='/data-privacy-policy'  title = 'Data Privacy Policy'> data privacy policy </a> </li>
-                        <li> <a  href='/contact'  title = 'in the media'> contact us </a> </li> --}}
+                        @yield('footer_menu_1_desktop')
                     </ul>
                 </div>
+
+                {{-- footer menu 1 mobile --}}
+                @yield('footer_menu_1_title_mobile')
+                <div class="mobile-toggle menu-mobile">
+                    <ul class="footer-menu">
+                        @yield('footer_menu_1_mobile')
+                    </ul>
+                </div>
+
             </div>
             <div class="col6 col-sm-12">
 
-                @yield('footer-menu-2-title')
-
-                <div class="mobile-toggle">
+                {{-- footer menu 2 desktop --}}
+                @yield('footer_menu_2_title_desktop')
+                <div class="mobile-toggle menu-desktop">
                     <ul class="footer-menu">
-                        @yield('footer-menu-2')
-
-                        {{-- @menu('education') --}}
-                        {{-- <li> <a  href='/in-class-courses'  title = 'In-Class Courses'> in-class courses  </a> </li>
-                        <li> <a  href='/video-on-demand-courses'  title = 'E-Learning Courses'> e-learning courses  </a> </li> --}}
+                        @yield('footer_menu_2_desktop')
                     </ul>
                 </div>
 
-                @yield('footer-menu-3-title')
-
-                <div class="mobile-toggle">
+                {{-- footer menu 2 mobile --}}
+                @yield('footer_menu_2_title_mobile')
+                <div class="mobile-toggle menu-mobile">
                     <ul class="footer-menu">
-                        @yield('footer-menu-3')
-
-                        {{-- @menu('students') --}}
-                        {{-- <li class="account-menu">
-                            @if (Auth::check())
-                                <a href="/myaccount" title = 'Manage Account'> manage your account </a>
-                            @else
-                                <a href="javascript:void(0)" title = 'Manage Account'> manage your account </a>
-                            @endif
-                        </li>
-                        <li> <a  href='https://www.facebook.com/groups/KnowcrunchAlumni/' target='_blank' title = 'Official Alumni Group'> official alumni group </a> </li>
-                        <li> <a  href='https://www.facebook.com/groups/socialmediagreece/' target='_blank' title = 'Digital Nation Group'> digital nation group </a> </li> --}}
+                        @yield('footer_menu_2_mobile')
                     </ul>
                 </div>
+
+                {{-- footer menu 3 desktop --}}
+                @yield('footer_menu_3_title_desktop')
+                <div class="mobile-toggle menu-desktop">
+                    <ul class="footer-menu">
+                        @yield('footer_menu_3_desktop')
+                    </ul>
+                </div>
+
+                {{-- footer menu 3 mobile --}}
+                @yield('footer_menu_3_title_mobile')
+                <div class="mobile-toggle menu-mobile">
+                    <ul class="footer-menu">
+                        @yield('footer_menu_3_mobile')
+                    </ul>
+                </div>
+
             </div>
             </div>
         </div>

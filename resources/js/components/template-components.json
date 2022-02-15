@@ -354,43 +354,99 @@
         "inputs": [
             {
                 "type": "multidropdown",
-                "key": "main_menu",
-                "label": "Main menu",
+                "key": "main_menu_desktop",
+                "label": "Main menu desktop",
                 "route": "getMenus",
                 "value": {
                     "name": "Main menu",
-                    "slug": "main-menu"
-                }
+                    "slug": "main-menu",
+                    "custom_class": "Main menu"
+                },
+                "size": "col-lg-6"
             },
             {
                 "type": "multidropdown",
-                "key": "footer_menu_1",
-                "label": "Footer menu 1",
+                "key": "main_menu_mobile",
+                "label": "Main menu mobile",
+                "route": "getMenus",
+                "value": {
+                    "name": "Main menu",
+                    "slug": "main-menu",
+                    "custom_class": "Main menu"
+                },
+                "size": "col-lg-6"
+            },
+            {
+                "type": "multidropdown",
+                "key": "footer_menu_1_desktop",
+                "label": "Footer menu 1 deshtop",
                 "route": "getMenus",
                 "value": {
                     "name": "About",
-                    "slug": "about"
-                }
+                    "slug": "about",
+                    "custom_class": "About"
+                },
+                "size": "col-lg-6"
             },
             {
                 "type": "multidropdown",
-                "key": "footer_menu_2",
-                "label": "Footer menu 2",
+                "key": "footer_menu_1_mobile",
+                "label": "Footer menu 1 mobile",
+                "route": "getMenus",
+                "value": {
+                    "name": "About",
+                    "slug": "about",
+                    "custom_class": "About"
+                },
+                "size": "col-lg-6"
+            },
+            {
+                "type": "multidropdown",
+                "key": "footer_menu_2_desktop",
+                "label": "Footer menu 2 desktop",
                 "route": "getMenus",
                 "value": {
                     "name": "Education",
-                    "slug": "education"
-                }
+                    "slug": "education",
+                    "custom_class": "Education"
+                },
+                "size": "col-lg-6"
             },
             {
                 "type": "multidropdown",
-                "key": "footer_menu_3",
-                "label": "Footer menu 3",
+                "key": "footer_menu_2_mobile",
+                "label": "Footer menu 2 mobile",
+                "route": "getMenus",
+                "value": {
+                    "name": "Education",
+                    "slug": "education",
+                    "custom_class": "Education"
+                },
+                "size": "col-lg-6"
+            },
+            {
+                "type": "multidropdown",
+                "key": "footer_menu_3_desktop",
+                "label": "Footer menu 3 desktop",
                 "route": "getMenus",
                 "value": {
                     "name": "Students",
-                    "slug": "students"
-                }
+                    "slug": "students",
+                    "custom_class": "Students"
+                },
+                "size": "col-lg-6"
+            },
+            {
+                "type": "multidropdown",
+                "key": "footer_menu_3_mobile",
+                "label": "Footer menu 3 mobile",
+                "route": "getMenus",
+                "value": {
+                    "name": "Students",
+                    "slug": "students",
+                    "custom_class": "Students"
+                },
+                "size": "col-lg-6"
             }
         ]
     }
