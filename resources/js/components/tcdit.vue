@@ -417,7 +417,7 @@ export default {
                 if (typeof row.collapsed !== 'undefined') {
                     row.collapsed = collapseAll;
                 } else {
-                    this.$set(val, 'collapsed', collapseAll);
+                    this.$set(row, 'collapsed', collapseAll);
                 }
             });
 
