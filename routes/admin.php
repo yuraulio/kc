@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin_api\MenuController;
 use App\Http\Controllers\Auth\AdminLoginController;
@@ -19,9 +20,15 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
         Route::get('/new_page/{uuid}', [DashboardController::class, 'page'])->name("new-page");
         Route::get('/media', [DashboardController::class, 'media'])->name("admin-media");
         Route::get('/menus', [DashboardController::class, 'menu'])->name("admin-menu");
+        Route::get('/menus', [DashboardController::class, 'menu'])->name("admin-menu");
+
+        Route::prefix('users')->group(function () {
+            Route::get('/admins', [UserController::class, 'admins'])->name("admins-management");
+        });
+
     });
 });
-
+Route::group(['middleware' => ['auth:admin_web']], function () {
     Route::get('menus', '\CodexShaper\Menu\Http\Controllers\MenuController@index');
     Route::get('menus/builder/{id}', '\CodexShaper\Menu\Http\Controllers\MenuItemController@showMenuItems')->name('menu.builder');
 /*
@@ -51,3 +58,4 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
     // Menu Settings
     Route::post('menu/item/settings', '\CodexShaper\Menu\Http\Controllers\MenuItemController@storeSettings');
     Route::get('menu/item/settings/{menu_id}', '\CodexShaper\Menu\Http\Controllers\MenuItemController@getSettings');
+});

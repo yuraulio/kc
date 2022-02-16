@@ -62,15 +62,15 @@
 
                 <li class="menu-title">Management</li>
 
-                <li>
+                <li {{ \Request::is('users/*') ? 'menuitem-active' : ''}}>
                     <a href="#usersCMS" data-bs-toggle="collapse">
                         <i data-feather="airplay"></i>
                         <span> Users <span class="badge bg-primary mt-0 align-middle">Comming soon</span> </span>
                     </a>
-                    <div class="collapse" id="usersCMS">
+                    <div class="collapse {{ \Request::is('users/*') ? ' show' : ''}}" id="usersCMS">
                         <ul class="nav-second-level">
-                            <li>
-                                <a href="#">Admins</a>
+                            <li class="{{ \Request::is('users/admins') ? 'menuitem-active' : ''}}">
+                                <a href="{{route('admins-management')}}">Admins</a>
                             </li>
                             <li>
                                 <a href="#">Users</a>

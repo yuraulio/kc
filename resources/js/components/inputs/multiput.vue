@@ -3,6 +3,7 @@
     <div v-if="type == 'text'" class="">
         <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
         <input v-model="editorData" type="text" :id="keyput" class="form-control">
+        <slot></slot>
     </div>
 
     <div v-if="type == 'image'" :key="keyput + 'media'" >

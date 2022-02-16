@@ -39,6 +39,12 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
             'index', 'destroy'
         ]);
 
+        Route::prefix('users')->group(function () {
+            Route::resource('admins', Admin_api\AdminController::class)->only([
+                'index', 'store', 'update', 'show', 'destroy'
+            ]);
+        });
+
         Route::put('pages/update_published/{id}', [PagesController::class, 'updatePublished']);
         Route::post('pages/upload_image', [PagesController::class, 'uploadImage']);
         Route::resource('media_manager', Admin_api\MediaController::class)->only([
