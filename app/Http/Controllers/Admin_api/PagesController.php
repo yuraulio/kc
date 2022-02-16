@@ -79,6 +79,7 @@ class PagesController extends Controller
             $page->template_id = $request->template_id;
             $page->content = $request->content;
             $page->published = $request->published;
+            $page->indexed = $request->indexed;
             $page->user_id = Auth::user()->id;
             $page->published_from = $request->published_from;
             $page->published_to = $request->published_to;
@@ -138,6 +139,7 @@ class PagesController extends Controller
             $page->template_id = $request->template_id;
             $page->content = $request->content;
             $page->published = $request->published;
+            $page->indexed = $request->indexed;
             $page->published_from = $request->published_from;
             $page->published_to = $request->published_to;
             $page->type = $request->type;

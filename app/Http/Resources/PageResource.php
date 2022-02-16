@@ -36,6 +36,7 @@ class PageResource extends JsonResource
             'published_to' => $this->published_to,
             'type' => $this->type,
             'slug' => $this->slug,
+            'indexed' => $this->indexed,
         ];
     }
 }

@@ -129,6 +129,11 @@
                                 <label class="form-check-label" for="light-mode-check">Published</label>
                             </div>
 
+                            <div class="form-check form-switch mb-3" style="display: inline-block; cursor: pointer">
+                                <input @click="indexed = !indexed" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :checked="indexed">
+                                <label class="form-check-label">Indexed</label>
+                            </div>
+
                             <datepicker-component
                                 title="Publish from"
                                 @updatevalue="update_published_from"
@@ -205,6 +210,7 @@ export default {
                 template_value: null,
                 loading: false,
                 published: false,
+                indexed: false,
                 lodash: _,
                 page: {},
                 subcategories: null,
@@ -287,6 +293,7 @@ export default {
                         subcategories: this.subcategory_value,
                         template_id: this.template_value ? this.template_value.id : null,
                         published: this.published,
+                        indexed: this.indexed,
                         published_from: this.published_from_value,
                         published_to: this.published_to_value,
                         type: this.type_value ? this.type_value.title : null,
@@ -321,6 +328,7 @@ export default {
                         content: this.template_value ? JSON.stringify(this.$refs.tc.data) : '',
                         template_id: this.template_value ? this.template_value.id : null,
                         published: this.published,
+                        indexed: this.indexed,
                         id: this.id,
                         published_from: this.published_from_value,
                         published_to: this.published_to_value,
@@ -350,7 +358,8 @@ export default {
                         var data = response.data.data;
                         // this.data = data;
                         this.title_value = data.title;
-                        this.published = data.published
+                        this.published = data.published;
+                        this.indexed = data.indexed;
                         if (data.rows){
                             this.rows_value = JSON.parse(data.rows);
                         }
@@ -370,7 +379,8 @@ export default {
                     var data = this.data;
                     this.title_value = data.title;
                     this.template_value = data.template;
-                    this.published = data.published
+                    this.published = data.published;
+                    this.indexed = data.indexed;
                     if (data.rows){
                         this.rows_value = JSON.parse(data.rows);
                     }

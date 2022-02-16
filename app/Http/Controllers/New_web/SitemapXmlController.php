@@ -20,7 +20,7 @@ class SitemapXmlController extends Controller
     {
         Sitemap::addTag(env("APP_URL"));
 
-        $pages = Page::all();
+        $pages = Page::whereIndexed(true)->get();
         foreach ($pages as $page) {
             $path = "/";
             if ($page->type == "Blog") {
