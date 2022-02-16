@@ -36,7 +36,7 @@ class AdminLoginController extends Controller
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::guard('admin_web')->attempt($credentials)) {
             $request->session()->regenerate();
 
             return redirect()->intended('admin-dashboard');
