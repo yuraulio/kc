@@ -2,11 +2,13 @@
 
 namespace App\Providers;
 
+use App\Model\Admin\Admin;
 use App\Model\Admin\Category;
 use App\Model\Admin\Comment;
 use App\Model\Admin\Page;
 use App\Model\Admin\Template;
 use App\Model\User;
+use App\Policies\AdminPolicy;
 use App\Policies\TagPolicy;
 use App\Policies\ItemPolicy;
 use App\Policies\RolePolicy;
@@ -32,6 +34,7 @@ class AuthServiceProvider extends ServiceProvider
         Template::class => TemplatePolicy::class,
         Page::class => PagePolicy::class,
         Comment::class => CommentPolicy::class,
+        Admin::class => AdminPolicy::class
     ];
 
     /**

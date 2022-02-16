@@ -27,11 +27,13 @@ use App\Model\CartCache;
 use App\Model\ExamResult;
 use App\Model\OauthAccessToken;
 use App\Model\Transaction;
+use App\Traits\SearchFilter;
+use App\Traits\PaginateTable;
 
 class Admin extends Authenticatable
 {
 
-    use Notifiable, HasApiTokens, MediaTrait, Billable;
+    use Notifiable, HasApiTokens, MediaTrait, Billable, SearchFilter, PaginateTable;
     /**
      * The attributes that are mass assignable.
      *
@@ -76,7 +78,25 @@ class Admin extends Authenticatable
      * @var array
      */
     protected $hidden = ['password', 'remember_token'];
+    public $asYouType = true;
 
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $array = [
+            'id' => $this->id,
+            'firstname' => $this->firstname,
+            'lastname' => $this->lastname,
+            'email' => $this->email,
+            'username' => $this->username,
+        ];
+
+        return $array;
+    }
 
     public function scopeSearchUsers($query, $search_term)
     {
