@@ -5,4 +5,6 @@
     }
 @endphp
 
-{!! $html["html_embed"] ?? "" !!}
+<div class="pb-4 pt-4">
+    {!! $html["html_embed"] ?? "" !!}
+</div>

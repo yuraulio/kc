@@ -5,6 +5,6 @@
     }
 @endphp
 
-<div class="">
+<div class="pb-4 pt-4">
     @include("global.social", ['summary' => $socials["social_summary"] ?? "", 'title' => $socials["social_title"] ?? ""])
 </div>

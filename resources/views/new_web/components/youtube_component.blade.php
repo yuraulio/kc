@@ -5,7 +5,7 @@
     }
 @endphp
 
-<div class="text-center">
+<div class="text-center pb-4 pt-4">
     <iframe 
         width="{{ $youtube["youtube_width"] ? $youtube["youtube_width"] : '100%' }}" 
         height="{{ $youtube["youtube_height"] ? $youtube["youtube_height"] : '400' }}" 
