@@ -50,7 +50,7 @@
                             </div>
                         </div>
                         <div class="col-4 text-center">
-                            <div v-if="val.columns[0].component != 'meta' && val.columns[0].component != 'post_feature'" class="btn-group">
+                            <div v-if="val.disable_color !== true" class="btn-group">
                                 <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                     <template v-if="val.color == 'white'">
                                         White <i class="mdi mdi-chevron-down"></i>
@@ -93,7 +93,7 @@
                     </div>
                     <div v-for="(column, indr, key) in val.columns" :key="key">
 
-                        <span @click="removeRow(index)" v-if="indr == (val.columns.length - 1) && column.template.key != 'meta_component'" class="position-absolute top-0 start-100 close-button" style="cursor: pointer">
+                        <span @click="removeRow(index)" v-if="indr == (val.columns.length - 1) && val.removable !== false" class="position-absolute top-0 start-100 close-button" style="cursor: pointer">
                             <button class="btn btn-sm btn-soft-danger" type="button">
                                 <i class="dripicons-cross"></i>
                             </button>
@@ -252,7 +252,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                <span @click="removeRow(index)" v-if="indr == (val.columns.length - 1) && column.template.key != 'meta_component'" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="cursor: pointer">
+                                <span @click="removeRow(index)" v-if="indr == (val.columns.length - 1) && val.removable !== false" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="cursor: pointer">
                                     Remove
                                     <span class="visually-hidden"></span>
                                 </span>
@@ -506,11 +506,15 @@ export default {
                 this.data = this.predata;
             } else {
             this.data = this.data ?? [];
-            var comp = {
+
+            // add meta component
+            var meta = {
                 "id": this.$uuid.v4(),
                 "width": this.extractedComponents['meta'].width,
                 "order": this.data.length + 1,
                 "description": "",
+                "removable": false,
+                "disable_color": true,
                 "columns": [
                     {
                         "id": this.$uuid.v4(),
@@ -521,8 +525,28 @@ export default {
                     }
                 ]
             }
+            this.data.push(meta);
 
-            this.data.push(comp);
+            // add menu component
+            var meta = {
+                "id": this.$uuid.v4(),
+                "width": this.extractedComponents['menus'].width,
+                "order": this.data.length + 1,
+                "description": "",
+                "collapsed": true,
+                "removable": false,
+                "disable_color": true,
+                "columns": [
+                    {
+                        "id": this.$uuid.v4(),
+                        "order": 0,
+                        "component": 'menus',
+                        "active": true,
+                        "template": this.extractedComponents['menus']
+                    }
+                ]
+            }
+            this.data.push(meta);
             }
         }
         if (this.pseudo == false) {

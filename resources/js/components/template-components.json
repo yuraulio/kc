@@ -126,6 +126,8 @@
         "key": "meta_component",
         "one_column": true,
         "changable": false,
+        "removable": false,
+        "disable_color": true,
         "inputs": [
             {
                 "type": "text",
@@ -321,7 +323,6 @@
         "icon": "dripicons-blog",
         "key": "post_feature_component",
         "one_column": true,
-        "changable": false,
         "inputs": [
             {
                 "type": "text",
@@ -351,6 +352,8 @@
         "key": "menu_component",
         "one_column": true,
         "changable": false,
+        "removable": false,
+        "disable_color": true,
         "inputs": [
             {
                 "type": "multidropdown",
