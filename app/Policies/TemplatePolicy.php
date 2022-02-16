@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Model\User;
+use App\Model\Admin\Admin;
 use App\Model\Admin\Template;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -13,10 +13,10 @@ class TemplatePolicy
     /**
      * Determine whether the user can view any models.
      *
-     * @param  \App\Model\User  $user
+     * @param  \App\Model\Admin\Admin  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function viewAny(User $user)
+    public function viewAny(Admin $user)
     {
         return true;
     }
@@ -24,11 +24,11 @@ class TemplatePolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param  \App\Model\User  $user
+     * @param  \App\Model\Admin\Admin  $user
      * @param  \App\Template  $template
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Template $template)
+    public function view(Admin $user, Template $template)
     {
         return true;
     }
@@ -36,10 +36,10 @@ class TemplatePolicy
     /**
      * Determine whether the user can create models.
      *
-     * @param  \App\Model\User  $user
+     * @param  \App\Model\Admin\Admin  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function create(User $user)
+    public function create(Admin $user)
     {
         return true;
     }
@@ -47,11 +47,11 @@ class TemplatePolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param  \App\Model\User  $user
+     * @param  \App\Model\Admin\Admin  $user
      * @param  \App\Template  $template
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Template $template)
+    public function update(Admin $user, Template $template)
     {
         return true;
     }
@@ -59,11 +59,11 @@ class TemplatePolicy
     /**
      * Determine whether the user can delete the model.
      *
-     * @param  \App\Model\User  $user
+     * @param  \App\Model\Admin\Admin  $user
      * @param  \App\Template  $template
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Template $template)
+    public function delete(Admin $user, Template $template)
     {
         return true;
     }
