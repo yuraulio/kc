@@ -171,23 +171,6 @@
                         self.resetForm();
                         self.closeModal();
                         this.$toast.success('Updated Successfully!');
-                        this.updateMenuOnPages(menu);
-                    }else if(res.data.success == false) {
-                        self.errors.name = res.data.errors.name[0];
-                    }
-                })
-                .catch(err => console.log(err));
-            },
-            updateMenuOnPages(menu) {
-                axios({
-                    url: this.prefix+'/menu/updatePages',
-                    method: 'POST',
-                    data: menu,
-                    responseType: 'json'
-                })
-                .then(res => {
-                    if(res.data.success == true) {
-                        
                     }else if(res.data.success == false) {
                         self.errors.name = res.data.errors.name[0];
                     }

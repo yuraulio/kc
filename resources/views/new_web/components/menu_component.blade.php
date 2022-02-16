@@ -5,52 +5,64 @@
     }
 @endphp
 
+{{-- get menus --}}
+@php
+    $mainMenuDesktop = $page->getMenu($menus['main_menu_desktop']->id ?? "");
+    $mainMenuMobile = $page->getMenu($menus['main_menu_mobile']->id ?? "");
+    $footerMenu1Desktop = $page->getMenu($menus['footer_menu_1_desktop']->id ?? "");
+    $footerMenu1Mobile = $page->getMenu($menus['footer_menu_1_mobile']->id ?? "");
+    $footerMenu2Desktop = $page->getMenu($menus['footer_menu_2_desktop']->id ?? "");
+    $footerMenu2Mobile = $page->getMenu($menus['footer_menu_2_mobile']->id ?? "");
+    $footerMenu3Desktop = $page->getMenu($menus['footer_menu_3_desktop']->id ?? "");
+    $footerMenu3Mobile = $page->getMenu($menus['footer_menu_3_mobile']->id ?? "");
+@endphp
+
 {{-- main menu --}}
 @section('main_menu_desktop')
-    @menu($menus['main_menu_desktop']->slug ?? "")
+    @menu($mainMenuDesktop["name"])
 @endsection
 @section('main_menu_mobile')
-    @menu($menus['main_menu_mobile']->slug ?? "")
+    @menu($mainMenuMobile["name"])
 @endsection
 
 {{-- footer menu 1 --}}
 @section('footer_menu_1_title_desktop')
-    <h4 class="footer-title menu-desktop">{{ $menus['footer_menu_1_desktop']->custom_class ?? "" }}</h4>
+    <h4 class="footer-title menu-desktop">{{ $footerMenu1Desktop["title"] }}</h4>
 @endsection
 @section('footer_menu_1_desktop')
-    @menu($menus['footer_menu_1_desktop']->slug ?? "")
+    @menu($footerMenu1Desktop["name"])
 @endsection
 @section('footer_menu_1_title_mobile')
-    <h4 class="footer-title menu-mobile">{{ $menus['footer_menu_1_mobile']->custom_class ?? "" }}</h4>
+    <h4 class="footer-title menu-mobile">{{ $footerMenu1Mobile["title"] }}</h4>
 @endsection
 @section('footer_menu_1_mobile')
-    @menu($menus['footer_menu_1_mobile']->slug ?? "")
+    @menu($footerMenu1Mobile["name"])
 @endsection
 
 {{-- footer menu 2 --}}
 @section('footer_menu_2_title_desktop')
-    <h4 class="footer-title menu-desktop">{{ $menus['footer_menu_2_desktop']->custom_class ?? "" }}</h4>
+    <h4 class="footer-title menu-desktop">{{ $footerMenu2Desktop["title"] }}</h4>
 @endsection
 @section('footer_menu_2_desktop')
-    @menu($menus['footer_menu_2_desktop']->slug ?? "")
+    @menu($footerMenu2Desktop["name"])
 @endsection
 @section('footer_menu_2_title_mobile')
-    <h4 class="footer-title menu-mobile">{{ $menus['footer_menu_2_mobile']->custom_class ?? "" }}</h4>
+    <h4 class="footer-title menu-mobile">{{ $footerMenu2Mobile["title"] }}</h4>
 @endsection
 @section('footer_menu_2_mobile')
-    @menu($menus['footer_menu_2_mobile']->slug ?? "")
+    @menu($footerMenu2Mobile["name"])
 @endsection
 
 {{-- footer menu 2 --}}
 @section('footer_menu_3_title_desktop')
-    <h4 class="footer-title menu-desktop">{{ $menus['footer_menu_3_desktop']->custom_class ?? "" }}</h4>
+    <h4 class="footer-title menu-desktop">{{ $footerMenu3Desktop["title"] }}</h4>
 @endsection
 @section('footer_menu_3_desktop')
-    @menu($menus['footer_menu_3_desktop']->slug ?? "")
+    @menu($footerMenu3Desktop["name"])
 @endsection
 @section('footer_menu_3_title_mobile')
-    <h4 class="footer-title menu-mobile">{{ $menus['footer_menu_3_mobile']->custom_class ?? "" }}</h4>
+    <h4 class="footer-title menu-mobile">{{ $footerMenu3Mobile["title"] }}</h4>
 @endsection
 @section('footer_menu_3_mobile')
-    @menu($menus['footer_menu_3_mobile']->slug ?? "")
+    @menu($footerMenu3Mobile["name"])
 @endsection

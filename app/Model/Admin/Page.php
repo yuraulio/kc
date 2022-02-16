@@ -9,6 +9,7 @@ use App\Traits\SearchFilter;
 use App\Traits\SlugTrait;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Builder;
+use CodexShaper\Menu\Models\Menu;
 
 class Page extends Model
 {
@@ -105,6 +106,15 @@ class Page extends Model
             "feature_title" => $this->title,
             "feature_description" => "",
             "feature_image" => "",
+        ];
+    }
+
+    public function getMenu($id)
+    {
+        $menu = Menu::find($id);
+        return [
+            'name' => $menu->name ?? "",
+            'title' => $menu->custom_class ?? "",
         ];
     }
 }

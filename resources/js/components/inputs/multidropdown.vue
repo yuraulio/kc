@@ -107,6 +107,7 @@
                             this.list = response.data.menus;
 
                             this.setMenuIds();
+                            this.updateSelectedMenu();
                         } else {
                             var data = response.data.data;
                             this.list = data;
@@ -132,6 +133,14 @@
 
                     this.value.id = this.list[index].id;
                 }
+            },
+            updateSelectedMenu() {
+                var value = this.value;
+                var index = this.list.findIndex(function(menu) {
+                    return menu.id == value.id;
+                });
+
+                this.value = this.list[index];
             }
         },
         mounted() {

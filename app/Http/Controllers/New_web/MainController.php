@@ -54,6 +54,7 @@ class MainController extends Controller
                 'content' => json_decode($page->content),
                 'page_id' => $page->id,
                 'comments' => $page->comments->take(500),
+                'page' => $page,
             ]);
         }
     }
