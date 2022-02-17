@@ -44,7 +44,7 @@
             handle=".handle"
         >
             <transition-group tag="div" >
-                <div v-for="(val, index, key) in data" v-if="tab == val.tab" :key="'prim'+ index" class="col-12 mb-1 card toggle-card">
+                <div v-for="(val, index, key) in data" :key="'prim'+ index" :class="'col-12 mb-1 card toggle-card ' + (tab == val.tab ? '' : 'visually-hidden')">
 
                     <div class="row handle">
                         <div class="col-2">
@@ -247,7 +247,7 @@
             handle=".handle"
         >
             <transition-group tag="div" >
-                <div v-for="(val, index) in data" v-if="tab == val.tab" :key="'prim'+ index" class="row mb-1">
+                <div v-for="(val, index) in data" :key="'prim'+ index" :class="'row mb-1 ' + (tab == val.tab ? '' : 'visually-hidden')">
                     <!-- <draggable v-model="val.columns">
                         <transition-group tag="div" class="row" key="subcols"> -->
                         <div v-if="val.width" class="btn-group" style="width: 20%;margin-left: 40%;margin-right: 40%;">
@@ -562,7 +562,7 @@ export default {
             this.data.push(meta);
 
             // add menu component
-            var meta = {
+            var menu = {
                 "id": this.$uuid.v4(),
                 "width": this.extractedComponents['menus'].width,
                 "order": this.data.length + 1,
@@ -581,7 +581,8 @@ export default {
                     }
                 ]
             }
-            this.data.push(meta);
+            console.log(menu.columns[0].template.name);
+            this.data.push(menu);
             }
         }
         if (this.pseudo == false) {

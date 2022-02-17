@@ -469,5 +469,41 @@
                 "size": "col-lg-6"
             }
         ]
+    },
+    "instructor_avatar" : {
+        "title": "Instructor avatar",
+        "icon": "dripicons-user",
+        "key": "instructor_avatar_component",
+        "tab": "Content",
+        "width": "content",
+        "inputs": [
+        ]
+    },
+    "instructor_text" : {
+        "title": "Instructor text",
+        "icon": "dripicons-user",
+        "key": "instructor_text_component",
+        "tab": "Content",
+        "width": "content",
+        "inputs": [
+        ]
+    },
+    "instructor_courses" : {
+        "title": "Instructor courses",
+        "icon": "dripicons-user",
+        "key": "instructor_courses_component",
+        "tab": "Content",
+        "width": "content",
+        "inputs": [
+        ]
+    },
+    "instructor_events" : {
+        "title": "Instructor events",
+        "icon": "dripicons-user",
+        "key": "instructor_events_component",
+        "tab": "Content",
+        "width": "content",
+        "inputs": [
+        ]
     }
 }

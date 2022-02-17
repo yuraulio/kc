@@ -114,6 +114,26 @@
                         <i style="font-size: 20px" class="text-muted dripicons-menu d-block mt-1"></i>
                         <span class="text-muted m-2 mt-1">Menus</span>
                     </div>
+
+                    <div @click="selectComponent('instructor_avatar')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
+                        <i style="font-size: 20px" class="text-muted dripicons-user d-block mt-1"></i>
+                        <span class="text-muted mt-1">Instructor avatar</span>
+                    </div>
+
+                    <div @click="selectComponent('instructor_text')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
+                        <i style="font-size: 20px" class="text-muted dripicons-user d-block mt-1"></i>
+                        <span class="text-muted mt-1">Instructor text</span>
+                    </div>
+
+                    <div @click="selectComponent('instructor_courses')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
+                        <i style="font-size: 20px" class="text-muted dripicons-user d-block mt-1"></i>
+                        <span class="text-muted mt-1">Instructor courses</span>
+                    </div>
+
+                    <div @click="selectComponent('instructor_events')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
+                        <i style="font-size: 20px" class="text-muted dripicons-user d-block mt-1"></i>
+                        <span class="text-muted mt-1">Instructor events</span>
+                    </div>
                 
                 </template>
 
