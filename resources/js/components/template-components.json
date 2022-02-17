@@ -5,6 +5,7 @@
         "icon": "dripicons-monitor",
         "key": "hero_header_component",
         "one_column": true,
+        "tab": "Content",
         "inputs": [
             {
                 "type": "image",
@@ -33,6 +34,7 @@
         "title": "Text Box",
         "key": "text_box_component",
         "icon": "dripicons-document-edit",
+        "tab": "Content",
         "inputs": [
             {
                 "type": "textarea",
@@ -46,6 +48,7 @@
         "title": "Teaser",
         "icon": "dripicons-article",
         "key": "content_box_component",
+        "tab": "Content",
         "inputs": [
             {
                 "type": "image",
@@ -94,6 +97,7 @@
         "title": "Rich Text Editor",
         "icon": "dripicons-document-edit",
         "key": "text_editor_component",
+        "tab": "Content",
         "inputs": [
             {
                 "type": "text_editor",
@@ -107,6 +111,7 @@
         "title": "Full size image",
         "icon": "dripicons-photo",
         "key": "full_sixe_image_component",
+        "tab": "Content",
         "inputs": [
             {
                 "type": "image",
@@ -128,6 +133,7 @@
         "changable": false,
         "removable": false,
         "disable_color": true,
+        "tab": "Meta",
         "inputs": [
             {
                 "type": "text",
@@ -177,6 +183,7 @@
         "key": "comment_box_component",
         "one_column": true,
         "icon": "dripicons-align-justify",
+        "tab": "Content",
         "inputs": [
         ]
     },
@@ -185,6 +192,7 @@
         "title": "Social Bar",
         "key": "social_bar_component",
         "icon": "dripicons-web",
+        "tab": "Content",
         "inputs": [
             {
                 "type": "text",
@@ -203,6 +211,7 @@
         "title": "Galery",
         "key": "gallery_component",
         "icon": "dripicons-photo-group",
+        "tab": "Content",
         "inputs": [
             {
                 "type": "gallery",
@@ -216,6 +225,7 @@
         "width": "blog",
         "icon": "dripicons-browser",
         "key": "blog_header_component",
+        "tab": "Content",
         "inputs": [
             {
                 "type": "textarea",
@@ -234,6 +244,7 @@
         "width": "content",
         "icon": "dripicons-camcorder",
         "key": "youtube_component",
+        "tab": "Content",
         "inputs": [
             {
                 "type": "number",
@@ -260,6 +271,7 @@
         "width": "content",
         "icon": "dripicons-code",
         "key": "html_component",
+        "tab": "Content",
         "inputs": [
             {
                 "type": "textarea",
@@ -273,6 +285,7 @@
         "width": "content",
         "icon": "dripicons-mail",
         "key": "contact_form_component",
+        "tab": "Content",
         "inputs": [
             {
                 "type": "text",
@@ -309,6 +322,7 @@
         "width": "content",
         "icon": "dripicons-wrong",
         "key": "empty_component",
+        "tab": "Content",
         "inputs": []
     },
     "horizintal_line" : {
@@ -316,6 +330,7 @@
         "width": "content",
         "icon": "dripicons-minus",
         "key": "horizontal_line_component",
+        "tab": "Content",
         "inputs": []
     },
     "post_feature" : {
@@ -323,6 +338,7 @@
         "icon": "dripicons-blog",
         "key": "post_feature_component",
         "one_column": true,
+        "tab": "Other",
         "inputs": [
             {
                 "type": "text",
@@ -354,6 +370,7 @@
         "changable": false,
         "removable": false,
         "disable_color": true,
+        "tab": "Other",
         "inputs": [
             {
                 "type": "multidropdown",

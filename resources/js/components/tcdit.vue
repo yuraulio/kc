@@ -22,13 +22,29 @@
             </div>
         </div>
 
+        <div class="row mb-1">
+            <div class="col-12">
+                <ul class="nav nav-pills nav-fill">
+                    <li class="nav-item">
+                        <a @click="tab = 'Content'" :class="'nav-link ' + (tab == 'Content' ? 'active' : '')" href="#">Content</a>
+                    </li>
+                    <li class="nav-item">
+                        <a @click="tab = 'Meta'" :class="'nav-link ' + (tab == 'Meta' ? 'active' : '')" href="#">Meta</a>
+                    </li>
+                    <li class="nav-item">
+                        <a @click="tab = 'Other'" :class="'nav-link ' + (tab == 'Other' ? 'active' : '')" href="#">Other</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
         <draggable 
             v-model="data" 
             key="cols"
             handle=".handle"
         >
             <transition-group tag="div" >
-                <div  v-for="(val, index, key) in data" :key="'prim'+ index" class="col-12 mb-1 card toggle-card">
+                <div v-for="(val, index, key) in data" v-if="tab == val.tab" :key="'prim'+ index" class="col-12 mb-1 card toggle-card">
 
                     <div class="row handle">
                         <div class="col-2">
@@ -209,13 +225,29 @@
             </div>
         </div>
 
+        <div class="row mb-1">
+            <div class="col-12">
+                <ul class="nav nav-pills nav-fill">
+                    <li class="nav-item">
+                        <a @click="tab = 'Content'" :class="'nav-link ' + (tab == 'Content' ? 'active' : '')" href="#">Content</a>
+                    </li>
+                    <li class="nav-item">
+                        <a @click="tab = 'Meta'" :class="'nav-link ' + (tab == 'Meta' ? 'active' : '')" href="#">Meta</a>
+                    </li>
+                    <li class="nav-item">
+                        <a @click="tab = 'Other'" :class="'nav-link ' + (tab == 'Other' ? 'active' : '')" href="#">Other</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
         <draggable 
             v-model="data" 
             key="cols"
             handle=".handle"
         >
             <transition-group tag="div" >
-                <div v-for="(val, index) in data" :key="'prim'+ index" class="row mb-1">
+                <div v-for="(val, index) in data" v-if="tab == val.tab" :key="'prim'+ index" class="row mb-1">
                     <!-- <draggable v-model="val.columns">
                         <transition-group tag="div" class="row" key="subcols"> -->
                         <div v-if="val.width" class="btn-group" style="width: 20%;margin-left: 40%;margin-right: 40%;">
@@ -315,6 +347,7 @@ export default {
             row_index: null,
             column_index: null,
             collapseAll: true,
+            tab: "Content",
         }
     },
     components: {
@@ -515,6 +548,7 @@ export default {
                 "description": "",
                 "removable": false,
                 "disable_color": true,
+                "tab": "Meta",
                 "columns": [
                     {
                         "id": this.$uuid.v4(),
@@ -536,6 +570,7 @@ export default {
                 "collapsed": true,
                 "removable": false,
                 "disable_color": true,
+                "tab": "Other",
                 "columns": [
                     {
                         "id": this.$uuid.v4(),
@@ -597,6 +632,7 @@ export default {
                 "description": "",
                 "collapsed": false,
                 "color": 'white',
+                "tab": this.extractedComponents[component].tab,
                 "columns": [
                     {
                         "id": this.$uuid.v4(),
