@@ -634,7 +634,8 @@ class LessonController extends Controller
             }
 
             $category = Category::find($categories[$key]);
-            $category->lessons()->where('id',$lesson)->detach();
+            //$category->lessons()->where('id',$lesson)->detach();
+            $category->lessons()->detach($lesson);
 
             foreach($category->events as $event){
 
