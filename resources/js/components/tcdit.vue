@@ -12,7 +12,7 @@
         </div> <!-- end offcanvas-body-->
     </div>
 
-    <div v-if="data && !pseudo">
+    <div v-if="!pseudo">
 
         <div v-if="pageTitle" class="">
             <div class="col-sm-12 mt-2 mb-2">
@@ -22,7 +22,7 @@
             </div>
         </div>
 
-        <div class="row mb-1">
+        <div v-if="name == 'main'" class="row mb-1">
             <div class="col-12">
                 <ul class="nav nav-pills nav-fill">
                     <li class="nav-item">
@@ -38,13 +38,47 @@
             </div>
         </div>
 
+        <div v-if="name == 'tabs'" class="row ">
+            <div class="col-12">
+                <nav class="nav nav-pills flex-column flex-sm-row">
+                    <template v-for="tab_item in tabs">
+                        <a @click="tabs_tab = tab_item" :class="'mb-1 me-1 flex-sm-fill text-sm-center nav-link ' + (tabs_tab == tab_item ? 'active' : '')" href="#">{{tab_item}}</a>
+                    </template>
+
+                    <button @click="add_tab = true" class="mb-1 btn btn-soft-success add-column-button">
+                        Add tab
+                    </button>
+                </nav>
+            </div>
+
+            <div class="col-12 mt-1 mb-1" v-if="add_tab == true">
+                <div class="row">
+                    <div class="col-8">
+                        <input v-model="new_tab" type="text" class="form-control">
+                    </div>
+                    <div class="col-2 text-center">
+                        <button @click="addTab()" class="btn btn-soft-success w-100">
+                            <i class="dripicons-checkmark"></i>
+                        </button>
+                    </div>
+                    <div class="col-2 text-center">
+                        <button @click="add_tab = false, new_tab = ''" class="btn btn-soft-secondary w-100">
+                            <i class="dripicons-cross"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
         <draggable 
+            v-if="data"
             v-model="data" 
             key="cols"
             handle=".handle"
         >
             <transition-group tag="div" >
-                <div v-for="(val, index, key) in data" :key="'prim'+ index" :class="'col-12 mb-1 card toggle-card ' + (tab == val.tab ? '' : 'visually-hidden')">
+                <div v-for="(val, index, key) in data" :key="'prim'+ index" :class="'col-12 mb-1 card toggle-card ' + (name == 'tabs' && tabs_tab == val.tabs_tab ? ' tab-components d-block ' : ' d-none ') + (name == 'main' && tab == val.tab ? ' d-block ' : ' d-none ')">
 
                     <div class="row handle">
                         <div class="col-2">
@@ -160,6 +194,7 @@
                                 
                                     <div v-for="(vl, indx) in val.columns" :key="'tabpane' + indx" :class="'tab-pane ' + (vl.active === true ? ' active' : '')">
                                         <div v-show="column.active" class="card-body row pb-0 pt-0">
+
                                             <multiput
                                                 v-for="input in column.template.inputs"
                                                 :key="input.key"
@@ -167,14 +202,18 @@
                                                 :label="input.label"
                                                 :type="input.type"
                                                 :value="input.value"
+                                                :tabsProp="input.tabs ? input.tabs : []"
                                                 :size="input.size"
                                                 @inputed="inputed($event, input)"
+                                                @inputedTabs="inputedTabs($event, input)"
                                                 :route="input.route"
                                                 :multi="false"
                                                 :existingValue="input.value"
+                                                :uuid="$uuid.v4()"
                                             />
                                         </div>
 
+                                        <!-- preview -->
                                         <template v-if="column.component == 'youtube'">
                                             <div class="card-body row pb-0 pt-0">
                                                 <div class="col-12">
@@ -216,7 +255,7 @@
 
     <div v-if="data && pseudo">
 
-        <div class="row">
+        <div v-if="name == 'main'" class="row">
             <div class="col-sm-12 mt-2 mb-2">
                 <div class="page-title-box d-flex justify-content-between align-items-center">
                     <h4 class="page-title d-inline-block">{{pageTitle}}</h4>
@@ -225,7 +264,7 @@
             </div>
         </div>
 
-        <div class="row mb-1">
+        <div v-if="name == 'main'" class="row mb-1">
             <div class="col-12">
                 <ul class="nav nav-pills nav-fill">
                     <li class="nav-item">
@@ -241,66 +280,114 @@
             </div>
         </div>
 
+        <div v-if="name == 'tabs'" class="row ">
+            <div class="col-12">
+                <nav class="nav nav-pills flex-column flex-sm-row">
+                    <template v-for="tab_item in tabs">
+                        <a @click="tabs_tab = tab_item" :class="'mb-1 me-1 flex-sm-fill text-sm-center nav-link ' + (tabs_tab == tab_item ? 'active' : '')" href="#">{{tab_item}}</a>
+                    </template>
+
+                    <button @click="add_tab = true" class="mb-1 btn btn-soft-success add-column-button">
+                        Add tab
+                    </button>
+                </nav>
+            </div>
+
+            <div class="col-12 mt-1 mb-1" v-if="add_tab == true">
+                <div class="row">
+                    <div class="col-8">
+                        <input v-model="new_tab" type="text" class="form-control">
+                    </div>
+                    <div class="col-2 text-center">
+                        <button @click="addTab()" class="btn btn-soft-success w-100">
+                            <i class="dripicons-checkmark"></i>
+                        </button>
+                    </div>
+                    <div class="col-2 text-center">
+                        <button @click="add_tab = false, new_tab = ''" class="btn btn-soft-secondary w-100">
+                            <i class="dripicons-cross"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
         <draggable 
             v-model="data" 
             key="cols"
             handle=".handle"
         >
             <transition-group tag="div" >
-                <div v-for="(val, index) in data" :key="'prim'+ index" :class="'row mb-1 ' + (tab == val.tab ? '' : 'visually-hidden')">
-                    <!-- <draggable v-model="val.columns">
-                        <transition-group tag="div" class="row" key="subcols"> -->
-                        <div v-if="val.width" class="btn-group" style="width: 20%;margin-left: 40%;margin-right: 40%;">
-                            <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                {{ val.width == 'full' ? 'Full' : (val.width == 'content' ? 'Content' :'Blog') }} Width<i class="mdi mdi-chevron-down"></i>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-center" style="" data-popper-placement="bottom-start">
-                                <a @click.prevent="val.width = 'full'" :class="'dropdown-item ' + (val.width == 'full' ? 'active' : '')" href="#">Full Width</a>
-                                <a @click.prevent="val.width = 'content'" :class="'dropdown-item ' + (val.width == 'content' ? 'active' : '')" href="#">Content Width</a>
-                                <a @click.prevent="val.width = 'blog'" :class="'dropdown-item ' + (val.width == 'blog' ? 'active' : '')" href="#">Blog Width</a>
-                            </div>
+                <div v-for="(val, index) in data" :key="'prim'+ index" :class="'row mb-1 ' + (name == 'tabs' && tabs_tab == val.tabs_tab ? ' d-block ' : ' d-none ') + (name == 'main' && tab == val.tab ? ' d-block ' : ' d-none ')">
+                    <div v-if="val.width" class="btn-group" style="width: 20%;margin-left: 40%;margin-right: 40%;">
+                        <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            {{ val.width == 'full' ? 'Full' : (val.width == 'content' ? 'Content' :'Blog') }} Width<i class="mdi mdi-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-center" style="" data-popper-placement="bottom-start">
+                            <a @click.prevent="val.width = 'full'" :class="'dropdown-item ' + (val.width == 'full' ? 'active' : '')" href="#">Full Width</a>
+                            <a @click.prevent="val.width = 'content'" :class="'dropdown-item ' + (val.width == 'content' ? 'active' : '')" href="#">Content Width</a>
+                            <a @click.prevent="val.width = 'blog'" :class="'dropdown-item ' + (val.width == 'blog' ? 'active' : '')" href="#">Blog Width</a>
                         </div>
-                        <div v-for="(column, indr) in val.columns" :key="'column' + indr" :class="'col-lg-' + getColumnWidth(column, val.columns)">
-                            <div class="" style="position: relative">
-                                <div @click.prevent="" :key="'pseudo' + indr" class="dropzone  mb-2" style="min-height:150px">
-                                    <div class="dz-message needsclick" style="margin: 0px !important; display: flex; justify-content: center; flex-direction: column">
-                                        <div @click="changeComponent(index, indr, column.template)">
-                                            <i :class="'h1 handle text-muted ' + column.template.icon"></i>
-                                            <div class="text-center">
-                                                <span class="text-muted font-13">
-                                                    <strong>{{ column.template.title }} {{ val.order }}</strong>
-                                                </span>
-                                                <small class="text-muted font-11">{{ column.order }}</small>
-                                            </div>
+                    </div>
+                    <div v-for="(column, indr) in val.columns" :key="'column' + indr" :class="'d-inline-block col-lg-' + getColumnWidth(column, val.columns)">
+                        <div class="" style="position: relative">
+                            <div @click.prevent="" :key="'pseudo' + indr" class="dropzone  mb-2" style="min-height:150px">
+                                <div class="dz-message needsclick" style="margin: 0px !important; display: flex; justify-content: center; flex-direction: column">
+                                    <div @click="changeComponent(index, indr, column.template)">
+                                        <i :class="'h1 handle text-muted ' + column.template.icon"></i>
+                                        <div class="text-center">
+                                            <span class="text-muted font-13">
+                                                <strong>{{ column.template.title }} {{ val.order }}</strong>
+                                            </span>
+                                            <small class="text-muted font-11">{{ column.order }}</small>
                                         </div>
-                                        <span v-if="column.template.one_column != true" class="text-muted font-13">
-                                            <i @click="split(val.columns, indr, 'push')" v-if="val.columns.length < 3" class="success dripicons-stack mr-2"></i>
-                                            <i v-if="val.columns.length <= 3 && val.columns.length > 1 && indr > 0" @click="split(val.columns, indr, 'splice')" class="danger dripicons-trash mr-2"></i>
-                                            <br>
-                                            <template v-if="val.columns.length > 1">
-                                                Width: {{column.width}} / 6
-                                                <input @click.stop="calculateWidth(val.columns, indr, $event, index)" :value="column.width" class="w-100" type="range" maxlength="1" min="1" max="6">
-                                            </template>
-                                        </span>
                                     </div>
+                                    <span v-if="column.template.one_column != true" class="text-muted font-13">
+                                        <i @click="split(val.columns, indr, 'push')" v-if="val.columns.length < 3" class="success dripicons-stack mr-2"></i>
+                                        <i v-if="val.columns.length <= 3 && val.columns.length > 1 && indr > 0" @click="split(val.columns, indr, 'splice')" class="danger dripicons-trash mr-2"></i>
+                                        <br>
+                                        <template v-if="val.columns.length > 1">
+                                            Width: {{column.width}} / 6
+                                            <input @click.stop="calculateWidth(val.columns, indr, $event, index)" :value="column.width" class="w-100" type="range" maxlength="1" min="1" max="6">
+                                        </template>
+                                    </span>
                                 </div>
-                                <span @click="removeRow(index)" v-if="indr == (val.columns.length - 1) && val.removable !== false" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="cursor: pointer">
-                                    Remove
-                                    <span class="visually-hidden"></span>
-                                </span>
+
+                                <multiput
+                                    v-for="input in column.template.inputs"
+                                    v-if="input.key == 'tabs'"
+                                    :pseudo="true"
+                                    :key="input.key"
+                                    :keyput="input.key"
+                                    :label="input.label"
+                                    :type="input.type"
+                                    :value="input.value"
+                                    :tabsProp="input.tabs ? input.tabs : []"
+                                    :size="input.size"
+                                    @inputed="inputed($event, input)"
+                                    @inputedTabs="inputedTabs($event, input)"
+                                    :route="input.route"
+                                    :multi="false"
+                                    :existingValue="input.value"
+                                    :uuid="$uuid.v4()"
+                                />
+
                             </div>
+                            <span @click="removeRow(index)" v-if="indr == (val.columns.length - 1) && val.removable !== false" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="cursor: pointer">
+                                Remove
+                                <span class="visually-hidden"></span>
+                            </span>
 
                         </div>
-
-                        <!-- </transition-group>
-                    </draggable> -->
+                    </div>
                 </div>
-                </transition-group>
+            </transition-group>
         </draggable>
     </div>
 
 
-    <form @click.prevent="addCustomComponent" class="dropzone dz-clickable" style="min-height:80px; border: 2px dashed #6658dd !important" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
+    <form v-if="tabs_tab || name == 'main'" @click.prevent="addCustomComponent" class="dropzone dz-clickable" style="min-height:80px; border: 2px dashed #6658dd !important" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
         <div class="dz-message needsclick" style="margin: 0px !important; color: #6658dd">
             <i class="h1  dripicons-view-apps" style="color: #6658dd"></i>
             <div class="text-center">
@@ -313,6 +400,7 @@
     <component-modal
         :row="row_index"
         :column="column_index"
+        :name="name"
     ></component-modal>
 
 </div>
@@ -336,6 +424,11 @@ export default {
         mode: {},
         pageTitle: null,
         collapseAllProp: Boolean,
+        name: {
+            type: String,
+            default: "main",
+        },
+        tabsProp: [],
     },
     data() {
         return {
@@ -348,6 +441,10 @@ export default {
             column_index: null,
             collapseAll: true,
             tab: "Content",
+            tabs: [],
+            tabs_tab: null,
+            add_tab: false,
+            new_tab: "",
         }
     },
     components: {
@@ -396,6 +493,9 @@ export default {
         inputed($event, value) {
             this.$set(value, 'value', $event.data);
         },
+        inputedTabs($event, value) {
+            this.$set(value, 'tabs', $event.data);
+        },
         rearange(preview) {
             if (preview && preview === true) {
                 this.spreview = false;
@@ -408,7 +508,7 @@ export default {
         addCustomComponent() {
             this.row_index = null;
             this.column_index = null;
-            this.$modal.show("component-modal", {"data": 'test'})
+            this.$modal.show(this.name);
         },
         reupdateTemplate() {
 
@@ -420,7 +520,7 @@ export default {
             if (component.changable !== false) {
                 this.row_index = row_index;
                 this.column_index = column_index;
-                this.$modal.show("component-modal");
+                this.$modal.show(this.name);
             }
         },
         toggleCollapse(val) {
@@ -522,12 +622,23 @@ export default {
             } else {
                 this.$set(this.data[rowIndex], "tooBig", false);
             }
+        },
+        addTab() {
+            this.tabs.push(this.new_tab);
+            if (this.tabs_tab == null) {
+                this.tabs_tab = this.new_tab;
+            }
+            this.new_tab = "";
+            this.add_tab = false;
         }
     },
 
     watch: {
-        "predata": function(val) {
-            // this.data = this.predata;
+        "data": function(val) {
+            this.$emit('updatetabscomponent', val);
+        },
+        "tabs": function(val) {
+            this.$emit('updatetabs', val);
         },
         "collapseAllProp": function() {
             this.toggleCollapseAll();
@@ -540,81 +651,96 @@ export default {
             } else {
             this.data = this.data ?? [];
 
-            // add meta component
-            var meta = {
-                "id": this.$uuid.v4(),
-                "width": this.extractedComponents['meta'].width,
-                "order": this.data.length + 1,
-                "description": "",
-                "removable": false,
-                "disable_color": true,
-                "tab": "Meta",
-                "columns": [
-                    {
-                        "id": this.$uuid.v4(),
-                        "order": 0,
-                        "component": 'meta',
-                        "active": true,
-                        "template": this.extractedComponents['meta']
-                    }
-                ]
+            if (typeof this.tabsProp !== 'undefined') {
+                this.tabs = this.tabsProp;
             }
-            this.data.push(meta);
 
-            // add menu component
-            var menu = {
-                "id": this.$uuid.v4(),
-                "width": this.extractedComponents['menus'].width,
-                "order": this.data.length + 1,
-                "description": "",
-                "collapsed": true,
-                "removable": false,
-                "disable_color": true,
-                "tab": "Other",
-                "columns": [
-                    {
-                        "id": this.$uuid.v4(),
-                        "order": 0,
-                        "component": 'menus',
-                        "active": true,
-                        "template": this.extractedComponents['menus']
-                    }
-                ]
-            }
-            console.log(menu.columns[0].template.name);
-            this.data.push(menu);
+            if (this.name == 'main') {
+                // add meta component
+                var meta = {
+                    "id": this.$uuid.v4(),
+                    "width": this.extractedComponents['meta'].width,
+                    "order": this.data.length + 1,
+                    "description": "",
+                    "removable": false,
+                    "disable_color": true,
+                    "tab": "Meta",
+                    "columns": [
+                        {
+                            "id": this.$uuid.v4(),
+                            "order": 0,
+                            "component": 'meta',
+                            "active": true,
+                            "template": this.extractedComponents['meta']
+                        }
+                    ]
+                }
+                this.data.push(meta);
+
+                // add menu component
+                var menu = {
+                    "id": this.$uuid.v4(),
+                    "width": this.extractedComponents['menus'].width,
+                    "order": this.data.length + 1,
+                    "description": "",
+                    "collapsed": true,
+                    "removable": false,
+                    "disable_color": true,
+                    "tab": "Other",
+                    "columns": [
+                        {
+                            "id": this.$uuid.v4(),
+                            "order": 0,
+                            "component": 'menus',
+                            "active": true,
+                            "template": this.extractedComponents['menus']
+                        }
+                    ]
+                }
+                this.data.push(menu);
+                }
             }
         }
         if (this.pseudo == false) {
-            var parsed = this.predata;
 
-            parsed.forEach(element => {
-                element.initialCollapsed = element.collapsed ? element.collapsed : false;
-            });
-
-            if (this.mode != "edit") {
-                parsed.forEach(element => {
-                    element.columns.forEach(column => {
-                        column.active = column.order < 1 ? true : false;
-                        if (this.extractedComponents[column.component] != null) {
-                            column.template = this.extractedComponents[column.component];
-                        }
-
+            if (typeof this.predata !== 'undefined') {
+                var parsed = this.predata;
+                if (parsed.length) {
+                    parsed.forEach(element => {
+                        element.initialCollapsed = element.collapsed ? element.collapsed : false;
                     });
-                });
+                }
+           
+                if (this.mode != "edit" && parsed.length) {
+                    parsed.forEach(element => {
+                        element.columns.forEach(column => {
+                            column.active = column.order < 1 ? true : false;
+                            if (this.extractedComponents[column.component] != null) {
+                                column.template = this.extractedComponents[column.component];
+                            }
+
+                        });
+                    });
+                }
+
+                this.data = parsed;
             }
 
-            this.data = parsed;
-
+            if (typeof this.tabsProp !== 'undefined') {
+                this.tabs = this.tabsProp;
+            }
+         
         }
 
-        this.data.forEach(row => {
-            if (!row.color){
-                this.$set(row, 'color', 'white');
-            }
-        });
+        if (this.data) {
+            this.data.forEach(row => {
+                if (!row.color){
+                    this.$set(row, 'color', 'white');
+                }
+            });
+        }
 
-        eventHub.$on('component-rearange', ((preview) => {
+        eventHub.$on('component-rearange-' + this.name, ((preview) => {
             if (preview && preview === true) {
                 this.spreview = false;
                 this.preview = true;
@@ -624,7 +750,7 @@ export default {
             }
         }));
 
-        eventHub.$on('component-added', ((component) => {
+        eventHub.$on('component-added-' + this.name, ((component) => {
             this.data = this.data ?? [];
             var comp = {
                 "id": this.$uuid.v4(),
@@ -634,6 +760,7 @@ export default {
                 "collapsed": false,
                 "color": 'white',
                 "tab": this.extractedComponents[component].tab,
+                "tabs_tab": this.tabs_tab,
                 "columns": [
                     {
                         "id": this.$uuid.v4(),
@@ -648,7 +775,7 @@ export default {
             this.data.push(comp);
         }));
 
-        eventHub.$on('component-change', ((data) => {
+        eventHub.$on('component-change-' + this.name, ((data) => {
             var component = data[0];
             var row_index = data[1];
             var column_index = data[2];
@@ -658,7 +785,7 @@ export default {
             this.$modal.hide("component-modal");
         }));
 
-        eventHub.$on('order-changed', ((data) => {
+        eventHub.$on('order-changed-' + this.name, ((data) => {
             this.data = data;
         }));
     },
@@ -695,5 +822,16 @@ export default {
 .add-column-button>i {
     font-size: 25px;
     transform: translateY(-3px);
+}
+
+.d-block {
+    display: block!important;
+}
+.d-inline-block {
+    display: inline-block!important;
+}
+
+.tab-components {
+    border: 5px solid #f5f6f8;
 }
 </style>

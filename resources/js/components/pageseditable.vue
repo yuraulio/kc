@@ -183,11 +183,11 @@
 
 <script>
 import multidropdown from './inputs/multidropdown.vue';
-import Tcedit from './tcdit.vue';
+// import Tcedit from './tcdit.vue';
 import gicon from './gicon.vue';
 
 export default {
-  components: { multidropdown, Tcedit, gicon },
+  components: { multidropdown, gicon },
         props: {
             pageTitle: String,
             title: String,

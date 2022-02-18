@@ -70,6 +70,7 @@ Vue.component('list', require('./components/inputs/list.vue').default);
 Vue.component('pagination', require('laravel-vue-pagination'));
 Vue.component('datepicker-component', require('./components/inputs/datepicker-component.vue').default);
 Vue.component('comments', require('./components/comments.vue').default);
+Vue.component('tcedit', require('./components/tcdit.vue').default);
 
 Vue.component('avatar', require('vue-avatar').default);
 Vue.component('media-manager', require('./components/media/media-manager.vue').default);

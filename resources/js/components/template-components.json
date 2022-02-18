@@ -505,5 +505,19 @@
         "width": "content",
         "inputs": [
         ]
+    },
+    "tabs" : {
+        "title": "Tabs",
+        "icon": "dripicons-browser",
+        "key": "tabs_component",
+        "tab": "Content",
+        "width": "content",
+        "inputs": [
+            {
+                "type": "tabs",
+                "key": "tabs",
+                "label": "Tabs"
+            }
+        ]
     }
 }

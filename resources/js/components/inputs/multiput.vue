@@ -101,6 +101,20 @@
             :taggable="taggable"
         ></multidropdown>
     </div>
+
+    <div v-if="type == 'tabs'" class="">
+        <tcedit
+            mode="new" 
+            ref="tc" 
+            :pseudo="pseudo" 
+            :predata="existingValue"
+            name="tabs"
+            :tabsProp="tabsProp"
+            @updatetabscomponent="updated"
+            @updatetabs="updatedTabs"
+        ></tcedit>
+    </div>
+
 </div>
 </template>
 
@@ -113,6 +127,7 @@ import { Editor, EditorContent } from '@tiptap/vue-2'
 import StarterKit from '@tiptap/starter-kit'
 import multidropdown from './multidropdown.vue'
 import MediaManager from '../media/media-manager.vue';
+// import Tcedit from '../tcdit.vue';
 
 export default {
     components: {
@@ -142,7 +157,9 @@ export default {
         route: {},
         taggable: {},
         multi: {},
-
+        uuid: String,
+        tabsProp: [],
+        pseudo: Boolean,
     },
     data() {
         return {
@@ -196,6 +213,9 @@ export default {
         },
         updated($event) {
             this.$emit('inputed', { 'data': $event, 'key': this.keyput})
+        },
+        updatedTabs($event) {
+            this.$emit('inputedTabs', { 'data': $event, 'key': this.keyput})
         }
     },
     watch: {

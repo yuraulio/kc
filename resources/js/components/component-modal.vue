@@ -8,14 +8,14 @@
 </style>
 
 <template>
-    <modal name="component-modal" :adaptive="true" :height="400" @before-open="getParams">
+    <modal :name="name" :adaptive="true" :height="400" @before-open="getParams">
 
         <div class="row pt-2 ps-4 pe-4">
             <div class="col-6 sm-auto">
                 <h3>Select component</h3>
             </div>
             <div class="col-6 sm-auto text-end">
-                    <i @click="$modal.hide('component-modal')" class="dripicons-cross fs-1"></i>
+                    <i @click="$modal.hide(name)" class="dripicons-cross fs-1"></i>
             </div>
         </div>
 
@@ -144,6 +144,11 @@
                         <span class="text-muted m-2 mt-1">Post feature</span>
                     </div>
 
+                    <div v-if="name != 'tabs'" @click="selectComponent('tabs')" class="widget-rounded-circle card bg-grey text-center d-inline-block me-2 mb-2">
+                        <i style="font-size: 20px" class="text-muted dripicons-browser d-block mt-1"></i>
+                        <span class="text-muted m-2 mt-1">Tabs</span>
+                    </div>
+
                 </template>
 
             </div>
@@ -156,6 +161,7 @@ export default {
     props: {
         row: Number,
         column: Number,
+        name: String,
     },
     data() {
         return {
@@ -167,13 +173,13 @@ export default {
         },
         selectComponent(component) {
             if (this.row !== null && this.column !== null){
-                eventHub.$emit('component-change', [component, this.row, this.column]);
+                eventHub.$emit('component-change-' + this.name, [component, this.row, this.column]);
             } else {
-                eventHub.$emit('component-added', component);
+                eventHub.$emit('component-added-' + this.name, component);
             }
         },
         rearange() {
-            eventHub.$emit('component-rearange')
+            eventHub.$emit('component-rearange-' + this.name)
         },
         getActive(tab){
             if (tab == this.type) {
