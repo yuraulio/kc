@@ -588,7 +588,7 @@ class LessonController extends Controller
         return redirect()->route('lessons.index')->withStatus(__('Lesson successfully deleted.'));
     }*/
 
-    public function destroy(Request $request, Lesson $lesson)
+    /*public function destroy(Request $request, Lesson $lesson)
     {
 
         $error = false;
@@ -620,7 +620,42 @@ class LessonController extends Controller
         }
 
         return redirect()->route('lessons.index')->withStatus(__('Lesson successfully deleted.'));
+    }*/
+
+
+    public function destroy(Request $request, Lesson $lesson)
+    {
+
+        $categories = $request->categories;
+        foreach( (array) $request->lessons as $key => $lesson){
+
+            if(!isset($categories[$key])){
+                continue;
+            }
+
+            $category = Category::find($categories[$key]);
+            $category->lessons()->where('id',$lesson)->detach();
+
+            foreach($category->events as $event){
+
+                //dd($event->allLessons->where('id',$lesson)->first());
+                $event->allLessons()->detach($lesson);
+                //$event->allLessons()->where('id',$lesson)->detach();
+            }
+
+            $lesson = Lesson::find($lesson);
+            if(count($lesson->topic) == 0){
+                $lesson->delete();
+            }
+            
+
+        }
+
+       
+
+        return redirect()->route('lessons.index')->withStatus(__('Lesson successfully deleted.'));
     }
+
 
     public function remove_lesson(Request $request)
     {

@@ -136,17 +136,17 @@ class UserController extends Controller
 
     public function getSMSVerification(Request $request){
 
-        require_once("/usr/www/users/lioncode/kcdev/app/Apifon/Model/IRequest.php");
-        require_once("/usr/www/users/lioncode/kcdev/app/Apifon/Model/SubscribersViewRequest.php");
-        require_once("/usr/www/users/lioncode/kcdev/app/Apifon/Mookee.php");
-        require_once("/usr/www/users/lioncode/kcdev/app/Apifon/Security/Hmac.php");
-        require_once("/usr/www/users/lioncode/kcdev/app/Apifon/Resource/AbstractResource.php");
-        require_once("/usr/www/users/lioncode/kcdev/app/Apifon/Resource/SMSResource.php");
-        require_once("/usr/www/users/lioncode/kcdev/app/Apifon/Response/GatewayResponse.php");
-        require_once("/usr/www/users/lioncode/kcdev/app/Apifon/Model/MessageContent.php");
-        require_once("/usr/www/users/lioncode/kcdev/app/Apifon/Model/SmsRequest.php");
-        require_once("/usr/www/users/lioncode/kcdev/app/Apifon/Model/SubscriberInformation.php");
-
+        require_once("../app/Apifon/Model/IRequest.php");
+        require_once("../app/Apifon/Model/SubscribersViewRequest.php");
+        require_once("../app/Apifon/Mookee.php");
+        require_once("../app/Apifon/Security/Hmac.php");
+        require_once("../app/Apifon/Resource/AbstractResource.php");
+        require_once("../app/Apifon/Resource/SMSResource.php");
+        require_once("../app/Apifon/Response/GatewayResponse.php");
+        require_once("../app/Apifon/Model/MessageContent.php");
+        require_once("../app/Apifon/Model/SmsRequest.php");
+        require_once("../app/Apifon/Model/SubscriberInformation.php");
+        
         $user = Auth::user();
         $cookie_value = '-11111111';
         if($request->hasHeader('auth-sms')){

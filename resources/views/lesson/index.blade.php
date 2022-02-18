@@ -111,7 +111,7 @@
                                         <td> 
                                             <div class="input-group-prepend lesson-select">
                                                 <div class="input-group-text">
-                                                    <input data-lesson-id="{{$lesson->id}}" class="check-lesson" type="checkbox" aria-label="Checkbox for following text input">
+                                                    <input data-category-id="{{$lesson->category[$key]['id']}}" data-lesson-id="{{$lesson->id}}" class="check-lesson" type="checkbox" aria-label="Checkbox for following text input">
                                                 </div>
                                             </div> 
                                         </td>
@@ -784,19 +784,25 @@
 
     function deleteLesson(){
         let lessons = [];
+        let categories = [];
         $('.check-lesson').each(function(index, value) {
             if ($(this).is(':checked')) {
                 lessons.push($(this).data('lesson-id'))
+                categories.push($(this).data('category-id'))
             }
         });
 
+
         let lessonsInput = '';
+        let categoryInput = '';
         $.each( lessons, function( key, value ) {
-            lessonsInput += `<input class="hidden" name="lessons[]" value="${value}">`
+            lessonsInput += `<input class="hidden" name="lessons[]" value="${lessons}">`
+            categoryInput += `<input class="hidden" name="categories[]" value="${categories[key]}">`
         });
 
+    
         $("#deleteLesson").append(lessonsInput);
-
+        $("#deleteLesson").append(categoryInput);
         $("#deleteLesson").submit();
 
     }
