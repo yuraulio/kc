@@ -792,11 +792,11 @@
             }
         });
 
-
+    
         let lessonsInput = '';
         let categoryInput = '';
         $.each( lessons, function( key, value ) {
-            lessonsInput += `<input class="hidden" name="lessons[]" value="${lessons}">`
+            lessonsInput += `<input class="hidden" name="lessons[]" value="${value}">`
             categoryInput += `<input class="hidden" name="categories[]" value="${categories[key]}">`
         });
 
