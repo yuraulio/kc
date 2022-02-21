@@ -56,16 +56,16 @@
                      <li><a href="#overview" class="active">Overview</a></li>
                      @if($estatus == 0 || $estatus == 2)
 
-                     @if(count($benefits) > 0)<li><a href="#benefits">Benefits</a></li>@endif
+                        @if(isset($sections['benefits'][0]) && $sections['benefits']->first()->visible)<li><a href="#benefits">{{$sections['benefits']->first()->tab_title}}</a></li>@endif
 
-                     <li><a href="#topics">Topics</a></li>
-                     <li><a href="#instructors">Instructors</a></li>
-                     @if(count($testimonials) > 0)<li><a href="#testimonials">Testimonials</a></li>@endif
-                     @if(count($venues) > 0)<li><a href="#location">Location</a></li>@endif
-                     <li><a href="#faq">FAQ</a></li>
+                        @if(isset($sections['topics'][0]) && $sections['topics']->first()->visible)<li><a href="#topics">{{$sections['topics']->first()->tab_title}}</a></li>@endif
+                        @if(isset($sections['instructors'][0]) && $sections['instructors']->first()->visible)<li><a href="#instructors">{{$sections['instructors']->first()->tab_title}}</a></li>@endif
+                        @if(isset($sections['testimonials'][0]) && $sections['testimonials']->first()->visible)<li><a href="#testimonials">{{$sections['testimonials']->first()->tab_title}}</a></li>@endif
+                        @if(isset($sections['location'][0]) && $sections['location']->first()->visible)<li><a href="#location">{{$sections['location']->first()->tab_title}}</a></li>@endif
+                        @if(isset($sections['questions'][0]) && $sections['questions']->first()->visible)<li><a href="#faq">{{$sections['questions']->first()->tab_title}}</a></li>@endif
                      @elseif($estatus == 3 || $estatus == 1 )
-                     <li><a href="#topics">Topics</a></li>
-                     <li><a href="#instructors">Instructors</a></li>
+                        @if(isset($sections['topics'][0]) && $sections['topics']->first()->visible)<li><a href="#topics">{{$sections['topics']->first()->tab_title}}</a></li>@endif
+                        @if(isset($sections['instructors'][0]) && $sections['instructors']->first()->visible)<li><a href="#instructors">{{$sections['instructors']->first()->tab_title}}</a></li>@endif
                      @endif
                   </ul>
           

@@ -19,6 +19,7 @@ use App\Http\Requests\EventRequest;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\ImageManagerStatic as Image;
 use App\Model\Coupon;
+use App\Model\Section;
 
 class EventController extends Controller
 {
@@ -312,6 +313,7 @@ class EventController extends Controller
                 
             }
         }
+
         //dd($unassigned);
        // dd($event['topic']->groupBy('id'));
         //dd($allTopicsByCategory);
@@ -339,7 +341,8 @@ class EventController extends Controller
         $data['eventUsers'] = $event->users;//$event->users->toArray();
         $data['coupons'] = Coupon::all();
         $data['activeMembers'] = 0;
-
+        $data['sections'] = $event->sections->groupBy('section');
+    
         $today = strtotime(date('Y-m-d'));
         if(!$data['isInclassCourse']){
 
@@ -367,7 +370,7 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
-       
+        
         if($request->published == 'on')
         {
             $published = 1;
@@ -409,6 +412,13 @@ class EventController extends Controller
 
         if($request->video != null){
             $event->video()->attach($request->video);
+        }
+        foreach((array) $request->sections as $sectionn){
+            $section = Section::findOrFail($sectionn['id']);
+            $section->tab_title = $sectionn['tab_title'];
+            $section->title = $sectionn['title'];
+            $section->visible = (isset($sectionn['visible']) && $sectionn['visible'] == 'on') ? true : false;
+            $section->save();
         }
 
         return back()->withStatus(__('Event successfully updated.'));

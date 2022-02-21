@@ -1,3 +1,31 @@
+
+@if(isset($sections['topics'][0]))
+
+<div class="form-group">
+
+   <input hidden name="sections[topics][id]" value="{{$sections['topics'][0]['id']}}"> 
+
+   <label class="form-control-label" for="input-title">{{ __('Tab Title') }}</label>
+   <input type="text" name="sections[topics][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[topics][tab_title]", $sections['topics'][0]['tab_title']) }}" autofocus> 
+   <label class="form-control-label" for="input-title">{{ __('H2 Title') }}</label>
+   <input type="text" name="sections[topics][title]" class="form-control" placeholder="{{ __('H2 Title') }}" value="{{ old("sections[topics][title]", $sections['topics'][0]['title']) }}" autofocus>
+
+
+   <label class="form-control-label" for="input-method">{{ __('Visible') }}</label>
+   <div style="margin: auto;" class="form-group">
+
+       <label class="custom-toggle enroll-toggle">
+           <input type="checkbox"  name="sections[topics][visible]" @if($sections['topics'][0]['visible'])) checked @endif>
+           <span class="custom-toggle-slider rounded-circle" data-label-off="no visible" data-label-on="visible"></span>
+       </label>
+
+   </div>
+                                
+
+</div>
+@endif
+
+
 <div class="accordion accord_topic" id="accordionExample">
     @foreach($topics as $key => $topic)
         <?php $topic = $topic->first(); ?>

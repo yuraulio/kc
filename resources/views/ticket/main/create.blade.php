@@ -46,6 +46,13 @@
                                     @include('alerts.feedback', ['field' => 'title'])
                                 </div>
 
+                                <div class="form-group{{ $errors->has('public_title') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-title">{{ __('Title') }}</label>
+                                    <input type="text" name="public_title" id="input-public_title" class="form-control{{ $errors->has('public_title') ? ' is-invalid' : '' }}" placeholder="{{ __('Public Title') }}" value="{{ old('public_title') }}" required autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'public_title'])
+                                </div>
+
                                 <div class="form-group{{ $errors->has('subtitle') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-subtitle">{{ __('Subtitle') }}</label>
                                     <input type="text" name="subtitle" id="input-subtitle" class="form-control{{ $errors->has('subtitle') ? ' is-invalid' : '' }}" placeholder="{{ __('subtitle') }}" value="{{ old('Subtitle') }}" autofocus>

@@ -15,6 +15,31 @@
     @include('alerts.errors')
 </div>
 
+@if(isset($sections['tickets'][0]))
+
+<div class="form-group">
+
+   <input hidden name="sections[tickets][id]" value="{{$sections['tickets'][0]['id']}}"> 
+
+   <label class="form-control-label" for="input-title">{{ __('Tab Title') }}</label>
+   <input type="text" name="sections[tickets][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[tickets][tab_title]", $sections['tickets'][0]['tab_title']) }}" autofocus> 
+   <label class="form-control-label" for="input-title">{{ __('H2 Title') }}</label>
+   <input type="text" name="sections[tickets][title]" class="form-control" placeholder="{{ __('H2 Title') }}" value="{{ old("sections[tickets][title]", $sections['tickets'][0]['title']) }}" autofocus>
+
+
+   <label class="form-control-label" for="input-method">{{ __('Visible') }}</label>
+   <div style="margin: auto;" class="form-group">
+
+       <label class="custom-toggle enroll-toggle">
+           <input type="checkbox"  name="sections[tickets][visible]" @if($sections['tickets'][0]['visible'])) checked @endif>
+           <span class="custom-toggle-slider rounded-circle" data-label-off="no visible" data-label-on="visible"></span>
+       </label>
+
+   </div>
+                                
+
+</div>
+@endif
 
 <div class="table-responsive py-4">
     <table class="table align-items-center table-flush ticket-table"  id="datatable-basic19">
@@ -40,6 +65,7 @@
                         </div>
                     </td>
                     <td><a class="admin_title_ticket_{{$ticket->id}}" id="edit-ticket-btn" href="#">{{ $ticket->title }}</a></td>
+                    <td id="public_title-{{$ticket->id}}">{{ $ticket->pivot->public_title }}</td>
                     {{--<td>{{ $ticket->subtitle }}</td>--}}
                     <td>{{ $ticket->type }}</td>
 
@@ -160,9 +186,15 @@
 
                 <div class="form-group">
                   <label class="form-control-label" for="edit-price">{{ __('Title for the administration view') }}</label>
-                  <input type="text" id="edit-title-ticket" class="form-control" value="{{ old('price') }}" readonly>
+                  <input type="text" id="edit-title-ticket" class="form-control" value="" readonly>
                 </div>
 
+                <div class="form-group{{ $errors->has('public_title') ? ' has-danger' : '' }}">
+                    <label class="form-control-label" for="input-title">{{ __('Public Title') }}</label>
+                    <input type="text" name="public_title" id="edit-public_title" class="form-control{{ $errors->has('public_title') ? ' is-invalid' : '' }}" placeholder="{{ __('Public Title') }}" value="{{ old('public_title') }}" required autofocus>
+
+                    @include('alerts.feedback', ['field' => 'public_title'])
+                </div>
                <div class="form-group{{ $errors->has('price') ? ' has-danger' : '' }}">
                   <label class="form-control-label" for="edit-price">{{ __('Price') }}</label>
                   <input type="text" name="price" id="edit-price" class="form-control{{ $errors->has('price') ? ' is-invalid' : '' }}" placeholder="{{ __('Price') }}" value="{{ old('price') }}" required autofocus>
@@ -365,7 +397,7 @@
                                 <i class="fas fa-ellipsis-v"></i>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                <a class="dropdown-item edit-to-open" data-toggle="modal" data-target="#editTicketModal" data-id="`+ticket['id']+`" data-price="`+ticket['price']+`" data-quantity="`+ticket['quantity']+`">{{ __('Edit') }}</a>
+                                <a class="dropdown-item edit-to-open" data-toggle="modal" data-target="#editTicketModal" data-id="`+ticket['id']+`" data-price="`+ticket['price']+`" data-quantity="`+ticket['quantity']+`" data-public_title="`+ticket['public_title']+`">{{ __('Edit') }}</a>
                                 <a class="dropdown-item" id="remove_ticket" data-ticket-id="`+ticket['id']+`">{{ __('Delete') }}</a>
 
                                 </div>
@@ -429,6 +461,7 @@
          price = $("#price-"+id).text(),
          //alert(price)
          quantity = $("#quantity-"+id).text();
+         public_title = $("#public_title-"+id).text();
          options = $("#options-"+id).text();
          features = $("#features-"+id).text();
          features = features ? JSON.parse(features) : [];
@@ -476,9 +509,10 @@
 
 
         modal.find("#edit-title-ticket").val(title)
-      modal.find("#edit-price").val(price);
-      modal.find("#edit-quantity1").val(quantity);
-   	modal.find("#ticket-id").val(id)
+        modal.find("#edit-price").val(price);
+        modal.find("#edit-quantity1").val(quantity);
+   	    modal.find("#ticket-id").val(id)
+        modal.find("#edit-public_title").val(public_title)
 
    });
 
@@ -503,7 +537,7 @@
             },
             type: 'put',
             url: '/admin/ticket/' + $ticketId,
-            data: {'option1':$('#option1_edit').val(),'option2':$('#option2_edit').val(),'option3':$('#option3_edit').val(),'features':features,'price':$('#edit-price').val(),'quantity':$('#edit-quantity1').val(),'model_type':modelType,'model_id':modelId},
+            data: {'option1':$('#option1_edit').val(),'option2':$('#option2_edit').val(),'option3':$('#option3_edit').val(),'features':features,'price':$('#edit-price').val(),'public_title':$('#input-public_title').val(),'quantity':$('#edit-quantity1').val(),'model_type':modelType,'model_id':modelId},
             success: function (data) {
 
         let quantity = data.data.quantity;

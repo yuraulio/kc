@@ -54,11 +54,14 @@ class TicketController extends Controller
      */
     public function store(Request $request, Ticket $ticket)
     {
+
+        
+
         $model = app($request->model_type);
         $model = $model::with('ticket')->find($request->model_id);
 
         $ticket = Ticket::find($request->ticket_id);
-
+        
         $features = json_encode($request->features);
 
 
@@ -74,11 +77,12 @@ class TicketController extends Controller
             'quantity' => $request->quantity,
             'features' => $features,
             'options' => $options,
-            'priority' => count($model->ticket) + 1
+            'priority' => count($model->ticket) + 1,
+            'public_title' => $ticket->public_title
             ]);
-
             //dd($ticket);
             $ticket->features = $features;
+            //$ticket->public_title = $request->public_title;
             $ticket->options = $options;
             $ticket->subtitle = $ticket['subtitle'];
             $ticket->quantity = $request->quantity;

@@ -10,6 +10,15 @@
         <button data-toggle="modal" data-target="#summaryModal" class="btn btn-sm btn-primary">{{ __('Add summary') }}</button>
     </div>
 </div>
+
+{{--@if(isset($sections['summary'][0]))
+
+<div class="form-group">
+    <label class="form-control-label" for="input-title">{{ __('Tab Title') }}</label>
+    <input type="text" name="sections['summary']['tab_title']" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old('title', $sections['summary'][0]['tab_title']) }}" autofocus>
+</div>
+@endif--}}
+
 <div class="table-responsive py-4">
     <table class="table align-items-center table-flush summary-table" id="datatable-basic-summary">
         <thead class="thead-light">

@@ -268,7 +268,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
                                             </div>
-                                            <input class="form-control datepicker" id="input-release_date_file" name="release_date_files" placeholder="Select date" type="text" value="{{ date('d-m-Y',strtotime(old('release_date_files', $event->release_date_files))) }}">
+                                            <input class="form-control datepicker" id="input-release_date_file" name="release_date_files" placeholder="Select date" type="text" @if(old('release_date_files', $event->release_date_files) && old('release_date_files', $event->release_date_files) !='1970-01-01 00:00:00') value="{{ date('d-m-Y',strtotime(old('release_date_files', $event->release_date_files))) }}" @endif>
                                         </div>
                                         @include('alerts.feedback', ['field' => 'release_date_files'])
                                     </div>
@@ -355,9 +355,9 @@
                                         <li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab_inside" data-toggle="tab" href="#tabs-icons-text-8_inside" role="tab" aria-controls="tabs-icons-text-8_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Partners</a>
                                         </li>
-                                        <li class="nav-item">
+                                        {{--<li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-9-tab_inside" data-toggle="tab" href="#tabs-icons-text-9_inside" role="tab" aria-controls="tabs-icons-text-9_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Sections</a>
-                                        </li>
+                                        </li>--}}
                                         <li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-10-tab_inside" data-toggle="tab" href="#tabs-icons-text-10_inside" role="tab" aria-controls="tabs-icons-text-10_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Faqs</a>
                                         </li>
@@ -370,6 +370,10 @@
                                       
                                         <li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-9-tab_inside" data-toggle="tab" href="#videos" role="tab" aria-controls="videos" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Videos</a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab_inside" data-toggle="tab" href="#instructors-tab" role="tab" aria-controls="instructors-tab" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Instructors</a>
                                         </li>
                                        
 
@@ -450,7 +454,7 @@
                                             </div>
                                             
                                             <div class="tab-pane fade" id="tabs-icons-text-2_inside" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab_inside">
-                                                @include('admin.summary.summary', ['model' => $event])
+                                                @include('admin.summary.summary', ['model' => $event,'sections' => $sections])
                                             </div>
                                             {{--<div class="tab-pane fade" id="metas" role="tabpanel" aria-labelledby="tabs-icons-text-8-tab_inside">
                                                 @include('admin.metas.metas',['metas' => $metas])
@@ -509,28 +513,28 @@
                                        
 
                                             <div class="tab-pane fade" id="tabs-icons-text-3_inside" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab_inside">
-                                                @include('admin.benefits.benefits',['model' => $event])
+                                                @include('admin.benefits.benefits',['model' => $event, 'sections' => $sections])
                                             </div>
                                             <div class="tab-pane fade show" id="tabs-icons-text-4_inside" role="tabpanel" aria-labelledby="tabs-icons-text-4-tab_inside">
-                                                @include('topics.event.instructors')
+                                                @include('topics.event.instructors',['sections' => $sections])
                                             </div>
                                             <div class="tab-pane fade" id="tabs-icons-text-5_inside" role="tabpanel" aria-labelledby="tabs-icons-text-5-tab_inside">
-                                                @include('admin.ticket.index', ['model' => $event])
+                                                @include('admin.ticket.index', ['model' => $event, 'sections' => $sections])
                                             </div>
                                             <div class="tab-pane fade" id="tabs-icons-text-6_inside" role="tabpanel" aria-labelledby="tabs-icons-text-6-tab_inside">
                                                 @include('admin.city.event.index', ['model' => $event])
                                             </div>
                                             <div class="tab-pane fade" id="tabs-icons-text-7_inside" role="tabpanel" aria-labelledby="tabs-icons-text-7-tab_inside">
-                                                @include('admin.venue.event.index', ['model' => $event])
+                                                @include('admin.venue.event.index', ['model' => $event,'sections' => $sections])
                                             </div>
                                             <div class="tab-pane fade" id="tabs-icons-text-8_inside" role="tabpanel" aria-labelledby="tabs-icons-text-8-tab_inside">
                                                 @include('admin.partner.event.index', ['model' => $event])
                                             </div>
-                                            <div class="tab-pane fade" id="tabs-icons-text-9_inside" role="tabpanel" aria-labelledby="tabs-icons-text-9-tab_inside">
+                                            {{--<div class="tab-pane fade" id="tabs-icons-text-9_inside" role="tabpanel" aria-labelledby="tabs-icons-text-9-tab_inside">
                                                 @include('admin.section.index', ['model' => $event])
-                                            </div>
+                                            </div>--}}
                                             <div class="tab-pane fade" id="tabs-icons-text-10_inside" role="tabpanel" aria-labelledby="tabs-icons-text-10-tab_inside">
-                                                @include('admin.faq.index', ['model' => $event])
+                                                @include('admin.faq.index', ['model' => $event,'sections' => $sections])
                                             </div>
                                             <div class="tab-pane fade" id="tabs-icons-text-11_inside" role="tabpanel" aria-labelledby="tabs-icons-text-11-tab_inside">
 
@@ -547,6 +551,62 @@
                                                 {{--@include('event.image_versions', ['event' => $event->medias,'versions1'=> ['event-card', 'header-image', 'social-media-sharing']])--}}
                                                 {{--@include('event.image_versions_new', ['event' => $event->medias,'versions1'=> ['social-media-sharing','instructors-testimonials', 'event-card', 'users' ,'header-image', 'instructors-small' ,'feed-image']])--}}
                                             </div>
+                                            <div class="tab-pane fade" id="instructors-tab" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
+                                                @if(isset($sections['instructors'][0]))
+
+                                                    <div class="form-group">
+
+                                                       <input hidden name="sections[instructors][id]" value="{{$sections['instructors'][0]['id']}}"> 
+
+                                                       <label class="form-control-label" for="input-title">{{ __('Tab Title') }}</label>
+                                                       <input type="text" name="sections[instructors][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[instructors][tab_title]", $sections['instructors'][0]['tab_title']) }}" autofocus> 
+                                                       <label class="form-control-label" for="input-title">{{ __('H2 Title') }}</label>
+                                                       <input type="text" name="sections[instructors][title]" class="form-control" placeholder="{{ __('H2 Title') }}" value="{{ old("sections[instructors][title]", $sections['instructors'][0]['title']) }}" autofocus>
+
+
+                                                       <label class="form-control-label" for="input-method">{{ __('Visible') }}</label>
+                                                       <div style="margin: auto;" class="form-group">
+
+                                                           <label class="custom-toggle enroll-toggle">
+                                                               <input type="checkbox"  name="sections[instructors][visible]" @if($sections['instructors'][0]['visible'])) checked @endif>
+                                                               <span class="custom-toggle-slider rounded-circle" data-label-off="no visible" data-label-on="visible"></span>
+                                                           </label>
+
+                                                       </div>
+
+
+                                                    </div>
+                                                @endif
+                                            </div>
+
+                                            <div class="tab-pane fade" id="testimonials-tab" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
+                                                @if(isset($sections['testimonials'][0]))
+
+                                                    <div class="form-group">
+
+                                                       <input hidden name="sections[testimonials][id]" value="{{$sections['testimonials'][0]['id']}}"> 
+
+                                                       <label class="form-control-label" for="input-title">{{ __('Tab Title') }}</label>
+                                                       <input type="text" name="sections[testimonials][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[testimonials][tab_title]", $sections['testimonials'][0]['tab_title']) }}" autofocus> 
+                                                       <label class="form-control-label" for="input-title">{{ __('H2 Title') }}</label>
+                                                       <input type="text" name="sections[testimonials][title]" class="form-control" placeholder="{{ __('H2 Title') }}" value="{{ old("sections[testimonials][title]", $sections['testimonials'][0]['title']) }}" autofocus>
+
+
+                                                       <label class="form-control-label" for="input-method">{{ __('Visible') }}</label>
+                                                       <div style="margin: auto;" class="form-group">
+
+                                                           <label class="custom-toggle enroll-toggle">
+                                                               <input type="checkbox"  name="sections[testimonials][visible]" @if($sections['testimonials'][0]['visible'])) checked @endif>
+                                                               <span class="custom-toggle-slider rounded-circle" data-label-off="no visible" data-label-on="visible"></span>
+                                                           </label>
+
+                                                       </div>
+
+
+                                                    </div>
+                                                @endif
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -557,6 +617,7 @@
                                 @include('admin.metas.metas',['metas' => $metas])
                             </div>
 
+                            
                             <div class="tab-pane fade" id="tabs-icons-text-3" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
                                 @include('event.students')
                             </div>

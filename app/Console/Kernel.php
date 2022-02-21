@@ -48,6 +48,8 @@ class Kernel extends ConsoleKernel
        Commands\AttachPaymentMethod::class,
        Commands\UpdateCavenTransactionDetails::class,
        Commands\RestoreTopicsLessons::class,
+       Commands\TabTitlesForSection::class,
+       Commands\TicketsTitle::class,
 
     ];
 

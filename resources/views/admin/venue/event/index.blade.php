@@ -20,6 +20,32 @@
     @include('alerts.errors')
 </div>
 
+@if(isset($sections['location'][0]))
+
+<div class="form-group">
+
+   <input hidden name="sections[location][id]" value="{{$sections['location'][0]['id']}}"> 
+
+   <label class="form-control-label" for="input-title">{{ __('Tab Title') }}</label>
+   <input type="text" name="sections[location][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[location][tab_title]", $sections['location'][0]['tab_title']) }}" autofocus> 
+   <label class="form-control-label" for="input-title">{{ __('H2 Title') }}</label>
+   <input type="text" name="sections[location][title]" class="form-control" placeholder="{{ __('H2 Title') }}" value="{{ old("sections[location][title]", $sections['location'][0]['title']) }}" autofocus>
+
+
+   <label class="form-control-label" for="input-method">{{ __('Visible') }}</label>
+   <div style="margin: auto;" class="form-group">
+
+       <label class="custom-toggle enroll-toggle">
+           <input type="checkbox"  name="sections[location][visible]" @if($sections['location'][0]['visible'])) checked @endif>
+           <span class="custom-toggle-slider rounded-circle" data-label-off="no visible" data-label-on="visible"></span>
+       </label>
+
+   </div>
+                                
+
+</div>
+@endif
+
 <div class="table-responsive py-4">
     <table class="table align-items-center table-flush"  id="datatable-basic20">
         <thead class="thead-light">

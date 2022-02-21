@@ -6,6 +6,33 @@
       <button data-toggle="modal" data-target="#myModal" class="btn btn-sm btn-primary">{{ __('Add benefit') }}</button>
    </div>
 </div>
+
+@if(isset($sections['benefits'][0]))
+
+<div class="form-group">
+
+   <input hidden name="sections[benefits][id]" value="{{$sections['benefits'][0]['id']}}"> 
+
+   <label class="form-control-label" for="input-title">{{ __('Tab Title') }}</label>
+   <input type="text" name="sections[benefits][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[benefits][tab_title]", $sections['benefits'][0]['tab_title']) }}" autofocus> 
+   <label class="form-control-label" for="input-title">{{ __('H2 Title') }}</label>
+   <input type="text" name="sections[benefits][title]" class="form-control" placeholder="{{ __('H2 Title') }}" value="{{ old("sections[benefits][title]", $sections['benefits'][0]['title']) }}" autofocus>
+
+
+   <label class="form-control-label" for="input-method">{{ __('Visible') }}</label>
+   <div style="margin: auto;" class="form-group">
+
+       <label class="custom-toggle enroll-toggle">
+           <input type="checkbox"  name="sections[benefits][visible]" @if($sections['benefits'][0]['visible'])) checked @endif>
+           <span class="custom-toggle-slider rounded-circle" data-label-off="no visible" data-label-on="visible"></span>
+       </label>
+
+   </div>
+                                
+
+</div>
+@endif
+
 <div class="table-responsive py-4">
    <table class="table align-items-center table-flush benefits-table"  id="datatable-basic-benefits">
       <thead class="thead-light">

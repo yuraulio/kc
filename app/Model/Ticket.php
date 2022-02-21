@@ -13,13 +13,13 @@ class Ticket extends Model
     protected $table = 'tickets';
 
     protected $fillable = [
-        'title', 'subtitle', 'status', 'type', 'features'
+        'title', 'subtitle', 'status', 'type', 'features','public_title'
     ];
 
 
     public function events()
     {
-        return $this->belongsToMany(Event::class, 'event_tickets')->withPivot('features','priority', 'quantity', 'price', 'options');
+        return $this->belongsToMany(Event::class, 'event_tickets')->withPivot('features','priority', 'quantity', 'price', 'options','public_title','seats_visible');
     }
 
 }
