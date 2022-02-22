@@ -2,7 +2,6 @@
 
 @section('metas')
 
-    <title>{{ $page['name'] }}</title>
    {!! $page->metable->getMetas() !!}
 @endsection
 

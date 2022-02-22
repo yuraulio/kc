@@ -552,23 +552,31 @@
                                                 {{--@include('event.image_versions_new', ['event' => $event->medias,'versions1'=> ['social-media-sharing','instructors-testimonials', 'event-card', 'users' ,'header-image', 'instructors-small' ,'feed-image']])--}}
                                             </div>
                                             <div class="tab-pane fade" id="instructors-tab" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
-                                                @if(isset($sections['instructors'][0]))
+                                               
 
+                                                    <?php 
+
+                                                        $id = isset($sections['instructors'][0]) ? $sections['instructors'][0]['id'] : '';
+                                                        $tab_title = isset($sections['instructors'][0]) ? $sections['instructors'][0]['tab_title'] : '' ;
+                                                        $title = isset($sections['instructors'][0]) ? $sections['instructors'][0]['title'] : '' ;
+                                                        $visible = isset($sections['instructors'][0]) ? $sections['instructors'][0]['visible'] : false ;
+
+                                                    ?> 
                                                     <div class="form-group">
 
-                                                       <input hidden name="sections[instructors][id]" value="{{$sections['instructors'][0]['id']}}"> 
+                                                       <input hidden name="sections[instructors][id]" value="{{$id}}"> 
 
                                                        <label class="form-control-label" for="input-title">{{ __('Tab Title') }}</label>
-                                                       <input type="text" name="sections[instructors][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[instructors][tab_title]", $sections['instructors'][0]['tab_title']) }}" autofocus> 
+                                                       <input type="text" name="sections[instructors][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[instructors][tab_title]", $tab_title) }}" autofocus> 
                                                        <label class="form-control-label" for="input-title">{{ __('H2 Title') }}</label>
-                                                       <input type="text" name="sections[instructors][title]" class="form-control" placeholder="{{ __('H2 Title') }}" value="{{ old("sections[instructors][title]", $sections['instructors'][0]['title']) }}" autofocus>
+                                                       <input type="text" name="sections[instructors][title]" class="form-control" placeholder="{{ __('H2 Title') }}" value="{{ old("sections[instructors][title]", $title) }}" autofocus>
 
 
                                                        <label class="form-control-label" for="input-method">{{ __('Visible') }}</label>
                                                        <div style="margin: auto;" class="form-group">
 
                                                            <label class="custom-toggle enroll-toggle">
-                                                               <input type="checkbox"  name="sections[instructors][visible]" @if($sections['instructors'][0]['visible'])) checked @endif>
+                                                               <input type="checkbox"  name="sections[instructors][visible]" @if($visible)) checked @endif>
                                                                <span class="custom-toggle-slider rounded-circle" data-label-off="no visible" data-label-on="visible"></span>
                                                            </label>
 
@@ -576,35 +584,42 @@
 
 
                                                     </div>
-                                                @endif
+                                               
                                             </div>
 
                                             <div class="tab-pane fade" id="testimonials-tab" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
-                                                @if(isset($sections['testimonials'][0]))
+                                                <?php 
 
-                                                    <div class="form-group">
+                                                    $id = isset($sections['testimonials'][0]) ? $sections['testimonials'][0]['id'] : '';
+                                                    $tab_title = isset($sections['testimonials'][0]) ? $sections['testimonials'][0]['tab_title'] : '' ;
+                                                    $title = isset($sections['testimonials'][0]) ? $sections['testimonials'][0]['title'] : '' ;
+                                                    $visible = isset($sections['testimonials'][0]) ? $sections['testimonials'][0]['visible'] : false ;
 
-                                                       <input hidden name="sections[testimonials][id]" value="{{$sections['testimonials'][0]['id']}}"> 
+                                                ?> 
 
-                                                       <label class="form-control-label" for="input-title">{{ __('Tab Title') }}</label>
-                                                       <input type="text" name="sections[testimonials][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[testimonials][tab_title]", $sections['testimonials'][0]['tab_title']) }}" autofocus> 
-                                                       <label class="form-control-label" for="input-title">{{ __('H2 Title') }}</label>
-                                                       <input type="text" name="sections[testimonials][title]" class="form-control" placeholder="{{ __('H2 Title') }}" value="{{ old("sections[testimonials][title]", $sections['testimonials'][0]['title']) }}" autofocus>
+                                                <div class="form-group">
 
+                                                   <input hidden name="sections[testimonials][id]" value="{{$id}}"> 
 
-                                                       <label class="form-control-label" for="input-method">{{ __('Visible') }}</label>
-                                                       <div style="margin: auto;" class="form-group">
-
-                                                           <label class="custom-toggle enroll-toggle">
-                                                               <input type="checkbox"  name="sections[testimonials][visible]" @if($sections['testimonials'][0]['visible'])) checked @endif>
-                                                               <span class="custom-toggle-slider rounded-circle" data-label-off="no visible" data-label-on="visible"></span>
-                                                           </label>
-
-                                                       </div>
+                                                   <label class="form-control-label" for="input-title">{{ __('Tab Title') }}</label>
+                                                   <input type="text" name="sections[testimonials][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[testimonials][tab_title]", $tab_title) }}" autofocus> 
+                                                   <label class="form-control-label" for="input-title">{{ __('H2 Title') }}</label>
+                                                   <input type="text" name="sections[testimonials][title]" class="form-control" placeholder="{{ __('H2 Title') }}" value="{{ old("sections[testimonials][title]", $title) }}" autofocus>
 
 
-                                                    </div>
-                                                @endif
+                                                   <label class="form-control-label" for="input-method">{{ __('Visible') }}</label>
+                                                   <div style="margin: auto;" class="form-group">
+
+                                                       <label class="custom-toggle enroll-toggle">
+                                                           <input type="checkbox"  name="sections[testimonials][visible]" @if($visible) checked @endif>
+                                                           <span class="custom-toggle-slider rounded-circle" data-label-off="no visible" data-label-on="visible"></span>
+                                                       </label>
+
+                                                   </div>
+
+
+                                                </div>
+                                               
                                             </div>
 
                                         </div>

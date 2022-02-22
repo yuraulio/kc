@@ -18,23 +18,32 @@
     @include('alerts.errors')
 </div>
 
-@if(isset($sections['questions'][0]))
+
+<?php 
+
+   $id = isset($sections['questions'][0]) ? $sections['questions'][0]['id'] : '';
+   $tab_title = isset($sections['questions'][0]) ? $sections['questions'][0]['tab_title'] : '' ;
+   $title = isset($sections['questions'][0]) ? $sections['questions'][0]['title'] : '' ;
+   $visible = isset($sections['questions'][0]) ? $sections['questions'][0]['visible'] : false ;
+
+?> 
+
 
 <div class="form-group">
 
-   <input hidden name="sections[questions][id]" value="{{$sections['questions'][0]['id']}}"> 
+   <input hidden name="sections[questions][id]" value="{{$id}}"> 
 
    <label class="form-control-label" for="input-title">{{ __('Tab Title') }}</label>
-   <input type="text" name="sections[questions][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[questions][tab_title]", $sections['questions'][0]['tab_title']) }}" autofocus> 
+   <input type="text" name="sections[questions][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[questions][tab_title]", $tab_title) }}" autofocus> 
    <label class="form-control-label" for="input-title">{{ __('H2 Title') }}</label>
-   <input type="text" name="sections[questions][title]" class="form-control" placeholder="{{ __('H2 Title') }}" value="{{ old("sections[questions][title]", $sections['questions'][0]['title']) }}" autofocus>
+   <input type="text" name="sections[questions][title]" class="form-control" placeholder="{{ __('H2 Title') }}" value="{{ old("sections[questions][title]", $title) }}" autofocus>
 
 
    <label class="form-control-label" for="input-method">{{ __('Visible') }}</label>
    <div style="margin: auto;" class="form-group">
 
        <label class="custom-toggle enroll-toggle">
-           <input type="checkbox"  name="sections[questions][visible]" @if($sections['questions'][0]['visible'])) checked @endif>
+           <input type="checkbox"  name="sections[questions][visible]" @if($visible) checked @endif>
            <span class="custom-toggle-slider rounded-circle" data-label-off="no visible" data-label-on="visible"></span>
        </label>
 
@@ -42,7 +51,7 @@
                                 
 
 </div>
-@endif
+
 
 <div class="accordion"  id="accordionTopicMain1">
 

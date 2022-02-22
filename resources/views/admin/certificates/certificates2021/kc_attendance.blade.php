@@ -172,7 +172,7 @@ h3.certificate {
                 <img class="signature-img" src="{{asset('theme/assets/images/certificates2021/knowcrunch-signature.png')}}">
                 <div class="border-bottom"></div>
                 <p class="name-signature"> APOSTOLIS AIVALIS</p>
-                <p class="title-signature"> Head of Curriculum, KnowCrunch</p>
+                <p class="title-signature"> Head of Curriculum, Knowcrunch</p>
                     
             </div>
         </div>

@@ -79,7 +79,7 @@
                      <span class="ticket-price hidden-xs">€{{$ticket['pivot']['price']}}</span>
                      <span class="ticket-infos"> {{ $ticket['subtitle'] }}</span>
                     
-                     <span class="ticket-infos hidden-xs">@if($ticket['type'] != 'Alumni' && ($event->view_tpl!='elearning_event')) {{ $ticket['pivot']['quantity'] }} seats remaining @else &nbsp; @endif</span> 
+                     @if($ticket['pivot']['seats_visible'])<span class="ticket-infos hidden-xs">@if($ticket['type'] != 'Alumni' && ($event->view_tpl!='elearning_event')) {{ $ticket['pivot']['quantity'] }} seats remaining @else &nbsp; @endif</span> @endif
                   </div>
                   <div class="ticket-box-actions">
                      @if($ticket['type'] == 'Regular' && $early)
@@ -143,6 +143,7 @@
          @endforeach   
         
       </div>
+
    </div>
 </section>
 {{--@endif--}}

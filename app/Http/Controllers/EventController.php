@@ -342,7 +342,7 @@ class EventController extends Controller
         $data['coupons'] = Coupon::all();
         $data['activeMembers'] = 0;
         $data['sections'] = $event->sections->groupBy('section');
-    
+
         $today = strtotime(date('Y-m-d'));
         if(!$data['isInclassCourse']){
 
@@ -413,12 +413,28 @@ class EventController extends Controller
         if($request->video != null){
             $event->video()->attach($request->video);
         }
-        foreach((array) $request->sections as $sectionn){
-            $section = Section::findOrFail($sectionn['id']);
-            $section->tab_title = $sectionn['tab_title'];
-            $section->title = $sectionn['title'];
-            $section->visible = (isset($sectionn['visible']) && $sectionn['visible'] == 'on') ? true : false;
-            $section->save();
+        foreach((array) $request->sections as $key => $sectionn){
+            
+            if( $section = Section::find($sectionn['id']) ){
+                $section->tab_title = $sectionn['tab_title'];
+                $section->title = $sectionn['title'];
+                $section->visible = (isset($sectionn['visible']) && $sectionn['visible'] == 'on') ? true : false;
+                $section->save();
+            }else{
+
+                $section = new Section;
+
+                $section->section = $key;
+                $section->tab_title = $sectionn['tab_title'];
+                $section->title = $sectionn['title'];
+                $section->visible = (isset($sectionn['visible']) && $sectionn['visible'] == 'on') ? true : false;
+                $section->save();
+
+                $event->sections()->save($section);
+               
+            }
+
+            
         }
 
         return back()->withStatus(__('Event successfully updated.'));

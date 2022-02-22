@@ -20,10 +20,11 @@ class Metas extends Model
         //dd($this);
 
         $pageLink = !$isHomePage ? url('/') . '/'  . $this->metable->slugable->slug :  url('/'); 
+        $title =  $this->meta_title ?  $this->meta_title : $this->metable->name;
 
         $metas = 
-        
-            '<meta name="author" content="KnowCrunch">
+            '<title>'. $title .'</title>
+            <meta name="author" content="KnowCrunch">
             <meta name="description" content="' . $this->meta_description .'">
             <meta name="keywords" content="' . $this->meta_keywords .'">
             <meta property="fb:app_id" content="961275423898153">' . 

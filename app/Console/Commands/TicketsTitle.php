@@ -50,7 +50,15 @@ class TicketsTitle extends Command
 
         foreach($events as $event){
             foreach($event->ticket as $ticket){
-                dd($ticket);
+
+                $t = Ticket::find($ticket->pivot->ticket_id);
+
+                if(!$t){
+                    continue;
+                }
+
+                $ticket->pivot->public_title = $t->public_title;
+                $ticket->pivot->save();
             }
         }
 

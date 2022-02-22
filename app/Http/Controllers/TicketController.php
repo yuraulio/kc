@@ -54,16 +54,11 @@ class TicketController extends Controller
      */
     public function store(Request $request, Ticket $ticket)
     {
-
-        
-
         $model = app($request->model_type);
         $model = $model::with('ticket')->find($request->model_id);
 
-        $ticket = Ticket::find($request->ticket_id);
-        
+        $ticket = Ticket::find($request->ticket_id);        
         $features = json_encode($request->features);
-
 
         $options['featured'] = ($request->option1 == 1 ? true : false);
         $options['dropdown'] = ($request->option2 == 1 ? true : false);
@@ -71,28 +66,27 @@ class TicketController extends Controller
 
         $options = json_encode($options);
 
-
         $ticket->events()->attach($request->model_id, [
             'price' => $request->price,
             'quantity' => $request->quantity,
             'features' => $features,
             'options' => $options,
             'priority' => count($model->ticket) + 1,
-            'public_title' => $ticket->public_title
-            ]);
-            //dd($ticket);
-            $ticket->features = $features;
-            //$ticket->public_title = $request->public_title;
-            $ticket->options = $options;
-            $ticket->subtitle = $ticket['subtitle'];
-            $ticket->quantity = $request->quantity;
-            $ticket->price = $request->price;
+            'public_title' => $ticket->public_title,
+            'seats_visible' => $request->seats_visible
+        ]);
+        //$ticket->features = $features;
+        ////$ticket->public_title = $request->public_title;
+        //$ticket->options = $options;
+        //$ticket->subtitle = $ticket['subtitle'];
+        //$ticket->quantity = $request->quantity;
+        //$ticket->price = $request->price;
+        
+       $ticket = $model->ticket()->wherePivot('ticket_id',$request->ticket_id)->first();
 
-
-
-        return response()->json([
+       return response()->json([
             'success' => __('Ticket successfully assigned.'),
-            'ticket' => $ticket,
+            'ticket' => $ticket ? $ticket : false,
         ]);
 
     }
@@ -168,7 +162,6 @@ class TicketController extends Controller
      */
     public function update(Request $request, Ticket $ticket)
     {
-
         $ticket_id = $ticket['id'];
         $event = Event::find($request->model_id);
 
@@ -186,7 +179,9 @@ class TicketController extends Controller
             'quantity' => $request->quantity,
             'price' => $request->price,
             'options' => $options,
-            'features' => $features
+            'features' => $features,
+            'public_title' => $request->public_title,
+            'seats_visible' => $request->seats_visible == 'true' ? 1 : 0
         ], false);
 
         $data['ticket_id'] = $ticket_id;
@@ -194,6 +189,8 @@ class TicketController extends Controller
         $data['price'] = $request->price;
         $data['features'] = $features;
         $data['options'] = $options;
+        $data['public_title'] = $request->public_title;
+        $data['seats_visible'] = $request->seats_visible;
 
         return response()->json([
             'success' => __('Ticket successfully updated.'),

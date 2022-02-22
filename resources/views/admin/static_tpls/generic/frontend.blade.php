@@ -1,7 +1,6 @@
 @extends('theme.layouts.master')
 @section('metas')
 
-    <title>{{ $page['name'] }}</title>
    {!! $page->metable->getMetas() !!}
 
 @endsection
@@ -33,7 +32,7 @@
          $url = explode('/',request()->url());
          $url = (end($url));
 
-         $class = 'logos-area';
+         $class = isset($logos) || isset($brands) ? 'logos-area' : '';
          if(trim($url) == 'terms' || trim($url) == 'data-privacy-policy'){
             $class = 'logos-area terms';
          }

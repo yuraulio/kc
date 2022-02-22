@@ -1,21 +1,28 @@
 
-@if(isset($sections['topics'][0]))
+<?php 
+
+    $id = isset($sections['topics'][0]) ? $sections['topics'][0]['id'] : '';
+    $tab_title = isset($sections['topics'][0]) ? $sections['topics'][0]['tab_title'] : '' ;
+    $title = isset($sections['topics'][0]) ? $sections['topics'][0]['title'] : '' ;
+    $visible = isset($sections['topics'][0]) ? $sections['topics'][0]['visible'] : false ;
+                                            
+?> 
 
 <div class="form-group">
 
-   <input hidden name="sections[topics][id]" value="{{$sections['topics'][0]['id']}}"> 
+   <input hidden name="sections[topics][id]" value="{{$id}}"> 
 
    <label class="form-control-label" for="input-title">{{ __('Tab Title') }}</label>
-   <input type="text" name="sections[topics][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[topics][tab_title]", $sections['topics'][0]['tab_title']) }}" autofocus> 
+   <input type="text" name="sections[topics][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[topics][tab_title]", $tab_title) }}" autofocus> 
    <label class="form-control-label" for="input-title">{{ __('H2 Title') }}</label>
-   <input type="text" name="sections[topics][title]" class="form-control" placeholder="{{ __('H2 Title') }}" value="{{ old("sections[topics][title]", $sections['topics'][0]['title']) }}" autofocus>
+   <input type="text" name="sections[topics][title]" class="form-control" placeholder="{{ __('H2 Title') }}" value="{{ old("sections[topics][title]", $title) }}" autofocus>
 
 
    <label class="form-control-label" for="input-method">{{ __('Visible') }}</label>
    <div style="margin: auto;" class="form-group">
 
        <label class="custom-toggle enroll-toggle">
-           <input type="checkbox"  name="sections[topics][visible]" @if($sections['topics'][0]['visible'])) checked @endif>
+           <input type="checkbox"  name="sections[topics][visible]" @if($visible) checked @endif>
            <span class="custom-toggle-slider rounded-circle" data-label-off="no visible" data-label-on="visible"></span>
        </label>
 
@@ -23,7 +30,6 @@
                                 
 
 </div>
-@endif
 
 
 <div class="accordion accord_topic" id="accordionExample">

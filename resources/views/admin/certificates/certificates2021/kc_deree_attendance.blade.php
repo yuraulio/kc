@@ -192,7 +192,7 @@ h2,h3{ font-size: 20px; padding: 0; font-weight:normal}
                 <img class="signature-img" src="{{asset('theme/assets/images/certificates2021/knowcrunch-signature.png')}}">
                 <div class="border-bottom"></div>
                 <p class="name-signature"> APOSTOLIS AIVALIS</p>
-                <p class="title-signature"> Head of Curriculum, KnowCrunch</p>
+                <p class="title-signature"> Head of Curriculum, Knowcrunch</p>
                 
             </div>
             

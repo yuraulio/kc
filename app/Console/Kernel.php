@@ -50,6 +50,8 @@ class Kernel extends ConsoleKernel
        Commands\RestoreTopicsLessons::class,
        Commands\TabTitlesForSection::class,
        Commands\TicketsTitle::class,
+       Commands\FreeElearningCertification::class,
+       Commands\GenerateInvoices::class,
 
     ];
 

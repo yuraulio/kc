@@ -1179,7 +1179,7 @@ class StudentController extends Controller
 
                 }
 
-            }else if( $event && $event->view_tpl != 'elearning_free' && count($event->getExams()) == 0 ){
+            }else if( $event /*&& $event->view_tpl != 'elearning_free'*/ && count($event->getExams()) == 0 ){
                 $event->certification($user);
             }
 

@@ -995,22 +995,21 @@
                      @else
                      <div class="col12 dynamic-courses-wrapper">
                         <div class="item">
-                           <?php //dd($event['title']); ?>
                            <h2>{{ $event['title'] }}</h2>
                            <div class="inside-tabs">
                               <div class="tabs-ctrl">
                                  <ul>
                                     <li class="active"><a href="#c-info-inner{{$tab}}">Info</a></li>
                                     <li><a href="#c-watch-inner{{$tab}}">Watch</a></li>
-                                    @if($event['view_tpl'] != 'elearning_free')
-                                    <?php //']); ?>
+                                  
+                                 
                                     @if(isset($event['exams']) && count($event['exams']) >0 )
-                                    <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
+                                       <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
                                     @endif
                                     @if(count($event['certs']) > 0)
-                                    <li><a href="#c-cert-inner{{$tab}}">Certificate</a></li>
+                                       <li><a href="#c-cert-inner{{$tab}}">Certificate</a></li>
                                     @endif
-                                    @endif
+                                  
                                     @if($event['mySubscription'])
                                     <li><a href="#c-subs-inner{{$tab}}">Subscription</a></li>
                                     @endif
@@ -1155,7 +1154,7 @@
                                        </div>
                                     </div>
                                  </div>
-                                 @if($event['view_tpl'] != 'elearning_free' )
+                                 
                                  @if(isset($event['exams']))
                                  <?php $nowTime = \Carbon\Carbon::now(); ?>
                                  <div id="c-exams-inner{{$tab}}" class="in-tab-wrapper">
@@ -1211,7 +1210,7 @@
                                     </div>
                                  </div>
                                  @endif
-                                 @endif
+                                 
                               </div>
                            </div>
                            <!-- ./item -->

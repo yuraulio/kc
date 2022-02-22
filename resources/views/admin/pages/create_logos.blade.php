@@ -88,8 +88,10 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('summary') ? ' has-danger' : '' }}">
-                           <label class="form-control-label" for="input-summary">{{ __('Page Summary') }}</label>
+                           <label class="form-control-label" for="input-summary">{{ __('Page Subtitle') }}</label>
                            <textarea name="summary" id="input-summary"  class="ckeditor form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Page summary') }}"  required autofocus>{{ old('summary',$page->summary) }}</textarea>
+                           {{--<input name="summary" id="input-summary"  class="form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Page Subtitle') }}"  value="{{ old('summary',$page->summary) }}" autofocus>--}}
+
                            @include('alerts.feedback', ['field' => 'summary'])
                         </div>
 

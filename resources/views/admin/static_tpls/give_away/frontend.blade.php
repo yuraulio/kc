@@ -6,24 +6,24 @@
 
 @endsection
 <main id="main-area" class="with-hero" role="main">
-@if (!empty($page['medias']))
+	@if (!empty($page['medias']))
 
-				<section class="section-hero" style="background-image:url({{cdn(get_image($page['medias'], 'header-image'))}})">
+		<section class="section-hero" style="background-image:url({{cdn(get_image($page['medias'], 'header-image'))}})">
 
 					<div class="overlay"></div>
 					<div class="container">
 						<div class="hero-message pad-r-col-6">
-							<h1>{{ $page['title'] }}</h1>
-							<h2>{{ $page['subtitle'] }}</h2>
+						<h1>{{ $page['name'] }}</h1>
+							<h2>{{ $page['title'] }}</h2>
 						</div>
 					</div>
-					</section>
+		</section>
 				@else
 						<section class="section-hero section-hero-small section-hero-blue-bg">
 			<div class="container">
 				<div class="hero-message give-away">
-				<h1>{{ $page['title'] }}</h1>
-							<h2>{{ $page['subtitle'] }}</h2>
+				<h1>{{ $page['name'] }}</h1>
+							<h2>{{ $page['title'] }}</h2>
 				</div>
 			</div>
 </section>
