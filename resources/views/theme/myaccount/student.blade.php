@@ -1088,6 +1088,7 @@
                                                          //row_status = ` style="color:red;" `;
                                                       }
                                                    ?>
+                                                @if($status !== 'Cancel')
                                                 <div class="status_switch">
                                                    <div class="onoffswitch" data-status="{{$status}}" data-id="{{$event['mySubscription']['id']}}" id="onoffswitch">
                                                       <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" tabindex="0" <?php echo $a; ?>>
@@ -1097,6 +1098,7 @@
                                                       </label>
                                                    </div>
                                                 </div>
+                                                @endif
                                              </div>
                                              @endif
                                           </div>
@@ -1338,6 +1340,7 @@
                                                          //row_status = ` style="color:red;" `;
                                                       }
                                                    ?>
+                                                @if($status !== 'Cancel')
                                                 <div class="status_switch">
                                                    <div class="onoffswitch" data-status="{{$status}}" data-id="{{$event['mySubscription']['id']}}" id="onoffswitch">
                                                       <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" tabindex="0" <?php echo $a; ?>>
@@ -1347,6 +1350,7 @@
                                                       </label>
                                                    </div>
                                                 </div>
+                                                @endif
                                              </div>
                                              @endif
                                           </div>

@@ -683,5 +683,22 @@ class WebhookController extends BaseWebhookController
         }
 	}
 
+
+	protected function handleCustomerSubscriptionDeleted(array $payload)
+    {
+        if ($user = $this->getUserByStripeId($payload['data']['object']['customer'])) {
+            $subscription = $user->eventSubscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first();
+
+			if($subscription){
+				$subscription->status = 0;
+				$subscription->stripe_status = 'canceled';
+				$subscription->save();
+			}
+
+        }
+
+        return $this->successMethod();
+    }
+
 	
 }
