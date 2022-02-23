@@ -52,6 +52,7 @@ class Kernel extends ConsoleKernel
        Commands\TicketsTitle::class,
        Commands\FreeElearningCertification::class,
        Commands\GenerateInvoices::class,
+       Commands\ExportAllUserByCategory::class,
 
     ];
 
