@@ -55,6 +55,12 @@
                            @include('alerts.feedback', ['field' => 'description'])
                         </div>
 
+                        <div class="form-group{{ $errors->has('description') ? ' has-danger' : '' }}">
+                           <label class="form-control-label" for="input-invoice_text">{{ __('Invoice Text') }}</label>
+                           <textarea name="invoice_text" id="input-invoice_text" class="form-control{{ $errors->has('invoice_text') ? ' is-invalid' : '' }}" required autofocus>{{ old('invoice_text',$plan->invoice_text) }}</textarea>
+                           @include('alerts.feedback', ['field' => 'invoice_text'])
+                        </div>
+
                         <div class="form-group{{ $errors->has('price') ? ' has-danger' : '' }}">
                            <label class="form-control-label" for="input-price">{{ __('Price') }}</label>
                            <input type="number" name="price" id="input-price" class="form-control{{ $errors->has('price') ? ' is-invalid' : '' }}" placeholder="{{ __('Price') }}" value="{{ old('price',$plan->cost) }}"  required autofocus>

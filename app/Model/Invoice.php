@@ -371,7 +371,8 @@ class Invoice extends Model
         if($planDecription){
 
             $plan = $this->event->first()->plans->first();
-            $data['description'] = $plan->name;
+            $data['description'] = $plan->invoice_text ? $plan->invoice_text : $plan->name;
+
             
         }else{
             $data['description'] = $this->event->first()->summary1->where('section','date')->first() ? $this->event->first()->summary1->where('section','date')->first()->title : '';
@@ -471,7 +472,8 @@ class Invoice extends Model
         if($planDecription){
 
             $plan = $this->event->first()->plans->first();
-            $data['description'] = $plan->name;
+            $data['description'] = $plan->invoice_text ? $plan->invoice_text : $plan->name;
+
             
         }else{
             $data['description'] = $this->event->first()->summary1->where('section','date')->first() ? $this->event->first()->summary1->where('section','date')->first()->title : '';

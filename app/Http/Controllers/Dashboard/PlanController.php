@@ -110,6 +110,7 @@ class PlanController extends Controller
             $planN->trial_days = $request->trial;
             $planN->interval_count = $request->interval_count;
             $planN->published = $request->published == 'on' ? true : false;
+            $planN->invoice_text = $request->invoice_text;
             $planN->save();
 
             if($request->events){
@@ -157,7 +158,7 @@ class PlanController extends Controller
 
             $plan->name = $request->name;
             $plan->description = $request->description;
-    
+            $plan->invoice_text = $request->invoice_text;
            //$plan->cost = $request->price;
            //$plan->interval = $request->interval;
            //$plan->interval_count = $request->interval_count;
