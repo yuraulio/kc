@@ -1,6 +1,5 @@
 @extends('theme.layouts.master')
 @section('metas')
-    <title>{{ $title }}</title>
     {!! $instructor->metable->getMetas() !!}
 
 @endsection

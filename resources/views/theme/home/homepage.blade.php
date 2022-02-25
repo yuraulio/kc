@@ -3,8 +3,6 @@
 
 @section('metas')
 
-    <title>{{$homePage->metable->meta_title}}</title>
-
    {!! $homePage->metable->getMetas(true) !!}
 
 @endsection

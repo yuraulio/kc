@@ -2,7 +2,6 @@
 
 @section('metas')
 
-    <title>{{ $event['title'] }}</title>
    {!! $event->metable->getMetas() !!}
 
 @endsection
