@@ -4,7 +4,7 @@
         $instructor[$input->key] = $input->value ?? "";
     }
 
-    $data = $page->getInstructorAvatar();
+    $data = $dynamic_page_data;
     
     $title = $data["title"];
     $content = $data["content"];

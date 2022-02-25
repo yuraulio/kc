@@ -4,7 +4,7 @@
         $instructor[$input->key] = $input->value ?? "";
     }
 
-    $data = $page->getInstructorCourses();
+    $data = $dynamic_page_data;
     $content = $data["content"];
     $instructorEvents = $data["instructorEvents"];
 @endphp

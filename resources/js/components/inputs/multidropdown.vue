@@ -31,7 +31,7 @@
                 <div v-else class="d-inline-block">
                     <span class="multiselect__tag multiselect__tag-padding">
                         <span>{{ props.option.title }}</span> 
-                        <i @click="props.option.edit = true" aria-hidden="true" tabindex="1" class="multiselect__tag-icon dripicons-return edit-icon"></i>
+                        <i @click="props.option.edit = true" aria-hidden="true" tabindex="1" class="multiselect__tag-icon dripicons-document-edit edit-icon"></i>
                         <i @click="removeTag(props.option.title)" aria-hidden="true" tabindex="1" class="multiselect__tag-icon"></i>
                     </span>
                 </div>

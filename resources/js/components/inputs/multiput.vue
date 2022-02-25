@@ -104,7 +104,7 @@
 
     <div v-if="type == 'tabs'" class="">
         <tcedit
-            mode="new" 
+            :mode="mode" 
             ref="tc" 
             :pseudo="pseudo" 
             :predata="existingValue"
@@ -113,6 +113,34 @@
             @updatetabscomponent="updated"
             @updatetabs="updatedTabs"
         ></tcedit>
+    </div>
+
+    <div v-if="type == 'repetable'" class="">
+        <template v-for="items in editorData">
+            <template v-for="input in inputs">
+                <multiput
+                    :key="input.key"
+                    :keyput="input.key"
+                    :label="input.label"
+                    :type="input.type"
+                    :value="input.value"
+                    :tabsProp="input.tabs ? input.tabs : []"
+                    :size="input.size"
+                    
+                    :route="input.route"
+                    :multi="false"
+                    :existingValue="input.value"
+                    :uuid="$uuid.v4()"
+                    :mode="mode"
+                />
+            </template>
+        </template>
+
+        <div class="text-center mt-2">
+            <button @click="addRepetableBlock()" class="btn btn-success add-column-button ms-1">
+                <i class="dripicons-plus"></i>
+            </button>
+        </div>
     </div>
 
 </div>
@@ -160,6 +188,8 @@ export default {
         uuid: String,
         tabsProp: [],
         pseudo: Boolean,
+        mode: String,
+        inputs: {},
     },
     data() {
         return {
@@ -216,6 +246,14 @@ export default {
         },
         updatedTabs($event) {
             this.$emit('inputedTabs', { 'data': $event, 'key': this.keyput})
+        },
+        addRepetableBlock() {
+            if (this.editorData) {
+                this.editorData.push(this.inputs);
+            } else {
+                this.editorData = [];
+                this.editorData[0] = this.inputs;
+            }
         }
     },
     watch: {

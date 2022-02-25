@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\New_web;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Theme\HomeController;
 use App\Http\Resources\PageResource;
+use App\Library\CMS;
 use App\Model\Admin\Category;
 use App\Model\Admin\Page;
 use App\Model\Admin\Redirect;
+use App\Model\Slug;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -34,16 +37,27 @@ class MainController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function page(String $slug): View
+    public function page(Slug $slug): View
     {
-        $page = Page::whereSlug($slug)
-        ->wherePublished(true)
-        ->first();
+        $dynamic_page_data = null;
+        if (get_class($slug->slugable) == "App\Model\Event") {
+            $event = $slug->slugable;
+            $page = Page::withoutGlobalScopes()->whereType("Course page")->first();
+            $dynamic_page_data = CMS::getEventData($event);
+        } elseif (get_class($slug->slugable) == "App\Model\Instructor") {
+            $instructor = $slug->slugable;
+            $page = Page::withoutGlobalScopes()->whereType("Trainer page")->first();
+            $dynamic_page_data = CMS::getInstructorData($instructor);
+        } else {
+            $page = Page::whereSlug($slug)
+            ->wherePublished(true)
+            ->first();
 
-        if (!$page) {
-            $redirect = Redirect::where("old_slug", $slug)->first();
-            if ($redirect) {
-                $page = Page::where("id", $redirect->page_id)->first();
+            if (!$page) {
+                $redirect = Redirect::where("old_slug", $slug)->first();
+                if ($redirect) {
+                    $page = Page::where("id", $redirect->page_id)->first();
+                }
             }
         }
 
@@ -55,6 +69,7 @@ class MainController extends Controller
                 'page_id' => $page->id,
                 'comments' => $page->comments->take(500),
                 'page' => $page,
+                'dynamic_page_data' => $dynamic_page_data,
             ]);
         }
     }

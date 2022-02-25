@@ -26,13 +26,13 @@
             <div class="col-12">
                 <ul class="nav nav-pills nav-fill">
                     <li class="nav-item">
-                        <a @click="tab = 'Content'" :class="'nav-link ' + (tab == 'Content' ? 'active' : '')" href="#">Content</a>
+                        <a @click="tab = 'Content'" :class="'nav-link ' + (tab == 'Content' ? 'active' : '')" href="#!">Content</a>
                     </li>
                     <li class="nav-item">
-                        <a @click="tab = 'Meta'" :class="'nav-link ' + (tab == 'Meta' ? 'active' : '')" href="#">Meta</a>
+                        <a @click="tab = 'Meta'" :class="'nav-link ' + (tab == 'Meta' ? 'active' : '')" href="#!">Meta</a>
                     </li>
                     <li class="nav-item">
-                        <a @click="tab = 'Other'" :class="'nav-link ' + (tab == 'Other' ? 'active' : '')" href="#">Other</a>
+                        <a @click="tab = 'Other'" :class="'nav-link ' + (tab == 'Other' ? 'active' : '')" href="#!">Other</a>
                     </li>
                 </ul>
             </div>
@@ -40,9 +40,28 @@
 
         <div v-if="name == 'tabs'" class="row ">
             <div class="col-12">
-                <nav class="nav nav-pills flex-column flex-sm-row">
-                    <template v-for="tab_item in tabs">
-                        <a @click="tabs_tab = tab_item" :class="'mb-1 me-1 flex-sm-fill text-sm-center nav-link ' + (tabs_tab == tab_item ? 'active' : '')" href="#">{{tab_item}}</a>
+                <nav class="nav nav-pills flex-column flex-sm-row navtab-bg">
+                    <template v-for="(tab_item, tab_index) in tabs">
+                        <a @click="tabs_tab = tab_item" :class="'mb-1 me-1 ms-0 flex-sm-fill text-sm-center nav-link ' + (tabs_tab == tab_item ? 'active' : '')" href="#!">
+                            <template v-if="!tab_open_edit.includes(tab_item)">
+                                {{tab_item}}
+                                <div @click.stop="removeTabsTab(tab_item)" class="d-inline-block float-end ms-1">
+                                    <i class="dripicons-cross"></i>
+                                </div>
+                                <div @click="tab_open_edit.push(tab_item)" class="d-inline-block float-end ms-1">
+                                    <i class="dripicons-document-edit"></i>
+                                </div>
+                            </template>
+                            <template v-else>
+                                <input style="height: 21px;" type="text" :value="tab_item" :ref="tab_item">
+                                <div @click="tab_open_edit.splice(tab_open_edit.indexOf(tab_item), 1)" class="d-inline-block float-end ms-1">
+                                    <i class="dripicons-cross mt-1"></i>
+                                </div>
+                                <div @click="renameTab(tab_item)" class="d-inline-block float-end ms-1">
+                                    <i class="dripicons-checkmark"></i>
+                                </div>
+                            </template>
+                        </a>
                     </template>
 
                     <button @click="add_tab = true" class="mb-1 btn btn-soft-success add-column-button">
@@ -82,7 +101,7 @@
 
                     <div class="row handle">
                         <div class="col-2">
-                            <button @click="toggleCollapse(val)" class="btn btn-sm btn-soft-secondary" type="button" data-bs-toggle="collapse" :data-bs-target="'#collapseelement' + index" aria-expanded="false" aria-controls="collapseExample">
+                            <button @click="toggleCollapse(val)" class="btn btn-sm btn-soft-secondary" type="button" data-bs-toggle="collapse" :data-bs-target="'#collapseelement' + val.id" aria-expanded="false" aria-controls="collapseExample">
                                 <i v-if="val.collapsed == true" class="mdi mdi-chevron-down"></i>
                                 <i v-else class="mdi mdi-chevron-up"></i>
                             </button>
@@ -93,9 +112,9 @@
                                     {{ val.width == 'full' ? 'Full' : (val.width == 'content' ? 'Content' :'Blog') }} Width<i class="mdi mdi-chevron-down"></i>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-center" style="" data-popper-placement="bottom-start">
-                                    <a @click.prevent="val.width = 'full'" :class="'dropdown-item ' + (val.width == 'full' ? 'active' : '')" href="#">Full Width</a>
-                                    <a @click.prevent="val.width = 'content'" :class="'dropdown-item ' + (val.width == 'content' ? 'active' : '')" href="#">Content Width</a>
-                                    <a @click.prevent="val.width = 'blog'" :class="'dropdown-item ' + (val.width == 'blog' ? 'active' : '')" href="#">Blog Width</a>
+                                    <a @click.prevent="val.width = 'full'" :class="'dropdown-item ' + (val.width == 'full' ? 'active' : '')" href="#!">Full Width</a>
+                                    <a @click.prevent="val.width = 'content'" :class="'dropdown-item ' + (val.width == 'content' ? 'active' : '')" href="#!">Content Width</a>
+                                    <a @click.prevent="val.width = 'blog'" :class="'dropdown-item ' + (val.width == 'blog' ? 'active' : '')" href="#!">Blog Width</a>
                                 </div>
                             </div>
                         </div>
@@ -119,22 +138,22 @@
                                 <div class="dropdown-menu dropdown-menu-center" style="">
                                     <a @click.prevent="val.color = 'white'" 
                                         :class="'dropdown-item ' + (val.color == 'white' ? 'active' : '')" 
-                                        href="#">White
+                                        href="#!">White
                                     </a>
 
                                     <a @click.prevent="val.color = 'blue_gradient'" 
                                         :class="'dropdown-item ' + (val.color == 'blue_gradient' ? 'active' : '')" 
-                                        href="#">Blue gradient
+                                        href="#!">Blue gradient
                                     </a>
 
                                     <a @click.prevent="val.color = 'blue'" 
                                         :class="'dropdown-item ' + (val.color == 'blue' ? 'active' : '')" 
-                                        href="#">Blue
+                                        href="#!">Blue
                                     </a>
 
                                     <a @click.prevent="val.color = 'gray'" 
                                         :class="'dropdown-item ' + (val.color == 'gray' ? 'active' : '')" 
-                                        href="#">Gray
+                                        href="#!">Gray
                                     </a>
                                 </div>
                             </div>
@@ -190,7 +209,7 @@
                                 </h5>
 
                             </div>
-                            <div :class="'tab-content collapse pb-3 ' + (val.initialCollapsed ? '' : 'show')" :id="'collapseelement' + index" style="padding-top: 0px" >
+                            <div :class="'tab-content collapse pb-3 ' + (val.initialCollapsed ? '' : 'show')" :id="'collapseelement' + val.id" style="padding-top: 0px" >
                                 
                                     <div v-for="(vl, indx) in val.columns" :key="'tabpane' + indx" :class="'tab-pane ' + (vl.active === true ? ' active' : '')">
                                         <div v-show="column.active" class="card-body row pb-0 pt-0">
@@ -210,6 +229,8 @@
                                                 :multi="false"
                                                 :existingValue="input.value"
                                                 :uuid="$uuid.v4()"
+                                                :mode="mode"
+                                                :inputs="input.inputs"
                                             />
                                         </div>
 
@@ -268,13 +289,13 @@
             <div class="col-12">
                 <ul class="nav nav-pills nav-fill">
                     <li class="nav-item">
-                        <a @click="tab = 'Content'" :class="'nav-link ' + (tab == 'Content' ? 'active' : '')" href="#">Content</a>
+                        <a @click="tab = 'Content'" :class="'nav-link ' + (tab == 'Content' ? 'active' : '')" href="#!">Content</a>
                     </li>
                     <li class="nav-item">
-                        <a @click="tab = 'Meta'" :class="'nav-link ' + (tab == 'Meta' ? 'active' : '')" href="#">Meta</a>
+                        <a @click="tab = 'Meta'" :class="'nav-link ' + (tab == 'Meta' ? 'active' : '')" href="#!">Meta</a>
                     </li>
                     <li class="nav-item">
-                        <a @click="tab = 'Other'" :class="'nav-link ' + (tab == 'Other' ? 'active' : '')" href="#">Other</a>
+                        <a @click="tab = 'Other'" :class="'nav-link ' + (tab == 'Other' ? 'active' : '')" href="#!">Other</a>
                     </li>
                 </ul>
             </div>
@@ -282,9 +303,28 @@
 
         <div v-if="name == 'tabs'" class="row ">
             <div class="col-12">
-                <nav class="nav nav-pills flex-column flex-sm-row">
-                    <template v-for="tab_item in tabs">
-                        <a @click="tabs_tab = tab_item" :class="'mb-1 me-1 flex-sm-fill text-sm-center nav-link ' + (tabs_tab == tab_item ? 'active' : '')" href="#">{{tab_item}}</a>
+                <nav class="nav nav-pills flex-column flex-sm-row navtab-bg">
+                    <template v-for="(tab_item, tab_index) in tabs">
+                        <a @click="tabs_tab = tab_item" :class="'mb-1 me-1 ms-0 flex-sm-fill text-sm-center nav-link ' + (tabs_tab == tab_item ? 'active' : '')" href="#!">
+                            <template v-if="!tab_open_edit.includes(tab_item)">
+                                {{tab_item}}
+                                <div @click.stop="removeTabsTab(tab_item)" class="d-inline-block float-end ms-1">
+                                    <i class="dripicons-cross"></i>
+                                </div>
+                                <div @click="tab_open_edit.push(tab_item)" class="d-inline-block float-end">
+                                    <i class="dripicons-document-edit"></i>
+                                </div>
+                            </template>
+                            <template v-else>
+                                <input style="height: 21px;" type="text" :value="tab_item" :ref="tab_item">
+                                <div @click="tab_open_edit.splice(tab_open_edit.indexOf(tab_item), 1)" class="d-inline-block float-end ms-1">
+                                    <i class="dripicons-cross mt-1"></i>
+                                </div>
+                                <div @click="renameTab(tab_item)" class="d-inline-block float-end">
+                                    <i class="dripicons-checkmark"></i>
+                                </div>
+                            </template>
+                        </a>
                     </template>
 
                     <button @click="add_tab = true" class="mb-1 btn btn-soft-success add-column-button">
@@ -325,9 +365,9 @@
                             {{ val.width == 'full' ? 'Full' : (val.width == 'content' ? 'Content' :'Blog') }} Width<i class="mdi mdi-chevron-down"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-center" style="" data-popper-placement="bottom-start">
-                            <a @click.prevent="val.width = 'full'" :class="'dropdown-item ' + (val.width == 'full' ? 'active' : '')" href="#">Full Width</a>
-                            <a @click.prevent="val.width = 'content'" :class="'dropdown-item ' + (val.width == 'content' ? 'active' : '')" href="#">Content Width</a>
-                            <a @click.prevent="val.width = 'blog'" :class="'dropdown-item ' + (val.width == 'blog' ? 'active' : '')" href="#">Blog Width</a>
+                            <a @click.prevent="val.width = 'full'" :class="'dropdown-item ' + (val.width == 'full' ? 'active' : '')" href="#!">Full Width</a>
+                            <a @click.prevent="val.width = 'content'" :class="'dropdown-item ' + (val.width == 'content' ? 'active' : '')" href="#!">Content Width</a>
+                            <a @click.prevent="val.width = 'blog'" :class="'dropdown-item ' + (val.width == 'blog' ? 'active' : '')" href="#!">Blog Width</a>
                         </div>
                     </div>
                     <div v-for="(column, indr) in val.columns" :key="'column' + indr" :class="'d-inline-block col-lg-' + getColumnWidth(column, val.columns)">
@@ -445,6 +485,7 @@ export default {
             tabs_tab: null,
             add_tab: false,
             new_tab: "",
+            tab_open_edit: [],
         }
     },
     components: {
@@ -524,6 +565,7 @@ export default {
             }
         },
         toggleCollapse(val) {
+            console.log(val.id);
             if (val.collapsed) {
                 val.collapsed = !val.collapsed;
             } else {
@@ -630,6 +672,43 @@ export default {
             }
             this.new_tab = "";
             this.add_tab = false;
+        },
+        removeTabsTab(tab_name) {
+            var data = this.data;
+            this.data.forEach(function(row, index) {
+                if (row.tabs_tab == tab_name) {
+                    data.splice(index, 1);
+                }
+            });
+
+            var tabs = this.tabs;
+            this.tabs.forEach(function(tab, index) {
+                if (tab == tab_name) {
+                    tabs.splice(index, 1);
+                }
+            });
+        },
+        renameTab(tab_name){
+            var input = this.$refs[tab_name];
+            var new_tab_name = input[0].value;
+
+            if (!this.tabs.includes(new_tab_name)) {
+                var data = this.data;
+                this.data.forEach(function(row, index) {
+                    if (row.tabs_tab == tab_name) {
+                        data[index].tabs_tab = new_tab_name;
+                    }
+                });
+
+                var tabs = this.tabs;
+                this.tabs.forEach(function(tab, index) {
+                    if (tab == tab_name) {
+                        tabs[index] = new_tab_name;
+                    }
+                });
+
+                this.tab_open_edit.splice(this.tab_open_edit.indexOf(new_tab_name), 1);
+            }
         }
     },
 
@@ -767,7 +846,7 @@ export default {
                         "order": 0,
                         "component": component,
                         "active": true,
-                        "template": this.extractedComponents[component]
+                        "template": JSON.parse(JSON.stringify(this.extractedComponents[component]))
                     }
                 ]
             }

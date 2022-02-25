@@ -511,13 +511,122 @@
         "icon": "dripicons-browser",
         "key": "tabs_component",
         "tab": "Content",
-        "width": "content",
+        "width": "full",
         "inputs": [
+            {
+                "type": "text",
+                "key": "button_text",
+                "label": "Button text"
+            },
+            {
+                "type": "text",
+                "key": "button_link",
+                "label": "Button link"
+            },
             {
                 "type": "tabs",
                 "key": "tabs",
                 "label": "Tabs"
             }
+        ]
+    },
+    "course_text" : {
+        "title": "Course text",
+        "icon": "dripicons-browser",
+        "key": "course_text_component",
+        "tab": "Content",
+        "width": "full",
+        "inputs": [
+        ]
+    },
+    "course_details" : {
+        "title": "Course details",
+        "icon": "dripicons-browser",
+        "key": "course_details_component",
+        "tab": "Content",
+        "width": "full",
+        "inputs": [
+        ]
+    },
+    "course_author" : {
+        "title": "Course author",
+        "icon": "dripicons-browser",
+        "key": "course_author_component",
+        "tab": "Content",
+        "width": "content",
+        "inputs": [
+        ]
+    },
+    "course_video" : {
+        "title": "Course video",
+        "icon": "dripicons-browser",
+        "key": "course_video_component",
+        "tab": "Content",
+        "width": "content",
+        "inputs": [
+        ]
+    },
+    "book_ticket" : {
+        "title": "Book ticket",
+        "icon": "dripicons-browser",
+        "key": "book_ticket_component",
+        "tab": "Content",
+        "width": "content",
+        "inputs": [
+        ]
+    },
+    "benefits" : {
+        "title": "Course benefits",
+        "icon": "dripicons-browser",
+        "key": "benefits_component",
+        "tab": "Content",
+        "width": "content",
+        "inputs": [
+        ]
+    },
+    "topics" : {
+        "title": "Course topics",
+        "icon": "dripicons-browser",
+        "key": "topics_component",
+        "tab": "Content",
+        "width": "content",
+        "inputs": [
+        ]
+    },
+    "course_instructors" : {
+        "title": "Course instructors",
+        "icon": "dripicons-browser",
+        "key": "course_instructors_component",
+        "tab": "Content",
+        "width": "content",
+        "inputs": [
+        ]
+    },
+    "course_testimonials" : {
+        "title": "Course testimonials",
+        "icon": "dripicons-browser",
+        "key": "course_testimonials_component",
+        "tab": "Content",
+        "width": "content",
+        "inputs": [
+        ]
+    },
+    "course_location" : {
+        "title": "Course location",
+        "icon": "dripicons-browser",
+        "key": "course_location_component",
+        "tab": "Content",
+        "width": "content",
+        "inputs": [
+        ]
+    },
+    "course_faq" : {
+        "title": "Course faq",
+        "icon": "dripicons-browser",
+        "key": "course_faq_component",
+        "tab": "Content",
+        "width": "content",
+        "inputs": [
         ]
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Theme;
 
 use App\Http\Controllers\Controller;
+use App\Library\CMS;
 use Illuminate\Http\Request;
 
 use App\Model\Slug;
@@ -44,7 +45,7 @@ class HomeController extends Controller
     public function __construct(FBPixelService $fbp)
     {
         $this->fbp = $fbp;
-        $this->middleware('auth.sms')->except('getSMSVerification','smsVerification');
+        $this->middleware('auth.sms')->except('getSMSVerification', 'smsVerification');
         //$this->middleware('instructor-terms');
         $fbp->sendPageViewEvent();
 
@@ -53,11 +54,10 @@ class HomeController extends Controller
                 $content['User_id'] = Auth::user()->id;
             }else{
                 $content['Visitor_id'] = 'fsdf';
-            } 
-            
+            }
+
             return $next($request);
         });*/
-
     }
 
     /*public function homePage(){
@@ -129,8 +129,8 @@ class HomeController extends Controller
 
     }*/
 
-    public function homePage(){
-
+    public function homePage()
+    {
         $data = [];
 
         //$data['events'] = Event::with('category', 'medias', 'slugable', 'ticket')->get()->toArray();
@@ -140,13 +140,11 @@ class HomeController extends Controller
         $data['elearningFree'] = [];
         $data['inclassFree'] = [];
 
-        $categories =Category::with('slugable','events.slugable','events.city','events','events.mediable')->where('show_homepage', 1)->orderBy('priority','asc')->get()->toArray();
+        $categories =Category::with('slugable', 'events.slugable', 'events.city', 'events', 'events.mediable')->where('show_homepage', 1)->orderBy('priority', 'asc')->get()->toArray();
 
 
-        foreach($categories as $category){
-
-            if(!key_exists($category['id'],$data['nonElearningEvents'])){
-
+        foreach ($categories as $category) {
+            if (!key_exists($category['id'], $data['nonElearningEvents'])) {
                 $data['nonElearningEvents'][$category['id']]['name'] = $category['name'];
                 $data['nonElearningEvents'][$category['id']]['slug'] = isset($category['slugable']) ? $category['slugable']['slug'] : '';
                 $data['nonElearningEvents'][$category['id']]['description'] = $category['description'];
@@ -170,63 +168,53 @@ class HomeController extends Controller
                 $data['inclassFree'][$category['id']]['description'] = $category['description'];
                 $data['inclassFree'][$category['id']]['hours'] = $category['hours'];
                 $data['inclassFree'][$category['id']]['events'] = [];
-
             }
 
-            foreach($category['events'] as $event){
-
-                if($event['status'] == 1 || $event['status'] == 3 || $event['status'] == 4 || !$event['published'] ){
+            foreach ($category['events'] as $event) {
+                if ($event['status'] == 1 || $event['status'] == 3 || $event['status'] == 4 || !$event['published']) {
                     continue;
                 }
 
-                if($event['view_tpl'] == 'elearning_event' || $event['view_tpl'] == 'elearning_pending'){
-
+                if ($event['view_tpl'] == 'elearning_event' || $event['view_tpl'] == 'elearning_pending') {
                     $data['elearningEvents'][$category['id']]['events'][] = $event;
-
-                }else if( $event['view_tpl'] == 'event_free' || $event['view_tpl'] == 'event_free_coupon'){
-
+                } elseif ($event['view_tpl'] == 'event_free' || $event['view_tpl'] == 'event_free_coupon') {
                     $data['inclassFree'][$category['id']]['events'][] = $event;
-
-                }else if( $event['view_tpl'] == 'elearning_free'){
-
+                } elseif ($event['view_tpl'] == 'elearning_free') {
                     $data['elearningFree'][$category['id']]['events'][] = $event;
-
-                }else{
+                } else {
                     $data['nonElearningEvents'][$category['id']]['events'][] = $event;
                 }
-
             }
         }
 
-        foreach($data as $key => $categories){
-            foreach($categories as $key2 => $category){
-
-                if(count($category['events']) == 0){
+        foreach ($data as $key => $categories) {
+            foreach ($categories as $key2 => $category) {
+                if (count($category['events']) == 0) {
                     unset($data[$key][$key2]);
                 }
             }
 
-            if(count($categories) == 0){
+            if (count($categories) == 0) {
                 unset($data[$key]);
             }
         }
 
         $data['homeBrands'] = Logos::with('medias')->where('type', 'brands')->inRandomOrder()->take(6)->get()->toArray();
         $data['homeLogos'] = Logos::with('medias')->where('type', 'logos')->inRandomOrder()->take(6)->get()->toArray();
-        $data['homePage'] = Pages::where('name','Home')->with('mediable','metable')->first();
+        $data['homePage'] = Pages::where('name', 'Home')->with('mediable', 'metable')->first();
 
-        return view('theme.home.homepage',$data);
-
+        return view('theme.home.homepage', $data);
     }
 
-    public function index(Slug $slug){
+    public function index(Slug $slug)
+    {
 
         //dd(get_class($slug->slugable) == Event::class);
         //dd(get_class($slug->slugable) == Delivery::class);
 
         //dd(get_class($slug->slugable));
 
-        if(!isset($slug->slugable)){
+        if (!isset($slug->slugable)) {
             abort(404);
         }
 
@@ -265,21 +253,19 @@ class HomeController extends Controller
                 break;
 
         }
-
     }
 
-    public function enrollToFreeEvent(Event $content){
-        
+    public function enrollToFreeEvent(Event $content)
+    {
         $published = $content->published;
-        if($published == 0){
+        if ($published == 0) {
             return false;
         }
         
         
         $data['user']['createAccount'] = false;
 
-        if( !($user = Auth::user()) && !($user = User::where('email',request()->email[0])->first()) ){
-
+        if (!($user = Auth::user()) && !($user = User::where('email', request()->email[0])->first())) {
             $data['user']['createAccount'] = true;
 
             $input = [];
@@ -289,7 +275,7 @@ class HomeController extends Controller
             unset($formData['update']);
             unset($formData['type']);
             
-            foreach($formData as $key => $value){
+            foreach ($formData as $key => $value) {
                 $input[$key] = $value[0];
             }
 
@@ -323,14 +309,14 @@ class HomeController extends Controller
         $data['user']['name'] = $user->firstname . ' ' . $user->lastname;
         $data['user']['email'] = $user->email;
         $data['extrainfo'] = ['','',$content->title];
-        $data['duration'] =  $content->summary1->where('section','date')->first() ? $content->summary1->where('section','date')->first()->title : '';
+        $data['duration'] =  $content->summary1->where('section', 'date')->first() ? $content->summary1->where('section', 'date')->first()->title : '';
 
         $data['eventSlug'] =  url('/') . '/' . $content->getSlug();
-        $user->notify(new WelcomeEmail($user,$data));
+        $user->notify(new WelcomeEmail($user, $data));
 
         
-        $student = $user->events->where('id',$content->id)->first();
-        if(!$student){
+        $student = $user->events->where('id', $content->id)->first();
+        if (!$student) {
 
             //ticket
             $eventticket = 'free';
@@ -361,7 +347,7 @@ class HomeController extends Controller
             $transaction = Transaction::create($transaction_arr);
 
             if ($transaction) {
-                    // set transaction id in session
+                // set transaction id in session
 
                 $pay_seats_data = ["names" => [$user->first_name],"surnames" => [$user->last_name],"emails" => [$user->email],
                 "mobiles" => [$user->mobile],"addresses" => [$user->address],"addressnums" => [$user->address_num],
@@ -392,13 +378,12 @@ class HomeController extends Controller
                 $today = date('Y/m/d');
                 $expiration_date = '';
 
-                if($content->expiration){
+                if ($content->expiration) {
                     $monthsExp = '+' . $content->expiration .'months';
                     $expiration_date = date('Y-m-d', strtotime($monthsExp, strtotime($today)));
                 }
 
-                $content->users()->save($user,['comment'=>'free','expiration'=>$expiration_date,'paid'=>true]);
-
+                $content->users()->save($user, ['comment'=>'free','expiration'=>$expiration_date,'paid'=>true]);
             }
         }
         
@@ -426,14 +411,13 @@ class HomeController extends Controller
         $data['event']['twitter'] = urlencode("Proudly participating in ". $content->title . " by Knowcrunch. 💙");
         $data['event']['linkedin'] = urlencode(url('/') . '/' .$content->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $content->title . " by Knowcrunch. 💙");
         
-        Session::put('thankyouData',$data);
+        Session::put('thankyouData', $data);
         return redirect('/thankyou');
         //return view('theme.cart.new_cart.thank_you_free',$data);
-
     }
 
-    private function city($page){
-
+    private function city($page)
+    {
         $data['content'] = $page;
 
         $city = City::with('event')->find($page['id']);
@@ -441,167 +425,83 @@ class HomeController extends Controller
         //$data['content'] = $city;
         $data['title'] = $city['name'];
         $data['city'] = $city;
-        $data['openlist'] = $city->event()->with('category','slugable', 'city', 'ticket','summary1')->where('published',true)->where('status', 0)->orderBy('published_at','desc')->get();
-        $data['completedlist'] = $city->event()->with('category','slugable', 'city', 'ticket', 'summary1')->where('published',true)->where('status', 3)->orderBy('published_at','desc')->get();
+        $data['openlist'] = $city->event()->with('category', 'slugable', 'city', 'ticket', 'summary1')->where('published', true)->where('status', 0)->orderBy('published_at', 'desc')->get();
+        $data['completedlist'] = $city->event()->with('category', 'slugable', 'city', 'ticket', 'summary1')->where('published', true)->where('status', 3)->orderBy('published_at', 'desc')->get();
 
-        return view('theme.pages.category' ,$data);
+        return view('theme.pages.category', $data);
     }
 
-    private function instructor($page){
-       
-        $data['content'] = $page;
-        $events = array();
-        $lessons = [];
-        $instructor = Instructor::with('eventInstructorPage.category', 'mediable', 'eventInstructorPage.lessons', 'eventInstructorPage.slugable', 'eventInstructorPage.city', 'eventInstructorPage.summary1')->where('status',1)->find($page['id']);
-        //dd($instructor['event'][0]);
-        $data['instructor'] = $instructor;
+    private function instructor($page)
+    {
+        $data = CMS::getInstructorData($page);
         
-        if(!$instructor){
-            abort(404);
-        }
-
-        $category = array();
-
-        $data['title'] = '';
-
-        if(isset($instructor['title'])){
-            $data['title'] .= $instructor['title'];
-        }
-
-        if(isset($instructor['subtitle'])){
-            $data['title'] .= ' '.$instructor['subtitle'];
-            
-        }
-        $data['title'] = trim($data['title']);
-       
-        foreach($instructor['eventInstructorPage'] as $key => $event){
-            if(($event['status'] == 0 || $event['status'] == 2) && $event->is_inclass_course()){
-                foreach($event['lessons'] as $lesson){
-
-                    if($lesson->pivot['date'] != ''){
-                        $date = date("Y/m/d", strtotime($lesson->pivot['date']));
-                    }else{
-                        $date = date("Y/m/d", strtotime($lesson->pivot['time_starts']));
-                    }
-                    if(strtotime("now") < strtotime($date)){
-                        if($lesson['instructor_id'] == $page['id']){
-                            $lessons[] = $lesson['title'];
-                        }
-                    }
-
-
-                }
-
-            }
-        }
-        $category = array();
-
-        foreach($instructor['eventInstructorPage'] as $key => $event){
-
-                //dd($event['status']);
-                if($key == 0){
-                    $category[$event['id']] = $event;
-                }else{
-                    if(!isset($category[$event['id']])){
-                        $category[$event['id']] = $event;
-                    }
-                }
-
-        }
-
-        $new_events = array();
-
-        foreach($category as $category){
-            //dd($category['title']);
-            if(count($new_events) == 0){
-                array_push($new_events, $category);
-            }else{
-                $find = false;
-                foreach($new_events as $event){
-                    if($event['title'] == $category['title']){
-                        $find = true;
-                    }
-                }
-                if(!$find){
-                    array_push($new_events, $category);
-                }
-            }
-        }
-
-        $data['instructorTeaches'] = array_unique($lessons);
-
-        $data['instructorEvents'] = $new_events;
-        //dd($new_events);
-
-        
-        return view('theme.pages.instructor_page' ,$data);
+        return view('theme.pages.instructor_page', $data);
     }
 
-    private function pages($page){
-
+    private function pages($page)
+    {
         $data['page'] = $page;
         //dd($page);
-        if($data['page']['template'] == 'corporate-template'){
+        if ($data['page']['template'] == 'corporate-template') {
             //$data['page']['template'] = 'corporate-template';
             $data['benefits'] = $page->benefits;
             $data['corporatebrands'] = Logos::with('medias')->where('type', 'corporate_brands')->where('status', true)->get();
-        }else if($data['page']['template'] == 'instructors'){
-            $data['instructors'] =  Instructor::with('medias', 'slugable')->orderBy('subtitle','asc')->where('status', 1)->get();
-        }else if($data['page']['id'] == 800){
-            $data['brands'] = Logos::with('medias')->where('type', 'brands')->orderBy('name','asc')->get();
-            return view('admin.static_tpls.logos.backend' ,$data);
-        }else if($data['page']['id'] == 801){
+        } elseif ($data['page']['template'] == 'instructors') {
+            $data['instructors'] =  Instructor::with('medias', 'slugable')->orderBy('subtitle', 'asc')->where('status', 1)->get();
+        } elseif ($data['page']['id'] == 800) {
+            $data['brands'] = Logos::with('medias')->where('type', 'brands')->orderBy('name', 'asc')->get();
+            return view('admin.static_tpls.logos.backend', $data);
+        } elseif ($data['page']['id'] == 801) {
             $data['logos'] = Logos::with('medias')->where('type', 'logos')->get();
-            return view('admin.static_tpls.logos.backend' ,$data);
-        }else if($data['page']['template'] == 'subscription-template'){
+            return view('admin.static_tpls.logos.backend', $data);
+        } elseif ($data['page']['template'] == 'subscription-template') {
             $data['event'] = Event::find(2304);
             $data['testimonials'] = isset($data['event']->category->toArray()[0]) ? $data['event']->category->toArray()[0]['testimonials'] : [];
-            if($data['event']->plans->first()){
+            if ($data['event']->plans->first()) {
                 $data['plan'] = $data['event']->plans->first()->name;
             }
 
             $data['event'] = $data['event']->title;
         }
 
-        return view('admin.static_tpls.'.$data['page']['template'].'.frontend' ,$data);
+        return view('admin.static_tpls.'.$data['page']['template'].'.frontend', $data);
     }
 
-    private function types($type){
-
+    private function types($type)
+    {
         $data['type'] = $type;
         $data['title'] = $type['name'];
 
-        $data['openlist'] = $type->events()->has('slugable')->with('category','slugable', 'city', 'ticket','summary1')->where('published',true)->where('status', 0)->orderBy('created_at','desc')->get();
-        $data['completedlist'] = $type->events()->has('slugable')->with('category','slugable', 'city', 'ticket', 'summary1')->where('published',true)->where('status', 3)->orderBy('published_at','desc')->get();
+        $data['openlist'] = $type->events()->has('slugable')->with('category', 'slugable', 'city', 'ticket', 'summary1')->where('published', true)->where('status', 0)->orderBy('created_at', 'desc')->get();
+        $data['completedlist'] = $type->events()->has('slugable')->with('category', 'slugable', 'city', 'ticket', 'summary1')->where('published', true)->where('status', 3)->orderBy('published_at', 'desc')->get();
 
-        return view('theme.pages.category' ,$data);
-
+        return view('theme.pages.category', $data);
     }
 
-    private function category($category){
+    private function category($category)
+    {
         $data['type'] = $category;
         $data['title'] = $category['name'];
 
-        $data['openlist'] = $category->events()->has('slugable')->with('category','slugable', 'city', 'ticket','summary1')->where('published',true)->where('status', 0)->orderBy('created_at','desc')->get();
-        $data['completedlist'] = $category->events()->has('slugable')->with('category','slugable', 'city', 'ticket', 'summary1')->where('published',true)->where('status', 3)->orderBy('published_at','desc')->get();
+        $data['openlist'] = $category->events()->has('slugable')->with('category', 'slugable', 'city', 'ticket', 'summary1')->where('published', true)->where('status', 0)->orderBy('created_at', 'desc')->get();
+        $data['completedlist'] = $category->events()->has('slugable')->with('category', 'slugable', 'city', 'ticket', 'summary1')->where('published', true)->where('status', 3)->orderBy('published_at', 'desc')->get();
 
-        return view('theme.pages.category' ,$data);
-
+        return view('theme.pages.category', $data);
     }
 
-    private function delivery($delivery){
-
+    private function delivery($delivery)
+    {
         $data['title'] = $delivery['name'];
         $data['delivery'] = $delivery;
-        $data['openlistt'] = $delivery->event()->has('slugable')->with('category', 'city', 'ticket')->where('published',true)->where('status', 0)->orderBy('created_at','desc')->get();
-        $data['completedlist'] = $delivery->event()->has('slugable')->with('category','slugable', 'city', 'ticket')->where('published',true)->where('status', 3)->orderBy('created_at','desc')->get();
+        $data['openlistt'] = $delivery->event()->has('slugable')->with('category', 'city', 'ticket')->where('published', true)->where('status', 0)->orderBy('created_at', 'desc')->get();
+        $data['completedlist'] = $delivery->event()->has('slugable')->with('category', 'slugable', 'city', 'ticket')->where('published', true)->where('status', 3)->orderBy('created_at', 'desc')->get();
 
         $data['openlist'] = [];
         
-        foreach($data['openlistt'] as $openlist){
+        foreach ($data['openlistt'] as $openlist) {
             $index = $openlist->category->first()->priority ?  $openlist->category->first()->priority : 0;
 
-            while(in_array($index,array_keys($data['openlist']))){
+            while (in_array($index, array_keys($data['openlist']))) {
                 $index++;
             }
             
@@ -610,73 +510,16 @@ class HomeController extends Controller
         ksort($data['openlist']);
         //dd($data['completedlist']);
         //dd($data['openlist']);
-        return view('theme.pages.category' ,$data);
+        return view('theme.pages.category', $data);
     }
 
-    private function event($event){
-
-        $data = $event->topicsLessonsInstructors();
-        $data['event'] = $event;
-        $data['benefits'] = $event->benefits->toArray();
-        $data['summary'] = $event->summary1()->get()->toArray();
-        $data['sections'] = $event->sections->groupBy('section');
-        $data['section_fullvideo'] = $event->sectionVideos->first();
-        $data['faqs'] = $event->getFaqs();
-        $data['testimonials'] = isset($event->category->toArray()[0]) ? $event->category->toArray()[0]['testimonials'] : [];
-        $data['tickets'] = $event->ticket()->where('price','>',0)->where('active',true)->get()->toArray();
-        $data['venues'] = $event->venues->toArray();
-        $data['syllabus'] = $event->syllabus->toArray();
-        $data['is_event_paid'] = 0;
-        $data['sumStudents'] = get_sum_students_course($event->category->first());//isset($event->category[0]) ? $event->category[0]->getSumOfStudents() : 0; 
-        $data['showSpecial'] = false;
-        $data['showAlumni'] = $event->ticket()->where('type','Alumni')->where('active',true)->first() ? true : false;;
-
-
-        if($event->ticket()->where('type','Early Bird')->first()){
-            $data['showSpecial'] = ($event->ticket()->where('type','Early Bird')->first() && $event->ticket()->where('type','Special')->first())  ? 
-                                    ($event->ticket()->where('type','Special')->first()->pivot->active 
-                                        || ($event->ticket()->where('type','Early Bird')->first()->pivot->quantity > 0)) : false;
-        }else{
-            
-            $data['showSpecial'] = $event->ticket()->where('type','Special')->first() ? $event->ticket()->where('type','Special')->first()->pivot->active  : false;
-        }
-
-        
-
-        $price = -1;
-
-        foreach($data['tickets'] as $ticket){
-            
-            if($ticket['pivot']['price'] && $ticket['pivot']['price'] > $price){
-                $price = $ticket['pivot']['price'];
-            }
-        }
-
-        if($price <= 0){
-            $price = (float) 0;
-        }
-        $categoryScript = $event->delivery->first() && $event->delivery->first()->id == 143 ? 'Video e-learning courses' : 'In-class courses'; //$event->category->first() ? 'Event > ' . $event->category->first()->name : '';
-        
-        $tr_price = $price;
-        if($tr_price - floor($tr_price)>0){
-            $tr_price = number_format($tr_price , 2 , '.', '');
-        }else{
-            $tr_price = number_format($tr_price , 0 , '.', '');
-            $tr_price = strval($tr_price);
-            $tr_price .= ".00";
-            
-        }
-
-        $data['tigran'] = ['Price' => $tr_price,'Product_id' => $event->id,'Product_SKU' => $event->id,'ProductCategory' => $categoryScript, 'ProductName' =>  $event->title,'Event_ID' => 'kc_' . time() ];
-
-        if(Auth::user() && count(Auth::user()->events->where('id',$event->id)) > 0){
-            $data['is_event_paid'] = 1;
-        }
+    private function event($event)
+    {
+        $data = CMS::getEventData($event);
 
         $this->fbp->sendViewContentEvent($data);
 
-        return view('theme.event.' . $event->view_tpl,$data);
-
+        return view('theme.event.' . $event->view_tpl, $data);
     }
 
     public function printSyllabusBySlug($slug = '')
@@ -689,18 +532,18 @@ class HomeController extends Controller
         $slug = Slug::where('slug', $slug)->firstOrFail();
         $data['content'] = $slug->slugable;
 
-        $data['content'] = Event::with('category', 'city', 'topic',)->find($data['content']['id']);
+        $data['content'] = Event::with('category', 'city', 'topic', )->find($data['content']['id']);
         $data['eventtopics']= $data['content']->topicsLessonsInstructors()['topics'];
         $topicDescription = [];
 
-        foreach($data['eventtopics'] as $key => $topic){
+        foreach ($data['eventtopics'] as $key => $topic) {
             //dd($key);
             $topic = Topic::where('title', $key)->first();
             $topicDescription[$key] = $topic['summary'];
         }
 
         $data['eventorganisers']=array();
-        if(count($data['content']['city']) != 0){
+        if (count($data['content']['city']) != 0) {
             $data['location']= $data['content']['city'][0];
         }
 
@@ -716,25 +559,22 @@ class HomeController extends Controller
         $fn = $slug->slugable->title . '.pdf';
         
         return $pdf->stream($fn);
-
     }
 
-    public function getSMSVerification($slug){
-
-        return view('theme.layouts.sms_layout',compact('slug'));
-
+    public function getSMSVerification($slug)
+    {
+        return view('theme.layouts.sms_layout', compact('slug'));
     }
 
-    public function smsVerification(Request $request){
-
+    public function smsVerification(Request $request)
+    {
         $user = Auth::user();
 
         //dd($user->cookiesSMS()->where('coockie_value',10001)->first());
         //dd($user->cookiesSMS()->where('coockie_value',$request->cookie_value)->first());
 
-        if($user && $user->cookiesSMS()->where('coockie_value',$request->cookie_value)->first()){
-
-            $cookieSms = $user->cookiesSMS()->where('coockie_value',$request->cookie_value)->first();
+        if ($user && $user->cookiesSMS()->where('coockie_value', $request->cookie_value)->first()) {
+            $cookieSms = $user->cookiesSMS()->where('coockie_value', $request->cookie_value)->first();
             $sms_code = $cookieSms->sms_code;
 
             $codeExpired = strtotime($cookieSms->updated_at);
@@ -742,40 +582,34 @@ class HomeController extends Controller
 
             //dd($codeExpired);
 
-            if($codeExpired >= 5){
+            if ($codeExpired >= 5) {
                 $cookieSms->send = false;
-                $cookieSms->sms_code = rand(1111,9999);
+                $cookieSms->sms_code = rand(1111, 9999);
                 $cookieSms->save();
 
                 return redirect('/myaccount')->with('errors', 'We just send you a new sms');
                 //redirect('/sms-verification/' . $cookieSms->coockie_value)->with('errors', 'We just send you a new sms');
-
             }
 
-            if($sms_code == $request->sms){
-
-                $smsCookies = $user->cookiesSMS()->where('coockie_value',$request->cookie_value)->first();
+            if ($sms_code == $request->sms) {
+                $smsCookies = $user->cookiesSMS()->where('coockie_value', $request->cookie_value)->first();
 
                 $smsCookies->sms_code = '';
                 $smsCookies->sms_verification = 1;
                 $smsCookies->save();
 
                 return redirect('/myaccount');
-
-            }else{
-
+            } else {
                 return redirect()->back()->with('errors', 'sms code is wrong');
                 ///not thes sms code
-
             }
         }
 
         return redirect()->back();//->with('errors', 'sms ode is wrong');
-
     }
 
-    public function giveAway(Request $request){
-
+    public function giveAway(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'cemail' => 'required|email',
             'cname' => 'required',
@@ -785,7 +619,6 @@ class HomeController extends Controller
         ]);
 
         if ($validator->fails()) {
-
             return [
                 'success' => false,
                 'status' => 0,
@@ -807,7 +640,6 @@ class HomeController extends Controller
         $data = $request->all();
 
         Mail::send('emails.admin.give_away', $data, function ($m) use ($data) {
-
             $fullname = $data['cname'] . ' ' . $data['csurname'];
             $adminemail = 'info@knowcrunch.com';
             $subject = 'Knowcrunch - Give Away';
@@ -816,23 +648,21 @@ class HomeController extends Controller
             $m->subject($subject);
             $m->from($adminemail, 'Knowcrunch');
             $m->replyTo($data['cemail'], $fullname);
-             // $m->to('nathanailidis@lioncode.gr', 'Chysafis');
+            // $m->to('nathanailidis@lioncode.gr', 'Chysafis');
             $m->to($adminemail, 'Knowcrunch');
         });
 
-       return [
+        return [
            'success' => true,
            'status' => 1,
            'message' => 'Τhank you for your participation',
        ];
-
     }
 
 
-    public function thankyou(){
-
-        
-        if($data = Session::get('thankyouData')){
+    public function thankyou()
+    {
+        if ($data = Session::get('thankyouData')) {
             Session::forget('thankyouData');
             return view('theme.cart.new_cart.thank_you', $data);
         }
@@ -840,16 +670,13 @@ class HomeController extends Controller
         return redirect('/');
     }
 
-    public function thankyouInstallments(Request $request){
-
-        
-       if($data = json_decode($request->data,true)){
+    public function thankyouInstallments(Request $request)
+    {
+        if ($data = json_decode($request->data, true)) {
             Session::forget('thankyouData');
             return view('theme.cart.new_cart.thank_you', $data);
         }
 
         return redirect('/');
     }
-
-
 }
