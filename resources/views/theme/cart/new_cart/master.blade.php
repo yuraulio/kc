@@ -216,7 +216,6 @@ var routesObj = {
                         }
                         break;
                     case 1:
-						console.log('gfds');
                         setTimeout( function(){
                             window.location.reload();;
                         }, 1000 );

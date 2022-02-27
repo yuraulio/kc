@@ -307,13 +307,21 @@ class CartController extends Controller
             //$data['cur_user'][$i] =  isset($data['pay_seats_data']['cur_user'][$i-1]) ? $data['pay_seats_data']['cur_user'][$i-1] : '';
             $data['firstname'][$i-1] = isset($data['pay_seats_data']['names'][$i-1]) ? $data['pay_seats_data']['names'][$i-1] : '';
             $data['lastname'][$i-1] = isset($data['pay_seats_data']['surnames'][$i-1]) ? $data['pay_seats_data']['surnames'][$i-1] : '';
-            $data['email'][$i-1] = isset($data['pay_seats_data']['emails'][$i-1]) ? $data['pay_seats_data']['emails'][$i-1] : '';
+            
             $data['country_code'][$i-1] = isset($data['pay_seats_data']['countryCodes'][$i-1]) ? $data['pay_seats_data']['countryCodes'][$i-1] : '';
             $data['city'][$i-1] = isset($data['pay_seats_data']['cities'][$i-1]) ? $data['pay_seats_data']['cities'][$i-1] : '';
             $data['mobile'][$i-1] = isset($data['pay_seats_data']['mobiles'][$i-1]) ? $data['pay_seats_data']['mobiles'][$i-1] : '';
             $data['job_title'][$i-1] = isset($data['pay_seats_data']['jobtitles'][$i-1]) ?  $data['pay_seats_data']['jobtitles'][$i-1]: '';
             $data['company'][$i-1] = isset($data['pay_seats_data']['companies'][$i-1]) ?  $data['pay_seats_data']['companies'][$i-1]: '';
             $data['student_type_id'][$i-1] = isset($data['pay_seats_data']['student_type_id'][$i-1]) ?  $data['pay_seats_data']['student_type_id'][$i-1]: '';
+
+
+            if($i==1 &&  $loggedin_user){
+                $data['email'][$i-1] = $loggedin_user->email;
+            }else{
+                $data['email'][$i-1] = isset($data['pay_seats_data']['emails'][$i-1]) ? $data['pay_seats_data']['emails'][$i-1] : '';
+            }
+
             
         }
         
@@ -559,7 +567,12 @@ class CartController extends Controller
             Session::forget('coupon_price');
             Session::forget('priceOf');
         }
-         
+        
+
+        if($userCheck && isset($seats_data['emails'][0])){
+            $seats_data['emails'][0] = $userCheck->email;
+        }
+
         Session::put('pay_seats_data', $seats_data);
         
         

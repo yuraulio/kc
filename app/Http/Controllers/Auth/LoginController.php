@@ -80,6 +80,17 @@ class LoginController extends Controller
                 
             }
 
+            if (Session::has('pay_seats_data')) {
+                $pay_seats_data = Session::get('pay_seats_data');
+    
+                if(isset($pay_seats_data['emails'][0])){
+                    $pay_seats_data['emails'][0] = Auth::user()->email;
+                    Session::forget('pay_seats_data');
+                    Session::put('pay_seats_data', $pay_seats_data);
+                }
+
+            }
+
             auth()->user()->AauthAcessToken()->delete();
             Auth::logoutOtherDevices($request->password);
             $user = Auth::user();
