@@ -687,7 +687,7 @@ class WebhookController extends BaseWebhookController
 	protected function handleCustomerSubscriptionDeleted(array $payload)
     {
         if ($user = $this->getUserByStripeId($payload['data']['object']['customer'])) {
-            $subscription = $user->eventSubscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first();
+            $subscription = $user->subscriptions()->where('stripe_id',$payload['data']['object']['id'])->first();
 
 			if($subscription){
 				$subscription->status = 0;

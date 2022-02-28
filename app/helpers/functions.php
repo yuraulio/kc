@@ -78,9 +78,17 @@ if (!function_exists('get_status_by_slug')){
     function get_status_by_slug($slugg){
 
         $slug = Slug::where('slug',$slugg)->first();
-        
+
         if($slug && $slug->slugable && (get_class($slug->slugable) == 'App\\Model\\Pages' || get_class($slug->slugable) == 'App\\Model\\Event')){
             return $slug->slugable->published;
+        }
+
+        else if($slug && $slug->slugable && (get_class($slug->slugable) == 'App\\Model\\Instructor')){
+            return $slug->slugable->status;
+        }
+
+        else if($slug && $slug->slugable && (get_class($slug->slugable) == 'App\\Model\\Category')){
+            return count($slug->slugable->events) > 0;
         }
         
         return true;
