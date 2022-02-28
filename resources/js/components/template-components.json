@@ -340,7 +340,7 @@
         "inputs": []
     },
     "post_feature" : {
-        "title": "Post feature",
+        "title": "Post list",
         "icon": "dripicons-blog",
         "key": "post_feature_component",
         "one_column": true,
@@ -349,17 +349,17 @@
             {
                 "type": "text",
                 "key": "feature_title",
-                "label": "Feature title"
+                "label": "List title"
             },
             {
                 "type": "textarea",
                 "key": "feature_description",
-                "label": "Feature description"
+                "label": "List description"
             },
             {
                 "type": "image",
                 "key": "feature_image",
-                "label": "Feature image"
+                "label": "List image"
             },
             {
                 "type": "text",
