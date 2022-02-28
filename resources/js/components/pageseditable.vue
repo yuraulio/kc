@@ -25,6 +25,7 @@
                         title="Slug"
                         @updatevalue="update_slug"
                         :prop-value="slug_value"
+                        class="visually-hidden"
                     ></text-field>
                 </div>
             </div>
@@ -38,6 +39,7 @@
                 :pseudo="false" 
                 :predata="template_value ? JSON.parse(template_value.rows) : null"
                 :collapseAllProp="collapseAll"
+                :slug="slug_value"
             ></tcedit>
             <div v-else class="card">
                 <div class="card-body p-4">
@@ -405,6 +407,11 @@ export default {
                 }
 
             }
+
+            eventHub.$on('updateslug', ((value) => {
+                console.log("event test");
+                this.slug_value = value;
+            }));
         },
         watch: {
             "category_value": function() {

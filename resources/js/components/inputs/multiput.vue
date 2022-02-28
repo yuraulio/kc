@@ -2,7 +2,7 @@
 <div :class="(type == 'text' && !size ? 'col-lg-6' : size) + ' mt-2'">
     <div v-if="type == 'text'" class="">
         <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
-        <input v-model="editorData" type="text" :id="keyput" class="form-control">
+        <input @input="update(editorData)" v-model="editorData" type="text" :id="keyput" class="form-control">
         <slot></slot>
     </div>
 
@@ -254,6 +254,11 @@ export default {
             } else {
                 this.editorData = [];
                 this.editorData[0] = this.inputs;
+            }
+        },
+        update(editorData) {
+            if (this.keyput == "meta_slug") {
+                eventHub.$emit('updateslug', editorData);
             }
         }
     },

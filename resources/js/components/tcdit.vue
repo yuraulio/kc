@@ -220,7 +220,7 @@
                                                 :keyput="input.key"
                                                 :label="input.label"
                                                 :type="input.type"
-                                                :value="input.value"
+                                                :value="input.key == 'meta_slug' ? slug : input.value"
                                                 :tabsProp="input.tabs ? input.tabs : []"
                                                 :size="input.size"
                                                 @inputed="inputed($event, input)"
@@ -469,6 +469,7 @@ export default {
             default: "main",
         },
         tabsProp: [],
+        slug: String,
     },
     data() {
         return {
@@ -532,6 +533,7 @@ export default {
             this.$forceUpdate();
         },
         inputed($event, value) {
+            console.log(value);
             this.$set(value, 'value', $event.data);
         },
         inputedTabs($event, value) {
@@ -810,6 +812,9 @@ export default {
             }
          
         }
+
+        // set slug
+
 
         if (this.data) {
             this.data.forEach(row => {

@@ -137,6 +137,12 @@
         "inputs": [
             {
                 "type": "text",
+                "key": "meta_slug",
+                "label": "Slug",
+                "size": "col-lg-12"
+            },
+            {
+                "type": "text",
                 "key": "meta_title",
                 "label": "Meta Title",
                 "size": "col-lg-12"
