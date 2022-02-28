@@ -27,6 +27,7 @@
                                     </a>
                                 </div>
                                 <p class="text-muted mb-4 mt-3">Enter your email address and password to access admin panel.</p>
+                                <p class="alert alert-warning" role="alert">Please login with an admin account. User accounts no longer work.</p>
                             </div>
 
 

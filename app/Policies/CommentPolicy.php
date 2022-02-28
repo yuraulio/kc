@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Model\Admin\Comment;
 use App\Model\Admin\Admin;
+use App\Model\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class CommentPolicy
@@ -39,7 +40,7 @@ class CommentPolicy
      * @param  \App\Model\Admin\Admin  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function create(Admin $user)
+    public function create(User $user)
     {
         return true;
     }
