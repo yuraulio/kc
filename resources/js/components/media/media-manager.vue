@@ -373,16 +373,16 @@ export default {
   },
   mounted() {
       if (this.loadstart) {
-          console.log('setted');
+          // console.log('setted');
           this.getFolders();
       }
   },
   beforeDestroy() {
-      console.log('unsetted');
+      // console.log('unsetted');
   },
   watch: {
       loadstart() {
-          console.log("watching load")
+          // console.log("watching load")
           if (this.loadstart == true) {
               this.getFolders();
           }

@@ -275,6 +275,9 @@ export default {
             },
             update_template(value){
                 this.template_value = value;
+                if (this.type == "edit") {
+                    this.template_value.rows = this.data.content;
+                }
                 this.$forceUpdate()
             },
             rearange() {

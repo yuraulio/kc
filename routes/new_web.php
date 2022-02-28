@@ -22,8 +22,8 @@ Route::prefix('v2')->group(function () {
     Route::get('/sitemap.xml', [SitemapXmlController::class, 'index']);
     Route::get('/feed', [SitemapXmlController::class, 'index']);
 
-    Route::get('/{slug}', [MainController::class, 'page']);
     Route::get('/blog/{slug}', [MainController::class, 'page']);
+    Route::get('/{slug}', [MainController::class, 'page']);
 });
 
 // Route::get('/sitemap.xml', [SitemapXmlController::class, 'index']);

@@ -37,21 +37,24 @@ class MainController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function page(Slug $slug): View
+    public function page(String $slug): View
     {
         $dynamic_page_data = null;
-        if (get_class($slug->slugable) == "App\Model\Event") {
-            $event = $slug->slugable;
-            $page = Page::withoutGlobalScopes()->whereType("Course page")->first();
-            $dynamic_page_data = CMS::getEventData($event);
-        } elseif (get_class($slug->slugable) == "App\Model\Instructor") {
-            $instructor = $slug->slugable;
-            $page = Page::withoutGlobalScopes()->whereType("Trainer page")->first();
-            $dynamic_page_data = CMS::getInstructorData($instructor);
+
+        $slug_model = Slug::whereSlug($slug)->first();
+
+        if ($slug_model) {
+            if (get_class($slug_model->slugable) == "App\Model\Event") {
+                $event = $slug_model->slugable;
+                $page = Page::withoutGlobalScopes()->whereType("Course page")->first();
+                $dynamic_page_data = CMS::getEventData($event);
+            } elseif (get_class($slug_model->slugable) == "App\Model\Instructor") {
+                $instructor = $slug_model->slugable;
+                $page = Page::withoutGlobalScopes()->whereType("Trainer page")->first();
+                $dynamic_page_data = CMS::getInstructorData($instructor);
+            }
         } else {
-            $page = Page::whereSlug($slug)
-            ->wherePublished(true)
-            ->first();
+            $page = Page::whereSlug($slug)->first();
 
             if (!$page) {
                 $redirect = Redirect::where("old_slug", $slug)->first();

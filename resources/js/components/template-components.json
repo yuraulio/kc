@@ -514,16 +514,6 @@
         "width": "full",
         "inputs": [
             {
-                "type": "text",
-                "key": "button_text",
-                "label": "Button text"
-            },
-            {
-                "type": "text",
-                "key": "button_link",
-                "label": "Button link"
-            },
-            {
                 "type": "tabs",
                 "key": "tabs",
                 "label": "Tabs"
@@ -624,6 +614,15 @@
         "title": "Course faq",
         "icon": "dripicons-browser",
         "key": "course_faq_component",
+        "tab": "Content",
+        "width": "content",
+        "inputs": [
+        ]
+    },
+    "course_hero" : {
+        "title": "Course hero",
+        "icon": "dripicons-browser",
+        "key": "course_hero_component",
         "tab": "Content",
         "width": "content",
         "inputs": [

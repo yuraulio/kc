@@ -14,6 +14,8 @@
    }
 ?>
 
+@if ($tickets)
+    
 <section id="seats" class="section-tickets">
    <div class="container">
         <h2 class="section-title">{{$title}}</h2>
@@ -122,3 +124,5 @@
         </div>
     </div>
 </section>
+
+@endif
