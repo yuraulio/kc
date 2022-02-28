@@ -18,7 +18,7 @@
 <link rel="icon" href="{{cdn('theme/assets/favicons/favicon.ico')}}">--}}
 
 
-<link rel="apple-touch-icon" sizes="57x57" href="{{cdn('theme/assets/favicons/apple-touch-icon-57x57.png')}}" />
+{{--<link rel="apple-touch-icon" sizes="57x57" href="{{cdn('theme/assets/favicons/apple-touch-icon-57x57.png')}}" />
 <link rel="apple-touch-icon" sizes="60x60" href="{{cdn('theme/assets/favicons/apple-touch-icon-60x60.png')}}" />
 <link rel="apple-touch-icon" sizes="72x72" href="{{cdn('theme/assets/favicons/apple-touch-icon-72x72.png')}}" />
 <link rel="apple-touch-icon" sizes="76x76" href="{{cdn('theme/assets/favicons/apple-touch-icon-76x76.png')}}" />
@@ -38,7 +38,7 @@
 <meta name="application-name" content="KnowCrunch">
 <meta name="msapplication-TileColor" content="#3f6fb6">
 <meta name="msapplication-TileImage" content="{{cdn('theme/assets/favicons/mstile-144x144.png')}}">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" content="#ffffff">--}}
 
 
 {{--<link rel="apple-touch-icon" sizes="57x57" href="{{cdn('theme/assets/favicons/apple-icon-57x57.png')}}">
@@ -61,3 +61,14 @@
 <meta name="msapplication-TileColor" content="#ffffff">
 <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
 <meta name="theme-color" content="#ffffff">--}}
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="{{cdn('theme/assets/favicons/apple-touch-icon.png')}}">
+<link rel="icon" type="image/png" sizes="32x32" href="{{cdn('theme/assets/favicons/favicon-32x32.png')}}">
+<link rel="icon" type="image/png" sizes="16x16" href="{{cdn('theme/assets/favicons/favicon-16x16.png')}}">
+<link rel="manifest" href="{{cdn('theme/assets/favicons/site.webmanifest')}}">
+<link rel="shortcut icon" type="image/png" href="{{cdn('theme/assets/favicons/favicon.ico')}}"/>
+<meta name="apple-mobile-web-app-title" content="KnowCrunch">
+<meta name="application-name" content="KnowCrunch">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">

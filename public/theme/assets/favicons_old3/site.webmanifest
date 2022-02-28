@@ -1,5 +1,6 @@
 {
-    "name": "Knowcrunch",
+    "name": "KnowCrunch",
+    "short_name": "KnowCrunch",
     "icons": [
         {
             "src": "/theme/assets/favicons/android-chrome-192x192.png",
@@ -14,5 +15,6 @@
     ],
     "theme_color": "#ffffff",
     "background_color": "#ffffff",
+    "start_url": "https://knowcrunch.com",
     "display": "standalone"
 }
