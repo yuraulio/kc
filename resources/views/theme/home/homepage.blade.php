@@ -7,6 +7,49 @@
 
 @endsection
 @section('content')
+<script type="application/ld+json">
+   { "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Knowcrunch",
+      "legalName" : "Knowcrunch INC",
+      "url": "https://knowcrunch.com/",
+      "logo": "https://knowcrunch.com/theme/assets/images/logo-knowcrunch-seminars.svg",
+      "foundingDate": "2013",
+      "founders": [
+         {
+         "@type": "Person",
+         "name": "Apostolis Aivalis"
+         }
+      ],
+      "address": {
+         "@type": "PostalAddress",
+         "streetAddress": "2035 Sunset Lake Road",
+         "addressLocality": "Suite B2 Newark",
+         "addressRegion": "Delaware",
+         "postalCode": "19702",
+         "addressCountry": "USA"
+         },
+      "contactPoint": {
+         "@type": "ContactPoint",
+         "contactType": "customer support",
+         "telephone": "[+302103007214]",
+         "email": "info@knowcrunch.com"
+      },
+      "sameAs": [ 
+         "https://www.facebook.com/KnowCrunch",
+         "https://twitter.com/knowcrunch",
+         "https://www.instagram.com/knowcrunch/",
+         "https://www.linkedin.com/school/knowcrunch/",
+         "https://www.youtube.com/Knowcrunch",
+         "https://www.tiktok.com/@knowcrunch?",
+         "https://knowcrunch.medium.com/",
+         "https://gr.pinterest.com/knowcrunch/",
+         "https://open.spotify.com/user/2bw3mu1iewpe7a3dzp0v3wdzj"
+      ]
+   }
+</script>
+
+
 <?php
    if(Session::has('scopeone')){
        $fone = Session::get('scopeone');
