@@ -172,7 +172,7 @@
                                                             </div> 
                                                         </td>
                                                         <td><?= ($topic->status == 1) ? 'Published' : 'Unpublished'; ?></td>
-                                                        <td> <a href="{{ route('topics.edit', $topic) }}">{{ $topic->title }}</a></td>
+                                                        <td> <a href="{{ route('topics.edit', [$topic,'selectedCategory' => $category->id]) }}">{{ $topic->title }}</a></td>
                                                         <td class="hidden">
                                                         
                                                             {{$category->name}}

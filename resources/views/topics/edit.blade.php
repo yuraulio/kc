@@ -34,7 +34,7 @@
                             enctype="multipart/form-data">
                             @csrf
                             @method('put')
-
+                            <input name="fromCategory" value="{{$fromCategory}}" hidden>
                             <h6 class="heading-small text-muted mb-4">{{ __('Topic information') }}</h6>
                             <div class="pl-lg-4">
 

@@ -144,9 +144,10 @@ class TopicController extends Controller
     public function edit(Topic $topic, Category $categories)
     {
         $categories = Category::all();
+        $fromCategory = request()->get('selectedCategory') ?: request()->get('selectedCategory');
         //$topic = $topic->with('category')->first();
 
-        return view('topics.edit', compact('topic', 'categories'));
+        return view('topics.edit', compact('topic', 'categories','fromCategory'));
     }
 
     /**
@@ -167,23 +168,36 @@ class TopicController extends Controller
             $status = 0;
         }
 
+
+        $fromCategory = $request->fromCategory ?: $request->fromCategory;
+
         $request->request->add(['status' => $status]);
 
         $topic->update($request->all());
         
+        $lessons = [];
         foreach($request->category_id as $category_id){
 
+
             if(!in_array($category_id,$topic->category()->pluck('category_id')->toArray())){
-
                 $category = Category::find($category_id);
-
+               
                 $topic->category()->attach($category_id,['priority' => count($category->topics)]);
+                foreach($topic->lessonsCategory()->wherePivot('category_id',$fromCategory)->get() as $lesson){
+
+                    if(in_array($lesson->id,$lessons)){
+                        continue;
+                    }
+                    $lessons[] = $lesson->id;
+                    $category->topic()->attach($topic,['category_id' => $category_id, 'lesson_id' => $lesson->id]);
+                }
 
             }
+
+            
             //$topic->category()->sync($request->category_id);
 
         }
-        
 
         return redirect()->route('topics.index')->withStatus(__('Topic successfully updated.'));
     }
