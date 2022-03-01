@@ -26,6 +26,13 @@
                 "type": "text",
                 "key": "hero_subtitle",
                 "label": "Subtitle"
+            },
+            {
+                "type": "checkbox",
+                "key": "hero_small",
+                "label": "Small",
+                "value": false,
+                "size": "col-lg-6"
             }
         ]
     },
@@ -632,6 +639,66 @@
         "tab": "Content",
         "width": "content",
         "inputs": [
+        ]
+    },
+    "blog_list" : {
+        "title": "Blog list",
+        "icon": "dripicons-browser",
+        "key": "blog_list_component",
+        "tab": "Content",
+        "width": "content",
+        "inputs": [
+            {
+                "type": "multidropdown",
+                "key": "blog_list",
+                "label": "Blog display",
+                "route": "getDisplayOptions",
+                "value": {
+                    "id": 2,
+                    "title": "Grid"
+                },
+                "size": "col-lg-12"
+            }
+        ]
+    },
+    "instructors_list" : {
+        "title": "Instructors list",
+        "icon": "dripicons-browser",
+        "key": "instructors_list_component",
+        "tab": "Content",
+        "width": "content",
+        "inputs": [
+            {
+                "type": "multidropdown",
+                "key": "instructors_list",
+                "label": "Instructors display",
+                "route": "getDisplayOptions",
+                "value": {
+                    "id": 1,
+                    "title": "List"
+                },
+                "size": "col-lg-12"
+            }
+        ]
+    },
+    "events_list" : {
+        "title": "Events list",
+        "icon": "dripicons-browser",
+        "key": "events_list_component",
+        "tab": "Content",
+        "width": "content",
+        "inputs": [
+            {
+                "type": "multidropdown",
+                "key": "events_list",
+                "label": "Events display",
+                "route": "getDisplayOptions",
+                "value": {
+                    "id": 1,
+                    "title": "List"
+                },
+                "size": "col-lg-12"
+            }
         ]
     }
 }

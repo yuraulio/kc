@@ -43,16 +43,15 @@ class MainController extends Controller
 
         $slug_model = Slug::whereSlug($slug)->first();
 
-        if ($slug_model) {
-            if (get_class($slug_model->slugable) == "App\Model\Event") {
-                $event = $slug_model->slugable;
-                $page = Page::withoutGlobalScopes()->whereType("Course page")->first();
-                $dynamic_page_data = CMS::getEventData($event);
-            } elseif (get_class($slug_model->slugable) == "App\Model\Instructor") {
-                $instructor = $slug_model->slugable;
-                $page = Page::withoutGlobalScopes()->whereType("Trainer page")->first();
-                $dynamic_page_data = CMS::getInstructorData($instructor);
-            }
+
+        if ($slug_model && get_class($slug_model->slugable) == "App\Model\Event") {
+            $event = $slug_model->slugable;
+            $page = Page::withoutGlobalScopes()->whereType("Course page")->first();
+            $dynamic_page_data = CMS::getEventData($event);
+        } elseif ($slug_model && get_class($slug_model->slugable) == "App\Model\Instructor") {
+            $instructor = $slug_model->slugable;
+            $page = Page::withoutGlobalScopes()->whereType("Trainer page")->first();
+            $dynamic_page_data = CMS::getInstructorData($instructor);
         } else {
             $page = Page::whereSlug($slug)->first();
 
@@ -75,38 +74,5 @@ class MainController extends Controller
                 'dynamic_page_data' => $dynamic_page_data,
             ]);
         }
-    }
-
-    public function blog(Request $request)
-    {
-        $c = $request->c;
-
-        if ($c = $request->c) {
-            $category = Category::find($c);
-
-            $categories = $category->subcategories()->whereHas("subPages", function ($q) {
-                $q->whereType("Blog");
-            })->get();
-
-            $blog = $category->pages()->whereType("Blog")->get();
-            $blog = $blog->merge($category->subPages()->whereType("Blog")->get());
-
-            return view('new_web.blog.index', [
-                'blog' => $blog,
-                'categories' => $categories,
-                'category' => $category,
-            ]);
-        }
-
-        $blog = Page::whereType("Blog")->get();
-        $categories = Category::whereNull("parent_id")->whereHas("pages", function ($q) {
-            $q->whereType("Blog");
-        })->get();
-        // dd($categories);
-        return view('new_web.blog.index', [
-            'blog' => $blog,
-            'categories' => $categories,
-            'category' => null,
-        ]);
     }
 }

@@ -5,8 +5,10 @@
     }
 @endphp
 
-<section class="section-hero" style="background-image:url({{ $hero["hero_image"] ?? "" }})">
-    <div class="overlay"></div>
+<section class="section-hero {{ $hero['hero_small'] ? 'section-hero-small' : '' }}" style="background-image:url({{ $hero["hero_image"] ?? "" }})">
+    @if (!$hero['hero_small'])
+        <div class="overlay"></div>
+    @endif
     <div class="container">
         <div class="hero-message">
             <h1>{{ $hero["hero_title"] ?? "" }}</h1>

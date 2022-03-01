@@ -226,4 +226,20 @@ class PagesController extends Controller
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
+
+    public function getDisplayOptions()
+    {
+        return [
+            "data" => [
+                [
+                    "id" => 1,
+                    "title" => "List"
+                ],
+                [
+                    "id" => 2,
+                    "title" => "Grid"
+                ]
+            ]
+        ];
+    }
 }

@@ -6654,3 +6654,13 @@ body.compensate-for-scrollbar { overflow: hidden; }
       display: none!important;
     }
 }
+
+@media only screen and (max-width: 680px) {
+    .section-hero.section-hero-small {
+        background: none !important;
+        height: auto;
+    }
+    .section-hero.section-hero-small h1 {
+        color: #ffffff!important;
+    }
+}

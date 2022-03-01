@@ -18,7 +18,6 @@ use App\Http\Controllers\New_web\SitemapXmlController;
 
 Route::prefix('v2')->group(function () {
     Route::get('/', [MainController::class, 'index']);
-    Route::get('/blog', [MainController::class, 'blog']);
     Route::get('/sitemap.xml', [SitemapXmlController::class, 'index']);
     Route::get('/feed', [SitemapXmlController::class, 'index']);
 

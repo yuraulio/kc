@@ -145,4 +145,27 @@ class CMS
 
         return $data;
     }
+
+    public static function getDeliveryData($delivery)
+    {
+        $data['title'] = $delivery['name'];
+        $data['delivery'] = $delivery;
+        $data['openlistt'] = $delivery->event()->has('slugable')->with('category', 'city', 'ticket')->where('published', true)->where('status', 0)->orderBy('created_at', 'desc')->get();
+        $data['completedlist'] = $delivery->event()->has('slugable')->with('category', 'slugable', 'city', 'ticket')->where('published', true)->where('status', 3)->orderBy('created_at', 'desc')->get();
+
+        $data['openlist'] = [];
+        
+        foreach ($data['openlistt'] as $openlist) {
+            $index = $openlist->category->first()->priority ?  $openlist->category->first()->priority : 0;
+
+            while (in_array($index, array_keys($data['openlist']))) {
+                $index++;
+            }
+            
+            $data['openlist'][$index] = $openlist;
+        }
+        ksort($data['openlist']);
+
+        return $data;
+    }
 }

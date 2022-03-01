@@ -56,5 +56,6 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
         Route::delete('media_manager/file/{id}', [MediaController::class, 'deleteFile']);
 
         Route::get('getMenus', '\CodexShaper\Menu\Http\Controllers\MenuController@getMenus');
+        Route::get('getDisplayOptions', [PagesController::class, 'getDisplayOptions']);
     });
 });
