@@ -32,6 +32,11 @@ class PagesRequest extends FormRequest
         */
 
         return [
+
+            'name' => [
+                'required', 'min:3'
+            ],
+
             'title' => [
                 'required', 'min:3'
             ],
