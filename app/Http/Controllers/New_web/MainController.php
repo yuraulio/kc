@@ -43,7 +43,6 @@ class MainController extends Controller
 
         $slug_model = Slug::whereSlug($slug)->first();
 
-
         if ($slug_model && get_class($slug_model->slugable) == "App\Model\Event") {
             $event = $slug_model->slugable;
             $page = Page::withoutGlobalScopes()->whereType("Course page")->first();

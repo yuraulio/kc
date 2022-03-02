@@ -7,7 +7,7 @@
     if ($c) {
         $category = Category::find($c);
 
-        $categories = $category->subcategories()->whereHas("subPages", function ($q) {
+        $categories = $category->subcategories()->whereHas("pages", function ($q) {
             $q->whereType("Blog");
         })->get();
 

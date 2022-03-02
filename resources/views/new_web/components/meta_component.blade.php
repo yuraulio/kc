@@ -1,11 +1,28 @@
-@section('header')
+@php
+    $meta = [];
+    foreach ($column->template->inputs as $input){
+        $meta[$input->key] = $input->value ?? "";
+    }
 
-    @php
-        $meta = [];
-        foreach ($column->template->inputs as $input){
-            $meta[$input->key] = $input->value ?? "";
-        }
-    @endphp
+    $event = $dynamic_page_data["event"] ?? null;
+    $instructor = $dynamic_page_data["instructor"] ?? null;
+@endphp
+
+@if($event)
+    @section('header')
+        <title>{{ $event['title'] }}</title>
+        {!! $event->metable->getMetas() !!}
+    @endsection
+@endif
+
+@if ($instructor)
+    @section('header')
+        <title>{{ $instructor->title . " " . $instructor->subtitle }}</title>
+        {!! $instructor->metable->getMetas() !!}
+    @endsection
+@endif
+
+@section('header')
 
     <title>{{ $meta['meta_title'] ?? "" }}</title>
 

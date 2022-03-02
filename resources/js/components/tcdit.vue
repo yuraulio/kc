@@ -806,14 +806,11 @@ export default {
 
                 this.data = parsed;
             }
-
-            if (typeof this.tabsProp !== 'undefined') {
-                this.tabs = this.tabsProp;
-            }
-         
         }
 
-        // set slug
+        if (typeof this.tabsProp !== 'undefined') {
+            this.tabs = this.tabsProp;
+        }
 
 
         if (this.data) {
