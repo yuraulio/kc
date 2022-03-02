@@ -88,6 +88,11 @@ class PagesController extends Controller
             $page->uuid = Uuid::uuid4();
             $page->save();
 
+            if ($request->slug) {
+                $page->slug = $request->slug;
+                $page->save();
+            }
+
             $categories = $request->categories ?? [];
             $subcategories = $request->subcategories ?? [];
 

@@ -3,6 +3,7 @@
     $showSpecial = $dynamic_page_data["showSpecial"] ?? null;
     $event = $dynamic_page_data["event"] ?? null;
     $sections = $dynamic_page_data["sections"] ?? null;
+    $showAlumni = $dynamic_page_data["showAlumni"] == null;
 @endphp
 
 <?php

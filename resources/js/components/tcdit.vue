@@ -178,7 +178,7 @@
                                                 <div @click.stop="removeColumn(val.columns, column.id, index, ind)" class="d-inline-block float-end ms-1">
                                                     <i class="dripicons-cross"></i>
                                                 </div>
-                                                <div @click="changeComponent(index, indr, column.template)" class="d-inline-block float-end">
+                                                <div @click="changeComponent(index, ind, column.template)" class="d-inline-block float-end">
                                                     <i class="dripicons-return"></i>
                                                 </div>
                                             </a>
@@ -198,7 +198,7 @@
                                     </ul>
                                 </div>
                                 <h5 v-else :class="'card-title mb-0 ' + getColumnWidth(column, val.columns)">
-                                    <div @click="changeComponent(index, indr, column.template)" class="d-inline-block cursor-pointer">
+                                    <div @click="changeComponent(index, 0, column.template)" class="d-inline-block cursor-pointer">
                                         {{ column.template.title }}
                                     </div>
                                     <span v-if="column.template.one_column != true" class="text-muted font-13 float-end">

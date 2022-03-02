@@ -292,6 +292,7 @@ export default {
                 .post('/api/' + this.route,
                     {
                         title: this.title_value,
+                        slug: this.slug_value,
                         rows: JSON.stringify(this.rows_value),
                         content: this.template_value ? JSON.stringify(this.$refs.tc.data) : '',
                         category_id: this.category_value,
