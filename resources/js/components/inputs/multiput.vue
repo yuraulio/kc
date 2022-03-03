@@ -46,7 +46,14 @@
                     <div v-for="val in value" class="col-sm-3" style="height: 200px">
                             <img :src="val.url" alt="image" class="img-fluid img-thumbnail" width="200" height="200">
                             <p class="mb-0">
-                                <code>{{val.name}}</code>
+                                <code>
+                                    <template v-if="val.name.length < 50">
+                                        {{ val.name }}
+                                    </template>
+                                    <template v-else>
+                                        {{ limit(val.name, 50) }}...
+                                    </template>
+                                </code>
                             </p>
                         </div>
                 </div>
@@ -60,7 +67,7 @@
 
     <div v-if="type == 'textarea'" class="">
         <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
-        <textarea :id="keyput" v-model="editorData" class="form-control" maxlength="500" rows="3" placeholder=""></textarea>
+        <textarea :id="keyput" v-model="editorData" class="form-control" maxlength="5000" rows="3" placeholder=""></textarea>
     </div>
 
     <!-- <div v-if="type == 'image'" class="">
@@ -260,6 +267,9 @@ export default {
             if (this.keyput == "meta_slug") {
                 eventHub.$emit('updateslug', editorData);
             }
+        },
+        limit (string = '', limit = 0) {  
+            return string.substring(0, limit)
         }
     },
     watch: {

@@ -25,14 +25,18 @@
                     </ul>
                     
                     @if ($event)
-                        @if($is_event_paid==0 && !Auth::user())
-                            <a href="{{ route('cart.add-item', [ $event->id,'free', 8 ]) }}" class="btn btn--lg btn--primary hidden-sm go-to-href">ENROLL FOR FREE</a>
-                        @elseif($is_event_paid==0 && Auth::user())
-                            <a href="{{ route('enrollForFree',  $event->id) }}" class="btn btn--lg btn--primary hidden-sm go-to-href">ENROLL FOR FREE</a>
-                        @elseif($estatus == 0 && !$is_event_paid)
-                            <a href="#seats" class="btn btn--lg btn--primary go-to-href">ENROLL NOW</a>
-                        @elseif($estatus != 3 && $estatus != 1 && !$is_event_paid)
-                            <a href="#seats" class="btn btn--lg btn--primary go-to-href go-to-href soldout">SOLD OUT</a>
+                        @if($event->view_tpl == "elearning_free")
+                            @if($is_event_paid==0 && !Auth::user())
+                                <a href="{{ route('cart.add-item', [ $event->id,'free', 8 ]) }}" class="btn btn--lg btn--primary hidden-sm go-to-href">ENROLL FOR FREE</a>
+                            @elseif($is_event_paid==0 && Auth::user())
+                                <a href="{{ route('enrollForFree',  $event->id) }}" class="btn btn--lg btn--primary hidden-sm go-to-href">ENROLL FOR FREE</a>
+                            @endif
+                        @else
+                           @if($estatus == 0 && !$is_event_paid)
+                                <a href="#seats" class="btn btn--lg btn--primary go-to-href">ENROLL NOW</a>
+                            @elseif($estatus != 3 && $estatus != 1 && !$is_event_paid)
+                                <a href="#seats" class="btn btn--lg btn--primary go-to-href go-to-href soldout">SOLD OUT</a>
+                            @endif
                         @endif
                     @endif
 

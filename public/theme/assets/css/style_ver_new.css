@@ -6664,3 +6664,26 @@ body.compensate-for-scrollbar { overflow: hidden; }
         color: #ffffff!important;
     }
 }
+
+.grayscale {
+    filter: grayscale(1);
+    max-width: 108px;
+}
+
+.image-grid-hover {
+    opacity: 0.7;
+
+    -webkit-transition: opacity 0.5s ease-in-out;
+    -moz-transition: opacity 0.5s ease-in-out;
+    transition: opacity 0.5s ease-in-out;
+}
+.image-grid-hover:hover {
+    opacity: 1;
+}
+
+.logos-carousel-wrapper .owl-stage {
+    display: flex;
+}
+.logos-carousel-wrapper .owl-stage .owl-item {
+    align-self: center;
+}

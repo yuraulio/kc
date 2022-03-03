@@ -221,15 +221,42 @@
     },
     "gallery" : {
         "width": "content",
-        "title": "Galery",
+        "title": "Gallery",
         "key": "gallery_component",
         "icon": "dripicons-photo-group",
         "tab": "Content",
         "inputs": [
             {
+                "type": "text",
+                "key": "gallery_title",
+                "label": "Title",
+                "size": "col-lg-12"
+            },
+            {
                 "type": "gallery",
-                "key": "gallery_title_title",
-                "label": "Title"
+                "key": "gallery",
+                "label": "Galery"
+            },
+            {
+                "type": "multidropdown",
+                "key": "galery_type",
+                "label": "Galery display",
+                "route": "getGaleryDisplayOptions",
+                "value": {
+                    "id": 1,
+                    "title": "Grid"
+                },
+                "size": "col-lg-12"
+            },
+            {
+                "type": "text",
+                "key": "gallery_link",
+                "label": "Link"
+            },
+            {
+                "type": "text",
+                "key": "gallery_link_text",
+                "label": "Link text"
             }
         ]
     },
@@ -698,6 +725,49 @@
                     "title": "List"
                 },
                 "size": "col-lg-12"
+            }
+        ]
+    },
+    "inspirational_teaser" : {
+        "title": "Inspirational teaser",
+        "icon": "dripicons-article",
+        "key": "inspirational_teaser_component",
+        "tab": "Content",
+        "width": "content",
+        "inputs": [
+            {
+                "type": "text",
+                "key": "inspiration_title",
+                "label": "Title"
+            },
+            {
+                "type": "text",
+                "key": "inspiration_description",
+                "label": "Description"
+            }
+        ]
+    },
+    "event_teaser" : {
+        "title": "Event teaser",
+        "icon": "dripicons-article",
+        "key": "event_teaser_component",
+        "tab": "Content",
+        "width": "content",
+        "inputs": [
+            {
+                "type": "text",
+                "key": "event_teaser_title",
+                "label": "Title"
+            },
+            {
+                "type": "text",
+                "key": "event_teaser_subtitle",
+                "label": "Subtitle"
+            },
+            {
+                "type": "text_editor",
+                "key": "event_teaser_text",
+                "label": "Text"
             }
         ]
     }

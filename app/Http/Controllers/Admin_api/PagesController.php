@@ -247,4 +247,24 @@ class PagesController extends Controller
             ]
         ];
     }
+
+    public function getGaleryDisplayOptions()
+    {
+        return [
+            "data" => [
+                [
+                    "id" => 1,
+                    "title" => "Grid"
+                ],
+                [
+                    "id" => 2,
+                    "title" => "Carousel"
+                ],
+                [
+                    "id" => 3,
+                    "title" => "Row"
+                ]
+            ]
+        ];
+    }
 }

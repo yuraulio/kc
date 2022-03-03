@@ -3,10 +3,12 @@
     foreach ($column->template->inputs as $input){
         $hero[$input->key] = $input->value ?? "";
     }
+
+    $small = $hero['hero_small'] ?? null;
 @endphp
 
-<section class="section-hero {{ $hero['hero_small'] ? 'section-hero-small' : '' }}" style="background-image:url({{ $hero["hero_image"] ?? "" }})">
-    @if (!$hero['hero_small'])
+<section class="section-hero {{ $small ? 'section-hero-small' : '' }}" style="background-image:url({{ $hero["hero_image"] ?? "" }})">
+    @if (!$small)
         <div class="overlay"></div>
     @endif
     <div class="container">

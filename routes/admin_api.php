@@ -57,5 +57,6 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
 
         Route::get('getMenus', '\CodexShaper\Menu\Http\Controllers\MenuController@getMenus');
         Route::get('getDisplayOptions', [PagesController::class, 'getDisplayOptions']);
+        Route::get('getGaleryDisplayOptions', [PagesController::class, 'getGaleryDisplayOptions']);
     });
 });

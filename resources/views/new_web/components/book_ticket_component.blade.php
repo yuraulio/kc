@@ -43,16 +43,8 @@
                         continue;
                     }
                 ?>
-                <div class="@if($showAlumni && $showSpecial) col-4 col-sm-12 @elseif($showAlumni && !$showSpecial && count($tickets) > 1) col-6 col-sm-12 
-                        @elseif(!$showAlumni && $ticket['type'] !== 'Alumni' && !$showSpecial)  
-                        @elseif(count($tickets) > 1) col-6 @endif   
-                        @if(!$showAlumni && ($ticket['type'] == 'Early Bird' || $ticket['type'] == 'Special')) ticket-right 
-                        @elseif($ticket['type'] == 'Alumni' && !$showSpecial) ticket-right 
-                        @elseif(!$showAlumni && $ticket['type'] !== 'Alumni' && !$showSpecial) ticket-center  
-                        @elseif(count($tickets) == 1))
-                            ticket-center  
-                        @endif">
-                    <div class="ticket-box-wrapper">
+                <div class="col-md-6 col-sm-12 d-flex justify-content-center" >
+                    <div class="ticket-box-wrapper" style="width: 100%;">
                         <div class="ticket-box">
                             <h3 class="@if($ticket['type'] != 'Alumni') special-ticket @endif">{{ $ticket['type'] }} <span> €{{$ticket['pivot']['price']}} </span></h3>
                             <div class="ticket-box-content">

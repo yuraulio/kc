@@ -7,7 +7,7 @@
 
 <div class="form-section">
     <div class="form-area-wrapper m-0">
-        <div class="form-wrapper blue-form w-m-bottom" style="margin-top: -315px;">
+        <div class="form-wrapper blue-form w-m-bottom" style="margin-top: -315px; margin-bottom: -20px">
             <form id="doall" method="POST" class="contactUsForm" novalidate="">
                 <h3 class="form-h3">{{ $form["title"] ?? "" }}</h3>
                 <label>First name <span>*</span></label>
