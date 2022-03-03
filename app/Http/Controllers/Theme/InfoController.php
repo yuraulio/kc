@@ -573,7 +573,7 @@ class InfoController extends Controller
 
                 $checkemailuser->save();
                 $creatAccount = false;
-                
+
                 if(!$checkemailuser->statusAccount->completed){
                     
                     $creatAccount = true;
@@ -604,7 +604,7 @@ class InfoController extends Controller
     			$newmembersdetails[] = $thismember;
     			$fullname = $thismember['firstname'] . ' ' . $thismember['lastname'];
     			$firstname = $thismember['firstname'];
-                $emailsCollector[] = ['email' => $thismember['email'], 'name' => $fullname, 'first' => $firstname, 'company' => $thismember['company'], 'first' => $firstname,
+                $emailsCollector[] = ['id' => $thismember['id'], 'email' => $thismember['email'], 'name' => $fullname, 'first' => $firstname, 'company' => $thismember['company'], 'first' => $firstname,
                     'mobile' => $thismember['mobile'], 'jobTitle' => $thismember['job_title'],'createAccount'=>true
                 ];
                 
