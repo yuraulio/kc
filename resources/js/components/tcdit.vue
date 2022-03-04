@@ -215,9 +215,9 @@
                                         <div v-show="column.active" class="card-body row pb-0 pt-0">
 
                                             <multiput
-                                                v-for="input in column.template.inputs"
+                                                v-for="(input, ri) in column.template.inputs"
                                                 :key="input.key"
-                                                :keyput="input.key"
+                                                :keyput="input.key + index + indx + ri + indr"
                                                 :label="input.label"
                                                 :type="input.type"
                                                 :value="input.key == 'meta_slug' ? slug : input.value"
