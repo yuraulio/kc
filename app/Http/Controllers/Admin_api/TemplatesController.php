@@ -125,6 +125,6 @@ class TemplatesController extends Controller
 
     public function templatesAll(Request $request)
     {
-        return $this->index($request, 0);
+        return $this->index($request, 99999);
     }
 }

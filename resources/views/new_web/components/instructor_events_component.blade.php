@@ -24,7 +24,7 @@
                                     <h2>{{ $row['title'] }}</h2>
                                 </div>
                                 <div class="right right--no-price">
-                                    <a href="{{ $row['slugable']['slug'] }}" class="btn btn--secondary btn--md">Course Details</a>
+                                    <a href="{{ env('NEW_PAGES_LINK') . '/' .  $row['slugable']['slug'] }}" class="btn btn--secondary btn--md">Course Details</a>
                                 </div>
                             </div>
                             @endif
@@ -52,7 +52,7 @@
 
                                     <div class="bottom">
                                         @if(count($row['city']) > 0 )
-                                            <a href="{{ $row['city'][0]['slugable']['slug'] }}" title="{{ $row['city'][0]['name'] }}" class="location">
+                                            <a href="{{env('NEW_PAGES_LINK') . '/' .  $row['city'][0]['slugable']['slug'] }}" title="{{ $row['city'][0]['name'] }}" class="location">
                                                 <img width="20" src="/theme/assets/images/icons/marker.svg" alt="">
                                                 {{ $row['city'][0]['name'] }}
                                             </a>
@@ -73,7 +73,7 @@
 
                                 </div>
                                 <div class="right right--no-price">
-                                    <a href="{{ $row['slugable']['slug'] }}" class="btn btn--secondary btn--md">Course Details</a>
+                                    <a href="{{env('NEW_PAGES_LINK') . '/' .  $row['slugable']['slug'] }}" class="btn btn--secondary btn--md">Course Details</a>
                                 </div>
                             </div>
                         @endif

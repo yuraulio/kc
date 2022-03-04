@@ -42,7 +42,7 @@
                                             $instructor = reset($instructors[$lesson['instructor_id']]);
                                         ?>
                                         @if($instructor['status'])
-                                            <a href="{{ $instructor['slugable']['slug']}}">
+                                            <a href="{{env('NEW_PAGES_LINK') . '/' .  $instructor['slugable']['slug']}}">
                                                 <span class="custom-tooltip">{{ $instructor['title'] }} {{$instructor['subtitle']}}</span>
                                                 <img alt="{{ $instructor['title']}} {{$instructor['subtitle']}}" src="{{ cdn(get_image($instructor['mediable'],'instructors-small')) }}"/>
                                             </a>

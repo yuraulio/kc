@@ -10,7 +10,7 @@
             <div class="duration">
                 @forelse($post->categories as $category)
                     @if(!$category->parent_id)
-                        <a href="{{"/v2/blog?c=$category->id"}}">{{ $category->title }}</a>
+                        <a href="{{env("NEW_PAGES_LINK") . "/blog?c=$category->id"}}">{{ $category->title }}</a>
                     @endif
                 @empty
                     Uncategorized
@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="">
-            <h2 class=''><a href="{{"/v2/blog/$post->slug"}}">{{$post->featureData()["feature_title"]}}</a></h2>
+            <h2 class=''><a href="{{env("NEW_PAGES_LINK") . "/blog/$post->slug"}}">{{$post->featureData()["feature_title"]}}</a></h2>
             <p>{!! mb_strimwidth($post->featureData()["feature_description"], 0, 350, "...") !!}</p>
         </div>
     </div>
@@ -37,7 +37,7 @@
                     <div class="duration">
                         @forelse($post->categories as $category)
                             @if(!$category->parent_id)
-                                <a href="{{"/v2/blog?c=$category->id"}}">{{ $category->title }}</a>
+                                <a href="{{env("NEW_PAGES_LINK") . "/blog?c=$category->id"}}">{{ $category->title }}</a>
                             @endif
                         @empty
                             Uncategorized
@@ -46,7 +46,7 @@
                     </div>
                 </div>
                 <div class="">
-                    <h2 class=''><a href="{{"/v2/blog/$post->slug"}}">{{$post->featureData()["feature_title"]}}</a></h2>
+                    <h2 class=''><a href="{{env("NEW_PAGES_LINK") . "/blog/$post->slug"}}">{{$post->featureData()["feature_title"]}}</a></h2>
                     <p>{!! mb_strimwidth($post->featureData()["feature_description"], 0, 350, "...") !!}</p>
                 </div>
             </div>

@@ -14,12 +14,12 @@
                                 $alt='';
                                 $img = get_image($syllabus[0]['mediable'],'instructors-small');
                             ?>
-                            <a id="syllabus-link" href=""><img src="{{cdn($img)}}" alt="{{$alt}}"></a>
+                            <a id="syllabus-link" href="{{env("NEW_PAGES_LINK") . "/" . $syllabus[0]['slugable']['slug']}}"><img src="{{cdn($img)}}" alt="{{$alt}}"></a>
                         </div>
                         <div class="ibox-text">
                             <p>Syllabus Manager<br></p>
                             <p>
-                                <a href="{{$syllabus[0]['slugable']['slug']}}">{{ $syllabus[0]['title'] }} {!! $syllabus[0]['subtitle'] !!}</a>
+                                <a href="{{env("NEW_PAGES_LINK") . "/" . $syllabus[0]['slugable']['slug']}}">{{ $syllabus[0]['title'] }} {!! $syllabus[0]['subtitle'] !!}</a>
                             </p>
                         </div>
                     </div>

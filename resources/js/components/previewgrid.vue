@@ -36,7 +36,7 @@
                             </div>
 
                             <div v-else-if="column.component == 'gallery'" class="card text-center text-white" style="background-color: #6c757dd6 !important">
-                            <h4 class="card-title text-white mt-3">Galery</h4>
+                            <h4 class="card-title text-white mt-3">Gallery</h4>
                                 <div v-if="!preview || (preview && !lodash.find(column.template.inputs, {'key': 'full_size_image' }).value)" class="card-img img-fluid text-center cimgfl" style="min-height: 200px" alt="Card image">
                                     <i class="h1 text-muted  dripicons-photo-group
                                     " style="font-size: 8em;"></i>

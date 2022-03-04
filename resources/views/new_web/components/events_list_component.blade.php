@@ -63,7 +63,7 @@
                                             $slug = '';
                                         }
                                     ?>
-                                    <h2><a href="{{ $slug }}">{{ $row->title}}</a></h2>
+                                    <h2><a href="{{env('NEW_PAGES_LINK') . '/' . $slug }}">{{ $row->title}}</a></h2>
                                     <div class="bottom">
                                         @if ($row->summary1->where('section','date')->first())
                                             <div class="duration"><img width="20" src="/theme/assets/images/icons/icon-calendar.svg" alt=""> {{$row->summary1->where('section','date')->first()->title}}  </div>
@@ -100,13 +100,13 @@
                                     ?>
                                     @if($row->view_tpl == 'elearning_free')
                                         <div class="price">free</div>
-                                        <a href="{{ $slug }}" class="btn btn--secondary btn--md">Enroll For Free</a>
+                                        <a href="{{env('NEW_PAGES_LINK') . '/' .  $slug }}" class="btn btn--secondary btn--md">Enroll For Free</a>
                                     @elseif($row->view_tpl == 'elearning_pending')
                                         <div class="price">Pending</div>
-                                        <a href="{{ $slug }}" class="btn btn--secondary btn--md">Course Details</a>
+                                        <a href="{{env('NEW_PAGES_LINK') . '/' .  $slug }}" class="btn btn--secondary btn--md">Course Details</a>
                                     @else
                                         <div class="price">from €{{$price}}</div>
-                                        <a href="{{ $slug }}" class="btn btn--secondary btn--md">Course Details</a>
+                                        <a href="{{env('NEW_PAGES_LINK') . '/' .  $slug }}" class="btn btn--secondary btn--md">Course Details</a>
                                     @endif
                                 </div>
                             </div>
@@ -138,11 +138,11 @@
                                             $slug = '';
                                         }
                                     ?>
-                                    <h2><a href="{{ $slug }}">{{ $row->title}}</a></h2>
+                                    <h2><a href="{{env('NEW_PAGES_LINK') . '/' .  $slug }}">{{ $row->title}}</a></h2>
                                     <div class="bottom">
                                         @if(isset($row['city']))
                                             @foreach($row['city'] as $city)
-                                                <a href="{{ $city->slugable->slug }}" class="city " title="{{ $city->name }}">
+                                                <a href="{{ env('NEW_PAGES_LINK') . '/' .  $city->slugable->slug }}" class="city " title="{{ $city->name }}">
                                                 <img width="20" class="replace-with-svg" src="/theme/assets/images/icons/marker.svg" alt="">{{ $city->name }}</a>
                                             @endforeach
                                         @endif
@@ -188,16 +188,16 @@
                                     @endif
                                     @if($row->view_tpl == 'event_free')
                                         <div class="price">free</div>
-                                        <a href="{{ $slug }}" class="btn btn--secondary btn--md">Enroll For Free</a>
+                                        <a href="{{ env('NEW_PAGES_LINK') . '/' .  $slug }}" class="btn btn--secondary btn--md">Enroll For Free</a>
                                     @elseif($row->view_tpl == 'event_free_coupon')
                                         <div class="price">free</div>
-                                        <a href="{{ $slug }}" class="btn btn--secondary btn--md">course details</a>
+                                        <a href="{{ env('NEW_PAGES_LINK') . '/' .  $slug }}" class="btn btn--secondary btn--md">course details</a>
                                     @else
                                         @if($etstatus == 0 && $price > 0)
                                             <div class="price">from €{{$price}}</div>
-                                            <a href="{{ $slug }}" class="btn btn--secondary btn--md">Course Details</a>
+                                            <a href="{{ env('NEW_PAGES_LINK') . '/' .  $slug }}" class="btn btn--secondary btn--md">Course Details</a>
                                         @else
-                                            <a href="{{ $slug }}" class="btn btn--secondary btn--md btn--sold-out">sold out</a>
+                                            <a href="{{ env('NEW_PAGES_LINK') . '/' .  $slug }}" class="btn btn--secondary btn--md btn--sold-out">sold out</a>
                                         @endif
                                     @endif
                                 </div>
@@ -244,11 +244,11 @@
                                             $slug = '';
                                         }
                                     ?>
-                                    <h2><a href="{{ $slug }}">{{ $row->title}}</a></h2>
+                                    <h2><a href="{{env('NEW_PAGES_LINK') . '/' .  $slug }}">{{ $row->title}}</a></h2>
                                     <div class="bottom">
                                         @if(isset($row['city']))
                                             @foreach($row['city'] as $city)
-                                                <a href="{{ $city->slugable->slug }}" class="city " title="{{ $city->name }}">
+                                                <a href="{{env('NEW_PAGES_LINK') . '/' .  $city->slugable->slug }}" class="city " title="{{ $city->name }}">
                                                 <img width="20" class="replace-with-svg" src="/theme/assets/images/icons/marker.svg" alt="">{{ $city->name }}</a>
                                             @endforeach
                                         @endif
@@ -287,7 +287,7 @@
                                         }
                                     ?>
                                     <?php $etstatus = 0 ?>
-                                    <a href="{{ $slug }}" class="btn btn--secondary btn--md btn--completed">completed</a>
+                                    <a href="{{env('NEW_PAGES_LINK') . '/' .  $slug }}" class="btn btn--secondary btn--md btn--completed">completed</a>
                                 </div>
                             </div>
                         </div>

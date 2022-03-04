@@ -70,9 +70,9 @@
                                                         }
                                                     ?>
                                                     <div class="profile-img">
-                                                        <a href="{{$lvalue['slugable']['slug']}}"><img src="{{cdn($img)}}"  title="{{$name}}" alt="{{$name}}"></a>
+                                                        <a href="{{env('NEW_PAGES_LINK') . '/' . $lvalue['slugable']['slug']}}"><img src="{{cdn($img)}}"  title="{{$name}}" alt="{{$name}}"></a>
                                                     </div>
-                                                    <h3><a href="{{$lvalue['slugable']['slug']}}">{{$name}}</a></h3>
+                                                    <h3><a href="{{env('NEW_PAGES_LINK') . '/' . $lvalue['slugable']['slug']}}">{{$name}}</a></h3>
                                                     <p>{{$field1}}, <a target="_blank" title="{{$field1}}" @if($ext_url!='') href="{{$ext_url}}"@endif>{{$field2}}</a>.</p>
                                                     <ul class="social-wrapper">
                                                         @if($fb != '')
@@ -159,7 +159,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-9">
-                                                                <h3><a href="{{$lvalue['slugable']['slug']}}">{{$name}}</a></h3>
+                                                                <h3><a href="{{env('NEW_PAGES_LINK') . '/' . $lvalue['slugable']['slug']}}">{{$name}}</a></h3>
                                                                 <p>{{$field1}}, <a target="_blank" title="{{$field1}}" @if($ext_url!='') href="{{$ext_url}}"@endif>{{$field2}}</a>.</p>
                                                                 <ul class="social-wrapper">
                                                                     @if($fb != '')
