@@ -31,9 +31,9 @@ class PagesController extends Controller
     public function index(Request $request)
     {
         $this->authorize('viewAny', Page::class, Auth::user());
-
         try {
-            $pages = Page::withoutGlobalScope('published')->lookForOriginal($request->filter)->with('template', 'categories.subcategories');
+            $pages = Page::withoutGlobalScope('published')->where("dynamic", $request->dynamic == "true" ? true : false)->lookForOriginal($request->filter)
+                ->with('template', 'categories.subcategories');
             if ($request->order) {
                 $pages->orderBy("created_at", $request->order);
             } else {
@@ -80,6 +80,7 @@ class PagesController extends Controller
             $page->content = $request->content;
             $page->published = $request->published;
             $page->indexed = $request->indexed;
+            $page->dynamic = $request->dynamic;
             $page->user_id = Auth::user()->id;
             $page->published_from = $request->published_from;
             $page->published_to = $request->published_to;
@@ -145,6 +146,7 @@ class PagesController extends Controller
             $page->content = $request->content;
             $page->published = $request->published;
             $page->indexed = $request->indexed;
+            $page->dynamic = $request->dynamic;
             $page->published_from = $request->published_from;
             $page->published_to = $request->published_to;
             $page->type = $request->type;

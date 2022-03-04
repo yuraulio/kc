@@ -22,12 +22,12 @@ class TemplatesController extends Controller
      *
      * @return AnonymousResourceCollection
      */
-    public function index(Request $request)
+    public function index(Request $request, $paginate = 10)
     {
         $this->authorize('viewAny', Template::class, Auth::user());
 
         try {
-            $templates = Template::lookForOriginal($request->filter)->with(["pages", "user"])->tableSort($request->sort)->paginate(10);
+            $templates = Template::lookForOriginal($request->filter)->with(["pages", "user"])->tableSort($request->sort)->paginate($paginate);
             return TemplateResource::collection($templates);
         } catch (Exception $e) {
             Log::error("Failed to get templates. " . $e->getMessage());
@@ -121,5 +121,10 @@ class TemplatesController extends Controller
             Log::error("Failed to delete template. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
         }
+    }
+
+    public function templatesAll(Request $request)
+    {
+        return $this->index($request, 0);
     }
 }

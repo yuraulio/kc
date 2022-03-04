@@ -19,8 +19,16 @@
                                 <input v-model="filter" type="search" class="form-control my-1 my-md-0" id="inputPassword2" placeholder="Search...">
                             </div>
 
+                            <div class="col-md-3 d-flex align-items-center">
+                                <div class="form-check">
+                                    <input v-model="dynamic" @change="getData()" class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                    <label class="form-check-label" for="flexCheckDefault">
+                                        Dynamic pages
+                                    </label>
+                                </div>
+                            </div>
 
-                            <div class="col-md-9 text-end">
+                            <div class="col-md-6 text-end">
                                 <!--
                                 <button @click="toggleOrder()" class="btn btn-soft-secondary waves-effect waves-light text-start">
                                     Created by order
@@ -28,7 +36,6 @@
                                     <i v-else class="mdi mdi-chevron-up ms-1"></i>
                                 </button>
                                 -->
-
                                 <button @click="mode='new'" type="button" class="btn btn-soft-info waves-effect waves-light ms-2"><i class="mdi mdi-plus-circle me-1"></i> Add New</button>
                             </div>
                             
@@ -238,6 +245,7 @@ import multidropdown from './inputs/multidropdown.vue';
                 subcategories: [],
                 published_value: null,
                 order: true,
+                dynamic: false,
             }
         },
         watch: {
@@ -319,13 +327,14 @@ import multidropdown from './inputs/multidropdown.vue';
                 axios.get('/api/pages',
                 {
                     params: {
-                        filete: this.filter,
+                        filter: this.filter,
                         page: page,
                         type: this.type_value ? this.type_value.title : null,
                         category: this.category_value ? this.category_value.id : null,
                         subcategory: this.subcategory_value ? this.subcategory_value.id : null,
                         published: this.published_value ? this.published_value.id : null,
                         order: this.order ? 'desc' : 'asc',
+                        dynamic: this.dynamic,
                     }
                 }
                 )

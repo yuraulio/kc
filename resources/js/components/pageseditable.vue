@@ -56,7 +56,7 @@
                             :multi="false"
                             @updatevalue="update_template"
                             :prop-value="template_value"
-                            route="templates"
+                            route="templatesAll"
                         ></multidropdown>
                     </div>
 
@@ -126,14 +126,19 @@
                                 :prop-value="rows_value"
                             ></rows>
 
-                            <div :key="'ck'"  class="form-check form-switch mb-3" style="display: inline-block; cursor: pointer">
+                            <div :key="'ck'"  class="form-check form-switch mb-3" style="cursor: pointer">
                                 <input :key="'on'" @click="published = !published" :id="'cinput'" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :for="'cinput'" :checked="published">
                                 <label class="form-check-label" for="light-mode-check">Published</label>
                             </div>
 
-                            <div class="form-check form-switch mb-3" style="display: inline-block; cursor: pointer">
+                            <div class="form-check form-switch mb-3" style="cursor: pointer">
                                 <input @click="indexed = !indexed" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :checked="indexed">
                                 <label class="form-check-label">Indexed</label>
+                            </div>
+
+                            <div class="form-check form-switch mb-3" style="cursor: pointer">
+                                <input @click="dynamic = !dynamic" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :checked="dynamic">
+                                <label class="form-check-label">Dynamic page</label>
                             </div>
 
                             <datepicker-component
@@ -213,6 +218,7 @@ export default {
                 loading: false,
                 published: false,
                 indexed: false,
+                dynamic: false,
                 lodash: _,
                 page: {},
                 subcategories: null,
@@ -300,6 +306,7 @@ export default {
                         template_id: this.template_value ? this.template_value.id : null,
                         published: this.published,
                         indexed: this.indexed,
+                        dynamic: this.dynamic,
                         published_from: this.published_from_value,
                         published_to: this.published_to_value,
                         type: this.type_value ? this.type_value.title : null,
@@ -335,6 +342,7 @@ export default {
                         template_id: this.template_value ? this.template_value.id : null,
                         published: this.published,
                         indexed: this.indexed,
+                        dynamic: this.dynamic,
                         id: this.id,
                         published_from: this.published_from_value,
                         published_to: this.published_to_value,
@@ -366,6 +374,7 @@ export default {
                         this.title_value = data.title;
                         this.published = data.published;
                         this.indexed = data.indexed;
+                        this.dynamic = data.dynamic;
                         if (data.rows){
                             this.rows_value = JSON.parse(data.rows);
                         }
@@ -387,6 +396,7 @@ export default {
                     this.template_value = data.template;
                     this.published = data.published;
                     this.indexed = data.indexed;
+                    this.dynamic = data.dynamic;
                     if (data.rows){
                         this.rows_value = JSON.parse(data.rows);
                     }

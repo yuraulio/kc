@@ -4,7 +4,7 @@ use App\Http\Controllers\Admin_api\CommentsController;
 use App\Http\Controllers\Admin_api\PagesController;
 use App\Http\Controllers\Admin_api\MediaController;
 use App\Http\Controllers\Admin_api\DashboardController;
-
+use App\Http\Controllers\Admin_api\TemplatesController;
 use Illuminate\Support\Facades\Route;
 
 Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
@@ -58,5 +58,6 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
         Route::get('getMenus', '\CodexShaper\Menu\Http\Controllers\MenuController@getMenus');
         Route::get('getDisplayOptions', [PagesController::class, 'getDisplayOptions']);
         Route::get('getGaleryDisplayOptions', [PagesController::class, 'getGaleryDisplayOptions']);
+        Route::get('templatesAll', [TemplatesController::class, 'templatesAll']);
     });
 });
