@@ -29,7 +29,7 @@ class MainController extends Controller
      */
     public function index()
     {
-        return $this->page("homepage");
+        return redirect(env("APP_URL"));
     }
 
     /**
