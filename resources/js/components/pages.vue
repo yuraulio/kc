@@ -20,12 +20,38 @@
                             </div>
 
                             <div class="col-md-3 d-flex align-items-center">
+                                <div class="text-md-end mt-3 mt-md-0 w-100">
+
+                                    <multidropdown
+                                        :multi="false"
+                                        @updatevalue="update_dynamic"
+                                        :prop-value="dynamic"
+                                        :fetch="false"
+                                        :data="[
+                                            {
+                                                title: 'Static pages',
+                                                id: false
+                                            },
+                                            {
+                                                title: 'Dynamic pages',
+                                                id: true
+                                            }
+                                        ]"
+                                        placeholder="Pick publishing"
+                                        marginbottom="mb-0"
+                                        :allowEmpty="false"
+                                    ></multidropdown>
+
+                                </div>
+
+                                <!--
                                 <div class="form-check">
                                     <input v-model="dynamic" @change="getData()" class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
                                     <label class="form-check-label" for="flexCheckDefault">
                                         Dynamic pages
                                     </label>
                                 </div>
+                                -->
                             </div>
 
                             <div class="col-md-6 text-end">
@@ -245,7 +271,10 @@ import multidropdown from './inputs/multidropdown.vue';
                 subcategories: [],
                 published_value: null,
                 order: true,
-                dynamic: false,
+                dynamic: {
+                    title: 'Static pages',
+                    id: false
+                },
             }
         },
         watch: {
@@ -334,7 +363,7 @@ import multidropdown from './inputs/multidropdown.vue';
                         subcategory: this.subcategory_value ? this.subcategory_value.id : null,
                         published: this.published_value ? this.published_value.id : null,
                         order: this.order ? 'desc' : 'asc',
-                        dynamic: this.dynamic,
+                        dynamic: this.dynamic.id,
                     }
                 }
                 )
@@ -361,6 +390,10 @@ import multidropdown from './inputs/multidropdown.vue';
             },
             update_subcategory(value){
                 this.subcategory_value = value;
+                this.getData();
+            },
+            update_dynamic(value) {
+                this.dynamic = value;
                 this.getData();
             },
             update_type(value){

@@ -6687,3 +6687,7 @@ body.compensate-for-scrollbar { overflow: hidden; }
 .logos-carousel-wrapper .owl-stage .owl-item {
     align-self: center;
 }
+
+.vm--modal {
+    overflow-y: hidden!important;
+}

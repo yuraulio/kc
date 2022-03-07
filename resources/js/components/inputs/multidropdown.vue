@@ -19,6 +19,7 @@
         track-by="id"
         :options="list"
         @tag="addedTag"
+        :allowEmpty="allowEmpty"
     >
         <template v-if="route == 'subcategories'" slot="tag" slot-scope="props">
            
@@ -64,6 +65,9 @@
             },
             marginbottom: {
                 default: "mb-3"
+            },
+            allowEmpty: {
+                default: true
             },
         },
         data() {

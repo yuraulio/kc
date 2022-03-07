@@ -67,3 +67,7 @@
 .logos-carousel-wrapper .owl-stage .owl-item {
     align-self: center;
 }
+
+.vm--modal {
+    overflow-y: hidden!important;
+}
