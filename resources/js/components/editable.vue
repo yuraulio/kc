@@ -62,7 +62,7 @@
         </div>
         </div>
         <tcdit 
-            v-if="rows_value" 
+            v-if="show" 
             ref="tc" 
             :pseudo="true" 
             :mode="type" 
@@ -110,6 +110,7 @@ export default {
                 test: null,
                 template_value: null,
                 loading: false,
+                show: false,
             }
         },
         methods: {
@@ -197,6 +198,7 @@ export default {
                             this.rows_value = JSON.parse(data.rows);
                         }
                         this.category_value = data.category_id;
+                        this.show = true;
                     }
                 })
                 .catch((error) => {
@@ -214,10 +216,13 @@ export default {
                         this.rows_value = JSON.parse(data.rows);
                     }
                     this.category_value = data.category_id;
+                    this.show = true;
                 } else {
                     this.get()
                 }
 
+            } else {
+                this.show = true;
             }
         },
         watch: {
