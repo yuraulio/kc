@@ -49,6 +49,7 @@
                     @endif
 
                     <input type="hidden" name="success" value="{{ $form["success_text"] ?? "" }}">
+                    <input type="hidden" name="qed_form" value="1">
 
                     <div class="submit-area-custom">
                         <button onClick="contactUsSubmit()" type="button" id="sendme" class="btn btn--md btn--secondary contactUsSubmit">{{ $form["button_text"] ?? "" }} </button>
@@ -151,6 +152,7 @@
                     @endif
 
                     <input type="hidden" name="success" value="{{ $form["success_text"] ?? "" }}">
+                    <input type="hidden" name="qed_form" value="1">
 
                     <div class="submit-area-custom">
                         <button onClick="corporateTrainingSubmit()" type="button" id="sendme1" class="btn btn--md btn--secondary contactUsSubmit">{{ $form["button_text"] ?? "" }} </button>
@@ -214,7 +216,8 @@
                             'company_name': company,
                             'position_title': job,
                             'email': email,
-                            'mobile_phone': tel
+                            'mobile_phone': tel,
+                            'qed_form': 1,
                         },
                         success: function(data){
                             $('.contactUsForm').find("input[type=text], input[type=email], textarea").removeClass('validate-error');
@@ -295,6 +298,7 @@
                     @endif
 
                     <input type="hidden" name="success" value="{{ $form["success_text"] ?? "" }}">
+                    <input type="hidden" name="qed_form" value="1">
 
                     <div class="submit-area-custom">
                         <button onClick="becomeInstructorSubmit()" type="button" id="sendme1" class="btn btn--md btn--secondary contactUsSubmit">{{ $form["button_text"] ?? "" }} </button>
