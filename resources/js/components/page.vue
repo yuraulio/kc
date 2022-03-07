@@ -39,7 +39,7 @@
                             <div v-if="page.template" class="text-uppercase">
                                 <i class="mdi mdi-account-circle"></i> 
                                 <small>
-                                    <a :href="'/templates?id=' + page.template.id + '&preview=' + true">{{ page.template.title }}</a>
+                                    <a :href="'/templates?id=' + page.template.id + '&title=' + page.template.title + '&preview=' + true">{{ page.template.title }}</a>
                                 </small>
                             </div>
                             <div v-if="page.type">

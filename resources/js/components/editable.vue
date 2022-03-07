@@ -62,7 +62,7 @@
         </div>
         </div>
         <tcdit 
-            v-if="fields" 
+            v-if="rows_value" 
             ref="tc" 
             :pseudo="true" 
             :mode="type" 

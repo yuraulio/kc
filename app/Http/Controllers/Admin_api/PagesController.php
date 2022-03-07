@@ -269,4 +269,24 @@ class PagesController extends Controller
             ]
         ];
     }
+
+    public function getFormTypes()
+    {
+        return [
+            "data" => [
+                [
+                    "id" => 1,
+                    "title" => "Contact"
+                ],
+                [
+                    "id" => 2,
+                    "title" => "Corporate training"
+                ],
+                [
+                    "id" => 3,
+                    "title" => "Become an instructror"
+                ]
+            ]
+        ];
+    }
 }

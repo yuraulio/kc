@@ -265,15 +265,17 @@
             },
         },
         mounted() {
-            this.getData();
             const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get("filter")) {
-                this.filter = urlParams.get("filter");
-            }
+            // if (urlParams.get("filter")) {
+            //     this.filter = urlParams.get("filter");
+            // }
             if (urlParams.get("id")) {
                 this.id = Number(urlParams.get("id"));
+                this.title = urlParams.get("title") ?? "";
                 this.updatemode("edit");
             }
+
+            this.getData();
         }
     }
 </script>

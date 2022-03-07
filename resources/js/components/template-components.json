@@ -240,7 +240,7 @@
             {
                 "type": "multidropdown",
                 "key": "galery_type",
-                "label": "Galery display",
+                "label": "Gallery display",
                 "route": "getGaleryDisplayOptions",
                 "value": {
                     "id": 1,
@@ -354,6 +354,13 @@
                 "type": "text_editor",
                 "key": "consent_text",
                 "label": "Consent text"
+            },
+            {
+                "type": "multidropdown",
+                "key": "form_type",
+                "label": "Form type",
+                "route": "getFormTypes"
+
             }
         ]
     },

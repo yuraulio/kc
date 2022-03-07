@@ -730,55 +730,55 @@ export default {
             if (this.predata) {
                 this.data = this.predata;
             } else {
-            this.data = this.data ?? [];
+                this.data = this.data ?? [];
 
-            if (typeof this.tabsProp !== 'undefined') {
-                this.tabs = this.tabsProp;
-            }
-
-            if (this.name == 'main') {
-                // add meta component
-                var meta = {
-                    "id": this.$uuid.v4(),
-                    "width": this.extractedComponents['meta'].width,
-                    "order": this.data.length + 1,
-                    "description": "",
-                    "removable": false,
-                    "disable_color": true,
-                    "tab": "Meta",
-                    "columns": [
-                        {
-                            "id": this.$uuid.v4(),
-                            "order": 0,
-                            "component": 'meta',
-                            "active": true,
-                            "template": this.extractedComponents['meta']
-                        }
-                    ]
+                if (typeof this.tabsProp !== 'undefined') {
+                    this.tabs = this.tabsProp;
                 }
-                this.data.push(meta);
 
-                // add menu component
-                var menu = {
-                    "id": this.$uuid.v4(),
-                    "width": this.extractedComponents['menus'].width,
-                    "order": this.data.length + 1,
-                    "description": "",
-                    "collapsed": true,
-                    "removable": false,
-                    "disable_color": true,
-                    "tab": "Other",
-                    "columns": [
-                        {
-                            "id": this.$uuid.v4(),
-                            "order": 0,
-                            "component": 'menus',
-                            "active": true,
-                            "template": this.extractedComponents['menus']
-                        }
-                    ]
-                }
-                this.data.push(menu);
+                if (this.name == 'main') {
+                    // add meta component
+                    var meta = {
+                        "id": this.$uuid.v4(),
+                        "width": this.extractedComponents['meta'].width,
+                        "order": this.data.length + 1,
+                        "description": "",
+                        "removable": false,
+                        "disable_color": true,
+                        "tab": "Meta",
+                        "columns": [
+                            {
+                                "id": this.$uuid.v4(),
+                                "order": 0,
+                                "component": 'meta',
+                                "active": true,
+                                "template": this.extractedComponents['meta']
+                            }
+                        ]
+                    }
+                    this.data.push(meta);
+
+                    // add menu component
+                    var menu = {
+                        "id": this.$uuid.v4(),
+                        "width": this.extractedComponents['menus'].width,
+                        "order": this.data.length + 1,
+                        "description": "",
+                        "collapsed": true,
+                        "removable": false,
+                        "disable_color": true,
+                        "tab": "Other",
+                        "columns": [
+                            {
+                                "id": this.$uuid.v4(),
+                                "order": 0,
+                                "component": 'menus',
+                                "active": true,
+                                "template": this.extractedComponents['menus']
+                            }
+                        ]
+                    }
+                    this.data.push(menu);
                 }
             }
         }
