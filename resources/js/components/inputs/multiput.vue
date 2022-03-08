@@ -264,7 +264,7 @@ export default {
             }
         },
         update(editorData) {
-            if (this.keyput == "meta_slug") {
+            if (this.keyput.substring(0,9) == "meta_slug") {
                 eventHub.$emit('updateslug', editorData);
             }
         },

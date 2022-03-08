@@ -533,7 +533,6 @@ export default {
             this.$forceUpdate();
         },
         inputed($event, value) {
-            console.log(value);
             this.$set(value, 'value', $event.data);
         },
         inputedTabs($event, value) {
