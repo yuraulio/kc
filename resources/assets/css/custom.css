@@ -75,6 +75,7 @@
 .form-default {
     margin-top: 0px!important;
     margin-bottom: 0px!important;
+    max-width: none!important;
 }
 .form-overlap {
     margin-top: -315px!important; 
