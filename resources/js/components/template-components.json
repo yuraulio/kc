@@ -360,7 +360,13 @@
                 "key": "form_type",
                 "label": "Form type",
                 "route": "getFormTypes"
-
+            },
+            {
+                "type": "checkbox",
+                "key": "top_overlap",
+                "label": "Overlap",
+                "value": true,
+                "size": "col-lg-6"
             }
         ]
     },
