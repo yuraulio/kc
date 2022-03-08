@@ -72,20 +72,21 @@
     >
       <div class="row p-4">
           <div class="d-grid col-lg-12">
-              <div class="mb-3">
+            <div class="mb-3">
                 <label for="example-fileinput" class="form-label">Pick a file</label>
                 <input @change="registerFile" type="file" id="example-fileinput" class="form-control">
             </div>
 
             <button
-            @click="uploadRegFile()"
-            type="button"
-            class="btn btn-success waves-effect waves-light"
-            :disabled="loading"
-          >
-            <i v-if="!loading" class="fe-check-circle me-1"></i
-            ><i v-else class="fas fa-spinner fa-spin"></i> Upload
-          </button>
+                @click="uploadRegFile()"
+                type="button"
+                class="btn btn-success waves-effect waves-light"
+                :disabled="loading"
+            >
+                <i v-if="!loading" class="fe-check-circle me-1"></i>
+                <i v-else class="fas fa-spinner fa-spin"></i> 
+                Upload
+            </button>
           </div>
       </div>
     </modal>

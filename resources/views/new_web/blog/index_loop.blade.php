@@ -1,9 +1,13 @@
+@php
+    $featureData = $post->featureData();
+@endphp
+
 @if ($type->id == 2)
     {{-- grid view --}}
     <div class="blogpagex item">
         <div class="">
             <div class='text-center blogpagex-blog-image'>
-                <img src="{{$post->featureData()["feature_image"]}}">
+                <img src="{{$featureData["feature_image"]->url ?? ''}}" alt="{{$featureData["feature_image"]->alt_text ?? ''}}">
             </div>
         </div>
         <div class="bottom">
@@ -19,8 +23,8 @@
             </div>
         </div>
         <div class="">
-            <h2 class=''><a href="{{env("NEW_PAGES_LINK") . "/blog/$post->slug"}}">{{$post->featureData()["feature_title"]}}</a></h2>
-            <p>{!! mb_strimwidth($post->featureData()["feature_description"], 0, 350, "...") !!}</p>
+            <h2 class=''><a href="{{env("NEW_PAGES_LINK") . "/blog/$post->slug"}}">{{$featureData["feature_title"] ?? ''}}</a></h2>
+            <p>{!! mb_strimwidth($featureData["feature_description"] ?? '', 0, 350, "...") !!}</p>
         </div>
     </div>
 @elseif ($type->id == 1)
@@ -29,7 +33,7 @@
         <div class="row">
             <div class="col-md-6">
                 <div class='text-center blogpagex-blog-image'>
-                    <img src="{{$post->featureData()["feature_image"]}}">
+                    <img src="{{$featureData["feature_image"]->url ?? ''}}" alt="{{$featureData["feature_image"]->alt_text ?? ''}}">
                 </div>
             </div>
             <div class="col-md-6">
@@ -46,8 +50,8 @@
                     </div>
                 </div>
                 <div class="">
-                    <h2 class=''><a href="{{env("NEW_PAGES_LINK") . "/blog/$post->slug"}}">{{$post->featureData()["feature_title"]}}</a></h2>
-                    <p>{!! mb_strimwidth($post->featureData()["feature_description"], 0, 350, "...") !!}</p>
+                    <h2 class=''><a href="{{env("NEW_PAGES_LINK") . "/blog/$post->slug"}}">{{$featureData["feature_title"] ?? ''}}</a></h2>
+                    <p>{!! mb_strimwidth($featureData["feature_description" ?? ''], 0, 350, "...") !!}</p>
                 </div>
             </div>
         </div>

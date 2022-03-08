@@ -7,7 +7,7 @@
     $small = $hero['hero_small'] ?? null;
 @endphp
 
-<section class="section-hero {{ $small ? 'section-hero-small' : '' }}" style="background-image:url({{ $hero["hero_image"] ?? "" }})">
+<section class="section-hero {{ $small ? 'section-hero-small' : '' }}" style="background-image:url({{ $hero["hero_image"]->url ?? "" }})">
     @if (!$small)
         <div class="overlay"></div>
     @endif

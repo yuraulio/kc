@@ -128,7 +128,7 @@ export default {
         },
         confirmSelection() {
             if (this.$parent.$parent.mode == 'single') {
-                this.$parent.$parent.updatedMediaImage(this.selectedImages[0].url);
+                this.$parent.$parent.updatedMediaImage(this.selectedImages[0]);
             } else {
                 this.$parent.$parent.updatedMediaImage(this.selectedImages);
             }

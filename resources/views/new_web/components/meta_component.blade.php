@@ -28,13 +28,13 @@
 
     <meta name="description" content="{{ $meta['meta_description'] ?? "" }}">
     <meta name="keywords" content="{{ $meta['meta_keyword'] ?? "" }}">
-    <meta name="image" content="{{ $meta['meta_image'] ?? "" }}">
+    <meta name="image" content="{{ $meta['meta_image']->url ?? "" }}" alt="{{ $meta['meta_image']->alt_text ?? "" }}">
     <meta name="author" content="{{ $meta['meta_author'] ?? "" }}">
 
     <!--  Essential META Tags -->
     <meta property="og:title" content="{{ $meta['meta_title'] ?? "" }}">
     <meta property="og:type" content="{{ $meta['meta_type'] ?? "" }}" />
-    <meta property="og:image" content="{{ $meta['meta_image'] ?? "" }}">
+    <meta property="og:image" content="{{ $meta['meta_image']->url ?? "" }}" alt="{{ $meta['meta_image']->alt_text ?? "" }}">
     <meta property="og:url" content="{{ $_SERVER['REQUEST_URI'] }}">
     <meta name="twitter:card" content="summary_large_image">
 

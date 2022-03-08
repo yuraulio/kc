@@ -22,7 +22,7 @@
                 <!-- Title-->
                 <div class="row">
                     <div class="col-1 d-flex img-align">
-                        <img v-if="getMetaImage()" class="" width="100%" :src="getMetaImage()">
+                        <img v-if="getMetaImage()" class="" width="100%" :src="getMetaImage()['url']">
                         <img v-else width="100%" src="/admin_assets/images/pg-image.png">
                     </div>
                     <div class="col-11">

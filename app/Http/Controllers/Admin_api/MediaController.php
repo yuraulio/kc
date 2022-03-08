@@ -88,7 +88,7 @@ class MediaController extends Controller
             $mediaFolder = new MediaFolder();
             $mediaFolder->name = $request->name;
             $mediaFolder->path = $path;
-            $mediaFolder->url = config('app.url'). "/uploads" . $path;;
+            $mediaFolder->url = config('app.url'). "/uploads" . $path;
             $mediaFolder->user_id = Auth::user()->id;
             $mediaFolder->save();
 
@@ -134,7 +134,7 @@ class MediaController extends Controller
                 if (!Storage::disk('public')->exists($originalImagePath)) {
                     $file = Storage::disk('public')->putFileAs($path, $request->file('original_file'), $request->imgname ? $request->imgname .".". $originalImage->extension() :  $originalImage->getClientOriginalName(), 'public');
 
-                    $originalFile = $this->storeFile(($request->imgname ? $request->imgname .".". $originalImage->extension() : $image->getClientOriginalName()), $originalImagePath, $mediaFolder->id, $originalImage->getSize(), null,$request->alttext);
+                    $originalFile = $this->storeFile(($request->imgname ? $request->imgname .".". $originalImage->extension() : $image->getClientOriginalName()), $originalImagePath, $mediaFolder->id, $originalImage->getSize(), null, $request->alttext);
                 } else {
                     $originalFile = MediaFile::wherePath($originalImagePath)->first();
                 }

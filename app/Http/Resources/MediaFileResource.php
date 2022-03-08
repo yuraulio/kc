@@ -24,7 +24,8 @@ class MediaFileResource extends JsonResource
             'full_path' => $this->full_path,
             'subfiles' => $this->whenLoaded('subfiles', $this->subfiles, []),
             'user' => $this->when(
-                $this->user, function () {
+                $this->user,
+                function () {
                     return [
                         'firstname' => $this->user->firstname,
                         'lastname' => $this->user->lastname,
@@ -32,6 +33,7 @@ class MediaFileResource extends JsonResource
                 }
             ),
             'created_at' => $this->created_at,
+            'alt_text' => $this->alt_text,
         ];
     }
 }
