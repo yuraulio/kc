@@ -41,4 +41,9 @@ class MediaFile extends Model
     {
         return $this->hasMany(MediaFile::class, "parent_id", "id");
     }
+
+    public function pages()
+    {
+        return $this->belongsToMany(Page::class, 'cms_link_pages_files', 'file_id', 'page_id');
+    }
 }

@@ -50,6 +50,11 @@ class Page extends Model
         return $array;
     }
 
+    public function files()
+    {
+        return $this->belongsToMany(MediaFile::class, 'cms_link_pages_files', 'page_id', 'file_id');
+    }
+
     public function categories()
     {
         return $this->belongsToMany(Category::class, 'cms_link_pages_categories', 'page_id', 'category_id')->whereNull("parent_id");

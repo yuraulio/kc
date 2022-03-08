@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateAdminPageRequest;
 use App\Http\Resources\PageResource;
 use App\Model\Admin\Category;
 use App\Model\Admin\Comment;
+use App\Model\Admin\MediaFile;
 use App\Model\Admin\Page;
 use App\Model\Admin\Redirect;
 use App\Model\Admin\Template;
@@ -94,6 +95,8 @@ class PagesController extends Controller
                 $page->save();
             }
 
+            $this->syncImages($page);
+
             $categories = $request->categories ?? [];
             $subcategories = $request->subcategories ?? [];
 
@@ -154,6 +157,8 @@ class PagesController extends Controller
             $page->slug = $request->slug;
             $page->uuid = $page->uuid ?? Uuid::uuid4();
             $page->save();
+
+            $this->syncImages($page);
 
             $categories = $request->categories ?? [];
             $subcategories = $request->subcategories ?? [];
@@ -288,5 +293,25 @@ class PagesController extends Controller
                 ]
             ]
         ];
+    }
+
+    private function syncImages($page)
+    {
+        $data = collect(json_decode($page->content, true))->flatten();
+
+        $images = [];
+
+        foreach ($data as $item) {
+            if (is_string($item)) {
+                if (strpos($item, env('APP_URL') . '/uploads/pages_media') !== false) {
+                    $image = MediaFile::whereUrl($item)->first();
+                    if ($image) {
+                        array_push($images, $image->id);
+                    }
+                }
+            }
+        }
+
+        $page->files()->sync($images);
     }
 }

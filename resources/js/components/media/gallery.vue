@@ -128,9 +128,16 @@ export default {
         },
         confirmSelection() {
             if (this.$parent.$parent.mode == 'single') {
-                this.$parent.$parent.updatedMediaImage(this.selectedImages[0]);
+                var image = this.selectedImages[0];
+                delete image.subfiles;
+                this.$parent.$parent.updatedMediaImage(image);
             } else {
-                this.$parent.$parent.updatedMediaImage(this.selectedImages);
+                var images = this.selectedImages;
+                images.forEach(function(image) {
+                    delete image.subfiles;
+                });
+                console.log("gallery", images);
+                this.$parent.$parent.updatedMediaImage(images);
             }
 
             this.$modal.hide('gallery-modal');
