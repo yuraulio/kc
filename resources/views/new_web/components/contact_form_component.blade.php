@@ -5,12 +5,14 @@
     }
 
     $type = $form["form_type"]->id ?? 1;
+    $overlap = $form['top_overlap'] ?? true;
+    $overlap_class = $overlap ? 'form-overlap' : 'form-default';
 @endphp
 
 @if ($type == 1)
     <div class="form-section">
         <div class="form-area-wrapper m-0">
-            <div class="form-wrapper blue-form w-m-bottom {{ $form['top_overlap'] ? 'form-overlap' : 'form-default' }}">
+            <div class="form-wrapper blue-form w-m-bottom {{ $overlap_class }}">
                 <form id="doall" method="POST" class="contactUsForm" novalidate="">
                     <h3 class="form-h3">{{ $form["title"] ?? "" }}</h3>
                     <label>First name <span>*</span></label>
@@ -109,7 +111,7 @@
 @elseif ($type == 2)
     <div class="form-section">
         <div class="form-area-wrapper m-0">
-            <div class="form-wrapper blue-form w-m-bottom" style="margin-top: -315px; margin-bottom: -20px">
+            <div class="form-wrapper blue-form w-m-bottom {{ $overlap_class }}">
                 <form id="doall" method="POST" class="contactUsForm" novalidate="">
                     <h3 class="form-h3">{{ $form["title"] ?? "" }}</h3>
                     <label>First name <span>*</span></label>
@@ -247,7 +249,7 @@
 @elseif ($type == 3)
     <div class="form-section">
         <div class="form-area-wrapper m-0">
-            <div class="form-wrapper blue-form w-m-bottom" style="margin-top: -315px; margin-bottom: -20px">
+            <div class="form-wrapper blue-form w-m-bottom {{ $overlap_class }}">
                 <form id="beForm" method="POST" class="contactUsForm" novalidate="">
                     <h3 class="form-h3">{{ $form["title"] ?? "" }}</h3>
                     <label>First name <span>*</span></label>

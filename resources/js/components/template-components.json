@@ -321,7 +321,7 @@
         ]
     },
     "contact_form" : {
-        "title": "Contact form",
+        "title": "Form component",
         "width": "content",
         "icon": "dripicons-mail",
         "key": "contact_form_component",
