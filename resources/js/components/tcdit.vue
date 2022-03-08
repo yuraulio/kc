@@ -794,11 +794,12 @@ export default {
                 if (this.mode != "edit" && parsed.length) {
                     parsed.forEach(element => {
                         element.columns.forEach(column => {
-                            column.active = column.order < 1 ? true : false;
-                            if (this.extractedComponents[column.component] != null) {
-                                column.template = this.extractedComponents[column.component];
+                            if (column.component != 'tabs') {
+                                column.active = column.order < 1 ? true : false;
+                                if (this.extractedComponents[column.component] != null) {
+                                    column.template = this.extractedComponents[column.component];
+                                }
                             }
-
                         });
                     });
                 }

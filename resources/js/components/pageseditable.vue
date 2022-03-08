@@ -286,7 +286,7 @@ export default {
                 if (this.type == "edit") {
                     this.template_value.rows = this.data.content;
                 }
-                this.$forceUpdate()
+                this.$forceUpdate();
             },
             rearange() {
                 this.$refs.tc.rearange(true);
