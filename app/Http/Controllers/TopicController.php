@@ -207,7 +207,7 @@ class TopicController extends Controller
                                                             'date' => $lesson->pivot->date,
                                                             'duration' => $lesson->pivot->duration,
                                                             'time_starts' => $lesson->pivot->time_starts,
-                                                            'time_ends' => $lesson->pivot->time_ends
+                                                            'time_ends' => $lesson->pivot->time_ends,
                                                             'priority' => $lesson->pivot->priority
                                                             ]);
                         }
