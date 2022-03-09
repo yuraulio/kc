@@ -44,12 +44,12 @@ class Topic extends Model
 
     public function event_topic()
     {
-        return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->withPivot('event_id','lesson_id','instructor_id');
+        return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->withPivot('event_id','lesson_id','instructor_id','date','priority','time_starts','time_ends','duration','room');
     }
 
     public function event_lesson()
     {
-        return $this->belongsToMany(Lesson::class, 'event_topic_lesson_instructor')->select('event_id')->where('status',true)->withPivot('event_id','lesson_id','instructor_id','topic_id')->with('instructor');
+        return $this->belongsToMany(Lesson::class, 'event_topic_lesson_instructor')->select('lessons.*','event_id')->where('status',true)->withPivot('event_id','lesson_id','instructor_id','date','priority','time_starts','time_ends','duration','room')->with('instructor');
     }
 
 }

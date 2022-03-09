@@ -170,14 +170,12 @@ class TopicController extends Controller
 
 
         $fromCategory = $request->fromCategory ?: $request->fromCategory;
-
         $request->request->add(['status' => $status]);
-
         $topic->update($request->all());
         
         $lessons = [];
+        $lessonsAttached = [];
         foreach($request->category_id as $category_id){
-
 
             if(!in_array($category_id,$topic->category()->pluck('category_id')->toArray())){
                 $category = Category::find($category_id);
@@ -191,10 +189,38 @@ class TopicController extends Controller
                     $lessons[] = $lesson->id;
                     $category->topic()->attach($topic,['category_id' => $category_id, 'lesson_id' => $lesson->id]);
                 }
+                $topic = Topic::find($topic->id);
+                foreach($category->events as $event){
+                    //foreach($topic->event_topic as $to){
+                        /*if(!in_array($fromCategory,$to->category->pluck('id')->toArray())){
+                            continue;
+                        }*/
+                        foreach($topic->event_lesson as $lesson){
+                            if(in_array($lesson->id,$lessonsAttached) || !in_array($fromCategory,$lesson->category->pluck('id')->toArray())){
+                                continue;
+                            }
+
+                            $lessonsAttached[] = $lesson->id;
+                            $event->topic()->attach($topic,['event_id' => $event->id,
+                                                            'lesson_id' => $lesson->pivot->lesson_id, 
+                                                            'instructor_id' => $lesson->pivot->instructor_id,
+                                                            'date' => $lesson->pivot->date,
+                                                            'duration' => $lesson->pivot->duration,
+                                                            'time_starts' => $lesson->pivot->time_starts,
+                                                            'time_ends' => $lesson->pivot->time_ends
+                                                            'priority' => $lesson->pivot->priority
+                                                            ]);
+                        }
+
+                      
+
+                    //}
+                }
+
+                
 
             }
 
-            
             //$topic->category()->sync($request->category_id);
 
         }
