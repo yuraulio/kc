@@ -7,6 +7,7 @@
           <thead class="table-light">
             <tr>
               <th class="border-0">Name</th>
+              <th class="border-0">Pages</th>
               <th class="border-0">Last Modified</th>
               <th class="border-0">Size</th>
               <th class="border-0" style="width: 80px">Action</th>
@@ -42,6 +43,7 @@
                   }}</a></span
                 >
               </td>
+              <td>{{ file.pages.length }}</td>
               <td>
                 <p class="mb-0">
                   {{

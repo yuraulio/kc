@@ -55,7 +55,7 @@ class MediaController extends Controller
                                 ->when($request->parent != false && $request->parent != 'false', function ($q) {
                                     return $q->whereNull('parent_id');
                                 })
-                                ->with('user')
+                                ->with(['user', 'pages'])
                                 ->when($request->folder_id != null, function ($q) use ($request) {
                                     return $q->where('folder_id', $request->folder_id);
                                 })

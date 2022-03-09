@@ -248,8 +248,17 @@ var mediaMixin = {
             this.$modal.show('upload-media-modal');
         },
         deleteFile($event) {
+            var pagesText = "";
+            var pages = $event.pages;
+            if (pages.length) {
+                pagesText = "This image is used on pages:\n";
+                pages.forEach(function(page){
+                    console.log(page);
+                    pagesText = pagesText + "\n" + page.title;
+                });
+            }
             Swal.fire({
-                title: 'Are you sure?',
+                title: 'Are you sure?\n ' + pagesText,
                 text: "You won't be able to revert this! Delete file?",
                 icon: 'warning',
                 showCancelButton: true,
