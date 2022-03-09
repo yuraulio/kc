@@ -6693,11 +6693,24 @@ body.compensate-for-scrollbar { overflow: hidden; }
 }
 
 .form-default {
-    margin-top: 0px!important;
-    margin-bottom: 0px!important;
+    margin-bottom: 3rem !important;
+    margin-top: 3rem !important;
     max-width: none!important;
 }
 .form-overlap {
-    margin-top: -315px!important; 
+    margin-top: -170px!important; 
     margin-bottom: -20px!important;
+}
+
+.book-ticket-boxes.justify-content-end-2 {
+    justify-content: flex-end;
+}
+.book-ticket-boxes.justify-content-start-2 {
+    justify-content: flex-start;
+}
+
+@media only screen and (max-width: 767px) {
+    .book-ticket-boxes {
+        justify-content: center!important;
+    }
 }

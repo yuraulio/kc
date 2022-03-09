@@ -186,6 +186,11 @@
                                                 Width: {{v.width}} / 6
                                                 <input @click="calculateWidth(val.columns, ind, $event, index)" :value="v.width" class="w-100" type="range" maxlength="1" min="1" max="6">
                                             </div>
+
+                                            <div v-if="checkComponentVersion(v)" class="alert alert-warning m-2" role="alert">
+                                                This component is updated. Refresh to get new version. Refresh will delete data.
+                                                <i @click="refreshComponent(v)" style="font-size: 20px" class="text-muted dripicons-clockwise m-1 d-inline-block"></i>
+                                            </div>
                                         </li>
                                         <li v-if="val.columns.length < 3">
                                             <button @click="split(val.columns, indr, 'push')" class="btn btn-success add-column-button ms-1">
@@ -197,16 +202,22 @@
                                         </li>
                                     </ul>
                                 </div>
-                                <h5 v-else :class="'card-title mb-0 ' + getColumnWidth(column, val.columns)">
-                                    <div @click="changeComponent(index, 0, column.template)" class="d-inline-block cursor-pointer">
-                                        {{ column.template.title }}
-                                    </div>
-                                    <span v-if="column.template.one_column != true" class="text-muted font-13 float-end">
-                                        <div @click="split(val.columns, indr, 'push')" class="mr-2 d-inline-block cursor-pointer">
-                                            Add column
+                                <template v-else>
+                                    <h5 :class="'card-title mb-0 ' + getColumnWidth(column, val.columns)">
+                                        <div @click="changeComponent(index, 0, column.template)" class="d-inline-block cursor-pointer">
+                                            {{ column.template.title }}
                                         </div>
-                                    </span>
-                                </h5>
+                                        <span v-if="column.template.one_column != true" class="text-muted font-13 float-end">
+                                            <div @click="split(val.columns, indr, 'push')" class="mr-2 d-inline-block cursor-pointer">
+                                                Add column
+                                            </div>
+                                        </span>
+                                    </h5>
+                                    <div v-if="checkComponentVersion(column)" class="alert alert-warning m-2" role="alert">
+                                        This component is updated. Refresh to get new version. Refresh will delete data.
+                                        <i @click="refreshComponent(column)" style="font-size: 20px" class="text-muted dripicons-clockwise m-1 d-inline-block"></i>
+                                    </div>
+                                </template>
 
                             </div>
                             <div :class="'tab-content collapse pb-3 ' + (val.initialCollapsed ? '' : 'show')" :id="'collapseelement' + val.id" style="padding-top: 0px" >
@@ -474,7 +485,7 @@ export default {
     data() {
         return {
             lodash: _,
-            data: null,
+            data: [],
             activeChange: false,
             preview: false,
             spreview: true,
@@ -667,12 +678,14 @@ export default {
             }
         },
         addTab() {
-            this.tabs.push(this.new_tab);
-            if (this.tabs_tab == null) {
-                this.tabs_tab = this.new_tab;
+            if (!this.tabs.includes(this.new_tab)) {
+                this.tabs.push(this.new_tab);
+                if (this.tabs_tab == null) {
+                    this.tabs_tab = this.new_tab;
+                }
+                this.new_tab = "";
+                this.add_tab = false;
             }
-            this.new_tab = "";
-            this.add_tab = false;
         },
         removeTabsTab(tab_name) {
             var data = this.data;
@@ -693,23 +706,35 @@ export default {
             var input = this.$refs[tab_name];
             var new_tab_name = input[0].value;
 
-            if (!this.tabs.includes(new_tab_name)) {
-                var data = this.data;
-                this.data.forEach(function(row, index) {
-                    if (row.tabs_tab == tab_name) {
-                        data[index].tabs_tab = new_tab_name;
-                    }
-                });
+            if (new_tab_name) {
+                if (!this.tabs.includes(new_tab_name)) {
+                    var data = this.data;
+                    this.data.forEach(function(row, index) {
+                        if (row.tabs_tab == tab_name) {
+                            data[index].tabs_tab = new_tab_name;
+                        }
+                    });
 
-                var tabs = this.tabs;
-                this.tabs.forEach(function(tab, index) {
-                    if (tab == tab_name) {
-                        tabs[index] = new_tab_name;
-                    }
-                });
+                    var tabs = this.tabs;
+                    this.tabs.forEach(function(tab, index) {
+                        if (tab == tab_name) {
+                            tabs[index] = new_tab_name;
+                        }
+                    });
 
-                this.tab_open_edit.splice(this.tab_open_edit.indexOf(new_tab_name), 1);
+                    this.tab_open_edit.splice(this.tab_open_edit.indexOf(new_tab_name), 1);
+                }
             }
+        },
+        checkComponentVersion(column) {
+            var version = column.template.version ? column.template.version : 1;
+            if (this.extractedComponents[column.component].version > version){
+                return true;
+            }
+            return false;
+        },
+        refreshComponent(column) {
+            column.template = JSON.parse(JSON.stringify(this.extractedComponents[column.component]));
         }
     },
 
@@ -861,7 +886,7 @@ export default {
             var row_index = data[1];
             var column_index = data[2];
             this.data[row_index].columns[column_index].component = component;
-            this.data[row_index].columns[column_index].template = this.extractedComponents[component];
+            this.data[row_index].columns[column_index].template = JSON.parse(JSON.stringify(this.extractedComponents[component]));
 
             this.$modal.hide("component-modal");
         }));
