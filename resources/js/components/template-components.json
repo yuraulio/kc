@@ -1,12 +1,13 @@
 {
     "hero" : {
-        "version": 2,
+        "version": 3,
         "title": "Header image with title",
         "width": "full",
         "icon": "dripicons-monitor",
         "key": "hero_header_component",
         "one_column": true,
         "tab": "Content",
+        "dynamic": true,
         "inputs": [
             {
                 "type": "image",
@@ -694,16 +695,6 @@
         "title": "Course Q & A",
         "icon": "dripicons-browser",
         "key": "course_faq_component",
-        "tab": "Content",
-        "width": "content",
-        "inputs": [
-        ]
-    },
-    "course_hero" : {
-        "version": 1,
-        "title": "Course hero",
-        "icon": "dripicons-browser",
-        "key": "course_hero_component",
         "tab": "Content",
         "width": "content",
         "inputs": [
