@@ -118,6 +118,34 @@ var mediaMixin = {
                 })
             }
         },
+        uploadImgFile() {
+            var formData = new FormData();
+            var imagefile = this.regFile;
+            if (this.selectedFolder) {
+                formData.append('directory', this.selectedFolder.id);
+            }
+            if (imagefile) {
+                this.loading = true;
+                formData.append("file", imagefile);
+                axios.post('/api/media_manager/upload_image', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }).then((response) => {
+                    this.$toast.success('Uploaded Successfully!');
+                    response.data.data.forEach((element) => {
+                        this.mediaFiles.push(element);
+                    })
+                    this.$modal.hide('upload-media-modal');
+                    this.loading = false;
+                    this.regFile = null;
+                })
+                .catch((error) => {
+                    console.log(error)
+                    this.loading = false;
+                })
+            }
+        },
         imageAdded($event) {
             console.log($event, this.selectedFolder)
             this.currentImage = $event;

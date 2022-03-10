@@ -103,10 +103,8 @@ class MediaController extends Controller
     public function uploadImage(Request $request): JsonResponse
     {
         $image = $request->file('file');
-        $originalImage = $request->file('original_file');
 
         try {
-            $cname = $this->getRealName($request->imgname ? $request->imgname .".". $image->extension() :  $image->getClientOriginalName());
             if ($request->directory) {
                 $mediaFolder = MediaFolder::findOrFail($request->directory);
                 $path = $mediaFolder->path . "/";
@@ -128,39 +126,15 @@ class MediaController extends Controller
                 }
             }
 
-            if ($originalImage) {
-                // Store original image
-                $originalImagePath = $path . ''. ($request->imgname ? $request->imgname .".". $originalImage->extension() :  $originalImage->getClientOriginalName());
-
-                if (!Storage::disk('public')->exists($originalImagePath)) {
-                    $file = Storage::disk('public')->putFileAs($path, $request->file('original_file'), $request->imgname ? $request->imgname .".". $originalImage->extension() :  $originalImage->getClientOriginalName(), 'public');
-
-                    $originalFile = $this->storeFile(($request->imgname ? $request->imgname .".". $originalImage->extension() : $image->getClientOriginalName()), $originalImagePath, $mediaFolder->id, $originalImage->getSize(), null, $request->alttext);
-                } else {
-                    $originalFile = MediaFile::wherePath($originalImagePath)->first();
-                }
-            }
-
-            if ($request->edited) {
-                $originalFile = MediaFile::findOrFail($request->edited);
-            }
-
-            // Store edited image
             $imgpath = $path . ''. (($request->imgname ? $request->imgname . "_" . getimagesize($image)[0] . "x" . getimagesize($image)[1] . "_" . $request->compression . ".". $image->extension() : $image->getClientOriginalName()));
 
             $file = Storage::disk('public')->putFileAs($path, $request->file('file'), ($request->imgname ? $request->imgname . "_" . getimagesize($image)[0] . "x" . getimagesize($image)[1] . "_" . $request->compression . ".". $image->extension() : $image->getClientOriginalName()), 'public');
 
-            $mfile = $this->storeFile(($request->imgname ? $request->imgname . "_" . getimagesize($image)[0] . "x" . getimagesize($image)[1] . "_" . $request->compression . ".". $image->extension() : $image->getClientOriginalName()), $imgpath, $mediaFolder->id, $image->getSize(), $originalFile->id, $request->alttext);
+            $mfile = $this->storeFile(($request->imgname ? $request->imgname . "_" . getimagesize($image)[0] . "x" . getimagesize($image)[1] . "_" . $request->compression . ".". $image->extension() : $image->getClientOriginalName()), $imgpath, $mediaFolder->id, $image->getSize(), null, $request->alttext);
+            $mfile->pages = [];
 
-            /* $img = Image::make($request->file('file'));
-            $img->resize(3840, 2160, function ($const) {
-                $const->aspectRatio();
-            })->save(public_path().'/uploads'.$path.$this->getRealName($image->getClientOriginalName()) . '_3840x2160.'. $image->extension());
 
-            $this->storeFile($this->getRealName($image->getClientOriginalName()) . '_3840x2160.'. $image->extension(), $path.$this->getRealName($image->getClientOriginalName()) . '_3840x2160.'. $image->extension(), $mediaFolder->id, strlen((string) $img->encode('png')), false); */
-
-            $url = config('app.url'). "/uploads" . $path;
-            return response()->json(['data' => [$mfile], 'original' => [$originalFile]], 200);
+            return response()->json(['data' => [$mfile]], 200);
         } catch (Exception $e) {
             Log::error("Failed update file . " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
@@ -200,7 +174,7 @@ class MediaController extends Controller
             $file = Storage::disk('public')->putFileAs($path, $request->file('file'), ($request->imgname ? $request->imgname . "_" . getimagesize($image)[0] . "x" . getimagesize($image)[1] . ".". $image->extension() : $image->getClientOriginalName()), 'public');
 
             $mfile = $this->storeFile(($request->imgname ? $request->imgname . "_" . getimagesize($image)[0] . "x" . getimagesize($image)[1] . "_" . $request->compression . ".". $image->extension() : $image->getClientOriginalName()), $imgpath, $mediaFolder->id, $image->getSize(), null, null);
-
+            $mfile->pages = [];
 
             $url = config('app.url'). "/uploads" . $path;
             return response()->json(['data' => [$mfile]], 200);

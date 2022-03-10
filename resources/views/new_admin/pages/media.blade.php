@@ -22,7 +22,7 @@
                         </a> --}}
                     </form>
                 </div>
-                <h4 class="page-title">Media</h4>
+                <h4 class="page-title mt-3 mb-3">Media</h4>
             </div>
         </div>
     </div>
