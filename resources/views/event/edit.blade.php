@@ -129,6 +129,26 @@
                                 </div>
                                 @endif
 
+                                <div class="form-group">
+                                    
+
+                                    <div class="form-group{{ $errors->has('fb_') ? ' has-danger' : '' }}">
+                                        <label class="form-control-label" for="input-hours">{{ __('Absences Limit(%)') }}</label>
+                                        <input type="text" name="absences_limit" id="input-absences_limit" class="form-control{{ $errors->has('Absences Limit(%)') ? ' is-invalid' : '' }}" placeholder="{{ __('absences_limit') }}" value="{{ old('absences_imit', $event->absences_limit) }}"autofocus>
+    
+                                        @include('alerts.feedback', ['field' => 'absences_imit'])
+                                    </div>
+
+                                    <label class="form-control-label" for="input-method">{{ __('Method Payment') }}</label>
+                                    <select name="payment_method" id="input-method" class="form-control" placeholder="{{ __('Method Payment') }}" no-mouseflow>
+                                        <option value="">-</option>
+                                        @foreach ($methods as $method)
+                                            <option value="{{ $method->id }}" {{$event['paymentMethod']->first() && $event['paymentMethod']->first()->id ==$method->id ? 'selected' : ''}} >{{ $method->method_name }}</option>
+                                        @endforeach
+                                    </select>
+
+                                    @include('alerts.feedback', ['field' => 'payment_method'])
+                                </div>
                               
                                 <div class="form-group">
                                     
