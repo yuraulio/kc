@@ -5,7 +5,7 @@
     $sumStudents = $dynamic_page_data["sumStudents"] ?? null;
 @endphp
 
-<div class="course-tab-sidebar" style="width: 100%;">
+<div class="course-tab-sidebar mt-5 mb-5" style="width: 100%;">
     <div class="course-details @if(!isset($section_fullvideo)) non-video-height @endif">
         <ul class="two-column-list">
             @foreach($summary as $sum)

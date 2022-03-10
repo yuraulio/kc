@@ -95,12 +95,12 @@ class Page extends Model
         ];
     }
 
-    public function featureData()
+    public function metaData()
     {
         $content = json_decode($this->content);
         foreach ($content as $row) {
             foreach ($row->columns as $column) {
-                if ($column->component == "post_feature") {
+                if ($column->component == "meta") {
                     $feature_data = [];
                     foreach ($column->template->inputs as $input) {
                         $feature_data[$input->key] = $input->value ?? "";

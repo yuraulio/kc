@@ -7,7 +7,7 @@
         "key": "hero_header_component",
         "one_column": true,
         "tab": "Content",
-        "dynamic": true,
+        "dynamic": false,
         "inputs": [
             {
                 "type": "image",
@@ -94,12 +94,13 @@
         ]
     },
     "text_editor" : {
-        "version": 1,
+        "version": 2,
         "width": "content",
         "title": "Rich Text Editor",
         "icon": "dripicons-document-edit",
         "key": "text_editor_component",
         "tab": "Content",
+        "dynamic": false,
         "inputs": [
             {
                 "type": "text_editor",
@@ -253,7 +254,7 @@
         "version": 1,
         "title": "Title & Subtitle",
         "width": "blog",
-        "icon": "dripicons-browser",
+        "icon": "dripicons-document",
         "key": "blog_header_component",
         "tab": "Content",
         "inputs": [
@@ -270,12 +271,13 @@
         ]
     },
     "youtube" : {
-        "version": 1,
+        "version": 2,
         "title": "Yutube video",
         "width": "content",
         "icon": "dripicons-camcorder",
         "key": "youtube_component",
         "tab": "Content",
+        "dynamic": false,
         "inputs": [
             {
                 "type": "number",
@@ -525,20 +527,10 @@
         "inputs": [
         ]
     },
-    "instructor_text" : {
-        "version": 1,
-        "title": "Instructor text",
-        "icon": "dripicons-user",
-        "key": "instructor_text_component",
-        "tab": "Content",
-        "width": "content",
-        "inputs": [
-        ]
-    },
     "instructor_courses" : {
         "version": 1,
         "title": "Instructor's lessons",
-        "icon": "dripicons-user",
+        "icon": "dripicons-view-list",
         "key": "instructor_courses_component",
         "tab": "Content",
         "width": "content",
@@ -548,7 +540,7 @@
     "instructor_events" : {
         "version": 1,
         "title": "Instructor's courses",
-        "icon": "dripicons-user",
+        "icon": "dripicons-view-list-large",
         "key": "instructor_events_component",
         "tab": "Content",
         "width": "content",
@@ -570,20 +562,10 @@
             }
         ]
     },
-    "course_text" : {
-        "version": 1,
-        "title": "Course text",
-        "icon": "dripicons-browser",
-        "key": "course_text_component",
-        "tab": "Content",
-        "width": "full",
-        "inputs": [
-        ]
-    },
     "course_details" : {
         "version": 1,
         "title": "Course details",
-        "icon": "dripicons-browser",
+        "icon": "dripicons-article",
         "key": "course_details_component",
         "tab": "Content",
         "width": "full",
@@ -593,27 +575,17 @@
     "course_author" : {
         "version": 1,
         "title": "Course manager",
-        "icon": "dripicons-browser",
+        "icon": "dripicons-user-id",
         "key": "course_author_component",
         "tab": "Content",
         "width": "content",
         "inputs": [
         ]
     },
-    "course_video" : {
-        "version": 1,
-        "title": "Course video",
-        "icon": "dripicons-browser",
-        "key": "course_video_component",
-        "tab": "Content",
-        "width": "content",
-        "inputs": [
-        ]
-    },
     "book_ticket" : {
-        "version": 1,
-        "title": "Tickets",
-        "icon": "dripicons-browser",
+        "version": 2,
+        "title": "Course tickets",
+        "icon": "dripicons-card",
         "key": "book_ticket_component",
         "tab": "Content",
         "width": "content",
@@ -623,7 +595,7 @@
     "benefits" : {
         "version": 1,
         "title": "Course benefits",
-        "icon": "dripicons-browser",
+        "icon": "dripicons-view-thumb",
         "key": "benefits_component",
         "tab": "Content",
         "width": "content",
@@ -633,7 +605,7 @@
     "topics" : {
         "version": 1,
         "title": "Course topics",
-        "icon": "dripicons-browser",
+        "icon": "dripicons-menu",
         "key": "topics_component",
         "tab": "Content",
         "width": "content",
@@ -643,18 +615,8 @@
     "course_instructors" : {
         "version": 1,
         "title": "Course instructors",
-        "icon": "dripicons-browser",
+        "icon": "dripicons-user-group",
         "key": "course_instructors_component",
-        "tab": "Content",
-        "width": "content",
-        "inputs": [
-        ]
-    },
-    "course_testimonials" : {
-        "version": 1,
-        "title": "Course video testimonials",
-        "icon": "dripicons-browser",
-        "key": "course_video_testimonials_component",
         "tab": "Content",
         "width": "content",
         "inputs": [
@@ -663,7 +625,7 @@
     "course_video_testimonials" : {
         "version": 1,
         "title": "Course video testimonials",
-        "icon": "dripicons-browser",
+        "icon": "dripicons-camcorder",
         "key": "course_video_testimonials_component",
         "tab": "Content",
         "width": "content",
@@ -673,7 +635,7 @@
     "course_written_testimonials" : {
         "version": 1,
         "title": "Course written testimonials",
-        "icon": "dripicons-browser",
+        "icon": "dripicons-message",
         "key": "course_written_testimonials_component",
         "tab": "Content",
         "width": "content",
@@ -683,7 +645,7 @@
     "course_location" : {
         "version": 1,
         "title": "Course location",
-        "icon": "dripicons-browser",
+        "icon": "dripicons-location",
         "key": "course_location_component",
         "tab": "Content",
         "width": "content",
@@ -693,7 +655,7 @@
     "course_faq" : {
         "version": 1,
         "title": "Course Q & A",
-        "icon": "dripicons-browser",
+        "icon": "dripicons-search",
         "key": "course_faq_component",
         "tab": "Content",
         "width": "content",
@@ -703,7 +665,7 @@
     "blog_list" : {
         "version": 1,
         "title": "Blog list",
-        "icon": "dripicons-browser",
+        "icon": "dripicons-blog",
         "key": "blog_list_component",
         "tab": "Content",
         "width": "content",
@@ -724,7 +686,7 @@
     "instructors_list" : {
         "version": 1,
         "title": "Instructors list",
-        "icon": "dripicons-browser",
+        "icon": "dripicons-checklist",
         "key": "instructors_list_component",
         "tab": "Content",
         "width": "content",
@@ -745,7 +707,7 @@
     "events_list" : {
         "version": 1,
         "title": "Courses list",
-        "icon": "dripicons-browser",
+        "icon": "dripicons-view-list-large",
         "key": "events_list_component",
         "tab": "Content",
         "width": "content",

@@ -4,7 +4,7 @@
         $hero[$input->key] = $input->value ?? "";
     }
 
-    if ($hero["hero_dynamic"]) {
+    if ($column->template->dynamic) {
         $event = $dynamic_page_data["event"] ?? null;
 
         $image = cdn(get_image($event->mediable,'header-image')) ?? "";

@@ -187,6 +187,10 @@
                                                 <input @click="calculateWidth(val.columns, ind, $event, index)" :value="v.width" class="w-100" type="range" maxlength="1" min="1" max="6">
                                             </div>
 
+                                            <div v-if="v.template.dynamic != null" class="d-block text-center">
+                                                <span class="text-muted font-13 d-inline-block me-1" style="margin-top: 4px;">Dynamic</span><input v-model="v.template.dynamic" type="checkbox" class="form-check-input">
+                                            </div>
+
                                             <div v-if="checkComponentVersion(v)" class="alert alert-warning m-2" role="alert">
                                                 This component is updated. Refresh to get new version. Refresh will delete data.
                                                 <i @click="refreshComponent(v)" style="font-size: 20px" class="text-muted dripicons-clockwise m-1 d-inline-block"></i>
@@ -204,18 +208,16 @@
                                 </div>
                                 <template v-else>
                                     <h5 :class="'card-title mb-0 ' + getColumnWidth(column, val.columns)">
-                                        <div class="d-inline-block cursor-pointer">
-                                            <template @click="changeComponent(index, 0, column.template)">
-                                                {{ column.template.title }}
-                                            </template>
+                                        <div @click="changeComponent(index, 0, column.template)" class="d-inline-block cursor-pointer">
+                                            {{ column.template.title }}
                                         </div>
-                                        <span v-if="column.template.one_column != true" class="text-muted font-13 float-end">
-                                            <div @click="split(val.columns, indr, 'push')" class="mr-2 d-inline-block cursor-pointer">
+                                        <span v-if="column.template.one_column != true" class="text-muted font-13 float-end" style="margin-top: 4px;">
+                                            <div @click="split(val.columns, indr, 'push')" class="ms-3 mr-2 d-inline-block cursor-pointer">
                                                 Add column
                                             </div>
                                         </span>
                                         <div v-if="column.template.dynamic != null" class="d-inline-block float-end">
-                                            <span class="text-muted d-inline-block me-1" style="margin-top: 3px;">Dynamic</span><input v-model="column.template.dynamic" type="checkbox" :id="keyput" class="form-check-input">
+                                            <span class="text-muted font-13 d-inline-block me-1" style="margin-top: 4px;">Dynamic</span><input v-model="column.template.dynamic" type="checkbox" class="form-check-input">
                                         </div>
                                     </h5>
                                     <div v-if="checkComponentVersion(column)" class="alert alert-warning m-2" role="alert">
@@ -253,7 +255,7 @@
 
                                         <!-- preview -->
                                         <template v-if="column.component == 'youtube'">
-                                            <div class="card-body row pb-0 pt-0">
+                                            <div v-show="!column.template.dynamic" class="card-body row pb-0 pt-0">
                                                 <div class="col-12">
                                                     <label class="form-label mt-2">Preview</label>
                                                     <div class="text-center">

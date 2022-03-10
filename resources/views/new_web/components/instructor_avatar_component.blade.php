@@ -10,7 +10,7 @@
     $content = $data["content"];
 @endphp
 
-<div class="instructor-area instructor-profile pb-4 pt-4">
+<div class="instructor-area instructor-profile mt-5 mb-5 ">
     <div class="avatar-wrapper">
         <div class="avatar" alt="{{ $title }}" title="{{ $title }}"  style="background-image:url({{cdn(get_image($content['medias'],'instructors-testimonials'))}});"></div>
         <div class="social-links">

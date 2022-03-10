@@ -35,19 +35,6 @@
                 <template v-if="type == 'general'">
 
                     <div class="row mb-2">
-                        <div class="col-3">
-                            <div @click="selectComponent('text_editor')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-document-edit d-block mt-1"></i>
-                                <span class="text-muted mt-1 ms-1 me-1">Rich text editor</span>
-                            </div>
-                        </div>
-
-                        <div class="col-3">
-                            <div @click="selectComponent('hero')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-monitor d-block mt-1"></i>
-                                <span class="text-muted mt-1 ms-1 me-1">Header image with title</span>
-                            </div>
-                        </div>
 
                         <div class="col-3">
                             <div @click="selectComponent('image')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
@@ -62,6 +49,20 @@
                                 <span class="text-muted mt-1 ms-1 me-1">Info & benefits</span>
                             </div>
                         </div>
+
+                        <div v-if="name != 'tabs'" class="col-3">
+                            <div @click="selectComponent('tabs')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
+                                <i style="font-size: 20px" class="text-muted dripicons-browser d-block mt-1"></i>
+                                <span class="text-muted mt-1 ms-1 me-1">Tabbed menu</span>
+                            </div>
+                        </div>
+
+                        <div class="col-3">
+                            <div @click="selectComponent('horizintal_line')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
+                                <i style="font-size: 20px" class="text-muted dripicons-minus d-block mt-1"></i>
+                                <span class="text-muted mt-1 ms-1 me-1">Horizontal line</span>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="row mb-2">
@@ -74,15 +75,15 @@
 
                         <div class="col-3">
                             <div @click="selectComponent('blog_header')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-browser d-block mt-1"></i>
+                                <i style="font-size: 20px" class="text-muted dripicons-document d-block mt-1"></i>
                                 <span class="text-muted mt-1 ms-1 me-1">Title & Subtitle</span>
                             </div>
                         </div>
 
                         <div class="col-3">
-                            <div @click="selectComponent('youtube')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-camcorder d-block mt-1"></i>
-                                <span class="text-muted mt-1 ms-1 me-1">Youtube</span>
+                            <div @click="selectComponent('empty')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
+                                <i style="font-size: 20px" class="text-muted dripicons-wrong d-block mt-1"></i>
+                                <span class="text-muted mt-1 ms-1 me-1">Empty space</span>
                             </div>
                         </div>
 
@@ -124,25 +125,27 @@
                         </div>
                     </div>
 
+                    <hr>
+
                     <div class="row mb-2">
                         <div class="col-3">
-                            <div @click="selectComponent('empty')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-wrong d-block mt-1"></i>
-                                <span class="text-muted mt-1 ms-1 me-1">Empty space</span>
+                            <div @click="selectComponent('text_editor')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
+                                <i style="font-size: 20px" class="text-muted dripicons-document-edit d-block mt-1"></i>
+                                <span class="text-muted mt-1 ms-1 me-1">Rich text editor</span>
                             </div>
                         </div>
 
                         <div class="col-3">
-                            <div @click="selectComponent('horizintal_line')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-minus d-block mt-1"></i>
-                                <span class="text-muted mt-1 ms-1 me-1">Horizontal line</span>
+                            <div @click="selectComponent('hero')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
+                                <i style="font-size: 20px" class="text-muted dripicons-monitor d-block mt-1"></i>
+                                <span class="text-muted mt-1 ms-1 me-1">Header image with title</span>
                             </div>
                         </div>
 
-                        <div v-if="name != 'tabs'" class="col-3">
-                            <div @click="selectComponent('tabs')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-browser d-block mt-1"></i>
-                                <span class="text-muted mt-1 ms-1 me-1">Tabbed menu</span>
+                        <div class="col-3">
+                            <div @click="selectComponent('youtube')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
+                                <i style="font-size: 20px" class="text-muted dripicons-camcorder d-block mt-1"></i>
+                                <span class="text-muted mt-1 ms-1 me-1">Youtube</span>
                             </div>
                         </div>
                     </div>
@@ -164,22 +167,15 @@
                         </div>
 
                         <div class="col-3">
-                            <div @click="selectComponent('instructor_text')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-user d-block mt-1"></i>
-                                <span class="text-muted mt-1 ms-1 me-1">Instructor text</span>
-                            </div>
-                        </div>
-
-                        <div class="col-3">
                             <div @click="selectComponent('instructor_courses')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-user d-block mt-1"></i>
+                                <i style="font-size: 20px" class="text-muted dripicons-view-list d-block mt-1"></i>
                                 <span class="text-muted mt-1 ms-1 me-1">Instructor's lessons</span>
                             </div>
                         </div>
 
                         <div class="col-3">
                             <div @click="selectComponent('instructor_events')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-user d-block mt-1"></i>
+                                <i style="font-size: 20px" class="text-muted dripicons-view-list-large d-block mt-1"></i>
                                 <span class="text-muted mt-1 ms-1 me-1">Instructor's courses</span>
                             </div>
                         </div>
@@ -190,28 +186,21 @@
                     <div class="row mb-2">
                         <div class="col-3">
                             <div @click="selectComponent('course_author')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-browser d-block mt-1"></i>
+                                <i style="font-size: 20px" class="text-muted dripicons-user-id d-block mt-1"></i>
                                 <span class="text-muted mt-1 ms-1 me-1">Course manager</span>
                             </div>
                         </div>
 
                         <div class="col-3">
-                            <div @click="selectComponent('course_video')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-browser d-block mt-1"></i>
-                                <span class="text-muted mt-1 ms-1 me-1">Course video</span>
-                            </div>
-                        </div>
-
-                        <div class="col-3">
                             <div @click="selectComponent('book_ticket')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-browser d-block mt-1"></i>
-                                <span class="text-muted mt-1 ms-1 me-1">Tickets</span>
+                                <i style="font-size: 20px" class="text-muted dripicons-card d-block mt-1"></i>
+                                <span class="text-muted mt-1 ms-1 me-1">Course tickets</span>
                             </div>
                         </div>
 
                         <div class="col-3">
                             <div @click="selectComponent('benefits')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-browser d-block mt-1"></i>
+                                <i style="font-size: 20px" class="text-muted dripicons-view-thumb d-block mt-1"></i>
                                 <span class="text-muted mt-1 ms-1 me-1">Course benefits</span>
                             </div>
                         </div>
@@ -220,28 +209,28 @@
                     <div class="row mb-2">
                         <div class="col-3">
                             <div @click="selectComponent('topics')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-browser d-block mt-1"></i>
+                                <i style="font-size: 20px" class="text-muted dripicons-menu d-block mt-1"></i>
                                 <span class="text-muted mt-1 ms-1 me-1">Course topics</span>
                             </div>
                         </div>
 
                         <div class="col-3">
                             <div @click="selectComponent('course_instructors')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-browser d-block mt-1"></i>
+                                <i style="font-size: 20px" class="text-muted dripicons-user-group d-block mt-1"></i>
                                 <span class="text-muted mt-1 ms-1 me-1">Course instructors</span>
                             </div>
                         </div>
 
                         <div class="col-3">
                             <div @click="selectComponent('course_video_testimonials')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-browser d-block mt-1"></i>
+                                <i style="font-size: 20px" class="text-muted dripicons-camcorder d-block mt-1"></i>
                                 <span class="text-muted mt-1 ms-1 me-1">Course video testimonials</span>
                             </div>
                         </div>
 
                         <div class="col-3">
                             <div @click="selectComponent('course_written_testimonials')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-browser d-block mt-1"></i>
+                                <i style="font-size: 20px" class="text-muted dripicons-message d-block mt-1"></i>
                                 <span class="text-muted mt-1 ms-1 me-1">Course written testimonials</span>
                             </div>
                         </div>
@@ -251,37 +240,21 @@
                     <div class="row mb-2">
                         <div class="col-3">
                             <div @click="selectComponent('course_faq')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-browser d-block mt-1"></i>
+                                <i style="font-size: 20px" class="text-muted dripicons-search d-block mt-1"></i>
                                 <span class="text-muted mt-1 ms-1 me-1">Course Q & A</span>
                             </div>
                         </div>
 
                         <div class="col-3">
-                            <div @click="selectComponent('course_hero')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-browser d-block mt-1"></i>
-                                <span class="text-muted mt-1 ms-1 me-1">Course hero</span>
-                            </div>
-                        </div>
-
-                        <div class="col-3">
-                            <div @click="selectComponent('course_text')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-browser d-block mt-1"></i>
-                                <span class="text-muted mt-1 ms-1 me-1">Course text</span>
-                            </div>
-                        </div>
-
-                        <div class="col-3">
                             <div @click="selectComponent('course_details')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-browser d-block mt-1"></i>
+                                <i style="font-size: 20px" class="text-muted dripicons-article d-block mt-1"></i>
                                 <span class="text-muted mt-1 ms-1 me-1">Course details</span>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="row mb-2">
                         <div class="col-3">
                             <div @click="selectComponent('course_location')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-browser d-block mt-1"></i>
+                                <i style="font-size: 20px" class="text-muted dripicons-location d-block mt-1"></i>
                                 <span class="text-muted mt-1 ms-1 me-1">Course location</span>
                             </div>
                         </div>
@@ -292,33 +265,22 @@
                     <div class="row mb-2">
                         <div class="col-3">
                             <div @click="selectComponent('blog_list')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-browser d-block mt-1"></i>
+                                <i style="font-size: 20px" class="text-muted dripicons-blog d-block mt-1"></i>
                                 <span class="text-muted mt-1 ms-1 me-1">Blog list</span>
                             </div>
                         </div>
 
                         <div class="col-3">
                             <div @click="selectComponent('instructors_list')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-browser d-block mt-1"></i>
+                                <i style="font-size: 20px" class="text-muted dripicons-checklist d-block mt-1"></i>
                                 <span class="text-muted mt-1 ms-1 me-1">Instructors list</span>
                             </div>
                         </div>
 
                          <div class="col-3">
                             <div @click="selectComponent('events_list')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-browser d-block mt-1"></i>
+                                <i style="font-size: 20px" class="text-muted dripicons-view-list-large d-block mt-1"></i>
                                 <span class="text-muted mt-1 ms-1 me-1">Courses list</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <hr>
-
-                    <div class="row mb-2">
-                        <div class="col-3">
-                            <div @click="selectComponent('post_feature')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-blog d-block mt-1"></i>
-                                <span class="text-muted mt-1 ms-1 me-1">Blog post list item</span>
                             </div>
                         </div>
                     </div>
