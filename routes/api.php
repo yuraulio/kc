@@ -39,6 +39,9 @@ Route::middleware('auth:api')->group(function () {
     // Logout
     Route::post('logout', [PassportAuthController::class, 'logout']);
 
+    //Absences
+    Route::post('absences-store', 'Api\AbsenceController@store');
+
    
 
 });
