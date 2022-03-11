@@ -735,7 +735,10 @@ export default {
             }
         },
         checkComponentVersion(column) {
-            var version = column.template.version ? column.template.version : 1;
+            var version = 1;
+            try {
+                var version = column.template.version;
+            } catch (error) {}
             if (this.extractedComponents[column.component].version > version){
                 return true;
             }
