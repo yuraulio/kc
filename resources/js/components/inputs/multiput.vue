@@ -251,12 +251,19 @@ export default {
             console.log(this.$refs[ref+'btn'])
         },
         updatedgallery($event, ref) {
-            this.$emit('inputed', { 'data': $event, 'key': this.keyput})
+            var gallery = [];
+            $event.forEach(function(image){
+                var image_data = {
+                    url: image.url,
+                    full_path: image.full_path,
+                    alt_text: image.alt_text,
+                    name: image.name,
+                }
+                gallery.push(image_data);
+            });
+            this.$emit('inputed', { 'data': gallery, 'key': this.keyput})
             this.$refs[ref+'btn'].click()
             this.$set(this.loadstart, ref,  false);
-            //this.$refs[ref].destroy();
-
-            console.log(this.$refs[ref+'btn'])
         },
         updatedimage($event) {
             this.$emit('inputed', { 'data': $event, 'key': this.keyput})
