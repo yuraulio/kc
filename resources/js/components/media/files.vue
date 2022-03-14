@@ -43,7 +43,7 @@
                   }}</a></span
                 >
               </td>
-              <td>{{ file.pages.length }}</td>
+              <td>{{ file.pages_count }}</td>
               <td>
                 <p class="mb-0">
                   {{
