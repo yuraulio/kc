@@ -23,6 +23,8 @@ class MediaFileResource extends JsonResource
             'extension' => $this->extension,
             'full_path' => $this->full_path,
             'subfiles' => $this->whenLoaded('subfiles', $this->subfiles, []),
+            'parrent' => $this->whenLoaded('parrent', $this->parrent, null),
+            'siblings' => $this->whenLoaded('siblings', $this->siblings, []),
             'user' => $this->when(
                 $this->user,
                 function () {
@@ -35,6 +37,7 @@ class MediaFileResource extends JsonResource
             'created_at' => $this->created_at,
             'alt_text' => $this->alt_text,
             'pages_count' => $this->pages_count,
+            'version' => $this->version,
         ];
     }
 }

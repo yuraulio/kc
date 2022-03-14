@@ -42,6 +42,16 @@ class MediaFile extends Model
         return $this->hasMany(MediaFile::class, "parent_id", "id");
     }
 
+    public function parrent()
+    {
+        return $this->belongsTo(MediaFile::class, "parent_id", "id");
+    }
+
+    public function siblings()
+    {
+        return $this->hasMany(MediaFile::class, "parent_id", "parent_id");
+    }
+
     public function pages()
     {
         return $this->belongsToMany(Page::class, 'cms_link_pages_files', 'file_id', 'page_id');

@@ -126,15 +126,61 @@ class MediaController extends Controller
                 }
             }
 
-            $imgpath = $path . ''. (($request->imgname ? $request->imgname . "_" . getimagesize($image)[0] . "x" . getimagesize($image)[1] . "_" . $request->compression . ".". $image->extension() : $image->getClientOriginalName()));
+            $image_name = $request->imgname ? pathinfo($request->imgname, PATHINFO_FILENAME) . "_" . getimagesize($image)[0] . "x" . getimagesize($image)[1] . "_" . $request->compression . ".". $image->extension() : $image->getClientOriginalName();
 
-            $file = Storage::disk('public')->putFileAs($path, $request->file('file'), ($request->imgname ? $request->imgname . "_" . getimagesize($image)[0] . "x" . getimagesize($image)[1] . "_" . $request->compression . ".". $image->extension() : $image->getClientOriginalName()), 'public');
+            $imgpath = $path . ''. $image_name;
 
-            $mfile = $this->storeFile(($request->imgname ? $request->imgname . "_" . getimagesize($image)[0] . "x" . getimagesize($image)[1] . "_" . $request->compression . ".". $image->extension() : $image->getClientOriginalName()), $imgpath, $mediaFolder->id, $image->getSize(), null, $request->alttext);
-            $mfile->pages = [];
+            $file = Storage::disk('public')->putFileAs($path, $request->file('file'), $image_name, 'public');
 
+            $mfile = $this->storeFile($image_name, $request->version, $imgpath, $mediaFolder->id, $image->getSize(), $request->parrent_id, $request->alttext);
 
-            return response()->json(['data' => [$mfile]], 200);
+            return response()->json(['data' => [new MediaFileResource($mfile)]], 200);
+        } catch (Exception $e) {
+            Log::error("Failed update file . " . $e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 400);
+        }
+    }
+
+    public function editImage(Request $request): JsonResponse
+    {
+        $image = $request->file('file');
+
+        try {
+            if ($request->directory) {
+                $mediaFolder = MediaFolder::findOrFail($request->directory);
+                $path = $mediaFolder->path . "/";
+            } else {
+                $path = "/pages_media/random/";
+
+                if (!Storage::disk('public')->exists($path)) {
+                    Storage::disk('public')->makeDirectory($path);
+                }
+
+                $mediaFolder = MediaFolder::whereName("random")->first();
+                if (!$mediaFolder) {
+                    $mediaFolder = new MediaFolder();
+                    $mediaFolder->name = "random";
+                    $mediaFolder->path = $path;
+                    $mediaFolder->url = config('app.url'). "/uploads" . $path;
+                    $mediaFolder->user_id = Auth::user()->id;
+                    $mediaFolder->save();
+                }
+            }
+
+            $image_name = $request->imgname;
+            $imgpath = $path . ''. $image_name;
+
+            // delete old file
+            $file = MediaFile::findOrFail($request->id);
+            if (Storage::disk('public')->exists($file->path)) {
+                Storage::disk('public')->delete($file->path);
+            }
+
+            $file = Storage::disk('public')->putFileAs($path, $request->file('file'), $image_name, 'public');
+
+            $mfile = $this->editFile($request->id, $request->version, $image_name, $imgpath, $mediaFolder->id, $image->getSize(), null, $request->alttext);
+
+            return response()->json(['data' => new MediaFileResource($mfile)], 200);
         } catch (Exception $e) {
             Log::error("Failed update file . " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
@@ -184,7 +230,7 @@ class MediaController extends Controller
         }
     }
 
-    public function storeFile($name, $path, $folderId, $size, $parent = null, $altext = null)
+    public function storeFile($name, $version, $path, $folderId, $size, $parent = null, $altext = null)
     {
         $mediaFile = new MediaFile();
         $mediaFile->name = $name;
@@ -197,7 +243,31 @@ class MediaController extends Controller
         $mediaFile->parent_id = $parent;
         $mediaFile->url = config('app.url'). "/uploads" . $path;
         $mediaFile->user_id = Auth::user()->id;
+        $mediaFile->version = $version;
         $mediaFile->save();
+
+        $mediaFile->load(["pages", "siblings", "subfiles"]);
+
+        return $mediaFile;
+    }
+
+    public function editFile($id, $version, $name, $path, $folderId, $size, $parent = null, $altext = null)
+    {
+        $mediaFile = MediaFile::find($id);
+        $mediaFile->name = $name;
+        $mediaFile->path = $path;
+        $mediaFile->extension = $this->getRealExtension($name);
+        $mediaFile->full_path = "/uploads" . $path;
+        $mediaFile->alt_text = $altext;
+        $mediaFile->folder_id = $folderId;
+        $mediaFile->size = $size;
+        $mediaFile->parent_id = $parent;
+        $mediaFile->url = config('app.url'). "/uploads" . $path;
+        $mediaFile->user_id = Auth::user()->id;
+        $mediaFile->version = $version;
+        $mediaFile->save();
+
+        $mediaFile->load(["pages", "siblings", "subfiles"]);
 
         return $mediaFile;
     }

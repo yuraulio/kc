@@ -139,6 +139,9 @@ var mediaMixin = {
                     this.$modal.hide('upload-media-modal');
                     this.loading = false;
                     this.regFile = null;
+
+                    this.selectedFile = response.data.data[0];
+                    this.$modal.show('edit-image-modal');
                 })
                 .catch((error) => {
                     console.log(error)
@@ -147,7 +150,6 @@ var mediaMixin = {
             }
         },
         imageAdded($event) {
-            console.log($event, this.selectedFolder)
             this.currentImage = $event;
             var formData = new FormData();
             var imagefile = $event;
@@ -155,6 +157,8 @@ var mediaMixin = {
             formData.append('imgname', this.$refs.crpr.imgname);
             formData.append('alttext', this.$refs.crpr.alttext);
             formData.append('compression', this.$refs.crpr.compression);
+            formData.append('parrent_id', this.$refs.crpr.parrentImage.id ? this.$refs.crpr.parrentImage.id : null);
+            formData.append('version', this.$refs.crpr.version ? this.$refs.crpr.version : 'original');
             if (this.$refs.crpr.prevalue) {
                 formData.append('edited', this.$refs.crpr.prevalue.id);
             }
@@ -162,7 +166,6 @@ var mediaMixin = {
             if (this.selectedFolder) {
                 formData.append('directory', this.selectedFolder.id);
             }
-            console.log('imgfile', imagefile)
             if (imagefile) {
                 this.$refs.crpr.isUploading = true;
                 formData.append("file", imagefile);
@@ -186,6 +189,43 @@ var mediaMixin = {
                     })
                     console.log(response)
                     this.$refs.crpr.isUploading = false;
+                })
+                .catch((error) => {
+                    console.log(error)
+                    this.$refs.crpr.isUploading = false;
+                })
+            }
+        },
+        imageEdit($event) {
+            var id = this.selectedFile.id;
+            this.currentImage = $event;
+            var formData = new FormData();
+            var imagefile = $event;
+            formData.append('imgname', this.$refs.crpr.imgname);
+            formData.append('alttext', this.$refs.crpr.alttext);
+            formData.append('compression', this.$refs.crpr.compression);
+            formData.append('version', this.$refs.crpr.version);
+            formData.append('id', id);
+            if (this.selectedFolder) {
+                formData.append('directory', this.selectedFolder.id);
+            }
+            if (imagefile) {
+                this.$refs.crpr.isUploading = true;
+                formData.append("file", imagefile);
+                axios.post('/api/media_manager/edit_image', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }).then((response) => {
+                    this.$toast.success('Uploaded Successfully!');
+                    var element = response.data.data;
+                    var index = this.mediaFiles.findIndex(function(file) {
+                        return file.id == id;
+                    });
+                    console.log("index", index);
+                    this.mediaFiles[index] = element;
+                    this.$refs.crpr.isUploading = false;
+                    this.$modal.hide('edit-image-modal');
                 })
                 .catch((error) => {
                     console.log(error)
@@ -273,7 +313,7 @@ var mediaMixin = {
         },
         userSelectedFiles($event) {
             this.selectedFile = $event;
-            this.$modal.show('upload-media-modal');
+            this.$modal.show('edit-image-modal');
         },
         deleteFile($event) {
             var pagesText = "";

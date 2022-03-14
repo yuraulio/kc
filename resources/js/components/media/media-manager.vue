@@ -39,6 +39,12 @@
         </div>
     </modal>
 
+    <modal name="edit-image-modal" :adaptive="true" :resizable="true" width="92%" height="auto" :scrollable="true">
+        <div class="row p-4">
+            <cropperer @edit="imageEdit" @upload="imageAdded" ref="crpr" :prevalue="selectedFile"></cropperer>
+        </div>
+    </modal>
+
     <modal name="upload-file-modal" ref="fmodal" :resizable="true" height="auto" :adaptive="true" :scrollable="true">
         <div class="row p-4">
             <div class="d-grid col-lg-12">
