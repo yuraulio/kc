@@ -178,9 +178,9 @@
         ]
     },
     "comments" : {
-        "version": 2,
+        "version": 3,
         "width": "content",
-        "title": "Comment",
+        "title": "Comments",
         "key": "comment_box_component",
         "one_column": true,
         "icon": "dripicons-align-justify",
