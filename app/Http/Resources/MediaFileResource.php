@@ -34,7 +34,7 @@ class MediaFileResource extends JsonResource
             ),
             'created_at' => $this->created_at,
             'alt_text' => $this->alt_text,
-            'pages' => $this->pages,
+            'pages_count' => $this->pages_count,
         ];
     }
 }

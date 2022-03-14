@@ -23,6 +23,7 @@
         <div class="row row-flex row-flex-15">
             <?php 
                $early = false;
+               $index = 0;
             ?>
             @foreach($tickets as $key => $ticket)
                 <?php 
@@ -42,8 +43,9 @@
                         $showAlumni = false;
                         continue;
                     }
+                    $index = $index + 1;
                 ?>
-                <div class="col-md-6 col-sm-12 d-flex book-ticket-boxes {{ $key == 0 ? 'justify-content-end-2' : 'justify-content-start-2' }}" >
+                <div class="col-md-6 col-sm-12 d-flex book-ticket-boxes {{ $index == 1 ? 'justify-content-end-2' : 'justify-content-start-2' }}" >
                     <div class="ticket-box-wrapper" style="width: 100%;">
                         <div class="ticket-box">
                             <h3 class="@if($ticket['type'] != 'Alumni') special-ticket @endif">{{ $ticket['type'] }} <span> €{{$ticket['pivot']['price']}} </span></h3>
