@@ -39,7 +39,7 @@
         </div>
     </modal>
 
-    <modal name="edit-image-modal" :adaptive="true" :resizable="true" width="92%" height="auto" :scrollable="true">
+    <modal name="edit-image-modal" :adaptive="true" :resizable="true" width="92%" height="auto" :scrollable="true" class="mb-0">
         <div class="row p-4">
             <cropperer @edit="imageEdit" @upload="imageAdded" ref="crpr" :prevalue="selectedFile"></cropperer>
         </div>
@@ -229,7 +229,7 @@ export default {
     data() {
         return {
             regFile: null,
-            onlyParent: true,
+            onlyParent: false,
             filesView: false,
             opImage: null,
             selectedFile: null,

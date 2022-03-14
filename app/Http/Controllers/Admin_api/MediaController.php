@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Image;
+use Intervention\Image\ImageManager;
 
 class MediaController extends Controller
 {
@@ -126,16 +127,103 @@ class MediaController extends Controller
                 }
             }
 
-            $image_name = $request->imgname ? pathinfo($request->imgname, PATHINFO_FILENAME) . "_" . getimagesize($image)[0] . "x" . getimagesize($image)[1] . "_" . $request->compression . ".". $image->extension() : $image->getClientOriginalName();
-
-            $imgpath = $path . ''. $image_name;
-
+            $image_name = $image->getClientOriginalName();
+            $imgpath_original = $path . ''. $image_name;
             $file = Storage::disk('public')->putFileAs($path, $request->file('file'), $image_name, 'public');
+            $mfile_original = $this->storeFile($image_name, "original", $imgpath_original, $mediaFolder->id, $image->getSize(), $request->parrent_id, $request->alttext);
 
-            $mfile = $this->storeFile($image_name, $request->version, $imgpath, $mediaFolder->id, $image->getSize(), $request->parrent_id, $request->alttext);
+            $versions = [
+                [
+                    "instructors-testimonials",
+                    470,
+                    470
+                ],
+                [
+                    "event-card",
+                    542,
+                    291
+                ],
+                [
+                    "users",
+                    470,
+                    470
+                ],
+                [
+                    "header-image",
+                    2880,
+                    1248
+                ],
+                [
+                    "instructors-small",
+                    90,
+                    90
+                ],
+                [
+                    "feed-image",
+                    300,
+                    300
+                ],
+                [
+                    "social-media-sharing",
+                    1920,
+                    832
+                ],
+                [
+                    "blog-content",
+                    680,
+                    320
+                ],
+                [
+                    "blog-featured",
+                    343,
+                    193
+                ]
+            ];
 
-            return response()->json(['data' => [new MediaFileResource($mfile)]], 200);
+            foreach ($versions as $version) {
+                // set image name
+                $tmp = explode('.', $image_name);
+                $extension = end($tmp);
+                $version_name = pathinfo($image_name, PATHINFO_FILENAME);
+                $version_name = $version_name . "-" . $version[0] . "." . $extension;
+
+                // set image path
+                $imgpath = $path . ''. $version_name;
+
+                // save image
+                $file = Storage::disk('public')->putFileAs($path, $request->file('file'), $version_name, 'public');
+
+                // crop image
+                $manager = new ImageManager();
+                $image = $manager->make(Storage::disk('public')->get($file));
+                $image_height = $image->height();
+                $image_width = $image->width();
+
+                $crop_height = $version[2];
+                $crop_width = $version[1];
+
+                $height_offset = ($image_height / 2) - ($crop_height / 2);
+                $height_offset = $height_offset > 0 ? (int) $height_offset : null;
+
+                $width_offset = ($image_width / 2) - ($crop_width / 2);
+                $width_offset = $width_offset > 0 ? (int) $width_offset : null;
+
+                // dd($crop_width, $crop_height, $width_offset, $height_offset);
+
+                $image->crop($crop_width, $crop_height, $width_offset, $height_offset);
+                $image->save(public_path("/uploads" . $mediaFolder->path . $version_name));
+
+                // save to db
+                $mfile = $this->storeFile($version_name, $version[0], $imgpath, $mediaFolder->id, $image->filesize(), $mfile_original->id, $request->alttext);
+                $files[] = new MediaFileResource($mfile);
+            }
+
+            $original = MediaFile::find($mfile_original->id);
+            array_unshift($files, new MediaFileResource($original));
+
+            return response()->json(['data' => $files], 200);
         } catch (Exception $e) {
+            throw $e;
             Log::error("Failed update file . " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
         }

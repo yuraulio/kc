@@ -158,7 +158,6 @@ var mediaMixin = {
             formData.append('alttext', this.$refs.crpr.alttext);
             formData.append('compression', this.$refs.crpr.compression);
             formData.append('parrent_id', this.$refs.crpr.parrentImage.id ? this.$refs.crpr.parrentImage.id : null);
-            formData.append('version', this.$refs.crpr.version ? this.$refs.crpr.version : 'original');
             if (this.$refs.crpr.prevalue) {
                 formData.append('edited', this.$refs.crpr.prevalue.id);
             }

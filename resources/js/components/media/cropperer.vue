@@ -1,10 +1,10 @@
 <template>
 <div class="row">
-    <div class="col-lg-8">
-        <template v-if="version != 'original'">
+    <div class="col-lg-8 ">
+        <div :class="version != 'original' ? '' : 'visually-hidden'">
             <h4>{{version}}</h4>
             <div v-show="imgSrc" :key="imgSrc ? imgSrc : 'emp'" class="img-cropper">
-                <vue-cropper ref="cropper" :checkCrossOrigin="false" :src="imgSrc" preview=".preview" />
+                <vue-cropper ref="cropper" :checkCrossOrigin="false" :src="imgSrc" preview=".preview"/>
             </div>
             <label v-show="imgSrc == null" :name="'image'" style="width: 100%; min-height: 300px">
                 <form method="post" class="dropzone dz-clickable" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
@@ -58,12 +58,7 @@
                 <button type="button" class="btn btn-soft-primary" @click.prevent="rotate(-90)">
                     <i class="mdi mdi-rotate-left"></i>
                 </button>
-                <button type="button" class="btn btn-soft-primary" @click.prevent="flipX">
-                    <i class="mdi mdi-flip-horizontal"></i>
-                </button>
-                <button type="button" class="btn btn-soft-primary" @click.prevent="flipY">
-                    <i class="mdi mdi-flip-vertical"></i>
-                </button>
+                
             </div>
 
             <div class="btn-group mb-2 mt-2" style="float: right">
@@ -73,193 +68,80 @@
                 <button type="button" class="btn btn-soft-primary" @click.prevent="cropImage">
                     Crop
                 </button>
-                <button type="button" class="btn btn-soft-primary" @click.prevent="
-                imgSrc = null;
-                showFileChooser;
-            ">
-                    Reupload
-                </button>
+                
             </div>
 
+            
             <div class="row">
-                <div class="col-lg-6">
-                    <h4 class="header-title mt-lg-0 my-3">Image Data</h4>
-
-                    <div class="row g-2">
-                        <div class="col-md">
-                            <div class="form-floating">
-                                <input v-model="imgData.scaleX" type="number" class="form-control" id="floatingInputGrid1" placeholder="" value="" />
-                                <label for="floatingInputGrid1">Scale X</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row g-2">
-                        <div class="col-md">
-                            <div class="form-floating">
-                                <input v-model="imgData.scaleY" type="number" class="form-control" id="floatingInputGrid2" placeholder="" value="" />
-                                <label for="floatingInputGrid2">Scale Y</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row g-2">
-                        <div class="col-md">
-                            <div class="form-floating">
-                                <input v-model="imgData.width" type="number" class="form-control" id="floatingInputGrid3" placeholder="" value="" />
-                                <label for="floatingInputGrid3">Width</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row g-2">
-                        <div class="col-md">
-                            <div class="form-floating">
-                                <input v-model="imgData.height" type="number" class="form-control" id="floatingInputGrid4" placeholder="" value="" />
-                                <label for="floatingInputGrid4">Height</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="btn-group mb-2 mt-2">
-                        <button type="button" class="btn btn-soft-primary" @click.prevent="getData">
-                            Get Data
-                        </button>
-                        <button type="button" class="btn btn-soft-primary" @click.prevent="setData">
-                            Set Data
-                        </button>
-                    </div>
+                <div class="col-lg-6 d-grid">
+                    <p>Preview</p>
+                    <div class="cropped-image preview" />
                 </div>
-
-                <div class="col-lg-6">
-                    <h4 class="header-title mt-lg-0 my-3">CropBox Data</h4>
-
-                    <div class="row g-2 mb-3">
-                        <div class="col-md">
-                            <div class="form-floating">
-                                <multiselect v-model="selectedVersion" :options="versions" :custom-label="nameWithLang" @input="versionSelected" :disabled="!imgSrc" placeholder="Select predefined" label="version" track-by="version"></multiselect>
-                                <!-- <input
-                    v-model="cropBoxData.left"
-                    type="number"
-                    class="form-control"
-                    id="floatingInputGrid11"
-                    placeholder=""
-                    value=""
-                    />
-                    <label for="floatingInputGrid11">Left</label> -->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row g-2">
-                        <div class="col-md">
-                            <div class="form-floating">
-                                <!-- <input
-                    v-model="cropBoxData.top"
-                    type="number"
-                    class="form-control"
-                    id="floatingInputGrid21"
-                    placeholder=""
-                    value=""
-                    />
-                    <label for="floatingInputGrid21">Top</label> -->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row g-2">
-                        <div class="col-md">
-                            <div class="form-floating">
-                                <input v-model="cropBoxData.width" type="number" class="form-control" id="floatingInputGrid31" placeholder="" value="" />
-                                <label for="floatingInputGrid31">Width</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row g-2">
-                        <div class="col-md">
-                            <div class="form-floating">
-                                <input v-model="cropBoxData.height" type="number" class="form-control" id="floatingInputGrid41" placeholder="" value="" />
-                                <label for="floatingInputGrid41">Height</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="btn-group mb-2 mt-2">
-                        <button type="button" class="btn btn-soft-primary" @click.prevent="getCropBoxData">
-                            Get Data
-                        </button>
-                        <button type="button" class="btn btn-soft-primary" @click.prevent="setCropBoxData">
-                            Set Data
-                        </button>
+                <div class="col-lg-6 d-grid">
+                    <p>Cropped Image</p>
+                    <div class="cropped-image">
+                        <img crossorigin="anonymous" v-if="cropImg" :src="cropImg" alt="Cropped Image" />
+                        <div v-else class="crop-placeholder" />
                     </div>
                 </div>
             </div>
-        </template>
-        <template v-else>
+            <div class="row">
+                <!--
+                <div class="col-lg-12 d-grid">
+                    <div class="mt-3 mb-3">
+                        <label for="example-range" class="form-label">Compression Quality ({{ compression }})</label>
+                        <input v-model="compression" class="form-range" id="example-range" type="range" name="range" min="0" max="100" />
+                    </div>
+                </div>
+                -->
+                <div class="col-lg-6 d-grid">
+                    <div class="mb-3">
+                        <label class="form-label">Name</label>
+                        <small>(Keep filename same for resizes to be child images)</small>
+                        <input v-model="imgname" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-lg-6 d-grid">
+                    <div class="mb-3">
+                        <label class="form-label">Alt text</label>
+                        <input v-model="alttext" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-lg-6 d-grid">
+                    <template v-if="findVersionImage(version) != null">
+                        <button @click="upload('edit')" class="btn btn-soft-success btn-block mt-1" :disabled="isUploading">
+                            <span v-if="isUploading"><i class="fas fa-spinner fa-spin"></i> Uploading...</span>
+                            <span v-else>Edit</span>
+                        </button>
+                    </template>
+                    <template v-else>
+                        <button @click="upload('upload')" class="btn btn-soft-success btn-block mt-1" :disabled="isUploading">
+                            <span v-if="isUploading"><i class="fas fa-spinner fa-spin"></i> Uploading...</span>
+                            <span v-else>Save</span>
+                        </button>
+                    </template>
+                </div>
+            </div>
+        </div>
+        <div :class="version == 'original' ? '' : 'visually-hidden'">
             <h4>Original image</h4>
             <img class="img-fluid" crossorigin="anonymous" v-if="parrentImage" :src="parrentImage.full_path" alt="Original image" />
-        </template>
+        </div>
     </div>
     <div class="col-lg-4">
         <div class="card">
-            <div class="card-body bg-light" style="max-height: 95vh; overflow: hidden; overflow-y: scroll">
-                <ul class="nav nav-pills navtab-bg nav-justified">
-                    <li class="nav-item">
-                        <a href="#!" @click="tab='edit'" aria-expanded="false" :class="'nav-link ' + (tab == 'edit' ? 'active' : '')">
-                            Edit
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#!" @click="tab='versions'" aria-expanded="true" :class="'nav-link ' + (tab == 'versions' ? 'active' : '')">
-                            Versions
-                        </a>
-                    </li>
-                </ul>
-                <div class="tab-content">
-                    <div v-if="tab == 'edit'" class="tab-pane d-block" id="home1">
-                        <div class="col-lg-12 d-grid">
-                            <p>Preview</p>
-                            <div class="cropped-image preview" />
-                            <p>Cropped Image</p>
-                            <div class="cropped-image">
-                                <img crossorigin="anonymous" v-if="cropImg" :src="cropImg" alt="Cropped Image" />
-                                <div v-else class="crop-placeholder" />
-                            </div>
+            <div class="card-body bg-light" style="max-height: 90vh; overflow: hidden; overflow-y: scroll">
+                <div class="tab-content pt-0">
 
-                            <div class="mt-3 mb-3">
-                                <label for="example-range" class="form-label">Compression Quality ({{ compression }})</label>
-                                <input v-model="compression" class="form-range" id="example-range" type="range" name="range" min="0" max="100" />
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">Name</label>
-                                <small>(Keep filename same for resizes to be child images)</small>
-                                <input v-model="imgname" type="text" class="form-control" />
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">Alt text</label>
-                                <input v-model="alttext" type="text" class="form-control" />
-                            </div>
-
-                            <template v-if="findVersionImage(version) != null">
-                                <button @click="upload('edit')" class="btn btn-soft-success btn-block mt-1" :disabled="isUploading">
-                                    <span v-if="isUploading"><i class="fas fa-spinner fa-spin"></i> Uploading...</span>
-                                    <span v-else>Edit</span>
-                                </button>
-                            </template>
-                            <template v-else>
-                                <button @click="upload('upload')" class="btn btn-soft-success btn-block mt-1" :disabled="isUploading">
-                                    <span v-if="isUploading"><i class="fas fa-spinner fa-spin"></i> Uploading...</span>
-                                    <span v-else>Save</span>
-                                </button>
-                            </template>
-                        </div>
-                    </div>
-                    <div v-if="tab == 'versions'" class="tab-pane d-block" id="profile1">
+                    <div class="tab-pane d-block" id="profile1">
                         <div v-for="version1 in versions" class="col-sm-12">
                             <h5>{{ version1.version }}</h5>
                             <small class="text-muted d-block">{{ version1.description }}</small>
                             <template v-if="findVersionImage(version1.version) != null">
-                                <img crossorigin="anonymous" :src="findVersionImage(version1.version).full_path" alt="image" class="img-fluid rounded" />
+                                <img @click="version=version1.version; selectedVersion=version1; versionSelected();" crossorigin="anonymous" :src="findVersionImage(version1.version).full_path" alt="image" class="img-fluid rounded" />
                             </template>
                             <template v-else>
-                                <button @click="version=version1.version; tab='edit';" class="btn btn-primary">Set image</button>
+                                <button @click="version=version1.version;" class="btn btn-primary">Set image</button>
                             </template>
 
                             <hr>
@@ -301,7 +183,6 @@ export default {
             compression: 100,
             parrentImage: null,
             version: "original",
-            tab: "versions",
             versions: [{
                     w: 470,
                     h: 470,
@@ -387,7 +268,7 @@ export default {
                 this.version = 'original';
             }
 
-            this.imgSrc = '/uploads/' + this.parrentImage.path;
+            this.imgSrc = '/uploads' + this.parrentImage.path;
             this.uploadedVersions = this.parrentImage.subfiles;
             this.originalFile = this.prevalue;
 
@@ -405,6 +286,8 @@ export default {
                     setTimeout(() => {
                         this.getData();
                         this.getCropBoxData();
+                        // this.setVersion();
+                        // this.versionSelected();
                     }, 600);
                 };
 
@@ -414,12 +297,49 @@ export default {
         }
     },
     methods: {
+        setVersion() {
+            var index = this.versions.findIndex((item) => {
+                return item.version == this.version;
+            });
+            this.selectedVersion = this.versions[index];
+        },
         versionSelected() {
             if (this.selectedVersion) {
-                this.$set(this.cropBoxData, 'width', this.selectedVersion.w)
-                this.$set(this.cropBoxData, 'height', this.selectedVersion.h)
-                this.setCropBoxData();
+                var image_width, image_height;
+
+                var img = new Image();
+                img.onload = () => {
+                    image_width = img.width;
+                    image_height = img.height;
+                    this.setCropBox(image_width, image_height)
+                }
+                img.src = this.originalFile.url;
             }
+        },
+        setCropBox(image_width, image_height) {
+            var cropper_height = this.$refs.cropper.$el.clientHeight;
+            var cropper_width = this.$refs.cropper.$el.clientWidth;
+
+            // var image_width = 2880;
+            // var image_height = 1248;
+
+            var width_ratio = cropper_width / image_width;
+            var height_ratio = cropper_height / image_height;
+
+
+            this.$set(this.cropBoxData, 'width', this.selectedVersion.w * width_ratio)
+            this.$set(this.cropBoxData, 'height', this.selectedVersion.h * height_ratio)
+            this.setCropBoxData();
+        },
+        calculateRatio(num_1, num_2){
+            for(num=num_2; num>1; num--) {
+                if((num_1 % num) == 0 && (num_2 % num) == 0) {
+                    num_1=num_1/num;
+                    num_2=num_2/num;
+                }
+            }
+            var ratio = num_1+":"+num_2;
+            return ratio;
         },
         nameWithLang({
             version,
@@ -506,8 +426,8 @@ export default {
         },
         reset() {
             this.$refs.cropper.reset();
-            this.selectedVersion = null;
-            this.getCropBoxData();
+            this.versionSelected();
+            // this.getCropBoxData();
         },
         rotate(deg) {
             this.$refs.cropper.rotate(deg);
