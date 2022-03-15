@@ -1,7 +1,7 @@
 <template>
 <div class="row">
     <div class="col-lg-8 ">
-        <div :class="version != 'original' ? '' : 'visually-hidden'">
+        <div>
             <h4>{{version}}</h4>
             <div v-show="imgSrc" :key="imgSrc ? imgSrc : 'emp'" class="img-cropper">
                 <vue-cropper ref="cropper" :checkCrossOrigin="false" :src="imgSrc" preview=".preview"/>
@@ -65,24 +65,19 @@
                 <button type="button" class="btn btn-soft-primary" @click.prevent="reset">
                     Reset
                 </button>
+                <!--
                 <button type="button" class="btn btn-soft-primary" @click.prevent="cropImage">
                     Crop
                 </button>
+                -->
                 
             </div>
 
             
-            <div class="row">
-                <div class="col-lg-6 d-grid">
+            <div class="row mb-2">
+                <div class="col-lg-12 d-grid">
                     <p>Preview</p>
                     <div class="cropped-image preview" />
-                </div>
-                <div class="col-lg-6 d-grid">
-                    <p>Cropped Image</p>
-                    <div class="cropped-image">
-                        <img crossorigin="anonymous" v-if="cropImg" :src="cropImg" alt="Cropped Image" />
-                        <div v-else class="crop-placeholder" />
-                    </div>
                 </div>
             </div>
             <div class="row">
@@ -108,7 +103,7 @@
                     </div>
                 </div>
                 <div class="col-lg-6 d-grid">
-                    <template v-if="findVersionImage(version) != null">
+                    <template v-if="findVersionData(version) != null">
                         <button @click="upload('edit')" class="btn btn-soft-success btn-block mt-1" :disabled="isUploading">
                             <span v-if="isUploading"><i class="fas fa-spinner fa-spin"></i> Uploading...</span>
                             <span v-else>Edit</span>
@@ -123,10 +118,7 @@
                 </div>
             </div>
         </div>
-        <div :class="version == 'original' ? '' : 'visually-hidden'">
-            <h4>Original image</h4>
-            <img class="img-fluid" crossorigin="anonymous" v-if="parrentImage" :src="parrentImage.full_path" alt="Original image" />
-        </div>
+        
     </div>
     <div class="col-lg-4">
         <div class="card">
@@ -137,8 +129,8 @@
                         <div v-for="version1 in versions" class="col-sm-12">
                             <h5>{{ version1.version }}</h5>
                             <small class="text-muted d-block">{{ version1.description }}</small>
-                            <template v-if="findVersionImage(version1.version) != null">
-                                <img @click="version=version1.version; selectedVersion=version1; versionSelected();" crossorigin="anonymous" :src="findVersionImage(version1.version).full_path" alt="image" class="img-fluid rounded" />
+                            <template v-if="findVersionData(version1.version) != null">
+                                <img @click="version=version1.version; selectedVersion=version1; versionSelected();" crossorigin="anonymous" :src="findVersionData(version1.version).full_path" alt="image" class="img-fluid rounded" />
                             </template>
                             <template v-else>
                                 <button @click="version=version1.version;" class="btn btn-primary">Set image</button>
@@ -183,6 +175,8 @@ export default {
             compression: 100,
             parrentImage: null,
             version: "original",
+            width_ratio: null,
+            height_ratio: null,
             versions: [{
                     w: 470,
                     h: 470,
@@ -286,8 +280,7 @@ export default {
                     setTimeout(() => {
                         this.getData();
                         this.getCropBoxData();
-                        // this.setVersion();
-                        // this.versionSelected();
+                        this.setCropBoxData();
                     }, 600);
                 };
 
@@ -297,12 +290,6 @@ export default {
         }
     },
     methods: {
-        setVersion() {
-            var index = this.versions.findIndex((item) => {
-                return item.version == this.version;
-            });
-            this.selectedVersion = this.versions[index];
-        },
         versionSelected() {
             if (this.selectedVersion) {
                 var image_width, image_height;
@@ -313,7 +300,12 @@ export default {
                     image_height = img.height;
                     this.setCropBox(image_width, image_height)
                 }
-                img.src = this.originalFile.url;
+                img.src = this.parrentImage.url;
+
+                var data = this.findVersionData(this.selectedVersion.version);
+                this.imgname = data.name;
+                this.alttext = data.alt_text;
+
             }
         },
         setCropBox(image_width, image_height) {
@@ -323,12 +315,11 @@ export default {
             // var image_width = 2880;
             // var image_height = 1248;
 
-            var width_ratio = cropper_width / image_width;
-            var height_ratio = cropper_height / image_height;
+            this.width_ratio = cropper_width / image_width;
+            this.height_ratio = cropper_height / image_height;
 
-
-            this.$set(this.cropBoxData, 'width', this.selectedVersion.w * width_ratio)
-            this.$set(this.cropBoxData, 'height', this.selectedVersion.h * height_ratio)
+            this.$set(this.cropBoxData, 'width', this.selectedVersion.w * this.width_ratio);
+            this.$set(this.cropBoxData, 'height', this.selectedVersion.h * this.height_ratio);
             this.setCropBoxData();
         },
         calculateRatio(num_1, num_2){
@@ -348,6 +339,8 @@ export default {
             return `${version} — [${description}]`
         },
         upload(event) {
+            this.getCropBoxData();
+            console.log(this.cropBoxData);
             this.$refs.cropper.getCroppedCanvas({
                 width: this.cropBoxData.width,
                 height: this.cropBoxData.height,
@@ -365,7 +358,6 @@ export default {
         },
         cropImage() {
             // get image data for post processing, e.g. upload or setting image src
-
             setTimeout(() => {
                 this.cropImg = this.$refs.cropper
                     .getCroppedCanvas({
@@ -477,7 +469,7 @@ export default {
         zoom(percent) {
             this.$refs.cropper.relativeZoom(percent);
         },
-        findVersionImage(version){
+        findVersionData(version){
             var return_value = null;
             this.prevalue.subfiles.forEach(function(image){
                 if (image.version == version) {
@@ -489,9 +481,7 @@ export default {
                     return_value = image;
                 }
             });
-
             return return_value;
-
         }
     },
     beforeDestroy() {

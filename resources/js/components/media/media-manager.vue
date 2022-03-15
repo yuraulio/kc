@@ -229,7 +229,7 @@ export default {
     data() {
         return {
             regFile: null,
-            onlyParent: false,
+            onlyParent: true,
             filesView: false,
             opImage: null,
             selectedFile: null,

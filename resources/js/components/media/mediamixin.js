@@ -202,9 +202,11 @@ var mediaMixin = {
             var imagefile = $event;
             formData.append('imgname', this.$refs.crpr.imgname);
             formData.append('alttext', this.$refs.crpr.alttext);
-            formData.append('compression', this.$refs.crpr.compression);
             formData.append('version', this.$refs.crpr.version);
-            formData.append('id', id);
+            formData.append('parent_id', this.$refs.crpr.parrentImage.id);
+            formData.append('crop_data', JSON.stringify(this.$refs.crpr.cropBoxData));
+            formData.append('width_ratio', this.$refs.crpr.width_ratio);
+            formData.append('height_ratio', this.$refs.crpr.height_ratio);
             if (this.selectedFolder) {
                 formData.append('directory', this.selectedFolder.id);
             }
@@ -218,11 +220,12 @@ var mediaMixin = {
                 }).then((response) => {
                     this.$toast.success('Uploaded Successfully!');
                     var element = response.data.data;
-                    var index = this.mediaFiles.findIndex(function(file) {
-                        return file.id == id;
-                    });
-                    console.log("index", index);
-                    this.mediaFiles[index] = element;
+                    // var index = this.mediaFiles.findIndex(function(file) {
+                    //     return file.id == id;
+                    // });
+                    // console.log("index", index);
+                    this.getFiles();
+                    // this.mediaFiles[index] = element;
                     this.$refs.crpr.isUploading = false;
                     this.$modal.hide('edit-image-modal');
                 })

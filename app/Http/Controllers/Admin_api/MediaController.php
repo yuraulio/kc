@@ -259,17 +259,35 @@ class MediaController extends Controller
             $imgpath = $path . ''. $image_name;
 
             // delete old file
-            $file = MediaFile::findOrFail($request->id);
+            $file = MediaFile::where("parent_id", $request->parent_id)->where("version", $request->version)->first();
+            $original_file = MediaFile::findOrFail($request->parent_id);
             if (Storage::disk('public')->exists($file->path)) {
                 Storage::disk('public')->delete($file->path);
             }
+            // dd($file->path);
+            Storage::disk('public')->copy($original_file->path, $file->path);
+            // dd($file->path);
 
-            $file = Storage::disk('public')->putFileAs($path, $request->file('file'), $image_name, 'public');
+            // crop image
+            $manager = new ImageManager();
+            $image = $manager->make(Storage::disk('public')->get($file->path));
 
-            $mfile = $this->editFile($request->id, $request->version, $image_name, $imgpath, $mediaFolder->id, $image->getSize(), null, $request->alttext);
+            $request->crop_data = json_decode($request->crop_data);
+
+            $crop_height = $request->crop_data->height * (1 / $request->height_ratio);
+            $crop_width = $request->crop_data->width * (1 / $request->width_ratio);
+
+            $height_offset = $request->crop_data->top * (1 / $request->height_ratio);
+            $width_offset = $request->crop_data->left * (1 / $request->width_ratio);
+
+            $image->crop((int) $crop_width, (int) $crop_height, (int) $width_offset, (int) $height_offset);
+            $image->save(public_path("/uploads" . $mediaFolder->path . $image_name));
+
+            $mfile = $this->editFile($request->parent_id, $request->version, $image_name, $imgpath, $mediaFolder->id, $image->filesize(), null, $request->alttext);
 
             return response()->json(['data' => new MediaFileResource($mfile)], 200);
         } catch (Exception $e) {
+            throw $e;
             Log::error("Failed update file . " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
         }
@@ -339,9 +357,9 @@ class MediaController extends Controller
         return $mediaFile;
     }
 
-    public function editFile($id, $version, $name, $path, $folderId, $size, $parent = null, $altext = null)
+    public function editFile($parent_id, $version, $name, $path, $folderId, $size, $parent = null, $altext = null)
     {
-        $mediaFile = MediaFile::find($id);
+        $mediaFile = MediaFile::where("parent_id", $parent_id)->where("version", $version)->first();
         $mediaFile->name = $name;
         $mediaFile->path = $path;
         $mediaFile->extension = $this->getRealExtension($name);
@@ -349,10 +367,8 @@ class MediaController extends Controller
         $mediaFile->alt_text = $altext;
         $mediaFile->folder_id = $folderId;
         $mediaFile->size = $size;
-        $mediaFile->parent_id = $parent;
         $mediaFile->url = config('app.url'). "/uploads" . $path;
         $mediaFile->user_id = Auth::user()->id;
-        $mediaFile->version = $version;
         $mediaFile->save();
 
         $mediaFile->load(["pages", "siblings", "subfiles"]);
