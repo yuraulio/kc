@@ -121,7 +121,7 @@
             ></editable>
         </div>
 
-        <div v-if="mode == 'edit'">
+        <div v-if="mode == 'edit' && templates != null">
             <editable
                 @updatemode="updatemode"
                 @refreshcategories="getData"
@@ -166,7 +166,7 @@
         data() {
             return {
                 mode: "list",
-                templates: [],
+                templates: null,
                 id: null,
                 title: null,
                 filter: "",
@@ -266,9 +266,6 @@
         },
         mounted() {
             const urlParams = new URLSearchParams(window.location.search);
-            // if (urlParams.get("filter")) {
-            //     this.filter = urlParams.get("filter");
-            // }
             if (urlParams.get("id")) {
                 this.id = Number(urlParams.get("id"));
                 this.title = urlParams.get("title") ?? "";
