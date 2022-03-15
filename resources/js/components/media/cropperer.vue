@@ -106,7 +106,7 @@
                     <template v-if="findVersionData(version) != null">
                         <button @click="upload('edit')" class="btn btn-soft-success btn-block mt-1" :disabled="isUploading">
                             <span v-if="isUploading"><i class="fas fa-spinner fa-spin"></i> Uploading...</span>
-                            <span v-else>Edit</span>
+                            <span v-else>Update</span>
                         </button>
                     </template>
                     <template v-else>
