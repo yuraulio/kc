@@ -128,7 +128,7 @@
                     <div class="tab-pane d-block" id="profile1">
                         <div v-for="version1 in versions" class="col-sm-12">
                             <h5>{{ version1.version }}</h5>
-                            <small class="text-muted d-block">{{ version1.description }}</small>
+                            <p class="text-muted d-block mb-2">{{ version1.description }}</p>
                             <template v-if="findVersionData(version1.version) != null">
                                 <img @click="version=version1.version; selectedVersion=version1; versionSelected();" crossorigin="anonymous" :src="findVersionData(version1.version).full_path" alt="image" class="img-fluid rounded" />
                             </template>

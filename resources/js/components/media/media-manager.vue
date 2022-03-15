@@ -180,7 +180,9 @@
                     </div>
                     <div v-if="!loading && loadstart">
                         <div v-if="!filesView">
+                            <!--
                             <folders :selectable="true" @selected="getFolders($event)" v-if="inMediaFolders && inMediaFolders.length && !loading" :mediaFolders="inMediaFolders" title="Quick Access"></folders>
+                            -->
                             <!-- end .mt-3-->
 
                             <files :key="view" :view="view" v-if="!loading" :mediaFiles="mediaFiles" @selected="userSelectedFiles" @delete="deleteFile" @open="openFile"></files>
