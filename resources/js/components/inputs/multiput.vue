@@ -257,6 +257,7 @@ export default {
                     url: image.url,
                     full_path: image.full_path,
                     alt_text: image.alt_text,
+                    link: image.link,
                     name: image.name,
                 }
                 gallery.push(image_data);

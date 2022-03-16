@@ -15,7 +15,7 @@
             <div class="row">
                 @foreach ($gallery["gallery"] as $image)
                     <div class="col-md-3 col-6 self-align-center mb-5">
-                        <a href="javascript:void(0);">
+                        <a href="{{ $image->link ?? "" }}" target="_blank">
                             <img src="{{ $image->full_path ?? "" }}" class="center grayscale image-grid-hover" alt="{{ $image->alt_text ?? "" }}">
                         </a>
                     </div>

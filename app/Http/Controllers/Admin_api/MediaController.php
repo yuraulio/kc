@@ -130,7 +130,7 @@ class MediaController extends Controller
             $image_name = $image->getClientOriginalName();
             $imgpath_original = $path . ''. $image_name;
             $file = Storage::disk('public')->putFileAs($path, $request->file('file'), $image_name, 'public');
-            $mfile_original = $this->storeFile($image_name, "original", $imgpath_original, $mediaFolder->id, $image->getSize(), $request->parrent_id, $request->alttext);
+            $mfile_original = $this->storeFile($image_name, "original", $imgpath_original, $mediaFolder->id, $image->getSize(), $request->parrent_id, $request->alt_text, $request->link);
 
             $versions = [
                 [
@@ -214,7 +214,7 @@ class MediaController extends Controller
                 $image->save(public_path("/uploads" . $mediaFolder->path . $version_name));
 
                 // save to db
-                $mfile = $this->storeFile($version_name, $version[0], $imgpath, $mediaFolder->id, $image->filesize(), $mfile_original->id, $request->alttext);
+                $mfile = $this->storeFile($version_name, $version[0], $imgpath, $mediaFolder->id, $image->filesize(), $mfile_original->id, $request->alt_text, $request->link);
                 $files[] = new MediaFileResource($mfile);
             }
 
@@ -304,7 +304,7 @@ class MediaController extends Controller
                 $parent_id = null;
             }
 
-            $mfile = $this->editFile($parent_id, $request->version, $image_name, $imgpath, $mediaFolder->id, $size, null, $request->alttext);
+            $mfile = $this->editFile($parent_id, $request->version, $image_name, $imgpath, $mediaFolder->id, $size, null, $request->alttext, $request->link);
 
             return response()->json(['data' => new MediaFileResource($mfile)], 200);
         } catch (Exception $e) {
@@ -357,14 +357,15 @@ class MediaController extends Controller
         }
     }
 
-    public function storeFile($name, $version, $path, $folderId, $size, $parent = null, $alttext = null)
+    public function storeFile($name, $version, $path, $folderId, $size, $parent = null, $alt_text = null, $link = null)
     {
         $mediaFile = new MediaFile();
         $mediaFile->name = $name;
         $mediaFile->path = $path;
         $mediaFile->extension = $this->getRealExtension($name);
         $mediaFile->full_path = "/uploads" . $path;
-        $mediaFile->alt_text = $alttext;
+        $mediaFile->alt_text = $alt_text;
+        $mediaFile->link = $link;
         $mediaFile->folder_id = $folderId;
         $mediaFile->size = $size;
         $mediaFile->parent_id = $parent;
@@ -378,7 +379,7 @@ class MediaController extends Controller
         return $mediaFile;
     }
 
-    public function editFile($parent_id, $version, $name, $path, $folderId, $size, $parent = null, $alttext = null)
+    public function editFile($parent_id, $version, $name, $path, $folderId, $size, $parent = null, $alttext = "", $link = "")
     {
         $mediaFile = MediaFile::where("parent_id", $parent_id)->where("version", $version)->first();
 
@@ -391,6 +392,7 @@ class MediaController extends Controller
         $mediaFile->extension = $this->getRealExtension($name);
         $mediaFile->full_path = "/uploads" . $path;
         $mediaFile->alt_text = $alttext;
+        $mediaFile->link = $link;
         $mediaFile->folder_id = $folderId;
         $mediaFile->size = $size ?? $mediaFile->size;
         $mediaFile->url = config('app.url'). "/uploads" . $path;
@@ -426,6 +428,17 @@ class MediaController extends Controller
         if (Storage::disk('public')->exists($file->path)) {
             Storage::disk('public')->delete($file->path);
         }
+
+        if ($file->parent_id == null) {
+            $subfiles = MediaFile::where("parent_id", $file->id)->get();
+            foreach ($subfiles as $subfile) {
+                if (Storage::disk('public')->exists($subfile->path)) {
+                    Storage::disk('public')->delete($subfile->path);
+                }
+                $subfile->delete();
+            }
+        }
+
         $file->delete();
 
         return response()->json('success', 200);

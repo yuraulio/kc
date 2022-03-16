@@ -30,6 +30,16 @@
                     <input @change="registerFile" type="file" id="example-fileinput" class="form-control">
                 </div>
 
+                <div class="mb-3">
+                    <label for="alt_text" class="form-label">Set alt text</label>
+                    <input v-model="alt_text" type="text" id="alt_text" class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label for="link" class="form-label">Set link</label>
+                    <input v-model="link" type="text" id="link" class="form-control">
+                </div>
+
                 <button @click="uploadImgFile()" type="button" class="btn btn-success waves-effect waves-light" :disabled="loading">
                     <i v-if="!loading" class="fe-check-circle me-1"></i>
                     <i v-else class="fas fa-spinner fa-spin"></i>
@@ -231,6 +241,8 @@ export default {
     data() {
         return {
             regFile: null,
+            alt_text: "",
+            link: "",
             onlyParent: true,
             filesView: false,
             opImage: null,

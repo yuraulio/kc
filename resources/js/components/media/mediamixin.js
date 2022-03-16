@@ -127,6 +127,8 @@ var mediaMixin = {
             if (imagefile) {
                 this.loading = true;
                 formData.append("file", imagefile);
+                formData.append("alt_text", this.alt_text);
+                formData.append("link", this.link);
                 axios.post('/api/media_manager/upload_image', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
@@ -201,6 +203,7 @@ var mediaMixin = {
             var formData = new FormData();
             formData.append('imgname', this.$refs.crpr.imgname);
             formData.append('alttext', this.$refs.crpr.alttext);
+            formData.append('link', this.$refs.crpr.link);
             formData.append('version', this.$refs.crpr.version);
             formData.append('parent_id', this.$refs.crpr.parrentImage.id);
             formData.append('crop_data', JSON.stringify(this.$refs.crpr.cropBoxData));
@@ -311,11 +314,10 @@ var mediaMixin = {
             var pagesText = "";
             var pages_count = $event.pages_count;
             if (pages_count) {
-                pagesText = "This image is used on" + pages_count + " pages.";
-                // pages.forEach(function(page){
-                //     console.log(page);
-                //     pagesText = pagesText + "\n" + page.title;
-                // });
+                pagesText = pagesText + "This image is used on" + pages_count + " pages.";
+            }
+            if ($event.parrent == null) {
+                pagesText = pagesText + "This this is an original image, this action will delete all its subimages that exist.";
             }
             Swal.fire({
                 title: 'Are you sure?\n ' + pagesText,

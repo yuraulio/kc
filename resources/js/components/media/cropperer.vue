@@ -63,23 +63,24 @@
                     <div class="cropped-image preview" />
                 </div>
             </div>
-            <div class="row">
+            <div class="row mb-2">
                 <div class="col-lg-6 d-grid">
-                    <div class="mb-3">
-                        <label class="form-label">Name</label>
-                        <small>(Keep filename same for resizes to be child images)</small>
-                        <input v-model="imgname" type="text" class="form-control" />
-                    </div>
+                    <label class="form-label">Name</label>
+                    <input v-model="imgname" type="text" class="form-control" />
                 </div>
                 <div class="col-lg-6 d-grid">
-                    <div class="mb-3">
-                        <label class="form-label">Alt text</label>
-                        <input v-model="alttext" type="text" class="form-control" />
-                    </div>
+                    <label class="form-label">Alt text</label>
+                    <input v-model="alttext" type="text" class="form-control" />
                 </div>
+            </div>
+            <div class="row mb-2">
                 <div class="col-lg-6 d-grid">
+                    <label class="form-label">Link</label>
+                    <input v-model="link" type="text" class="form-control" />
+                </div>
+                <div class="col-lg-6 d-flex align-items-end">
                     <template>
-                        <button @click="upload('edit')" class="btn btn-soft-success btn-block mt-1" :disabled="isUploading">
+                        <button @click="upload('edit')" class="btn btn-soft-success btn-block w-100" :disabled="isUploading">
                             <span v-if="isUploading"><i class="fas fa-spinner fa-spin"></i> Uploading...</span>
                             <span v-else>
                                 Update
@@ -100,7 +101,7 @@
                         <div class="col-sm-12">
 
                             <h5>Original image</h5>
-                            <img @click="version='original'; selectedVersion=null; imgname=parrentImage.name; alttext=parrentImage.alt_text;" crossorigin="anonymous" :src="parrentImage ? parrentImage.full_path : ''" alt="image" class="img-fluid rounded" />
+                            <img @click="version='original'; selectedVersion=null; imgname=parrentImage.name; alttext=parrentImage.alt_text; link=parrentImage.link" crossorigin="anonymous" :src="parrentImage ? parrentImage.full_path : ''" alt="image" class="img-fluid rounded" />
                             <hr>
 
                             <template v-for="version1 in versions">
@@ -147,6 +148,7 @@ export default {
             data: null,
             imgname: "",
             alttext: "",
+            link: "",
             cropBoxData: {},
             imgData: {},
             compression: 100,
@@ -244,8 +246,9 @@ export default {
             this.uploadedVersions = this.parrentImage.subfiles;
             this.originalFile = this.prevalue;
 
-            this.imgname = this.originalFile ? this.originalFile.name : '';
-            this.alttext = this.originalFile ? this.originalFile.alt_text : '';
+            this.imgname = this.parrentImage ? this.parrentImage.name : '';
+            this.alttext = this.parrentImage.alt_text ? this.parrentImage.alt_text : '';
+            this.link = this.parrentImage.link ? this.parrentImage.link : '';
 
             if (typeof FileReader === "function") {
                 const reader = new FileReader();
@@ -281,7 +284,8 @@ export default {
 
                 this.versionData = this.findVersionData(this.selectedVersion.version);
                 this.imgname = this.versionData ? this.versionData.name : "";
-                this.alttext = this.versionData ? this.versionData.alt_text : "";
+                this.alttext = this.versionData.alt_text ? this.versionData.alt_text : "";
+                this.link = this.versionData ? this.versionData.link : "";
 
                 if (this.imgname == "") {
                     var tmp = this.parrentImage.name.split(".");
