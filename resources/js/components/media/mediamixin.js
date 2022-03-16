@@ -199,7 +199,6 @@ var mediaMixin = {
             var id = this.selectedFile.id;
             this.currentImage = $event;
             var formData = new FormData();
-            var imagefile = $event;
             formData.append('imgname', this.$refs.crpr.imgname);
             formData.append('alttext', this.$refs.crpr.alttext);
             formData.append('version', this.$refs.crpr.version);
@@ -210,30 +209,21 @@ var mediaMixin = {
             if (this.selectedFolder) {
                 formData.append('directory', this.selectedFolder.id);
             }
-            if (imagefile) {
-                this.$refs.crpr.isUploading = true;
-                formData.append("file", imagefile);
-                axios.post('/api/media_manager/edit_image', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                }).then((response) => {
-                    this.$toast.success('Uploaded Successfully!');
-                    var element = response.data.data;
-                    // var index = this.mediaFiles.findIndex(function(file) {
-                    //     return file.id == id;
-                    // });
-                    // console.log("index", index);
-                    this.getFiles();
-                    // this.mediaFiles[index] = element;
-                    this.$refs.crpr.isUploading = false;
-                    this.$modal.hide('edit-image-modal');
-                })
-                .catch((error) => {
-                    console.log(error)
-                    this.$refs.crpr.isUploading = false;
-                })
-            }
+            this.$refs.crpr.isUploading = true;
+            axios.post('/api/media_manager/edit_image', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }).then((response) => {
+                this.$toast.success('Uploaded Successfully!');
+                this.getFiles();
+                this.$refs.crpr.isUploading = false;
+                this.$modal.hide('edit-image-modal');
+            })
+            .catch((error) => {
+                console.log(error)
+                this.$refs.crpr.isUploading = false;
+            })
         },
         addFolder() {
             this.errors = null;
@@ -319,13 +309,13 @@ var mediaMixin = {
         },
         deleteFile($event) {
             var pagesText = "";
-            var pages = $event.pages;
-            if (pages.length) {
-                pagesText = "This image is used on pages:\n";
-                pages.forEach(function(page){
-                    console.log(page);
-                    pagesText = pagesText + "\n" + page.title;
-                });
+            var pages_count = $event.pages_count;
+            if (pages_count) {
+                pagesText = "This image is used on" + pages_count + " pages.";
+                // pages.forEach(function(page){
+                //     console.log(page);
+                //     pagesText = pagesText + "\n" + page.title;
+                // });
             }
             Swal.fire({
                 title: 'Are you sure?\n ' + pagesText,
@@ -344,13 +334,14 @@ var mediaMixin = {
                         .delete('/api/media_manager/file/' + $event.id)
                         .then((response) => {
                             if (response.status == 200) {
-                                if (_.findIndex(this.mediaFiles, { 'id': $event.id }) > -1) {
-                                    this.mediaFiles.splice(_.findIndex(this.mediaFiles, { 'id': $event.id }), 1);
-                                } else {
-                                    this.mediaFiles.forEach((element) => {
-                                        element.subfiles.splice(_.findIndex(element.subfiles, { 'id': $event.id }), 1);
-                                    })
-                                }
+                                // if (_.findIndex(this.mediaFiles, { 'id': $event.id }) > -1) {
+                                //     this.mediaFiles.splice(_.findIndex(this.mediaFiles, { 'id': $event.id }), 1);
+                                // } else {
+                                //     this.mediaFiles.forEach((element) => {
+                                //         element.subfiles.splice(_.findIndex(element.subfiles, { 'id': $event.id }), 1);
+                                //     })
+                                // }
+                                this.getFiles();
 
                             }
                         })

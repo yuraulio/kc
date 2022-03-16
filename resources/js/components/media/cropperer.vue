@@ -1,9 +1,9 @@
 <template>
 <div class="row">
     <div class="col-lg-8 ">
-        <div>
+        <div >
             <h4>{{version}}</h4>
-            <div v-show="imgSrc" :key="imgSrc ? imgSrc : 'emp'" class="img-cropper">
+            <div v-show="imgSrc" :key="imgSrc ? imgSrc : 'emp'" class="img-cropper" style>
                 <vue-cropper ref="cropper" :checkCrossOrigin="false" :src="imgSrc" preview=".preview"/>
             </div>
             <label v-show="imgSrc == null" :name="'image'" style="width: 100%; min-height: 300px">
@@ -17,17 +17,6 @@
                     </div>
                 </form>
             </label>
-            <!-- <div v-else>
-                <div class="card">
-                    <upload-image
-                        :keyput="'mediaManagera'"
-                        :direct="false"
-                        :prevalue="imgSrc ?? null"
-                        @inputed="imageAdded"
-                    >
-                    </upload-image>
-                </div>
-            </div> -->
             <div class="btn-group mb-2 mt-2">
                 <button type="button" class="btn btn-soft-primary" @click.prevent="zoom(0.2)">
                     <i class="mdi mdi-magnify-plus-outline"></i>
@@ -65,12 +54,6 @@
                 <button type="button" class="btn btn-soft-primary" @click.prevent="reset">
                     Reset
                 </button>
-                <!--
-                <button type="button" class="btn btn-soft-primary" @click.prevent="cropImage">
-                    Crop
-                </button>
-                -->
-                
             </div>
 
             
@@ -81,14 +64,6 @@
                 </div>
             </div>
             <div class="row">
-                <!--
-                <div class="col-lg-12 d-grid">
-                    <div class="mt-3 mb-3">
-                        <label for="example-range" class="form-label">Compression Quality ({{ compression }})</label>
-                        <input v-model="compression" class="form-range" id="example-range" type="range" name="range" min="0" max="100" />
-                    </div>
-                </div>
-                -->
                 <div class="col-lg-6 d-grid">
                     <div class="mb-3">
                         <label class="form-label">Name</label>
@@ -103,19 +78,13 @@
                     </div>
                 </div>
                 <div class="col-lg-6 d-grid">
-                    <template v-if="findVersionData(version) != null">
+                    <template>
                         <button @click="upload('edit')" class="btn btn-soft-success btn-block mt-1" :disabled="isUploading">
                             <span v-if="isUploading"><i class="fas fa-spinner fa-spin"></i> Uploading...</span>
-                            <span v-else>Update</span>
+                            <span v-else>
+                                Update
+                            </span>
                         </button>
-                    </template>
-                    <template v-else>
-                        <!--
-                        <button @click="upload('upload')" class="btn btn-soft-success btn-block mt-1" :disabled="isUploading">
-                            <span v-if="isUploading"><i class="fas fa-spinner fa-spin"></i> Uploading...</span>
-                            <span v-else>Save</span>
-                        </button>
-                        -->
                     </template>
                 </div>
             </div>
@@ -128,17 +97,23 @@
                 <div class="tab-content pt-0">
 
                     <div class="tab-pane d-block" id="profile1">
-                        <div v-for="version1 in versions" class="col-sm-12">
-                            <h5>{{ version1.version }}</h5>
-                            <p class="text-muted d-block mb-2">{{ version1.description }}</p>
-                            <template v-if="findVersionData(version1.version) != null">
-                                <img @click="version=version1.version; selectedVersion=version1; versionSelected();" crossorigin="anonymous" :src="findVersionData(version1.version).full_path" alt="image" class="img-fluid rounded" />
-                            </template>
-                            <template v-else>
-                                <button @click="version=version1.version;" class="btn btn-primary">Set image</button>
-                            </template>
+                        <div class="col-sm-12">
 
+                            <h5>Original image</h5>
+                            <img @click="version='original'; selectedVersion=null; imgname=parrentImage.name; alttext=parrentImage.alt_text;" crossorigin="anonymous" :src="parrentImage ? parrentImage.full_path : ''" alt="image" class="img-fluid rounded" />
                             <hr>
+
+                            <template v-for="version1 in versions">
+                                <h5>{{ version1.version }}</h5>
+                                <p class="text-muted d-block mb-2">{{ version1.description }}</p>
+                                <template v-if="findVersionData(version1.version) != null">
+                                    <img @click="version=version1.version; selectedVersion=version1; versionSelected();" crossorigin="anonymous" :src="findVersionData(version1.version).full_path" alt="image" class="img-fluid rounded" />
+                                </template>
+                                <template v-else>
+                                    <button @click="version=version1.version; selectedVersion=version1; versionSelected();" class="btn btn-primary">Set image</button>
+                                </template>
+                                <hr>
+                            </template>
                         </div>
                     </div>
                 </div>
@@ -179,6 +154,7 @@ export default {
             version: "original",
             width_ratio: null,
             height_ratio: null,
+            versionData: null,
             versions: [{
                     w: 470,
                     h: 470,
@@ -286,7 +262,6 @@ export default {
                     }, 600);
                 };
 
-                //reader.readAsDataURL(file);
                 this.$forceUpdate();
             }
         }
@@ -304,18 +279,21 @@ export default {
                 }
                 img.src = this.parrentImage.url;
 
-                var data = this.findVersionData(this.selectedVersion.version);
-                this.imgname = data.name;
-                this.alttext = data.alt_text;
+                this.versionData = this.findVersionData(this.selectedVersion.version);
+                this.imgname = this.versionData ? this.versionData.name : "";
+                this.alttext = this.versionData ? this.versionData.alt_text : "";
+
+                if (this.imgname == "") {
+                    var tmp = this.parrentImage.name.split(".");
+                    var extension = tmp[tmp.length - 1];
+                    this.imgname = tmp[0] + "-" + this.version + "." + extension;
+                }
 
             }
         },
         setCropBox(image_width, image_height) {
             var cropper_height = this.$refs.cropper.$el.clientHeight;
             var cropper_width = this.$refs.cropper.$el.clientWidth;
-
-            // var image_width = 2880;
-            // var image_height = 1248;
 
             this.width_ratio = cropper_width / image_width;
             this.height_ratio = cropper_height / image_height;
@@ -357,37 +335,6 @@ export default {
         },
         imageAdded($event) {
             this.imgSrc = $event.url;
-        },
-        cropImage() {
-            // get image data for post processing, e.g. upload or setting image src
-            setTimeout(() => {
-                this.cropImg = this.$refs.cropper
-                    .getCroppedCanvas({
-                        width: this.cropBoxData.width,
-                        height: this.cropBoxData.height,
-                    })
-                    .toDataURL("image/jpeg", this.compression / 100);
-            }, 100)
-
-            /*this.$refs.cropper.getCroppedCanvas().toBlob((blob) => {
-              const formData = new FormData();
-
-              formData.append('croppedImage', blob, 'example.png' );
-
-              // Use `jQuery.ajax` method for example
-              $.ajax('/path/to/upload', {
-                  method: 'POST',
-                  data: formData,
-                  processData: false,
-                  contentType: false,
-                  success() {
-                  console.log('Upload success');
-                  },
-                  error() {
-                  console.log('Upload error');
-                  },
-              });
-              }*/
         },
         flipX() {
             const dom = this.$refs.flipX;
@@ -489,11 +436,6 @@ export default {
     beforeDestroy() {
         this.imgSrc = null;
         this.$parent.$parent.selectedFile = null;
-    },
-    watch: {
-        compression() {
-            this.cropImage();
-        }
     }
 };
 </script>

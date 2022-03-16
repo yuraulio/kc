@@ -231,7 +231,7 @@ class MediaController extends Controller
 
     public function editImage(Request $request): JsonResponse
     {
-        $image = $request->file('file');
+        // $image = $request->file('file');
 
         try {
             if ($request->directory) {
@@ -257,33 +257,54 @@ class MediaController extends Controller
 
             $image_name = $request->imgname;
             $imgpath = $path . ''. $image_name;
+            $size = null;
 
-            // delete old file
-            $file = MediaFile::where("parent_id", $request->parent_id)->where("version", $request->version)->first();
             $original_file = MediaFile::findOrFail($request->parent_id);
-            if (Storage::disk('public')->exists($file->path)) {
-                Storage::disk('public')->delete($file->path);
+            $file = MediaFile::where("parent_id", $request->parent_id)->where("version", $request->version)->first();
+
+            if ($file) {
+                $file_path = $file->path;
+            } else {
+                // create new file path
+                $tmp = explode('.', $original_file->path);
+                $extension = end($tmp);
+                $file_path = $tmp[0];
+                $file_path = $file_path . "-" . $request->version . "." . $extension;
             }
-            // dd($file->path);
-            Storage::disk('public')->copy($original_file->path, $file->path);
-            // dd($file->path);
 
-            // crop image
-            $manager = new ImageManager();
-            $image = $manager->make(Storage::disk('public')->get($file->path));
+            if ($request->version != 'original') {
+                // delete old file
+                if ($file && Storage::disk('public')->exists($file->path)) {
+                    Storage::disk('public')->delete($file->path);
+                }
 
-            $request->crop_data = json_decode($request->crop_data);
+                // duplicate original file
+                Storage::disk('public')->copy($original_file->path, $file_path);
 
-            $crop_height = $request->crop_data->height * (1 / $request->height_ratio);
-            $crop_width = $request->crop_data->width * (1 / $request->width_ratio);
+                // crop image
+                $manager = new ImageManager();
+                $image = $manager->make(Storage::disk('public')->get($file_path));
 
-            $height_offset = $request->crop_data->top * (1 / $request->height_ratio);
-            $width_offset = $request->crop_data->left * (1 / $request->width_ratio);
+                $crop_data = json_decode($request->crop_data);
 
-            $image->crop((int) $crop_width, (int) $crop_height, (int) $width_offset, (int) $height_offset);
-            $image->save(public_path("/uploads" . $mediaFolder->path . $image_name));
+                $crop_height = $crop_data->height * (1 / $request->height_ratio);
+                $crop_width = $crop_data->width * (1 / $request->width_ratio);
 
-            $mfile = $this->editFile($request->parent_id, $request->version, $image_name, $imgpath, $mediaFolder->id, $image->filesize(), null, $request->alttext);
+                $height_offset = $crop_data->top * (1 / $request->height_ratio);
+                $width_offset = $crop_data->left * (1 / $request->width_ratio);
+
+                $image->crop((int) $crop_width, (int) $crop_height, (int) $width_offset, (int) $height_offset);
+                $image->save(public_path("/uploads" . $mediaFolder->path . $image_name));
+
+                $size = $image ? $image->filesize() : null;
+            }
+
+            $parent_id = $request->parent_id;
+            if ($request->version == 'original') {
+                $parent_id = null;
+            }
+
+            $mfile = $this->editFile($parent_id, $request->version, $image_name, $imgpath, $mediaFolder->id, $size, null, $request->alttext);
 
             return response()->json(['data' => new MediaFileResource($mfile)], 200);
         } catch (Exception $e) {
@@ -336,14 +357,14 @@ class MediaController extends Controller
         }
     }
 
-    public function storeFile($name, $version, $path, $folderId, $size, $parent = null, $altext = null)
+    public function storeFile($name, $version, $path, $folderId, $size, $parent = null, $alttext = null)
     {
         $mediaFile = new MediaFile();
         $mediaFile->name = $name;
         $mediaFile->path = $path;
         $mediaFile->extension = $this->getRealExtension($name);
         $mediaFile->full_path = "/uploads" . $path;
-        $mediaFile->alt_text = $altext;
+        $mediaFile->alt_text = $alttext;
         $mediaFile->folder_id = $folderId;
         $mediaFile->size = $size;
         $mediaFile->parent_id = $parent;
@@ -357,18 +378,25 @@ class MediaController extends Controller
         return $mediaFile;
     }
 
-    public function editFile($parent_id, $version, $name, $path, $folderId, $size, $parent = null, $altext = null)
+    public function editFile($parent_id, $version, $name, $path, $folderId, $size, $parent = null, $alttext = null)
     {
         $mediaFile = MediaFile::where("parent_id", $parent_id)->where("version", $version)->first();
+
+        if (!$mediaFile) {
+            $mediaFile = new MediaFile;
+        }
+
         $mediaFile->name = $name;
         $mediaFile->path = $path;
         $mediaFile->extension = $this->getRealExtension($name);
         $mediaFile->full_path = "/uploads" . $path;
-        $mediaFile->alt_text = $altext;
+        $mediaFile->alt_text = $alttext;
         $mediaFile->folder_id = $folderId;
-        $mediaFile->size = $size;
+        $mediaFile->size = $size ?? $mediaFile->size;
         $mediaFile->url = config('app.url'). "/uploads" . $path;
         $mediaFile->user_id = Auth::user()->id;
+        $mediaFile->version = $version;
+        $mediaFile->parent_id = $parent_id;
         $mediaFile->save();
 
         $mediaFile->load(["pages", "siblings", "subfiles"]);
