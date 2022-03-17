@@ -39,7 +39,7 @@ class AdminLoginController extends Controller
         if (Auth::guard('admin_web')->attempt($credentials)) {
             $request->session()->regenerate();
 
-            return redirect()->intended('admin-dashboard');
+            return redirect()->intended();
         }
 
         return back()->withErrors([

@@ -104,7 +104,6 @@ class MediaController extends Controller
     public function uploadImage(Request $request): JsonResponse
     {
         $image = $request->file('file');
-
         try {
             if ($request->directory) {
                 $mediaFolder = MediaFolder::findOrFail($request->directory);
@@ -127,9 +126,11 @@ class MediaController extends Controller
                 }
             }
 
+            // dd($path, $mediaFolder->path);
+
             $image_name = $image->getClientOriginalName();
             $imgpath_original = $path . ''. $image_name;
-            $file = Storage::disk('public')->putFileAs($path, $request->file('file'), $image_name, 'public');
+            $file = Storage::disk('public')->putFileAs($path, $image, $image_name, 'public');
             $mfile_original = $this->storeFile($image_name, "original", $imgpath_original, $mediaFolder->id, $image->getSize(), $request->parrent_id, $request->alt_text, $request->link);
 
             $versions = [
@@ -208,10 +209,8 @@ class MediaController extends Controller
                 $width_offset = ($image_width / 2) - ($crop_width / 2);
                 $width_offset = $width_offset > 0 ? (int) $width_offset : null;
 
-                // dd($crop_width, $crop_height, $width_offset, $height_offset);
-
                 $image->crop($crop_width, $crop_height, $width_offset, $height_offset);
-                $image->save(public_path("/uploads" . $mediaFolder->path . $version_name));
+                $image->save(public_path("/uploads" . $path . $version_name));
 
                 // save to db
                 $mfile = $this->storeFile($version_name, $version[0], $imgpath, $mediaFolder->id, $image->filesize(), $mfile_original->id, $request->alt_text, $request->link);
@@ -231,8 +230,6 @@ class MediaController extends Controller
 
     public function editImage(Request $request): JsonResponse
     {
-        // $image = $request->file('file');
-
         try {
             if ($request->directory) {
                 $mediaFolder = MediaFolder::findOrFail($request->directory);
@@ -442,5 +439,19 @@ class MediaController extends Controller
         $file->delete();
 
         return response()->json('success', 200);
+    }
+
+    public function deleteFolder(Request $request, $id)
+    {
+        $folder = MediaFolder::find($id);
+        $path = $folder->path;
+        $result = Storage::disk('public')->deleteDirectory($path);
+        if ($result) {
+            $folder->delete();
+            MediaFile::where('folder_id', $id)->delete();
+            return response()->json('success', 200);
+        } else {
+            return response()->json('Failed to delete folder.', 400);
+        }
     }
 }

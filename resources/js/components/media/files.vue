@@ -143,7 +143,6 @@ export default {
             this.$emit("open", file);
         },
         infiniteHandler($state) {
-            console.log("parent", this.$parent);
             axios
                 .get("/api/media_manager/files", {
                     params: {
@@ -154,7 +153,6 @@ export default {
                     },
                 })
                 .then((response) => {
-
                     if (response.data.data.length) {
                         this.page += 1;
                         this.$parent.mediaFiles.push(...response.data.data);

@@ -113,24 +113,26 @@
                             <vue-nestable-handle slot-scope="{ item, isChild }" :item="item">
                                 <li :key="item.id + uncolapsed.length" v-show="!isChild || uncolapsed.includes(item.id)" class="dd-item" :data-id="item.id">
                                     <button @click="
-                        collapse(item);
-                        $forceUpdate();
-                      " v-if="
-                        item.children &&
-                        item.children.length &&
-                        !uncolapsed.includes(item.children[0].id)
-                      ">
+                                        collapse(item);
+                                        $forceUpdate();
+                                        " v-if="
+                                        item.children &&
+                                        item.children.length &&
+                                        !uncolapsed.includes(item.children[0].id)
+                                    ">
                                         <button class="dd-collapse" data-action="collapse" type="button">Collapse</button>
                                     </button>
                                     <button @click="uncollapse(item)" v-if="
-                        item.children &&
-                        item.children.length &&
-                        uncolapsed.includes(item.children[0].id)
-                      ">
+                                        item.children &&
+                                        item.children.length &&
+                                        uncolapsed.includes(item.children[0].id)
+                                    ">
                                         <i class="mdi mdi-minus font-18"></i>
                                     </button>
                                     <div @click="selectedFolder = item; getFolders(item.id)" class="dd-handle">
-                                        <i class="mdi mdi-folder-outline font-18 align-middle me-2"></i>{{ item.name }}
+                                        <i class="mdi mdi-folder-outline font-18 align-middle me-2"></i>
+                                        {{ item.name }}
+                                        <i @click.stop="deleteFolder(item)" class="fa fa-times ms-2 float-end mt-1" aria-hidden="true"></i>
                                     </div>
                                 </li>
                             </vue-nestable-handle>

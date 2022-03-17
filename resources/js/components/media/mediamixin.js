@@ -252,6 +252,50 @@ var mediaMixin = {
                     this.loading = false;
                 });
         },
+        deleteFolder(folder) {
+            Swal.fire({
+                title: 'Are you sure?\n ',
+                text: "You won't be able to revert this! Delete folder?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                showLoaderOnConfirm: true,
+                buttonsStyling: false,
+                customClass: {
+                    cancelButton: 'btn btn-soft-secondary',
+                    confirmButton: 'btn btn-soft-danger',
+                },
+                preConfirm: () => {
+                    return axios
+                        .delete('/api/media_manager/folder/' + folder.id)
+                        .then((response) => {
+                            if (response.status == 200) {
+                                Swal.fire(
+                                    'Deleted!',
+                                    'Folder has been deleted.',
+                                    'success'
+                                )
+                            }
+                            this.getFolders();
+                            this.getFiles();
+                        })
+                        .catch((error) => {
+                            Swal.fire(
+                                'Deleted!',
+                                'Folder was not deleted.',
+                                'error'
+                            )
+                            this.getFolders();
+                            this.getFiles();
+
+                            console.log(error)
+                            this.errors = error.response.data.errors;
+                            this.loading = false;
+                        })
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            })
+        },
         getFolders(folderId) {
             this.filesView = false;
             this.folderId = folderId;
@@ -336,15 +380,7 @@ var mediaMixin = {
                         .delete('/api/media_manager/file/' + $event.id)
                         .then((response) => {
                             if (response.status == 200) {
-                                // if (_.findIndex(this.mediaFiles, { 'id': $event.id }) > -1) {
-                                //     this.mediaFiles.splice(_.findIndex(this.mediaFiles, { 'id': $event.id }), 1);
-                                // } else {
-                                //     this.mediaFiles.forEach((element) => {
-                                //         element.subfiles.splice(_.findIndex(element.subfiles, { 'id': $event.id }), 1);
-                                //     })
-                                // }
                                 this.getFiles();
-
                             }
                         })
                         .catch(error => {
