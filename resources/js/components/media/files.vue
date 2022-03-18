@@ -54,6 +54,10 @@
                                 <div class="dropdown-menu dropdown-menu-end">
                                     <!-- <a class="dropdown-item" href="#"><i class="mdi mdi-link me-2 text-muted vertical-middle"></i>Get Sharable Link</a> -->
                                     <a class="dropdown-item" href="#" @click.prevent="editFile(file)"><i class="mdi mdi-pencil me-2 text-muted vertical-middle"></i>Edit</a>
+                                    <a class="dropdown-item" href="#" @click.prevent="moveFile(file)">
+                                        <i class="mdi mdi-file-move me-2 text-muted vertical-middle"></i>
+                                        Move
+                                    </a>
                                     <a class="dropdown-item" target="_blank" :href="file.url" :download="file.name"><i class="mdi mdi-download me-2 text-muted vertical-middle"></i>Download</a>
                                     <a class="dropdown-item" href="#" @click.prevent="deleteFile(file)"><i class="mdi mdi-delete me-2 text-muted vertical-middle"></i>Remove</a>
                                 </div>
@@ -135,6 +139,9 @@ export default {
     methods: {
         editFile(file) {
             this.$emit("selected", file);
+        },
+        moveFile(file) {
+            this.$emit("move", file);
         },
         deleteFile(file) {
             this.$emit("delete", file);

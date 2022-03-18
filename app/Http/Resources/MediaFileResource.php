@@ -39,6 +39,7 @@ class MediaFileResource extends JsonResource
             'link' => $this->link,
             'pages_count' => $this->pages_count,
             'version' => $this->version,
+            'folder_id' => $this->folder_id,
         ];
     }
 }

@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Admin_api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateAdminPageRequest;
 use App\Http\Requests\CreateMediaFolderRequest;
+use App\Http\Requests\EditMediaFolderRequest;
+use App\Http\Requests\MoveMediaFileRequest;
 use App\Http\Resources\MediaFileResource;
 use App\Http\Resources\MediaFolderResource;
 use App\Http\Resources\PageResource;
+use App\Jobs\MoveImages;
 use App\Model\Admin\Category;
 use App\Model\Admin\MediaFile;
 use App\Model\Admin\MediaFolder;
@@ -18,6 +21,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -105,26 +109,9 @@ class MediaController extends Controller
     {
         $image = $request->file('file');
         try {
-            if ($request->directory) {
-                $mediaFolder = MediaFolder::findOrFail($request->directory);
-                $path = $mediaFolder->path . "/";
-            } else {
-                $path = "/pages_media/random/";
-
-                if (!Storage::disk('public')->exists($path)) {
-                    Storage::disk('public')->makeDirectory($path);
-                }
-
-                $mediaFolder = MediaFolder::whereName("random")->first();
-                if (!$mediaFolder) {
-                    $mediaFolder = new MediaFolder();
-                    $mediaFolder->name = "random";
-                    $mediaFolder->path = $path;
-                    $mediaFolder->url = config('app.url'). "/uploads" . $path;
-                    $mediaFolder->user_id = Auth::user()->id;
-                    $mediaFolder->save();
-                }
-            }
+            $folder = $this->getFolder($request);
+            $path = $folder["path"];
+            $mediaFolder = $folder["mediaFolder"];
 
             // dd($path, $mediaFolder->path);
 
@@ -231,26 +218,9 @@ class MediaController extends Controller
     public function editImage(Request $request): JsonResponse
     {
         try {
-            if ($request->directory) {
-                $mediaFolder = MediaFolder::findOrFail($request->directory);
-                $path = $mediaFolder->path . "/";
-            } else {
-                $path = "/pages_media/random/";
-
-                if (!Storage::disk('public')->exists($path)) {
-                    Storage::disk('public')->makeDirectory($path);
-                }
-
-                $mediaFolder = MediaFolder::whereName("random")->first();
-                if (!$mediaFolder) {
-                    $mediaFolder = new MediaFolder();
-                    $mediaFolder->name = "random";
-                    $mediaFolder->path = $path;
-                    $mediaFolder->url = config('app.url'). "/uploads" . $path;
-                    $mediaFolder->user_id = Auth::user()->id;
-                    $mediaFolder->save();
-                }
-            }
+            $folder = $this->getFolder($request);
+            $path = $folder["path"];
+            $mediaFolder = $folder["mediaFolder"];
 
             $image_name = $request->imgname;
             $imgpath = $path . ''. $image_name;
@@ -317,26 +287,10 @@ class MediaController extends Controller
 
         try {
             $cname = $this->getRealName($request->imgname ? $request->imgname .".". $image->extension() :  $image->getClientOriginalName());
-            if ($request->directory) {
-                $mediaFolder = MediaFolder::findOrFail($request->directory);
-                $path = $mediaFolder->path . "/";
-            } else {
-                $path = "/pages_media/random/";
-
-                if (!Storage::disk('public')->exists($path)) {
-                    Storage::disk('public')->makeDirectory($path);
-                }
-
-                $mediaFolder = MediaFolder::whereName("random")->first();
-                if (!$mediaFolder) {
-                    $mediaFolder = new MediaFolder();
-                    $mediaFolder->name = "random";
-                    $mediaFolder->path = $path;
-                    $mediaFolder->url = config('app.url'). "/uploads" . $path;
-                    $mediaFolder->user_id = Auth::user()->id;
-                    $mediaFolder->save();
-                }
-            }
+            
+            $folder = $this->getFolder($request);
+            $path = $folder["path"];
+            $mediaFolder = $folder["mediaFolder"];
 
             // Store edited image
             $imgpath = $path . ''. (($request->imgname ? $request->imgname . "_" . getimagesize($image)[0] . "x" . getimagesize($image)[1] . "_" . $request->compression . ".". $image->extension() : $image->getClientOriginalName()));
@@ -441,7 +395,7 @@ class MediaController extends Controller
         return response()->json('success', 200);
     }
 
-    public function deleteFolder(Request $request, $id)
+    public function deleteFolder($request, $id)
     {
         $folder = MediaFolder::find($id);
         $path = $folder->path;
@@ -453,5 +407,95 @@ class MediaController extends Controller
         } else {
             return response()->json('Failed to delete folder.', 400);
         }
+    }
+
+    public function editFolder(EditMediaFolderRequest $request)
+    {
+        $folder = MediaFolder::find($request->id);
+
+        $old_path = $folder->path;
+        if (substr($old_path, -1) == "/") {
+            $old_path = substr($old_path, 0, -1);
+        }
+
+        $tmp = substr($old_path, 0, -1);
+        $tmp = explode("/", $tmp);
+        array_pop($tmp);
+        $new_path = implode('/', $tmp) . "/" . $request->name;
+        if (substr($new_path, -1) == "/") {
+            $new_path = substr($new_path, 0, -1);
+        }
+
+        $old_full_path = public_path("/uploads" . $old_path);
+        $new_full_path = public_path("/uploads" . $new_path);
+
+        $result = rename($old_full_path, $new_full_path);
+
+        if ($result) {
+            $folder->name = $request->name;
+            $folder->save();
+
+            MoveImages::dispatch($old_path, $new_path);
+
+            return response()->json('success', 200);
+        } else {
+            return response()->json('Failed to rename folder.', 400);
+        }
+    }
+
+    public function moveFile(MoveMediaFileRequest $request)
+    {
+        $folder = json_decode($request->folder);
+        $file = json_decode($request->file);
+
+        $old_path = $file->path;
+
+        $new_path = $folder->path;
+        if (substr($new_path, -1) == "/") {
+            $new_path = substr($new_path, 0, -1);
+        }
+        $new_path = $new_path . "/" . $file->name;
+
+        // dd(Storage::disk('public')->exists("/uploads" . $old_path));
+
+        $result = Storage::disk('public')->move($old_path, $new_path);
+
+        if ($result) {
+            MoveImages::dispatch($old_path, $new_path, $folder->id);
+
+            return response()->json('success', 200);
+        } else {
+            return response()->json('Failed to move file.', 400);
+        }
+    }
+
+    private function getFolder(Request $request)
+    {
+        if ($request->directory) {
+            $mediaFolder = MediaFolder::findOrFail($request->directory);
+            $path = $mediaFolder->path . "/";
+        } else {
+            $path = "/pages_media/random";
+
+            if (!Storage::disk('public')->exists($path)) {
+                Storage::disk('public')->makeDirectory($path);
+            }
+
+            $mediaFolder = MediaFolder::whereName("random")->first();
+            if (!$mediaFolder) {
+                $mediaFolder = new MediaFolder();
+                $mediaFolder->name = "random";
+                $mediaFolder->path = $path;
+                $mediaFolder->url = config('app.url'). "/uploads" . $path;
+                $mediaFolder->user_id = Auth::user()->id;
+                $mediaFolder->save();
+            }
+            $path = $mediaFolder->path . "/";
+        }
+
+        return [
+            "mediaFolder" => $mediaFolder,
+            "path" => $path
+        ];
     }
 }

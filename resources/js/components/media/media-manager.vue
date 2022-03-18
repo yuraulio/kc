@@ -55,6 +55,77 @@
         </div>
     </modal>
 
+    <modal name="file_move_modal" :adaptive="true" :resizable="true" height="auto" :scrollable="true" class="mb-0">
+        <div class="row p-4">
+            <div class="col-12">
+                <h5>Move file {{ file_to_move ? file_to_move.name : "" }}</h5>
+                <p>Select new folder:</p>
+
+                <vue-nestable v-model="mediaFolders" :maxDepth="0" class="dd-list mb-2">
+                    <vue-nestable-handle slot-scope="{ item, isChild }" :item="item">
+                        <li :key="item.id + uncolapsed.length" v-show="!isChild || uncolapsed.includes(item.id)" class="dd-item" :data-id="item.id">
+                            <button 
+                                @click="collapse(item); $forceUpdate();" 
+                                v-if="item.children && item.children.length && !uncolapsed.includes(item.children[0].id)"
+                                class="collapse-button"
+                            >
+                                <i class="mdi mdi-plus font-18"></i>
+                            </button>
+                            <button 
+                                @click="uncollapse(item)" 
+                                v-if="item.children && item.children.length && uncolapsed.includes(item.children[0].id)"
+                                class="collapse-button"
+                            >
+                                <i class="mdi mdi-minus font-18"></i>
+                            </button>
+                            <div @click="move_file_to = item;" :class="'dd-handle ' + (item == move_file_to ? 'selected-folder ' : ' ') + (item.id == file_to_move.folder_id ? 'original-floder' : '')">
+                                <i class="mdi mdi-folder-outline font-18 align-middle me-"></i>
+                                {{ item.name }}
+                            </div>
+                        </li>
+                    </vue-nestable-handle>
+                </vue-nestable>
+
+                <p class="mb-2">
+                    <span class="d-inline-block" style="width: 40px;">From: </span>{{file_to_move ? file_to_move.path.replace("/" + file_to_move.name, "") : "" }} 
+                    <br>
+                    <span class="d-inline-block" style="width: 40px;">To: </span>{{ move_file_to ? move_file_to.path : '' }}
+                </p>
+
+                <button @click="moveFile()" type="button" class="btn btn-success waves-effect waves-light mb-3 w-100" :disabled="loading">
+                    <i v-if="!loading" class="fe-check-circle me-1"></i>
+                    <i v-else class="fas fa-spinner fa-spin"></i>
+                    Move
+                </button>
+
+                <div class="alert alert-warning" role="alert">
+                    Pages and files will update in the background in a few minutes.
+                </div>
+            </div>
+        </div>
+    </modal>
+
+    <modal name="edit-folder-modal" :adaptive="true" :resizable="true" height="auto" :scrollable="true" class="mb-0">
+        <div class="row p-4">
+            <div class="d-grid col-lg-12">
+                <div class="mb-3">
+                    <label for="alt_text" class="form-label">Change folder name</label>
+                    <input v-model="folder_edit_name" type="text" id="alt_text" class="form-control">
+                </div>
+
+                <button @click="renameFolder()" type="button" class="btn btn-success waves-effect waves-light mb-3" :disabled="loading">
+                    <i v-if="!loading" class="fe-check-circle me-1"></i>
+                    <i v-else class="fas fa-spinner fa-spin"></i>
+                    Edit
+                </button>
+
+                <div class="alert alert-warning" role="alert">
+                    Pages and files will update in the background in a few minutes.
+                </div>
+            </div>
+        </div>
+    </modal>
+
     <modal name="upload-file-modal" ref="fmodal" :resizable="true" height="auto" :adaptive="true" :scrollable="true">
         <div class="row p-4">
             <div class="d-grid col-lg-12">
@@ -101,38 +172,30 @@
                         </div>
                     </div>
                     <div class="mail-list mt-3">
-                        <a href="#" @click.prevent="getFolders(); filesView = false" class="list-group-item border-0 font-14"><i class="mdi mdi-folder-outline font-18 align-middle me-2"></i>Recents</a>
-                        <a href="#" @click.prevent="getFiles();filesView = true;" class="list-group-item border-0 font-14"><i class="mdi mdi-file-outline font-18 align-middle me-2"></i>My Files</a>
-
-                        <!-- <a href="#" class="list-group-item border-0 font-14"><i class="mdi mdi-google-drive font-18 align-middle me-2"></i>Google Drive</a>
-                  <a href="#" class="list-group-item border-0 font-14"><i class="mdi mdi-dropbox font-18 align-middle me-2"></i>Dropbox</a>
-                  <a href="#" class="list-group-item border-0 font-14"><i class="mdi mdi-share-variant font-18 align-middle me-2"></i>Share with me</a>
-                  <a href="#" class="list-group-item border-0 font-14"><i class="mdi mdi-clock-outline font-18 align-middle me-2"></i>Recent</a>
-                  <a href="#" class="list-group-item border-0 font-14"><i class="mdi mdi-star-outline font-18 align-middle me-2"></i>Starred</a> -->
+                        <a href="#" @click.prevent="getFolders(); filesView = false" class="list-group-item border-0 font-14"><i class="mdi mdi-folder-outline font-18 align-middle me-1"></i>Recents</a>
+                        <a href="#" @click.prevent="getFiles();filesView = true;" class="list-group-item border-0 font-14"><i class="mdi mdi-file-outline font-18 align-middle me-1"></i>My Files</a>
                         <vue-nestable v-model="mediaFolders" :maxDepth="0" class="dd-list">
                             <vue-nestable-handle slot-scope="{ item, isChild }" :item="item">
                                 <li :key="item.id + uncolapsed.length" v-show="!isChild || uncolapsed.includes(item.id)" class="dd-item" :data-id="item.id">
-                                    <button @click="
-                                        collapse(item);
-                                        $forceUpdate();
-                                        " v-if="
-                                        item.children &&
-                                        item.children.length &&
-                                        !uncolapsed.includes(item.children[0].id)
-                                    ">
-                                        <button class="dd-collapse" data-action="collapse" type="button">Collapse</button>
+                                    <button 
+                                        @click="collapse(item); $forceUpdate();" 
+                                        v-if="item.children && item.children.length && !uncolapsed.includes(item.children[0].id)"
+                                        class="collapse-button"
+                                    >
+                                        <i class="mdi mdi-plus font-18"></i>
                                     </button>
-                                    <button @click="uncollapse(item)" v-if="
-                                        item.children &&
-                                        item.children.length &&
-                                        uncolapsed.includes(item.children[0].id)
-                                    ">
+                                    <button 
+                                        @click="uncollapse(item)" 
+                                        v-if="item.children && item.children.length && uncolapsed.includes(item.children[0].id)"
+                                        class="collapse-button"
+                                    >
                                         <i class="mdi mdi-minus font-18"></i>
                                     </button>
-                                    <div @click="selectedFolder = item; getFolders(item.id)" class="dd-handle">
-                                        <i class="mdi mdi-folder-outline font-18 align-middle me-2"></i>
+                                    <div @click="selectedFolder = item; getFolders(item.id)" :class="'dd-handle ' + (item.id == folderId ? 'selected-folder' : '')">
+                                        <i class="mdi mdi-folder-outline font-18 align-middle me-"></i>
                                         {{ item.name }}
-                                        <i @click.stop="deleteFolder(item)" class="fa fa-times ms-2 float-end mt-1" aria-hidden="true"></i>
+                                        <i @click.stop="deleteFolder(item)" class="fa fa-times ms-1 float-end mt-1" aria-hidden="true"></i>
+                                        <i @click.stop="renameFolderModal(item)" class="fas fa-edit ms-1 float-end mt-1"></i>
                                     </div>
                                 </li>
                             </vue-nestable-handle>
@@ -168,7 +231,7 @@
                                 <span class="mdi mdi-magnify"></span>
                             </div>
                         </div>
-                        <div @click.prevent="onlyParent = !onlyParent; getFiles()" :key="onlyParent + 'parent'" class="form-check form-switch mb-1" style="display: inline-block; cursor: pointer">
+                        <div @click.prevent="onlyParent = !onlyParent; getFiles(); folderId = null;" :key="onlyParent + 'parent'" class="form-check form-switch mb-1" style="display: inline-block; cursor: pointer">
                             <input :id="'toginput'" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :for="'toginput'" :checked="onlyParent">
                             <label class="form-check-label" for="light-mode-check">Show Only Parent Images</label>
                         </div>
@@ -192,15 +255,10 @@
                     </div>
                     <div v-if="!loading && loadstart">
                         <div v-if="!filesView">
-                            <!--
-                            <folders :selectable="true" @selected="getFolders($event)" v-if="inMediaFolders && inMediaFolders.length && !loading" :mediaFolders="inMediaFolders" title="Quick Access"></folders>
-                            -->
-                            <!-- end .mt-3-->
-
-                            <files :key="view" :view="view" v-if="!loading" :mediaFiles="mediaFiles" @selected="userSelectedFiles" @delete="deleteFile" @open="openFile"></files>
+                            <files :key="view" :view="view" v-if="!loading" :mediaFiles="mediaFiles" @selected="userSelectedFiles" @delete="deleteFile" @open="openFile" @move="openMoveModal"></files>
                         </div>
                         <div v-else>
-                            <files :key="view" :view="view" v-if="!loading" :mediaFiles="mediaFiles" @selected="userSelectedFiles" @delete="deleteFile" @open="openFile"></files>
+                            <files :key="view" :view="view" v-if="!loading" :mediaFiles="mediaFiles" @selected="userSelectedFiles" @delete="deleteFile" @open="openFile" @move="openMoveModal"></files>
                         </div>
                         <!-- end .mt-3-->
                     </div>
@@ -261,6 +319,10 @@ export default {
             mediaFiles: [],
             selectedFolder: null,
             currentImage: null,
+            folder_edit_name: null,
+            folder_edit_id: null,
+            file_to_move: null,
+            move_file_to: null,
             sizes: [
 
             ],
@@ -293,4 +355,25 @@ export default {
 </script>
 
 <style>
+.dd-handle {
+    padding: 0px 5px!important;
+    border: 1px solid transparent!important;
+}
+.dd-handle:hover i {
+    color: #6c757d;
+}
+.dd-item {
+    min-height: 30px!important;
+}
+.collapse-button {
+    text-indent: 0px!important;
+    transform: translateY(-4px);
+    width: 23px!important;
+}
+.selected-folder {
+    border: 1px solid #6658dd!important;
+}
+.original-floder {
+    border: 1px solid #1abc9c!important;
+}
 </style>

@@ -151,6 +151,62 @@ var mediaMixin = {
                 })
             }
         },
+        renameFolderModal(folder) {
+            this.folder_edit_name = folder.name;
+            this.folder_edit_id = folder.id;
+            this.$modal.show('edit-folder-modal');
+        },
+        renameFolder() {
+            if (this.folder_edit_name && this.folder_edit_id) {
+                var formData = new FormData();
+                formData.append('name', this.folder_edit_name);
+                formData.append('id', this.folder_edit_id);
+                this.loading = true;
+                axios.post('/api/media_manager/folder/edit', formData)
+                .then((response) => {
+                    if (response.status == 200) {
+                        this.$toast.success('Edited Successfully!');
+
+                        this.getFolders();
+                        this.getFiles();
+                        this.$modal.hide('edit-folder-modal');
+                    }
+                    this.loading = false;
+                })
+                .catch((error) => {
+                    console.log(error)
+                    this.loading = false;
+                })
+            }
+        },
+        openMoveModal(file){
+            this.move_file_to = null;
+            this.file_to_move = file;
+            this.$modal.show('file_move_modal');
+        },
+        moveFile(){
+            if (this.file_to_move && this.move_file_to) {
+                var formData = new FormData();
+                formData.append('file', JSON.stringify(this.file_to_move));
+                formData.append('folder', JSON.stringify(this.move_file_to));
+                this.loading = true;
+                axios.post('/api/media_manager/file/move', formData)
+                .then((response) => {
+                    if (response.status == 200) {
+                        this.$toast.success('Moved Successfully!');
+
+                        this.getFiles();
+                        this.$modal.hide('file_move_modal');
+                    }
+                    this.loading = false;
+                    this.move_file_to = null;
+                })
+                .catch((error) => {
+                    console.log(error)
+                    this.loading = false;
+                })
+            }
+        },
         imageAdded($event) {
             this.currentImage = $event;
             var formData = new FormData();
