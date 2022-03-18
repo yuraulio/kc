@@ -395,7 +395,7 @@ class MediaController extends Controller
         return response()->json('success', 200);
     }
 
-    public function deleteFolder($request, $id)
+    public function deleteFolder($id)
     {
         $folder = MediaFolder::find($id);
         $path = $folder->path;
