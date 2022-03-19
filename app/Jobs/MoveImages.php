@@ -40,7 +40,7 @@ class MoveImages implements ShouldQueue
      */
     public function handle()
     {
-        $files = MediaFile::where("path", "LIKE", "%".$this->old_path."%")->get();
+        $files = MediaFile::where("path", "LIKE", "%" . $this->old_path . "%")->get();
         Log::info("Files count: " . count($files));
         foreach ($files as $file) {
             $path = $file->path;
@@ -78,7 +78,7 @@ class MoveImages implements ShouldQueue
             }
         }
 
-        $folders = MediaFolder::where("path", "LIKE", "%".$this->old_path."%")->get();
+        $folders = MediaFolder::where("path", "LIKE", "%" . $this->old_path . "%")->get();
         foreach ($folders as $folder) {
             $path = $folder->path;
             if (strpos($path, $this->old_path) !== false) {

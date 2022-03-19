@@ -2,31 +2,26 @@
 
 namespace App\Http\Controllers\Admin_api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\CreateAdminPageRequest;
-use App\Http\Requests\CreateMediaFolderRequest;
-use App\Http\Requests\EditMediaFolderRequest;
-use App\Http\Requests\MoveMediaFileRequest;
-use App\Http\Resources\MediaFileResource;
-use App\Http\Resources\MediaFolderResource;
-use App\Http\Resources\PageResource;
+use Exception;
 use App\Jobs\MoveImages;
-use App\Model\Admin\Category;
+use App\Model\Admin\Page;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\Model\Admin\MediaFile;
 use App\Model\Admin\MediaFolder;
-use App\Model\Admin\Page;
-use App\Model\Admin\Template;
-use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use Image;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\PageResource;
+use App\Http\Controllers\Controller;
 use Intervention\Image\ImageManager;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Resources\MediaFileResource;
+use App\Http\Requests\MoveMediaFileRequest;
+use App\Http\Resources\MediaFolderResource;
+use App\Http\Requests\EditMediaFolderRequest;
+use App\Http\Requests\CreateMediaFolderRequest;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class MediaController extends Controller
 {
@@ -37,12 +32,12 @@ class MediaController extends Controller
      */
     public function index(Request $request)
     {
-        //$this->authorize('viewAny', Page::class, Auth::user());
+        // $this->authorize('viewAny', Page::class, Auth::user());
 
         try {
             $folders = MediaFolder::lookForOriginal($request->filter)
-                                ->with('children')->whereParentId($request->folder_id ?? null)
-                                ->orderBy('created_at', 'desc')->get();
+                ->with('children')->whereParentId($request->folder_id ?? null)
+                ->orderBy('created_at', 'desc')->get();
 
             return MediaFolderResource::collection($folders);
         } catch (Exception $e) {
@@ -57,15 +52,15 @@ class MediaController extends Controller
 
         try {
             $files = MediaFile::lookForOriginal($request->filter)
-                                ->when($request->parent != false && $request->parent != 'false', function ($q) {
-                                    return $q->whereNull('parent_id');
-                                })
-                                ->with('user')
-                                ->withCount('pages')
-                                ->when($request->folder_id != null, function ($q) use ($request) {
-                                    return $q->where('folder_id', $request->folder_id);
-                                })
-                                ->orderBy('created_at', 'desc')->paginate(20);
+                ->when($request->parent != false && $request->parent != 'false', function ($q) {
+                    return $q->whereNull('parent_id');
+                })
+                ->with('user')
+                ->withCount('pages')
+                ->when($request->folder_id != null, function ($q) use ($request) {
+                    return $q->where('folder_id', $request->folder_id);
+                })
+                ->orderBy('created_at', 'desc')->paginate(20);
             if ($request->parent != false && $request->parent != 'false') {
                 $files->load('subfiles');
             }
@@ -94,7 +89,7 @@ class MediaController extends Controller
             $mediaFolder = new MediaFolder();
             $mediaFolder->name = $request->name;
             $mediaFolder->path = $path;
-            $mediaFolder->url = config('app.url'). "/uploads" . $path;
+            $mediaFolder->url = config('app.url') . "/uploads" . $path;
             $mediaFolder->user_id = Auth::user()->id;
             $mediaFolder->save();
 
@@ -110,13 +105,11 @@ class MediaController extends Controller
         $image = $request->file('file');
         try {
             $folder = $this->getFolder($request);
-            $path = $folder["path"];
+            $path = '/' . $folder["path"];
             $mediaFolder = $folder["mediaFolder"];
 
-            // dd($path, $mediaFolder->path);
-
             $image_name = $image->getClientOriginalName();
-            $imgpath_original = $path . ''. $image_name;
+            $imgpath_original = $path . '' . $image_name;
             $file = Storage::disk('public')->putFileAs($path, $image, $image_name, 'public');
             $mfile_original = $this->storeFile($image_name, "original", $imgpath_original, $mediaFolder->id, $image->getSize(), $request->parrent_id, $request->alt_text, $request->link);
 
@@ -176,7 +169,7 @@ class MediaController extends Controller
                 $version_name = $version_name . "-" . $version[0] . "." . $extension;
 
                 // set image path
-                $imgpath = $path . ''. $version_name;
+                $imgpath = $path . '' . $version_name;
 
                 // save image
                 $file = Storage::disk('public')->putFileAs($path, $request->file('file'), $version_name, 'public');
@@ -223,7 +216,7 @@ class MediaController extends Controller
             $mediaFolder = $folder["mediaFolder"];
 
             $image_name = $request->imgname;
-            $imgpath = $path . ''. $image_name;
+            $imgpath = $path . '' . $image_name;
             $size = null;
 
             $original_file = MediaFile::findOrFail($request->parent_id);
@@ -286,21 +279,21 @@ class MediaController extends Controller
         $image = $request->file('file');
 
         try {
-            $cname = $this->getRealName($request->imgname ? $request->imgname .".". $image->extension() :  $image->getClientOriginalName());
-            
+            $cname = $this->getRealName($request->imgname ? $request->imgname . "." . $image->extension() :  $image->getClientOriginalName());
+
             $folder = $this->getFolder($request);
             $path = $folder["path"];
             $mediaFolder = $folder["mediaFolder"];
 
             // Store edited image
-            $imgpath = $path . ''. (($request->imgname ? $request->imgname . "_" . getimagesize($image)[0] . "x" . getimagesize($image)[1] . "_" . $request->compression . ".". $image->extension() : $image->getClientOriginalName()));
+            $imgpath = $path . '' . (($request->imgname ? $request->imgname . "_" . getimagesize($image)[0] . "x" . getimagesize($image)[1] . "_" . $request->compression . "." . $image->extension() : $image->getClientOriginalName()));
 
-            $file = Storage::disk('public')->putFileAs($path, $request->file('file'), ($request->imgname ? $request->imgname . "_" . getimagesize($image)[0] . "x" . getimagesize($image)[1] . ".". $image->extension() : $image->getClientOriginalName()), 'public');
+            $file = Storage::disk('public')->putFileAs($path, $request->file('file'), ($request->imgname ? $request->imgname . "_" . getimagesize($image)[0] . "x" . getimagesize($image)[1] . "." . $image->extension() : $image->getClientOriginalName()), 'public');
 
-            $mfile = $this->storeFile(($request->imgname ? $request->imgname . "_" . getimagesize($image)[0] . "x" . getimagesize($image)[1] . "_" . $request->compression . ".". $image->extension() : $image->getClientOriginalName()), $imgpath, $mediaFolder->id, $image->getSize(), null, null);
+            $mfile = $this->storeFile(($request->imgname ? $request->imgname . "_" . getimagesize($image)[0] . "x" . getimagesize($image)[1] . "_" . $request->compression . "." . $image->extension() : $image->getClientOriginalName()), $imgpath, $mediaFolder->id, $image->getSize(), null, null);
             $mfile->pages = [];
 
-            $url = config('app.url'). "/uploads" . $path;
+            $url = config('app.url') . "/uploads" . $path;
             return response()->json(['data' => [$mfile]], 200);
         } catch (Exception $e) {
             Log::error("Failed update file . " . $e->getMessage());
@@ -320,7 +313,7 @@ class MediaController extends Controller
         $mediaFile->folder_id = $folderId;
         $mediaFile->size = $size;
         $mediaFile->parent_id = $parent;
-        $mediaFile->url = config('app.url'). "/uploads" . $path;
+        $mediaFile->url = config('app.url') . "/uploads" . $path;
         $mediaFile->user_id = Auth::user()->id;
         $mediaFile->version = $version;
         $mediaFile->save();
@@ -346,7 +339,7 @@ class MediaController extends Controller
         $mediaFile->link = $link;
         $mediaFile->folder_id = $folderId;
         $mediaFile->size = $size ?? $mediaFile->size;
-        $mediaFile->url = config('app.url'). "/uploads" . $path;
+        $mediaFile->url = config('app.url') . "/uploads" . $path;
         $mediaFile->user_id = Auth::user()->id;
         $mediaFile->version = $version;
         $mediaFile->parent_id = $parent_id;
@@ -450,7 +443,7 @@ class MediaController extends Controller
 
         $old_path = $file->path;
 
-        $new_path = $folder->path;
+        $new_path = '/' . $folder->path;
         if (substr($new_path, -1) == "/") {
             $new_path = substr($new_path, 0, -1);
         }
@@ -486,7 +479,7 @@ class MediaController extends Controller
                 $mediaFolder = new MediaFolder();
                 $mediaFolder->name = "random";
                 $mediaFolder->path = $path;
-                $mediaFolder->url = config('app.url'). "/uploads" . $path;
+                $mediaFolder->url = config('app.url') . "/uploads" . $path;
                 $mediaFolder->user_id = Auth::user()->id;
                 $mediaFolder->save();
             }

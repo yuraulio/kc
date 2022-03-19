@@ -1,100 +1,100 @@
 <template>
 <div class="row">
-    <div class="col-lg-8 ">
-        <div >
-            <h4>{{version}}</h4>
-            <div v-show="imgSrc" :key="imgSrc ? imgSrc : 'emp'" class="img-cropper" style>
-                <vue-cropper ref="cropper" :checkCrossOrigin="false" :src="imgSrc" preview=".preview"/>
-            </div>
-            <label v-show="imgSrc == null" :name="'image'" style="width: 100%; min-height: 300px">
-                <form method="post" class="dropzone dz-clickable" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
-                    <div class="dz-message needsclick" style="margin: 0 auto; min-height: 300px">
-                        <i class="h1 text-muted dripicons-cloud-upload"></i>
-                        <div class="text-center">
-                            <input ref="input" type="file" name="image" accept="image/*" @change="setImage" />
-                            <span class="font-16">Drop files here or click to upload</span>
+    <div class="col-9">
+        <div class="row">
+            <div class="col-7">
+                <h4>{{version}}</h4>
+                <div v-show="imgSrc" :key="imgSrc ? imgSrc : 'emp'" class="img-cropper" style>
+                    <vue-cropper ref="cropper" :checkCrossOrigin="false" :src="imgSrc" preview=".preview"/>
+                </div>
+                <label v-show="imgSrc == null" :name="'image'" style="width: 100%; min-height: 300px">
+                    <form method="post" class="dropzone dz-clickable" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
+                        <div class="dz-message needsclick" style="margin: 0 auto; min-height: 300px">
+                            <i class="h1 text-muted dripicons-cloud-upload"></i>
+                            <div class="text-center">
+                                <input ref="input" type="file" name="image" accept="image/*" @change="setImage" />
+                                <span class="font-16">Drop files here or click to upload</span>
+                            </div>
                         </div>
-                    </div>
-                </form>
-            </label>
-            <div class="btn-group mb-2 mt-2">
-                <button type="button" class="btn btn-soft-primary" @click.prevent="zoom(0.2)">
-                    <i class="mdi mdi-magnify-plus-outline"></i>
-                </button>
-                <button type="button" class="btn btn-soft-primary" @click.prevent="zoom(-0.2)">
-                    <i class="mdi mdi-magnify-minus-outline"></i>
-                </button>
-            </div>
-            <div class="btn-group mb-2 mt-2">
-                <button type="button" class="btn btn-soft-primary" @click.prevent="move(-10, 0)">
-                    <i class="mdi mdi-arrow-left"></i>
-                </button>
-                <button type="button" class="btn btn-soft-primary" @click.prevent="move(10, 0)">
-                    <i class="mdi mdi-arrow-right"></i>
-                </button>
-                <button type="button" class="btn btn-soft-primary" @click.prevent="move(0, 10)">
-                    <i class="mdi mdi-arrow-up"></i>
-                </button>
-                <button type="button" class="btn btn-soft-primary" @click.prevent="move(0, -10)">
-                    <i class="mdi mdi-arrow-down"></i>
-                </button>
-            </div>
+                    </form>
+                </label>
+                <div class="btn-group mb-2 mt-2">
+                    <button type="button" class="btn btn-soft-primary" @click.prevent="zoom(0.2)">
+                        <i class="mdi mdi-magnify-plus-outline"></i>
+                    </button>
+                    <button type="button" class="btn btn-soft-primary" @click.prevent="zoom(-0.2)">
+                        <i class="mdi mdi-magnify-minus-outline"></i>
+                    </button>
+                </div>
+                <div class="btn-group mb-2 mt-2">
+                    <button type="button" class="btn btn-soft-primary" @click.prevent="move(-10, 0)">
+                        <i class="mdi mdi-arrow-left"></i>
+                    </button>
+                    <button type="button" class="btn btn-soft-primary" @click.prevent="move(10, 0)">
+                        <i class="mdi mdi-arrow-right"></i>
+                    </button>
+                    <button type="button" class="btn btn-soft-primary" @click.prevent="move(0, 10)">
+                        <i class="mdi mdi-arrow-up"></i>
+                    </button>
+                    <button type="button" class="btn btn-soft-primary" @click.prevent="move(0, -10)">
+                        <i class="mdi mdi-arrow-down"></i>
+                    </button>
+                </div>
 
-            <div class="btn-group mb-2 mt-2">
-                <button type="button" class="btn btn-soft-primary" @click.prevent="rotate(90)">
-                    <i class="mdi mdi-rotate-right"></i>
-                </button>
-                <button type="button" class="btn btn-soft-primary" @click.prevent="rotate(-90)">
-                    <i class="mdi mdi-rotate-left"></i>
-                </button>
-                
-            </div>
+                <div class="btn-group mb-2 mt-2">
+                    <button type="button" class="btn btn-soft-primary" @click.prevent="rotate(90)">
+                        <i class="mdi mdi-rotate-right"></i>
+                    </button>
+                    <button type="button" class="btn btn-soft-primary" @click.prevent="rotate(-90)">
+                        <i class="mdi mdi-rotate-left"></i>
+                    </button>
 
-            <div class="btn-group mb-2 mt-2" style="float: right">
-                <button type="button" class="btn btn-soft-primary" @click.prevent="reset">
-                    Reset
-                </button>
-            </div>
+                </div>
 
-            
-            <div class="row mb-2">
+                <div class="btn-group mb-2 mt-2" style="float: right">
+                    <button type="button" class="btn btn-soft-primary" @click.prevent="reset">
+                        Reset
+                    </button>
+                </div>
+            </div>
+            <div class="col-5">
+                 <div class="row mb-2">
                 <div class="col-lg-12 d-grid">
                     <p>Preview</p>
-                    <div class="cropped-image preview" />
+                    <div class="cropped-image preview" style="margin: 0px auto;"/>
                 </div>
-            </div>
-            <div class="row mb-2">
-                <div class="col-lg-6 d-grid">
-                    <label class="form-label">Name</label>
-                    <input v-model="imgname" type="text" class="form-control" />
                 </div>
-                <div class="col-lg-6 d-grid">
-                    <label class="form-label">Alt text</label>
-                    <input v-model="alttext" type="text" class="form-control" />
-                </div>
-            </div>
-            <div class="row mb-2">
-                <div class="col-lg-6 d-grid">
-                    <label class="form-label">Link</label>
-                    <input v-model="link" type="text" class="form-control" />
-                </div>
-                <div class="col-lg-6 d-flex align-items-end">
-                    <template>
-                        <button @click="upload('edit')" class="btn btn-soft-success btn-block w-100" :disabled="isUploading">
-                            <span v-if="isUploading"><i class="fas fa-spinner fa-spin"></i> Uploading...</span>
-                            <span v-else>
-                                Update
-                            </span>
-                        </button>
-                    </template>
+                <div class="row mb-2">
+                    <div class="col-lg-12 d-grid mb-2">
+                        <label class="form-label">Name</label>
+                        <input v-model="imgname" type="text" class="form-control" />
+                    </div>
+                    <div class="col-lg-12 d-grid mb-2">
+                        <label class="form-label">Alt text</label>
+                        <input v-model="alttext" type="text" class="form-control" />
+                    </div>
+                    <div class="col-lg-12 d-grid mb-2">
+                        <label class="form-label">Link</label>
+                        <input v-model="link" type="text" class="form-control" />
+                    </div>
+                    <div class="col-lg-12 d-flex align-items-end mt-2">
+                        <template>
+                            <button @click="upload('edit')" class="btn btn-soft-success btn-block w-100" :disabled="isUploading">
+                                <span v-if="isUploading"><i class="fas fa-spinner fa-spin"></i> Uploading...</span>
+                                <span v-else>
+                                    Update
+                                </span>
+                            </button>
+                        </template>
+                    </div>
                 </div>
             </div>
         </div>
-        
+
     </div>
-    <div class="col-lg-4">
+    <div class="col-3">
         <div class="card">
-            <div class="card-body bg-light" style="max-height: 90vh; overflow: hidden; overflow-y: scroll">
+            <div class="card-body bg-light" style="max-height: 50vh; overflow: hidden; overflow-y: scroll">
                 <div class="tab-content pt-0">
 
                     <div class="tab-pane d-block" id="profile1">

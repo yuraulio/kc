@@ -275,7 +275,7 @@ var mediaMixin = {
                 }
             }).then((response) => {
                 this.$toast.success('Uploaded Successfully!');
-                this.getFiles();
+                this.getFiles(response.data.data.folder_id);
                 this.$refs.crpr.isUploading = false;
                 this.$modal.hide('edit-image-modal');
             })
@@ -436,7 +436,7 @@ var mediaMixin = {
                         .delete('/api/media_manager/file/' + $event.id)
                         .then((response) => {
                             if (response.status == 200) {
-                                this.getFiles();
+                                this.getFiles($event.folder_id);
                             }
                         })
                         .catch(error => {

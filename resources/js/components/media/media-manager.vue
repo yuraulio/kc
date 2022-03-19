@@ -49,7 +49,7 @@
         </div>
     </modal>
 
-    <modal name="edit-image-modal" :adaptive="true" :resizable="true" width="92%" height="auto" :scrollable="true" class="mb-0">
+    <modal name="edit-image-modal" :adaptive="true" :resizable="true" width="70%" height="70%" :scrollable="true" class="mb-0">
         <div class="row p-4">
             <cropperer @edit="imageEdit" @upload="imageAdded" ref="crpr" :prevalue="selectedFile"></cropperer>
         </div>
@@ -64,15 +64,15 @@
                 <vue-nestable v-model="mediaFolders" :maxDepth="0" class="dd-list mb-2">
                     <vue-nestable-handle slot-scope="{ item, isChild }" :item="item">
                         <li :key="item.id + uncolapsed.length" v-show="!isChild || uncolapsed.includes(item.id)" class="dd-item" :data-id="item.id">
-                            <button 
-                                @click="collapse(item); $forceUpdate();" 
+                            <button
+                                @click="collapse(item); $forceUpdate();"
                                 v-if="item.children && item.children.length && !uncolapsed.includes(item.children[0].id)"
                                 class="collapse-button"
                             >
                                 <i class="mdi mdi-plus font-18"></i>
                             </button>
-                            <button 
-                                @click="uncollapse(item)" 
+                            <button
+                                @click="uncollapse(item)"
                                 v-if="item.children && item.children.length && uncolapsed.includes(item.children[0].id)"
                                 class="collapse-button"
                             >
@@ -87,7 +87,7 @@
                 </vue-nestable>
 
                 <p class="mb-2">
-                    <span class="d-inline-block" style="width: 40px;">From: </span>{{file_to_move ? file_to_move.path.replace("/" + file_to_move.name, "") : "" }} 
+                    <span class="d-inline-block" style="width: 40px;">From: </span>{{file_to_move ? file_to_move.path.replace("/" + file_to_move.name, "") : "" }}
                     <br>
                     <span class="d-inline-block" style="width: 40px;">To: </span>{{ move_file_to ? move_file_to.path : '' }}
                 </p>
@@ -177,15 +177,15 @@
                         <vue-nestable v-model="mediaFolders" :maxDepth="0" class="dd-list">
                             <vue-nestable-handle slot-scope="{ item, isChild }" :item="item">
                                 <li :key="item.id + uncolapsed.length" v-show="!isChild || uncolapsed.includes(item.id)" class="dd-item" :data-id="item.id">
-                                    <button 
-                                        @click="collapse(item); $forceUpdate();" 
+                                    <button
+                                        @click="collapse(item); $forceUpdate();"
                                         v-if="item.children && item.children.length && !uncolapsed.includes(item.children[0].id)"
                                         class="collapse-button"
                                     >
                                         <i class="mdi mdi-plus font-18"></i>
                                     </button>
-                                    <button 
-                                        @click="uncollapse(item)" 
+                                    <button
+                                        @click="uncollapse(item)"
                                         v-if="item.children && item.children.length && uncolapsed.includes(item.children[0].id)"
                                         class="collapse-button"
                                     >
@@ -201,26 +201,6 @@
                             </vue-nestable-handle>
                         </vue-nestable>
                     </div>
-
-                    <!-- <div class="mt-5">
-              <h4>
-                <span class="badge rounded-pill p-1 px-2 badge-soft-secondary"
-                  >FREE</span
-                >
-              </h4>
-              <h6 class="text-uppercase mt-3">Storage</h6>
-              <div class="progress my-2 progress-sm">
-                <div
-                  class="progress-bar progress-lg bg-success"
-                  role="progressbar"
-                  style="width: 46%"
-                  aria-valuenow="46"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                ></div>
-              </div>
-              <p class="text-muted font-12 mb-0">7.02 GB (46%) of 15 GB used</p>
-            </div> -->
                 </div>
                 <!-- End Left sidebar -->
                 <div class="inbox-rightbar">
@@ -231,20 +211,18 @@
                                 <span class="mdi mdi-magnify"></span>
                             </div>
                         </div>
-                        <div @click.prevent="onlyParent = !onlyParent; getFiles(); folderId = null;" :key="onlyParent + 'parent'" class="form-check form-switch mb-1" style="display: inline-block; cursor: pointer">
-                            <input :id="'toginput'" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :for="'toginput'" :checked="onlyParent">
-                            <label class="form-check-label" for="light-mode-check">Show Only Parent Images</label>
-                        </div>
                         <div class="mt-2 mt-md-0">
+                            <div @click.prevent="onlyParent = !onlyParent; getFiles(); folderId = null;" :key="onlyParent + 'parent'" class="form-check form-switch mb-1" style="display: inline-block; cursor: pointer">
+                                <button @click.prevent="view = 'list'" class="btn btn-sm btn-white">
+                                    <i class="mdi mdi-eye"></i>
+                                </button>
+                            </div>
                             <button @click.prevent="view = 'list'" class="btn btn-sm btn-white">
                                 <i class="mdi mdi-format-list-bulleted"></i>
                             </button>
-                            <!-- <button
-                  @click.prevent="view = 'cards'"
-                  class="btn btn-sm btn-white"
-                >
-                  <i class="mdi mdi-view-grid"></i>
-                </button> -->
+                            <button @click.prevent="view = 'cards'" class="btn btn-sm btn-white">
+                                <i class="mdi mdi-view-grid"></i>
+                            </button>
                         </div>
                     </div>
 
