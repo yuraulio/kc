@@ -21455,7 +21455,8 @@ body {
 .invoice-button {
   position: absolute;
   right: 25em;
-  top: -10px; }
+  top: -10px;
+}
 
 .toggle-bold {
   width: 65px !important;
