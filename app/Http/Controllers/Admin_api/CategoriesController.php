@@ -30,16 +30,7 @@ class CategoriesController extends Controller
         try {
             $categories = Category::lookForOriginal($request->filter)->where("parent_id", null);
             $categories->with(["pages", "subcategories", "user"]);
-            // if (strpos($request->sort, 'user') !== false) {
-            //     $orderBy = explode('|', $request->sort)[1];
-            //     $categories->orderBy('user.firstname', $orderBy);
-            // // $categories->join('admins', 'cms_categories.user_id', 'admins.id')->orderBy('admins.firstname', $orderBy);
-            // // ->join('cms_categories as subcategories', 'cms_categories.parent_id', 'subcategories.id');
-            // } else {
-            //     $categories->tableSort($request->sort);
-            // }
             $categories->tableSort($request);
-            // $categories->with(["pages", "subcategories", "user"]);
             $categories = $categories->paginate($request->per_page ?? 50);
             return CategoryResource::collection($categories);
         } catch (Exception $e) {
