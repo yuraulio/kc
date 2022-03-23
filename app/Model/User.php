@@ -27,6 +27,7 @@ use App\Model\CartCache;
 use App\Model\ExamResult;
 use App\Model\OauthAccessToken;
 use App\Model\Transaction;
+use App\Model\Absence;
 
 class User extends Authenticatable
 {
@@ -802,4 +803,65 @@ class User extends Authenticatable
     {
         return "$this->firstname $this->lastname";
     }
+
+    public function absences(){
+        return $this->hasMany(Absence::class);
+    }
+
+    public function getAbsencesByEvent(Event $event){
+        
+        $eventId = $event->id;
+        $absences = $this->absences()->whereEventId($eventId);
+        
+        if(empty($absences->get())){
+            return [];
+        }
+
+        $userMinutes = $absences->sum('minutes');
+        $eventMinutes =  $absences->sum('total_minutes');
+        $userMinutesAbsences = $eventMinutes - $userMinutes;
+        $eventLimitAbsence = $event->absences_limit;
+
+        $absencesByDate = [];
+       
+        foreach($absences->get()->groupBy('date') as $key => $absence){
+            
+            $userM = 0;
+            $eventM = 0;
+            
+            foreach($absence as $ab){
+            
+                $userM += $ab->minutes;
+                $eventM += $ab->total_minutes;
+            
+            }
+
+            $absencesByDate[$key] = ['user_minutes' => $userM, 'event_minutes' => $eventM];
+
+        }
+
+        //$userAbsencesPercent = 100 - ( ( $userMinutes / $eventMinutes ) * 100 );
+        $userAbsencesPercent =  ( $userMinutesAbsences / $eventMinutes ) * 100 ;
+
+        /*return response()->json([
+            
+            'absences_by_date' => $absencesByDate,
+            'total_user_minutes' => $userMinutes,
+            'total_event_minutes' => $eventMinutes,
+            'user_minutes_absences' => $userMinutesAbsences,
+            'user_absences_percent' => $userAbsencesPercent
+
+        ]);*/
+
+        $data['absences_by_date'] = $absencesByDate;
+        $data['total_user_minutes'] = $userMinutes;
+        $data['total_event_minutes'] = $eventMinutes;
+        $data['user_minutes_absences'] = $userMinutesAbsences;
+        $data['user_absences_percent'] = $userAbsencesPercent;
+
+        return $data;
+        
+    }
+
+
 }

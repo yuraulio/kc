@@ -16030,3 +16030,7 @@ button#move-lesson {
   color: #324cdd;
   border-color: white; }
 
+@media (min-width: 576px) {
+  #absences-info .modal-dialog {
+    max-width: 1000px; } }
+

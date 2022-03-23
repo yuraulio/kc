@@ -23,6 +23,7 @@ use App\Notifications\SurveyEmail;
 use App\Notifications\SubscriptionReminder;
 use App\Model\Pages;
 use App\Model\Transaction;
+use App\Model\Absence;
 
 class CronjobsController extends Controller
 {
@@ -697,6 +698,78 @@ class CronjobsController extends Controller
                     
                 
             }
+        }
+
+    }
+    
+
+    public function absences(){
+
+        $date = date('Y-m-d');
+        $events = Event::
+        wherePublished(true)
+        ->whereHas('lessons',function($lessonQ) use($date){
+            return $lessonQ->where('event_topic_lesson_instructor.date',$date);
+        })
+        ->with([
+            'lessons' => function($lessonQ) use($date){
+                return $lessonQ->wherePivot('date',$date);
+            },
+            'users',
+            'instructors'
+            ]
+        )->get();
+
+        
+
+        foreach($events as $event){
+            
+            $timeStarts = false;
+            $timeEnds = false;
+            $totalLessonHour = 0;
+
+            $lessons = $event['lessons'];
+
+            foreach($lessons as $key => $lesson){  
+            
+            
+                $lessonHour = date('H', strtotime($lesson->pivot->time_starts));
+    
+                if(!$timeStarts){
+                    $timeStarts = (int) date('H', strtotime($lesson->pivot->time_starts));
+                }
+                $timeEnds = (int) date('H', strtotime($lesson->pivot->time_ends));
+            }
+
+            if($timeStarts && $timeEnds){
+           
+                $totalLessonHour = ($timeEnds - $timeStarts) * 60;
+                $instructorIds = $event->instructors->unique()->pluck('id')->toArray();
+                
+                foreach($event['users'] as $user){
+                    if($user->instructor->first() && in_array($user->instructor->first()->id,$instructorIds)){
+                        continue;
+                    }
+
+                    if(Absence::where('user_id',$user->id)->where('event_id',$event->id)->where('date',$date)->first()){
+                        continue;
+                    }
+                    
+                    $absence = new Absence;
+                    $absence->user_id = $user->id;
+                    $absence->event_id = $event->id;
+                    $absence->date = $date;
+                    $absence->minutes = 0;
+                    $absence->total_minutes = $totalLessonHour;
+        
+                    $absence->save();
+                }
+                
+                
+    
+            }
+    
+
         }
 
     }

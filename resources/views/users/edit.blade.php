@@ -400,6 +400,9 @@
 
 
 
+               @include('users.absences.absences_modal')
+
+
                 <div class="row align-items-center">
                     <div class="col-8">
                     </div>
@@ -425,6 +428,7 @@
                                 <th scope="col">{{ __('Paid') }}</th>
                                 <th scope="col">{{ __('Registration Date') }}</th>
                                 <th scope="col">{{ __('Expiration Date') }}</th>
+                                <th scope="col">{{ __('Absences') }}</th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
@@ -454,18 +458,27 @@
                                         </div>
                                     </td>
 
-                                        <td class="text-right">
+                                    @if($user_event->is_inclass_course())
+                                    <td>
+                                        <button class="absences btn btn-info btn-sm" style="margin-top:10px;" type="button"
+                                                data-user_id="{{$user_event->pivot->user_id}}" data-event_id="{{$user_event->id}}" 
+                                                data-toggle="modal" data-target="#absences-info">Absences</button>
+                                        
+                                    </td>
+                                    @endif
 
-                                                <div class="dropdown" style="margin-left: 1.8rem;">
-                                                    <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i class="fas fa-ellipsis-v"></i>
-                                                    </a>
-                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                        <a class="dropdown-item" id="remove_ticket_user" data-event-id="{{$user_event->id}}" data-user-id="{{$user->id}}" data-ticket-id="{{ $user_event->ticket_id }}">{{ __('Delete') }}</a>
-                                                    </div>
+                                    <td class="text-right">
+
+                                            <div class="dropdown" style="margin-left: 1.8rem;">
+                                                <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fas fa-ellipsis-v"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                                    <a class="dropdown-item" id="remove_ticket_user" data-event-id="{{$user_event->id}}" data-user-id="{{$user->id}}" data-ticket-id="{{ $user_event->ticket_id }}">{{ __('Delete') }}</a>
                                                 </div>
+                                            </div>
 
-                                        </td>
+                                    </td>
 
                                 </tr>
                             @endforeach
@@ -1416,6 +1429,104 @@ $(document).on('click', '.ticket-card', function () {
 
     })
     
+
+</script>
+
+<script>
+
+    $(document).on('click','.absences',function(){
+       
+
+        let url =`/admin/user/absences/${$(this).data('user_id')}/${$(this).data('event_id')}`
+
+        
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: 'get',
+            url: url,
+            
+            success: function (data) {
+
+                if(data.success == true){
+
+                    let tableHtml = 
+                        `<table class="table align-items-center table-flush"  id="absences-table">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">{{ __('date') }}</th>
+                                    <th scope="col">{{ __('check in') }}</th>
+                                    <th scope="col">{{ __('presence hours') }}</th>
+                                    <th scope="col">{{ __('absence hours') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody id="absencesBody">
+
+                            </tbody>
+                        </table>
+                        `
+
+                    $("#absences-modal").append(tableHtml)
+
+                    $("#presence-hours").text((data.data.total_user_minutes/60));
+                    $("#absence-hours").text((data.data.user_minutes_absences/60));
+                    $("#absence-percent").text(data.data.user_absences_percent.toFixed(2) + '%');
+
+                    $('#absences-table').DataTable( {
+                        destroy: true,
+                        language: {
+                            paginate: {
+                                next: '&#187;', // or '→'
+                                previous: '&#171;' // or '←'
+                            }
+                        }
+                    });
+
+                    var t = $('#absences-table').DataTable();
+                    let totalEventHours = 0;
+                    let totalUserHours = 0;
+                    t.clear();
+                    $.each(data.data.absences_by_date, function(key1, value1) {
+
+                        totalEventHours = value1['event_minutes'] / 60;
+                        totalUserHours = value1['user_minutes'] / 60;
+
+                        t.row.add([
+                           
+                            key1,
+                            totalUserHours > 0 ? `<i class="ni ni-check-bold"></i>` : '',
+                            totalUserHours + '/' +  totalEventHours,
+                            (totalEventHours - totalUserHours) + '/' +  totalEventHours,
+                           
+                           
+                        ]).draw()
+                    })
+      
+
+
+                    
+                }else{
+                    
+                }
+
+            }
+        });
+        
+    });
+
+
+    $("#absences-info").on('hidden.bs.modal', function (e) {
+
+        $("#presence-hours").text(0);
+        $("#absence-hours").text(0);
+        $("#absence-percent").text(0 + '%');
+
+        var t = $('#absences-table').DataTable();
+        t.clear();
+        t.destroy();
+        $('#absences-table').remove();
+    })
 
 </script>
 

@@ -744,4 +744,25 @@ class UserController extends Controller
         $user->save();
     }
 
+    public function getAbsences(User $user, Event $event){
+
+        $data = $user->getAbsencesByEvent($event);
+
+        if(empty($data)){
+            return response()->json([
+                'success' => false,
+                'message' => 'There is no data!'  
+               
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,   
+            'data' => $data
+        
+        ]);
+
+
+    }
+
 }

@@ -19,6 +19,7 @@ class CreateAbsencesTable extends Migration
             $table->integer('event_id');
             $table->string('date');
             $table->integer('minutes');
+            $table->integer('total_minutes');
             $table->timestamps();
         });
     }

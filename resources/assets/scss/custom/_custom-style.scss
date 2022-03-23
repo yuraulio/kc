@@ -112,3 +112,9 @@ button#move-lesson {
 }
 
 
+@media (min-width: 576px){
+  #absences-info .modal-dialog {
+      max-width: 1000px;
+  }
+}
+

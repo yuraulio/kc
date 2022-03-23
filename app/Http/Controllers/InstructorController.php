@@ -138,7 +138,7 @@ class InstructorController extends Controller
         {
             $status = 0;
         }
-
+        
         $request->request->add(['status' => $status, 'social_media' => $social_media]);
         $isUpdate = $instructor->update($request->all());
 

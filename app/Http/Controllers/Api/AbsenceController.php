@@ -24,7 +24,7 @@ class AbsenceController extends Controller
         $user = Auth::user();
         $event = Event::find($request->event);
         $date = $request->date;//'2022-01-17';//date('Y-m-d');
-        $hour = date('H');
+        $hour = $request->hour;//date('H');
 
         if(!$event){
             return response()->json([
@@ -45,11 +45,19 @@ class AbsenceController extends Controller
         
         $timeStarts = false;
         $timeEnds = false;
+        $missedHours = 0;
 
-        foreach($lessons as $key => $lesson){            
-            //$lessonHour = date('H', strtotime($lesson->pivot->time_starts));
+        foreach($lessons as $key => $lesson){  
+            
+            
+            $lessonHour = date('H', strtotime($lesson->pivot->time_starts));
+
+            if($lessonHour < $hour){
+                $missedHours += 1;
+                continue;
+            }
+
             if(!$timeStarts){
-                //dd($lesson->pivot->time_starts);
                 $timeStarts = (int) date('H', strtotime($lesson->pivot->time_starts));
             }
             $timeEnds = (int) date('H', strtotime($lesson->pivot->time_ends));
@@ -57,13 +65,15 @@ class AbsenceController extends Controller
         
         if($timeStarts && $timeEnds){
            
-            $totalMinutes = ($timeEnds - $timeStarts) * 60;
+            $totalMinutesUser = ($timeEnds - $timeStarts) * 60;
+            $totalMinutesEvent = $totalMinutesUser + ($missedHours * 60);
             
             $absence = new Absence;
             $absence->user_id = $user->id;
             $absence->event_id = $event->id;
             $absence->date = $date;
-            $absence->minutes = $totalMinutes;
+            $absence->minutes = $totalMinutesUser;
+            $absence->total_minutes = $totalMinutesEvent;
 
             $absence->save();
 

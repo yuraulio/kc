@@ -173,6 +173,7 @@
 
 
                                 <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
+                                    <input id="old-category" name="oldCategory" value="{{isset($event->category[0]) ? $event->category[0]->id : -1}}" hidden>
                                     <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
                                     <select name="category_id" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}" required>
                                         <option></option>
@@ -1112,7 +1113,19 @@
 </script>
 <script>
         $('#submit-btn').on('click', function(){
-            $('#event_edit_form').submit()
+
+            if($("#input-category_id").val() != $("#old-category").val() && $("#old-category").val() != -1){
+
+                if(confirm("You are gonna change the event category. All data of instructors and lessons will be lost. Do you want to continue?")){
+                    $('#event_edit_form').submit();
+                }
+                else{
+                    $("#input-category_id").val($("#old-category").val()).change();
+                }
+
+            }else{
+                $('#event_edit_form').submit();
+            }
         })
 
 

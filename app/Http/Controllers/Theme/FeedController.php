@@ -26,7 +26,7 @@ class FeedController extends Controller
     public function generateSitemap()
     {
 
-
+        $avoidModels = ['App\Model\Type','App\Model\Partner'];
         $custom = [
             ['loc' => $this->baseUrl, 'lastmod' => '', 'priority' => '', 'changefreq' => ''],
         ];
@@ -43,7 +43,9 @@ class FeedController extends Controller
 
             if(!$slug->slugable){
                 continue;
-            }else if(get_class($slug->slugable) == 'App\Model\Event' && !$slug->slugable->category->first()) {
+            }else if(get_class($slug->slugable) == 'App\Model\Event' && (!$slug->slugable->category->first() || $slug->slugable->status != 0)) {
+                continue;
+            }else if(in_array(get_class($slug->slugable),$avoidModels)){
                 continue;
             }
 

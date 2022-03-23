@@ -84,11 +84,11 @@ if (!function_exists('get_status_by_slug')){
         }
 
         else if($slug && $slug->slugable && (get_class($slug->slugable) == 'App\\Model\\Instructor')){
-            return $slug->slugable->status;
+            return $slug->slugable->status == 1;
         }
 
         else if($slug && $slug->slugable && (get_class($slug->slugable) == 'App\\Model\\Category')){
-            return count($slug->slugable->events) > 0;
+            return count($slug->slugable->events()->where('published',1)->where('status',0)->get()) > 0;
         }
         
         return true;

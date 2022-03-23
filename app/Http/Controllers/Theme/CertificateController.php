@@ -88,7 +88,7 @@ class CertificateController extends Controller
         ]);
 
        //return view($view,compact('certificate'));
-
+        
         $certificate['firstname'] = $certificate->firstname;
         $certificate['lastname'] = $certificate->lastname;
         $certificate['certification_date'] = $certificate->certification_date;
@@ -96,10 +96,15 @@ class CertificateController extends Controller
         $certificate['credential'] = $certificate->credential;
         $certificate['certification_title'] = $certificate->certificate_title;
 
+        //return view('admin.certificates.kc_diploma_2022a',compact('certificate'));
+
         $pdf->getDomPDF()->setHttpContext($contxt);
-        $pdf->loadView('admin.certificates.certificates2021.'.$certificate->template,compact('certificate'))->setPaper('a4', 'landscape');
-          $fn = $certificate->firstname . '-' . $certificate->lastname . '-' . $certificate->user()->first()->kc_id . '.pdf';
-          return $pdf->stream($fn);
+        
+        $pdf->loadView('admin.certificates.'.$certificate->template,compact('certificate'))->setPaper('a4', 'landscape');
+        //$pdf->loadView('admin.certificates.kc_attendance_2022a',compact('certificate'))->setPaper('a4', 'landscape');
+        //$pdf->loadView('admin.certificates.kc_diploma_2022a',compact('certificate'))->setPaper('a4', 'landscape');
+        $fn = $certificate->firstname . '-' . $certificate->lastname . '-' . $certificate->user()->first()->kc_id . '.pdf';
+        return $pdf->stream($fn);
   
           
   
@@ -137,7 +142,7 @@ class CertificateController extends Controller
 
           $template = '';
           if($date <= 2021){
-            $view = 'admin.certificates.certificates2021.kc_deree_diploma';
+            $view = 'admin.certificates.kc_deree_diploma';
             $template = 'kc_deree_diploma';
           }else{
             $view = 'admin.certificates.certificates2021.kc_diploma';
@@ -187,7 +192,7 @@ class CertificateController extends Controller
         $fn = $name . '.pdf';
         $pdf->getDomPDF()->setHttpContext($contxt);
 
-        $pdf->loadView('admin.certificates.certificates2021.'.$cert->template,compact('certificate'))->setPaper('a4', 'landscape')->save(public_path('certificates_folders/'.$fn))->stream($fn);
+        $pdf->loadView('admin.certificates.'.$cert->template,compact('certificate'))->setPaper('a4', 'landscape')->save(public_path('certificates_folders/'.$fn))->stream($fn);
         
         $zip->addFile(public_path('certificates_folders/'.$fn), $fn);
 

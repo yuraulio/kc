@@ -111,7 +111,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     Route::post('user/save-notes','UserController@saveNotes');
     Route::get('user/edit_ticket', ['as' => 'user.edit_ticket', 'uses' => 'UserController@edit_ticket']);
     Route::post('user/remove_ticket_user', ['as' => 'user.remove_ticket_user', 'uses' => 'UserController@remove_ticket_user']);
-    Route::get('user/store_ticket', ['as' => 'user.store_ticket', 'uses' => 'UserController@store_ticket']);
+    Route::get('user/absences/{user}/{event}', 'UserController@getAbsences');
 
 
     //Videos
@@ -616,6 +616,8 @@ Route::get('/sendPaymentReminder', 'Dashboard\CronjobsController@sendPaymentRemi
 Route::get('/sendHalfPeriod', 'Dashboard\CronjobsController@sendHalfPeriod');//in
 Route::get('/sendElearningFQ', 'Dashboard\CronjobsController@sendElearningFQ');//in
 Route::get('/sendSurveyMail', 'Dashboard\CronjobsController@sendSurveyMail');//in
+Route::get('/absences', 'Dashboard\CronjobsController@absences');//in
+
 
 //SITEMAP
 Route::get('feed/{feed_type?}', 'Theme\FeedController@index');
