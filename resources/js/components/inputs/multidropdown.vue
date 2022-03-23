@@ -22,7 +22,7 @@
         :allowEmpty="allowEmpty"
     >
         <template v-if="route == 'subcategories'" slot="tag" slot-scope="props">
-           
+
                 <div v-if="props.option.edit == true" class="d-inline-block">
                     <span class="multiselect__tag">
                         <input class="edit-input" v-model="props.option.title">
@@ -31,12 +31,12 @@
                 </div>
                 <div v-else class="d-inline-block">
                     <span class="multiselect__tag multiselect__tag-padding">
-                        <span>{{ props.option.title }}</span> 
+                        <span>{{ props.option.title }}</span>
                         <i @click="props.option.edit = true" aria-hidden="true" tabindex="1" class="multiselect__tag-icon dripicons-document-edit edit-icon"></i>
                         <i @click="removeTag(props.option.title)" aria-hidden="true" tabindex="1" class="multiselect__tag-icon"></i>
                     </span>
                 </div>
-          
+
         </template>
     </multiselect>
 </div>
@@ -145,6 +145,9 @@
                 });
 
                 this.value = this.list[index];
+            },
+            setEdit(tag) {
+                this.$set(tag, 'edit', true);
             }
         },
         mounted() {
@@ -155,7 +158,7 @@
             if (this.data) {
                 this.list = this.data;
             }
-            
+
             if (this.fetch) {
                 this.get();
             }

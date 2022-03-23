@@ -3,6 +3,7 @@
 namespace App\Model\Admin;
 
 use App\Model\User;
+use App\Traits\PaginateTable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\SearchFilter;
@@ -11,9 +12,11 @@ class Category extends Model
 {
     use HasFactory;
     use SearchFilter;
+    use PaginateTable;
 
     protected $table = 'cms_categories';
     public $asYouType = true;
+    protected $appends = ['pages_count'];
 
     /**
      * Get the indexable data array for the model.
@@ -47,5 +50,10 @@ class Category extends Model
     public function user()
     {
         return $this->belongsTo(Admin::class, "user_id");
+    }
+
+    public function getPagesCountAttribute()
+    {
+        return $this->pages()->count();
     }
 }

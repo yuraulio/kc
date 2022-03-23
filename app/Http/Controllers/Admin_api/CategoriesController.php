@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateAdminCategoryRequest;
 use App\Http\Requests\UpdateAdminCategoryRequest;
 use App\Http\Resources\CategoryResource;
+use App\Jobs\DeleteMultipleCategories;
 use App\Model\Admin\Category;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class CategoriesController extends Controller
@@ -21,13 +23,24 @@ class CategoriesController extends Controller
      *
      * @return AnonymousResourceCollection
      */
-    public function index(Request $request): AnonymousResourceCollection
+    public function index(Request $request)
     {
         $this->authorize('viewAny', Category::class, Auth::user());
 
         try {
-            $categories = Category::lookForOriginal($request->filter)->where("parent_id", null)
-            ->orderBy('created_at', 'desc')->with(["pages", "subcategories", "user"])->paginate(10);
+            $categories = Category::lookForOriginal($request->filter)->where("parent_id", null);
+            $categories->with(["pages", "subcategories", "user"]);
+            // if (strpos($request->sort, 'user') !== false) {
+            //     $orderBy = explode('|', $request->sort)[1];
+            //     $categories->orderBy('user.firstname', $orderBy);
+            // // $categories->join('admins', 'cms_categories.user_id', 'admins.id')->orderBy('admins.firstname', $orderBy);
+            // // ->join('cms_categories as subcategories', 'cms_categories.parent_id', 'subcategories.id');
+            // } else {
+            //     $categories->tableSort($request->sort);
+            // }
+            $categories->tableSort($request);
+            // $categories->with(["pages", "subcategories", "user"]);
+            $categories = $categories->paginate($request->per_page ?? 50);
             return CategoryResource::collection($categories);
         } catch (Exception $e) {
             Log::error("Failed to get categories. " . $e->getMessage());
@@ -124,21 +137,29 @@ class CategoriesController extends Controller
      *
      * @return JsonResponse
      */
-    public function destroy(Request $request, int $id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         try {
+            DB::beginTransaction();
+
             $category = Category::find($id);
 
             $this->authorize('delete', $category, Auth::user());
 
             $this->syncSubcategories($category, []);
 
+            $category->pages()->detach();
+
             $category->delete();
 
             Category::all()->searchable();
 
+            DB::commit();
+
             return response()->json(['message' => 'success'], 200);
         } catch (Exception $e) {
+            throw $e;
+            DB::rollBack();
             Log::error("Failed to delete category. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
         }
@@ -173,5 +194,61 @@ class CategoriesController extends Controller
                 $cat->save();
             }
         }
+    }
+
+    public function deleteMultiple(Request $request)
+    {
+        try {
+            $ids = $request->selected;
+        
+            // authorize action
+            $categories = Category::findOrFail($ids);
+            foreach ($categories as $category) {
+                $this->authorize('delete', $category, Auth::user());
+            }
+
+            // start job
+            DeleteMultipleCategories::dispatch($ids, Auth::user());
+
+            return response()->json(['message' => 'success'], 200);
+        } catch (Exception $e) {
+            Log::error("Failed to bulk delete categories. " . $e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 400);
+        }
+    }
+
+    public function widgets()
+    {
+        return [
+            $this->categoryCount(),
+            $this->subcategoryCount(),
+            $this->popularCategory(),
+            $this->popularSubcategory()
+
+        ];
+    }
+
+    public function categoryCount()
+    {
+        return Category::where("parent_id", null)->count();
+    }
+
+    public function subcategoryCount()
+    {
+        return Category::where("parent_id", '!=', null)->count();
+    }
+
+    public function popularCategory()
+    {
+        return Category::where("parent_id", null)->with('pages')->get()->sortByDesc(function ($category) {
+            return $category->pages->count();
+        })->first()->title;
+    }
+
+    public function popularSubcategory()
+    {
+        return Category::where("parent_id", '!=', null)->with('pages')->get()->sortByDesc(function ($category) {
+            return $category->pages->count();
+        })->first()->title;
     }
 }

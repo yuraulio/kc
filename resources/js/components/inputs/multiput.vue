@@ -116,7 +116,7 @@
             @updatevalue="updated"
             :prop-value="existingValue"
             :route="route"
-            :fetch="true"
+            :fetch="fetch"
             :multi="multi"
             :taggable="taggable"
         ></multidropdown>
@@ -210,6 +210,9 @@ export default {
         pseudo: Boolean,
         mode: String,
         inputs: {},
+        fetch: {
+            default: true
+        },
     },
     data() {
         return {

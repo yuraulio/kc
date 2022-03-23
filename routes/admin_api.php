@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin_api\CategoriesController;
 use App\Http\Controllers\Admin_api\CommentsController;
 use App\Http\Controllers\Admin_api\PagesController;
 use App\Http\Controllers\Admin_api\MediaController;
@@ -20,6 +21,8 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
         });
 
         // categories
+        Route::post('categories/deleteMultiple', [CategoriesController::class, 'deleteMultiple']);
+        Route::get('categories/widgets', [CategoriesController::class, 'widgets']);
         Route::resource('categories', Admin_api\CategoriesController::class)->only([
             'index', 'store', 'update', 'show', 'destroy'
         ]);

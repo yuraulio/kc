@@ -81,6 +81,14 @@ Vue.component('draggable-menu', require('./components/menu/MenuBuilder.vue').def
 Vue.component('nest-menu', require('./components/menu/NestMenu.vue').default);
 Vue.component('admins', require('./components/admins.vue').default);
 
+import VuetableFieldCheckbox from 'vuetable-2/src/components/VuetableFieldCheckbox.vue';
+Vue.component('vuetable-field-checkbox', VuetableFieldCheckbox);
+
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+Vue.use(BootstrapVue)
+
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+
 
 new Vue({
    el: '#app'

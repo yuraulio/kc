@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CategoryResource extends JsonResource
@@ -27,8 +28,10 @@ class CategoryResource extends JsonResource
                     ];
                 }
             ),
-            'pages' => count($this->pages),
+            // 'pages' => $this->pages,
+            'pages_count' => $this->pagesCount,
             'subcategories' => $this->subcategories,
+            'created_at' => Carbon::parse($this->created_at)->toFormattedDateString(),
         ];
     }
 }
