@@ -177,6 +177,7 @@ class CategoriesController extends Controller
         $currentSubcategories = $category->subcategories()->get();
         foreach ($currentSubcategories ?? [] as $currentSubcategory) {
             if (!in_array($currentSubcategory->id, collect($subcategories)->pluck('id')->toArray())) {
+                $currentSubcategory->pages()->detach();
                 $currentSubcategory->delete();
             } else {
                 $key = array_search($currentSubcategory->id, array_column($subcategories, 'id'));
@@ -184,7 +185,7 @@ class CategoriesController extends Controller
                 $currentSubcategory->save();
             }
         }
-
+        
         foreach ($subcategories ?? [] as $sub) {
             if (array_key_exists('new', $sub) && $sub['new']) {
                 $cat = new Category();
