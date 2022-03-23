@@ -26,14 +26,15 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
             Route::get('/admins', [UserController::class, 'admins'])->name("admins-management");
         });
 
+        Route::get('/page/{id}', [DashboardController::class, 'pageEdit']);
     });
 });
 Route::group(['middleware' => ['auth:admin_web']], function () {
     Route::get('menus', '\CodexShaper\Menu\Http\Controllers\MenuController@index');
     Route::get('menus/builder/{id}', '\CodexShaper\Menu\Http\Controllers\MenuItemController@showMenuItems')->name('menu.builder');
-/*
-     * Helpers Route
-     */
+    /*
+         * Helpers Route
+         */
     Route::get('assets', '\CodexShaper\Menu\Http\Controllers\MenuController@assets')->name('menu.asset');
 
     /*

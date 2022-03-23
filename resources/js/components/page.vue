@@ -62,6 +62,7 @@
                             </span>
 
                             <span class="pe-2 text-nowrap d-inline-block" style="float: right">
+                                <a class="btn btn-soft-secondary" :href="'/page/'+page.id">Simple edit</a>
                                 <a @click="edit()" href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
                             </span>
 

@@ -6,9 +6,10 @@
         <slot></slot>
     </div>
 
-    <div v-if="type == 'image'" :key="keyput + 'media'" >
+    <div v-if="type == 'image'" :key="keyput + 'media'" class="image-input">
         <div 
-        :ref="keyput + 'media'" class="offcanvas offcanvas-start" 
+        :ref="keyput + 'media'" 
+        class="offcanvas offcanvas-start" 
         data-bs-scroll="true" 
         tabindex="-1" 
         :id="'mediaCanvas' + keyput" 
@@ -26,9 +27,9 @@
             </div> <!-- end offcanvas-body-->
         </div>
         <div class="text-center">
-            <div class="d-grid text-center" v-if="value" style="display: block;">
+            <div class="d-grid text-center" v-if="value">
                 <img :src="value.url" alt="image" class="img-fluid rounded" >
-                <button @click="$set(loadstart, (keyput + 'media'),  true)" style="margin-top: -60px" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput"  aria-controls="offcanvasScrolling"  class="btn btn-soft-primary">Change Media</button>
+                <button @click="$set(loadstart, (keyput + 'media'),  true)" style="margin-top: -60px" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput"  aria-controls="offcanvasScrolling"  class="btn btn-soft-primary change-media">Change Media</button>
 
                 <div class="mt-2">
                     <label class="form-label float-start">Alt Text</label>
@@ -87,7 +88,7 @@
         <uploadImage @updatedimage="updatedimage" :key="keyput" :prevalue="value"  :keyput="keyput"></uploadImage>
     </div> -->
 
-    <div v-if="type == 'text_editor'" class="">
+    <div v-if="type == 'text_editor'" class="text-editor-input">
         <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
         <ckeditor v-if="texteditor == 'ck'" :height="300" :editor="editor" :id="keyput" v-model="editorData" :config="editorConfig"></ckeditor>
 

@@ -1,7 +1,7 @@
 <!-- Topbar Start -->
 <div class="navbar-custom">
     <div class="container-fluid">
-        <ul class="list-unstyled topnav-menu float-end mb-0">
+        <ul class="list-unstyled topnav-menu float-end mb-0" style="min-width: auto;">
 
             {{-- <li class="d-none d-lg-block">
                 <form class="app-search">

@@ -100,4 +100,9 @@ class DashboardController extends Controller
     {
         return view('new_admin.pages.menu');
     }
+
+    public function pageEdit($id)
+    {
+        return view('new_admin.pages.page_edit', ["id" => $id]);
+    }
 }
