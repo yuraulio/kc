@@ -28,8 +28,8 @@ export default {
             name: 'title',
             title: 'Title',
             sortField: 'title',
-            dataClass: 'align-middle text-center',
-            titleClass: 'text-center'
+            dataClass: 'align-middle',
+            titleClass: ''
         },
         {
             name: 'subcategories',
@@ -43,8 +43,8 @@ export default {
                 }
                 return subcategories;
             },
-            dataClass: 'align-middle text-center',
-            titleClass: 'text-center'
+            dataClass: 'align-middle',
+            titleClass: ''
         },
         {
             name: 'user',
@@ -57,8 +57,8 @@ export default {
                     return "";
                 }
             },
-            dataClass: 'align-middle text-center',
-            titleClass: 'text-center'
+            dataClass: 'align-middle',
+            titleClass: ''
         },
         {
             name: 'pages_count',
