@@ -7,15 +7,15 @@
     </div>
 
     <div v-if="type == 'image'" :key="keyput + 'media'" class="image-input">
-        <div 
-        :ref="keyput + 'media'" 
-        class="offcanvas offcanvas-start" 
-        data-bs-scroll="true" 
-        tabindex="-1" 
-        :id="'mediaCanvas' + keyput" 
-        aria-labelledby="mediaCanvasLabel" 
-        style="visibility: visible; width: 100%" 
-        aria-modal="true" 
+        <div
+        :ref="keyput + 'media'"
+        class="offcanvas offcanvas-start"
+        data-bs-scroll="true"
+        tabindex="-1"
+        :id="'mediaCanvas' + keyput"
+        aria-labelledby="mediaCanvasLabel"
+        style="visibility: visible; width: 100%"
+        aria-modal="true"
         role="dialog">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title" id="mediaCanvasLabel"></h5>
@@ -28,7 +28,7 @@
         </div>
         <div class="text-center">
             <div class="d-grid text-center" v-if="value">
-            
+
                 <img @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" :src="value.url" alt="image" class="img-fluid rounded" >
 
                 <div class="mt-2">
@@ -126,9 +126,9 @@
 
     <div v-if="type == 'tabs'" class="">
         <tcedit
-            :mode="mode" 
-            ref="tc" 
-            :pseudo="pseudo" 
+            :mode="mode"
+            ref="tc"
+            :pseudo="pseudo"
             :predata="existingValue"
             name="tabs"
             :tabsProp="tabsProp"
@@ -148,7 +148,7 @@
                     :value="input.value"
                     :tabsProp="input.tabs ? input.tabs : []"
                     :size="input.size"
-                    
+
                     :route="input.route"
                     :multi="false"
                     :existingValue="input.value"
@@ -293,7 +293,7 @@ export default {
                 eventHub.$emit('updateslug', editorData);
             }
         },
-        limit (string = '', limit = 0) {  
+        limit (string = '', limit = 0) {
             return string.substring(0, limit)
         }
     },
@@ -361,7 +361,7 @@ export default {
     }
 
     .page-edit-simple .image-input img.img-fluid.rounded {
-        max-height: 300px;
+        max-height: 500px;
     }
     .page-edit-simple .image-input .change-media {
         display: block;
