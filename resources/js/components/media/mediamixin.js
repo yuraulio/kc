@@ -143,6 +143,7 @@ var mediaMixin = {
                     this.regFile = null;
 
                     this.selectedFile = response.data.data[0];
+                    this.getFiles(response.data.data[0].folder_id)
                     this.$modal.show('edit-image-modal');
                 })
                 .catch((error) => {
@@ -194,8 +195,9 @@ var mediaMixin = {
                 .then((response) => {
                     if (response.status == 200) {
                         this.$toast.success('Moved Successfully!');
-
-                        this.getFiles();
+                        _.remove(this.mediaFiles, {
+                            id: this.file_to_move.id
+                        });
                         this.$modal.hide('file_move_modal');
                     }
                     this.loading = false;
@@ -297,7 +299,7 @@ var mediaMixin = {
                     if (response.status == 201 || response.status == 200) {
                         this.$toast.success('Created Successfully!')
                     }
-                    this.mediaFolders.push(response.data.data)
+                    this.mediaFolders.unshift(response.data.data)
                     this.folderName = '';
                     this.loading = false;
                     this.$modal.hide('create-folder-modal')

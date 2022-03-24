@@ -3,17 +3,19 @@
 namespace App\Http\Controllers\Admin_api;
 
 use Exception;
+use App\Jobs\MoveFile;
 use App\Jobs\MoveImages;
 use App\Model\Admin\Page;
+use App\Jobs\RenameFolder;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Model\Admin\MediaFile;
 use App\Model\Admin\MediaFolder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Resources\PageResource;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PageResource;
+use Illuminate\Support\Facades\Auth;
 use Intervention\Image\ImageManager;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\MediaFileResource;
@@ -325,11 +327,9 @@ class MediaController extends Controller
 
     public function editFile($parent_id, $version, $name, $path, $folderId, $size, $parent = null, $alttext = "", $link = "")
     {
-        $mediaFile = MediaFile::where("parent_id", $parent_id)->where("version", $version)->first();
+        $mediaFile = MediaFile::whereParentId($parent_id)->whereVersion($version)->first();
 
-        if (!$mediaFile) {
-            $mediaFile = new MediaFile;
-        }
+        $oldPath = $mediaFile->path;
 
         $mediaFile->name = $name;
         $mediaFile->path = $path;
@@ -344,6 +344,10 @@ class MediaController extends Controller
         $mediaFile->version = $version;
         $mediaFile->parent_id = $parent_id;
         $mediaFile->save();
+
+        if (!Storage::disk('public')->exists($mediaFile->path)) {
+            Storage::disk('public')->move($oldPath, $mediaFile->path);
+        }
 
         $mediaFile->load(["pages", "siblings", "subfiles"]);
 
@@ -406,34 +410,27 @@ class MediaController extends Controller
     {
         $folder = MediaFolder::find($request->id);
 
-        $old_path = $folder->path;
-        if (substr($old_path, -1) == "/") {
-            $old_path = substr($old_path, 0, -1);
-        }
+        $newFolderNameSlugify = Str::slug($request->name, '_');
+        $oldFolderNameSlugify = Str::slug($folder->name, '_');
 
-        $tmp = substr($old_path, 0, -1);
-        $tmp = explode("/", $tmp);
-        array_pop($tmp);
-        $new_path = implode('/', $tmp) . "/" . $request->name;
-        if (substr($new_path, -1) == "/") {
-            $new_path = substr($new_path, 0, -1);
-        }
+        $oldPath = $folder->path;
+        $newPath = Str::replaceLast($oldFolderNameSlugify, $newFolderNameSlugify, $oldPath);
 
-        $old_full_path = public_path("/uploads" . $old_path);
-        $new_full_path = public_path("/uploads" . $new_path);
+        $oldFullPath = public_path("/uploads/" . $oldPath);
+        $newFullPath = public_path("/uploads/" . $newPath);
 
-        $result = rename($old_full_path, $new_full_path);
+        $result = rename($oldFullPath, $newFullPath);
 
         if ($result) {
             $folder->name = $request->name;
             $folder->save();
 
-            MoveImages::dispatch($old_path, $new_path);
+            RenameFolder::dispatch($oldPath, $newPath, $folder->id);
 
             return response()->json('success', 200);
-        } else {
-            return response()->json('Failed to rename folder.', 400);
         }
+
+        return response()->json('Failed to rename folder.', 400);
     }
 
     public function moveFile(MoveMediaFileRequest $request)
@@ -441,25 +438,9 @@ class MediaController extends Controller
         $folder = json_decode($request->folder);
         $file = json_decode($request->file);
 
-        $old_path = $file->path;
+        MoveFile::dispatch($file->id, $folder->id);
 
-        $new_path = '/' . $folder->path;
-        if (substr($new_path, -1) == "/") {
-            $new_path = substr($new_path, 0, -1);
-        }
-        $new_path = $new_path . "/" . $file->name;
-
-        // dd(Storage::disk('public')->exists("/uploads" . $old_path));
-
-        $result = Storage::disk('public')->move($old_path, $new_path);
-
-        if ($result) {
-            MoveImages::dispatch($old_path, $new_path, $folder->id);
-
-            return response()->json('success', 200);
-        } else {
-            return response()->json('Failed to move file.', 400);
-        }
+        return response()->json('success', 200);
     }
 
     private function getFolder(Request $request)

@@ -3,7 +3,7 @@
     <modal name="create-folder-modal" :resizable="true" height="auto" :adaptive="true">
         <div class="row">
             <div class="col-lg-12 p-4">
-                <label :for="'foldername'" class="form-label">FolderName</label>
+                <label :for="'foldername'" class="form-label">Folder Name</label>
                 <input v-model="folderName" type="text" :id="'folderName'" class="form-control" />
                 <ul v-if="errors && errors['name']" class="parsley-errors-list filled" id="parsley-id-7" aria-hidden="false">
                     <li class="parsley-required">{{ errors["name"][0] }}</li>
@@ -152,28 +152,21 @@
             <div class="card-body">
                 <!-- Left sidebar -->
                 <div class="inbox-leftbar">
-                    <div class="btn-group d-block mb-2">
-                        <button type="button" class="
-                  btn btn-success
-                  w-100
-                  waves-effect waves-light
-                  dropdown-toggle
-                " data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="mdi mdi-plus"></i> Create New
+                    <div class="btn-group d-block mb-2 text-center">
+                        <button class="btn btn-sm btn-info" @click.prevent="$modal.show('create-folder-modal')">
+                            <i class="mdi mdi-plus"></i> <i class="mdi mdi-folder-plus-outline me-1"></i>
                         </button>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#" @click.prevent="$modal.show('create-folder-modal')"><i class="mdi mdi-folder-plus-outline me-1"></i> Folder</a>
-                            <!-- <a class="dropdown-item" href="#"><i class="mdi mdi-file-plus-outline me-1"></i> File</a>
-                     <a class="dropdown-item" href="#"><i class="mdi mdi-file-document me-1"></i> Document</a> -->
-                            <a class="dropdown-item" href="#" @click.prevent="$modal.show('upload-media-modal')"><i class="mdi mdi-image me-1"></i> Image
-                            </a>
-
-                            <a class="dropdown-item" href="#" @click.prevent="$modal.show('upload-file-modal')"><i class="mdi mdi-upload me-1"></i> File</a>
-                        </div>
+                        <button class="btn btn-sm btn-warning" @click.prevent="$modal.show('upload-media-modal')">
+                            <i class="mdi mdi-plus"></i> <i class="mdi mdi-image me-1"></i>
+                        </button>
+                        <button class="btn btn-sm btn-primary" @click.prevent="$modal.show('upload-file-modal')">
+                            <i class="mdi mdi-plus"></i> <i class="mdi mdi-upload me-1"></i>
+                        </button>
                     </div>
                     <div class="mail-list mt-3">
-                        <a href="#" @click.prevent="getFolders(); filesView = false" class="list-group-item border-0 font-14"><i class="mdi mdi-folder-outline font-18 align-middle me-1"></i>Recents</a>
-                        <a href="#" @click.prevent="getFiles();filesView = true;" class="list-group-item border-0 font-14"><i class="mdi mdi-file-outline font-18 align-middle me-1"></i>My Files</a>
+                        <a href="#" @click.prevent="getFolders(); filesView = false" class="list-group-item border-0 font-14"><i class="mdi mdi-folder-outline font-18 align-middle me-1"></i>Recent Updated</a>
+                        <a href="#" @click.prevent="getFiles(); filesView = true;" class="list-group-item border-0 font-14"><i class="mdi mdi-folder-outline font-18 align-middle me-1"></i> All Files</a>
+
                         <vue-nestable v-model="mediaFolders" :maxDepth="0" class="dd-list">
                             <vue-nestable-handle slot-scope="{ item, isChild }" :item="item">
                                 <li :key="item.id + uncolapsed.length" v-show="!isChild || uncolapsed.includes(item.id)" class="dd-item" :data-id="item.id">
@@ -192,6 +185,7 @@
                                         <i class="mdi mdi-minus font-18"></i>
                                     </button>
                                     <div @click="selectedFolder = item; getFolders(item.id)" :class="'dd-handle ' + (item.id == folderId ? 'selected-folder' : '')">
+
                                         <i class="mdi mdi-folder-outline font-18 align-middle me-"></i>
                                         {{ item.name }}
                                         <i @click.stop="deleteFolder(item)" class="fa fa-times ms-1 float-end mt-1" aria-hidden="true"></i>
