@@ -51,7 +51,7 @@ class RenameFolder implements ShouldQueue
                 $file->save();
 
                 foreach ($file->pages()->get() as $page) {
-                    if ($page->content = str_replace($this->old_path, $this->new_path, $page->content, $count) && $count) {
+                    if ($page->content = str_replace($this->oldPath, $this->newPath, $page->content, $count) && $count) {
                         $page->save();
                     };
                 }
