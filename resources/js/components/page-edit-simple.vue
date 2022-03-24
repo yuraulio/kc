@@ -37,7 +37,7 @@
     .component-tabs {
         min-height: 300px;
     }
-    
+
 </style>
 
 <template>
@@ -50,10 +50,10 @@
                         <input v-model="page.title" class="d-inline-block title-input mb-3">
                     </div>
                     <div class="col-md-6">
-                        <button :disabled="loading" @click="changeMode()" type="button" class="btn btn-soft-info waves-effect waves-light float-end ms-2 mb-3"><i class="dripicons-toggles me-1" style="transform: translateY(2px);"></i>Advanced</button>
+                        <button :disabled="loading" @click="changeMode()" type="button" class="btn btn-soft-info waves-effect waves-light float-end ms-2 mb-3"><i class="dripicons-toggles me-1" style="transform: translateY(2px);"></i>Advanced Mode</button>
                         <button v-if="type != 'new'" :disabled="loading" @click="preview()" type="button" class="btn btn-soft-warning waves-effect waves-light float-end ms-2 mb-3"><i class="dripicons-preview me-1" style="transform: translateY(2px);"></i>Preview</button>
                         <button :disabled="loading" @click="type == 'new' ? add() : edit()" type="button" class="btn btn-soft-success waves-effect waves-light float-end ms-2 mb-3"><i v-if="!loading" class="mdi mdi-square-edit-outline me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Save</button>
-                        <a href="/pages" type="button" class="btn btn-soft-secondary waves-effect waves-light float-end ms-2 mb-3"><i class="fe-x me-1"></i> Cancel</a>
+                        <a href="/pages"  class="btn btn-soft-secondary waves-effect waves-light float-end ms-2 mb-3"><i class="fe-x me-1"></i> Cancel</a>
                         <div v-if="type != 'new'" :key="'ck'"  class="form-check form-switch mb-3 d-inline-block float-end" style="cursor: pointer; margin-top:10px;">
                             <input :key="'on'" @click="page.published = !page.published" :id="'cinput'" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :for="'cinput'" :checked="page.published">
                             <label class="form-check-label" for="light-mode-check">Published</label>
@@ -126,13 +126,13 @@
                                             <div v-show="!column.template.dynamic" class="col-12">
                                                 <label class="form-label mt-2">Preview</label>
                                                 <div class="text-center">
-                                                    <iframe 
-                                                        :width="findInputValue(column.template.inputs, 'youtube_width') || '100%'" 
-                                                        :height="findInputValue(column.template.inputs, 'youtube_height') || '400'" 
-                                                        :src="'https://www.youtube.com/embed/' + findInputValue(column.template.inputs, 'youtube_embed')" 
-                                                        title="YouTube video player" 
-                                                        frameborder="0" 
-                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                                    <iframe
+                                                        :width="findInputValue(column.template.inputs, 'youtube_width') || '100%'"
+                                                        :height="findInputValue(column.template.inputs, 'youtube_height') || '400'"
+                                                        :src="'https://www.youtube.com/embed/' + findInputValue(column.template.inputs, 'youtube_embed')"
+                                                        title="YouTube video player"
+                                                        frameborder="0"
+                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                                         allowfullscreen
                                                     ></iframe>
                                                 </div>
@@ -147,7 +147,7 @@
                 </template>
             </template>
         </template>
-    </div> 
+    </div>
 
     <div v-else class="card mt-5">
         <div class="card-body p-4">
@@ -157,7 +157,7 @@
 
             <div class="text-center">
                 <h3 class="mt-4">Select Template go get started</h3>
-                
+
                 <multidropdown
                     title="Template"
                     :multi="false"
@@ -185,7 +185,7 @@ import multidropdown from './inputs/multidropdown.vue';
         },
         data() {
             return {
-                
+
                 tab: "Content",
                 loading: false,
             }

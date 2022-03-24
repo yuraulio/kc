@@ -6,7 +6,7 @@
                 <h4 v-if="title_value" class="page-title d-inline-block">Edit page: {{title_value}}</h4>
                 <h4 v-else class="page-title d-inline-block">New page</h4>
 
-                <button :disabled="loading" @click="changeMode()" type="button" class="btn btn-soft-info waves-effect waves-light float-end">Basic</button>
+                <button :disabled="loading" @click="changeMode()" type="button" class="btn btn-soft-info waves-effect waves-light float-end">Editor Mode</button>
             </div>
         </div>
 
@@ -34,11 +34,11 @@
         </div>
 
         <div class="col-lg-9" >
-            <tcedit 
-                v-if="template_value" 
-                :mode="type" 
-                ref="tc" 
-                :pseudo="false" 
+            <tcedit
+                v-if="template_value"
+                :mode="type"
+                ref="tc"
+                :pseudo="false"
                 :predata="template_value.rows"
                 :collapseAllProp="collapseAll"
                 :slug="slug_value"
@@ -52,7 +52,7 @@
 
                     <div class="text-center">
                         <h3 class="mt-4">Select Template go get started</h3>
-                        
+
                         <multidropdown
                             title="Template"
                             :multi="false"
@@ -76,7 +76,7 @@
                         <template v-else>
                             Expand All
                         </template>
-                        
+
                     </button>
 
                     <h4 class="mb-2">{{pageTitle}}</h4>
@@ -400,7 +400,7 @@ export default {
         },
         mounted() {
             if (this.data) {
-                
+
                 var data = this.data;
                 this.title_value = data.title;
                 this.template_value = data.template;

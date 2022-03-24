@@ -62,9 +62,9 @@
                                     <i v-else class="mdi mdi-chevron-up ms-1"></i>
                                 </button>
                                 -->
-                                <a href="/new_page" type="button" class="btn btn-soft-info waves-effect waves-light ms-2"><i class="mdi mdi-plus-circle me-1"></i> Add New</a>
+                                <a href="/new_page" class="btn btn-soft-info waves-effect waves-light ms-2"><i class="mdi mdi-plus-circle me-1"></i> Add New</a>
                             </div>
-                            
+
                     </div>
 
                     <div class="row">
@@ -95,7 +95,7 @@
 
                             <div class="col-md-3">
                                 <div class="text-md-end mt-3 mt-md-0">
-                                    
+
                                     <multidropdown
                                         :multi="false"
                                         @updatevalue="update_type"
@@ -109,7 +109,7 @@
                                 </div>
                             </div><!-- end col-->
 
-                            
+
                             <div class="col-md-3">
                                 <div class="text-md-end mt-3 mt-md-0">
 
@@ -142,7 +142,7 @@
 
                                 </div>
                             </div>
-                        
+
 
                     </div> <!-- end row -->
                 </div> <!-- end card-body-->
@@ -282,7 +282,7 @@ import multidropdown from './inputs/multidropdown.vue';
                 this.getData();
             },
             "category_value": function() {
-                
+
             }
         },
         methods: {
