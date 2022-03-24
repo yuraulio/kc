@@ -3,8 +3,10 @@
 
         <div class="col-sm-12 mt-3 mb-3">
             <div class="page-title-box">
-                <h4 v-if="title_value" class="page-title">Edit page: {{title_value}}</h4>
-                <h4 v-else class="page-title">New page</h4>
+                <h4 v-if="title_value" class="page-title d-inline-block">Edit page: {{title_value}}</h4>
+                <h4 v-else class="page-title d-inline-block">New page</h4>
+
+                <button :disabled="loading" @click="changeMode()" type="button" class="btn btn-soft-info waves-effect waves-light float-end">Basic</button>
             </div>
         </div>
 
@@ -37,9 +39,10 @@
                 :mode="type" 
                 ref="tc" 
                 :pseudo="false" 
-                :predata="template_value ? JSON.parse(template_value.rows) : null"
+                :predata="template_value.rows"
                 :collapseAllProp="collapseAll"
                 :slug="slug_value"
+                class="mb-3"
             ></tcedit>
             <div v-else class="card">
                 <div class="card-body p-4">
@@ -49,9 +52,8 @@
 
                     <div class="text-center">
                         <h3 class="mt-4">Select Template go get started</h3>
-                        <p class="text-muted mb-0">Select template in the right menu or below, you'll have an option to update it manually.</p>
+                        
                         <multidropdown
-                            v-if="category"
                             title="Template"
                             :multi="false"
                             @updatevalue="update_template"
@@ -74,7 +76,6 @@
                         <template v-else>
                             Expand All
                         </template>
-                        
                         
                     </button>
 
@@ -162,7 +163,9 @@
                                     <button v-if="type == 'new'" @click="add()" type="button" class="btn btn-soft-success waves-effect waves-light m-1" :disabled="loading"><i v-if="!loading" class="fe-check-circle me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Create</button>
                                     <button v-if="type == 'edit'" :disabled="loading" @click="edit()" type="button" class="btn btn-soft-success waves-effect waves-light m-1"><i v-if="!loading" class="mdi mdi-square-edit-outline me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Save</button>
 
-                                    <button @click="$emit('updatemode', 'list')" type="button" class="btn btn-soft-secondary waves-effect waves-light m-1"><i class="fe-x me-1"></i> Cancel</button>
+
+                                    <a href="/pages" type="button" class="btn btn-soft-secondary waves-effect waves-light m-1"><i class="fe-x me-1"></i> Cancel</a>
+
                                 </div>
                             </div>
                         </div> <!-- end col-->
@@ -217,7 +220,7 @@ export default {
                 template_value: null,
                 loading: false,
                 published: false,
-                indexed: false,
+                indexed: true,
                 dynamic: false,
                 lodash: _,
                 page: {},
@@ -386,41 +389,45 @@ export default {
                 .catch((error) => {
                     console.log(error)
                 });
+            },
+            changeMode() {
+                this.data.title = this.title_value;
+                this.data.slug = this.slug_value;
+                this.data.published = this.published;
+                this.data.content = JSON.stringify(this.$refs.tc.data);
+                this.$emit('changeMode', this.data);
             }
         },
         mounted() {
-            if (this.type == "edit"){
-                if (this.data) {
-                    var data = this.data;
-                    this.title_value = data.title;
-                    this.template_value = data.template;
-                    this.published = data.published;
-                    this.indexed = data.indexed;
-                    this.dynamic = data.dynamic;
-                    if (data.rows){
-                        this.rows_value = JSON.parse(data.rows);
-                    }
-                    if (data.content){
-                        this.template_value.rows = data.content;
-                    }
-                    this.category_value = data.categories;
-                    this.subcategory_value = data.subcategories;
-                    this.published_from_value = data.published_from;
-                    this.published_to_value = data.published_to;
-
-                    var index = this.type_list.findIndex(function(type) {
-                        return type.title ==  data.type;
-                    });
-                    this.type_value = this.type_list[index];
-                    this.slug_value = data.slug;
-                } else {
-                    this.get()
+            if (this.data) {
+                
+                var data = this.data;
+                this.title_value = data.title;
+                this.template_value = data.template;
+                this.published = data.published;
+                this.indexed = data.indexed;
+                this.dynamic = data.dynamic;
+                if (data.rows){
+                    this.rows_value = JSON.parse(data.rows);
                 }
+                if (data.content){
+                    this.template_value.rows = JSON.parse(data.content);
+                }
+                this.category_value = data.categories;
+                this.subcategory_value = data.subcategories;
+                this.published_from_value = data.published_from;
+                this.published_to_value = data.published_to;
 
+                var index = this.type_list.findIndex(function(type) {
+                    return type.title ==  data.type;
+                });
+                this.type_value = this.type_list[index];
+                this.slug_value = data.slug;
+            } else {
+                this.get()
             }
 
             eventHub.$on('updateslug', ((value) => {
-                console.log("event test");
                 this.slug_value = value;
             }));
         },

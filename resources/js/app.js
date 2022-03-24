@@ -89,6 +89,8 @@ Vue.use(BootstrapVue)
 
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
+Vue.component('page-edit', require('./components/page-edit.vue').default);
+Vue.component('page-new', require('./components/page-new.vue').default);
 Vue.component('page-edit-simple', require('./components/page-edit-simple.vue').default);
 
 

@@ -585,7 +585,6 @@ export default {
             }
         },
         toggleCollapse(val) {
-            console.log(val.id);
             if (val.collapsed) {
                 val.collapsed = !val.collapsed;
             } else {
@@ -632,13 +631,11 @@ export default {
             return inputs[index].value;
         },
         getColumnWidth(column, columns) {
-            // console.log("getColumnWidth started");
             if (column.width) {
                 return column.width * 2;
             } 
             var width = (12 / columns.length) / 2;
             this.$set(column, "width", Number(width));
-            // console.log("property added");
             return width * 2;
         },
         calculateWidth(columns, index, event, rowIndex) {
@@ -815,7 +812,6 @@ export default {
             }
         }
         if (this.pseudo == false) {
-
             if (typeof this.predata !== 'undefined') {
                 var parsed = this.predata;
                 if (parsed.length) {
@@ -836,7 +832,6 @@ export default {
                         });
                     });
                 }
-
                 this.data = parsed;
             }
         }

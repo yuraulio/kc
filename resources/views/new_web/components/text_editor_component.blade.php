@@ -23,7 +23,7 @@
     } else {
         $text = [];
         foreach ($column->template->inputs as $input){
-            $text[$input->key] = $input->value;
+            $text[$input->key] = $input->value ?? "";
         }
 
         $display_text = $text["rich_text_box_title"] ?? "";

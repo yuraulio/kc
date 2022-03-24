@@ -28,8 +28,8 @@
         </div>
         <div class="text-center">
             <div class="d-grid text-center" v-if="value">
-                <img :src="value.url" alt="image" class="img-fluid rounded" >
-                <button @click="$set(loadstart, (keyput + 'media'),  true)" style="margin-top: -60px" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput"  aria-controls="offcanvasScrolling"  class="btn btn-soft-primary change-media">Change Media</button>
+            
+                <img @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" :src="value.url" alt="image" class="img-fluid rounded" >
 
                 <div class="mt-2">
                     <label class="form-label float-start">Alt Text</label>
@@ -37,12 +37,13 @@
                 </div>
             </div>
             <div v-else>
-                <button @click="$set(loadstart, (keyput + 'media'),  true)" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" aria-controls="offcanvasScrolling"  class="btn btn-soft-primary">Add Media</button>
+                <i @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" class="text-muted dripicons-photo d-none image-input-icon" style="font-size: 100px;"></i>
+                <button @click="$set(loadstart, (keyput + 'media'),  true)" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" aria-controls="offcanvasScrolling"  class="btn btn-soft-primary image-input-button">Add Media</button>
             </div>
         </div>
     </div>
 
-    <div v-if="type == 'gallery'" :key="keyput + 'media'" >
+    <div v-if="type == 'gallery'" :key="keyput + 'media'" class="image-input">
             <div :ref="keyput + 'media'" class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" :id="'mediaCanvas' + keyput" aria-labelledby="mediaCanvasLabel" style="visibility: visible; width: 100%" aria-modal="true" role="dialog">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title" id="mediaCanvasLabel"></h5>
@@ -56,8 +57,8 @@
         <div class="text-center">
             <div class="d-grid text-center" v-if="value" style="display: block;">
                 <div class="row" >
-                    <div v-for="val in value" class="col-sm-3" style="height: 200px">
-                            <img :src="val.url" alt="image" class="img-fluid img-thumbnail" width="200" height="200">
+                    <div v-for="val in value" class="col-sm-3">
+                            <img @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" :src="val.url" alt="image" class="img-fluid img-thumbnail" width="200" height="200">
                             <p class="mb-0">
                                 <code>
                                     <template v-if="val.name.length < 50">
@@ -70,10 +71,10 @@
                             </p>
                         </div>
                 </div>
-            <button @click="$set(loadstart, (keyput + 'media'),  true)" style="margin-top: 00px" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput"  aria-controls="offcanvasScrolling"  class="btn btn-soft-primary">Change Media</button>
             </div>
             <div v-else>
-                <button @click="$set(loadstart, (keyput + 'media'),  true)" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" aria-controls="offcanvasScrolling"  class="btn btn-soft-primary">Add Media</button>
+                <i @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" class="text-muted dripicons-photo-group d-none image-input-icon" style="font-size: 100px;"></i>
+                <button @click="$set(loadstart, (keyput + 'media'),  true)" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" aria-controls="offcanvasScrolling"  class="btn btn-soft-primary image-input-button">Add Media</button>
             </div>
         </div>
     </div>
@@ -322,7 +323,59 @@ export default {
 </script>
 
 <style>
-.ck.ck-editor__main>.ck-editor__editable {
-    min-height: 200px;
-}
+    .ck.ck-editor__main>.ck-editor__editable {
+        min-height: 200px;
+    }
+
+    .page-edit-simple .ck-editor:not(:hover) .ck-editor__top{
+        visibility: hidden;
+    }
+    .page-edit-simple .ck-editor .ck-editor__top * {
+        border: 0px;
+    }
+    .page-edit-simple .ck-editor .ck-toolbar {
+        background-color: transparent;
+    }
+    .page-edit-simple .ck-editor:not(:hover) .ck-content {
+        border: 0px;
+        box-shadow: none;
+    }
+    .page-edit-simple .ck-editor .ck-content {
+        border: 0px;
+    }
+    .page-edit-simple .ck.ck-editor__editable:not(.ck-editor__nested-editable).ck-focused {
+        outline: none;
+        border: 0px;
+        box-shadow: none;
+    }
+</style>
+
+<style scoped>
+    .page-edit-simple .text-editor-input .form-label {
+        display: none;
+    }
+
+    .page-edit-simple .form-label {
+        color: #98a6ad !important;
+        font-size: 12px;
+    }
+
+    .page-edit-simple .image-input img.img-fluid.rounded {
+        max-height: 300px;
+    }
+    .page-edit-simple .image-input .change-media {
+        display: block;
+        width: 100%;
+        margin-top: 0px!important;
+    }
+
+    .page-edit-simple .image-input .d-grid {
+        display: block!important;
+    }
+    .page-edit-simple .image-input .image-input-icon {
+        display: block!important;
+    }
+    .page-edit-simple .image-input .image-input-button {
+        display: none!important;
+    }
 </style>

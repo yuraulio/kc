@@ -6,7 +6,7 @@
 @section('content')
     <div class="container-fluid">
         <div class="row">
-            <page-edit :id="{{$id}}"></page-edit>
+            <page-new></page-new>
         </div>
     </div>
 @endsection

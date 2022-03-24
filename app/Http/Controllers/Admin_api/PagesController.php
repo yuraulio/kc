@@ -196,6 +196,7 @@ class PagesController extends Controller
 
             $page->categories()->detach();
             $page->subcategories()->detach();
+            $page->files()->detach();
 
             Comment::where("page_id", $page->id)->delete();
 

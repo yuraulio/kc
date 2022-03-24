@@ -13,7 +13,8 @@
             {
                 "type": "image",
                 "key": "hero_image",
-                "label": "Image"
+                "label": "Image",
+                "main": true
             },
             {
                 "type": "text",
@@ -47,7 +48,8 @@
             {
                 "type": "image",
                 "key": "content_box_image",
-                "label": "Content Box Image"
+                "label": "Content Box Image",
+                "main": true
             },
             {
                 "type": "text",
@@ -94,7 +96,9 @@
             {
                 "type": "text_editor",
                 "key": "rich_text_box_title",
-                "label": "Text"
+                "label": "Text",
+                "main": true,
+                "value": null
             }
         ]
     },
@@ -110,7 +114,8 @@
             {
                 "type": "image",
                 "key": "full_size_image",
-                "label": "Image"
+                "label": "Image",
+                "main": true
             }
         ]
     },
@@ -130,41 +135,48 @@
                 "type": "text",
                 "key": "meta_slug",
                 "label": "Slug",
-                "size": "col-lg-12"
+                "size": "col-lg-12",
+                "main": true
             },
             {
                 "type": "text",
                 "key": "meta_title",
                 "label": "Meta Title",
-                "size": "col-lg-12"
+                "size": "col-lg-12",
+                "main": true
             },
             {
                 "type": "textarea",
                 "key": "meta_description",
-                "label": "Meta Description"
+                "label": "Meta Description",
+                "main": true
             },
             {
                 "type": "text",
                 "key": "meta_keyword",
                 "label": "Meta Keywords",
-                "size": "col-lg-12"
+                "size": "col-lg-12",
+                "main": true
             },
             {
                 "type": "image",
                 "key": "meta_image",
-                "label": "Meta image"
+                "label": "Meta image",
+                "main": true
             },
             {
                 "type": "text",
                 "key": "meta_author",
                 "label": "Meta Author",
-                "size": "col-lg-12"
+                "size": "col-lg-12",
+                "main": true
             },
             {
                 "type": "text",
                 "key": "meta_type",
                 "label": "Meta Type",
-                "size": "col-lg-12"
+                "size": "col-lg-12",
+                "main": true
             }
         ]
     },
@@ -219,7 +231,8 @@
             {
                 "type": "gallery",
                 "key": "gallery",
-                "label": "Gallery"
+                "label": "Gallery",
+                "main": true
             },
             {
                 "type": "multidropdown",
@@ -254,14 +267,10 @@
         "simple_view": true,
         "inputs": [
             {
-                "type": "textarea",
+                "type": "text_editor",
                 "key": "blog_header_title",
-                "label": "Title"
-            },
-            {
-                "type": "textarea",
-                "key": "blog_header_subtitle",
-                "label": "Subtitle"
+                "label": "Text",
+                "main": true
             }
         ]
     },
@@ -291,7 +300,8 @@
                 "type": "text",
                 "key": "youtube_embed",
                 "label": "Video code",
-                "size": "col-lg-12"
+                "size": "col-lg-12",
+                "main": true
             }
         ]
     },
@@ -352,14 +362,16 @@
                 "type": "multidropdown",
                 "key": "form_type",
                 "label": "Form type",
-                "route": "getFormTypes"
+                "route": "getFormTypes",
+                "main": true
             },
             {
                 "type": "checkbox",
                 "key": "top_overlap",
                 "label": "Overlap",
                 "value": true,
-                "size": "col-lg-6"
+                "size": "col-lg-6",
+                "simple_view": false
             }
         ]
     },
@@ -754,7 +766,8 @@
             {
                 "type": "image",
                 "key": "inspirational_image",
-                "label": "Image"
+                "label": "Image",
+                "main": true
             },
             {
                 "type": "text",
@@ -790,7 +803,8 @@
             {
                 "type": "text_editor",
                 "key": "event_teaser_text",
-                "label": "Text"
+                "label": "Text",
+                "main": true
             }
         ]
     }

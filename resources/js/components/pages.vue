@@ -62,7 +62,7 @@
                                     <i v-else class="mdi mdi-chevron-up ms-1"></i>
                                 </button>
                                 -->
-                                <button @click="mode='new'" type="button" class="btn btn-soft-info waves-effect waves-light ms-2"><i class="mdi mdi-plus-circle me-1"></i> Add New</button>
+                                <a href="/new_page" type="button" class="btn btn-soft-info waves-effect waves-light ms-2"><i class="mdi mdi-plus-circle me-1"></i> Add New</a>
                             </div>
                             
                     </div>
