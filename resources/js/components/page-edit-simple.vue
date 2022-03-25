@@ -37,6 +37,21 @@
     .component-tabs {
         min-height: 300px;
     }
+    
+    .column-navigation {
+        min-width: unset;
+        transform: translateY(-3px);
+        font-size: 12px;
+    }
+    .column-navigation a {
+        padding: 2px 5px;
+    }
+    .column-navigation a.active{
+        border-bottom: 2px solid #98a6ad;
+    }
+    .column-navigation-margin {
+        margin-right: 26px;
+    }
 
 </style>
 
@@ -44,7 +59,7 @@
 <div>
     <div class="page-edit-simple" v-if="page">
         <div class="row">
-            <div class="col-md-10 offset-md-1 align-self-center">
+            <div class="col-md-12 align-self-center">
                 <div class="page-title-box mt-3 row">
                     <div class="col-md-6">
                         <input v-model="page.title" class="d-inline-block title-input mb-3">
@@ -60,7 +75,11 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
 
+        <div class="row">
+            <div class="col-md-8 offset-md-2 align-self-center">
                 <ul class="nav mb-3">
                     <li class="nav-item">
                         <a @click="tab = 'Content'" :class="'nav-link ' + (tab == 'Content' ? 'active' : '')" href="#">General</a>
@@ -73,7 +92,7 @@
         </div>
 
         <div v-if="tab == 'Meta'" class="row">
-            <div class="col-md-10 offset-md-1 align-self-center">
+            <div class="col-md-8 offset-md-2 align-self-center">
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
@@ -88,16 +107,28 @@
         </div>
 
         <template v-for="(row, row_index) in content" v-if="content">
+
+
+
             <template v-for="(column, column_index) in row.columns">
                 <template v-if="column.template.simple_view == true && column.template.tab == tab">
-                    <div class="row">
-                        <div class="col-md-10 offset-md-1 align-self-center">
-                            <div class="card">
+                    <div :class="'row ' + 'row' + row_index">
+                        <div class="col-md-8 offset-md-2 align-self-center">
+                            <div :class="'card ' + 'column' + column_index" :style="(column_index == 0 ? '' : 'display: none;')">
                                 <div class="card-body">
                                     <div :class="'row component-tabs ' + (column.tab == 'settings' ? 'settings' : 'main')">
                                         <div class="col-12">
                                             <p class="text-muted d-inline-block">{{ column.template.title }}</p>
-                                            <i v-if="settingsExist(column)" @click="column.tab == 'settings' ? column.tab = 'main' : column.tab = 'settings'" class="text-muted dripicons-gear float-end"></i>
+                                            <i v-if="settingsExist(column)" @click="column.tab == 'settings' ? column.tab = 'main' : column.tab = 'settings'" class="text-muted dripicons-gear float-end ms-2"></i>
+                                            <template v-if="simpleColumnCount(row.columns) > 1">
+                                                <ul :class="'nav column-navigation d-inline-block float-end mb-0 nav-row' + row_index + ' ' + (settingsExist(column) == false ? 'column-navigation-margin' : '')">
+                                                    <template v-for="(column, column_index) in row.columns">
+                                                        <li :class="'nav-item d-inline-block nav-column' + column_index">
+                                                            <a @click="showColumnTab(row_index, column_index)" :class="'nav-link text-muted ' + (column_index == 0 ? 'active' : '')" href="#">Col {{column_index + 1}}</a>
+                                                        </li>
+                                                    </template>
+                                                </ul>
+                                            </template>
                                         </div>
 
                                         <multiput
@@ -149,25 +180,28 @@
         </template>
     </div>
 
-    <div v-else class="card mt-5">
-        <div class="card-body p-4">
-            <div class="error-ghost text-center">
-                <gicon></gicon>
-            </div>
+    <div v-else class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card mt-5">
+                <div class="card-body p-4">
+                    <div class="error-ghost text-center">
+                        <gicon></gicon>
+                    </div>
 
-            <div class="text-center">
-                <h3 class="mt-4">Select Template go get started</h3>
-
-                <multidropdown
-                    title="Template"
-                    :multi="false"
-                    @updatevalue="setTemplate"
-                    route="templatesAll"
-                ></multidropdown>
+                    <div class="text-center">
+                        <h3 class="mt-4">Select Template go get started</h3>
+                        
+                        <multidropdown
+                            title="Template"
+                            :multi="false"
+                            @updatevalue="setTemplate"
+                            route="templatesAll"
+                        ></multidropdown>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
 </div>
 </template>
 
@@ -325,6 +359,22 @@ import multidropdown from './inputs/multidropdown.vue';
                 };
 
                 this.$emit('setPage', page);
+            },
+            simpleColumnCount(columns) {
+                var count = 0;
+                columns.forEach((column) => {
+                    if (column.template.simple_view == true) {
+                        count = count + 1;
+                    }
+                });
+                return count;
+            },
+            showColumnTab(row_index, column_index) {
+                $(".nav-row" + row_index + " a").removeClass("active");
+                $(".nav-row" + row_index + " li.nav-column" + column_index + " a").addClass("active");
+
+                $(".row" + row_index + ">div>.card").hide();
+                $(".row" + row_index + " .column" + column_index).show();
             }
         },
         mounted() {
