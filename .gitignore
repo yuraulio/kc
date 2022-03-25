@@ -26,3 +26,4 @@ yarn-error.log
 docker-compose.yml
 docker-compose-sail.yml
 storage/*.index*
+*.unison*

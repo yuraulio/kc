@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin_api;
 
 use Exception;
 use App\Jobs\MoveFile;
-use App\Jobs\MoveImages;
 use App\Model\Admin\Page;
 use App\Jobs\RenameFolder;
 use Illuminate\Support\Str;
