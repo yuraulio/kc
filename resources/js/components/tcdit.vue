@@ -747,6 +747,9 @@ export default {
         "data": function(val) {
             this.$emit('updatetabscomponent', val);
         },
+        "predata": function(val) {
+            this.data = this.predata;
+        },
         "tabs": function(val) {
             this.$emit('updatetabs', val);
         },
@@ -812,6 +815,7 @@ export default {
             }
         }
         if (this.pseudo == false) {
+            // this.data = this.predata;
             if (typeof this.predata !== 'undefined') {
                 var parsed = this.predata;
                 if (parsed.length) {
@@ -825,9 +829,9 @@ export default {
                         element.columns.forEach(column => {
                             if (column.component != 'tabs') {
                                 column.active = column.order < 1 ? true : false;
-                                if (this.extractedComponents[column.component] != null) {
-                                    column.template = this.extractedComponents[column.component];
-                                }
+                                // if (this.extractedComponents[column.component] != null) {
+                                //     column.template = this.extractedComponents[column.component];
+                                // }
                             }
                         });
                     });

@@ -29,12 +29,10 @@ use App\Model\OauthAccessToken;
 use App\Model\Transaction;
 use App\Traits\SearchFilter;
 use App\Traits\PaginateTable;
-use Laravel\Scout\Searchable;
 
 class Admin extends Authenticatable
 {
     use Notifiable, HasApiTokens, MediaTrait, Billable, SearchFilter, PaginateTable;
-    use Searchable;
     /**
      * The attributes that are mass assignable.
      *

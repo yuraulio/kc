@@ -7,14 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use App\Traits\SearchFilter;
 use App\Model\User;
 use App\Traits\PaginateTable;
-use Laravel\Scout\Searchable;
 
 class Template extends Model
 {
     use HasFactory;
     use SearchFilter;
     use PaginateTable;
-    use Searchable;
 
     protected $table = 'cms_templates';
     public $asYouType = true;

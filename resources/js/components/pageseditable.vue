@@ -21,7 +21,7 @@
                         required=1
                     ></text-field>
 
-                    <ul v-if="errors && errors['title']" class="parsley-errors-list filled" id="parsley-id-7" aria-hidden="false"><li class="parsley-required">{{errors['title'][0]}}</li></ul>
+                    <ul v-if="errors && errors['title']" class="parsley-errors-list filled mb-3" id="parsley-id-7" aria-hidden="false"><li class="parsley-required">{{errors['title'][0]}}</li></ul>
 
                     <text-field
                         title="Slug"
@@ -34,25 +34,31 @@
         </div>
 
         <div class="col-lg-9" >
-            <tcedit
-                v-if="template_value"
-                :mode="type"
-                ref="tc"
-                :pseudo="false"
-                :predata="template_value.rows"
-                :collapseAllProp="collapseAll"
-                :slug="slug_value"
-                class="mb-3"
-            ></tcedit>
+            <template v-if="template_value && loader == false">
+                <tcedit
+                    :mode="type"
+                    ref="tc"
+                    :pseudo="false"
+                    :predata="data.content"
+                    :collapseAllProp="collapseAll"
+                    :slug="slug_value"
+                    class="mb-3"
+                ></tcedit>
+            </template>
+            <template v-else>
+                <div style="margin-top: 150px" class="text-center">
+                    <vue-loaders-ball-grid-beat	 color="#6658dd" scale="1" class="mt-4 text-center"></vue-loaders-ball-grid-beat	>
+                </div>
+            </template>
+
+            <!--
             <div v-else class="card">
                 <div class="card-body p-4">
                     <div class="error-ghost text-center">
                         <gicon></gicon>
                     </div>
-
                     <div class="text-center">
                         <h3 class="mt-4">Select Template go get started</h3>
-
                         <multidropdown
                             title="Template"
                             :multi="false"
@@ -61,9 +67,9 @@
                             route="templatesAll"
                         ></multidropdown>
                     </div>
-
-                </div> <!-- end card-body -->
+                </div>
             </div>
+            -->
         </div>
         <div class="col-lg-3">
             <div class="card ">
@@ -156,7 +162,7 @@
 
                             <div class="row mt-3">
                                 <div class="col-12 text-center mb-3 d-grid">
-                                    <a :href="'/new_page/' + uuid" target="_blank" class="btn btn-block btn-soft-warning waves-effect waves-light m-1">
+                                    <a v-if="type != 'new'" :href="'/new_page/' + uuid" target="_blank" class="btn btn-block btn-soft-warning waves-effect waves-light m-1">
                                         Live preview
                                     </a>
                                     <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions" :disabled="!template_value" @click="rearange()" class="btn btn-block btn-soft-info waves-effect waves-light m-1">Pseudo preview</button>
@@ -219,6 +225,7 @@ export default {
                 test: null,
                 template_value: null,
                 loading: false,
+                loader: true,
                 published: false,
                 indexed: true,
                 dynamic: false,
@@ -322,6 +329,7 @@ export default {
                         this.$emit('created', response.data.data);
                         this.$emit('updatemode', 'list');
                         this.$toast.success('Created Successfully!')
+                        window.location="/page/" + response.data.data.id;
                     }
                     this.loading = false;
                 })
@@ -357,7 +365,7 @@ export default {
                     if (response.status == 200){
                         this.route == 'categories' ? this.$emit('edited', response.data) : this.$emit('refreshcategories');
                         // this.$emit('updatemode', 'list');
-                        this.$toast.success('Saved Successfully!')
+                        this.$toast.success('Saved Successfully!');
                         this.loading = false;
                     }
                 })
@@ -384,6 +392,8 @@ export default {
                         this.category_value = data.categories;
                         this.subcategory_value = data.subcategories;
                         this.template_value = data.template;
+
+                        this.loader = false;
                     }
                 })
                 .catch((error) => {
@@ -394,13 +404,13 @@ export default {
                 this.data.title = this.title_value;
                 this.data.slug = this.slug_value;
                 this.data.published = this.published;
-                this.data.content = JSON.stringify(this.$refs.tc.data);
+                this.data.content = this.$refs.tc.data;
                 this.$emit('changeMode', this.data);
             }
         },
         mounted() {
             if (this.data) {
-
+                
                 var data = this.data;
                 this.title_value = data.title;
                 this.template_value = data.template;
@@ -410,9 +420,9 @@ export default {
                 if (data.rows){
                     this.rows_value = JSON.parse(data.rows);
                 }
-                if (data.content){
-                    this.template_value.rows = JSON.parse(data.content);
-                }
+                // if (data.content){
+                //     this.template_value.rows = data.content;
+                // }
                 this.category_value = data.categories;
                 this.subcategory_value = data.subcategories;
                 this.published_from_value = data.published_from;
@@ -423,6 +433,8 @@ export default {
                 });
                 this.type_value = this.type_list[index];
                 this.slug_value = data.slug;
+
+                this.loader = false;
             } else {
                 this.get()
             }

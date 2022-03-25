@@ -62,9 +62,9 @@
                     });
                 }
             },
-            changeMode(page) {
+            changeMode(page, content) {
                 this.page = page;
-                this.content = JSON.parse(this.page.content);
+                this.content = this.page.content;
                 this.simple = !this.simple;
             },
             setPage(page) {

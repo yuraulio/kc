@@ -7,14 +7,12 @@ use App\Traits\PaginateTable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\SearchFilter;
-use Laravel\Scout\Searchable;
 
 class Category extends Model
 {
     use HasFactory;
     use SearchFilter;
     use PaginateTable;
-    use Searchable;
 
     protected $table = 'cms_categories';
     public $asYouType = true;

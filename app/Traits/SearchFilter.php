@@ -6,7 +6,7 @@ use Laravel\Scout\Searchable;
 
 trait SearchFilter
 {
-    // use Searchable;
+    use Searchable;
 
     /**
      * Looks for filter and load properly query builder.

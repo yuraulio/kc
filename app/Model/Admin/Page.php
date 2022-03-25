@@ -12,14 +12,12 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Builder;
 use CodexShaper\Menu\Models\Menu;
 use App\Model\Slug;
-use Laravel\Scout\Searchable;
 
 class Page extends Model
 {
     use HasFactory;
     use SearchFilter;
     use Sluggable;
-    use Searchable;
 
     protected $table = 'cms_pages';
     public $asYouType = true;

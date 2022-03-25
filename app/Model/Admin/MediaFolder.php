@@ -8,14 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 use App\Traits\SearchFilter;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
-use Laravel\Scout\Searchable;
 
 class MediaFolder extends Model
 {
     use HasFactory;
     use SearchFilter;
     use SoftDeletes;
-    use Searchable;
 
     protected $table = 'cms_folders';
     public $asYouType = true;

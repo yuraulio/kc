@@ -235,11 +235,17 @@ import multidropdown from './inputs/multidropdown.vue';
                 this.$set(value, 'value', $event.data);
             },
             changeMode() {
-                this.page.content = JSON.stringify(this.content);
+                this.page.content = this.content;
                 this.page.rows = JSON.stringify(this.content);
-                this.page.published = false;
-                this.page.indexed = true;
-                this.page.dynamic = false;
+                if (this.page.published == undefined) {
+                    this.page.published = false;
+                }
+                if (this.page.indexed == undefined) {
+                    this.page.indexed = true;
+                }
+                if (this.page.dynamic == undefined) {
+                    this.page.dynamic = false;
+                }
                 this.$emit('changeMode', this.page);
             },
             add(){
