@@ -7,12 +7,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\SearchFilter;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
 
 class MediaFile extends Model
 {
     use HasFactory;
     use SearchFilter;
     use SoftDeletes;
+    use Searchable;
 
     protected $table = 'cms_files';
     public $asYouType = true;

@@ -6,11 +6,13 @@ use App\Model\User;
 use App\Traits\SearchFilter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Comment extends Model
 {
     use HasFactory;
     use SearchFilter;
+    use Searchable;
 
     protected $table = 'cms_comments';
 
