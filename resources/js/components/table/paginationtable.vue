@@ -50,8 +50,13 @@
     </modal>
 
     <b-sidebar v-if="config.filters" id="sidebar-right" title="" right shadow>
+        <!--
         <div class="px-3 py-2">
             <input v-model="filter" type="search" class="form-control my-1 my-md-0 d-inline-block" id="inputPassword2" placeholder="Search..."/>
+        </div>
+        -->
+         <div class="px-3 py-2">
+            <p>No filters.</p>
         </div>
     </b-sidebar>
 
@@ -144,12 +149,10 @@
         <div class="card-body pt-0" style="overflow: auto;">
 
             <div class="row mb-1">
-                 <!--
-                <div class="col-md-3">
+                <div class="col-md-3 pt-3">
                     <input v-model="filter" type="search" class="form-control my-1 my-md-0 d-inline-block w-auto" id="inputPassword2" placeholder="Search..." style="transform: translateY(1px);"/>
                 </div>
-                -->
-                <div class="col-md-12">
+                <div class="col-md-9">
 
                     <div class="text-md-end mt-md-0 d-inline-block float-end ms-2 pt-3">
                         <button @click="addNew" type="button" class="btn btn-soft-info waves-effect waves-light">
