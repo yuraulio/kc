@@ -463,7 +463,7 @@ $(document).ready(function() {
 
     function filterColumn ( i ) {
         
-        if($('#col'+i+'_filter').val()){
+        if($('#col'+i+'_filter').val() && i != 8){
             $('#participants_table').DataTable().column( i ).search(
                 '^'+$('#col'+i+'_filter').val()+'$', true,true
             ).draw();
