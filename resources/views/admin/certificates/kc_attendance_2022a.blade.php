@@ -173,7 +173,7 @@
          <table class="user-info" width="100%">
             <tbody>
                 <tr>
-						<td  align="center"><img class="signature-img" src="{{asset('theme/assets/images/certificates2021/knowcrunch-signature.png')}}"></td>
+						<td  align="center"><img class="signature-img" src="{{asset('theme/assets/images/certificates2022/knowcrunch-signature.png')}}"></td>
                </tr>
                <tr>
 						<td  align="center"> <img src="{{asset('theme/assets/images/certificates2022/signature-line.png')}}"></td>
@@ -192,7 +192,7 @@
                <tr>
 					<td  align="center"> 
 						<p > 
-							Issue date: {{$certificate['certification_date']}}  @if($certificate['expiration_date']) <span> | </span> Expiration date: {{$certificate['expiration_date']}} @endif <span> | </span>    Credential: {{$certificate['credential']}} 
+							Issue date: {{$certificate['certification_date']}}   <span> | </span>    Credential: {{$certificate['credential']}} 
 						</p>
 					</td>
                </tr>

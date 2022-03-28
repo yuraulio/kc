@@ -387,9 +387,9 @@ class ExamAttemptController extends Controller
 
                 if(($eventType->delivery->first() && $eventType->delivery->first()->id == 143) || date('Y') > 2021){
                     if($success){
-                        $template ='kc_diploma'; 
+                        $template ='kc_diploma_2022a'; 
                     }else{
-                        $template ='kc_attendance';
+                        $template ='kc_attendance_2022a';
                     }
                 }else{
                     if($success){

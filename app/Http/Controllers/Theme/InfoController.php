@@ -604,7 +604,7 @@ class InfoController extends Controller
     			$newmembersdetails[] = $thismember;
     			$fullname = $thismember['firstname'] . ' ' . $thismember['lastname'];
     			$firstname = $thismember['firstname'];
-                $emailsCollector[] = ['id' => $thismember['id'], 'email' => $thismember['email'], 'name' => $fullname, 'first' => $firstname, 'company' => $thismember['company'], 'first' => $firstname,
+                $emailsCollector[] = ['id' => null, 'email' => $thismember['email'], 'name' => $fullname, 'first' => $firstname, 'company' => $thismember['company'], 'first' => $firstname,
                     'mobile' => $thismember['mobile'], 'jobTitle' => $thismember['job_title'],'createAccount'=>true
                 ];
                 
@@ -832,6 +832,7 @@ class InfoController extends Controller
 
         $transdata = [];
         $transdata['trans'] = $transaction;
+        $transdata['installments'] = Session::has('installments') ? Session::get('installments') : 1;
         foreach ($emailsCollector as $key => $muser) {
 
         	$transdata['user'] = $muser;

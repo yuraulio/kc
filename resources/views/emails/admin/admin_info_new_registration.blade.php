@@ -33,7 +33,7 @@ else {
 	
 }else{
 	
-	$stId = '-';
+	$stId = null;
 }
 ?>
 
@@ -276,7 +276,7 @@ else {
                                                                            <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                               <div><strong>TICKET TYPE:</strong>  <br /><br />
 
-                                                                                 <p style="margin: 0px;">Ticket: {{ $tickettype }}, @if($trans->total_amount == 0) Free @else {{ round($trans->total_amount,2) }} @endif</p>
+                                                                                 <p style="margin: 0px;">Ticket: {{ $tickettype }} @if($trans->total_amount == 0), Free @else, {{ round($trans->total_amount,2) }} @endif @if($stId),  {{ $stId }} @endif</p>
                                                                               </div>
                                                                            </td>
                                                                         </tr>
@@ -295,7 +295,7 @@ else {
                                                                         <tr>
                                                                            <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                               <div>
-                                                                                 <p style="margin: 0px;">Amount paid: @if($trans->total_amount == 0) Free @else {{  round($trans->total_amount,2) }} @endif </p>
+                                                                                 <p style="margin: 0px;">Amount paid: @if($trans->total_amount == 0) Free @else {{   round($trans->total_amount/$installments,2) }} @endif </p>
                                                                               </div>
                                                                            </td>
                                                                         </tr>
@@ -311,6 +311,7 @@ else {
                                                                         <tr class="nl2go-responsive-hide">
                                                                            <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
                                                                         </tr>
+                                                                        @if($user['id'])
                                                                         <tr>
                                                                            <td height="18" align="center" valign="top" class="r17-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5;">
                                                                      
@@ -320,6 +321,7 @@ else {
                                                                           
                                                                            </td>
                                                                         </tr>
+                                                                        @endif
                                                                         <tr class="nl2go-responsive-hide">
                                                                            <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
                                                                         </tr>

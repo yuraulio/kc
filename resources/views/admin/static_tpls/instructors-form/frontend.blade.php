@@ -47,7 +47,7 @@
 								<div class="form-area-wrapper">
 									<div class="form-wrapper blue-form w-m-bottom">
 										<form id="beForm" method="POST" action="" class="beForm" novalidate>
-											<h3 class="form-h3">Apply to become a KnowCrunch’s instructor</h3>
+											<h3 class="form-h3">Apply to become a Knowcrunch’s instructor</h3>
 											<label>First name <span>*</span></label>
 											<div class="input-safe-wrapper">
 												<input class="required" type="text" id="iform-name" name="iform-name"/>

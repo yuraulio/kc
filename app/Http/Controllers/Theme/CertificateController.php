@@ -141,13 +141,17 @@ class CertificateController extends Controller
           $date = date('Y');
 
           $template = '';
-          if($date <= 2021){
+          /*if($date <= 2021){
             $view = 'admin.certificates.kc_deree_diploma';
             $template = 'kc_deree_diploma';
           }else{
             $view = 'admin.certificates.certificates2021.kc_diploma';
             $template = 'kc_diploma';
-          }
+          }*/
+
+            $view = 'admin.certificates.kc_diploma_2022a';
+            $template = 'kc_diploma_2022a';
+          
 
           $cert = new Certificate;
           $cert->success = true;

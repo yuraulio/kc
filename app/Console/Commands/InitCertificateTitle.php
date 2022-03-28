@@ -43,7 +43,32 @@ class InitCertificate extends Command
         $sum = 0;
         foreach($certificates as $certificate){
 
-            if($certificate->credential){
+
+            if(!$certificate->event->first()){
+                continue;
+            }
+
+
+            if($certificate->event->first()->view_tpl == 'elearning_event' || $certificate->event->first()->view_tpl == 'elearning_free'){
+                if($certificate->success){
+                    $certificate->template ='kc_diploma_2022a'; 
+                }else{
+                    $certificate->template ='kc_attendance_2022a';
+                }
+
+                $certificate->save();
+            }else if( $certificate->event->first()->paymentMethod->first() && $certificate->event->first()->paymentMethod->first()->id != 1 ){
+
+                if($certificate->success){
+                    $certificate->template ='kc_diploma_2022a'; 
+                }else{
+                    $certificate->template ='kc_attendance_2022a';
+                }
+                $certificate->save();
+            }
+
+
+            /*if($certificate->credential){
                 continue;
             }
 
@@ -55,13 +80,13 @@ class InitCertificate extends Command
 
                 $certificate->certificate_title = 'E-Learning Masterclass in Facebook Marketing';
 
-            }*/
+            }
 
             if($certificate->event->first()->delivery->first() && $certificate->event->first()->delivery->first()->id == 143){
                 if($certificate->success){
-                    $certificate->template ='kc_diploma'; 
+                    $certificate->template ='kc_diploma_2022a'; 
                 }else{
-                    $certificate->template ='kc_attendance';
+                    $certificate->template ='kc_attendance_2022a';
                 }
             }else{
                 if($certificate->success){
@@ -89,7 +114,7 @@ class InitCertificate extends Command
             $certificate->credential = $certificateNumber;
             $certificate->show_certificate = true;
 
-            $certificate->save();
+            $certificate->save();*/
         }
         return 0;
     }

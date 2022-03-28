@@ -163,7 +163,7 @@
          <table class="signature-table" width="100%">
             <tbody>
 					<tr>
-						<td  align="center"><img class="signature-img" src="{{asset('theme/assets/images/certificates2021/knowcrunch-signature.png')}}"></td>
+						<td  align="center"><img class="signature-img" src="{{asset('theme/assets/images/certificates2022/knowcrunch-signature.png')}}"></td>
                </tr>
                <tr>
 						<td  align="center"> <img src="{{asset('theme/assets/images/certificates2022/signature-line.png')}}"></td>
