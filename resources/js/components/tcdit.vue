@@ -450,9 +450,10 @@
         <div class="dz-message needsclick" style="margin: 0px !important; color: #6658dd">
             <i class="h1  dripicons-view-apps" style="color: #6658dd"></i>
             <div class="text-center">
-            <span class="text-muted font-13">
-                <strong>Click to Add Custom Component</strong></span>
-        </div>
+                <span class="text-muted font-13">
+                    <strong>Click to Add Custom Component</strong>
+                </span>
+            </div>
         </div>
     </form>
 

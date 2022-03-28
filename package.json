@@ -34,6 +34,7 @@
     "dependencies": {
         "@ckeditor/ckeditor5-build-classic": "^31.1.0",
         "@ckeditor/ckeditor5-vue2": "^1.0.5",
+        "@sindresorhus/slugify": "^2.1.0",
         "@tiptap/starter-kit": "^2.0.0-beta.171",
         "@tiptap/vue-2": "^2.0.0-beta.75",
         "annyang": "^2.6.1",

@@ -52,6 +52,10 @@
     .column-navigation-margin {
         margin-right: 26px;
     }
+    .add-component-icon {
+        font-size: 32px;
+
+    }
 
 </style>
 
@@ -62,17 +66,21 @@
             <div class="col-md-12 align-self-center">
                 <div class="page-title-box mt-3 row">
                     <div class="col-md-6">
-                        <input v-model="page.title" class="d-inline-block title-input mb-3">
+                        <input @change="setSlug()" v-model="page.title" class="d-inline-block title-input mb-3">
                     </div>
                     <div class="col-md-6">
                         <button :disabled="loading" @click="changeMode()" type="button" class="btn btn-soft-info waves-effect waves-light float-end ms-2 mb-3"><i class="dripicons-toggles me-1" style="transform: translateY(2px);"></i>Advanced Mode</button>
                         <button v-if="type != 'new'" :disabled="loading" @click="preview()" type="button" class="btn btn-soft-warning waves-effect waves-light float-end ms-2 mb-3"><i class="dripicons-preview me-1" style="transform: translateY(2px);"></i>Preview</button>
                         <button :disabled="loading" @click="type == 'new' ? add() : edit()" type="button" class="btn btn-soft-success waves-effect waves-light float-end ms-2 mb-3"><i v-if="!loading" class="mdi mdi-square-edit-outline me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Save</button>
-                        <a href="/pages"  class="btn btn-soft-secondary waves-effect waves-light float-end ms-2 mb-3"><i class="fe-x me-1"></i> Cancel</a>
-                        <div v-if="type != 'new'" :key="'ck'"  class="form-check form-switch mb-3 d-inline-block float-end" style="cursor: pointer; margin-top:10px;">
-                            <input :key="'on'" @click="page.published = !page.published" :id="'cinput'" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :for="'cinput'" :checked="page.published">
-                            <label class="form-check-label" for="light-mode-check">Published</label>
-                        </div>
+                        
+                        <template v-if="page.published">
+                            <input @click="page.published = !page.published" type="checkbox" class="btn-check float-end" id="btn-check-outlined" autocomplete="off" :checked="page.published">
+                            <label class="btn btn-outline-primary float-end ms-2 mb-3" for="btn-check-outlined"><i class="dripicons-checkmark me-1" style="transform: translateY(2px);"></i>Published</label>
+                        </template>
+                        <template v-else>
+                            <input @click="page.published = !page.published" type="checkbox" class="btn-check float-end" id="btn-check-outlined" autocomplete="off" :checked="page.published">
+                            <label class="btn btn-outline-primary float-end ms-2 mb-3" for="btn-check-outlined"><i class="dripicons-cross me-1" style="transform: translateY(2px);"></i> Unpublished</label>
+                        </template>
                     </div>
                 </div>
             </div>
@@ -91,25 +99,7 @@
             </div>
         </div>
 
-        <div v-if="tab == 'Meta'" class="row">
-            <div class="col-md-8 offset-md-2 align-self-center">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <p class="text-muted">Slug</p>
-                                <input v-model="page.slug" type="text" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <template v-for="(row, row_index) in content" v-if="content">
-
-
-
             <template v-for="(column, column_index) in row.columns">
                 <template v-if="column.template.simple_view == true && column.template.tab == tab">
                     <div :class="'row ' + 'row' + row_index">
@@ -119,12 +109,13 @@
                                     <div :class="'row component-tabs ' + (column.tab == 'settings' ? 'settings' : 'main')">
                                         <div class="col-12">
                                             <p class="text-muted d-inline-block">{{ column.template.title }}</p>
+                                            <i v-if="column.template.removable !== false" @click="removeRow(row_index)" class="dripicons-trash text-muted float-end ms-2"></i>
                                             <i v-if="settingsExist(column)" @click="column.tab == 'settings' ? column.tab = 'main' : column.tab = 'settings'" class="text-muted dripicons-gear float-end ms-2"></i>
                                             <template v-if="simpleColumnCount(row.columns) > 1">
                                                 <ul :class="'nav column-navigation d-inline-block float-end mb-0 nav-row' + row_index + ' ' + (settingsExist(column) == false ? 'column-navigation-margin' : '')">
                                                     <template v-for="(column, column_index) in row.columns">
                                                         <li :class="'nav-item d-inline-block nav-column' + column_index">
-                                                            <a @click="showColumnTab(row_index, column_index)" :class="'nav-link text-muted ' + (column_index == 0 ? 'active' : '')" href="#">Col {{column_index + 1}}</a>
+                                                            <a @click="showColumnTab(row_index, column_index)" :class="'nav-link text-muted ' + (column_index == 0 ? 'active' : '')" href="#!">Col {{column_index + 1}}</a>
                                                         </li>
                                                     </template>
                                                 </ul>
@@ -139,7 +130,7 @@
                                             :keyput="input.key + row_index + column_index + input_index"
                                             :label="input.label"
                                             :type="input.type"
-                                            :value="input.value"
+                                            :value="input.key == 'meta_slug' ? page.slug : input.value"
                                             :tabsProp="input.tabs ? input.tabs : []"
                                             :size="input.size"
                                             @inputed="inputed($event, input)"
@@ -178,6 +169,16 @@
                 </template>
             </template>
         </template>
+
+        <div class="text-center">
+            <i @click.prevent="addCustomComponent" class="dripicons-plus add-component-icon"></i>
+        </div>
+
+        <component-modal-simple
+            :row="null"
+            :column="null"
+            name="simple"
+        ></component-modal-simple>
     </div>
 
     <div v-else class="row">
@@ -208,6 +209,8 @@
 <script>
 import gicon from './gicon.vue';
 import multidropdown from './inputs/multidropdown.vue';
+import templateComponents from './template-components.json'
+import slugify from '@sindresorhus/slugify';
 
     export default {
         components: { multidropdown, gicon },
@@ -339,7 +342,10 @@ import multidropdown from './inputs/multidropdown.vue';
                 .then((response) => {
                     if (response.status == 200){
                         this.loading = false;
-                        window.location.href = '/new_page/' + this.page.uuid;
+                        window.open(
+                            '/new_page/' + this.page.uuid,
+                            '_blank'
+                        );
                     }
                 })
                 .catch((error) => {
@@ -381,6 +387,20 @@ import multidropdown from './inputs/multidropdown.vue';
 
                 $(".row" + row_index + ">div>.card").hide();
                 $(".row" + row_index + " .column" + column_index).show();
+            },
+            addCustomComponent() {
+                this.$modal.show('simple');
+            },
+            removeRow(index) {
+                this.$parent.content.splice(index, 1);
+            },
+            setSlug() {
+               this.$parent.page.slug = slugify(this.page.title);
+            }
+        },
+        computed: {
+            extractedComponents() {
+                return templateComponents;
             }
         },
         mounted() {
@@ -391,6 +411,38 @@ import multidropdown from './inputs/multidropdown.vue';
                     });
                 });
             }
+
+            eventHub.$on('component-added-simple', ((component) => {
+                var comp = {
+                    "id": this.$uuid.v4(),
+                    "width": this.extractedComponents[component].width,
+                    "order": this.$parent.content.length + 1,
+                    "description": "",
+                    "collapsed": false,
+                    "color": 'white',
+                    "tab": this.extractedComponents[component].tab,
+                    "tabs_tab": this.tabs_tab,
+                    "columns": [
+                        {
+                            "id": this.$uuid.v4(),
+                            "order": 0,
+                            "component": component,
+                            "active": true,
+                            "template": JSON.parse(JSON.stringify(this.extractedComponents[component]))
+                        }
+                    ]
+                }
+
+                this.$parent.content.push(comp);
+            }));
+
+            eventHub.$on('updateslug', ((value) => {
+                this.page.slug = value;
+            }));
+        },
+        destroyed() {
+            eventHub.$off('component-added-simple');
+            eventHub.$off('updateslug');
         }
     }
 </script>
