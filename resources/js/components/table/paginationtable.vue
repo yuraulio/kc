@@ -9,6 +9,11 @@
     .vuetable-body tr:nth-of-type(odd) {
         background-color: #f3f7f9;
     }
+
+    .settings-dropdown {
+        right:0!important; 
+        left: auto!important;
+    }
 </style>
 
 <template>
@@ -73,8 +78,8 @@
                         </div>
                         <div class="col-7">
                             <div class="text-end">
-                                <h3 class="text-dark my-1"><span>{{widgets[0]}}</span></h3>
-                                <p class="text-muted mb-0 text-truncate">Categories</p>
+                                <h3 class="text-dark my-1"><span>{{widgets[0][1]}}</span></h3>
+                                <p class="text-muted mb-0 text-truncate">{{widgets[0][0]}}</p>
                             </div>
                         </div>
                     </div>
@@ -93,8 +98,8 @@
                         </div>
                         <div class="col-7">
                             <div class="text-end">
-                                <h3 class="text-dark my-1"><span>{{widgets[1]}}</span></h3>
-                                <p class="text-muted mb-0 text-truncate">Subcategories</p>
+                                <h3 class="text-dark my-1"><span>{{widgets[1][1]}}</span></h3>
+                                <p class="text-muted mb-0 text-truncate">{{widgets[1][0]}}</p>
                             </div>
                         </div>
                     </div>
@@ -113,8 +118,8 @@
                         </div>
                         <div class="col-7">
                             <div class="text-end">
-                                <h3 class="text-dark my-1 text-truncate"><span>{{widgets[2]}}</span></h3>
-                                <p class="text-muted mb-0 text-truncate">Popular category</p>
+                                <h3 class="text-dark my-1 text-truncate"><span>{{widgets[2][1]}}</span></h3>
+                                <p class="text-muted mb-0 text-truncate">{{widgets[2][0]}}</p>
                             </div>
                         </div>
                     </div>
@@ -133,8 +138,8 @@
                         </div>
                         <div class="col-7">
                             <div class="text-end">
-                                <h3 class="text-dark my-1 text-truncate"><span>{{widgets[3]}}</span></h3>
-                                <p class="text-muted mb-0 text-truncate">Popular subcategory</p>
+                                <h3 class="text-dark my-1 text-truncate"><span>{{widgets[3][1]}}</span></h3>
+                                <p class="text-muted mb-0 text-truncate">{{widgets[3][0]}}</p>
                             </div>
                         </div>
                     </div>
@@ -154,14 +159,14 @@
                 </div>
                 <div class="col-md-9">
 
-                    <div class="text-md-end mt-md-0 d-inline-block float-end ms-2 pt-3">
+                    <div v-if="config.create" class="text-md-end mt-md-0 d-inline-block float-end ms-2 pt-3">
                         <button @click="addNew" type="button" class="btn btn-soft-info waves-effect waves-light">
                             <i class="mdi mdi-plus-circle me-1"></i> Add New
                         </button>
                     </div>
 
-                    <div class="float-end ms-2 pt-3">
-                        <b-button v-b-toggle.sidebar-right v-if="config.filters" class="btn-soft-secondary">
+                    <div v-if="config.filters" class="float-end ms-2 pt-3">
+                        <b-button v-b-toggle.sidebar-right class="btn-soft-secondary">
                             <i class="fa fa-filter" aria-hidden="true"></i>
                         </b-button>
                     </div>
@@ -170,7 +175,7 @@
                         <button class="btn btn-soft-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fa fa-cog" aria-hidden="true"></i>
                         </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <div class="dropdown-menu settings-dropdown" aria-labelledby="dropdownMenuButton">
                             <a class="dropdown-item" href="#" @click="deleteMultipleItems()">
                                 <i class="fas fa-trash"></i> Delete selected
                             </a>
@@ -222,7 +227,7 @@
             >
                 <template slot="actions" slot-scope="props">
                     <div class="text-sm-end">
-                        <a @click="edit(props.rowData)" href="javascript:void(0);" class="action-icon">
+                        <a v-if="config.edit" @click="edit(props.rowData)" href="javascript:void(0);" class="action-icon">
                             <i class="mdi mdi-square-edit-outline"></i></a>
                         <a @click="remove(props.rowData.id, props.rowData.title)" href="javascript:void(0);" class="action-icon">
                             <i class="mdi mdi-delete"></i></a>

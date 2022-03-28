@@ -28,7 +28,8 @@ class CategoriesController extends Controller
         $this->authorize('viewAny', Category::class, Auth::user());
 
         try {
-            $categories = Category::lookForOriginal($request->filter)->where("parent_id", null);
+            $categories = Category::lookForOriginal($request->filter)
+            ->where("parent_id", null);
             $categories->with(["pages", "subcategories", "user"]);
             $categories->tableSort($request);
             $categories = $categories->paginate($request->per_page ?? 50);
@@ -149,7 +150,6 @@ class CategoriesController extends Controller
 
             return response()->json(['message' => 'success'], 200);
         } catch (Exception $e) {
-            throw $e;
             DB::rollBack();
             Log::error("Failed to delete category. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
@@ -212,10 +212,22 @@ class CategoriesController extends Controller
     public function widgets()
     {
         return [
-            $this->categoryCount(),
-            $this->subcategoryCount(),
-            $this->popularCategory(),
-            $this->popularSubcategory()
+            [
+                "Categories",
+                $this->categoryCount(),
+            ],
+            [
+                "Subcategories",
+                $this->subcategoryCount(),
+            ],
+            [
+                "Popular category",
+                $this->popularCategory(),
+            ],
+            [
+                "Popular subcategory",
+                $this->popularSubcategory(),
+            ]
 
         ];
     }

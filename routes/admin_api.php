@@ -38,6 +38,8 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
         ]);
 
         // comments
+        Route::post('comments/deleteMultiple', [CommentsController::class, 'deleteMultiple']);
+        Route::get('comments/widgets', [CommentsController::class, 'widgets']);
         Route::resource('comments', Admin_api\CommentsController::class)->only([
             'index', 'destroy'
         ]);

@@ -8,9 +8,12 @@ use App\Http\Requests\CreateCommentRequest;
 use App\Http\Requests\UpdateAdminTemplateRequest;
 use App\Http\Resources\CommentResource;
 use App\Http\Resources\TemplateResource;
+use App\Jobs\DeleteMultipleComments;
 use App\Model\Admin\Comment;
 use App\Model\Admin\Page;
 use App\Model\Admin\Template;
+use App\Model\User;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -31,7 +34,10 @@ class CommentsController extends Controller
         $this->authorize('viewAny', Comment::class, Auth::user());
 
         try {
-            $comments = Comment::lookForOriginal($request->filter)->with(["page", "user"])->orderBy("created_at", "desc")->paginate(100);
+            $comments = Comment::lookForOriginal($request->filter)
+                ->with(["page", "user"])
+                ->tableSort($request)
+                ->paginate($request->per_page ?? 50);
             return CommentResource::collection($comments);
         } catch (Exception $e) {
             Log::error("Failed to get comments. " . $e->getMessage());
@@ -87,5 +93,76 @@ class CommentsController extends Controller
     {
         $comments = Comment::where('page_id', $page_id)->with(["page", "user"])->orderBy("created_at", "desc")->limit(500)->get();
         return CommentResource::collection($comments);
+    }
+
+    public function deleteMultiple(Request $request)
+    {
+        try {
+            $ids = $request->selected;
+        
+            // authorize action
+            $comments = Comment::findOrFail($ids);
+            foreach ($comments as $comment) {
+                $this->authorize('delete', $comment, Auth::user());
+            }
+
+            // start job
+            DeleteMultipleComments::dispatch($ids, Auth::user());
+
+            return response()->json(['message' => 'success'], 200);
+        } catch (Exception $e) {
+            Log::error("Failed to bulk delete comments. " . $e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 400);
+        }
+    }
+
+    public function widgets()
+    {
+        return [
+            [
+                "Comments",
+                $this->commentCount(),
+            ],
+            [
+                "Popular page",
+                $this->popularPage(),
+            ],
+            [
+                "Last comment",
+                $this->lastCommentCreated(),
+            ],
+            [
+                "Popular user",
+                $this->popularUser(),
+            ]
+
+        ];
+    }
+
+    public function commentCount()
+    {
+        return Comment::count();
+    }
+
+    public function popularPage()
+    {
+        return Page::with('comments')->get()->sortByDesc(function ($page) {
+            return $page->comments->count();
+        })->first()->title;
+    }
+
+    public function lastCommentCreated()
+    {
+        $created_at = Comment::orderByDesc("created_at")->first()->created_at;
+        return $created_at->diffForHumans();
+    }
+
+    public function popularUser()
+    {
+        $user = User::with('usersComments')->get()->sortByDesc(function ($user) {
+            return $user->usersComments->count();
+        })->first();
+
+        return $user->firstname . " " . $user->lastname;
     }
 }

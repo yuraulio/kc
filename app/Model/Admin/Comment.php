@@ -3,6 +3,7 @@
 namespace App\Model\Admin;
 
 use App\Model\User;
+use App\Traits\PaginateTable;
 use App\Traits\SearchFilter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +12,7 @@ class Comment extends Model
 {
     use HasFactory;
     use SearchFilter;
+    use PaginateTable;
 
     protected $table = 'cms_comments';
 

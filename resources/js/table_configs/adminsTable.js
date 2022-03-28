@@ -46,6 +46,8 @@ export default {
         }
     ],
     apiUrl: '/api/users/admins',
+    create: true,
+    edit: true,
     editInputs: collectiveInputs,
     addInputs: collectiveInputs.concat([
         {

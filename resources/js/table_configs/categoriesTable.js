@@ -33,7 +33,7 @@ export default {
         },
         {
             name: 'subcategories',
-            title: 'Subcategories',
+            title: 'Subcategories' + '<i title="Column cant be sorted." class="fa fa-info-circle text-muted ms-1"></i>',
             formatter (value) {
                 var subcategories = "";
                 if (value && value != []) {
@@ -62,7 +62,7 @@ export default {
         },
         {
             name: 'pages_count',
-            title: 'Pages',
+            title: 'Pages' + '<i title="Column cant be sorted." class="fa fa-info-circle text-muted ms-1"></i>',
             dataClass: 'align-middle text-center',
             titleClass: 'text-center'
         },
@@ -83,6 +83,8 @@ export default {
         }
     ],
     apiUrl: '/api/categories',
+    create: true,
+    edit: true,
     editInputs: collectiveInputs,
     filters: true,
     perPage: 50,
