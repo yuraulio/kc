@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateAdminPageRequest;
 use App\Http\Requests\UpdateAdminPageRequest;
 use App\Http\Resources\PageResource;
+use App\Jobs\DeleteMultiplePages;
 use App\Model\Admin\Category;
 use App\Model\Admin\Comment;
 use App\Model\Admin\MediaFile;
@@ -33,17 +34,21 @@ class PagesController extends Controller
     {
         $this->authorize('viewAny', Page::class, Auth::user());
         try {
-            $pages = Page::withoutGlobalScope('published')->where("dynamic", $request->dynamic == "true" ? true : false)->lookForOriginal($request->filter)
-                ->with('template', 'categories.subcategories');
-            if ($request->order) {
-                $pages->orderBy("created_at", $request->order);
-            } else {
-                $pages->orderBy("created_at", "desc");
+            $pages = Page::withoutGlobalScope('published')
+                ->where("dynamic", $request->dynamic == "true" ? true : false)
+                ->lookForOriginal($request->filter)
+                ->with('template', 'categories.subcategories')
+                ->tableSort($request);
+
+            if ($request->template !== null) {
+                $pages->whereHas("template", function ($q) use ($request) {
+                    $q->where("id", $request->template);
+                });
             }
             if ($request->published !== null) {
                 $pages->wherePublished($request->published);
             }
-            if ($request->type) {
+            if ($request->type !== null) {
                 $pages->whereType($request->type);
             }
             if ($request->category) {
@@ -57,7 +62,7 @@ class PagesController extends Controller
                 });
             }
             
-            $pages = $pages->paginate(10);
+            $pages = $pages->paginate($request->per_page ?? 50);
             return PageResource::collection($pages);
         } catch (Exception $e) {
             Log::error("Failed to get pages. " . $e->getMessage());
@@ -314,5 +319,89 @@ class PagesController extends Controller
         }
 
         $page->files()->sync($images);
+    }
+
+    public function deleteMultiple(Request $request)
+    {
+        try {
+            $ids = $request->selected;
+        
+            // authorize action
+            $categories = Page::findOrFail($ids);
+            foreach ($categories as $category) {
+                $this->authorize('delete', $category, Auth::user());
+            }
+
+            // start job
+            DeleteMultiplePages::dispatch($ids, Auth::user());
+
+            return response()->json(['message' => 'success'], 200);
+        } catch (Exception $e) {
+            Log::error("Failed to bulk delete templates. " . $e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 400);
+        }
+    }
+
+    public function widgets()
+    {
+        return [
+            [
+                "Pages",
+                $this->pagesCount(),
+            ],
+            [
+                "Published pages",
+                $this->publishedPagesCount(),
+            ],
+            [
+                "Unpublished pages",
+                $this->unpublishedPagesCount(),
+            ],
+            [
+                "Blog articles",
+                $this->articlePagesCount(),
+            ]
+
+        ];
+    }
+
+    public function pagesCount()
+    {
+        try {
+            return Page::withoutGlobalScope('published')->count();
+        } catch (Exception $e) {
+            Log::warning("(pages widget) Failed to get pages count. " . $e->getMessage());
+            return "0";
+        }
+    }
+
+    public function publishedPagesCount()
+    {
+        try {
+            return Page::count();
+        } catch (Exception $e) {
+            Log::warning("(pages widget) Failed to get published pages count. " . $e->getMessage());
+            return "0";
+        }
+    }
+
+    public function unpublishedPagesCount()
+    {
+        try {
+            return Page::withoutGlobalScope('published')->wherePublished(false)->count();
+        } catch (Exception $e) {
+            Log::warning("(pages widget) Failed to get ubpublished pages count. " . $e->getMessage());
+            return "0";
+        }
+    }
+
+    public function articlePagesCount()
+    {
+        try {
+            return Page::withoutGlobalScope('published')->whereType("Blog")->count();
+        } catch (Exception $e) {
+            Log::warning("(pages widget) Failed to get ubpublished pages count. " . $e->getMessage());
+            return "0";
+        }
     }
 }

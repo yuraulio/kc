@@ -296,9 +296,9 @@
     <div v-if="data && pseudo">
 
         <div v-if="name == 'main'" class="row">
-            <div class="col-sm-12 mt-2 mb-2">
+            <div class="col-sm-12 mt-3 mb-3">
                 <div class="page-title-box d-flex justify-content-between align-items-center">
-                    <h4 class="page-title d-inline-block">{{pageTitle}}</h4>
+                    <input :value="pageTitle" @change="updateTemplateTitle" class="d-inline-block title-input">
                     <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions" @click="rearange()" class="btn btn-block btn-soft-info waves-effect waves-light m-1t ">Rearange</button>
                 </div>
             </div>
@@ -741,6 +741,9 @@ export default {
         },
         refreshComponent(column) {
             column.template = JSON.parse(JSON.stringify(this.extractedComponents[column.component]));
+        },
+        updateTemplateTitle(){
+            this.$parent.title_value = $('.title-input').val();
         }
     },
 
@@ -763,7 +766,7 @@ export default {
             if (this.predata) {
                 this.data = this.predata;
             } else {
-                this.data = this.data ?? [];
+                // this.data = this.data ?? [];
 
                 if (typeof this.tabsProp !== 'undefined') {
                     this.tabs = this.tabsProp;
@@ -947,5 +950,14 @@ export default {
 
 .tab-components {
     border: 5px solid #f5f6f8;
+}
+
+.title-input {
+    background: transparent;
+    outline: none;
+    border: 0px;
+    box-shadow: none;
+    font-size: 23px;
+    width: 100%;
 }
 </style>

@@ -28,11 +28,15 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
         ]);
 
         // templates
+        Route::post('templates/deleteMultiple', [TemplatesController::class, 'deleteMultiple']);
+        Route::get('templates/widgets', [TemplatesController::class, 'widgets']);
         Route::resource('templates', Admin_api\TemplatesController::class)->only([
             'index', 'store', 'update', 'show', 'destroy'
         ]);
 
         // pages
+        Route::post('pages/deleteMultiple', [PagesController::class, 'deleteMultiple']);
+        Route::get('pages/widgets', [PagesController::class, 'widgets']);
         Route::resource('pages', Admin_api\PagesController::class)->only([
             'index', 'store', 'update', 'show', 'destroy'
         ]);

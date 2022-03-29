@@ -38,10 +38,10 @@
             pageseditable,
         },
         props: {
+            pageId: Number,
         },
         data() {
             return {
-                pageId: null,
                 page: null,
                 content: null,
                 simple: true,
@@ -70,7 +70,6 @@
             }
         },
         mounted() {
-            this.pageId = this.$attrs.id;
             this.getPage();
         }
     }

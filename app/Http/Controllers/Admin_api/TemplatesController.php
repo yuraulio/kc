@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateAdminTemplateRequest;
 use App\Http\Requests\UpdateAdminTemplateRequest;
 use App\Http\Resources\TemplateResource;
+use App\Jobs\DeleteMultipleTemplates;
 use App\Model\Admin\Template;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -22,12 +23,15 @@ class TemplatesController extends Controller
      *
      * @return AnonymousResourceCollection
      */
-    public function index(Request $request, $paginate = 10)
+    public function index(Request $request)
     {
         $this->authorize('viewAny', Template::class, Auth::user());
 
         try {
-            $templates = Template::lookForOriginal($request->filter)->with(["pages", "user"])->tableSort($request->sort)->paginate($paginate);
+            $templates = Template::lookForOriginal($request->filter)
+                ->with(["pages", "user"])
+                ->tableSort($request)
+                ->paginate($request->per_page ?? 50);
             return TemplateResource::collection($templates);
         } catch (Exception $e) {
             Log::error("Failed to get templates. " . $e->getMessage());
@@ -126,5 +130,91 @@ class TemplatesController extends Controller
     public function templatesAll(Request $request)
     {
         return $this->index($request, 99999);
+    }
+
+    public function deleteMultiple(Request $request)
+    {
+        try {
+            $ids = $request->selected;
+        
+            // authorize action
+            $categories = Template::findOrFail($ids);
+            foreach ($categories as $category) {
+                $this->authorize('delete', $category, Auth::user());
+            }
+
+            // start job
+            DeleteMultipleTemplates::dispatch($ids, Auth::user());
+
+            return response()->json(['message' => 'success'], 200);
+        } catch (Exception $e) {
+            Log::error("Failed to bulk delete templates. " . $e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 400);
+        }
+    }
+
+    public function widgets()
+    {
+        return [
+            [
+                "Templates",
+                $this->templatesCount(),
+            ],
+            [
+                "Popular template",
+                $this->popularTemplate(),
+            ],
+            [
+                "Newest template",
+                $this->newestTemplate(),
+            ],
+            [
+                "Oldest template",
+                $this->oldestTemplate(),
+            ]
+
+        ];
+    }
+
+    public function templatesCount()
+    {
+        try {
+            return Template::count();
+        } catch (Exception $e) {
+            Log::warning("(templates widget) Failed to get templates count. " . $e->getMessage());
+            return "0";
+        }
+    }
+
+    public function popularTemplate()
+    {
+        try {
+            return Template::with('pages')->get()->sortByDesc(function ($category) {
+                return $category->pages->count();
+            })->first()->title;
+        } catch (Exception $e) {
+            Log::warning("(templates widget) Failed to get most popular template. " . $e->getMessage());
+            return "-";
+        }
+    }
+
+    public function newestTemplate()
+    {
+        try {
+            return Template::orderByDesc("created_at")->first()->title;
+        } catch (Exception $e) {
+            Log::warning("(templates widget) Failed to find newest template. " . $e->getMessage());
+            return "-";
+        }
+    }
+
+    public function oldestTemplate()
+    {
+        try {
+            return Template::orderBy("created_at")->first()->title;
+        } catch (Exception $e) {
+            Log::warning("(templates widget) Failed to find oldest template. " . $e->getMessage());
+            return "-";
+        }
     }
 }

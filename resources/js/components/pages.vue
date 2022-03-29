@@ -4,277 +4,74 @@
 
 <template>
     <div>
-        <div v-if="mode == 'list'">
 
-            <div class="page-title-box mt-3 mb-3">
-                <h4 class="page-title">Pages</h4>
-            </div>
-
-            <div class="card mb-2">
-                <div class="card-body">
-                    <div class="row mb-2">
-
-                            <div class="col-md-3">
-                                <label for="inputPassword2" class="visually-hidden">Search</label>
-                                <input v-model="filter" type="search" class="form-control my-1 my-md-0" id="inputPassword2" placeholder="Search...">
-                            </div>
-
-                            <div class="col-md-3 d-flex align-items-center">
-                                <div class="text-md-end mt-3 mt-md-0 w-100">
-
-                                    <multidropdown
-                                        :multi="false"
-                                        @updatevalue="update_dynamic"
-                                        :prop-value="dynamic"
-                                        :fetch="false"
-                                        :data="[
-                                            {
-                                                title: 'Static pages',
-                                                id: false
-                                            },
-                                            {
-                                                title: 'Dynamic pages',
-                                                id: true
-                                            }
-                                        ]"
-                                        placeholder="Pick publishing"
-                                        marginbottom="mb-0"
-                                        :allowEmpty="false"
-                                    ></multidropdown>
-
-                                </div>
-
-                                <!--
-                                <div class="form-check">
-                                    <input v-model="dynamic" @change="getData()" class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    <label class="form-check-label" for="flexCheckDefault">
-                                        Dynamic pages
-                                    </label>
-                                </div>
-                                -->
-                            </div>
-
-                            <div class="col-md-6 text-end">
-                                <!--
-                                <button @click="toggleOrder()" class="btn btn-soft-secondary waves-effect waves-light text-start">
-                                    Created by order
-                                    <i v-if="order" class="mdi mdi-chevron-down ms-1"></i>
-                                    <i v-else class="mdi mdi-chevron-up ms-1"></i>
-                                </button>
-                                -->
-                                <a href="/new_page" class="btn btn-soft-info waves-effect waves-light ms-2"><i class="mdi mdi-plus-circle me-1"></i> Add New</a>
-                            </div>
-
-                    </div>
-
-                    <div class="row">
-                            <div class="col-3">
-                                <div class="text-md-end mt-3 mt-md-0">
-
-                                    <multidropdown
-                                        :multi="false"
-                                        @updatevalue="update_published"
-                                        :prop-value="published_value"
-                                        :fetch="false"
-                                        :data="[
-                                            {
-                                                title: 'Published',
-                                                id: 1
-                                            },
-                                            {
-                                                title: 'Unpublished',
-                                                id: 0
-                                            }
-                                        ]"
-                                        placeholder="Pick publishing"
-                                        marginbottom="mb-0"
-                                    ></multidropdown>
-
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="text-md-end mt-3 mt-md-0">
-
-                                    <multidropdown
-                                        :multi="false"
-                                        @updatevalue="update_type"
-                                        :prop-value="type_value"
-                                        :fetch="false"
-                                        :data="type_list"
-                                        placeholder="Pick type"
-                                        marginbottom="mb-0"
-                                    ></multidropdown>
-
-                                </div>
-                            </div><!-- end col-->
-
-
-                            <div class="col-md-3">
-                                <div class="text-md-end mt-3 mt-md-0">
-
-                                    <multidropdown
-                                        :multi="false"
-                                        @updatevalue="update_category"
-                                        :prop-value="category_value"
-                                        route="categories"
-                                        placeholder="Pick category"
-                                        @change="getData()"
-                                        marginbottom="mb-0"
-                                    ></multidropdown>
-
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="text-md-end mt-3 mt-md-0">
-
-                                    <multidropdown
-                                        :multi="false"
-                                        @updatevalue="update_subcategory"
-                                        :prop-value="subcategory_value"
-                                        :fetch="false"
-                                        :data="subcategories"
-                                        placeholder="Pick subcategory"
-                                        @change="getData()"
-                                        marginbottom="mb-0"
-                                    ></multidropdown>
-
-                                </div>
-                            </div>
-
-
-                    </div> <!-- end row -->
-                </div> <!-- end card-body-->
-            </div> <!-- end card-->
-
-            <div v-if="!isLoading">
-                <page
-                v-for="page in pages['data']"
-                v-bind:key="page.id"
-                :page="page"
-                :description="page.description"
-                @updatemode="updatemode"
-                @updateid="updateid"
-                @updateuuid="updateuuid"
-                @updatetitle="updatetitle"
-                ></page>
-
-                <pagination v-if="pages['meta']" class="mt-3"
-                :data="pages['meta']"
-                @pagination-change-page="getData"
-                :limit = 5
-                align = "center"
-                :show-disabled = "true"
-                ></pagination>
-            </div>
-
-            <div style="margin-top: 150px" class="text-center" v-else>
-                <vue-loaders-ball-grid-beat	 color="#6658dd" scale="1" class="mt-4 text-center"></vue-loaders-ball-grid-beat	>
-            </div>
+        <div class="page-title-box mt-3 mb-3">
+            <h4 class="page-title">Pages</h4>
         </div>
 
-        <div v-if="mode == 'new'">
-            <pageseditable
-                ref="adit"
-                @updatemode="updatemode"
-                @refreshcategories="getData"
-                @created="created"
-                @add-custom-component="addCustomComponent"
-                title="true"
-                category="true"
-                type="new"
-                route="pages"
-                :additionalTemplates="additionalTemplates"
-                page-title="New Page"
-            ></pageseditable>
-        </div>
-
-        <div v-if="mode == 'edit'">
-            <pageseditable
-                @updatemode="updatemode"
-                @refreshcategories="getData"
-                title="true"
-                category="true"
-                type="edit"
-                route="pages"
-                page-title="Edit Page"
-                :data="lodash.find(pages.data, { 'id': id })"
-                :id="id"
-                :uuid="uuid"
-            ></pageseditable>
-        </div>
-
-        <div v-if="mode == 'delete'">
-            <delete
-                @updatemode="updatemode"
-                @refreshcategories="getData"
-                :title="title"
-                route="pages"
-                page-title="Delete Page"
-                :id="id"
-            ></delete>
-        </div>
+        <paginationtable :config="config"></paginationtable>
 
     </div>
 </template>
 <script>
-import page from './page.vue'
-import pageseditable from './pageseditable.vue'
-import multidropdown from './inputs/multidropdown.vue';
+import Paginationtable from './table/paginationtable.vue';
+import pagesConfig from "../table_configs/pagesTable";
 
     export default {
         components: {
-            page,
-            pageseditable,
-            multidropdown,
+            pagesConfig,
+            Paginationtable,
+            // multidropdown,
         },
         props: {
 
         },
         data() {
             return {
-                mode: "list",
-                pages: [],
-                id: null,
-                uuid: null,
-                title: null,
-                filter: "",
-                isLoading: false,
-                additionalTemplates: [],
-                lodash: _,
-                type_value: null,
-                category_value: null,
-                subcategory_value: null,
-                type_list: [
-                    {
-                        'id': 1,
-                        'title':'Article'
-                    },
-                    {
-                        'id': 2,
-                        'title':'Blog'
-                    },
-                    {
-                        'id': 3,
-                        'title':'Course page'
-                    },
-                    {
-                        'id': 4,
-                        'title':'Trainer page'
-                    },
-                    {
-                        'id': 5,
-                        'title':'General'
-                    }
-                ],
-                subcategories: [],
-                published_value: null,
-                order: true,
-                dynamic: {
-                    title: 'Static pages',
-                    id: false
-                },
+                config: pagesConfig,
+
+
+                // mode: "list",
+                // pages: [],
+                // id: null,
+                // uuid: null,
+                // title: null,
+                // filter: "",
+                // isLoading: false,
+                // additionalTemplates: [],
+                // lodash: _,
+                // type_value: null,
+                // category_value: null,
+                // subcategory_value: null,
+                // type_list: [
+                //     {
+                //         'id': 1,
+                //         'title':'Article'
+                //     },
+                //     {
+                //         'id': 2,
+                //         'title':'Blog'
+                //     },
+                //     {
+                //         'id': 3,
+                //         'title':'Course page'
+                //     },
+                //     {
+                //         'id': 4,
+                //         'title':'Trainer page'
+                //     },
+                //     {
+                //         'id': 5,
+                //         'title':'General'
+                //     }
+                // ],
+                // subcategories: [],
+                // published_value: null,
+                // order: true,
+                // dynamic: {
+                //     title: 'Static pages',
+                //     id: false
+                // },
             }
         },
         watch: {
@@ -286,147 +83,14 @@ import multidropdown from './inputs/multidropdown.vue';
             }
         },
         methods: {
-            created($event) {
-                this.pages['data'].unshift($event);
-            },
-            addCustomComponent() {
-                this.$modal.show("component-modal")
-            },
-            rearange() {
-                this.$modal.hide("component-modal")
-                this.$refs.adit.rearange();
-            },
-            updatemode(variable){
-                if (variable == "delete") {
-                     Swal.fire({
-                        title: 'Are you sure?',
-                        text: "You won't be able to revert this! Delete page '" + this.title + "'?",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes, delete it!',
-                        showLoaderOnConfirm: true,
-                        buttonsStyling: false,
-                        customClass : {
-                            cancelButton: 'btn btn-soft-secondary',
-                            confirmButton: 'btn btn-soft-danger',
-                        },
-                        preConfirm: () => {
-                            return axios
-                                .delete('/api/pages/' + this.id)
-                                .then((response) => {
-                                    if (response.status == 200){
-                                        this.pages['data'].splice(_.findIndex(this.pages['data'], { 'id' : this.id }), 1);
-                                        this.$emit('updatemode', 'list');
-                                    }
-
-                                })
-                                .catch(error => {
-                                Swal.showValidationMessage(
-                                `Request failed: ${error}`
-                                )
-                            })
-                        },
-                        allowOutsideClick: () => !Swal.isLoading()
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                Swal.fire(
-                                        'Deleted!',
-                                        'Item has been deleted.',
-                                        'success'
-                                    )
-                            }
-                        })
-                } else if (variable == 'edit') {
-                    this.mode = variable;
-                } else {
-                    this.mode = variable;
-                }
-            },
-            updateid(variable){
-                this.id = variable;
-            },
-            updateuuid(variable){
-                this.uuid = variable;
-            },
-            updatetitle(variable){
-                this.title = variable;
-            },
-            getData(page = 1){
-                this.isLoading = true;
-                axios.get('/api/pages',
-                {
-                    params: {
-                        filter: this.filter,
-                        page: page,
-                        type: this.type_value ? this.type_value.title : null,
-                        category: this.category_value ? this.category_value.id : null,
-                        subcategory: this.subcategory_value ? this.subcategory_value.id : null,
-                        published: this.published_value ? this.published_value.id : null,
-                        order: this.order ? 'desc' : 'asc',
-                        dynamic: this.dynamic.id,
-                    }
-                }
-                )
-                    .then((response) => {
-                        this.pages = response.data;
-                        this.isLoading = false;
-                    })
-                    .catch((error) => {
-                        console.log(error)
-                        this.isLoading = false;
-                    });
-            },
-            update_category(value){
-                this.category_value = value;
-                this.getData();
-
-                var subcategories = [];
-                if (this.category_value) {
-                    this.category_value.subcategories.forEach(function(subcategory, index) {
-                        subcategories.push(subcategory);
-                    });
-                    this.subcategories = subcategories;
-                }
-            },
-            update_subcategory(value){
-                this.subcategory_value = value;
-                this.getData();
-            },
-            update_dynamic(value) {
-                this.dynamic = value;
-                this.getData();
-            },
-            update_type(value){
-                this.type_value = value;
-                this.getData();
-            },
-            update_published(value){
-                this.published_value = value;
-                this.getData();
-            },
-            toggleOrder() {
-                this.order = !this.order;
-                this.getData();
-            }
+            
         },
         mounted() {
-            this.getData();
-
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get("filter")) {
-                this.filter = urlParams.get("filter");
-            }
+            
         }
     }
 </script>
 
-<style>
-.widget-rounded-circle {
-    transition: box-shadow .5s;
-    cursor: pointer;
-    box-shadow: 0 0 11px rgba(33,33,33,.2);
-}
-.widget-rounded-circle:hover {
-  box-shadow: 0 0 11px rgba(33,33,33,.4);
-}
+<style scoped>
+
 </style>

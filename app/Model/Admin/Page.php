@@ -12,12 +12,14 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Builder;
 use CodexShaper\Menu\Models\Menu;
 use App\Model\Slug;
+use App\Traits\PaginateTable;
 
 class Page extends Model
 {
     use HasFactory;
     use SearchFilter;
     use Sluggable;
+    use PaginateTable;
 
     protected $table = 'cms_pages';
     public $asYouType = true;

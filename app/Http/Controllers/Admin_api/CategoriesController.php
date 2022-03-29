@@ -234,25 +234,45 @@ class CategoriesController extends Controller
 
     public function categoryCount()
     {
-        return Category::where("parent_id", null)->count();
+        try {
+            return Category::where("parent_id", null)->count();
+        } catch (Exception $e) {
+            Log::warning("(categories widget) Failed to get category count. " . $e->getMessage());
+            return "0";
+        }
     }
 
     public function subcategoryCount()
     {
-        return Category::where("parent_id", '!=', null)->count();
+        try {
+            return Category::where("parent_id", '!=', null)->count();
+        } catch (Exception $e) {
+            Log::warning("(categories widget) Failed to get subcategory count. " . $e->getMessage());
+            return "0";
+        }
     }
 
     public function popularCategory()
     {
-        return Category::where("parent_id", null)->with('pages')->get()->sortByDesc(function ($category) {
-            return $category->pages->count();
-        })->first()->title;
+        try {
+            return Category::where("parent_id", null)->with('pages')->get()->sortByDesc(function ($category) {
+                return $category->pages->count();
+            })->first()->title;
+        } catch (Exception $e) {
+            Log::warning("(categories widget) Failed to get most popular category. " . $e->getMessage());
+            return "-";
+        }
     }
 
     public function popularSubcategory()
     {
-        return Category::where("parent_id", '!=', null)->with('pages')->get()->sortByDesc(function ($category) {
-            return $category->pages->count();
-        })->first()->title;
+        try {
+            return Category::where("parent_id", '!=', null)->with('pages')->get()->sortByDesc(function ($category) {
+                return $category->pages->count();
+            })->first()->title;
+        } catch (Exception $e) {
+            Log::warning("(categories widget) Failed to get most popular subcategory. " . $e->getMessage());
+            return "-";
+        }
     }
 }

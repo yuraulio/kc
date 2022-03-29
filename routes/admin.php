@@ -28,6 +28,9 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
 
         Route::get('/page/{id}', [DashboardController::class, 'pageEdit']);
         Route::get('/new_page', [DashboardController::class, 'pageNew']);
+
+        Route::get('/template/{id}', [DashboardController::class, 'templateEdit']);
+        Route::get('/new_template', [DashboardController::class, 'templateNew']);
     });
 });
 Route::group(['middleware' => ['auth:admin_web']], function () {

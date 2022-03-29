@@ -146,23 +146,37 @@ class CommentsController extends Controller
 
     public function popularPage()
     {
-        return Page::with('comments')->get()->sortByDesc(function ($page) {
-            return $page->comments->count();
-        })->first()->title;
+        try {
+            return Page::with('comments')->get()->sortByDesc(function ($page) {
+                return $page->comments->count();
+            })->first()->title;
+        } catch (Exception $e) {
+            Log::warning("(comments widget) Failed to find popular comments page. " . $e->getMessage());
+            return "-";
+        }
     }
 
     public function lastCommentCreated()
     {
-        $created_at = Comment::orderByDesc("created_at")->first()->created_at;
-        return $created_at->diffForHumans();
+        try {
+            $created_at = Comment::orderByDesc("created_at")->first()->created_at;
+            return $created_at->diffForHumans();
+        } catch (Exception $e) {
+            Log::warning("(comments widget) Failed to find last comment created. " . $e->getMessage());
+            return "-";
+        }
     }
 
     public function popularUser()
     {
-        $user = User::with('usersComments')->get()->sortByDesc(function ($user) {
-            return $user->usersComments->count();
-        })->first();
-
-        return $user->firstname . " " . $user->lastname;
+        try {
+            $user = User::with('usersComments')->get()->sortByDesc(function ($user) {
+                return $user->usersComments->count();
+            })->first();
+            return $user->firstname . " " . $user->lastname;
+        } catch (Exception $e) {
+            Log::warning("(comments widget) Failed to find user with most comments. " . $e->getMessage());
+            return "-";
+        }
     }
 }

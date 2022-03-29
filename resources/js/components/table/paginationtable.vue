@@ -54,20 +54,131 @@
         </div>
     </modal>
 
-    <b-sidebar v-if="config.filters" id="sidebar-right" title="" right shadow>
-        <!--
-        <div class="px-3 py-2">
-            <input v-model="filter" type="search" class="form-control my-1 my-md-0 d-inline-block" id="inputPassword2" placeholder="Search..."/>
-        </div>
-        -->
-         <div class="px-3 py-2">
-            <p>No filters.</p>
-        </div>
+    <b-sidebar id="sidebar-right" title="" right shadow>
+
+        <template v-if="config.showFilters == false">
+            <div class="px-3 py-2">
+                <p>No filters.</p>
+            </div>
+        </template>
+        <template v-else>
+
+             <div class="px-3 py-2">
+                <multidropdown
+                    :multi="false"
+                    @updatevalue="update_dynamic"
+                    :prop-value="dynamic"
+                    :fetch="false"
+                    :data="[
+                        {
+                            title: 'Static pages',
+                            id: false
+                        },
+                        {
+                            title: 'Dynamic pages',
+                            id: true
+                        }
+                    ]"
+                    placeholder="All pages"
+                    marginbottom="mb-0"
+                ></multidropdown>
+            </div>
+
+            <div class="px-3 py-2">
+                <multidropdown
+                    :multi="false"
+                    @updatevalue="update_published"
+                    :prop-value="published_value"
+                    :fetch="false"
+                    :data="[
+                        {
+                            title: 'Published',
+                            id: 1
+                        },
+                        {
+                            title: 'Unpublished',
+                            id: 0
+                        }
+                    ]"
+                    placeholder="All pages visible"
+                    marginbottom="mb-0"
+                ></multidropdown>
+            </div>
+
+            <div class="px-3 py-2">
+                <multidropdown
+                    :multi="false"
+                    @updatevalue="update_template"
+                    :prop-value="template_value"
+                    route="templates"
+                    placeholder="All templates"
+                    marginbottom="mb-0"
+                ></multidropdown>
+            </div>
+
+            <div class="px-3 py-2">
+                <multidropdown
+                    :multi="false"
+                    @updatevalue="update_type"
+                    :prop-value="type_value"
+                    :fetch="false"
+                    :data="[
+                        {
+                            'id': 1,
+                            'title':'Article'
+                        },
+                        {
+                            'id': 2,
+                            'title':'Blog'
+                        },
+                        {
+                            'id': 3,
+                            'title':'Course page'
+                        },
+                        {
+                            'id': 4,
+                            'title':'Trainer page'
+                        },
+                        {
+                            'id': 5,
+                            'title':'General'
+                        }
+                    ]"
+                    placeholder="All page types"
+                    marginbottom="mb-0"
+                ></multidropdown>
+            </div>
+
+            <div class="px-3 py-2">
+                <multidropdown
+                    :multi="false"
+                    @updatevalue="update_category"
+                    :prop-value="category_value"
+                    route="categories"
+                    placeholder="All categories"
+                    marginbottom="mb-0"
+                ></multidropdown>
+            </div>
+
+            <div class="px-3 py-2">
+                <multidropdown
+                    :multi="false"
+                    @updatevalue="update_subcategory"
+                    :prop-value="subcategory_value"
+                    :fetch="false"
+                    :data="subcategories"
+                    placeholder="All subcategories"
+                    marginbottom="mb-0"
+                ></multidropdown>
+             </div>
+
+        </template>
+
     </b-sidebar>
 
-    <div class="row">
+    <div v-if="widgets" class="row">
 
-        <div class="col-md-3">
+        <div class="col-lg-3 col-md-6">
             <div class="card bg-pattern mb-3">
                 <div class="card-body">
                     <div class="row">
@@ -78,7 +189,7 @@
                         </div>
                         <div class="col-7">
                             <div class="text-end">
-                                <h3 class="text-dark my-1"><span>{{widgets[0][1]}}</span></h3>
+                                <h3 class="text-dark my-1 text-truncate" :title="widgets[0][1]"><span>{{widgets[0][1]}}</span></h3>
                                 <p class="text-muted mb-0 text-truncate">{{widgets[0][0]}}</p>
                             </div>
                         </div>
@@ -87,7 +198,7 @@
             </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-lg-3 col-md-6">
             <div class="card bg-pattern mb-3">
                 <div class="card-body">
                     <div class="row">
@@ -98,7 +209,7 @@
                         </div>
                         <div class="col-7">
                             <div class="text-end">
-                                <h3 class="text-dark my-1"><span>{{widgets[1][1]}}</span></h3>
+                                <h3 class="text-dark my-1 text-truncate" :title="widgets[1][1]"><span>{{widgets[1][1]}}</span></h3>
                                 <p class="text-muted mb-0 text-truncate">{{widgets[1][0]}}</p>
                             </div>
                         </div>
@@ -107,7 +218,7 @@
             </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-lg-3 col-md-6">
             <div class="card bg-pattern mb-3">
                 <div class="card-body">
                     <div class="row">
@@ -118,7 +229,7 @@
                         </div>
                         <div class="col-7">
                             <div class="text-end">
-                                <h3 class="text-dark my-1 text-truncate"><span>{{widgets[2][1]}}</span></h3>
+                                <h3 class="text-dark my-1 text-truncate" :title="widgets[2][1]"><span>{{widgets[2][1]}}</span></h3>
                                 <p class="text-muted mb-0 text-truncate">{{widgets[2][0]}}</p>
                             </div>
                         </div>
@@ -127,7 +238,7 @@
             </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-lg-3 col-md-6">
             <div class="card bg-pattern mb-3">
                 <div class="card-body">
                     <div class="row">
@@ -138,7 +249,7 @@
                         </div>
                         <div class="col-7">
                             <div class="text-end">
-                                <h3 class="text-dark my-1 text-truncate"><span>{{widgets[3][1]}}</span></h3>
+                                <h3 class="text-dark my-1 text-truncate" :title="widgets[3][1]"><span>{{widgets[3][1]}}</span></h3>
                                 <p class="text-muted mb-0 text-truncate">{{widgets[3][0]}}</p>
                             </div>
                         </div>
@@ -147,6 +258,10 @@
             </div>
         </div>
 
+    </div>
+    <div v-else class="col-lg-12 text-center">
+        <vue-loaders-ball-grid-beat color="#6658dd" scale="1" class="mt-4 text-center">
+        </vue-loaders-ball-grid-beat>
     </div>
 
     <!-- end card-->
@@ -165,7 +280,7 @@
                         </button>
                     </div>
 
-                    <div v-if="config.filters" class="float-end ms-2 pt-3">
+                    <div class="float-end ms-2 pt-3">
                         <b-button v-b-toggle.sidebar-right class="btn-soft-secondary">
                             <i class="fa fa-filter" aria-hidden="true"></i>
                         </b-button>
@@ -206,6 +321,20 @@
                 <!-- end col-->
             </div>
 
+            <template v-if="dynamic || published_value || template_value || type_value || category_value || subcategory_value ">
+                <div class="row mb-1">
+                    <div class="col-12">
+                        Filters: 
+                        <span @click="dynamic=null, refreshTable()" v-if="dynamic" class="badge bg-primary ms-1 cursor-pointer">{{dynamic.title}}</span>
+                        <span @click="published_value=null, refreshTable()" v-if="published_value" class="badge bg-primary ms-1 cursor-pointer">{{published_value.title}}</span>
+                        <span @click="template_value=null, refreshTable()" v-if="template_value" class="badge bg-primary ms-1 cursor-pointer">{{template_value.title}}</span>
+                        <span @click="type_value=null, refreshTable()" v-if="type_value" class="badge bg-primary ms-1 cursor-pointer">{{type_value.title}}</span>
+                        <span @click="category_value=null, refreshTable()" v-if="category_value" class="badge bg-primary ms-1 cursor-pointer">{{category_value.title}}</span>
+                        <span @click="subcategory_value=null, refreshTable()" v-if="subcategory_value" class="badge bg-primary ms-1 cursor-pointer">{{subcategory_value.title}}</span>
+                    </div>
+                </div>
+            </template>
+
             <div v-show="loading" class="col-lg-12 text-center">
                 <vue-loaders-ball-grid-beat color="#6658dd" scale="1" class="mt-4 text-center">
                 </vue-loaders-ball-grid-beat>
@@ -224,13 +353,40 @@
                 @vuetable:checkbox-toggled="showMultiselectActions"
                 @vuetable:checkbox-toggled-all="selectAllItems"
                 :per-page="config.perPage"
+                :append-params="{
+                        'dynamic': this.dynamic ? this.dynamic.id : null,
+                        'published': this.published_value ? this.published_value.id : null,
+                        'template': this.template_value ? this.template_value.id : null,
+                        'type': this.type_value ? this.type_value.title : null,
+                        'category': this.category_value ? this.category_value.id : null,
+                        'subcategory': this.subcategory_value ? this.subcategory_value.id : null,
+
+                }"
             >
+                <template slot="visibility" slot-scope="props">
+                    <div :key="props.rowData.id"  class="form-check form-switch mb-1" style="display: inline-grid; cursor: pointer">
+                        <input :key="props.rowData.id + 'on'" @click="changePublish(props.rowData.id)" :id="props.rowData.id + 'input'" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :for="props.rowData.id + 'input'" :checked="props.rowData.published">
+  
+                    </div>
+                </template>
+
                 <template slot="actions" slot-scope="props">
                     <div class="text-sm-end">
-                        <a v-if="config.edit" @click="edit(props.rowData)" href="javascript:void(0);" class="action-icon">
-                            <i class="mdi mdi-square-edit-outline"></i></a>
+                        <template v-if="config.edit">
+                            <template v-if="config.editLink">
+                                <a :href="config.editLink + props.rowData.id" class="action-icon">
+                                    <i class="mdi mdi-square-edit-outline"></i>
+                                </a>
+                            </template>
+                            <template v-else>
+                                <a @click="edit(props.rowData)" href="javascript:void(0);" class="action-icon">
+                                    <i class="mdi mdi-square-edit-outline"></i>
+                                </a>
+                            </template>
+                        </template>
                         <a @click="remove(props.rowData.id, props.rowData.title)" href="javascript:void(0);" class="action-icon">
-                            <i class="mdi mdi-delete"></i></a>
+                            <i class="mdi mdi-delete"></i>
+                        </a>
                     </div>
                 </template>
             </vuetable>
@@ -254,6 +410,7 @@ import VuetablePaginationMixin from "vuetable-2/src/components/VuetablePaginatio
 import VuetablePagination from "vuetable-2/src/components/VuetablePagination";
 import VuetablePaginationDropdown from "vuetable-2/src/components/VuetablePaginationDropdown.vue";
 import VuetablePaginationInfo from "vuetable-2/src/components/VuetablePaginationInfo.vue";
+import multidropdown from '.././inputs/multidropdown.vue';
 export default {
     mixins: [VuetablePaginationMixin],
     components: {
@@ -261,6 +418,7 @@ export default {
         VuetablePagination,
         VuetablePaginationDropdown,
         VuetablePaginationInfo,
+        multidropdown
     },
     props: {
         config: {}
@@ -281,7 +439,15 @@ export default {
             multiselectShow: false,
             selectAllCheckbox: false,
             perPage: 50,
-            widgets: [],
+            widgets: null,
+            dynamic: null,
+            published_value: null,
+            type_value: null,
+            category_value: null,
+            subcategory_value: null,
+            subcategories: [],
+            template_value: null,
+
         };
     },
     watch: {
@@ -345,8 +511,12 @@ export default {
             this.title = variable;
         },
         addNew() {
-            this.type = 'new';
-            this.$modal.show("edit-modal");
+            if (this.config.createLink) {
+                window.location = this.config.createLink;
+            } else {
+                this.type = 'new';
+                this.$modal.show("edit-modal");
+            }
         },
         edit(item) {
             this.item = item;
@@ -516,6 +686,56 @@ export default {
             .catch((error) => {
                 this.$toast.error('Filed to get widget data.')
             });
+        },
+        changePublish(id) {
+            this.loading = true;
+            axios
+            .put('/api/pages/update_published/' + id)
+            .then((response) => {
+                if (response.status == 200){
+                    this.$toast.success('Published Status Updated Successfully!')
+                }
+                this.loading = false;
+            })
+            .catch((error) => {
+                console.log(error)
+                this.loading = false;
+            });
+        },
+        update_dynamic(value) {
+            this.dynamic = value;
+            this.$nextTick(() => this.$refs.vuetable.refresh());
+        },
+        update_published(value){
+            this.published_value = value;
+            this.$nextTick(() => this.$refs.vuetable.refresh());
+        },
+        update_template(value){
+            this.template_value = value;
+            this.$nextTick(() => this.$refs.vuetable.refresh());
+        },
+        update_type(value){
+            this.type_value = value;
+            this.$nextTick(() => this.$refs.vuetable.refresh());
+        },
+        update_category(value){
+            this.category_value = value;
+            this.$nextTick(() => this.$refs.vuetable.refresh());
+
+            var subcategories = [];
+            if (this.category_value) {
+                this.category_value.subcategories.forEach(function(subcategory, index) {
+                    subcategories.push(subcategory);
+                });
+                this.subcategories = subcategories;
+            }
+        },
+        update_subcategory(value){
+            this.subcategory_value = value;
+            this.$nextTick(() => this.$refs.vuetable.refresh());
+        },
+        refreshTable() {
+            this.$nextTick(() => this.$refs.vuetable.refresh());
         }
     },
     mounted() {

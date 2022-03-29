@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PageResource extends JsonResource
@@ -14,6 +15,7 @@ class PageResource extends JsonResource
      */
     public function toArray($request)
     {
+        // dd($this->metaData()["meta_image"]->url);
         return [
             'id' => $this->id,
             'uuid' => $this->uuid,
@@ -38,6 +40,13 @@ class PageResource extends JsonResource
             'slug' => $this->slug,
             'indexed' => $this->indexed,
             'dynamic' => $this->dynamic,
+            'created_at' => Carbon::parse($this->created_at)->toFormattedDateString(),
+            'meta_image' => $this->when(
+                $this->metaData(),
+                function () {
+                    return $this->metaData()["meta_image"]->url ?? env("PAGE_IMAGE");
+                }
+            ),
         ];
     }
 }

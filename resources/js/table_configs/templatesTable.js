@@ -10,17 +10,17 @@ export default {
             dataClass: 'align-middle',
         },
         {
-            name: 'comment',
-            title: 'Comment',
-            sortField: 'comment',
+            name: 'title',
+            title: 'Name',
+            sortField: 'title',
             dataClass: 'align-middle',
             titleClass: ''
         },
         {
-            name: 'page',
-            title: 'Page' + '<i title="Column cant be sorted." class="fa fa-info-circle text-muted ms-1"></i>',
-            dataClass: 'align-middle',
-            titleClass: '',
+            name: 'pages',
+            title: 'Pages based on it' + '<i title="Column cant be sorted." class="fa fa-info-circle text-muted ms-1"></i>',
+            dataClass: 'align-middle text-center',
+            titleClass: 'text-center'
         },
         {
             name: 'created_at',
@@ -32,22 +32,17 @@ export default {
             titleClass: 'text-center'
         },
         {
-            name: 'user',
-            title: 'User',
-            sortField: 'user.firstname',
-            dataClass: 'align-middle',
-            titleClass: ''
-        },
-        {
             name: 'actions',
             title: 'Actions',
             titleClass: 'text-end',
             dataClass: 'align-middle'
         }
     ],
-    apiUrl: '/api/comments',
-    create: false,
-    edit: false,
+    apiUrl: '/api/templates',
+    create: true,
+    createLink: '/new_template',
+    edit: true,
+    editLink: '/template/',
     editInputs: collectiveInputs,
     showFilters: false,
     perPage: 50,

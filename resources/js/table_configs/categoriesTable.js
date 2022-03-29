@@ -86,7 +86,7 @@ export default {
     create: true,
     edit: true,
     editInputs: collectiveInputs,
-    filters: true,
+    showFilters: false,
     perPage: 50,
     addInputs: collectiveInputs.concat([
        

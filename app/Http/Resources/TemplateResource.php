@@ -26,7 +26,7 @@ class TemplateResource extends JsonResource
                 }
             ),
             'pages' => count($this->pages),
-            'created_at' => Carbon::parse($this->created_at)->format("Y-m-d"),
+            'created_at' => Carbon::parse($this->created_at)->toFormattedDateString(),
         ];
     }
 }

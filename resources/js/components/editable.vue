@@ -25,42 +25,6 @@
             </div>
         </modal>
 
-        <div v-if="false">
-        <div v-for="(val, index, key) in fields" :key="key" class="col-12 mb-1">
-            <div v-for="(column, indr, key) in val.columns" :key="key">
-                <div class="card" v-if="index != 'components'">
-                    <div class="card-body pb-0">
-                        <div v-if="val.columns.length > 1">
-                            <ul class="nav nav-pills navtab-bg nav-justified">
-                                <li v-for="(v, ind) in val.columns" :key="ind" class="nav-item">
-                                    <a href="#home1" @click="setTabActive(index, ind)" data-bs-toggle="tab" aria-expanded="false" :class="'nav-link' + (v.active === true ? ' active' : '')">
-                                        {{ v.template.title }} #{{ ind + 1 }}
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <h5 v-else class="card-title">{{ column.template.title }}</h5>
-                    </div>
-                    <div class="tab-content" style="padding-top: 0px" >
-                        <div v-for="(vl, indx) in val.columns" :key="'tabpane' + indx" :class="'tab-pane ' + (vl.active === true ? ' active' : '')">
-                            <div class="card-body row">
-                                <multiput
-                                    v-for="input in column.template.inputs"
-                                    :key="input.key"
-                                    :keyput="input.key"
-                                    :label="input.label"
-                                    :type="input.type"
-                                    :value="input.value"
-                                    :size="input.size"
-                                    @inputed="inputed($event, input)"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        </div>
         <tcdit 
             v-if="show" 
             ref="tc" 
@@ -72,7 +36,7 @@
 
         <div class="col-lg-12 text-center mt-3 mb-3">
             <button v-if="type == 'new' || type == 'edit'" @click="$modal.show('save-modal'); $forceUpdate()" type="button" class="btn btn-soft-success waves-effect waves-light" ><i class="fe-check-circle me-1"></i> Save</button>
-            <button @click="$emit('updatemode', 'list')" type="button" class="btn btn-soft-secondary waves-effect waves-light"><i class="fe-x me-1"></i> Cancel</button>
+            <a href="/templates" class="btn btn-soft-secondary waves-effect waves-light"><i class="fe-x me-1"></i> Cancel</a>
         </div>
 </div> <!-- end card-->
 
@@ -139,17 +103,13 @@ export default {
                 .post('/api/' + this.route,
                     {
                         title: this.title_value,
-                        description: this.description_value,
                         rows: this.$refs.tc ? JSON.stringify(this.$refs.tc.data) : null,
-                        category_id: this.category_value,
                     }
                 )
                 .then((response) => {
                     if (response.status == 201){
-                        //this.$emit('refreshcategories');
-                        this.$emit('created', response.data.data);
-                        this.$emit('updatemode', 'list');
-                        this.$toast.success('Created Successfully!')
+                        this.$toast.success('Created Successfully!');
+                        window.location = "/templates";
                     }
                     this.loading = false;
                 })
@@ -166,18 +126,15 @@ export default {
                 .patch('/api/' + this.route + '/' + this.id,
                     {
                         title: this.title_value,
-                        description: this.description_value,
                         rows: this.$refs.tc ? JSON.stringify(this.$refs.tc.data) : null,
-                        category_id: this.category_value,
                         id: this.id,
                     }
                 )
                 .then((response) => {
                     if (response.status == 200){
-                        this.route == 'categories' ? this.$emit('edited', response.data.data) : this.$emit('refreshcategories');
-                        this.$emit('updatemode', 'list');
                         this.$toast.success('Edited Successfully!')
                         this.loading = false;
+                        window.location = "/templates";
                     }
                 })
                 .catch((error) => {
@@ -193,11 +150,9 @@ export default {
                     if (response.status == 200){
                         var data = response.data.data;
                         this.title_value = data.title;
-                        this.description_value = data.description;
                         if (data.rows){
                             this.rows_value = JSON.parse(data.rows);
                         }
-                        this.category_value = data.category_id;
                         this.show = true;
                     }
                 })
@@ -222,17 +177,11 @@ export default {
                 }
 
             } else {
+                this.title_value = 'New Template';
                 this.show = true;
             }
         },
         watch: {
-            /* additionalTemplates() {
-                if (this.template_value) {
-                    this.template_value.concat(this.additionalTemplates)
-                } else {
-                    this.template_value = this.additionalTemplates
-                }
-            } */
         }
     }
 </script>

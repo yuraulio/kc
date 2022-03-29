@@ -110,4 +110,14 @@ class DashboardController extends Controller
     {
         return view('new_admin.pages.page_new');
     }
+
+    public function templateEdit($id)
+    {
+        return view('new_admin.pages.template_edit', ["id" => $id]);
+    }
+
+    public function templateNew()
+    {
+        return view('new_admin.pages.template_new');
+    }
 }
