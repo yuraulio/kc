@@ -32,13 +32,13 @@
          }
          
          .certificate{
-         	margin-top:70px;
+         	margin-top:100px;
          	padding: 0 70px;
          }
        
          
-			.user-info {
-         	margin-top: 70px;
+		.user-info {
+         	margin-top: 50px;
          	margin-bottom: 10px;
          }
 
@@ -50,10 +50,15 @@
 
 
 			.award{
-   			font-size:25px;
-   			line-height:1;
-				padding: 20px 0;
+   				font-size:25px;
+   				line-height:1;
+				padding: 10px 0;
+				
 
+			}
+
+			p.certi-title{
+				line-height:40px
 			}
 
 			p{
@@ -66,8 +71,9 @@
 			}
 
 			.signature{
-				font-size:20px;
+				font-size:17px;
 				letter-spacing:2px;
+				line-height:20px;
 			}
 			.signature-table {
 
@@ -76,9 +82,9 @@
 			}
 
 			.footer {
-
+				font-size:10px;
 				position: absolute;
-				top: 90%;
+				top: 88%;
 			}
 
 			.footer p{
@@ -149,7 +155,7 @@
 
 					<tr>
             	   <td align="center">
-							<p class="info-title">
+							<p class="info-title certi-title">
                
 								{{$certificate['certification_title']}}
 
@@ -168,11 +174,11 @@
                <tr>
 						<td  align="center"> <img src="{{asset('theme/assets/images/certificates2022/signature-line.png')}}"></td>
                </tr>
-					<tr>
-						<td  class="signature" align="center"> APOSTOLOS AIVALIS</td>
+				<tr>
+					<td  class="signature" align="center"> APOSTOLOS AIVALIS</td>
                </tr>
-					<tr>
-						<td class="signature"  align="center"> HEAD OF CURRICULUM, KNOWCRUNCH </td>
+				<tr>
+					<td class="signature"  align="center"> HEAD OF CURRICULUM, KNOWCRUNCH </td>
                </tr>
             </tbody>
          </table>
@@ -180,11 +186,11 @@
 			<table class="footer" width="100%">
             <tbody>
                <tr>
-						<td  align="center"> 
-							<p > 
-								Issue date: {{$certificate['certification_date']}}  @if($certificate['expiration_date']) <span> | </span> Expiration date: {{$certificate['expiration_date']}} @endif <span> | </span>    Credential: {{$certificate['credential']}} 
-							</p>
-						</td>
+					<td  align="center"> 
+						<p > 
+							Issue date: {{$certificate['certification_date']}}  @if($certificate['expiration_date']) <span> | </span> Expiration date: {{$certificate['expiration_date']}} @endif <span> | </span>    Credential: {{$certificate['credential']}} 
+						</p>
+					</td>
                </tr>
 					
             </tbody>
