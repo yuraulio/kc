@@ -42,6 +42,7 @@
          	margin-bottom: 10px;
          }
 
+
 			.info-title{
 		    	font-size:42px;
 		    	letter-spacing:5px;
@@ -58,7 +59,13 @@
 			}
 
 			p.certi-title{
-				line-height:40px
+				line-height:40px;
+			}
+			
+			
+			.certi-title-new p{
+				font-size:42px;
+				line-height:40px;
 			}
 
 			p{
@@ -154,10 +161,10 @@
             	</tr>
 
 					<tr>
-            	   <td align="center">
+            	   <td class="certi-title-new" align="center">
 							<p class="info-title certi-title">
                
-								{{$certificate['certification_title']}}
+								{!! $certificate['certification_title'] !!}
 
 			  				</p>
             	   </td>

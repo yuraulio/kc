@@ -646,7 +646,7 @@ class WebhookController extends BaseWebhookController
 				$subscription = $user->subscriptions()->where('stripe_id',$payload['data']['object']['subscription'])->first();
 				$eventId = explode('_',$subscription->stripe_price)[3];
 				//$event = $user->events_for_user_list()->first();
-				$event = $user->wherePivot('event_id',$eventId)->first();
+				$event = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first();
 
 				if($payload['data']['object']['attempt_count'] >= 4){
 

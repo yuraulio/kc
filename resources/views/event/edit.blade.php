@@ -155,7 +155,7 @@
 
                                     <div class="form-group{{ $errors->has('fb_') ? ' has-danger' : '' }}">
                                         <label class="form-control-label" for="input-hours">{{ __('Certificate Title') }}</label>
-                                        <input type="text" name="certificate_title" id="input-certificate_title" class="form-control{{ $errors->has('certificate_title') ? ' is-invalid' : '' }}" placeholder="{{ __('Certificate Title') }}" value="{{ old('certificate_title', $event->certificate_title) }}"autofocus>
+                                        <textarea type="text" name="certificate_title" id="input-certificate_title" class="ckeditor form-control{{ $errors->has('certificate_title') ? ' is-invalid' : '' }}" placeholder="{{ __('Certificate Title') }}" autofocus>{{ old('certificate_title', $event->certificate_title) }}</textarea>
     
                                         @include('alerts.feedback', ['field' => 'certificate_title'])
                                     </div>

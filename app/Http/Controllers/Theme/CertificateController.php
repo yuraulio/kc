@@ -99,10 +99,11 @@ class CertificateController extends Controller
         //return view('admin.certificates.kc_diploma_2022a',compact('certificate'));
 
         $pdf->getDomPDF()->setHttpContext($contxt);
-        
         $pdf->loadView('admin.certificates.'.$certificate->template,compact('certificate'))->setPaper('a4', 'landscape');
-        //$pdf->loadView('admin.certificates.kc_attendance_2022a',compact('certificate'))->setPaper('a4', 'landscape');
-        //$pdf->loadView('admin.certificates.kc_diploma_2022a',compact('certificate'))->setPaper('a4', 'landscape');
+
+        //$customPaper = array(0,0,3507,2480);
+        //$pdf->loadView('admin.certificates.'.$certificate->template,compact('certificate'))->setPaper($customPaper);
+
         $fn = $certificate->firstname . '-' . $certificate->lastname . '-' . $certificate->user()->first()->kc_id . '.pdf';
         return $pdf->stream($fn);
   
@@ -149,9 +150,9 @@ class CertificateController extends Controller
             $template = 'kc_diploma';
           }*/
 
-            $view = 'admin.certificates.kc_diploma_2022a';
-            $template = 'kc_diploma_2022a';
-          
+          $view = 'admin.certificates.kc_diploma_2022a';
+          $template = 'kc_diploma_2022a';
+        
 
           $cert = new Certificate;
           $cert->success = true;
