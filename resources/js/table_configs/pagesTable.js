@@ -106,11 +106,15 @@ export default {
     editInputs: collectiveInputs,
     showFilters: true,
     filters: [
-
+        'dynamic',
+        'visibility',
+        'template',
+        'type',
+        'category',
+        'subcategory'
     ],
     perPage: 50,
     addInputs: collectiveInputs.concat([
        
     ]),
 }
-

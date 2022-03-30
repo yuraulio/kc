@@ -49,7 +49,10 @@ export default {
     create: false,
     edit: false,
     editInputs: collectiveInputs,
-    showFilters: false,
+    showFilters: true,
+    filters: [
+        'page'
+    ],
     perPage: 50,
     addInputs: collectiveInputs.concat([
        

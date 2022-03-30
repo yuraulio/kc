@@ -63,7 +63,7 @@
         </template>
         <template v-else>
 
-             <div class="px-3 py-2">
+             <div v-if="showFilter('dynamic')" class="px-3 py-2">
                 <multidropdown
                     :multi="false"
                     @updatevalue="update_dynamic"
@@ -84,7 +84,7 @@
                 ></multidropdown>
             </div>
 
-            <div class="px-3 py-2">
+            <div v-if="showFilter('visibility')" class="px-3 py-2">
                 <multidropdown
                     :multi="false"
                     @updatevalue="update_published"
@@ -105,7 +105,7 @@
                 ></multidropdown>
             </div>
 
-            <div class="px-3 py-2">
+            <div v-if="showFilter('template')" class="px-3 py-2">
                 <multidropdown
                     :multi="false"
                     @updatevalue="update_template"
@@ -116,7 +116,7 @@
                 ></multidropdown>
             </div>
 
-            <div class="px-3 py-2">
+            <div v-if="showFilter('type')" class="px-3 py-2">
                 <multidropdown
                     :multi="false"
                     @updatevalue="update_type"
@@ -149,7 +149,7 @@
                 ></multidropdown>
             </div>
 
-            <div class="px-3 py-2">
+            <div v-if="showFilter('category')" class="px-3 py-2">
                 <multidropdown
                     :multi="false"
                     @updatevalue="update_category"
@@ -160,7 +160,7 @@
                 ></multidropdown>
             </div>
 
-            <div class="px-3 py-2">
+            <div v-if="showFilter('subcategory')" class="px-3 py-2">
                 <multidropdown
                     :multi="false"
                     @updatevalue="update_subcategory"
@@ -171,6 +171,17 @@
                     marginbottom="mb-0"
                 ></multidropdown>
              </div>
+
+             <div v-if="showFilter('page')" class="px-3 py-2">
+                <multidropdown
+                    :multi="false"
+                    @updatevalue="update_page"
+                    :prop-value="page_value"
+                    route="pages"
+                    placeholder="All pages"
+                    marginbottom="mb-0"
+                ></multidropdown>
+            </div>
 
         </template>
 
@@ -274,14 +285,13 @@
                 </div>
 
                 <div class="col-md-3 pt-3">
-                    <template v-if="dynamic || published_value || template_value || type_value || category_value || subcategory_value ">
-                        <span @click="dynamic=null, refreshTable()" v-if="dynamic" class="badge bg-primary ms-1 cursor-pointer">{{dynamic.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
-                        <span @click="published_value=null, refreshTable()" v-if="published_value" class="badge bg-primary ms-1 cursor-pointer">{{published_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
-                        <span @click="template_value=null, refreshTable()" v-if="template_value" class="badge bg-primary ms-1 cursor-pointer">{{template_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
-                        <span @click="type_value=null, refreshTable()" v-if="type_value" class="badge bg-primary ms-1 cursor-pointer">{{type_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
-                        <span @click="category_value=null, refreshTable()" v-if="category_value" class="badge bg-primary ms-1 cursor-pointer">{{category_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
-                        <span @click="subcategory_value=null, refreshTable()" v-if="subcategory_value" class="badge bg-primary ms-1 cursor-pointer">{{subcategory_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
-                    </template>
+                    <span @click="page_value=null, refreshTable()" v-if="page_value && showFilter('page')" class="badge bg-primary ms-1 cursor-pointer">{{page_value.title.substring(0, 20)}} <i class="fa fa-times" aria-hidden="true"></i></span>
+                    <span @click="dynamic=null, refreshTable()" v-if="dynamic && showFilter('dynamic')" class="badge bg-primary ms-1 cursor-pointer">{{dynamic.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
+                    <span @click="published_value=null, refreshTable()" v-if="published_value && showFilter('visibility')" class="badge bg-primary ms-1 cursor-pointer">{{published_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
+                    <span @click="template_value=null, refreshTable()" v-if="template_value && showFilter('template')" class="badge bg-primary ms-1 cursor-pointer">{{template_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
+                    <span @click="type_value=null, refreshTable()" v-if="type_value && showFilter('type')" class="badge bg-primary ms-1 cursor-pointer">{{type_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
+                    <span @click="category_value=null, refreshTable()" v-if="category_value && showFilter('category')" class="badge bg-primary ms-1 cursor-pointer">{{category_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
+                    <span @click="subcategory_value=null, refreshTable()" v-if="subcategory_value && showFilter('subcategory')" class="badge bg-primary ms-1 cursor-pointer">{{subcategory_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
                 </div>
 
                 <div class="col-md-5">
@@ -358,6 +368,7 @@
                         'type': this.type_value ? this.type_value.title : null,
                         'category': this.category_value ? this.category_value.id : null,
                         'subcategory': this.subcategory_value ? this.subcategory_value.id : null,
+                        'pagefilter': this.page_value ? this.page_value.id : null,
 
                 }"
             >
@@ -445,6 +456,7 @@ export default {
             subcategory_value: null,
             subcategories: [],
             template_value: null,
+            page_value: null,
 
         };
     },
@@ -716,6 +728,10 @@ export default {
             this.type_value = value;
             this.$nextTick(() => this.$refs.vuetable.refresh());
         },
+        update_page(value){
+            this.page_value = value;
+            this.$nextTick(() => this.$refs.vuetable.refresh());
+        },
         update_category(value){
             this.category_value = value;
             this.$nextTick(() => this.$refs.vuetable.refresh());
@@ -734,6 +750,10 @@ export default {
         },
         refreshTable() {
             this.$nextTick(() => this.$refs.vuetable.refresh());
+        },
+        showFilter(filter){
+            var index = this.config.filters.indexOf(filter);
+            return (index != -1 ? true : false);
         }
     },
     mounted() {

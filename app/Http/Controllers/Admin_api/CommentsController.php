@@ -36,8 +36,14 @@ class CommentsController extends Controller
         try {
             $comments = Comment::lookForOriginal($request->filter)
                 ->with(["page", "user"])
-                ->tableSort($request)
-                ->paginate($request->per_page ?? 50);
+                ->tableSort($request);
+
+            if ($request->pagefilter !== null) {
+                $comments->whereHas("page", function ($q) use ($request) {
+                    $q->where("id", $request->pagefilter);
+                });
+            }
+            $comments = $comments->paginate($request->per_page ?? 50);
             return CommentResource::collection($comments);
         } catch (Exception $e) {
             Log::error("Failed to get comments. " . $e->getMessage());
