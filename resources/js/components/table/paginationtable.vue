@@ -739,6 +739,13 @@ export default {
     mounted() {
         this.perPage = this.config.perPage;
         this.getWidgets();
+
+        if (this.config.apiUrl == "/api/pages") {
+            this.published_value = {
+                title: 'Published',
+                id: 1
+            };
+        }
     },
 };
 </script>
