@@ -130,11 +130,6 @@ class TemplatesController extends Controller
         }
     }
 
-    public function templatesAll(Request $request)
-    {
-        return $this->index($request, 99999);
-    }
-
     public function deleteMultiple(Request $request)
     {
         try {

@@ -203,7 +203,7 @@
                             title="Template"
                             :multi="false"
                             @updatevalue="setTemplate"
-                            route="templatesAll"
+                            route="templates?per_page=0"
                         ></multidropdown>
                     </div>
                 </div>
