@@ -67,6 +67,7 @@
 				font-size:42px;
 				line-height:40px;
 				text-transform: uppercase;
+				letter-spacing:5px;
 			}
 
 			p{
