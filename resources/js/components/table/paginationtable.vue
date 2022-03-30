@@ -71,15 +71,15 @@
                     :fetch="false"
                     :data="[
                         {
-                            title: 'Static pages',
+                            title: 'Static items',
                             id: false
                         },
                         {
-                            title: 'Dynamic pages',
+                            title: 'Dynamic items',
                             id: true
                         }
                     ]"
-                    placeholder="All pages"
+                    placeholder="All items"
                     marginbottom="mb-0"
                 ></multidropdown>
             </div>

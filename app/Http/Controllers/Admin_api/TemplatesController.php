@@ -29,9 +29,12 @@ class TemplatesController extends Controller
 
         try {
             $templates = Template::lookForOriginal($request->filter)
-                ->with(["pages", "user"])
-                ->tableSort($request)
-                ->paginate($request->per_page ?? 50);
+                    ->with(["pages", "user"])
+                    ->tableSort($request);
+            if ($request->dynamic !== null) {
+                $templates->where("dynamic", $request->dynamic == "true" ? true : false);
+            }
+            $templates = $templates->paginate($request->per_page ?? 50);
             return TemplateResource::collection($templates);
         } catch (Exception $e) {
             Log::error("Failed to get templates. " . $e->getMessage());
@@ -47,10 +50,10 @@ class TemplatesController extends Controller
     public function store(CreateAdminTemplateRequest $request)
     {
         $this->authorize('create', Template::class, Auth::user());
-
         try {
             $template = new Template();
             $template->title = $request->title;
+            $template->dynamic = $request->dynamic;
             $template->description = $request->description;
             $template->rows = $request->rows;
             $template->user_id = Auth::user()->id;
@@ -93,8 +96,8 @@ class TemplatesController extends Controller
             $template = Template::find($id);
 
             $this->authorize('update', $template, Auth::user());
-
             $template->title = $request->title;
+            $template->dynamic = $request->dynamic;
             $template->description = $request->description;
             $template->rows = $request->rows;
             $template->save();

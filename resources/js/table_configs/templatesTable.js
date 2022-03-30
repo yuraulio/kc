@@ -44,10 +44,13 @@ export default {
     edit: true,
     editLink: '/template/',
     editInputs: collectiveInputs,
-    showFilters: false,
+    showFilters: true,
     perPage: 50,
     addInputs: collectiveInputs.concat([
        
-    ])
+    ]),
+    filters: [
+        'dynamic'
+    ],
 }
 

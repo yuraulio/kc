@@ -13,6 +13,29 @@
                     ></text-field>
                     <ul v-if="errors && errors['title']" class="parsley-errors-list filled" id="parsley-id-7" aria-hidden="false"><li class="parsley-required">{{errors['title'][0]}}</li></ul>
                 </div>
+
+                <div class="col-lg-12 p4">
+                    <multidropdown
+                        :multi="false"
+                        @updatevalue="update_dynamic"
+                        :prop-value="dynamic"
+                        :fetch="false"
+                        :data="[
+                            {
+                                title: 'Static page',
+                                id: false
+                            },
+                            {
+                                title: 'Dynamic page',
+                                id: true
+                            }
+                        ]"
+                        placeholder="Select tyoe"
+                        marginbottom="mb-0"
+                        :allowEmpty="false"
+                    ></multidropdown>
+                </div>
+
                 <div class="col-lg-12 text-center mt-3">
                     <button v-if="type == 'new'" @click="add()" type="button" class="btn btn-soft-success  waves-effect waves-light" :disabled="loading"><i v-if="!loading" class="fe-check-circle me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Save</button>
                     <button v-if="type == 'edit'" :disabled="loading" @click="edit()" type="button" class="btn btn-soft-success  waves-effect waves-light"><i v-if="!loading" class="mdi mdi-square-edit-outline me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Save</button>
@@ -75,11 +98,18 @@ export default {
                 template_value: null,
                 loading: false,
                 show: false,
+                dynamic: {
+                    title: 'Static page',
+                    id: false
+                },
             }
         },
         methods: {
             update_title(value){
                 this.title_value = value;
+            },
+            update_dynamic(value) {
+                this.dynamic = value;
             },
             update_description(value){
                 this.description_value = value;
@@ -103,6 +133,7 @@ export default {
                 .post('/api/' + this.route,
                     {
                         title: this.title_value,
+                        dynamic: this.dynamic.id,
                         rows: this.$refs.tc ? JSON.stringify(this.$refs.tc.data) : null,
                     }
                 )
@@ -126,6 +157,7 @@ export default {
                 .patch('/api/' + this.route + '/' + this.id,
                     {
                         title: this.title_value,
+                        dynamic: this.dynamic.id,
                         rows: this.$refs.tc ? JSON.stringify(this.$refs.tc.data) : null,
                         id: this.id,
                     }
@@ -150,6 +182,17 @@ export default {
                     if (response.status == 200){
                         var data = response.data.data;
                         this.title_value = data.title;
+                        if (!data.dynamic) {
+                            this.dynamic = {
+                                title: 'Static page',
+                                id: false
+                            };
+                        } else {
+                            this.dynamic = {
+                                title: 'Dynamic page',
+                                id: true
+                            };
+                        }
                         if (data.rows){
                             this.rows_value = JSON.parse(data.rows);
                         }

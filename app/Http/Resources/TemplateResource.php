@@ -18,6 +18,7 @@ class TemplateResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
+            'dynamic' => $this->dynamic,
             'rows' => $this->rows,
             'user' => $this->when(
                 $this->user,
