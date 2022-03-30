@@ -270,7 +270,7 @@ import slugify from '@sindresorhus/slugify';
                         template_id: this.page.template.id,
                         published: false,
                         indexed: true,
-                        dynamic: false,
+                        dynamic: this.page.template.dynamic,
                         published_from: this.page.published_from,
                         published_to: this.page.published_to,
                         type: this.page.type,
