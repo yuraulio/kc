@@ -133,15 +133,22 @@
                                 :prop-value="rows_value"
                             ></rows>
 
-                            <div :key="'ck'"  class="form-check form-switch mb-3" style="cursor: pointer">
-                                <input :key="'on'" @click="published = !published" :id="'cinput'" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :for="'cinput'" :checked="published">
-                                <label class="form-check-label" for="light-mode-check">Published</label>
-                            </div>
+                            <template v-if="!dynamic">
+                                <div :key="'ck'"  class="form-check form-switch mb-3" style="cursor: pointer">
+                                    <input :key="'on'" @click="published = !published" :id="'cinput'" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :for="'cinput'" :checked="published">
+                                    <label class="form-check-label" for="light-mode-check">Published</label>
+                                </div>
 
-                            <div class="form-check form-switch mb-3" style="cursor: pointer">
-                                <input @click="indexed = !indexed" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :checked="indexed">
-                                <label class="form-check-label">Indexed</label>
-                            </div>
+                                <div class="form-check form-switch mb-3" style="cursor: pointer">
+                                    <input @click="indexed = !indexed" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :checked="indexed">
+                                    <label class="form-check-label">Indexed</label>
+                                </div>
+                            </template>
+                            <template v-else>
+                                <div class="text-center">
+                                    <span class="badge bg-warning mb-3">Dynamic page</span>
+                                </div>
+                            </template>
 
                             <!--
                             <div class="form-check form-switch mb-3" style="cursor: pointer">

@@ -70,16 +70,21 @@
                     </div>
                     <div class="col-md-6">
                         <button :disabled="loading" @click="changeMode()" type="button" class="btn btn-soft-info waves-effect waves-light float-end ms-2 mb-3"><i class="dripicons-toggles me-1" style="transform: translateY(2px);"></i>Advanced Mode</button>
-                        <button v-if="type != 'new'" :disabled="loading" @click="preview()" type="button" class="btn btn-soft-warning waves-effect waves-light float-end ms-2 mb-3"><i class="dripicons-preview me-1" style="transform: translateY(2px);"></i>Preview</button>
                         <button :disabled="loading" @click="type == 'new' ? add() : edit()" type="button" class="btn btn-soft-success waves-effect waves-light float-end ms-2 mb-3"><i v-if="!loading" class="mdi mdi-square-edit-outline me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Save</button>
-                        
-                        <template v-if="page.published">
-                            <input @click="page.published = !page.published" type="checkbox" class="btn-check float-end" id="btn-check-outlined" autocomplete="off" :checked="page.published">
-                            <label class="btn btn-outline-primary float-end ms-2 mb-3" for="btn-check-outlined"><i class="dripicons-checkmark me-1" style="transform: translateY(2px);"></i>Published</label>
-                        </template>
-                        <template v-else>
-                            <input @click="page.published = !page.published" type="checkbox" class="btn-check float-end" id="btn-check-outlined" autocomplete="off" :checked="page.published">
-                            <label class="btn btn-outline-primary float-end ms-2 mb-3" for="btn-check-outlined"><i class="dripicons-cross me-1" style="transform: translateY(2px);"></i> Unpublished</label>
+
+                        <template v-if="type != 'new'">
+                            <button v-if="type != 'new'" :disabled="loading" @click="preview()" type="button" class="btn btn-soft-warning waves-effect waves-light float-end ms-2 mb-3"><i class="dripicons-preview me-1" style="transform: translateY(2px);"></i>Preview</button>
+                            
+                            <template v-if="!page.dynamic">
+                                <template v-if="page.published">
+                                    <input @click="page.published = !page.published" type="checkbox" class="btn-check float-end" id="btn-check-outlined" autocomplete="off" :checked="page.published">
+                                    <label class="btn btn-outline-primary float-end ms-2 mb-3" for="btn-check-outlined"><i class="dripicons-checkmark me-1" style="transform: translateY(2px);"></i>Published</label>
+                                </template>
+                                <template v-else>
+                                    <input @click="page.published = !page.published" type="checkbox" class="btn-check float-end" id="btn-check-outlined" autocomplete="off" :checked="page.published">
+                                    <label class="btn btn-outline-primary float-end ms-2 mb-3" for="btn-check-outlined"><i class="dripicons-cross me-1" style="transform: translateY(2px);"></i> Unpublished</label>
+                                </template>
+                            </template>
                         </template>
                     </div>
                 </div>
