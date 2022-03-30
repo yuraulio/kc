@@ -170,7 +170,12 @@ class CertificateController extends Controller
           $cert->event()->save($event);
           $cert->user()->save($user);
 
+        }else{
+          $cert->certificate_title = $event->certificate_title;
+          $cert->save();
         }
+
+        
 
         $certificate['firstname'] = $cert->firstname;
         $certificate['lastname'] = $cert->lastname;

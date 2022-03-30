@@ -66,6 +66,7 @@
 			.certi-title-new p{
 				font-size:42px;
 				line-height:40px;
+				text-transform: uppercase;
 			}
 
 			p{
