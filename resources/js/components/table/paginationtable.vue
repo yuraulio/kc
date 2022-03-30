@@ -269,10 +269,22 @@
         <div class="card-body pt-0" style="overflow: auto;">
 
             <div class="row mb-1">
-                <div class="col-md-3 pt-3">
+                <div class="col-md-4 pt-3">
                     <input v-model="filter" type="search" class="form-control my-1 my-md-0 d-inline-block w-auto" id="inputPassword2" placeholder="Search..." style="transform: translateY(1px);"/>
                 </div>
-                <div class="col-md-9">
+
+                <div class="col-md-3 pt-3">
+                    <template v-if="dynamic || published_value || template_value || type_value || category_value || subcategory_value ">
+                        <span @click="dynamic=null, refreshTable()" v-if="dynamic" class="badge bg-primary ms-1 cursor-pointer">{{dynamic.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
+                        <span @click="published_value=null, refreshTable()" v-if="published_value" class="badge bg-primary ms-1 cursor-pointer">{{published_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
+                        <span @click="template_value=null, refreshTable()" v-if="template_value" class="badge bg-primary ms-1 cursor-pointer">{{template_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
+                        <span @click="type_value=null, refreshTable()" v-if="type_value" class="badge bg-primary ms-1 cursor-pointer">{{type_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
+                        <span @click="category_value=null, refreshTable()" v-if="category_value" class="badge bg-primary ms-1 cursor-pointer">{{category_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
+                        <span @click="subcategory_value=null, refreshTable()" v-if="subcategory_value" class="badge bg-primary ms-1 cursor-pointer">{{subcategory_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
+                    </template>
+                </div>
+
+                <div class="col-md-5">
 
                     <div v-if="config.create" class="text-md-end mt-md-0 d-inline-block float-end ms-2 pt-3">
                         <button @click="addNew" type="button" class="btn btn-soft-info waves-effect waves-light">
@@ -320,20 +332,6 @@
                 </div>
                 <!-- end col-->
             </div>
-
-            <template v-if="dynamic || published_value || template_value || type_value || category_value || subcategory_value ">
-                <div class="row mb-1">
-                    <div class="col-12">
-                        Filters: 
-                        <span @click="dynamic=null, refreshTable()" v-if="dynamic" class="badge bg-primary ms-1 cursor-pointer">{{dynamic.title}}</span>
-                        <span @click="published_value=null, refreshTable()" v-if="published_value" class="badge bg-primary ms-1 cursor-pointer">{{published_value.title}}</span>
-                        <span @click="template_value=null, refreshTable()" v-if="template_value" class="badge bg-primary ms-1 cursor-pointer">{{template_value.title}}</span>
-                        <span @click="type_value=null, refreshTable()" v-if="type_value" class="badge bg-primary ms-1 cursor-pointer">{{type_value.title}}</span>
-                        <span @click="category_value=null, refreshTable()" v-if="category_value" class="badge bg-primary ms-1 cursor-pointer">{{category_value.title}}</span>
-                        <span @click="subcategory_value=null, refreshTable()" v-if="subcategory_value" class="badge bg-primary ms-1 cursor-pointer">{{subcategory_value.title}}</span>
-                    </div>
-                </div>
-            </template>
 
             <div v-show="loading" class="col-lg-12 text-center">
                 <vue-loaders-ball-grid-beat color="#6658dd" scale="1" class="mt-4 text-center">
