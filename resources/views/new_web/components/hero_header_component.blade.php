@@ -25,8 +25,7 @@
     @endif
     <div class="container">
         <div class="hero-message">
-            <h1>{{ $title }}</h1>
-            <h2>{{ $subtitle }}</h2>
+            {!! $title !!}
         </div>
     </div>
 </section>

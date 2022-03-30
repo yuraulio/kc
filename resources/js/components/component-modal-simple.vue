@@ -76,7 +76,7 @@
                         <div class="col-3">
                             <div @click="selectComponent('hero')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
                                 <i style="font-size: 20px" class="text-muted dripicons-monitor d-block mt-1"></i>
-                                <span class="text-muted mt-1 ms-1 me-1">Header image with title</span>
+                                <span class="text-muted mt-1 ms-1 me-1">Header</span>
                             </div>
                         </div>
 

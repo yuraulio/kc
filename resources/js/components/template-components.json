@@ -1,7 +1,7 @@
 {
     "hero" : {
-        "version": 4,
-        "title": "Header image with title",
+        "version": 5,
+        "title": "Header",
         "width": "full",
         "icon": "dripicons-monitor",
         "key": "hero_header_component",
@@ -13,18 +13,13 @@
             {
                 "type": "image",
                 "key": "hero_image",
-                "label": "Image",
-                "main": true
+                "label": "Image"
             },
             {
-                "type": "text",
+                "type": "text_editor",
                 "key": "hero_title",
-                "label": "Title"
-            },
-            {
-                "type": "text",
-                "key": "hero_subtitle",
-                "label": "Subtitle"
+                "label": "Title",
+                "main": true
             },
             {
                 "type": "checkbox",
