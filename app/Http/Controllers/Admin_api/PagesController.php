@@ -35,11 +35,13 @@ class PagesController extends Controller
         $this->authorize('viewAny', Page::class, Auth::user());
         try {
             $pages = Page::withoutGlobalScope('published')
-                ->where("dynamic", $request->dynamic == "true" ? true : false)
                 ->lookForOriginal($request->filter)
                 ->with('template', 'categories.subcategories')
                 ->tableSort($request);
 
+            if ($request->dynamic !== null) {
+                $pages->where("dynamic", $request->dynamic == "true" ? true : false);
+            }
             if ($request->template !== null) {
                 $pages->whereHas("template", function ($q) use ($request) {
                     $q->where("id", $request->template);
