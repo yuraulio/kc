@@ -174,6 +174,13 @@
             <i @click.prevent="addCustomComponent" class="dripicons-plus add-component-icon"></i>
         </div>
 
+        <div v-if="isBasicEditorEmpty()" class="text-center mt-3">
+            <p>
+                There are no basic component to edit. Add a new basic component or switch to Advanced Mode.
+            </p>
+            <button :disabled="loading" @click="changeMode()" type="button" class="btn btn-soft-info waves-effect waves-light"><i class="dripicons-toggles me-1" style="transform: translateY(2px);"></i>Advanced Mode</button>
+        </div>
+
         <component-modal-simple
             :row="null"
             :column="null"
@@ -222,7 +229,6 @@ import slugify from '@sindresorhus/slugify';
         },
         data() {
             return {
-
                 tab: "Content",
                 loading: false,
             }
@@ -396,6 +402,19 @@ import slugify from '@sindresorhus/slugify';
             },
             setSlug() {
                this.$parent.page.slug = slugify(this.page.title);
+            },
+            isBasicEditorEmpty() {
+                var result = true;
+                this.content.forEach((row)=>{
+                    if (row.tab == 'Content') {
+                        row.columns.forEach((column)=>{
+                            if (column.template.simple_view == true) {
+                                result = false;
+                            }
+                        });
+                    }
+                });
+                return result;
             }
         },
         computed: {
