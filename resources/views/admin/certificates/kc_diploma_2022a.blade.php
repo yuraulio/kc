@@ -197,7 +197,7 @@
                <tr>
 					<td  align="center"> 
 						<p > 
-							ISSUED IN: {{$certificate['certification_date']}}  @if($certificate['expiration_date']) <span> | </span>  EXPIRES IN: {{$certificate['expiration_date']}} @endif <span> | </span>    Credential: {{$certificate['credential']}} 
+							ISSUED IN: {{$certificate['certification_date']}}  @if($certificate['expiration_date']) <span> | </span>  EXPIRES IN: {{$certificate['expiration_date']}} @endif <span> | </span>    Credential NO.: {{$certificate['credential']}} 
 						</p>
 					</td>
                </tr>

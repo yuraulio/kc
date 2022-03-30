@@ -192,7 +192,7 @@
                <tr>
 					<td  align="center"> 
 						<p > 
-							ISSUED IN: {{$certificate['certification_date']}}   <span> | </span>    Credential: {{$certificate['credential']}} 
+							ISSUED IN: {{$certificate['certification_date']}}   <span> | </span>    Credential NO.: {{$certificate['credential']}} 
 						</p>
 					</td>
                </tr>
