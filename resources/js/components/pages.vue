@@ -21,7 +21,6 @@ import pagesConfig from "../table_configs/pagesTable";
         components: {
             pagesConfig,
             Paginationtable,
-            // multidropdown,
         },
         props: {
 
@@ -29,49 +28,6 @@ import pagesConfig from "../table_configs/pagesTable";
         data() {
             return {
                 config: pagesConfig,
-
-
-                // mode: "list",
-                // pages: [],
-                // id: null,
-                // uuid: null,
-                // title: null,
-                // filter: "",
-                // isLoading: false,
-                // additionalTemplates: [],
-                // lodash: _,
-                // type_value: null,
-                // category_value: null,
-                // subcategory_value: null,
-                // type_list: [
-                //     {
-                //         'id': 1,
-                //         'title':'Article'
-                //     },
-                //     {
-                //         'id': 2,
-                //         'title':'Blog'
-                //     },
-                //     {
-                //         'id': 3,
-                //         'title':'Course page'
-                //     },
-                //     {
-                //         'id': 4,
-                //         'title':'Trainer page'
-                //     },
-                //     {
-                //         'id': 5,
-                //         'title':'General'
-                //     }
-                // ],
-                // subcategories: [],
-                // published_value: null,
-                // order: true,
-                // dynamic: {
-                //     title: 'Static pages',
-                //     id: false
-                // },
             }
         },
         watch: {
