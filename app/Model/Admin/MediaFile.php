@@ -24,7 +24,10 @@ class MediaFile extends Model
      */
     public function toSearchableArray()
     {
-        return $this->toArray();
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+        ];
     }
 
     public function mediaFolder()

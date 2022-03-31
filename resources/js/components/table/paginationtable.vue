@@ -280,21 +280,23 @@
         <div class="card-body pt-0" style="overflow: auto;">
 
             <div class="row mb-1">
-                <div class="col-md-4 pt-3">
+                <div class="col-md-auto pt-3 d-flex align-items-center">
                     <input v-model="filter" type="search" class="form-control my-1 my-md-0 d-inline-block w-auto" id="inputPassword2" placeholder="Search..." style="transform: translateY(1px);"/>
                 </div>
 
-                <div class="col-md-3 pt-3">
-                    <span @click="page_value=null, refreshTable()" v-if="page_value && showFilter('page')" class="badge bg-primary ms-1 cursor-pointer">{{page_value.title.substring(0, 20)}} <i class="fa fa-times" aria-hidden="true"></i></span>
-                    <span @click="dynamic=null, refreshTable()" v-if="dynamic && showFilter('dynamic')" class="badge bg-primary ms-1 cursor-pointer">{{dynamic.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
-                    <span @click="published_value=null, refreshTable()" v-if="published_value && showFilter('visibility')" class="badge bg-primary ms-1 cursor-pointer">{{published_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
-                    <span @click="template_value=null, refreshTable()" v-if="template_value && showFilter('template')" class="badge bg-primary ms-1 cursor-pointer">{{template_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
-                    <span @click="type_value=null, refreshTable()" v-if="type_value && showFilter('type')" class="badge bg-primary ms-1 cursor-pointer">{{type_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
-                    <span @click="category_value=null, refreshTable()" v-if="category_value && showFilter('category')" class="badge bg-primary ms-1 cursor-pointer">{{category_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
-                    <span @click="subcategory_value=null, refreshTable()" v-if="subcategory_value && showFilter('subcategory')" class="badge bg-primary ms-1 cursor-pointer">{{subcategory_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
+                <div class="col-md-auto pt-3 d-flex align-items-center">
+                    <div>
+                        <span @click="page_value=null, refreshTable()" v-if="page_value && showFilter('page')" class="badge bg-primary ms-1 cursor-pointer">{{page_value.title.substring(0, 20)}} <i class="fa fa-times" aria-hidden="true"></i></span>
+                        <span @click="dynamic=null, refreshTable()" v-if="dynamic && showFilter('dynamic')" class="badge bg-primary ms-1 cursor-pointer">{{dynamic.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
+                        <span @click="published_value=null, refreshTable()" v-if="published_value && showFilter('visibility')" class="badge bg-primary ms-1 cursor-pointer">{{published_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
+                        <span @click="template_value=null, refreshTable()" v-if="template_value && showFilter('template')" class="badge bg-primary ms-1 cursor-pointer">{{template_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
+                        <span @click="type_value=null, refreshTable()" v-if="type_value && showFilter('type')" class="badge bg-primary ms-1 cursor-pointer">{{type_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
+                        <span @click="category_value=null, refreshTable()" v-if="category_value && showFilter('category')" class="badge bg-primary ms-1 cursor-pointer">{{category_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
+                        <span @click="subcategory_value=null, refreshTable()" v-if="subcategory_value && showFilter('subcategory')" class="badge bg-primary ms-1 cursor-pointer">{{subcategory_value.title}} <i class="fa fa-times" aria-hidden="true"></i></span>
+                    </div>
                 </div>
 
-                <div class="col-md-5">
+                <div class="col-md align-items-center">
 
                     <div v-if="config.create" class="text-md-end mt-md-0 d-inline-block float-end ms-2 pt-3">
                         <button @click="addNew" type="button" class="btn btn-soft-info waves-effect waves-light">
@@ -373,10 +375,14 @@
                 }"
             >
                 <template slot="visibility" slot-scope="props">
-                    <div :key="props.rowData.id"  class="form-check form-switch mb-1" style="display: inline-grid; cursor: pointer">
-                        <input :key="props.rowData.id + 'on'" @click="changePublish(props.rowData.id)" :id="props.rowData.id + 'input'" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :for="props.rowData.id + 'input'" :checked="props.rowData.published">
-  
-                    </div>
+                    <template v-if="props.rowData.dynamic == 0">
+                        <div :key="props.rowData.id"  class="form-check form-switch mb-1" style="display: inline-grid; cursor: pointer">
+                            <input :key="props.rowData.id + 'on'" @click="changePublish(props.rowData.id)" :id="props.rowData.id + 'input'" type="checkbox" class="form-check-input" name="color-scheme-mode" value="light" :for="props.rowData.id + 'input'" :checked="props.rowData.published">
+                        </div>
+                    </template>
+                    <template v-else>
+                        <span class="badge bg-warning d-inline-grid">Dynamic</span>
+                    </template>
                 </template>
 
                 <template slot="actions" slot-scope="props">
@@ -759,13 +765,14 @@ export default {
     mounted() {
         this.perPage = this.config.perPage;
         this.getWidgets();
-
+    },
+    created() {
         if (this.config.apiUrl == "/api/pages") {
             this.published_value = {
                 title: 'Published',
                 id: 1
             };
         }
-    },
+    }
 };
 </script>

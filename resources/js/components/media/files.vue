@@ -2,7 +2,7 @@
 <div>
     <div v-if="view == 'list'" class="mt-3">
         <h5 class="mb-3">Files</h5>
-        <div class="table-responsive">
+        <div style="overflow-x: auto;">
             <table class="table table-centered table-nowrap mb-0">
                 <thead class="table-light">
                     <tr>

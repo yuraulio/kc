@@ -40,7 +40,7 @@ export default {
             formatter (value) {
                 var template = "";
                 if (value) {
-                    template = "<a href='/template/" + value.id + "'><span class='badge bg-primary'>" + value.title + "</span></a> &nbsp";
+                    template = "<a class='position-absolute' style='display: contents;' href='/template/" + value.id + "'><span class='badge bg-primary'>" + value.title + "</span></a>";
                 }
                 return template;
             },
