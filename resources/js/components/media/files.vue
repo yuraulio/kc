@@ -16,7 +16,7 @@
                 </thead>
                 <tbody>
                     <tr v-for="file in mediaFiles" :key="file.id">
-                        <td @click="openFile(file)" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                        <td @click="openFile(file)" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer;">
                             <span v-if="file.extension == 'pdf'" class="bg-light text-secondary rounded">
                                 <i class="mdi mdi-file-pdf-outline font-28"></i>
                             </span>
@@ -24,7 +24,7 @@
                             <img v-else :src="file.url" alt="image" class="img-fluid avatar-sm rounded mt-2" style="width: 100px; height: auto;" />
                         </td>
                         <td>
-                            <span class="ms-2 fw-normal"><a href="javascript: void(0);" class="text-reset">{{file.name}}</a></span>
+                            <span class="ms-2 fw-normal">{{file.name}}</span>
                         </td>
                         <td>
                             {{ file.pages_count }}

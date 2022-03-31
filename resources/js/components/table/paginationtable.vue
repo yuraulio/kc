@@ -14,6 +14,10 @@
         right:0!important; 
         left: auto!important;
     }
+    .form-check-input:checked {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
 </style>
 
 <template>

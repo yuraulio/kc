@@ -95,6 +95,9 @@ Vue.component('page-edit', require('./components/page-edit.vue').default);
 Vue.component('page-new', require('./components/page-new.vue').default);
 Vue.component('page-edit-simple', require('./components/page-edit-simple.vue').default);
 
+import VueClipboard from 'vue-clipboard2'
+VueClipboard.config.autoSetContainer = true // add this line
+Vue.use(VueClipboard)
 
 new Vue({
    el: '#app'

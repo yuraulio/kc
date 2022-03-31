@@ -259,7 +259,7 @@ export default {
             default: true
         },
         mode: {
-            default: 'single'
+            default: null
         }
     },
     mixins: [mediaMixin],

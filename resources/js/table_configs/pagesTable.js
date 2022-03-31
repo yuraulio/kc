@@ -40,7 +40,7 @@ export default {
             formatter (value) {
                 var template = "";
                 if (value) {
-                    template = "<a class='position-absolute' style='display: contents;' href='/template/" + value.id + "'><span class='badge bg-primary'>" + value.title + "</span></a>";
+                    template = "<a class='position-absolute' style='display: contents;' href='/template/" + value.id + "'><span class='badge bg-warning'>" + value.title + "</span></a>";
                 }
                 return template;
             },
@@ -67,21 +67,21 @@ export default {
             dataClass: 'align-middle',
             titleClass: ''
         },
-        {
-            name: 'subcategories',
-            title: 'Subcategories' + '<i title="Column cant be sorted." class="fa fa-info-circle text-muted ms-1"></i>',
-            formatter (value) {
-                var subcategories = "";
-                if (value && value != []) {
-                    value.forEach(function(subcategory) {
-                        subcategories = subcategories + "<span class='badge bg-primary'>" + subcategory.title + "</span> &nbsp";
-                    });
-                }
-                return subcategories;
-            },
-            dataClass: 'align-middle',
-            titleClass: ''
-        },
+        // {
+        //     name: 'subcategories',
+        //     title: 'Subcategories' + '<i title="Column cant be sorted." class="fa fa-info-circle text-muted ms-1"></i>',
+        //     formatter (value) {
+        //         var subcategories = "";
+        //         if (value && value != []) {
+        //             value.forEach(function(subcategory) {
+        //                 subcategories = subcategories + "<span class='badge bg-primary'>" + subcategory.title + "</span> &nbsp";
+        //             });
+        //         }
+        //         return subcategories;
+        //     },
+        //     dataClass: 'align-middle',
+        //     titleClass: ''
+        // },
         {
             name: 'created_at',
             title: 'Created at',

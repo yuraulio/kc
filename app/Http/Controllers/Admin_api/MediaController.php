@@ -255,7 +255,7 @@ class MediaController extends Controller
                 $width_offset = $crop_data->left * (1 / $request->width_ratio);
 
                 $image->crop((int) $crop_width, (int) $crop_height, (int) $width_offset, (int) $height_offset);
-                $image->save(public_path("/uploads" . $mediaFolder->path . $image_name));
+                $image->save(public_path("/uploads" . $mediaFolder->path . "/" . $image_name));
 
                 $size = $image ? $image->filesize() : null;
             }
@@ -326,7 +326,7 @@ class MediaController extends Controller
 
     public function editFile($parent_id, $version, $name, $path, $folderId, $size, $parent = null, $alttext = "", $link = "")
     {
-        $mediaFile = MediaFile::whereParentId($parent_id)->whereVersion($version)->first();
+        $mediaFile = MediaFile::whereParentId($parent_id)->whereVersion($version)->firstOrCreate();
 
         $oldPath = $mediaFile->path;
 
@@ -454,15 +454,14 @@ class MediaController extends Controller
                 Storage::disk('public')->makeDirectory($path);
             }
 
-            $mediaFolder = MediaFolder::whereName("random")->first();
-            if (!$mediaFolder) {
-                $mediaFolder = new MediaFolder();
-                $mediaFolder->name = "random";
-                $mediaFolder->path = $path;
-                $mediaFolder->url = config('app.url') . "/uploads" . $path;
-                $mediaFolder->user_id = Auth::user()->id;
-                $mediaFolder->save();
-            }
+            $mediaFolder = MediaFolder::whereName("random")->firstOrCreate();
+
+            $mediaFolder->name = "random";
+            $mediaFolder->path = $path;
+            $mediaFolder->url = config('app.url') . "/uploads" . $path;
+            $mediaFolder->user_id = Auth::user()->id;
+            $mediaFolder->save();
+            
             $path = $mediaFolder->path . "/";
         }
 

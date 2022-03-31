@@ -104,8 +104,11 @@
                             <img @click="version='original'; selectedVersion=null; imgname=parrentImage.name; alttext=parrentImage.alt_text; link=parrentImage.link" crossorigin="anonymous" :src="parrentImage ? parrentImage.full_path : ''" alt="image" class="img-fluid rounded" />
                             <hr>
 
-                            <template v-for="version1 in versions">
-                                <h5>{{ version1.version }}</h5>
+                            <template v-for="(version1, index) in versions">
+                                <h5 class="">
+                                    {{ version1.version }}
+                                    <i v-if="findVersionData(version1.version)" @click="deleteFile(findVersionData(version1.version), index)" class="mdi mdi-delete text-muted vertical-middle cursor-pointer"></i>
+                                </h5>
                                 <p class="text-muted d-block mb-2">{{ version1.description }}</p>
                                 <template v-if="findVersionData(version1.version) != null">
                                     <img @click="version=version1.version; selectedVersion=version1; versionSelected();" crossorigin="anonymous" :src="findVersionData(version1.version).full_path" alt="image" class="img-fluid rounded" />
@@ -284,13 +287,19 @@ export default {
 
                 this.versionData = this.findVersionData(this.selectedVersion.version);
                 this.imgname = this.versionData ? this.versionData.name : "";
-                this.alttext = this.versionData.alt_text ? this.versionData.alt_text : "";
+                this.alttext = this.versionData ? this.versionData.alt_text : "";
                 this.link = this.versionData ? this.versionData.link : "";
 
                 if (this.imgname == "") {
                     var tmp = this.parrentImage.name.split(".");
                     var extension = tmp[tmp.length - 1];
                     this.imgname = tmp[0] + "-" + this.version + "." + extension;
+                }
+                if (this.alttext == "") {
+                    this.alttext = this.originalFile.alt_text;
+                }
+                if (this.link == "") {
+                    this.link = this.originalFile.link;
                 }
 
             }
@@ -324,7 +333,6 @@ export default {
         },
         upload(event) {
             this.getCropBoxData();
-            console.log(this.cropBoxData);
             this.$refs.cropper.getCroppedCanvas({
                 width: this.cropBoxData.width,
                 height: this.cropBoxData.height,
@@ -435,6 +443,13 @@ export default {
                 }
             });
             return return_value;
+        },
+        deleteFile(file, index) {
+            file.parent = file.parent_id;
+            this.$parent.$parent.deleteFile(file);
+        },
+        updateUploadedVersions() {
+            this.uploadedVersions = this.parrentImage.subfiles;
         }
     },
     beforeDestroy() {

@@ -466,6 +466,9 @@ export default {
     }
 </script>
 
-<style>
-
+<style scoped>
+    .form-check-input:checked {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
 </style>

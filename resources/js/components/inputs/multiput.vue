@@ -23,7 +23,7 @@
             </div> <!-- end offcanvas-header-->
 
             <div class="offcanvas-body" style="padding: 0px !important">
-                <media-manager v-if="loadstart[(keyput + 'media')]" :loadstart="loadstart[(keyput + 'media')]" @updatedimg="updatedmedia($event,(keyput + 'media'))" :key="keyput"></media-manager>
+                <media-manager v-if="loadstart[(keyput + 'media')]" mode="single" :loadstart="loadstart[(keyput + 'media')]" @updatedimg="updatedmedia($event,(keyput + 'media'))" :key="keyput"></media-manager>
             </div> <!-- end offcanvas-body-->
         </div>
         <div class="text-center">
@@ -56,20 +56,26 @@
         </div>
         <div class="text-center">
             <div class="d-grid text-center" v-if="value" style="display: block;">
-                <div class="row" >
-                    <div v-for="val in value" class="col-sm-3">
-                            <img @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" :src="val.url" alt="image" class="img-fluid img-thumbnail" width="200" height="200">
-                            <p class="mb-0">
-                                <code>
-                                    <template v-if="val.name.length < 50">
-                                        {{ val.name }}
-                                    </template>
-                                    <template v-else>
-                                        {{ limit(val.name, 50) }}...
-                                    </template>
-                                </code>
-                            </p>
-                        </div>
+                <div class="row">
+                    <div v-for="(val, index) in value" class="col-sm-3 mb-2">
+                        <img @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" :src="val.url" alt="image" class="img-fluid img-thumbnail" width="200" height="200">
+                        <p class="mb-0">
+                            <code>
+                                <template v-if="val.name.length < 50">
+                                    {{ val.name }}
+                                </template>
+                                <template v-else>
+                                    {{ limit(val.name, 50) }}...
+                                </template>
+                                
+                            </code>
+                            <i @click="removeGalleryImage(index)" class="mdi mdi-delete text-muted vertical-middle"></i>
+                        </p>
+                    </div>
+                    <div class="col-sm-3">
+                        <i @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" class="text-muted dripicons-photo-group d-none image-input-icon" style="font-size: 100px;"></i>
+                        <button @click="$set(loadstart, (keyput + 'media'),  true)" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" aria-controls="offcanvasScrolling"  class="btn btn-soft-primary image-input-button">Add Media</button>
+                    </div>
                 </div>
             </div>
             <div v-else>
@@ -264,18 +270,23 @@ export default {
             console.log(this.$refs[ref+'btn'])
         },
         updatedgallery($event, ref) {
-            var gallery = [];
-            $event.forEach(function(image){
-                var image_data = {
-                    url: image.url,
-                    full_path: image.full_path,
-                    alt_text: image.alt_text,
-                    link: image.link,
-                    name: image.name,
-                }
-                gallery.push(image_data);
-            });
-            this.$emit('inputed', { 'data': gallery, 'key': this.keyput})
+            var data;
+            if (!this.value) {
+                data = [];
+            } else {
+                data = this.value;
+            }
+
+            var image_data = {
+                url: $event.url,
+                full_path: $event.full_path,
+                alt_text: $event.alt_text,
+                link: $event.link,
+                name: $event.name,
+            }
+            data.push(image_data);
+
+            this.$emit('inputed', { 'data': data, 'key': this.keyput})
             this.$refs[ref+'btn'].click()
             this.$set(this.loadstart, ref,  false);
         },
@@ -303,6 +314,9 @@ export default {
         },
         limit (string = '', limit = 0) {
             return string.substring(0, limit)
+        },
+        removeGalleryImage(index) {
+            this.value.splice(index, 1);
         }
     },
     watch: {

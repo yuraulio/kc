@@ -257,7 +257,6 @@ var mediaMixin = {
         },
         imageEdit($event) {
             var id = this.selectedFile.id;
-            this.currentImage = $event;
             var formData = new FormData();
             formData.append('imgname', this.$refs.crpr.imgname);
             formData.append('alttext', this.$refs.crpr.alttext);
@@ -267,9 +266,7 @@ var mediaMixin = {
             formData.append('crop_data', JSON.stringify(this.$refs.crpr.cropBoxData));
             formData.append('width_ratio', this.$refs.crpr.width_ratio);
             formData.append('height_ratio', this.$refs.crpr.height_ratio);
-            if (this.selectedFolder) {
-                formData.append('directory', this.selectedFolder.id);
-            }
+            formData.append('directory', this.selectedFile.folder_id);
             this.$refs.crpr.isUploading = true;
             axios.post('/api/media_manager/edit_image', formData, {
                 headers: {
@@ -279,7 +276,7 @@ var mediaMixin = {
                 this.$toast.success('Uploaded Successfully!');
                 this.getFiles(response.data.data.folder_id);
                 this.$refs.crpr.isUploading = false;
-                this.$modal.hide('edit-image-modal');
+                // this.$modal.hide('edit-image-modal');
             })
             .catch((error) => {
                 console.log(error)
@@ -332,7 +329,8 @@ var mediaMixin = {
                                     'Deleted!',
                                     'Folder has been deleted.',
                                     'success'
-                                )
+                                );
+                                this.selectedFolder = null;
                             }
                             this.getFolders();
                             this.getFiles();
@@ -398,9 +396,9 @@ var mediaMixin = {
                     }
                 })
                 .then((response) => {
-                    console.log(response.data);
                     this.mediaFiles = response.data.data;
                     this.loading = false;
+                    this.updateSelectedFile();
                 })
                 .catch((error) => {
                     console.log(error)
@@ -418,7 +416,7 @@ var mediaMixin = {
             if (pages_count) {
                 pagesText = pagesText + "This image is used on" + pages_count + " pages.";
             }
-            if ($event.parrent == null) {
+            if ($event.parent == null) {
                 pagesText = pagesText + "This this is an original image, this action will delete all its subimages that exist.";
             }
             Swal.fire({
@@ -457,6 +455,15 @@ var mediaMixin = {
                     )
                 }
             })
+        },
+        updateSelectedFile() {
+            if (this.selectedFile) {
+                var oldFile = this.selectedFile;
+                var index = this.mediaFiles.findIndex(function(file) {
+                    return file.id == oldFile.id;
+                });
+                this.selectedFile = this.mediaFiles[index];
+            }
         }
     }
 }
