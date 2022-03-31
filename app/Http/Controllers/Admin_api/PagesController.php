@@ -35,34 +35,10 @@ class PagesController extends Controller
         $this->authorize('viewAny', Page::class, Auth::user());
         try {
             $pages = Page::withoutGlobalScope('published')
-                ->lookForOriginal($request->filter)
                 ->with('template', 'categories.subcategories')
                 ->tableSort($request);
 
-            if ($request->dynamic !== null) {
-                $pages->where("dynamic", $request->dynamic == "true" ? true : false);
-            }
-            if ($request->template !== null) {
-                $pages->whereHas("template", function ($q) use ($request) {
-                    $q->where("id", $request->template);
-                });
-            }
-            if ($request->published !== null) {
-                $pages->wherePublished($request->published);
-            }
-            if ($request->type !== null) {
-                $pages->whereType($request->type);
-            }
-            if ($request->category) {
-                $pages->whereHas("categories", function ($q) use ($request) {
-                    $q->where("id", $request->category);
-                });
-            }
-            if ($request->subcategory) {
-                $pages->whereHas("subcategories", function ($q) use ($request) {
-                    $q->where("id", $request->subcategory);
-                });
-            }
+            $pages = $this->filters($request, $pages);
             
             $pages = $pages->paginate($request->per_page ?? 50);
             return PageResource::collection($pages);
@@ -70,6 +46,36 @@ class PagesController extends Controller
             Log::error("Failed to get pages. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
         }
+    }
+
+    private function filters($request, $pages)
+    {
+        $pages->lookForOriginal($request->filter);
+        if ($request->dynamic !== null) {
+            $pages->where("dynamic", $request->dynamic == "true" ? true : false);
+        }
+        if ($request->template !== null) {
+            $pages->whereHas("template", function ($q) use ($request) {
+                $q->where("id", $request->template);
+            });
+        }
+        if ($request->published !== null) {
+            $pages->wherePublished($request->published);
+        }
+        if ($request->type !== null) {
+            $pages->whereType($request->type);
+        }
+        if ($request->category) {
+            $pages->whereHas("categories", function ($q) use ($request) {
+                $q->where("id", $request->category);
+            });
+        }
+        if ($request->subcategory) {
+            $pages->whereHas("subcategories", function ($q) use ($request) {
+                $q->where("id", $request->subcategory);
+            });
+        }
+        return $pages;
     }
 
     /**
@@ -344,63 +350,71 @@ class PagesController extends Controller
         }
     }
 
-    public function widgets()
+    public function widgets(Request $request)
     {
         return [
             [
                 "Pages",
-                $this->pagesCount(),
+                $this->pagesCount($request),
             ],
             [
                 "Published pages",
-                $this->publishedPagesCount(),
+                $this->publishedPagesCount($request),
             ],
             [
                 "Unpublished pages",
-                $this->unpublishedPagesCount(),
+                $this->unpublishedPagesCount($request),
             ],
             [
                 "Blog articles",
-                $this->articlePagesCount(),
+                $this->articlePagesCount($request),
             ]
 
         ];
     }
 
-    public function pagesCount()
+    public function pagesCount($request)
     {
         try {
-            return Page::withoutGlobalScope('published')->count();
+            $pages = Page::withoutGlobalScope('published');
+            $pages = $this->filters($request, $pages);
+            return $pages->count();
         } catch (Exception $e) {
             Log::warning("(pages widget) Failed to get pages count. " . $e->getMessage());
             return "0";
         }
     }
 
-    public function publishedPagesCount()
+    public function publishedPagesCount($request)
     {
         try {
-            return Page::count();
+            $pages = Page::withoutGlobalScope('published')->wherePublished(true);
+            $pages = $this->filters($request, $pages);
+            return $pages->count();
         } catch (Exception $e) {
             Log::warning("(pages widget) Failed to get published pages count. " . $e->getMessage());
             return "0";
         }
     }
 
-    public function unpublishedPagesCount()
+    public function unpublishedPagesCount($request)
     {
         try {
-            return Page::withoutGlobalScope('published')->wherePublished(false)->count();
+            $pages = Page::withoutGlobalScope('published')->wherePublished(false);
+            $pages = $this->filters($request, $pages);
+            return $pages->count();
         } catch (Exception $e) {
             Log::warning("(pages widget) Failed to get ubpublished pages count. " . $e->getMessage());
             return "0";
         }
     }
 
-    public function articlePagesCount()
+    public function articlePagesCount($request)
     {
         try {
-            return Page::withoutGlobalScope('published')->whereType("Blog")->count();
+            $pages = Page::withoutGlobalScope('published')->whereType("Blog");
+            $pages = $this->filters($request, $pages);
+            return $pages->count();
         } catch (Exception $e) {
             Log::warning("(pages widget) Failed to get ubpublished pages count. " . $e->getMessage());
             return "0";

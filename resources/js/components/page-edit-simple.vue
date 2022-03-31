@@ -175,11 +175,11 @@
             </template>
         </template>
 
-        <div class="text-center">
+        <div v-if="tab != 'Meta'" class="text-center">
             <i @click.prevent="addCustomComponent" class="dripicons-plus add-component-icon"></i>
         </div>
 
-        <div v-if="isBasicEditorEmpty()" class="text-center mt-3">
+        <div v-if="isBasicEditorEmpty() && tab != 'Meta'" class="text-center mt-3">
             <p>
                 There are no basic component to edit. Add a new basic component or switch to Advanced Mode.
             </p>

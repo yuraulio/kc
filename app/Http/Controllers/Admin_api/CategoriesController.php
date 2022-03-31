@@ -28,8 +28,10 @@ class CategoriesController extends Controller
         $this->authorize('viewAny', Category::class, Auth::user());
 
         try {
-            $categories = Category::lookForOriginal($request->filter)
-            ->where("parent_id", null);
+            $categories = Category::where("parent_id", null);
+
+            $categories = $this->filters($categories, $request);
+
             $categories->with(["pages", "subcategories", "user"]);
             $categories->tableSort($request);
             $categories = $categories->paginate($request->per_page ?? 50);
@@ -38,6 +40,12 @@ class CategoriesController extends Controller
             Log::error("Failed to get categories. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
         }
+    }
+
+    private function filters($categories, $request)
+    {
+        $categories->lookForOriginal($request->filter);
+        return $categories;
     }
 
     /**
@@ -209,65 +217,76 @@ class CategoriesController extends Controller
         }
     }
 
-    public function widgets()
+    public function widgets(Request $request)
     {
         return [
             [
                 "Categories",
-                $this->categoryCount(),
+                $this->categoryCount($request),
             ],
             [
                 "Subcategories",
-                $this->subcategoryCount(),
+                $this->subcategoryCount($request),
             ],
             [
                 "Popular category",
-                $this->popularCategory(),
+                $this->popularCategory($request),
             ],
             [
                 "Popular subcategory",
-                $this->popularSubcategory(),
+                $this->popularSubcategory($request),
             ]
 
         ];
     }
 
-    public function categoryCount()
+    public function categoryCount($request)
     {
         try {
-            return Category::where("parent_id", null)->count();
+            $categories = Category::where("parent_id", null);
+            $categories = $this->filters($categories, $request);
+            return $categories->count();
         } catch (Exception $e) {
             Log::warning("(categories widget) Failed to get category count. " . $e->getMessage());
             return "0";
         }
     }
 
-    public function subcategoryCount()
+    public function subcategoryCount($request)
     {
         try {
-            return Category::where("parent_id", '!=', null)->count();
+            // this does not work, full text search is being done on categories and subcategories, that messes it up
+            $categories = Category::where("parent_id", '!=', null);
+            $categories = $this->filters($categories, $request);
+            return $categories->count();
         } catch (Exception $e) {
             Log::warning("(categories widget) Failed to get subcategory count. " . $e->getMessage());
             return "0";
         }
     }
 
-    public function popularCategory()
+    public function popularCategory($request)
     {
         try {
-            return Category::where("parent_id", null)->with('pages')->get()->sortByDesc(function ($category) {
+            $categories = Category::where("parent_id", null);
+            $categories = $this->filters($categories, $request);
+            $categories->where("parent_id", null)->with('pages')->get()->sortByDesc(function ($category) {
                 return $category->pages->count();
-            })->first()->title;
+            });
+            return $categories->first()->title;
         } catch (Exception $e) {
             Log::warning("(categories widget) Failed to get most popular category. " . $e->getMessage());
             return "-";
         }
     }
 
-    public function popularSubcategory()
+    public function popularSubcategory($request)
     {
         try {
-            return Category::where("parent_id", '!=', null)->with('pages')->get()->sortByDesc(function ($category) {
+            // this does not work, full text search is being done on categories and subcategories, that messes it up
+            $categories = Category::where("parent_id", '!=', null);
+            $categories = $this->filters($categories, $request);
+            return $categories->where("parent_id", '!=', null)->with('pages')->get()->sortByDesc(function ($category) {
                 return $category->pages->count();
             })->first()->title;
         } catch (Exception $e) {

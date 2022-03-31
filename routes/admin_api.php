@@ -22,28 +22,28 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
 
         // categories
         Route::post('categories/deleteMultiple', [CategoriesController::class, 'deleteMultiple']);
-        Route::get('categories/widgets', [CategoriesController::class, 'widgets']);
+        Route::post('categories/widgets', [CategoriesController::class, 'widgets']);
         Route::resource('categories', Admin_api\CategoriesController::class)->only([
             'index', 'store', 'update', 'show', 'destroy'
         ]);
 
         // templates
         Route::post('templates/deleteMultiple', [TemplatesController::class, 'deleteMultiple']);
-        Route::get('templates/widgets', [TemplatesController::class, 'widgets']);
+        Route::post('templates/widgets', [TemplatesController::class, 'widgets']);
         Route::resource('templates', Admin_api\TemplatesController::class)->only([
             'index', 'store', 'update', 'show', 'destroy'
         ]);
 
         // pages
         Route::post('pages/deleteMultiple', [PagesController::class, 'deleteMultiple']);
-        Route::get('pages/widgets', [PagesController::class, 'widgets']);
+        Route::post('pages/widgets', [PagesController::class, 'widgets']);
         Route::resource('pages', Admin_api\PagesController::class)->only([
             'index', 'store', 'update', 'show', 'destroy'
         ]);
 
         // comments
         Route::post('comments/deleteMultiple', [CommentsController::class, 'deleteMultiple']);
-        Route::get('comments/widgets', [CommentsController::class, 'widgets']);
+        Route::post('comments/widgets', [CommentsController::class, 'widgets']);
         Route::resource('comments', Admin_api\CommentsController::class)->only([
             'index', 'destroy'
         ]);

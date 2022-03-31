@@ -28,18 +28,26 @@ class TemplatesController extends Controller
         $this->authorize('viewAny', Template::class, Auth::user());
 
         try {
-            $templates = Template::lookForOriginal($request->filter)
-                    ->with(["pages", "user"])
-                    ->tableSort($request);
-            if ($request->dynamic !== null) {
-                $templates->where("dynamic", $request->dynamic == "true" ? true : false);
-            }
+            $templates = Template::with(["pages", "user"])
+                ->with(["pages", "user"])
+                ->tableSort($request);
+
+            $templates = $this->filters($templates, $request);
             $templates = $templates->paginate($request->per_page ?? 50);
             return TemplateResource::collection($templates);
         } catch (Exception $e) {
             Log::error("Failed to get templates. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
         }
+    }
+
+    private function filters($templates, $request)
+    {
+        $templates->lookForOriginal($request->filter);
+        if ($request->dynamic !== null) {
+            $templates->where("dynamic", $request->dynamic == "true" ? true : false);
+        }
+        return $templates;
     }
 
     /**
@@ -151,65 +159,74 @@ class TemplatesController extends Controller
         }
     }
 
-    public function widgets()
+    public function widgets(Request $request)
     {
         return [
             [
                 "Templates",
-                $this->templatesCount(),
+                $this->templatesCount($request),
             ],
             [
                 "Popular template",
-                $this->popularTemplate(),
+                $this->popularTemplate($request),
             ],
             [
                 "Newest template",
-                $this->newestTemplate(),
+                $this->newestTemplate($request),
             ],
             [
                 "Oldest template",
-                $this->oldestTemplate(),
+                $this->oldestTemplate($request),
             ]
 
         ];
     }
 
-    public function templatesCount()
+    public function templatesCount($request)
     {
         try {
-            return Template::count();
+            $templates = Template::tableSort($request);
+            $templates = $this->filters($templates, $request);
+            return $templates->count();
         } catch (Exception $e) {
             Log::warning("(templates widget) Failed to get templates count. " . $e->getMessage());
             return "0";
         }
     }
 
-    public function popularTemplate()
+    public function popularTemplate($request)
     {
         try {
-            return Template::with('pages')->get()->sortByDesc(function ($category) {
+            $templates = Template::tableSort($request);
+            $templates = $this->filters($templates, $request);
+            $templates = $templates->get()->sortByDesc(function ($category) {
                 return $category->pages->count();
-            })->first()->title;
+            });
+            return $templates->first()->title;
         } catch (Exception $e) {
             Log::warning("(templates widget) Failed to get most popular template. " . $e->getMessage());
             return "-";
         }
     }
 
-    public function newestTemplate()
+    public function newestTemplate($request)
     {
         try {
-            return Template::orderByDesc("created_at")->first()->title;
+            $templates = Template::tableSort($request);
+            $templates = $this->filters($templates, $request);
+            return $templates->orderByDesc("created_at")->first()->title;
         } catch (Exception $e) {
             Log::warning("(templates widget) Failed to find newest template. " . $e->getMessage());
             return "-";
         }
     }
 
-    public function oldestTemplate()
+    public function oldestTemplate($request)
     {
         try {
-            return Template::orderBy("created_at")->first()->title;
+            $templates = Template::tableSort($request);
+            $templates = $this->filters($templates, $request);
+            return $templates->orderBy("created_at")->first()->title;
         } catch (Exception $e) {
             Log::warning("(templates widget) Failed to find oldest template. " . $e->getMessage());
             return "-";

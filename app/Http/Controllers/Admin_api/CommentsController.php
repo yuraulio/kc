@@ -34,21 +34,27 @@ class CommentsController extends Controller
         $this->authorize('viewAny', Comment::class, Auth::user());
 
         try {
-            $comments = Comment::lookForOriginal($request->filter)
-                ->with(["page", "user"])
-                ->tableSort($request);
+            $comments = Comment::tableSort($request);
 
-            if ($request->pagefilter !== null) {
-                $comments->whereHas("page", function ($q) use ($request) {
-                    $q->where("id", $request->pagefilter);
-                });
-            }
+            $comments = $this->filters($request, $comments);
+
             $comments = $comments->paginate($request->per_page ?? 50);
             return CommentResource::collection($comments);
         } catch (Exception $e) {
             Log::error("Failed to get comments. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
         }
+    }
+
+    private function filters($request, $comments)
+    {
+        $comments->lookForOriginal($request->filter)->with(["page", "user"]);
+        if ($request->pagefilter !== null) {
+            $comments->whereHas("page", function ($q) use ($request) {
+                $q->where("id", $request->pagefilter);
+            });
+        }
+        return $comments;
     }
 
     /**
@@ -122,62 +128,78 @@ class CommentsController extends Controller
         }
     }
 
-    public function widgets()
+    public function widgets(Request $request)
     {
         return [
             [
                 "Comments",
-                $this->commentCount(),
+                $this->commentCount($request),
             ],
             [
                 "Popular page",
-                $this->popularPage(),
+                $this->popularPage($request),
             ],
             [
                 "Last comment",
-                $this->lastCommentCreated(),
+                $this->lastCommentCreated($request),
             ],
             [
                 "Popular user",
-                $this->popularUser(),
+                $this->popularUser($request),
             ]
 
         ];
     }
 
-    public function commentCount()
+    public function commentCount($request)
     {
-        return Comment::count();
+        $comments = Comment::tableSort($request);
+        $comments = $this->filters($request, $comments);
+        return $comments->count();
     }
 
-    public function popularPage()
+    public function popularPage($request)
     {
         try {
-            return Page::with('comments')->get()->sortByDesc(function ($page) {
+            $pages = Page::withoutGlobalScope('published');
+
+            if ($request->pagefilter !== null) {
+                $pages->where("id", $request->pagefilter);
+            }
+            $pages = $pages->get();
+            // this does not work, dont know why
+            $pages->sortByDesc(function ($page) {
                 return $page->comments->count();
-            })->first()->title;
+            });
+            return $pages->first()->title;
         } catch (Exception $e) {
             Log::warning("(comments widget) Failed to find popular comments page. " . $e->getMessage());
             return "-";
         }
     }
 
-    public function lastCommentCreated()
+    public function lastCommentCreated($request)
     {
         try {
-            $created_at = Comment::orderByDesc("created_at")->first()->created_at;
-            return $created_at->diffForHumans();
+            $comments = Comment::tableSort($request);
+            $comments = $this->filters($request, $comments);
+            $comments = $comments->orderByDesc("created_at")->first();
+            return $comments->created_at->diffForHumans();
         } catch (Exception $e) {
             Log::warning("(comments widget) Failed to find last comment created. " . $e->getMessage());
             return "-";
         }
     }
 
-    public function popularUser()
+    public function popularUser($request)
     {
         try {
-            $user = User::with('usersComments')->get()->sortByDesc(function ($user) {
-                return $user->usersComments->count();
+            $user = User::with('usersComments')->get()->sortByDesc(function ($user) use ($request) {
+                $data = $user->usersComments;
+                if ($request->pagefilter !== null) {
+                    $data = $data->where("page_id", $request->pagefilter);
+                }
+                return $data->count();
             })->first();
             return $user->firstname . " " . $user->lastname;
         } catch (Exception $e) {

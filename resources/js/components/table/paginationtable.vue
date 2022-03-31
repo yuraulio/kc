@@ -363,7 +363,7 @@
                 @vuetable:pagination-data="onPaginationData" 
                 @vuetable:initialized="onInitialized" 
                 @vuetable:loading="showLoader" 
-                @vuetable:loaded="hideLoader"
+                @vuetable:loaded="getWidgets"
                 @vuetable:checkbox-toggled="showMultiselectActions"
                 @vuetable:checkbox-toggled-all="selectAllItems"
                 :per-page="config.perPage"
@@ -697,10 +697,21 @@ export default {
         },
         getWidgets() {
             axios
-            .get(this.config.apiUrl + '/widgets')
+            .post(this.config.apiUrl + '/widgets',
+            {
+                filter: this.filter ? this.filter : null,
+                dynamic: this.dynamic ? this.dynamic.id : null,
+                published: this.published_value ? this.published_value.id : null,
+                template: this.template_value ? this.template_value.id : null,
+                type: this.type_value ? this.type_value.title : null,
+                category: this.category_value ? this.category_value.id : null,
+                subcategory: this.subcategory_value ? this.subcategory_value.id : null,
+                pagefilter: this.page_value ? this.page_value.id : null,
+            })
             .then((response) => {
                 if (response.status == 200) {
                     this.widgets = response.data;
+                    this.hideLoader();
                 }
             })
             .catch((error) => {
@@ -724,27 +735,27 @@ export default {
         },
         update_dynamic(value) {
             this.dynamic = value;
-            this.$nextTick(() => this.$refs.vuetable.refresh());
+            this.refreshTable();
         },
         update_published(value){
             this.published_value = value;
-            this.$nextTick(() => this.$refs.vuetable.refresh());
+            this.refreshTable();
         },
         update_template(value){
             this.template_value = value;
-            this.$nextTick(() => this.$refs.vuetable.refresh());
+            this.refreshTable();
         },
         update_type(value){
             this.type_value = value;
-            this.$nextTick(() => this.$refs.vuetable.refresh());
+            this.refreshTable();
         },
         update_page(value){
             this.page_value = value;
-            this.$nextTick(() => this.$refs.vuetable.refresh());
+            this.refreshTable();
         },
         update_category(value){
             this.category_value = value;
-            this.$nextTick(() => this.$refs.vuetable.refresh());
+            this.refreshTable();
 
             var subcategories = [];
             if (this.category_value) {
@@ -756,10 +767,11 @@ export default {
         },
         update_subcategory(value){
             this.subcategory_value = value;
-            this.$nextTick(() => this.$refs.vuetable.refresh());
+            this.refreshTable();
         },
         refreshTable() {
             this.$nextTick(() => this.$refs.vuetable.refresh());
+            this.getWidgets();
         },
         showFilter(filter){
             var index = this.config.filters.indexOf(filter);
