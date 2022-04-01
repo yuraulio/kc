@@ -37,7 +37,7 @@ class MainController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function page(String $slug): View
+    public function page(String $slug, Request $request)
     {
         $dynamic_page_data = null;
 
@@ -63,7 +63,10 @@ class MainController extends Controller
         }
 
         if (!$page) {
-            abort(404);
+            Log::warning("Failed to find page in new routes. URL:" . $request->path() . " Method:" . $request->method());
+            session()->flash('404redirect', 'Not found in new routes');
+            return redirect($request->path(), 302);
+        // abort(404);
         } else {
             return view('new_web.page', [
                 'content' => json_decode($page->content),
