@@ -19,7 +19,7 @@
     }
 @endphp
 
-<section class="section-hero {{ $small ? 'section-hero-small' : '' }}" style="background-image:url({{ $image }})">
+<section class="section-hero {{ $small ? 'section-hero-small' : '' }}" style="background-image:url({{ !$small ? $image : '' }})">
     @if (!$small)
         <div class="overlay"></div>
     @endif

@@ -6621,14 +6621,14 @@ body.compensate-for-scrollbar { overflow: hidden; }
 .background-blue_gradient {
     background: linear-gradient(90deg, rgba(63,111,182,1) 0%, rgba(65,156,255,1) 100%);
 }
-.background-blue_gradient .content-text-area {
+.background-blue_gradient * {
     color: #fff;
 }
 
 .background-blue {
     background: rgb(48, 114, 202);
 }
-.background-blue .content-text-area {
+.background-blue * {
     color: #fff;
 }
 
@@ -6714,6 +6714,7 @@ body.compensate-for-scrollbar { overflow: hidden; }
         justify-content: center!important;
     }
 }
+
 @charset "UTF-8";
 /*
 Template Name: Ubold - Responsive Bootstrap 4 Admin Dashboard

@@ -1,62 +1,64 @@
 <template>
 <div>
-    <div v-if="view == 'list'" class="mt-3">
+    <div v-if="view == 'list'" class="mt-3" style="overflow-x: auto;">
         <h5 class="mb-3">Files</h5>
-        <div style="overflow-x: auto;">
-            <table class="table table-centered table-nowrap mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th class="border-0">Image</th>
-                        <th class="border-0">Name</th>
-                        <th class="border-0">Pages</th>
-                        <th class="border-0">Last Modified</th>
-                        <th class="border-0">Size</th>
-                        <th class="border-0" style="width: 80px">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="file in mediaFiles" :key="file.id">
-                        <td @click="openFile(file)" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer;">
-                            <span v-if="file.extension == 'pdf'" class="bg-light text-secondary rounded">
-                                <i class="mdi mdi-file-pdf-outline font-28"></i>
-                            </span>
+        <div class="d-flex" style="">
+            <div class="d-flex" style="align-items: end; width: 100%;">
+                <table class="table table-centered table-nowrap mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="border-0">Image</th>
+                            <th class="border-0">Name</th>
+                            <th class="border-0">Pages</th>
+                            <th class="border-0">Last Modified</th>
+                            <th class="border-0">Size</th>
+                            <th class="border-0" style="width: 80px">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="file in mediaFiles" :key="file.id">
+                            <td @click="openFile(file)" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer;">
+                                <span v-if="file.extension == 'pdf'" class="bg-light text-secondary rounded">
+                                    <i class="mdi mdi-file-pdf-outline font-28"></i>
+                                </span>
 
-                            <img v-else :src="file.url" alt="image" class="img-fluid avatar-sm rounded mt-2" style="width: 100px; height: auto;" />
-                        </td>
-                        <td>
-                            <span class="ms-2 fw-normal">{{file.name}}</span>
-                        </td>
-                        <td>
-                            {{ file.pages_count }}
-                        </td>
-                        <td>
-                            <p class="mb-0">
-                                {{ new Date(file.created_at).toISOString().slice(0, 19).replace(/-/g, "/").replace("T", " ") }}
-                            </p>
-                        </td>
-                        <td>
-                            {{ parseFloat(file.size * 0.000001).toFixed(1) }} MB
-                        </td>
-                        <td>
-                            <div class="btn-group dropdown">
-                                <a href="javascript: void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-xs" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="mdi mdi-dots-horizontal"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-end">
-                                    <!-- <a class="dropdown-item" href="#"><i class="mdi mdi-link me-2 text-muted vertical-middle"></i>Get Sharable Link</a> -->
-                                    <a class="dropdown-item" href="#" @click.prevent="editFile(file)"><i class="mdi mdi-pencil me-2 text-muted vertical-middle"></i>Edit</a>
-                                    <a class="dropdown-item" href="#" @click.prevent="moveFile(file)">
-                                        <i class="mdi mdi-file-move me-2 text-muted vertical-middle"></i>
-                                        Move
+                                <img v-else :src="file.url" alt="image" class="img-fluid avatar-sm rounded mt-2" style="width: 100px; height: auto;" />
+                            </td>
+                            <td>
+                                <span class="ms-2 fw-normal">{{file.name}}</span>
+                            </td>
+                            <td>
+                                {{ file.pages_count }}
+                            </td>
+                            <td>
+                                <p class="mb-0">
+                                    {{ new Date(file.created_at).toISOString().slice(0, 19).replace(/-/g, "/").replace("T", " ") }}
+                                </p>
+                            </td>
+                            <td>
+                                {{ parseFloat(file.size * 0.000001).toFixed(1) }} MB
+                            </td>
+                            <td>
+                                <div class="btn-group dropstart">
+                                    <a href="javascript: void(0);" class="table-action-btn dropdown-toggle arrow-none btn btn-light btn-xs" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="mdi mdi-dots-horizontal"></i>
                                     </a>
-                                    <a class="dropdown-item" target="_blank" :href="file.url" :download="file.name"><i class="mdi mdi-download me-2 text-muted vertical-middle"></i>Download</a>
-                                    <a class="dropdown-item" href="#" @click.prevent="deleteFile(file)"><i class="mdi mdi-delete me-2 text-muted vertical-middle"></i>Remove</a>
+                                    <div class="dropdown-menu" style="">
+                                        <!-- <a class="dropdown-item" href="#"><i class="mdi mdi-link me-2 text-muted vertical-middle"></i>Get Sharable Link</a> -->
+                                        <a class="dropdown-item" href="#" @click.prevent="editFile(file)"><i class="mdi mdi-pencil me-2 text-muted vertical-middle"></i>Edit</a>
+                                        <a class="dropdown-item" href="#" @click.prevent="moveFile(file)">
+                                            <i class="mdi mdi-file-move me-2 text-muted vertical-middle"></i>
+                                            Move
+                                        </a>
+                                        <a class="dropdown-item" target="_blank" :href="file.url" :download="file.name"><i class="mdi mdi-download me-2 text-muted vertical-middle"></i>Download</a>
+                                        <a class="dropdown-item" href="#" @click.prevent="deleteFile(file)"><i class="mdi mdi-delete me-2 text-muted vertical-middle"></i>Remove</a>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <infinite-loading @infinite="infiniteHandler">
             <div slot="spinner">Loading...</div>

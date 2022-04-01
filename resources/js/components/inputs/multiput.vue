@@ -262,14 +262,15 @@ export default {
     },
     methods: {
         updatedmedia($event, ref) {
+            $event.siblings = null;
+            $event.subfiles = null;
             this.$emit('inputed', { 'data': $event, 'key': this.keyput})
             this.$refs[ref+'btn'].click()
             this.$set(this.loadstart, ref,  false);
-            //this.$refs[ref].destroy();
-
-            console.log(this.$refs[ref+'btn'])
         },
         updatedgallery($event, ref) {
+            $event.siblings = null;
+            $event.subfiles = null;
             var data;
             if (!this.value) {
                 data = [];

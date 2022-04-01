@@ -18,6 +18,9 @@
         background-color: #28a745;
         border-color: #28a745;
     }
+    .actions-width {
+        min-width: 85px;
+    }
 </style>
 
 <template>
@@ -191,92 +194,94 @@
 
     </b-sidebar>
 
-    <div v-if="widgets" class="row">
+    <div v-if="config.loadWidgets !== false">
+        <div v-if="widgets" class="row">
 
-        <div class="col-lg-3 col-md-6">
-            <div class="card bg-pattern mb-3">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-5">
-                            <div class="avatar-md bg-blue rounded">
-                                <i class="fe-layers avatar-title font-22 text-white"></i>
+            <div class="col-lg-3 col-md-6">
+                <div class="card bg-pattern mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="avatar-md bg-blue rounded">
+                                    <i class="fe-layers avatar-title font-22 text-white"></i>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-7">
-                            <div class="text-end">
-                                <h3 class="text-dark my-1 text-truncate" :title="widgets[0][1]"><span>{{widgets[0][1]}}</span></h3>
-                                <p class="text-muted mb-0 text-truncate">{{widgets[0][0]}}</p>
+                            <div class="col-7">
+                                <div class="text-end">
+                                    <h3 class="text-dark my-1 text-truncate" :title="widgets[0][1]"><span>{{widgets[0][1]}}</span></h3>
+                                    <p class="text-muted mb-0 text-truncate">{{widgets[0][0]}}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-lg-3 col-md-6">
-            <div class="card bg-pattern mb-3">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-5">
-                            <div class="avatar-md bg-success rounded">
-                                <i class="fe-award avatar-title font-22 text-white"></i>
+            <div class="col-lg-3 col-md-6">
+                <div class="card bg-pattern mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="avatar-md bg-success rounded">
+                                    <i class="fe-award avatar-title font-22 text-white"></i>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-7">
-                            <div class="text-end">
-                                <h3 class="text-dark my-1 text-truncate" :title="widgets[1][1]"><span>{{widgets[1][1]}}</span></h3>
-                                <p class="text-muted mb-0 text-truncate">{{widgets[1][0]}}</p>
+                            <div class="col-7">
+                                <div class="text-end">
+                                    <h3 class="text-dark my-1 text-truncate" :title="widgets[1][1]"><span>{{widgets[1][1]}}</span></h3>
+                                    <p class="text-muted mb-0 text-truncate">{{widgets[1][0]}}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-lg-3 col-md-6">
-            <div class="card bg-pattern mb-3">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-5">
-                            <div class="avatar-md bg-danger rounded">
-                                <i class="fe-delete avatar-title font-22 text-white"></i>
+            <div class="col-lg-3 col-md-6">
+                <div class="card bg-pattern mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="avatar-md bg-danger rounded">
+                                    <i class="fe-delete avatar-title font-22 text-white"></i>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-7">
-                            <div class="text-end">
-                                <h3 class="text-dark my-1 text-truncate" :title="widgets[2][1]"><span>{{widgets[2][1]}}</span></h3>
-                                <p class="text-muted mb-0 text-truncate">{{widgets[2][0]}}</p>
+                            <div class="col-7">
+                                <div class="text-end">
+                                    <h3 class="text-dark my-1 text-truncate" :title="widgets[2][1]"><span>{{widgets[2][1]}}</span></h3>
+                                    <p class="text-muted mb-0 text-truncate">{{widgets[2][0]}}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-lg-3 col-md-6">
-            <div class="card bg-pattern mb-3">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-5">
-                            <div class="avatar-md bg-warning rounded">
-                                <i class="fe-dollar-sign avatar-title font-22 text-white"></i>
+            <div class="col-lg-3 col-md-6">
+                <div class="card bg-pattern mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="avatar-md bg-warning rounded">
+                                    <i class="fe-dollar-sign avatar-title font-22 text-white"></i>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-7">
-                            <div class="text-end">
-                                <h3 class="text-dark my-1 text-truncate" :title="widgets[3][1]"><span>{{widgets[3][1]}}</span></h3>
-                                <p class="text-muted mb-0 text-truncate">{{widgets[3][0]}}</p>
+                            <div class="col-7">
+                                <div class="text-end">
+                                    <h3 class="text-dark my-1 text-truncate" :title="widgets[3][1]"><span>{{widgets[3][1]}}</span></h3>
+                                    <p class="text-muted mb-0 text-truncate">{{widgets[3][0]}}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-    </div>
-    <div v-else class="col-lg-12 text-center">
-        <vue-loaders-ball-grid-beat color="#6658dd" scale="1" class="mt-4 text-center">
-        </vue-loaders-ball-grid-beat>
+        </div>
+        <div v-else class="col-lg-12 text-center">
+            <vue-loaders-ball-grid-beat color="#6658dd" scale="1" class="mt-4 text-center">
+            </vue-loaders-ball-grid-beat>
+        </div>
     </div>
 
     <!-- end card-->
@@ -696,27 +701,31 @@ export default {
             }
         },
         getWidgets() {
-            axios
-            .post(this.config.apiUrl + '/widgets',
-            {
-                filter: this.filter ? this.filter : null,
-                dynamic: this.dynamic ? this.dynamic.id : null,
-                published: this.published_value ? this.published_value.id : null,
-                template: this.template_value ? this.template_value.id : null,
-                type: this.type_value ? this.type_value.title : null,
-                category: this.category_value ? this.category_value.id : null,
-                subcategory: this.subcategory_value ? this.subcategory_value.id : null,
-                pagefilter: this.page_value ? this.page_value.id : null,
-            })
-            .then((response) => {
-                if (response.status == 200) {
-                    this.widgets = response.data;
-                    this.hideLoader();
-                }
-            })
-            .catch((error) => {
-                this.$toast.error('Filed to get widget data.')
-            });
+            if (this.config.loadWidgets !== false) {
+                axios
+                .post(this.config.apiUrl + '/widgets',
+                {
+                    filter: this.filter ? this.filter : null,
+                    dynamic: this.dynamic ? this.dynamic.id : null,
+                    published: this.published_value ? this.published_value.id : null,
+                    template: this.template_value ? this.template_value.id : null,
+                    type: this.type_value ? this.type_value.title : null,
+                    category: this.category_value ? this.category_value.id : null,
+                    subcategory: this.subcategory_value ? this.subcategory_value.id : null,
+                    pagefilter: this.page_value ? this.page_value.id : null,
+                })
+                .then((response) => {
+                    if (response.status == 200) {
+                        this.widgets = response.data;
+                        this.hideLoader();
+                    }
+                })
+                .catch((error) => {
+                    this.$toast.error('Filed to get widget data.')
+                });
+            } else {
+                this.hideLoader();
+            }
         },
         changePublish(id) {
             this.loading = true;

@@ -49,12 +49,11 @@ class NewAdminMediaManager extends Command
 
         return;
         dd($directories);
-    $files = \File::files(public_path('/uploads'). '/pages_media');
-foreach ($files as $key => $file) {
-    dd(basename($file), $file->getPath(), $file->getRealPath(), $file);
-}
+        $files = \File::files(public_path('/uploads'). '/pages_media');
+        foreach ($files as $key => $file) {
+            dd(basename($file), $file->getPath(), $file->getRealPath(), $file);
+        }
         dd($files);
-
     }
 
     public function storeDirectories($directories)

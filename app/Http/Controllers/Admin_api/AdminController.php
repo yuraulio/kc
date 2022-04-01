@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CreateAdminRequest;
 use App\Http\Requests\Admin\UpdateAdminRequest;
 use App\Http\Resources\AdminResource;
+use App\Jobs\DeleteMultipleAdmins;
 use App\Model\Admin\Admin;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -28,7 +29,7 @@ class AdminController extends Controller
 
         try {
             $admins = Admin::lookForOriginal($request->filter)
-                            ->tableSort($request->sort)->paginate(10);
+                            ->tableSort($request)->paginate($request->per_page ?? 50);
             return AdminResource::collection($admins);
         } catch (Exception $e) {
             Log::error("Failed to get admins. " . $e->getMessage());
@@ -122,6 +123,27 @@ class AdminController extends Controller
             return response()->json(['message' => 'success'], 200);
         } catch (Exception $e) {
             Log::error("Failed to delete admin. " . $e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 400);
+        }
+    }
+
+    public function deleteMultiple(Request $request)
+    {
+        try {
+            $ids = $request->selected;
+        
+            // authorize action
+            $categories = Admin::findOrFail($ids);
+            foreach ($categories as $category) {
+                $this->authorize('delete', $category, Auth::user());
+            }
+
+            // start job
+            DeleteMultipleAdmins::dispatch($ids, Auth::user());
+
+            return response()->json(['message' => 'success'], 200);
+        } catch (Exception $e) {
+            Log::error("Failed to bulk delete admins. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }

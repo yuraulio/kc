@@ -19,15 +19,15 @@
     </div>
 
     <div class="row">
-        <div class="col-9">
+        <div class="col-md">
             <div style="height: 600px" id="" class="carousel">
                 <div class="carousel-inner" role="listbox">
-                    <div v-for="(img, index) in selectedImage ? [selectedImage] : images" :class="'carousel-item ' + (activeImg == img.id ? ' active' : '')" :key="index">
+                    <div v-if="activeImg" v-for="(img, index) in selectedImage ? [selectedImage] : images" :class="'carousel-item ' + (activeImg.id == img.id ? ' active' : '')" :key="index">
                         <template v-if="!lodash.find(img.subfiles, {'subselected' : true})">
                             <div v-if="img.extension == 'pdf'" style="width: 100%; height: 300px" class=" text-secondary rounded text-center">
                                 <i class="mdi mdi-file-pdf-outline font-28"></i>
                             </div>
-                            <img v-else :src="img.url" alt="..." class="d-block img-fluid" />
+                            <img @click="confirmSelection(img)" v-else :src="img.url" alt="..." class="d-block img-fluid" />
                             
                         </template>
                         <template v-else>
@@ -45,9 +45,9 @@
                 </div>
             </div>
         </div>
-        <div class="col-3">
+        <div v-if="activeImg && activeImg.parrent == null" class="col-md-3">
             <div class="mt-4" style="max-height: 500px; overflow: hidden; overflow-y: scroll; text-align: center; background-color:#f3f7f9 !important; padding:20px;">
-                <div v-for="(im, index) in activeImg ? lodash.find(images, {id: activeImg}).subfiles : []" style="cursor: pointer" :key="index" class="mb-2">
+                <div v-for="(im, index) in activeImg ? lodash.find(images, {id: activeImg.id}).subfiles : []" style="cursor: pointer" :key="index" class="mb-2">
                     <img @click="selectImg(im)" :src="im.url" alt="image" class="img-fluid rounded" width="200" :style="'height: 100px; width: auto; ' + (im.subselected ? ' border: 4px solid #1abc9c;' : ' border: 4px solid #f3f7f9;')">
                     <p class="mb-0 text-truncate" :title="im.name">
                         {{im.name}}
@@ -95,7 +95,6 @@ export default {
             this.$parent.$parent.deleteFile(file);
         },
         confirmSelection(image) {
-            console.log("conform selection", image);
             if (this.$parent.$parent.mode != null ) {
                 this.$parent.$parent.updatedMediaImage(image);
                 this.$modal.hide('gallery-modal');
@@ -104,7 +103,7 @@ export default {
         },
         selectImg(img) {
             var subfiles = _.find(this.images, {
-                id: this.activeImg
+                id: this.activeImg.id
             }).subfiles;
             if (img && !img.subselected) {
                 this.mainDysplayImage = img;
@@ -122,18 +121,18 @@ export default {
         list(type) {
             if (type == 'back') {
                 this.activeImg = _.findIndex(this.images, {
-                        id: this.activeImg
+                        id: this.activeImg.id
                     }) > 0 ?
                     this.images[_.findIndex(this.images, {
-                        id: this.activeImg
-                    }) - 1].id : this.images[this.images.length - 1].id
+                        id: this.activeImg.id
+                    }) - 1] : this.images[this.images.length - 1]
             } else {
                 this.activeImg = _.findIndex(this.images, {
-                        id: this.activeImg
+                        id: this.activeImg.id
                     }) != this.images.length - 1 ?
                     this.images[_.findIndex(this.images, {
-                        id: this.activeImg
-                    }) + 1].id : this.images[0].id
+                        id: this.activeImg.id
+                    }) + 1] : this.images[0]
             }
         },
         saveToClipboard() {
@@ -153,7 +152,7 @@ export default {
         }
     },
     mounted() {
-        this.activeImg = this.opImage ? this.opImage.id : null;
+        this.activeImg = this.opImage ? this.opImage : null;
         //console.log("cim", this.currentImages);
     },
     watch: {

@@ -22,22 +22,31 @@ const collectiveInputs = [
 export default {
     fields: [
         {
+            name: '__checkbox',
+            titleClass: 'center aligned',
+            dataClass: 'align-middle',
+        },
+        {
             name: 'firstname',
             title: 'First Name',
+            sortField: 'firstname',
         },
         {
             name: 'lastname',
             title: 'Last Name',
+            sortField: 'lastname',
         },
         {
             name: 'email',
             title: 'Email',
+            sortField: 'email',
         },
         {
             name: 'created_at',
             title: 'Created at',
             dataClass: 'text-center',
             titleClass: 'text-center',
+            sortField: 'created_at',
         },
         {
             name: 'actions',
@@ -50,6 +59,7 @@ export default {
     edit: true,
     showFilters: false,
     editInputs: collectiveInputs,
+    loadWidgets: false,
     addInputs: collectiveInputs.concat([
         {
             "type": "text",

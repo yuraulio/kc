@@ -164,14 +164,12 @@ class CommentsController extends Controller
             $pages = Page::withoutGlobalScope('published');
 
             if ($request->pagefilter !== null) {
-                $pages->where("id", $request->pagefilter);
+                $pages->whereId($request->pagefilter);
             }
             $pages = $pages->get();
-            // this does not work, dont know why
-            $pages->sortByDesc(function ($page) {
-                return $page->comments->count();
-            });
-            return $pages->first()->title;
+            return $pages->sortByDesc(function ($page) {
+                return $page->comments()->count();
+            })->first()->title ?? "-";
         } catch (Exception $e) {
             Log::warning("(comments widget) Failed to find popular comments page. " . $e->getMessage());
             return "-";

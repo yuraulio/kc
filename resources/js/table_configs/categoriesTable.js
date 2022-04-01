@@ -79,7 +79,7 @@ export default {
             name: 'actions',
             title: 'Actions',
             titleClass: 'text-end',
-            dataClass: 'align-middle'
+            dataClass: 'align-middle actions-width'
         }
     ],
     apiUrl: '/api/categories',

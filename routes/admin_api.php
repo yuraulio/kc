@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin_api\AdminController;
 use App\Http\Controllers\Admin_api\CategoriesController;
 use App\Http\Controllers\Admin_api\CommentsController;
 use App\Http\Controllers\Admin_api\PagesController;
@@ -49,6 +50,7 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
         ]);
 
         Route::prefix('users')->group(function () {
+            Route::post('admins/deleteMultiple', [AdminController::class, 'deleteMultiple']);
             Route::resource('admins', Admin_api\AdminController::class)->only([
                 'index', 'store', 'update', 'show', 'destroy'
             ]);
