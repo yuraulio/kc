@@ -383,6 +383,11 @@
 
                 }"
             >
+
+                <template slot="page_title" slot-scope="props">
+                    <a :href="'/'+props.rowData.slug" target="_blank">{{ props.rowData.title }}</a>
+                </template>
+
                 <template slot="visibility" slot-scope="props">
                     <template v-if="props.rowData.dynamic == 0">
                         <div :key="props.rowData.id"  class="form-check form-switch mb-1" style="display: inline-grid; cursor: pointer">

@@ -25,7 +25,7 @@ export default {
             },
         },
         {
-            name: 'title',
+            name: 'page_title',
             title: 'Name',
             sortField: 'title',
             dataClass: 'align-middle',
