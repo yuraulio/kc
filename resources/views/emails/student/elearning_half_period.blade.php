@@ -30,7 +30,7 @@ Dear {{$firstName}},<br />
 
 <ul>
 	<li>
-	<p>KnowCrunch instructors support are always available for your questions and queries in our Facebook group in the link <a href="https://www.facebook.com/groups/elearningdigital/">https://www.facebook.com/groups/elearningdigital/</a></p>
+	<p>Knowcrunch instructors support are always available for your questions and queries in our Facebook group in the link <a href="https://www.facebook.com/groups/elearningdigital/">https://www.facebook.com/groups/elearningdigital/</a></p>
 	</li>
 </ul>
 

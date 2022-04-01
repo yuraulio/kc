@@ -44,7 +44,7 @@ class ContactUsController extends Controller
 
             	$adminemail = 'info@knowcrunch.com';
                 if(isset($mail_data['eventtitle'])) {
-                    $subject = 'KnowCrunch – information about ' . $mail_data['eventtitle'];
+                    $subject = 'Knowcrunch – information about ' . $mail_data['eventtitle'];
                 }
                 else {
                     $subject = 'Knowcrunch - Website Contact';

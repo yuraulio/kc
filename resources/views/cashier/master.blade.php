@@ -5,7 +5,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">	
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-	<title>KnowCrunch Billing</title>
+	<title>Knowcrunch Billing</title>
 	@include('theme.layouts.favicons')	
 
     
@@ -63,7 +63,7 @@
 			<img src="{{cdn('new_cart/images/china-unionpay.svg')}}" alt="Unionpay" width="59px" height="37px">
 		</div>
 		<div class="address text-center">
-			KnowCrunch Inc., 2035 Sunset Lake Road, Delaware, USA.
+			Knowcrunch Inc., 2035 Sunset Lake Road, Delaware, USA.
 		</div>		
 	</footer>
 	<!---------------- footer end--------------->

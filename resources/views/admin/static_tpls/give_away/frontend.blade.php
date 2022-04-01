@@ -83,7 +83,7 @@
 	                                            <div class="custom-checkbox">
 	                                                <input type="checkbox" id="accept" name="accept" value="accept">
 	                                                <span></span>
-	                                            </div>{{-- /give_away_terms/KnowCrunch - Όροι Συμμετοχής Boussias Communications.pdf --}}
+	                                            </div>{{-- /give_away_terms/Knowcrunch - Όροι Συμμετοχής Boussias Communications.pdf --}}
 	                                            <label for="receive-messages">I have read, agree upon & accept the <a href="/give-away-terms" target="_blank">terms & <br/>conditions</a> and <a href="/data-privacy-policy" target="_blank">data privacy policy</a>. </label>
 	                                        </div>
 	                                        <div class="submit-area-custom">

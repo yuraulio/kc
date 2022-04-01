@@ -47,7 +47,7 @@ class CourseInvoice extends Notification
 
         return (new MailMessage)
                     ->from('info@knowcrunch.com', 'Knowcrunch')
-                    ->subject('KnowCrunch - ' . $this->data['firstName'] . ' download your receipt')
+                    ->subject('Knowcrunch - ' . $this->data['firstName'] . ' download your receipt')
                     ->view('emails.user.invoice',$this->data);
     }
 

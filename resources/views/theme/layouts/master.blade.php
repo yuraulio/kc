@@ -170,14 +170,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 				<!-- /.alert-outer -->
 	    </div>
         <form autocomplete="off" class="login-form">
+         
+
+            <label>Email <span class="required">(*)</span></label>
             <div class="input-wrapper input-wrapper--text input-wrapper--email">
-                <span class="icon"><img width="14" src="{{cdn('/theme/assets/images/icons/icon-email.svg')}}" alt=""></span>
-                <input type="text" placeholder="Email" id="email" autocomplete="off">
+                <input type="text" id="email" autocomplete="off">
+
             </div>
-            <div class="input-wrapper input-wrapper--text">
-                <span class="icon"><img width="10" src="{{cdn('/theme/assets/images/icons/icon-lock.svg')}}" alt=""></span>
-                <input type="password" placeholder="Password" id="password" autocomplete="off">
+            
+            </br>
+
+            <label> Password <span class="required">(*)</span></label><span data-id="password" class="icon"><img width="20" src="{{cdn('/theme/assets/images/icons/eye-password.svg')}}" alt="">Show</span>
+            <div class="input-wrapper input-wrapper--text">    
+                <input type="password"  id="password" autocomplete="off">
             </div>
+
             <div class="form-group">
                 <label for="remember-me"><input id="remember-me" type="checkbox">Remember me</label>
                 <a id="forgot-pass" href="javascript:void(0)">Forgot password?</a>
@@ -354,6 +361,27 @@ $(document).on('click', '.close-btn', function(e){
             $this.addClass('active');
 
         }
+
+</script>
+
+<script>
+
+    $('.icon').click(function(){
+        let input = $(`#${$(this).data('id')}`);
+    
+
+        if(input.attr('type') === "password"){
+            input.attr('type','text')
+
+            $(this).find('img').attr('src', "{{cdn('/theme/assets/images/icons/eye-password-active.svg')}}");
+
+
+        }else{
+            input.attr('type','password')
+            $(this).find('img').attr('src', "{{cdn('/theme/assets/images/icons/eye-password.svg')}}");
+        }
+
+    })
 
 </script>
 

@@ -25,7 +25,7 @@
                   <h2>{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}</h2>
                   <ul>
                      @if($currentuser['kc_id'] != '')
-                     <li>KnowCrunch alumni number: {{ $currentuser['kc_id'] }}</li>
+                     <li>Knowcrunch alumni number: {{ $currentuser['kc_id'] }}</li>
                      @endif
                      @if($currentuser['partner_id'])
                      <li>Deree number: {{ $currentuser['partner_id'] }}</li>
@@ -484,14 +484,14 @@
                                              <input type="checkbox" id="receive-emails" name="receive-emails" value="accept" checked="checked">
                                              <span></span>
                                           </div>
-                                          <label for="receive-emails">I want to receive emails from KnowCrunch.</label>
+                                          <label for="receive-emails">I want to receive emails from Knowcrunch.</label>
                                        </div>
                                        <div class="checkbox-row">
                                           <div class="custom-checkbox">
                                              <input type="checkbox" id="receive-messages" name="receive-messages" value="accept" checked="checked">
                                              <span></span>
                                           </div>
-                                          <label for="receive-messages">I want to receive important mobile messages from KnowCrunch.</label>
+                                          <label for="receive-messages">I want to receive important mobile messages from Knowcrunch.</label>
                                        </div>
                                        --}}
                                        <div class="form-submit-area">

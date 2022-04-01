@@ -34,7 +34,7 @@ class TransactionPolicy
 
         $roles = $user->role->pluck('name')->toArray();
         return (in_array('Super Administrator',$roles) || in_array('Administrator',$roles) || in_array('Manager',$roles) || 
-                        in_array('Author',$roles) || in_array('KnowCrunch Partner',$roles));
+                        in_array('Author',$roles) || in_array('Knowcrunch Partner',$roles));
     }
 
     /**

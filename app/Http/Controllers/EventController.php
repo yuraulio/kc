@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Auth;
 use Intervention\Image\ImageManagerStatic as Image;
 use App\Model\Coupon;
 use App\Model\Section;
+use App\Model\City;
+
 
 class EventController extends Controller
 {
@@ -152,14 +154,18 @@ class EventController extends Controller
      */
     public function create()
     {
+        
         $user = Auth::user();
 
         $categories = Category::all();
         $types = Type::all();
         $delivery = Delivery::all();
         $instructors = Instructor::with('medias')->where('status', 1)->get()->groupBy('id');
+        $cities = City::all();
+        $partners = Partner::all();
 
-        return view('event.create', ['user' => $user, 'events' => Event::all(), 'categories' => $categories, 'types' => $types, 'delivery' =>$delivery, 'instructors' => $instructors]);
+        return view('event.create', ['user' => $user, 'events' => Event::all(), 'categories' => $categories, 'types' => $types, 'delivery' =>$delivery, 
+                                        'instructors' => $instructors, 'cities' => $cities,'partners'=>$partners]);
     }
 
     /**
@@ -216,7 +222,8 @@ class EventController extends Controller
 
         }
 
-
+        $event->city()->sync([$request->city_id]);
+        $event->partners()->sync([$request->partner_id]);
         if($request->type_id != null){
             //dd($request->type_id);
             $event->type()->sync($request->type_id);
@@ -271,6 +278,7 @@ class EventController extends Controller
         //dd($event->summary1);
         //dd($event->medias->details);
         $categories = Category::all();
+
         $types = Type::all();
         $partners = Partner::all();
 
@@ -322,6 +330,8 @@ class EventController extends Controller
         $data['event'] = $event;
         //dd($event);
         $data['categories'] = $categories;
+        $data['cities'] = City::all();
+        $data['partners'] = Partner::all();
         $data['types'] = $types;
         $data['user'] = $user;
         $data['allTopicsByCategory'] = $allTopicsByCategory;
@@ -400,6 +410,8 @@ class EventController extends Controller
         }
 
         $event->category()->sync([$request->category_id]);
+        $event->city()->sync([$request->city_id]);
+        $event->partners()->sync([$request->partner_id]);
 
         if($request->category_id != $request->oldCategory){
             $category = Category::with('topics')->find($request->category_id);

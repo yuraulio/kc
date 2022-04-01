@@ -5,7 +5,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">	
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-	<title>KnowCrunch Billing</title>
+	<title>Knowcrunch Billing</title>
 	@include('theme.layouts.favicons')	
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">	
 	{{--<link rel="stylesheet" type="text/css" href="{{cdn('new_cart/css/style.css')}}">--}}
@@ -73,14 +73,20 @@
 			<!-- /.alert-outer -->
 	</div>
 	<form autocomplete="off" class="login-form">
-		<div class="input-wrapper input-wrapper--text input-wrapper--email">
-			<span class="icon"><img width="14" src="{{cdn('/theme/assets/images/icons/icon-email.svg')}}" alt=""></span>
-			<input type="text" placeholder="Email" id="emaill" autocomplete="off">
-		</div>
-		<div class="input-wrapper input-wrapper--text">
-			<span class="icon"><img width="10" src="{{cdn('/theme/assets/images/icons/icon-lock.svg')}}" alt=""></span>
-			<input type="password" placeholder="Password" id="password" autocomplete="off">
-		</div>
+	<label>Email <span class="required">(*)</span></label>
+            <div class="input-wrapper input-wrapper--text input-wrapper--email">
+                <input type="text"  id="email" autocomplete="off">
+
+            </div>
+            
+            </br>
+
+            <label> Password <span class="required">(*)</span></label><span data-id="password" class="icon"><img width="20" src="{{cdn('/theme/assets/images/icons/eye-password.svg')}}" alt="">Show</span>
+            <div class="input-wrapper input-wrapper--text">    
+                <input type="password"  id="password" autocomplete="off">
+            </div>
+
+        
 		<div class="form-group">
 			<label for="remember-me"><input id="remember-me" type="checkbox">Remember me</label>
 			{{--<a id="forgot-pass" href="javascript:void(0)">Forgot password?</a>--}}
@@ -151,7 +157,7 @@
 		</div>
 		@endif
 		<div class="address text-center">
-			KnowCrunch Inc., 2035 Sunset Lake Road, Delaware, USA.
+			Knowcrunch Inc., 2035 Sunset Lake Road, Delaware, USA.
 		</div>		
 	</footer>
 	<!---------------- footer end--------------->
@@ -282,6 +288,27 @@ $(document).ready(function(){
 		}
 
 	</script>
+
+
+<script>
+
+    $('.icon').click(function(){
+        let input = $(`#${$(this).data('id')}`);
+
+        if(input.attr('type') === "password"){
+            input.attr('type','text')
+
+            $(this).find('img').attr('src', "{{cdn('/theme/assets/images/icons/eye-password-active.svg')}}");
+
+
+        }else{
+            input.attr('type','password')
+            $(this).find('img').attr('src', "{{cdn('/theme/assets/images/icons/eye-password.svg')}}");
+        }
+
+    })
+
+</script>
 
 @stack('scripts')
 

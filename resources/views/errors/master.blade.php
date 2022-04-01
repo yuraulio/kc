@@ -30,7 +30,7 @@
              "postalCode": "19702",
              "streetAddress": "2035 Sunset Lake Road"
            },
-           "name": "KnowCrunch Inc",
+           "name": "Knowcrunch Inc",
            "logo": "/theme/assets/images/logo.png"
          }
       </script>
@@ -47,9 +47,9 @@
                </div>
                <div class="menu-area">
                   <button class="hamburger hamburger--spin mob-menu-btn" type="button">
-                  <span class="hamburger-box">
-                  <span class="hamburger-inner"></span>
-                  </span>
+                     <span class="hamburger-box">
+                        <span class="hamburger-inner"></span>
+                     </span>
                   </button>
                   <div class="header-actions clearfix">
                      <ul class="actions-list">
@@ -113,7 +113,7 @@
       <div class="search-wrapper">
       <form method="get" action="search/term">
           {{ csrf_field() }}
-            <input type="text" name="search_term" placeholder="Search KnowCrunch">
+            <input type="text" name="search_term" placeholder="Search Knowcrunch">
             <button type="submit"><img src="{{cdn('/theme/assets/images/icons/icon-magnifier.svg')}}" class="replace-with-svg" alt=""/></button>
          </form>
       </div>
@@ -164,14 +164,19 @@
             <p>Access your courses, schedule & files.</p>
         </div>
 
+        <label>Email <span class="required">(*)</span></label>
             <div class="input-wrapper input-wrapper--text input-wrapper--email">
-                <span class="icon"><img width="14" src="{{cdn('/theme/assets/images/icons/icon-email.svg')}}" class="replace-with-svg" alt=""></span>
-                <input type="text" placeholder="Email" id="email">
+                <input type="text" id="email" autocomplete="off">
+
             </div>
-            <div class="input-wrapper input-wrapper--text">
-                <span class="icon"><img width="10" src="{{cdn('/theme/assets/images/icons/icon-lock.svg')}}" class="replace-with-svg" alt=""></span>
-                <input type="password" placeholder="Password" id="password">
+            
+            </br>
+
+            <label> Password <span class="required">(*)</span></label><span data-id="password" class="icon"><img width="20" src="{{cdn('/theme/assets/images/icons/eye-password.svg')}}" alt="">Show</span>
+            <div class="input-wrapper input-wrapper--text">    
+                <input type="password"  id="password" autocomplete="off">
             </div>
+
             <div class="form-group">
                 <label for="remember-me"><input id="remember-me" type="checkbox">Remember me</label>
                 <a id="forgot-pass" href="javascript:void(0)">Forgot password?</a>
@@ -250,7 +255,7 @@
                     <li> <a  href='/become-an-instructor' title = 'become an instructor'> become an instructor </a> </li>
                     <li> <a  href='/corporate-training'  title = 'corporate training'> corporate training </a> </li>
                     <li> <a  href='/en/blog' title = 'blog'> blog </a> </li>
-                    <li> <a  href='https://www.facebook.com/pg/KnowCrunch/jobs/' target='_blank' title = 'jobs'> jobs </a> </li>
+                    <li> <a  href='https://www.facebook.com/pg/Knowcrunch/jobs/' target='_blank' title = 'jobs'> jobs </a> </li>
                     <li> <a  href='/terms'  title = 'Terms & Conditions'> terms & conditions </a> </li>
                     <li> <a  href='/data-privacy-policy'  title = 'Data Privacy Policy'> data privacy policy </a> </li>
                     <li> <a  href='/contact'  title = 'in the media'> contact us </a> </li>
@@ -437,5 +442,24 @@ $('.alert-outer').hide()
 });
 
       </script>
+      <script>
+
+$('.icon').click(function(){
+    let input = $(`#${$(this).data('id')}`);
+
+    if(input.attr('type') === "password"){
+        input.attr('type','text')
+
+        $(this).find('img').attr('src', "{{cdn('/theme/assets/images/icons/eye-password-active.svg')}}");
+
+
+    }else{
+        input.attr('type','password')
+        $(this).find('img').attr('src', "{{cdn('/theme/assets/images/icons/eye-password.svg')}}");
+    }
+
+})
+
+</script>
    </body>
 </html>

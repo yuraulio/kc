@@ -36,7 +36,7 @@
          "email": "info@knowcrunch.com"
       },
       "sameAs": [ 
-         "https://www.facebook.com/KnowCrunch",
+         "https://www.facebook.com/Knowcrunch",
          "https://twitter.com/knowcrunch",
          "https://www.instagram.com/knowcrunch/",
          "https://www.linkedin.com/school/knowcrunch/",

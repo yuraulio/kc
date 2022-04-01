@@ -27,7 +27,7 @@
                         @csrf
 							<div class="form-wrp box" id="clone-box">												
 								
-								<div class="alumni-number">KnowCrunch alumni number: {{$kc_id}}</div>
+								<div class="alumni-number">Knowcrunch alumni number: {{$kc_id}}</div>
 								<div class="form-row">
 									<div class="col-md-6 mb-4 pr-md-3">
 										<label class="input-label">My first name is  <span class="checkout-required-data">(*)</span></label>
@@ -349,7 +349,7 @@ dataLayer.push({
         'name': $.parseHTML("{{ $tigran['ProductName'] }}")[0].data,
         'id': "{{$tigran['Product_id']}}",
         'price': "{{$tigran['Price']}}",
-        'brand': 'KnowCrunch',
+        'brand': 'Knowcrunch',
         'category': "{{$tigran['ProductCategory']}}",
         'quantity': 1
        }]

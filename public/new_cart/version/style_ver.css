@@ -404,6 +404,31 @@ label.custom-control-label{font-size:19px;}
         padding-left: 0!important;
     }
 
+    .reset-password .icon, .login-popup-wrapper .icon{
+        float: right;
+    }
+    
+    .reset-password .icon img , .login-popup-wrapper .icon img{
+        margin-right: 5px;
+        display:inline-block!important;
+    }
+    
+    .reset-password .input-wrapper--text input,  .login-popup-wrapper  .input-wrapper--text input{
+        padding-left: 10px!important;
+    }
+    
+    .reset-password .required, .login-popup-wrapper .required{
+        color:red;
+    }
+    
+    .reset-password label, .login-popup-wrapper label{
+        font-size: 19px;
+    }
+    
+    .reset-password .login-popup, .login-popup-wrapper .login-popup{
+        max-width:450px
+    }
+
 /* responsive media */
 
 @media(min-width:993px){

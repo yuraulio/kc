@@ -919,7 +919,7 @@ class StudentController extends Controller
                         .$currentuser->post_code.','
                         .$currentuser->city.','
                         .$currentuser->afm.PHP_EOL;*/
-            $content = 'KnowCrunch data for: '.PHP_EOL;
+            $content = 'Knowcrunch data for: '.PHP_EOL;
             $content .= '------------------------'. PHP_EOL;
             $content .= PHP_EOL;
             $content .= 'First name: '.$currentuser->firstname.PHP_EOL;

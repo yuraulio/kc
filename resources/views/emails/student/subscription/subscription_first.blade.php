@@ -38,7 +38,7 @@ Dear {{$firstName}},<br />
 <p>Subscription billing period: {{$sub_period}}</p>
 
 <br/>
-<p>Meanwhile, do not forget to join our alumni community for more updates: <a href="https://www.facebook.com/groups/KnowcrunchAlumni">KnowCrunch Official Alumni</a></p>
+<p>Meanwhile, do not forget to join our alumni community for more updates: <a href="https://www.facebook.com/groups/KnowcrunchAlumni">Knowcrunch Official Alumni</a></p>
 <br />
 <p> Enjoy! </p>
 <br/>

@@ -38,7 +38,7 @@
             "postalCode": "19702",
             "streetAddress": "2035 Sunset Lake Road"
           },
-          "name": "KnowCrunch Inc",
+          "name": "Knowcrunch Inc",
           "logo": "/theme/assets/images/logo.png"
         }
 </script>

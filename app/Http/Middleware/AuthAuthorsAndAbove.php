@@ -42,7 +42,7 @@ class AuthAuthorsAndAbove
         if (in_array('Super Administrator',$roles) || in_array('Administrator',$roles) || in_array('Manager',$roles) || in_array('Author',$roles)) {
             return $next($request);
         }
-        elseif(in_array('KnowCrunch Partner',$roles)) {
+        elseif(in_array('Knowcrunch Partner',$roles)) {
 
             if($request->route()->uri != 'admin/transaction/export-excel'){
                 $request->route()->action['uses'] = 'App\Http\Controllers\TransactionController@participants_inside_revenue';

@@ -10,7 +10,7 @@ Dear {{$firstName}},<br />
 <p>
 <br/>
 
-We remind you that your access to the {{$eventTitle}} is completed in {{$expirationDate}}. 
+We remind you that your access to the {{$eventTitle}} expires on {{$expirationDate}}. 
 <br />
 Continue your training and gain full access to our updated videos, files and your personal notes by purchasing an annual subscription in your account.
 <br />

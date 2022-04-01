@@ -19,6 +19,7 @@
       <link rel="stylesheet" href="https://use.typekit.net/pfo3bjs.css">
       --}}
       <link rel="stylesheet" href="{{ cdn('theme/assets/css/new/pop_up.css') }}" />
+      <link rel="stylesheet" href="{{ cdn('theme/assets/css/new/burger.css') }}" />
       <link rel="stylesheet" href="{{ cdn('theme/assets/css/new/normalize.css') }}" />
       <link rel="stylesheet" href="{{ cdn('theme/assets/css/new/core.css') }}" />
       <title>{{$course}}</title>
@@ -69,20 +70,18 @@
          <div class="content-wrapper">
             <div class="sidebar-wrapper open jsSidebar">
                <header class="sidebar-header">
+                  <button class="hamburger hamburger--spin is-active" type="button">
+                  <span class="hamburger-box">
+                  <span class="hamburger-inner"></span>
+                  </span>
+                  </button>
                   <a tabindex="0" href="/myaccount">
                   <img
                      id="logo"
                      src="/theme/assets/img/new/logo-knowcrunch-seminars.svg"
                      alt="knowcruch logo"
                      /></a>
-                  <a tabindex="0" href="/myaccount" class="jsHideSidebar">
-                  <img
-                     id="sidebar-toggle"
-                     src="/theme/assets/img/new/arrows.svg"
-                     alt="toggle sidebar"
-                     class="jsGreenOnHover"
-                     />
-                  </a>
+                  
                </header>
                <!-- ./sidebar-header -->
                <div class="searchbar-wrapper">
@@ -245,18 +244,30 @@
             <!-- ./sidebar-wrapper -->
             <div class="lesson-wrapper jsLesson">
                <header class="lesson-header">
+                  <button class="show-sidebar hamburger hamburger--spin" type="button">
+                     <span class="hamburger-box">
+                     <span class="hamburger-inner"></span>
+                     </span>
+                  </button>
+
+                  {{--
+                  
+                     <a tabindex="0" class="show-sidebar jsShowSidebar" href="#">
+                        <img
+                           class="jsGreenOnHover"
+                           src="/theme/assets/img/new/arrows.svg"
+                           alt="show sidebar"
+                           />
+                     </a>
+                     
+                  --}}
+
                   <img
                      id="second-logo"
                      src="/theme/assets/img/new/logo-knowcrunch-seminars.svg"
                      alt="knowcruch logo"
                      />
-                  <a tabindex="0" class="show-sidebar jsShowSidebar" href="#">
-                  <img
-                     class="jsGreenOnHover"
-                     src="/theme/assets/img/new/arrows.svg"
-                     alt="show sidebar"
-                     />
-                  </a>
+            
                   <h1 class="lesson-header-title">
                      {{$course}}
                   </h1>
@@ -523,7 +534,7 @@
                      {{--<a href="/">Video e-learning courses</a>--}}
                   </div>
                   <!-- ./lesson-footer-links -->
-                  <span class="copyright">KnowCrunch Inc. © 2021</span>
+                  <span class="copyright">Knowcrunch Inc. © 2021</span>
                </footer>
                <!-- ./lesson-footer -->
             </div>
@@ -543,6 +554,7 @@
          crossorigin="anonymous"
          ></script>
       <script src="{{ cdn('theme/assets/js/new_js1/app1.js') }}"></script>
+      <script src="{{ cdn('theme/assets/js/new_js1/burger.js') }}"></script>
       <script src="https://player.vimeo.com/api/player.js"></script>
       <script>
          $( ".lesson-info_title" ).click(function() {

@@ -47,7 +47,7 @@ Attached you may find a PDF file which gives you clear instructions about your l
 
 It is our honor that you have chosen us & we promise you a wonderful journey full of inspiration and creativity!
  
-Welcome to KnowCrunch 
+Welcome to Knowcrunch 
 <br />
 <span style="color:#006aa9;">KNOWCRUNCH </span> | LEARN. TRANSFORM. THRIVE <br />
 We respect your data. Read our <a href="https://knowcrunch.com/data-privacy-policy">data privacy policy</a>

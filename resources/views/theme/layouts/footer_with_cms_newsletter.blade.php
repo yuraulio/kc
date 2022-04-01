@@ -112,7 +112,7 @@
 
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6">
-                    <p class="mobileL">Copyright © <?php echo date('Y'); ?> KnowCrunch</p>
+                    <p class="mobileL">Copyright © <?php echo date('Y'); ?> Knowcrunch</p>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6">
                     <p class="mobileR"><a class="footer-link" target="_blank" href="http://www.darkpony.com">Design &amp; Development by Darkpony</a></p>

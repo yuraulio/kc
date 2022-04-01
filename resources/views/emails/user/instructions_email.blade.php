@@ -56,7 +56,7 @@
                                                                            <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
                                                                         </tr>
                                                                         <tr>
-                                                                           <td class="r11-i"> <a href="https://knowcrunch.com/?utm_source=Knowcrunch.com&utm_medium=Automated_Email&utm_campaign=KNOWCRUNCH_BRANDING" target="_blank" style="color: #0092ff; text-decoration: underline;"> <img src="https://img.mailinblue.com/4113051/images/rnb/original/616437849c4f37380008cb4d.png" width="200" alt="KnowCrunch logo" border="0" class="" style="display: block; width: 100%;"></a> </td>
+                                                                           <td class="r11-i"> <a href="https://knowcrunch.com/?utm_source=Knowcrunch.com&utm_medium=Automated_Email&utm_campaign=KNOWCRUNCH_BRANDING" target="_blank" style="color: #0092ff; text-decoration: underline;"> <img src="https://img.mailinblue.com/4113051/images/rnb/original/616437849c4f37380008cb4d.png" width="200" alt="Knowcrunch logo" border="0" class="" style="display: block; width: 100%;"></a> </td>
                                                                         </tr>
                                                                         <tr class="nl2go-responsive-hide">
                                                                            <td height="15" style="font-size: 15px; line-height: 15px;">­</td>
@@ -246,7 +246,7 @@
                                                                         <tr>
                                                                            <td align="center" valign="top" class="r19-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: center;">
                                                                               <div>
-                                                                                 <p style="font-size: 14px; margin: 0px;"><span style="color: #ffffff; font-family: Tahoma, geneva, sans-serif;"><strong>KnowCrunch Inc.</strong>, 2035 Sunset Lake Road, Suite B2, Newark, 19702, Delaware, USA</span></p>
+                                                                                 <p style="font-size: 14px; margin: 0px;"><span style="color: #ffffff; font-family: Tahoma, geneva, sans-serif;"><strong>Knowcrunch Inc.</strong>, 2035 Sunset Lake Road, Suite B2, Newark, 19702, Delaware, USA</span></p>
                                                                               </div>
                                                                            </td>
                                                                         </tr>

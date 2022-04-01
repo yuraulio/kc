@@ -74,9 +74,9 @@
                                             <option value="Administrator"> Administrator </option>
                                             <option value="Author"> Author </option>
                                             <option value="Collaborator"> Collaborator </option>
-                                            <option value="KnowCrunch Partner"> KnowCrunch Partner </option>
-                                            <option value="KnowCrunch Payer"> KnowCrunch Payer </option>
-                                            <option value="KnowCrunch Student"> KnowCrunch Student </option>
+                                            <option value="Knowcrunch Partner"> Knowcrunch Partner </option>
+                                            <option value="Knowcrunch Payer"> Knowcrunch Payer </option>
+                                            <option value="Knowcrunch Student"> Knowcrunch Student </option>
                                             <option value="Manager"> Manager </option>
                                             <option value="Member"> Member </option>
                                             <option value="Super Administrator"> Super Administrator </option>

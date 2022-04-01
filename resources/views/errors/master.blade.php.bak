@@ -29,7 +29,7 @@
              "postalCode": "19702",
              "streetAddress": "2035 Sunset Lake Road"
            },
-           "name": "KnowCrunch Inc",
+           "name": "Knowcrunch Inc",
            "logo": "/theme/assets/images/logo.png"
          }
       </script>
@@ -108,7 +108,7 @@
       <div class="search-wrapper">
       <form method="post" action="search/term">
           {{ csrf_field() }}
-            <input type="text" name="search_term" placeholder="Search KnowCrunch">
+            <input type="text" name="search_term" placeholder="Search Knowcrunch">
             <button type="submit"><img src="{{cdn('/theme/assets/images/icons/icon-magnifier.svg')}}" class="replace-with-svg" alt=""/></button>
          </form>
       </div>
@@ -245,7 +245,7 @@
                                  <li> <a  href='/become-an-instructor' title = 'become an instructor'> become an instructor </a> </li>
                                  <li> <a  href='/corporate-training'  title = 'corporate training'> corporate training </a> </li>
                                  <li> <a  href='/en/blog' title = 'blog'> blog </a> </li>
-                                 <li> <a  href='https://www.facebook.com/pg/KnowCrunch/jobs/' target='_blank' title = 'jobs'> jobs </a> </li>
+                                 <li> <a  href='https://www.facebook.com/pg/Knowcrunch/jobs/' target='_blank' title = 'jobs'> jobs </a> </li>
                                  <li> <a  href='/terms'  title = 'Terms & Conditions'> terms & conditions </a> </li>
                                  <li> <a  href='/data-privacy-policy'  title = 'Data Privacy Policy'> data privacy policy </a> </li>
                                  <li> <a  href='/contact'  title = 'in the media'> contact us </a> </li>

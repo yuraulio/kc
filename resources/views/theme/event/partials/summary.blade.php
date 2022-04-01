@@ -64,7 +64,7 @@
 
 			    <?php if (isset($content['c_fields']['simple_text'][6]) && $content['c_fields']['simple_text'][6]['value'] != '') : ?>
 			    <div class="summary-tiles">
-			    <div class="sum-icon"><img class="summary_ic" src="theme/assets/img/summary_icons/KnowCrunchDeree.svg" alt="KnowCrunch Deree" title="KnowCrunch Deree" /></div>
+			    <div class="sum-icon"><img class="summary_ic" src="theme/assets/img/summary_icons/KnowCrunchDeree.svg" alt="Knowcrunch Deree" title="Knowcrunch Deree" /></div>
 			    <h5 class="sum-icon-title">{{ $content['c_fields']['simple_text'][6]['value'] }}</h5>
 			    <?php if (isset($content['c_fields']['simple_text'][7])) : ?>
 			    <p>{{ $content['c_fields']['simple_text'][7]['value'] }}</p>

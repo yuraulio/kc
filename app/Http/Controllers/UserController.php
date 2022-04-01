@@ -625,7 +625,7 @@ class UserController extends Controller
 
 			$fullname = $muser['name'];
 			$first = $muser['first'];
-			$sub = 'KnowCrunch |' . $first . ' – Payment Successful in ' . $muser['event_title'];;
+			$sub = 'Knowcrunch |' . $first . ' – Payment Successful in ' . $muser['event_title'];;
 			$m->from($adminemail, 'Knowcrunch');
 			$m->to($muser['email'], $fullname);
 			$m->subject($sub);
@@ -648,7 +648,7 @@ class UserController extends Controller
 
             $fullname = $muser['name'];
             $first = $muser['first'];
-            $sub =  'KnowCrunch |' . $first . ' – Payment Successful in ' . $muser['event_title'];;
+            $sub =  'Knowcrunch |' . $first . ' – Payment Successful in ' . $muser['event_title'];;
             $m->from('info@knowcrunch.com', 'Knowcrunch');
             $m->to($adminemail, $fullname);
             //$m->to('moulopoulos@lioncode.gr', $fullname);

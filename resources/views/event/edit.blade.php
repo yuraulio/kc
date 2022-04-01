@@ -69,6 +69,13 @@
                                 <span class="btn-inner--text">Students</span>
                             </button>
                         </li>
+
+                        <li class="nav-item">
+                            <button class="btn btn-icon btn-primary" data-toggle="tab"  href="#tabs-icons-text-5" role="tab" type="button">
+                            	<span class="btn-inner--icon"><i class="ni ni-hat-3"></i></span>
+                                <span class="btn-inner--text">Coupons</span>
+                            </button>
+                        </li>
                       
                     </ul>
                 </div>
@@ -191,6 +198,11 @@
 
                                     @include('alerts.feedback', ['field' => 'category_id'])
                                 </div>
+
+
+                                @include('admin.city.event.index')
+
+                                @include('admin.partner.event.index')
 
                                 <div class="form-group{{ $errors->has('type_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-type_id">{{ __('Type') }}</label>
@@ -323,7 +335,6 @@
 
 
                                                 @foreach ($instructors1 as $key => $instructor)
-                                                <?php //dd($key); ?>
 
                                                     <option
                                                     <?php if(count($event->syllabus) != 0){
@@ -367,15 +378,15 @@
                                         <li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-5-tab_inside" data-toggle="tab" href="#tabs-icons-text-5_inside" role="tab" aria-controls="tabs-icons-text-5_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Tickets</a>
                                         </li>
-                                        <li class="nav-item">
+                                        {{--<li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-6-tab_inside" data-toggle="tab" href="#tabs-icons-text-6_inside" role="tab" aria-controls="tabs-icons-text-6_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>City</a>
-                                        </li>
+                                        </li>--}}
                                         <li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-7-tab_inside" data-toggle="tab" href="#tabs-icons-text-7_inside" role="tab" aria-controls="tabs-icons-text-7_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Venue</a>
                                         </li>
-                                        <li class="nav-item">
+                                        {{--<li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab_inside" data-toggle="tab" href="#tabs-icons-text-8_inside" role="tab" aria-controls="tabs-icons-text-8_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Partners</a>
-                                        </li>
+                                        </li>--}}
                                         {{--<li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-9-tab_inside" data-toggle="tab" href="#tabs-icons-text-9_inside" role="tab" aria-controls="tabs-icons-text-9_inside" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Sections</a>
                                         </li>--}}
@@ -385,9 +396,9 @@
                                         <li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-11-tab_inside" data-toggle="tab" href="#tabs-icons-text-11_inside" role="tab" aria-controls="tabs-icons-text-11_inside" aria-selected="false"><i class="far fa-images mr-2"></i>Image</a>
                                         </li>
-                                        <li class="nav-item">
+                                        {{--<li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab_inside" data-toggle="tab" href="#coupons" role="tab" aria-controls="metas" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Coupons</a>
-                                        </li>
+                                        </li>--}}
                                       
                                         <li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-9-tab_inside" data-toggle="tab" href="#videos" role="tab" aria-controls="videos" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Videos</a>
@@ -410,6 +421,36 @@
 
                                                     <h6 class="heading-small text-muted mb-4">{{ __('Event information') }}</h6>
                                                     <div class="pl-lg-4">
+                                                        <?php 
+
+                                                            $id = isset($sections['overview'][0]) ? $sections['overview'][0]['id'] : '';
+                                                            $tab_title = isset($sections['overview'][0]) ? $sections['overview'][0]['tab_title'] : '' ;
+                                                            $title = isset($sections['overview'][0]) ? $sections['overview'][0]['title'] : '' ;
+                                                            $visible = true ;
+
+                                                        ?> 
+                                                        <div class="form-group">
+
+                                                            <input hidden name="sections[overview][id]" value="{{$id}}"> 
+
+                                                            <label class="form-control-label" for="input-title">{{ __('Tab Title') }}</label>
+                                                            <input type="text" name="sections[overview][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[instructors][tab_title]", $tab_title) }}" autofocus> 
+                                                            <label class="form-control-label" for="input-title">{{ __('H2 Title') }}</label>
+                                                            <input type="text" name="sections[overview][title]" class="form-control" placeholder="{{ __('H2 Title') }}" value="{{ old("sections[instructors][title]", $title) }}" autofocus>
+                                                            <input hidden type="checkbox"  name="sections[overview][visible]" @if($visible)) checked @endif>
+
+                                                            {{--<label class="form-control-label" for="input-method">{{ __('Visible') }}</label>
+                                                            <div style="margin: auto;" class="form-group">
+
+                                                               <label class="custom-toggle enroll-toggle">
+                                                                   <input type="checkbox"  name="sections[instructors][visible]" @if($visible)) checked @endif>
+                                                                   <span class="custom-toggle-slider rounded-circle" data-label-off="no visible" data-label-on="visible"></span>
+                                                               </label>
+
+                                                            </div>--}}
+
+
+                                                        </div>
 
 
 
@@ -481,7 +522,7 @@
                                                 @include('admin.metas.metas',['metas' => $metas])
                                             </div>--}}
 
-                                            <div class="tab-pane fade" id="coupons" role="tabpanel" aria-labelledby="tabs-icons-text-8-tab_inside">
+                                            {{--<div class="tab-pane fade" id="coupons" role="tabpanel" aria-labelledby="tabs-icons-text-8-tab_inside">
 
                                                 <div class="table-responsive py-4">
                                                     <table class="table align-items-center table-flush"  id="datatable-coupon">
@@ -525,7 +566,7 @@
                                                     </table>
                                                 </div>
 
-                                            </div>
+                                            </div>--}}
 
                                             <div class="tab-pane fade" id="videos" role="tabpanel" aria-labelledby="tabs-icons-text-9-tab_inside">
                                                 @include('admin.videos.event.index',['model' => $event])
@@ -542,15 +583,15 @@
                                             <div class="tab-pane fade" id="tabs-icons-text-5_inside" role="tabpanel" aria-labelledby="tabs-icons-text-5-tab_inside">
                                                 @include('admin.ticket.index', ['model' => $event, 'sections' => $sections])
                                             </div>
-                                            <div class="tab-pane fade" id="tabs-icons-text-6_inside" role="tabpanel" aria-labelledby="tabs-icons-text-6-tab_inside">
+                                            {{--<div class="tab-pane fade" id="tabs-icons-text-6_inside" role="tabpanel" aria-labelledby="tabs-icons-text-6-tab_inside">
                                                 @include('admin.city.event.index', ['model' => $event])
-                                            </div>
+                                            </div>--}}
                                             <div class="tab-pane fade" id="tabs-icons-text-7_inside" role="tabpanel" aria-labelledby="tabs-icons-text-7-tab_inside">
                                                 @include('admin.venue.event.index', ['model' => $event,'sections' => $sections])
                                             </div>
-                                            <div class="tab-pane fade" id="tabs-icons-text-8_inside" role="tabpanel" aria-labelledby="tabs-icons-text-8-tab_inside">
+                                            {{--<div class="tab-pane fade" id="tabs-icons-text-8_inside" role="tabpanel" aria-labelledby="tabs-icons-text-8-tab_inside">
                                                 @include('admin.partner.event.index', ['model' => $event])
-                                            </div>
+                                            </div>--}}
                                             {{--<div class="tab-pane fade" id="tabs-icons-text-9_inside" role="tabpanel" aria-labelledby="tabs-icons-text-9-tab_inside">
                                                 @include('admin.section.index', ['model' => $event])
                                             </div>--}}
@@ -659,7 +700,7 @@
                             </div>
 
                             <div class="tab-pane fade" id="emails_fields" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
-                            <p class="text-sm mb-0">
+                                <p class="text-sm mb-0">
                                                     {{ __("Please submit the full links for for this course's automated emails.") }}
                                                 </p>
                                                 <div class="form-group">
@@ -697,6 +738,53 @@
                                                         @include('alerts.feedback', ['field' => 'fb_testimonial'])
                                                     </div>
                                                 </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="tabs-icons-text-5" role="tabpanel" aria-labelledby="tabs-icons-text-5-tab">
+                            
+                                <div class="table-responsive py-4">
+                                    <table class="table align-items-center table-flush"  id="datatable-coupon">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th scope="col">{{ __('Code') }}</th>
+                                                <th scope="col">{{ __('Price') }}</th>
+                                                <th scope="col">{{ __('Status') }}</th>
+                                                <th scope="col">{{ __('Used') }}</th>
+                                                <th scope="col">{{ __('Assigned') }}</th>
+
+
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php //dd($allTopicsByCategory);
+                                            $eventCoupons = $event['coupons']->pluck('id')->toArray();
+                                            //dd($eventCoupons);
+                                        ?>
+
+                                            @foreach ($coupons as $key => $coupon)
+                                                <tr>
+                                                    <td>{{ $coupon['code_coupon'] }}</td>
+                                                    <td>{{ $coupon['price'] }}</td>
+                                                    <td>{{ $coupon['status'] }}</td>
+                                                    <td>{{ $coupon['used'] }}</td>
+
+                                                    <td>
+                                                        <div class="col-2 assign-toggle" id="toggle_{{$key}}">
+                                                            <label class="custom-toggle">
+                                                                <input class="coupon-input" type="checkbox" data-status="{{in_array($coupon['id'],$eventCoupons)}}" data-event-id="{{$event['id']}}" data-coupon-id="{{$coupon['id']}}" @if(in_array($coupon['id'],$eventCoupons)) checked @endif>
+                                                                <span class="coupon custom-toggle-slider rounded-circle" ></span>
+                                                            </label>
+                                                        </div>
+                                                    </td>
+
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                       
                             </div>
 
                         </div>
@@ -818,6 +906,22 @@
             let lesson_id = $('#lesson_id').val()
             let instructor_id = $('#instFormControlSelect12').val()
 
+            if(!date){
+
+                alert('You must fill date field')
+                return false;
+
+            }else if(!start){
+                
+                alert('You must fill start time field')
+                return false;
+                
+            }else if(!end){
+
+                alert('You must fill end time field')
+                return false;
+                
+            }
 
             data = {date:date, start:start, event_id:event_id, end:end, room:room, instructor_id:instructor_id, topic_id:topic_id, lesson_id:lesson_id}
 

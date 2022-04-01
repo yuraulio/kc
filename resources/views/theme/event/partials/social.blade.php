@@ -10,7 +10,7 @@
 	                    </a>
 	                </div>
 	                <div class="social_icon social_icon_tw">
-	                	<a target="_blank" title="Share on Twitter" href="http://twitter.com/share?text={{ $content->title }}&amp;url={{ Request::url() }}&amp;via=KnowCrunch" onclick="javascript:window.open(this.href,
+	                	<a target="_blank" title="Share on Twitter" href="http://twitter.com/share?text={{ $content->title }}&amp;url={{ Request::url() }}&amp;via=Knowcrunch" onclick="javascript:window.open(this.href,
 	'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"><img class="social_ic_bot" src="theme/assets/img/new_icons/twitter_overview.svg"/>  twitter
 	                    </a>
 	                </div>
@@ -21,7 +21,7 @@
 	                </div> -->
 	                <div class="social_icon social_icon_li">
 	                    <a target="_blank" title="Share on LinkedIn" href="https://www.linkedin.com/shareArticle?mini=true&amp;url={{ Request::url() }}&amp;title={{ $content->title }}
-&amp;summary={{ $content->summary }}&amp;source=KnowCrunch" onclick="javascript:window.open(this.href,
+&amp;summary={{ $content->summary }}&amp;source=Knowcrunch" onclick="javascript:window.open(this.href,
 	'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"><img class="social_ic_bot" src="theme/assets/img/new_icons/linkedin_overview.svg"/> linkedin
 	                    </a>
 	                </div>

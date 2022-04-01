@@ -47,13 +47,13 @@ ON EVENT POSITIONS -->
 
 <iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2FKnowCrunch%2Fvideos%2F1587380654668571%2F&show_text=0&width=560" width="560" height="315" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" allowFullScreen="true"></iframe>
 
-https://www.facebook.com/plugins/video.php?href=https://www.facebook.com/KnowCrunch/videos/2F1587380654668571/
+https://www.facebook.com/plugins/video.php?href=https://www.facebook.com/Knowcrunch/videos/2F1587380654668571/
  		</div>
  	</div>
  </div>
  @endif
  <!-- VIDEOS END /{page-id}/video_lists -->
-<!-- https://www.facebook.com/KnowCrunch/videos/1625323314207638/ -->
+<!-- https://www.facebook.com/Knowcrunch/videos/1625323314207638/ -->
 <!-- ?access_token=378574919191027|y8eycTxvHs1pFRKk2zxl5h-AQy4 -->2F1587380654668571
 @section('scripts')
 <script type="text/javascript">

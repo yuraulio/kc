@@ -30,14 +30,22 @@
             <!-- /.alert-outer -->
          </div>
          <form autocomplete="off" class="login-form">
+        
+
+            <label>Email <span class="required">(*)</span></label>
             <div class="input-wrapper input-wrapper--text input-wrapper--email">
-               <span class="icon"><img width="14" src="{{cdn('/theme/assets/images/icons/icon-email.svg')}}" alt=""></span>
-               <input type="text" placeholder="Email" id="email-sub" autocomplete="off">
+                <input type="text"  id="email-sub" autocomplete="off">
+
             </div>
-            <div class="input-wrapper input-wrapper--text">
-               <span class="icon"><img width="10" src="{{cdn('/theme/assets/images/icons/icon-lock.svg')}}" alt=""></span>
-               <input type="password" placeholder="Password" id="password-sub" autocomplete="off">
+            
+            </br>
+
+            <label> Password <span class="required">(*)</span></label><span data-id="password-sub" class="icon sub"><img width="20" src="{{cdn('/theme/assets/images/icons/eye-password.svg')}}" alt="">Show</span>
+            <div class="input-wrapper input-wrapper--text">    
+                <input type="password"  id="password-sub" autocomplete="off">
             </div>
+
+            
             <div class="form-group">
                <label for="remember-me"><input id="remember-me-sub" type="checkbox">Remember me</label>
                {{--<a id="forgot-pass" href="javascript:void(0)">Forgot password?</a>--}}
@@ -237,7 +245,7 @@
 														  "reviewBody": "{!! $rev !!}",
 														  "publisher": {
 														    "@type": "Organization",
-														    "name": "KnowCrunch"
+														    "name": "Knowcrunch"
 														  }
 														}
 													</script>
@@ -291,9 +299,7 @@
        if (email.length > 4 && password.length > 4) {
        $.ajax({ url: routesObj.baseUrl+"studentlogin", type: "post",
                data: {email:email, password:password, remember:remember},
-               success: function(data) {
-                   //console.log(data);
-                   
+               success: function(data) {                   
                    switch (data.status) {
                        case 0:
                            if (data.message.length > 0) {
@@ -314,7 +320,7 @@
                            break;
                        case 1:
                          
-   			location.reload();
+   			               location.reload();
                            /*setTimeout( function(){
                                window.location.replace(data.redirect);
                            }, 1000 );*/
@@ -322,7 +328,7 @@
                            break;
    
                        default:
-                           shakeModal();
+                           //shakeModal();
                            break;
                    }
                    
@@ -344,5 +350,25 @@
    }
    @endif
    
+</script>
+
+<script>
+
+    $('.icon sub').click(function(){
+        let input = $(`#${$(this).data('id')}`);
+
+        if(input.attr('type') === "password"){
+            input.attr('type','text')
+
+            $(this).find('img').attr('src', "{{cdn('/theme/assets/images/icons/eye-password-active.svg')}}");
+
+
+        }else{
+            input.attr('type','password')
+            $(this).find('img').attr('src', "{{cdn('/theme/assets/images/icons/eye-password.svg')}}");
+        }
+
+    })
+
 </script>
 @stop

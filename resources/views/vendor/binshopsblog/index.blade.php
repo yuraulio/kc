@@ -2,14 +2,14 @@
 
 @section('metas')
     <meta charset="UTF-8">
-    <meta name="description" content="KnowCrunch is offering high level professional training and specialized educational courses dedicated to fostering knowledge to others">
+    <meta name="description" content="Knowcrunch is offering high level professional training and specialized educational courses dedicated to fostering knowledge to others">
     <meta name="keywords" content="training, εκπαίδευση, seminars, σεμινάρια, events, courses, diplomas, certificates, business, marketing, digital marketing, εκπαίδευση στελεχών, executive training, knowcrunch, kc">
-    <meta name="author" content="KnowCrunch">
+    <meta name="author" content="Knowcrunch">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 @endsection
 
 @section('header')
-    <title>{{ __('KnowCrunch Blog') }}</title>
+    <title>{{ __('Knowcrunch Blog') }}</title>
 @endsection
 
 

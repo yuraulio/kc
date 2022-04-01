@@ -392,7 +392,7 @@ dataLayer.push({
         'name': $.parseHTML("{{ $tigran['ProductName'] }}")[0].data,
         'id': "{{$tigran['Product_id']}}",
         'price': "{{$tigran['Price']}}",
-        'brand': 'KnowCrunch',
+        'brand': 'Knowcrunch',
         'category': "{{$tigran['ProductCategory']}}",
         'quantity': "{{$totalitems}}"
        }]

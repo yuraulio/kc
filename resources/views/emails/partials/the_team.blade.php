@@ -7,7 +7,7 @@ Learn. Transform. Thrive.
 <br />
 <a href="https://knowcrunch.com/terms-privacy" target="_blank">Terms &amp; Conditions</a> | <a href="https://knowcrunch.com/data-privacy-policy" target="_blank">Data Privacy Policy</a>
 <br />
-<a href="https://www.facebook.com/KnowCrunch/" target="_blank">Facebook</a> |
+<a href="https://www.facebook.com/Knowcrunch/" target="_blank">Facebook</a> |
 <a href="https://twitter.com/knowcrunch" target="_blank">Twitter</a> |
 <a href="https://www.instagram.com/knowcrunch/" target="_blank">Instagram</a> |
 <a href="https://www.youtube.com/channel/UCU5p3dauJLrdMpuLwB_mX1A" target="_blank">YouTube</a> |

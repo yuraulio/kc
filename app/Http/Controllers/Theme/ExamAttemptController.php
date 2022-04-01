@@ -461,12 +461,12 @@ class ExamAttemptController extends Controller
                         $view_email = 'emails.student.after_exam';
                     }
 
-                    $pathFile = url('/') . '/pdf/elearning/KnowCrunch - How to add your certification in Social Media.pdf';
+                    $pathFile = url('/') . '/pdf/elearning/Knowcrunch - How to add your certification in Social Media.pdf';
                     $pathFile = str_replace(' ','%20',$pathFile);
 
                     $sent = Mail::send($view_email, $data,function ($m) use ($adminemail, $muser,$pathFile) {
 
-                        $sub =  'KnowCrunch |' . $muser['first'] . ', Final Evaluation Surveys & how to add your certification in Social Media';
+                        $sub =  'Knowcrunch |' . $muser['first'] . ', Final Evaluation Surveys & how to add your certification in Social Media';
                         $m->from($adminemail, 'Knowcrunch');
                         $m->to($muser['email'], $muser['fullname']);
                         $m->subject($sub);

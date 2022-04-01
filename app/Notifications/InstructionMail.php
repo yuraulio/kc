@@ -43,7 +43,7 @@ class InstructionMail extends Notification
     {
         return (new MailMessage)
                     ->from('info@knowcrunch.com', 'Knowcrunch')
-                    ->subject('KnowCrunch |' . $this->data['user']['first'] . ', welcome to ' . $this->data['extrainfo'][2].'!')
+                    ->subject('Knowcrunch |' . $this->data['user']['first'] . ', welcome to ' . $this->data['extrainfo'][2].'!')
                     ->view('emails.user.instructions_email',$this->data);
     }
 

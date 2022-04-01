@@ -136,7 +136,6 @@ $.ajaxSetup({headers:{'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content
 
     $('.icon').click(function(){
         let input = $(`#${$(this).data('id')}`);
-        console.log(input.attr('type'));
 
         if(input.attr('type') === "password"){
             input.attr('type','text')

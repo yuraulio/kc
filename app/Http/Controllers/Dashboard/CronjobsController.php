@@ -122,7 +122,7 @@ class CronjobsController extends Controller
 
             $data['firstName'] = $user->firstname;
             $data['eventTitle'] = $event->title;
-            $data['subject'] = 'KnowCrunch |' . $data['firstName'] . ' - Subscription Payment Declined';;
+            $data['subject'] = 'Knowcrunch |' . $data['firstName'] . ' - Subscription Payment Declined';;
             $data['expirationDate'] = $event->pivot->expiration;
             $data['template'] = 'emails.user.subscription_non_payment';
             $data['amount'] = round($subscription->price,2);
@@ -134,7 +134,7 @@ class CronjobsController extends Controller
 
                 $fullname = $muser['name'];
                 $first = $muser['first'];
-                $sub = 'KnowCrunch |' . $first . ' - Subscription Payment Declined';
+                $sub = 'Knowcrunch |' . $first . ' - Subscription Payment Declined';
                 $m->from($adminemail, 'Knowcrunch');
                 $m->to($muser['email'], $fullname);
                 //$m->cc($adminemail);
@@ -416,7 +416,7 @@ class CronjobsController extends Controller
 
                     $data['subscriptionSlug'] =  url('/') . '/' . $page->getSlug() ;
                     $data['template'] = 'emails.user.courses.masterclass_expiration';
-                    $data['subject'] = 'KnowCrunch | ' . $data['firstName'] . ' your course expires soon';
+                    $data['subject'] = 'Knowcrunch | ' . $data['firstName'] . ' your course expires soon';
 
                     $user->notify(new ExpirationMails($data));
 
@@ -426,7 +426,7 @@ class CronjobsController extends Controller
                     $data['expirationDate'] = date('d-m-Y',strtotime($user->pivot->expiration));
 
                     $data['template'] = 'emails.user.courses.week_expiration';
-                    $data['subject'] = 'KnowCrunch | ' . $data['firstName'] . ' your course expires soon';
+                    $data['subject'] = 'Knowcrunch | ' . $data['firstName'] . ' your course expires soon';
 
                     $user->notify(new ExpirationMails($data));
                 }

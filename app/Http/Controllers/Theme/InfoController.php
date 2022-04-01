@@ -101,10 +101,10 @@ class InfoController extends Controller
 
                 $data['event']['title'] = $thisevent->title;
                 $data['event']['slug'] = $thisevent->slugable->slug;
-                $data['event']['facebook'] = url('/') . '/' .$thisevent->slugable->slug .'?utm_source=Facebook&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&quote='.urlencode("Proudly participating in ". $thisevent->title . " by KnowCrunch.");
-                $data['event']['twitter'] = urlencode("Proudly participating in ". $thisevent->title . " by KnowCrunch. 💙");
-                $data['event']['linkedin'] = urlencode(url('/') . '/' .$thisevent->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $thisevent->title . " by KnowCrunch. 💙");
-                //$data['event']['linkedin'] = urlencode('https://knowcrunch.com/' . '/' .$thisevent->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $thisevent->title . " by KnowCrunch. 💙");
+                $data['event']['facebook'] = url('/') . '/' .$thisevent->slugable->slug .'?utm_source=Facebook&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&quote='.urlencode("Proudly participating in ". $thisevent->title . " by Knowcrunch.");
+                $data['event']['twitter'] = urlencode("Proudly participating in ". $thisevent->title . " by Knowcrunch. 💙");
+                $data['event']['linkedin'] = urlencode(url('/') . '/' .$thisevent->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $thisevent->title . " by Knowcrunch. 💙");
+                //$data['event']['linkedin'] = urlencode('https://knowcrunch.com/' . '/' .$thisevent->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $thisevent->title . " by Knowcrunch. 💙");
 
 	        	$stockHelper = $thisevent->ticket->where('ticket_id', $item->id)->first();
 	        	$newstock = $stockHelper->pivot->quantity - $item->qty;
@@ -154,7 +154,7 @@ class InfoController extends Controller
 
                 $data['ecommerce'] = [
                     'actionField' => ['id' => $this->transaction['id'], 'value' => $tr_price, 'currency' => 'EUR', 'coupon' => $transaction->coupon_code], 
-                    'products' => ['name' => $thisevent->title, 'id' => $thisevent->id, 'brand'=>'KnowCrunch', 'price' => $tr_price, 
+                    'products' => ['name' => $thisevent->title, 'id' => $thisevent->id, 'brand'=>'Knowcrunch', 'price' => $tr_price, 
                                     'category' => $categoryScript, 'coupon' => $transaction->coupon_code,'quantity' => Cart::content()->count()]
                                         
                 ];
@@ -338,7 +338,7 @@ class InfoController extends Controller
     {
     	/*
     	1. Knowcrunch Student ID
-		KC - KnowCrunch
+		KC - Knowcrunch
 		YY - year of registration e.g. 17
 		MM - month of registration e.g. 01
 		ID - next available ID on the system 4-digit 0001-9999 e.g. 0129
@@ -811,7 +811,7 @@ class InfoController extends Controller
 
                     $fullname = $muser['name'];
                     $first = $muser['first'];
-                    $sub =  'KnowCrunch -' . $first . ' – download your receipt';
+                    $sub =  'Knowcrunch -' . $first . ' – download your receipt';
                     $m->from('info@knowcrunch.com', 'Knowcrunch');
                     $m->to($adminemail, $fullname);
                     //$m->to('moulopoulos@lioncode.gr', $fullname);

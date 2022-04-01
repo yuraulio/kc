@@ -41,7 +41,7 @@ Class Alphabank_processor
         $sbt_data['billAddress'] = $data['order_details']['billing_details']['billaddress'];
 
         //$sbt_data['orderid'] = $data['order_details']['order_id'];
-		$sbt_data['orderDesc'] = 'KnowCrunch Order for booking';
+		$sbt_data['orderDesc'] = 'Knowcrunch Order for booking';
 		$sbt_data['orderAmount'] = number_format($data['order_details']['total_amount'], 2, '.', '');
 		$sbt_data['confirmUrl'] = $data['payment_options']['confirmUrl'];
 		$sbt_data['cancelUrl'] = $data['payment_options']['cancelUrl'];
