@@ -39,7 +39,11 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapAdminApiRoutes();
 
-        $this->mapNewWebRoutes();
+        // If path is cached that means it doesn't exists on new website
+        // Because of that we will skip loading web routes
+        if (!cache(request()->path())) {
+            $this->mapNewWebRoutes();
+        }
 
         $this->mapApiRoutes();
 
@@ -56,8 +60,8 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapWebRoutes()
     {
         Route::middleware('web')
-             ->namespace($this->namespace)
-             ->group(base_path('routes/web.php'));
+            ->namespace($this->namespace)
+            ->group(base_path('routes/web.php'));
     }
 
     /**
@@ -70,9 +74,9 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapApiRoutes()
     {
         Route::prefix('api')
-             ->middleware('api')
-             ->namespace($this->namespace)
-             ->group(base_path('routes/api.php'));
+            ->middleware('api')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/api.php'));
     }
 
     /**
@@ -84,8 +88,8 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapAdminRoutes()
     {
         Route::middleware('web')
-             ->namespace($this->namespace)
-             ->group(base_path('routes/admin.php'));
+            ->namespace($this->namespace)
+            ->group(base_path('routes/admin.php'));
     }
 
     /**
@@ -111,7 +115,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapNewWebRoutes()
     {
         Route::middleware('web')
-             ->namespace($this->namespace)
-             ->group(base_path('routes/new_web.php'));
+            ->namespace($this->namespace)
+            ->group(base_path('routes/new_web.php'));
     }
 }

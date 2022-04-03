@@ -39,42 +39,42 @@ class MainController extends Controller
      */
     public function page(String $slug, Request $request)
     {
-        $dynamic_page_data = null;
+        $dynamicPageData = null;
 
-        $slug_model = Slug::whereSlug($slug)->first();
+        $modelSlug = Slug::whereSlug($slug)->first();
 
-        if ($slug_model && get_class($slug_model->slugable) == "App\Model\Event") {
-            $event = $slug_model->slugable;
+        if ($modelSlug && get_class($modelSlug->slugable) == "App\Model\Event") {
+            $event = $modelSlug->slugable;
             $page = Page::withoutGlobalScopes()->whereType("Course page")->whereDynamic(true)->first();
-            $dynamic_page_data = CMS::getEventData($event);
-        } elseif ($slug_model && get_class($slug_model->slugable) == "App\Model\Instructor") {
-            $instructor = $slug_model->slugable;
+            $dynamicPageData = CMS::getEventData($event);
+        } elseif ($modelSlug && get_class($modelSlug->slugable) == "App\Model\Instructor") {
+            $instructor = $modelSlug->slugable;
             $page = Page::withoutGlobalScopes()->whereType("Trainer page")->whereDynamic(true)->first();
-            $dynamic_page_data = CMS::getInstructorData($instructor);
+            $dynamicPageData = CMS::getInstructorData($instructor);
         } else {
             $page = Page::whereSlug($slug)->first();
 
-            if (!$page) {
-                $redirect = Redirect::where("old_slug", $slug)->first();
-                if ($redirect) {
-                    $page = Page::where("id", $redirect->page_id)->first();
-                }
+            if (!$page && $redirect = Redirect::whereOldSlug($slug)->first() and $redirect->page) {
+                return redirect()->route('new_general_page', ['slug' => $redirect->page->slug], 301);
             }
         }
 
         if (!$page) {
-            Log::warning("Failed to find page in new routes. URL:" . $request->path() . " Method:" . $request->method());
-            session()->flash('404redirect', 'Not found in new routes');
-            return redirect($request->path(), 302);
-        // abort(404);
-        } else {
-            return view('new_web.page', [
-                'content' => json_decode($page->content),
-                'page_id' => $page->id,
-                'comments' => $page->comments->take(500),
-                'page' => $page,
-                'dynamic_page_data' => $dynamic_page_data,
-            ]);
+            // Cache 5 minutes
+            cache()->remember($request->path(), 300, function () use ($request) {
+                Log::warning("Failed to find page in new routes. URL:" . $request->path() . " Method:" . $request->method());
+                return true;
+            });
+            return redirect()->route('home_route', ['slug' => $slug]);
         }
+
+
+        return view('new_web.page', [
+            'content' => json_decode($page->content),
+            'page_id' => $page->id,
+            'comments' => $page->comments->take(500),
+            'page' => $page,
+            'dynamicPageData' => $dynamicPageData,
+        ]);
     }
 }

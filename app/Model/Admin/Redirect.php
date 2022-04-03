@@ -10,4 +10,9 @@ class Redirect extends Model
     use HasFactory;
 
     protected $table = 'cms_redirects';
+
+    public function page()
+    {
+        return $this->belongsTo(Page::class);
+    }
 }
