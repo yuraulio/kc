@@ -31,6 +31,8 @@
 
                 <img @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" :src="value.url" alt="image" class="img-fluid rounded" >
 
+                <i @click="removeImage()" class="mdi mdi-delete text-muted vertical-middle d-block fs-4 mt-1"></i>
+
                 <div class="mt-2">
                     <label class="form-label float-start">Alt Text</label>
                     <input type="text" v-model="value.alt_text" class="form-control">
@@ -318,6 +320,9 @@ export default {
         },
         removeGalleryImage(index) {
             this.value.splice(index, 1);
+        },
+        removeImage() {
+            this.value = null;
         }
     },
     watch: {

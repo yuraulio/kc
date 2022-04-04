@@ -1,6 +1,6 @@
 {
     "hero" : {
-        "version": 5,
+        "version": 6,
         "title": "Header",
         "width": "full",
         "icon": "dripicons-monitor",
@@ -24,10 +24,8 @@
             {
                 "type": "checkbox",
                 "key": "hero_small",
-                "label": "Small",
-                "value": false,
-                "size": "col-lg-6",
-                "simple_view": false
+                "label": "Minified",
+                "value": false
             }
         ]
     },
@@ -317,7 +315,7 @@
         ]
     },
     "contact_form" : {
-        "version": 2,
+        "version": 3,
         "title": "Form",
         "width": "content",
         "icon": "dripicons-mail",
@@ -365,8 +363,7 @@
                 "key": "top_overlap",
                 "label": "Overlap",
                 "value": true,
-                "size": "col-lg-6",
-                "simple_view": false
+                "size": "col-lg-6"
             }
         ]
     },
