@@ -15,15 +15,13 @@
                 <div class="page-title-box">
                     <div class="page-title-right">
                     </div>
-                    <h4 class="page-title mt-3">Settings</h4>
+                    <h4 class="page-title mt-3 mb-3">Settings</h4>
                 </div>
             </div>
         </div>
         <!-- end page title -->
 
-        <div class="row">
-            
-        </div> 
+        <settings></settings>
 
     </div>
 @endsection

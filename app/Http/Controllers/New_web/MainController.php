@@ -75,7 +75,7 @@ class MainController extends Controller
             'page_id' => $page->id,
             'comments' => $page->comments->take(500),
             'page' => $page,
-            'dynamicPageData' => $dynamicPageData,
+            'dynamic_page_data' => $dynamicPageData,
         ]);
     }
 }

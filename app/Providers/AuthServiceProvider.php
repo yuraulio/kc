@@ -34,7 +34,8 @@ class AuthServiceProvider extends ServiceProvider
         Template::class => TemplatePolicy::class,
         Page::class => PagePolicy::class,
         Comment::class => CommentPolicy::class,
-        Admin::class => AdminPolicy::class
+        Admin::class => AdminPolicy::class,
+        Setting::class => SettingPolicy::class,
     ];
 
     /**

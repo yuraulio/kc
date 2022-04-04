@@ -303,7 +303,7 @@ class PagesController extends Controller
                 ],
                 [
                     "id" => 3,
-                    "title" => "Become an instructror"
+                    "title" => "Become an instructor"
                 ]
             ]
         ];

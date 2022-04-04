@@ -1,5 +1,5 @@
 <template>
-<div class="row">
+<div class="row media-manager">
     <modal name="create-folder-modal" :resizable="true" height="auto" :adaptive="true">
         <div class="row">
             <div class="col-lg-12 p-4">
@@ -327,25 +327,25 @@ export default {
 </script>
 
 <style>
-.dd-handle {
+.media-manager .dd-handle {
     padding: 0px 5px!important;
     border: 1px solid transparent!important;
 }
-.dd-handle:hover i {
+.media-manager .dd-handle:hover i {
     color: #6c757d;
 }
-.dd-item {
+.media-manager .dd-item {
     min-height: 30px!important;
 }
-.collapse-button {
+.media-manager .collapse-button {
     text-indent: 0px!important;
     transform: translateY(-4px);
     width: 23px!important;
 }
-.selected-folder {
+.media-manager .selected-folder {
     border: 1px solid #6658dd!important;
 }
-.original-floder {
+.media-manager .original-floder {
     border: 1px solid #1abc9c!important;
 }
 </style>

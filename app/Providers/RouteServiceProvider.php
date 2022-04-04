@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Model\Admin\Setting;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -36,17 +37,19 @@ class RouteServiceProvider extends ServiceProvider
     public function map()
     {
         $this->mapAdminRoutes();
-
         $this->mapAdminApiRoutes();
 
-        // If path is cached that means it doesn't exists on new website
-        // Because of that we will skip loading web routes
-        if (!cache(request()->path())) {
-            $this->mapNewWebRoutes();
+        $cms_mode = Setting::whereSetting("cms_mode")->firstOrFail()->value;
+        if ($cms_mode == "new") {
+
+            // If path is cached that means it doesn't exists on new website
+            // Because of that we will skip loading web routes
+            if (!cache(request()->path())) {
+                $this->mapNewWebRoutes();
+            }
         }
 
         $this->mapApiRoutes();
-
         $this->mapWebRoutes();
     }
 

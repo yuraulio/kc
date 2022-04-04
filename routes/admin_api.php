@@ -49,6 +49,12 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
             'index', 'destroy'
         ]);
 
+        // settings
+        Route::resource('settings', Admin_api\SettingsController::class)->only([
+            'index', 'update'
+        ]);
+
+        // users
         Route::prefix('users')->group(function () {
             Route::post('admins/deleteMultiple', [AdminController::class, 'deleteMultiple']);
             Route::resource('admins', Admin_api\AdminController::class)->only([

@@ -8,8 +8,6 @@ use App\Model\Admin\Page;
 
 class SettingsController extends Controller
 {
-
-
     /**
      * Show the application settings.
      *

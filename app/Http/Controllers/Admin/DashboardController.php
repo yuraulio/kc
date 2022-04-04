@@ -8,8 +8,6 @@ use App\Model\Admin\Page;
 
 class DashboardController extends Controller
 {
-
-
     /**
      * Show the application dashboard.
      *
@@ -67,16 +65,6 @@ class DashboardController extends Controller
      */
     public function media()
     {
-        /*         $path = public_path('/uploads');
-                $directories = \Storage::disk('public')->directories('/');
-                //dd($directories);
-            $files = \File::files($path. '/pages_media');
-        foreach ($files as $key => $file) {
-            $path = explode('uploads', $file->getPath())[1];
-            dd(basename($file),$file->getExtension(), $path, $file->getRealPath(), $file->getSize(), filemtime($file), $file);
-        }
-                dd($files); */
-
         return view('new_admin.pages.media');
     }
 
