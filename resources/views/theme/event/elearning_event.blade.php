@@ -126,10 +126,10 @@
                      <?php switch ($estatus) {
                         case 0:
                         case 2: ?>
-                        <h2 class="tab-title">{{$title}}</h2>
-                     <h3 > {!!$body!!} </h3>
+                        
                      <div class="course-overview clearfix">
                         <div class="course-tab-text" itemprop="abstract">
+                        <h2 class="tab-title">{{$title}}</h2>
                            {!! $event->body !!}
                            <div class="author-infos">
                               <div class="row">

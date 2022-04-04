@@ -195,4 +195,14 @@ $(document).ready(function () {
     //     $(".jsTopicOpen").hide();
     //     $(".jsTopicClose").show();
     // }
+
+
+    ///LIONCODE
+    $('.lessons-list .lesson').click(function(){
+        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+            $('.jsSidebar.open').removeClass('open')
+        }
+    })
+   
+
 });

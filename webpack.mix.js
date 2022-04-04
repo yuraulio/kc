@@ -57,6 +57,13 @@ mix.js('resources/js/app.js', 'public/js')
           'public/theme/assets/css/style_ver.css',
           'public/theme/assets/js/front.js',
           'public/new_cart/version/style_ver.css',
+          'public/theme/assets/css/new/pop_up.css',
+          'public/theme/assets/css/new/burger.css',
+          'public/theme/assets/css/new/normalize.css',
+          'public/theme/assets/css/new/core.css',
+          'public/theme/assets/js/new_js1/app1.js',
+          'public/theme/assets/js/new_js1/burger.js'
+          
       ]);
   //});
 

@@ -1,6 +1,6 @@
 
 
- $('.hamburger.is-active').click(function(){
+ $('.hamburger').click(function(){
     
     //$(this).toggleClass('is-active');
 
@@ -18,7 +18,7 @@
 });
 
 
-$('.hamburger').not('.is-active').click(function(){
+$('.hamburger').not('.is-activee').click(function(){
     
     //$(this).toggleClass('is-active');
 

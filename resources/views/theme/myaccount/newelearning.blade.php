@@ -18,10 +18,10 @@
       {{--
       <link rel="stylesheet" href="https://use.typekit.net/pfo3bjs.css">
       --}}
-      <link rel="stylesheet" href="{{ cdn('theme/assets/css/new/pop_up.css') }}" />
-      <link rel="stylesheet" href="{{ cdn('theme/assets/css/new/burger.css') }}" />
-      <link rel="stylesheet" href="{{ cdn('theme/assets/css/new/normalize.css') }}" />
-      <link rel="stylesheet" href="{{ cdn('theme/assets/css/new/core.css') }}" />
+      <link rel="stylesheet" href="{{ cdn(mix('theme/assets/css/new/pop_up.css')) }}" />
+      <link rel="stylesheet" href="{{ cdn(mix('theme/assets/css/new/burger.css')) }}" />
+      <link rel="stylesheet" href="{{ cdn(mix('theme/assets/css/new/normalize.css')) }}" />
+      <link rel="stylesheet" href="{{ cdn(mix('theme/assets/css/new/core.css')) }}" />
       <title>{{$course}}</title>
       <script src="https://kit.fontawesome.com/84bbd74d3a.js" crossorigin="anonymous"></script>
 
@@ -70,7 +70,7 @@
          <div class="content-wrapper">
             <div class="sidebar-wrapper open jsSidebar">
                <header class="sidebar-header">
-                  <button class="hamburger hamburger--spin is-active" type="button">
+                  <button class="hamburger hamburger--spin is-activee" type="button">
                   <span class="hamburger-box">
                   <span class="hamburger-inner"></span>
                   </span>
@@ -553,8 +553,8 @@
          integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
          crossorigin="anonymous"
          ></script>
-      <script src="{{ cdn('theme/assets/js/new_js1/app1.js') }}"></script>
-      <script src="{{ cdn('theme/assets/js/new_js1/burger.js') }}"></script>
+      <script src="{{ cdn(mix('theme/assets/js/new_js1/app1.js')) }}"></script>
+      <script src="{{ cdn(mix('theme/assets/js/new_js1/burger.js')) }}"></script>
       <script src="https://player.vimeo.com/api/player.js"></script>
       <script>
          $( ".lesson-info_title" ).click(function() {
