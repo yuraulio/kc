@@ -907,9 +907,10 @@ export default {
         }));
     },
     beforeDestroy() {
-        eventHub.$off('component-added');
-        eventHub.$off('component-rearange');
-        eventHub.$off('order-changed');
+        eventHub.$off('component-added-' + this.name);
+        eventHub.$off('component-rearange-' + this.name);
+        eventHub.$off('order-changed-' + this.name);
+        eventHub.$off('component-change-' + this.name);    
     }
 }
 </script>
