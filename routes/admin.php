@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin_api\MenuController;
 use App\Http\Controllers\Auth\AdminLoginController;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +32,8 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
 
         Route::get('/template/{id}', [DashboardController::class, 'templateEdit']);
         Route::get('/new_template', [DashboardController::class, 'templateNew']);
+
+        Route::get('/settings', [SettingsController::class, 'index'])->name("settings");
     });
 });
 Route::group(['middleware' => ['auth:admin_web']], function () {

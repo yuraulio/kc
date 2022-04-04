@@ -15,6 +15,7 @@ use App\Http\Controllers\New_web\SitemapXmlController;
 |
 */
 
+Route::get('/', [MainController::class, 'index'])->name('home_route');
 
 Route::get('get-page-comments/{page_id}', [CommentsController::class, 'getPageComments']);
 

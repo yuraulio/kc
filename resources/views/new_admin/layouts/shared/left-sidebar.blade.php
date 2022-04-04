@@ -114,6 +114,13 @@
                     </div>
                 </li>
 
+                <li>
+                    <a href="{{route('settings')}}">
+                        <i data-feather="settings"></i>
+                        <span> Settings </span>
+                    </a>
+                </li>
+
             </ul>
 
         </div>

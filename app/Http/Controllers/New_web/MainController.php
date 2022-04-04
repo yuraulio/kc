@@ -29,7 +29,7 @@ class MainController extends Controller
      */
     public function index()
     {
-        return redirect(env("APP_URL"));
+        // return redirect(env("APP_URL"));
     }
 
     /**
@@ -65,7 +65,8 @@ class MainController extends Controller
                 Log::warning("Failed to find page in new routes. URL:" . $request->path() . " Method:" . $request->method());
                 return true;
             });
-            return redirect()->route('home_route', ['slug' => $slug]);
+            return redirect($request->path(), 302);
+            // return redirect()->route('home_route', ['slug' => $slug]);
         }
 
 
