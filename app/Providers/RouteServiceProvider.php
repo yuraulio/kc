@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Model\Admin\Setting;
+use Exception;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -39,10 +40,13 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapAdminRoutes();
         $this->mapAdminApiRoutes();
 
-        $cmsMode = cache()->remember("cmsMode", 3600, function() {
-            return Setting::whereSetting("cms_mode")->firstOrFail()->value;
-        });
-        
+            $cmsMode = cache()->remember("cmsMode", 3600, function () {
+                try {
+                    return Setting::whereSetting("cms_mode")->firstOrFail()->value;
+                } catch (Exception $e) {
+                   return "old";
+                }
+            });
         if ($cmsMode == Setting::NEW_PAGE) {
 
             // If path is cached that means it doesn't exists on new website
