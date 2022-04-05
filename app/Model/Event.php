@@ -651,6 +651,24 @@ class Event extends Model
 
     public function getTotalHours(){
         
+        $timeStarts = false;
+        $timeEnds = false;
+        $hours = 0;
+        
+        foreach($this->lessons as $lesson){
+            $timeStarts = false;
+            $timeEnds = false;
+            
+            $timeStarts = (int) date('H', strtotime($lesson->pivot->time_starts));
+            $timeEnds = (int) date('H', strtotime($lesson->pivot->time_ends));
+
+            if($timeStarts && $timeEnds){
+                $hours += ($timeEnds - $timeStarts) * 60;
+            }
+    
+        }
+   
+        return $hours;
     }
 
 }

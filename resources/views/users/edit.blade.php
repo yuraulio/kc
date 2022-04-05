@@ -1459,6 +1459,7 @@ $(document).on('click', '.ticket-card', function () {
                                     <th scope="col">{{ __('check in') }}</th>
                                     <th scope="col">{{ __('presence hours') }}</th>
                                     <th scope="col">{{ __('absence hours') }}</th>
+                                    <th scope="col"></th>
                                 </tr>
                             </thead>
                             <tbody id="absencesBody">
@@ -1475,12 +1476,17 @@ $(document).on('click', '.ticket-card', function () {
 
                     $('#absences-table').DataTable( {
                         destroy: true,
+                        dom: 'lrtip',
+                        bPaginate: false,
+                        bLengthChange: false,
+                        order: [[ 0, "asc" ]],
                         language: {
                             paginate: {
                                 next: '&#187;', // or '→'
                                 previous: '&#171;' // or '←'
                             }
-                        }
+                        },
+                        
                     });
 
                     var t = $('#absences-table').DataTable();
@@ -1496,11 +1502,12 @@ $(document).on('click', '.ticket-card', function () {
                            
                             key1,
                             totalUserHours > 0 ? `<i class="ni ni-check-bold"></i>` : '',
-                            totalUserHours + '/' +  totalEventHours,
+                            `<input id="${value1['id']}" value=${totalUserHours + '/' +  totalEventHours} readonly>`,
                             (totalEventHours - totalUserHours) + '/' +  totalEventHours,
-                           
-                           
+                            `<button class="absence-edit" data-absence-id=${value1['id']} > Edit </button>`,
+                            `<button hidden id="absence-update-${value1['id']}" > Update </button>`,
                         ]).draw()
+                        
                     })
       
 
@@ -1526,6 +1533,13 @@ $(document).on('click', '.ticket-card', function () {
         t.clear();
         t.destroy();
         $('#absences-table').remove();
+    })
+
+
+    $(document).on('click','.absence-update',function(){
+
+        
+
     })
 
 </script>

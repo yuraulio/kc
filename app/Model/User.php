@@ -812,13 +812,13 @@ class User extends Authenticatable
         
         $eventId = $event->id;
         $absences = $this->absences()->whereEventId($eventId);
-        
+        $event->getTotalHours();
         if(empty($absences->get())){
             return [];
         }
 
         $userMinutes = $absences->sum('minutes');
-        $eventMinutes =  $absences->sum('total_minutes');
+        $eventMinutes =  $event->getTotalHours();//$absences->sum('total_minutes');
         $userMinutesAbsences = $eventMinutes - $userMinutes;
         $eventLimitAbsence = $event->absences_limit;
 
@@ -836,7 +836,7 @@ class User extends Authenticatable
             
             }
 
-            $absencesByDate[$key] = ['user_minutes' => $userM, 'event_minutes' => $eventM];
+            $absencesByDate[$key] = ['id'=>$ab->id,'user_minutes' => $userM, 'event_minutes' => $eventM];
 
         }
 
@@ -853,11 +853,20 @@ class User extends Authenticatable
 
         ]);*/
 
+        $class = '';
+
+        if($userAbsencesPercent >= $event->absences_limit ){
+            $class = 'dangerous-absences';
+        }else if($event->absences_limit - $userAbsencesPercent <= 2){
+            $class = 'warning-absences';
+        }
+       
         $data['absences_by_date'] = $absencesByDate;
         $data['total_user_minutes'] = $userMinutes;
         $data['total_event_minutes'] = $eventMinutes;
         $data['user_minutes_absences'] = $userMinutesAbsences;
         $data['user_absences_percent'] = $userAbsencesPercent;
+        $data['class'] = $class;
 
         return $data;
         
