@@ -25,6 +25,7 @@ class CreateAdminPageRequest extends FormRequest
     {
         return [
             'title' => 'required|unique:cms_pages',
+            'slug' => 'unique:cms_pages',
         ];
     }
 }

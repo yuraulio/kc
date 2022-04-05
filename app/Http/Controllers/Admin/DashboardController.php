@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Library\CMS;
 use Illuminate\Http\Request;
 use App\Model\Admin\Page;
 
@@ -76,11 +77,19 @@ class DashboardController extends Controller
     public function page($uuid)
     {
         $page = Page::withoutGlobalScope('published')->whereUuid($uuid)->with('template')->first();
+
+        $dynamicPageData = null;
+
+        if ($page->slug == "homepage") {
+            $dynamicPageData = CMS::getHomepageData();
+        }
+
         return view('new_web.page', [
             'content' => json_decode($page->content),
             'page_id' => $page->id,
             'comments' => $page->comments->take(500),
             'page' => $page,
+            'dynamic_page_data' => $dynamicPageData,
         ]);
     }
 

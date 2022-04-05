@@ -9,6 +9,8 @@ use App\Library\CMS;
 use App\Model\Admin\Category;
 use App\Model\Admin\Page;
 use App\Model\Admin\Redirect;
+use App\Model\Logos;
+use App\Model\Pages;
 use App\Model\Slug;
 use Carbon\Carbon;
 use Exception;
@@ -31,6 +33,16 @@ class MainController extends Controller
     {
         $page = Page::whereSlug("homepage")->first();
         $dynamicPageData = CMS::getHomepageData();
+
+        if (!$page) {
+            $data = CMS::getHomepageData();
+
+            $data['homeBrands'] = Logos::with('medias')->where('type', 'brands')->inRandomOrder()->take(6)->get()->toArray();
+            $data['homeLogos'] = Logos::with('medias')->where('type', 'logos')->inRandomOrder()->take(6)->get()->toArray();
+            $data['homePage'] = Pages::where('name', 'Home')->with('mediable', 'metable')->first();
+
+            return view('theme.home.homepage', $data);
+        }
 
         return view('new_web.page', [
             'content' => json_decode($page->content),

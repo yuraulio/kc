@@ -25,6 +25,7 @@ class UpdateAdminPageRequest extends FormRequest
     {
         return [
             'title' => "required|unique:cms_pages,title,{$this->id}",
+            'slug' => "unique:cms_pages,slug,{$this->id}",
         ];
     }
 }

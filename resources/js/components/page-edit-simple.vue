@@ -291,8 +291,8 @@ import slugify from '@sindresorhus/slugify';
                     this.loading = false;
                 })
                 .catch((error) => {
-                    console.log(error)
                     this.errors = error.response.data.errors;
+                    this.$toast.error("Failed to create");
                     this.loading = false;
                 });
             },
@@ -324,8 +324,9 @@ import slugify from '@sindresorhus/slugify';
                     }
                 })
                 .catch((error) => {
-                    console.log(error)
+                    console.log(error.response.data.errors);
                     this.loading = false;
+                    this.$toast.error("Failed to save");
                     this.errors = error.response.data.errors;
                 });
             },
