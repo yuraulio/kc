@@ -223,7 +223,15 @@ class EventController extends Controller
         }
 
         $event->city()->sync([$request->city_id]);
-        $event->partners()->sync([$request->partner_id]);
+        
+        $event->partners()->detach();
+        foreach((array) $request->partner_id as $partner_id){
+            $event->partners()->attach($partner_id);
+        }
+
+
+
+       
         if($request->type_id != null){
             //dd($request->type_id);
             $event->type()->sync($request->type_id);
@@ -411,7 +419,14 @@ class EventController extends Controller
 
         $event->category()->sync([$request->category_id]);
         $event->city()->sync([$request->city_id]);
-        $event->partners()->sync([$request->partner_id]);
+
+       
+        $event->partners()->detach();
+        foreach((array) $request->partner_id as $partner_id){
+            $event->partners()->attach($partner_id);
+        }
+
+        
 
         if($request->category_id != $request->oldCategory){
             $category = Category::with('topics')->find($request->category_id);

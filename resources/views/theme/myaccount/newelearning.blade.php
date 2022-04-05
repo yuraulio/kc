@@ -70,12 +70,12 @@
          <div class="content-wrapper">
             <div class="sidebar-wrapper open jsSidebar">
                <header class="sidebar-header">
-                  <button class="hamburger hamburger--spin is-activee" type="button">
+                  <button title="Close menu" class="hamburger hamburger--spin is-activee" type="button">
                   <span class="hamburger-box">
                   <span class="hamburger-inner"></span>
                   </span>
                   </button>
-                  <a tabindex="0" href="/myaccount">
+                  <a tabindex="0" href="/myaccount" title="Back to my courses">
                   <img
                      id="logo"
                      src="/theme/assets/img/new/logo-knowcrunch-seminars.svg"
@@ -244,7 +244,7 @@
             <!-- ./sidebar-wrapper -->
             <div class="lesson-wrapper jsLesson">
                <header class="lesson-header">
-                  <button class="show-sidebar hamburger hamburger--spin" type="button">
+                  <button title="Open menu" class="show-sidebar hamburger hamburger--spin" type="button">
                      <span class="hamburger-box">
                      <span class="hamburger-inner"></span>
                      </span>
@@ -266,6 +266,7 @@
                      id="second-logo"
                      src="/theme/assets/img/new/logo-knowcrunch-seminars.svg"
                      alt="knowcruch logo"
+                     title="Back to my courses"
                      />
             
                   <h1 class="lesson-header-title">
@@ -570,6 +571,8 @@
          var prev_topicId = [];
 
          var note;
+
+         var noteFocus = false;
 
           var event = false;
           var videos = false;
@@ -1201,9 +1204,9 @@
           @endif
 
           document.body.onkeydown= function(e){
+           
+             if(e.keyCode == 32 && !noteFocus){
 
-
-             if(e.keyCode == 32){
 
                 if(this.playVi){
 
@@ -1474,13 +1477,18 @@
          }
          }
 
-
-
-
-
-
-
       </script>
+
+<script>
+$('#notes').on('focusin', function() {
+        noteFocus = true;
+    })
+    .on('focusout', function(e) {
+      noteFocus = false;
+    });
+
+</script>
+
    </body>
 </html>
 
