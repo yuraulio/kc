@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin_api\CommentsController;
 use App\Http\Controllers\New_web\MainController;
 use App\Http\Controllers\New_web\SitemapXmlController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,7 +16,7 @@ use App\Http\Controllers\New_web\SitemapXmlController;
 |
 */
 
-Route::get('/', [MainController::class, 'index'])->name('homepage');
+Route::get('/', [MainController::class, 'index']);
 
 Route::get('get-page-comments/{page_id}', [CommentsController::class, 'getPageComments']);
 

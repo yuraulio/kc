@@ -799,5 +799,27 @@
                 "main": true
             }
         ]
+    },
+    "homepage_events" : {
+        "version": 1,
+        "title": "Homepage events",
+        "icon": "dripicons-article",
+        "key": "homepage_events_component",
+        "tab": "Content",
+        "width": "full",
+        "simple_view": false,
+        "inputs": [
+            {
+                "type": "multidropdown",
+                "key": "event_types",
+                "label": "Event type",
+                "route": "getEventTypes",
+                "value": {
+                    "id": 1,
+                    "title": "In class Events"
+                },
+                "size": "col-lg-12"
+            }
+        ]
     }
 }

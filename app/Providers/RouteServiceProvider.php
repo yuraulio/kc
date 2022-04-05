@@ -39,8 +39,11 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapAdminRoutes();
         $this->mapAdminApiRoutes();
 
-        $cms_mode = Setting::whereSetting("cms_mode")->firstOrFail()->value;
-        if ($cms_mode == "new") {
+        $cmsMode = cache()->remember("cmsMode", 3600, function() {
+            return Setting::whereSetting("cms_mode")->firstOrFail()->value;
+        });
+        
+        if ($cmsMode == Setting::NEW_PAGE) {
 
             // If path is cached that means it doesn't exists on new website
             // Because of that we will skip loading web routes

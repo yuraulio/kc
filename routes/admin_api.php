@@ -80,6 +80,7 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
         Route::get('getDisplayOptions', [PagesController::class, 'getDisplayOptions']);
         Route::get('getGaleryDisplayOptions', [PagesController::class, 'getGaleryDisplayOptions']);
         Route::get('getFormTypes', [PagesController::class, 'getFormTypes']);
+        Route::get('getEventTypes', [PagesController::class, 'getEventTypes']);
         Route::get('templatesAll', [TemplatesController::class, 'templatesAll']);
     });
 });

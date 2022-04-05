@@ -52,7 +52,7 @@
             @php
                 $gallery["gallery"] = array_slice($gallery["gallery"], 0, 6);
             @endphp
-            <div class="section--partners p-0">
+            <div class="section--partners p-0 mt-5">
                 <h2 class="section-title">{{ $gallery["gallery_title"] ?? "" }}</h2>
             </div>
             <div class="row">

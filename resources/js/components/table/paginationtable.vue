@@ -380,12 +380,11 @@
                         'category': this.category_value ? this.category_value.id : null,
                         'subcategory': this.subcategory_value ? this.subcategory_value.id : null,
                         'pagefilter': this.page_value ? this.page_value.id : null,
-
                 }"
             >
 
                 <template slot="page_title" slot-scope="props">
-                    <a :href="'/'+props.rowData.slug" target="_blank">{{ props.rowData.title }}</a>
+                    <a :href="getAppURL() + '/' + props.rowData.slug" target="_blank">{{ props.rowData.title }}</a>
                 </template>
 
                 <template slot="visibility" slot-scope="props">
@@ -790,6 +789,9 @@ export default {
         showFilter(filter){
             var index = this.config.filters.indexOf(filter);
             return (index != -1 ? true : false);
+        },
+        getAppURL() {
+            return process.env.MIX_APP_URL;
         }
     },
     mounted() {

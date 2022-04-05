@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\NotificationController;
+use App\Model\Admin\Setting;
 
 /*
 |--------------------------------------------------------------------------
@@ -708,7 +709,9 @@ Route::group(['middleware' => ['preview', 'web', 'auth.sms']], function () {
         return redirect('/brands-trained');
     });
 
-    Route::get('/', 'Theme\HomeController@homePage')->name('homepage');
+    if (cache("cmsMode") != Setting::NEW_PAGE) {
+        Route::get('/', 'Theme\HomeController@homePage')->name('homepage');
+    }
     Route::post('/add-payment-method', 'Theme\HomeController@addPaymentMethod')->name('add.paymentMethod');
     Route::get('{slug?}', 'Theme\HomeController@index');
 });

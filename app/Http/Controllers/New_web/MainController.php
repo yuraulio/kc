@@ -27,9 +27,18 @@ class MainController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
-        // return redirect(env("APP_URL"));
+        $page = Page::whereSlug("homepage")->first();
+        $dynamicPageData = CMS::getHomepageData();
+
+        return view('new_web.page', [
+            'content' => json_decode($page->content),
+            'page_id' => $page->id,
+            'comments' => $page->comments->take(500),
+            'page' => $page,
+            'dynamic_page_data' => $dynamicPageData,
+        ]);
     }
 
     /**
@@ -39,6 +48,10 @@ class MainController extends Controller
      */
     public function page(String $slug, Request $request)
     {
+        if ($slug == "homepage") {
+            return redirect("/", 301);
+        }
+
         $dynamicPageData = null;
 
         $modelSlug = Slug::whereSlug($slug)->first();

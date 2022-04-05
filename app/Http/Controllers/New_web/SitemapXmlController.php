@@ -28,6 +28,11 @@ class SitemapXmlController extends Controller
             if ($page->type == "Blog") {
                 $path = "/blog/";
             }
+
+            if ($page->slug == "homepage") {
+                $page->slug = "";
+            }
+
             Sitemap::addTag(env("APP_URL") . $path . $page->slug, $page->updated_at, 'daily', '0.8');
         }
 

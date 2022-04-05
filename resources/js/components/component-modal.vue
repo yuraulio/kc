@@ -204,16 +204,16 @@
                                 <span class="text-muted mt-1 ms-1 me-1">Course benefits</span>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="row mb-2">
                         <div class="col-3">
                             <div @click="selectComponent('topics')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
                                 <i style="font-size: 20px" class="text-muted dripicons-menu d-block mt-1"></i>
                                 <span class="text-muted mt-1 ms-1 me-1">Course topics</span>
                             </div>
                         </div>
+                    </div>
 
+                    <div class="row mb-2">
                         <div class="col-3">
                             <div @click="selectComponent('course_instructors')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
                                 <i style="font-size: 20px" class="text-muted dripicons-user-group d-block mt-1"></i>
@@ -235,15 +235,16 @@
                             </div>
                         </div>
 
-                    </div>
-
-                    <div class="row mb-2">
                         <div class="col-3">
                             <div @click="selectComponent('course_faq')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
                                 <i style="font-size: 20px" class="text-muted dripicons-search d-block mt-1"></i>
                                 <span class="text-muted mt-1 ms-1 me-1">Course Q & A</span>
                             </div>
                         </div>
+
+                    </div>
+
+                    <div class="row mb-2">
 
                         <div class="col-3">
                             <div @click="selectComponent('course_details')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
@@ -277,10 +278,17 @@
                             </div>
                         </div>
 
-                         <div class="col-3">
+                        <div class="col-3">
                             <div @click="selectComponent('events_list')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
                                 <i style="font-size: 20px" class="text-muted dripicons-view-list-large d-block mt-1"></i>
                                 <span class="text-muted mt-1 ms-1 me-1">Courses list</span>
+                            </div>
+                        </div>
+
+                        <div class="col-3">
+                            <div @click="selectComponent('homepage_events')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
+                                <i style="font-size: 20px" class="text-muted dripicons-view-list-large d-block mt-1"></i>
+                                <span class="text-muted mt-1 ms-1 me-1">Hompage events</span>
                             </div>
                         </div>
                     </div>

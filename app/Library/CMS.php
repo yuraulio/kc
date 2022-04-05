@@ -4,6 +4,7 @@ namespace App\Library;
 
 use App\Model\Instructor;
 use Illuminate\Support\Facades\Auth;
+use App\Model\Category;
 
 class CMS
 {
@@ -165,6 +166,76 @@ class CMS
             $data['openlist'][$index] = $openlist;
         }
         ksort($data['openlist']);
+
+        return $data;
+    }
+
+    public static function getHomepageData()
+    {
+        $data = [];
+
+        $data['nonElearningEvents'] = [];
+        $data['elearningEvents'] = [];
+        $data['elearningFree'] = [];
+        $data['inclassFree'] = [];
+
+        $categories =Category::with('slugable', 'events.slugable', 'events.city', 'events', 'events.mediable')->where('show_homepage', 1)->orderBy('priority', 'asc')->get()->toArray();
+
+        foreach ($categories as $category) {
+            if (!key_exists($category['id'], $data['nonElearningEvents'])) {
+                $data['nonElearningEvents'][$category['id']]['name'] = $category['name'];
+                $data['nonElearningEvents'][$category['id']]['slug'] = isset($category['slugable']) ? $category['slugable']['slug'] : '';
+                $data['nonElearningEvents'][$category['id']]['description'] = $category['description'];
+                $data['nonElearningEvents'][$category['id']]['hours'] = $category['hours'];
+                $data['nonElearningEvents'][$category['id']]['events'] = [];
+
+                $data['elearningEvents'][$category['id']]['name'] = $category['name'];
+                $data['elearningEvents'][$category['id']]['slug'] = isset($category['slugable']) ? $category['slugable']['slug'] : '';
+                $data['elearningEvents'][$category['id']]['description'] = $category['description'];
+                $data['elearningEvents'][$category['id']]['hours'] = $category['hours'];
+                $data['elearningEvents'][$category['id']]['events'] = [];
+
+                $data['elearningFree'][$category['id']]['name'] = $category['name'];
+                $data['elearningFree'][$category['id']]['slug'] = isset($category['slugable']) ? $category['slugable']['slug'] : '';
+                $data['elearningFree'][$category['id']]['description'] = $category['description'];
+                $data['elearningFree'][$category['id']]['hours'] = $category['hours'];
+                $data['elearningFree'][$category['id']]['events'] = [];
+
+                $data['inclassFree'][$category['id']]['name'] = $category['name'];
+                $data['inclassFree'][$category['id']]['slug'] = isset($category['slugable']) ? $category['slugable']['slug'] : '';
+                $data['inclassFree'][$category['id']]['description'] = $category['description'];
+                $data['inclassFree'][$category['id']]['hours'] = $category['hours'];
+                $data['inclassFree'][$category['id']]['events'] = [];
+            }
+
+            foreach ($category['events'] as $event) {
+                if ($event['status'] == 1 || $event['status'] == 3 || $event['status'] == 4 || !$event['published']) {
+                    continue;
+                }
+
+                if ($event['view_tpl'] == 'elearning_event' || $event['view_tpl'] == 'elearning_pending') {
+                    $data['elearningEvents'][$category['id']]['events'][] = $event;
+                } elseif ($event['view_tpl'] == 'event_free' || $event['view_tpl'] == 'event_free_coupon') {
+                    $data['inclassFree'][$category['id']]['events'][] = $event;
+                } elseif ($event['view_tpl'] == 'elearning_free') {
+                    $data['elearningFree'][$category['id']]['events'][] = $event;
+                } else {
+                    $data['nonElearningEvents'][$category['id']]['events'][] = $event;
+                }
+            }
+        }
+
+        foreach ($data as $key => $categories) {
+            foreach ($categories as $key2 => $category) {
+                if (count($category['events']) == 0) {
+                    unset($data[$key][$key2]);
+                }
+            }
+
+            if (count($categories) == 0) {
+                unset($data[$key]);
+            }
+        }
 
         return $data;
     }

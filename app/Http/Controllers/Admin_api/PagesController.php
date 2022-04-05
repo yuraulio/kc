@@ -309,6 +309,30 @@ class PagesController extends Controller
         ];
     }
 
+    public function getEventTypes()
+    {
+        return [
+            "data" => [
+                [
+                    "id" => 1,
+                    "title" => "In class Events"
+                ],
+                [
+                    "id" => 2,
+                    "title" => "Elearning Events"
+                ],
+                [
+                    "id" => 3,
+                    "title" => "Elearning Free Events"
+                ],
+                [
+                    "id" => 4,
+                    "title" => "In class Free Events"
+                ]
+            ]
+        ];
+    }
+
     private function syncImages($page)
     {
         $data = collect(json_decode($page->content, true))->flatten();
@@ -419,7 +443,7 @@ class PagesController extends Controller
     public function articlePagesCount($request)
     {
         try {
-            $pages = Page::withoutGlobalScope('published')->whereType("Blog");
+            $pages = Page::withoutGlobalScope('published')->whereType("Article");
             $pages = $this->filters($request, $pages);
             return $pages->count();
         } catch (Exception $e) {

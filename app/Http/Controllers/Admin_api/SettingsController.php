@@ -40,6 +40,8 @@ class SettingsController extends Controller
             $setting->value = $request->value;
             $setting->save();
 
+            cache()->forget("cmsMode");
+
             return $setting;
         } catch (Exception $e) {
             Log::error("Failed to edit setting. ", [$e]);
