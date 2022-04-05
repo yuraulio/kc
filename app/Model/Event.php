@@ -649,4 +649,8 @@ class Event extends Model
 
     }
 
+    public function getTotalHours(){
+        
+    }
+
 }
