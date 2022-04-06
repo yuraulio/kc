@@ -69,7 +69,6 @@ h2,h3{ font-size: 20px; padding: 0; font-weight:normal}
     font-size:35px;
     margin:auto;
     letter-spacing:3px;
-    max-width:650px;
    
 }
 
@@ -192,7 +191,7 @@ h3.certificate {
             </p>
 
 
-            <h3 class="certificate">  {{$certificate['certification_title']}}  </h3>
+            <h3 class="certificate">  {!!$certificate['certification_title']!!}  </h3>
 
            
                

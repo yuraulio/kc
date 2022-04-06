@@ -10,7 +10,7 @@
     @include('alerts.success')
     @include('alerts.errors')
 </div>
-
+@include('users.absences.absences_modal')
     <table class="table align-items-center table-flush"  id="datatable-basic-students1">
         <thead class="thead-light">
             <tr>
@@ -23,6 +23,11 @@
                 <th scope="col">{{ __('Videos Seen') }}</th>
                 <th scope="col">{{ __('Progress') }}</th>
                 @endif
+
+                @if($isInclassCourse)
+                <th scope="col">{{ __('Absences') }}</th>
+                @endif
+
             </tr>
         </thead>
         <tbody>
@@ -39,6 +44,13 @@
                         <td>{{ $event->video_seen($user) }}</td>
                         <td>{{ round($event->progress($user),2)  }}%</td>
                     @endif
+
+                    @if($isInclassCourse)
+                        <td> <button class="absences btn btn-info btn-sm" style="margin-top:10px;" type="button"
+                                                data-user_id="{{$user['id']}}" data-event_id="{{$event->id}}" 
+                                                data-toggle="modal" data-target="#absences-info">Absences</button> </td>
+                    @endif
+
                 </tr>
             @endforeach
         </tbody>

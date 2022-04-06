@@ -167,15 +167,7 @@
                                         @include('alerts.feedback', ['field' => 'certificate_title'])
                                     </div>
 
-                                    <label class="form-control-label" for="input-method">{{ __('Method Payment') }}</label>
-                                    <select name="payment_method" id="input-method" class="form-control" placeholder="{{ __('Method Payment') }}" no-mouseflow>
-                                        <option value="">-</option>
-                                        @foreach ($methods as $method)
-                                            <option value="{{ $method->id }}" {{$event['paymentMethod']->first() && $event['paymentMethod']->first()->id ==$method->id ? 'selected' : ''}} >{{ $method->method_name }}</option>
-                                        @endforeach
-                                    </select>
-
-                                    @include('alerts.feedback', ['field' => 'payment_method'])
+                                    
                                 </div>
 
 

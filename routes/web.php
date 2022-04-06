@@ -375,6 +375,10 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
             Route::post('/toggle_language/{languageId}', 'BinshopsLanguageAdminController@toggle_language')->name('binshopsblog.admin.languages.toggle_language');
         });
     });
+
+
+    Route::post('/absence-update','Dashboard\AbsenceController@update')->name('update-absences');
+
 });
 
 /*Route::group(['prefix' => 'cart','middleware' => ['web']], function () {

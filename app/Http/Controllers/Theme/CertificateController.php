@@ -117,7 +117,8 @@ class CertificateController extends Controller
 
     $users = $event->users;
     $zip = new ZipArchive();
-    
+
+    $paymentMethod = $event->paymentMethod->first() ? $event->paymentMethod->first()->id : -1;
     $fileName = 'certificates.zip';
     File::deleteDirectory(public_path('certificates_folders'));
     File::makeDirectory(public_path('certificates_folders'));
@@ -137,11 +138,20 @@ class CertificateController extends Controller
 
         $expda = strtotime(date('Y-m-d', strtotime('+24 months', strtotime(date('Y-m-d'))))); 
 
+        $template = '';
+        if($paymentMethod == 1){
+          $view = 'admin.certificates.kc_deree_diploma';
+          $template = 'kc_deree_diploma';
+        }else /*if(in_array($paymentMethod,[3,2]))*/{
+          $view = 'admin.certificates.kc_diploma_2022a';
+          $template = 'kc_diploma_2022a';
+        }
+
         if( !($cert = $event->userHasCertificate($user->id)->first()) ){
 
           $date = date('Y');
 
-          $template = '';
+          /*$template = '';
           /*if($date <= 2021){
             $view = 'admin.certificates.kc_deree_diploma';
             $template = 'kc_deree_diploma';
@@ -150,8 +160,15 @@ class CertificateController extends Controller
             $template = 'kc_diploma';
           }*/
 
-          $view = 'admin.certificates.kc_diploma_2022a';
-          $template = 'kc_diploma_2022a';
+          /*if($paymentMethod == 1){
+            $view = 'admin.certificates.kc_deree_diploma';
+            $template = 'kc_deree_diploma';
+          }else /*if(in_array($paymentMethod,[3,2]))*///{
+            /*$view = 'admin.certificates.kc_diploma_2022a';
+            $template = 'kc_diploma_2022a';
+          }*/
+
+         
         
 
           $cert = new Certificate;
@@ -172,6 +189,7 @@ class CertificateController extends Controller
 
         }else{
           $cert->certificate_title = $event->certificate_title;
+          $cert->template = $template;
           $cert->save();
         }
 

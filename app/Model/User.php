@@ -866,6 +866,7 @@ class User extends Authenticatable
         $data['total_event_minutes'] = $eventMinutes;
         $data['user_minutes_absences'] = $userMinutesAbsences;
         $data['user_absences_percent'] = $userAbsencesPercent;
+        $data['event_id'] = $eventId;
         $data['class'] = $class;
 
         return $data;

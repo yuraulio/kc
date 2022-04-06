@@ -16030,6 +16030,21 @@ button#move-lesson {
   color: #324cdd;
   border-color: white; }
 
+#absences-table input {
+  border: none; }
+
+#absences-table input :focus, #absences-table input:focus-visible {
+  border: none; }
+
+.absence-border {
+  border: 1px black solid !important; }
+
+.warning-absences {
+  color: orange; }
+
+.dangerous-absences {
+  color: red; }
+
 @media (min-width: 576px) {
   #absences-info .modal-dialog {
     max-width: 1000px; } }
