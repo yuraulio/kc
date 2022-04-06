@@ -9,6 +9,7 @@
         "tab": "Content",
         "dynamic": false,
         "simple_view": true,
+        "simple_view_settings_icon": "dripicons-photo",
         "inputs": [
             {
                 "type": "image",

@@ -17,7 +17,7 @@
         width: 100%;
     }
 
-    .component-tabs.settings>div>i {
+    .component-tabs.settings>div>.settings-icon {
         color: #6c757d!important;
     }
 
@@ -115,7 +115,7 @@
                                         <div class="col-12">
                                             <p class="text-muted d-inline-block">{{ column.template.title }}</p>
                                             <i v-if="column.template.removable !== false" @click="removeRow(row_index)" class="dripicons-trash text-muted float-end ms-2"></i>
-                                            <i v-if="settingsExist(column)" @click="column.tab == 'settings' ? column.tab = 'main' : column.tab = 'settings'" class="text-muted dripicons-gear float-end ms-2"></i>
+                                            <i v-if="settingsExist(column)" @click="column.tab == 'settings' ? column.tab = 'main' : column.tab = 'settings'" :class="'settings-icon text-muted float-end ms-2 ' + (column.template.simple_view_settings_icon ? column.template.simple_view_settings_icon : 'dripicons-gear')"></i>
                                             <template v-if="simpleColumnCount(row.columns) > 1">
                                                 <ul :class="'nav column-navigation d-inline-block float-end mb-0 nav-row' + row_index + ' ' + (settingsExist(column) == false ? 'column-navigation-margin' : '')">
                                                     <template v-for="(column, column_index) in row.columns">
