@@ -48,11 +48,24 @@
         <div v-if="activeImg && activeImg.parrent == null" class="col-md-3">
             <div class="mt-4" style="max-height: 500px; overflow: hidden; overflow-y: scroll; text-align: center; background-color:#f3f7f9 !important; padding:20px;">
                 <div v-for="(im, index) in activeImg ? lodash.find(images, {id: activeImg.id}).subfiles : []" style="cursor: pointer" :key="index" class="mb-2">
+                    <template v-if="getVersion(im.version)">
+                        <h5 class="text-start">
+                            {{ getVersion(im.version).version }}
+                            <i @click="deleteFile(im)" class="mdi mdi-delete text-muted vertical-middle"></i>
+                        </h5>
+                        <p class="text-start text-muted d-block mb-2">{{ getVersion(im.version).description }}</p>
+                    </template>
+                    <template v-else>
+                        <h5>
+                            Custom
+                            <i @click="deleteFile(im)" class="mdi mdi-delete text-muted vertical-middle"></i>
+                        </h5>
+                    </template>
+
                     <img @click="selectImg(im)" :src="im.url" alt="image" class="img-fluid rounded" width="200" :style="'height: 100px; width: auto; ' + (im.subselected ? ' border: 4px solid #1abc9c;' : ' border: 4px solid #f3f7f9;')">
                     <p class="mb-0 text-truncate" :title="im.name">
                         {{im.name}}
                     </p>
-                    <i @click="deleteFile(im)" class="mdi mdi-delete text-muted vertical-middle"></i>
                     <hr class="mt-2 mb-2">
                 </div>
             </div>
@@ -78,6 +91,79 @@ export default {
             subactiveImg: null,
             selectedImages: [],
             mainDysplayImage: null,
+            versions: [{
+                    w: 470,
+                    h: 470,
+                    q: 60,
+                    fit: "crop",
+                    version: "instructors-testimonials",
+                    description: "Applies to : Our Instructor Page (Footer) & Event -> Instructors",
+                },
+                {
+                    w: 542,
+                    h: 291,
+                    q: 60,
+                    fit: "crop",
+                    version: "event-card",
+                    description: "Applies to : Homepage Events list",
+                },
+                {
+                    w: 470,
+                    h: 470,
+                    q: 60,
+                    fit: "crop",
+                    version: "users",
+                    description: "Applies to : Testimonial square image",
+                },
+                {
+                    w: 2880,
+                    h: 1248,
+                    q: 60,
+                    fit: "crop",
+                    version: "header-image",
+                    description: "Applies to: Event header carousel (Main event page)",
+                },
+                {
+                    w: 90,
+                    h: 90,
+                    q: 60,
+                    fit: "crop",
+                    version: "instructors-small",
+                    description: "Applies to : Event -> Topics (syllabus-block)",
+                },
+                {
+                    w: 300,
+                    h: 300,
+                    q: 60,
+                    fit: "crop",
+                    description: "feed-image",
+                    version: "feed-image",
+                },
+                {
+                    w: 1920,
+                    h: 832,
+                    q: 60,
+                    fit: "crop",
+                    version: "social-media-sharing",
+                    description: "Applies to: Social media sharing default image",
+                },
+                {
+                    w: 680,
+                    h: 320,
+                    q: 60,
+                    fit: "crop",
+                    version: "blog-content",
+                    description: "Applies to: Blog content image",
+                },
+                {
+                    w: 343,
+                    h: 193,
+                    q: 60,
+                    fit: "crop",
+                    version: "blog-featured",
+                    description: "Applies to: Blog Featured image",
+                },
+            ],
         };
     },
     computed: {
@@ -149,6 +235,17 @@ export default {
             }, function (e) {
                 console.log(e)
             });
+        },
+        getVersion(version) {
+            var return_value = null;
+            if (version) {
+                this.versions.forEach(function(version1){
+                    if (version1.version == version) {
+                        return_value = version1;
+                    }
+                });
+            }
+            return return_value;
         }
     },
     mounted() {

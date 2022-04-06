@@ -31,8 +31,8 @@ Vue.use(VueToast);
 import Multiselect from 'vue-multiselect'
 import CKEditor from '@ckeditor/ckeditor5-vue2';
 
-Vue.use( CKEditor );
-  // register globally
+Vue.use(CKEditor);
+// register globally
 Vue.component('multiselect', Multiselect)
 //Vue.$toast.open({/*
 import 'vue-loaders/dist/vue-loaders.css';
@@ -102,5 +102,5 @@ VueClipboard.config.autoSetContainer = true // add this line
 Vue.use(VueClipboard)
 
 new Vue({
-   el: '#app'
+    el: '#app'
 })
