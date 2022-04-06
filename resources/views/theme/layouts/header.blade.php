@@ -96,12 +96,16 @@
 						</div>
 
 						<ul class="main-menu">
-
-
-                            @menu('main-menu')
-							<!--<li><a href="#">In-class courses</a></li>
-							<li><a href="#">E-learning Courses</a></li>
-							<li><a href="#">Corporate training</a></li>-->
+                            @if (!empty($header_menus))
+                                @foreach ($header_menus['menu']['Header'] as $key => $row)
+                                    <li>
+                                        <a title="{{ $row['data']['name'] }}" href="{{'/' . $row['data']['slugable']['slug'] }}">{{ $row['data']['name'] }}</a>
+                                    </li>
+								@endforeach
+                                <li>
+                                    <a title="Blog" href="/en/blog">Blog</a>
+                                </li>
+                            @endif
 						</ul>
 					</div>
 				</div>

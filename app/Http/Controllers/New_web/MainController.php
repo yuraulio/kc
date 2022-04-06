@@ -4,25 +4,26 @@ namespace App\Http\Controllers\New_web;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Theme\HomeController;
-use App\Http\Resources\PageResource;
+use App\Library\Cache;
 use App\Library\CMS;
-use App\Model\Admin\Category;
 use App\Model\Admin\Page;
 use App\Model\Admin\Redirect;
-use App\Model\Logos;
-use App\Model\Pages;
+use App\Model\Admin\Setting;
 use App\Model\Slug;
-use Carbon\Carbon;
-use Exception;
-use Illuminate\Http\JsonResponse;
+use App\Services\FBPixelService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Illuminate\View\View;
 
 class MainController extends Controller
 {
+    private $fbp;
 
+    public function __construct(FBPixelService $fbp)
+    {
+        $this->fbp = $fbp;
+        $this->middleware('auth.sms')->except('getSMSVerification', 'smsVerification');
+        // $fbp->sendPageViewEvent();
+    }
 
     /**
      * Show Homepage
@@ -31,18 +32,18 @@ class MainController extends Controller
      */
     public function index(Request $request)
     {
-        $page = Page::whereSlug("homepage")->first();
-        $dynamicPageData = CMS::getHomepageData();
+        $page = null;
+
+        if (Cache::getCmsMode() == Setting::NEW_PAGES) {
+            $page = Page::whereSlug("homepage")->first();
+            $dynamicPageData = CMS::getHomepageData();
+        }
 
         if (!$page) {
-            $data = CMS::getHomepageData();
-
-            $data['homeBrands'] = Logos::with('medias')->where('type', 'brands')->inRandomOrder()->take(6)->get()->toArray();
-            $data['homeLogos'] = Logos::with('medias')->where('type', 'logos')->inRandomOrder()->take(6)->get()->toArray();
-            $data['homePage'] = Pages::where('name', 'Home')->with('mediable', 'metable')->first();
-
-            return view('theme.home.homepage', $data);
+            return (new HomeController($this->fbp))->homePage();
         }
+
+        $this->fbp->sendPageViewEvent();
 
         return view('new_web.page', [
             'content' => json_decode($page->content),
@@ -60,27 +61,27 @@ class MainController extends Controller
      */
     public function page(String $slug, Request $request)
     {
-        if ($slug == "homepage") {
-            return redirect("/", 301);
-        }
+        $page = null;
 
-        $dynamicPageData = null;
+        if (!cache($request->path())) {
+            $dynamicPageData = null;
 
-        $modelSlug = Slug::whereSlug($slug)->first();
+            $modelSlug = Slug::whereSlug($slug)->first();
 
-        if ($modelSlug && get_class($modelSlug->slugable) == "App\Model\Event") {
-            $event = $modelSlug->slugable;
-            $page = Page::withoutGlobalScopes()->whereType("Course page")->whereDynamic(true)->first();
-            $dynamicPageData = CMS::getEventData($event);
-        } elseif ($modelSlug && get_class($modelSlug->slugable) == "App\Model\Instructor") {
-            $instructor = $modelSlug->slugable;
-            $page = Page::withoutGlobalScopes()->whereType("Trainer page")->whereDynamic(true)->first();
-            $dynamicPageData = CMS::getInstructorData($instructor);
-        } else {
-            $page = Page::whereSlug($slug)->first();
+            if ($modelSlug && get_class($modelSlug->slugable) == "App\Model\Event") {
+                $event = $modelSlug->slugable;
+                $page = Page::withoutGlobalScopes()->whereType("Course page")->whereDynamic(true)->first();
+                $dynamicPageData = CMS::getEventData($event);
+            } elseif ($modelSlug && get_class($modelSlug->slugable) == "App\Model\Instructor") {
+                $instructor = $modelSlug->slugable;
+                $page = Page::withoutGlobalScopes()->whereType("Trainer page")->whereDynamic(true)->first();
+                $dynamicPageData = CMS::getInstructorData($instructor);
+            } else {
+                $page = Page::whereSlug($slug)->first();
 
-            if (!$page && $redirect = Redirect::whereOldSlug($slug)->first() and $redirect->page) {
-                return redirect()->route('new_general_page', ['slug' => $redirect->page->slug], 301);
+                if (!$page && $redirect = Redirect::whereOldSlug($slug)->first() and $redirect->page) {
+                    return redirect()->route('new_general_page', ['slug' => $redirect->page->slug], 301);
+                }
             }
         }
 
@@ -90,8 +91,9 @@ class MainController extends Controller
                 Log::warning("Failed to find page in new routes. URL:" . $request->path() . " Method:" . $request->method());
                 return true;
             });
-            return redirect($request->path(), 302);
-            // return redirect()->route('home_route', ['slug' => $slug]);
+            
+            $slugModel = Slug::whereSlug($slug)->firstOrCreate();
+            return (new HomeController($this->fbp))->index($slugModel);
         }
 
 

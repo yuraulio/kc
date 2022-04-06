@@ -11,7 +11,7 @@ class SettingPolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any models.
+     * Determine whether the user can view any setting.
      *
      * @param  \App\Model\Admin\Admin  $user
      * @return \Illuminate\Auth\Access\Response|bool
@@ -22,10 +22,9 @@ class SettingPolicy
     }
 
     /**
-     * Determine whether the user can update the model.
+     * Determine whether the user can update settings.
      *
      * @param  \App\Model\Admin\Admin  $user
-     * @param  \App\Setting  $setting
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function update(Admin $user)

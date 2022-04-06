@@ -16,6 +16,7 @@ use App\Policies\UserPolicy;
 use App\Policies\CategoryPolicy;
 use App\Policies\CommentPolicy;
 use App\Policies\PagePolicy;
+use App\Policies\SettingPolicy;
 use App\Policies\TemplatePolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;

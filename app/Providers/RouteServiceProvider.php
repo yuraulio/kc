@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Library\Cache;
 use App\Model\Admin\Setting;
 use Exception;
 use Illuminate\Support\Facades\Route;
@@ -40,15 +41,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapAdminRoutes();
         $this->mapAdminApiRoutes();
 
-            $cmsMode = cache()->remember("cmsMode", 3600, function () {
-                try {
-                    return Setting::whereSetting("cms_mode")->firstOrFail()->value;
-                } catch (Exception $e) {
-                   return "old";
-                }
-            });
-        if ($cmsMode == Setting::NEW_PAGE) {
-
+        if (Cache::getCmsMode() == Setting::NEW_PAGES) {
             // If path is cached that means it doesn't exists on new website
             // Because of that we will skip loading web routes
             if (!cache(request()->path())) {
@@ -58,6 +51,8 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapApiRoutes();
         $this->mapWebRoutes();
+
+        $this->mapGeneralRoutes();
     }
 
     /**
@@ -127,5 +122,18 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware('web')
             ->namespace($this->namespace)
             ->group(base_path('routes/new_web.php'));
+    }
+
+    /**
+     * Define the "general" routes for the application.
+     *
+     *
+     * @return void
+     */
+    protected function mapGeneralRoutes()
+    {
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/general.php'));
     }
 }
