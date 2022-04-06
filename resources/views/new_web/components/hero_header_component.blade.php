@@ -25,7 +25,12 @@
     @endif
     <div class="container">
         <div class="hero-message">
-            {!! $title !!}
+            @if($column->template->dynamic)
+                <h1>{{$title}}</h1>
+                <h2>{{$subtitle}}</h2>
+            @else
+                {!! $title !!}
+            @endif
         </div>
     </div>
 </section>
