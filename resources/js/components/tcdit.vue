@@ -29,7 +29,7 @@
                         <a @click="tab = 'Content'" :class="'nav-link ' + (tab == 'Content' ? 'active' : '')" href="#!">Content</a>
                     </li>
                     <li class="nav-item">
-                        <a @click="tab = 'Meta'" :class="'nav-link ' + (tab == 'Meta' ? 'active' : '')" href="#!">Meta</a>
+                        <a @click="tab = 'Meta'" :class="'nav-link ' + (tab == 'Meta' ? 'active' : '')" href="#!">SEO</a>
                     </li>
                     <li class="nav-item">
                         <a @click="tab = 'Other'" :class="'nav-link ' + (tab == 'Other' ? 'active' : '')" href="#!">Other</a>
@@ -803,7 +803,7 @@ export default {
                         "collapsed": true,
                         "removable": false,
                         "disable_color": true,
-                        "tab": "Other",
+                        "tab": "Content",
                         "columns": [
                             {
                                 "id": this.$uuid.v4(),

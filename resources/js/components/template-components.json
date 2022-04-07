@@ -421,7 +421,7 @@
         ]
     },
     "menus" : {
-        "version": 2,
+        "version": 3,
         "title": "Menus",
         "icon": "dripicons-menu",
         "key": "menu_component",
@@ -429,7 +429,7 @@
         "changable": false,
         "removable": false,
         "disable_color": true,
-        "tab": "Other",
+        "tab": "Content",
         "simple_view": false,
         "inputs": [
             {
