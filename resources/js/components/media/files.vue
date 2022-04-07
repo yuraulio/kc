@@ -4,13 +4,13 @@
         <h5 class="mb-3">Files</h5>
         <div class="d-flex" style="">
             <div class="d-flex" style="align-items: end; width: 100%;">
-                <table class="table table-centered table-nowrap mb-0">
+                <table class="table table-centered mb-0">
                     <thead class="table-light">
                         <tr>
                             <th class="border-0">Image</th>
                             <th class="border-0">Name</th>
                             <th class="border-0">Pages</th>
-                            <th class="border-0">Last Modified</th>
+                            <th class="border-0">Created</th>
                             <th class="border-0">Size</th>
                             <th class="border-0" style="width: 80px">Action</th>
                         </tr>
@@ -24,15 +24,15 @@
 
                                 <img v-else :src="file.url" alt="image" class="img-fluid avatar-sm rounded mt-2" style="width: 100px; height: auto;" />
                             </td>
-                            <td>
-                                <span class="ms-2 fw-normal">{{file.name}}</span>
+                            <td class="text-truncate">
+                                <span class="ms-2 fw-normal" :title="file.name">{{file.name}}</span>
                             </td>
                             <td>
                                 {{ file.pages_count }}
                             </td>
                             <td>
                                 <p class="mb-0">
-                                    {{ new Date(file.created_at).toISOString().slice(0, 19).replace(/-/g, "/").replace("T", " ") }}
+                                    {{ file.created_at }}
                                 </p>
                             </td>
                             <td>
@@ -170,5 +170,14 @@ export default {
 .card:hover {
     transition: box-shadow 0.5s;
     scale: 1.1;
+}
+
+table {
+    table-layout: fixed;
+    width: 100%;
+}
+td, th {
+
+    word-wrap: break-word;
 }
 </style>

@@ -31,7 +31,7 @@
     }
 @endphp
 
-<div class="mt-5 mb-5 m-0">
+<div class="mt-5 mb-5 m-0 text-editor-blockquote">
     @if (isset($title))
         <h2 class="tab-title">{{$title}}</h2>
     @endif

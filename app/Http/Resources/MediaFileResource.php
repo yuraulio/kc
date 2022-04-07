@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class MediaFileResource extends JsonResource
@@ -34,7 +35,7 @@ class MediaFileResource extends JsonResource
                     ];
                 }
             ),
-            'created_at' => $this->created_at,
+            'created_at' => Carbon::parse($this->created_at)->toFormattedDateString(),
             'alt_text' => $this->alt_text,
             'link' => $this->link,
             'pages_count' => $this->pages_count,

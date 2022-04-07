@@ -94,3 +94,11 @@
         justify-content: center!important;
     }
 }
+
+.text-editor-blockquote blockquote {
+    border-left: 5px solid #419cff;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding: 20px 130px 20px 30px;
+    font-size: 22px;
+}
