@@ -292,7 +292,7 @@ import slugify from '@sindresorhus/slugify';
                 })
                 .catch((error) => {
                     this.errors = error.response.data.errors;
-                    this.$toast.error("Failed to create");
+                    this.$toast.error("Failed to create. " + this.errors[Object.keys(this.errors)[0]]);
                     this.loading = false;
                 });
             },
@@ -324,10 +324,9 @@ import slugify from '@sindresorhus/slugify';
                     }
                 })
                 .catch((error) => {
-                    console.log(error.response.data.errors);
                     this.loading = false;
-                    this.$toast.error("Failed to save");
                     this.errors = error.response.data.errors;
+                    this.$toast.error("Failed to save. " + this.errors[Object.keys(this.errors)[0]]);
                 });
             },
             preview() {

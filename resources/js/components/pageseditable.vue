@@ -344,6 +344,7 @@ export default {
                     console.log(error)
                     this.errors = error.response.data.errors;
                     this.loading = false;
+                    this.$toast.error("Failed to create. " + this.errors[Object.keys(this.errors)[0]]);
                 });
             },
             edit(){
@@ -380,6 +381,7 @@ export default {
                     console.log(error)
                     this.loading = false;
                     this.errors = error.response.data.errors;
+                    this.$toast.error("Failed to save. " + this.errors[Object.keys(this.errors)[0]]);
                 });
             },
             get(){
