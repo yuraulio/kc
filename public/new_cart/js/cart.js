@@ -179,6 +179,47 @@ $(document).on('click', '.do-checkout-subscription', function(e) {
 });
 
 
+$(document).on('click', '.do-checkout-waiting', function(e) {
+	e.preventDefault();
+	
+    var checkoutUrl = 'mobile-check';
+    var fdata = $("#participant-form").serialize();
+    $(".error-mobile").hide();
+
+
+
+       
+    $.ajax({ url: checkoutUrl, type: "get",
+       
+        data: fdata,
+        success: function(data) {
+            //alert('HO');
+         //   return;
+            $('#participant-form').find("input[type=text]").removeClass('verror');
+            if (Number(data.status) === 0) {
+                //var html = '<ul>';
+                $.each(data.errors, function (key, row) {
+                    
+                    key = Number(key.split('.')[1]);
+                    
+                    $("#mobile-error"+(key+1)).html(row);
+                    $("#mobile-error"+(key+1)).show()
+
+                });
+
+
+            } else {
+                
+                $("#participant-form").submit();
+    
+            }
+        }
+            
+    });
+	
+});
+
+
 
 
 

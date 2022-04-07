@@ -41,7 +41,7 @@ class TicketCheck
                 }
             }
         }else{
-
+           
             $cart = Cart::content();
             $event_id = -1;
             $ticket_id = -1;
@@ -56,7 +56,7 @@ class TicketCheck
             //dd($event_id);
             $event = Event::where('id',$event_id)->with('ticket')->first();
             if($event){
-                if($event->view_tpl == 'event_free_coupon' || $event->view_tpl == 'elearning_free'){
+                if($event->view_tpl == 'event_free_coupon' || $event->view_tpl == 'elearning_free' || $ticket_id == 'waiting'){
                     $stock = 1;
                 }else{
                     $stock = $event->ticket->where('ticket_id',$ticket_id)->first() ? $event->ticket->where('ticket_id',$ticket_id)->first()->pivot->quantity : 0;

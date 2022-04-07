@@ -33,7 +33,7 @@ use App\Model\Plan;
 use App\Model\Coupon;
 use App\Model\Video;
 use App\Model\Certificate;
-
+use App\Model\WaitingList;
 
 class Event extends Model
 {
@@ -445,6 +445,10 @@ class Event extends Model
         return $this->belongsToMany(Event::class, 'event_statistics')->withPivot('videos','lastVideoSeen', 'notes', 'event_id', 'user_id');
     }
 
+    public function waitingList(){
+        return $this->hasMany(WaitingList::class);
+    }
+
     public function examAccess( $user,$successPer = 0.8){
 
         $seenPercent =  $this->progress($user);
@@ -670,5 +674,7 @@ class Event extends Model
    
         return $hours;
     }
+
+    
 
 }

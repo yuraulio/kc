@@ -73,6 +73,8 @@
                                                 {{'Soldout'}}
                                             @elseif($event->status == 4)
                                                 {{ __('My Account Only') }}
+                                            @elseif($event->status == 5)
+                                                {{ __('Waiting') }}
                                             @endif
                                         </td>
 
