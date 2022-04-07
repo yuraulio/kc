@@ -41,6 +41,7 @@ use App\Model\Invoice;
 use App\Notifications\CourseInvoice;
 use App\Notifications\WelcomeEmail;
 use Illuminate\Http\Request;
+use App\Notifications\SendWaitingListEmail;
 
 class UserController extends Controller
 {

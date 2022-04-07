@@ -22,7 +22,7 @@ class SendWaitingListEmail extends Notification
     private $user;
     private $event;
 
-    public function __construct($user, $evemt)
+    public function __construct($user, $event)
     {
         $this->user = User::find($user);
         $this->event = User::find($event);

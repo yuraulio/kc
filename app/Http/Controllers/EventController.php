@@ -486,7 +486,6 @@ class EventController extends Controller
 
         if($event->status == 0 && $request->old_status == 5){
             SendMaiWaitingList::dispatch($event->id)->delay(now()->addMinutes(1));
-            //Artisan::call('queue:work');
         }
 
         return back()->withStatus(__('Event successfully updated.'));

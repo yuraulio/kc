@@ -9,7 +9,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Model\Event;
-use Illuminate\Notifications\Messages\MailMessage;
 use App\Notifications\SendWaitingListEmail;
 
 class SendMaiWaitingList implements ShouldQueue
@@ -39,9 +38,9 @@ class SendMaiWaitingList implements ShouldQueue
         if($this->event){
             foreach($this->event->waitingList as $list){
 
-                new SendWaitingListEmail($list->user_id,$list->event_id);
-                
+                $list->user->notify(new SendWaitingListEmail($list->user_id,$list->event_id));
                 $list->delete();
+
             }
         }
     }
