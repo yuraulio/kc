@@ -43,4 +43,8 @@
     <meta property="og:site_name" content="Knowcrunch’s professional diploma in digital and social media marketing">
     <meta name="twitter:image:alt" content="Knowcrunch’s professional diploma in digital and social media marketing">
 
+    <script type="application/ld+json">
+        {!! $meta['meta_schema'] ?? "" !!}
+    </script>
+
 @endsection

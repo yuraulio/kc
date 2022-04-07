@@ -114,7 +114,7 @@
         ]
     },
     "meta" : {
-        "version": 3,
+        "version": 7,
         "title": "Meta",
         "icon": "dripicons-rocket",
         "key": "meta_component",
@@ -171,6 +171,14 @@
                 "label": "Meta Type",
                 "size": "col-lg-12",
                 "main": true
+            },
+            {
+                "type": "textarea",
+                "key": "meta_schema",
+                "label": "Meta Schema",
+                "size": "col-lg-12",
+                "main": true,
+                "simple_view": false
             }
         ]
     },

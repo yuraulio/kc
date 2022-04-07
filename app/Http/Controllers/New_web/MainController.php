@@ -44,7 +44,6 @@ class MainController extends Controller
         }
 
         $this->fbp->sendPageViewEvent();
-
         return view('new_web.page', [
             'content' => json_decode($page->content),
             'page_id' => $page->id,
@@ -96,7 +95,7 @@ class MainController extends Controller
             return (new HomeController($this->fbp))->index($slugModel);
         }
 
-
+        $this->fbp->sendPageViewEvent();
         return view('new_web.page', [
             'content' => json_decode($page->content),
             'page_id' => $page->id,

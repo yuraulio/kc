@@ -89,7 +89,7 @@
 
     <div v-if="type == 'textarea'" class="">
         <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
-        <textarea :id="keyput" v-model="editorData" class="form-control" maxlength="5000" rows="3" placeholder=""></textarea>
+        <textarea :id="keyput" v-model="editorData" class="form-control" maxlength="10000" rows="3" placeholder=""></textarea>
     </div>
 
     <!-- <div v-if="type == 'image'" class="">
@@ -145,34 +145,6 @@
         ></tcedit>
     </div>
 
-    <div v-if="type == 'repetable'" class="">
-        <template v-for="items in editorData">
-            <template v-for="input in inputs">
-                <multiput
-                    :key="input.key"
-                    :keyput="input.key"
-                    :label="input.label"
-                    :type="input.type"
-                    :value="input.value"
-                    :tabsProp="input.tabs ? input.tabs : []"
-                    :size="input.size"
-
-                    :route="input.route"
-                    :multi="false"
-                    :existingValue="input.value"
-                    :uuid="$uuid.v4()"
-                    :mode="mode"
-                />
-            </template>
-        </template>
-
-        <div class="text-center mt-2">
-            <button @click="addRepetableBlock()" class="btn btn-success add-column-button ms-1">
-                <i class="dripicons-plus"></i>
-            </button>
-        </div>
-    </div>
-
 </div>
 </template>
 
@@ -185,7 +157,7 @@ import { Editor, EditorContent } from '@tiptap/vue-2'
 import StarterKit from '@tiptap/starter-kit'
 import multidropdown from './multidropdown.vue'
 import MediaManager from '../media/media-manager.vue';
-// import Tcedit from '../tcdit.vue';
+
 
 export default {
     components: {
