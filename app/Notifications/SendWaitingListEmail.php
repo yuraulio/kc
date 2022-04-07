@@ -20,7 +20,7 @@ class SendWaitingListEmail extends Notification
      */
 
     private $user;
-    private $event
+    private $event;
 
     public function __construct($user, $evemt)
     {
