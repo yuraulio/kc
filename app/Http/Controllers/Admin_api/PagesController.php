@@ -459,7 +459,7 @@ class PagesController extends Controller
     public function articlePagesCount($request)
     {
         try {
-            $pages = Page::withoutGlobalScope('published')->whereType("Article");
+            $pages = Page::withoutGlobalScope('published')->whereType("Blog");
             $pages = $this->filters($request, $pages);
             return $pages->count();
         } catch (Exception $e) {
