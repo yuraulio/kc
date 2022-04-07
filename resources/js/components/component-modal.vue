@@ -5,6 +5,9 @@
     .components .card {
         width: 120px;
     }
+    .widget-rounded-circle {
+        cursor: pointer;
+    }
 </style>
 
 <template>

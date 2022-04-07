@@ -186,10 +186,22 @@
                                     </button>
                                     <div @click="selectedFolder = item; getFolders(item.id)" :class="'dd-handle ' + (item.id == folderId ? 'selected-folder' : '')">
 
-                                        <i class="mdi mdi-folder-outline font-18 align-middle me-"></i>
-                                        {{ item.name }}
-                                        <i @click.stop="deleteFolder(item)" class="fa fa-times ms-1 float-end mt-1" aria-hidden="true"></i>
-                                        <i @click.stop="renameFolderModal(item)" class="fas fa-edit ms-1 float-end mt-1"></i>
+                                        <div class="row g-0 ps-1">
+                                            <div class="col-auto p-0">
+                                                <i class="mdi mdi-folder-outline font-18 align-middle" style="margin-right: 5px;"></i>
+                                            </div>
+                                            <div class="col p-0" style="width: 10px">
+                                                <div>
+                                                    <div class="text-truncate">
+                                                        <span :title="item.name">{{ item.name }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-auto p-0">
+                                                <i @click.stop="deleteFolder(item)" class="fa fa-times ms-1  mt-1" aria-hidden="true"></i>
+                                                <i @click.stop="renameFolderModal(item)" class="fas fa-edit ms-1  mt-1"></i>
+                                            </div>
+                                        </div>
                                     </div>
                                 </li>
                             </vue-nestable-handle>
@@ -347,5 +359,28 @@ export default {
 }
 .media-manager .original-floder {
     border: 1px solid #1abc9c!important;
+}
+</style>
+
+<style scoped>
+@media (max-width: 992px) {
+    .inbox-leftbar {
+        width: 100%;
+        float: none;
+        padding: 0 20px;
+    }
+    .inbox-rightbar {
+        padding-top: 40px;
+        margin: 0;
+        border: 0;
+        padding-left: 0;
+    }
+    .message-list li .col-mail-1 .checkbox-wrapper-mail {
+        margin-left: 0;
+    }
+}
+
+.dd-handle {
+    padding-left: 22px!important;
 }
 </style>
