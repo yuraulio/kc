@@ -61,7 +61,7 @@
 
 <template>
 <div>
-    <div class="page-edit-simple" v-if="page">
+    <div class="page-edit-simple" v-if="page && page.template">
         <div class="row">
             <div class="col-md-12 align-self-center">
                 <div class="page-title-box mt-3 row">
@@ -376,13 +376,18 @@ import slugify from '@sindresorhus/slugify';
                 return result;
             },
             setTemplate(template) {
-                var page = {
-                    content: template.rows,
-                    title: "New page",
-                    template: template
-                };
-
-                this.$emit('setPage', page);
+                if (this.page) {
+                    console.log("test");
+                    this.page.template = template;
+                    this.$emit('setPage', this.page);
+                } else {
+                    var page = {
+                        content: template.rows,
+                        title: "New page",
+                        template: template
+                    };
+                    this.$emit('setPage', page);
+                }
             },
             simpleColumnCount(columns) {
                 var count = 0;

@@ -9,6 +9,7 @@ use App\Library\CMS;
 use App\Model\Admin\Page;
 use App\Model\Admin\Redirect;
 use App\Model\Admin\Setting;
+use App\Model\Logos;
 use App\Model\Slug;
 use App\Services\FBPixelService;
 use Illuminate\Http\Request;
@@ -37,6 +38,9 @@ class MainController extends Controller
         if (Cache::getCmsMode() == Setting::NEW_PAGES) {
             $page = Page::whereSlug("homepage")->first();
             $dynamicPageData = CMS::getHomepageData();
+
+            $dynamicPageData['homeBrands'] = Logos::with('medias')->where('type', 'brands')->inRandomOrder()->take(6)->get()->toArray();
+            $dynamicPageData['homeLogos'] = Logos::with('medias')->where('type', 'logos')->inRandomOrder()->take(6)->get()->toArray();
         }
 
         if (!$page) {

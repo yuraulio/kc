@@ -333,6 +333,22 @@ class PagesController extends Controller
         ];
     }
 
+    public function getHomepageGalleryOptions()
+    {
+        return [
+            "data" => [
+                [
+                    "id" => 1,
+                    "title" => "Trusted Brands"
+                ],
+                [
+                    "id" => 2,
+                    "title" => "Media Logos"
+                ]
+            ]
+        ];
+    }
+
     private function syncImages($page)
     {
         $data = collect(json_decode($page->content, true))->flatten();

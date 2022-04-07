@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Library\CMS;
 use Illuminate\Http\Request;
 use App\Model\Admin\Page;
+use App\Model\Logos;
 
 class DashboardController extends Controller
 {
@@ -82,6 +83,9 @@ class DashboardController extends Controller
 
         if ($page->slug == "homepage") {
             $dynamicPageData = CMS::getHomepageData();
+            $dynamicPageData['homeBrands'] = Logos::with('medias')->where('type', 'brands')->inRandomOrder()->take(6)->get()->toArray();
+            $dynamicPageData['homeLogos'] = Logos::with('medias')->where('type', 'logos')->inRandomOrder()->take(6)->get()->toArray();
+            // dd($dynamicPageData['homeBrands']);
         }
 
         return view('new_web.page', [

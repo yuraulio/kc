@@ -417,7 +417,7 @@ export default {
         },
         mounted() {
             if (this.data) {
-                
+                console.log(data);
                 var data = this.data;
                 this.title_value = data.title;
                 this.template_value = data.template;

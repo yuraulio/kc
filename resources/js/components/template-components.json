@@ -689,6 +689,28 @@
         "inputs": [
         ]
     },
+    "homepage_gallery" : {
+        "version": 1,
+        "title": "Homepage Gallery",
+        "icon": "dripicons-photo-group",
+        "key": "homepage_gallery_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": false,
+        "inputs": [
+            {
+                "type": "multidropdown",
+                "key": "homepage_gallery_type",
+                "label": "Type",
+                "route": "getHomepageGalleryOptions",
+                "value": {
+                    "id": 1,
+                    "title": "Trusted Brands"
+                },
+                "size": "col-lg-12"
+            }
+        ]
+    },
     "blog_list" : {
         "version": 2,
         "title": "Blog list",
