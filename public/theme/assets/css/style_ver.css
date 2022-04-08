@@ -23,8 +23,17 @@
     top: 0;
 }
 
+
+.event-background:nth-child(2n){
+    background:white;
+}
+
 .event-background:nth-child(2n + 1) {
     background-color: #f0f0f0;
+}
+
+.section--partners{
+    background: white;
 }
 
 .subs-page-span {
