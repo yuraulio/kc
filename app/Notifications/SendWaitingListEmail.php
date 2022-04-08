@@ -25,7 +25,7 @@ class SendWaitingListEmail extends Notification
     public function __construct($user, $event)
     {
         $this->user = User::find($user);
-        $this->event = User::find($event);
+        $this->event = Event::find($event);
     }
 
     /**
@@ -47,9 +47,11 @@ class SendWaitingListEmail extends Notification
      */
     public function toMail($notifiable)
     {
+        $url = url('/') . '/' . $this->event->getSlug() . '?lo=' . encrypt($this->user->email);
+
         return (new MailMessage)
                     ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
+                    ->action('Notification Action',$url)
                     ->line('Thank you for using our application!');
     }
 

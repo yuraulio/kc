@@ -36,11 +36,11 @@ class SendMaiWaitingList implements ShouldQueue
     public function handle()
     {
         if($this->event){
-            foreach($this->event->waitingList as $list){
+            foreach($this->event->waitingList()->where('mail_sent',false)->get() as $list){
 
                 $list->user->notify(new SendWaitingListEmail($list->user_id,$list->event_id));
-                $list->delete();
-
+                $list->mail_sent = true;
+                $list->save();
             }
         }
     }

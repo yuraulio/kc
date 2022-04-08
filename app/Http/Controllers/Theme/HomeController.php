@@ -438,6 +438,20 @@ class HomeController extends Controller
         $published = $content->published;
         $status = $content->status;
         if($published == 0 || $status != 5){
+
+            Cart::instance('default')->destroy();
+            Session::forget('pay_seats_data');
+            Session::forget('transaction_id');
+            Session::forget('cardtype');
+            Session::forget('installments');
+            //Session::forget('pay_invoice_data');
+            Session::forget('pay_bill_data');
+            Session::forget('deree_user_data');
+            Session::forget('user_id');
+            Session::forget('coupon_code');
+            Session::forget('coupon_price');
+            Session::forget('priceOf');
+
             return false;
         }
         
@@ -487,6 +501,20 @@ class HomeController extends Controller
         }
 
         if(WaitingList::where('user_id',$user->id)->where('event_id',$content->id)->first()){
+
+            Cart::instance('default')->destroy();
+            Session::forget('pay_seats_data');
+            Session::forget('transaction_id');
+            Session::forget('cardtype');
+            Session::forget('installments');
+            //Session::forget('pay_invoice_data');
+            Session::forget('pay_bill_data');
+            Session::forget('deree_user_data');
+            Session::forget('user_id');
+            Session::forget('coupon_code');
+            Session::forget('coupon_price');
+            Session::forget('priceOf');
+
             return false;
         }
 
@@ -772,6 +800,16 @@ class HomeController extends Controller
         }
 
         $data['tigran'] = ['Price' => $tr_price,'Product_id' => $event->id,'Product_SKU' => $event->id,'ProductCategory' => $categoryScript, 'ProductName' =>  $event->title,'Event_ID' => 'kc_' . time() ];
+
+
+        if(request()->has('lo')){
+            $user = User::where('email',decrypt(request()->get('lo')))->first();
+            if($user){
+                Auth::login($user);
+            }
+        }
+
+        
 
         if(Auth::user() && count(Auth::user()->events->where('id',$event->id)) > 0){
             $data['is_event_paid'] = 1;

@@ -485,9 +485,11 @@ class EventController extends Controller
         }
 
         if($event->status == 0 && $request->old_status == 5){
-            SendMaiWaitingList::dispatch($event->id)->delay(now()->addMinutes(1));
-        }
+            //SendMaiWaitingList::dispatchAfterResponse($event->id);
+            dispatch((new SendMaiWaitingList($event->id))->delay(now()->addSeconds(3)));
 
+        }
+        
         return back()->withStatus(__('Event successfully updated.'));
         //return redirect()->route('events.edit',$event->id)->withStatus(__('Event successfully created.'));
         //return redirect()->route('events.index')->withStatus(__('Event successfully updated.'));

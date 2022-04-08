@@ -17,6 +17,7 @@ class CreateWaitingListsTable extends Migration
             $table->id();
             $table->integer('user_id');
             $table->integer('event_id');
+            $table->boolean('mail_sent')->default(false);
             $table->timestamps();
         });
     }
