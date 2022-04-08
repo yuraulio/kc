@@ -432,7 +432,7 @@ Route::group(['middleware' => ['web']], function () {
             Route::post('/cart/update', ['as' => 'cart.update', 'uses' => 'PaymentController@update']);
 
             Route::get('/enroll-for-free/{content}', 'Theme\HomeController@enrollToFreeEvent')->name('enrollForFree');
-            Route::get('/enroll-for-waiting/{content}', 'Theme\HomeController@enrollToWaitingList')->name('enrollForWaiting');
+            //Route::get('/enroll-for-waiting/{content}', 'Theme\HomeController@enrollToWaitingList')->name('enrollForWaiting');
         });
     });
 });
