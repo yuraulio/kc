@@ -70,7 +70,7 @@ class Kernel extends ConsoleKernel
             $schedule->command('db:seed')->daily();
         }
 
-        $schedule->command('publishCheck')->everyHour();
+        $schedule->command('publishCheck')->hourly();
     }
 
     /**
