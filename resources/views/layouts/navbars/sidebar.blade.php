@@ -28,6 +28,14 @@
                         </a>
                         <div class="collapse {{ isset($parentSection) and $parentSection  == 'dashboards' ? 'show' : '' }}" id="navbar-dashboards">
                             <ul class="nav nav-sm flex-column">
+
+                                <li class="nav-item">
+                                    <a href="{{env("ADMIN_URL")}}" class="nav-link">
+                                        <span class="badge badge-primary">New</span> &nbsp
+                                        {{ __('Dashboard') }}
+                                    </a>
+                                </li>
+
                                 <li class="nav-item {{ isset($elementName) and $elementName  == 'dashboard' ? 'active' : '' }}">
                                     <a href="{{ route('home') }}" class="nav-link">{{ __('Dashboard') }}</a>
                                 </li>

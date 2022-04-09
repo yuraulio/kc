@@ -1,3 +1,13 @@
+Requirements:\
+Composer: 2\
+PHP: 8\
+Node Version: 15.10\
+Python2
+
+# QED
+- Node: v15.5.1
+- Composer: 2.1.11
+
 # Argon Pro Theme for Laravel Framework 8.x and Up
 
 Argon Pro Theme for Laravel Framework 8.x and Up
@@ -15,6 +25,7 @@ If you don't already have an Apache local environment with PHP and MySQL, use on
 - Mac: https://wpshout.com/quick-guides/how-to-install-mamp-on-your-mac
 
 You will also need to install Composer: https://getcomposer.org/doc/00-intro.md
+..
 
 
 ## Installation
@@ -29,21 +40,21 @@ You will also need to install Composer: https://getcomposer.org/doc/00-intro.md
 
 ## Usage
 
-To start testing the Pro theme, register as a user or log in using one of the default users: 
+To start testing the Pro theme, register as a user or log in using one of the default users:
 
 - admin type - **admin@argon.com** with the password **secret**
-- creator type - **creator@argon.com** with the password **secret** 
-- member type - **member@argon.com** with the password **secret** 
+- creator type - **creator@argon.com** with the password **secret**
+- member type - **member@argon.com** with the password **secret**
 
 Make sure to run the migrations and seeders for the above credentials to be available.
 
 In addition to the features included in the free preset, the Pro theme also has a role management example with an updated user management, as well as tag management, category management and item management examples. All the necessary files (controllers, requests, views) are installed out of the box and all the needed routes are added to `routes/web.php`. Keep in mind that all the features can be viewed once you log in using the credentials provided above or by registering your own user.
 
-Each role has a different privilege level and can perform a certain number of actions according to this level.  
+Each role has a different privilege level and can perform a certain number of actions according to this level.
 
 A **member type** user can log in, update his profile and view a list of added items.
-A **creator type** user can log in, update his profile and perform actions on categories, tags and items.  
-A **admin type** user can log in, update his profile and perform actions on categories, tags, items, roles and users.  
+A **creator type** user can log in, update his profile and perform actions on categories, tags and items.
+A **admin type** user can log in, update his profile and perform actions on categories, tags, items, roles and users.
 
 ### Dashboard
 
@@ -231,7 +242,7 @@ The policy which authorizes the user on categories management pages is implement
 
 Item management is the most advanced example included in the Pro theme, because every item has a picture, belongs to a category and has multiple tags. To access this example click the "**Examples/Item Management**" link in the left sidebar or add **/item** to the URL.
 Here you can manage the items. A list of items will appear once you start adding them (to access the add page click "**Add item**").
-On the add page, besides the Name and Description fields (which are present in most of the CRUD examples) you can see a category dropdown, which contains the categories you added, a file input and a tag multi select. If you did not add any categories or tags, please go to the corresponding sections (category management, tag management) and add some.  
+On the add page, besides the Name and Description fields (which are present in most of the CRUD examples) you can see a category dropdown, which contains the categories you added, a file input and a tag multi select. If you did not add any categories or tags, please go to the corresponding sections (category management, tag management) and add some.
 
 
 The code for saving a new item is a bit different than before (see snippet bellow):
@@ -299,7 +310,7 @@ In the item management we have an **observer** (`app\Observers\ItemObserver`) ex
 public function deleting(Item  $item)
 {
     File::delete(storage_path("/app/public/{$item->picture}"));
-    
+
     $item->tags()->detach();
 }
 ```

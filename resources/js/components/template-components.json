@@ -1,0 +1,856 @@
+{
+    "hero" : {
+        "version": 6,
+        "title": "Header",
+        "width": "full",
+        "icon": "dripicons-monitor",
+        "key": "hero_header_component",
+        "one_column": true,
+        "tab": "Content",
+        "dynamic": false,
+        "simple_view": true,
+        "simple_view_settings_icon": "dripicons-photo",
+        "inputs": [
+            {
+                "type": "image",
+                "key": "hero_image",
+                "label": "Image"
+            },
+            {
+                "type": "text_editor",
+                "key": "hero_title",
+                "label": "Title",
+                "main": true
+            },
+            {
+                "type": "checkbox",
+                "key": "hero_small",
+                "label": "Minified",
+                "value": false
+            }
+        ]
+    },
+    "content_box" : {
+        "version": 3,
+        "width": "content",
+        "title": "Teaser",
+        "icon": "dripicons-article",
+        "key": "content_box_component",
+        "tab": "Content",
+        "simple_view": true,
+        "inputs": [
+            {
+                "type": "image",
+                "key": "content_box_image",
+                "label": "Content Box Image",
+                "main": true
+            },
+            {
+                "type": "text",
+                "key": "content_box_title",
+                "label": "Title"
+            },
+            {
+                "type": "text",
+                "key": "content_box_title_url",
+                "label": "Title Url"
+            },
+            {
+                "type": "text",
+                "key": "content_box_subtitle_url",
+                "label": "Subtitle Url"
+            },
+            {
+                "type": "text",
+                "key": "content_box_subtitle",
+                "label": "Subtitle"
+            },
+            {
+                "type": "text",
+                "key": "content_box_btn_text",
+                "label": "Button Text"
+            },
+            {
+                "type": "text",
+                "key": "content_box_btn_link",
+                "label": "Button Link"
+            }
+        ]
+    },
+    "text_editor" : {
+        "version": 3,
+        "width": "content",
+        "title": "Rich Text Editor",
+        "icon": "dripicons-document-edit",
+        "key": "text_editor_component",
+        "tab": "Content",
+        "dynamic": false,
+        "simple_view": true,
+        "inputs": [
+            {
+                "type": "text_editor",
+                "key": "rich_text_box_title",
+                "label": "Text",
+                "main": true,
+                "value": null
+            }
+        ]
+    },
+    "image" : {
+        "version": 3,
+        "width": "full",
+        "title": "Full size image",
+        "icon": "dripicons-photo",
+        "key": "full_sixe_image_component",
+        "tab": "Content",
+        "simple_view": true,
+        "inputs": [
+            {
+                "type": "image",
+                "key": "full_size_image",
+                "label": "Image",
+                "main": true
+            }
+        ]
+    },
+    "meta" : {
+        "version": 7,
+        "title": "Meta",
+        "icon": "dripicons-rocket",
+        "key": "meta_component",
+        "one_column": true,
+        "changable": false,
+        "removable": false,
+        "disable_color": true,
+        "tab": "Meta",
+        "simple_view": true,
+        "inputs": [
+            {
+                "type": "text",
+                "key": "meta_slug",
+                "label": "Slug",
+                "size": "col-lg-12",
+                "main": true
+            },
+            {
+                "type": "text",
+                "key": "meta_title",
+                "label": "Meta Title",
+                "size": "col-lg-12",
+                "main": true
+            },
+            {
+                "type": "textarea",
+                "key": "meta_description",
+                "label": "Meta Description",
+                "main": true
+            },
+            {
+                "type": "text",
+                "key": "meta_keyword",
+                "label": "Meta Keywords",
+                "size": "col-lg-12",
+                "main": true
+            },
+            {
+                "type": "image",
+                "key": "meta_image",
+                "label": "Meta image",
+                "main": true
+            },
+            {
+                "type": "text",
+                "key": "meta_author",
+                "label": "Meta Author",
+                "size": "col-lg-12",
+                "main": true
+            },
+            {
+                "type": "text",
+                "key": "meta_type",
+                "label": "Meta Type",
+                "size": "col-lg-12",
+                "main": true
+            },
+            {
+                "type": "textarea",
+                "key": "meta_schema",
+                "label": "Meta Schema",
+                "size": "col-lg-12",
+                "main": true,
+                "simple_view": false
+            }
+        ]
+    },
+    "comments" : {
+        "version": 4,
+        "width": "content",
+        "title": "Comments",
+        "key": "comment_box_component",
+        "one_column": true,
+        "icon": "dripicons-align-justify",
+        "tab": "Content",
+        "simple_view": false,
+        "inputs": [
+        ]
+    },
+    "social_bar" : {
+        "version": 2,
+        "width": "blog",
+        "title": "Social sharing",
+        "key": "social_bar_component",
+        "icon": "dripicons-web",
+        "tab": "Content",
+        "simple_view": false,
+        "inputs": [
+            {
+                "type": "text",
+                "key": "social_title",
+                "label": "Title"
+            },
+            {
+                "type": "text",
+                "key": "social_summary",
+                "label": "Summary"
+            }
+        ]
+    },
+    "gallery" : {
+        "version": 2,
+        "width": "content",
+        "title": "Image gallery",
+        "key": "gallery_component",
+        "icon": "dripicons-photo-group",
+        "tab": "Content",
+        "simple_view": true,
+        "inputs": [
+            {
+                "type": "text",
+                "key": "gallery_title",
+                "label": "Title",
+                "size": "col-lg-12"
+            },
+            {
+                "type": "gallery",
+                "key": "gallery",
+                "label": "Gallery",
+                "main": true
+            },
+            {
+                "type": "multidropdown",
+                "key": "galery_type",
+                "label": "Gallery display",
+                "route": "getGaleryDisplayOptions",
+                "value": {
+                    "id": 1,
+                    "title": "Grid"
+                },
+                "size": "col-lg-12"
+            },
+            {
+                "type": "text",
+                "key": "gallery_link",
+                "label": "Link"
+            },
+            {
+                "type": "text",
+                "key": "gallery_link_text",
+                "label": "Link text"
+            }
+        ]
+    },
+    "blog_header" : {
+        "version": 2,
+        "title": "Title & Subtitle",
+        "width": "blog",
+        "icon": "dripicons-document",
+        "key": "blog_header_component",
+        "tab": "Content",
+        "simple_view": true,
+        "inputs": [
+            {
+                "type": "text_editor",
+                "key": "blog_header_title",
+                "label": "Text",
+                "main": true
+            }
+        ]
+    },
+    "youtube" : {
+        "version": 3,
+        "title": "Yutube video",
+        "width": "content",
+        "icon": "dripicons-camcorder",
+        "key": "youtube_component",
+        "tab": "Content",
+        "dynamic": false,
+        "simple_view": true,
+        "inputs": [
+            {
+                "type": "number",
+                "key": "youtube_height",
+                "label": "Video height (px)",
+                "size": "col-lg-6"
+            },
+            {
+                "type": "number",
+                "key": "youtube_width",
+                "label": "Video width (px)",
+                "size": "col-lg-6"
+            },
+            {
+                "type": "text",
+                "key": "youtube_embed",
+                "label": "Video code",
+                "size": "col-lg-12",
+                "main": true
+            }
+        ]
+    },
+    "html" : {
+        "version": 2,
+        "title": "Embed htlm",
+        "width": "content",
+        "icon": "dripicons-code",
+        "key": "html_component",
+        "tab": "Content",
+        "simple_view": false,
+        "inputs": [
+            {
+                "type": "textarea",
+                "key": "html_embed",
+                "label": "Html code"
+            }
+        ]
+    },
+    "contact_form" : {
+        "version": 3,
+        "title": "Form",
+        "width": "content",
+        "icon": "dripicons-mail",
+        "key": "contact_form_component",
+        "tab": "Content",
+        "simple_view": true,
+        "inputs": [
+            {
+                "type": "text",
+                "key": "title",
+                "label": "Title"
+            },
+            {
+                "type": "text",
+                "key": "button_text",
+                "label": "Button text"
+            },
+            {
+                "type": "text",
+                "key": "success_text",
+                "label": "Success message",
+                "size": "col-lg-6"
+            },
+            {
+                "type": "checkbox",
+                "key": "enable_consent",
+                "label": "Enable consent",
+                "value": true,
+                "size": "col-lg-6"
+            },
+            {
+                "type": "text_editor",
+                "key": "consent_text",
+                "label": "Consent text"
+            },
+            {
+                "type": "multidropdown",
+                "key": "form_type",
+                "label": "Form type",
+                "route": "getFormTypes",
+                "main": true
+            },
+            {
+                "type": "checkbox",
+                "key": "top_overlap",
+                "label": "Overlap",
+                "value": true,
+                "size": "col-lg-6"
+            }
+        ]
+    },
+    "empty" : {
+        "version": 2,
+        "title": "Empty space",
+        "width": "content",
+        "icon": "dripicons-wrong",
+        "key": "empty_component",
+        "tab": "Content",
+        "inputs": []
+    },
+    "horizintal_line" : {
+        "version": 2,
+        "title": "Horizontal line",
+        "width": "content",
+        "icon": "dripicons-minus",
+        "key": "horizontal_line_component",
+        "tab": "Content",
+        "inputs": []
+    },
+    "post_feature" : {
+        "version": 3,
+        "title": "Blog post list item",
+        "icon": "dripicons-blog",
+        "key": "post_feature_component",
+        "one_column": true,
+        "tab": "Other",
+        "simple_view": false,
+        "inputs": [
+            {
+                "type": "text",
+                "key": "feature_title",
+                "label": "List title"
+            },
+            {
+                "type": "textarea",
+                "key": "feature_description",
+                "label": "List description"
+            },
+            {
+                "type": "image",
+                "key": "feature_image",
+                "label": "List image"
+            }
+        ]
+    },
+    "menus" : {
+        "version": 3,
+        "title": "Menus",
+        "icon": "dripicons-menu",
+        "key": "menu_component",
+        "one_column": true,
+        "changable": false,
+        "removable": false,
+        "disable_color": true,
+        "tab": "Content",
+        "simple_view": false,
+        "inputs": [
+            {
+                "type": "multidropdown",
+                "key": "main_menu_desktop",
+                "label": "Main menu desktop",
+                "route": "getMenus",
+                "value": {
+                    "name": "Main menu",
+                    "slug": "main-menu",
+                    "custom_class": "Main menu"
+                },
+                "size": "col-lg-6"
+            },
+            {
+                "type": "multidropdown",
+                "key": "main_menu_mobile",
+                "label": "Main menu mobile",
+                "route": "getMenus",
+                "value": {
+                    "name": "Main menu",
+                    "slug": "main-menu",
+                    "custom_class": "Main menu"
+                },
+                "size": "col-lg-6"
+            },
+            {
+                "type": "multidropdown",
+                "key": "footer_menu_1_desktop",
+                "label": "Footer menu 1 deshtop",
+                "route": "getMenus",
+                "value": {
+                    "name": "About",
+                    "slug": "about",
+                    "custom_class": "About"
+                },
+                "size": "col-lg-6"
+            },
+            {
+                "type": "multidropdown",
+                "key": "footer_menu_1_mobile",
+                "label": "Footer menu 1 mobile",
+                "route": "getMenus",
+                "value": {
+                    "name": "About",
+                    "slug": "about",
+                    "custom_class": "About"
+                },
+                "size": "col-lg-6"
+            },
+            {
+                "type": "multidropdown",
+                "key": "footer_menu_2_desktop",
+                "label": "Footer menu 2 desktop",
+                "route": "getMenus",
+                "value": {
+                    "name": "Education",
+                    "slug": "education",
+                    "custom_class": "Education"
+                },
+                "size": "col-lg-6"
+            },
+            {
+                "type": "multidropdown",
+                "key": "footer_menu_2_mobile",
+                "label": "Footer menu 2 mobile",
+                "route": "getMenus",
+                "value": {
+                    "name": "Education",
+                    "slug": "education",
+                    "custom_class": "Education"
+                },
+                "size": "col-lg-6"
+            },
+            {
+                "type": "multidropdown",
+                "key": "footer_menu_3_desktop",
+                "label": "Footer menu 3 desktop",
+                "route": "getMenus",
+                "value": {
+                    "name": "Students",
+                    "slug": "students",
+                    "custom_class": "Students"
+                },
+                "size": "col-lg-6"
+            },
+            {
+                "type": "multidropdown",
+                "key": "footer_menu_3_mobile",
+                "label": "Footer menu 3 mobile",
+                "route": "getMenus",
+                "value": {
+                    "name": "Students",
+                    "slug": "students",
+                    "custom_class": "Students"
+                },
+                "size": "col-lg-6"
+            }
+        ]
+    },
+    "instructor_avatar" : {
+        "version": 2,
+        "title": "Instructor avatar",
+        "icon": "dripicons-user",
+        "key": "instructor_avatar_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": false,
+        "inputs": [
+        ]
+    },
+    "instructor_courses" : {
+        "version": 2,
+        "title": "Instructor's lessons",
+        "icon": "dripicons-view-list",
+        "key": "instructor_courses_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": false,
+        "inputs": [
+        ]
+    },
+    "instructor_events" : {
+        "version": 2,
+        "title": "Instructor's courses",
+        "icon": "dripicons-view-list-large",
+        "key": "instructor_events_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": false,
+        "inputs": [
+        ]
+    },
+    "tabs" : {
+        "version": 2,
+        "title": "Tabbed menu",
+        "icon": "dripicons-browser",
+        "key": "tabs_component",
+        "tab": "Content",
+        "width": "full",
+        "simple_view": false,
+        "inputs": [
+            {
+                "type": "tabs",
+                "key": "tabs",
+                "label": "Tabs"
+            }
+        ]
+    },
+    "course_details" : {
+        "version": 2,
+        "title": "Course details",
+        "icon": "dripicons-article",
+        "key": "course_details_component",
+        "tab": "Content",
+        "width": "full",
+        "simple_view": false,
+        "inputs": [
+        ]
+    },
+    "course_author" : {
+        "version": 2,
+        "title": "Course manager",
+        "icon": "dripicons-user-id",
+        "key": "course_author_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": false,
+        "inputs": [
+        ]
+    },
+    "book_ticket" : {
+        "version": 3,
+        "title": "Course tickets",
+        "icon": "dripicons-card",
+        "key": "book_ticket_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": false,
+        "inputs": [
+        ]
+    },
+    "benefits" : {
+        "version": 2,
+        "title": "Course benefits",
+        "icon": "dripicons-view-thumb",
+        "key": "benefits_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": false,
+        "inputs": [
+        ]
+    },
+    "topics" : {
+        "version": 2,
+        "title": "Course topics",
+        "icon": "dripicons-menu",
+        "key": "topics_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": false,
+        "inputs": [
+        ]
+    },
+    "course_instructors" : {
+        "version": 1,
+        "title": "Course instructors",
+        "icon": "dripicons-user-group",
+        "key": "course_instructors_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": false,
+        "inputs": [
+        ]
+    },
+    "course_video_testimonials" : {
+        "version": 2,
+        "title": "Course video testimonials",
+        "icon": "dripicons-camcorder",
+        "key": "course_video_testimonials_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": false,
+        "inputs": [
+        ]
+    },
+    "course_written_testimonials" : {
+        "version": 2,
+        "title": "Course written testimonials",
+        "icon": "dripicons-message",
+        "key": "course_written_testimonials_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": false,
+        "inputs": [
+        ]
+    },
+    "course_location" : {
+        "version": 2,
+        "title": "Course location",
+        "icon": "dripicons-location",
+        "key": "course_location_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": false,
+        "inputs": [
+        ]
+    },
+    "course_faq" : {
+        "version": 2,
+        "title": "Course Q & A",
+        "icon": "dripicons-search",
+        "key": "course_faq_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": false,
+        "inputs": [
+        ]
+    },
+    "homepage_gallery" : {
+        "version": 1,
+        "title": "Homepage Gallery",
+        "icon": "dripicons-photo-group",
+        "key": "homepage_gallery_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": false,
+        "inputs": [
+            {
+                "type": "multidropdown",
+                "key": "homepage_gallery_type",
+                "label": "Type",
+                "route": "getHomepageGalleryOptions",
+                "value": {
+                    "id": 1,
+                    "title": "Trusted Brands"
+                },
+                "size": "col-lg-12"
+            }
+        ]
+    },
+    "blog_list" : {
+        "version": 2,
+        "title": "Blog list",
+        "icon": "dripicons-blog",
+        "key": "blog_list_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": false,
+        "inputs": [
+            {
+                "type": "multidropdown",
+                "key": "blog_list",
+                "label": "Blog display",
+                "route": "getDisplayOptions",
+                "value": {
+                    "id": 2,
+                    "title": "Grid"
+                },
+                "size": "col-lg-12"
+            }
+        ]
+    },
+    "instructors_list" : {
+        "version": 2,
+        "title": "Instructors list",
+        "icon": "dripicons-checklist",
+        "key": "instructors_list_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": false,
+        "inputs": [
+            {
+                "type": "multidropdown",
+                "key": "instructors_list",
+                "label": "Instructors display",
+                "route": "getDisplayOptions",
+                "value": {
+                    "id": 1,
+                    "title": "List"
+                },
+                "size": "col-lg-12"
+            }
+        ]
+    },
+    "events_list" : {
+        "version": 2,
+        "title": "Courses list",
+        "icon": "dripicons-view-list-large",
+        "key": "events_list_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": false,
+        "inputs": [
+            {
+                "type": "multidropdown",
+                "key": "events_list",
+                "label": "Events display",
+                "route": "getDisplayOptions",
+                "value": {
+                    "id": 1,
+                    "title": "List"
+                },
+                "size": "col-lg-12"
+            }
+        ]
+    },
+    "inspirational_teaser" : {
+        "version": 3,
+        "title": "Info & benefits",
+        "icon": "dripicons-article",
+        "key": "inspirational_teaser_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": true,
+        "inputs": [
+            {
+                "type": "image",
+                "key": "inspirational_image",
+                "label": "Image",
+                "main": true
+            },
+            {
+                "type": "text",
+                "key": "inspiration_title",
+                "label": "Title"
+            },
+            {
+                "type": "text",
+                "key": "inspiration_description",
+                "label": "Description"
+            }
+        ]
+    },
+    "event_teaser" : {
+        "version": 2,
+        "title": "Event teaser",
+        "icon": "dripicons-article",
+        "key": "event_teaser_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": true,
+        "inputs": [
+            {
+                "type": "text",
+                "key": "event_teaser_title",
+                "label": "Title"
+            },
+            {
+                "type": "text",
+                "key": "event_teaser_subtitle",
+                "label": "Subtitle"
+            },
+            {
+                "type": "text_editor",
+                "key": "event_teaser_text",
+                "label": "Text",
+                "main": true
+            }
+        ]
+    },
+    "homepage_events" : {
+        "version": 1,
+        "title": "Homepage events",
+        "icon": "dripicons-article",
+        "key": "homepage_events_component",
+        "tab": "Content",
+        "width": "full",
+        "simple_view": false,
+        "inputs": [
+            {
+                "type": "multidropdown",
+                "key": "event_types",
+                "label": "Event type",
+                "route": "getEventTypes",
+                "value": {
+                    "id": 1,
+                    "title": "In class Events"
+                },
+                "size": "col-lg-12"
+            }
+        ]
+    }
+}

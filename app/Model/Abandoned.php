@@ -18,5 +18,4 @@ class Abandoned extends Model
     ];
 
     use HasFactory;
-
 }

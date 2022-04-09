@@ -33,8 +33,8 @@ Route::middleware('auth:api')->group(function () {
 
 
     //SMS
-    Route::post('smsVerification',[UserController::class, 'smsVerification']);
-    Route::post('getSMSVerification',[UserController::class, 'getSMSVerification']);
+    Route::post('smsVerification', [UserController::class, 'smsVerification']);
+    Route::post('getSMSVerification', [UserController::class, 'getSMSVerification']);
 
     // Logout
     Route::post('logout', [PassportAuthController::class, 'logout']);
@@ -47,5 +47,4 @@ Route::middleware('auth:api')->group(function () {
 });
 
 
-Route::post('/myaccount/reset','Api\ForgotPasswordController@sendResetLinkEmail');
- 
+Route::post('/myaccount/reset', 'Api\ForgotPasswordController@sendResetLinkEmail');

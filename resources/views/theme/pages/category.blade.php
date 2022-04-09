@@ -8,7 +8,6 @@
       <div class="container">
          <div class="dynamic-learning--title">
             <?php $elern = false; $diplomas = false; $certificates = false; ?>
-            <?php //dd(count($type)); ?>
             @if(isset($delivery))
             <?php
                if( $delivery['slugable']['slug'] === 'video-on-demand-courses'){$elern = true; }

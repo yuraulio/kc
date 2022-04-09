@@ -1,0 +1,104 @@
+.background-blue_gradient {
+    background: linear-gradient(90deg, rgba(63,111,182,1) 0%, rgba(65,156,255,1) 100%);
+}
+.background-blue_gradient * {
+    color: #fff;
+}
+
+.background-blue {
+    background: rgb(48, 114, 202);
+}
+.background-blue * {
+    color: #fff;
+}
+
+.background-gray {
+    background-color: #f0f0f0;
+}
+
+.container-fluid {
+    padding: 0px !important;
+}
+.social-share {
+    margin-bottom: 0px!important;
+}
+
+@media only screen and (max-width: 980px) {
+    .menu-desktop {
+      display: none!important;
+    }
+}
+
+@media only screen and (min-width: 981px) {
+    .menu-mobile {
+      display: none!important;
+    }
+}
+
+@media only screen and (max-width: 680px) {
+    .section-hero.section-hero-small {
+        background: none !important;
+        height: auto;
+    }
+    .section-hero.section-hero-small h1 {
+        color: #ffffff!important;
+    }
+}
+
+.grayscale {
+    filter: grayscale(1);
+    max-width: 108px;
+}
+
+.image-grid-hover {
+    opacity: 0.7;
+
+    -webkit-transition: opacity 0.5s ease-in-out;
+    -moz-transition: opacity 0.5s ease-in-out;
+    transition: opacity 0.5s ease-in-out;
+}
+.image-grid-hover:hover {
+    opacity: 1;
+}
+
+.logos-carousel-wrapper .owl-stage {
+    display: flex;
+}
+.logos-carousel-wrapper .owl-stage .owl-item {
+    align-self: center;
+}
+
+.vm--modal {
+    overflow-y: hidden!important;
+}
+
+.form-default {
+    margin-bottom: 3rem !important;
+    margin-top: 3rem !important;
+    max-width: none!important;
+}
+.form-overlap {
+    margin-top: -170px!important; 
+    margin-bottom: -20px!important;
+}
+
+.book-ticket-boxes.justify-content-end-2 {
+    justify-content: flex-end;
+}
+.book-ticket-boxes.justify-content-start-2 {
+    justify-content: flex-start;
+}
+
+@media only screen and (max-width: 767px) {
+    .book-ticket-boxes {
+        justify-content: center!important;
+    }
+}
+
+.text-editor-blockquote blockquote {
+    border-left: 5px solid #419cff;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding: 20px 130px 20px 30px;
+    font-size: 22px;
+}

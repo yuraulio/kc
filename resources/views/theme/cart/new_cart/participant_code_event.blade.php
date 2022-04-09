@@ -207,7 +207,7 @@
 											<option value="32" label="Belgium (+32)">Belgium </option>
 											<option value="387" label="Bosnia and Herzegovina (+387)">Bosnia and Herzegovina </option>
 											<option value="359" label="Bulgaria (+359)">Bulgaria </option>
-											<option value="385" label="Croatia (+386)">Croatia </option>
+											<option value="385" label="Croatia (+385)">Croatia </option>
 											<option value="357" label="Cyprus (+357)">Cyprus </option>
 											<option value="420" label="Czech Republic (+420)">Czech Republic </option>
 											<option value="45" label="Denmark (+45)">Denmark</option>

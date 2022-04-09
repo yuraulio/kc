@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\NotificationController;
+use App\Model\Admin\Setting;
 
 /*
 |--------------------------------------------------------------------------
@@ -709,8 +710,10 @@ Route::group(['middleware' => ['preview', 'web', 'auth.sms']], function () {
         return redirect('/brands-trained');
     });
 
-    Route::get('/', 'Theme\HomeController@homePage')->name('homepage');
+    // if (cache("cmsMode") != Setting::NEW_PAGES) {
+    //     Route::get('/', 'Theme\HomeController@homePage')->name('homepage');
+    // }
     Route::post('/add-payment-method', 'Theme\HomeController@addPaymentMethod')->name('add.paymentMethod');
-    Route::get('{slug?}', 'Theme\HomeController@index');
+    // Route::get('{slug?}', 'Theme\HomeController@index');
 });
 /// If you want to add a new route, please add it above the comment "must be at the end of file"!
