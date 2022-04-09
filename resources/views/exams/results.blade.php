@@ -194,7 +194,7 @@
 
             const data = {
               
-                labels: ['correct','wrong'],
+                labels: ['correct','incorrect'],
                 datasets: [{
                     data: [score,100-score],
                     backgroundColor: [
@@ -210,7 +210,7 @@
        
         @else
             const data = {
-                labels: ['correct','wrong'],
+                labels: ['correct','incorrect'],
                     datasets: [{
                     data: [score,100-score],
                     backgroundColor: [

@@ -23,8 +23,17 @@
     top: 0;
 }
 
+
+.event-background:nth-child(2n){
+    background:white;
+}
+
 .event-background:nth-child(2n + 1) {
     background-color: #f0f0f0;
+}
+
+.section--partners{
+    background: white;
 }
 
 .subs-page-span {
@@ -54,6 +63,10 @@
 .instructor-studies ul li svg line {
     stroke: #419cff !important;
     stroke-width: 1.5!important;
+}
+
+.section--partners{
+    background: white;
 }
 
 .bold-topic {

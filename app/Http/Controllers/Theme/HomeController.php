@@ -37,6 +37,7 @@ use Illuminate\Support\Str;
 use \Cart as Cart;
 use Session;
 use App\Services\FBPixelService;
+use App\Model\WaitingList;
 
 class HomeController extends Controller
 {
@@ -344,8 +345,139 @@ class HomeController extends Controller
         //return view('theme.cart.new_cart.thank_you_free',$data);
     }
 
-    private function city($page)
-    {
+    public function enrollToWaitingList(Event $content){
+        
+        $published = $content->published;
+        $status = $content->status;
+        if($published == 0 || $status != 5){
+
+            Cart::instance('default')->destroy();
+            Session::forget('pay_seats_data');
+            Session::forget('transaction_id');
+            Session::forget('cardtype');
+            Session::forget('installments');
+            //Session::forget('pay_invoice_data');
+            Session::forget('pay_bill_data');
+            Session::forget('deree_user_data');
+            Session::forget('user_id');
+            Session::forget('coupon_code');
+            Session::forget('coupon_price');
+            Session::forget('priceOf');
+
+            return false;
+        }
+        
+
+        
+        $data['user']['createAccount'] = false;
+
+        if( !($user = Auth::user()) && !($user = User::where('email',request()->email[0])->first()) ){
+
+            $data['user']['createAccount'] = true;
+
+            $input = [];
+            $formData = request()->all();
+            unset($formData['_token']);
+            unset($formData['terms_condition']);
+            unset($formData['update']);
+            unset($formData['type']);
+            
+            foreach($formData as $key => $value){
+                $input[$key] = $value[0];
+            }
+
+            $input['password'] = Hash::make(date('Y-m-dTH:i:s'));
+            
+            $user = User::create($input);
+
+            $code = Activation::create([
+                'user_id' => $user->id,
+                'code' => Str::random(40),
+                'completed' => true,
+            ]);
+            $user->role()->attach(7);
+
+
+
+            $cookieValue = base64_encode($user->id . date("H:i"));
+            setcookie('auth-'.$user->id, $cookieValue, time() + (1 * 365 * 86400), "/"); // 86400 = 1 day
+        
+            $coockie = new CookiesSMS;
+            $coockie->coockie_name = 'auth-'.$user->id;
+            $coockie->coockie_value = $cookieValue;
+            $coockie->user_id = $user->id;
+            $coockie->sms_code = -1;
+            $coockie->sms_verification = true;
+
+            $coockie->save();
+        }
+
+        if(WaitingList::where('user_id',$user->id)->where('event_id',$content->id)->first()){
+
+            Cart::instance('default')->destroy();
+            Session::forget('pay_seats_data');
+            Session::forget('transaction_id');
+            Session::forget('cardtype');
+            Session::forget('installments');
+            //Session::forget('pay_invoice_data');
+            Session::forget('pay_bill_data');
+            Session::forget('deree_user_data');
+            Session::forget('user_id');
+            Session::forget('coupon_code');
+            Session::forget('coupon_price');
+            Session::forget('priceOf');
+
+            return false;
+        }
+
+        $waiting = new WaitingList;
+        $waiting->user_id = $user->id;
+        $waiting->event_id = $content->id;
+        $waiting->save();
+
+        $data['user']['first'] = $user->firstname;
+        $data['user']['name'] = $user->firstname . ' ' . $user->lastname;
+        $data['user']['email'] = $user->email;
+        $data['extrainfo'] = ['','',$content->title];
+        $data['duration'] =  $content->summary1->where('section','date')->first() ? $content->summary1->where('section','date')->first()->title : '';
+
+        $data['eventSlug'] =  url('/') . '/' . $content->getSlug();
+        //$user->notify(new WelcomeEmail($user,$data));
+
+        
+       
+        Cart::instance('default')->destroy();
+        Session::forget('pay_seats_data');
+        Session::forget('transaction_id');
+        Session::forget('cardtype');
+        Session::forget('installments');
+        //Session::forget('pay_invoice_data');
+        Session::forget('pay_bill_data');
+        Session::forget('deree_user_data');
+        Session::forget('user_id');
+        Session::forget('coupon_code');
+        Session::forget('coupon_price');
+        Session::forget('priceOf');
+
+        $data['info']['success'] = true;
+        $data['info']['title'] = __('thank_you_page.title');
+        $data['info']['message'] = __('thank_you_page.message');
+        $data['info']['statusClass'] = 'success';
+
+        $data['event']['title'] = $content->title;
+        $data['event']['slug'] = $content->slugable->slug;
+        $data['event']['facebook'] = url('/') . '/' .$content->slugable->slug .'?utm_source=Facebook&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&quote='.urlencode("Proudly participating in ". $content->title . " by Knowcrunch.");
+        $data['event']['twitter'] = urlencode("Proudly participating in ". $content->title . " by Knowcrunch. 💙");
+        $data['event']['linkedin'] = urlencode(url('/') . '/' .$content->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $content->title . " by Knowcrunch. 💙");
+        
+        Session::put('thankyouData',$data);
+        return redirect('/thankyou');
+        //return view('theme.cart.new_cart.thank_you_free',$data);
+
+    }
+
+    private function city($page){
+
         $data['content'] = $page;
 
         $city = City::with('event')->find($page['id']);
@@ -424,9 +556,75 @@ class HomeController extends Controller
         return view('theme.pages.category', $data);
     }
 
-    private function event($event)
-    {
-        $data = CMS::getEventData($event);
+    private function event($event){
+
+        $data = $event->topicsLessonsInstructors();
+        $data['event'] = $event;
+        $data['benefits'] = $event->benefits->toArray();
+        $data['summary'] = $event->summary1()->get()->toArray();
+        $data['sections'] = $event->sections->groupBy('section');
+        $data['section_fullvideo'] = $event->sectionVideos->first();
+        $data['faqs'] = $event->getFaqs();
+        $data['testimonials'] = isset($event->category->toArray()[0]) ? $event->category->toArray()[0]['testimonials'] : [];
+        $data['tickets'] = $event->ticket()->where('price','>',0)->where('active',true)->get()->toArray();
+        $data['venues'] = $event->venues->toArray();
+        $data['syllabus'] = $event->syllabus->toArray();
+        $data['is_event_paid'] = 0;
+        $data['sumStudents'] = get_sum_students_course($event->category->first());//isset($event->category[0]) ? $event->category[0]->getSumOfStudents() : 0; 
+        $data['showSpecial'] = false;
+        $data['showAlumni'] = $event->ticket()->where('type','Alumni')->where('active',true)->first() ? true : false;;
+
+
+        if($event->ticket()->where('type','Early Bird')->first()){
+            $data['showSpecial'] = ($event->ticket()->where('type','Early Bird')->first() && $event->ticket()->where('type','Special')->first())  ? 
+                                    ($event->ticket()->where('type','Special')->first()->pivot->active 
+                                        || ($event->ticket()->where('type','Early Bird')->first()->pivot->quantity > 0)) : false;
+        }else{
+            
+            $data['showSpecial'] = $event->ticket()->where('type','Special')->first() ? $event->ticket()->where('type','Special')->first()->pivot->active  : false;
+        }
+
+        
+
+        $price = -1;
+
+        foreach($data['tickets'] as $ticket){
+            
+            if($ticket['pivot']['price'] && $ticket['pivot']['price'] > $price){
+                $price = $ticket['pivot']['price'];
+            }
+        }
+
+        if($price <= 0){
+            $price = (float) 0;
+        }
+        $categoryScript = $event->delivery->first() && $event->delivery->first()->id == 143 ? 'Video e-learning courses' : 'In-class courses'; //$event->category->first() ? 'Event > ' . $event->category->first()->name : '';
+        
+        $tr_price = $price;
+        if($tr_price - floor($tr_price)>0){
+            $tr_price = number_format($tr_price , 2 , '.', '');
+        }else{
+            $tr_price = number_format($tr_price , 0 , '.', '');
+            $tr_price = strval($tr_price);
+            $tr_price .= ".00";
+            
+        }
+
+        $data['tigran'] = ['Price' => $tr_price,'Product_id' => $event->id,'Product_SKU' => $event->id,'ProductCategory' => $categoryScript, 'ProductName' =>  $event->title,'Event_ID' => 'kc_' . time() ];
+
+
+        if(request()->has('lo')){
+            $user = User::where('email',decrypt(request()->get('lo')))->first();
+            if($user){
+                Auth::login($user);
+            }
+        }
+
+        
+
+        if(Auth::user() && count(Auth::user()->events->where('id',$event->id)) > 0){
+            $data['is_event_paid'] = 1;
+        }
 
         $this->fbp->sendViewContentEvent($data);
 

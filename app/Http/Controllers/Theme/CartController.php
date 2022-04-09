@@ -162,7 +162,13 @@ class CartController extends Controller
 
             $data['eventFree'] = true;
 
-        }else if($data['type'] == 'free' ){
+        }else if($data['type'] == 'free'){
+            $data['price'] = 'Free';
+            $data['show_coupon'] = false;
+            $ticketType = 'Free';
+            $tr_price = 0;
+            $data['eventFree'] = true;
+        }else if($data['type'] == 'waiting'){
             $data['price'] = 'Free';
             $data['show_coupon'] = false;
             $ticketType = 'Free';
@@ -383,6 +389,10 @@ class CartController extends Controller
 
         if($data['type'] == 'free'){
             return view('theme.cart.new_cart.participant_free_event', $data);
+        }
+
+        if($data['type'] == 'waiting'){
+            return view('theme.cart.new_cart.participant_waiting_event', $data);
         }
 
         return view('theme.cart.new_cart.participant', $data);
@@ -800,12 +810,12 @@ class CartController extends Controller
     */
     public function add($id, $ticket, $type, Request $request)
     {
-      
+        
         if((!Auth::user() || (Auth::user() && !Auth::user()->kc_id)) && $type == 3){
             return back();
         }
         
-
+        
         Cart::instance('default')->destroy();
         Session::forget('pay_seats_data');
         Session::forget('transaction_id');
@@ -832,8 +842,8 @@ class CartController extends Controller
             }
             return redirect()->to('/');
         }
-
-        if($ticket == 'free'){
+        
+        if($ticket == 'free' || $ticket == 'waiting'){
             $this->addFreeToCart($product, $ticket, $ticket);
         }else{
             $ticketob = $product->ticket->groupBy('ticket_id')[$ticket]->first();
@@ -848,7 +858,12 @@ class CartController extends Controller
             return Redirect::to('/registration')->with('success',
                 "Free ticket was successfully added to your bag."
             );
-        }else{
+        }else if($ticket == 'waiting'){
+            return Redirect::to('/registration')/*->with('success',
+                "Free ticket was successfully added to your bag."
+            )*/;
+        }
+        else{
             return Redirect::to('/registration')->with('success',
                 "{$ticketob->title} was successfully added to your bag."
             );
@@ -949,8 +964,7 @@ class CartController extends Controller
         $quantity = 1;
         $eventid = $product->id;
 
-        $item = Cart::add('free', $product->title, $quantity, $price, ['type' => 'free', 'event' => $eventid])->associate(Ticket::class);
-
+        $item = Cart::add($ticket, $product->title, $quantity, $price, ['type' => $ticket, 'event' => $eventid])->associate(Ticket::class);
 
         return $item;
 

@@ -125,7 +125,9 @@
 
                      <?php switch ($estatus) {
                         case 0:
-                        case 2: ?>
+                        case 2: 
+                        case 5:
+                     ?>
                         
                      <div class="course-overview clearfix">
                         <div class="course-tab-text" itemprop="abstract">
@@ -258,7 +260,7 @@
                   </div>
                   <!-- /.tab-content-wrapper -->
                </div>
-
+               @if($estatus !== 5)
                <div id="benefits" class="tab-content-wrapper">
                   <div class="course-benefits-text">
                      <div class="container">
@@ -703,7 +705,7 @@
                   <!-- /.tab-content-wrapper -->
 
                </div>
-
+               @endif
 
                <!-- /.tabs-content -->
             </div>

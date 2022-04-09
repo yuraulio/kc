@@ -21,7 +21,8 @@ use Intervention\Image\ImageManagerStatic as Image;
 use App\Model\Coupon;
 use App\Model\Section;
 use App\Model\City;
-
+use App\Jobs\SendMaiWaitingList;
+use Artisan;
 
 class EventController extends Controller
 {
@@ -483,6 +484,12 @@ class EventController extends Controller
             
         }
 
+        if($event->status == 0 && $request->old_status == 5){
+            //SendMaiWaitingList::dispatchAfterResponse($event->id);
+            dispatch((new SendMaiWaitingList($event->id))->delay(now()->addSeconds(3)));
+
+        }
+        
         return back()->withStatus(__('Event successfully updated.'));
         //return redirect()->route('events.edit',$event->id)->withStatus(__('Event successfully created.'));
         //return redirect()->route('events.index')->withStatus(__('Event successfully updated.'));

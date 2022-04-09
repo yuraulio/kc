@@ -121,6 +121,8 @@
                                             <option value="3">{{ __('Completed') }}</option>
                                             <option value="0">{{ __('Open') }}</option>
                                             <option value="1">{{ __('Close') }}</option>
+                                            {{--<option value="5">{{ __('Waiting') }}</option>--}}
+
                                     </select>
 
                                     @include('alerts.feedback', ['field' => 'status'])

@@ -299,6 +299,7 @@
                                     </div>
 
                                 <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
+                                    <input hidden name="old_status" value="{{$event['status']}}">
                                     <label class="form-control-label" for="input-status">{{ __('Status') }}</label>
                                     <select name="status" id="input-status" class="form-control" placeholder="{{ __('Status') }}" >
                                         <option value="">-</option>
@@ -307,6 +308,7 @@
                                             <option <?= ($event['status'] == 3) ? "selected" : ''; ?> value="3">{{ __('Completed') }}</option>
                                             <option <?= ($event['status'] == 0) ? "selected" : ''; ?> value="0">{{ __('Open') }}</option>
                                             <option <?= ($event['status'] == 1) ? "selected" : ''; ?> value="1">{{ __('Close') }}</option>
+                                            {{--<option <?= ($event['status'] == 5) ? "selected" : ''; ?> value="5">{{ __('Waiting') }}</option>--}}
                                     </select>
 
                                     @include('alerts.feedback', ['field' => 'status'])

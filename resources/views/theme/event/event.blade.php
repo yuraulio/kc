@@ -71,6 +71,8 @@
                   
                   @if($estatus == 0 && !$is_event_paid)
                   <a href="#seats" class="btn btn--lg btn--primary go-to-href">ENROLL NOW</a>
+                  @elseif($estatus == 5)
+                  <a href="{{ route('cart.add-item', [ $event->id,'waiting', 8 ]) }}" class="btn btn--lg btn--primary go-to-href elearning-free">ENROLL FOR WAITING LIST</a>
                   @elseif($estatus != 3 && $estatus != 1 && !$is_event_paid)
                   <a href="#seats" class="btn btn--lg btn--primary go-to-href go-to-href soldout">SOLD OUT</a>
                   @endif
@@ -125,7 +127,9 @@
 
                      <?php switch ($estatus) {
                         case 0:
-                        case 2: ?>
+                        case 2: 
+                        case 5:   
+                     ?>
                         
                      <div class="course-overview clearfix">
                         <div class="course-tab-text" itemprop="abstract">
@@ -258,8 +262,8 @@
                   </div>
                   <!-- /.tab-content-wrapper -->
                </div>
-
-               <div id="benefits" class="tab-content-wrapper">
+               @if($estatus !== 5)
+                  <div id="benefits" class="tab-content-wrapper">
                   <div class="course-benefits-text">
                      <div class="container">
                         <?php
@@ -298,10 +302,10 @@
                      </div>
                   </div>
                   <!-- /.tab-content-wrapper -->
-               </div>
-
-
-               <div id="topics" class="tab-content-wrapper">
+                  </div>
+                           
+                           
+                  <div id="topics" class="tab-content-wrapper">
                   <div class="container">
                      <div class="course-full-text">
                         <?php
@@ -382,9 +386,9 @@
                      </div>
                   </div>
                   <!-- /.tab-content-wrapper -->
-               </div>
-
-               <div id="instructors" class="tab-content-wrapper tab-blue-gradient">
+                  </div>
+                           
+                  <div id="instructors" class="tab-content-wrapper tab-blue-gradient">
                   <div class="container">
                      <div class="course-full-text">
                         @if(isset($instructors))
@@ -476,10 +480,10 @@
                      <!-- /.container -->
                   </div>
                   <!-- /.tab-content-wrapper -->
-               </div>
-
-               @if(count($testimonials) > 0)
-               <?php
+                  </div>
+                              
+                  @if(count($testimonials) > 0)
+                  <?php
                         $title = '';
                         $body = '';
                   if(isset($sections['testimonials'])){
@@ -488,7 +492,7 @@
                   }
 
                   ?>
-               <div id="testimonials" class="tab-content-wrapper tab-no-pad">
+                  <div id="testimonials" class="tab-content-wrapper tab-no-pad">
                   <div class="container">
                      <div class="course-full-text full-w-pad">
                         <h2 class="text-align-center text-xs-left tab-title">{!!$title!!}</h2>
@@ -583,11 +587,11 @@
                      </div>
                   </div>
                   <!-- /.tab-content-wrapper -->
-               </div>
-               @endif
-
-               @if(count($venues))
-               <div id="location" class="tab-content-wrapper ">
+                  </div>
+                  @endif
+                                          
+                  @if(count($venues))
+                  <div id="location" class="tab-content-wrapper ">
                   <div class="container">
                      <div class="course-full-text">
 
@@ -614,9 +618,9 @@
                         @endforeach
                      </div>
                   </div>
-               </div>
-               @endif
-               <div id="faq" class="tab-content-wrapper">
+                  </div>
+                  @endif
+                  <div id="faq" class="tab-content-wrapper">
 
                   <?php
                   $title = '';
@@ -703,7 +707,7 @@
                   <!-- /.tab-content-wrapper -->
 
                </div>
-
+               @endif
 
                <!-- /.tabs-content -->
             </div>
