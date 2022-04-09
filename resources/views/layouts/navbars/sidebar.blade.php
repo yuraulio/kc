@@ -30,7 +30,7 @@
                             <ul class="nav nav-sm flex-column">
 
                                 <li class="nav-item">
-                                    <a href="{{"http://admin." . env("APP_URL")}}" class="nav-link">
+                                    <a href="{{env("ADMIN_URL")}}" class="nav-link">
                                         <span class="badge badge-primary">New</span> &nbsp
                                         {{ __('Dashboard') }}
                                     </a>
