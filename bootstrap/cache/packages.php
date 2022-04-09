@@ -45,6 +45,17 @@
     array (
     ),
   ),
+  'codexshaper/laravel-menu-builder' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'CodexShaper\\Menu\\MenuServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'MenuBuilder' => 'CodexShaper\\Menu\\Facades\\Menu',
+    ),
+  ),
   'cviebrock/eloquent-sluggable' => 
   array (
     'providers' => 
@@ -131,6 +142,13 @@
       0 => 'Laravel\\Sail\\SailServiceProvider',
     ),
   ),
+  'laravel/scout' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Laravel\\Scout\\ScoutServiceProvider',
+    ),
+  ),
   'laravel/tinker' => 
   array (
     'providers' => 
@@ -198,6 +216,13 @@
     'aliases' => 
     array (
       'Sentry' => 'Sentry\\Laravel\\Facade',
+    ),
+  ),
+  'teamtnt/laravel-scout-tntsearch-driver' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'TeamTNT\\Scout\\TNTSearchScoutServiceProvider',
     ),
   ),
   'vemcogroup/laravel-sparkpost-driver' => 

@@ -26,7 +26,7 @@ class AddPaymentEmailToPaymentMethods extends Migration
     public function down()
     {
         Schema::table('payment_methods', function (Blueprint $table) {
-            //
+            $table->dropColumn('payment_email');
         });
     }
 }

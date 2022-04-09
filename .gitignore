@@ -21,5 +21,9 @@ yarn-error.log
 /config/cdn_setup.php
 /public/.htaccess
 /storage/laravel-excel
-
-
+/storage/*.index
+.DS_Store
+docker-compose.yml
+docker-compose-sail.yml
+storage/*.index*
+*.unison*

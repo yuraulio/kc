@@ -1,0 +1,221 @@
+/*
+* Style for nestable
+*/
+.nestable {
+    position: relative;
+  }
+  .nestable-rtl {
+    direction: rtl;
+  }
+  .nestable .nestable-list {
+    margin: 0;
+    padding: 0 0 0 40px;
+    list-style-type: none;
+  }
+  .nestable-rtl .nestable-list {
+    padding: 0 40px 0 0;
+  }
+  .nestable > .nestable-list {
+    padding: 0;
+  }
+  .nestable-item,
+  .nestable-item-copy {
+    margin: 10px 0 0;
+  }
+  .nestable-item:first-child,
+  .nestable-item-copy:first-child {
+    margin-top: 0;
+  }
+  .nestable-item .nestable-list,
+  .nestable-item-copy .nestable-list {
+    margin-top: 10px;
+  }
+  .nestable-item {
+    position: relative;
+  }
+  .nestable-item.is-dragging .nestable-list {
+    pointer-events: none;
+  }
+  .nestable-item.is-dragging * {
+    opacity: 0;
+    filter: alpha(opacity=0);
+  }
+  .nestable-item.is-dragging:before {
+    content: ' ';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(106, 127, 233, 0.274);
+    border: 1px dashed rgb(73, 100, 241);
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+  }
+  .nestable-drag-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    pointer-events: none;
+  }
+  .nestable-rtl .nestable-drag-layer {
+    left: auto;
+    right: 0;
+  }
+  .nestable-drag-layer > .nestable-list {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0;
+    background-color: rgba(106, 127, 233, 0.274);
+  }
+  .nestable-rtl .nestable-drag-layer > .nestable-list {
+    padding: 0;
+  }
+  .nestable [draggable="true"] {
+    cursor: move;
+  }
+  .nestable-handle {
+    display: inline;
+  }
+  .dd {
+      position: relative;
+      display: block;
+      margin: 0;
+      padding: 0;
+      max-width: 600px;
+      list-style: none;
+      font-size: 13px;
+      line-height: 20px;
+  }
+  .dd-list {
+      display: block;
+      position: relative;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+  }
+
+  dl, ol, ul {
+      margin-top: 0;
+      margin-bottom: 1rem;
+  }
+  ol, ul {
+      padding-left: 2rem;
+  }
+  *, ::after, ::before {
+      box-sizing: border-box;
+  }
+  ol {
+      display: block;
+      list-style-type: decimal;
+      margin-block-start: 1em;
+      margin-block-end: 1em;
+      margin-inline-start: 0px;
+      margin-inline-end: 0px;
+      padding-inline-start: 40px;
+  }
+  .dd-empty, .dd-item, .dd-placeholder {
+      display: block;
+      position: relative;
+      margin: 0;
+      padding: 0;
+      min-height: 20px;
+      font-size: 13px;
+      line-height: 20px;
+  }
+
+  *, ::after, ::before {
+      box-sizing: border-box;
+  }
+  li {
+      display: list-item;
+      text-align: -webkit-match-parent;
+  }
+  .dd-list .dd-item button {
+      height: 36px;
+      font-size: 17px;
+      margin: 0;
+      color: #98a6ad;
+      width: 36px;
+  }
+
+  [type=button]:not(:disabled), [type=reset]:not(:disabled), [type=submit]:not(:disabled), button:not(:disabled) {
+      cursor: pointer;
+  }
+  .dd-item>button {
+      position: relative;
+      cursor: pointer;
+      float: left;
+      width: 25px;
+      height: 20px;
+      margin: 5px 0;
+      padding: 0;
+      text-indent: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      border: 0;
+      background: 0 0;
+      font-size: 12px;
+      line-height: 1;
+      text-align: center;
+      font-weight: 700;
+  }
+  .dd-list .dd-item button {
+      height: 36px;
+      font-size: 17px;
+      margin: 0;
+      color: #98a6ad;
+      width: 36px;
+  }
+
+  [type=button]:not(:disabled), [type=reset]:not(:disabled), [type=submit]:not(:disabled), button:not(:disabled) {
+      cursor: pointer;
+  }
+  .dd-item>button {
+      position: relative;
+      cursor: pointer;
+      float: left;
+      width: 25px;
+      height: 20px;
+      margin: 5px 0;
+      padding: 0;
+      text-indent: 1%;
+      white-space: nowrap;
+      overflow: hidden;
+      border: 0;
+      background: 0 0;
+      font-size: 12px;
+      line-height: 1;
+      text-align: center;
+      font-weight: 700;
+  }
+  .vm-modal {
+      margin-top: 30px !important;
+      z-index: 150 !important;
+      overflow-y: auto !important;
+  }
+  .vm--modal {
+    overflow-y: auto !important;
+}
+  .vm--container {
+    z-index: 1500 !important;
+    overflow-y: auto !important;
+  }
+  .v-toast {
+      z-index: 1501 !important;
+  }
+
+
+.swal2-container {
+    z-index: 1501 !important;
+}
+  .carousel-inner {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    max-height: 600px;
+    /* object-fit: contain; */
+}
+.table-responsive{overflow: inherit !important;}
