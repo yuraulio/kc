@@ -1,15 +1,7 @@
 {
-    "/js/app.js": "/js/app.js?id=ec14465e24383c604a16",
-    "/assets/vendor/MediaManager/style.css": "/assets/vendor/MediaManager/style.css?id=463c68ea99b16a7b4a0d",
-    "/css/argon.css": "/css/argon.css?id=3b09639d6ffa3e73040d",
-    "/theme/assets/css/style_ver.css": "/theme/assets/css/style_ver.css?id=47d69454367ed62f6c4e",
-    "/new_cart/version/style_ver.css": "/new_cart/version/style_ver.css?id=2beacc39781b62a55123",
-    "/theme/assets/js/front.js": "/theme/assets/js/front.js?id=66e001b2530365fb0879",
-    "/theme/assets/css/new/pop_up.css": "/theme/assets/css/new/pop_up.css?id=4f84bea7160f50c0197c",
-    "/theme/assets/css/new/burger.css": "/theme/assets/css/new/burger.css?id=a472374b16ebf4839441",
-    "/theme/assets/css/new/normalize.css": "/theme/assets/css/new/normalize.css?id=dd377c4f3ebc1380484f",
-    "/theme/assets/css/new/core.css": "/theme/assets/css/new/core.css?id=701ce316fa868fc9c1c1",
-    "/theme/assets/js/new_js1/app1.js": "/theme/assets/js/new_js1/app1.js?id=6a6ba4cbd645b7cca081",
-    "/theme/assets/js/new_js1/burger.js": "/theme/assets/js/new_js1/burger.js?id=8bfbce3645fa45dcfc69",
-    "/assets/vendor/MediaManager/noPreview.jpg": "/assets/vendor/MediaManager/noPreview.jpg?id=2649a7dca071fa33e137"
+    "/js/app.js": "/js/app.js",
+    "/js/blog.js": "/js/blog.js",
+    "/assets/vendor/MediaManager/style.css": "/assets/vendor/MediaManager/style.css",
+    "/theme/assets/css/bootstrap5-grid.css": "/theme/assets/css/bootstrap5-grid.css",
+    "/css/argon.css": "/css/argon.css"
 }
