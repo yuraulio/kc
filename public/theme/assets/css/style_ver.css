@@ -65,6 +65,10 @@
     stroke-width: 1.5!important;
 }
 
+.section--partners{
+    background: white;
+}
+
 .bold-topic {
     font-weight: bold;
 }
