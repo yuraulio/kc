@@ -27,3 +27,4 @@ docker-compose.yml
 docker-compose-sail.yml
 storage/*.index*
 *.unison*
+/resources/js/app.js
