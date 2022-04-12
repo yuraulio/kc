@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin_api;
 
 use Exception;
 use App\Jobs\MoveFile;
-use App\Model\Admin\Page;
 use App\Jobs\RenameFolder;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -23,6 +22,8 @@ use App\Http\Resources\MediaFolderResource;
 use App\Http\Requests\EditMediaFolderRequest;
 use App\Http\Requests\CreateMediaFolderRequest;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+
+// use msonowal\LaravelTinify\Facades\Tinify;
 
 class MediaController extends Controller
 {
@@ -196,6 +197,9 @@ class MediaController extends Controller
                 // save to db
                 $mfile = $this->storeFile($version_name, $version[0], $imgpath, $mediaFolder->id, $image->filesize(), $mfile_original->id, $request->alt_text, $request->link);
                 $files[] = new MediaFileResource($mfile);
+
+                Tinify::setKey("3wZm6xtp9mV0SVSkZgjtXSQBkLt7v1yg");
+                // \Tinify::fromFile("unoptimized.png")->toFile("optimized.png");
             }
 
             $original = MediaFile::find($mfile_original->id);
