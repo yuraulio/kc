@@ -169,9 +169,9 @@ class CartController extends Controller
             $tr_price = 0;
             $data['eventFree'] = true;
         }else if($data['type'] == 'waiting'){
-            $data['price'] = 'Free';
+            $data['price'] = 'Waiting list.';
             $data['show_coupon'] = false;
-            $ticketType = 'Free';
+            $ticketType = 'waiting';
             $tr_price = 0;
             $data['eventFree'] = true;
         }

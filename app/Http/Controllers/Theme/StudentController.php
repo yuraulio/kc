@@ -717,6 +717,8 @@ class StudentController extends Controller
         $data['instructors'] = Instructor::with('slugable', 'medias')->get()->groupby('id');
         $data['subscriptionEvents'] = Event::whereIn('id',$subscriptionEvents)->with('slugable')->get();
 
+        $data = $this->getWaitingList($data);
+
         if(isset($data['events'][2304])){
             $value = $data['events'][2304];
             unset($data['events'][2304]);
@@ -1346,6 +1348,36 @@ class StudentController extends Controller
         }
 
        
+
+    }
+
+
+    protected function getWaitingList($data){
+
+        $userEvents = isset($data['events']) ? array_keys($data['events']) : [];
+        $userWaitingEvents = Auth::user()->waitingList()->whereNotIn('event_id',$userEvents)->pluck('event_id')->toArray();
+
+        $events = Event::whereIn('id',$userWaitingEvents)->get();
+
+        foreach($events as $event){
+            $data['events'][$event->id]['topics'] = [];
+            $video_access = false;
+            
+            $data['events'][$event->id]['exams'] = [];
+            $data['events'][$event->id]['certs'] = [];
+            $data['events'][$event->id]['view_tpl'] = $event['view_tpl'];
+            $data['events'][$event->id]['category'] = $event['category'];
+            $data['events'][$event->id]['summary1'] = $event['summary1'];
+            $data['events'][$event->id]['hours'] = $event['hours'];
+            $data['events'][$event->id]['slugable'] = $event['slugable']->toArray();
+            $data['events'][$event->id]['title'] = $event['title'];
+            $data['events'][$event->id]['release_date_files'] = $event->release_date_files;
+            $data['events'][$event->id]['status'] = $event->status;
+        }
+
+        return $data;
+        //$waitingEvents = Event::where('status',5)
+
 
     }
 

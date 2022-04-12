@@ -705,7 +705,7 @@
                               <div class="tabs-ctrl">
                                  <ul>
                                     <li class="active"><a href="#c-info-inner{{$tab}}">Info</a></li>
-                                    <li><a href="#c-shedule-inner{{$tab}}">Schedule </a></li>
+                                    @if(isset($event['topics']) && count($event['topics']) > 0)<li><a href="#c-shedule-inner{{$tab}}">Schedule </a></li>@endif
                                     <?php  $fa = strtotime(date('Y-m-d',strtotime($event['release_date_files']))) >= strtotime(date('Y-m-d'))?>
                                     {{--@if(!$instructor && isset($event['category'][0]['dropbox']) && count($event['category'][0]['dropbox']) != 0 &&--}}
                                     @if(isset($event['category'][0]['dropbox']) && count($event['category'][0]['dropbox']) != 0 &&
@@ -738,8 +738,15 @@
                                        @if($event['hours'])
                                        <div class="expire-date"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Start-Finish.svg')}}" alt="">{{$event['hours']}}</div>
                                        @endif
+                                      
                                     </div>
+                                    @if($event['status'] == 5)
+                                       <div>
+                                          You are on the waiting list.
+                                       </div>
+                                    @endif
                                  </div>
+                                 @if(isset($event['topics']) && count($event['topics']) > 0)
                                  <div id="c-shedule-inner{{$tab}}" class="in-tab-wrapper">
                                     <div class="bottom tabs-bottom">
                                        <div class="expire-date exp-date"><img src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="">Schedule available in PDF</div>
@@ -751,7 +758,6 @@
                                        <div class="accordion-wrapper accordion-big">
                                           <?php $catId = -1?>
                                           <?php //dd($event['topics']); ?>
-                                          @if(isset($event['topics']) && count($event['topics']) > 0)
                                           @foreach($event['topics'] as $keyTopic => $topic)
                                           <?php //dd($keyTopic); ?>
                                           @if(isset($topic) && count($topic) != 0 )
@@ -793,12 +799,13 @@
                                           </div>
                                           @endif
                                           @endforeach
-                                          @endif
+                                          
                                           <!-- /.accordion-wrapper -->
                                        </div>
                                        <!-- /.acc-topic-accordion -->
                                     </div>
                                  </div>
+                                 @endif
                                  <?php
                                     $dropbox = isset($event['category'][0]['dropbox'][0]) ? $event['category'][0]['dropbox'][0] : [];
                                     //dd($dropbox);
@@ -1247,6 +1254,7 @@
                                        @if (isset($event['videos_progress']))
                                        <div  class="duration"><img class="replace-with-svg" width="20" src="{{cdn('/theme/assets/images/icons/E-Learning.svg')}}" alt=""> {{$event['videos_progress']}}% </div>
                                        @endif
+                                       
                                     </div>
                                  </div>
                                  <div id="c-watch-inner{{$tab}}" class="in-tab-wrapper">

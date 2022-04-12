@@ -53,6 +53,8 @@ class WelcomeEmail extends Notification
         
         $slug = encrypt($slug);
 
+        $template = isset($this->data['template']) ? 'emails.user.'.$this->data['template'] : 'emails.user.welcome';
+
         $this->data['slug'] = url('/') . '/create-your-password/' . $slug;
 
         if($this->user->statusAccount){
@@ -60,11 +62,11 @@ class WelcomeEmail extends Notification
             $this->user->statusAccount->completed_at = Carbon::now();
             $this->user->statusAccount->save();
         }
-               
+
         return (new MailMessage)
                     ->from('info@knowcrunch.com', 'Knowcrunch')
-                    ->subject('Knowcrunch - Welcome')
-                    ->view('emails.user.welcome',$this->data);
+                    ->subject('Knowcrunch - Welcome ' .  $this->user->firstname . '. Activate your account​ now')
+                    ->view($template,$this->data);
     }
 
     /**

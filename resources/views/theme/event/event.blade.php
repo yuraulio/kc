@@ -71,9 +71,9 @@
                   
                   @if($estatus == 0 && !$is_event_paid)
                   <a href="#seats" class="btn btn--lg btn--primary go-to-href">ENROLL NOW</a>
-                  @elseif($estatus == 5)
-                  <a href="{{ route('cart.add-item', [ $event->id,'waiting', 8 ]) }}" class="btn btn--lg btn--primary go-to-href elearning-free">ENROLL FOR WAITING LIST</a>
-                  @elseif($estatus != 3 && $estatus != 1 && !$is_event_paid)
+                  @elseif($estatus == 5 && !$is_joined_waiting_list)
+                  <a href="{{ route('cart.add-item', [ $event->id,'waiting', 8 ]) }}" class="btn btn--lg btn--primary go-to-href elearning-free">JOIN WAITING LIST</a>
+                  @elseif($estatus != 3 && $estatus != 5 && $estatus != 1 && !$is_event_paid)
                   <a href="#seats" class="btn btn--lg btn--primary go-to-href go-to-href soldout">SOLD OUT</a>
                   @endif
                   <!-- /.container -->

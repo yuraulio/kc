@@ -22,10 +22,11 @@ class CMS
         $data['venues'] = $event->venues->toArray();
         $data['syllabus'] = $event->syllabus->toArray();
         $data['is_event_paid'] = 0;
+        $data['is_joined_waiting_list'] = 0;
         $data['sumStudents'] = get_sum_students_course($event->category->first());//isset($event->category[0]) ? $event->category[0]->getSumOfStudents() : 0;
         $data['showSpecial'] = false;
         $data['showAlumni'] = $event->ticket()->where('type', 'Alumni')->where('active', true)->first() ? true : false;
-        ;
+        
 
 
         if ($event->ticket()->where('type', 'Early Bird')->first()) {
@@ -62,8 +63,10 @@ class CMS
 
         $data['tigran'] = ['Price' => $tr_price,'Product_id' => $event->id,'Product_SKU' => $event->id,'ProductCategory' => $categoryScript, 'ProductName' =>  $event->title,'Event_ID' => 'kc_' . time() ];
 
-        if (Auth::user() && count(Auth::user()->events->where('id', $event->id)) > 0) {
+        if(Auth::user() && count(Auth::user()->events->where('id',$event->id)) > 0){
             $data['is_event_paid'] = 1;
+        }else if(Auth::user() && $event->waitingList()->where('user_id',Auth::user()->id)->first()){
+            $data['is_joined_waiting_list'] = 1;
         }
 
         return $data;
@@ -151,7 +154,7 @@ class CMS
     {
         $data['title'] = $delivery['name'];
         $data['delivery'] = $delivery;
-        $data['openlistt'] = $delivery->event()->has('slugable')->with('category', 'city', 'ticket')->where('published', true)->where('status', 0)->orderBy('created_at', 'desc')->get();
+        $data['openlistt'] = $delivery->event()->has('slugable')->with('category', 'city', 'ticket')->where('published', true)->whereIn('status', [0,5])->orderBy('created_at', 'desc')->get();
         $data['completedlist'] = $delivery->event()->has('slugable')->with('category', 'slugable', 'city', 'ticket')->where('published', true)->where('status', 3)->orderBy('created_at', 'desc')->get();
 
         $data['openlist'] = [];

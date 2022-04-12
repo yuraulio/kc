@@ -12,7 +12,11 @@
 						    @if($duration)<datetime="YYYY-MM-DDThh:mm:ssTZD"><span class="datetime">{{$duration}}</span></datetime="YYYY-MM-DDThh:mm:ssTZD">@endif
 						    <div class="checkout-price-wrap">
 						    	<div class="checkout-price">
+									@if($type=='waiting')
+									<span class="waiting"> Waiting list. </span>
+									@else
 						    		<p>Price:</p><span>@if(is_numeric($price)) €{{$oldPrice}} @else {{$price}} @endif</span>
+									@endif
 						    	</div>
 								@if(!$eventFree)
 						    		<div class="checkout-participant">
