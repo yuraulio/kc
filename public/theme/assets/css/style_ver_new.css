@@ -23,8 +23,17 @@
     top: 0;
 }
 
+
+.event-background:nth-child(2n){
+    background:white;
+}
+
 .event-background:nth-child(2n + 1) {
     background-color: #f0f0f0;
+}
+
+.section--partners{
+    background: white;
 }
 
 .subs-page-span {
@@ -54,6 +63,10 @@
 .instructor-studies ul li svg line {
     stroke: #419cff !important;
     stroke-width: 1.5!important;
+}
+
+.section--partners{
+    background: white;
 }
 
 .bold-topic {
@@ -186,27 +199,27 @@
     color: red!important;
 }
 
-.reset-password .icon{
+.reset-password .icon, .login-popup-wrapper .icon, .login-popup-wrapper-subscription .icon{
     float: right;
 }
 
-.reset-password .icon img{
+.reset-password .icon img , .login-popup-wrapper .icon img, .login-popup-wrapper-subscription .icon img{
     margin-right: 5px;
 }
 
-.reset-password .input-wrapper--text input{
+.reset-password .input-wrapper--text input,  .login-popup-wrapper  .input-wrapper--text input, .login-popup-wrapper-subscription .input-wrapper--text input{
     padding-left: 10px!important;
 }
 
-.reset-password .required{
+.reset-password .required, .login-popup-wrapper .required, .login-popup-wrapper-subscription .required{
     color:red;
 }
 
-.reset-password label{
+.reset-password label, .login-popup-wrapper label, .login-popup-wrapper-subscription label{
     font-size: 19px;
 }
 
-.reset-password .login-popup{
+.reset-password .login-popup, .login-popup-wrapper .login-popup, .login-popup-wrapper-subscription .login-popup{
     max-width:450px
 }
 
@@ -5245,7 +5258,7 @@ body.compensate-for-scrollbar { overflow: hidden; }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .video-carousel .slide{ box-shadow: 10px 8px 6.5600000000000005px 1.44px rgba(76, 76, 76, 0.23); }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .video-carousel .owl-nav{  }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .video-carousel .owl-nav button,
-   .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .video-carousel-big .owl-nav button{ position: absolute; z-index: 2; top: 50%; transform: translateY(-50%); width: 17px; height: 32px; display: block; outline: none; }
+   .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .video-carousel-big .owl-nav button{ position: absolute; z-index: 2; top: 35%; transform: translateY(-50%); width: 17px; height: 32px; display: block; outline: none; }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .video-carousel .owl-nav button.owl-prev,
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .video-carousel-big .owl-nav button.owl-prev{ left: 0; }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .video-carousel .owl-nav button.owl-next,
