@@ -57,7 +57,7 @@ class ContactUsController extends Controller
             ];
         } else {
 
-            Mail::send('theme.emails.contact.send_us_email', ['mail_data' => $mail_data], function ($m) use ($mail_data) {
+            Mail::send('theme.emails.contact.send_us_email', ['mail_data' => $mail_data], function ($m) use ($mail_data, $email) {
                 $fullname = $mail_data['cname'] . ' ' . $mail_data['csurname'];
 
             	 $fullname = $mail_data['cname'] . ' ' . $mail_data['csurname'];
