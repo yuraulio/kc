@@ -382,7 +382,7 @@ class PagesController extends Controller
             $ids = $request->selected;
         
             // authorize action
-            $categories = Page::findOrFail($ids);
+            $categories = Page::withoutGlobalScope("published")->findOrFail($ids);
             foreach ($categories as $category) {
                 $this->authorize('delete', $category, Auth::user());
             }
@@ -392,7 +392,7 @@ class PagesController extends Controller
 
             return response()->json(['message' => 'success'], 200);
         } catch (Exception $e) {
-            Log::error("Failed to bulk delete templates. " . $e->getMessage());
+            Log::error("Failed to bulk delete pages. " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }

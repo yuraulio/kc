@@ -55,7 +55,8 @@ class Kernel extends ConsoleKernel
        Commands\ExportAllUserByCategory::class,
        Commands\AttachCerficateByEvent::class,
        Commands\SubscriptionsEnds::class,
-       Commands\NewAdminMediaManager::class
+       Commands\NewAdminMediaManager::class,
+       Commands\CompnentsRefresh::class
     ];
 
     /**
