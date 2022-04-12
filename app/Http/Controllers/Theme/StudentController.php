@@ -1371,13 +1371,11 @@ class StudentController extends Controller
             $data['events'][$event->id]['hours'] = $event['hours'];
             $data['events'][$event->id]['slugable'] = $event['slugable']->toArray();
             $data['events'][$event->id]['title'] = $event['title'];
-            $data['events'][$event->id]['release_date_files'] = $event->release_date_files;
+            $data['events'][$event->id]['release_date_files'] = '1970-01-01';
             $data['events'][$event->id]['status'] = $event->status;
         }
 
         return $data;
-        //$waitingEvents = Event::where('status',5)
-
 
     }
 

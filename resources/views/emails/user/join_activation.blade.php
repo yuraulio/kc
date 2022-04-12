@@ -83,7 +83,7 @@
                                                                 <tr>
                                                                    <td align="left" valign="top" class="r14-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                       <div>
-                                                                         <h2 class="default-heading2" style="margin: 0; color: #1F2D3D; font-family: arial,helvetica,sans-serif; font-size: 32px;"><span style="font-family: Tahoma, geneva, sans-serif;">Hello {{ $user['firstname'] }}</span></h2>
+                                                                         <h2 class="default-heading2" style="margin: 0; color: #1F2D3D; font-family: arial,helvetica,sans-serif; font-size: 32px;"><span style="font-family: Tahoma, geneva, sans-serif;">Hello {{ $user['first'] }}</span></h2>
                                                                       </div>
                                                                    </td>
                                                                 </tr>
