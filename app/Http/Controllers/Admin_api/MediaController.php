@@ -203,8 +203,7 @@ class MediaController extends Controller
 
             return response()->json(['data' => $files], 200);
         } catch (Exception $e) {
-            throw $e;
-            Log::error("Failed update file . " . $e->getMessage());
+            Log::error("Failed to uoload file . " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
         }
     }
