@@ -38,3 +38,4 @@ storage/*.index*
 /public/theme/assets/js/front.js.map
 /public/assets/vendor/MediaManager/*
 /public/mix-manifest.json
+supervisord.conf
