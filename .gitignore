@@ -36,3 +36,4 @@ storage/*.index*
 /public/new_cart/version/style_ver.css
 /public/theme/assets/js/front.js
 /public/theme/assets/js/front.js.map
+/public/assets/vendor/MediaManager/*
