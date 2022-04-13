@@ -21,9 +21,8 @@ use App\Http\Requests\MoveMediaFileRequest;
 use App\Http\Resources\MediaFolderResource;
 use App\Http\Requests\EditMediaFolderRequest;
 use App\Http\Requests\CreateMediaFolderRequest;
+use App\Jobs\TinifyImage;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-
-// use msonowal\LaravelTinify\Facades\Tinify;
 
 class MediaController extends Controller
 {
@@ -197,9 +196,8 @@ class MediaController extends Controller
                 // save to db
                 $mfile = $this->storeFile($version_name, $version[0], $imgpath, $mediaFolder->id, $image->filesize(), $mfile_original->id, $request->alt_text, $request->link);
                 $files[] = new MediaFileResource($mfile);
-
-                Tinify::setKey("3wZm6xtp9mV0SVSkZgjtXSQBkLt7v1yg");
-                // \Tinify::fromFile("unoptimized.png")->toFile("optimized.png");
+                
+                TinifyImage::dispatch(public_path() . $mfile->full_path, $mfile->id);
             }
 
             $original = MediaFile::find($mfile_original->id);
@@ -258,7 +256,8 @@ class MediaController extends Controller
                 $width_offset = $crop_data->left * (1 / $request->width_ratio);
 
                 $image->crop((int) $crop_width, (int) $crop_height, (int) $width_offset, (int) $height_offset);
-                $image->save(public_path("/uploads" . $mediaFolder->path . "/" . $image_name));
+                $save_path = public_path("/uploads" . $mediaFolder->path . "/" . $image_name);
+                $image->save($save_path);
 
                 $size = $image ? $image->filesize() : null;
             }
@@ -269,6 +268,10 @@ class MediaController extends Controller
             }
 
             $mfile = $this->editFile($parent_id, $request->version, $image_name, $imgpath, $mediaFolder->id, $size, null, $request->alttext, $request->link);
+
+            if ($request->version != 'original') {
+                TinifyImage::dispatch($save_path, $mfile->id);
+            }
 
             return response()->json(['data' => new MediaFileResource($mfile)], 200);
         } catch (Exception $e) {
