@@ -1,6 +1,6 @@
 <template>
 <div>
-    <div v-if="view == 'list'" class="mt-3" style="overflow-x: auto;">
+    <div v-if="view == 'list'" class="mt-3" style="">
         <h5 class="mb-3">Files</h5>
         <div class="d-flex" style="">
             <div class="d-flex" style="align-items: end; width: 100%;">

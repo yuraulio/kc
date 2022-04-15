@@ -61,7 +61,7 @@
                 <h5>Move file {{ file_to_move ? file_to_move.name : "" }}</h5>
                 <p>Select new folder:</p>
 
-                <vue-nestable v-model="mediaFolders" :maxDepth="0" class="dd-list mb-2">
+                <vue-nestable v-model="mediaFolders" class="dd-list mb-2">
                     <vue-nestable-handle slot-scope="{ item, isChild }" :item="item">
                         <li :key="item.id + uncolapsed.length" v-show="!isChild || uncolapsed.includes(item.id)" class="dd-item" :data-id="item.id">
                             <button
@@ -149,9 +149,9 @@
     <!-- Right Sidebar -->
     <div class="col-12">
         <div class="card">
-            <div class="card-body">
+            <div class="card-body p-2">
                 <!-- Left sidebar -->
-                <div class="inbox-leftbar">
+                <div class="inbox-leftbar p-0">
                     <div class="btn-group d-block mb-2 text-center">
                         <button class="btn btn-sm btn-info" @click.prevent="$modal.show('create-folder-modal')">
                             <i class="mdi mdi-plus"></i> <i class="mdi mdi-folder-plus-outline me-1"></i>
@@ -359,6 +359,9 @@ export default {
 }
 .media-manager .original-floder {
     border: 1px solid #1abc9c!important;
+}
+.media-manager ol.nestable-list {
+    padding-left: 10px;
 }
 </style>
 

@@ -37,7 +37,7 @@ class MediaController extends Controller
 
         try {
             $folders = MediaFolder::lookForOriginal($request->filter)
-                ->with('children')->whereParentId($request->folder_id ?? null)
+                ->with('children.children.children.children.children.children.children.children')->whereParentId($request->folder_id ?? null)
                 ->orderBy('created_at', 'desc')->get();
 
             return MediaFolderResource::collection($folders);
@@ -114,53 +114,7 @@ class MediaController extends Controller
             $file = Storage::disk('public')->putFileAs($path, $image, $image_name, 'public');
             $mfile_original = $this->storeFile($image_name, "original", $imgpath_original, $mediaFolder->id, $image->getSize(), $request->parrent_id, $request->alt_text, $request->link);
 
-            $versions = [
-                [
-                    "instructors-testimonials",
-                    470,
-                    470
-                ],
-                [
-                    "event-card",
-                    542,
-                    291
-                ],
-                [
-                    "users",
-                    470,
-                    470
-                ],
-                [
-                    "header-image",
-                    2880,
-                    1248
-                ],
-                [
-                    "instructors-small",
-                    90,
-                    90
-                ],
-                [
-                    "feed-image",
-                    300,
-                    300
-                ],
-                [
-                    "social-media-sharing",
-                    1920,
-                    832
-                ],
-                [
-                    "blog-content",
-                    680,
-                    320
-                ],
-                [
-                    "blog-featured",
-                    343,
-                    193
-                ]
-            ];
+            $versions = Page::VERSIONS;
 
             foreach ($versions as $version) {
                 // set image name
@@ -240,7 +194,6 @@ class MediaController extends Controller
 
                 // duplicate original file
                 Storage::disk('public')->copy($original_file->path, $file_path);
-
                 // crop image
                 $manager = new ImageManager();
                 $image = $manager->make(Storage::disk('public')->get($file_path));
@@ -254,7 +207,11 @@ class MediaController extends Controller
                 $width_offset = $crop_data->left * (1 / $request->width_ratio);
 
                 $image->crop((int) $crop_width, (int) $crop_height, (int) $width_offset, (int) $height_offset);
-                $image->save(public_path("/uploads" . $mediaFolder->path . "/" . $image_name));
+
+                $folderPath = ltrim($mediaFolder->path, "/");
+                $folderPath = "/" . $folderPath;
+
+                $image->save(public_path("/uploads" . $folderPath . "/" . $image_name));
 
                 $size = $image ? $image->filesize() : null;
             }
@@ -381,10 +338,12 @@ class MediaController extends Controller
                 if (Storage::disk('public')->exists($subfile->path)) {
                     Storage::disk('public')->delete($subfile->path);
                 }
+                $subfile->pages()->detach();
                 $subfile->delete();
             }
         }
 
+        $file->pages()->detach();
         $file->delete();
 
         return response()->json('success', 200);

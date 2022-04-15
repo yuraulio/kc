@@ -79,6 +79,7 @@ var mediaMixin = {
         },
         uncollapse(item) {
             item.children.forEach((el) => {
+                this.uncollapse(el);
                 this.uncolapsed.splice(this.uncolapsed.indexOf(el.id), 1);
             })
         },
@@ -279,8 +280,9 @@ var mediaMixin = {
                 // this.$modal.hide('edit-image-modal');
             })
             .catch((error) => {
-                console.log(error)
+                console.log("edit error", error.response.data.message);
                 this.$refs.crpr.isUploading = false;
+                this.$toast.error("Failed to update. " + error.response.data.message);
             })
         },
         addFolder() {

@@ -12,7 +12,7 @@ class MediaFile extends Model
 {
     use HasFactory;
     use SearchFilter;
-    use SoftDeletes;
+    // use SoftDeletes;
 
     protected $table = 'cms_files';
     public $asYouType = true;

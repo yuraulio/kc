@@ -16,7 +16,7 @@
                 @foreach ($gallery["gallery"] as $image)
                     <div class="col-md-3 col-6 self-align-center mb-5">
                         <a href="{{ $image->link ?? "" }}" target="_blank">
-                            <img src="{{ $image->full_path ?? "" }}" class="center grayscale image-grid-hover" alt="{{ $image->alt_text ?? "" }}">
+                            <img src="{{ $image->url ?? "" }}" class="center grayscale image-grid-hover" alt="{{ $image->alt_text ?? "" }}">
                         </a>
                     </div>
                 @endforeach
@@ -31,7 +31,7 @@
                     <div class="logos-carousel owl-carousel">
                         @foreach ($gallery["gallery"] as $image)
                             <div class="slide">
-                                <img class="center grayscale" style="max-width: 100%;" src="{{ $image->full_path ?? "" }}" title="{{ $image->name }}" alt="{{ $image->alt_text ?? "" }}">
+                                <img class="center grayscale" style="max-width: 100%;" src="{{ $image->url ?? "" }}" title="{{ $image->name }}" alt="{{ $image->alt_text ?? "" }}">
                             </div>
                         @endforeach
                     </div>
@@ -58,7 +58,7 @@
             <div class="row">
                 @foreach ($gallery["gallery"] as $image)
                     <div class="col-md-2 col-6 self-align-center mb-5">
-                        <img src="{{ $image->full_path ?? "" }}" class="center grayscale image-grid-hover" alt="{{ $image->alt_text ?? "" }}">
+                        <img src="{{ $image->url ?? "" }}" class="center grayscale image-grid-hover" alt="{{ $image->alt_text ?? "" }}">
                     </div>
                 @endforeach
             </div>
