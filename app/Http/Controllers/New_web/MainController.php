@@ -66,7 +66,7 @@ class MainController extends Controller
     {
         $page = null;
 
-        if (!cache($request->path())) {
+        if (Cache::getCmsMode() == Setting::NEW_PAGES) {
             $dynamicPageData = null;
 
             $modelSlug = Slug::whereSlug($slug)->first();
