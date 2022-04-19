@@ -99,6 +99,11 @@ class MainController extends Controller
             return (new HomeController($this->fbp))->index($slugModel);
         }
 
+        if ($slug == "in-the-media" || $slug == "brands-trained") {
+            $dynamicPageData['brands'] = Logos::with('medias')->where('type', 'brands')->orderBy('name', 'asc')->get()->toArray();
+            $dynamicPageData['logos'] = Logos::with('medias')->where('type', 'logos')->orderBy('name', 'asc')->get()->toArray();
+        }
+
         $this->fbp->sendPageViewEvent();
         return view('new_web.page', [
             'content' => json_decode($page->content),

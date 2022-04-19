@@ -1,11 +1,45 @@
 @php
     $gallery = [];
-    foreach ($column->template->inputs as $input){
-        $gallery[$input->key] = $input->value ?? "";
+    if ($column->template->dynamic) {
+        $brands = $dynamic_page_data["brands"];
+        $logos = $dynamic_page_data["logos"];
+    } else {
+        foreach ($column->template->inputs as $input){
+            $gallery[$input->key] = $input->value ?? "";
+        }
     }
+
 @endphp
 
-@if ($gallery["gallery"])
+@if ($column->template->dynamic)
+    @if($page->slug == "in-the-media") 
+        <div class="logos-area content-text-area text-center">
+            <h2>Media saying great things about us</h2>
+        </div>
+        <div class="row">
+            @foreach ($logos as $image)
+                <div class="col-md-3 col-6 self-align-center mb-5">
+                    <a href="{{ $image['ext_url'] ?? "" }}" target="_blank">
+                        <img src="{{ cdn(get_image($image['medias']))}}" class="center grayscale image-grid-hover" alt="{{ $image['name'] }}">
+                    </a>
+                </div>
+            @endforeach
+        </div>
+    @elseif ($page->slug == "brands-trained")
+        <div class="logos-area content-text-area text-center">
+            <h2>Brands & organizations that chose us</h2>
+        </div>
+        <div class="row">
+            @foreach ($brands as $image)
+                <div class="col-md-3 col-6 self-align-center mb-5">
+                    <a href="{{ $image['ext_url'] ?? "" }}" target="_blank">
+                        <img src="{{ cdn(get_image($image['medias']))}}" class="center grayscale image-grid-hover" alt="{{ $image['name'] }}">
+                    </a>
+                </div>
+            @endforeach
+        </div>
+    @endif
+@elseif ($gallery["gallery"])
     <div class="mb-5">
         @if ($gallery["galery_type"]->id == 1)
             {{-- grid view --}}
