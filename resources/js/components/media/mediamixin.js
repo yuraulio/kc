@@ -90,9 +90,7 @@ var mediaMixin = {
         uploadRegFile() {
             var formData = new FormData();
             var imagefile = this.regFile;
-            if (this.selectedFolder) {
-                formData.append('directory', this.selectedFolder.id);
-            }
+            formData.append('directory', this.move_file_to.id);
             if (imagefile) {
                 this.loading = true;
                 formData.append("file", imagefile);
@@ -130,6 +128,7 @@ var mediaMixin = {
                 formData.append("file", imagefile);
                 formData.append("alt_text", this.alt_text);
                 formData.append("link", this.link);
+                formData.append('directory', this.move_file_to.id);
                 axios.post('/api/media_manager/upload_image', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
@@ -223,9 +222,7 @@ var mediaMixin = {
                 formData.append('edited', this.$refs.crpr.prevalue.id);
             }
             formData.append('original_file', this.$refs.crpr.originalFile);
-            if (this.selectedFolder) {
-                formData.append('directory', this.selectedFolder.id);
-            }
+            formData.append('directory', this.move_file_to.id);
             if (imagefile) {
                 this.$refs.crpr.isUploading = true;
                 formData.append("file", imagefile);
@@ -268,6 +265,7 @@ var mediaMixin = {
             formData.append('width_ratio', this.$refs.crpr.width_ratio);
             formData.append('height_ratio', this.$refs.crpr.height_ratio);
             formData.append('directory', this.selectedFile.folder_id);
+            formData.append('id', this.selectedFile.id);
             this.$refs.crpr.isUploading = true;
             axios.post('/api/media_manager/edit_image', formData, {
                 headers: {

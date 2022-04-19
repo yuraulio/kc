@@ -40,6 +40,33 @@
                     <input v-model="link" type="text" id="link" class="form-control">
                 </div>
 
+                <p>Select folder:</p>
+
+                <vue-nestable v-model="mediaFolders" class="dd-list mb-3">
+                    <vue-nestable-handle slot-scope="{ item, isChild }" :item="item">
+                        <li :key="item.id + uncolapsed.length" v-show="!isChild || uncolapsed.includes(item.id)" class="dd-item" :data-id="item.id">
+                            <button
+                                @click="collapse(item); $forceUpdate();"
+                                v-if="item.children && item.children.length && !uncolapsed.includes(item.children[0].id)"
+                                class="collapse-button"
+                            >
+                                <i class="mdi mdi-plus font-18"></i>
+                            </button>
+                            <button
+                                @click="uncollapse(item)"
+                                v-if="item.children && item.children.length && uncolapsed.includes(item.children[0].id)"
+                                class="collapse-button"
+                            >
+                                <i class="mdi mdi-minus font-18"></i>
+                            </button>
+                            <div @click="move_file_to = item;" :class="'dd-handle ' + (item == move_file_to ? 'selected-folder ' : ' ')">
+                                <i class="mdi mdi-folder-outline font-18 align-middle me-"></i>
+                                {{ item.name }}
+                            </div>
+                        </li>
+                    </vue-nestable-handle>
+                </vue-nestable>
+
                 <button @click="uploadImgFile()" type="button" class="btn btn-success waves-effect waves-light" :disabled="loading">
                     <i v-if="!loading" class="fe-check-circle me-1"></i>
                     <i v-else class="fas fa-spinner fa-spin"></i>
@@ -133,6 +160,33 @@
                     <label for="example-fileinput" class="form-label">Pick a file</label>
                     <input @change="registerFile" type="file" id="example-fileinput" class="form-control">
                 </div>
+
+                <p>Select folder:</p>
+
+                <vue-nestable v-model="mediaFolders" class="dd-list mb-3">
+                    <vue-nestable-handle slot-scope="{ item, isChild }" :item="item">
+                        <li :key="item.id + uncolapsed.length" v-show="!isChild || uncolapsed.includes(item.id)" class="dd-item" :data-id="item.id">
+                            <button
+                                @click="collapse(item); $forceUpdate();"
+                                v-if="item.children && item.children.length && !uncolapsed.includes(item.children[0].id)"
+                                class="collapse-button"
+                            >
+                                <i class="mdi mdi-plus font-18"></i>
+                            </button>
+                            <button
+                                @click="uncollapse(item)"
+                                v-if="item.children && item.children.length && uncolapsed.includes(item.children[0].id)"
+                                class="collapse-button"
+                            >
+                                <i class="mdi mdi-minus font-18"></i>
+                            </button>
+                            <div @click="move_file_to = item;" :class="'dd-handle ' + (item == move_file_to ? 'selected-folder ' : ' ')">
+                                <i class="mdi mdi-folder-outline font-18 align-middle me-"></i>
+                                {{ item.name }}
+                            </div>
+                        </li>
+                    </vue-nestable-handle>
+                </vue-nestable>
 
                 <button @click="uploadRegFile()" type="button" class="btn btn-success waves-effect waves-light" :disabled="loading">
                     <i v-if="!loading" class="fe-check-circle me-1"></i>

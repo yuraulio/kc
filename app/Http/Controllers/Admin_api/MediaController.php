@@ -174,7 +174,7 @@ class MediaController extends Controller
             $size = null;
 
             $original_file = MediaFile::findOrFail($request->parent_id);
-            $file = MediaFile::where("parent_id", $request->parent_id)->where("version", $request->version)->first();
+            $file = MediaFile::whereId($request->id)->first();
 
             if ($file) {
                 $file_path = $file->path;
@@ -221,7 +221,7 @@ class MediaController extends Controller
                 $parent_id = null;
             }
 
-            $mfile = $this->editFile($parent_id, $request->version, $image_name, $imgpath, $mediaFolder->id, $size, null, $request->alttext, $request->link);
+            $mfile = $this->editFile($parent_id, $request->version, $image_name, $imgpath, $mediaFolder->id, $size, null, $request->alttext, $request->link, $request->id);
 
             return response()->json(['data' => new MediaFileResource($mfile)], 200);
         } catch (Exception $e) {
@@ -258,7 +258,7 @@ class MediaController extends Controller
         }
     }
 
-    public function storeFile($name, $version, $path, $folderId, $size, $parent = null, $alt_text = null, $link = null)
+    public function storeFile($name, $path, $folderId, $size, $parent = null, $alt_text = null, $link = null)
     {
         $mediaFile = new MediaFile();
         $mediaFile->name = $name;
@@ -272,7 +272,7 @@ class MediaController extends Controller
         $mediaFile->parent_id = $parent;
         $mediaFile->url = config('app.url') . "/uploads" . $path;
         $mediaFile->user_id = Auth::user()->id;
-        $mediaFile->version = $version;
+        $mediaFile->version = "original";
         $mediaFile->save();
 
         $mediaFile->load(["pages", "siblings", "subfiles"]);
@@ -280,9 +280,11 @@ class MediaController extends Controller
         return $mediaFile;
     }
 
-    public function editFile($parent_id, $version, $name, $path, $folderId, $size, $parent = null, $alttext = "", $link = "")
+    public function editFile($parent_id, $version, $name, $path, $folderId, $size, $parent = null, $alttext = "", $link = "", $id)
     {
-        $mediaFile = MediaFile::whereParentId($parent_id)->whereVersion($version)->firstOrCreate();
+        $url = config('app.url') . "/uploads" . $path;
+
+        $mediaFile = MediaFile::whereId($id)->firstOrNew();
 
         $oldPath = $mediaFile->path;
 
@@ -294,7 +296,7 @@ class MediaController extends Controller
         $mediaFile->link = $link;
         $mediaFile->folder_id = $folderId;
         $mediaFile->size = $size ?? $mediaFile->size;
-        $mediaFile->url = config('app.url') . "/uploads" . $path;
+        $mediaFile->url = $url;
         $mediaFile->user_id = Auth::user()->id;
         $mediaFile->version = $version;
         $mediaFile->parent_id = $parent_id;

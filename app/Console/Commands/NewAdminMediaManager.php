@@ -69,7 +69,7 @@ class NewAdminMediaManager extends Command
         $bar = $this->output->createProgressBar(count($directories));
 
         foreach ($directories ?? [] as $directory) {
-            $this->info($directory);
+            $this->info("\n\nWorking on directory: $directory");
 
             $bar->start();
 
@@ -99,22 +99,20 @@ class NewAdminMediaManager extends Command
             $bar->finish();
 
             $this->syncFilesInDirectory($mediaFolder);
-
-            $this->info("\nGetting directories in $directory\n");
             $this->storeDirectories(\Storage::disk('public')->directories("/$directory"));
         }
     }
 
     public function syncFilesInDirectory($mediaFolder)
     {
-        $this->info("\nSyncing files in $mediaFolder->path\n");
+        $this->info("\nSyncing files in $mediaFolder->path");
         $files = \File::files(public_path('/uploads'). '/' . $mediaFolder->path);
         $bar = $this->output->createProgressBar(count($files));
 
         $versions = Page::VERSIONS;
 
         foreach ($files as $key => $file) {
-            $path = explode('uploads', $file->getPath())[1];
+            $path = explode('/public/uploads', $file->getPath())[1];
             $path = "/" . (ltrim($path, "/"));
             $filepath = $path . "/" . basename($file);
             $parentFolder = MediaFolder::wherePath($path)->first();
@@ -132,13 +130,11 @@ class NewAdminMediaManager extends Command
                 foreach ($versions as $version) {
                     $versionName = $version[0];
                     if (str_ends_with($name, $versionName)) {
-                        $this->info("file vesion found: " . $versionName);
                         $fileVersion = $versionName;
 
                         $originalFileName = Str::of($name)->basename($fileVersion);
                         $originalFile = MediaFile::whereName($originalFileName)->where("folder_id", $folderId)->first();
                         if ($originalFile) {
-                            $this->info("original file of version found");
                             $parentId = $originalFile->id;
                         }
                     }
@@ -155,15 +151,12 @@ class NewAdminMediaManager extends Command
                 $mediaFile->parent_id = $parentId;
                 $mediaFile->version = $fileVersion;
                 $mediaFile->save();
-                
-                $this->info("file saved with version: " . $fileVersion);
 
                 if ($fileVersion == "original") {
                     // try to find child files
                     $childFiles = MediaFile::where("name", "LIKE", $name."%")
                         ->where("folder_id", $folderId)->where("id", "!=", $mediaFile->id)->get();
                     foreach ($childFiles as $childFile) {
-                        $this->info("child file found");
                         $childVersion = Str::of($childFile->name)->afterLast($name);
                         $childVersion = ltrim($childVersion, "-");
                         $childVersion = Str::of($childVersion)->basename(".".$childFile->extension);
@@ -172,7 +165,6 @@ class NewAdminMediaManager extends Command
                             $childFile->parent_id = $mediaFile->id;
                             $childFile->version = $childVersion;
                             $childFile->save();
-                            $this->info("child file saved with version: " . $childVersion);
                         }
                     }
                 }
