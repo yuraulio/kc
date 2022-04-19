@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\MenuItemsSeeder;
 use Illuminate\Database\Seeder;
 
 class MenuDatabaseSeeder extends Seeder
@@ -16,8 +17,8 @@ class MenuDatabaseSeeder extends Seeder
     public function run()
     {
         $seeds = [
-            'MenuItemsSeeder',
-            'MenuSettingsSeeder',
+            'Database\Seeders\MenuItemsSeeder',
+            'Database\Seeders\MenuSettingsSeeder',
         ];
 
         foreach ($seeds as $class) {

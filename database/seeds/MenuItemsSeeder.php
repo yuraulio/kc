@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use CodexShaper\Menu\Models\Menu;
 use CodexShaper\Menu\Models\MenuItem;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class MenuItemsSeeder extends Seeder
@@ -16,6 +17,12 @@ class MenuItemsSeeder extends Seeder
      */
     public function run()
     {
+        // clear existing darta
+        DB::table('menus')->truncate();
+        DB::table('menu_items')->truncate();
+
+        // insert new data
+
         // main menu
         $menu = new Menu();
         $menu->name = 'Main menu';
