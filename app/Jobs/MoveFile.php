@@ -68,8 +68,6 @@ class MoveFile implements ShouldQueue
 
                 $pages = $file->pages()->get();
 
-                Log::debug($file->load("pages"));
-                Log::debug($pages);
                 foreach ($pages as $page) {
                     $content = $page->content;
                     $content = str_replace($oldFileUrl, $newFileUrl, $content);
