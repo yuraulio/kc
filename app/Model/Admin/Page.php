@@ -13,13 +13,15 @@ use Illuminate\Database\Eloquent\Builder;
 use CodexShaper\Menu\Models\Menu;
 use App\Model\Slug;
 use App\Traits\PaginateTable;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Page extends Model
+class Page extends Model implements Auditable
 {
     use HasFactory;
     use SearchFilter;
     use Sluggable;
     use PaginateTable;
+    use \OwenIt\Auditing\Auditable;
 
     protected $table = 'cms_pages';
     public $asYouType = true;
