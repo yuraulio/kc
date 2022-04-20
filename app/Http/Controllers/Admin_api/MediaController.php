@@ -22,7 +22,9 @@ use App\Http\Requests\MoveMediaFileRequest;
 use App\Http\Resources\MediaFolderResource;
 use App\Http\Requests\EditMediaFolderRequest;
 use App\Http\Requests\CreateMediaFolderRequest;
+use App\Jobs\RenameFile;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\DB;
 
 class MediaController extends Controller
 {
@@ -82,8 +84,12 @@ class MediaController extends Controller
         //$this->authorize('create', Page::class, Auth::user());
 
         try {
+            $parent = MediaFolder::whereId($request->directory)->first();
+
             $cname = Str::slug($request->name, '_');
-            $path = "/pages_media/$cname";
+            $path = $parent->path . "/$cname";
+
+            $path = str_replace("//", "/", $path);
 
             Storage::disk('public')->makeDirectory($path);
 
@@ -92,6 +98,7 @@ class MediaController extends Controller
             $mediaFolder->path = $path;
             $mediaFolder->url = config('app.url') . "/uploads" . $path;
             $mediaFolder->user_id = Auth::user()->id;
+            $mediaFolder->parent_id = $parent->id;
             $mediaFolder->save();
 
             return new MediaFolderResource($mediaFolder);
@@ -258,8 +265,10 @@ class MediaController extends Controller
         }
     }
 
-    public function storeFile($name, $path, $folderId, $size, $parent = null, $alt_text = null, $link = null)
+    public function storeFile($name, $version, $path, $folderId, $size, $parent = null, $alt_text = null, $link = null)
     {
+        $path = str_replace("//", "/", $path);
+
         $mediaFile = new MediaFile();
         $mediaFile->name = $name;
         $mediaFile->path = $path;
@@ -272,7 +281,7 @@ class MediaController extends Controller
         $mediaFile->parent_id = $parent;
         $mediaFile->url = config('app.url') . "/uploads" . $path;
         $mediaFile->user_id = Auth::user()->id;
-        $mediaFile->version = "original";
+        $mediaFile->version = $version;
         $mediaFile->save();
 
         $mediaFile->load(["pages", "siblings", "subfiles"]);
@@ -282,29 +291,43 @@ class MediaController extends Controller
 
     public function editFile($parent_id, $version, $name, $path, $folderId, $size, $parent = null, $alttext = "", $link = "", $id)
     {
-        $url = config('app.url') . "/uploads" . $path;
+        DB::beginTransaction();
 
-        $mediaFile = MediaFile::whereId($id)->firstOrNew();
+        try {
+            $url = config('app.url') . "/uploads" . $path;
 
-        $oldPath = $mediaFile->path;
+            $mediaFile = MediaFile::whereId($id)->firstOrNew();
 
-        $mediaFile->name = $name;
-        $mediaFile->path = $path;
-        $mediaFile->extension = $this->getRealExtension($name);
-        $mediaFile->full_path = "/uploads" . $path;
-        $mediaFile->alt_text = $alttext;
-        $mediaFile->link = $link;
-        $mediaFile->folder_id = $folderId;
-        $mediaFile->size = $size ?? $mediaFile->size;
-        $mediaFile->url = $url;
-        $mediaFile->user_id = Auth::user()->id;
-        $mediaFile->version = $version;
-        $mediaFile->parent_id = $parent_id;
-        $mediaFile->save();
+            $oldPath = $mediaFile->path;
+            $oldUrl = $mediaFile->url;
 
-        if (!Storage::disk('public')->exists($mediaFile->path)) {
-            Storage::disk('public')->move($oldPath, $mediaFile->path);
+            $mediaFile->name = $name;
+            $mediaFile->path = $path;
+            $mediaFile->extension = $this->getRealExtension($name);
+            $mediaFile->full_path = "/uploads" . $path;
+            $mediaFile->alt_text = $alttext;
+            $mediaFile->link = $link;
+            $mediaFile->folder_id = $folderId;
+            $mediaFile->size = $size ?? $mediaFile->size;
+            $mediaFile->url = $url;
+            $mediaFile->user_id = Auth::user()->id;
+            $mediaFile->version = $version;
+            $mediaFile->parent_id = $parent_id;
+            $mediaFile->save();
+
+            if (!Storage::disk('public')->exists($mediaFile->path)) {
+                Storage::disk('public')->move($oldPath, $mediaFile->path);
+            }
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            Log::error("Failed edit file. " . $e->getMessage());
+
+            return $e->getMessage();
         }
+
+        RenameFile::dispatch($oldUrl, $url);
 
         $mediaFile->load(["pages", "siblings", "subfiles"]);
 
@@ -367,29 +390,37 @@ class MediaController extends Controller
 
     public function editFolder(EditMediaFolderRequest $request)
     {
-        $folder = MediaFolder::find($request->id);
+        DB::beginTransaction();
+        try {
+            $folder = MediaFolder::find($request->id);
 
-        $newFolderNameSlugify = Str::slug($request->name, '_');
-        $oldFolderNameSlugify = Str::slug($folder->name, '_');
+            $newFolderNameSlugify = Str::slug($request->name, '_');
+            $oldFolderNameSlugify = Str::slug($folder->name, '_');
 
-        $oldPath = $folder->path;
-        $newPath = Str::replaceLast($oldFolderNameSlugify, $newFolderNameSlugify, $oldPath);
+            $oldPath = $folder->path;
+            $newPath = Str::replaceLast($oldFolderNameSlugify, $newFolderNameSlugify, $oldPath);
 
-        $oldFullPath = public_path("/uploads/" . $oldPath);
-        $newFullPath = public_path("/uploads/" . $newPath);
+            $oldFullPath = public_path("/uploads/" . $oldPath);
+            $newFullPath = public_path("/uploads/" . $newPath);
 
-        $result = rename($oldFullPath, $newFullPath);
+            $result = rename($oldFullPath, $newFullPath);
+            if ($result) {
+                $folder->name = $request->name;
+                $folder->save();
 
-        if ($result) {
-            $folder->name = $request->name;
-            $folder->save();
+                RenameFolder::dispatch($oldPath, $newPath, $folder->id);
 
-            RenameFolder::dispatch($oldPath, $newPath, $folder->id);
+                DB::commit();
+                return response()->json('success', 200);
+            }
 
-            return response()->json('success', 200);
+            DB::rollback();
+        } catch (Exception $e) {
+            throw $e;
+            DB::rollback();
+            Log::error("Failed to update pages when renaming file. " . $e->getMessage());
+            return response()->json('Failed to rename folder.', 400);
         }
-
-        return response()->json('Failed to rename folder.', 400);
     }
 
     public function moveFile(MoveMediaFileRequest $request)

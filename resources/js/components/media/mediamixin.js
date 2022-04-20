@@ -157,6 +157,7 @@ var mediaMixin = {
         renameFolderModal(folder) {
             this.folder_edit_name = folder.name;
             this.folder_edit_id = folder.id;
+            this.folder_edit_directory = folder.parent_id;
             this.$modal.show('edit-folder-modal');
         },
         renameFolder() {
@@ -164,6 +165,7 @@ var mediaMixin = {
                 var formData = new FormData();
                 formData.append('name', this.folder_edit_name);
                 formData.append('id', this.folder_edit_id);
+                formData.append('directory', this.folder_edit_directory);
                 this.loading = true;
                 axios.post('/api/media_manager/folder/edit', formData)
                 .then((response) => {
@@ -287,18 +289,21 @@ var mediaMixin = {
         },
         addFolder() {
             this.errors = null;
+
+            if (this.folderName && this.move_file_to) {
             this.loading = true;
             axios
                 .post('/api/media_manager',
                     {
                         name: this.folderName,
+                        directory: this.move_file_to.id,
                     }
                 )
                 .then((response) => {
                     if (response.status == 201 || response.status == 200) {
                         this.$toast.success('Created Successfully!')
                     }
-                    this.mediaFolders.unshift(response.data.data)
+                    this.getFolders();
                     this.folderName = '';
                     this.loading = false;
                     this.$modal.hide('create-folder-modal')
@@ -308,6 +313,9 @@ var mediaMixin = {
                     this.errors = error.response.data.errors;
                     this.loading = false;
                 });
+            } else {
+                this.folder_error = "Enter folder name od pick a parent folder.";
+            }
         },
         deleteFolder(folder) {
             Swal.fire({
@@ -370,9 +378,9 @@ var mediaMixin = {
                     }
                 })
                 .then((response) => {
-                    console.log(response.data);
                     if (!folderId) {
                         this.mediaFolders = response.data.data;
+                        this.$refs.folders.$forceUpdate();
                     }
 
                     this.inMediaFolders = response.data.data;

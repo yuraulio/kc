@@ -24,8 +24,8 @@ class EditMediaFolderRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:cms_folders',
-            'id' => 'required'
+            'name' => "required|uniqueNameAndParent:{$this->directory}",
+            'directory' => "required"
         ];
     }
 }

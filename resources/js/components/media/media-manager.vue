@@ -8,8 +8,41 @@
                 <ul v-if="errors && errors['name']" class="parsley-errors-list filled" id="parsley-id-7" aria-hidden="false">
                     <li class="parsley-required">{{ errors["name"][0] }}</li>
                 </ul>
+
+                <label class="form-label mt-3">Pick a parent folder</label>
+
+                <vue-nestable v-model="mediaFolders" class="dd-list mb-3">
+                    <vue-nestable-handle slot-scope="{ item, isChild }" :item="item">
+                        <li :key="item.id + uncolapsed.length" v-show="!isChild || uncolapsed.includes(item.id)" class="dd-item" :data-id="item.id">
+                            <button
+                                @click="collapse(item); $forceUpdate();"
+                                v-if="item.children && item.children.length && !uncolapsed.includes(item.children[0].id)"
+                                class="collapse-button"
+                            >
+                                <i class="mdi mdi-plus font-18"></i>
+                            </button>
+                            <button
+                                @click="uncollapse(item)"
+                                v-if="item.children && item.children.length && uncolapsed.includes(item.children[0].id)"
+                                class="collapse-button"
+                            >
+                                <i class="mdi mdi-minus font-18"></i>
+                            </button>
+                            <div @click="move_file_to = item;" :class="'dd-handle ' + (item == move_file_to ? 'selected-folder ' : ' ')">
+                                <i class="mdi mdi-folder-outline font-18 align-middle me-"></i>
+                                {{ item.name }}
+                            </div>
+                        </li>
+                    </vue-nestable-handle>
+                </vue-nestable>
+
+                <template v-if="folder_error">
+                    <p class="text-danger">{{folder_error}}</p>
+                </template>
+
             </div>
         </div>
+
         <div class="row mt-3 mb-3">
             <div class="col-12 text-center">
                 <button @click="addFolder()" type="button" class="btn btn-success waves-effect waves-light m-1" :disabled="loading">
@@ -229,7 +262,7 @@
                         <a href="#" @click.prevent="getFolders(); filesView = false" class="list-group-item border-0 font-14"><i class="mdi mdi-folder-outline font-18 align-middle me-1"></i>Recent Updated</a>
                         <a href="#" @click.prevent="getFiles(); filesView = true;" class="list-group-item border-0 font-14"><i class="mdi mdi-folder-outline font-18 align-middle me-1"></i> All Files</a>
 
-                        <vue-nestable v-model="mediaFolders" :maxDepth="0" class="dd-list">
+                        <vue-nestable ref="folders" v-model="mediaFolders" :maxDepth="0" class="dd-list">
                             <vue-nestable-handle slot-scope="{ item, isChild }" :item="item">
                                 <li :key="item.id + uncolapsed.length" v-show="!isChild || uncolapsed.includes(item.id)" class="dd-item" :data-id="item.id">
                                     <button
@@ -370,7 +403,8 @@ export default {
             file_to_move: null,
             move_file_to: null,
             sizes: [],
-            upload_error: "",
+            upload_error: null,
+            folder_error: null,
         };
     },
     methods: {

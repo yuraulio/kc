@@ -83,7 +83,6 @@ class MoveFile implements ShouldQueue
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
-            throw $e;
             Log::error("Failed to move file. " . $e->getMessage());
         }
     }
