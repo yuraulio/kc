@@ -440,9 +440,9 @@ class HomeController extends Controller
         $data['user']['email'] = $user->email;
         $data['extrainfo'] = ['','',$content->title];
         $data['duration'] =  $content->summary1->where('section','date')->first() ? $content->summary1->where('section','date')->first()->title : '';
-
+        $data['template'] = 'join_activation';
         $data['eventSlug'] =  url('/') . '/' . $content->getSlug();
-        //$user->notify(new WelcomeEmail($user,$data));
+        $user->notify(new WelcomeEmail($user,$data));
 
         
        
@@ -573,6 +573,7 @@ class HomeController extends Controller
         $data['sumStudents'] = get_sum_students_course($event->category->first());//isset($event->category[0]) ? $event->category[0]->getSumOfStudents() : 0; 
         $data['showSpecial'] = false;
         $data['showAlumni'] = $event->ticket()->where('type','Alumni')->where('active',true)->first() ? true : false;;
+        $data['is_joined_waiting_list'] = 0;
 
 
         if($event->ticket()->where('type','Early Bird')->first()){
@@ -624,6 +625,8 @@ class HomeController extends Controller
 
         if(Auth::user() && count(Auth::user()->events->where('id',$event->id)) > 0){
             $data['is_event_paid'] = 1;
+        }else if(Auth::user() && $event->waitingList()->where('user_id',Auth::user()->id)->first()){
+            $data['is_joined_waiting_list'] = 1;
         }
 
         $this->fbp->sendViewContentEvent($data);

@@ -429,6 +429,10 @@ label.custom-control-label{font-size:19px;}
         max-width:450px
     }
 
+    span.waiting{
+        margin: auto;
+    }
+
 /* responsive media */
 
 @media(min-width:993px){

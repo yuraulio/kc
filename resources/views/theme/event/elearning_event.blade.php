@@ -53,7 +53,7 @@
                   <a href="#" class="mobile-tabs-menu">Menu</a>
                   <ul class="clearfix tab-controls-list">
                      @if(isset($sections['overview']) && $sections['overview']->first())<li><a href="#overview" class="active">{{$sections['overview']->first()->tab_title}}</a></li>@endif
-                     @if($estatus == 0 || $estatus == 2)
+                     @if($estatus == 0 || $estatus == 2 || $estatus == 5)
 
                         @if(isset($sections['benefits'][0]) && $sections['benefits']->first()->visible)<li><a href="#benefits">{{$sections['benefits']->first()->tab_title}}</a></li>@endif
 
@@ -71,10 +71,10 @@
                   @if($estatus == 0 && !$is_event_paid)
                   <a href="#seats" class="btn btn--lg btn--primary go-to-href">ENROLL NOW</a>
 
-                  @elseif($estatus == 5)
-                  <a href="{{ route('cart.add-item', [ $event->id,'waiting', 8 ]) }}" class="btn btn--lg btn--primary go-to-href elearning-free">ENROLL FOR WAITING LIST</a>
+                  @elseif($estatus == 5 && !$is_joined_waiting_list && !$is_event_paid)
+                  <a href="{{ route('cart.add-item', [ $event->id,'waiting', 8 ]) }}" class="btn btn--lg btn--primary go-to-href elearning-free">JOIN WAITING LIST</a>
 
-                  @elseif($estatus != 3 && $estatus != 1 && !$is_event_paid)
+                  @elseif($estatus != 3 && $estatus != 5 && $estatus != 1 && !$is_event_paid)
                   <a href="#seats" class="btn btn--lg btn--primary go-to-href go-to-href soldout">SOLD OUT</a>
                   @endif
                   <!-- /.container -->
@@ -262,7 +262,7 @@
                   </div>
                   <!-- /.tab-content-wrapper -->
                </div>
-               @if($estatus !== 5)
+               
                <div id="benefits" class="tab-content-wrapper">
                   <div class="course-benefits-text">
                      <div class="container">
@@ -584,7 +584,7 @@
                   </div>
                   <!-- /.tab-content-wrapper -->
                </div>
-               @endif
+               
 
 
                <div id="faq" class="tab-content-wrapper">

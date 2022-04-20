@@ -774,6 +774,9 @@ class InfoController extends Controller
                     $user->cart->delete();
                 }
 
+                $data['template'] = $transaction->event->first() && $user->waitingList()->where('event_id',$transaction->event->first()->id)->first() 
+                                        ? 'waiting_list_welcome' : 'welcome';
+
                 $user->notify(new WelcomeEmail($user,$data));
 
                 /*if($elearning){
@@ -794,7 +797,7 @@ class InfoController extends Controller
             $muser['event_title'] =$transaction->event->first()->title;
 
             $data['firstName'] = $transaction->user->first()->firstname;
-            $data['eventTitle'] =$transaction->event->first()->title;
+            $data['eventTitle'] = $transaction->event->first()->title;
             
 
             if(Session::has('installments') && Session::get('installments') <= 1){
