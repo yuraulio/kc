@@ -140,16 +140,18 @@ class NewAdminMediaManager extends Command
                     }
                 }
 
-                $mediaFile = MediaFile::wherePath($filepath)->firstOrNew();
+                $path = "/" . (ltrim($filepath, "/"));
+
+                $mediaFile = MediaFile::wherePath($path)->firstOrNew();
                 $mediaFile->name = basename($file);
-                $mediaFile->path = "/" . (ltrim($filepath, "/"));
+                $mediaFile->path = $path;
                 $mediaFile->extension = $file->getExtension();
                 $mediaFile->folder_id = $folderId;
                 $mediaFile->size = $file->getSize();
                 $mediaFile->url = config('app.url'). "/uploads" . $filepath;
                 $mediaFile->created_at = filemtime($file);
-                $mediaFile->parent_id = $parentId;
-                $mediaFile->version = $fileVersion;
+                $mediaFile->parent_id = $mediaFile->parent_id ? $mediaFile->parent_id : $parentId;
+                $mediaFile->version = $mediaFile->version ? $mediaFile->version : $fileVersion;
                 $mediaFile->save();
 
                 if ($fileVersion == "original") {
