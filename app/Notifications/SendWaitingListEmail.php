@@ -47,12 +47,16 @@ class SendWaitingListEmail extends Notification
      */
     public function toMail($notifiable)
     {
-        $url = url('/') . '/' . $this->event->getSlug() . '?lo=' . encrypt($this->user->email);
+
+        $data['urlEnrol'] = url('/') . '/' . $this->event->getSlug() . '?lo=' . encrypt($this->user->email);
+        $data['eventTitle'] = $this->event->title;
+        $data['firstname'] = $this->user->firstname;
+        $template = 'emails.user.waiting_list_open';
 
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action',$url)
-                    ->line('Thank you for using our application!');
+                    ->from('info@knowcrunch.com', 'Knowcrunch')
+                    ->subject('Knowcrunch - Hi '. $data['firstname'] . '. Course is available')
+                    ->view($template,$data);
     }
 
     /**

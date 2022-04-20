@@ -220,6 +220,9 @@
                                     @if($etstatus == 0 && $price > 0)
                                     <div class="price">from €{{$price}}</div>
                                     <a href="{{ $slug }}" class="btn btn--secondary btn--md">Course Details</a>
+                                    @elseif($etstatus == 5)
+                                    <div class="price">Course coming soon</div>
+                                    <a href="{{ $slug }}" class="btn btn--secondary btn--md">JOIN WAITING LIST</a>
                                     @else
                                     <a href="{{ $slug }}" class="btn btn--secondary btn--md btn--sold-out">sold out</a>
                                     @endif

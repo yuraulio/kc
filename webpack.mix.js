@@ -62,7 +62,7 @@ mix.js('resources/js/app.js', 'public/js')
         'public/new_cart/css/style.css',
     ], 'public/new_cart/version/style_ver.css');
 
-      /* */
+      /* **/
 
       mix.scripts([
 

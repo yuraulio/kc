@@ -96,15 +96,23 @@
 						</div>
 
 						<ul class="main-menu">
-                            @if (!empty($header_menus))
+							@if (!empty($header_menus))
                                 @foreach ($header_menus['menu']['Header'] as $key => $row)
+                                <?php //dd($row['header_menus']['data']);
+                                //dd($row); ?>
                                     <li>
-                                        <a title="{{ $row['data']['name'] }}" href="{{'/' . $row['data']['slugable']['slug'] }}">{{ $row['data']['name'] }}</a>
+                                        <a title="{{ $row['data']['name'] }}" href="{{ $row['data']['slugable']['slug'] }}">{{ $row['data']['name'] }}</a>
                                     </li>
 								@endforeach
+
+								<li>
+								<a title="Corporate Training" href="/corporate-training">Corporate Training</a>
+								</li>
+
                                 <li>
                                     <a title="Blog" href="/en/blog">Blog</a>
                                 </li>
+								
                             @endif
 						</ul>
 					</div>

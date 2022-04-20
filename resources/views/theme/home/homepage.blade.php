@@ -131,8 +131,10 @@
                               <span class="date">{{$dateLaunch}} </span>
                            @if(isset($row['slugable']) && $row['slugable']['slug'] != '')
 
-                              @if($row['status'] != 0)
+                              @if($row['status'] != 0 && $row['status'] != 5)
                               <a href="{{ $row['slugable']['slug'] }}" class="btn btn--sm btn--secondary btn--sold-out">sold out</a>
+                              @elseif($row['status'] == 5)
+                              <a href="{{ $row['slugable']['slug'] }}" class="btn btn--sm btn--secondary">JOIN WAITING LIST</a>
                               @else
                               <a href="{{ $row['slugable']['slug'] }}" class="btn btn--sm btn--secondary">course details</a>
                               @endif
