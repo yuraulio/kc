@@ -40,7 +40,7 @@
                     <input v-model="link" type="text" id="link" class="form-control">
                 </div>
 
-                <p>Select folder:</p>
+                <label class="form-label">Pick a folder</label>
 
                 <vue-nestable v-model="mediaFolders" class="dd-list mb-3">
                     <vue-nestable-handle slot-scope="{ item, isChild }" :item="item">
@@ -66,6 +66,10 @@
                         </li>
                     </vue-nestable-handle>
                 </vue-nestable>
+
+                <template v-if="upload_error">
+                    <p class="text-danger">{{upload_error}}</p>
+                </template>
 
                 <button @click="uploadImgFile()" type="button" class="btn btn-success waves-effect waves-light" :disabled="loading">
                     <i v-if="!loading" class="fe-check-circle me-1"></i>
@@ -161,7 +165,7 @@
                     <input @change="registerFile" type="file" id="example-fileinput" class="form-control">
                 </div>
 
-                <p>Select folder:</p>
+                <label class="form-label">Pick a folder</label>
 
                 <vue-nestable v-model="mediaFolders" class="dd-list mb-3">
                     <vue-nestable-handle slot-scope="{ item, isChild }" :item="item">
@@ -188,6 +192,10 @@
                     </vue-nestable-handle>
                 </vue-nestable>
 
+                <template v-if="upload_error">
+                    <p class="text-danger">{{upload_error}}</p>
+                </template>
+
                 <button @click="uploadRegFile()" type="button" class="btn btn-success waves-effect waves-light" :disabled="loading">
                     <i v-if="!loading" class="fe-check-circle me-1"></i>
                     <i v-else class="fas fa-spinner fa-spin"></i>
@@ -207,13 +215,13 @@
                 <!-- Left sidebar -->
                 <div class="inbox-leftbar p-0">
                     <div class="btn-group d-block mb-2 text-center">
-                        <button class="btn btn-sm btn-info" @click.prevent="$modal.show('create-folder-modal')">
+                        <button class="btn btn-sm btn-info" @click.prevent="$modal.show('create-folder-modal'); move_file_to = null;">
                             <i class="mdi mdi-plus"></i> <i class="mdi mdi-folder-plus-outline me-1"></i>
                         </button>
-                        <button class="btn btn-sm btn-warning" @click.prevent="$modal.show('upload-media-modal')">
+                        <button class="btn btn-sm btn-warning" @click.prevent="$modal.show('upload-media-modal'); move_file_to = null;">
                             <i class="mdi mdi-plus"></i> <i class="mdi mdi-image me-1"></i>
                         </button>
-                        <button class="btn btn-sm btn-primary" @click.prevent="$modal.show('upload-file-modal')">
+                        <button class="btn btn-sm btn-primary" @click.prevent="$modal.show('upload-file-modal'); move_file_to = null;">
                             <i class="mdi mdi-plus"></i> <i class="mdi mdi-upload me-1"></i>
                         </button>
                     </div>
@@ -361,9 +369,8 @@ export default {
             folder_edit_id: null,
             file_to_move: null,
             move_file_to: null,
-            sizes: [
-
-            ],
+            sizes: [],
+            upload_error: "",
         };
     },
     methods: {

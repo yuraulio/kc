@@ -60,7 +60,7 @@ var mediaMixin = {
                   "version": "social-media-sharing",
                   "description": "Applies to: Social media sharing default image"
                 }
-              ]
+            ]
         }
     },
     methods: {
@@ -90,10 +90,11 @@ var mediaMixin = {
         uploadRegFile() {
             var formData = new FormData();
             var imagefile = this.regFile;
-            formData.append('directory', this.move_file_to.id);
-            if (imagefile) {
+            if (imagefile && this.move_file_to) {
+                this.upload_error = null;
                 this.loading = true;
                 formData.append("file", imagefile);
+                formData.append('directory', this.move_file_to.id);
                 axios.post('/api/media_manager/upload_reg_file', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
@@ -115,15 +116,14 @@ var mediaMixin = {
                     console.log(error)
                     this.loading = false;
                 })
+            } else {
+                this.upload_error = "Pick file or folder.";
             }
         },
         uploadImgFile() {
             var formData = new FormData();
             var imagefile = this.regFile;
-            if (this.selectedFolder) {
-                formData.append('directory', this.selectedFolder.id);
-            }
-            if (imagefile) {
+            if (imagefile && this.move_file_to) {
                 this.loading = true;
                 formData.append("file", imagefile);
                 formData.append("alt_text", this.alt_text);
@@ -150,6 +150,8 @@ var mediaMixin = {
                     console.log(error)
                     this.loading = false;
                 })
+            } else {
+                this.upload_error = "Pick file or folder.";
             }
         },
         renameFolderModal(folder) {
