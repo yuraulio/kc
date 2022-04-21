@@ -101,7 +101,7 @@
                         <div class="col-sm-12">
 
                             <h5>Original image</h5>
-                            <img @click="version='original'; selectedVersion=null; imgname=parrentImage.name; alttext=parrentImage.alt_text; link=parrentImage.link" crossorigin="anonymous" :src="parrentImage ? parrentImage.url : ''" alt="image" class="img-fluid rounded" />
+                            <img @click="version='original'; selectedVersion=null; imgname=parrentImage.name; alttext=parrentImage.alt_text; link=parrentImage.link" crossorigin="anonymous" :src="parrentImage ? ('/uploads/' + parrentImage.path) : ''" alt="image" class="img-fluid rounded" />
                             <hr>
 
                             <template v-for="(version1, index) in versions">
@@ -111,7 +111,7 @@
                                 </h5>
                                 <p class="text-muted d-block mb-2">{{ version1.description }}</p>
                                 <template v-if="findVersionData(version1.version) != null">
-                                    <img @click="version=version1.version; selectedVersion=version1; versionSelected();" crossorigin="anonymous" :src="findVersionData(version1.version).url" alt="image" class="img-fluid rounded" />
+                                    <img @click="version=version1.version; selectedVersion=version1; versionSelected();" crossorigin="anonymous" :src="'/uploads/' + findVersionData(version1.version).path" alt="image" class="img-fluid rounded" />
                                 </template>
                                 <template v-else>
                                     <button @click="version=version1.version; selectedVersion=version1; versionSelected();" class="btn btn-primary">Set image</button>
