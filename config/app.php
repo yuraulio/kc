@@ -186,6 +186,8 @@ return [
         Gloudemans\ShoppingCart\ShoppingcartServiceProvider::class,
         //Barryvdh\DomPDF\ServiceProvider::class,
 
+        OwenIt\Auditing\AuditingServiceProvider::class,
+
         msonowal\LaravelTinify\LaravelTinifyServiceProvider::class,
     ],
 

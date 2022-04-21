@@ -223,6 +223,7 @@
         "icon": "dripicons-photo-group",
         "tab": "Content",
         "simple_view": true,
+        "dynamic": false,
         "inputs": [
             {
                 "type": "text",

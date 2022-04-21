@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Bus\Queueable;
 use App\Model\Admin\MediaFile;
 use App\Model\Admin\MediaFolder;
+use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
@@ -14,6 +15,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Support\Facades\DB;
 
 class MoveFile implements ShouldQueue
 {
@@ -40,22 +42,48 @@ class MoveFile implements ShouldQueue
      */
     public function handle()
     {
-        $parentFile = MediaFile::find($this->fileId);
-        $folder = MediaFolder::find($this->folderId);
+        DB::beginTransaction();
+        try {
+            $parentFile = MediaFile::find($this->fileId);
+            $folder = MediaFolder::find($this->folderId);
 
-        $files = $parentFile->subfiles()->get();
-        $files->push($parentFile);
+            $files = $parentFile->subfiles()->get();
+            $files->push($parentFile);
 
-        foreach ($files as $file) {
-            $newPath = '/' . trim(rtrim('/' . $folder->path, '/'), '/') . '/' . $file->name;
-            Storage::disk('public')->move($file->path, $newPath);
+            foreach ($files as $file) {
+                $newPath = '/' . trim(rtrim('/' . $folder->path, '/'), '/') . '/' . $file->name;
 
-            $file->url = Str::replaceLast($file->path, $newPath, $file->url);
-            $file->full_path = Str::replaceLast($file->path, $newPath, $file->full_path);
-            $file->path = Str::replaceLast($file->path, $newPath, $file->path);
-            $file->folder_id = $folder->id;
+                $oldFileUrl = $file->url;
+                $oldFilePath = $file->path;
 
-            $file->save();
+                $file->url = Str::replaceLast($file->path, $newPath, $file->url);
+                $file->full_path = Str::replaceLast($file->path, $newPath, $file->full_path);
+                $file->path = Str::replaceLast($file->path, $newPath, $file->path);
+                $file->folder_id = $folder->id;
+
+                $file->save();
+
+                $newFileUrl = $file->url;
+                $newFilePath = $file->path;
+
+                $pages = $file->pages()->get();
+
+                foreach ($pages as $page) {
+                    $content = $page->content;
+                    $content = str_replace($oldFileUrl, $newFileUrl, $content);
+                    $content = str_replace($oldFilePath, $newFilePath, $content);
+                    $page->content = $content;
+                    $page->save();
+                }
+
+                // move file
+                Storage::disk('public')->move($oldFilePath, $newPath);
+            }
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            Log::error("Failed to move file. " . $e->getMessage());
         }
     }
 }

@@ -357,14 +357,7 @@ class PagesController extends Controller
 
         foreach ($data as $item) {
             if (is_string($item)) {
-                if (strpos($item, env('APP_URL') . '/uploads/pages_media') !== false) {
-                    $image = MediaFile::whereUrl($item)->first();
-                    if ($image) {
-                        array_push($images, $image->id);
-                    }
-                }
-                // sometimes there a two slashed
-                if (strpos($item, env('APP_URL') . '/uploads//pages_media') !== false) {
+                if (strpos($item, env('APP_URL') . '/uploads/') !== false) {
                     $image = MediaFile::whereUrl($item)->first();
                     if ($image) {
                         array_push($images, $image->id);

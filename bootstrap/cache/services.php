@@ -1,5 +1,5 @@
 <?php return array (
-  'providers' => 
+  'providers' =>
   array (
     0 => 'Illuminate\\Auth\\AuthServiceProvider',
     1 => 'Illuminate\\Broadcasting\\BroadcastServiceProvider',
@@ -44,9 +44,9 @@
     40 => 'Laravel\\Ui\\UiServiceProvider',
     41 => 'Laravelium\\Feed\\FeedServiceProvider',
     42 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
-    43 => 'msonowal\\LaravelTinify\\LaravelTinifyServiceProvider',
-    44 => 'Carbon\\Laravel\\ServiceProvider',
-    45 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
+    43 => 'Carbon\\Laravel\\ServiceProvider',
+    44 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
+    45 => 'OwenIt\\Auditing\\AuditingServiceProvider',
     46 => 'Propaganistas\\LaravelPhone\\PhoneServiceProvider',
     47 => 'Sentry\\Laravel\\ServiceProvider',
     48 => 'Sentry\\Laravel\\Tracing\\ServiceProvider',
@@ -65,9 +65,10 @@
     61 => 'App\\Providers\\RouteServiceProvider',
     62 => 'Barryvdh\\Debugbar\\ServiceProvider',
     63 => 'Gloudemans\\ShoppingCart\\ShoppingcartServiceProvider',
-    64 => 'msonowal\\LaravelTinify\\LaravelTinifyServiceProvider',
+    64 => 'OwenIt\\Auditing\\AuditingServiceProvider',
+    65 => 'msonowal\\LaravelTinify\\LaravelTinifyServiceProvider',
   ),
-  'eager' => 
+  'eager' =>
   array (
     0 => 'Illuminate\\Auth\\AuthServiceProvider',
     1 => 'Illuminate\\Cookie\\CookieServiceProvider',
@@ -120,7 +121,7 @@
     48 => 'Gloudemans\\ShoppingCart\\ShoppingcartServiceProvider',
     49 => 'msonowal\\LaravelTinify\\LaravelTinifyServiceProvider',
   ),
-  'deferred' => 
+  'deferred' =>
   array (
     'Illuminate\\Broadcasting\\BroadcastManager' => 'Illuminate\\Broadcasting\\BroadcastServiceProvider',
     'Illuminate\\Contracts\\Broadcasting\\Factory' => 'Illuminate\\Broadcasting\\BroadcastServiceProvider',
@@ -247,52 +248,56 @@
     'command.tinker' => 'Laravel\\Tinker\\TinkerServiceProvider',
     'feed' => 'Laravelium\\Feed\\FeedServiceProvider',
     'Laravelium\\Feed\\Feed' => 'Laravelium\\Feed\\FeedServiceProvider',
+    'OwenIt\\Auditing\\Contracts\\Auditor' => 'OwenIt\\Auditing\\AuditingServiceProvider',
   ),
-  'when' => 
+  'when' =>
   array (
-    'Illuminate\\Broadcasting\\BroadcastServiceProvider' => 
+    'Illuminate\\Broadcasting\\BroadcastServiceProvider' =>
     array (
     ),
-    'Illuminate\\Bus\\BusServiceProvider' => 
+    'Illuminate\\Bus\\BusServiceProvider' =>
     array (
     ),
-    'Illuminate\\Cache\\CacheServiceProvider' => 
+    'Illuminate\\Cache\\CacheServiceProvider' =>
     array (
     ),
-    'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider' => 
+    'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider' =>
     array (
     ),
-    'Illuminate\\Hashing\\HashServiceProvider' => 
+    'Illuminate\\Hashing\\HashServiceProvider' =>
     array (
     ),
-    'Illuminate\\Mail\\MailServiceProvider' => 
+    'Illuminate\\Mail\\MailServiceProvider' =>
     array (
     ),
-    'Illuminate\\Pipeline\\PipelineServiceProvider' => 
+    'Illuminate\\Pipeline\\PipelineServiceProvider' =>
     array (
     ),
-    'Illuminate\\Queue\\QueueServiceProvider' => 
+    'Illuminate\\Queue\\QueueServiceProvider' =>
     array (
     ),
-    'Illuminate\\Redis\\RedisServiceProvider' => 
+    'Illuminate\\Redis\\RedisServiceProvider' =>
     array (
     ),
-    'Illuminate\\Auth\\Passwords\\PasswordResetServiceProvider' => 
+    'Illuminate\\Auth\\Passwords\\PasswordResetServiceProvider' =>
     array (
     ),
-    'Illuminate\\Translation\\TranslationServiceProvider' => 
+    'Illuminate\\Translation\\TranslationServiceProvider' =>
     array (
     ),
-    'Illuminate\\Validation\\ValidationServiceProvider' => 
+    'Illuminate\\Validation\\ValidationServiceProvider' =>
     array (
     ),
-    'Laravel\\Sail\\SailServiceProvider' => 
+    'Laravel\\Sail\\SailServiceProvider' =>
     array (
     ),
-    'Laravel\\Tinker\\TinkerServiceProvider' => 
+    'Laravel\\Tinker\\TinkerServiceProvider' =>
     array (
     ),
-    'Laravelium\\Feed\\FeedServiceProvider' => 
+    'Laravelium\\Feed\\FeedServiceProvider' =>
+    array (
+    ),
+    'OwenIt\\Auditing\\AuditingServiceProvider' =>
     array (
     ),
   ),

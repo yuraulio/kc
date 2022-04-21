@@ -13,17 +13,67 @@ use Illuminate\Database\Eloquent\Builder;
 use CodexShaper\Menu\Models\Menu;
 use App\Model\Slug;
 use App\Traits\PaginateTable;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Page extends Model
+class Page extends Model implements Auditable
 {
     use HasFactory;
     use SearchFilter;
     use Sluggable;
     use PaginateTable;
+    use \OwenIt\Auditing\Auditable;
 
     protected $table = 'cms_pages';
     public $asYouType = true;
     protected $with = ['categories'];
+
+    const VERSIONS = [
+        [
+            "instructors-testimonials",
+            470,
+            470
+        ],
+        [
+            "event-card",
+            542,
+            291
+        ],
+        [
+            "users",
+            470,
+            470
+        ],
+        [
+            "header-image",
+            2880,
+            1248
+        ],
+        [
+            "instructors-small",
+            90,
+            90
+        ],
+        [
+            "feed-image",
+            300,
+            300
+        ],
+        [
+            "social-media-sharing",
+            1920,
+            832
+        ],
+        [
+            "blog-content",
+            680,
+            320
+        ],
+        [
+            "blog-featured",
+            343,
+            193
+        ]
+    ];
 
     /**
      * The "booted" method of the model.

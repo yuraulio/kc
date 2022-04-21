@@ -39,3 +39,7 @@ storage/*.index*
 /public/assets/vendor/MediaManager/*
 /public/mix-manifest.json
 supervisord.conf
+/app/overrides/dompdf
+composer.phar
+public/*.tar.gz
+uploads

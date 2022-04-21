@@ -8,8 +8,41 @@
                 <ul v-if="errors && errors['name']" class="parsley-errors-list filled" id="parsley-id-7" aria-hidden="false">
                     <li class="parsley-required">{{ errors["name"][0] }}</li>
                 </ul>
+
+                <label class="form-label mt-3">Pick a parent folder</label>
+
+                <vue-nestable v-model="mediaFolders" class="dd-list mb-3">
+                    <vue-nestable-handle slot-scope="{ item, isChild }" :item="item">
+                        <li :key="item.id + uncolapsed.length" v-show="!isChild || uncolapsed.includes(item.id)" class="dd-item" :data-id="item.id">
+                            <button
+                                @click="collapse(item); $forceUpdate();"
+                                v-if="item.children && item.children.length && !uncolapsed.includes(item.children[0].id)"
+                                class="collapse-button"
+                            >
+                                <i class="mdi mdi-plus font-18"></i>
+                            </button>
+                            <button
+                                @click="uncollapse(item)"
+                                v-if="item.children && item.children.length && uncolapsed.includes(item.children[0].id)"
+                                class="collapse-button"
+                            >
+                                <i class="mdi mdi-minus font-18"></i>
+                            </button>
+                            <div @click="move_file_to = item;" :class="'dd-handle ' + (item == move_file_to ? 'selected-folder ' : ' ')">
+                                <i class="mdi mdi-folder-outline font-18 align-middle me-"></i>
+                                {{ item.name }}
+                            </div>
+                        </li>
+                    </vue-nestable-handle>
+                </vue-nestable>
+
+                <template v-if="folder_error">
+                    <p class="text-danger">{{folder_error}}</p>
+                </template>
+
             </div>
         </div>
+
         <div class="row mt-3 mb-3">
             <div class="col-12 text-center">
                 <button @click="addFolder()" type="button" class="btn btn-success waves-effect waves-light m-1" :disabled="loading">
@@ -40,6 +73,37 @@
                     <input v-model="link" type="text" id="link" class="form-control">
                 </div>
 
+                <label class="form-label">Pick a folder</label>
+
+                <vue-nestable v-model="mediaFolders" class="dd-list mb-3">
+                    <vue-nestable-handle slot-scope="{ item, isChild }" :item="item">
+                        <li :key="item.id + uncolapsed.length" v-show="!isChild || uncolapsed.includes(item.id)" class="dd-item" :data-id="item.id">
+                            <button
+                                @click="collapse(item); $forceUpdate();"
+                                v-if="item.children && item.children.length && !uncolapsed.includes(item.children[0].id)"
+                                class="collapse-button"
+                            >
+                                <i class="mdi mdi-plus font-18"></i>
+                            </button>
+                            <button
+                                @click="uncollapse(item)"
+                                v-if="item.children && item.children.length && uncolapsed.includes(item.children[0].id)"
+                                class="collapse-button"
+                            >
+                                <i class="mdi mdi-minus font-18"></i>
+                            </button>
+                            <div @click="move_file_to = item;" :class="'dd-handle ' + (item == move_file_to ? 'selected-folder ' : ' ')">
+                                <i class="mdi mdi-folder-outline font-18 align-middle me-"></i>
+                                {{ item.name }}
+                            </div>
+                        </li>
+                    </vue-nestable-handle>
+                </vue-nestable>
+
+                <template v-if="upload_error">
+                    <p class="text-danger">{{upload_error}}</p>
+                </template>
+
                 <button @click="uploadImgFile()" type="button" class="btn btn-success waves-effect waves-light" :disabled="loading">
                     <i v-if="!loading" class="fe-check-circle me-1"></i>
                     <i v-else class="fas fa-spinner fa-spin"></i>
@@ -61,7 +125,7 @@
                 <h5>Move file {{ file_to_move ? file_to_move.name : "" }}</h5>
                 <p>Select new folder:</p>
 
-                <vue-nestable v-model="mediaFolders" :maxDepth="0" class="dd-list mb-2">
+                <vue-nestable v-model="mediaFolders" class="dd-list mb-2">
                     <vue-nestable-handle slot-scope="{ item, isChild }" :item="item">
                         <li :key="item.id + uncolapsed.length" v-show="!isChild || uncolapsed.includes(item.id)" class="dd-item" :data-id="item.id">
                             <button
@@ -134,6 +198,37 @@
                     <input @change="registerFile" type="file" id="example-fileinput" class="form-control">
                 </div>
 
+                <label class="form-label">Pick a folder</label>
+
+                <vue-nestable v-model="mediaFolders" class="dd-list mb-3">
+                    <vue-nestable-handle slot-scope="{ item, isChild }" :item="item">
+                        <li :key="item.id + uncolapsed.length" v-show="!isChild || uncolapsed.includes(item.id)" class="dd-item" :data-id="item.id">
+                            <button
+                                @click="collapse(item); $forceUpdate();"
+                                v-if="item.children && item.children.length && !uncolapsed.includes(item.children[0].id)"
+                                class="collapse-button"
+                            >
+                                <i class="mdi mdi-plus font-18"></i>
+                            </button>
+                            <button
+                                @click="uncollapse(item)"
+                                v-if="item.children && item.children.length && uncolapsed.includes(item.children[0].id)"
+                                class="collapse-button"
+                            >
+                                <i class="mdi mdi-minus font-18"></i>
+                            </button>
+                            <div @click="move_file_to = item;" :class="'dd-handle ' + (item == move_file_to ? 'selected-folder ' : ' ')">
+                                <i class="mdi mdi-folder-outline font-18 align-middle me-"></i>
+                                {{ item.name }}
+                            </div>
+                        </li>
+                    </vue-nestable-handle>
+                </vue-nestable>
+
+                <template v-if="upload_error">
+                    <p class="text-danger">{{upload_error}}</p>
+                </template>
+
                 <button @click="uploadRegFile()" type="button" class="btn btn-success waves-effect waves-light" :disabled="loading">
                     <i v-if="!loading" class="fe-check-circle me-1"></i>
                     <i v-else class="fas fa-spinner fa-spin"></i>
@@ -149,17 +244,17 @@
     <!-- Right Sidebar -->
     <div class="col-12">
         <div class="card">
-            <div class="card-body">
+            <div class="card-body p-2">
                 <!-- Left sidebar -->
-                <div class="inbox-leftbar">
+                <div class="inbox-leftbar p-0">
                     <div class="btn-group d-block mb-2 text-center">
-                        <button class="btn btn-sm btn-info" @click.prevent="$modal.show('create-folder-modal')">
+                        <button class="btn btn-sm btn-info" @click.prevent="$modal.show('create-folder-modal'); move_file_to = null;">
                             <i class="mdi mdi-plus"></i> <i class="mdi mdi-folder-plus-outline me-1"></i>
                         </button>
-                        <button class="btn btn-sm btn-warning" @click.prevent="$modal.show('upload-media-modal')">
+                        <button class="btn btn-sm btn-warning" @click.prevent="$modal.show('upload-media-modal'); move_file_to = null;">
                             <i class="mdi mdi-plus"></i> <i class="mdi mdi-image me-1"></i>
                         </button>
-                        <button class="btn btn-sm btn-primary" @click.prevent="$modal.show('upload-file-modal')">
+                        <button class="btn btn-sm btn-primary" @click.prevent="$modal.show('upload-file-modal'); move_file_to = null;">
                             <i class="mdi mdi-plus"></i> <i class="mdi mdi-upload me-1"></i>
                         </button>
                     </div>
@@ -167,7 +262,7 @@
                         <a href="#" @click.prevent="getFolders(); filesView = false" class="list-group-item border-0 font-14"><i class="mdi mdi-folder-outline font-18 align-middle me-1"></i>Recent Updated</a>
                         <a href="#" @click.prevent="getFiles(); filesView = true;" class="list-group-item border-0 font-14"><i class="mdi mdi-folder-outline font-18 align-middle me-1"></i> All Files</a>
 
-                        <vue-nestable v-model="mediaFolders" :maxDepth="0" class="dd-list">
+                        <vue-nestable ref="folders" v-model="mediaFolders" :maxDepth="0" class="dd-list">
                             <vue-nestable-handle slot-scope="{ item, isChild }" :item="item">
                                 <li :key="item.id + uncolapsed.length" v-show="!isChild || uncolapsed.includes(item.id)" class="dd-item" :data-id="item.id">
                                     <button
@@ -307,9 +402,9 @@ export default {
             folder_edit_id: null,
             file_to_move: null,
             move_file_to: null,
-            sizes: [
-
-            ],
+            sizes: [],
+            upload_error: null,
+            folder_error: null,
         };
     },
     methods: {
@@ -359,6 +454,9 @@ export default {
 }
 .media-manager .original-floder {
     border: 1px solid #1abc9c!important;
+}
+.media-manager ol.nestable-list {
+    padding-left: 10px;
 }
 </style>
 

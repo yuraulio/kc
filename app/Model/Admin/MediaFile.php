@@ -7,12 +7,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\SearchFilter;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class MediaFile extends Model
+class MediaFile extends Model implements Auditable
 {
     use HasFactory;
     use SearchFilter;
-    use SoftDeletes;
+    use \OwenIt\Auditing\Auditable;
+    // use SoftDeletes;
 
     protected $table = 'cms_files';
     public $asYouType = true;
