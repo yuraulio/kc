@@ -23,6 +23,7 @@ use App\Http\Requests\EditMediaFolderRequest;
 use App\Http\Requests\CreateMediaFolderRequest;
 use App\Jobs\RenameFile;
 use App\Jobs\TinifyImage;
+use App\Model\Admin\Page;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 
