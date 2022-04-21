@@ -62,7 +62,7 @@
                         <div class="alert-wrapper success-alert">
                             <div class="alert-inner">
                                 <p id="contact-success"></p>
-                                <a href="javascript:void(0)" class="close-alert"><img src="http://admin.knowcrunch.local/theme/assets/images/icons/alert-icons/icon-close-alert.svg" alt="Close Alert"></a>
+                                <a href="javascript:void(0)" class="close-alert"><img src="/theme/assets/images/icons/alert-icons/icon-close-alert.svg" alt="Close Alert"></a>
                             </div>
                         </div>
                     </div>
@@ -165,7 +165,7 @@
                         <div class="alert-wrapper success-alert">
                             <div class="alert-inner">
                                 <p id="coorporate-success"></p>
-                                <a href="javascript:void(0)" class="close-alert"><img src="http://admin.knowcrunch.local/theme/assets/images/icons/alert-icons/icon-close-alert.svg" alt="Close Alert"></a>
+                                <a href="javascript:void(0)" class="close-alert"><img src="/theme/assets/images/icons/alert-icons/icon-close-alert.svg" alt="Close Alert"></a>
                             </div>
                         </div>
                     </div>
@@ -311,7 +311,7 @@
                         <div class="alert-wrapper success-alert">
                             <div class="alert-inner">
                                 <p id="beIns-success"></p>
-                                <a href="javascript:void(0)" class="close-alert"><img src="http://admin.knowcrunch.local/theme/assets/images/icons/alert-icons/icon-close-alert.svg" alt="Close Alert"></a>
+                                <a href="javascript:void(0)" class="close-alert"><img src="/theme/assets/images/icons/alert-icons/icon-close-alert.svg" alt="Close Alert"></a>
                             </div>
                         </div>
                     </div>

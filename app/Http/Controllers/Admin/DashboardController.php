@@ -91,6 +91,9 @@ class DashboardController extends Controller
                 $dynamicPageData['homeLogos'] = Logos::with('medias')->where('type', 'logos')->inRandomOrder()->take(6)->get()->toArray();
             }
 
+            $dynamicPageData['brands'] = Logos::with('medias')->where('type', 'brands')->orderBy('name', 'asc')->get()->toArray();
+            $dynamicPageData['logos'] = Logos::with('medias')->where('type', 'logos')->orderBy('name', 'asc')->get()->toArray();
+
             return view('new_web.page', [
                 'content' => json_decode($page->content),
                 'page_id' => $page->id,
