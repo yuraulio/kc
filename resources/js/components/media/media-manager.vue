@@ -259,8 +259,8 @@
                         </button>
                     </div>
                     <div class="mail-list mt-3">
-                        <a href="#" @click.prevent="getFolders(); filesView = false" class="list-group-item border-0 font-14"><i class="mdi mdi-folder-outline font-18 align-middle me-1"></i>Recent Updated</a>
-                        <a href="#" @click.prevent="getFiles(); filesView = true;" class="list-group-item border-0 font-14"><i class="mdi mdi-folder-outline font-18 align-middle me-1"></i> All Files</a>
+                        <a href="#" @click.prevent="getFolders(); filesView = false; folderId=null;" class="list-group-item border-0 font-14"><i class="mdi mdi-folder-outline font-18 align-middle me-1"></i>Recent Updated</a>
+                        <a href="#" @click.prevent="getFiles(); filesView = true; folderId=null;" class="list-group-item border-0 font-14"><i class="mdi mdi-folder-outline font-18 align-middle me-1"></i> All Files</a>
 
                         <vue-nestable ref="folders" v-model="mediaFolders" :maxDepth="0" class="dd-list">
                             <vue-nestable-handle slot-scope="{ item, isChild }" :item="item">
@@ -333,13 +333,7 @@
                         </div>
                     </div>
                     <div v-if="!loading && loadstart">
-                        <div v-if="!filesView">
-                            <files :key="view" :view="view" v-if="!loading" :mediaFiles="mediaFiles" @selected="userSelectedFiles" @delete="deleteFile" @open="openFile" @move="openMoveModal"></files>
-                        </div>
-                        <div v-else>
-                            <files :key="view" :view="view" v-if="!loading" :mediaFiles="mediaFiles" @selected="userSelectedFiles" @delete="deleteFile" @open="openFile" @move="openMoveModal"></files>
-                        </div>
-                        <!-- end .mt-3-->
+                        <files :key="view" :view="view" v-if="!loading" :mediaFiles="mediaFiles" @selected="userSelectedFiles" @delete="deleteFile" @open="openFile" @move="openMoveModal"></files>
                     </div>
                 </div>
                 <!-- end inbox-rightbar-->
