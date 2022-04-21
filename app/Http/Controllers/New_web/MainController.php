@@ -66,7 +66,7 @@ class MainController extends Controller
     {
         $page = null;
 
-        if (!cache($request->path())) {
+        if (!cache($request->path()) && Cache::getCmsMode() == Setting::NEW_PAGES) {
             $dynamicPageData = null;
 
             $modelSlug = Slug::whereSlug($slug)->first();
@@ -97,6 +97,11 @@ class MainController extends Controller
             
             $slugModel = Slug::whereSlug($slug)->firstOrCreate();
             return (new HomeController($this->fbp))->index($slugModel);
+        }
+
+        if ($slug == "in-the-media" || $slug == "brands-trained") {
+            $dynamicPageData['brands'] = Logos::with('medias')->where('type', 'brands')->orderBy('name', 'asc')->get()->toArray();
+            $dynamicPageData['logos'] = Logos::with('medias')->where('type', 'logos')->orderBy('name', 'asc')->get()->toArray();
         }
 
         $this->fbp->sendPageViewEvent();

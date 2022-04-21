@@ -70,9 +70,9 @@
 
                     <div class="row mb-2">
                         <div class="col-3">
-                            <div @click="selectComponent('gallery')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-photo-group d-block mt-1"></i>
-                                <span class="text-muted mt-1 ms-1 me-1">Image gallery</span>
+                            <div @click="selectComponent('menus')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
+                                <i style="font-size: 20px" class="text-muted dripicons-menu d-block mt-1"></i>
+                                <span class="text-muted mt-1 ms-1 me-1">Menus</span>
                             </div>
                         </div>
 
@@ -119,13 +119,6 @@
                                 <span class="text-muted mt-1 ms-1 me-1">Form</span>
                             </div>
                         </div>
-
-                        <div class="col-3">
-                            <div @click="selectComponent('menus')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
-                                <i style="font-size: 20px" class="text-muted dripicons-menu d-block mt-1"></i>
-                                <span class="text-muted mt-1 ms-1 me-1">Menus</span>
-                            </div>
-                        </div>
                     </div>
 
                     <hr>
@@ -149,6 +142,13 @@
                             <div @click="selectComponent('youtube')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
                                 <i style="font-size: 20px" class="text-muted dripicons-camcorder d-block mt-1"></i>
                                 <span class="text-muted mt-1 ms-1 me-1">Youtube</span>
+                            </div>
+                        </div>
+
+                        <div class="col-3">
+                            <div @click="selectComponent('gallery')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
+                                <i style="font-size: 20px" class="text-muted dripicons-photo-group d-block mt-1"></i>
+                                <span class="text-muted mt-1 ms-1 me-1">Image gallery</span>
                             </div>
                         </div>
                     </div>

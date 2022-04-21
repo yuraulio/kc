@@ -185,6 +185,17 @@
       'Excel' => 'Maatwebsite\\Excel\\Facades\\Excel',
     ),
   ),
+  'msonowal/laravel-tinify' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'msonowal\\LaravelTinify\\LaravelTinifyServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'Tinify' => 'msonowal\\LaravelTinify\\Facades\\Tinify',
+    ),
+  ),
   'nesbot/carbon' => 
   array (
     'providers' => 
@@ -197,6 +208,13 @@
     'providers' => 
     array (
       0 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
+    ),
+  ),
+  'owen-it/laravel-auditing' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'OwenIt\\Auditing\\AuditingServiceProvider',
     ),
   ),
   'propaganistas/laravel-phone' => 

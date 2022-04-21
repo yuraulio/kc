@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Request;
 
 class CreateMediaFolderRequest extends FormRequest
 {
@@ -24,7 +25,8 @@ class CreateMediaFolderRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:cms_folders',
+            'name' => "required|uniqueNameAndParent:{$this->directory}",
+            'directory' => "required"
         ];
     }
 }

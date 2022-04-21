@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use CodexShaper\Menu\Models\MenuSetting;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class MenuSettingsSeeder extends Seeder
 {
@@ -14,6 +15,10 @@ class MenuSettingsSeeder extends Seeder
      */
     public function run()
     {
+        // clear existing darta
+        DB::table('menu_settings')->truncate();
+
+        // insert new data
         $settings = new MenuSetting();
         $settings->menu_id = null;
         $settings->depth = 5;

@@ -1,5 +1,5 @@
 <?php return array (
-  'providers' => 
+  'providers' =>
   array (
     0 => 'Illuminate\\Auth\\AuthServiceProvider',
     1 => 'Illuminate\\Broadcasting\\BroadcastServiceProvider',
@@ -46,26 +46,29 @@
     42 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
     43 => 'Carbon\\Laravel\\ServiceProvider',
     44 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
-    45 => 'Propaganistas\\LaravelPhone\\PhoneServiceProvider',
-    46 => 'Sentry\\Laravel\\ServiceProvider',
-    47 => 'Sentry\\Laravel\\Tracing\\ServiceProvider',
-    48 => 'TeamTNT\\Scout\\TNTSearchScoutServiceProvider',
-    49 => 'Vemcogroup\\SparkPostDriver\\SparkPostDriverServiceProvider',
-    50 => 'Watson\\Sitemap\\SitemapServiceProvider',
-    51 => 'Intervention\\Image\\ImageServiceProvider',
-    52 => 'Laravel\\Passport\\PassportServiceProvider',
-    53 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
-    54 => 'Laravel\\Scout\\ScoutServiceProvider',
-    55 => 'TeamTNT\\Scout\\TNTSearchScoutServiceProvider',
-    56 => 'App\\Providers\\AppServiceProvider',
-    57 => 'App\\Providers\\AuthServiceProvider',
-    58 => 'App\\Providers\\DropboxFilesystemServiceProvider',
-    59 => 'App\\Providers\\EventServiceProvider',
-    60 => 'App\\Providers\\RouteServiceProvider',
-    61 => 'Barryvdh\\Debugbar\\ServiceProvider',
-    62 => 'Gloudemans\\ShoppingCart\\ShoppingcartServiceProvider',
+    45 => 'OwenIt\\Auditing\\AuditingServiceProvider',
+    46 => 'Propaganistas\\LaravelPhone\\PhoneServiceProvider',
+    47 => 'Sentry\\Laravel\\ServiceProvider',
+    48 => 'Sentry\\Laravel\\Tracing\\ServiceProvider',
+    49 => 'TeamTNT\\Scout\\TNTSearchScoutServiceProvider',
+    50 => 'Vemcogroup\\SparkPostDriver\\SparkPostDriverServiceProvider',
+    51 => 'Watson\\Sitemap\\SitemapServiceProvider',
+    52 => 'Intervention\\Image\\ImageServiceProvider',
+    53 => 'Laravel\\Passport\\PassportServiceProvider',
+    54 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
+    55 => 'Laravel\\Scout\\ScoutServiceProvider',
+    56 => 'TeamTNT\\Scout\\TNTSearchScoutServiceProvider',
+    57 => 'App\\Providers\\AppServiceProvider',
+    58 => 'App\\Providers\\AuthServiceProvider',
+    59 => 'App\\Providers\\DropboxFilesystemServiceProvider',
+    60 => 'App\\Providers\\EventServiceProvider',
+    61 => 'App\\Providers\\RouteServiceProvider',
+    62 => 'Barryvdh\\Debugbar\\ServiceProvider',
+    63 => 'Gloudemans\\ShoppingCart\\ShoppingcartServiceProvider',
+    64 => 'OwenIt\\Auditing\\AuditingServiceProvider',
+    65 => 'msonowal\\LaravelTinify\\LaravelTinifyServiceProvider',
   ),
-  'eager' => 
+  'eager' =>
   array (
     0 => 'Illuminate\\Auth\\AuthServiceProvider',
     1 => 'Illuminate\\Cookie\\CookieServiceProvider',
@@ -95,28 +98,30 @@
     25 => 'Laravel\\Scout\\ScoutServiceProvider',
     26 => 'Laravel\\Ui\\UiServiceProvider',
     27 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
-    28 => 'Carbon\\Laravel\\ServiceProvider',
-    29 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
-    30 => 'Propaganistas\\LaravelPhone\\PhoneServiceProvider',
-    31 => 'Sentry\\Laravel\\ServiceProvider',
-    32 => 'Sentry\\Laravel\\Tracing\\ServiceProvider',
-    33 => 'TeamTNT\\Scout\\TNTSearchScoutServiceProvider',
-    34 => 'Vemcogroup\\SparkPostDriver\\SparkPostDriverServiceProvider',
-    35 => 'Watson\\Sitemap\\SitemapServiceProvider',
-    36 => 'Intervention\\Image\\ImageServiceProvider',
-    37 => 'Laravel\\Passport\\PassportServiceProvider',
-    38 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
-    39 => 'Laravel\\Scout\\ScoutServiceProvider',
-    40 => 'TeamTNT\\Scout\\TNTSearchScoutServiceProvider',
-    41 => 'App\\Providers\\AppServiceProvider',
-    42 => 'App\\Providers\\AuthServiceProvider',
-    43 => 'App\\Providers\\DropboxFilesystemServiceProvider',
-    44 => 'App\\Providers\\EventServiceProvider',
-    45 => 'App\\Providers\\RouteServiceProvider',
-    46 => 'Barryvdh\\Debugbar\\ServiceProvider',
-    47 => 'Gloudemans\\ShoppingCart\\ShoppingcartServiceProvider',
+    28 => 'msonowal\\LaravelTinify\\LaravelTinifyServiceProvider',
+    29 => 'Carbon\\Laravel\\ServiceProvider',
+    30 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
+    31 => 'Propaganistas\\LaravelPhone\\PhoneServiceProvider',
+    32 => 'Sentry\\Laravel\\ServiceProvider',
+    33 => 'Sentry\\Laravel\\Tracing\\ServiceProvider',
+    34 => 'TeamTNT\\Scout\\TNTSearchScoutServiceProvider',
+    35 => 'Vemcogroup\\SparkPostDriver\\SparkPostDriverServiceProvider',
+    36 => 'Watson\\Sitemap\\SitemapServiceProvider',
+    37 => 'Intervention\\Image\\ImageServiceProvider',
+    38 => 'Laravel\\Passport\\PassportServiceProvider',
+    39 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
+    40 => 'Laravel\\Scout\\ScoutServiceProvider',
+    41 => 'TeamTNT\\Scout\\TNTSearchScoutServiceProvider',
+    42 => 'App\\Providers\\AppServiceProvider',
+    43 => 'App\\Providers\\AuthServiceProvider',
+    44 => 'App\\Providers\\DropboxFilesystemServiceProvider',
+    45 => 'App\\Providers\\EventServiceProvider',
+    46 => 'App\\Providers\\RouteServiceProvider',
+    47 => 'Barryvdh\\Debugbar\\ServiceProvider',
+    48 => 'Gloudemans\\ShoppingCart\\ShoppingcartServiceProvider',
+    49 => 'msonowal\\LaravelTinify\\LaravelTinifyServiceProvider',
   ),
-  'deferred' => 
+  'deferred' =>
   array (
     'Illuminate\\Broadcasting\\BroadcastManager' => 'Illuminate\\Broadcasting\\BroadcastServiceProvider',
     'Illuminate\\Contracts\\Broadcasting\\Factory' => 'Illuminate\\Broadcasting\\BroadcastServiceProvider',
@@ -243,52 +248,56 @@
     'command.tinker' => 'Laravel\\Tinker\\TinkerServiceProvider',
     'feed' => 'Laravelium\\Feed\\FeedServiceProvider',
     'Laravelium\\Feed\\Feed' => 'Laravelium\\Feed\\FeedServiceProvider',
+    'OwenIt\\Auditing\\Contracts\\Auditor' => 'OwenIt\\Auditing\\AuditingServiceProvider',
   ),
-  'when' => 
+  'when' =>
   array (
-    'Illuminate\\Broadcasting\\BroadcastServiceProvider' => 
+    'Illuminate\\Broadcasting\\BroadcastServiceProvider' =>
     array (
     ),
-    'Illuminate\\Bus\\BusServiceProvider' => 
+    'Illuminate\\Bus\\BusServiceProvider' =>
     array (
     ),
-    'Illuminate\\Cache\\CacheServiceProvider' => 
+    'Illuminate\\Cache\\CacheServiceProvider' =>
     array (
     ),
-    'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider' => 
+    'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider' =>
     array (
     ),
-    'Illuminate\\Hashing\\HashServiceProvider' => 
+    'Illuminate\\Hashing\\HashServiceProvider' =>
     array (
     ),
-    'Illuminate\\Mail\\MailServiceProvider' => 
+    'Illuminate\\Mail\\MailServiceProvider' =>
     array (
     ),
-    'Illuminate\\Pipeline\\PipelineServiceProvider' => 
+    'Illuminate\\Pipeline\\PipelineServiceProvider' =>
     array (
     ),
-    'Illuminate\\Queue\\QueueServiceProvider' => 
+    'Illuminate\\Queue\\QueueServiceProvider' =>
     array (
     ),
-    'Illuminate\\Redis\\RedisServiceProvider' => 
+    'Illuminate\\Redis\\RedisServiceProvider' =>
     array (
     ),
-    'Illuminate\\Auth\\Passwords\\PasswordResetServiceProvider' => 
+    'Illuminate\\Auth\\Passwords\\PasswordResetServiceProvider' =>
     array (
     ),
-    'Illuminate\\Translation\\TranslationServiceProvider' => 
+    'Illuminate\\Translation\\TranslationServiceProvider' =>
     array (
     ),
-    'Illuminate\\Validation\\ValidationServiceProvider' => 
+    'Illuminate\\Validation\\ValidationServiceProvider' =>
     array (
     ),
-    'Laravel\\Sail\\SailServiceProvider' => 
+    'Laravel\\Sail\\SailServiceProvider' =>
     array (
     ),
-    'Laravel\\Tinker\\TinkerServiceProvider' => 
+    'Laravel\\Tinker\\TinkerServiceProvider' =>
     array (
     ),
-    'Laravelium\\Feed\\FeedServiceProvider' => 
+    'Laravelium\\Feed\\FeedServiceProvider' =>
+    array (
+    ),
+    'OwenIt\\Auditing\\AuditingServiceProvider' =>
     array (
     ),
   ),

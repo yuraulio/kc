@@ -29,11 +29,14 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.0",
         "maatwebsite/excel": "^3.1",
+        "owen-it/laravel-auditing": "^13.0",
+        "msonowal/laravel-tinify": "^1.0",
         "propaganistas/laravel-phone": "^4.3",
         "sentry/sentry-laravel": "^2.10",
         "spatie/flysystem-dropbox": "^1.0",
         "stripe/stripe-php": "^7.87",
         "teamtnt/laravel-scout-tntsearch-driver": "^11.5",
+        "tinify/tinify": "^1.5",
         "vemcogroup/laravel-sparkpost-driver": "^4.0",
         "vimeo/vimeo-api": "^3.0",
         "watson/sitemap": "^4.0"
@@ -63,7 +66,7 @@
         }
     },
     "autoload": {
-        
+
         "psr-4": {
             "App\\": "app/",
             "Laravel\\Cashier\\": "app/Model",
@@ -71,7 +74,7 @@
             "Alexusmai\\LaravelFileManager\\Controllers\\": "app/overrides/file-manager/",
             "Alexusmai\\LaravelFileManager\\":"app/overrides/file-manager/model/",
             "Laravel\\Cashier\\Concerns\\": "app/Concerns",
-            "Library\\": "app/Library/"            
+            "Library\\": "app/Library/"
 
         },
         "classmap": [
