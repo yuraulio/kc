@@ -6,7 +6,7 @@ use App\Model\Admin\Page;
 use Illuminate\Console\Command;
 use stdClass;
 
-class CompnentsRefresh extends Command
+class ComponentsRefresh extends Command
 {
     /**
      * The name and signature of the console command.
