@@ -2,6 +2,9 @@
 
 echo "Run composer, migrations and node builder"
 
+export NVM_DIR=$HOME/.nvm;
+source $NVM_DIR/nvm.sh;
+
 ## just in case
 cd $PWD
 
