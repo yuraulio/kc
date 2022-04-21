@@ -17,7 +17,7 @@ trait SearchFilter
             return $query;
         }
 
-        return $this->search($filter);
+        return $this->withoutGlobalScopes()->search($filter);
     }
 
     /**
