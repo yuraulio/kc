@@ -18,7 +18,6 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
         Route::get('/pages', [DashboardController::class, 'pages'])->name("admin-pages");
         Route::get('/comments', [DashboardController::class, 'comments'])->name("admin-comments");
 
-        Route::get('/new_page/{uuid}', [DashboardController::class, 'page'])->name("new-page");
         Route::get('/media', [DashboardController::class, 'media'])->name("admin-media");
         Route::get('/menus', [DashboardController::class, 'menu'])->name("admin-menu");
         Route::get('/menus', [DashboardController::class, 'menu'])->name("admin-menu");
