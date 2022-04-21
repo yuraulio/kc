@@ -384,6 +384,13 @@ class MediaController extends Controller
     public function deleteFolder($id)
     {
         $folder = MediaFolder::find($id);
+
+        // delete subfolders
+        $subfolders = MediaFolder::where("parent_id", $id)->get();
+        foreach ($subfolders as $subfolder) {
+            $this->deleteFolder($subfolder->id);
+        }
+
         $path = $folder->path;
         $result = Storage::disk('public')->deleteDirectory($path);
         if ($result) {
