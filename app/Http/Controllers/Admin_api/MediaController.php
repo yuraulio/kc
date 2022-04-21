@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin_api;
 
 use Exception;
 use App\Jobs\MoveFile;
-use App\Model\Admin\Page;
 use App\Jobs\RenameFolder;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -23,6 +22,7 @@ use App\Http\Resources\MediaFolderResource;
 use App\Http\Requests\EditMediaFolderRequest;
 use App\Http\Requests\CreateMediaFolderRequest;
 use App\Jobs\RenameFile;
+use App\Jobs\TinifyImage;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 
@@ -157,6 +157,8 @@ class MediaController extends Controller
                 // save to db
                 $mfile = $this->storeFile($version_name, $version[0], $imgpath, $mediaFolder->id, $image->filesize(), $mfile_original->id, $request->alt_text, $request->link);
                 $files[] = new MediaFileResource($mfile);
+                
+                TinifyImage::dispatch(public_path() . $mfile->full_path, $mfile->id);
             }
 
             $original = MediaFile::find($mfile_original->id);
@@ -229,6 +231,10 @@ class MediaController extends Controller
             }
 
             $mfile = $this->editFile($parent_id, $request->version, $image_name, $imgpath, $mediaFolder->id, $size, null, $request->alttext, $request->link, $request->id);
+
+            if ($request->version != 'original') {
+                TinifyImage::dispatch($save_path, $mfile->id);
+            }
 
             return response()->json(['data' => new MediaFileResource($mfile)], 200);
         } catch (Exception $e) {

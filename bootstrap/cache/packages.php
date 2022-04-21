@@ -185,6 +185,17 @@
       'Excel' => 'Maatwebsite\\Excel\\Facades\\Excel',
     ),
   ),
+  'msonowal/laravel-tinify' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'msonowal\\LaravelTinify\\LaravelTinifyServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'Tinify' => 'msonowal\\LaravelTinify\\Facades\\Tinify',
+    ),
+  ),
   'nesbot/carbon' => 
   array (
     'providers' => 

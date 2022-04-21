@@ -188,6 +188,7 @@ return [
 
         OwenIt\Auditing\AuditingServiceProvider::class,
 
+        msonowal\LaravelTinify\LaravelTinifyServiceProvider::class,
     ],
 
     /*
@@ -242,6 +243,8 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'Sitemap'   => Watson\Sitemap\Facades\Sitemap::class,
+
+        'Tinify' => msonowal\LaravelTinify\Facades\Tinify::class,
 
     ],
 
