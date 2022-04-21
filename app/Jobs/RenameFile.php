@@ -44,7 +44,7 @@ class RenameFile implements ShouldQueue
     {
         DB::beginTransaction();
         try {
-            $pages = Page::withoutGlobalScope("publish")->get();
+            $pages = Page::withoutGlobalScope("published")->get();
 
             foreach ($pages as $page) {
                 $content = $page->content;
