@@ -380,7 +380,6 @@ var mediaMixin = {
                 .then((response) => {
                     if (!folderId) {
                         this.mediaFolders = response.data.data;
-                        this.$refs.folders.$forceUpdate();
                     }
 
                     this.inMediaFolders = response.data.data;
