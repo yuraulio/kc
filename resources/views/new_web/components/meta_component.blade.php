@@ -13,11 +13,19 @@
     @section('header')
         <title>{{ $event['title'] }}</title>
         {!! $event->metable->getMetas() !!}
+
+        <script type="application/ld+json">
+            {!! $meta['meta_schema'] ?? "" !!}
+        </script>
     @endsection
 @elseif ($instructor)
     @section('header')
         <title>{{ $instructor->title . " " . $instructor->subtitle }}</title>
         {!! $instructor->metable->getMetas() !!}
+
+        <script type="application/ld+json">
+            {!! $meta['meta_schema'] ?? "" !!}
+        </script>
     @endsection
 @else
     @section('header')

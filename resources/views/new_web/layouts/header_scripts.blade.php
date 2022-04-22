@@ -2,23 +2,6 @@
 
 <link href="{{ cdn(mix('theme/assets/css/bootstrap5-grid.css')) }}" rel="stylesheet" media="all" />
 
-<script type="application/ld+json">
-        {
-          "@context": "http://schema.org",
-          "@type": "EducationalOrganization",
-          "url": "https://knowcrunch.com/",
-          "address": {
-            "@type": "PostalAddress",
-            "addressLocality": "Delaware",
-            "addressRegion": "DE",
-            "postalCode": "19702",
-            "streetAddress": "2035 Sunset Lake Road"
-          },
-          "name": "KnowCrunch Inc",
-          "logo": "/theme/assets/images/logo.png"
-        }
-</script>
-
 <script type="text/javascript" src="{{ cdn('theme/assets/js/jquery-2.1.4.min.js') }}"></script>
 
 <script type="text/javascript">
