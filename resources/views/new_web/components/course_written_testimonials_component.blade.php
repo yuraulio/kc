@@ -1,4 +1,5 @@
 @php
+    $event = $dynamic_page_data["event"] ?? null;
     $sections = $dynamic_page_data["sections"] ?? null;
     $topics = $dynamic_page_data["topics"] ?? null;
     $testimonials = $dynamic_page_data["testimonials"] ?? null;
