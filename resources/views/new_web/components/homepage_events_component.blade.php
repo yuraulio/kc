@@ -13,7 +13,7 @@
 <!-- nonElearningEvents -->
 @if($homepage["event_types"]->id == 1)
     @foreach($nonElearningEvents as $bcatid => $category)
-        <section class="section-text-carousel event-background">
+        <section class="section-text-carousel">
             <div class="container container--md">
                 <div class="row-text-carousel clearfix">
                     <div class="text-column">
