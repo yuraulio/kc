@@ -184,7 +184,7 @@ class MediaController extends Controller
             $size = null;
 
             $original_file = MediaFile::findOrFail($request->parent_id);
-            $file = MediaFile::whereId($request->id)->first();
+            $file = MediaFile::where("parent_id", $request->parent_id)->where("version", $request->version)->first();
 
             if ($file) {
                 $file_path = $file->path;
@@ -234,7 +234,7 @@ class MediaController extends Controller
             $mfile = $this->editFile($parent_id, $request->version, $image_name, $imgpath, $mediaFolder->id, $size, null, $request->alttext, $request->link, $request->id);
 
             if ($request->version != 'original') {
-                TinifyImage::dispatch($save_path, $mfile->id);
+                TinifyImage::dispatch(public_path() . $mfile->full_path, $mfile->id);
             }
 
             return response()->json(['data' => new MediaFileResource($mfile)], 200);
@@ -303,7 +303,7 @@ class MediaController extends Controller
         try {
             $url = config('app.url') . "/uploads" . $path;
 
-            $mediaFile = MediaFile::whereId($id)->firstOrNew();
+            $mediaFile = MediaFile::whereParentId($parent_id)->whereVersion($version)->firstOrNew();
 
             $oldPath = $mediaFile->path;
             $oldUrl = $mediaFile->url;
