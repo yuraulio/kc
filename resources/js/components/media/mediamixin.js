@@ -380,6 +380,7 @@ var mediaMixin = {
                 .then((response) => {
                     if (!folderId) {
                         this.mediaFolders = response.data.data;
+                        this.collapse(this.mediaFolders[0]);
                     }
 
                     this.inMediaFolders = response.data.data;
