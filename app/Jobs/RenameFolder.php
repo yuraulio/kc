@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Model\Admin\Page;
 use Illuminate\Support\Str;
 use Illuminate\Bus\Queueable;
-use App\Model\Admin\MediaFile;
 use App\Model\Admin\MediaFolder;
 use Exception;
 use Illuminate\Support\Facades\Log;
@@ -13,7 +12,6 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Support\Facades\DB;
 
 class RenameFolder implements ShouldQueue
@@ -23,17 +21,21 @@ class RenameFolder implements ShouldQueue
     private $oldPath;
     private $newPath;
     private $folderId;
+    private $renameFolder;
+    private $folderName;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($oldPath, $newPath, $folderId)
+    public function __construct($oldPath, $newPath, $folderId, $renameFolder = true, $folderName = null)
     {
         $this->oldPath = $oldPath;
         $this->newPath = $newPath;
         $this->folderId = $folderId;
+        $this->renameFolder = $renameFolder;
+        $this->folderName = $folderName;
     }
 
     /**
@@ -43,6 +45,8 @@ class RenameFolder implements ShouldQueue
      */
     public function handle()
     {
+        Log::debug($this->newPath);
+
         DB::beginTransaction();
         try {
             // rename files and folder
@@ -59,7 +63,7 @@ class RenameFolder implements ShouldQueue
                     $newUrl = $file->url;
 
                     // update pages content
-                    foreach ($file->pages()->get() as $page) {
+                    foreach (Page::withoutGlobalScopes()->get() as $page) {
                         $content = $page->content;
 
                         $content = str_replace($oldUrl, $newUrl, $content);
@@ -74,11 +78,35 @@ class RenameFolder implements ShouldQueue
             $folder->url = Str::replaceLast($this->oldPath, $this->newPath, $folder->url);
             $folder->save();
 
-            DB::commit();
+            // loop through subdirectories
+            foreach ($folder->children()->get() as $subfolder) {
+                $subfolderName = $subfolder->name;
+                $oldPathSubfolder = $this->oldPath . "/" . $subfolderName;
+                $newPathSubfolder = $this->newPath . "/" . $subfolderName;
+                $subfolderID = $subfolder->id;
+                RenameFolder::dispatch($oldPathSubfolder, $newPathSubfolder, $subfolderID, false);
+            }
+
+            if ($this->renameFolder) {
+                $oldFullPath = public_path("/uploads/" . $this->oldPath);
+                $newFullPath = public_path("/uploads/" . $this->newPath);
+                $result = rename($oldFullPath, $newFullPath);
+                if ($result) {
+                    $folder->name = Str::slug($this->folderName, '_');
+                    $folder->save();
+
+                    DB::commit();
+                } else {
+                    DB::rollback();
+                    Log::error("Failed to rename folder in RenameFolder job.");
+                }
+            } else {
+                DB::commit();
+            }
         } catch (Exception $e) {
             throw $e;
             DB::rollback();
-            Log::error("Failed to update files or pages when renaming folder. " . $e->getMessage());
+            Log::error("Failed to update files or pages when renaming folder (job). " . $e->getMessage());
         }
     }
 }
