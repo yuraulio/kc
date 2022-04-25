@@ -261,7 +261,7 @@ class MediaController extends Controller
 
             $file = Storage::disk('public')->putFileAs($path, $request->file('file'), ($request->imgname ? $request->imgname . "_" . getimagesize($image)[0] . "x" . getimagesize($image)[1] . "." . $image->extension() : $image->getClientOriginalName()), 'public');
 
-            $mfile = $this->storeFile(($request->imgname ? $request->imgname . "_" . getimagesize($image)[0] . "x" . getimagesize($image)[1] . "_" . $request->compression . "." . $image->extension() : $image->getClientOriginalName()), $imgpath, $mediaFolder->id, $image->getSize(), null, null);
+            $mfile = $this->storeFile($image->getClientOriginalName(), "Original", $imgpath, $mediaFolder->id, $image->getSize(), null, null, null);
             $mfile->pages = [];
 
             $url = config('app.url') . "/uploads" . $path;
@@ -353,7 +353,7 @@ class MediaController extends Controller
     public function getRealExtension($string)
     {
         $parts  = explode('.', $string);
-        return array_pop($parts);
+        return strtolower(array_pop($parts));
     }
 
     public function deleteFile(Request $request, $id)
