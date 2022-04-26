@@ -14,7 +14,8 @@
             {
                 "type": "image",
                 "key": "hero_image",
-                "label": "Image"
+                "label": "Image",
+                "main": true
             },
             {
                 "type": "text_editor",
@@ -26,7 +27,8 @@
                 "type": "checkbox",
                 "key": "hero_small",
                 "label": "Minified",
-                "value": false
+                "value": false,
+                "main": true
             }
         ]
     },
