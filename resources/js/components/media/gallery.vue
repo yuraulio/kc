@@ -27,11 +27,11 @@
                 <div class="carousel-inner" role="listbox">
                     <div v-if="activeImg" v-for="(img, index) in selectedImage ? [selectedImage] : images" :class="'carousel-item ' + (activeImg.id == img.id ? ' active' : '')" :key="index">
                         <template v-if="!lodash.find(img.subfiles, {'subselected' : true})">
-                            <div v-if="img.extension == 'pdf'" style="width: 100%; height: 300px" class=" text-secondary rounded text-center">
+                            <div v-if="img.extension.toLowerCase() == 'pdf'" style="width: 100%; height: 300px" class=" text-secondary rounded text-center">
                                 <i class="mdi mdi-file-pdf-outline" style="font-size: 160px;"></i>
                             </div>
 
-                            <img v-else-if="imageExtensions.includes(img.extension)" @click="confirmSelection(img)" :src="img.url" alt="..." class="d-block img-fluid" />
+                            <img v-else-if="imageExtensions.includes(img.extension.toLowerCase())" @click="confirmSelection(img)" :src="img.url" alt="..." class="d-block img-fluid" />
 
                             <div v-else style="width: 100%; height: 300px" class=" text-secondary rounded text-center">
                                 <i class="mdi mdi-file" style="font-size: 160px;"></i>
