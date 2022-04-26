@@ -239,7 +239,6 @@ class MediaController extends Controller
 
             return response()->json(['data' => new MediaFileResource($mfile)], 200);
         } catch (Exception $e) {
-            throw $e;
             Log::error("Failed update file . " . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 400);
         }
@@ -261,7 +260,7 @@ class MediaController extends Controller
 
             $file = Storage::disk('public')->putFileAs($path, $request->file('file'), ($request->imgname ? $request->imgname . "_" . getimagesize($image)[0] . "x" . getimagesize($image)[1] . "." . $image->extension() : $image->getClientOriginalName()), 'public');
 
-            $mfile = $this->storeFile(($request->imgname ? $request->imgname . "_" . getimagesize($image)[0] . "x" . getimagesize($image)[1] . "_" . $request->compression . "." . $image->extension() : $image->getClientOriginalName()), $imgpath, $mediaFolder->id, $image->getSize(), null, null);
+            $mfile = $this->storeFile($image->getClientOriginalName(), "Original", $imgpath, $mediaFolder->id, $image->getSize(), null, null, null);
             $mfile->pages = [];
 
             $url = config('app.url') . "/uploads" . $path;
@@ -353,7 +352,7 @@ class MediaController extends Controller
     public function getRealExtension($string)
     {
         $parts  = explode('.', $string);
-        return array_pop($parts);
+        return strtolower(array_pop($parts));
     }
 
     public function deleteFile(Request $request, $id)
@@ -404,7 +403,6 @@ class MediaController extends Controller
 
     public function editFolder(EditMediaFolderRequest $request)
     {
-        DB::beginTransaction();
         try {
             $folder = MediaFolder::find($request->id);
 
@@ -414,25 +412,11 @@ class MediaController extends Controller
             $oldPath = $folder->path;
             $newPath = Str::replaceLast($oldFolderNameSlugify, $newFolderNameSlugify, $oldPath);
 
-            $oldFullPath = public_path("/uploads/" . $oldPath);
-            $newFullPath = public_path("/uploads/" . $newPath);
-
-            $result = rename($oldFullPath, $newFullPath);
-            if ($result) {
-                $folder->name = $request->name;
-                $folder->save();
-
-                RenameFolder::dispatch($oldPath, $newPath, $folder->id);
-
-                DB::commit();
-                return response()->json('success', 200);
-            }
-
-            DB::rollback();
+            RenameFolder::dispatch($oldPath, $newPath, $folder->id, true, $request->name);
+            
+            return response()->json('success', 200);
         } catch (Exception $e) {
-            throw $e;
-            DB::rollback();
-            Log::error("Failed to update pages when renaming file. " . $e->getMessage());
+            Log::error("Failed to update pages when renaming folder (controller). " . $e->getMessage());
             return response()->json('Failed to rename folder.', 400);
         }
     }

@@ -239,7 +239,7 @@
     </modal>
 
     <modal name="gallery-modal" ref="gmodal" :resizable="true" height="auto" :adaptive="true" :minWidth="1000" :scrollable="true">
-        <gallery ref="gals" :images="mediaFiles" :opImage="opImage"></gallery>
+        <gallery ref="gals" :images="mediaFiles" :opImage="opImage" :imageExtensions="imageExtensions"></gallery>
     </modal>
     <!-- Right Sidebar -->
     <div class="col-12">
@@ -266,7 +266,7 @@
                             <vue-nestable-handle slot-scope="{ item, isChild }" :item="item">
                                 <li :key="item.id + uncolapsed.length" v-show="!isChild || uncolapsed.includes(item.id)" class="dd-item" :data-id="item.id">
                                     <button
-                                        @click="collapse(item); $forceUpdate();"
+                                        @click="collapse(item)"
                                         v-if="item.children && item.children.length && !uncolapsed.includes(item.children[0].id)"
                                         class="collapse-button"
                                     >
@@ -333,7 +333,7 @@
                         </div>
                     </div>
                     <div v-if="!loading && loadstart">
-                        <files :key="view" :view="view" v-if="!loading" :mediaFiles="mediaFiles" @selected="userSelectedFiles" @delete="deleteFile" @open="openFile" @move="openMoveModal"></files>
+                        <files :key="view" :view="view" v-if="!loading" :mediaFiles="mediaFiles" @selected="userSelectedFiles" @delete="deleteFile" @open="openFile" @move="openMoveModal" :imageExtensions="imageExtensions"></files>
                     </div>
                 </div>
                 <!-- end inbox-rightbar-->
@@ -399,6 +399,14 @@ export default {
             sizes: [],
             upload_error: null,
             folder_error: null,
+            imageExtensions: [
+                "jpg",
+                "jpeg",
+                "png",
+                "gif",
+                "webp",
+                "svg",
+            ]
         };
     },
     methods: {

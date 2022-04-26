@@ -306,7 +306,8 @@ var mediaMixin = {
                     this.getFolders();
                     this.folderName = '';
                     this.loading = false;
-                    this.$modal.hide('create-folder-modal')
+                    this.$modal.hide('create-folder-modal');
+                    this.uncollapse(this.mediaFolders[0]);
                 })
                 .catch((error) => {
                     console.log(error)
@@ -380,6 +381,7 @@ var mediaMixin = {
                 .then((response) => {
                     if (!folderId) {
                         this.mediaFolders = response.data.data;
+                        this.collapse(this.mediaFolders[0]);
                     }
 
                     this.inMediaFolders = response.data.data;
