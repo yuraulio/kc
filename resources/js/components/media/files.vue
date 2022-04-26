@@ -22,7 +22,12 @@
                                     <i class="mdi mdi-file-pdf-outline font-28"></i>
                                 </span>
 
-                                <img v-else :src="file.url" alt="image" class="img-fluid avatar-sm rounded mt-2" style="width: 100px; height: auto;" />
+                                <img v-else-if="imageExtensions.includes(file.extension)" :src="file.url" alt="image" class="img-fluid avatar-sm rounded mt-2" style="width: 100px; height: auto;" />
+
+                                <span v-else class="bg-light text-secondary rounded">
+                                    <i class="mdi mdi-file font-28"></i>
+                                </span>
+
                             </td>
                             <td class="text-truncate">
                                 <span class="ms-2 fw-normal" :title="file.name">{{file.name}}</span>
@@ -114,6 +119,7 @@ export default {
         view: {
             default: "list",
         },
+        imageExtensions: [],
     },
     data() {
         return {
