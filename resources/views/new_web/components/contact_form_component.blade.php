@@ -10,7 +10,7 @@
 @endphp
 
 @if ($type == 1)
-    <div class="form-section">
+    <div class="form-section cms-rich-text-editor">
         <div class="form-area-wrapper m-0">
             <div class="form-wrapper blue-form w-m-bottom {{ $overlap_class }}">
                 <form id="doall" method="POST" class="contactUsForm" novalidate="">
@@ -109,7 +109,7 @@
         </script>
     @endpush
 @elseif ($type == 2)
-    <div class="form-section">
+    <div class="form-section cms-rich-text-editor">
         <div class="form-area-wrapper m-0">
             <div class="form-wrapper blue-form w-m-bottom {{ $overlap_class }}">
                 <form id="doall" method="POST" class="contactUsForm" novalidate="">
@@ -247,7 +247,7 @@
         </script>
     @endpush
 @elseif ($type == 3)
-    <div class="form-section">
+    <div class="form-section cms-rich-text-editor">
         <div class="form-area-wrapper m-0">
             <div class="form-wrapper blue-form w-m-bottom {{ $overlap_class }}">
                 <form id="beForm" method="POST" class="contactUsForm" novalidate="">
