@@ -113,3 +113,16 @@
 .text-editor-blockquote blockquote {
     margin-left: 0px;
 }
+
+.cms-rich-text-editor li {
+    list-style: disc!important;
+}
+.cms-rich-text-editor ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+}
