@@ -31,7 +31,7 @@
     }
 @endphp
 
-<div class="mt-5 mb-5 m-0 text-editor-blockquote">
+<div class="mt-5 mb-5 m-0 cms-rich-text-editor text-editor-blockquote {{ $page->slug == "about" ? " about-static-page " : "" }}">
     @if (isset($title))
         <h2 class="tab-title">{{$title}}</h2>
     @endif
