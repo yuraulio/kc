@@ -7,7 +7,7 @@ use TeamTNT\TNTSearch\Support\TokenizerInterface;
 
 class ImageTokenizer extends AbstractTokenizer implements TokenizerInterface
 {
-    protected static $pattern = '/[\s,\.-]+/';
+    protected static $pattern = '/[\_\s,\.-]+/';
 
     public function tokenize($text, $stopwords = [])
     {
