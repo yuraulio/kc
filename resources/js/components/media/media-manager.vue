@@ -266,7 +266,7 @@
                             <vue-nestable-handle slot-scope="{ item, isChild }" :item="item">
                                 <li :key="item.id + uncolapsed.length" v-show="!isChild || uncolapsed.includes(item.id)" class="dd-item" :data-id="item.id">
                                     <button
-                                        @click="collapse(item); $forceUpdate();"
+                                        @click="collapse(item)"
                                         v-if="item.children && item.children.length && !uncolapsed.includes(item.children[0].id)"
                                         class="collapse-button"
                                     >
