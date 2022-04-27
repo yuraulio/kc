@@ -72,27 +72,50 @@
                         </div>
                         <div class="alert-outer" hidden>
                             <div class="alert-wrapper error-alert">
-                                <div class="alert-inner">
-                                    <p id="account-error"></p>
-                                </div>
-                        </div>
+                            <div class="alert-inner">
+                                <p id="account-error"></p>
+                                {{--<a href="javascript:void(0)" class="close-alert"><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')}}" alt="Close Alert"/></a>--}}
+                            </div>
+                            </div>
+                            <!-- /.alert-outer -->
                         </div>
                         <form autocomplete="off" class="login-form">
+                        
+
+                            <label>Email <span class="required">(*)</span></label>
                             <div class="input-wrapper input-wrapper--text input-wrapper--email">
-                                <span class="icon"><img width="14" src="{{cdn('/theme/assets/images/icons/icon-email.svg')}}" alt=""></span>
-                                <input type="text" placeholder="Email" id="email" autocomplete="off">
+                                <input type="text"  id="email-sub" autocomplete="off">
+
                             </div>
-                            <div class="input-wrapper input-wrapper--text">
-                                <span class="icon"><img width="10" src="{{cdn('/theme/assets/images/icons/icon-lock.svg')}}" alt=""></span>
-                                <input type="password" placeholder="Password" id="password" autocomplete="off">
+                            
+                            </br>
+
+                            <label> Password <span class="required">(*)</span></label><span data-id="password-sub" class="icon sub"><img width="20" src="{{cdn('/theme/assets/images/icons/eye-password.svg')}}" alt="">Show</span>
+                            <div class="input-wrapper input-wrapper--text">    
+                                <input type="password"  id="password-sub" autocomplete="off">
                             </div>
+
+                            
                             <div class="form-group">
-                                <label for="remember-me"><input id="remember-me" type="checkbox">Remember me</label>
-                                <a id="forgot-pass" href="javascript:void(0)">Forgot password?</a>
+                            <label for="remember-me"><input id="remember-me-sub" type="checkbox">Remember me</label>
+                            {{--<a id="forgot-pass" href="javascript:void(0)">Forgot password?</a>--}}
                             </div>
-                            <input type="button" onclick="loginAjaxNew()" value="LOGIN">
+                            <input type="button" onclick="loginAjaxSubscription()" value="LOGIN">
                         </form>
                     </div>
+
+                    <script>
+                        $('.icon.sub').click(function(){
+                            let input = $(`#${$(this).data('id')}`);
+                            if(input.attr('type') === "password"){
+                                input.attr('type','text')
+                                $(this).find('img').attr('src', "{{cdn('/theme/assets/images/icons/eye-password-active.svg')}}");
+                            }else{
+                                input.attr('type','password')
+                                $(this).find('img').attr('src', "{{cdn('/theme/assets/images/icons/eye-password.svg')}}");
+                            }
+                        })
+                    </script>
 
                     <div id="forgot-pass-input" class="login-popup" hidden>
                         <a href="#" class="close-btn"><img width="26" src="{{cdn('theme/assets/images/icons/icon-close.svg')}}" class="replace-with-svg" alt="Close"></a>
