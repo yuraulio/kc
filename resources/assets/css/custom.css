@@ -155,3 +155,19 @@
         max-width: 100%!important;
     }
 }
+
+.cart-number-mobile {
+    position: relative;
+    background: red;
+    color: white;
+    border-radius: 68px;
+    padding: 1px;
+    text-align: center;
+    font-size: 15px;
+    width: 21px;
+    height: 21px;
+    display: inline-block;
+    margin-left: 5px;
+    left: initial;
+    top: initial;
+}
