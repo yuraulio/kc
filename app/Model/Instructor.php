@@ -32,7 +32,7 @@ class Instructor extends Model
     public function event()
     {
         $now = date('Y-m-d');
-        return $this->belongsToMany(Event::class, 'event_topic_lesson_instructor')->wherePivot('instructor_id',$this->user()->first()->id)->wherePivot('time_starts','>=',$now)->orWhere('time_starts',null)->whereIn('status',[0,2,3])->where('published',true)->with('slugable','category','city')->distinct();
+        return $this->belongsToMany(Event::class, 'event_topic_lesson_instructor')->with('summary1', 'category', 'slugable')->wherePivot('instructor_id',$this->user()->first()->id)->wherePivot('time_starts','>=',$now)->orWhere('time_starts',null)->whereIn('status',[0,2,3])->where('published',true)->with('slugable','category','city')->distinct();
     }
 
     public function eventInstructorPage()
