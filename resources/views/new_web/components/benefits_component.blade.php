@@ -16,10 +16,10 @@
             <h2 class="text-align-center text-xs-left tab-title mt-5">{!!$title!!}</h2>
             <h3>{!!$body!!}</h3>
             <div class="benefits-list">
-                <div class="row-flex row-flex-17">
+                <div class="row">
                     @foreach($benefits as $key => $benefit)
                         @if($benefit['name'] != '')
-                            <div class="col-3 col-sm-6 col-xs-12">
+                            <div class="col-12 col-sm-6 col-md-3">
                                 <div class="benefit-box">
                                     <div class="box-icon">
                                         <img class="replace-with-svg" src="{{cdn(get_image($benefit['medias']))}}" width="40" alt="">

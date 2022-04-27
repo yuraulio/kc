@@ -148,8 +148,8 @@
                                 <?php $url = url($slug); ?>
 
                                 <h3><a href="{{$url}}">{{ $until }}</a></h3>
-                                
-                                @if(isset($header_menus['elearning_card']['data']['slugable']) )<a href="{{ $header_menus['elearning_card']['data']['slugable']['slug'] }}" class="location"> VIDEO E-LEARNING COURSES</a>@endif
+
+                                <a href="/video-on-demand-courses" class="location"> VIDEO E-LEARNING COURSES</a>
                                 <span class="date"> </span>
                                 <a href="{{$url}}" class="btn btn--sm btn--secondary">course details</a>
 
@@ -266,7 +266,7 @@
                                     <div class="box-text">
                                     <h3><a href="{{ $row['slugable']['slug'] }}">{{ $until}}</a></h3>
 
-                                    @if(isset($header_menus['elearning_card']['data']['slugable']) )<a href="{{ $header_menus['elearning_card']['data']['slugable']['slug'] }}" class="location"> VIDEO E-LEARNING COURSES</a>@endif
+                                    <a href="/video-on-demand-courses" class="location"> VIDEO E-LEARNING COURSES</a>
                                     <span class="date"></span>
                                     <a href="{{ $row['slugable']['slug'] }}" class="btn btn--sm btn--secondary">enroll for free</a>
                                     </div>
