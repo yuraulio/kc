@@ -234,7 +234,7 @@ class UserController extends Controller
         }
 
 
-        dd($data);
+     
         return response()->json([
             'success' => true,
             'data' => $data
@@ -658,8 +658,9 @@ class UserController extends Controller
                 $arr['topic_content']['topic_id'] = $key11;
                 $arr['topic_name'] = $topic['name'];
                 
+                $arr['topic_content']['lessons'] = $topic['lessons'];
                 if($isElearning){
-                    $arr['topic_content']['lessons'] = $topic['lessons'];
+                    //$arr['topic_content']['lessons'] = $topic['lessons'];
 
                     $topic1 = preg_replace('/[0-9]+/', '', $topic['name']);
                     $topic1 = Str::slug($topic1);
@@ -948,9 +949,10 @@ class UserController extends Controller
                 $arr['topic_content']['topic_id'] = $key11;
                 $arr['topic_name'] = $topic['name'];
                 
+                $arr['topic_content']['lessons'] = $topic['lessons'];
                 if($isElearning){
             
-                    $arr['topic_content']['lessons'] = $topic['lessons'];
+                    //$arr['topic_content']['lessons'] = $topic['lessons'];
                     $arr['topic_content']['files'] = [];
 
                 }
