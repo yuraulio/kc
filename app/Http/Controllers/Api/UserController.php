@@ -54,9 +54,9 @@ class UserController extends Controller
 
         if(isset($user['image']) && get_profile_image($user['image'])){
 
-            $user['profileImage'] = cdn(get_profile_image($user['image']));
+            $user['profileImage'] = get_profile_image($user['image']);
         }else{
-            $user['profileImage'] = cdn('/theme/assets/images/icons/user-profile-placeholder-image.png');
+            $user['profileImage'] = '/theme/assets/images/icons/user-profile-placeholder-image.png';
         }
 
         unset($user['image']);
@@ -208,27 +208,59 @@ class UserController extends Controller
 
     public function events()
     {
-        $bonusFiles = ['_Bonus', 'Bonus', 'Bonus Files', 'Βonus', '_Βonus', 'Βonus', 'Βonus Files'];
-        $user1 = Auth::user();
-
-        //dd($user1);
-
-        $user = User::find($user1->id);
+        
+        $user = Auth::user();;//->with('events.summary1','events.lessons.topic','instructor.event')->first();
+        $user = User::where('id',$user->id)->with('events.summary1','events','events.lessons.topic')->first();
         $data = [];
+        $instructor = count($user->instructor) > 0;
+        
+        if($instructor){
+            $data = $this->instructorEvents($data,$user);
+        }else{
+            $data = $this->userEvents($data,$user);
+        }
 
+
+        foreach($data as $key => $d){
+           
+            unset($data[$key]['event']['summary1']);
+            unset($data[$key]['event']['pivot']);
+            unset($data[$key]['event']['category']);
+            unset($data[$key]['event']['slugable']);
+            unset($data[$key]['event']['lessons']);
+            unset($data[$key]['event']['summary']);
+            unset($data[$key]['event']['body']);
+            unset($data[$key]['event']['htmlTitle']);
+        }
+
+
+     
+        return response()->json([
+            'success' => true,
+            'data' => $data
+        ]);
+
+    }
+
+
+    private function userEvents($data,$user,$exceptEvents = []){
+
+        $bonusFiles = ['_Bonus', 'Bonus', 'Bonus Files', 'Βonus', '_Βonus', 'Βonus', 'Βonus Files'];
         $instructors = Instructor::with('medias')->get()->groupby('id');
 
-
-        foreach($user->events as $key => $event)
+        foreach($user['events']->whereNotIn('id',$exceptEvents) as $key => $event)
         {
             
 
             $data1 = [];
             
-            $event = Event::find($event['id']);
+            $isElearning = false;
+            //$event = Event::find($event['id']);
+
+            $category = $event->category->first();
 
             $data[$key]['event'] = $event->toArray();
-            $dropbox = $event->category->first()['dropbox']->first();
+            $dropbox = $category['dropbox']->first();
             $folders = isset($dropbox['folders'][0]) ? $dropbox['folders'][0] : [];
             $folders_bonus = isset($dropbox['folders'][1]) ? $dropbox['folders'][1] : [];
             //dd($folders_bonus);
@@ -373,10 +405,9 @@ class UserController extends Controller
                 $folders[] = ['id'=>$file['id'],'dirname'=>$file['dirname'],'foldername'=>$file['foldername'],'files'=>$file['files'],'bonus'=>$file['bonus'],
                     'subfolders'=>$newSubfolders];
             }
-            //$data[$key]['event']['files']['folders'] = $folders;
-                   
+           
             // Summary
-            foreach($event->summary1 as $key_summary => $summary){
+            foreach($event['summary1'] as $key_summary => $summary){
                 $data[$key]['summary'][$key_summary]['title'] = $summary->title;
                 $data[$key]['summary'][$key_summary]['description'] = $summary->description;
                 $data[$key]['summary'][$key_summary]['icon'] = $summary->icon;
@@ -421,6 +452,7 @@ class UserController extends Controller
 
             }else if($event->is_elearning_course()){
                 $data[$key]['is_elearning'] = true;
+                $isElearning = true;
                 //progress here
                 $data[$key]['progress'] = intval($event->progress($user)).'%';
 
@@ -440,175 +472,501 @@ class UserController extends Controller
                 $data[$key]['is_inClass'] = false;
             }
 
-            $arr = array();
+           
+            $topics = [];
 
-            $data[$key]['topics'] = [];
-            foreach($event->topicsLessonsInstructors()['topics'] as $key11 => $topic){
-                //dd($key11);
+            foreach($event->lessons as $lesson){
+                if(!$lesson['instructor_id']){
+                    continue;
+                }
+                $sum= 0;
                 $arr_lesson = array();
-                $arr['topic_content'] = array();
-                $arr['topic_content']['lessons'] = array();
+                $topic = $lesson['topic']->first();
+                //$topic = $lesson->topic()->wherePivot('category_id',$category->id)->first();
 
-                $calendar_count = 0;
+                if(!isset($topics[$topic->id])){
+                    $topics[$topic->id] = [];
+                    $topics[$topic->id]['calendar_count'] = 0;
+                    $topics[$topic->id]['sumHour'] = 0;
+                    $topics[$topic->id]['lessons'] = [];
+                }
 
-                foreach($topic['lessons'] as $key_topic => $lesson1){
+                $topics[$topic->id]['name'] = $topic->title;
 
-
-
+                if($isElearning){
                     
-                        $arr['topic_name'] = $key11;
-
-                        //$data[$key]['topics'][$key11]['lessons'][$key_topic]['title'] = $lesson1['title'];
-                        if($event->is_elearning_course()){
-                            //$data[$key]['topics'][$key11]['topic_id'] = $lesson1['topic_id'];
-                            $arr['topic_content']['topic_id'] = $lesson1['topic_id'];
-
-                            $m = isset($topic['topic_duration']) ?  floor(($topic['topic_duration'] / 60) % 60) : 0;
-                            $h =isset($topic['topic_duration']) ? $hours = floor($topic['topic_duration'] / 3600) : 0;
-                            $arr['topic_content']['total_duration'] = intval($h) . 'h ' . $m . 'm';
+                    //$m = isset($topic['topic_duration']) ?  floor(($topic['topic_duration'] / 60) % 60) : 0;
+                    //$h =isset($topic['topic_duration']) ? $hours = floor($topic['topic_duration'] / 3600) : 0;
+                    //$arr['topic_content']['total_duration'] = intval($h) . 'h ' . $m . 'm';
 
 
-                            $arr_lesson['title'] = $lesson1['title'];
-                            $arr_lesson['vimeo_video'] = $lesson1['vimeo_video'];
-                            $arr_lesson['vimeo_duration'] = $lesson1['vimeo_duration'];
+                    $arr_lesson['title'] = $lesson['title'];
+                    $arr_lesson['vimeo_video'] = $lesson['vimeo_video'];
+                    $arr_lesson['vimeo_duration'] = $lesson['vimeo_duration'];
+                    $arr_lesson['bold'] = $lesson['bold'];
 
-                            //$arr['topic_content']['lessons'][$key_topic]['vimeo_video'] = $lesson1['vimeo_video'];
-                            //$arr['topic_content']['lessons'][$key_topic]['vimeo_duration'] = $lesson1['vimeo_duration'];
+                 
+                    if($lesson['vimeo_video'] != ''){
+                        $vimeo_id = explode('https://vimeo.com/', $lesson['vimeo_video'])[1];
 
-                            if($lesson1['vimeo_video'] != ''){
-                                $vimeo_id = explode('https://vimeo.com/', $lesson1['vimeo_video'])[1];
-
-                                if(isset($notes[$vimeo_id]))
-                                    //$arr['topic_content']['lessons'][$key_topic]['note'] = $notes[$vimeo_id];
-                                    $arr_lesson['note'] = $notes[$vimeo_id];
-
-                                    //dd(isset($videos[$vimeo_id]));
-
-                                if(isset($videos[$vimeo_id])){
-
-                                    $arr_lesson['video_info']['seen'] = strval($videos[$vimeo_id]['seen']);
-                                    $arr_lesson['video_info']['stop_time'] = strval($videos[$vimeo_id]['stop_time']);
-                                    $arr_lesson['video_info']['percentMinutes'] = strval($videos[$vimeo_id]['percentMinutes']);
-                                }else{
-                                    $arr_lesson['video_info']['seen'] = "0";
-                                    $arr_lesson['video_info']['stop_time'] = "0";
-                                    $arr_lesson['video_info']['percentMinutes'] = "0";
-                                }
+                        if(isset($notes[$vimeo_id]))
+                            $arr_lesson['note'] = $notes[$vimeo_id];
 
 
+                        if(isset($videos[$vimeo_id])){
 
-
-                            }else{
-                                $arr_lesson['note'] = '';
-                            }
-
-
-                            $topic1 = preg_replace('/[0-9]+/', '', $key11);
-                            $topic1 = Str::slug($topic1);
-
-                        ////dd($data1);
-
-                            foreach($folders as $key12 => $folder){
-                                
-                                $folderName = $folder['foldername'];
-                                $folderName = preg_replace('/[0-9]+/', '', $folderName);
-
-                                $folderName = Str::slug($folderName);
-                                if($topic1 == $folderName){
-                                    $arr['topic_content']['files'] = $folder;
-                                }
-                            }
-
-
-                        }else if($event->is_inclass_course()){
-                            //$arr['lessons'][$key_topic]['title']
-                            //dd($lesson1['pivot']['date']);
-                            if($lesson1['pivot']['date'] != ''){
-                                $arr_lesson['date'] = date_format(date_create($lesson1['pivot']['date']),"d/m/Y");
-
-
-                            }else{
-                                $arr_lesson['date'] = date_format(date_create($lesson1['pivot']['time_starts']),"d/m/Y");
-                                //dd($arr_lesson['time_starts']);
-                            }
-
-                            $arr_lesson['title'] = $lesson1['title'];
-                            $arr_lesson['time_starts'] = $lesson1['pivot']['time_starts'];
-                            $arr_lesson['time_ends'] = $lesson1['pivot']['time_ends'];
-                            $arr_lesson['duration'] = $lesson1['pivot']['duration'];
-                            $arr_lesson['room'] = $lesson1['pivot']['room'];
-                            // Calendar
-
-                            //
-                            //parse date
-                            $date_lesson = ($lesson1['pivot']['date'] != null) ? $lesson1['pivot']['date'] : null;
-                            
-                            if(/*$date_lesson == null && */$lesson1['pivot']['time_starts'] != ''){
-
-                                $date_lesson = $lesson1['pivot']['time_starts'];
-                                //var_dump($date_lesson);
-                                //2020-06-29 23:00:00
-
-
-                                $date_split = explode(" ", $date_lesson);
-                                //0 => "2020-06-29"
-                                //1 => "23:00:00"
-
-                                $date = strtotime($date_split[0]);
-                                //1593378000
-                                //dd($date_split[0]);
-
-                                //dd($date_split[1]);
-                                $time = strtotime($date_split[1]);
-                                //dd($time);
-                                //1624564800
-
-                                $date_time = strtotime($date_lesson);
-
-                                //key einai to ==>> $date
-                                //var_dump($time);
-
-
-                                $data[$key]['calendar'][$calendar_count]['time'] = $date_lesson ?? '';
-                                $data[$key]['calendar'][$calendar_count]['date_time'] = date_format(date_create($date_lesson), 'd/m/Y');
-                                $data[$key]['calendar'][$calendar_count]['title'] = $lesson1['title'];
-                                $data[$key]['calendar'][$calendar_count]['room'] = $lesson1['pivot']['room'];
-                                $data[$key]['calendar'][$calendar_count]['instructor_image'] = asset(get_image($instructors[$lesson1['instructor_id']][0]->medias, 'instructors-small'));
-                                // $data[$key]['calendar'][$calendar_count]['instructor_image'] = \Request::url().$instructors[$lesson1['instructor_id']][0]->medias['path'].$instructors[$lesson1['instructor_id']][0]->medias['original_name'];
-                                $data[$key]['calendar'][$calendar_count]['instructor_name'] = $instructors[$lesson1['instructor_id']][0]['title'].' '.$instructors[$lesson1['instructor_id']][0]['subtitle'];
-
-                                $calendar_count++;
-                            }
-
+                            $arr_lesson['video_info']['seen'] = strval($videos[$vimeo_id]['seen']);
+                            $arr_lesson['video_info']['stop_time'] = strval($videos[$vimeo_id]['stop_time']);
+                            $arr_lesson['video_info']['percentMinutes'] = strval($videos[$vimeo_id]['percentMinutes']);
+                        }else{
+                            $arr_lesson['video_info']['seen'] = "0";
+                            $arr_lesson['video_info']['stop_time'] = "0";
+                            $arr_lesson['video_info']['percentMinutes'] = "0";
                         }
 
 
-                        $instructor['name'] = $instructors[$lesson1['instructor_id']][0]['title'].' '.$instructors[$lesson1['instructor_id']][0]['subtitle'];
-                        $instructor['media'] = asset(get_image($instructors[$lesson1['instructor_id']][0]->medias, 'instructors-small'));
-                        $arr_lesson['instructor'] = $instructor;
-                        //dd($arr['topic_content']);
 
 
+                    }else{
+                        $arr_lesson['note'] = '';
+                    }
+                    
+                    if($lesson['vimeo_duration'] != null && $lesson['vimeo_duration'] != '0'){
 
+                        $vimeo_duration = explode(' ', $lesson['vimeo_duration']);
+                        $hour = 0;
+                        $min = 0;
+                        $sec = 0;
+    
+    
+    
+                        if(count($vimeo_duration) == 3){
+                            $string_hour = $vimeo_duration[0];
+                            $string_hour = intval(explode('h',$string_hour)[0]);
+                            $hour = $string_hour * 3600;
+    
+                            $string_min = $vimeo_duration[1];
+                            $string_min = intval(explode('m',$string_min)[0]);
+                            $min = $string_min * 60;
+    
+                            $string_sec = $vimeo_duration[2];
+                            $string_sec = intval(explode('s',$string_sec)[0]);
+                            $sec = $string_sec;
+    
+                            $sum = $hour + $min + $sec;
+    
+                        }else if(count($vimeo_duration) == 2){
+                            $string_min = $vimeo_duration[0];
+                            $string_min = intval(explode('m',$string_min)[0]);
+                            $min = $string_min * 60;
+    
+                            $string_sec = $vimeo_duration[1];
+                            $string_sec = intval(explode('s',$string_sec)[0]);
+                            $sec = $string_sec;
+    
+                            $sum = $min + $sec;
+                        }else if(count($vimeo_duration) == 1){
+                            //dd($vimeo_duration);
+                            $a = strpos( $vimeo_duration[0], 's');
+                            //dd($a);
+                            if($a === false ){
+                                $sum = 0;
+                                if(strpos( $vimeo_duration[0], 'm')){
+                                    $string_min = $vimeo_duration[0];
+                                    $string_min = intval(explode('m',$string_min)[0]);
+                                    $min = $string_min * 60;
+                                    $sum = $min;
+                                }
+    
+                            }else if($a !== false ){
+                                $string_sec = intval(explode('s',$vimeo_duration[0])[0]);
+                                $sec = $string_sec;
+                                $sum = $sec;
+    
+                            }
+                        }
+    
+                    }
+    
+                    $topics[$topic->id]['sumHour'] += $sum;
+
+
+                  
+
+                }else{
+                    if($lesson['pivot']['date'] != ''){
+                        $arr_lesson['date'] = date_format(date_create($lesson['pivot']['date']),"d/m/Y");
+
+
+                    }else{
+                        $arr_lesson['date'] = date_format(date_create($lesson['pivot']['time_starts']),"d/m/Y");
                         
+                    }
 
-                        array_push($arr['topic_content']['lessons'], $arr_lesson);
+                    $arr_lesson['title'] = $lesson['title'];
+                    $arr_lesson['time_starts'] = $lesson['pivot']['time_starts'];
+                    $arr_lesson['time_ends'] = $lesson['pivot']['time_ends'];
+                    $arr_lesson['duration'] = $lesson['pivot']['duration'];
+                    $arr_lesson['room'] = $lesson['pivot']['room'];
+                    // Calendar
+
+                    //
+                    //parse date
+                    $date_lesson = ($lesson['pivot']['date'] != null) ? $lesson['pivot']['date'] : null;
+                    
+                    if($lesson['pivot']['time_starts'] != ''){
+
+                        $date_lesson = $lesson['pivot']['time_starts'];
+                        $date_split = explode(" ", $date_lesson);
+                        $date = strtotime($date_split[0]);
+                        $time = strtotime($date_split[1]);
+                        $date_time = strtotime($date_lesson);
+
+                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['time'] = $date_lesson ?? '';
+                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['date_time'] = date_format(date_create($date_lesson), 'd/m/Y');
+                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['title'] = $lesson['title'];
+                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['room'] = $lesson['pivot']['room'];
+                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_image'] = asset(get_image($instructors[$lesson['instructor_id']][0]->medias, 'instructors-small'));
+                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_name'] = $instructors[$lesson['instructor_id']][0]['title'].' '.$instructors[$lesson['instructor_id']][0]['subtitle'];
+
+                        $topics[$topic->id]['calendar_count']++;
+                    }
+
+                }
+               
+
+                $instructor['name'] = $instructors[$lesson['instructor_id']][0]['title'].' '.$instructors[$lesson['instructor_id']][0]['subtitle'];
+                $instructor['media'] = asset(get_image($instructors[$lesson['instructor_id']][0]->medias, 'instructors-small'));
+
+                $arr_lesson['instructor'] = $instructor; 
+
+                array_push($topics[$topic->id]['lessons'], $arr_lesson);
+
+                
+            }
+
+            $data[$key]['topics'] = [];
+            foreach($topics as $key11 =>  $topic){
+                //dd($topic);
+
+                $arr['topic_content'] = array();
+                $arr['topic_content']['lessons'] = array();
+
+                $m = floor(($topic['sumHour'] / 60) % 60) ;
+                $h =$hours = floor($topic['sumHour'] / 3600) ;
+                $arr['topic_content']['total_duration'] = intval($h) . 'h ' . $m . 'm';
+                $arr['topic_content']['topic_id'] = $key11;
+                $arr['topic_name'] = $topic['name'];
+                
+                $arr['topic_content']['lessons'] = $topic['lessons'];
+                if($isElearning){
+                    //$arr['topic_content']['lessons'] = $topic['lessons'];
+
+                    $topic1 = preg_replace('/[0-9]+/', '', $topic['name']);
+                    $topic1 = Str::slug($topic1);
+
+
+                    foreach($folders as $key12 => $folder){
+                        
+                        $folderName = $folder['foldername'];
+                        $folderName = preg_replace('/[0-9]+/', '', $folderName);
+
+                        $folderName = Str::slug($folderName);
+                        if($topic1 == $folderName){
+                            $arr['topic_content']['files'] = $folder;
+                        }
+                    }
+
+
+                }
+                
+                array_push($data[$key]['topics'], $arr);
+            }
+            
+            
+        }
+
+        return $data;
+
+    }
+
+    private function instructorEvents($data,$user){
+
+        $exceptEvents = [];
+        $bonusFiles = ['_Bonus', 'Bonus', 'Bonus Files', 'Βonus', '_Βonus', 'Βonus', 'Βonus Files'];
+        $instructors = Instructor::with('medias')->get()->groupby('id');
+        $instructor = $user->instructor()->with('event.summary1','event.lessons.topic')->first();
+        
+        
+        foreach($instructor['event'] as $key => $event)
+        {
+            
+            $data1 = [];
+            $isElearning = false;
+
+            $category = $event->category->first();
+            $data[$key]['event'] = $event;
+            
+            $exceptEvents[] = $event['id'];
+
+    
+            // Summary
+            foreach($event['summary1'] as $key_summary => $summary){
+                $data[$key]['summary'][$key_summary]['title'] = $summary->title;
+                $data[$key]['summary'][$key_summary]['description'] = $summary->description;
+                $data[$key]['summary'][$key_summary]['icon'] = $summary->icon;
+                $data[$key]['summary'][$key_summary]['section'] = $summary->section;
+
+                if($summary->section == 'date'){
+                    $date = $summary->section;
+                }else{
+                    $date = "null";
+                }
+            }
+            
+            // is Inclass?
+            if($event->is_inclass_course()){
+                //dd($key);
+                $data[$key]['is_inclass'] = true;
+                $data[$key]['date'] = $date;
+                //$data[$key]['city'] = $event->city->toArray();
+                if(isset($event->city)){
+                    //dd($event->city);
+                    foreach($event->city as $key_city => $city){
+                        $data[$key]['city'][$key_city]['name'] = ($city->name) ? $city->name : '' ;
+                        $data[$key]['city'][$key_city]['description'] =  ($city->description) ? $city->description : '' ;
+                    }
+                }
+
+                if(isset($event->venues)){
+                    foreach($event->venues as $key_venue => $venue ){
+                        $data[$key]['venues'][$key_venue]['name'] = ($venue->name) ? $venue->name : '';
+                        $data[$key]['venues'][$key_venue]['description'] = ($venue->description) ? $venue->description : '';
+                        $data[$key]['venues'][$key_venue]['direction_description'] = ($venue->direction_description) ? $venue->direction_description : '';
+                        $data[$key]['venues'][$key_venue]['longitude'] = ($venue->longtitude) ? $venue->longtitude : '';
+                        $data[$key]['venues'][$key_venue]['latitude'] = ($venue->latitude) ? $venue->latitude : '';
+                    }
 
                 }
 
+
+            }else if($event->is_elearning_course()){
+                $data[$key]['is_elearning'] = true;
+                $isElearning = true;
+                //progress here
+                $data[$key]['progress'] = intval($event->progress($user)).'%';
+
+                // Statistics
+                $statistics =  ($statistics = $user->statistic()->wherePivot('event_id',$event['id'])->first()) ?
+                            $statistics->toArray() : ['pivot' => [], 'videos' => ''];
+
+                //$statistics = $user->updateUserStatistic($event,$statistics['pivot']);
+
+                $notes = isset($statistics->pivot['notes']) ? json_decode($statistics->pivot['notes'], true) : [];
+                $videos = isset($statistics->pivot['videos']) ? json_decode($statistics->pivot['videos'], true) : [];
+                $data[$key]['lastVideoSeen'] = isset($statistics->pivot['lastVideoSeen']) ? $statistics->pivot['lastVideoSeen'] : -1;
+
+
+            }
+            else{
+                $data[$key]['is_inClass'] = false;
+            }
+
+           
+            $topics = [];
+            foreach($event->lessons as $lesson){
+                if(!$lesson['instructor_id']){
+                    continue;
+                }
+                $sum= 0;
+                $arr_lesson = array();
+                $topic = $lesson['topic']->first();
+                //$topic = $lesson->topic()->wherePivot('category_id',$category->id)->first();
+
+                if(!isset($topics[$topic->id])){
+                    $topics[$topic->id] = [];
+                    $topics[$topic->id]['calendar_count'] = 0;
+                    $topics[$topic->id]['sumHour'] = 0;
+                    $topics[$topic->id]['lessons'] = [];
+                }
+
+                $topics[$topic->id]['name'] = $topic->title;
+
+                if($isElearning){
+                    
+                    $arr_lesson['title'] = $lesson['title'];
+                    $arr_lesson['vimeo_video'] = $lesson['vimeo_video'];
+                    $arr_lesson['vimeo_duration'] = $lesson['vimeo_duration'];
+                    $arr_lesson['bold'] = $lesson['bold'];
+
+                 
+                    if($lesson['vimeo_video'] != ''){
+                        $vimeo_id = explode('https://vimeo.com/', $lesson['vimeo_video'])[1];
+
+                        if(isset($notes[$vimeo_id]))
+                            $arr_lesson['note'] = $notes[$vimeo_id];
+
+
+                        if(isset($videos[$vimeo_id])){
+
+                            $arr_lesson['video_info']['seen'] = strval($videos[$vimeo_id]['seen']);
+                            $arr_lesson['video_info']['stop_time'] = strval($videos[$vimeo_id]['stop_time']);
+                            $arr_lesson['video_info']['percentMinutes'] = strval($videos[$vimeo_id]['percentMinutes']);
+                        }else{
+                            $arr_lesson['video_info']['seen'] = "0";
+                            $arr_lesson['video_info']['stop_time'] = "0";
+                            $arr_lesson['video_info']['percentMinutes'] = "0";
+                        }
+
+
+
+
+                    }else{
+                        $arr_lesson['note'] = '';
+                    }
+                    
+                    if($lesson['vimeo_duration'] != null && $lesson['vimeo_duration'] != '0'){
+
+                        $vimeo_duration = explode(' ', $lesson['vimeo_duration']);
+                        $hour = 0;
+                        $min = 0;
+                        $sec = 0;
+    
+    
+    
+                        if(count($vimeo_duration) == 3){
+                            $string_hour = $vimeo_duration[0];
+                            $string_hour = intval(explode('h',$string_hour)[0]);
+                            $hour = $string_hour * 3600;
+    
+                            $string_min = $vimeo_duration[1];
+                            $string_min = intval(explode('m',$string_min)[0]);
+                            $min = $string_min * 60;
+    
+                            $string_sec = $vimeo_duration[2];
+                            $string_sec = intval(explode('s',$string_sec)[0]);
+                            $sec = $string_sec;
+    
+                            $sum = $hour + $min + $sec;
+    
+                        }else if(count($vimeo_duration) == 2){
+                            $string_min = $vimeo_duration[0];
+                            $string_min = intval(explode('m',$string_min)[0]);
+                            $min = $string_min * 60;
+    
+                            $string_sec = $vimeo_duration[1];
+                            $string_sec = intval(explode('s',$string_sec)[0]);
+                            $sec = $string_sec;
+    
+                            $sum = $min + $sec;
+                        }else if(count($vimeo_duration) == 1){
+                            //dd($vimeo_duration);
+                            $a = strpos( $vimeo_duration[0], 's');
+                            //dd($a);
+                            if($a === false ){
+                                $sum = 0;
+                                if(strpos( $vimeo_duration[0], 'm')){
+                                    $string_min = $vimeo_duration[0];
+                                    $string_min = intval(explode('m',$string_min)[0]);
+                                    $min = $string_min * 60;
+                                    $sum = $min;
+                                }
+    
+                            }else if($a !== false ){
+                                $string_sec = intval(explode('s',$vimeo_duration[0])[0]);
+                                $sec = $string_sec;
+                                $sum = $sec;
+    
+                            }
+                        }
+    
+                    }
+    
+                    $topics[$topic->id]['sumHour'] += $sum;
+
+
+                  
+
+                }else{
+                    if($lesson['pivot']['date'] != ''){
+                        $arr_lesson['date'] = date_format(date_create($lesson['pivot']['date']),"d/m/Y");
+
+
+                    }else{
+                        $arr_lesson['date'] = date_format(date_create($lesson['pivot']['time_starts']),"d/m/Y");
+                        
+                    }
+
+                    $arr_lesson['title'] = $lesson['title'];
+                    $arr_lesson['time_starts'] = $lesson['pivot']['time_starts'];
+                    $arr_lesson['time_ends'] = $lesson['pivot']['time_ends'];
+                    $arr_lesson['duration'] = $lesson['pivot']['duration'];
+                    $arr_lesson['room'] = $lesson['pivot']['room'];
+             
+                    $date_lesson = ($lesson['pivot']['date'] != null) ? $lesson['pivot']['date'] : null;
+                    
+                    if($lesson['pivot']['time_starts'] != ''){
+
+                        $date_lesson = $lesson['pivot']['time_starts'];
+                        $date_split = explode(" ", $date_lesson);
+                        $date = strtotime($date_split[0]);
+                        $time = strtotime($date_split[1]);
+                        $date_time = strtotime($date_lesson);
+
+                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['time'] = $date_lesson ?? '';
+                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['date_time'] = date_format(date_create($date_lesson), 'd/m/Y');
+                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['title'] = $lesson['title'];
+                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['room'] = $lesson['pivot']['room'];
+                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_image'] = asset(get_image($instructors[$lesson['instructor_id']][0]->medias, 'instructors-small'));
+                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_name'] = $instructors[$lesson['instructor_id']][0]['title'].' '.$instructors[$lesson['instructor_id']][0]['subtitle'];
+
+                        $topics[$topic->id]['calendar_count']++;
+                    }
+
+                }
+               
+                $inst['name'] = $instructors[$lesson['instructor_id']][0]['title'].' '.$instructors[$lesson['instructor_id']][0]['subtitle'];
+                $inst['media'] = asset(get_image($instructors[$lesson['instructor_id']][0]->medias, 'instructors-small'));
+
+                $arr_lesson['instructor'] = $inst; 
+
+                array_push($topics[$topic->id]['lessons'], $arr_lesson);
+
+                
+            }
+
+            $data[$key]['topics'] = [];
+           
+            foreach($topics as $key11 =>  $topic){
+                
+
+                $arr['topic_content'] = array();
+                $arr['topic_content']['lessons'] = array();
+
+                $m = floor(($topic['sumHour'] / 60) % 60) ;
+                $h =$hours = floor($topic['sumHour'] / 3600) ;
+                $arr['topic_content']['total_duration'] = intval($h) . 'h ' . $m . 'm';
+                $arr['topic_content']['topic_id'] = $key11;
+                $arr['topic_name'] = $topic['name'];
+                
+                $arr['topic_content']['lessons'] = $topic['lessons'];
+                if($isElearning){
+            
+                    //$arr['topic_content']['lessons'] = $topic['lessons'];
+                    $arr['topic_content']['files'] = [];
+
+                }
+                
                 array_push($data[$key]['topics'], $arr);
             }
-         
-
-
+            
+           
         }
+       
 
+        $data = $this->userEvents($data,$user,$exceptEvents);
 
-        return response()->json([
-            'success' => true,
-            'data' => $data
-        ]);
-
+        return $data;
     }
 
     /**
