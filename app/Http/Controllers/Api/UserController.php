@@ -926,7 +926,7 @@ class UserController extends Controller
                 }
                
                 $inst['name'] = $instructors[$lesson['instructor_id']][0]['title'].' '.$instructors[$lesson['instructor_id']][0]['subtitle'];
-                $instt['media'] = asset(get_image($instructors[$lesson['instructor_id']][0]->medias, 'instructors-small'));
+                $inst['media'] = asset(get_image($instructors[$lesson['instructor_id']][0]->medias, 'instructors-small'));
 
                 $arr_lesson['instructor'] = $inst; 
 
