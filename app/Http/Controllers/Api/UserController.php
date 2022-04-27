@@ -220,8 +220,21 @@ class UserController extends Controller
             $data = $this->userEvents($data,$user);
         }
 
-        
 
+        foreach($data as $key => $d){
+           
+            unset($data[$key]['event']['summary1']);
+            unset($data[$key]['event']['pivot']);
+            unset($data[$key]['event']['category']);
+            unset($data[$key]['event']['slugable']);
+            unset($data[$key]['event']['lessons']);
+            unset($data[$key]['event']['summary']);
+            unset($data[$key]['event']['body']);
+            unset($data[$key]['event']['htmlTitle']);
+        }
+
+
+        dd($data);
         return response()->json([
             'success' => true,
             'data' => $data
@@ -669,148 +682,7 @@ class UserController extends Controller
                 array_push($data[$key]['topics'], $arr);
             }
             
-            /*$data[$key]['topics'] = [];
-            foreach($event->topicsLessonsInstructors()['topics'] as $key11 => $topic){
-                //dd($key11);
-                $arr_lesson = array();
-                $arr['topic_content'] = array();
-                $arr['topic_content']['lessons'] = array();
-
-                $calendar_count = 0;
-
-                foreach($topic['lessons'] as $key_topic => $lesson1){
-
-                    //dd($data[$key]['topics']);
-
-                    
-                        $arr['topic_name'] = $key11;
-
-                        
-                        if($isElearning){
-                            $arr['topic_content']['topic_id'] = $lesson1['topic_id'];
-
-                            $m = isset($topic['topic_duration']) ?  floor(($topic['topic_duration'] / 60) % 60) : 0;
-                            $h =isset($topic['topic_duration']) ? $hours = floor($topic['topic_duration'] / 3600) : 0;
-                            $arr['topic_content']['total_duration'] = intval($h) . 'h ' . $m . 'm';
-
-
-                            $arr_lesson['title'] = $lesson1['title'];
-                            $arr_lesson['vimeo_video'] = $lesson1['vimeo_video'];
-                            $arr_lesson['vimeo_duration'] = $lesson1['vimeo_duration'];
-
-                           
-
-                            if($lesson1['vimeo_video'] != ''){
-                                $vimeo_id = explode('https://vimeo.com/', $lesson1['vimeo_video'])[1];
-
-                                if(isset($notes[$vimeo_id]))
-                                    $arr_lesson['note'] = $notes[$vimeo_id];
-
-
-                                if(isset($videos[$vimeo_id])){
-
-                                    $arr_lesson['video_info']['seen'] = strval($videos[$vimeo_id]['seen']);
-                                    $arr_lesson['video_info']['stop_time'] = strval($videos[$vimeo_id]['stop_time']);
-                                    $arr_lesson['video_info']['percentMinutes'] = strval($videos[$vimeo_id]['percentMinutes']);
-                                }else{
-                                    $arr_lesson['video_info']['seen'] = "0";
-                                    $arr_lesson['video_info']['stop_time'] = "0";
-                                    $arr_lesson['video_info']['percentMinutes'] = "0";
-                                }
-
-
-
-
-                            }else{
-                                $arr_lesson['note'] = '';
-                            }
-
-
-                            $topic1 = preg_replace('/[0-9]+/', '', $key11);
-                            $topic1 = Str::slug($topic1);
-
-
-                            foreach($folders as $key12 => $folder){
-                                
-                                $folderName = $folder['foldername'];
-                                $folderName = preg_replace('/[0-9]+/', '', $folderName);
-
-                                $folderName = Str::slug($folderName);
-                                if($topic1 == $folderName){
-                                    $arr['topic_content']['files'] = $folder;
-                                }
-                            }
-
-
-                        }else{
-                           
-                            if($lesson1['pivot']['date'] != ''){
-                                $arr_lesson['date'] = date_format(date_create($lesson1['pivot']['date']),"d/m/Y");
-
-
-                            }else{
-                                $arr_lesson['date'] = date_format(date_create($lesson1['pivot']['time_starts']),"d/m/Y");
-                                
-                            }
-
-                            $arr_lesson['title'] = $lesson1['title'];
-                            $arr_lesson['time_starts'] = $lesson1['pivot']['time_starts'];
-                            $arr_lesson['time_ends'] = $lesson1['pivot']['time_ends'];
-                            $arr_lesson['duration'] = $lesson1['pivot']['duration'];
-                            $arr_lesson['room'] = $lesson1['pivot']['room'];
-                            // Calendar
-
-                            //
-                            //parse date
-                            $date_lesson = ($lesson1['pivot']['date'] != null) ? $lesson1['pivot']['date'] : null;
-                            
-                            if($lesson1['pivot']['time_starts'] != ''){
-
-                                $date_lesson = $lesson1['pivot']['time_starts'];
-                               
-
-
-                                $date_split = explode(" ", $date_lesson);
-                                
-
-                                $date = strtotime($date_split[0]);
-                           
-                                $time = strtotime($date_split[1]);
-               
-                                $date_time = strtotime($date_lesson);
-
-                        
-
-
-                                $data[$key]['calendar'][$calendar_count]['time'] = $date_lesson ?? '';
-                                $data[$key]['calendar'][$calendar_count]['date_time'] = date_format(date_create($date_lesson), 'd/m/Y');
-                                $data[$key]['calendar'][$calendar_count]['title'] = $lesson1['title'];
-                                $data[$key]['calendar'][$calendar_count]['room'] = $lesson1['pivot']['room'];
-                                $data[$key]['calendar'][$calendar_count]['instructor_image'] = asset(get_image($instructors[$lesson1['instructor_id']][0]->medias, 'instructors-small'));
-                                $data[$key]['calendar'][$calendar_count]['instructor_name'] = $instructors[$lesson1['instructor_id']][0]['title'].' '.$instructors[$lesson1['instructor_id']][0]['subtitle'];
-
-                                $calendar_count++;
-                            }
-
-                        }
-
-
-                        $instructor['name'] = $instructors[$lesson1['instructor_id']][0]['title'].' '.$instructors[$lesson1['instructor_id']][0]['subtitle'];
-                        $instructor['media'] = asset(get_image($instructors[$lesson1['instructor_id']][0]->medias, 'instructors-small'));
-                        $arr_lesson['instructor'] = $instructor;
-
-
-
-                        
-
-                        array_push($arr['topic_content']['lessons'], $arr_lesson);
-
-                }
-                array_push($data[$key]['topics'], $arr);
-            }*/
-         
-            //dd($topics);
-            //dd($data[$key]['topics']);
+            
         }
 
         return $data;
