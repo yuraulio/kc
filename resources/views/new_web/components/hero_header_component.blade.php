@@ -24,7 +24,7 @@
         <div class="overlay"></div>
     @endif
     <div class="container">
-        <div class="hero-message cms-rich-text-editor">
+        <div class="hero-message cms-rich-text-editor {{ $column->template->dynamic ? ' dynamic-header ' : ''}}">
             @if($column->template->dynamic)
                 <h1>{{$title}}</h1>
                 <h2>{{$subtitle}}</h2>

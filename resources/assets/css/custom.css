@@ -132,3 +132,26 @@
     margin-inline-end: 0px!important;
     padding-inline-start: 40px!important;
 }
+
+@media only screen and (max-width: 680px) {
+    .dynamic-header {
+        margin-top: 50px;
+    }
+}
+
+.fluid-width-video-wrapper iframe {
+    width: 100%!important;
+    height: 100%!important;
+}
+.section-course-tabs .course-full-text .location-map-wrapper > iframe {
+    width: 100%!important;
+    height: 100%!important;
+}
+
+@media only screen and (max-width: 1200px) {
+    .tabs-container {
+        margin-left: 0px!important;
+        margin-right: 0px!important;
+        max-width: 100%!important;
+    }
+}

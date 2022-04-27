@@ -16,30 +16,33 @@
     <div class="content-wrapper">
         <div class="tabs-wrapper fixed-tab-controls">
             <div class="tab-controls">
-                <div class="container">
-                    <a href="#" class="mobile-tabs-menu">Overview</a>
-                    <ul class="clearfix tab-controls-list">
-                        @foreach ($tabs["tabs"]["tabs"] as $index=>$tab)
-                            <li><a href="#{{Illuminate\Support\Str::slug($tab)}}" class="{{$index == 0 ? "active" : "" }}">{{$tab}}</a></li>
-                        @endforeach
-                    </ul>
-                    
-                    @if ($event)
-                        @if($event->view_tpl == "elearning_free")
-                            @if($is_event_paid==0 && !Auth::user())
-                                <a href="{{ route('cart.add-item', [ $event->id,'free', 8 ]) }}" class="btn btn--lg btn--primary hidden-sm go-to-href">ENROLL FOR FREE</a>
-                            @elseif($is_event_paid==0 && Auth::user())
-                                <a href="{{ route('enrollForFree',  $event->id) }}" class="btn btn--lg btn--primary hidden-sm go-to-href">ENROLL FOR FREE</a>
+                <div class="container tabs-container">
+                    <div class="row">
+                        <div calss="col-12">
+                            <a href="#" class="mobile-tabs-menu">Overview</a>
+                            <ul class="clearfix tab-controls-list">
+                                @foreach ($tabs["tabs"]["tabs"] as $index=>$tab)
+                                    <li><a href="#{{Illuminate\Support\Str::slug($tab)}}" class="{{$index == 0 ? "active" : "" }}">{{$tab}}</a></li>
+                                @endforeach
+                            </ul>
+                            
+                            @if ($event)
+                                @if($event->view_tpl == "elearning_free")
+                                    @if($is_event_paid==0 && !Auth::user())
+                                        <a href="{{ route('cart.add-item', [ $event->id,'free', 8 ]) }}" class="btn btn--lg btn--primary hidden-sm go-to-href">ENROLL FOR FREE</a>
+                                    @elseif($is_event_paid==0 && Auth::user())
+                                        <a href="{{ route('enrollForFree',  $event->id) }}" class="btn btn--lg btn--primary hidden-sm go-to-href">ENROLL FOR FREE</a>
+                                    @endif
+                                @else
+                                @if($estatus == 0 && !$is_event_paid)
+                                        <a href="#seats" class="btn btn--lg btn--primary go-to-href">ENROLL NOW</a>
+                                    @elseif($estatus != 3 && $estatus != 1 && !$is_event_paid)
+                                        <a href="#seats" class="btn btn--lg btn--primary go-to-href go-to-href soldout">SOLD OUT</a>
+                                    @endif
+                                @endif
                             @endif
-                        @else
-                           @if($estatus == 0 && !$is_event_paid)
-                                <a href="#seats" class="btn btn--lg btn--primary go-to-href">ENROLL NOW</a>
-                            @elseif($estatus != 3 && $estatus != 1 && !$is_event_paid)
-                                <a href="#seats" class="btn btn--lg btn--primary go-to-href go-to-href soldout">SOLD OUT</a>
-                            @endif
-                        @endif
-                    @endif
-
+                        </div>
+                    </div>
                 </div>
             </div>
 
