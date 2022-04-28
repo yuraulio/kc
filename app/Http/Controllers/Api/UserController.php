@@ -231,6 +231,8 @@ class UserController extends Controller
             unset($data[$key]['event']['summary']);
             unset($data[$key]['event']['body']);
             unset($data[$key]['event']['htmlTitle']);
+            unset($data[$key]['event']['city']);
+            unset($data[$key]['event']['delivery']);
         }
 
 
