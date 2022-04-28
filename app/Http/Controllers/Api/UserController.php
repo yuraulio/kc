@@ -259,7 +259,7 @@ class UserController extends Controller
 
             $category = $event->category->first();
 
-            $data[$key]['event'] = $event->toArray();
+            $data[$key]['event'] = $event;
             $dropbox = $category['dropbox']->first();
             $folders = isset($dropbox['folders'][0]) ? $dropbox['folders'][0] : [];
             $folders_bonus = isset($dropbox['folders'][1]) ? $dropbox['folders'][1] : [];
@@ -459,12 +459,15 @@ class UserController extends Controller
                 // Statistics
                 $statistics =  ($statistics = $user->statistic()->wherePivot('event_id',$event['id'])->first()) ?
                             $statistics->toArray() : ['pivot' => [], 'videos' => ''];
-
+                
                 //$statistics = $user->updateUserStatistic($event,$statistics['pivot']);
 
-                $notes = isset($statistics->pivot['notes']) ? json_decode($statistics->pivot['notes'], true) : [];
-                $videos = isset($statistics->pivot['videos']) ? json_decode($statistics->pivot['videos'], true) : [];
-                $data[$key]['lastVideoSeen'] = isset($statistics->pivot['lastVideoSeen']) ? $statistics->pivot['lastVideoSeen'] : -1;
+                $notes = isset($statistics['pivot']['notes']) ? json_decode($statistics['pivot']['notes'], true) : [];
+                $videos = isset($statistics['pivot']['videos']) ? json_decode($statistics['pivot']['videos'], true) : [];
+
+                //dd($statistics);
+
+                $data[$key]['lastVideoSeen'] = isset($statistics['pivot']['lastVideoSeen']) ? $statistics['pivot']['lastVideoSeen'] : -1;
 
 
             }
@@ -762,9 +765,9 @@ class UserController extends Controller
 
                 //$statistics = $user->updateUserStatistic($event,$statistics['pivot']);
 
-                $notes = isset($statistics->pivot['notes']) ? json_decode($statistics->pivot['notes'], true) : [];
-                $videos = isset($statistics->pivot['videos']) ? json_decode($statistics->pivot['videos'], true) : [];
-                $data[$key]['lastVideoSeen'] = isset($statistics->pivot['lastVideoSeen']) ? $statistics->pivot['lastVideoSeen'] : -1;
+                $notes = isset($statistics['pivot']['notes']) ? json_decode($statistics['pivot']['notes'], true) : [];
+                $videos = isset($statistics['pivot']['videos']) ? json_decode($statistics['pivot']['videos'], true) : [];
+                $data[$key]['lastVideoSeen'] = isset($statistics['pivot']['lastVideoSeen']) ? $statistics['pivot']['lastVideoSeen'] : -1;
 
 
             }

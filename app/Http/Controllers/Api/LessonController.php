@@ -89,10 +89,18 @@ class LessonController extends Controller
             'videos' => $db_video,
         ]);*/
 
-        $user->statistic()->updateExistingPivot($event_id, [
+
+        $user->statistic()
+            ->wherePivot('event_id', $event_id)
+            ->updateExistingPivot($event_id, [
+                'videos' => $db_video,
+                'lastVideoSeen' => $vimeo_id
+            ], false);
+
+        /*$user->statistic()->updateExistingPivot($event_id, [
             'videos' => $db_video,
             'lastVideoSeen' => $vimeo_id
-        ]);
+        ]);*/
 
 
 

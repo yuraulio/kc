@@ -684,6 +684,22 @@
                </div>
                @endif
 
+               @if(Session::has('opmessage'))
+                  @if(Session::get('opstatus'))
+                  <div class="alert-outer">
+                     <div class="container">
+                        <div class="alert-wrapper success-alert">
+                           <div class="alert-inner">
+                              <p><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-success-alert.svg')}}" alt="Info Alert">{{ Session::get('opmessage') }}</p>
+                              <a href="javascript:void(0)" class="close-alert"><img src="{{cdn('/theme/assets/images/icons/alert-icons/icon-close-alert.svg')}}" alt="Close Alert"/></a>
+                           </div>
+                        </div>
+                     </div>
+                     <!-- /.alert-outer -->
+                  </div>
+                  @endif
+               @endif
+
 
                <div class="container container-new">
                   <div class="row">

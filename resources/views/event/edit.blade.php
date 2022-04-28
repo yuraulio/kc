@@ -903,17 +903,17 @@
             let lesson_id = $('#lesson_id').val()
             let instructor_id = $('#instFormControlSelect12').val()
 
-            if(!date){
+            if(!date && event_type){
 
                 alert('You must fill date field')
                 return false;
 
-            }else if(!start){
+            }else if(!start && event_type){
                 
                 alert('You must fill start time field')
                 return false;
                 
-            }else if(!end){
+            }else if(!end && event_type){
 
                 alert('You must fill end time field')
                 return false;
@@ -966,6 +966,7 @@
 
 
 <script>
+    var event_type = false;
             function formatDate(date) {
             var d = new Date(date),
                 month = '' + (d.getMonth() + 1),
@@ -1024,6 +1025,7 @@
             topic_id = topic_id.split("_")
             const event_id = $('#topic_lessons').data('event-id')
             let instructor_id = $('#instFormControlSelect12').val()
+            
 
             data = {lesson_id:elem[1], topic_id:topic_id[1], event_id:event_id}
             $.ajax({
@@ -1040,7 +1042,7 @@
                     data = JSON.parse(data)
                     let instructors = data.instructors
 
-                    let event_type = data.isInclassCourse
+                    event_type = data.isInclassCourse
                     let event_id = data.event
 
                     lesson = data.lesson.pivot
