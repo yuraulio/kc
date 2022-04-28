@@ -7,6 +7,7 @@ use App\Model\Event;
 use App\Model\Plan;
 use App\Model\User;
 use Auth;
+use Session;
 
 class CheckForSubscription
 {
@@ -50,6 +51,12 @@ class CheckForSubscription
         }
         if(!$dpuser->checkUserPlansById($event->plans,$plan->id)){
             abort(404);
+        }
+
+        if($user->subscriptions()->where('stripe_price',$plan->stripe_plan)->first()){
+            Session::flash('opmessage', 'You have already been subscribed to this event.');
+            Session::flash('opstatus', 1);
+            return redirect('/myaccount');
         }
 
         return $next($request);

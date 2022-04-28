@@ -462,9 +462,12 @@ class UserController extends Controller
                 
                 //$statistics = $user->updateUserStatistic($event,$statistics['pivot']);
 
-                $notes = isset($statistics->pivot['notes']) ? json_decode($statistics->pivot['notes'], true) : [];
-                $videos = isset($statistics->pivot['videos']) ? json_decode($statistics->pivot['videos'], true) : [];
-                $data[$key]['lastVideoSeen'] = isset($statistics->pivot['lastVideoSeen']) ? $statistics->pivot['lastVideoSeen'] : -1;
+                $notes = isset($statistics['pivot']['notes']) ? json_decode($statistics['pivot']['notes'], true) : [];
+                $videos = isset($statistics['pivot']['videos']) ? json_decode($statistics['pivot']['videos'], true) : [];
+
+                //dd($statistics);
+
+                $data[$key]['lastVideoSeen'] = isset($statistics['pivot']['lastVideoSeen']) ? $statistics['pivot']['lastVideoSeen'] : -1;
 
 
             }
@@ -762,9 +765,9 @@ class UserController extends Controller
 
                 //$statistics = $user->updateUserStatistic($event,$statistics['pivot']);
 
-                $notes = isset($statistics->pivot['notes']) ? json_decode($statistics->pivot['notes'], true) : [];
-                $videos = isset($statistics->pivot['videos']) ? json_decode($statistics->pivot['videos'], true) : [];
-                $data[$key]['lastVideoSeen'] = isset($statistics->pivot['lastVideoSeen']) ? $statistics->pivot['lastVideoSeen'] : -1;
+                $notes = isset($statistics['pivot']['notes']) ? json_decode($statistics['pivot']['notes'], true) : [];
+                $videos = isset($statistics['pivot']['videos']) ? json_decode($statistics['pivot']['videos'], true) : [];
+                $data[$key]['lastVideoSeen'] = isset($statistics['pivot']['lastVideoSeen']) ? $statistics['pivot']['lastVideoSeen'] : -1;
 
 
             }
