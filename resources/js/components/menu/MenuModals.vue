@@ -26,9 +26,15 @@
 
                             </div>
 
-                            <div class="m-footer pull-right mt-10">
-                                <button @click="closeModal" type="button" class="btn btn-danger cs-danger" data-dismiss="modal">Close</button>
-                                <button type="submit" id="add_menu_item_btn" class="btn btn-info edit-info">Add</button>
+                            <div class="m-footer mt-10 text-center">
+                                <button type="submit" id="add_menu_item_btn" class="btn btn-soft-success edit-info m-1">
+                                    <i class="mdi mdi-square-edit-outline me-1"></i>
+                                    Create
+                                </button>
+                                <button @click="closeModal" type="button" class="btn btn-soft-secondary cs-danger m-1" data-dismiss="modal">
+                                    <i class="fe-x me-1"></i>
+                                    Cancel
+                                </button>
                             </div>
 
                         </div>
@@ -63,9 +69,15 @@
                                 <input type="text" name="custom_class" class="form-control input-field " v-model="menu.custom_class" placeholder="Custom Class">
 
                             </div>
-                            <div class="m-footer pull-right">
-                                <button @click="closeModal" type="button" class="btn btn-danger cs-danger" data-dismiss="modal">Close</button>
-                                <button type="submit" id="edit_menu_item_btn" class="btn btn-info edit-info">Update</button>
+                            <div class="m-footer text-center">
+                                <button type="submit" id="edit_menu_item_btn" class="btn btn-soft-success edit-info m-1">
+                                    <i  class="mdi mdi-square-edit-outline me-1"></i>
+                                    Save
+                                </button>
+                                <button @click="closeModal" type="button" class="btn btn-soft-secondary cs-danger m-1" data-dismiss="modal">
+                                    <i class="fe-x me-1"></i>
+                                    Cancel
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -91,3 +103,12 @@
         }
     }
 </script>
+
+<style scoped>
+
+.modal-header {
+    background-color: #edeff1;
+    padding: 23px;
+}
+
+</style>

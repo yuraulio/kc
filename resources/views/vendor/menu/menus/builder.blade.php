@@ -21,7 +21,7 @@
                         </a> --}}
                     </form>
                 </div>
-                <h4 class="page-title">Menu2</h4>
+                <h4 class="page-title">{{$menu->name}}</h4>
             </div>
         </div>
     </div>
