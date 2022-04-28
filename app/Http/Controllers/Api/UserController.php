@@ -259,7 +259,7 @@ class UserController extends Controller
 
             $category = $event->category->first();
 
-            $data[$key]['event'] = $event->toArray();
+            $data[$key]['event'] = $event;
             $dropbox = $category['dropbox']->first();
             $folders = isset($dropbox['folders'][0]) ? $dropbox['folders'][0] : [];
             $folders_bonus = isset($dropbox['folders'][1]) ? $dropbox['folders'][1] : [];
