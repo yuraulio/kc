@@ -97,6 +97,9 @@ class AdminController extends Controller
             $admin->firstname = $request->firstname;
             $admin->lastname = $request->lastname;
             $admin->email = $request->email;
+            if ($request->password) {
+                $admin->password = Hash::make($request->password);
+            }
             $admin->save();
 
             return new AdminResource($admin);

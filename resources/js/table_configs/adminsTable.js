@@ -16,7 +16,19 @@ const collectiveInputs = [
         "key": "email",
         "label": "Email",
         "size": "col-lg-12"
-    }
+    },
+    {
+        "type": "text",
+        "key": "password",
+        "label": "Password",
+        "size": "col-lg-12"
+    },
+    {
+        "type": "text",
+        "key": "password_confirmation",
+        "label": "Confirm Password",
+        "size": "col-lg-12"
+    },
 ];
 
 export default {
@@ -61,18 +73,7 @@ export default {
     editInputs: collectiveInputs,
     loadWidgets: false,
     addInputs: collectiveInputs.concat([
-        {
-            "type": "text",
-            "key": "password",
-            "label": "Password",
-            "size": "col-lg-12"
-        },
-        {
-            "type": "text",
-            "key": "password_confirmation",
-            "label": "Confirm Password",
-            "size": "col-lg-12"
-        },
+        
     ])
 }
 

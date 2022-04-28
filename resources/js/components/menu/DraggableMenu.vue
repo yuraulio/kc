@@ -7,16 +7,19 @@
                 <span class="item-url"> {{list.url}}</span></div>
             <div class='action-area'>
                 <a href="#"
-                style="    margin-top: 2px"
-                    class="btn btn-soft-info"
+                    style="margin-top: 7px"
+                    class="action-icon"
                     v-on:click="editMenuItem(list.id)"
-                    :data-id="list.id"><i class=" mdi mdi-square-edit-outline"></i></a>
-                <a
-                    href='#'
-                    style="    margin-top: 2px"
-                    class='btn btn-soft-danger'
+                    :data-id="list.id">
+                        <i class=" mdi mdi-square-edit-outline"></i>
+                </a>
+                <a href='#'
+                    style="margin-top: 7px"
+                    class='action-icon'
                     v-on:click="deleteMenuItem(list.id)"
-                    :data-id="list.id"><i class="mdi mdi-delete"></i></a>
+                    :data-id="list.id">
+                        <i class="mdi mdi-delete"></i>
+                </a>
             </div>
             <draggable-menu
                 v-if="(list.childrens.length > 0)"

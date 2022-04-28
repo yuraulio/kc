@@ -30,8 +30,11 @@ class UpdateAdminRequest extends FormRequest
             'firstname' => ['required', 'min:3'],
             'lastname' => ['required', 'min:3'],
             'email' => [
-                'required', 'email', 'unique:admins,email'
+                'required', 'email', "unique:admins,email,{$this->id}"
             ],
+            'password' => [
+                $this->route()->user ? 'nullable' : 'confirmed', 'min:6'
+            ]
         ];
     }
 }
