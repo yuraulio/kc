@@ -210,7 +210,7 @@ class UserController extends Controller
     {
         
         $user = Auth::user();;//->with('events.summary1','events.lessons.topic','instructor.event')->first();
-        $user = User::where('id',$user->id)->with('events.summary1','events','events.lessons.topic')->first();
+        $user = User::where('id',$user->id)->with('events.category','events.summary1','events','events.lessons.topic')->first();
         $data = [];
         $instructor = count($user->instructor) > 0;
         
@@ -259,7 +259,7 @@ class UserController extends Controller
 
             $category = $event->category->first();
 
-            $data[$key]['event'] = $event;
+            $data[$key]['event'] = $event;//$event->toArray();
             $dropbox = $category['dropbox']->first();
             $folders = isset($dropbox['folders'][0]) ? $dropbox['folders'][0] : [];
             $folders_bonus = isset($dropbox['folders'][1]) ? $dropbox['folders'][1] : [];
@@ -460,7 +460,7 @@ class UserController extends Controller
                 $statistics =  ($statistics = $user->statistic()->wherePivot('event_id',$event['id'])->first()) ?
                             $statistics->toArray() : ['pivot' => [], 'videos' => ''];
                 
-                //$statistics = $user->updateUserStatistic($event,$statistics['pivot']);
+                $statistics = $user->updateUserStatistic($event,$statistics['pivot']);
 
                 $notes = isset($statistics['pivot']['notes']) ? json_decode($statistics['pivot']['notes'], true) : [];
                 $videos = isset($statistics['pivot']['videos']) ? json_decode($statistics['pivot']['videos'], true) : [];
@@ -698,7 +698,7 @@ class UserController extends Controller
         $exceptEvents = [];
         $bonusFiles = ['_Bonus', 'Bonus', 'Bonus Files', 'Βonus', '_Βonus', 'Βonus', 'Βonus Files'];
         $instructors = Instructor::with('medias')->get()->groupby('id');
-        $instructor = $user->instructor()->with('event.summary1','event.lessons.topic')->first();
+        $instructor = $user->instructor()->with('events.category','event.summary1','event.lessons.topic')->first();
         
         
         foreach($instructor['event'] as $key => $event)
