@@ -17,7 +17,8 @@
         <div class="tabs-wrapper fixed-tab-controls">
             <div class="tab-controls">
                 <div class="container tabs-container">
-
+                    <div class="row">
+                        <div calss="col-12">
                             <a href="#" class="mobile-tabs-menu">Overview</a>
                             <ul class="clearfix tab-controls-list">
                                 @foreach ($tabs["tabs"]["tabs"] as $index=>$tab)
@@ -40,7 +41,8 @@
                                     @endif
                                 @endif
                             @endif
-                
+                        </div>
+                    </div>
                 </div>
             </div>
 
