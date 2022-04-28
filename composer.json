@@ -74,7 +74,8 @@
             "Alexusmai\\LaravelFileManager\\Controllers\\": "app/overrides/file-manager/",
             "Alexusmai\\LaravelFileManager\\":"app/overrides/file-manager/model/",
             "Laravel\\Cashier\\Concerns\\": "app/Concerns",
-            "Library\\": "app/Library/"
+            "Library\\": "app/Library/",
+            "Illuminate\\Queue\\Connectors\\": "app/overrides/Connectors"
 
         },
         "classmap": [
