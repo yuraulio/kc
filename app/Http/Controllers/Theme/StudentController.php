@@ -1038,7 +1038,7 @@ class StudentController extends Controller
                             $statistic->toArray() : ['pivot' => [], 'videos' => ''];
 
         //$this->updateUserStatistic($event,$statistic['pivot'],$user);
-        $statistic = $user->updateUserStatistic($event,$statistic['pivot']);
+        //$statistic = $user->updateUserStatistic($event,$statistic['pivot']);
         $data['lastVideoSeen'] = $statistic['pivot']['lastVideoSeen'];
         $data['event_statistic_id'] = $statistic['pivot']['id'];
         $data['event_id'] = $statistic['pivot']['event_id'];

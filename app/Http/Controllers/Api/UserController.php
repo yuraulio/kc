@@ -459,7 +459,7 @@ class UserController extends Controller
                 // Statistics
                 $statistics =  ($statistics = $user->statistic()->wherePivot('event_id',$event['id'])->first()) ?
                             $statistics->toArray() : ['pivot' => [], 'videos' => ''];
-
+                
                 //$statistics = $user->updateUserStatistic($event,$statistics['pivot']);
 
                 $notes = isset($statistics->pivot['notes']) ? json_decode($statistics->pivot['notes'], true) : [];
