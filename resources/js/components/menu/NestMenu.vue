@@ -1,19 +1,18 @@
 <template>
-    <div class="nest-menu">
+    <div class="nest-menu menu-datatable">
         <div class="card">
             <div class="card-body">
                 <div class="row">
-                    <div class="create-btn col-md-12">
+                    <div class="create-btn col-md-12" style="margin-top: -38px;">
                        <button
-                           v-on:click="showAddMenuForm"
-                           class="btn btn-success mat-raised-button"
-                           data-target="#addMenuModal">Add Menu</button>
-                     </div>
-                     <div class="col-md-12">
-                        <div class="alert alert-info mt-2">
-                             To use a menu on your site just call <code>menu('name')</code> Or <code> @menu('name')</code>
-                        </div>
-                     </div>
+                            v-on:click="showAddMenuForm"
+                            class="btn btn-soft-info mat-raised-button float-end add-menu-button"
+                            data-target="#addMenuModal">
+                                <i class="mdi mdi-plus-circle me-1"></i>
+                                Add Menu
+                        </button>
+                    </div>
+                     
                     <div class="col-md-12 col-sm-12 dataTables_wrapper dt-bootstrap5 no-footer">
                         <div class="table-responsive">
                             <table class="table" id="menuTable" >
@@ -22,41 +21,32 @@
                                         <th width="120">Id</th>
                                         <th> Name </th>
                                         <th> Title </th>
-                                        <th class="action-head text-right" >Action </th>
+                                        <th class="action-head text-end" >Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-for="menu in menus" :key="menu.id">
-                                        <td>{{ menu.id }}</td>
-                                        <td>{{ menu.name }}</td>
-                                        <td>{{ menu.custom_class }}</td>
-                                        <td class="action-buttons text-right">
-                                            <a :href="prefix+'/menus/builder/'+menu.id" class="btn btn-soft-primary me-1 mb-1" title="menu build">
-                                                <i class="material-icons"></i>
-                                                Builder
+                                        <td class="align-middle">{{ menu.id }}</td>
+                                        <td class="align-middle">{{ menu.name }}</td>
+                                        <td class="align-middle">{{ menu.custom_class }}</td>
+                                        <td class="action-buttons text-right align-middle">
+
+                                            <a v-on:click="deleteMenu(menu.id)" :data-id="menu.id" href="javascript:void(0);" class="action-icon float-end" title="Delete menu">
+                                                <i class="mdi mdi-delete"></i>
                                             </a>
-                                            <button
-                                                class="btn btn-soft-info edit-info me-1 mb-1"
-                                                title="edit menu"
-                                                data-target="#editMenuModal"
-                                                v-on:click="showEditMenuForm(menu.id)"
-                                                :data-id="menu.id">
-                                                Edit
-                                            </button>
-                                            <button
-                                                class="btn btn-soft-warning me-1 mb-1"
-                                                title="clone menu"
-                                                v-on:click="cloneMenu(menu.id)"
-                                                :data-id="menu.id">
-                                                Clone
-                                            </button>
-                                            <button
-                                                class="btn btn-soft-danger cs-danger me-1 mb-1"
-                                                title="delete menu"
-                                                v-on:click="deleteMenu(menu.id)"
-                                                :data-id="menu.id">
-                                                Delete
-                                            </button>
+
+                                            <a v-on:click="cloneMenu(menu.id)" :data-id="menu.id" href="javascript:void(0);" class="action-icon float-end" title="Clone menu">
+                                                <i class="fa fa-clone data-table-actions" aria-hidden="true"></i>
+                                            </a>
+
+                                            <a v-on:click="showEditMenuForm(menu.id)" :data-id="menu.id" href="javascript:void(0);" class="action-icon float-end" title="Edit menu">
+                                                <i class="mdi mdi-square-edit-outline"></i>
+                                            </a>
+
+                                            <a :href="prefix+'/menus/builder/'+menu.id" class="action-icon float-end" title="Build menu">
+                                                <i class="fa fa-bars data-table-actions" aria-hidden="true"></i>
+                                            </a>
+
                                         </td>
                                     </tr>
                                 </tbody>
@@ -181,11 +171,16 @@
                 let self = this;
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: 'You will not be able to recover this menu item',
+                    text: "You won't be able to revert this! Delete item?",
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonText: 'Yes, delete it!',
-                    cancelButtonText: 'No, keep it'
+                    confirmButtonText: "Yes, delete it!",
+                    showLoaderOnConfirm: true,
+                    buttonsStyling: false,
+                    customClass: {
+                        cancelButton: "btn btn-soft-secondary",
+                        confirmButton: "btn btn-soft-danger",
+                    },
                 }).then((result) => {
                     if (result.value) {
                         let url = this.prefix+'/menu/'+id;
@@ -235,7 +230,17 @@
             },
             initDataTable(selector, options={}){
                 setTimeout(function(){
-                    $(selector).DataTable().draw();
+                    $(selector).DataTable(
+                        {
+                        "dom": "<'row'<'col-sm-12 col-md-6'f><'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'test>>" +
+                                "<'row'<'col-sm-12'tr>>" +
+                                "<'row'<'col-sm-12'p>>",
+                        }
+                    ).draw();
+
+                    $(".dataTables_filter input").attr('placeholder', 'Search...').removeClass("form-control-sm");
+                    $(".dataTables_length select").removeClass("form-control-sm").addClass("btn btn-soft-secondary");
+
                 },300);
             },
             destroyDataTable(selector){
@@ -247,3 +252,54 @@
         },
     }
 </script>
+
+<style>
+.menu-datatable .dataTables_filter>label{
+    font-size: 0px;
+    float: left;
+}
+.menu-datatable .dataTables_length>label{
+    font-size: 0px;
+    float: right;
+    margin-right: 120px;
+}
+.menu-datatable .dataTables_length select {
+    border-color: #d6d8db;
+}
+.menu-datatable .dataTables_length select:focus {
+    color: #6c757d;
+    background-color: rgba(108, 117, 125, 0.18);
+    border-color: #d6d8db;
+}
+.menu-datatable .dataTables_length select:hover {
+    color: #fff;
+    background-color: #6c757d;
+}
+.menu-datatable .dataTables_length select option {
+    background-color: #fff;
+    color: #6c757d;
+}
+.add-menu-button {
+    transform: translateY(38px);
+}
+.menu-datatable tbody tr:nth-of-type(odd) {
+    background-color: #f3f7f9;
+}
+.menu-datatable .data-table-actions {
+    font-size: 16px;
+    transform: translateY(-1px);
+}
+.menu-datatable thead th::before {
+    content: ""!important;
+}
+.menu-datatable thead th::after {
+    content: ""!important;
+}
+.menu-datatable .table-responsive {
+    margin-bottom: 0px;
+}
+.menu-datatable .pagination {
+    margin-top: 13px!important;
+}
+
+</style>

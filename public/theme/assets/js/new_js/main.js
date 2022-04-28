@@ -591,6 +591,7 @@ jQuery(document).ready(function($) {
         }else if( $el.parent().parent().parent('.container').parent('.tab-controls').next('.tabs-content').find('.tab-content-wrapper').length ){
             $el.parent().parent().parent('.container').parent('.tab-controls').next('.tabs-content').children('.tab-content-wrapper').removeClass('active-tab');
         }
+        $(".tabs-content>div").removeClass('active-tab');
     	
     	$(target).addClass('active-tab');
     	$this.addClass('active');
