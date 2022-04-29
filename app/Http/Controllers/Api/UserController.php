@@ -1102,9 +1102,21 @@ class UserController extends Controller
                 $arr['topic_content']['lessons'] = $topic['lessons'];
                 if($isElearning){
             
-                    //$arr['topic_content']['lessons'] = $topic['lessons'];
-                    $arr['topic_content']['files'] = [];
-
+                    $topic1 = preg_replace('/[0-9]+/', '', $topic['name']);
+                    $topic1 = Str::slug($topic1);
+    
+                    foreach($folders as $key12 => $folder){
+                        
+                        $folderName = $folder['foldername'];
+                        $folderName = preg_replace('/[0-9]+/', '', $folderName);
+    
+                        $folderName = Str::slug($folderName);
+                        if($topic1 == $folderName){
+                            $arr['topic_content']['files'] = $folder;
+                        }
+                    }
+    
+    
                 }
                 
                 array_push($data[$key]['topics'], $arr);
