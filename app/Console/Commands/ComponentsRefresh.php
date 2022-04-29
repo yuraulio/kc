@@ -90,7 +90,9 @@ class ComponentsRefresh extends Command
                 $new_column->component = $component;
                 $new_column->active = $component_active;
                 $new_column->template = json_decode(json_encode($components->$component));
-                $new_column->template->dynamic = $component_dynamic;
+                if (isset($new_column->template->dynamic)) {
+                    $new_column->template->dynamic = $component_dynamic;
+                }
 
                 foreach ($new_column->template->inputs as $input_key => $new_input) {
                     $key = array_search($new_input->key, array_column($inputs, 'key'));
