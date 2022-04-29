@@ -713,6 +713,151 @@ class UserController extends Controller
             
             $exceptEvents[] = $event['id'];
 
+            $dropbox = $category['dropbox'][0];
+            $folders = isset($dropbox['folders'][0]) ? $dropbox['folders'][0] : [];
+            $folders_bonus = isset($dropbox['folders'][1]) ? $dropbox['folders'][1] : [];
+            //dd($folders_bonus);
+            $files = isset($dropbox['files'][1]) ? $dropbox['files'][1] : [];
+            $files_bonus = isset($dropbox['files'][2]) ? $dropbox['files'][2] : [];
+
+            $now1 = strtotime(date("Y-m-d"));
+            $display = false;
+            if(!$event['release_date_files'] && $event['status'] == 3){
+                $display = true;
+
+            }else if(strtotime(date('Y-m-d',strtotime($event['release_date_files']))) >= $now1 && $event['status'] == 3){
+
+                $display = true;
+            }else if(isset($event['delivery'][0]['id']) && $event['delivery'][0]['id'] == 143){
+                $display = true;
+            }
+
+            if(isset($dropbox) && $folders != null && $display)
+            {
+                if(isset($folders) && count($folders) > 0){
+                   
+                    foreach($folders as $folder){
+                        
+                        $data1[$folder['id']]['subfolders'] = [];
+                        $data1[$folder['id']]['id'] = $folder['id'];
+                        $data1[$folder['id']]['dirname'] = $folder['dirname'];
+                        $data1[$folder['id']]['foldername'] = $folder['foldername'];
+                        $data1[$folder['id']]['files'] = [];
+                        $data1[$folder['id']]['bonus'] = [];
+
+                        $checkedF = [];
+                        $fs = [];
+                        $fk = 1;
+                        $bonus = [];
+                        $subfolder = [];
+                        $subfiles = [];
+
+                        if(isset($files) && count($files) > 0){
+
+                            foreach($folders_bonus as $folder_bonus){
+                                
+                                if($folder_bonus['parent'] == $folder['id']  && !in_array($folder_bonus['foldername'],$bonusFiles)){
+                                    $checkedF[] = $folder_bonus['id'] + 1 ;
+                                    $fs[$folder_bonus['id']+1]=[];
+                                    $fs[$folder_bonus['id']+1] = $folder_bonus;
+
+                                }
+                                                     
+                            }
+                        }
+
+                        if(count($fs)>0){
+                            foreach($fs as $subf){
+                                foreach($files_bonus as $folder_bonus){
+                                
+                                    if(in_array($subf['foldername'],$subfolder)){
+                                      continue;
+                                    }
+                                    if($folder_bonus['parent'] == $folder['id']){
+                           
+                                        $subfolder[] =  $subf['foldername']; 
+                                        $data1[$folder_bonus['parent']]['subfolders'][$subf['foldername']]=[];
+                                        foreach($files_bonus as $file_bonus){
+                                            if($file_bonus['fid'] == $subf['id'] && $file_bonus['parent'] == $subf['parent'] ){
+                                                $subfiles[]= $file_bonus['filename'];
+                                               
+                                                $data1[$folder_bonus['parent']]['subfolders'][$subf['foldername']][]=['fid'=>$file_bonus['parent'], 'foldername'=>$subf['foldername'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'], 
+                                                'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
+                                            }
+                                        }
+                                    
+                                    }
+                                }                   
+                            }
+                            
+                        }
+
+                        foreach($files as $file){
+                            if($folder['id'] == $file['fid']){
+                                //dd($file);
+                                $data1[$folder['id']]['files'][] = ['fid'=>$file['fid'], 'filename' => $file['filename'], 'dirname' => $file['dirname'], 
+                                    'ext' => $file['ext'], 'last_mod' => $file['last_mod']];
+                           
+                            }
+                        }
+
+                        if(isset($folders_bonus) && count($folders_bonus) > 0){
+                                                
+                            foreach($folders_bonus as $folder_bonus){
+                                                   
+                                if(in_array($folder_bonus['foldername'],$subfolder)){
+                                   continue;
+                                }
+                                
+                                if($folder_bonus['parent'] == $folder['id']){
+
+                                    $data1[$folder['foldername']]['bonus'] = [];
+                                    if(isset($files_bonus) && count($files_bonus) > 0){
+                                        foreach($files_bonus as $file_bonus){
+                                            if($file_bonus['parent'] == $folder_bonus['parent'] && !in_array($file_bonus['filename'],$subfiles)){
+                                                
+                                                
+                                                $data1[$folder_bonus['parent']]['bonus'][] = ['fid'=>$file_bonus['parent'], 'filename' => $file_bonus['filename'], 'dirname' => $file_bonus['dirname'], 
+                                                'ext' => $file_bonus['ext'], 'last_mod' => $file_bonus['last_mod']];
+
+                                                
+                                                   
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                                               
+                        }
+
+                    }
+                                          
+                }
+                                                                       
+            }
+
+            $folders = [];
+                        
+            foreach($data1 as $file){
+
+                $bonus = [];
+                $subfolders = [];
+
+                if(!isset($file['id'])){
+                    continue;
+
+                }
+
+                $newSubfolders = [];
+                foreach($file['subfolders'] as $subf){
+                    
+                    $newSubfolders[] = $subf;
+                //    //$newSubfolders['foldername'] = $key;
+                }
+                
+                $folders[] = ['id'=>$file['id'],'dirname'=>$file['dirname'],'foldername'=>$file['foldername'],'files'=>$file['files'],'bonus'=>$file['bonus'],
+                    'subfolders'=>$newSubfolders];
+            }
     
             // Summary
             foreach($event['summary1'] as $key_summary => $summary){
@@ -753,7 +898,8 @@ class UserController extends Controller
 
                 }
 
-
+                $data[$key]['files']['folders'] = $folders;
+                
             }else if($event->is_elearning_course()){
                 $data[$key]['is_elearning'] = true;
                 $isElearning = true;
