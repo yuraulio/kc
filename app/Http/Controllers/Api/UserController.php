@@ -52,6 +52,9 @@ class UserController extends Controller
         $billing['bilcountry'] = isset($billingDetails['bilcountry']) ? $billingDetails['bilcountry'] : '' ;
         $billing['billemail'] = isset($billingDetails['billemail']) ? $billingDetails['billemail'] : '' ;
 
+        //$user['stripe_ids'] = json_decode($user['stripe_ids'],true)  ? $user['stripe_ids'] : [];
+    
+
         if(isset($user['image']) && get_profile_image($user['image'])){
 
             $user['profileImage'] = get_profile_image($user['image']);
@@ -60,6 +63,10 @@ class UserController extends Controller
         }
 
         unset($user['image']);
+        unset($user['stripe_ids']);
+        unset($user['receipt_details']);
+        unset($user['invoice_details']);
+
 
         return response()->json([
             'success' => true,
