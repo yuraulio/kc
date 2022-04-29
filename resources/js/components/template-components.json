@@ -855,5 +855,23 @@
                 "size": "col-lg-12"
             }
         ]
+    },
+    "terms_conditions" : {
+        "version": 1,
+        "title": "Accept terms prompt",
+        "icon": "dripicons-checkmark",
+        "key": "terms_conditions_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": false,
+        "inputs": [
+            {
+                "type": "text",
+                "key": "terms_text",
+                "label": "Accept terms text",
+                "value": "I have read, agree & accept the data privacy policy above.",
+                "size": "col-lg-12"
+            }
+        ]
     }
 }
