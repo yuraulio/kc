@@ -11,16 +11,30 @@
     $is_event_paid = $dynamic_page_data["is_event_paid"] ?? null;
     $estatus = $event->status ?? null;
 
-    function checkTabContent($tab, $tabs) {
-        $result = false;
+    function checkTabContent($tab, $dynamic_page_data, $tabs) {
         foreach ($tabs["tabs"]["value"] as $tab_content) {
             if ($tab_content->tabs_tab == $tab) {
-                $result = true;
+
+                if ($tab == "faq") {
+                    $tab = "questions";
+                }
+
+                if (isset($dynamic_page_data["sections"][$tab])) {
+                    if ($dynamic_page_data["sections"][$tab]->first()->title != "") {
+                        return true;
+                    }
+                } else {
+                    return true;
+                }
             }
         }
-        return $result;
+        return false;
     }
+    //dd($dynamic_page_data["sections"]["topics"]->first()->title);
+
 @endphp
+
+{{ $dynamic_page_data["sections"] ?? "nema" }}
 
 <div class="section-course-tabs">
     <div class="content-wrapper">
@@ -31,7 +45,7 @@
                             <a href="#" class="mobile-tabs-menu">Overview</a>
                             <ul class="clearfix tab-controls-list">
                                 @foreach ($tabs["tabs"]["tabs"] as $index=>$tab)
-                                    @if (checkTabContent($tab, $tabs))
+                                    @if (checkTabContent($tab, $dynamic_page_data, $tabs))
                                         <li><a href="#{{Illuminate\Support\Str::slug($tab)}}" class="{{$index == 0 ? "active" : "" }}">{{$tab}}</a></li>
                                     @endif
                                 @endforeach
