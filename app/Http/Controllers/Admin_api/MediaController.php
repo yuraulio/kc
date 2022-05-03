@@ -188,12 +188,11 @@ class MediaController extends Controller
 
             if ($file) {
                 $file_path = $file->path;
+                $file_path = str_replace($file->name, $image_name, $file_path);
             } else {
                 // create new file path
-                $tmp = explode('.', $original_file->path);
-                $extension = end($tmp);
-                $file_path = $tmp[0];
-                $file_path = $file_path . "-" . $request->version . "." . $extension;
+                $file_path = $original_file->path;
+                $file_path = str_replace($original_file->name, $image_name, $file_path);
             }
 
             if ($request->version != 'original') {
@@ -333,7 +332,8 @@ class MediaController extends Controller
             return $e->getMessage();
         }
 
-        RenameFile::dispatch($oldUrl, $url);
+        LOG::debug("job start");
+        RenameFile::dispatch($oldUrl, $url, $alttext, $link);
 
         $mediaFile->load(["pages", "siblings", "subfiles"]);
 
