@@ -30,11 +30,8 @@
         }
         return false;
     }
-    //dd($dynamic_page_data["sections"]["topics"]->first()->title);
 
 @endphp
-
-{{ $dynamic_page_data["sections"] ?? "nema" }}
 
 <div class="section-course-tabs">
     <div class="content-wrapper">
