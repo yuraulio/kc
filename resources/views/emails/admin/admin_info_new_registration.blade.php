@@ -275,8 +275,20 @@ else {
                                                                         <tr>
                                                                            <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                               <div><strong>TICKET TYPE:</strong>  <br /><br />
+                                                                                 <?php 
+                                                                                    $ticketType  = $tickettype;
+                                                                                    if($trans->total_amount == 0){
+                                                                                       $tickettype .=  ', Free'; 
+                                                                                    }else { 
+                                                                                       $tickettype .= ', ' . round($trans->total_amount,2);
+                                                                                       
+                                                                                    }
 
-                                                                                 <p style="margin: 0px;">Ticket: {{ $tickettype }} @if($trans->total_amount == 0), Free @else, {{ round($trans->total_amount,2) }} @endif @if($stId),  {{ $stId }} @endif</p>
+                                                                                    if($stId){ 
+                                                                                       $tickettype .= ', ' . $stId ;
+                                                                                    }
+                                                                                 ?>
+                                                                                 <p style="margin: 0px;">Ticket: {{ $tickettype }} </p>
                                                                               </div>
                                                                            </td>
                                                                         </tr>

@@ -156,6 +156,30 @@
 
                                     @include('alerts.feedback', ['field' => 'payment_method'])
                                 </div>
+
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect1">Select Dropbox Folder</label>
+                                    <select class="form-control" name="folder_name" id="folder_name">
+
+                                        @foreach($folders as $folder)
+
+                                            <?php $found = false; ?>
+                                            @foreach($already_assign as $ass)
+                                                @if(isset($ass) && $ass['folder_name'] == $folder)
+                                                <?php $found = true; ?>
+
+                                                @endif
+                                            @endforeach
+                                            @if($found)
+                                            <?php //dd($folder); ?>
+                                                <option selected value="{{ $folder }}">{{ $folder }}</option>
+                                            @else
+                                                <option value="{{ $folder }}">{{ $folder }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                    @include('alerts.feedback', ['field' => 'dropbox'])
+                                </div>
                               
                                 <div class="form-group">
                                     

@@ -5,6 +5,7 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Category;
+use App\Model\Event;
 
 class Dropbox extends Model
 {
@@ -20,5 +21,10 @@ class Dropbox extends Model
      public function categories()
      {
          return $this->morphedByMany(Category::class, 'dropboxcacheable');
+     }
+
+     public function events()
+     {
+         return $this->morphedByMany(Event::class, 'dropboxcacheable');
      }
 }

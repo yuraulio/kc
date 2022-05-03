@@ -217,7 +217,7 @@ class UserController extends Controller
     {
         
         $user = Auth::user();;//->with('events.summary1','events.lessons.topic','instructor.event')->first();
-        $user = User::where('id',$user->id)->with('events.category','events.category.dropbox','events.summary1','events','events.lessons','events.lessons.topic')->first();
+        $user = User::where('id',$user->id)->with('events.category','events.dropbox','events.summary1','events','events.lessons','events.lessons.topic')->first();
         $data = [];
         $instructor = count($user->instructor) > 0;
         
@@ -240,6 +240,7 @@ class UserController extends Controller
             unset($data[$key]['event']['htmlTitle']);
             unset($data[$key]['event']['city']);
             unset($data[$key]['event']['delivery']);
+            unset($data[$key]['event']['dropbox']);
         }
 
 
@@ -268,7 +269,8 @@ class UserController extends Controller
             $category = $event->category[0];
 
             $data[$key]['event'] = $event;//$event->toArray();
-            $dropbox = $category['dropbox'][0];
+            //$dropbox = $category['dropbox'][0];
+            $dropbox = $event['dropbox'][0];
             $folders = isset($dropbox['folders'][0]) ? $dropbox['folders'][0] : [];
             $folders_bonus = isset($dropbox['folders'][1]) ? $dropbox['folders'][1] : [];
             //dd($folders_bonus);
@@ -722,7 +724,8 @@ class UserController extends Controller
             
             $exceptEvents[] = $event['id'];
 
-            $dropbox = $category['dropbox'][0];
+            //$dropbox = $category['dropbox'][0];
+            $dropbox = $event['dropbox'][0];
             $folders = isset($dropbox['folders'][0]) ? $dropbox['folders'][0] : [];
             $folders_bonus = isset($dropbox['folders'][1]) ? $dropbox['folders'][1] : [];
             //dd($folders_bonus);

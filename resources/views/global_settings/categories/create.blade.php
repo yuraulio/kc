@@ -57,7 +57,7 @@
                                     @include('alerts.feedback', ['field' => 'hours'])
                                 </div>
 
-                                <div class="form-group">
+                                {{--<div class="form-group">
                                     <label class="form-control-label" for="exampleFormControlSelect1">{{ __('Select Dropbox Folder') }}</label>
                                     <select class="form-control" name="folder_name" id="folder_name">
                                         @foreach($folders as $folder)
@@ -65,7 +65,7 @@
                                         @endforeach
                                     </select>
                                     @include('alerts.feedback', ['field' => 'dropbox'])
-                                </div>
+                                </div>--}}
 
                                 <div class="form-group{{ $errors->has('show_homepage') ? ' has-danger' : '' }}">
                                     <div class="status-label">

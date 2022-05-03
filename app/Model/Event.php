@@ -237,15 +237,24 @@ class Event extends Model
         return $this->belongsToMany(PaymentMethod::class, 'paymentmethod_event');
     }
 
+    public function dropbox()
+    {
+        return $this->morphToMany(Dropbox::class, 'dropboxcacheable');
+    }
+
+
     public function medias()
     {
         return $this->morphOne(Media::class, 'mediable');
     }
 
 
-    public function topicsLessonsInstructors(){
+    public function topicsLessonsInstructors($videos = null){
+
+        $videos = json_decode($videos,true);
 
         $topics = [];
+        $topicsSeen = [];
         $lessons = $this->lessons->groupBy('topic_id');
         $sum1 = 0;
         //162
@@ -253,10 +262,8 @@ class Event extends Model
         // sum topic duration
         foreach($lessons as $key => $lesson1){
 
-
-
             $sum1 = 0;
-
+            
             foreach($lesson1 as $key1 => $lesson){
                 $sum = 0;
 
@@ -266,8 +273,6 @@ class Event extends Model
                     $hour = 0;
                     $min = 0;
                     $sec = 0;
-
-
 
                     if(count($vimeo_duration) == 3){
                         $string_hour = $vimeo_duration[0];
@@ -317,6 +322,9 @@ class Event extends Model
 
                 }
 
+                $vimeoVideo = explode("/",$lesson->vimeo_video);
+                $vimeoVideo = end( $vimeoVideo );
+                $topicsSeen[$key] = isset($videos[$vimeoVideo]) && (int) $videos[$vimeoVideo]['seen'] == 1? true : false;
                 $sum1 = $sum1 + $sum;
                 $data['keys'][$key] = $sum1;
 
@@ -378,7 +386,7 @@ class Event extends Model
             //}
 
             $data['topics'][$key]['topic_duration'] = $data['keys'][$topic_id];
-
+            $data['topics'][$key]['topic_seen'] = $topicsSeen[$topic_id];
         }
 
         return $data;
