@@ -11,7 +11,6 @@
 
 @if($event)
     @section('header')
-        <title>{{ $event['title'] }}</title>
         {!! $event->metable->getMetas() !!}
 
         <script type="application/ld+json">
