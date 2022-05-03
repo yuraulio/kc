@@ -10,6 +10,16 @@
     $event = $dynamic_page_data["event"] ?? null;
     $is_event_paid = $dynamic_page_data["is_event_paid"] ?? null;
     $estatus = $event->status ?? null;
+
+    function checkTabContent($tab, $tabs) {
+        $result = false;
+        foreach ($tabs["tabs"]["value"] as $tab_content) {
+            if ($tab_content->tabs_tab == $tab) {
+                $result = true;
+            }
+        }
+        return $result;
+    }
 @endphp
 
 <div class="section-course-tabs">
@@ -21,7 +31,9 @@
                             <a href="#" class="mobile-tabs-menu">Overview</a>
                             <ul class="clearfix tab-controls-list">
                                 @foreach ($tabs["tabs"]["tabs"] as $index=>$tab)
-                                    <li><a href="#{{Illuminate\Support\Str::slug($tab)}}" class="{{$index == 0 ? "active" : "" }}">{{$tab}}</a></li>
+                                    @if (checkTabContent($tab, $tabs))
+                                        <li><a href="#{{Illuminate\Support\Str::slug($tab)}}" class="{{$index == 0 ? "active" : "" }}">{{$tab}}</a></li>
+                                    @endif
                                 @endforeach
                             </ul>
                             
