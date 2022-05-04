@@ -353,7 +353,7 @@
                </div>
             </div>
          </footer>
-         <a href="#" class="go-top-btn"><i class="fas fa-chevron-up"></i></a>
+         <a href="#" class="go-top-btn"><i class="icon-up-open"></i></a>
       </div>
       <script src="{{cdn('/theme/assets/js/new_js/vendor/modernizr-3.7.1.min.js')}}"></script>
 <script src="{{cdn('/theme/assets/js/new_js/jquery-3.4.1.min.js')}}" ></script>
