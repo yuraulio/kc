@@ -18,9 +18,11 @@
                 if ($tab == "faq") {
                     $tab = "questions";
                 }
-
+                if ($tab == "overview") {
+                    return true;
+                }
                 if (isset($dynamic_page_data["sections"][$tab])) {
-                    if ($dynamic_page_data["sections"][$tab]->first()->title != "") {
+                    if ($dynamic_page_data["sections"][$tab]->first()->visible) {
                         return true;
                     }
                 } else {
