@@ -217,7 +217,7 @@ class UserController extends Controller
     {
         
         $user = Auth::user();;//->with('events.summary1','events.lessons.topic','instructor.event')->first();
-        $user = User::where('id',$user->id)->with('events.category','events.dropbox','events.summary1','events','events.lessons','events.lessons.topic')->first();
+        $user = User::where('id',$user->id)->with('events.dropbox','events.summary1','events','events.lessons','events.lessons.topic')->first();
         $data = [];
         $instructor = count($user->instructor) > 0;
         
@@ -241,6 +241,7 @@ class UserController extends Controller
             unset($data[$key]['event']['city']);
             unset($data[$key]['event']['delivery']);
             unset($data[$key]['event']['dropbox']);
+            unset($data[$key]['event']['venues']);
         }
 
 
@@ -266,7 +267,7 @@ class UserController extends Controller
             $isElearning = false;
             //$event = Event::find($event['id']);
 
-            $category = $event->category[0];
+            //$category = $event->category[0];
 
             $data[$key]['event'] = $event;//$event->toArray();
             //$dropbox = $category['dropbox'][0];
@@ -719,7 +720,7 @@ class UserController extends Controller
             $data1 = [];
             $isElearning = false;
 
-            $category = $event->category->first();
+            //$category = $event->category->first();
             $data[$key]['event'] = $event;
             
             $exceptEvents[] = $event['id'];
