@@ -54,9 +54,9 @@
                             @if ($event)
                                 @if($event->view_tpl == "elearning_free")
                                     @if($is_event_paid==0 && !Auth::user())
-                                        <a href="{{ route('cart.add-item', [ $event->id,'free', 8 ]) }}" class="btn btn--lg btn--primary hidden-sm go-to-href">ENROLL FOR FREE</a>
+                                        <a href="{{ route('cart.add-item', [ $event->id,'free', 8 ]) }}" class="btn btn--lg btn--primary  go-to-href">ENROLL FOR FREE</a>
                                     @elseif($is_event_paid==0 && Auth::user())
-                                        <a href="{{ route('enrollForFree',  $event->id) }}" class="btn btn--lg btn--primary hidden-sm go-to-href">ENROLL FOR FREE</a>
+                                        <a href="{{ route('enrollForFree',  $event->id) }}" class="btn btn--lg btn--primary go-to-href">ENROLL FOR FREE</a>
                                     @endif
                                 @else
                                 @if($estatus == 0 && !$is_event_paid)
