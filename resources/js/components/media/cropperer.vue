@@ -111,7 +111,7 @@
                                 </h5>
                                 <p class="text-muted d-block mb-2">{{ version1.description }}</p>
                                 <template v-if="findVersionData(version1.version) != null">
-                                    <img @click="version=version1.version; selectedVersion=version1; versionSelected();" crossorigin="anonymous" :src="'/uploads/' + findVersionData(version1.version).path" alt="image" class="img-fluid rounded" />
+                                    <img @click="version=version1.version; selectedVersion=version1; versionSelected();" crossorigin="anonymous" :src="'/uploads/' + findVersionData(version1.version).path + '?key=' + imageKey" alt="image" class="img-fluid rounded" />
                                 </template>
                                 <template v-else>
                                     <button @click="version=version1.version; selectedVersion=version1; versionSelected();" class="btn btn-primary">Set image</button>
@@ -135,6 +135,7 @@ import uploadImage from "../inputs/upload-image.vue";
 export default {
     props: {
         prevalue: {},
+        imageKey: "",
     },
     components: {
         VueCropper,

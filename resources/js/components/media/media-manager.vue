@@ -115,7 +115,7 @@
 
     <modal name="edit-image-modal" :adaptive="true" :resizable="true" width="70%" height="70%" :scrollable="true" class="mb-0">
         <div class="row p-4">
-            <cropperer @edit="imageEdit" @upload="imageAdded" ref="crpr" :prevalue="selectedFile"></cropperer>
+            <cropperer @edit="imageEdit" @upload="imageAdded" ref="crpr" :prevalue="selectedFile" :imageKey="imageKey"></cropperer>
         </div>
     </modal>
 
@@ -399,6 +399,7 @@ export default {
             sizes: [],
             upload_error: null,
             folder_error: null,
+            imageKey: Math.random().toString().substr(2, 8),
             imageExtensions: [
                 "jpg",
                 "jpeg",

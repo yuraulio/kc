@@ -81,7 +81,7 @@
                             <label>Email <span class="required">(*)</span></label>
                             <div class="input-wrapper input-wrapper--text input-wrapper--email">
                                 <span class="icon"><img width="14"  alt=""></span>
-                                <input type="text" placeholder="Email" id="email" autocomplete="off">
+                                <input type="text" placeholder="" id="email" autocomplete="off">
                             </div>
 
                             <br>
@@ -89,7 +89,7 @@
                             <label> Password <span class="required">(*)</span></label><span data-id="password" class="icon sub"><img width="20" src="{{cdn('/theme/assets/images/icons/eye-password.svg')}}" alt="">Show</span>
                             <div class="input-wrapper input-wrapper--text">
                                 <span class="icon"><img width="10"  alt=""></span>
-                                <input type="password" placeholder="Password" id="password" autocomplete="off">
+                                <input type="password" placeholder="" id="password" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label for="remember-me"><input id="remember-me" type="checkbox">Remember me</label>
@@ -140,10 +140,10 @@
                                 </div>
                             </div>
 
+                            <label>Email <span class="required">(*)</span></label>
                             <div class="input-wrapper input-wrapper--text input-wrapper--email">
                                 <div class="input-safe-wrapper">	
-                                    <span class="icon"><img width="14" src="{{cdn('/theme/assets/images/icons/icon-email.svg')}}" alt=""></span>
-                                    <input type="email"  placeholder="Email" name="email" id="email-forgot" class="required"> 
+                                    <input type="email"  placeholder="" name="email" id="email-forgot" class="required"> 
                                 </div>
                             </div>
                             

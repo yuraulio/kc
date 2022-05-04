@@ -12,6 +12,7 @@
     $estatus = $event->status ?? null;
 
     function checkTabContent($tab, $dynamic_page_data, $tabs) {
+        $tab = strtolower($tab);
         foreach ($tabs["tabs"]["value"] as $tab_content) {
             if ($tab_content->tabs_tab == $tab) {
 
