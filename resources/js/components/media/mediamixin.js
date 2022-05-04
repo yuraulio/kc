@@ -279,6 +279,7 @@ var mediaMixin = {
                 this.$toast.success('Uploaded Successfully!');
                 this.getFiles(response.data.data.folder_id);
                 this.$refs.crpr.isUploading = false;
+                this.imageKey = Math.random().toString().substr(2, 8);
                 // this.$modal.hide('edit-image-modal');
             })
             .catch((error) => {
