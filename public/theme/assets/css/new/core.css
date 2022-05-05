@@ -85,8 +85,9 @@ li.topic.seen {
 }
 
 img.topic-progress{
-  max-width: 20px;
+  max-width: 12px;
   vertical-align: middle;
+  margin-left: 10px;
 }
 
 .content-wrapper {
