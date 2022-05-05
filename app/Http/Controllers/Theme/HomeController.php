@@ -753,7 +753,7 @@ class HomeController extends Controller
         Mail::send('emails.admin.give_away', $data, function ($m) use ($data) {
             $fullname = $data['cname'] . ' ' . $data['csurname'];
             $adminemail = 'info@knowcrunch.com';
-            $subject = 'Knowcrunch - Give Away';
+            $subject = 'Knowcrunch - Giveaway participant';
 
             //$emails = ['socratous12@gmail.com', 'info@darkpony.com'];
             $m->subject($subject);

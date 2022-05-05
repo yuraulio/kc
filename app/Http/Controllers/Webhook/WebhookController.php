@@ -558,7 +558,7 @@ class WebhookController extends BaseWebhookController
 
             $fullname = $muser['name'];
             $first = $muser['first'];
-            $sub =  'Knowcrunch |' . $first . ' – Payment Successful in ' . $muser['event_title'];;
+            $sub =  'Knowcrunch |' . $first .  ' – download your receipt';
             $m->from('info@knowcrunch.com', 'Knowcrunch');
             $m->to($adminemail, $fullname);
             //$m->to('moulopoulos@lioncode.gr', $fullname);

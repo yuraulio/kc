@@ -76,6 +76,10 @@ iframe {
   color: #fff;
 }
 
+img.topic-progress{
+  max-width: 24px;
+}
+
 .content-wrapper {
   display: -webkit-box;
   display: -moz-box;

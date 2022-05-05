@@ -190,6 +190,7 @@ class StudentController extends Controller
                 $data['events'][$event->id]['release_date_files'] = $event->release_date_files;
                 $data['events'][$event->id]['plans'] = [];
                 $data['events'][$event->id]['status'] = $event->status;
+                $data['events'][$event->id]['dropbox'] = $event->dropbox;
 
 
 
@@ -268,6 +269,8 @@ class StudentController extends Controller
                 $data['events'][$event->id]['release_date_files'] = $event->release_date_files;
                 $data['events'][$event->id]['plans'] = [];
                 $data['events'][$event->id]['status'] = $event->status;
+                $data['events'][$event->id]['dropbox'] = $event->dropbox;
+
 
 
 
@@ -657,6 +660,8 @@ class StudentController extends Controller
                 $data['events'][$event->id]['title'] = $event['title'];
                 $data['events'][$event->id]['release_date_files'] = $event->release_date_files;
                 $data['events'][$event->id]['status'] = $event->status;
+                $data['events'][$event->id]['dropbox'] = $event->dropbox;
+
                 //$data['user']['events'][$event->id]['exam_access'] = $user->examAccess(0.8,$event->id);
 
             }
@@ -724,7 +729,6 @@ class StudentController extends Controller
             unset($data['events'][2304]);
             array_unshift($data['events'], $value);
         }
-
         //dd($data['user']['events'][0]);
         return $data;
 
@@ -1026,7 +1030,8 @@ class StudentController extends Controller
         $data['details'] = $event->toArray();
         $data['details']['slug'] = $event['slugable']['slug'];
 
-        $data['files'] = !$user->instructor->first() && isset($event['category'][0]['dropbox'][0]) ? $event['category'][0]['dropbox'][0]->toArray() : [];
+        //$data['files'] = !$user->instructor->first() && isset($event['category'][0]['dropbox'][0]) ? $event['category'][0]['dropbox'][0]->toArray() : [];
+        $data['files'] = isset($event['dropbox'][0]) ? $event['dropbox'][0]->toArray() : [];
         //dd($data['files']);
         //dd($data['details']);
 
@@ -1053,7 +1058,8 @@ class StudentController extends Controller
         //$data['instructor_topics'] = count($user->instructor) > 0;
         //expiration event for user
         $expiration_event_user = $event['pivot']['expiration'];
-        $data['topics'] = $event->topicsLessonsInstructors();
+        $data['topics'] = $event->topicsLessonsInstructors($data['videos']);
+
 
         return view('theme.myaccount.newelearning', $data);
 
