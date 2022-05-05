@@ -122,12 +122,10 @@
                            if($count == 1)
                               // $count = 2;
                            ?>
-                        <li class="topic" data-count="{{$count}}">
+                        <li class="topic @if($topic['topic_seen']) seen @endif" data-count="{{$count}}">
                            <?php $count++; ?>
                            <a href="javascript:void(0)" tabindex="0" class="topic-header">
-                              @if($topic['topic_seen'])
-                                 <img class="topic-progress" src="{{cdn('/theme/assets/img/new/completed_lesson_icon.svg')}}">
-                              @endif
+                             
                               <div class="topic-info">
                                  
                                  <h3
@@ -146,7 +144,11 @@
 
                                     echo intval($h) . 'h ' . $m . 'm';
                                     ?>
+                                     
                                  </span>
+                                 @if($topic['topic_seen'])
+                                 <img class="topic-progress" src="{{cdn('/theme/assets/img/new/completed_lesson_icon.svg')}}">
+                              @endif
                               </div>
                               <!-- ./topic-info -->
                               <img
