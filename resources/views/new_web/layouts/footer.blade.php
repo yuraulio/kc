@@ -106,7 +106,7 @@
                 {{-- footer menu 3 desktop --}}
                 @yield('footer_menu_3_title_desktop')
                 <div class="mobile-toggle menu-desktop">
-                    <ul class="footer-menu">
+                    <ul class="footer-menu footer-menu-3">
                         @yield('footer_menu_3_desktop')
                     </ul>
                 </div>
@@ -114,7 +114,7 @@
                 {{-- footer menu 3 mobile --}}
                 @yield('footer_menu_3_title_mobile')
                 <div class="mobile-toggle menu-mobile">
-                    <ul class="footer-menu">
+                    <ul class="footer-menu footer-menu-3">
                         @yield('footer_menu_3_mobile')
                     </ul>
                 </div>

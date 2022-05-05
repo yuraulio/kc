@@ -80,10 +80,16 @@ class MainController extends Controller
                 $page = Page::withoutGlobalScopes()->whereType("Trainer page")->whereDynamic(true)->first();
                 $dynamicPageData = CMS::getInstructorData($instructor);
             } else {
-                $page = Page::whereSlug($slug)->first();
+                $page = Page::withoutGlobalScopes()->whereSlug($slug)->first();
+                $useRedirect = true;
 
-                if (!$page && $redirect = Redirect::whereOldSlug($slug)->first() and $redirect->page) {
-                    return redirect()->route('new_general_page', ['slug' => $redirect->page->slug], 301);
+                if ($page && !$page->published) {
+                    $page = null;
+                    $useRedirect = false;
+                }
+
+                if ($useRedirect && !$page && $redirect = Redirect::whereOldSlug($slug)->first() and $redirect->page) {
+                    return redirect()->route('new_general_page', ['slug' => $redirect->page->slug], 302);
                 }
             }
         }

@@ -208,6 +208,7 @@
 import multidropdown from './inputs/multidropdown.vue';
 // import Tcedit from './tcdit.vue';
 import gicon from './gicon.vue';
+import slugify from '@sindresorhus/slugify';
 
 export default {
   components: { multidropdown, gicon },
@@ -275,6 +276,7 @@ export default {
             },
             update_title(value){
                 this.title_value = value;
+                this.slug_value = slugify(value);
             },
             update_rows(value){
                 this.rows_value = value;
