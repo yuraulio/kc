@@ -23,6 +23,8 @@ use App\Model\Section;
 use App\Model\City;
 use App\Jobs\SendMaiWaitingList;
 use Artisan;
+use Storage;
+use App\Model\Dropbox;
 
 class EventController extends Controller
 {
@@ -204,20 +206,24 @@ class EventController extends Controller
         $event->createSlug($request->slug ? $request->slug : $request->title);
         $event->createMetas($request->all());
 
+        
         if($request->category_id != null){
             $category = Category::with('topics')->find($request->category_id);
 
             $event->category()->attach([$category->id]);
 
             //assign all topics with lesson
-
+            
             foreach($category->topics as $topic){
                //dd($topic);
                 //$lessons = Topic::with('lessons')->find($topic['id']);
-                $lessons = $topic->lessonsCategory;
-
+                //$lessons = $topic->lessonsCategory;
+                $lessons = $topic->lessonsCategory()->wherePivot('category_id',$category->id)->get();
+                
                 foreach($lessons as $lesson){
+                   
                     $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id'],'priority'=>$lesson->pivot->priority]);
+                    
                 }
             }
 
@@ -374,6 +380,23 @@ class EventController extends Controller
 
         }
 
+        $data['folders'] = [];
+        $li = Storage::disk('dropbox');
+        if($li) {
+
+            $folders = $li->listContents();
+      
+            foreach ($folders as $key => $row) {
+                
+                if($row['type'] == 'dir') :
+                    $data['folders'][$row['basename']] = $row['basename'];
+                endif;
+            }
+           
+            $data['already_assign'] = $event->dropbox;
+
+        }
+
         
         //dd($data['topics']);
 
@@ -427,7 +450,13 @@ class EventController extends Controller
             $event->partners()->attach($partner_id);
         }
 
-        
+        if($request->folder_name != null){
+            $exist_dropbox = Dropbox::where('folder_name', $request->folder_name)->first();
+            if($exist_dropbox){
+                $event->dropbox()->sync([$exist_dropbox->id]);
+            }
+
+        }
 
         if($request->category_id != $request->oldCategory){
             $category = Category::with('topics')->find($request->category_id);
@@ -438,7 +467,8 @@ class EventController extends Controller
             foreach($category->topics as $topic){
                //dd($topic);
                 //$lessons = Topic::with('lessons')->find($topic['id']);
-                $lessons = $topic->lessonsCategory;
+                //$lessons = $topic->lessonsCategory;
+                $lessons = $topic->lessonsCategory()->wherePivot('category_id',$category->id)->get();
 
                 foreach($lessons as $lesson){
                     $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id'],'priority'=>$lesson->pivot->priority]);
@@ -568,7 +598,7 @@ class EventController extends Controller
         $newEvent->createSlug($newEvent->title);
         //$event->createMetas($request->all());
         //dd($event->lessons);
-        $event->load('category','faqs','sectionVideos','type','summary1','delivery','ticket','city','sections','venues','syllabus','benefits');
+        $event->load('category','faqs','sectionVideos','type','summary1','delivery','ticket','city','sections','venues','syllabus','benefits','paymentMethod','dropbox');
 
         foreach ($event->getRelations() as $relationName => $values){
             if($relationName == 'summary1' || $relationName == 'benefits' || $relationName == 'sections'){
@@ -626,6 +656,11 @@ class EventController extends Controller
         $newEvent->metable->meta_keywords = $event->metable ? $event->metable->meta_keywords : '';
         $newEvent->metable->meta_description = $event->metable ? $event->metable->meta_description : '';
         $newEvent->metable->save();
+
+        foreach($newEvent->ticket as $ticket){
+            $ticket->pivot->active = false;
+            $ticket->pivot->save();
+        }
 
         return redirect()->route('events.edit',$newEvent->id)->withStatus(__('Event successfully cloned.'));
     }

@@ -75,7 +75,7 @@
 	<form autocomplete="off" class="login-form">
 	<label>Email <span class="required">(*)</span></label>
             <div class="input-wrapper input-wrapper--text input-wrapper--email">
-                <input type="text"  id="email" autocomplete="off">
+                <input type="text"  id="emaill" autocomplete="off">
 
             </div>
             
@@ -205,7 +205,7 @@ var routesObj = {
 
                 switch (data.data.status) {
                     case 0:
-                        if (data.message.length > 0) {
+                        if (data.data.message.length > 0) {
 
                             var p = document.getElementById('account-error').textContent = data['message'];
                           //  var img = document.createElement('img');

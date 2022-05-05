@@ -43,3 +43,4 @@ supervisord.conf
 composer.phar
 public/*.tar.gz
 uploads
+public/FAQs.xlsx

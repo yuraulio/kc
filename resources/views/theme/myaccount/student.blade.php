@@ -710,8 +710,9 @@
 
 
                      <?php $tab = 0; ?>
-                     <?php //dd($events[0]); ?>
+                     <?php //dd($events); ?>
                      @if(isset($events) && count($events) > 0)
+
                      @foreach($events as $keyType => $event)
                      @if($event['view_tpl'] != 'elearning_free' && $event['view_tpl'] != 'elearning_event')
                      <div class="col12 dynamic-courses-wrapper dynamic-courses-wrapper--style2">
@@ -724,7 +725,7 @@
                                     @if(isset($event['topics']) && count($event['topics']) > 0)<li><a href="#c-shedule-inner{{$tab}}">Schedule </a></li>@endif
                                     <?php  $fa = strtotime(date('Y-m-d',strtotime($event['release_date_files']))) >= strtotime(date('Y-m-d'))?>
                                     {{--@if(!$instructor && isset($event['category'][0]['dropbox']) && count($event['category'][0]['dropbox']) != 0 &&--}}
-                                    @if(isset($event['category'][0]['dropbox']) && count($event['category'][0]['dropbox']) != 0 &&
+                                    @if(isset($event['dropbox']) && count($event['dropbox']) != 0 &&
                                        $event['status'] == 3 &&  $fa)
                                     <li><a href="#c-files-inner{{$tab}}">Files</a></li>
                                     @endif
@@ -823,7 +824,9 @@
                                  </div>
                                  @endif
                                  <?php
-                                    $dropbox = isset($event['category'][0]['dropbox'][0]) ? $event['category'][0]['dropbox'][0] : [];
+                                 
+                                    //$dropbox = isset($event['category'][0]['dropbox'][0]) ? $event['category'][0]['dropbox'][0] : [];
+                                    $dropbox = isset($event['dropbox'][0]) ? $event['dropbox'][0] : [];
                                     //dd($dropbox);
                                     $folders = isset($dropbox['folders'][0]) ? $dropbox['folders'][0] : [];
                                     //dd($folders);

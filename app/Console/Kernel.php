@@ -56,7 +56,10 @@ class Kernel extends ConsoleKernel
        Commands\SubscriptionsEnds::class,
        Commands\NewAdminMediaManager::class,
        Commands\ComponentsRefresh::class,
-       Commands\PublishCheck::class
+       Commands\PublishCheck::class,
+
+       Commands\ImportFaqs::class,
+       Commands\AttachFilesToEvents::class,
     ];
 
     /**

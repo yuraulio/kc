@@ -38,10 +38,16 @@ class CronjobsController extends Controller
             $events = $student->events()->wherePivot('comment','enroll')->get();
 
             foreach($events as $event){
+
+                if(!$event->pivot->expiration){
+                    continue;
+                }
+
                 $expiration = strtotime($event->pivot->expiration);
 
                 if($today > $expiration){
-                    $student->events()->detach($event->id);
+                    //$student->events()->detach($event->id);
+                    $student->events()->where('id',$event->id)->detach();
                 }
 
             }

@@ -46,7 +46,7 @@ class AbandonedCart extends Notification
     {
         return (new MailMessage)
                     ->from('info@knowcrunch.com', 'Knowcrunch')
-                    ->subject($this->data['firstName'] . ' - Μήπως χρειάζεστε βοήθεια;')
+                    ->subject($this->data['firstName'] . ' - do you need help with your enrollment')
                     ->view('emails.user.abandoned_email',$this->data);
     }
 

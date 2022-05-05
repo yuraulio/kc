@@ -217,7 +217,7 @@ class UserController extends Controller
     {
         
         $user = Auth::user();;//->with('events.summary1','events.lessons.topic','instructor.event')->first();
-        $user = User::where('id',$user->id)->with('events.category','events.category.dropbox','events.summary1','events','events.lessons','events.lessons.topic')->first();
+        $user = User::where('id',$user->id)->with('events.dropbox','events.summary1','events','events.lessons','events.lessons.topic')->first();
         $data = [];
         $instructor = count($user->instructor) > 0;
         
@@ -240,6 +240,8 @@ class UserController extends Controller
             unset($data[$key]['event']['htmlTitle']);
             unset($data[$key]['event']['city']);
             unset($data[$key]['event']['delivery']);
+            unset($data[$key]['event']['dropbox']);
+            unset($data[$key]['event']['venues']);
         }
 
 
@@ -265,10 +267,11 @@ class UserController extends Controller
             $isElearning = false;
             //$event = Event::find($event['id']);
 
-            $category = $event->category[0];
+            //$category = $event->category[0];
 
             $data[$key]['event'] = $event;//$event->toArray();
-            $dropbox = $category['dropbox'][0];
+            //$dropbox = $category['dropbox'][0];
+            $dropbox = $event['dropbox'][0];
             $folders = isset($dropbox['folders'][0]) ? $dropbox['folders'][0] : [];
             $folders_bonus = isset($dropbox['folders'][1]) ? $dropbox['folders'][1] : [];
             //dd($folders_bonus);
@@ -486,10 +489,14 @@ class UserController extends Controller
            
             $topics = [];
 
-            foreach($event->lessons as $lesson){
+            foreach($event['lessons'] as $lesson){
                 if(!$lesson['instructor_id']){
                     continue;
                 }
+
+                $inst['name'] = $instructors[$lesson['instructor_id']][0]['title'].' '.$instructors[$lesson['instructor_id']][0]['subtitle'];
+                $inst['media'] = asset(get_image($instructors[$lesson['instructor_id']][0]['medias'], 'instructors-small'));
+
                 $sum= 0;
                 $arr_lesson = array();
                 $topic = $lesson['topic']->first();
@@ -502,6 +509,7 @@ class UserController extends Controller
                     $topics[$topic->id]['lessons'] = [];
                 }
 
+                
                 $topics[$topic->id]['name'] = $topic->title;
 
                 if($isElearning){
@@ -637,23 +645,20 @@ class UserController extends Controller
                         $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['date_time'] = date_format(date_create($date_lesson), 'd/m/Y');
                         $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['title'] = $lesson['title'];
                         $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['room'] = $lesson['pivot']['room'];
-                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_image'] = asset(get_image($instructors[$lesson['instructor_id']][0]->medias, 'instructors-small'));
-                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_name'] = $instructors[$lesson['instructor_id']][0]['title'].' '.$instructors[$lesson['instructor_id']][0]['subtitle'];
+                        //$data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_image'] = asset(get_image($instructors[$lesson['instructor_id']][0]->medias, 'instructors-small'));
+                        //$data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_name'] = $instructors[$lesson['instructor_id']][0]['title'].' '.$instructors[$lesson['instructor_id']][0]['subtitle'];
+                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_image'] = $inst['name']; 
+                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_name'] = $inst['media'];
+
 
                         $topics[$topic->id]['calendar_count']++;
                     }
 
                 }
                
-
-                $instructor['name'] = $instructors[$lesson['instructor_id']][0]['title'].' '.$instructors[$lesson['instructor_id']][0]['subtitle'];
-                $instructor['media'] = asset(get_image($instructors[$lesson['instructor_id']][0]->medias, 'instructors-small'));
-
-                $arr_lesson['instructor'] = $instructor; 
-
+                $arr_lesson['instructor'] = $inst; 
                 array_push($topics[$topic->id]['lessons'], $arr_lesson);
 
-                
             }
 
             $data[$key]['topics'] = [];
@@ -715,12 +720,13 @@ class UserController extends Controller
             $data1 = [];
             $isElearning = false;
 
-            $category = $event->category->first();
+            //$category = $event->category->first();
             $data[$key]['event'] = $event;
             
             $exceptEvents[] = $event['id'];
 
-            $dropbox = $category['dropbox'][0];
+            //$dropbox = $category['dropbox'][0];
+            $dropbox = $event['dropbox'][0];
             $folders = isset($dropbox['folders'][0]) ? $dropbox['folders'][0] : [];
             $folders_bonus = isset($dropbox['folders'][1]) ? $dropbox['folders'][1] : [];
             //dd($folders_bonus);
