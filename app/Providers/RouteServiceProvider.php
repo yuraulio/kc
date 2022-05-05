@@ -100,7 +100,7 @@ class RouteServiceProvider extends ServiceProvider
     }
 
     /**
-     * Define the "knowelage" routes for the application.
+     * Define the "knowledge" routes for the application.
      *
      *
      * @return void
@@ -109,7 +109,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::middleware('web')
             ->namespace($this->namespace)
-            ->group(base_path('routes/knowelage.php'));
+            ->group(base_path('routes/knowledge.php'));
     }
 
     /**

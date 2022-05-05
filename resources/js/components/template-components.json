@@ -724,6 +724,23 @@
         "simple_view": false,
         "inputs": [
             {
+                "type": "text_editor",
+                "key": "blog_title",
+                "label": "Text",
+                "value": "<h1>Our blog</h1>"
+            },
+            {
+                "type": "multidropdown",
+                "key": "blog_source",
+                "label": "Blog source",
+                "route": "getBlogSource",
+                "value": {
+                    "id": 1,
+                    "title": "Blog"
+                },
+                "size": "col-lg-12"
+            },
+            {
                 "type": "multidropdown",
                 "key": "blog_list",
                 "label": "Blog display",

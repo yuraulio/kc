@@ -1,6 +1,11 @@
+@php
+    if (!filter_var($menu->url, FILTER_VALIDATE_URL)) { 
+        $menu->url = env("APP_URL") . $menu->url;
+    } 
+@endphp
 
 <li data-id="{{$menu->id}}" class="menu_item">
-    <a href="{{ menu_url($menu) }}">
+    <a class="{{$menu->custom_class}}" href="{{ $menu->url }}">
         <span class="menu-icon"></span>{!! $menu->icon !!}
         <span class="menu-title">{{ $menu->title }}</span>
     </a>

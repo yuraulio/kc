@@ -1,6 +1,7 @@
 @php
     // dd($post);
     $metaData = $post->metaData();
+    $source = strtolower($source->title);
 @endphp
 
 @if ($type->id == 2)
@@ -15,7 +16,7 @@
             <div class="duration">
                 @forelse($post->categories as $category)
                     @if(!$category->parent_id)
-                        <a href="{{env("NEW_PAGES_LINK") . "/blog?c=$category->id"}}">{{ $category->title }}</a>
+                        <a href="{{env("NEW_PAGES_LINK") . "/$source?c=$category->id"}}">{{ $category->title }}</a>
                     @endif
                 @empty
                     Uncategorized
@@ -24,7 +25,7 @@
             </div>
         </div>
         <div class="">
-            <h2 class=''><a href="{{env("NEW_PAGES_LINK") . "/blog/$post->slug"}}">{{$post->title ?? ''}}</a></h2>
+            <h2 class=''><a href="{{env("NEW_PAGES_LINK") . "/$source/$post->slug"}}">{{$post->title ?? ''}}</a></h2>
             {{-- <p>{!! mb_strimwidth($featureData["feature_description"] ?? '', 0, 350, "...") !!}</p> --}}
         </div>
     </div>
@@ -42,7 +43,7 @@
                     <div class="duration">
                         @forelse($post->categories as $category)
                             @if(!$category->parent_id)
-                                <a href="{{env("NEW_PAGES_LINK") . "/blog?c=$category->id"}}">{{ $category->title }}</a>
+                                <a href="{{env("NEW_PAGES_LINK") . "/$source?c=$category->id"}}">{{ $category->title }}</a>
                             @endif
                         @empty
                             Uncategorized
@@ -51,7 +52,7 @@
                     </div>
                 </div>
                 <div class="">
-                    <h2 class=''><a href="{{env("NEW_PAGES_LINK") . "/blog/$post->slug"}}">{{$post->title ?? ''}}</a></h2>
+                    <h2 class=''><a href="{{env("NEW_PAGES_LINK") . "/$source/$post->slug"}}">{{$post->title ?? ''}}</a></h2>
                     {{-- <p>{!! mb_strimwidth($featureData["feature_description" ?? ''], 0, 350, "...") !!}</p> --}}
                 </div>
             </div>
