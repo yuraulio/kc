@@ -53,7 +53,7 @@
     @menu($footerMenu2Mobile["name"])
 @endsection
 
-{{-- footer menu 2 --}}
+{{-- footer menu 3 --}}
 @section('footer_menu_3_title_desktop')
     <h4 class="footer-title menu-desktop">{{ $footerMenu3Desktop["title"] }}</h4>
 @endsection
