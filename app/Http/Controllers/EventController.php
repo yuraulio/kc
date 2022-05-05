@@ -206,20 +206,24 @@ class EventController extends Controller
         $event->createSlug($request->slug ? $request->slug : $request->title);
         $event->createMetas($request->all());
 
+        
         if($request->category_id != null){
             $category = Category::with('topics')->find($request->category_id);
 
             $event->category()->attach([$category->id]);
 
             //assign all topics with lesson
-
+            
             foreach($category->topics as $topic){
                //dd($topic);
                 //$lessons = Topic::with('lessons')->find($topic['id']);
-                $lessons = $topic->lessonsCategory;
-
+                //$lessons = $topic->lessonsCategory;
+                $lessons = $topic->lessonsCategory()->wherePivot('category_id',$category->id)->get();
+                
                 foreach($lessons as $lesson){
+                   
                     $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id'],'priority'=>$lesson->pivot->priority]);
+                    
                 }
             }
 
@@ -463,7 +467,8 @@ class EventController extends Controller
             foreach($category->topics as $topic){
                //dd($topic);
                 //$lessons = Topic::with('lessons')->find($topic['id']);
-                $lessons = $topic->lessonsCategory;
+                //$lessons = $topic->lessonsCategory;
+                $lessons = $topic->lessonsCategory()->wherePivot('category_id',$category->id)->get();
 
                 foreach($lessons as $lesson){
                     $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id'],'priority'=>$lesson->pivot->priority]);
