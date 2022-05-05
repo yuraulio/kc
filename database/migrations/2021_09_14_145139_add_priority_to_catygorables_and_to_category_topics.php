@@ -14,11 +14,11 @@ class AddPriorityToCatygorablesAndToCategoryTopics extends Migration
     public function up()
     {
         Schema::table('categoryables', function (Blueprint $table) {
-            $table->integer('priority');
+            $table->integer('priority')->nullable();
         });
 
         Schema::table('categories_topics_lesson', function (Blueprint $table) {
-            $table->integer('priority');
+            $table->integer('priority')->nullable();
         });
     }
 

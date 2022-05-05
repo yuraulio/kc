@@ -147,8 +147,8 @@
                                      
                                  </span>
                                  @if($topic['topic_seen'])
-                                 <img class="topic-progress" src="{{cdn('/theme/assets/img/new/completed_lesson_icon.svg')}}">
-                              @endif
+                                    <img class="topic-progress" src="{{cdn('/theme/assets/img/new/completed_lesson_icon.svg')}}">
+                                 @endif
                               </div>
                               <!-- ./topic-info -->
                               <img
