@@ -171,3 +171,8 @@
     left: initial;
     top: initial;
 }
+
+.editor-subtitle {
+    font-size: 26px;
+    color: #5b5b5b;
+}
