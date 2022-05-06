@@ -82,7 +82,7 @@
     "text_editor" : {
         "version": 3,
         "width": "content",
-        "title": "Rich Text Editor",
+        "title": "Content Body",
         "icon": "dripicons-document-edit",
         "key": "text_editor_component",
         "tab": "Content",
@@ -101,7 +101,7 @@
     "image" : {
         "version": 3,
         "width": "full",
-        "title": "Full size image",
+        "title": "Image",
         "icon": "dripicons-photo",
         "key": "full_sixe_image_component",
         "tab": "Content",
