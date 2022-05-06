@@ -264,6 +264,10 @@ export default {
                     {
                         'id': 5,
                         'title':'General'
+                    },
+                    {
+                        'id': 6,
+                        'title':'Knowledge'
                     }
                 ],
                 slug_value: null,

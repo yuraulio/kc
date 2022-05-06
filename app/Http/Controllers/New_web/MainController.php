@@ -73,14 +73,14 @@ class MainController extends Controller
 
             if ($modelSlug && $modelSlug->slugable != null && get_class($modelSlug->slugable) == "App\Model\Event") {
                 $event = $modelSlug->slugable;
-                $page = Page::withoutGlobalScopes()->whereType("Course page")->whereDynamic(true)->first();
+                $page = Page::withoutGlobalScope("published")->whereType("Course page")->whereDynamic(true)->first();
                 $dynamicPageData = CMS::getEventData($event);
             } elseif ($modelSlug && $modelSlug->slugable != null && get_class($modelSlug->slugable) == "App\Model\Instructor") {
                 $instructor = $modelSlug->slugable;
-                $page = Page::withoutGlobalScopes()->whereType("Trainer page")->whereDynamic(true)->first();
+                $page = Page::withoutGlobalScope("published")->whereType("Trainer page")->whereDynamic(true)->first();
                 $dynamicPageData = CMS::getInstructorData($instructor);
             } else {
-                $page = Page::withoutGlobalScopes()->whereSlug($slug)->first();
+                $page = Page::withoutGlobalScope("published")->whereSlug($slug)->first();
                 $useRedirect = true;
 
                 if ($page && !$page->published) {

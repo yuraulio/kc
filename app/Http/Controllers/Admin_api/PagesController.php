@@ -34,7 +34,7 @@ class PagesController extends Controller
     {
         $this->authorize('viewAny', Page::class, Auth::user());
         try {
-            $pages = Page::withoutGlobalScope('published')
+            $pages = Page::withoutGlobalScopes()
                 ->with('template', 'categories.subcategories')
                 ->tableSort($request);
 
@@ -132,7 +132,7 @@ class PagesController extends Controller
     public function show(int $id)
     {
         try {
-            $page = Page::withoutGlobalScope('published')->whereId($id)->with('template')->first();
+            $page = Page::withoutGlobalScopes()->whereId($id)->with('template')->first();
 
             $this->authorize('view', $page, Auth::user());
 
@@ -151,7 +151,7 @@ class PagesController extends Controller
     public function update(UpdateAdminPageRequest $request, int $id)
     {
         try {
-            $page = Page::withoutGlobalScope('published')->find($id);
+            $page = Page::withoutGlobalScopes()->find($id);
 
             $this->authorize('update', $page, Auth::user());
 
@@ -203,7 +203,7 @@ class PagesController extends Controller
     public function destroy(int $id): JsonResponse
     {
         try {
-            $page = Page::withoutGlobalScope('published')->find($id);
+            $page = Page::withoutGlobalScopes()->find($id);
 
             $this->authorize('delete', $page, Auth::user());
 
@@ -225,7 +225,7 @@ class PagesController extends Controller
     public function updatePublished(int $id): JsonResponse
     {
         try {
-            $page = Page::withoutGlobalScope('published')->find($id);
+            $page = Page::withoutGlobalScopes()->find($id);
 
             $this->authorize('publish', $page, Auth::user());
 
@@ -349,6 +349,22 @@ class PagesController extends Controller
         ];
     }
 
+    public function getBlogSource()
+    {
+        return [
+            "data" => [
+                [
+                    "id" => 1,
+                    "title" => "Blog"
+                ],
+                [
+                    "id" => 2,
+                    "title" => "Knowledge"
+                ]
+            ]
+        ];
+    }
+
     private function syncImages($page)
     {
         $data = collect(json_decode($page->content, true))->flatten();
@@ -375,7 +391,7 @@ class PagesController extends Controller
             $ids = $request->selected;
         
             // authorize action
-            $categories = Page::withoutGlobalScope("published")->findOrFail($ids);
+            $categories = Page::withoutGlobalScopes()->findOrFail($ids);
             foreach ($categories as $category) {
                 $this->authorize('delete', $category, Auth::user());
             }
@@ -416,7 +432,7 @@ class PagesController extends Controller
     public function pagesCount($request)
     {
         try {
-            $pages = Page::withoutGlobalScope('published');
+            $pages = Page::withoutGlobalScopes();
             $pages = $this->filters($request, $pages);
             return $pages->count();
         } catch (Exception $e) {
@@ -428,7 +444,7 @@ class PagesController extends Controller
     public function publishedPagesCount($request)
     {
         try {
-            $pages = Page::withoutGlobalScope('published')->wherePublished(true);
+            $pages = Page::withoutGlobalScopes()->wherePublished(true);
             $pages = $this->filters($request, $pages);
             return $pages->count();
         } catch (Exception $e) {
@@ -440,7 +456,7 @@ class PagesController extends Controller
     public function unpublishedPagesCount($request)
     {
         try {
-            $pages = Page::withoutGlobalScope('published')->wherePublished(false);
+            $pages = Page::withoutGlobalScopes()->wherePublished(false);
             $pages = $this->filters($request, $pages);
             return $pages->count();
         } catch (Exception $e) {
@@ -452,7 +468,7 @@ class PagesController extends Controller
     public function articlePagesCount($request)
     {
         try {
-            $pages = Page::withoutGlobalScope('published')->whereType("Blog");
+            $pages = Page::withoutGlobalScopes()->whereType("Blog");
             $pages = $this->filters($request, $pages);
             return $pages->count();
         } catch (Exception $e) {

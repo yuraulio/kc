@@ -60,6 +60,15 @@
                     </a>
                 </li>
 
+                <li class="menu-title">Knowledge</li>
+
+                <li>
+                    <a href="{{ env("KNOWLEDGE_URL") }}">
+                        <i data-feather="book"></i>
+                        <span> Knowledge pages </span>
+                    </a>
+                </li>
+
                 <li class="menu-title">Management</li>
 
                 <li {{ \Request::is('users/*') ? 'menuitem-active' : ''}}>
