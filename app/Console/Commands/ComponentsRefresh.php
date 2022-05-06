@@ -43,7 +43,7 @@ class ComponentsRefresh extends Command
         $components = json_decode(file_get_contents(base_path() . "/resources/js/components/template-components.json"), false);
 
         // for pages
-        $pages = Page::withoutGlobalScope("published")->get();
+        $pages = Page::withoutGlobalScopes()->get();
         foreach ($pages as $page) {
             $content = $page->content;
             

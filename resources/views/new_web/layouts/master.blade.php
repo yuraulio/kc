@@ -267,7 +267,7 @@
 
         @if(!Auth::check())
             <script>
-                $('.footer-menu-3 li:first-child a').click(function(e) {
+                $('.footer-menu li a.account-menu').click(function(e) {
                     e.preventDefault();
                     $('.login-popup-wrapper').addClass('active');
                 });

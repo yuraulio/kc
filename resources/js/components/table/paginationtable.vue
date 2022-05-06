@@ -149,6 +149,10 @@
                         {
                             'id': 5,
                             'title':'General'
+                        },
+                        {
+                            'id': 6,
+                            'title':'Knowledge'
                         }
                     ]"
                     placeholder="All page types"

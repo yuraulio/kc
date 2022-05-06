@@ -41,6 +41,8 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapAdminRoutes();
         $this->mapAdminApiRoutes();
 
+        $this->mapKnowelageRoutes();
+
         if (Cache::getCmsMode() == Setting::NEW_PAGES) {
             // If path is cached that means it doesn't exists on new website
             // Because of that we will skip loading web routes
@@ -95,6 +97,19 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware('web')
             ->namespace($this->namespace)
             ->group(base_path('routes/admin.php'));
+    }
+
+    /**
+     * Define the "knowledge" routes for the application.
+     *
+     *
+     * @return void
+     */
+    protected function mapKnowelageRoutes()
+    {
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/knowledge.php'));
     }
 
     /**
