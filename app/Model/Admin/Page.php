@@ -87,7 +87,7 @@ class Page extends Model implements Auditable
         });
 
         static::addGlobalScope('knowledge', function (Builder $builder) {
-            $builder->where("type", "!=", "Knowledge");
+            $builder->where("type", "!=", "Knowledge")->orWhere("type", null);
         });
     }
 
