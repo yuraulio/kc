@@ -469,7 +469,7 @@ class EventController extends Controller
                 //$lessons = Topic::with('lessons')->find($topic['id']);
                 //$lessons = $topic->lessonsCategory;
                 $lessons = $topic->lessonsCategory()->wherePivot('category_id',$category->id)->get();
-
+            
                 foreach($lessons as $lesson){
                     $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id'],'priority'=>$lesson->pivot->priority]);
                 }
@@ -664,4 +664,14 @@ class EventController extends Controller
 
         return redirect()->route('events.edit',$newEvent->id)->withStatus(__('Event successfully cloned.'));
     }
+
+
+    public function deleteExplainerVideo(Request $request, Event $event, $explainerVideo){
+        
+        $event->sectionVideos()->where('id',$explainerVideo)->detach();
+        
+        return back();
+
+    }
+
 }

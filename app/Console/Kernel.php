@@ -60,6 +60,8 @@ class Kernel extends ConsoleKernel
 
        Commands\ImportFaqs::class,
        Commands\AttachFilesToEvents::class,
+       Commands\FixOrder::class,
+       Commands\AttachFaqs::class,
     ];
 
     /**

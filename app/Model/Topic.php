@@ -34,7 +34,7 @@ class Topic extends Model
 
     public function lessonsCategory()
     {
-        return $this->belongsToMany(Lesson::class, 'categories_topics_lesson')->withPivot('category_id');
+        return $this->belongsToMany(Lesson::class, 'categories_topics_lesson')->withPivot('category_id','priority');
     }
 
     public function lessons()

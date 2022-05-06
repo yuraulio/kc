@@ -123,6 +123,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     Route::put('video/update/{video}', ['as' => 'video.update', 'uses' => 'VideoController@update']);
     Route::get('video/fetchAllVideos', ['as' => 'video.fetchAllVideos', 'uses' => 'VideoController@fetchAllVideos']);
     Route::post('video/store_event', ['as' => 'video.store_event', 'uses' => 'VideoController@store_event']);
+    Route::delete('/delete-explainer-video/{event}/{explainerVideo}', 'EventController@deleteExplainerVideo')->name('events.video.destroy');
 
     //Custom Ticket
     //ticket.edit

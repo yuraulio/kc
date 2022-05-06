@@ -175,6 +175,7 @@ class TopicController extends Controller
         
         $lessons = [];
         $lessonsAttached = [];
+
         foreach($request->category_id as $category_id){
 
             if(!in_array($category_id,$topic->category()->pluck('category_id')->toArray())){
@@ -187,7 +188,7 @@ class TopicController extends Controller
                         continue;
                     }
                     $lessons[] = $lesson->id;
-                    $category->topic()->attach($topic,['category_id' => $category_id, 'lesson_id' => $lesson->id]);
+                    $category->topic()->attach($topic,['category_id' => $category_id, 'lesson_id' => $lesson->id,'priority'=>$lesson->pivot->priority]);
                 }
                 $topic = Topic::find($topic->id);
                 foreach($category->events as $event){
@@ -199,7 +200,7 @@ class TopicController extends Controller
                             if(in_array($lesson->id,$lessonsAttached) || !in_array($fromCategory,$lesson->category->pluck('id')->toArray())){
                                 continue;
                             }
-
+                            
                             $lessonsAttached[] = $lesson->id;
                             $event->topic()->attach($topic,['event_id' => $event->id,
                                                             'lesson_id' => $lesson->pivot->lesson_id, 
@@ -210,6 +211,9 @@ class TopicController extends Controller
                                                             'time_ends' => $lesson->pivot->time_ends,
                                                             'priority' => $lesson->pivot->priority
                                                             ]);
+
+                                                 
+                            //$category->lessons()->wherePivot('lesson_id', $lesson->pivot->lesson_id)->updateExistingPivot($lesson->pivot->lesson_id, ['priority' =>  $lesson->pivot->priority],false);
                         }
 
                       
@@ -224,7 +228,6 @@ class TopicController extends Controller
             //$topic->category()->sync($request->category_id);
 
         }
-
         return redirect()->route('topics.index')->withStatus(__('Topic successfully updated.'));
     }
 

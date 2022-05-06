@@ -25,11 +25,28 @@
                     <td id="title-{{$video->id}}" data-id="{{$video->id}}" class="video-list"><a class="edit-btn" href="#"> {{ $video->title }} </a></td>
                     
                     <td class="text-right">
+                       
+
                         <div class="dropdown">
                             <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-ellipsis-v"></i>
                             </a>
+                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                
+                                <form action="{{ route('events.video.destroy', [$event,$video]) }}" method="post">
+                                    @csrf
+                                    @method('delete')
+
+                                    <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to remove the explainer video?") }}') ? this.parentElement.submit() : ''">
+                                        {{ __('Delete') }}
+                                    </button>
+                                </form>
+
+                                
+
+                            </div>
                         </div>
+
                     </td>
                 </tr>
             @endforeach
