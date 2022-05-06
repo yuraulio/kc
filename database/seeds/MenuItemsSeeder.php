@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use CodexShaper\Menu\Models\Menu;
 use CodexShaper\Menu\Models\MenuItem;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class MenuItemsSeeder extends Seeder
@@ -16,6 +17,12 @@ class MenuItemsSeeder extends Seeder
      */
     public function run()
     {
+        // clear existing darta
+        DB::table('menus')->truncate();
+        DB::table('menu_items')->truncate();
+
+        // insert new data
+
         // main menu
         $menu = new Menu();
         $menu->name = 'Main menu';
@@ -60,9 +67,25 @@ class MenuItemsSeeder extends Seeder
 
         $menuItem = new MenuItem();
         $menuItem->menu_id = $menu->id;
+        $menuItem->title = 'CORPORATE TRAINING';
+        $menuItem->slug = Str::slug('CORPORATE TRAINING');
+        $menuItem->url = '/corporate-training';
+        $menuItem->parent_id = null;
+        $menuItem->order = 1;
+        $menuItem->route = null;
+        $menuItem->params = null;
+        $menuItem->middleware = null;
+        $menuItem->controller = '\CodexShaper\Menu\Http\Controllers\MenuController@index';
+        $menuItem->target = '_self';
+        $menuItem->icon = null;
+        $menuItem->custom_class = null;
+        $menuItem->save();
+
+        $menuItem = new MenuItem();
+        $menuItem->menu_id = $menu->id;
         $menuItem->title = 'BLOG';
         $menuItem->slug = Str::slug('BLOG');
-        $menuItem->url = '/en/blog';
+        $menuItem->url = '/blog';
         $menuItem->parent_id = null;
         $menuItem->order = 1;
         $menuItem->route = null;

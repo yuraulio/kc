@@ -31,7 +31,7 @@
     }
 @endphp
 
-<div class="mt-5 mb-5 m-0 text-editor-blockquote">
+<div class="mt-5 mb-5 m-0 cms-rich-text-editor text-editor-blockquote {{ $page->slug == "about" ? " about-static-page " : "" }}">
     @if (isset($title))
         <h2 class="tab-title">{{$title}}</h2>
     @endif
@@ -40,3 +40,26 @@
     @endif
     {!! $editor_text !!}
 </div>
+
+@if (($column->template->dynamic && $dynamic_page_data && isset($dynamic_page_data["event"])))
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Course",
+        "name": "{!!$event->title!!}",
+        "description": "{{ $event->subtitle }}",
+        "award": "Awarded as the 'Best Digital & Social Media Education', by Social Media World in 2016, 2017 and 2018.",
+        "inLanguage": "Greek/Ellinika",
+        "educationalCredentialAwarded": "EQF 5+ level",
+        "author": {
+        	"@type": "Person",
+        	"name": "Tolis Aivalis"
+        },
+        "provider": {
+          "@type": "Organization",
+          "name": "Know Crunch",
+          "sameAs": "https://knowcrunch.com/"
+        }
+      }
+   </script>
+@endif

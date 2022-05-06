@@ -66,7 +66,7 @@ class MainController extends Controller
     {
         $page = null;
 
-        if (!cache($request->path())) {
+        if (!cache($request->path()) && Cache::getCmsMode() == Setting::NEW_PAGES) {
             $dynamicPageData = null;
 
             $modelSlug = Slug::whereSlug($slug)->first();
@@ -80,10 +80,16 @@ class MainController extends Controller
                 $page = Page::withoutGlobalScopes()->whereType("Trainer page")->whereDynamic(true)->first();
                 $dynamicPageData = CMS::getInstructorData($instructor);
             } else {
-                $page = Page::whereSlug($slug)->first();
+                $page = Page::withoutGlobalScopes()->whereSlug($slug)->first();
+                $useRedirect = true;
 
-                if (!$page && $redirect = Redirect::whereOldSlug($slug)->first() and $redirect->page) {
-                    return redirect()->route('new_general_page', ['slug' => $redirect->page->slug], 301);
+                if ($page && !$page->published) {
+                    $page = null;
+                    $useRedirect = false;
+                }
+
+                if ($useRedirect && !$page && $redirect = Redirect::whereOldSlug($slug)->first() and $redirect->page) {
+                    return redirect()->route('new_general_page', ['slug' => $redirect->page->slug], 302);
                 }
             }
         }
@@ -97,6 +103,11 @@ class MainController extends Controller
             
             $slugModel = Slug::whereSlug($slug)->firstOrCreate();
             return (new HomeController($this->fbp))->index($slugModel);
+        }
+
+        if ($slug == "in-the-media" || $slug == "brands-trained") {
+            $dynamicPageData['brands'] = Logos::with('medias')->where('type', 'brands')->orderBy('name', 'asc')->get()->toArray();
+            $dynamicPageData['logos'] = Logos::with('medias')->where('type', 'logos')->orderBy('name', 'asc')->get()->toArray();
         }
 
         $this->fbp->sendPageViewEvent();

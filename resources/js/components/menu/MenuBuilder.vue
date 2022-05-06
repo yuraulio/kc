@@ -3,31 +3,32 @@
                 <div class="card-body">
         <div class="row">
             <div class="col-md-12">
-                <div class="row">
+                <div class="row mb-3">
                     <div class="col-md-12">
-                        <div class="create-btn">
-                            <button
-                                v-on:click="showAddMenuItemForm"
-                                class="btn btn-success"
-                                data-target="#addMenuItemModal">Add Menu Item</button>
+                        <div class="create-btn text-end">
+                            <a
+                                href="/menus"
+                                class="btn btn-soft-secondary edit-info me-2 float-start"
+                                >
+                                    <i class="fe-x me-1"></i>
+                                    Cancel
+                            </a>
                             <button
                                 v-on:click="showSettingsForm"
-                                class="btn btn-info edit-info"
-                                data-target="#settingsModal">Settings</button>
+                                class="btn btn-soft-secondary edit-info me-2"
+                                data-target="#settingsModal">
+                                    <i class="mdi mdi-cog me-1"></i>
+                                    Settings
+                            </button>
                             <button
-                            @click="showDesignModal"
-                                id="show_menu_design"
-                                class="btn btn-info edit-info"
-                                :data-id="menu.id"
-                                :data-prefix="prefix"
-                                data-target="#showMenuModel"> View Design</button>
+                                v-on:click="showAddMenuItemForm"
+                                class="btn btn-soft-info"
+                                data-target="#addMenuItemModal">
+                                    <i class="mdi mdi-plus-circle me-1"></i>
+                                    Add Menu Item
+                            </button>
                         </div>
 
-                    </div>
-                    <div class="col-md-12">
-                        <div class="alert alert-info mt-2">
-                             To use a menu on your site just call <code>menu('name')</code> Or <code> @menu('name')</code>
-                        </div>
                     </div>
                 </div>
                 <div class="dd" id="nestmenu">
@@ -221,11 +222,16 @@
 
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: 'You will not be able to recover this menu item',
-                    type: 'warning',
+                    text: "You won't be able to revert this! Delete item?",
+                    icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonText: 'Yes, delete it!',
-                    cancelButtonText: 'No, keep it'
+                    confirmButtonText: "Yes, delete it!",
+                    showLoaderOnConfirm: true,
+                    buttonsStyling: false,
+                    customClass: {
+                        cancelButton: "btn btn-soft-secondary",
+                        confirmButton: "btn btn-soft-danger",
+                    },
                 }).then((result) => {
                     if (result.value) {
                         let url = this.prefix+'/menu/item/'+id;

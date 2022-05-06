@@ -1,6 +1,6 @@
 <template>
 <div>
-    <div v-if="view == 'list'" class="mt-3" style="overflow-x: auto;">
+    <div v-if="view == 'list'" class="mt-3" style="">
         <h5 class="mb-3">Files</h5>
         <div class="d-flex" style="">
             <div class="d-flex" style="align-items: end; width: 100%;">
@@ -18,11 +18,15 @@
                     <tbody>
                         <tr v-for="file in mediaFiles" :key="file.id">
                             <td @click="openFile(file)" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer;">
-                                <span v-if="file.extension == 'pdf'" class="bg-light text-secondary rounded">
+                                <span v-if="file.extension.toLowerCase() == 'pdf'" class="bg-light text-secondary rounded">
                                     <i class="mdi mdi-file-pdf-outline font-28"></i>
                                 </span>
+                                <img v-else-if="imageExtensions.includes(file.extension.toLowerCase())" :src="file.url" alt="image" class="img-fluid avatar-sm rounded mt-2" style="width: 100px; height: auto;" />
 
-                                <img v-else :src="file.url" alt="image" class="img-fluid avatar-sm rounded mt-2" style="width: 100px; height: auto;" />
+                                <span v-else class="bg-light text-secondary rounded">
+                                    <i class="mdi mdi-file font-28"></i>
+                                </span>
+
                             </td>
                             <td class="text-truncate">
                                 <span class="ms-2 fw-normal" :title="file.name">{{file.name}}</span>
@@ -114,6 +118,7 @@ export default {
         view: {
             default: "list",
         },
+        imageExtensions: [],
     },
     data() {
         return {

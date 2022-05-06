@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Validator;
 use Vimeo\Vimeo;
+use App\Jobs\UpdateStatisticJson;
 
 class LessonController extends Controller
 {
@@ -292,6 +293,8 @@ class LessonController extends Controller
         $data['start'] = $start_response;
         $data['end'] = $end_response;
         $data['room'] = $request->room;
+
+        dispatch((new UpdateStatisticJson($request->event_id))->delay(now()->addSeconds(3)));
 
         echo json_encode($data);
 
@@ -660,8 +663,11 @@ class LessonController extends Controller
 
     public function remove_lesson(Request $request)
     {
+       
         $topic = Topic::find($request->topic_id);
         $topic->event_topic()->wherePivot('lesson_id', '=', $request->lesson_id)->wherePivot('event_id', '=', $request->event_id)->detach($request->topic_id);
+
+        dispatch((new UpdateStatisticJson($request->event_id))->delay(now()->addSeconds(3)));
 
         echo json_encode($request->all());
     }

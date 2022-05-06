@@ -59,7 +59,7 @@
                                 </div>
 
 
-                                <div class="form-group">
+                                {{--<div class="form-group">
                                     <label for="exampleFormControlSelect1">Select Dropbox Folder</label>
                                     <?php //dd($data['folders']); ?>
                                     <select class="form-control" name="folder_name" id="folder_name">
@@ -82,7 +82,7 @@
                                         @endforeach
                                     </select>
                                     @include('alerts.feedback', ['field' => 'dropbox'])
-                                </div>
+                                </div>--}}
 
                                 <?php //dd($category->show_homepage); ?>
 

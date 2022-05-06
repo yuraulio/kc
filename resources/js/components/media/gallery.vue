@@ -16,6 +16,9 @@
         <div class="col-auto">
             <button @click="saveToClipboard()" class="btn btn-soft-primary"><i class="fa fa-clipboard" aria-hidden="true"></i></button>
         </div>
+        <div class="col-auto">
+            <a :href="opImage.url" target="_blank" class="btn btn-soft-primary"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+        </div>
     </div>
 
     <div class="row">
@@ -24,10 +27,15 @@
                 <div class="carousel-inner" role="listbox">
                     <div v-if="activeImg" v-for="(img, index) in selectedImage ? [selectedImage] : images" :class="'carousel-item ' + (activeImg.id == img.id ? ' active' : '')" :key="index">
                         <template v-if="!lodash.find(img.subfiles, {'subselected' : true})">
-                            <div v-if="img.extension == 'pdf'" style="width: 100%; height: 300px" class=" text-secondary rounded text-center">
-                                <i class="mdi mdi-file-pdf-outline font-28"></i>
+                            <div v-if="img.extension.toLowerCase() == 'pdf'" style="width: 100%; height: 300px" class=" text-secondary rounded text-center">
+                                <i class="mdi mdi-file-pdf-outline" style="font-size: 160px;"></i>
                             </div>
-                            <img @click="confirmSelection(img)" v-else :src="img.url" alt="..." class="d-block img-fluid" />
+
+                            <img v-else-if="imageExtensions.includes(img.extension.toLowerCase())" @click="confirmSelection(img)" :src="img.url" alt="..." class="d-block img-fluid" />
+
+                            <div v-else style="width: 100%; height: 300px" class=" text-secondary rounded text-center">
+                                <i class="mdi mdi-file" style="font-size: 160px;"></i>
+                            </div>
                             
                         </template>
                         <template v-else>
@@ -45,9 +53,10 @@
                 </div>
             </div>
         </div>
-        <div v-if="activeImg && activeImg.parrent == null" class="col-md-3">
+
+        <div v-if="activeImg && activeImg.parrent == null && sidebarImages.length" class="col-md-3">
             <div class="mt-4" style="max-height: 500px; overflow: hidden; overflow-y: scroll; text-align: center; background-color:#f3f7f9 !important; padding:20px;">
-                <div v-for="(im, index) in activeImg ? lodash.find(images, {id: activeImg.id}).subfiles : []" style="cursor: pointer" :key="index" class="mb-2">
+                <div v-for="(im, index) in sidebarImages" style="cursor: pointer" :key="index" class="mb-2">
                     <template v-if="getVersion(im.version)">
                         <h5 class="text-start">
                             {{ getVersion(im.version).version }}
@@ -80,7 +89,8 @@
 export default {
     props: {
         images: {},
-        opImage: {}
+        opImage: {},
+        imageExtensions: [],
     },
     data() {
         return {
@@ -174,6 +184,9 @@ export default {
                 }) :
                 [];
         },
+        sidebarImages() {
+            return this.activeImg ? this.lodash.find(this.images, {id: this.activeImg.id}).subfiles : [];
+        }
     },
     methods: {
         deleteFile(file) {

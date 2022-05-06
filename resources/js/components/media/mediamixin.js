@@ -60,7 +60,7 @@ var mediaMixin = {
                   "version": "social-media-sharing",
                   "description": "Applies to: Social media sharing default image"
                 }
-              ]
+            ]
         }
     },
     methods: {
@@ -79,6 +79,7 @@ var mediaMixin = {
         },
         uncollapse(item) {
             item.children.forEach((el) => {
+                this.uncollapse(el);
                 this.uncolapsed.splice(this.uncolapsed.indexOf(el.id), 1);
             })
         },
@@ -89,12 +90,11 @@ var mediaMixin = {
         uploadRegFile() {
             var formData = new FormData();
             var imagefile = this.regFile;
-            if (this.selectedFolder) {
-                formData.append('directory', this.selectedFolder.id);
-            }
-            if (imagefile) {
+            if (imagefile && this.move_file_to) {
+                this.upload_error = null;
                 this.loading = true;
                 formData.append("file", imagefile);
+                formData.append('directory', this.move_file_to.id);
                 axios.post('/api/media_manager/upload_reg_file', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
@@ -116,19 +116,19 @@ var mediaMixin = {
                     console.log(error)
                     this.loading = false;
                 })
+            } else {
+                this.upload_error = "Pick file or folder.";
             }
         },
         uploadImgFile() {
             var formData = new FormData();
             var imagefile = this.regFile;
-            if (this.selectedFolder) {
-                formData.append('directory', this.selectedFolder.id);
-            }
-            if (imagefile) {
+            if (imagefile && this.move_file_to) {
                 this.loading = true;
                 formData.append("file", imagefile);
                 formData.append("alt_text", this.alt_text);
                 formData.append("link", this.link);
+                formData.append('directory', this.move_file_to.id);
                 axios.post('/api/media_manager/upload_image', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
@@ -150,11 +150,14 @@ var mediaMixin = {
                     console.log(error)
                     this.loading = false;
                 })
+            } else {
+                this.upload_error = "Pick file or folder.";
             }
         },
         renameFolderModal(folder) {
             this.folder_edit_name = folder.name;
             this.folder_edit_id = folder.id;
+            this.folder_edit_directory = folder.parent_id;
             this.$modal.show('edit-folder-modal');
         },
         renameFolder() {
@@ -162,6 +165,7 @@ var mediaMixin = {
                 var formData = new FormData();
                 formData.append('name', this.folder_edit_name);
                 formData.append('id', this.folder_edit_id);
+                formData.append('directory', this.folder_edit_directory);
                 this.loading = true;
                 axios.post('/api/media_manager/folder/edit', formData)
                 .then((response) => {
@@ -222,9 +226,7 @@ var mediaMixin = {
                 formData.append('edited', this.$refs.crpr.prevalue.id);
             }
             formData.append('original_file', this.$refs.crpr.originalFile);
-            if (this.selectedFolder) {
-                formData.append('directory', this.selectedFolder.id);
-            }
+            formData.append('directory', this.move_file_to.id);
             if (imagefile) {
                 this.$refs.crpr.isUploading = true;
                 formData.append("file", imagefile);
@@ -267,6 +269,7 @@ var mediaMixin = {
             formData.append('width_ratio', this.$refs.crpr.width_ratio);
             formData.append('height_ratio', this.$refs.crpr.height_ratio);
             formData.append('directory', this.selectedFile.folder_id);
+            formData.append('id', this.selectedFile.id);
             this.$refs.crpr.isUploading = true;
             axios.post('/api/media_manager/edit_image', formData, {
                 headers: {
@@ -276,36 +279,45 @@ var mediaMixin = {
                 this.$toast.success('Uploaded Successfully!');
                 this.getFiles(response.data.data.folder_id);
                 this.$refs.crpr.isUploading = false;
+                this.imageKey = Math.random().toString().substr(2, 8);
                 // this.$modal.hide('edit-image-modal');
             })
             .catch((error) => {
-                console.log(error)
+                console.log("edit error", error.response.data.message);
                 this.$refs.crpr.isUploading = false;
+                this.$toast.error("Failed to update. " + error.response.data.message);
             })
         },
         addFolder() {
             this.errors = null;
+
+            if (this.folderName && this.move_file_to) {
             this.loading = true;
             axios
                 .post('/api/media_manager',
                     {
                         name: this.folderName,
+                        directory: this.move_file_to.id,
                     }
                 )
                 .then((response) => {
                     if (response.status == 201 || response.status == 200) {
                         this.$toast.success('Created Successfully!')
                     }
-                    this.mediaFolders.unshift(response.data.data)
+                    this.getFolders();
                     this.folderName = '';
                     this.loading = false;
-                    this.$modal.hide('create-folder-modal')
+                    this.$modal.hide('create-folder-modal');
+                    this.uncollapse(this.mediaFolders[0]);
                 })
                 .catch((error) => {
                     console.log(error)
                     this.errors = error.response.data.errors;
                     this.loading = false;
                 });
+            } else {
+                this.folder_error = "Enter folder name od pick a parent folder.";
+            }
         },
         deleteFolder(folder) {
             Swal.fire({
@@ -368,9 +380,9 @@ var mediaMixin = {
                     }
                 })
                 .then((response) => {
-                    console.log(response.data);
                     if (!folderId) {
                         this.mediaFolders = response.data.data;
+                        this.collapse(this.mediaFolders[0]);
                     }
 
                     this.inMediaFolders = response.data.data;

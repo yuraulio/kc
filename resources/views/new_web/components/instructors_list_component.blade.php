@@ -72,8 +72,8 @@
                                                     <div class="profile-img">
                                                         <a href="{{env('NEW_PAGES_LINK') . '/' . $lvalue['slugable']['slug']}}"><img src="{{cdn($img)}}"  title="{{$name}}" alt="{{$name}}"></a>
                                                     </div>
-                                                    <h3><a href="{{env('NEW_PAGES_LINK') . '/' . $lvalue['slugable']['slug']}}">{{$name}}</a></h3>
-                                                    <p>{{$field1}}, <a target="_blank" title="{{$field1}}" @if($ext_url!='') href="{{$ext_url}}"@endif>{{$field2}}</a>.</p>
+                                                    <h3><a style="color:#81be00;" href="{{env('NEW_PAGES_LINK') . '/' . $lvalue['slugable']['slug']}}">{{$name}}</a></h3>
+                                                    <p>{{$field1}}, <a style="color:#81be00;" target="_blank" title="{{$field1}}" @if($ext_url!='') href="{{$ext_url}}"@endif>{{$field2}}</a>.</p>
                                                     <ul class="social-wrapper">
                                                         @if($fb != '')
                                                             <li><a target="_blank" href="{{$fb}}"><img class="replace-with-svg"  src="/theme/assets/images/icons/social/Facebook.svg" width="16" alt="Visit"></a></li>

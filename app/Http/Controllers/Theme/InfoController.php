@@ -757,6 +757,7 @@ class InfoController extends Controller
         $data = [];
         $data['fbGroup'] = $extrainfo[7];
         $data['duration'] = $extrainfo[3];
+        
         $data['eventSlug'] = $transaction->event->first() ? url('/') . '/' . $transaction->event->first()->getSlug() : url('/');
 
     	foreach ($emailsCollector as $key => $muser) {
@@ -836,6 +837,8 @@ class InfoController extends Controller
         $transdata = [];
         $transdata['trans'] = $transaction;
         $transdata['installments'] = Session::has('installments') ? Session::get('installments') : 1;
+        $transdata['coupon'] = $transaction->coupon_code != '' ? $transaction->coupon_code : null;
+        
         foreach ($emailsCollector as $key => $muser) {
 
         	$transdata['user'] = $muser;

@@ -122,17 +122,21 @@
                            if($count == 1)
                               // $count = 2;
                            ?>
-                        <li class="topic" data-count="{{$count}}">
+                        <li class="topic @if($topic['topic_seen']) seen @endif" data-count="{{$count}}">
                            <?php $count++; ?>
                            <a href="javascript:void(0)" tabindex="0" class="topic-header">
+                             
                               <div class="topic-info">
+                                 
                                  <h3
                                     class="topic-info_title"
                                     data-title="{!! $keyTopic !!}"
                                     data-topic-slug = "{{\Illuminate\Support\Str::slug(preg_replace('/[0-9]+/', '', $keyTopic))}}"
                                     >
+                                   
                                     {!! $keyTopic !!}
                                  </h3>
+
                                  <span class="topic-info_duration">
                                  <?php
                                     $m = isset($topic['topic_duration']) ?  floor(($topic['topic_duration'] / 60) % 60) : 0;
@@ -140,7 +144,11 @@
 
                                     echo intval($h) . 'h ' . $m . 'm';
                                     ?>
+                                     
                                  </span>
+                                 @if($topic['topic_seen'])
+                                    <img class="topic-progress" src="{{cdn('/theme/assets/img/new/completed_lesson_icon.svg')}}">
+                                 @endif
                               </div>
                               <!-- ./topic-info -->
                               <img

@@ -56,14 +56,8 @@ class ContactUsController extends Controller
                 'message' => '',
             ];
         } else {
-            $mail_data = $request->all();
-            $mail_data["cname"] = $mail_data['first_name'];
-            $mail_data["csurname"] = $mail_data['last_name'];
-            $mail_data["cemail"] = $mail_data['email'];
-            $mail_data["ctel"] = $mail_data['mobile_phone'];
-            $mail_data["cmessage"] = $mail_data['your_message'];
 
-            Mail::send('theme.emails.contact.send_us_email', ['mail_data' => $mail_data], function ($m) use ($mail_data) {
+            Mail::send('theme.emails.contact.send_us_email', ['mail_data' => $mail_data], function ($m) use ($mail_data, $email) {
                 $fullname = $mail_data['cname'] . ' ' . $mail_data['csurname'];
 
             	 $fullname = $mail_data['cname'] . ' ' . $mail_data['csurname'];

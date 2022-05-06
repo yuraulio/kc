@@ -75,26 +75,35 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function page($uuid)
+    public function page(Request $request, $uuid)
     {
-        $page = Page::withoutGlobalScope('published')->whereUuid($uuid)->with('template')->first();
+        // also check referer
+        // if ($request->p == 'HEW7M9hd8xY2gkRk' && rtrim($request->header('referer'), "/") == env("ADMIN_URL")) {
 
-        $dynamicPageData = null;
+        if ($request->p == 'HEW7M9hd8xY2gkRk') {
+            $page = Page::withoutGlobalScope('published')->whereUuid($uuid)->with('template')->firstOrFail();
 
-        if ($page->slug == "homepage") {
-            $dynamicPageData = CMS::getHomepageData();
-            $dynamicPageData['homeBrands'] = Logos::with('medias')->where('type', 'brands')->inRandomOrder()->take(6)->get()->toArray();
-            $dynamicPageData['homeLogos'] = Logos::with('medias')->where('type', 'logos')->inRandomOrder()->take(6)->get()->toArray();
-            // dd($dynamicPageData['homeBrands']);
+            $dynamicPageData = null;
+
+            if ($page->slug == "homepage") {
+                $dynamicPageData = CMS::getHomepageData();
+                $dynamicPageData['homeBrands'] = Logos::with('medias')->where('type', 'brands')->inRandomOrder()->take(6)->get()->toArray();
+                $dynamicPageData['homeLogos'] = Logos::with('medias')->where('type', 'logos')->inRandomOrder()->take(6)->get()->toArray();
+            }
+
+            $dynamicPageData['brands'] = Logos::with('medias')->where('type', 'brands')->orderBy('name', 'asc')->get()->toArray();
+            $dynamicPageData['logos'] = Logos::with('medias')->where('type', 'logos')->orderBy('name', 'asc')->get()->toArray();
+
+            return view('new_web.page', [
+                'content' => json_decode($page->content),
+                'page_id' => $page->id,
+                'comments' => $page->comments->take(500),
+                'page' => $page,
+                'dynamic_page_data' => $dynamicPageData,
+            ]);
+        } else {
+            abort(404);
         }
-
-        return view('new_web.page', [
-            'content' => json_decode($page->content),
-            'page_id' => $page->id,
-            'comments' => $page->comments->take(500),
-            'page' => $page,
-            'dynamic_page_data' => $dynamicPageData,
-        ]);
     }
 
     public function menu()

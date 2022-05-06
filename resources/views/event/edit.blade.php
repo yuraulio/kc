@@ -156,6 +156,30 @@
 
                                     @include('alerts.feedback', ['field' => 'payment_method'])
                                 </div>
+
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect1">Select Dropbox Folder</label>
+                                    <select class="form-control" name="folder_name" id="folder_name">
+
+                                        @foreach($folders as $folder)
+
+                                            <?php $found = false; ?>
+                                            @foreach($already_assign as $ass)
+                                                @if(isset($ass) && $ass['folder_name'] == $folder)
+                                                <?php $found = true; ?>
+
+                                                @endif
+                                            @endforeach
+                                            @if($found)
+                                            <?php //dd($folder); ?>
+                                                <option selected value="{{ $folder }}">{{ $folder }}</option>
+                                            @else
+                                                <option value="{{ $folder }}">{{ $folder }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                    @include('alerts.feedback', ['field' => 'dropbox'])
+                                </div>
                               
                                 <div class="form-group">
                                     
@@ -308,7 +332,7 @@
                                             <option <?= ($event['status'] == 3) ? "selected" : ''; ?> value="3">{{ __('Completed') }}</option>
                                             <option <?= ($event['status'] == 0) ? "selected" : ''; ?> value="0">{{ __('Open') }}</option>
                                             <option <?= ($event['status'] == 1) ? "selected" : ''; ?> value="1">{{ __('Close') }}</option>
-                                            {{--<option <?= ($event['status'] == 5) ? "selected" : ''; ?> value="5">{{ __('Waiting') }}</option>--}}
+                                            <option <?= ($event['status'] == 5) ? "selected" : ''; ?> value="5">{{ __('Waiting') }}</option>
                                     </select>
 
                                     @include('alerts.feedback', ['field' => 'status'])
@@ -389,6 +413,9 @@
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-11-tab_inside" data-toggle="tab" href="#tabs-icons-text-11_inside" role="tab" aria-controls="tabs-icons-text-11_inside" aria-selected="false"><i class="far fa-images mr-2"></i>Image</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-11-tab_inside" data-toggle="tab" href="#testimonials-tab" role="tab" aria-controls="tabs-icons-text-11_inside" aria-selected="false"><i class="far fa-images mr-2"></i>Testimonials</a>
                                         </li>
                                         {{--<li class="nav-item">
                                             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab_inside" data-toggle="tab" href="#coupons" role="tab" aria-controls="metas" aria-selected="false"><i class="ni ni-calendar-grid-58 mr-2"></i>Coupons</a>
@@ -900,17 +927,17 @@
             let lesson_id = $('#lesson_id').val()
             let instructor_id = $('#instFormControlSelect12').val()
 
-            if(!date){
+            if(!date && event_type){
 
                 alert('You must fill date field')
                 return false;
 
-            }else if(!start){
+            }else if(!start && event_type){
                 
                 alert('You must fill start time field')
                 return false;
                 
-            }else if(!end){
+            }else if(!end && event_type){
 
                 alert('You must fill end time field')
                 return false;
@@ -963,6 +990,7 @@
 
 
 <script>
+    var event_type = false;
             function formatDate(date) {
             var d = new Date(date),
                 month = '' + (d.getMonth() + 1),
@@ -1021,6 +1049,7 @@
             topic_id = topic_id.split("_")
             const event_id = $('#topic_lessons').data('event-id')
             let instructor_id = $('#instFormControlSelect12').val()
+            
 
             data = {lesson_id:elem[1], topic_id:topic_id[1], event_id:event_id}
             $.ajax({
@@ -1037,7 +1066,7 @@
                     data = JSON.parse(data)
                     let instructors = data.instructors
 
-                    let event_type = data.isInclassCourse
+                    event_type = data.isInclassCourse
                     let event_id = data.event
 
                     lesson = data.lesson.pivot

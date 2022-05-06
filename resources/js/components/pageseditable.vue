@@ -171,9 +171,9 @@
 
                             <div class="row mt-3">
                                 <div class="col-12 text-center mb-3 d-grid">
-                                    <a v-if="type != 'new'" :href="'/new_page/' + data.uuid" target="_blank" class="btn btn-block btn-soft-warning waves-effect waves-light m-1">
+                                    <button v-if="type != 'new'" @click="preview()" class="btn btn-block btn-soft-warning waves-effect waves-light m-1">
                                         Live preview
-                                    </a>
+                                    </button>
                                     <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions" :disabled="!template_value" @click="rearange()" class="btn btn-block btn-soft-info waves-effect waves-light m-1">Pseudo preview</button>
                                     <button v-if="type == 'new'" @click="add()" type="button" class="btn btn-soft-success waves-effect waves-light m-1" :disabled="loading"><i v-if="!loading" class="fe-check-circle me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Create</button>
                                     <button v-if="type == 'edit'" :disabled="loading" @click="edit()" type="button" class="btn btn-soft-success waves-effect waves-light m-1"><i v-if="!loading" class="mdi mdi-square-edit-outline me-1"></i><i v-else class="fas fa-spinner fa-spin"></i> Save</button>
@@ -208,6 +208,7 @@
 import multidropdown from './inputs/multidropdown.vue';
 // import Tcedit from './tcdit.vue';
 import gicon from './gicon.vue';
+import slugify from '@sindresorhus/slugify';
 
 export default {
   components: { multidropdown, gicon },
@@ -275,6 +276,7 @@ export default {
             },
             update_title(value){
                 this.title_value = value;
+                this.slug_value = slugify(value);
             },
             update_rows(value){
                 this.rows_value = value;
@@ -415,6 +417,12 @@ export default {
                 this.data.published = this.published;
                 this.data.content = this.$refs.tc.data;
                 this.$emit('changeMode', this.data);
+            },
+            preview() {
+                window.open(
+                    process.env.MIX_APP_URL + '/__preview/' + this.data.uuid + '?p=HEW7M9hd8xY2gkRk',
+                    '_blank'
+                );
             }
         },
         mounted() {

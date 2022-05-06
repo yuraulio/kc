@@ -19,12 +19,12 @@
     }
 @endphp
 
-<section class="section-hero {{ $small ? 'section-hero-small' : '' }}" style="background-image:url({{ !$small ? $image : '' }})">
+<section class="section-hero {{ $small ? 'section-hero-small' : '' }}" style="background-image:url('{{ !$small ? $image : '' }}');" >
     @if (!$small)
         <div class="overlay"></div>
     @endif
     <div class="container">
-        <div class="hero-message">
+        <div class="hero-message cms-rich-text-editor {{ $column->template->dynamic ? ' dynamic-header ' : ''}}">
             @if($column->template->dynamic)
                 <h1>{{$title}}</h1>
                 <h2>{{$subtitle}}</h2>

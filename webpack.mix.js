@@ -49,7 +49,7 @@ mix.js('resources/js/app.js', 'public/js')
         'public/theme/assets/css/fontawesome/css/kcfonts.css',
         'public/theme/assets/css/select2.css',
         'resources/assets/css/custom.css',
-        'public/admin_assets/css/icons.css',
+        // 'public/admin_assets/css/icons.css',
     ], 'public/theme/assets/css/style_ver_new.css');
 
     mix.sass('resources/assets/scss/bootstrap5/bootstrap5-grid.scss',
@@ -62,7 +62,7 @@ mix.js('resources/js/app.js', 'public/js')
         'public/new_cart/css/style.css',
     ], 'public/new_cart/version/style_ver.css');
 
-      /* */
+      /* **/
 
       mix.scripts([
 

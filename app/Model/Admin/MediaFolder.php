@@ -13,7 +13,6 @@ class MediaFolder extends Model
 {
     use HasFactory;
     use SearchFilter;
-    use SoftDeletes;
 
     protected $table = 'cms_folders';
     public $asYouType = true;

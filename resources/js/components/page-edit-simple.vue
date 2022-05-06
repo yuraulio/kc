@@ -354,7 +354,7 @@ import slugify from '@sindresorhus/slugify';
                     if (response.status == 200){
                         this.loading = false;
                         window.open(
-                            '/new_page/' + this.page.uuid,
+                            process.env.MIX_APP_URL + '/__preview/' + this.page.uuid + '?p=HEW7M9hd8xY2gkRk',
                             '_blank'
                         );
                     }

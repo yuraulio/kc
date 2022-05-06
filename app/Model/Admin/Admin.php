@@ -29,10 +29,12 @@ use App\Model\OauthAccessToken;
 use App\Model\Transaction;
 use App\Traits\SearchFilter;
 use App\Traits\PaginateTable;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Admin extends Authenticatable
+class Admin extends Authenticatable implements Auditable
 {
     use Notifiable, HasApiTokens, MediaTrait, Billable, SearchFilter, PaginateTable;
+    use \OwenIt\Auditing\Auditable;
     /**
      * The attributes that are mass assignable.
      *

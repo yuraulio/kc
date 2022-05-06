@@ -76,6 +76,20 @@ iframe {
   color: #fff;
 }
 
+li.topic {
+  border-left: 3px solid lightgrey;
+}
+
+li.topic.seen {
+  border-left: 3px solid #2FD339;
+}
+
+img.topic-progress{
+  max-width: 12px;
+  vertical-align: middle;
+  margin-left: 10px;
+}
+
 .content-wrapper {
   display: -webkit-box;
   display: -moz-box;

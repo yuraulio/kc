@@ -283,7 +283,7 @@
                   <h4 class="footer-title ">Students</h4>
                   <div class="mobile-toggle">
                      <ul class="footer-menu">
-                        <li class="account-menu">
+                        {{--<li class="account-menu">
                         @if (Auth::check())
                         <a href="/myaccount" title = 'Manage Account'> manage your account </a>
 
@@ -291,7 +291,7 @@
                         <a href="javascript:void(0)" title = 'Manage Account'> manage your account </a>
 
                         @endif
-                        </li>
+                        </li>--}}
                         <li> <a  href='https://www.facebook.com/groups/KnowcrunchAlumni/' target='_blank' title = 'Official Alumni Group'> official alumni group </a> </li>
                         <li> <a  href='https://www.facebook.com/groups/socialmediagreece/' target='_blank' title = 'Digital Nation Group'> digital nation group </a> </li>
 
@@ -353,7 +353,7 @@
                </div>
             </div>
          </footer>
-         <a href="#" class="go-top-btn"><i class="fas fa-chevron-up"></i></a>
+         <a href="#" class="go-top-btn"><i class="icon-up-open"></i></a>
       </div>
       <script src="{{cdn('/theme/assets/js/new_js/vendor/modernizr-3.7.1.min.js')}}"></script>
 <script src="{{cdn('/theme/assets/js/new_js/jquery-3.4.1.min.js')}}" ></script>

@@ -2,7 +2,6 @@
 
 namespace App\Console;
 
-use App\Console\Commands\DeleteOldUsers;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -55,7 +54,12 @@ class Kernel extends ConsoleKernel
        Commands\ExportAllUserByCategory::class,
        Commands\AttachCerficateByEvent::class,
        Commands\SubscriptionsEnds::class,
-       Commands\NewAdminMediaManager::class
+       Commands\NewAdminMediaManager::class,
+       Commands\ComponentsRefresh::class,
+       Commands\PublishCheck::class,
+
+       Commands\ImportFaqs::class,
+       Commands\AttachFilesToEvents::class,
     ];
 
     /**
