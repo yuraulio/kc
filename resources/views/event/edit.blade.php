@@ -99,14 +99,6 @@
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
                           
-
-                                <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-title">{{ __('Title') }}</label>
-                                    <input type="text" name="eventTitle" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title', $event->title) }}" required autofocus>
-
-                                    @include('alerts.feedback', ['field' => 'title'])
-                                </div>
-
                                 @if($event->is_inclass_course() && isset($slug))
                                 <div class="form-group">
                                     <label class="form-control-label" for="input-method">{{ __('Syllabus Pdf') }}</label>
@@ -483,12 +475,12 @@
 
 
 
-                                                        {{--<div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
+                                                        <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
                                                             <label class="form-control-label" for="input-title">{{ __('Title') }}</label>
                                                             <input type="text" name="eventTitle" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title', $event->title) }}" required autofocus>
 
                                                             @include('alerts.feedback', ['field' => 'title'])
-                                                        </div>--}}
+                                                        </div>
                                                         {{--@include('admin.slug.slug',['slug' => isset($slug) ? $slug : null])--}}
                                                         <div class="form-group{{ $errors->has('htmlTitle') ? ' has-danger' : '' }}">
                                                             <label class="form-control-label" for="input-htmlTitle">{{ __('HTML Title') }}</label>
