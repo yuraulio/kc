@@ -58,8 +58,10 @@
                                             <span class="date">{{$dateLaunch}} </span>
                                         @if(isset($row['slugable']) && $row['slugable']['slug'] != '')
 
-                                            @if($row['status'] != 0)
+                                            @if($row['status'] != 0 && $row['status'] != 5)
                                             <a href="{{ $row['slugable']['slug'] }}" class="btn btn--sm btn--secondary btn--sold-out">sold out</a>
+                                            @elseif($row['status'] == 5)
+                                            <a href="{{ $row['slugable']['slug'] }}" class="btn btn--sm btn--secondary">JOIN WAITING LIST</a>
                                             @else
                                             <a href="{{ $row['slugable']['slug'] }}" class="btn btn--sm btn--secondary">course details</a>
                                             @endif
@@ -151,7 +153,12 @@
 
                                 <a href="/video-on-demand-courses" class="location"> VIDEO E-LEARNING COURSES</a>
                                 <span class="date"> </span>
-                                <a href="{{$url}}" class="btn btn--sm btn--secondary">course details</a>
+
+                                @if($row['status'] == 5)
+                                    <a href="{{$url}}" class="btn btn--sm btn--secondary">JOIN WAITING LIST</a>
+                                @else
+                                    <a href="{{$url}}" class="btn btn--sm btn--secondary">course details</a>
+                                @endif
 
                                 </div>
                             </div>
