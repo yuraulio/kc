@@ -232,7 +232,7 @@
                            <span class="date"> </span>
                            @if($row['status'] == 0)
                            <a href="{{$url}}" class="btn btn--sm btn--secondary">course details</a>
-                           @elif
+                           @elseif($row['status'] == 5)
                            <a href="{{$url}}" class="btn btn--sm btn--secondary">JOIN WAITING LIST</a>
                            @endif
 
