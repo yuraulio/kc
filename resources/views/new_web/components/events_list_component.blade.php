@@ -100,14 +100,17 @@
                                     ?>
                                     @if($row->view_tpl == 'elearning_free')
                                         <div class="price">free</div>
-                                        <a href="{{env('NEW_PAGES_LINK') . '/' .  $slug }}" class="btn btn--secondary btn--md">Enroll For Free</a>
+                                        <a href="{{ $slug }}" class="btn btn--secondary btn--md">Enroll For Free</a>
                                     @elseif($row->view_tpl == 'elearning_pending')
                                         <div class="price">Pending</div>
-                                        <a href="{{env('NEW_PAGES_LINK') . '/' .  $slug }}" class="btn btn--secondary btn--md">Course Details</a>
+                                        <a href="{{ $slug }}" class="btn btn--secondary btn--md">Course Details</a>
+                                    @elseif($row['status'] == 5)
+                                        <div class="price">Course coming soon</div>
+                                        <a href="{{ $slug }}" class="btn btn--secondary btn--md">JOIN WAITING LIST</a>
                                     @else
                                         <div class="price">from €{{$price}}</div>
-                                        <a href="{{env('NEW_PAGES_LINK') . '/' .  $slug }}" class="btn btn--secondary btn--md">Course Details</a>
-                                    @endif
+                                        <a href="{{ $slug }}" class="btn btn--secondary btn--md">Course Details</a>
+                                    @endif  
                                 </div>
                             </div>
                         </div>
@@ -186,19 +189,18 @@
                                     @if(isset($row['status']))
                                         <?php $etstatus = $row['status']; ?>
                                     @endif
-                                    @if($row->view_tpl == 'event_free')
-                                        <div class="price">free</div>
-                                        <a href="{{ env('NEW_PAGES_LINK') . '/' .  $slug }}" class="btn btn--secondary btn--md">Enroll For Free</a>
-                                    @elseif($row->view_tpl == 'event_free_coupon')
-                                        <div class="price">free</div>
-                                        <a href="{{ env('NEW_PAGES_LINK') . '/' .  $slug }}" class="btn btn--secondary btn--md">course details</a>
+                                    @if($row->view_tpl == 'elearning_free')
+                                    <div class="price">free</div>
+                                    <a href="{{ $slug }}" class="btn btn--secondary btn--md">Enroll For Free</a>
+                                    @elseif($row->view_tpl == 'elearning_pending')
+                                    <div class="price">Pending</div>
+                                    <a href="{{ $slug }}" class="btn btn--secondary btn--md">Course Details</a>
+                                    @elseif($row['status'] == 5)
+                                        <div class="price">Course coming soon</div>
+                                        <a href="{{ $slug }}" class="btn btn--secondary btn--md">JOIN WAITING LIST</a>
                                     @else
-                                        @if($etstatus == 0 && $price > 0)
-                                            <div class="price">from €{{$price}}</div>
-                                            <a href="{{ env('NEW_PAGES_LINK') . '/' .  $slug }}" class="btn btn--secondary btn--md">Course Details</a>
-                                        @else
-                                            <a href="{{ env('NEW_PAGES_LINK') . '/' .  $slug }}" class="btn btn--secondary btn--md btn--sold-out">sold out</a>
-                                        @endif
+                                    <div class="price">from €{{$price}}</div>
+                                    <a href="{{ $slug }}" class="btn btn--secondary btn--md">Course Details</a>
                                     @endif
                                 </div>
                             </div>
