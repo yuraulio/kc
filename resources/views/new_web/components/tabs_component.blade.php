@@ -9,6 +9,7 @@
 
     $event = $dynamic_page_data["event"] ?? null;
     $is_event_paid = $dynamic_page_data["is_event_paid"] ?? null;
+    $is_joined_waiting_list = $dynamic_page_data["is_joined_waiting_list"] ?? null;
     $estatus = $event->status ?? null;
 
     function checkTabContent($tab, $dynamic_page_data, $tabs) {
@@ -58,12 +59,12 @@
                                     @elseif($is_event_paid==0 && Auth::user())
                                         <a href="{{ route('enrollForFree',  $event->id) }}" class="btn btn--lg btn--primary go-to-href">ENROLL FOR FREE</a>
                                     @endif
-                                @else
-                                @if($estatus == 0 && !$is_event_paid)
-                                        <a href="#seats" class="btn btn--lg btn--primary go-to-href">ENROLL NOW</a>
-                                    @elseif($estatus != 3 && $estatus != 1 && !$is_event_paid)
-                                        <a href="#seats" class="btn btn--lg btn--primary go-to-href go-to-href soldout">SOLD OUT</a>
-                                    @endif
+                                @elseif($estatus == 0 && !$is_event_paid)
+                                    <a href="#seats" class="btn btn--lg btn--primary go-to-href">ENROLL NOW</a>
+                                @elseif($estatus == 5 && !$is_joined_waiting_list && !$is_event_paid)
+                                    <a href="{{ route('cart.add-item', [ $event->id,'waiting', 8 ]) }}" class="btn btn--lg btn--primary go-to-href elearning-free">JOIN WAITING LIST</a>
+                                @elseif($estatus != 3 && $estatus != 5 && $estatus != 1 && !$is_event_paid)
+                                    <a href="#seats" class="btn btn--lg btn--primary go-to-href go-to-href soldout">SOLD OUT</a>
                                 @endif
                             @endif
                 
