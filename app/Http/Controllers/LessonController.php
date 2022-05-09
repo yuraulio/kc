@@ -237,7 +237,7 @@ class LessonController extends Controller
 
             $date1 = date('Y-m-d', strtotime($request->date));
         }else{
-            $date1 = date('Y-m-d', strtotime($request->start));;
+            $date1 = date('Y-m-d', strtotime($request->date));;
         }
 
         if($request->start != null){

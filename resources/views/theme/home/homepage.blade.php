@@ -230,7 +230,11 @@
                            
                            @if(isset($header_menus['elearning_card']['data']['slugable']) )<a href="{{ $header_menus['elearning_card']['data']['slugable']['slug'] }}" class="location"> VIDEO E-LEARNING COURSES</a>@endif
                            <span class="date"> </span>
+                           @if($row['status'] == 0)
                            <a href="{{$url}}" class="btn btn--sm btn--secondary">course details</a>
+                           @elif
+                           <a href="{{$url}}" class="btn btn--sm btn--secondary">JOIN WAITING LIST</a>
+                           @endif
 
                         </div>
                      </div>

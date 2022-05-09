@@ -189,7 +189,7 @@ class EventController extends Controller
             $published_at = null;
         }
 
-        $launchDate = date('Y-m-d',strtotime($request->launch_date));
+        $launchDate = $request->launch_date ? date('Y-m-d',strtotime($request->launch_date)) : $published_at;
 
         $request->request->add(['published' => $published, 'published_at' => $published_at, 'release_date_files' => date('Y-m-d', strtotime($request->release_date_files)),'launch_date'=>$launchDate]);
         $event = $model->create($request->all());
@@ -426,7 +426,7 @@ class EventController extends Controller
         //dd($request->all());
        //dd($request->release_date_files);
        
-        $launchDate = date('Y-m-d',strtotime($request->launch_date));
+       $launchDate = $request->launch_date ? date('Y-m-d',strtotime($request->launch_date)) : $published_at;
 
         $request->request->add(['published' => $published, 'published_at' => $published_at, 
             'release_date_files' => date('Y-m-d', strtotime($request->release_date_files)),
