@@ -4,7 +4,7 @@
         <div class="row">
             <?php
 
-            if($event['mediable_type'] == 'App\Model\Event' || $event['mediable_type'] == 'App\Model\Pages' || $event['mediable_type'] == 'App\Model\Logos' || $event['mediable_type'] == 'App\Model\Instructor' || $event['mediable_type'] == 'App\Model\Testimonial'){
+            if($event['mediable_type'] == 'App\Model\Event' || $event['mediable_type'] == 'App\Model\Pages' || $event['mediable_type'] == 'App\Model\Logos' || $event['mediable_type'] == 'App\Model\Instructor' || $event['mediable_type'] == 'App\Model\Testimonial' || $event['mediable_type'] == 'App\Model\Partner'){
                 if($event['details'] != null){
                     $details = json_decode($event['details'], true);
                 }else{

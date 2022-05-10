@@ -101,8 +101,6 @@ Upload Image
         name = $('#select_ImageModal .table-info .fm-content-item').text()
         if(name == ''){
             name = $('#select_ImageModal .fm-grid-item.active').attr('title')
-
-            console.log('name2 = ', name)
         }
 
         name = name.replace(/\s/g, '')

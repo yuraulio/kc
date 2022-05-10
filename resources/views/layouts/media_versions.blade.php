@@ -27,7 +27,10 @@
         $versions = ['social-media-sharing','instructors-testimonials', 'event-card', 'users' ,'header-image', 'instructors-small' ,'feed-image'];
     }else if($media['mediable_type'] == 'App\Model\Testimonial'){
         $versions = ['social-media-sharing','instructors-testimonials', 'event-card', 'users' ,'header-image', 'instructors-small' ,'feed-image'];
+    }else if($media['mediable_type'] == 'App\Model\Partner'){
+        $versions = ['social-media-sharing','instructors-testimonials', 'event-card', 'users' ,'header-image', 'instructors-small' ,'feed-image'];
     }
+
     ?>
 
     <?php

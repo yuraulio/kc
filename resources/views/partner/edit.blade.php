@@ -46,11 +46,26 @@
                                     @include('alerts.feedback', ['field' => 'name'])
                                 </div>
 
+                                
+
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
                                 </div>
                             </div>
                         </form>
+                        <div class="" id="media"  aria-labelledby="tabs-icons-text-2-tab">
+                                  <div class="row">
+                                     <div class="col-xl-12 order-xl-1">
+                                     @include('admin.upload.upload', ['event' => ($media != null) ? $media : null, 'versions' => ['event-card', 'header-image', 'social-media-sharing']])
+                                     </div>
+                            
+                                  </div>
+                                    @if($media != null && $media['name'] != '')
+                                        <div id="version-btn" style="margin-bottom:20px" class="col">
+                                            <a href="{{ route('media2.eventImage', $media) }}" target="_blank" class="btn btn-primary">{{ __('Versions') }}</a>
+                                        </div>
+                                    @endif
+                                </div>
                     </div>
                 </div>
             </div>

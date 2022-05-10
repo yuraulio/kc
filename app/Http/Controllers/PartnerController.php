@@ -53,7 +53,7 @@ class PartnerController extends Controller
     public function store(PartnerRequest $request, Partner $model)
     {
         $model->create($request->all());
-
+        $model->createMedia();
         return redirect()->route('partner.index')->withStatus(__('Partner successfully created.'));
     }
 
@@ -95,7 +95,13 @@ class PartnerController extends Controller
      */
     public function edit(Partner $partner)
     {
-        return view('partner.edit', compact('partner'));
+
+        $media = $partner->mediable;
+        if(!$media){
+            $media = $partner->createMedia();
+        }
+        
+        return view('partner.edit', compact('partner','media'));
     }
 
     public function edit_event(Partner $partner)

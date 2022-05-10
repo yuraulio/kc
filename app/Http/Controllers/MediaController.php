@@ -368,8 +368,7 @@ class MediaController extends Controller
 
     public function eventImage($id){
         $data['media'] = Media::find($id);
-        //dd($data['media']);
-
+        
         return view('layouts.media_versions', $data);
     }
 
