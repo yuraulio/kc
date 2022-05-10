@@ -8,19 +8,6 @@
    $search_term = $dynamic_page_data["blog_search_data"]["search_term"] ?? null;
    $search_term_slug = $dynamic_page_data["blog_search_data"]["search_term_slug"] ?? null;
 
-   array_push($column->template->inputs, (object)[
-      "key" => "blog_list",
-      "value" => (object)["id" => 2],
-   ]);
-   array_push($column->template->inputs, (object)[
-      "key" => "blog_source",
-      "value" => (object)["title" => "Blog"],
-   ]);
-   array_push($column->template->inputs, (object)[
-      "key" => "blog_title",
-      "value" => "",
-   ]);
-
    $show_categories = false;
 
 @endphp
@@ -42,5 +29,7 @@
 
 @if($results > 0)
    @include("new_web.components.blog_list_component")
+@else
+   <div class="mb-5"></div>
 @endif
    

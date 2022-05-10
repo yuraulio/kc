@@ -46,6 +46,7 @@
     }
 
     $blog = $blog->get();
+    
 @endphp
 
 <div class="row mb-5">
@@ -53,7 +54,9 @@
         @if ($category)
             <h1>{{$category->title}}</h1>
         @else
-            {!! $blog_display["blog_title"] !!}
+            @if (isset($blog_display["blog_title"]))
+                {!! $blog_display["blog_title"] !!}
+            @endif
         @endif
     </div>
 </div>
