@@ -49,7 +49,7 @@
                         <a href="javascript:void(0)" title="Search" class="search-toggle"><img src="{{cdn('/theme/assets/images/icons/icon-magnifier.svg')}}" class="replace-with-svg" alt="Search"></a>
                         <div class="header-search-wrapper">
 
-                            @if(request()->segment(1) == 'blog')
+                            @if(request()->segment(1) == 'blog' || request()->segment(1) == 'blog_search')
                                 <form method='get' action='blog_search' class='text-center'>
                                     {{ csrf_field() }}
                                     <input id="sat" type="text" name="search_term"  class="search-input" placeholder="Search">

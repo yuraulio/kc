@@ -1,0 +1,46 @@
+@php
+   $results = 0;
+   if(!empty($list)){
+         $results += count($list);
+   }
+
+   $list = $dynamic_page_data["blog_search_data"]["list"] ?? null;
+   $search_term = $dynamic_page_data["blog_search_data"]["search_term"] ?? null;
+   $search_term_slug = $dynamic_page_data["blog_search_data"]["search_term_slug"] ?? null;
+
+   array_push($column->template->inputs, (object)[
+      "key" => "blog_list",
+      "value" => (object)["id" => 2],
+   ]);
+   array_push($column->template->inputs, (object)[
+      "key" => "blog_source",
+      "value" => (object)["title" => "Blog"],
+   ]);
+   array_push($column->template->inputs, (object)[
+      "key" => "blog_title",
+      "value" => "",
+   ]);
+
+   $show_categories = false;
+
+@endphp
+
+<div class="search-results-head mb-0">
+   <h1 class="search-results-title">Search results for <span>{{ $search_term }}</span></h1>
+      <?php
+         $results = 0;
+         if(!empty($list)){
+            $results += count($list);
+         }
+      ?>
+   @if($results > 0 )
+      <p class="search-results-text"><span>{{$results}} result(s) </span> found containing the term <span>{{ $search_term }}.</span></p>
+   @else
+      <p class="search-results-text"><strong>{{$results}} result(s) </strong> were found containing the term <strong>{{ $search_term }}</strong>. Try again.</p>
+   @endif
+</div>
+
+@if($results > 0)
+   @include("new_web.components.blog_list_component")
+@endif
+   

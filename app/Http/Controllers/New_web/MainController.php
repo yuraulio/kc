@@ -184,8 +184,6 @@ class MainController extends Controller
 
         $data['list'] = Page::whereType("Blog")->where('title', 'like', '%' . $data['search_term'] . '%')->get();
 
-        $data['instructor'] = Instructor::whereStatus(1)->get();
-
         $dynamicPageData["blog_search_data"] = $data;
 
         return $dynamicPageData;

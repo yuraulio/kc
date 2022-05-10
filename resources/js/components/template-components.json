@@ -901,5 +901,16 @@
         "simple_view": false,
         "inputs": [
         ]
+    },
+    "blog_search_result" : {
+        "version": 2,
+        "title": "Blog search result",
+        "icon": "dripicons-search",
+        "key": "blog_search_result_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": false,
+        "inputs": [
+        ]
     }
 }
