@@ -160,31 +160,27 @@
                                     </div>
                                  </div>
                                  @endif
-                                 {{--@if(isset($section_organisers))
+                                 @if(!empty($partners))
                                  <div class="col6 col-xs-12">
                                     <div class="ibox">
-                                       @foreach($evorg as $vkey => $vvalue)
+                                       @foreach($partners as $vkey => $partner)
                                        <?php
-                                          $alt='';
-                                          $img ='';
+                                          $alt=$partner->name;
+                                          $img = get_image($partner['mediable']);
 
-                                          if (isset($evorg)){
-                                            $media = PostRider\Media::select('id','path','name','ext')->findOrFail($evorg[0]->allMedia[0]['media_id'])->toArray();
-                                            $alt = $evorg[0]->name;
-                                            $img = "/uploads/originals/".$media['path'] . '/' . $media['name'] . $media['ext'];
-                                          }
+                                          
 
-                                          ?>
+                                       ?>
                                        <div class="ibox-img">
-                                          <a href="{{$evorg[0]->abbr}}" title="{{$alt}}" target="_blank"><img src="{{cdn($img)}}" alt="{{$alt}}"></a>
+                                          <a href="javascript:void(0)" title="{{$alt}}" target="_blank"><img src="{{cdn($img)}}" alt="{{$alt}}"></a>
                                        </div>
                                        <div class="ibox-text">
-                                          {!! $section_organisers->htmlTitle !!}
+                                          {!! $partner->name !!}
                                        </div>
                                        @endforeach
                                     </div>
                                  </div>
-                                 @endif--}}
+                                 @endif
                               </div>
                            </div>
                            <!-- /.course-overview-text -->

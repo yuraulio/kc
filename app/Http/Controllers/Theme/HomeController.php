@@ -573,7 +573,7 @@ class HomeController extends Controller
         $data['showSpecial'] = false;
         $data['showAlumni'] = $event->ticket()->where('type','Alumni')->where('active',true)->first() ? true : false;;
         $data['is_joined_waiting_list'] = 0;
-
+        $data['partners'] = $event->partners;
 
         if($event->ticket()->where('type','Early Bird')->first()){
             $data['showSpecial'] = ($event->ticket()->where('type','Early Bird')->first() && $event->ticket()->where('type','Special')->first())  ? 

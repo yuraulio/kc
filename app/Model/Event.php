@@ -224,7 +224,7 @@ class Event extends Model
 
     public function partners()
     {
-        return $this->belongsToMany(Partner::class, 'event_partner');
+        return $this->belongsToMany(Partner::class, 'event_partner')->with('mediable');
     }
 
     public function syllabus()
