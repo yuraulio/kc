@@ -40,7 +40,7 @@
 
 
                         <li class="nav-item">
-                            <button class="btn btn-icon btn-primary" data-toggle="tab"  href="#metas" role="tab" type="button">
+                            <button class="btn btn-icon btn-primary seo" data-toggle="tab"  href="#metas" role="tab" type="button">
                             	<span class="btn-inner--icon"><i class="ni ni-world"></i></span>
                                 <span class="btn-inner--text">Seo</span>
                             </button>
@@ -1388,7 +1388,15 @@ var datePickerOptions = {
     })
 </script>--}}
 
-
+<script>
+    $(document).on('click','button',function(){
+        if($(this).hasClass('seo')){
+            $(".form_event_btn").hide();
+        }else{
+            $(".form_event_btn").show();
+        }
+    });
+</script>
 
 @endpush
 
