@@ -166,6 +166,10 @@ class DropboxController extends Controller
                         $drop->files = $data['files'][$di];
                         $drop->folders = $data['folders'][$di];
                         $drop->save();
+                    }elseif(!isset($data['files'][$di])){
+                        $drop = new Dropbox;
+                        $drop->folder_name = $di;
+                        $drop->save();
                     }
                 }
 

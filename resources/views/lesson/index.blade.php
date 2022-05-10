@@ -209,6 +209,7 @@
             s = s.replace(/ /g,'');
             s = s.replace(/&/g,'');
             s = s.replace(/amp;/g,'');
+            s = s.replace(/,/g, "");
             return s
         }
 
@@ -218,6 +219,7 @@
 
     $("#col2_filter").select2({
     templateResult: function(option, container) {
+
 
         if(selectedTopic != null){
             if (selectedCategory != '' && $(option.element).attr("data-category") !== undefined && removeSpecial($(option.element).attr("data-category")) != selectedCategory){
@@ -234,7 +236,7 @@
     
     $("#col1_filter").select2({
     templateResult: function(option, container) {
-
+        
         if(selectedCategory != null){
             if (selectedCategory != '' && $(option.element).attr("data-category") !== undefined && removeSpecial($(option.element).attr("data-category")) != selectedCategory){
                 $(container).css("display","none");
@@ -269,7 +271,7 @@
     $('#col2_filter').append(row)
 
     $.each(topics, function(key1, value1) {
-        let row = `<option data-topic="${value1.id}" data-category="${key}" value="${value1.title}">${value1.title}</option>`
+        let row = `<option data-topic="${value1.id}" data-category="${key}" value="${removeSpecial(value1.title)}">${value1.title}</option>`
         $('#col1_filter').append(row)
         $('#col1_move').append(row)
     })
@@ -299,11 +301,13 @@
             
             
             if(selectedCategory != null){
-        
+                
         
                 if(selectedCategory != '' && selectedTopic == null){
             
-                    let word = data[4].split(',');
+
+                    let word = removeSpecial(data[4]);
+                    word = word.split(',');
             
             
                     if(selectedCategory != "--All--"){
@@ -344,9 +348,13 @@
             
                 }else if(selectedCategory != null && selectedTopic != ''){
             
-            
-                    let cat = data[4].split(',');
-                    let topi = data[3].split(',');
+                    let cat = removeSpecial(data[4]);
+                    cat = cat.split(',');
+
+                    let topi = removeSpecial(data[3]);
+                    topi = topi.split(',');
+
+
                     if(selectedTopic != '--All--'){
                         $.each(cat, function(key, value) {
                             if(value != ''){

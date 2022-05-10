@@ -364,6 +364,7 @@ class EventController extends Controller
         $data['isInclassCourse'] = $event->is_inclass_course();
         $data['eventFaqs'] = $event->faqs->pluck('id')->toArray();
         $data['eventUsers'] = $event->users;//$event->users->toArray();
+        $data['eventWaitingUsers'] = $event->waitingList()->with('user')->get();
         $data['coupons'] = Coupon::all();
         $data['activeMembers'] = 0;
         $data['sections'] = $event->sections->groupBy('section');
