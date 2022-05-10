@@ -71,6 +71,13 @@
                         </li>
 
                         <li class="nav-item">
+                            <button class="btn btn-icon btn-primary" data-toggle="tab"  href="#waiting_list" role="tab" type="button">
+                            	<span class="btn-inner--icon"><i class="ni ni-hat-3"></i></span>
+                                <span class="btn-inner--text">Waiting List Students</span>
+                            </button>
+                        </li>
+
+                        <li class="nav-item">
                             <button class="btn btn-icon btn-primary" data-toggle="tab"  href="#tabs-icons-text-5" role="tab" type="button">
                             	<span class="btn-inner--icon"><i class="ni ni-hat-3"></i></span>
                                 <span class="btn-inner--text">Coupons</span>
@@ -718,6 +725,11 @@
                             
                             <div class="tab-pane fade" id="tabs-icons-text-3" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
                                 @include('event.students')
+                            </div>
+
+
+                            <div class="tab-pane fade" id="waiting_list" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
+                                @include('event.students_waiting_list')
                             </div>
 
                             <div class="tab-pane fade" id="emails_fields" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
