@@ -417,7 +417,7 @@
                         <!--<h3 class="lesson-misc-title">Lesson resources</h3>-->
                         <div class="lesson-resources">
                           
-                           @if(isset($files) && count($files) > 0)
+                           @if(isset($files) && count($files) > 0 && isset($files['folders'][0]))
                            <?php
                               
                               $folders = $files['folders'][0];
