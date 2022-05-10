@@ -49,13 +49,13 @@
                         <a href="javascript:void(0)" title="Search" class="search-toggle"><img src="{{cdn('/theme/assets/images/icons/icon-magnifier.svg')}}" class="replace-with-svg" alt="Search"></a>
                         <div class="header-search-wrapper">
 
-                            @if(request()->segment(2) == 'blog')
-                                <form method='get' action='{{route("binshopsblog.search", app('request')->get('locale'))}}' class='text-center'>
+                            @if(request()->segment(1) == 'blog')
+                                <form method='get' action='blog_search' class='text-center'>
                                     {{ csrf_field() }}
-                                    <input type="input" class="search-input" name="s" placeholder="Search" id='name' value="{{ \Request::get('s') }}"/>
+                                    <input id="sat" type="text" name="search_term"  class="search-input" placeholder="Search">
                                 </form>
                             @else
-                                <form method="get" action="search/term">
+                                <form method="get" action="event_search">
                                     {{ csrf_field() }}
                                     <input id="sat" type="text" name="search_term"  class="search-input" placeholder="Search">
                                 </form>
