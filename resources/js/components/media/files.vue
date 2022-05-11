@@ -21,7 +21,7 @@
                                 <span v-if="file.extension.toLowerCase() == 'pdf'" class="bg-light text-secondary rounded">
                                     <i class="mdi mdi-file-pdf-outline font-28"></i>
                                 </span>
-                                <img v-else-if="imageExtensions.includes(file.extension.toLowerCase())" :src="file.url" alt="image" class="img-fluid avatar-sm rounded mt-2" style="width: 100px; height: auto;" />
+                                <img v-else-if="imageExtensions.includes(file.extension.toLowerCase())" :src="file.url + '?key=' + Math.random().toString().substr(2, 8)" alt="image" class="img-fluid avatar-sm rounded mt-2" style="width: 100px; height: auto;" />
 
                                 <span v-else class="bg-light text-secondary rounded">
                                     <i class="mdi mdi-file font-28"></i>
