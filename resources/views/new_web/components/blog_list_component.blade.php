@@ -17,7 +17,7 @@
         $categories = $category->subcategories()->whereHas("pages", function ($q) use ($source) {
             $q->whereType($source);
             if ($source == "Knowledge") {
-                $q->withoutGlobalScope("knowledge")->where("slug", "!=", "knowledge");
+                $q->withoutGlobalScope("knowledge")->where("slug", "!=", "knowledge")->where("slug", "!=", "knowledge_search");
             }
             if (isset($search_term) && $search_term !== null) {
                 $q = $q->where('title', 'like', '%' . $search_term . '%');
@@ -38,7 +38,7 @@
     $blog = Page::whereType($source);
 
     if ($source == "Knowledge") {
-        $blog = $blog->withoutGlobalScope("knowledge")->where("slug", "!=", "knowledge");
+        $blog = $blog->withoutGlobalScope("knowledge")->where("slug", "!=", "knowledge")->where("slug", "!=", "knowledge_search");
     }
 
     if (isset($search_term) && $search_term !== null) {
@@ -50,6 +50,9 @@
 @endphp
 
 <div class="row mb-5">
+    @if (isset($blog_display["blog_title"]))
+        <div class="mt-5"></div>
+    @endif
     <div class="col-lg-12 marbot">
         @if ($category)
             <h1>{{$category->title}}</h1>

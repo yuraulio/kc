@@ -80,7 +80,10 @@ class KnowledgeController extends Controller
             $data['search_term_slug'] = Str::slug($data['search_term'], "-");
         }
 
-        $data['list'] = Page::whereType("Knowledge")->withoutGlobalScope("knowledge")->where("slug", "!=", "knowledge")->where('title', 'like', '%' . $data['search_term'] . '%')->get();
+        $data['list'] = Page::whereType("Knowledge")->withoutGlobalScope("knowledge")
+        ->where("slug", "!=", "knowledge")
+        ->where("slug", "!=", "knowledge_search")
+        ->where('title', 'like', '%' . $data['search_term'] . '%')->get();
 
         $dynamicPageData["blog_search_data"] = $data;
 
