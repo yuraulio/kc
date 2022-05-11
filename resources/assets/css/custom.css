@@ -245,8 +245,13 @@
 .homepage-events .slide .box-text .date{ letter-spacing: 1px; font-size: 12px; text-transform: uppercase; color: #ff9000; display: block; margin-bottom: 12px; }
 .homepage-events .slide .box-text .btn{ font-size: 13px; }
 
-@media (min-width: 576px) and (max-width: 991px) {
-    .homepage-events .col-md-4 {
+@media (min-width: 990px) and (max-width: 1200px) {
+    .homepage-events .col-md-3 {
+        width: 33.3333333333333333%!important;
+    }
+}
+@media (min-width: 576px) and (max-width: 990px) {
+    .homepage-events .col-md-3 {
         width: 50%!important;
     }
 }
@@ -254,5 +259,9 @@
     .homepage-events .slide {
         max-width: 100%;
     }
+}
+
+.homepage-events .box-text.box-text-orange:before {
+    background: linear-gradient(90deg, rgba(255,120,0,1) 0%, rgba(255,155,52,1) 16%, rgba(255,189,103,1) 100%);
 }
 /* homepage events - end */

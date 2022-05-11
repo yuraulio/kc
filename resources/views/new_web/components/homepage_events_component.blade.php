@@ -82,7 +82,7 @@
     <div class="row homepage-events mt-5">
         @foreach($elearningEvents as $data)
             @foreach($data['events'] as $event)
-                <div class="col-sm-6 col-md-4 mb-5">
+                <div class="col-sm-6 col-md-3 mb-5">
                     <div class="slide d-inline-block">
                         <?php
                             $string = $event['title'];
@@ -96,42 +96,42 @@
                         @if ( isset($event['mediable']) && isset($event['slugable']))
                         <a href="{{ $event['slugable']['slug'] }}"><img src="{{ cdn(get_image($event['mediable'],'event-card')) }}" alt="{{ $until}}"/></a>
                         @endif
-                        <div class="box-text">
-                        <?php
-                            $string = $event['title'];
-                            if( strpos($string, ',') !== false ) {
-                                $until = substr($string, 0, strrpos($string, ","));
-                            }
-                            else {
-                                $until = $string;
-                            }
+                        <div class="box-text box-text-orange">
+                            <?php
+                                $string = $event['title'];
+                                if( strpos($string, ',') !== false ) {
+                                    $until = substr($string, 0, strrpos($string, ","));
+                                }
+                                else {
+                                    $until = $string;
+                                }
 
-                            if(isset($event['slugable'])){
-                                $slug = $event['slugable']['slug'];
-                            }else{
-                                $slug = '';
-                            }
+                                if(isset($event['slugable'])){
+                                    $slug = $event['slugable']['slug'];
+                                }else{
+                                    $slug = '';
+                                }
 
-                            $month = !$event['launch_date'] ? date('F Y', strtotime($event['published_at'])) : date('F Y', strtotime($event['launch_date']));
-                            $url = url($slug); 
-                        ?>
+                                $month = !$event['launch_date'] ? date('F Y', strtotime($event['published_at'])) : date('F Y', strtotime($event['launch_date']));
+                                $url = url($slug); 
+                            ?>
 
-                        <h3><a href="{{$url}}">{{ $until }}</a></h3>
-                        <div class="box-footer">
-                            <a href="/video-on-demand-courses" class="location"> VIDEO E-LEARNING COURSES</a>
-                            <span class="date">{{ $event['hours'] }} hours</span>
-                            @if(isset($event['slugable']) && $event['slugable']['slug'] != '')
-                                @if ($data["free"])
-                                    <a href="{{ $event['slugable']['slug'] }}" class="btn btn--sm btn--secondary">enroll for free</a>
-                                @elseif($event['status'] != 0 && $event['status'] != 5)
-                                    <a href="{{ $event['slugable']['slug'] }}" class="btn btn--sm btn--secondary btn--sold-out">sold out</a>
-                                @elseif($event['status'] == 5)
-                                    <a href="{{ $event['slugable']['slug'] }}" class="btn btn--sm btn--secondary">JOIN WAITING LIST</a>
-                                @else
-                                    <a href="{{ $event['slugable']['slug'] }}" class="btn btn--sm btn--secondary">course details</a>
+                            <h3><a href="{{$url}}">{{ $until }}</a></h3>
+                            <div class="box-footer">
+                                <a href="/video-on-demand-courses" class="location"> VIDEO E-LEARNING COURSES</a>
+                                <span class="date">{{ $event['hours'] }} hours</span>
+                                @if(isset($event['slugable']) && $event['slugable']['slug'] != '')
+                                    @if ($data["free"])
+                                        <a href="{{ $event['slugable']['slug'] }}" class="btn btn--sm btn--secondary">enroll for free</a>
+                                    @elseif($event['status'] != 0 && $event['status'] != 5)
+                                        <a href="{{ $event['slugable']['slug'] }}" class="btn btn--sm btn--secondary btn--sold-out">sold out</a>
+                                    @elseif($event['status'] == 5)
+                                        <a href="{{ $event['slugable']['slug'] }}" class="btn btn--sm btn--secondary">JOIN WAITING LIST</a>
+                                    @else
+                                        <a href="{{ $event['slugable']['slug'] }}" class="btn btn--sm btn--secondary">course details</a>
+                                    @endif
                                 @endif
-                            @endif
-                        </div>
+                            </div>
                         </div>
                     </div>
                 </div>
