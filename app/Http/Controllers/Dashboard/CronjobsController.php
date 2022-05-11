@@ -164,15 +164,15 @@ class CronjobsController extends Controller
 
 
         $events = Event::where('view_tpl','!=','event_free')->where('view_tpl','!=','elearning_free')->where('published',true)->whereIn('status',[0])->with('category', 'ticket','mediable')->get();
-        $columns = array('id', 'title', 'description', 'availability', 'price', 'link', 'image_link', 'brand', 'google_product_category','condition');
+        $columns = array('id', 'title', 'description', 'availability', 'price', 'link', 'image_link', 'brand', 'google_product_category','condition','custom_label_0');
 
         $file = fopen('csv/fb/fb.csv', 'w');
         fputcsv($file, $columns);
 
         foreach($events as $event) {
 
-            $cat = $event->category->first() ? $event->category->first()->name : '';
-
+            //$cat = $event->category->first() ? $event->category->first()->name : '';
+            $cat = 'Business & Industrial > Advertising & Marketing';
             $amount = 0;
 
             foreach($event->ticket as $price){
@@ -182,15 +182,12 @@ class CronjobsController extends Controller
 
             }
 
-            $summary = $event->title;
-            if($event->summary != ''){
-                $summary = strip_tags($event->summary);
-                $summary = html_entity_decode($summary);
-            }
+            $eventTitle = $event->xml_title ? $event->xml_title : $event->title;
+            $summary = $event->xml_description;
 
         
             $img = url('/') . $event['mediable']['path'] . '/' . $event['mediable']['original_name'];
-            fputcsv($file, array($event->id, $event->title, $summary, 'in stock', $amount . ' EUR', url('/') . '/' . $event->slugable->slug, str_replace('\"', '', $img), 'Knowcrunch',  'Event > ' . $cat, 'new'));
+            fputcsv($file, array($event->id, $eventTitle, trim($summary), 'in stock', $amount . ' EUR', url('/') . '/' . $event->slugable->slug, str_replace('\"', '', $img), 'Knowcrunch',  $cat, 'new',$event->xml_short_description));
 
         }
         fclose($file);
@@ -218,7 +215,8 @@ class CronjobsController extends Controller
 
         foreach($events as $event) {
 
-            $cat = $event->category->first() ? $event->category->first()->name : '';
+            //$cat = $event->category->first() ? $event->category->first()->name : '';
+            $cat = 'Business & Industrial > Advertising & Marketing';
             $city = null;
 
             $amount = 0;
@@ -232,12 +230,10 @@ class CronjobsController extends Controller
 
             $img = url('/') . $event['mediable']['path'] . '/' . $event['mediable']['original_name'];
 
-            $summary = $event->title;
-            if($event->summary != ''){
-                $summary = strip_tags($event->summary);
-                $summary = html_entity_decode($summary);
-            }
-            fputcsv($file, array($event->id, $event->title,  url('/') . '/' . $event->slugable->slug, $img, $amount . ' EUR', 'Event > ' . $cat,trim($summary)));
+            $eventTitle = $event->xml_title ? $event->xml_title : $event->title;
+            $summary = $event->xml_description;
+            
+            fputcsv($file, array($event->id, $eventTitle,  url('/') . '/' . $event->slugable->slug, $img, $amount . ' EUR',  $cat, trim($summary)));
 
         }
         fclose($file);

@@ -3,7 +3,7 @@
     <div class="col-8">
         <h3 class="mb-0">{{ __('Summary') }}</h3>
         <p class="text-sm mb-0">
-            {{ __('This is an example of Summary management.') }}
+            {{-- __('This is an example of Summary management.') --}}
         </p>
     </div>
     <div class="col-4 text-right">

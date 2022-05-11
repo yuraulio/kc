@@ -83,6 +83,13 @@
                                 <span class="btn-inner--text">Coupons</span>
                             </button>
                         </li>
+
+                        <li class="nav-item">
+                            <button class="btn btn-icon btn-primary" data-toggle="tab"  href="#xml_fields" role="tab" type="button">
+                            	<span class="btn-inner--icon"><i class="ni ni-hat-3"></i></span>
+                                <span class="btn-inner--text">Xml fields</span>
+                            </button>
+                        </li>
                       
                     </ul>
                 </div>
@@ -510,13 +517,6 @@
                                                             @include('alerts.feedback', ['field' => 'header'])
                                                         </div>
 
-                                                        <div class="form-group{{ $errors->has('summary') ? ' has-danger' : '' }}">
-                                                            <label class="form-control-label" for="input-summary">{{ __('XML Summary') }}</label>
-                                                            <textarea name="summary" id="input-summary"  class="ckeditor form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Summary') }}" required autofocus>{{ old('summary', $event->summary) }}</textarea>
-
-                                                            @include('alerts.feedback', ['field' => 'summary'])
-                                                        </div>
-
                                                         <div class="form-group{{ $errors->has('body') ? ' has-danger' : '' }}">
                                                             <label class="form-control-label" for="input-body">{{ __('Body') }}</label>
                                                             <textarea name="body" id="input-body"  class="ckeditor form-control{{ $errors->has('body') ? ' is-invalid' : '' }}" placeholder="{{ __('Body') }}" required autofocus>{{ old('body', $event->body) }}</textarea>
@@ -730,6 +730,34 @@
 
                             <div class="tab-pane fade" id="waiting_list" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
                                 @include('event.students_waiting_list')
+                            </div>
+
+                            <div class="tab-pane fade" id="xml_fields" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
+
+                                <h3 class="mb-0">{{ __('Facebook') }}</h3>
+                                <br>
+
+                                <div class="form-group{{ $errors->has('xml_title') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-xml_title">{{ __('XML  Title') }}</label>
+                                    <input name="xml_title" id="input-xml_title"  class="ckeditor form-control{{ $errors->has('xml_title') ? ' is-invalid' : '' }}" placeholder="{{ __('XML  Title') }}" value="{{ old('xml_title', $event->xml_title) }}" autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'xml_title'])
+                                </div>
+
+                                <div class="form-group{{ $errors->has('xml_description') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-xml_description">{{ __('XML  Description') }}</label>
+                                    <input name="xml_description" id="input-xml_description"  class="ckeditor form-control{{ $errors->has('xml_description') ? ' is-invalid' : '' }}" placeholder="{{ __('XML  Description') }}" value="{{ old('xml_description', $event->xml_description) }}" autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'xml_description'])
+                                </div>
+
+                                <div class="form-group{{ $errors->has('xml_short_description') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-xml_short_description">{{ __('XML Short Description') }}</label>
+                                    <input name="xml_short_description" id="input-xml_short_description"  class="ckeditor form-control{{ $errors->has('xml_short_description') ? ' is-invalid' : '' }}" placeholder="{{ __('XML Short Description') }}" value="{{ old('xml_short_description', $event->xml_short_description) }}" autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'xml_short_description'])
+                                </div>
+
                             </div>
 
                             <div class="tab-pane fade" id="emails_fields" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
