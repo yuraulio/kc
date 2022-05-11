@@ -30,7 +30,7 @@
     <div class="row homepage-events mt-5">
         @foreach($inclassEvents as $data)
             @foreach($data['events'] as $event)
-                <div class="col-sm-6 col-md-4 mb-5">
+                <div class="col-sm-6 col-md-3 mb-5">
                     <div class="slide d-inline-block">
                         <?php
                         $string = $event['title'];
