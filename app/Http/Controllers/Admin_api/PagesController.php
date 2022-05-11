@@ -320,14 +320,6 @@ class PagesController extends Controller
                 [
                     "id" => 2,
                     "title" => "Elearning Events"
-                ],
-                [
-                    "id" => 3,
-                    "title" => "Elearning Free Events"
-                ],
-                [
-                    "id" => 4,
-                    "title" => "In class Free Events"
                 ]
             ]
         ];
