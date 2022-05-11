@@ -3,17 +3,29 @@ $(document).on('click', '.registration', function(e) {
 	e.preventDefault();
 
     $('input[name^="firstname["]').each(function(i){
-        let val = $(this).val();
-        let newVal = val.charAt(0).toUpperCase() + val.slice(1).toLowerCase();
+        let val = ($(this).val()).split(" ");
+        let newVal = '';
+        $.each(val, function( index, value ) {
+            newVal += value.charAt(0).toUpperCase() + value.slice(1).toLowerCase() + ' ';
+        });
 
-        $(this).val(newVal);
+        $(this).val(newVal.trim());
     })
 
     $('input[name^="lastname["]').each(function(i){
-        let val = $(this).val();
+        /*let val = $(this).val();
         let newVal = val.charAt(0).toUpperCase() + val.slice(1).toLowerCase();
 
-        $(this).val(newVal);
+        $(this).val(newVal);*/
+
+        let val = ($(this).val()).split(" ");
+        let newVal = '';
+        $.each(val, function( index, value ) {
+            newVal += value.charAt(0).toUpperCase() + value.slice(1).toLowerCase() + ' ';
+        });
+
+        $(this).val(newVal.trim());
+
     })
 
 

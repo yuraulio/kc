@@ -44,7 +44,7 @@ class AttachCertificatesToOldStudents extends Command
     public function handle()
     {
 
-        $nonEvents = [96,1347,4611,4612,4613,4614,2035,4616];
+        /*$nonEvents = [96,1347,4611,4612,4613,4614,2035,4616];
 
         $fileName =  public_path() . '/certificates_import/Users with kc id and events.xlsx';
         $spreadsheet = new Spreadsheet();
@@ -110,6 +110,20 @@ class AttachCertificatesToOldStudents extends Command
             }
 
             
+        }*/
+
+
+        $certificates = Certificate::all();
+
+        foreach($certificates as $certificate){
+            if($certificate->event->first() && $certificate->event->first()->paymentMethod->first() && $certificate->event->first()->paymentMethod->first()->id == 1){
+                if($certificate->success){
+                    $certificate->template = 'kc_deree_diploma';
+                }else{
+                    $certificate->template = 'kc_deree_attendance';
+                }
+            }
+            $certificate->save();
         }
 
 

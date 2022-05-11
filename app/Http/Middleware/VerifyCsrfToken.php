@@ -22,6 +22,9 @@ class VerifyCsrfToken extends Middleware
         '/webhook/stripe',
         'payment-dispatch/notok/*',
         'payment-dispatch/ok/*',
+        '/elearning/saveNote',
+        '/elearning/save',
+        '/getdropbox'
 
     ];
 }

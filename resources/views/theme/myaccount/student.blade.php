@@ -1929,13 +1929,28 @@
 <script>
    $("#update-personal-info").click(function(){
 
-      let val = $("#firstname").val();
+      /*let val = $("#firstname").val();
       let newVal = val.charAt(0).toUpperCase() + val.slice(1).toLowerCase();
       $("#firstname").val(newVal)
 
       val = $("#lastname").val();
       newVal = val.charAt(0).toUpperCase() + val.slice(1).toLowerCase();
-      $("#lastname").val(newVal)
+      $("#lastname").val(newVal)*/
+
+      let val = ($("#firstname").val()).split(" ");
+      let newVal = '';
+      $.each(val, function( index, value ) {
+          newVal += value.charAt(0).toUpperCase() + value.slice(1).toLowerCase() + ' ';
+      });
+      $("#firstname").val(newVal.trim());
+
+      val = ($("#lastname").val()).split(" ");
+      newVal = '';
+      $.each(val, function( index, value ) {
+          newVal += value.charAt(0).toUpperCase() + value.slice(1).toLowerCase() + ' ';
+      });
+
+      $("#lastname").val(newVal.trim());
 
 
 

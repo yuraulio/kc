@@ -181,9 +181,16 @@ class CronjobsController extends Controller
                 }
 
             }
+
+            $summary = $event->title;
+            if($event->summary != ''){
+                $summary = strip_tags($event->summary);
+                $summary = html_entity_decode($summary);
+            }
+
         
             $img = url('/') . $event['mediable']['path'] . '/' . $event['mediable']['original_name'];
-            fputcsv($file, array($event->id, $event->title, $event->title, 'in stock', $amount . ' EUR', url('/') . '/' . $event->slugable->slug, str_replace('\"', '', $img), 'Knowcrunch',  'Event > ' . $cat, 'new'));
+            fputcsv($file, array($event->id, $event->title, $summary, 'in stock', $amount . ' EUR', url('/') . '/' . $event->slugable->slug, str_replace('\"', '', $img), 'Knowcrunch',  'Event > ' . $cat, 'new'));
 
         }
         fclose($file);
@@ -225,11 +232,11 @@ class CronjobsController extends Controller
 
             $img = url('/') . $event['mediable']['path'] . '/' . $event['mediable']['original_name'];
 
-            $summary = 'empty';
+            $summary = $event->title;
             if($event->summary != ''){
                 $summary = strip_tags($event->summary);
+                $summary = html_entity_decode($summary);
             }
-
             fputcsv($file, array($event->id, $event->title,  url('/') . '/' . $event->slugable->slug, $img, $amount . ' EUR', 'Event > ' . $cat,trim($summary)));
 
         }
