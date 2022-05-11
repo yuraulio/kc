@@ -87,7 +87,7 @@
                         <li class="nav-item">
                             <button class="btn btn-icon btn-primary" data-toggle="tab"  href="#xml_fields" role="tab" type="button">
                             	<span class="btn-inner--icon"><i class="ni ni-hat-3"></i></span>
-                                <span class="btn-inner--text">Xml fields</span>
+                                <span class="btn-inner--text">XML fields</span>
                             </button>
                         </li>
                       
@@ -733,9 +733,6 @@
                             </div>
 
                             <div class="tab-pane fade" id="xml_fields" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
-
-                                <h3 class="mb-0">{{ __('Facebook') }}</h3>
-                                <br>
 
                                 <div class="form-group{{ $errors->has('xml_title') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-xml_title">{{ __('XML  Title') }}</label>
