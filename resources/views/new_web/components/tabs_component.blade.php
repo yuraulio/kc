@@ -137,7 +137,7 @@
                <input type="text" onblur="this.placeholder = 'Please type your code here'" onfocus="this.placeholder = ''" placeholder="Please type your code here" id="event-code" name="event-code">
          </div>
          <input type="hidden" value="{{$event->id}}" name="event">
-         <input type="submit" onclick="checkCode()"  value="Confirm">
+         <input id="code-popup-submit" type="submit"  value="Confirm">
    </div><!-- ./code-popup -->
 </div><!-- ./code-popup-wrapper -->
 
@@ -145,13 +145,17 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('#open-code-popup').click(function(e) {
-                    $('.code-popup-wrapper').addClass('active');
-                });
+                $('.code-popup-wrapper').addClass('active');
+            });
 
             $(".close-btn").click(function(){
                 $('.code-popup-wrapper').removeClass('active');
                 $('.alert-outer').hide()
-            })
+            });
+
+            $('#code-popup-submit').click(function(e) {
+                checkCode();
+            });
 
             function checkCode(){
                 $('.alert-outer').hide()

@@ -156,6 +156,11 @@
     }
 }
 
+.section-course-tabs .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .course-tab-text {
+    width: 100%;
+    max-width: initial;
+}
+
 .cart-number-mobile {
     position: relative;
     background: red;

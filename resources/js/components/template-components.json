@@ -890,5 +890,49 @@
                 "size": "col-lg-12"
             }
         ]
+    },
+    "event_search_result" : {
+        "version": 2,
+        "title": "Event search result",
+        "icon": "dripicons-search",
+        "key": "event_search_result_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": false,
+        "inputs": [
+        ]
+    },
+    "blog_search_result" : {
+        "version": 2,
+        "title": "Blog search result",
+        "icon": "dripicons-search",
+        "key": "blog_search_result_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": false,
+        "inputs": [
+            {
+                "type": "multidropdown",
+                "key": "blog_source",
+                "label": "Blog source",
+                "route": "getBlogSource",
+                "value": {
+                    "id": 1,
+                    "title": "Blog"
+                },
+                "size": "col-lg-12"
+            },
+            {
+                "type": "multidropdown",
+                "key": "blog_list",
+                "label": "Blog display",
+                "route": "getDisplayOptions",
+                "value": {
+                    "id": 2,
+                    "title": "Grid"
+                },
+                "size": "col-lg-12"
+            }
+        ]
     }
 }
