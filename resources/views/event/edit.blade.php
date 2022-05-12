@@ -58,7 +58,7 @@
                         <li class="nav-item">
                             {{--<a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-4-tab" data-toggle="tab" href="#emails_fields" role="tab" aria-controls="tabs-icons-text-4" aria-selected="false"><i class="ni ni-world mr-2"></i>Links</a>--}}
                             <button class="btn btn-icon btn-primary" data-toggle="tab"  href="#emails_fields" role="tab" type="button">
-                            	<span class="btn-inner--icon"><i class="ni ni-world"></i></span>
+                            	<span class="btn-inner--icon"><i class="ni ni-curved-next"></i></span>
                                 <span class="btn-inner--text">Links</span>
                             </button>
                         </li>
@@ -79,14 +79,14 @@
 
                         <li class="nav-item">
                             <button class="btn btn-icon btn-primary" data-toggle="tab"  href="#tabs-icons-text-5" role="tab" type="button">
-                            	<span class="btn-inner--icon"><i class="ni ni-hat-3"></i></span>
+                            	<span class="btn-inner--icon"><i class="ni ni-tag"></i></span>
                                 <span class="btn-inner--text">Coupons</span>
                             </button>
                         </li>
 
                         <li class="nav-item">
                             <button class="btn btn-icon btn-primary" data-toggle="tab"  href="#xml_fields" role="tab" type="button">
-                            	<span class="btn-inner--icon"><i class="ni ni-hat-3"></i></span>
+                            	<span class="btn-inner--icon"><i class="ni ni-single-copy-04"></i></span>
                                 <span class="btn-inner--text">XML fields</span>
                             </button>
                         </li>
