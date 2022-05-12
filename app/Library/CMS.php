@@ -183,7 +183,7 @@ class CMS
         $data['elearningFree'] = [];
         $data['inclassFree'] = [];
 
-        $categories =Category::with('slugable', 'events.slugable', 'events.city', 'events', 'events.mediable')->where('show_homepage', 1)->orderBy('priority', 'asc')->get()->toArray();
+        $categories =Category::with('slugable', 'events.slugable', 'events.city', 'events', 'events.mediable')->orderBy('priority', 'asc')->get()->toArray();
 
         foreach ($categories as $category) {
             if (!key_exists($category['id'], $data['nonElearningEvents'])) {
