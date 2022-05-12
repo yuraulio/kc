@@ -35,7 +35,12 @@
             }
         })->get();
     }
-    $blog = Page::whereType($source);
+
+    if ($category) {
+        $blog = $category->pages();
+    } else {
+        $blog = Page::whereType($source);
+    }
 
     if ($source == "Knowledge") {
         $blog = $blog->withoutGlobalScope("knowledge")->where("slug", "!=", "knowledge")->where("slug", "!=", "knowledge_search");
