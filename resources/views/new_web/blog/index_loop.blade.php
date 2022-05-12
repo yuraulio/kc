@@ -1,5 +1,4 @@
 @php
-    // dd($post);
     $metaData = $post->metaData();
     $source = strtolower($source->title);
 @endphp
