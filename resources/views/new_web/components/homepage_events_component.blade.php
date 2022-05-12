@@ -22,7 +22,7 @@
         $elearningFree[$key]["free"] = true;
     }
 
-    $inclassEvents = array_merge($inclassEvents, $inclassFree);
+    // $inclassEvents = array_merge($inclassEvents, $inclassFree);
     $elearningEvents = array_merge($elearningEvents, $elearningFree);
 @endphp
 

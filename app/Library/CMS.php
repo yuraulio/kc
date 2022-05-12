@@ -161,8 +161,11 @@ class CMS
         $data['openlist'] = [];
         
         foreach ($data['openlistt'] as $openlist) {
-            $index = $openlist->category->first()->priority ?  $openlist->category->first()->priority : 0;
-
+            if ($openlist->category->first() == null) {
+                $index = 0;
+            } else {
+                $index = $openlist->category->first()->priority ?  $openlist->category->first()->priority : 0;
+            }
             while (in_array($index, array_keys($data['openlist']))) {
                 $index++;
             }
