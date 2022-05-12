@@ -221,21 +221,19 @@
                 @foreach($completedlist as $row)
                     @if($row->view_tpl != 'elearning_event' && $row->view_tpl != 'elearning_greek' && $row->view_tpl != 'elearning_free' && $row->view_tpl != 'elearning_pending')
                         <?php
-                            $pubdate = $row->launch_date ? $row->launch_date :  $row->published_at;
+                            $pubdate = $row->launch_date  && $row->launch_date != '1970-01-01' ? $row->launch_date :  $row->published_at;
                             $chmonth = date('m', strtotime($pubdate));
                             $month = date('F Y', strtotime($pubdate));
                             $isonCart = Cart::search(function ($cartItem, $rowId) use ($row) {
                                 return $cartItem->id === $row->id;
                             });
                         ?>
-
                         @if($chmonth != $lastmonth1)
                             <?php $lastmonth1 = $chmonth;?>
                             <div class="dynamic-learning--subtitle">
                                 <h2>{{$month}}</h2>
                             </div>
                         @endif
-
                         <div class="dynamic-courses-wrapper dynamic-courses-wrapper--style2">
                             <div class="item">
                                 <div class="left">
@@ -246,11 +244,11 @@
                                             $slug = '';
                                         }
                                     ?>
-                                    <h2><a href="{{env('NEW_PAGES_LINK') . '/' .  $slug }}">{{ $row->title}}</a></h2>
+                                    <h2><a href="{{ $slug }}">{{ $row->title}}</a></h2>
                                     <div class="bottom">
                                         @if(isset($row['city']))
                                             @foreach($row['city'] as $city)
-                                                <a href="{{env('NEW_PAGES_LINK') . '/' .  $city->slugable->slug }}" class="city " title="{{ $city->name }}">
+                                                <a href="{{ $city->slugable->slug }}" class="city " title="{{ $city->name }}">
                                                 <img width="20" class="replace-with-svg" src="/theme/assets/images/icons/marker.svg" alt="">{{ $city->name }}</a>
                                             @endforeach
                                         @endif
@@ -261,40 +259,38 @@
                                         @if($row->hours)
                                             <div class="expire-date"><img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt="">{{ $row->hours }}h</div>
                                         @endif
+
                                     </div>
                                 </div>
                                 <div class="right">
                                     <?php  
                                         if (isset($row['ticket']->where('type','Early Bird')->first()->pivot->price) && 
-                                            $row['ticket']->where('type','Early Bird')->first()->pivot->price > 0 && 
-                                            $row['ticket']->where('type','Early Bird')->first()->pivot->quantity > 0 &&
-                                            $row['ticket']->where('type','Early Bird')->first()->pivot->active) {
-
+                                        $row['ticket']->where('type','Early Bird')->first()->pivot->price > 0 && 
+                                        $row['ticket']->where('type','Early Bird')->first()->pivot->quantity > 0 &&
+                                        $row['ticket']->where('type','Early Bird')->first()->pivot->active) {
                                             $price = $row['ticket']->where('type','Early Bird')->first()->pivot->price;
-
                                         }else if(isset($row['ticket']->where('type','Special')->first()->pivot->price) && 
-                                            $row['ticket']->where('type','Special')->first()->pivot->price > 0 && 
-                                            $row['ticket']->where('type','Special')->first()->pivot->quantity > 0 &&
-                                            $row['ticket']->where('type','Special')->first()->pivot->active){
-                                            
+                                        $row['ticket']->where('type','Special')->first()->pivot->price > 0 && 
+                                        $row['ticket']->where('type','Special')->first()->pivot->quantity > 0 &&
+                                        $row['ticket']->where('type','Special')->first()->pivot->active){
                                             $price = $row['ticket']->where('type','Special')->first()->pivot->price;
                                         }else if(isset($row['ticket']->where('type','Regular')->first()->pivot->price) && 
-                                            $row['ticket']->where('type','Regular')->first()->pivot->price > 0 && 
-                                            $row['ticket']->where('type','Regular')->first()->pivot->quantity > 0 &&
-                                            $row['ticket']->where('type','Regular')->first()->pivot->active){
-                        
+                                        $row['ticket']->where('type','Regular')->first()->pivot->price > 0 && 
+                                        $row['ticket']->where('type','Regular')->first()->pivot->quantity > 0 &&
+                                        $row['ticket']->where('type','Regular')->first()->pivot->active){
                                             $price = $row['ticket']->where('type','Regular')->first()->pivot->price;
-                                        } else { 
+                                        }
+                                        else { 
                                             $price = 0; 
                                         }
                                     ?>
                                     <?php $etstatus = 0 ?>
-                                    <a href="{{env('NEW_PAGES_LINK') . '/' .  $slug }}" class="btn btn--secondary btn--md btn--completed">completed</a>
+                                    <a href="{{ $slug }}" class="btn btn--secondary btn--md btn--completed">completed</a>
                                 </div>
                             </div>
                         </div>
                     @endif
-                @endforeach
+               @endforeach
             @endif
         </div>
     </div>
