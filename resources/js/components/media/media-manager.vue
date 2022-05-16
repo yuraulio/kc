@@ -109,6 +109,10 @@
                     <i v-else class="fas fa-spinner fa-spin"></i>
                     Upload
                 </button>
+
+                <div class="alert alert-warning mt-3" role="alert">
+                    Images will be minified in up to two minutes.
+                </div>
             </div>
         </div>
     </modal>

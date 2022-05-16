@@ -40,7 +40,8 @@
                                 </p>
                             </td>
                             <td>
-                                {{ parseFloat(file.size * 0.000001).toFixed(1) }} MB
+                                
+                                {{ size(file.size) }}
                             </td>
                             <td>
                                 <div class="btn-group dropstart">
@@ -162,6 +163,13 @@ export default {
                     this.$parent.errors = error.response.data.errors;
                 });
         },
+        size(size){
+            if (size < 1000000) {
+                return parseFloat(size * 0.001).toFixed(1) + " kB";
+            } else {
+                return parseFloat(size * 0.000001).toFixed(1) + " MB";
+            }
+        }
     },
 };
 </script>
