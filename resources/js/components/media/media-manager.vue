@@ -109,13 +109,17 @@
                     <i v-else class="fas fa-spinner fa-spin"></i>
                     Upload
                 </button>
+
+                <div class="alert alert-warning mt-3" role="alert">
+                    Images will be minified in up to two minutes.
+                </div>
             </div>
         </div>
     </modal>
 
-    <modal name="edit-image-modal" :adaptive="true" :resizable="true" width="70%" height="70%" :scrollable="true" class="mb-0">
+    <modal name="edit-image-modal" :adaptive="true" width="70%" height="70%" :scrollable="true" class="mb-0">
         <div class="row p-4">
-            <cropperer @edit="imageEdit" @upload="imageAdded" ref="crpr" :prevalue="selectedFile" :imageKey="imageKey"></cropperer>
+            <cropperer @edit="imageEdit" @upload="imageAdded" ref="crpr" :prevalue="selectedFile" :imageKey="imageKey" :warning="warning"></cropperer>
         </div>
     </modal>
 
@@ -407,7 +411,8 @@ export default {
                 "gif",
                 "webp",
                 "svg",
-            ]
+            ],
+            warning: false,
         };
     },
     methods: {

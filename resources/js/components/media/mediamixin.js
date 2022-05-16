@@ -134,7 +134,7 @@ var mediaMixin = {
                         'Content-Type': 'multipart/form-data'
                     }
                 }).then((response) => {
-                    this.$toast.success('Uploaded Successfully!');
+                    this.$toast.success('Uploaded Successfully! Images will be minified in up to two minutes.');
                     response.data.data.forEach((element) => {
                         this.mediaFiles.push(element);
                     })
@@ -143,7 +143,8 @@ var mediaMixin = {
                     this.regFile = null;
 
                     this.selectedFile = response.data.data[0];
-                    this.getFiles(response.data.data[0].folder_id)
+                    this.getFiles(response.data.data[0].folder_id);
+                    this.warning = true;
                     this.$modal.show('edit-image-modal');
                 })
                 .catch((error) => {
@@ -248,7 +249,7 @@ var mediaMixin = {
                             this.mediaFiles.unshift(element);
                         }
                     })
-                    console.log(response)
+                    // console.log(response)
                     this.$refs.crpr.isUploading = false;
                 })
                 .catch((error) => {
@@ -420,6 +421,7 @@ var mediaMixin = {
         },
         userSelectedFiles($event) {
             this.selectedFile = $event;
+            this.warning = false;
             this.$modal.show('edit-image-modal');
         },
         deleteFile($event) {
