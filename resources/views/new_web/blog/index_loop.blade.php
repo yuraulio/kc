@@ -79,5 +79,29 @@
             </div>
         </div>
     </div>
+@elseif ($type->id == 3)
+    {{-- List 2 view --}}
+    <div class="col-12 item mb-5 course-list-item-green">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="bottom">
+                    <div class="duration">
+                        @forelse($post->categories as $category)
+                            @if(!$category->parent_id)
+                                <a href="{{env("NEW_PAGES_LINK") . "/$source?c=$category->id"}}">{{ $category->title }}</a>
+                            @endif
+                        @empty
+                            Uncategorized
+                        @endforelse
+                        | {{date('d M Y ', strtotime($post->created_at))}}
+                    </div>
+                </div>
+                <div class="">
+                    <h2 class=''><a href="{{env("NEW_PAGES_LINK") . "/$source/$post->slug"}}">{{$post->title ?? ''}}</a></h2>
+                    {{-- <p>{!! mb_strimwidth($featureData["feature_description" ?? ''], 0, 350, "...") !!}</p> --}}
+                </div>
+            </div>
+        </div>
+    </div>
 @endif
 

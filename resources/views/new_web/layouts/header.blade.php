@@ -35,7 +35,7 @@
                             </a>
                             <div class="account-submenu">
                                 <ul>
-                                    <li class="account-menu"><a href="/myaccount">Account</a></li>
+                                    <li class="account-menu"><a href="{{env("APP_URL")}}/myaccount">Account</a></li>
                                     <li><a href="{{ route('logout') }}">Sign Out</a></li>
                                 </ul>
                             </div>

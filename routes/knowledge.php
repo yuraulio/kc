@@ -10,6 +10,7 @@ Route::domain('knowledge.' . env('APP_DOMAIN'))->group(function () {
 
     Route::group(['middleware' => ['auth:admin_web']], function () {
         Route::get('/', [KnowledgeController::class, 'index']);
+        Route::get('/knowledge', [KnowledgeController::class, 'index']);
         Route::get('/knowledge_search', [KnowledgeController::class, 'searchResults']);
         Route::get('/knowledge/{slug}', [KnowledgeController::class, 'article']);
     });

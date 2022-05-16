@@ -81,7 +81,7 @@
 </div>
 @endif
 
-<div class="blogpagex dynamic-courses-wrapper">
+<div class="blogpagex dynamic-courses-wrapper mb-5">
     @forelse($blog as $post)
         @include("new_web.blog.index_loop", ["type" => $blog_display["blog_list"], "source" => $blog_display["blog_source"]])
         @empty

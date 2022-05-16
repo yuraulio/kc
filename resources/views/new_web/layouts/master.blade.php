@@ -159,7 +159,11 @@
 
             </div>
 
-            @include('new_web.layouts.footer')
+            @if (isset($page) && $page->type == "Knowledge")
+                @include('new_web.layouts.footer-small')
+            @else
+                @include('new_web.layouts.footer')
+            @endif
             
             <a href="#" class="go-top-btn"><i class="icon-up-open"></i></a>
         </div>

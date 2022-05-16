@@ -285,3 +285,12 @@
     background: linear-gradient(90deg, rgba(255,120,0,1) 0%, rgba(255,155,52,1) 16%, rgba(255,189,103,1) 100%);
 }
 /* homepage events - end */
+
+.course-list-item-green:before {
+    background: #92cc16!important;
+}
+
+.footer-small {
+    padding-top: 40px!important;
+    padding-bottom: 40px!important;
+}
