@@ -74,7 +74,7 @@
     <div v-if="view == 'cards'" class="mt-3">
         <h5 class="mb-3">Files</h5>
         <div class="row">
-            <div v-for="file in mediaFiles" :key="file.id + '-card'" class="col-3">
+            <div v-for="file in mediaFiles" :key="file.id + '-card'" class="col-md-3 col-sm-6">
                 <div class="card product-box">
                     <div class="card-body" style="padding: 0.5rem; height:200px">
                         <div class="product-action">
@@ -91,8 +91,17 @@
                             </div>
                         </div>
 
-                        <div class="bg-light" style="text-align: center; min-width: 100px">
-                            <img :src="file.url" alt="product-pic" class="img-fluid rounded" style="width:100px, object-fit: dover" />
+                        <div class="bg-light view-catds-item" style="text-align: center; min-width: 100px">
+
+
+                            <span v-if="file.extension.toLowerCase() == 'pdf'" class="bg-light text-secondary rounded">
+                                <i class="mdi mdi-file-pdf-outline font-28"></i>
+                            </span>
+                            <img v-else-if="imageExtensions.includes(file.extension.toLowerCase())" :src="file.url + '?key=' + Math.random().toString().substr(2, 8)" alt="product-pic" class="img-fluid rounded" style="width:100px, object-fit: dover" />
+
+                            <span v-else class="bg-light text-secondary rounded">
+                                <i class="mdi mdi-file font-28"></i>
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -192,5 +201,20 @@ table {
 td, th {
 
     word-wrap: break-word;
+}
+
+.view-catds-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.product-box:hover .product-action {
+    transform: translateX(25px);
+}
+
+.product-box:hover .product-action .btn-group.dropdown>a {
+    transform: translateX(-11px);
 }
 </style>
