@@ -187,7 +187,7 @@ class CronjobsController extends Controller
 
         
             $img = url('/') . $event['mediable']['path'] . '/' . $event['mediable']['original_name'];
-            fputcsv($file, array($event->id, $eventTitle, trim($summary), 'in stock', $amount . ' EUR', url('/') . '/' . $event->slugable->slug, str_replace('\"', '', $img), 'Knowcrunch',  $cat, 'new',$event->xml_short_description));
+            fputcsv($file, array($event->id, $eventTitle, $event->xml_short_description, 'in stock', $amount . ' EUR', url('/') . '/' . $event->slugable->slug, str_replace('\"', '', $img), 'Knowcrunch',  $cat, 'new',trim($summary)));
 
         }
         fclose($file);
