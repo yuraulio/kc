@@ -846,6 +846,11 @@ class CartController extends Controller
         if($ticket == 'free' || $ticket == 'waiting'){
             $this->addFreeToCart($product, $ticket, $ticket);
         }else{
+
+            if(!isset($product->ticket->groupBy('ticket_id')[$ticket])){
+                return redirect($product->slugable->slug);
+            }
+
             $ticketob = $product->ticket->groupBy('ticket_id')[$ticket]->first();
             $item = $this->addToCart($product, $ticketob, $type);
         }
