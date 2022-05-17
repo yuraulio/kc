@@ -83,7 +83,12 @@
     {{-- List 2 view --}}
     <div class="col-12 item mb-5 course-list-item-green">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-auto">
+                <div class='text-center list2-image'>
+                    <img src="{{$metaData["meta_image"]->url ?? ''}}" alt="{{$metaData["meta_image"]->alt_text ?? ''}}">
+                </div>
+            </div>
+            <div class="col">
                 <div class="bottom">
                     <div class="duration">
                         @forelse($post->categories as $category)

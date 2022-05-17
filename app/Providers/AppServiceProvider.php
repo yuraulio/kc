@@ -10,6 +10,7 @@ use App\Observers\UserObserver;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Cashier\Cashier;
 use Auth;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use View;
@@ -37,6 +38,7 @@ class AppServiceProvider extends ServiceProvider
         Item::observe(ItemObserver::class);
         User::observe(UserObserver::class);
         Cashier::useCustomerModel(User::class);
+        Paginator::useBootstrap();
     }
 
     /**

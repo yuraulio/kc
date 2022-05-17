@@ -289,6 +289,21 @@
 .course-list-item-green:before {
     background: #92cc16!important;
 }
+.course-list-item-green>.row {
+    width: 100%;
+}
+.course-list-item-green .list2-image>img {
+    max-height: 111px;
+}
+.dynamic-courses-wrapper .item {
+    padding-bottom: 40px!important;
+}
+
+.blog-list-pagination nav {
+    justify-content: end;
+    display: flex;
+}
+
 
 .footer-small {
     padding-top: 40px!important;
