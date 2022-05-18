@@ -472,7 +472,8 @@ class Event extends Model
              return false;
         }
 
-        return $seenPercent >=  ($successPer * 100);
+        $certification = count($this->certificatesByUser($user->id)) > 0;
+        return $seenPercent >=  ($successPer * 100) && !$certification;
 
     }
 
