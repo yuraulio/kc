@@ -108,6 +108,9 @@
                         <div class="col-sm-12">
 
                             <h5>Original image</h5>
+                            <p class="text-start text-muted d-block">
+                                {{ size(parrentImage.size) }}
+                            </p>
                             <img @click="version='original'; selectedVersion=null; imgname=parrentImage.name; alttext=parrentImage.alt_text; link=parrentImage.link" crossorigin="anonymous" :src="parrentImage ? ('/uploads/' + parrentImage.path) : ''" alt="image" class="img-fluid rounded" />
                             <hr>
 
@@ -116,6 +119,9 @@
                                     {{ version1.version }}
                                     <i v-if="findVersionData(version1.version)" @click="deleteFile(findVersionData(version1.version), index)" class="mdi mdi-delete text-muted vertical-middle cursor-pointer"></i>
                                 </h5>
+                                <p class="text-start text-muted d-block">
+                                    {{ size(findVersionData(version1.version).size) }}
+                                </p>
                                 <p class="text-muted d-block mb-2">{{ version1.description }}</p>
                                 <template v-if="findVersionData(version1.version) != null">
                                     <img @click="version=version1.version; selectedVersion=version1; versionSelected();" crossorigin="anonymous" :src="'/uploads/' + findVersionData(version1.version).path + '?key=' + imageKey" alt="image" class="img-fluid rounded" />
@@ -459,6 +465,13 @@ export default {
         },
         updateUploadedVersions() {
             this.uploadedVersions = this.parrentImage.subfiles;
+        },
+        size(size){
+            if (size < 1000000) {
+                return parseFloat(size * 0.001).toFixed(1) + " kB";
+            } else {
+                return parseFloat(size * 0.000001).toFixed(1) + " MB";
+            }
         }
     },
     beforeDestroy() {
