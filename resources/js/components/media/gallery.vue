@@ -17,7 +17,7 @@
             <button @click="saveToClipboard()" class="btn btn-soft-primary"><i class="fa fa-clipboard" aria-hidden="true"></i></button>
         </div>
         <div class="col-auto">
-            <a :href="opImage.url" target="_blank" class="btn btn-soft-primary"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+            <a :href="mainDysplayImage ? mainDysplayImage.url : opImage.url" target="_blank" class="btn btn-soft-primary"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>
         </div>
     </div>
 
@@ -62,6 +62,9 @@
                             {{ getVersion(im.version).version }}
                             <i @click="deleteFile(im)" class="mdi mdi-delete text-muted vertical-middle"></i>
                         </h5>
+                        <p class="text-start text-muted d-block">
+                            {{ size(im.size) }}
+                        </p>
                         <p class="text-start text-muted d-block mb-2">{{ getVersion(im.version).description }}</p>
                     </template>
                     <template v-else>
@@ -259,6 +262,13 @@ export default {
                 });
             }
             return return_value;
+        },
+        size(size){
+            if (size < 1000000) {
+                return parseFloat(size * 0.001).toFixed(1) + " kB";
+            } else {
+                return parseFloat(size * 0.000001).toFixed(1) + " MB";
+            }
         }
     },
     mounted() {
