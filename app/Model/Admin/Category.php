@@ -56,4 +56,9 @@ class Category extends Model
     {
         return $this->pages()->count();
     }
+
+    public function image()
+    {
+        return $this->belongsTo(MediaFile::class, "image_id");
+    }
 }

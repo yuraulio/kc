@@ -32,6 +32,7 @@ class CategoryResource extends JsonResource
             'pages_count' => $this->pagesCount,
             'subcategories' => $this->subcategories,
             'created_at' => Carbon::parse($this->created_at)->toFormattedDateString(),
+            'category_image' => $this->image,
         ];
     }
 }

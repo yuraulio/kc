@@ -6,6 +6,12 @@ const collectiveInputs = [
         "size": "col-lg-12"
     },
     {
+        "type": "image",
+        "key": "category_image",
+        "label": "Image",
+        "main": true
+    },
+    {
         "type": "multidropdown",
         "key": "subcategories",
         "label": "Subcategories",

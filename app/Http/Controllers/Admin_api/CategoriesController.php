@@ -32,7 +32,7 @@ class CategoriesController extends Controller
 
             $categories = $this->filters($categories, $request);
 
-            $categories->with(["pages", "subcategories", "user"]);
+            $categories->with(["pages", "subcategories", "user", "image"]);
             $categories->tableSort($request);
             $categories = $categories->paginate($request->per_page ?? 50);
             return CategoryResource::collection($categories);
@@ -62,6 +62,7 @@ class CategoriesController extends Controller
             $category->title = $request->title;
             $category->parent_id = $request->parent_id ?? null;
             $category->user_id = Auth::user()->id;
+            $category->image_id = $request->category_image["id"];
             $category->save();
 
             $parent_id = $category->id;
@@ -119,6 +120,7 @@ class CategoriesController extends Controller
             $this->authorize('update', $category, Auth::user());
 
             $category->title = $request->title;
+            $category->image_id = $request->category_image["id"];
             $category->save();
 
             $this->syncSubcategories($category, $request->subcategories);

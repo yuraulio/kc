@@ -61,4 +61,9 @@ class MediaFile extends Model implements Auditable
     {
         return $this->belongsToMany(Page::class, 'cms_link_pages_files', 'file_id', 'page_id');
     }
+
+    public function categories()
+    {
+        return $this->hasMany(Category::class, "image_id", "id");
+    }
 }
