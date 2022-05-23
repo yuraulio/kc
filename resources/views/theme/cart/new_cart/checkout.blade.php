@@ -183,7 +183,7 @@ $('form').submit(function() {
 <script>
 $(document).ready(function(){
 		$("#pay-now").click(function(){
-			dataLayer.push({'Event_ID':"{{$tigran['Event_ID']}}", 'event': 'Add Payment Info', 'Product_id' : "{{$tigran['Product_id']}}", 'Price': "{{$tigran['Price']}}",'ProductCategory':"{{$tigran['ProductCategory']}}","product":"product"});	
+			dataLayer.push({'Event_ID':"{{$tigran['Event_ID']}}", 'event': 'AddPaymentInfo', 'Product_id' : "{{$tigran['Product_id']}}", 'Price': "{{$tigran['Price']}}",'ProductCategory':"{{$tigran['ProductCategory']}}","product":"product"});	
 		})
 })
 </script>

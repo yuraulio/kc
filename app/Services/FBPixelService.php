@@ -97,7 +97,7 @@ class FBPixelService
 
     public function sendViewContentEvent($data)
     {
-        $eventData = ['event_id' => $data['tigran']['Event_ID'].'v','event_name'=>'View Content','event_source_url'=>url('/'),
+        $eventData = ['event_id' => $data['tigran']['Event_ID'].'v','event_name'=>'ViewContent','event_source_url'=>url('/'),
                         'action_source'=>'website'
                     ];
 
@@ -225,7 +225,7 @@ class FBPixelService
 
     public function sendAddPaymentInfoEvent($data)
     {
-        $eventData = ['event_id' => $data['tigran']['Event_ID'],'event_name'=>'Add Payment Info','event_source_url'=>url('/'),
+        $eventData = ['event_id' => $data['tigran']['Event_ID'],'event_name'=>'AddPaymentInfo','event_source_url'=>url('/'),
             'action_source'=>'website'
         ];
 
