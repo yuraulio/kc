@@ -1758,7 +1758,7 @@ $( document ).ready(function() {
 </script>
 @if(isset($info) && isset($info['message']) && $info['message'] != '')
 @if($info['statusClass'] == 'success')
-@if(isset($tigran) && isset($tigran['evid']) && isset($tigran['price']))
+@if(isset($tigran) && isset($tigran['evid']) && isset($tigran['price']) && $tigran['price'] > 0)
 <script type="text/javascript">
 
    setTimeout(function(){
