@@ -156,6 +156,10 @@ class FBPixelService
             return;
         }
 
+        if ($data['tigran']['Price'] <= 0) {
+            return;
+        }
+
         $eventData = ['event_id' => $data['tigran']['Event_ID'],'event_name'=>'Purchase','event_source_url'=>url('/'),
                         'action_source'=>'website'
                     ];

@@ -57,7 +57,7 @@
 
 @section('scripts')
    
-@if(isset($tigran) && !env('APP_DEBUG'))
+@if(isset($tigran) && isset($tigran['Price']) && $tigran['Price'] > 0 && env('APP_DEBUG'))
 
 <script>
 $(document).ready(function(){
@@ -69,7 +69,7 @@ $(document).ready(function(){
 
 @endif
 
-@if(isset($ecommerce) && !env('APP_DEBUG'))
+@if(isset($ecommerce) && isset($ecommerce['actionField']['value']) && $ecommerce['actionField']['value'] > 0 && env('APP_DEBUG'))
 
 <script>
    $(document).ready(function(){
@@ -115,7 +115,7 @@ $(document).ready(function(){
 @endif
 
 
-@if(isset($gt3) && !env('APP_DEBUG'))
+@if(isset($gt3) && isset($gt3['gt3']['transactionTotal']) && $gt3['gt3']['transactionTotal'] > 0 && env('APP_DEBUG'))
    {{--<script>
       $(document).ready(function(){
       let gt3 = {};
