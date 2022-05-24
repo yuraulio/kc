@@ -29,7 +29,7 @@
                     <div class="video-carousel-big owl-carousel">
                         @foreach($testimonials as $key => $video)
                         <?php
-
+                            
                             if(!$video['video_url']){
                             continue;
                             }
@@ -38,7 +38,8 @@
 
                             // YouTube video ID
                             $youtubeVideoId = $urlArr[$urlArrNum - 1];
-
+                            $youtubeVideoId = explode('v=',$youtubeVideoId);
+                            $youtubeVideoId = isset($youtubeVideoId[1]) ? $youtubeVideoId[1] : $youtubeVideoId[0];
                             // Generate youtube thumbnail url
                             $thumbURL = 'https://img.youtube.com/vi/'.$youtubeVideoId.'/mqdefault.jpg';
                             ?>

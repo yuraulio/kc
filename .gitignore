@@ -44,3 +44,4 @@ composer.phar
 public/*.tar.gz
 uploads
 public/FAQs.xlsx
+public/Testimonials.xlsx

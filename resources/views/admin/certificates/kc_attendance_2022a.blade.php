@@ -50,26 +50,29 @@
 
 
 			.award{
-   			    font-size:25px;
-   			    line-height:1;
-				padding: 20px 0;
-                max-width:90%;
-               
-               
+   				font-size:25px;
+   				line-height:1;
+				padding: 10px 0;
+				
+
+			}
+
+			p.certi-title{
+				line-height:30px;
+			}
+			
+			
+			.certi-title-new p{
+				font-size:20px;
+				line-height:30px;
+				text-transform: uppercase;
+				letter-spacing:5px;
 			}
 
 			p{
 				padding: 0;
-				margin: 0;
-                
-
-                
+				margin: 0 !important;;
 			}
-
-            p.award{
-                text-align:center;
-                margin:auto;
-            }
 
 			.knowcrunch-logo{
 				width:200px;
@@ -148,12 +151,12 @@
             	</tr>
 
 					<tr>
-            	   <td align="center" >
-						<p class="award">
-               
-                            has attended our course {{$certificate['certification_title']}} and is awarded this
-
-			  			</p>
+            	    <td class="certi-title-new" align="center">
+							<p class="info-title certi-title">
+                				
+								has attended our course {!!$certificate['certification_title']!!} <p class="info-title certi-title"> and is awarded this </p>
+								
+			  				</p>
             	   </td>
             	</tr>
 

@@ -62,6 +62,7 @@ class Kernel extends ConsoleKernel
        Commands\AttachFilesToEvents::class,
        Commands\FixOrder::class,
        Commands\AttachFaqs::class,
+       Commands\InsertTestimonial::class,
     ];
 
     /**
