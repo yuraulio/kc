@@ -342,7 +342,7 @@ class SubscriptionController extends Controller
 
         try {
 
-            $charge = $user->newSubscription($plan->name, $plan->stripe_plan)->trialDays($plan->trial_days)->create($request->payment_method, 
+            $charge = $user->newSubscription($plan->name, $plan->stripe_plan)->noProrate()->trialDays($plan->trial_days)->create($request->payment_method, 
             ['email' => $user->email]);
             
             $charge->price = $plan->cost;
