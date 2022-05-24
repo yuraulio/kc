@@ -13,6 +13,7 @@ use Session;
 use App\Services\FBPixelService;
 use App\Model\PaymentMethod;
 use App\Notifications\SubscriptionWelcome;
+use Carbon\Carbon;
 
 class SubscriptionController extends Controller
 {
@@ -339,11 +340,15 @@ class SubscriptionController extends Controller
             $user->save();
         }
 
-
+        //$anchor = Carbon::now()->addDays(16);;
+        //$anchor = $anchor->startOfMonth();
         try {
 
-            $charge = $user->newSubscription($plan->name, $plan->stripe_plan)->noProrate()->trialDays($plan->trial_days)->create($request->payment_method, 
-            ['email' => $user->email]);
+            $charge = $user->newSubscription($plan->name, $plan->stripe_plan)
+            //->anchorBillingCycleOn($anchor->startOfDay())
+            ->noProrate()
+            ->trialDays($plan->trial_days)
+            ->create($request->payment_method, ['email' => $user->email])->swap();
             
             $charge->price = $plan->cost;
             $charge->save();

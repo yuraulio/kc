@@ -1,5 +1,14 @@
 @extends("new_web.layouts.master")
 
+
+@section('metas')
+
+    @if(isset($dynamic_page_data['event']['status']) && $dynamic_page_data['event']['status'] == 3)
+        <meta name="robots" content="noindex, nofollow" />
+    @endif
+
+@stop
+
 @section('blog-custom-css')
     <link type="text/css" href="{{ asset('binshops-blog.css') }}" rel="stylesheet">
 @endsection

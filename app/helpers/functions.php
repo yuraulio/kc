@@ -157,13 +157,39 @@ if (!function_exists('cdnPath')){
     }
 }
 
-if (!function_exists('get_image')){
+/*if (!function_exists('get_image')){
     function get_image($media, $version = null) {
         if(!$version){
             return isset($media['original_name']) ? $media['path'] . $media['original_name']  : '';
         }
 
         return isset($media['name']) ? $media['path']  . $media['name'] . '-' . $version . $media['ext'] : '';
+    }
+}*/
+
+
+if (!function_exists('get_image')){
+    function get_image($media, $version = null) {
+            
+        if($version){
+
+        
+            $image = isset($media['name']) ? $media['path']  . $media['name'] : '';
+
+            if(file_exists(public_path()  .$image . '-' . $version . $media['ext'])){
+                $image = $image . '-' . $version . $media['ext'];
+            }else if($image!=''){
+               // dd($image . $media['ext']);
+                $image = $image . $media['ext'];
+            }
+
+        }
+
+        if(!$version){
+            return isset($media['original_name']) ? $media['path'] . $media['original_name']  : '';
+        }
+        //dd($image);
+        return $image;
     }
 }
 

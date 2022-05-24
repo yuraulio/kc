@@ -108,6 +108,7 @@
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner .social-wrapper li a img,
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner .social-wrapper li a svg{ width: 16px; }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner .social-wrapper li a path{ transition: 300ms all ease; stroke: #c8c8c8 !important; }
+   .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .testimonial-box .author-infos .social-wrapper li a path{ transition: 300ms all ease; stroke: #c8c8c8 !important; }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner .social-wrapper li a:hover path{ stroke: #90c524 !important; }
    
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .video-carousel,

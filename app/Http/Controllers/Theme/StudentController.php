@@ -143,6 +143,7 @@ class StudentController extends Controller
 
         $eventSubscriptions = [];
         $data['user']['events'] = $instructor['event'];
+        //dd($data['user']['events']);
         $data['eventss'] = [];
         foreach($data['user']['events'] as $key => $event){
             //if elearning assign progress for this event
