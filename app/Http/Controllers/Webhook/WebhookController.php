@@ -189,7 +189,7 @@ class WebhookController extends BaseWebhookController
 
 
 		if ((int)$count >= (int)$totalinst) {
-			$subscription->cancel();
+			$subscription->noProrate()->cancel();
 		}
 	}
 

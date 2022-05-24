@@ -1226,7 +1226,7 @@ class CartController extends Controller
                     $ev->users()->wherePivot('user_id',$dpuser->id)->detach();
                     $ev->users()->save($dpuser,['paid'=>false,'payment_method'=>$payment_method_id]);
 
-                    $charge = $dpuser->newSubscription($name, $plan->id)->create($input['payment_method'],
+                    $charge = $dpuser->newSubscription($name, $plan->id)->noProrate()->create($input['payment_method'],
                     ['email' => $dpuser->email],
                                 ['metadata' => ['installments_paid' => 0, 'installments' => $installments]]);
     
