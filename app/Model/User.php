@@ -29,12 +29,10 @@ use App\Model\ExamResult;
 use App\Model\OauthAccessToken;
 use App\Model\Transaction;
 use App\Model\Absence;
-use OwenIt\Auditing\Contracts\Auditable;
 
 class User extends Authenticatable
 {
     use Notifiable, HasApiTokens, MediaTrait, Billable;
-    use \OwenIt\Auditing\Auditable;
     /**
      * The attributes that are mass assignable.
      *
