@@ -51,7 +51,7 @@
 @if (count($categories))
     <div class="row mb-5 mt-5">
         @foreach($categories as $c)
-            <div class="col-lg-3 col-md-4 col-sm-6 marbot knowledge-card-column">
+            <div class="col-lg-3 col-md-4 col-sm-6 marbot knowledge-card-column mb-2 mt-2">
                 <div class="knowledge-card">
                     <a class="" href="{{Request::path()}}?c={{$c->id}}">
                         <div class="card-body">
@@ -78,7 +78,9 @@
         @endforelse
     </div>
 
+    @if($blog->links())
     <div class="mb-5 blog-list-pagination">
         {{ $blog->links() }}
     </div>
+    @endif
 @endif
