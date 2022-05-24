@@ -56,6 +56,10 @@ mix.js('resources/js/app.js', 'public/js')
         'public/theme/assets/css'
     );
 
+    mix.sass('resources/assets/scss/bootstrap5/bootstrap.scss',
+        'public/theme/assets/css'
+    );
+
     mix.js('resources/js/blog.js', 'public/js')
 
       mix.styles([
