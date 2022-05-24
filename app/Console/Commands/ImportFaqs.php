@@ -45,11 +45,20 @@ class ImportFaqs extends Command
 
         $del = $this->argument('delivery');
         $events = [];
-        $categories = Category::whereHas('events',function($event) use($del){
+        /*$categories = Category::whereHas('events',function($event) use($del){
             return $event->whereHas('delivery',function($delivery) use($del){
                 return $delivery->where('deliveries.id', $del);
             });
-        })->get();//->pluck('id')->toArray();
+        })->get();//->pluck('id')->toArray();*/
+
+        if($del == 'all'){
+            $categories = Category::whereHas('events')->get();
+        }else{
+            $categories = Category::whereHas('events',function($event) use($del){
+                return $event->where('view_tpl',$del);
+                
+            })->get();
+        }
 
         foreach($categories as $category){
 
@@ -59,11 +68,21 @@ class ImportFaqs extends Command
 
         }
 
-        $categories = Category::whereHas('events',function($event) use($del){
+        /*$categories = Category::whereHas('events',function($event) use($del){
             return $event->whereHas('delivery',function($delivery) use($del){
                 return $delivery->where('deliveries.id', $del);
             });
-        })->pluck('id')->toArray();
+        })->pluck('id')->toArray();*/
+
+        if($del == 'all'){
+            $categories = Category::whereHas('events')->pluck('id')->toArray();
+        }else{
+            $categories = Category::whereHas('events',function($event) use($del){
+                return $event->where('view_tpl',$del);
+            })->pluck('id')->toArray();
+        }
+
+        
 
         $fileName = public_path() . '/FAQs.xlsx';
         $spreadsheet = new Spreadsheet();
@@ -75,13 +94,6 @@ class ImportFaqs extends Command
         $file = $file->toArray();
        
         foreach($file as $key =>  $line){
-
-            /*if($key == 28){
-                dd(htmlspecialchars_decode($line[2]));
-            }else{
-                continue;
-            }*/
-
 
             if($key == 0 ){
                 continue;

@@ -31,12 +31,25 @@
                     <div class="slide">
                         <div class="testimonial-box">
                             <div class="author-infos">
-                            <div class="author-img">
-                                <img src="{{ cdn(get_image($row['mediable'],'users')) }}" alt="{!! $row['name'] !!}">
-                            </div>
-                            <span class="author-name">
-                            {!! $row['name'] !!} {!! $row['lastname'] !!}</span>
-                            <span class="author-job">{!! $row['title'] !!}</span>
+                                <div class="author-img">
+                                    <img src="{{ cdn(get_image($row['mediable'],'users')) }}" alt="{!! $row['name'] !!}">
+                                </div>
+                                <span class="author-name">
+                                {!! $row['name'] !!} {!! $row['lastname'] !!}</span>
+                                <span class="author-job">{!! $row['title'] !!}</span>
+                                <?php $socials = json_decode($row['social_url'], true) ?>
+                                
+                                <ul class="social-wrapper">
+                                     @if(isset($socials['facebook']))
+                                     <li><a target="_blank" href="{{$socials['facebook']}}"><img class="replace-with-svg"  src="/theme/assets/images/icons/social/Facebook.svg" width="16" alt="Visit"></a></li>
+                                     @endif
+        
+                                     @if(isset($socials['linkedin']))
+                                     <li><a target="_blank" href="{{$socials['linked']}}"><img class="replace-with-svg"  src="/theme/assets/images/icons/social/Linkedin.svg" width="16" alt="Visit"></a></li>
+                                     @endif
+        
+        
+                                </ul>
                             </div>
                             <div class="testimonial-text">
                             <?php

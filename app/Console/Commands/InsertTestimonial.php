@@ -44,13 +44,17 @@ class InsertTestimonial extends Command
     {
 
 
-        $dir_path="/uploads/originals/testimonials/";
+        $dir_path=public_path() ."/uploads/originals/testimonials/";
         $files = array_diff(scandir($dir_path), array('.', '..'));
 
-        foreach($files as $file){
-            dd($file);
-        }
+        $images = [];
 
+        foreach($files as $file){
+            
+            $name = explode('.',$file)[0];
+            $images[$name] = $file;
+        }
+        
         $fileName = public_path() . '/Testimonials.xlsx';
         $spreadsheet = new Spreadsheet();
         $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($fileName);
@@ -80,7 +84,7 @@ class InsertTestimonial extends Command
             }
 
             if($line[9]){
-                $social['faclinkedinebook'] = $line[9];
+                $social['linkedin'] = $line[9];
             }
 
             $testimonial->social_url = json_encode($social);
@@ -103,15 +107,13 @@ class InsertTestimonial extends Command
 
             if($line[0]){
 
-                $image = file_get_contents(url().'/uploads/originals/testimonials/'.str_replace('.','',$line[0]));
-                dd($image);
-
+                $name = str_replace('.','',$line[0]);
                 $media = new Media;
 
                 $media->path = '/uploads/originals/testimonials/';
-                $media->ext = '.jpg';
+                $media->ext = '.' . explode('.',$images[$name])[1];
                 $media->name = str_replace('.','',$line[0]);
-                $media->original_name = str_replace('.','',$line[0]) . '.jpg';
+                $media->original_name = $images[$name];
                 $media->mediable_id = $testimonial->id;
                 $media->mediable_type = get_class($testimonial);
 

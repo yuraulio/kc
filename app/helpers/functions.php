@@ -173,12 +173,13 @@ if (!function_exists('get_image')){
             
         if($version){
 
+        
             $image = isset($media['name']) ? $media['path']  . $media['name'] : '';
 
-            if(file_exists($image . '-' . $version . $media['ext'])){
+            if(file_exists(public_path()  .$image . '-' . $version . $media['ext'])){
                 $image = $image . '-' . $version . $media['ext'];
             }else if($image!=''){
-                
+               // dd($image . $media['ext']);
                 $image = $image . $media['ext'];
             }
 
