@@ -45,7 +45,7 @@
                                      @endif
         
                                      @if(isset($socials['linkedin']))
-                                     <li><a target="_blank" href="{{$socials['linked']}}"><img class="replace-with-svg"  src="/theme/assets/images/icons/social/Linkedin.svg" width="16" alt="Visit"></a></li>
+                                     <li><a target="_blank" href="{{$socials['linkedin']}}"><img class="replace-with-svg"  src="/theme/assets/images/icons/social/Linkedin.svg" width="16" alt="Visit"></a></li>
                                      @endif
         
         
