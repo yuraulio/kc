@@ -104,6 +104,7 @@
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner p{ font-size: 9px; color: #3f6fb6; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0; }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner .social-wrapper{ display: block; text-align: center; position: absolute; bottom: 15px; left: 0; width: 100%; }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner .social-wrapper li{ display: inline-block; margin: 0 4px; }
+   .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .testimonial-box .author-infos .social-wrapper li{ display: inline-block; margin: 0 4px; }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner .social-wrapper li a{ display: block; width: 16px; }
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner .social-wrapper li a img,
    .content-wrapper .tabs-wrapper .tabs-content .tab-content-wrapper .instructor-box .instructor-inner .social-wrapper li a svg{ width: 16px; }
