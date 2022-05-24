@@ -360,3 +360,12 @@
 .knowledge-card-title {
     font-weight: bold;
 }
+
+footer {
+    margin-top:auto; 
+}
+.page-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
