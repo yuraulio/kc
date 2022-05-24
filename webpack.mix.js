@@ -91,3 +91,11 @@ mix.js('resources/js/app.js', 'public/js')
 // MediaManager
 mix.sass('resources/assets/vendor/MediaManager/sass/manager.scss', 'public/assets/vendor/MediaManager/style.css')
     .copyDirectory('resources/assets/vendor/MediaManager/dist', 'public/assets/vendor/MediaManager')
+
+mix.webpackConfig({
+    watchOptions: {
+        ignored: /node_modules/,
+        aggregateTimeout: 200,
+        poll: 1000,
+    }
+});
