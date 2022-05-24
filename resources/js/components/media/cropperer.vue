@@ -108,7 +108,7 @@
                         <div class="col-sm-12">
 
                             <h5>Original image</h5>
-                            <p class="text-start text-muted d-block">
+                            <p v-if="parrentImage" class="text-start text-muted d-block">
                                 {{ size(parrentImage.size) }}
                             </p>
                             <img @click="version='original'; selectedVersion=null; imgname=parrentImage.name; alttext=parrentImage.alt_text; link=parrentImage.link" crossorigin="anonymous" :src="parrentImage ? ('/uploads/' + parrentImage.path) : ''" alt="image" class="img-fluid rounded" />
@@ -119,7 +119,7 @@
                                     {{ version1.version }}
                                     <i v-if="findVersionData(version1.version)" @click="deleteFile(findVersionData(version1.version), index)" class="mdi mdi-delete text-muted vertical-middle cursor-pointer"></i>
                                 </h5>
-                                <p class="text-start text-muted d-block">
+                                <p v-if="findVersionData(version1.version)" class="text-start text-muted d-block">
                                     {{ size(findVersionData(version1.version).size) }}
                                 </p>
                                 <p class="text-muted d-block mb-2">{{ version1.description }}</p>

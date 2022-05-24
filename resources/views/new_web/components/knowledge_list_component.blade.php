@@ -66,7 +66,7 @@
     </div>
 @else
 
-    <h3 class="mt-5">{{ $category->title }}</h3>
+    <h3 class="mt-5">{{ $category->title ?? "" }}</h3>
 
     <div class="blogpagex dynamic-courses-wrapper mb-3">
         @forelse($blog as $post)
