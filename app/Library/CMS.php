@@ -18,6 +18,7 @@ class CMS
         $data['section_fullvideo'] = $event->sectionVideos->first();
         $data['faqs'] = $event->getFaqs();
         $data['testimonials'] = isset($event->category->toArray()[0]) ? $event->category->toArray()[0]['testimonials'] : [];
+        shuffle($data['testimonials']);
         $data['tickets'] = $event->ticket()->where('price', '>', 0)->where('active', true)->get()->toArray();
         $data['venues'] = $event->venues->toArray();
         $data['syllabus'] = $event->syllabus->toArray();
