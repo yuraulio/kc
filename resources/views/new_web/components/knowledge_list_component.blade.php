@@ -45,7 +45,7 @@
     $type = new stdClass();
     $type->id = 3;
 
-    //dd($categories[0]->image()->first()->url);
+    //dd($categories[0]->parent()->first()->image()->first()->url);
 @endphp
 
 @if (count($categories))
@@ -56,7 +56,14 @@
                     <a class="" href="{{Request::path()}}?c={{$c->id}}">
                         <div class="card-body">
                             <h5 class="text-center knowledge-card-title">{{ $c->title }}</h5>
-                            <img class="knowledge-card-image mb-5" src="{{ $c->image()->first()->url ?? '' }}">
+                            @php
+                                $image = $c->image()->first()->url ?? "";
+                                if (!$image) {
+                                    $image = $c->parent()->first()->image()->first()->url ?? "";
+                                }
+                            @endphp
+
+                            <img class="knowledge-card-image mb-5" src="{{ $image ?? '' }}">
                             
                         </div>
                     </a>

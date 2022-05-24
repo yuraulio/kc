@@ -33,6 +33,7 @@ class CategoryResource extends JsonResource
             'subcategories' => $this->subcategories,
             'created_at' => Carbon::parse($this->created_at)->toFormattedDateString(),
             'category_image' => $this->image,
+            'parent' => $this->parent,
         ];
     }
 }
