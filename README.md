@@ -8,6 +8,7 @@ Python2
 - Node: v15.5.1
 - Composer: 2.1.11
 
+
 # Argon Pro Theme for Laravel Framework 8.x and Up
 
 Argon Pro Theme for Laravel Framework 8.x and Up
