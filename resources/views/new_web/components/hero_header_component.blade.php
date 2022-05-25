@@ -11,11 +11,13 @@
         $title = $event->title ?? "";
         $subtitle = $event->subtitle ?? "";
         $small = false;
+        $left = false;
     } else {
         $image = $hero["hero_image"]->url ?? "";
         $title = $hero["hero_title"] ?? "";
         $subtitle = $hero["hero_subtitle"] ?? "";
         $small = $hero['hero_small'] ?? null;
+        $left = $hero['hero_left'] ?? null;
     }
 @endphp
 
@@ -24,7 +26,7 @@
         <div class="overlay"></div>
     @endif
     <div class="container">
-        <div class="hero-message cms-rich-text-editor {{ $column->template->dynamic ? ' dynamic-header ' : ''}}">
+        <div class="hero-message cms-rich-text-editor {{ $left ? 'section-hero-left' : '' }} {{ $column->template->dynamic ? ' dynamic-header ' : ''}}">
             @if($column->template->dynamic)
                 <h1>{{$title}}</h1>
                 <h2>{{$subtitle}}</h2>

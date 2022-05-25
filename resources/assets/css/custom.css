@@ -45,6 +45,12 @@
     }
 }
 
+@media only screen and (min-width: 768px) {
+    .section-hero-left {
+        padding-right: 50%;
+    }
+}
+
 .grayscale {
     filter: grayscale(1);
     max-width: 108px;
