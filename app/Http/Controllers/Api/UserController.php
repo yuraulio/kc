@@ -640,27 +640,39 @@ class UserController extends Controller
                         $date = strtotime($date_split[0]);
                         $time = strtotime($date_split[1]);
                         $date_time = strtotime($date_lesson);
+                        
+                        //$data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['time'] = $date_lesson ?? '';
+                        //$data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['date_time'] = date_format(date_create($date_lesson), 'd/m/Y');
+                        //$data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['title'] = $lesson['title'];
+                        //$data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['room'] = $lesson['pivot']['room'];
+                        ////$data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_image'] = asset(get_image($instructors[$lesson['instructor_id']][0]->medias, 'instructors-small'));
+                        ////$data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_name'] = $instructors[$lesson['instructor_id']][0]['title'].' '.$instructors[$lesson['instructor_id']][0]['subtitle'];
+                        //$data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_image'] = $inst['media']; 
+                        //$data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_name'] = $inst['name'];
 
-                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['time'] = $date_lesson ?? '';
-                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['date_time'] = date_format(date_create($date_lesson), 'd/m/Y');
-                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['title'] = $lesson['title'];
-                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['room'] = $lesson['pivot']['room'];
-                        //$data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_image'] = asset(get_image($instructors[$lesson['instructor_id']][0]->medias, 'instructors-small'));
-                        //$data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_name'] = $instructors[$lesson['instructor_id']][0]['title'].' '.$instructors[$lesson['instructor_id']][0]['subtitle'];
-                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_image'] = $inst['media']; 
-                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_name'] = $inst['name'];
+                        $data[$key]['calendar'][]=[
+                            'time' => $date_lesson ?? '',
+                            'date_time' => date_format(date_create($date_lesson), 'd/m/Y'),
+                            'title' => $lesson['title'],
+                            'room' => $lesson['pivot']['room'],
+                            'instructor_image' => $inst['media'],
+                            'instructor_name' => $inst['name'],
 
+                        ];
 
                         $topics[$topic->id]['calendar_count']++;
+                        
                     }
 
                 }
-               
+
+                
+
                 $arr_lesson['instructor'] = $inst; 
                 array_push($topics[$topic->id]['lessons'], $arr_lesson);
 
             }
-
+    
             $data[$key]['topics'] = [];
             foreach($topics as $key11 =>  $topic){
                 //dd($topic);
@@ -1069,25 +1081,36 @@ class UserController extends Controller
                     $date_lesson = ($lesson['pivot']['date'] != null) ? $lesson['pivot']['date'] : null;
                     
                     if($lesson['pivot']['time_starts'] != ''){
-
+                        
                         $date_lesson = $lesson['pivot']['time_starts'];
                         $date_split = explode(" ", $date_lesson);
                         $date = strtotime($date_split[0]);
                         $time = strtotime($date_split[1]);
                         $date_time = strtotime($date_lesson);
 
-                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['time'] = $date_lesson ?? '';
-                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['date_time'] = date_format(date_create($date_lesson), 'd/m/Y');
-                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['title'] = $lesson['title'];
-                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['room'] = $lesson['pivot']['room'];
-                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_image'] = asset(get_image($instructors[$lesson['instructor_id']][0]->medias, 'instructors-small'));
-                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_name'] = $instructors[$lesson['instructor_id']][0]['title'].' '.$instructors[$lesson['instructor_id']][0]['subtitle'];
+                        //$data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['time'] = $date_lesson ?? '';
+                        //$data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['date_time'] = date_format(date_create($date_lesson), 'd/m/Y');
+                        //$data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['title'] = $lesson['title'];
+                        //$data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['room'] = $lesson['pivot']['room'];
+                        //$data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_image'] = asset(get_image($instructors[$lesson['instructor_id']][0]->medias, 'instructors-small'));
+                        //$data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_name'] = $instructors[$lesson['instructor_id']][0]['title'].' '.$instructors[$lesson['instructor_id']][0]['subtitle'];
+
+
+                        $data[$key]['calendar'][]=[
+                            'time' => $date_lesson ?? '',
+                            'date_time' => date_format(date_create($date_lesson), 'd/m/Y'),
+                            'title' => $lesson['title'],
+                            'room' => $lesson['pivot']['room'],
+                            'instructor_image' => asset(get_image($instructors[$lesson['instructor_id']][0]->medias, 'instructors-small')),
+                            'instructor_name' => $instructors[$lesson['instructor_id']][0]['title'].' '.$instructors[$lesson['instructor_id']][0]['subtitle'],
+
+                        ];
 
                         $topics[$topic->id]['calendar_count']++;
                     }
 
                 }
-               
+                
                 $inst['name'] = $instructors[$lesson['instructor_id']][0]['title'].' '.$instructors[$lesson['instructor_id']][0]['subtitle'];
                 $inst['media'] = asset(get_image($instructors[$lesson['instructor_id']][0]->medias, 'instructors-small'));
 
