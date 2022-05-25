@@ -160,7 +160,7 @@ h3.certificate {
             </p>
 
 
-            <h3 class="certificate">  {{$certificate['certification_title']}}  </h3>
+            <h3 class="certificate">  {!!$certificate['certification_title']!!}  </h3>
 
            
                

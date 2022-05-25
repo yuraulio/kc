@@ -650,7 +650,7 @@ class Event extends Model
             $createDate = strtotime(date('Y-m-d'));
             $cert->create_date = $createDate;
 
-            $cert->template = 'kc_attendance';
+            $cert->template = 'kc_attendance_2022a';
             $cert->show_certificate = true;
 
             $cert->save();
