@@ -1,6 +1,6 @@
 <link href="{{ cdn(mix('theme/assets/css/bootstrap.css')) }}" rel="stylesheet" media="all" />
 <link href="{{asset('admin_assets/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
-<link href="{{asset('admin_assets/css/default/app-limited.css')}} " rel="stylesheet" type="text/css"/>
+<link href="{{asset('admin_assets/css/saas/app-limited.css')}} " rel="stylesheet" type="text/css"/>
 
 <style>
     .ubold .form-control {
