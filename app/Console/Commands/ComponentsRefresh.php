@@ -82,37 +82,41 @@ class ComponentsRefresh extends Command
                 $component = $column->component;
                 $component_active = $column->active;
                 $component_dynamic = $column->template->dynamic ?? false;
-                $inputs = $column->template->inputs;
+                $inputs = $column->template->inputs ?? null;
 
                 $new_column = new stdClass();
                 $new_column->id = $component_id;
                 $new_column->order = $component_order;
                 $new_column->component = $component;
                 $new_column->active = $component_active;
-                $new_column->template = json_decode(json_encode($components->$component));
+                $new_column->template =  isset($components->$component) ? json_decode(json_encode($components->$component)) : null;
                 if (isset($new_column->template->dynamic)) {
                     $new_column->template->dynamic = $component_dynamic;
                 }
+                
+                if (isset($new_column->template->inputs)) {
+                    foreach ($new_column->template->inputs as $input_key => $new_input) {
+                        $key = array_search($new_input->key, array_column($inputs, 'key'));
 
-                foreach ($new_column->template->inputs as $input_key => $new_input) {
-                    $key = array_search($new_input->key, array_column($inputs, 'key'));
+                        if ($key !== false) {
+                            $this->info("found old value in column");
+                            if (property_exists($inputs[$key], "value")) {
+                                $old_value = $inputs[$key]->value;
+                                $new_column->template->inputs[$input_key]->value = $old_value;
 
-                    if ($key !== false) {
-                        $this->info("found old value in column");
-                        if (property_exists($inputs[$key], "value")) {
-                            $old_value = $inputs[$key]->value;
-                            $new_column->template->inputs[$input_key]->value = $old_value;
-
-                            if ($new_input->key == "tabs") {
-                                $old_tabs = $inputs[$key]->tabs;
-                                $new_column->template->inputs[$input_key]->tabs = $old_tabs;
+                                if ($new_input->key == "tabs") {
+                                    $old_tabs = $inputs[$key]->tabs;
+                                    $new_column->template->inputs[$input_key]->tabs = $old_tabs;
+                                }
                             }
                         }
                     }
                 }
 
                 $rows[$row_key]->columns[$column_key] = $new_column;
-                $rows[$row_key]->tab = json_decode(json_encode($components->$component))->tab;
+                if (isset($components->$component)) {
+                    $rows[$row_key]->tab = json_decode(json_encode($components->$component))->tab;
+                }
                 $this->info("saved row $row_key, column $column_key");
             }
         }
