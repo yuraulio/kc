@@ -14,9 +14,11 @@
                 $editor_text = PageVariables::parseText($editor_text, $page, $dynamic_page_data ?? null);
             }
         } else {
-            $title = $dynamic_page_data["title"];
-            $subtitle = $dynamic_page_data["content"]["header"];
-            $editor_text = $dynamic_page_data["content"]['body'];
+            $title = $dynamic_page_data["title"] ?? null;
+            $subtitle = $dynamic_page_data["content"]["header"] ?? null;
+            $company = $dynamic_page_data["content"]['company'] ?? null;
+            $companyUrl = $dynamic_page_data["content"]['ext_url'] ?? null;
+            $editor_text = $dynamic_page_data["content"]['body'] ?? null;
             $editor_text = PageVariables::parseText($editor_text, $page, $dynamic_page_data ?? null);
         }
 
@@ -33,10 +35,12 @@
 
 <div class="mt-5 mb-5 m-0 cms-rich-text-editor text-editor-blockquote {{ $page->slug == "about" ? " about-static-page " : "" }}">
     @if (isset($title))
-        <h2 class="tab-title">{{$title}}</h2>
+        <h1 class="tab-title">{{$title}}</h1>
     @endif
     @if (isset($subtitle))
-        <h5>{{ $subtitle }}</h5>
+        <h2 style="font-size: 30px;">
+            {{ $subtitle }}@if (isset($company)), <a target="_blank" title="{{ $company }}" href="{{ $companyUrl }}"> {{ $company }}</a>@endif
+        </h2>
     @endif
     {!! $editor_text !!}
 </div>
