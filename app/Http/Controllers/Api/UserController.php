@@ -647,8 +647,8 @@ class UserController extends Controller
                         $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['room'] = $lesson['pivot']['room'];
                         //$data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_image'] = asset(get_image($instructors[$lesson['instructor_id']][0]->medias, 'instructors-small'));
                         //$data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_name'] = $instructors[$lesson['instructor_id']][0]['title'].' '.$instructors[$lesson['instructor_id']][0]['subtitle'];
-                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_image'] = $inst['name']; 
-                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_name'] = $inst['media'];
+                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_image'] = $inst['media']; 
+                        $data[$key]['calendar'][$topics[$topic->id]['calendar_count']]['instructor_name'] = $inst['name'];
 
 
                         $topics[$topic->id]['calendar_count']++;
