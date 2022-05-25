@@ -28,7 +28,16 @@
                 "key": "hero_small",
                 "label": "Minified",
                 "value": false,
-                "main": true
+                "main": true,
+                "size": "col-lg-6"
+            },
+            {
+                "type": "checkbox",
+                "key": "hero_left",
+                "label": "Left half",
+                "value": false,
+                "main": true,
+                "size": "col-lg-6"
             }
         ]
     },
