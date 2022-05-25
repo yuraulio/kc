@@ -155,7 +155,7 @@ h3.certificate {
                 
             <p class="award">
                
-                has attended our course {{$certificate['certification_title']}} and is awarded this
+                has attended our course {!!$certificate['certification_title']!!} and is awarded this
 
             </p>
 
