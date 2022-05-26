@@ -129,7 +129,7 @@
 
                                         <multiput
                                             v-for="(input, input_index) in column.template.inputs"
-                                            v-show="!column.template.dynamic"
+                                            v-show="!column.template.dynamic || input.dynamic"
                                             v-if="input.simple_view != false"
                                             :key="input.key"
                                             :keyput="input.key + row_index + column_index + input_index"
