@@ -50,10 +50,23 @@
                                         </select>
                                     </div>
 
+                                    <div class="col-4 filter_col">
+                                        <div class="form-group">
+                                            <label>From:</label>
+                                            <input class="select2-css" type="text" id="min" name="min">
+                                        </div>
+                                    </div>
+                                    <div class="col-4 filter_col">
+                                        <div class="form-group">
+                                            <label>To:</label>
+                                            <input class="select2-css" type="text" id="max" name="max">
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
-                        <a href="abandoned/exportcsv" style="margin-left:1.2rem;" class="btn btn-primary btn-sm">Export csv</a>
+                        <a href="javascript:void(0)" style="margin-left:1.2rem;" class="btn btn-primary btn-sm export-excel">Export excel</a>
                         <hr>
                         <table class="table align-items-center table-flush"  id="abandoned_table">
                             <thead class="thead-light">
@@ -65,6 +78,7 @@
                                     <th scope="col">{{ __('Amount') }}</th>
                                     <th scope="col">{{ __('Dates') }}</th>
                                     <th scope="col"></th>
+                                    <th hidden scope="col"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -93,7 +107,8 @@
                                             <td class="text-center">{{$ucart->qty}}</td>
                                             <td class="text-right">&euro;{{$ucart->qty*$ucart->price}}</td>
 
-                                            <td class="td_categories text-right">@if(isset($abcart[$user_id]->created_at) && $abcart[$user_id]->created_at != '') C:{{$abcart[$user_id]->created_at->format('d/m/Y H:i')}} @endif <br />U:{{$abcart[$user_id]->updated_at->format('d/m/Y H:i')}}</td>
+                                            <td class="td_categories text-right">@if(isset($abcart[$user_id]->created_at) && $abcart[$user_id]->created_at != '') {{$abcart[$user_id]->created_at->format('Y-m-d')}} @endif </td>
+                                            {{--<td class="td_categories text-right">@if(isset($abcart[$user_id]->created_at) && $abcart[$user_id]->created_at != '') C:{{$abcart[$user_id]->created_at->format('d/m/Y H:i')}} @endif <br />U:{{$abcart[$user_id]->updated_at->format('d/m/Y H:i')}}</td>--}}
                                             {{--<td style="text-align: center;"><span class="delete_link"><a href="javascript:void(0);" class="delete_abcart" data-dp-content-id="{{$user_id}}" data-dp-content-title="{{$ucart->name}}" title="Delete"><i class="fa fa-trash"></i></span></td>--}}
 
 
@@ -114,7 +129,10 @@
                                                     </form>
                                                 </div>
                                             </div>
-                                        </td>
+                                            </td>
+                                            <td hidden>
+                                                {{$events[$ucart->options['event']]['id']}}
+                                            </td>
                                         </tr>
                                         @endif
                                     @endforeach
@@ -135,6 +153,7 @@
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css">
+    <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables-datetime/datetime.min.css">
 @endpush
 
 @push('js')
@@ -146,6 +165,8 @@
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/datatables.net-select/js/dataTables.select.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{{ asset('argon') }}/vendor/datatables-datetime/datetime.min.js"></script>
 
     <script>
         function fillSelectedBox(){
@@ -170,6 +191,15 @@
         });
 
         $(document).ready(function() {
+
+            minDate = new DateTime($('#min'), {
+                format: 'L'
+            });
+            //console.log('--min: '+minDate.val())
+            maxDate = new DateTime($('#max'), {
+                format: 'L'
+            });
+
             fillSelectedBox()
 
             $('select.column_filter').on('change', function () {
@@ -177,6 +207,56 @@
 
             } );
 
+
+            var minDate, maxDate;
+
+
+            // Custom filtering function which will search data in column four between two values
+            $.fn.dataTable.ext.search.push(
+            
+                function( settings, data, dataIndex ) {
+                    var min = minDate.val();
+                    var max = maxDate.val();
+                    var date = new Date( data[5] );
+                    if (
+                        ( min === null && max === null ) ||
+                        ( min === null && date <= max ) ||
+                        ( min <= date   && max === null ) ||
+                        ( min <= date   && date <= max )
+                    ) {
+                        return true;
+                    }
+                    return false;
+                }
+            
+            );
+
+            $('#min, #max').on('change', function () {
+              
+                table.draw();
+                     
+                min = new Date($('#min').val());
+                max = new Date($('#max').val());            
+                minDate = new DateTime($('#min'), {
+                    format: 'L'
+                });         
+                min = moment(min).format('MM/DD/YYYY')
+                max = moment(max).format('MM/DD/YYYY')          
+
+            });
+
+
+
+            $(".export-excel").click(function(){
+
+                let events = table.column(7,{filter: 'applied'}).data().unique().sort();
+                console.log(events);
+
+                //abandoned/exportcsv
+            })
+
         });
+
+
     </script>
 @endpush

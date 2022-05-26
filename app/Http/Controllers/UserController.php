@@ -402,7 +402,21 @@ class UserController extends Controller
         $clientip = '';
         $clientip = \Request::ip();
 
-        $user->consent = '{"ip": "' . $clientip . '", "date": "'.$connow.'" }';
+        $consent['ip'] = $clientip;
+        $consent['date'] = $connow;
+        $consent['firstname'] = $user->firstname;
+        $consent['lastname'] = $user->lastname;
+        if($user->afm){
+            $consent['afm'] = $user->afm;
+        }
+
+        $billing = json_decode($user->receipt_details,true);
+
+        if(isset($billing['billafm']) && $billing['billafm']){
+            $consent['billafm'] = $billing['billafm'];
+        }
+
+        $user->consent = json_encode($consent);;
         $user->save();
 
         $user->notify(new userActivationLink($user,'activate'));

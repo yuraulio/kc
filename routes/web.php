@@ -322,6 +322,9 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     //EnrollToElearning
     Route::get('enroll-to-elearning/{event}/{enroll}', 'Dashboard\DashboardController@enrollStudendsToElearning');
 
+    //Index
+    Route::get('change-index/{event}/{index}', 'Dashboard\DashboardController@changeIndex');
+
     //Topics
     Route::post('/sort-topics', 'TopicController@orderTopic')->name('sort-topics');
     Route::post('/detach-topic', 'TopicController@detachTopic')->name('topics.detach');

@@ -92,6 +92,14 @@ button#move-lesson {
   width:80px!important;
 }
 
+.index-toggle input:checked + .custom-toggle-slider:before{
+  transform: translateX(55px)!important;
+}
+
+.index-toggle{
+  width:80px!important;
+}
+
 #results .progress-label span{
   font-size: 1rem!important;
 }

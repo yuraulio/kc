@@ -136,7 +136,7 @@ class CronjobsController extends Controller
 
 
 
-        $events = Event::where('view_tpl','!=','event_free')->where('view_tpl','!=','elearning_free')->where('published',true)->whereIn('status',[0])->with('category', 'ticket','mediable')->get();
+        $events = Event::where('view_tpl','!=','event_free')->where('index',true)->where('view_tpl','!=','elearning_free')->where('published',true)->whereIn('status',[0])->with('category', 'ticket','mediable')->get();
         $columns = array('id', 'title', 'description', 'availability', 'price', 'link', 'image_link', 'brand', 'google_product_category','condition');
 
         $file = fopen('csv/fb/fb.csv', 'w');
@@ -174,7 +174,7 @@ class CronjobsController extends Controller
             File::makeDirectory($destinationPath, $mode = 0777, true, true);
         }
 
-        $events = Event::where('view_tpl','!=','event_free')->where('view_tpl','!=','elearning_free')->where('published',true)->whereIn('status',[0])->with('category', 'ticket','mediable')->get();
+        $events = Event::where('view_tpl','!=','event_free')->where('index',true)->where('view_tpl','!=','elearning_free')->where('published',true)->whereIn('status',[0])->with('category', 'ticket','mediable')->get();
 
         $columns = array("ID", "Item Title", "Final URL", "Image URL", "Price", "Item Category", "Item Description");
 

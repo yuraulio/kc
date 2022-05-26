@@ -64,8 +64,8 @@ class AbandonedController extends Controller
 
     public function exportCsv()
     {
-        Excel::store(new AbandonedExport(2018), 'AbandonedCart.csv', 'export');
-        return Excel::download(new AbandonedExport, 'AbandonedCart.csv');
+        Excel::store(new AbandonedExport(2018), 'AbandonedCart.xls', 'export');
+        return Excel::download(new AbandonedExport, 'AbandonedCart.xls');
 
         return redirect()->route('abandoned.index');
 

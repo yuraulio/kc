@@ -68,4 +68,11 @@ class DashboardController extends Controller
         
     }
 
+    public function changeIndex(Event $event,$enroll){
+
+        $event->index = $enroll;
+        $event->save();
+
+    }
+
 }
