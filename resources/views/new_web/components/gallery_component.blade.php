@@ -3,10 +3,9 @@
     if ($column->template->dynamic) {
         $brands = $dynamic_page_data["brands"];
         $logos = $dynamic_page_data["logos"];
-    } else {
-        foreach ($column->template->inputs as $input){
-            $gallery[$input->key] = $input->value ?? "";
-        }
+    } 
+    foreach ($column->template->inputs as $input){
+        $gallery[$input->key] = $input->value ?? "";
     }
 
 @endphp
@@ -14,7 +13,7 @@
 @if ($column->template->dynamic)
     @if($page->slug == "in-the-media") 
         <div class="logos-area content-text-area text-center">
-            <h2>Media saying great things about us</h2>
+            <h2>{{ $gallery["gallery_title"] ?? "" }}</h2>
         </div>
         <div class="row">
             @foreach ($logos as $image)
@@ -27,7 +26,7 @@
         </div>
     @elseif ($page->slug == "brands-trained")
         <div class="logos-area content-text-area text-center">
-            <h2>Brands & organizations that chose us</h2>
+            <h2>{{ $gallery["gallery_title"] ?? "" }}</h2>
         </div>
         <div class="row">
             @foreach ($brands as $image)

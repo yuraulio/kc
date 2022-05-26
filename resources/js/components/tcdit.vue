@@ -234,7 +234,7 @@
 
                                             <multiput
                                                 v-for="(input, ri) in column.template.inputs"
-                                                v-show="!column.template.dynamic"
+                                                v-show="!column.template.dynamic || input.dynamic"
                                                 :key="input.key"
                                                 :keyput="input.key + index + indx + ri + indr"
                                                 :label="input.label"
