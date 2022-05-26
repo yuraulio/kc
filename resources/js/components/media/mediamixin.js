@@ -128,6 +128,7 @@ var mediaMixin = {
                 formData.append("file", imagefile);
                 formData.append("alt_text", this.alt_text);
                 formData.append("link", this.link);
+                formData.append("jpg", this.jpg);
                 formData.append('directory', this.move_file_to.id);
                 axios.post('/api/media_manager/upload_image', formData, {
                     headers: {
@@ -146,6 +147,10 @@ var mediaMixin = {
                     this.getFiles(response.data.data[0].folder_id);
                     this.warning = true;
                     this.$modal.show('edit-image-modal');
+
+                    this.jpg = false;
+                    this.alt_text = "";
+                    this.link = "";
                 })
                 .catch((error) => {
                     console.log(error)
@@ -264,6 +269,7 @@ var mediaMixin = {
             formData.append('imgname', this.$refs.crpr.imgname);
             formData.append('alttext', this.$refs.crpr.alttext);
             formData.append('link', this.$refs.crpr.link);
+            formData.append('jpg', this.$refs.crpr.jpg);
             formData.append('version', this.$refs.crpr.version);
             formData.append('parent_id', this.$refs.crpr.parrentImage.id);
             formData.append('crop_data', JSON.stringify(this.$refs.crpr.cropBoxData));
@@ -282,6 +288,12 @@ var mediaMixin = {
                 this.$refs.crpr.isUploading = false;
                 this.imageKey = Math.random().toString().substr(2, 8);
                 // this.$modal.hide('edit-image-modal');
+
+                this.$refs.crpr.imgname = this.$refs.crpr.parrentImage.name;
+                this.$refs.crpr.alttext = this.$refs.crpr.parrentImage.alttext;
+                this.$refs.crpr.link = this.$refs.crpr.parrentImage.link;
+                this.$refs.crpr.jpg = false;
+                this.$refs.crpr.version = 'original';
             })
             .catch((error) => {
                 console.log("edit error", error.response.data.message);

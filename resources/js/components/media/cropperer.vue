@@ -84,9 +84,14 @@
                         <label class="form-label">Link</label>
                         <input v-model="link" type="text" class="form-control" />
                     </div>
+                    <div class="col-lg-12 d-grid mb-2">
+                        <label for="jpg" class="form-label">Convert image versions to jpg format. (Reduces size.)</label>
+                        <br class="d-none">
+                        <input v-model="jpg" type="checkbox" id="jpg" class="form-check-input">
+                    </div>
                     <div class="col-lg-12 d-flex align-items-end mt-2">
                         <template>
-                            <button @click="upload('edit')" class="btn btn-soft-success btn-block w-100" :disabled="isUploading">
+                            <button @click="upload('edit')" class="btn btn-soft-success btn-block w-100" :disabled="isUploading || version == 'original'">
                                 <span v-if="isUploading"><i class="fas fa-spinner fa-spin"></i> Uploading...</span>
                                 <span v-else>
                                     Update
@@ -124,7 +129,7 @@
                                 </p>
                                 <p class="text-muted d-block mb-2">{{ version1.description }}</p>
                                 <template v-if="findVersionData(version1.version) != null">
-                                    <img @click="version=version1.version; selectedVersion=version1; versionSelected();" crossorigin="anonymous" :src="'/uploads/' + findVersionData(version1.version).path + '?key=' + imageKey" alt="image" class="img-fluid rounded" />
+                                    <img @click="version=version1.version; selectedVersion=version1; versionSelected();" crossorigin="anonymous" :src="'/uploads/' + findVersionData(version1.version).path + '?key=' + imageKey" alt="image" class="img-fluid rounded" :style="version == version1.version ? 'border: 4px solid #1abc9c;' : 'border: 4px solid #f3f7f9;'" />
                                 </template>
                                 <template v-else>
                                     <button @click="version=version1.version; selectedVersion=version1; versionSelected();" class="btn btn-primary">Set image</button>
@@ -167,6 +172,7 @@ export default {
             imgname: "",
             alttext: "",
             link: "",
+            jpg: false,
             cropBoxData: {},
             imgData: {},
             compression: 100,
@@ -254,11 +260,13 @@ export default {
         if (this.prevalue) {
             if (this.prevalue.parrent) {
                 this.parrentImage = this.prevalue.parrent;
-                this.version = this.prevalue.version;
+                // this.version = this.prevalue.version;
             } else {
                 this.parrentImage = this.prevalue;
-                this.version = 'original';
+                // this.version = 'original';
             }
+
+            this.version = 'original';
 
             this.imgSrc = '/uploads' + this.parrentImage.path;
             this.uploadedVersions = this.parrentImage.subfiles;
@@ -347,18 +355,20 @@ export default {
             return `${version} — [${description}]`
         },
         upload(event) {
-            this.getCropBoxData();
-            this.$refs.cropper.getCroppedCanvas({
-                width: this.cropBoxData.width,
-                height: this.cropBoxData.height,
-            }).toBlob(
-                (blob) => {
-                    // blob.version = this.version;
-                    this.$emit(event, blob);
-                },
-                "image/jpeg",
-                this.compression / 100
-            );
+            if (this.version != 'original') {
+                this.getCropBoxData();
+                this.$refs.cropper.getCroppedCanvas({
+                    width: this.cropBoxData.width,
+                    height: this.cropBoxData.height,
+                }).toBlob(
+                    (blob) => {
+                        // blob.version = this.version;
+                        this.$emit(event, blob);
+                    },
+                    "image/jpeg",
+                    this.compression / 100
+                );
+            }
         },
         imageAdded($event) {
             this.imgSrc = $event.url;
