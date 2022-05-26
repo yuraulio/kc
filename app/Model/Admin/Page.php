@@ -180,4 +180,17 @@ class Page extends Model implements Auditable
             'title' => $menu->custom_class ?? "",
         ];
     }
+
+    public function getTitle()
+    {
+        $content = json_decode($this->content);
+        foreach ($content as $row) {
+            foreach ($row->columns as $column) {
+                if ($column->component == "blog_header") {
+                    return $column->template->inputs[0]->value;
+                }
+            }
+        }
+        return null;
+    }
 }

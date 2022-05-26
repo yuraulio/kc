@@ -348,7 +348,7 @@ class SubscriptionController extends Controller
             //->anchorBillingCycleOn($anchor->startOfDay())
             ->noProrate()
             ->trialDays($plan->trial_days)
-            ->create($request->payment_method, ['email' => $user->email])->swap();
+            ->create($request->payment_method, ['email' => $user->email]);
             
             $charge->price = $plan->cost;
             $charge->save();

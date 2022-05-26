@@ -188,6 +188,10 @@
     color: #5b5b5b;
 }
 
+.color-reset * {
+    color: initial;
+}
+
 /* homepage events - start */
 .homepage-events .section-text-carousel, 
 .homepage-events .carousel-column, 
