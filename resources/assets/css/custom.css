@@ -188,8 +188,13 @@
     color: #5b5b5b;
 }
 
-.color-reset * {
+.blog-list-title * {
     color: initial;
+}
+.blog-list-title>a>h2 {
+    font-size: 19px !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
 }
 
 /* homepage events - start */
