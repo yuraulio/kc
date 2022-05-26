@@ -240,7 +240,9 @@
                 "type": "text",
                 "key": "gallery_title",
                 "label": "Title",
-                "size": "col-lg-12"
+                "size": "col-lg-12",
+                "dynamic": true
+
             },
             {
                 "type": "gallery",
