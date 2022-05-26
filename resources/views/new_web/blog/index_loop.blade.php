@@ -1,4 +1,15 @@
 @php
+    if (! function_exists('get_string_between')) {
+        function get_string_between($string, $start, $end){
+            $string = ' ' . $string;
+            $ini = strpos($string, $start);
+            if ($ini == 0) return '';
+            $ini += strlen($start);
+            $len = strpos($string, $end, $ini) - $ini;
+            return substr($string, $ini, $len);
+        }
+    }
+
     $metaData = $post->metaData();
     $source = strtolower($source->title);
     $title = $post->getTitle() ?? "";
@@ -7,15 +18,6 @@
 
     if (!$title) {
         $title = $post->title;
-    }
-
-    function get_string_between($string, $start, $end){
-        $string = ' ' . $string;
-        $ini = strpos($string, $start);
-        if ($ini == 0) return '';
-        $ini += strlen($start);
-        $len = strpos($string, $end, $ini) - $ini;
-        return substr($string, $ini, $len);
     }
 @endphp
 
