@@ -2,8 +2,20 @@
     $metaData = $post->metaData();
     $source = strtolower($source->title);
     $title = $post->getTitle() ?? "";
+
+    $title = get_string_between($title, "<h1>", "</h1>");
+
     if (!$title) {
-        $title = "<h2>" . $post->title . "</h2>";
+        $title = $post->title;
+    }
+
+    function get_string_between($string, $start, $end){
+        $string = ' ' . $string;
+        $ini = strpos($string, $start);
+        if ($ini == 0) return '';
+        $ini += strlen($start);
+        $len = strpos($string, $end, $ini) - $ini;
+        return substr($string, $ini, $len);
     }
 @endphp
 
@@ -29,8 +41,8 @@
                 | {{date('d M Y ', strtotime($post->created_at))}}
             </div>
         </div>
-        <div class="color-reset">
-            <a href="{{env("NEW_PAGES_LINK") . "/$source/$post->slug"}}">{!!$title!!}</a>
+        <div class="blog-list-title">
+            <a href="{{env("NEW_PAGES_LINK") . "/$source/$post->slug"}}"><h2>{!!$title!!}</h2></a>
             {{-- <p>{!! mb_strimwidth($featureData["feature_description"] ?? '', 0, 350, "...") !!}</p> --}}
         </div>
     </div>
@@ -59,7 +71,7 @@
                     </div>
                 </div>
                 <div class="color-reset">
-                    <a href="{{env("NEW_PAGES_LINK") . "/$source/$post->slug"}}">{!!$title!!}</a>
+                    <a href="{{env("NEW_PAGES_LINK") . "/$source/$post->slug"}}"><h2>{!!$title!!}</h2></a>
                     {{-- <p>{!! mb_strimwidth($featureData["feature_description" ?? ''], 0, 350, "...") !!}</p> --}}
                 </div>
             </div>
