@@ -157,7 +157,21 @@ class RegisterController extends Controller
                     $clientip = '';
                     $clientip = \Request::ip();
                     $dpuser->terms = 1;
-                    $dpuser->consent = '{"ip": "' . $clientip . '", "date": "'.$connow.'" }';
+                    $consent['ip'] = $clientip;
+                    $consent['date'] = $connow;
+                    $consent['firstname'] = $user->firstname;
+                    $consent['lastname'] = $user->lastname;
+                    if($dpuser->afm){
+                        $consent['afm'] = $user->afm;
+                    }
+            
+                    $billing = json_decode($user->receipt_details,true);
+            
+                    if(isset($billing['billafm']) && $billing['billafm']){
+                        $consent['billafm'] = $billing['billafm'];
+                    }
+            
+                    $dpuser->consent = json_encode($consent);;
 
                     $dpuser->save();
                 }

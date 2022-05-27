@@ -75,9 +75,9 @@
         <li class="nav-item">
             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-9-tab" data-toggle="tab" href="#tabs-icons-text-9" role="tab" aria-controls="tabs-icons-text-4" aria-selected="true"><i class="ni ni-cloud-upload-96 mr-2"></i> Subscriptions</a>
         </li>
-        <li class="nav-item">
+        {{--<li class="nav-item">
             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-5-tab" data-toggle="tab" href="#tabs-icons-text-5" role="tab" aria-controls="tabs-icons-text-5" aria-selected="false"><i class="ni ni-bell-55 mr-2"></i>Activity Timeline</a>
-        </li>
+        </li>--}}
         <li class="nav-item">
             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-6-tab" data-toggle="tab" href="#tabs-icons-text-6" role="tab" aria-controls="tabs-icons-text-6" aria-selected="false"><i class="fas fa-envelope mr-2"></i>Messages</a>
         </li>
@@ -87,6 +87,13 @@
         <li class="nav-item">
             <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab" data-toggle="tab" href="#notes" role="tab" aria-controls="tabs-icons-text-8" aria-selected="false"><i class="fas fa-images mr-2"></i>Notes</a>
         </li>
+
+        <li class="nav-item">
+            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-8-tab" data-toggle="tab" href="#consent" role="tab" aria-controls="tabs-icons-text-8" aria-selected="false"><i class="fas fa-images mr-2"></i>Consent</a>
+        </li>
+
+        
+
     </ul>
 </div>
 <?php //dd($user); ?>
@@ -1014,6 +1021,29 @@
                 </div>
                
             </div>
+
+            <div class="tab-pane fade" id="consent" role="tabpanel" aria-labelledby="consent-tab">
+                
+                <div class="pl-lg-4">
+
+                    <div class="form-row">
+
+                        @foreach((array) json_decode($user->consent,true) as $key => $consent)
+
+                        <div class="form-group{{ $errors->has('billaddress') ? ' has-danger' : '' }} col-md-4">
+                            <label class="form-control-label" >{{ $key }}</label>
+                            <input type="text" class="form-control"  value="{{$consent}}" readonly>
+
+                        </div>
+                        @endforeach
+
+                       
+                    </div>
+                </div>
+               
+            </div>
+
+
         </div>
     </div>
 </div>

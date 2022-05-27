@@ -574,6 +574,26 @@ class InfoController extends Controller
                 $checkemailuser->save();
                 $creatAccount = false;
 
+                $connow = Carbon::now();
+                $clientip = '';
+                $clientip = \Request::ip();
+                $consent['ip'] = $clientip;
+                $consent['date'] = $connow;
+                $consent['firstname'] = $checkemailuser->firstname;
+                $consent['lastname'] = $checkemailuser->lastname;
+                if($checkemailuser->afm){
+                    $consent['afm'] = $checkemailuser->afm;
+                }
+            
+                $billing = json_decode($checkemailuser->receipt_details,true);
+            
+                if(isset($billing['billafm']) && $billing['billafm']){
+                    $consent['billafm'] = $billing['billafm'];
+                }
+
+                $checkemailuser->consent = json_encode($consent);;
+                $checkemailuser->save();
+
                 if(!$checkemailuser->statusAccount->completed){
                     
                     $creatAccount = true;
@@ -629,6 +649,8 @@ class InfoController extends Controller
 
         foreach ($newmembersdetails as $key => $member) {
           
+            $consent = [];
+
             $next_kc_id = str_pad($next, 4, '0', STR_PAD_LEFT);
             $knowcrunch_id = $KC.$YY.$MM.$next_kc_id;
             $member['password'] = Hash::make($KC.$YY.$MM.$next_kc_id);
@@ -654,7 +676,12 @@ class InfoController extends Controller
             $clientip = '';
             $clientip = \Request::ip();
             $user->terms = 0;
-            $user->consent = '{"ip": "' . $clientip . '", "date": "'.$connow.'" }';
+            $consent['ip'] = $clientip;
+            $consent['date'] = $connow;
+            $consent['firstname'] = $user->firstname;
+            $consent['lastname'] = $user->lastname;
+            
+            
 
 
             if(isset($deree_user_data[$value])) {
@@ -675,12 +702,13 @@ class InfoController extends Controller
             }
             if(isset($pay_seats_data['afms'][$key])) {
                 $user->afm = $pay_seats_data['afms'][$key];
+                $consent['afm'] = $pay_seats_data['afms'][$key];
             }
             else {
                 $user->afm = '';
             }
 
-           
+            $user->consent = json_encode($consent);;
             $user->save();
             $transaction->user()->save($user);
             //if($elearning){

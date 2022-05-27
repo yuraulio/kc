@@ -10,16 +10,25 @@
             @slot('title')
                 {{ __('') }}
             @endslot
+            @slot('filter')
+                <!-- <a href="#" class="btn btn-sm btn-neutral">{{ __('Filters') }}</a> -->
+                <a class="btn btn-sm btn-neutral" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">{{ __('Filters') }}</a>
 
+            @endslot
             <li class="breadcrumb-item"><a href="{{ route('events.index') }}">{{ __('Event Management') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
         @endcomponent
         @include('event.layouts.cards')
     @endcomponent
 
+    
+
     <div class="container-fluid mt--6">
         <div class="row">
             <div class="col">
+
+            
+
                 <div class="card">
                     <div class="card-header">
                         <div class="row align-items-center">
@@ -34,11 +43,44 @@
                         </div>
                     </div>
 
+                    <div class="collapse" id="collapseExample">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-3 filter_col" id="filter_col1" data-column="1">
+                                <label>Published/Upublished</label>
+                                <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="col1_filter">
+                                <option selected value> -- All -- </option>
+                                </select>
+                            </div>
+                            <div class="col-sm-3 filter_col" id="filter_col2" data-column="2">
+                                <label>Status</label>
+                                <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col2_filter" >
+                                <option selected value> -- All -- </option>
+                                </select>
+                            </div>
+
+                            <div class="col-sm-3 filter_col" id="filter_col6" data-column="6">
+                                <label>Delivery</label>
+                                <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col6_filter" >
+                                <option selected value> -- All -- </option>
+                                </select>
+                            </div>
+                       
+                        </div>
+                    </div>
+                </div>
+
                     <div class="col-12 mt-2">
                         @include('alerts.success')
                         @include('alerts.errors')
                     </div>
+
+                    
+
                     <div class="table-responsive py-4">
+
+                    
+
                         <table class="table align-items-center table-flush"  id="datatable-basic26">
                             <thead class="thead-light">
                                 <tr>
@@ -48,6 +90,7 @@
                                     <th scope="col">{{ __('Assigned to Category') }}</th>
                                     <th scope="col">{{ __('Assigned to Type') }}</th>
                                     <th scope="col">{{ __('Created at') }}</th>
+                                    <th hidden scope="col">{{ __('Delivery') }}</th>
                                     <th scope="col"></th>
                                 </tr>
                             </thead>
@@ -89,7 +132,7 @@
                                         @endforeach
                                         </td>
                                         <td>{{ date_format($event->created_at, 'Y-m-d' ) }}</td>
-
+                                        <td hidden >@if(isset($event['delivery'][0])) {{$event['delivery'][0]['name']}} @else none @endif </td>
                                         <td class="text-right">
 
                                             <div class="dropdown">
@@ -200,5 +243,55 @@
     });
 
       </script>
+
+
+    <script>
+
+        $( document ).ready(function(){
+            
+            let published = table.column(1).data().unique();
+            let status = table.column(2).data().unique();
+            let delivery = table.column(6).data().unique();
+
+            $.each(published, function(key, value){
+
+                $('#col1_filter').append(`<option value="${value}">${value}</option>`)
+
+            })
+
+            $.each(status, function(key, value){
+
+                $('#col2_filter').append(`<option value="${value}">${value}</option>`)
+
+            })
+
+            $.each(delivery, function(key, value){
+                 if(value != 'none'){
+                    $('#col6_filter').append(`<option value="${value}">${value}</option>`)
+                 }
+            })
+
+        });
+
+        $('select.column_filter').on('change', function () {
+            filterColumn( $(this).parents('div').attr('data-column') );
+        });
+
+        function filterColumn ( i ) {   
+            
+            if($('#col'+i+'_filter').val() && i != 8){
+                $('#datatable-basic26').DataTable().column( i ).search(
+                    '^'+$('#col'+i+'_filter').val()+'$', true,true
+                ).draw();
+            }else{
+                $('#datatable-basic26').DataTable().column( i ).search(
+                    $('#col'+i+'_filter').val()
+                ).draw();
+            }
+            
+        }
+    
+    </script>
+
 
 @endpush

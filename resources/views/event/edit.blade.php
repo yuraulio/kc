@@ -113,30 +113,114 @@
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
                           
-                                @if($event->is_inclass_course() && isset($slug))
-                                <div class="form-group">
-                                    <label class="form-control-label" for="input-method">{{ __('Syllabus Pdf') }}</label>
-                                    <div class="form-group">
 
-                                        <a target="_blank" href="/print/syllabus/{{$slug->slug}}" id="syllabus-pdf" class="btn btn-primary">Get Pdf</a>
+                                <div class="row">
 
-                                    </div>
-                                </div>
-                                @endif
+
+                                    <div class="col-md-6 col-sm-6">
+
+                                        @if($event->is_inclass_course() && isset($slug))
+                                            <div class="form-group">
+                                                <label class="form-control-label" for="input-method">{{ __('Syllabus Pdf') }}</label>
+                                                <div class="form-group">
+
+                                                    <a target="_blank" href="/print/syllabus/{{$slug->slug}}" id="syllabus-pdf" class="btn btn-primary">Get Pdf</a>
+
+                                                </div>
+                                            </div>
+                                        @endif
 
                                
 
                                 
-                                <div class="form-group">
-                                    <label class="form-control-label" for="input-method">{{ __('Enroll Students to E-Learning') }}</label>
-                                    <div style="margin: auto;" class="form-group">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="input-method">{{ __('Enroll Students to E-Learning') }}</label>
+                                            <div style="margin: auto;" class="form-group">
 
-                                        <label class="custom-toggle enroll-toggle">
-                                            <input type="checkbox" id="input-enroll" @if($event['enroll']) checked @endif>
-                                            <span class="custom-toggle-slider rounded-circle" data-label-off="enroll" data-label-on="unroll"></span>
-                                        </label>
+                                                <label class="custom-toggle enroll-toggle">
+                                                    <input type="checkbox" id="input-enroll" @if($event['enroll']) checked @endif>
+                                                    <span class="custom-toggle-slider rounded-circle" data-label-off="enroll" data-label-on="unroll"></span>
+                                                </label>
+
+                                            </div>
+                                        </div>
+
 
                                     </div>
+
+                                    <div class="col-md-6 col-sm-6 is-flex"  style="padding:0">
+                                        <div style="margin: auto 0;" class="col-md-3 col-sm-3">
+                                            <div style="margin: auto;" class="form-group{{ $errors->has('published') ? ' has-danger' : '' }}">
+
+
+
+                                            <label class="custom-toggle custom-published">
+                                                <input type="checkbox" name="published" id="input-published" @if($event['published']) checked @endif>
+                                                <span class="custom-toggle-slider rounded-circle" data-label-off="unpublished" data-label-on="published"></span>
+                                            </label>
+                                            @include('alerts.feedback', ['field' => 'published'])
+
+
+
+                                            </div>
+                                        </div>
+                                        @if($event['published_at'] != null)
+                                        <div class="col-md-6 col-sm-6 is-flex">
+
+                                            <div class="form-group col-sm-6">
+                                                <label class="form-control-label" for="launch_date">{{ __('Launch Date') }}</label>
+                                                <input type="text" name="launch_date" type="text" id="input-launch-input"
+                                                            value="{{ date('d-m-Y',strtotime(old('launch_date', $event->launch_date))) }}" class="form-control datepicker" />
+
+                                            </div>
+
+                                            <div class="form-group col-sm-6">
+                                                <label class="form-control-label" for="input-published">{{ __('Published at') }}</label>
+                                                <input type="text" name="published_at" type="text" id="input-published-input"
+                                                            value="{{ date('d-m-Y',strtotime(old('published_at', $event->published_at))) }}" class="form-control" disabled />
+
+                                            </div>
+                                        </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+
+
+                                    <div class="col-md-6 col-sm-6">
+
+
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="input-method">{{ __('Index') }}</label>
+                                            <div style="margin: auto;" class="form-group">
+
+                                                <label class="custom-toggle index-toggle">
+                                                    <input type="checkbox" id="input-index" @if($event['index']) checked @endif>
+                                                    <span class="custom-toggle-slider rounded-circle" data-label-off="index" data-label-on="no index"></span>
+                                                </label>
+
+                                            </div>
+                                        </div>
+                                    </div>  
+
+                                    <div class="col-md-6 col-sm-6">
+
+
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="input-method">{{ __('Feed') }}</label>
+                                            <div style="margin: auto;" class="form-group">
+
+                                                <label class="custom-toggle feed-toggle">
+                                                    <input type="checkbox" id="input-feed" @if($event['feed']) checked @endif>
+                                                    <span class="custom-toggle-slider rounded-circle" data-label-off="feed" data-label-on="no feed"></span>
+                                                </label>
+
+                                            </div>
+                                        </div>
+                                    </div>  
+
                                 </div>
 
                                 @if($event->exam()->first())
@@ -280,42 +364,7 @@
                                     @include('alerts.feedback', ['field' => 'delivery'])
                                 </div>
 
-                                <div class="row">
-
-                                    <div style="margin: auto;" class="col-md-6 col-sm-6">
-                                        <div style="margin: auto;" class="form-group{{ $errors->has('published') ? ' has-danger' : '' }}">
-
-
-
-                                        <label class="custom-toggle custom-published">
-                                            <input type="checkbox" name="published" id="input-published" @if($event['published']) checked @endif>
-                                            <span class="custom-toggle-slider rounded-circle" data-label-off="unpublished" data-label-on="published"></span>
-                                        </label>
-                                        @include('alerts.feedback', ['field' => 'published'])
-
-
-
-                                        </div>
-                                    </div>
-                                    @if($event['published_at'] != null)
-                                    <div class="col-md-6 col-sm-6 is-flex">
-
-                                        <div class="form-group col-sm-6">
-                                            <label class="form-control-label" for="launch_date">{{ __('Launch Date') }}</label>
-                                            <input type="text" name="launch_date" type="text" id="input-launch-input"
-                                                        value="{{ date('d-m-Y',strtotime(old('launch_date', $event->launch_date))) }}" class="form-control datepicker" />
-
-                                        </div>
-
-                                        <div class="form-group col-sm-6">
-                                            <label class="form-control-label" for="input-published">{{ __('Published at') }}</label>
-                                            <input type="text" name="published_at" type="text" id="input-published-input"
-                                                        value="{{ date('d-m-Y',strtotime(old('published_at', $event->published_at))) }}" class="form-control" disabled />
-
-                                        </div>
-                                    </div>
-                                    @endif
-                                </div>
+                                
 
                                 <div id="exp_input" class="form-group{{ $errors->has('expiration') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-expiration">{{ __('Months access') }}</label>
@@ -1390,6 +1439,43 @@
         });
 
     })
+
+
+    $('.index-toggle').change(function(){
+       
+       let index = $("#input-index").is(":checked") ? 1 : 0;
+
+       $.ajax({
+           type: 'get',
+           headers: {
+           'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+           },
+           Accept: 'application/json',
+           url: "/admin/change-index/" + "{{$event->id}}" +"/" + index,
+           success: function(data) {
+           
+           }
+       });
+
+   })
+
+   $('.feed-toggle').change(function(){
+       
+       let feed = $("#input-feed").is(":checked") ? 1 : 0;
+
+       $.ajax({
+           type: 'get',
+           headers: {
+           'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+           },
+           Accept: 'application/json',
+           url: "/admin/change-feed/" + "{{$event->id}}" +"/" + feed,
+           success: function(data) {
+           
+           }
+       });
+
+   })
 
 
 </script>

@@ -343,8 +343,22 @@ class StudentController extends Controller
             $clientip = '';
             $clientip = \Request::ip();
             $user->terms = 1;
-            $user->consent = '{"ip": "' . $clientip . '", "date": "'.$now.'" }';
-            $user->save();
+            $consent['ip'] = $clientip;
+            $consent['date'] = $now;
+            $consent['firstname'] = $user->firstname;
+            $consent['lastname'] = $user->lastname;
+            if($user->afm){
+                $consent['afm'] = $user->afm;
+            }
+
+            $billing = json_decode($user->receipt_details,true);
+
+            if(isset($billing['billafm']) && $billing['billafm']){
+                $consent['billafm'] = $billing['billafm'];
+            }
+
+            $user->consent = json_encode($consent);;
+                $user->save();
 
             return ['status' => 1, 'message' => 'Thank you!'];
         }

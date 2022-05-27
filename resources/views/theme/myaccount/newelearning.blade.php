@@ -432,7 +432,7 @@
                              
                            ?>
                            <div class="lesson-downloads">
-                              <h4 class="resource-list-title">Downloads</h4>
+                              <!--<h4 class="resource-list-title">Downloads</h4>-->
                               <?php //dd($folders) ?>
                               <ul class="resource-list">
                                  <?php $topicNames = []; ?>
@@ -496,7 +496,7 @@
                           
                            <!-- ./lesson-downloads -->
                            <div class="lesson-links">
-                              <h4 class="resource-list-title">Links</h4>
+                              <!--<h4 class="resource-list-title">Links</h4>!-->
                               <ul id="links" class="resource-list">
                               </ul>
                            </div>

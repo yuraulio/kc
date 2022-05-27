@@ -36,7 +36,7 @@ class SitemapXmlController extends Controller
             Sitemap::addTag(env("APP_URL") . $path . $page->slug, $page->updated_at, 'daily', '0.8');
         }
 
-        $events = Event::whereStatus(0)->wherePublished(1)->get();
+        $events = Event::whereStatus(0)->wherePublished(1)->whereIndex(1)->get();
         foreach ($events as $event) {
             Sitemap::addTag(env("APP_URL") . "/" . $event->slugable->slug, $event->updated_at, 'daily', '0.8');
         }

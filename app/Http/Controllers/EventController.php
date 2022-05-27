@@ -42,7 +42,7 @@ class EventController extends Controller
         $data['completed_courses'] = count(Event::where('published', 1)->where('status', '3')->get());
         $data['total_courses'] = count(Event::all());
 
-        return view('event.index', ['events' => $model->with('category', 'type')->orderBy('published', 'asc')->get(), 'user' => $user, 'data' => $data]);
+        return view('event.index', ['events' => $model->with('category', 'type','delivery')->orderBy('published', 'asc')->get(), 'user' => $user, 'data' => $data]);
     }
 
     public function assign_ticket(Request $request)
