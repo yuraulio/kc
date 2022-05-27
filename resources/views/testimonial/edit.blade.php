@@ -60,6 +60,13 @@
                                             @include('alerts.feedback', ['field' => 'name'])
                                         </div>
 
+                                        <div class="form-group{{ $errors->has('lastname') ? ' has-danger' : '' }}">
+                                            <label class="form-control-label" for="input-lastname">{{ __('Last Name') }}</label>
+                                            <input type="text" name="lastname" id="input-lastname" class="form-control{{ $errors->has('lastname') ? ' is-invalid' : '' }}" placeholder="{{ __('Last Name') }}" value="{{ old('lastname', $testimonial->lastname) }}" autofocus>
+
+                                            @include('alerts.feedback', ['field' => 'lastname'])
+                                        </div>
+
                                         <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-title">{{ __('Title') }}</label>
                                             <input type="text" name="title" id="input-title" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title', $testimonial->title) }}" required autofocus>
@@ -71,18 +78,20 @@
 
                                         <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
-                                            <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="category_id" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}" required>
+                                            <select multiple name="category_id[]" data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." id="input-category_id" class="form-control" placeholder="{{ __('Category') }}" required>
                                                 <option value="">-</option>
                                                 @foreach ($categories as $category)
                                                
                                                     <option value="{{ $category->id }}"
-                                                    <?php if(count($testimonial->category) != 0){
-                                                        if($category->id == $testimonial->category[0]->id){
+                                                    <?php 
+                                                        $testimonialsIds = $testimonial->category->pluck('id')->toArray();
+                                                        if(count($testimonial->category) != 0){
+                                                            if(in_array($category->id,$testimonialsIds)){
                                                             echo 'selected';
-                                                        }else{
+                                                            }else{
                                                             echo '';
+                                                            }
                                                         }
-                                                    }
                                                     ?>
 
                                                         >{{ $category->name }}</option>

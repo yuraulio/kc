@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Model\User;
+use App\Model\PaymentMethod;
+use Stripe\Stripe;
 
 class UserBalanceStripe extends Command
 {
@@ -39,13 +41,64 @@ class UserBalanceStripe extends Command
     public function handle()
     {
 
-        $user = User::all();
-
+        $users = User::whereHas('subscriptions')->get();//where('id',4201)->get();//User::all();
+			
         foreach($users as $user){
-            $balance = preg_replace('/[^0-9.]+/', '', $user->balance);
-            if($balance > 0){
-                dd($balance . ' user => '. $user->id);
+		
+            if(!$user->stripe_id){
+                continue;
             }
+
+            $paymentMethod = PaymentMethod::find(2);
+            Stripe::setApiKey($paymentMethod->processor_options['secret_key']);
+            session()->put('payment_method',2);
+
+         
+          try{
+            if(!$user->asStripeCustomer()){
+           		continue; 
+          	}
+            
+     
+            
+            if($user->upcomingInvoice() && $user->upcomingInvoice()->total < 0){
+             
+              $user->applyBalance($user->upcomingInvoice()->total);
+             
+             
+            }
+            
+            if(!empty($user->invoicesIncludingPending())){
+              $amount = 0;
+              foreach($user->invoicesIncludingPending() as $invoice){
+               
+                if($invoice->total < 0){
+                 $amount += $invoice->total;
+                }
+                             
+              	
+              }
+              
+              /*if($amount != 0){
+               $user->applyBalance($amount); 
+              }*/
+              
+            
+              
+            }
+            
+            
+          }catch(\Stripe\Exception\InvalidRequestException $e){
+           	
+            continue;
+            
+          }
+          catch(\InvalidArgumentException  $e){
+           	
+            continue;
+            
+          }
+   
         }
 
         return 0;

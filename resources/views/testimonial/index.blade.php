@@ -50,7 +50,7 @@
                             <tbody>
                                 @foreach ($testimonials as $testimonial)
                                     <tr>
-                                        <td><a href="{{ route('testimonials.edit', $testimonial) }}">{{ $testimonial->name }}</a></td>
+                                        <td><a href="{{ route('testimonials.edit', $testimonial) }}">{{ $testimonial->name }} {{ $testimonial->lastname }}</a></td>
                                         <td>{{ $testimonial->title }}</td>
                                         <td>
                                         @foreach($testimonial->category as $category)

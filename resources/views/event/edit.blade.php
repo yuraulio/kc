@@ -198,7 +198,7 @@
 
                                                 <label class="custom-toggle index-toggle">
                                                     <input type="checkbox" id="input-index" @if($event['index']) checked @endif>
-                                                    <span class="custom-toggle-slider rounded-circle" data-label-off="index" data-label-on="no index"></span>
+                                                    <span class="custom-toggle-slider rounded-circle" data-label-off="Yes" data-label-on="No"></span>
                                                 </label>
 
                                             </div>
@@ -214,7 +214,7 @@
 
                                                 <label class="custom-toggle feed-toggle">
                                                     <input type="checkbox" id="input-feed" @if($event['feed']) checked @endif>
-                                                    <span class="custom-toggle-slider rounded-circle" data-label-off="feed" data-label-on="no feed"></span>
+                                                    <span class="custom-toggle-slider rounded-circle" data-label-off="Yes" data-label-on="No"></span>
                                                 </label>
 
                                             </div>

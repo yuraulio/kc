@@ -81,9 +81,13 @@ class TestimonialController extends Controller
             $instructor->testimonials()->attach($testimonial->id);
         }
 
-        if($request->category_id != null){
+        /*if($request->category_id != null){
             $category = Category::find($request->category_id);
             $testimonial->category()->attach([$category->id]);
+        }*/
+
+        foreach($request->category_id as $category){
+            $testimonial->category()->attach([$category]);
         }
 
 
@@ -163,9 +167,15 @@ class TestimonialController extends Controller
 
         }
 
-        if($request->category_id != null){
-            $category = Category::find($request->category_id);
-            $testimonial->category()->sync([$category->id]);
+        //if($request->category_id != null){
+        //    $category = Category::find($request->category_id);
+        //    $testimonial->category()->sync([$category->id]);
+        //}
+        
+        $testimonial->category()->detach();
+        
+        foreach($request->category_id as $category){
+            $testimonial->category()->attach([$category]);
         }
 
         return redirect()->route('testimonials.index')->withStatus(__('Testimonial successfully updated.'));

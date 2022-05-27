@@ -490,7 +490,8 @@ class UserController extends Controller
             $topics = [];
 
             foreach($event['lessons'] as $lesson){
-                if(!$lesson['instructor_id']){
+                
+                if(!$lesson['instructor_id'] || !$lesson['vimeo_video']){
                     continue;
                 }
 
@@ -950,7 +951,7 @@ class UserController extends Controller
            
             $topics = [];
             foreach($event->lessons as $lesson){
-                if(!$lesson['instructor_id']){
+                if(!$lesson['instructor_id'] || !$lesson['vimeo_video']){
                     continue;
                 }
                 $sum= 0;

@@ -61,6 +61,13 @@
                                 </div>
 
                                 <div class="form-group{{ $errors->has('lastname') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-name">{{ __('Last Name') }}</label>
+                                    <input type="text" name="lastname" id="input-lastname" class="form-control{{ $errors->has('lastname') ? ' is-invalid' : '' }}" placeholder="{{ __('Last Name') }}" value="{{ old('lastname') }}" required autofocus>
+
+                                    @include('alerts.feedback', ['field' => 'name'])
+                                </div>
+
+                                <div class="form-group{{ $errors->has('lastname') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-lastname">{{ __('Last name') }}</label>
                                     <input type="text" name="lastname" id="input-lastname" class="form-control{{ $errors->has('lastname') ? ' is-invalid' : '' }}" placeholder="{{ __('Last name') }}" value="{{ old('lastname') }}" required autofocus>
 

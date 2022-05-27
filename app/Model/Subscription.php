@@ -495,7 +495,7 @@ class Subscription extends Model
 
         $stripeSubscription = $this->updateStripeSubscription([
             'payment_behavior' => $this->paymentBehavior(),
-            'proration_behavior' => $this->prorateBehavior(),
+            'proration_behavior' => 'none',
             'quantity' => $quantity,
             'expand' => ['latest_invoice.payment_intent'],
         ]);
@@ -616,7 +616,7 @@ class Subscription extends Model
 
         $this->updateStripeSubscription([
             'trial_end' => 'now',
-            'proration_behavior' => $this->prorateBehavior(),
+            'proration_behavior' => 'none',
         ]);
 
         $this->trial_ends_at = null;
@@ -640,7 +640,7 @@ class Subscription extends Model
 
         $this->updateStripeSubscription([
             'trial_end' => $date->getTimestamp(),
-            'proration_behavior' => $this->prorateBehavior(),
+            'proration_behavior' => 'none',
         ]);
 
         $this->trial_ends_at = $date;
@@ -793,7 +793,7 @@ class Subscription extends Model
         $payload = [
             'items' => $items->values()->all(),
             'payment_behavior' => $this->paymentBehavior(),
-            'proration_behavior' => $this->prorateBehavior(),
+            'proration_behavior' => 'none',
             'expand' => ['latest_invoice.payment_intent'],
         ];
 
@@ -839,7 +839,7 @@ class Subscription extends Model
                 'quantity' => $quantity,
                 'tax_rates' => $this->getPriceTaxRatesForPayload($price),
                 'payment_behavior' => $this->paymentBehavior(),
-                'proration_behavior' => $this->prorateBehavior(),
+                'proration_behavior' => 'none',
             ], $options)));
 
         $this->items()->create([
@@ -926,7 +926,7 @@ class Subscription extends Model
 
         $stripeItem->delete(array_filter([
             'clear_usage' => $stripeItem->price->recurring->usage_type === 'metered' ? true : null,
-            'proration_behavior' => $this->prorateBehavior(),
+            'proration_behavior' => 'none',
         ]));
 
         $this->items()->where('stripe_price', $price)->delete();
@@ -988,7 +988,7 @@ class Subscription extends Model
 
         $stripeSubscription = $this->updateStripeSubscription([
             'cancel_at' => $endsAt,
-            'proration_behavior' => $this->prorateBehavior(),
+            'proration_behavior' => 'none',
         ]);
 
         $this->stripe_status = $stripeSubscription->status;
@@ -1008,7 +1008,7 @@ class Subscription extends Model
     public function cancelNow()
     {
         $this->owner->stripe()->subscriptions->cancel($this->stripe_id, [
-            'prorate' => $this->prorateBehavior() === 'create_prorations',
+            'prorate' => 'none' === 'create_prorations',
         ]);
 
         $this->markAsCancelled();
@@ -1025,7 +1025,7 @@ class Subscription extends Model
     {
         $this->owner->stripe()->subscriptions->cancel($this->stripe_id, [
             'invoice_now' => true,
-            'prorate' => $this->prorateBehavior() === 'create_prorations',
+            'prorate' => 'none' === 'create_prorations',
         ]);
 
         $this->markAsCancelled();
@@ -1180,13 +1180,13 @@ class Subscription extends Model
     {
         $this->updateStripeSubscription([
             'default_tax_rates' => $this->user->taxRates() ?: null,
-            'proration_behavior' => $this->prorateBehavior(),
+            'proration_behavior' => 'none',
         ]);
 
         foreach ($this->items as $item) {
             $item->updateStripeSubscriptionItem([
                 'tax_rates' => $this->getPriceTaxRatesForPayload($item->stripe_price) ?: null,
-                'proration_behavior' => $this->prorateBehavior(),
+                'proration_behavior' => 'none',
             ]);
         }
     }

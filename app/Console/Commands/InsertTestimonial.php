@@ -80,14 +80,14 @@ class InsertTestimonial extends Command
 
             $socials = [];
             if($line[8]){
-                $social['facebook'] = $line[8];
+                $socials['facebook'] = $line[8];
             }
 
             if($line[9]){
-                $social['linkedin'] = $line[9];
+                $socials['linkedin'] = $line[9];
             }
 
-            $testimonial->social_url = json_encode($social);
+            $testimonial->social_url = json_encode($socials);
             $testimonial->save();
 
             $categories = [];

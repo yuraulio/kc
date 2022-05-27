@@ -142,6 +142,11 @@ class Cashier
      */
     public static function formatAmount($amount, $currency = null, $locale = null)
     {
+
+        if(!$amount){
+            $amount = 0;
+        }
+
         if (static::$formatCurrencyUsing) {
             return call_user_func(static::$formatCurrencyUsing, $amount, $currency);
         }
