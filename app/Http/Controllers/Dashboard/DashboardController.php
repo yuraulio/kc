@@ -68,4 +68,19 @@ class DashboardController extends Controller
         
     }
 
+    public function changeIndex(Event $event,$index){
+
+        $event->index = $index;
+        $event->save();
+
+    }
+
+
+    public function changeFeed(Event $event,$feed){
+
+        $event->feed = $feed;
+        $event->save();
+
+    }
+
 }

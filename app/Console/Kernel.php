@@ -63,6 +63,8 @@ class Kernel extends ConsoleKernel
        Commands\FixOrder::class,
        Commands\AttachFaqs::class,
        Commands\InsertTestimonial::class,
+       Commands\FixStatistics::class,
+       Commands\UserBalanceStripe::class,
     ];
 
     /**

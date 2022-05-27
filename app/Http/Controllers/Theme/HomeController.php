@@ -484,7 +484,7 @@ class HomeController extends Controller
         //$data['content'] = $city;
         $data['title'] = $city['name'];
         $data['city'] = $city;
-        $data['openlist'] = $city->event()->with('category', 'slugable', 'city', 'ticket', 'summary1')->where('published', true)->where('status', 0)->orderBy('published_at', 'desc')->get();
+        $data['openlist'] = $city->event()->with('category', 'slugable', 'city', 'ticket', 'summary1')->where('published', true)->whereIn('status', [0])->orderBy('published_at', 'desc')->get();
         $data['completedlist'] = $city->event()->with('category', 'slugable', 'city', 'ticket', 'summary1')->where('published', true)->where('status', 3)->orderBy('published_at', 'desc')->get();
 
         return view('theme.pages.category', $data);
