@@ -50,7 +50,8 @@ class UserBalanceStripe extends Command
             }
 
             $paymentMethod = PaymentMethod::find(2);
-            Stripe::setApiKey($paymentMethod->processor_options['secret_key']);
+            //dd($paymentMethod);
+            Stripe::setApiKey($paymentMethod->test_processor_options['secret_key']);
             session()->put('payment_method',2);
 
          
@@ -58,11 +59,12 @@ class UserBalanceStripe extends Command
             if(!$user->asStripeCustomer()){
            		continue; 
           	}
-            
-     
+            dd($user);
+            //$user->applyBalance(100);
+            //dd($user);
             
             if($user->upcomingInvoice() && $user->upcomingInvoice()->total < 0){
-             
+              
               $user->applyBalance($user->upcomingInvoice()->total);
              
              
