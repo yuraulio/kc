@@ -84,10 +84,40 @@
                             <tbody>
                             <?php //dd($abcart); ?>
                                 @if(isset($list))
+
+                                    <?php
+                                        $oldTickets[4756] = 1201;
+                                        $oldTickets[2249] = 1201;
+                                        $oldTickets[1921] = 1201;
+
+                                        $oldTickets[1150] = 19;
+                                        $oldTickets[1230] = 19;
+                                        $oldTickets[983]  = 19;
+
+                                        $oldTickets[4755] = 20;
+                                        $oldTickets[2248] = 20;
+                                        $oldTickets[1514] = 20;
+                                        $oldTickets[1151] = 20;
+                                        $oldTickets[1232] = 20;
+                                        $oldTickets[984]  = 20;
+
+                                        $oldTickets[4757] = 21;
+                                        $oldTickets[2250] = 21;
+                                        $oldTickets[1513] = 21;
+                                        $oldTickets[1988] = 21;
+                                        $oldTickets[1152] = 21;
+                                        $oldTickets[1231] = 21;
+                                        $oldTickets[985]  = 21;
+
+                                        
+                                    ?>
+
                                     @foreach($list as $user_id => $ucart)
-                                    <?php //dd($abcart); ?>
-                                        @if(isset($abcart[$user_id]->user) && isset($tickets[$ucart->id]))
+                                    <?php $ucartId = isset($oldTickets[$ucart->id]) ? $oldTickets[$ucart->id] : $ucart->id; ?>
+                                        @if(isset($abcart[$user_id]->user) && isset($tickets[$ucartId]))
                                         <?php
+
+                                            
                                             $evdate = 'No Date';
                                             if(isset($events[$ucart->options['event']]['customFields'])) {
                                                 foreach ($events[$ucart->options['event']]['customFields'] as $ckey => $cvalue) {
@@ -103,7 +133,7 @@
                                             <?php //dd($events[$ucart->options['event']]['title']); ?>
                                             <td>@if($abcart[$user_id]['user']->first() != null)<a href="mailto:{{$abcart[$user_id]['user']->first()['email']}}">{{$abcart[$user_id]['user']->first()['email']}}</a><br />{{$abcart[$user_id]['user']->first()['firstname']}} {{$abcart[$user_id]['user']->first()['lastname']}}<br /><a target="_blank" href="admin/student/{{$user_id}}"><i class="fa fa-external-link"></i></a> @endif</td>
                                             <td class="text-center">{{$events[$ucart->options['event']]['title']}}</td>
-                                            <td class="text-center">{{$tickets[$ucart->id]->title}}</td>
+                                            <td class="text-center">{{$tickets[$ucartId]->title}}</td>
                                             <td class="text-center">{{$ucart->qty}}</td>
                                             <td class="text-right">&euro;{{$ucart->qty*$ucart->price}}</td>
 
@@ -250,7 +280,27 @@
             $(".export-excel").click(function(){
 
                 let events = table.column(7,{filter: 'applied'}).data().unique().sort();
-                console.log(events);
+                let fromDate = $("#min").val();
+                let toDate = $("#max").val();
+                let eventsIds = [];
+
+                $.each(events, function(key, value){
+                    eventsIds.push(value)
+                })
+
+                $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{route('abandoned.exportcsv')}}",
+                type: "POST",
+                data:{events:eventsIds,fromDate:fromDate,toDate:toDate} ,
+                success: function(data) {
+
+                    window.location.href = '/tmp/exports/AbandonedCart.xlsx'
+
+                }
+            });
 
                 //abandoned/exportcsv
             })

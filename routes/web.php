@@ -297,7 +297,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     //Abandoned
     Route::get('abandoned', 'Dashboard\AbandonedController@index')->name('abandoned.index');
     Route::post('abandoned/remove/{id}', ['as' => 'abandoned.remove', 'uses' => 'Dashboard\AbandonedController@remove']);
-    Route::get('abandoned/exportcsv', ['as' => 'abandoned.exportcsv', 'uses' => 'Dashboard\AbandonedController@exportCsv']);
+    Route::post('abandoned/exportcsv', ['as' => 'abandoned.exportcsv', 'uses' => 'Dashboard\AbandonedController@exportCsv']);
 
     //Notification Messages
     Route::post('status-inform', ['as' => 'student.status.inform', 'uses' => 'Dashboard\StudentController@statusInform']);
@@ -324,6 +324,9 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
 
     //Index
     Route::get('change-index/{event}/{index}', 'Dashboard\DashboardController@changeIndex');
+
+    //Feed
+    Route::get('change-feed/{event}/{feed}', 'Dashboard\DashboardController@changeFeed');
 
     //Topics
     Route::post('/sort-topics', 'TopicController@orderTopic')->name('sort-topics');

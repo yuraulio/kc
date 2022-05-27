@@ -26,7 +26,7 @@ class AbandonedController extends Controller
         $freeEvents = Event::where('view_tpl','elearning_free')->pluck('id');
         $freeEvents = $freeEvents->toArray();
         //dd($freeEvents);
-
+        //dd($list);
         foreach ($list as $key => $item) {
             $user_id = $item->identifier;
             $cart = unserialize($item->content);
@@ -49,7 +49,7 @@ class AbandonedController extends Controller
         $data['events'] = $events;
         $data['tickets'] = $ticks->getDictionary();
         $data['abcart'] = ShoppingCart::with('user')->get()->keyBy('identifier');
-        //dd($data['abcart']);
+        //dd($data['tickets']);
 
         //dd($data);
         return view('admin.abandoned.index', $data);
@@ -62,10 +62,11 @@ class AbandonedController extends Controller
         return redirect('admin/abandoned');
     }
 
-    public function exportCsv()
-    {
-        Excel::store(new AbandonedExport(2018), 'AbandonedCart.xls', 'export');
-        return Excel::download(new AbandonedExport, 'AbandonedCart.xls');
+    public function exportCsv(Request $request)
+    {   
+        
+        Excel::store(new AbandonedExport($request->events,$request->fromDate,$request->toDate), 'AbandonedCart.xlsx', 'export');
+        return Excel::download(new AbandonedExport($request->events,$request->fromDate,$request->toDate), 'AbandonedCart.xlsx');
 
         return redirect()->route('abandoned.index');
 

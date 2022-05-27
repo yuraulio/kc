@@ -21485,19 +21485,11 @@ button#move-lesson {
   left: 103%;
 }
 
-.enroll-toggle input:checked + .custom-toggle-slider:before {
+.enroll-toggle input:checked + .custom-toggle-slider:before, .index-toggle input:checked + .custom-toggle-slider:before, .feed-toggle input:checked + .custom-toggle-slider:before {
   transform: translateX(55px) !important;
 }
 
-.enroll-toggle {
-  width: 80px !important;
-}
-
-.index-toggle input:checked + .custom-toggle-slider:before {
-  transform: translateX(55px) !important;
-}
-
-.index-toggle {
+.enroll-toggle, .index-toggle, .feed-toggle {
   width: 80px !important;
 }
 

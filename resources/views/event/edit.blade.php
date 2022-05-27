@@ -148,7 +148,7 @@
 
                                     </div>
 
-                                    <div class="col-md-6 col-sm-6 is-flex">
+                                    <div class="col-md-6 col-sm-6 is-flex"  style="padding:0">
                                         <div style="margin: auto 0;" class="col-md-3 col-sm-3">
                                             <div style="margin: auto;" class="form-group{{ $errors->has('published') ? ' has-danger' : '' }}">
 
@@ -186,18 +186,41 @@
                                 </div>
 
 
-                              
+                                <div class="row">
 
-                                <div class="form-group">
-                                    <label class="form-control-label" for="input-method">{{ __('Index') }}</label>
-                                    <div style="margin: auto;" class="form-group">
 
-                                        <label class="custom-toggle index-toggle">
-                                            <input type="checkbox" id="input-index" @if($event['index']) checked @endif>
-                                            <span class="custom-toggle-slider rounded-circle" data-label-off="index" data-label-on="no index"></span>
-                                        </label>
+                                    <div class="col-md-6 col-sm-6">
 
-                                    </div>
+
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="input-method">{{ __('Index') }}</label>
+                                            <div style="margin: auto;" class="form-group">
+
+                                                <label class="custom-toggle index-toggle">
+                                                    <input type="checkbox" id="input-index" @if($event['index']) checked @endif>
+                                                    <span class="custom-toggle-slider rounded-circle" data-label-off="index" data-label-on="no index"></span>
+                                                </label>
+
+                                            </div>
+                                        </div>
+                                    </div>  
+
+                                    <div class="col-md-6 col-sm-6">
+
+
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="input-method">{{ __('Feed') }}</label>
+                                            <div style="margin: auto;" class="form-group">
+
+                                                <label class="custom-toggle feed-toggle">
+                                                    <input type="checkbox" id="input-feed" @if($event['feed']) checked @endif>
+                                                    <span class="custom-toggle-slider rounded-circle" data-label-off="feed" data-label-on="no feed"></span>
+                                                </label>
+
+                                            </div>
+                                        </div>
+                                    </div>  
+
                                 </div>
 
                                 @if($event->exam()->first())
@@ -1429,6 +1452,24 @@
            },
            Accept: 'application/json',
            url: "/admin/change-index/" + "{{$event->id}}" +"/" + index,
+           success: function(data) {
+           
+           }
+       });
+
+   })
+
+   $('.feed-toggle').change(function(){
+       
+       let feed = $("#input-feed").is(":checked") ? 1 : 0;
+
+       $.ajax({
+           type: 'get',
+           headers: {
+           'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+           },
+           Accept: 'application/json',
+           url: "/admin/change-feed/" + "{{$event->id}}" +"/" + feed,
            success: function(data) {
            
            }

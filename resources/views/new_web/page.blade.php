@@ -3,7 +3,7 @@
 
 @section('metas')
 
-    @if(!$dynamic_page_data['event']['index'] == 3)
+    @if(isset($dynamic_page_data['event']) && (!$dynamic_page_data['event']['index'] && !$dynamic_page_data['event']['feed']) )
         <meta name="robots" content="noindex, nofollow" />
     @endif
 
