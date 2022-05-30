@@ -65,7 +65,7 @@
                                     ?>
                                     <h2><a href="{{env('NEW_PAGES_LINK') . '/' . $slug }}">{{ $row->title}}</a></h2>
                                     <div class="bottom">
-                                        @if ($row->summary1->where('section','date')->first())
+                                        @if ($row->summary1->where('section','date')->first() && $row->summary1->where('section','date')->first()->title)
                                             <div class="duration"><img width="20" src="/theme/assets/images/icons/icon-calendar.svg" alt=""> {{$row->summary1->where('section','date')->first()->title}}  </div>
                                         @endif
                                         @if($row->hours)
@@ -150,7 +150,7 @@
                                             @endforeach
                                         @endif
 
-                                        @if ($row->summary1->where('section','date')->first() && row->summary1->where('section','date')->first()->title)
+                                        @if ($row->summary1->where('section','date')->first() && $row->summary1->where('section','date')->first()->title)
                                             <div class="duration"><img width="20" src="/theme/assets/images/icons/icon-calendar.svg" alt=""> {{$row->summary1->where('section','date')->first()->title}}  </div>
                                         @endif
                                         @if($row->hours)
@@ -253,7 +253,7 @@
                                             @endforeach
                                         @endif
 
-                                        @if ($row->summary1->where('section','date')->first())
+                                        @if ($row->summary1->where('section','date')->first() && $row->summary1->where('section','date')->first()->title)
                                             <div class="duration"><img width="20" src="/theme/assets/images/icons/icon-calendar.svg" alt=""> {{$row->summary1->where('section','date')->first()->title}}  </div>
                                         @endif
                                         @if($row->hours)
