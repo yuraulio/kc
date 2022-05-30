@@ -34,7 +34,9 @@
                                             ?>
                                             @if($date)<span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-calendar.svg')}}" width="12" alt="" />{{$date}}</span>@endif
                                             @if($time)<span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/Times.svg')}}" width="12" alt="" />{{$time}} ({{$lesson['pivot']['duration']}})</span>@endif
-                                            <span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-marker.svg')}}" width="12" alt="" />{{$lesson['pivot']['room']}}</span>
+                                            @if($lesson['pivot']['room'])<span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/icon-marker.svg')}}" width="12" alt="" />{{$lesson['pivot']['room']}}</span>@endif
+                                            @if($lesson['vimeo_duration'])<span class="meta-item duration"><img src="{{cdn('/theme/assets/images/icons/Times.svg')}}" width="12" alt="" />{{$lesson['vimeo_duration']}}</span>@endif
+
                                         </div>
                                     </div>
                                     <div class="author-img">

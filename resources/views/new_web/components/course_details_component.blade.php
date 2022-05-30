@@ -21,16 +21,16 @@
                     </div>
                 </li>
                 @elseif($sum['title'] && $sum['section'] == 'students')
+                    @if($sumStudents <= 0)
                     <li>
                         @if($sum['mediable'])<img class="info-icon" class="replace-with-svg" src="{{cdn(get_image($sum['mediable']))}}" width="30" />@endif
                         <div class="info-text">
-                                @if($sumStudents<=0)
-                                    <p>{{  $sum['title'] }}</br></p>
-                                @else
-                                    <p>{{$sumStudents}} {{preg_replace('/[0-9]+/', '', $sum['title'])}}</br></p>
-                                @endif
+                
+                            <p>{{$sumStudents}} {{preg_replace('/[0-9]+/', '', $sum['title'])}}</br></p>
+                               
                         </div>
                     </li>
+                    @endif
                 @endif
             @endforeach
         </ul>

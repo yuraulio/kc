@@ -129,32 +129,32 @@
                                 </div>
 
                                 <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-title">{{ __('Title') }}</label>
-                                    <input type="text" name="title" id="input-title" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title') }}" required autofocus>
+                                    <label class="form-control-label" for="input-title">{{ __('Η1 public title') }}</label>
+                                    <input type="text" name="title" id="input-title" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Η1 public title') }}" value="{{ old('title') }}" required autofocus>
 
                                     @include('alerts.feedback', ['field' => 'title'])
                                 </div>
                                 @include('admin.slug.slug',['slug' => isset($slug) ? $slug : null])
                                 <div class="form-group{{ $errors->has('htmlTitle') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-htmlTitle">{{ __('HTML title') }}</label>
-                                    <input type="text" name="htmlTitle" id="input-htmlTitle" class="form-control{{ $errors->has('htmlTitle') ? ' is-invalid' : '' }}" placeholder="{{ __('HTML title') }}" value="{{ old('Short title') }}" autofocus>
+                                    <label class="form-control-label" for="input-htmlTitle">{{ __('Admin title') }}</label>
+                                    <input type="text" name="htmlTitle" id="input-htmlTitle" class="form-control{{ $errors->has('htmlTitle') ? ' is-invalid' : '' }}" placeholder="{{ __('Admin title') }}" value="{{ old('Short title') }}" autofocus>
 
                                     @include('alerts.feedback', ['field' => 'htmlTitle'])
                                 </div>
 
                                 <div class="form-group{{ $errors->has('subtitle') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-subtitle">{{ __('Subtitle') }}</label>
-                                    <input type="text" name="subtitle" id="input-subtitle" class="form-control{{ $errors->has('subtitle') ? ' is-invalid' : '' }}" placeholder="{{ __('subtitle') }}" value="{{ old('Subtitle') }}" autofocus>
+                                    <label class="form-control-label" for="input-subtitle">{{ __('H2 subtitle') }}</label>
+                                    <input type="text" name="subtitle" id="input-subtitle" class="form-control{{ $errors->has('subtitle') ? ' is-invalid' : '' }}" placeholder="{{ __('H2 subtitle') }}" value="{{ old('Subtitle') }}" autofocus>
 
                                     @include('alerts.feedback', ['field' => 'subtitle'])
                                 </div>
 
-                                <div class="form-group{{ $errors->has('header') ? ' has-danger' : '' }}">
+                                {{{--<div class="form-group{{ $errors->has('header') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-header">{{ __('Header') }}</label>
                                     <input type="text" name="header" id="input-header" class="form-control{{ $errors->has('header') ? ' is-invalid' : '' }}" placeholder="{{ __('Header') }}" value="{{ old('header') }}" autofocus>
 
                                     @include('alerts.feedback', ['field' => 'header'])
-                                </div>
+                                </div>--}}
 
                                 <div class="form-group{{ $errors->has('summary') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-summary">{{ __('Summary') }}</label>
@@ -213,10 +213,6 @@
                                     @include('alerts.feedback', ['field' => 'ext_url'])
 
                                     {{--@include('admin.upload.upload', ['event' => ( isset($event) && $event->medias != null) ? $event->medias : null])--}}
-
-
-
-
 
 
                                 <div class="text-center">

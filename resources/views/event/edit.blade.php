@@ -519,8 +519,8 @@
 
                                                             <label class="form-control-label" for="input-title">{{ __('Tab Title') }}</label>
                                                             <input type="text" name="sections[overview][tab_title]" class="form-control" placeholder="{{ __('Tab Title') }}" value="{{ old("sections[instructors][tab_title]", $tab_title) }}" autofocus> 
-                                                            <label class="form-control-label" for="input-title">{{ __('H2 Title') }}</label>
-                                                            <input type="text" name="sections[overview][title]" class="form-control" placeholder="{{ __('H2 Title') }}" value="{{ old("sections[instructors][title]", $title) }}" autofocus>
+                                                            {{--<label class="form-control-label" for="input-title">{{ __('H2 Title') }}</label>--}}
+                                                            <input hidden type="text" name="sections[overview][title]" class="form-control" placeholder="{{ __('H2 Title') }}" value="{{ old("sections[instructors][title]", $title) }}" autofocus>
                                                             <input hidden type="checkbox"  name="sections[overview][visible]" @if($visible)) checked @endif>
 
                                                             {{--<label class="form-control-label" for="input-method">{{ __('Visible') }}</label>
@@ -539,32 +539,32 @@
 
 
                                                         <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
-                                                            <label class="form-control-label" for="input-title">{{ __('Title') }}</label>
-                                                            <input type="text" name="eventTitle" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title', $event->title) }}" required autofocus>
+                                                            <label class="form-control-label" for="input-title">{{ __('Η1 public title') }}</label>
+                                                            <input type="text" name="eventTitle" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Η1 public title') }}" value="{{ old('title', $event->title) }}" required autofocus>
 
                                                             @include('alerts.feedback', ['field' => 'title'])
                                                         </div>
                                                         {{--@include('admin.slug.slug',['slug' => isset($slug) ? $slug : null])--}}
                                                         <div class="form-group{{ $errors->has('htmlTitle') ? ' has-danger' : '' }}">
-                                                            <label class="form-control-label" for="input-htmlTitle">{{ __('HTML Title') }}</label>
-                                                            <input type="text" name="htmlTitle" id="input-htmlTitle" class="form-control{{ $errors->has('htmlTitle') ? ' is-invalid' : '' }}" placeholder="{{ __('HTML Title') }}" value="{{ old('Short title', $event->htmlTitle) }}" autofocus>
+                                                            <label class="form-control-label" for="input-htmlTitle">{{ __('Admin title') }}</label>
+                                                            <input type="text" name="htmlTitle" id="input-htmlTitle" class="form-control{{ $errors->has('htmlTitle') ? ' is-invalid' : '' }}" placeholder="{{ __('Admin title') }}" value="{{ old('Short title', $event->htmlTitle) }}" autofocus>
 
                                                             @include('alerts.feedback', ['field' => 'htmlTitle'])
                                                         </div>
 
                                                         <div class="form-group{{ $errors->has('subtitle') ? ' has-danger' : '' }}">
-                                                            <label class="form-control-label" for="input-subtitle">{{ __('Subtitle') }}</label>
-                                                            <input type="text" name="subtitle" id="input-subtitle" class="form-control{{ $errors->has('subtitle') ? ' is-invalid' : '' }}" placeholder="{{ __('subtitle') }}" value="{{ old('Subtitle', $event->subtitle) }}" autofocus>
+                                                            <label class="form-control-label" for="input-subtitle">{{ __('H2 subtitle') }}</label>
+                                                            <input type="text" name="subtitle" id="input-subtitle" class="form-control{{ $errors->has('subtitle') ? ' is-invalid' : '' }}" placeholder="{{ __('H2 subtitle') }}" value="{{ old('Subtitle', $event->subtitle) }}" autofocus>
 
                                                             @include('alerts.feedback', ['field' => 'subtitle'])
                                                         </div>
 
-                                                        <div class="form-group{{ $errors->has('header') ? ' has-danger' : '' }}">
+                                                        {{--<div class="form-group{{ $errors->has('header') ? ' has-danger' : '' }}">
                                                             <label class="form-control-label" for="input-header">{{ __('Header') }}</label>
                                                             <input type="text" name="header" id="input-header" class="form-control{{ $errors->has('header') ? ' is-invalid' : '' }}" placeholder="{{ __('Header') }}" value="{{ old('header', $event->header) }}" autofocus>
 
                                                             @include('alerts.feedback', ['field' => 'header'])
-                                                        </div>
+                                                        </div>--}}
 
                                                         <div class="form-group{{ $errors->has('body') ? ' has-danger' : '' }}">
                                                             <label class="form-control-label" for="input-body">{{ __('Body') }}</label>

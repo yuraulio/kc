@@ -476,6 +476,7 @@ jQuery(document).ready(function($) {
         navText: ["<img src='/theme/assets/images/icons/icon-arrow-left-light-green.svg'>","<img src='/theme/assets/images/icons/icon-arrow-right-light-green.svg'>"],
         dots:false,
         autoHeight:true,
+        slideBy:2,
         responsive:{
             0:{
                 items:1
@@ -497,6 +498,7 @@ jQuery(document).ready(function($) {
         dots:false,
         autoplay: true,
         autoHeight:true,
+        slideBy:2,
         autoplayTimeout: 8000,
         autoplayHoverPause: true,
         navText: ["<img src='/theme/assets/images/icons/icon-arrow-left-light-green.svg')>","<img src='/theme/assets/images/icons/icon-arrow-right-light-green.svg'>"]

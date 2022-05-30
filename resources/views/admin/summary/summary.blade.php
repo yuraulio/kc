@@ -259,27 +259,25 @@
    $(document).on('shown.bs.modal', '#editModalSummary',function(e) {
     $("#sum_create").trigger('reset')
 
-   	var link  = e.relatedTarget,
-        	modal    = $(this),
-            id = e.relatedTarget.dataset.id
+   	    var link  = e.relatedTarget,
+        modal    = $(this),
+        id = e.relatedTarget.dataset.id
 
-            // if open first modal with id pass data
-            // if open second modal(file-manager) no pass data
-            if(id != null){
+        // if open first modal with id pass data
+        // if open second modal(file-manager) no pass data
+        if(id != null){
 
+    
             //title = e.relatedTarget.dataset.title,
             //description =e.relatedTarget.dataset.description;
             title = $("#title-"+id).text(),
             section = e.relatedTarget.dataset.section
+            //edit_section_sum
 
-            //console.log()
-            //console.log(section)
-            //console.log('------')
             let elem = $('#edit_section_sum option')
-
+            $("#edit_section_sum option:selected").removeAttr("selected");
             $.each(elem, function(key, value) {
                 //console.log($(value).val())
-
                 if($(value).val() == section){
                     $(value).attr('selected',true)
                 }
@@ -298,9 +296,9 @@
             base_url = window.location.protocol + "//" + window.location.host
             $("#img-upload-summary").attr('src', base_url+media)
 
-            }
+        }
 
-   });
+    });
 
 </script>
 <script src="{{ asset('js/sortable/Sortable.js') }}"></script>
