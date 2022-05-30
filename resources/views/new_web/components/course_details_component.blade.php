@@ -21,7 +21,7 @@
                     </div>
                 </li>
                 @elseif($sum['title'] && $sum['section'] == 'students')
-                    @if($sumStudents <= 0)
+                    @if($sumStudents > 0)
                     <li>
                         @if($sum['mediable'])<img class="info-icon" class="replace-with-svg" src="{{cdn(get_image($sum['mediable']))}}" width="30" />@endif
                         <div class="info-text">
