@@ -19,7 +19,7 @@
     @endsection
 @elseif ($instructor)
     @section('header')
-        <title>{{ $instructor->title . " " . $instructor->subtitle }}</title>
+        {{-- <title>{{ $instructor->title . " " . $instructor->subtitle }}</title> --}}
         {!! $instructor->metable->getMetas() !!}
 
         <script type="application/ld+json">
