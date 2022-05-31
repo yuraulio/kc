@@ -1,6 +1,5 @@
 @extends("new_web.layouts.master")
 
-
 @section('metas')
 
     @if(isset($dynamic_page_data['event']) && (!$dynamic_page_data['event']['index'] && !$dynamic_page_data['event']['feed']) )
