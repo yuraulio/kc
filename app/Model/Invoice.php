@@ -91,7 +91,7 @@ class Invoice extends Model
         if( $user = $this->user->first() ){
         
             if($event = $user->events()->wherePivot('event_id',$eventId)->first()){
-
+            //if($event = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first()){  
                 $paymentMethodId = $event->pivot->payment_method;
 
             }

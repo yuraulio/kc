@@ -137,7 +137,7 @@
                                             <label class="form-control-label" for="input-method">{{ __('Enroll Students to E-Learning') }}</label>
                                             <div style="margin: auto;" class="form-group">
 
-                                                <label class="custom-toggle enroll-toggle">
+                                                <label class="custom-toggle enroll-toggle enroll-students">
                                                     <input type="checkbox" id="input-enroll" @if($event['enroll']) checked @endif>
                                                     <span class="custom-toggle-slider rounded-circle" data-label-off="enroll" data-label-on="unroll"></span>
                                                 </label>
@@ -1422,10 +1422,10 @@
     })
 
 
-    $('.enroll-toggle').change(function(){
+    $('.enroll-students').change(function(){
        
         let enroll = $("#input-enroll").is(":checked") ? 1 : 0;
-
+        console.log('dfsd');
         $.ajax({
             type: 'get',
             headers: {
