@@ -2,7 +2,7 @@
 
 @section('metas')
 
-    @if(isset($dynamic_page_data['event']) && (!$dynamic_page_data['event']['index'] && !$dynamic_page_data['event']['feed']) )
+    @if(isset($dynamic_page_data['event']) && !$dynamic_page_data['event']['index'] )
         <meta name="robots" content="noindex, nofollow" />
     @endif
 
