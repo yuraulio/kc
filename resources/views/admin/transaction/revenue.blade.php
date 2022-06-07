@@ -182,12 +182,12 @@
 
 @push('css')
     
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    {{--<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />--}}
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">
     <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css">
 
-    {{--<link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables-datetime/datetime.min.css">--}}
+    <link rel="stylesheet" href="{{ asset('argon') }}/vendor/datatables-datetime/datetime.min.css">
 
 @endpush
 
@@ -209,7 +209,7 @@
 
     <script>
 
-$('input[name="min"]').daterangepicker({
+{{--$('input[name="min"]').daterangepicker({
     singleDatePicker: true,
     showDropdowns: true,
     minYear: 1901,
@@ -217,7 +217,7 @@ $('input[name="min"]').daterangepicker({
   }, function(start, end, label) {
     var years = moment().diff(start, 'years');
     alert("You are " + years + " years old!");
-  });
+  });--}}
 
        var eventsArray = {};
         // DataTables initialisation
