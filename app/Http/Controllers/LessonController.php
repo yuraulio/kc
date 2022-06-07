@@ -842,9 +842,10 @@ class LessonController extends Controller
         })->whereIn('vimeo_video',['',null])->get();
 
 
-        Excel::store(new LessonsNoVimeoLinkExport($lessons), 'LessonsNoVimeoLinkExport.xlsx', 'export');
-        return Excel::download(new LessonsNoVimeoLinkExport($lessons), 'LessonsNoVimeoLinkExport.xlsx');
-       
+        //Excel::store(new LessonsNoVimeoLinkExport($lessons), 'LessonsNoVimeoLinkExport.xlsx', 'export');
+        //return Excel::download(new LessonsNoVimeoLinkExport($lessons), 'LessonsNoVimeoLinkExport.xlsx');
+
+        return view('lesson.lessons_with_no_vimeo_link', ['lessons' => $lessons]);
 
 
     }

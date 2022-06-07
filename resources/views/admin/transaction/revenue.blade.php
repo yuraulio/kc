@@ -19,7 +19,7 @@
             <li class="breadcrumb-item"><a href="{{ route('transaction.participants') }}">{{ __('Revenue List') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
         @endcomponent
-        @include('admin.transaction.layouts.cards')
+        @include('admin.transaction.layouts.cards_revenue')
     @endcomponent
 
     <div class="container-fluid mt--6">
@@ -67,6 +67,14 @@
                                 </select>
                             </div>
 
+
+                            <div class="col-sm-3 filter_col" id="filter_col12" data-column="12">
+                                <label>Delivey</label>
+                                <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col12_filter" placeholder="Payment Method">
+                                <option selected value> -- All -- </option>
+                                </select>
+                            </div>
+
                             <div class="col-sm-3 filter_col">
                                 <div class="form-group">
                                     <label>From:</label>
@@ -96,13 +104,15 @@
                             
                             <th scope="col">{{ __('Coupon') }}</th>
                             <th class="participant_elearning none">{{ __('Video Seen') }}</th>
-                            <th scope="col">{{ __('Registration Date') }}</th>
+                            <th scope="col">{{ __('Payment date') }}</th>
                             <th class="participant_elearning none">{{ __('Expiration Date') }}</th>
                             <th class="col">{{ __('Payment Method') }}</th>
                             <th hidden>{{ __('Event ID') }}</th>
                             <th hidden>{{ __('Transaction ID') }}</th>
                             {{--<th class="participant_elearning none">{{ __('New Expiration Date') }}</th>--}}
                             <th hidden>{{ __('Ticket Price') }}</th>
+                            <th hidden>{{ __('Delivery') }}</th>
+
                         </tr>
                     </thead>
                     <tfoot>
@@ -114,7 +124,7 @@
                             <th>{{ __('Amount Paid') }}</th>
                             <th>{{ __('Coupon') }}</th>
                             <th class="participant_elearning none">{{ __('Video Seen') }}</th>
-                            <th>{{ __('Registration Date') }}</th>
+                            <th>{{ __('Payment date') }}</th>
                             <th class="participant_elearning none">{{ __('Expiration Date') }}</th>
                             <th> {{ __('Payment Method') }} </th>
                             <th hidden>{{ __('Event ID') }}</th>
@@ -122,6 +132,8 @@
                             {{--<th class="participant_elearning none">{{ __('New Expiration Date') }}</th>--}}
 
                             <th hidden>{{ __('Ticket Price') }}</th>
+                            <th hidden>{{ __('Delivery') }}</th>
+
                         </tr>
                     </tfoot>
                     <tbody>
@@ -153,6 +165,8 @@
                                 </td>--}}
 
                                 <td hidden><?= '€'.number_format($transaction['ticket_price'], 2, '.', ''); ?></td>
+                                <td hidden>{{$transaction['is_elearning'] ? 'e-learning' : 'in-class'}}</td>
+
                             </tr>
                         @endforeach
                     </tbody>
@@ -313,6 +327,7 @@ $(document).ready(function() {
     events = table.column(1).data().unique().sort()
     coupons = table.column(4).data().unique().sort()
     paymentMethods = table.column(8).data().unique().sort()
+    delivery = table.column(12).data().unique().sort()
     prices = table.column(3).data()
 
     let sum = 0
@@ -372,6 +387,10 @@ $(document).ready(function() {
         $('#col8_filter').append('<option value="'+value+'">'+value+'</option>')
     })
 
+    $.each(delivery, function(key, value){
+        $('#col12_filter').append('<option value="'+value+'">'+value+'</option>')
+    })
+
     //Refilter the table
     $('#min, #max').on('change', function () {
         //console.log('from change min!!')
@@ -403,6 +422,13 @@ $(document).ready(function() {
         $('#col8_filter').append('<option value>-- All --</option>')
         $.each(paymentMethods, function(key, value){
             $('#col8_filter').append('<option value="'+value+'">'+value+'</option>')
+        })
+
+        delivery = table.column(12,{filter: 'applied'}).data().unique().sort();
+        $('#col12_filter').empty();
+        $('#col12_filter').append('<option value>-- All --</option>')
+        $.each(delivery, function(key, value){
+            $('#col12_filter').append('<option value="'+value+'">'+value+'</option>')
         })
 
         stats_non_elearning()
@@ -567,39 +593,9 @@ $(document).ready(function() {
 
         
 
-        $('#total').text('€'+sum)
-        $('#special').text('€'+special)
-        $('#regular').text('€'+regular)
-        $('#alumni').text('€'+alumni)
-        $('#early-bird').text('€'+early)
-        $('#sponsored').text('€'+sponsored)
-        $('#count_special').text(count_special)
-        $('#count_regular').text(count_regular)
-        $('#count_alumni').text(count_alumni)
-        $('#count_early-bird').text(count_early)
-        $('#count_sponsored').text(count_sponsored)
-
-        $(".total-sales").remove();
-
-        $(`
-            <div class="card-body col-xl-3 col-md-6 total-sales">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col">
-                                <h5 class="card-title text-uppercase text-muted mb-0">Total Sales:</h5>
-                                <span id="total-sales" class="h2 font-weight-bold mb-0">${totalSales}</span>
-                            </div>
-                    
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `).insertBefore(".total-revenue");
-        
-
-
-       
+        $('#total').text('€'+sum.toLocaleString())
+        $('#total-sales').text('€'+totalSales.toLocaleString())
+           
         $.each( newTickets, function( key, value ) {
           
           actionValue = key.toLowerCase()
@@ -829,36 +825,9 @@ $(document).ready(function() {
 
 
         })
-        $('#total').text('€'+sum)
-        $('#special').text('€'+special)
-        $('#regular').text('€'+regular)
-        $('#alumni').text('€'+alumni)
-        $('#early-bird').text('€'+early)
-        $('#sponsored').text('€'+sponsored)
-        $('#count_special').text('Special(all): '+count_special)
-        $('#count_regular').text('Regular(all): '+count_regular)
-        $('#count_alumni').text('Alumni(all): '+count_alumni)
-        $('#count_early-bird').text('Early Bird(all): '+count_early)
-        $('#count_sponsored').text(+count_sponsored)
-
-        $(".total-sales").remove();
-        $(`
-            <div class="card-body col-xl-3 col-md-6 total-sales">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col">
-                                <h5 class="card-title text-uppercase text-muted mb-0">Total Sales:</h5>
-                                <span id="total-sales" class="h2 font-weight-bold mb-0">${totalSales}</span>
-                            </div>
-                    
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `).insertBefore(".total-revenue");
-
-        
+        $('#total').text('€'+sum.toLocaleString())
+        $('#total-sales').text('€'+totalSales.toLocaleString())
+       
         $.each( newTickets, function( key, value ) {
           
             actionValue = key.toLowerCase()

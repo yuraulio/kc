@@ -83,7 +83,8 @@
                     <div class="col">
                         <h5 class="card-title text-uppercase text-muted mb-0"><div id="count_sponsored"></div> Sponsored:</h5>
                         <span id="sponsored" class="h2 font-weight-bold mb-0"></span>
-                    </div> 
+                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -101,9 +102,9 @@
 
             id = type.toLowerCase();
             id = id.replace(/ /g, '-');
-           
+
             $(`#count_${id}`).text(`${type}:(${value}) ` + newTickets[type][value]['count'])
-            $(`#${id}`).text('€'+newTickets[type][value]['countValue'])
+            $(`#${id}`).text('€'+newTickets[type][value]['countValue'].toLocaleString())
 
         })
     </script>

@@ -67,6 +67,14 @@
                                 </select>
                             </div>
 
+
+                            <div class="col-sm-3 filter_col" id="filter_col11" data-column="11">
+                                <label>Delivey</label>
+                                <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col11_filter" placeholder="Payment Method">
+                                <option selected value> -- All -- </option>
+                                </select>
+                            </div>
+
                             <div class="col-sm-3 filter_col">
                                 <div class="form-group">
                                     <label>From:</label>
@@ -100,6 +108,7 @@
                             <th class="col">{{ __('Payment Method') }}</th>
                             <th hidden>{{ __('Event ID') }}</th>
                             <th hidden>{{ __('Transaction ID') }}</th>
+                            <th hidden>{{ __('Delivery') }}</th>
                             {{--<th class="participant_elearning none">{{ __('New Expiration Date') }}</th>--}}
                         </tr>
                     </thead>
@@ -117,6 +126,7 @@
                             <th> {{ __('Payment Method') }} </th>
                             <th hidden>{{ __('Event ID') }}</th>
                             <th hidden>{{ __('Transaction ID') }}</th>
+                            <th hidden>{{ __('Delivery') }}</th>
                             {{--<th class="participant_elearning none">{{ __('New Expiration Date') }}</th>--}}
                         </tr>
                     </tfoot>
@@ -143,6 +153,7 @@
                                 <td> {{$transaction['paymentMethod']}} </td>
                                 <td hidden>{{$transaction['event_id']}}</td>
                                 <td hidden>{{$transaction['id']}}</td>
+                                <td hidden>{{$transaction['is_elearning'] ? 'e-learning' : 'in-class'}}</td>
                                 {{--<td class="participant_elearning none">
                                     <input id="{{$transaction['id']}}" class="form-control datepicker" placeholder="Select date" type="text" value="<?= ($transaction['expiration'] != null) ? $transaction['expiration'] : ''; ?>">
                                     <button class="update_exp btn btn-info btn-sm" style="margin-top:10px;" type="button" data-id="{{$transaction['id']}}" >Update</button>
@@ -305,6 +316,8 @@ $(document).ready(function() {
     events = table.column(1).data().unique().sort()
     coupons = table.column(4).data().unique().sort()
     paymentMethods = table.column(8).data().unique().sort()
+    delivery = table.column(11).data().unique().sort()
+
     prices = table.column(3).data()
 
     let sum = 0
@@ -364,6 +377,10 @@ $(document).ready(function() {
         $('#col8_filter').append('<option value="'+value+'">'+value+'</option>')
     })
 
+    $.each(delivery, function(key, value){
+        $('#col11_filter').append('<option value="'+value+'">'+value+'</option>')
+    })
+
     //Refilter the table
     $('#min, #max').on('change', function () {
         //console.log('from change min!!')
@@ -391,10 +408,18 @@ $(document).ready(function() {
         })
 
         paymentMethods = table.column(8,{filter: 'applied'}).data().unique().sort();
+        delivery = table.column(11,{filter: 'applied'}).data().unique().sort();
+        
         $('#col8_filter').empty();
         $('#col8_filter').append('<option value>-- All --</option>')
         $.each(paymentMethods, function(key, value){
             $('#col8_filter').append('<option value="'+value+'">'+value+'</option>')
+        })
+
+        $('#col11_filter').empty();
+        $('#col11_filter').append('<option value>-- All --</option>')
+        $.each(delivery, function(key, value){
+            $('#col11_filter').append('<option value="'+value+'">'+value+'</option>')
         })
 
         stats_non_elearning()
@@ -551,23 +576,22 @@ $(document).ready(function() {
 
             }
 
-        } );
+        });
 
 
-        
+        $('#total').text('€'+sum.toLocaleString())
+        $('#special').text('€'+special.toLocaleString())
+        $('#regular').text('€'+regular.toLocaleString())
+        $('#alumni').text('€'+alumni.toLocaleString())
+        $('#early-bird').text('€'+early.toLocaleString())
+        $('#sponsored').text('€'+sponsored.toLocaleString())
 
-        $('#total').text('€'+sum)
-        $('#special').text('€'+special)
-        $('#regular').text('€'+regular)
-        $('#alumni').text('€'+alumni)
-        $('#early-bird').text('€'+early)
-        $('#sponsored').text('€'+sponsored)
-        $('#count_special').text(count_special)
-        $('#count_regular').text(count_regular)
-        $('#count_alumni').text(count_alumni)
-        $('#count_early-bird').text(count_early)
-        $('#count_sponsored').text(count_sponsored)
-       
+        $('#count_special').text('Special(all): '+count_special)
+        $('#count_regular').text('Regular(all): '+count_regular)
+        $('#count_alumni').text('Alumni(all): '+count_alumni)
+        $('#count_early-bird').text('Early Bird(all): '+count_early)
+        $('#count_sponsored').text(+count_sponsored)
+     
         $.each( newTickets, function( key, value ) {
           
           actionValue = key.toLowerCase()
@@ -797,17 +821,17 @@ $(document).ready(function() {
 
 
         })
-        $('#total').text('€'+sum)
-        $('#special').text('€'+special)
-        $('#regular').text('€'+regular)
-        $('#alumni').text('€'+alumni)
-        $('#early-bird').text('€'+early)
-        $('#sponsored').text('€'+sponsored)
-        $('#count_special').text('Special(all): '+count_special)
-        $('#count_regular').text('Regular(all): '+count_regular)
-        $('#count_alumni').text('Alumni(all): '+count_alumni)
-        $('#count_early-bird').text('Early Bird(all): '+count_early)
-        $('#count_sponsored').text(+count_sponsored)
+        $('#total').text('€'+sum.toLocaleString())
+        $('#special').text('€'+special.toLocaleString())
+        $('#regular').text('€'+regular.toLocaleString())
+        $('#alumni').text('€'+alumni.toLocaleString())
+        $('#early-bird').text('€'+early.toLocaleString())
+        $('#sponsored').text('€'+sponsored.toLocaleString())
+        $('#count_special').text('Special(all): '+count_special.toLocaleString())
+        $('#count_regular').text('Regular(all): '+count_regular.toLocaleString())
+        $('#count_alumni').text('Alumni(all): '+count_alumni.toLocaleString())
+        $('#count_early-bird').text('Early Bird(all): '+count_early.toLocaleString())
+        $('#count_sponsored').text(+count_sponsored.toLocaleString())
 
         
         $.each( newTickets, function( key, value ) {
