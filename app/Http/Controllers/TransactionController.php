@@ -275,7 +275,7 @@ class TransactionController extends Controller
                             
                             $data['transactions'][] = ['id' => $transaction['id'], 'user_id' => $u['id'],'name' => $u['firstname'].' '.$u['lastname'],
                             'event_id' => $transaction->event[0]['id'],'event_title' => $transaction->event[0]['title'].' / '.date('d-m-Y', strtotime($transaction->event[0]['published_at'])),'coupon_code' => $coupon_code, 'type' => trim($ticketType),'ticketName' => $ticketName,
-                            'date' => date_format($transaction['created_at'], 'Y-m-d'), 'amount' => $invoice->amount,
+                            'date' => date_format($invoice['created_at'], 'Y-m-d'), 'amount' => $invoice->amount,
                             'is_elearning' => $isElearning,
                             'coupon_code' => $transaction['coupon_code'],'videos_seen' => $this->getVideosSeen($videos),'expiration'=>$expiration,
                             'paymentMethod' => $paymentMethod, 'ticket_price' => !in_array($transaction['id'], $doubleTransactions) ? $transaction['amount'] : 0];
