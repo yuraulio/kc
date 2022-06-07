@@ -55,6 +55,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
 
     //Participants
     Route::get('transaction/participants', 'TransactionController@participants_inside_revenue')->name('transaction.participants');
+    Route::get('transaction/revenue', 'TransactionController@participants_inside_revenue_new')->name('transaction.participants_new');
     Route::post('transaction/updateExpirationDate', ['as' => 'transaction.updateExpirationDate', 'uses' => 'TransactionController@updateExpirationDate']);
     Route::post('transaction/export-excel', 'TransactionController@exportExcel')->name('transaction.export-excel');
     Route::post('transaction/export-invoice', 'TransactionController@exportInvoices')->name('transaction.export-invoice');
@@ -236,6 +237,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     //Lessons
     //Route::post('/sort-lessons/{event}', 'LessonController@orderLesson')->name('sort-lessons');
     Route::post('/sort-lessons', 'LessonController@orderLesson')->name('sort-lessons');
+    Route::get('/extract-lessons-novimeolink', 'LessonController@extractElearningLessonsWithNoVimeoLink')->name('lessons.novimeolink');
 
     //Social
     Route::get('/social', 'Dashboard\SocialController@index')->name('social.index');
@@ -327,6 +329,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
 
     //Feed
     Route::get('change-feed/{event}/{feed}', 'Dashboard\DashboardController@changeFeed');
+    Route::get('ads-feed', 'Dashboard\FeedController@index')->name('ads-feed');
 
     //Topics
     Route::post('/sort-topics', 'TopicController@orderTopic')->name('sort-topics');

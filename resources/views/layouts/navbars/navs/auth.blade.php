@@ -130,7 +130,7 @@
         })
     })
 
-    $(document).on("click", "#update-feed-btn", function(){
+    /*$(document).on("click", "#update-feed-btn", function(){
 
         window.swal({
             title: "Feed Updating...",
@@ -159,7 +159,7 @@
 
 
         })
-    })
+    })*/
 
         $(document).on('keyup',"#search-user",function(){
 

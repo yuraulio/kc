@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\DB;
 use Validator;
 use Vimeo\Vimeo;
 use App\Jobs\UpdateStatisticJson;
+use App\Exports\LessonsNoVimeoLinkExport;
+use Excel;
 
 class LessonController extends Controller
 {
@@ -826,6 +828,24 @@ class LessonController extends Controller
             'success' => true,
             'message' => 'Order has changed',
         ];
+
+    }
+
+    public function extractElearningLessonsWithNoVimeoLink(){
+        
+        $lessons = Lesson::whereHas('event', function($event){
+
+            return $event->whereHas('delivery', function($delivery){
+                return $delivery->where('deliveries.id', 143);
+            });
+
+        })->whereIn('vimeo_video',['',null])->get();
+
+
+        Excel::store(new LessonsNoVimeoLinkExport($lessons), 'LessonsNoVimeoLinkExport.xlsx', 'export');
+        return Excel::download(new LessonsNoVimeoLinkExport($lessons), 'LessonsNoVimeoLinkExport.xlsx');
+       
+
 
     }
 

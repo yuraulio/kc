@@ -41,11 +41,21 @@
                                 
                                 <ul class="social-wrapper">
                                      @if(isset($socials['facebook']))
-                                     <li><a target="_blank" href="{{$socials['facebook']}}"><img class="replace-with-svg"  src="/theme/assets/images/icons/social/Facebook.svg" width="16" alt="Visit"></a></li>
+
+                                        @if(strpos($socials['facebook'],'https://') === false)
+                                           $socials['facebook'] = = 'https://'.$socials['facebook'];
+                                        @endif
+                                        
+                                        <li><a target="_blank" href="{{$socials['facebook']}}"><img class="replace-with-svg"  src="/theme/assets/images/icons/social/Facebook.svg" width="16" alt="Visit"></a></li>
                                      @endif
         
                                      @if(isset($socials['linkedin']))
-                                     <li><a target="_blank" href="{{$socials['linkedin']}}"><img class="replace-with-svg"  src="/theme/assets/images/icons/social/Linkedin.svg" width="16" alt="Visit"></a></li>
+
+                                        @if(strpos($socials['linkedin'],'https://') === false)
+                                           $socials['linkedin'] = = 'https://'.$socials['linkedin'];
+                                        @endif
+
+                                        <li><a target="_blank" href="{{$socials['linkedin']}}"><img class="replace-with-svg"  src="/theme/assets/images/icons/social/Linkedin.svg" width="16" alt="Visit"></a></li>
                                      @endif
         
         

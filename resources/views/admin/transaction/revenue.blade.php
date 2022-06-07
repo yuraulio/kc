@@ -92,7 +92,8 @@
                             <th scope="col">{{ __('Event') }}</th>
 
                             <th scope="col">{{ __('Ticket Type') }}</th>
-                            <th scope="col">{{ __('Ticket Price') }}</th>
+                            <th scope="col">{{ __('Amount Paid') }}</th>
+                            
                             <th scope="col">{{ __('Coupon') }}</th>
                             <th class="participant_elearning none">{{ __('Video Seen') }}</th>
                             <th scope="col">{{ __('Registration Date') }}</th>
@@ -101,6 +102,7 @@
                             <th hidden>{{ __('Event ID') }}</th>
                             <th hidden>{{ __('Transaction ID') }}</th>
                             {{--<th class="participant_elearning none">{{ __('New Expiration Date') }}</th>--}}
+                            <th hidden>{{ __('Ticket Price') }}</th>
                         </tr>
                     </thead>
                     <tfoot>
@@ -109,7 +111,7 @@
                             <th>{{ __('Event') }}</th>
 
                             <th>{{ __('Ticket Type') }}</th>
-                            <th>{{ __('Ticket Price') }}</th>
+                            <th>{{ __('Amount Paid') }}</th>
                             <th>{{ __('Coupon') }}</th>
                             <th class="participant_elearning none">{{ __('Video Seen') }}</th>
                             <th>{{ __('Registration Date') }}</th>
@@ -118,12 +120,14 @@
                             <th hidden>{{ __('Event ID') }}</th>
                             <th hidden>{{ __('Transaction ID') }}</th>
                             {{--<th class="participant_elearning none">{{ __('New Expiration Date') }}</th>--}}
+
+                            <th hidden>{{ __('Ticket Price') }}</th>
                         </tr>
                     </tfoot>
                     <tbody>
-                    <?php //dd($transactions[100]); ?>
-                        @foreach ($transactions as $transaction)
-
+                    <?php ///dd(count($transactions)); ?>
+                        @foreach ($transactions as $key => $transaction)
+                        
                             <tr>
                                 <td><a href="{{ route('user.edit', $transaction['user_id']) }}">{{$transaction['name']}}</a></td>
                                 <td>{{$transaction['event_title']}}</td>
@@ -147,6 +151,8 @@
                                     <input id="{{$transaction['id']}}" class="form-control datepicker" placeholder="Select date" type="text" value="<?= ($transaction['expiration'] != null) ? $transaction['expiration'] : ''; ?>">
                                     <button class="update_exp btn btn-info btn-sm" style="margin-top:10px;" type="button" data-id="{{$transaction['id']}}" >Update</button>
                                 </td>--}}
+
+                                <td hidden><?= '€'.number_format($transaction['ticket_price'], 2, '.', ''); ?></td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -206,6 +212,7 @@
         let countRegularNew = {};
         let countValueRegularNew = {};
         let newTickets = {};
+        let totalSales = 0;
 
         function initCounters(){
             sum = 0
@@ -222,6 +229,7 @@
             countRegularNew = {};
             countValueRegularNew = {};
             newTickets = {};
+            totalSales = 0;
         }
 
 
@@ -428,11 +436,14 @@ $(document).ready(function() {
         let sum = 0
         //returns 'filtered' or visible rows
         table.rows({filter: 'applied'}).every( function ( rowIdx, tableLoop, rowLoop ) {
+            
             var coupon = this.data()[2];
             var amount = this.data()[3];
-            amount = parseInt(amount.replace("€",""))
-            sum = sum + amount
+            var ticketPrice = this.data()[11];
+            amount = parseInt(amount.replace("€",""));
 
+            sum = sum + amount
+            totalSales +=  parseInt(ticketPrice.replace("€",""))
             if(coupon == 'Alumni'){
                 alumni = alumni + amount
                 count_alumni++
@@ -567,6 +578,27 @@ $(document).ready(function() {
         $('#count_alumni').text(count_alumni)
         $('#count_early-bird').text(count_early)
         $('#count_sponsored').text(count_sponsored)
+
+        $(".total-sales").remove();
+
+        $(`
+            <div class="card-body col-xl-3 col-md-6 total-sales">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <h5 class="card-title text-uppercase text-muted mb-0">Total Sales:</h5>
+                                <span id="total-sales" class="h2 font-weight-bold mb-0">${totalSales}</span>
+                            </div>
+                    
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `).insertBefore(".total-revenue");
+        
+
+
        
         $.each( newTickets, function( key, value ) {
           
@@ -663,7 +695,7 @@ $(document).ready(function() {
                 //console.log('asd')
                 //console.log($('#participants_table').DataTable().column( 3 ).data()[key])
                 sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key].replace("€", ""))
-
+                totalSales += parseInt($('#participants_table').DataTable().column( 11 ).data()[key].replace("€", ""))
                 if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Alumni'){
                     alumni = alumni + parseInt(value)
                     count_alumni++
@@ -808,6 +840,23 @@ $(document).ready(function() {
         $('#count_alumni').text('Alumni(all): '+count_alumni)
         $('#count_early-bird').text('Early Bird(all): '+count_early)
         $('#count_sponsored').text(+count_sponsored)
+
+        $(".total-sales").remove();
+        $(`
+            <div class="card-body col-xl-3 col-md-6 total-sales">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <h5 class="card-title text-uppercase text-muted mb-0">Total Sales:</h5>
+                                <span id="total-sales" class="h2 font-weight-bold mb-0">${totalSales}</span>
+                            </div>
+                    
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `).insertBefore(".total-revenue");
 
         
         $.each( newTickets, function( key, value ) {

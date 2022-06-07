@@ -124,7 +124,10 @@
                                         <a href="javascript:void(0)" id="update-btn" class="nav-link">{{ __('Update Dropbox') }}</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="javascript:void(0)" id="update-feed-btn" class="nav-link">{{ __('Update Feed') }}</a>
+                                        <a href="{{route('ads-feed')}}" class="nav-link">{{ __('Ads feed') }}</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{route('lessons.novimeolink')}}" class="nav-link">{{ __('Vimeo Link Check') }}</a>
                                     </li>
 
                             </ul>
@@ -239,13 +242,16 @@
                     <li class="nav-item active">
                         <a class="nav-link active" href="#navbar-revenue" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-revenue">
                             <i class="fas fa-euro-sign" style="color: #f4645f;"></i>
-                            <span class="nav-link-text" style="color: #f4645f;">{{ __('Revenue') }}</span>
+                            <span class="nav-link-text" style="color: #f4645f;">{{ __('Sales') }}</span>
                         </a>
                         <div class="collapse show" id="navbar-revenue">
                             <ul class="nav nav-sm flex-column">
 
                                     <li class="nav-item  {{ isset($elementName) and $elementName  == 'participants-management' ? 'active' : '' }}">
                                         <a href="{{ route('transaction.participants') }}" class="nav-link">{{ __('Registrations') }}</a>
+                                    </li>
+                                    <li class="nav-item  {{ isset($elementName) and $elementName  == 'participants-management' ? 'active' : '' }}">
+                                        <a href="{{ route('transaction.participants_new') }}" class="nav-link">{{ __('Revenue') }}</a>
                                     </li>
                                     @can('manage-users', App\Model\User::class)
                                     <li class="nav-item  {{ isset($elementName) and $elementName  == 'subscriptions-management' ? 'active' : '' }}">
