@@ -53,13 +53,32 @@
                 <div class="form-group">
 
                     <a href="https://knowcrunch.com/csv/google/google.csv" class="btn btn-primary">Feed for Google advertising</a>
-
+                    
                 </div>
+                
 
                 <div class="form-group">
 
                     <a href="https://knowcrunch.com/csv/fb/fb.csv" class="btn btn-primary">Feed for Facebook advertising</a>
 
+                </div>
+            </div>
+
+            <div class="form-group" style="width:415px;">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Google</span>
+                  </div>
+                  <input value="https://knowcrunch.com/csv/google/google.csv" type="text" aria-label="google-csv" class="form-control" readonly>
+                </div>
+            </div>
+            
+            <div class="form-group" style="width:415px;">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Facebook</span>
+                  </div>
+                  <input value="https://knowcrunch.com/csv/fb/fb.csv" type="text" aria-label="facebook-csv" class="form-control" readonly>
                 </div>
             </div>
 
