@@ -59,7 +59,8 @@
                             @php
                                 $image = $c->image()->first()->url ?? "";
                                 if (!$image) {
-                                    $image = $c->parent()->first()->image()->first()->url ?? "";
+                                    $image = "/images/static/class.png";
+                                    // $image = $c->parent()->first()->image()->first()->url ?? "";
                                 }
                             @endphp
 
