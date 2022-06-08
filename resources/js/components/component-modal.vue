@@ -290,6 +290,7 @@
                     <hr>
 
                     <div class="row mb-2">
+                    
                         <div class="col-3">
                             <div @click="selectComponent('blog_list')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
                                 <i style="font-size: 20px" class="text-muted dripicons-blog d-block mt-1"></i>
@@ -312,14 +313,23 @@
                         </div>
 
                         <div class="col-3">
+                            <div @click="selectComponent('city_list')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
+                                <i style="font-size: 20px" class="text-muted dripicons-view-list-large d-block mt-1"></i>
+                                <span class="text-muted mt-1 ms-1 me-1">City list</span>
+                            </div>
+                        </div>
+                  
+                    </div>
+
+                    <div class="row mb-2">
+
+                        <div class="col-3">
                             <div @click="selectComponent('homepage_events')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
                                 <i style="font-size: 20px" class="text-muted dripicons-view-list-large d-block mt-1"></i>
                                 <span class="text-muted mt-1 ms-1 me-1">Hompage events</span>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="row mb-2">
                         <div class="col-3">
                             <div @click="selectComponent('homepage_gallery')" class="widget-rounded-circle card bg-grey text-center d-inline-block h-100 mb-1">
                                 <i style="font-size: 20px" class="text-muted dripicons-view-list-large d-block mt-1"></i>

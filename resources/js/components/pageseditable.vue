@@ -268,6 +268,10 @@ export default {
                     {
                         'id': 6,
                         'title':'Knowledge'
+                    },
+                    {
+                        'id': 7,
+                        'title':'City page'
                     }
                 ],
                 slug_value: null,

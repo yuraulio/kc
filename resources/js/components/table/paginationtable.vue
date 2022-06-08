@@ -153,6 +153,10 @@
                         {
                             'id': 6,
                             'title':'Knowledge'
+                        },
+                        {
+                            'id': 7,
+                            'title':'City page'
                         }
                     ]"
                     placeholder="All page types"
