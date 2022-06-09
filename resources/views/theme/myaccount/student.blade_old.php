@@ -110,7 +110,7 @@
                         <div class="account-image-actions"  id="logo_dropzone">
                            <div class="acc-img">
                               @if(isset($user['image']) && $user['image']['name'] != '')
-                              <img id="user-img" src="{{cdn($img_src)}}" onerror="this.src='https://via.placeholder.com/150'" alt="{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}"/>
+                              <img id="user-img" src="{{cdn($img_src)}}" onerror="this.src='https://via.placeholder.com/150?text=PHOTO'" alt="{{ $currentuser['firstname'] }} {{ $currentuser['lastname'] }}"/>
                               @else
                               <img id="user-img" src="{{cdn('/theme/assets/images/icons/user-profile-placeholder-image.png')}}" alt="user-profile-placeholder-image"/>
                               @endif

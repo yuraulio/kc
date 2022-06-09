@@ -69,7 +69,7 @@
 
 
                             <div class="col-sm-3 filter_col" id="filter_col11" data-column="11">
-                                <label>Delivey</label>
+                                <label>Delivery</label>
                                 <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." name="Name" class="column_filter" id="col11_filter" placeholder="Payment Method">
                                 <option selected value> -- All -- </option>
                                 </select>

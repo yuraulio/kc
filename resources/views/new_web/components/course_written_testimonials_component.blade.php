@@ -43,7 +43,7 @@
                                      @if(isset($socials['facebook']))
 
                                         @if(strpos($socials['facebook'],'https://') === false)
-                                           $socials['facebook'] = = 'https://'.$socials['facebook'];
+                                           <?php $socials['facebook'] = 'https://'.$socials['facebook']; ?>
                                         @endif
                                         
                                         <li><a target="_blank" href="{{$socials['facebook']}}"><img class="replace-with-svg"  src="/theme/assets/images/icons/social/Facebook.svg" width="16" alt="Visit"></a></li>
@@ -52,7 +52,7 @@
                                      @if(isset($socials['linkedin']))
 
                                         @if(strpos($socials['linkedin'],'https://') === false)
-                                           $socials['linkedin'] = = 'https://'.$socials['linkedin'];
+                                           <?php $socials['linkedin'] = 'https://'.$socials['linkedin']; ?>
                                         @endif
 
                                         <li><a target="_blank" href="{{$socials['linkedin']}}"><img class="replace-with-svg"  src="/theme/assets/images/icons/social/Linkedin.svg" width="16" alt="Visit"></a></li>

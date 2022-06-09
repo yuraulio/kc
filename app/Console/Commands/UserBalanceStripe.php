@@ -42,7 +42,7 @@ class UserBalanceStripe extends Command
     {
 
         $users = User::whereHas('subscriptions')->get();//where('id',4201)->get();//User::all();
-			
+			//$id = 'ii_1KJfI1IppxFyGi0YGCFL4Ugj';
         foreach($users as $user){
 		
             if(!$user->stripe_id){
@@ -67,10 +67,11 @@ class UserBalanceStripe extends Command
               
               //dd($user->upcomingInvoice()->invoiceLineItems());
               
-              foreach($user->upcomingInvoice()->invoiceLineItems() as $invoice){
-                dd($invoice);
-              }
-              
+              /*foreach($user->upcomingInvoice()->invoiceLineItems() as $invoice){
+                $invoice->void();
+              }*/
+              //dd($user->upcomingInvoice());
+              $user->upcomingInvoice()->markUncollectible();
               //$user->upcomingInvoice()->void();
               //$user->applyBalance($user->upcomingInvoice()->total);
              
@@ -81,9 +82,13 @@ class UserBalanceStripe extends Command
               $amount = 0;
               foreach($user->invoicesIncludingPending() as $invoice){
                
-                if($invoice->total < 0){
-                  
-                  print_r('is void = '. $invoice->isVoid());
+                if($invoice->total < 0 ){
+                  //dd($invoice);
+                  //$inv = $invoice->markUncollectible();
+                  //dd($inv);
+                  //$invoice->void(['consume_applied_balance'=>false]);
+                  //$invoice->save();
+                  //print_r('is void = '. $invoice->isVoid());
                   
                   //$invoice->void();
                   //dd($invoice);

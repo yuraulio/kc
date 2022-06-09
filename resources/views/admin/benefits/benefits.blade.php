@@ -62,7 +62,7 @@
                             {{ asset('') }}{{$benefit->medias['path']}}{{$benefit->medias['original_name'] }}
                         @endisset"
                     alt=""
-                    onerror="this.src='https://via.placeholder.com/60'"
+                    onerror="this.src='https://via.placeholder.com/60?text=PHOTO'"
                 >
             </td>
             <td id="name-{{$benefit->id}}" class="benefit-list" data-id ="{{$benefit->id}}"><a class="edit-btn" href="#">{{ $benefit->name }}</td>
@@ -159,7 +159,7 @@
             </form>
 
             <div class="form-group" style="text-align:center;">
-                <img style="margin-top:10px;" id="img-upload-benefit" onerror="this.src='https://via.placeholder.com/60'" src="">
+                <img style="margin-top:10px;" id="img-upload-benefit" onerror="this.src='https://via.placeholder.com/60?text=PHOTO'" src="">
             </div>
             </div>
          </div>
@@ -199,7 +199,7 @@
                     {{ asset('') }}{{$benefit->medias['path']}}{{$benefit->medias['original_name'] }}
                 @endisset"
             alt=""
-            onerror="this.src='https://via.placeholder.com/60'"
+            onerror="this.src='https://via.placeholder.com/60?text=PHOTO'"
                 >
        </td>`+
    	`<td id="name-` + benefit['id'] +`"><a class="edit-btn" href="#">` + benefit['name'] + `</td>` +

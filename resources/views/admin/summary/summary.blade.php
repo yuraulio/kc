@@ -40,7 +40,7 @@
                                 src="@if(isset($summary->medias))
                                         {{ asset('') }}{{$summary->medias['path']}}{{$summary->medias['original_name'] }}
                                     @endif"
-                                onerror="this.src='https://via.placeholder.com/60'">
+                                onerror="this.src='https://via.placeholder.com/60?text=PHOTO'">
                         </td>
                         <td id="title-{{$summary->id}}" data-id="{{$summary->id}}" class="summary-list"><a class="edit-btn" href="#"> {{ $summary->title }} </a></td>
                         <td id="section_sum-{{$summary->id}}" data-id="{{$summary->id}}" class="summary-list">{{ $summary->section }}</td>
@@ -166,7 +166,7 @@
                <input type="hidden" value="" name="image_svg_upload" id="image_svg_upload-summary">
             </div>
             <div class="form-group" style="text-align:center;">
-                <img style="margin-top:10px;" id="img-upload-summary" onerror="this.src='https://via.placeholder.com/60'" src="">
+                <img style="margin-top:10px;" id="img-upload-summary" onerror="this.src='https://via.placeholder.com/60?text=PHOTO'" src="">
             </div>
          </div>
          <div class="modal-footer">
@@ -345,7 +345,7 @@
                         id="sum_ben_icon-${summary['id']}"
                         class="sum_ben_icon sum_ben_icon-${summary['id']}"
                         src=""
-                        onerror="this.src='https://via.placeholder.com/60'"
+                        onerror="this.src='https://via.placeholder.com/60?text=PHOTO'"
                     >
                 </td>`+
                 `<td id="title-` + summary['id'] +`"><a class="edit-btn" href="#">` + summary['title'] + `</a></td>` +
