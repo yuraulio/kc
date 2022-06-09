@@ -191,7 +191,7 @@ class TransactionController extends Controller
         $userRole = Auth::user()->role->pluck('id')->toArray();
 
         $paymentMethods = [];
-
+        
         foreach(PaymentMethod::all() as $paymentMethod){
             $paymentMethods[$paymentMethod->id] =  $paymentMethod->method_name;
         }
@@ -217,6 +217,7 @@ class TransactionController extends Controller
         $earlyCount = 0;
         $data['transactions'] = [];
         $doubleTransactions = [];
+        
         foreach($transactions as $transaction){
             if(!$transaction->subscription->first() && $transaction->user->first() && $transaction->event->first()){
 
@@ -254,7 +255,7 @@ class TransactionController extends Controller
                 }
                 
                 $countUsers = count($transaction->user);
-
+               
                 foreach($transaction['user'] as $u){
 
                     $statistic = $u->statisticGroupByEvent->groupBy('event_id');
@@ -268,19 +269,17 @@ class TransactionController extends Controller
 
                     $paymentMethod = isset($paymentMethods[$paymentMethodId]) ? $paymentMethods[$paymentMethodId] :'Alpha Bank';
 
-                    //if(count($transaction->invoice) >= 4){
-                    //    dd($transaction);
-                    //}
-                    if(count($transaction->invoice) > 0){
+                    if(count($transaction->invoice) > 0 && ($isElearning && $transaction->event[0]['view_tpl'] == 'elearning_event')){
                         
                         foreach($transaction->invoice as $invoice){
                             
+                        
                             $data['transactions'][] = ['id' => $transaction['id'], 'user_id' => $u['id'],'name' => $u['firstname'].' '.$u['lastname'],
                             'event_id' => $transaction->event[0]['id'],'event_title' => $transaction->event[0]['title'].' / '.date('d-m-Y', strtotime($transaction->event[0]['published_at'])),'coupon_code' => $coupon_code, 'type' => trim($ticketType),'ticketName' => $ticketName,
                             'date' => date_format($invoice['created_at'], 'Y-m-d'), 'amount' => $invoice->amount,
                             'is_elearning' => $isElearning,
                             'coupon_code' => $transaction['coupon_code'],'videos_seen' => $this->getVideosSeen($videos),'expiration'=>$expiration,
-                            'paymentMethod' => $paymentMethod, 'ticket_price' => !in_array($transaction['id'], $doubleTransactions) ? $transaction['amount'] : 0];
+                            'paymentMethod' => $paymentMethod, 'ticket_price' => $transaction['amount']/*(!in_array($transaction['id'], $doubleTransactions) ? $transaction['amount'] : 0*/];
 
                             $doubleTransactions[] = $transaction['id'];
                         }
@@ -303,7 +302,6 @@ class TransactionController extends Controller
             }
 
         }
-       
         return $data;
 
     }

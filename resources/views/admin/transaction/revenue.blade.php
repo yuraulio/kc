@@ -247,6 +247,7 @@
         let countValueRegularNew = {};
         let newTickets = {};
         let totalSales = 0;
+        let transactionCheck = [];
 
         function initCounters(){
             sum = 0
@@ -264,11 +265,8 @@
             countValueRegularNew = {};
             newTickets = {};
             totalSales = 0;
+            transactionCheck = [];
         }
-
-
-
-
 
 
 var minDate, maxDate;
@@ -352,8 +350,10 @@ $(document).ready(function() {
 
     let sum = 0
     $.each(prices, function(key, value) {
+
         value = value.replace("€", "")
         sum = sum + parseInt(value)
+        
     })
 
     // var sum = prices.reduce(function(a, b){
@@ -489,7 +489,13 @@ $(document).ready(function() {
             amount = parseInt(amount.replace("€",""));
 
             sum = sum + amount
-            totalSales +=  parseInt(ticketPrice.replace("€",""))
+
+            if(transactionCheck.indexOf(this.data()[10]) == -1){
+                totalSales +=  parseInt(ticketPrice.replace("€",""))
+
+            }
+            transactionCheck.push(this.data()[10]);
+
             if(coupon == 'Alumni'){
                 alumni = alumni + amount
                 count_alumni++
@@ -701,7 +707,7 @@ $(document).ready(function() {
         let countValueRegularNew = {};
         let count_sponsored = 0;
         let count_early = 0;
-
+        transactionCheck = [];
         newTickets = {};
 
             $.each(price, function(key, value){
@@ -711,7 +717,12 @@ $(document).ready(function() {
                 //console.log('asd')
                 //console.log($('#participants_table').DataTable().column( 3 ).data()[key])
                 sum = sum + parseInt($('#participants_table').DataTable().column( 3 ).data()[key].replace("€", ""))
-                totalSales += parseInt($('#participants_table').DataTable().column( 11 ).data()[key].replace("€", ""))
+
+                if(transactionCheck.indexOf($('#participants_table').DataTable().column( 10 ).data()[key]) == -1){
+                    totalSales += parseInt($('#participants_table').DataTable().column( 11 ).data()[key].replace("€", ""))
+
+                }
+                transactionCheck.push($('#participants_table').DataTable().column( 10 ).data()[key])
                 if($('#participants_table').DataTable().column( 2 ).data()[key] == 'Alumni'){
                     alumni = alumni + parseInt(value)
                     count_alumni++
