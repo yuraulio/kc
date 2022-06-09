@@ -59,13 +59,20 @@ class UserBalanceStripe extends Command
             if(!$user->asStripeCustomer()){
            		continue; 
           	}
-            dd($user);
+            //dd($user);
             //$user->applyBalance(100);
             //dd($user);
             
             if($user->upcomingInvoice() && $user->upcomingInvoice()->total < 0){
               
-              $user->applyBalance($user->upcomingInvoice()->total);
+              //dd($user->upcomingInvoice()->invoiceLineItems());
+              
+              foreach($user->upcomingInvoice()->invoiceLineItems() as $invoice){
+                dd($invoice);
+              }
+              
+              //$user->upcomingInvoice()->void();
+              //$user->applyBalance($user->upcomingInvoice()->total);
              
              
             }
@@ -75,7 +82,12 @@ class UserBalanceStripe extends Command
               foreach($user->invoicesIncludingPending() as $invoice){
                
                 if($invoice->total < 0){
-                 $amount += $invoice->total;
+                  
+                  print_r('is void = '. $invoice->isVoid());
+                  
+                  //$invoice->void();
+                  //dd($invoice);
+                 //$amount += $invoice->total;
                 }
                              
               	

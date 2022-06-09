@@ -268,7 +268,9 @@ class TransactionController extends Controller
 
                     $paymentMethod = isset($paymentMethods[$paymentMethodId]) ? $paymentMethods[$paymentMethodId] :'Alpha Bank';
 
-                  
+                    //if(count($transaction->invoice) >= 4){
+                    //    dd($transaction);
+                    //}
                     if(count($transaction->invoice) > 0){
                         
                         foreach($transaction->invoice as $invoice){
