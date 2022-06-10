@@ -65,6 +65,7 @@ class Kernel extends ConsoleKernel
        Commands\InsertTestimonial::class,
        Commands\FixStatistics::class,
        Commands\UserBalanceStripe::class,
+       Commands\ClearInvoices::class,
     ];
 
     /**

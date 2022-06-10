@@ -34,9 +34,9 @@
 @endphp
 
 <div class="mt-5 mb-5 m-0 cms-rich-text-editor text-editor-blockquote {{ $page->slug == "about" ? " about-static-page " : "" }}">
-    @if (isset($title))
+    {{--@if (isset($title))
         <h1 class="tab-title">{{$title}}</h1>
-    @endif
+    @endif--}}
     @if (isset($subtitle))
         <h2 style="font-size: 30px;">
             {{ $subtitle }}@if (isset($company)), <a target="_blank" title="{{ $company }}" href="{{ $companyUrl }}"> {{ $company }}</a>@endif

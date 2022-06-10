@@ -217,7 +217,7 @@ class TransactionController extends Controller
         $earlyCount = 0;
         $data['transactions'] = [];
         $doubleTransactions = [];
-        
+
         foreach($transactions as $transaction){
             if(!$transaction->subscription->first() && $transaction->user->first() && $transaction->event->first()){
 
@@ -268,8 +268,8 @@ class TransactionController extends Controller
                     $videos = isset($videos) ? json_decode($videos->videos,true) : null;
 
                     $paymentMethod = isset($paymentMethods[$paymentMethodId]) ? $paymentMethods[$paymentMethodId] :'Alpha Bank';
-
-                    if(count($transaction->invoice) > 0 && ($isElearning && $transaction->event[0]['view_tpl'] == 'elearning_event')){
+                    
+                    if(count($transaction->invoice) > 0 ){
                         
                         foreach($transaction->invoice as $invoice){
                             
@@ -302,6 +302,7 @@ class TransactionController extends Controller
             }
 
         }
+
         return $data;
 
     }

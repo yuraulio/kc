@@ -492,7 +492,6 @@ $(document).ready(function() {
 
             if(transactionCheck.indexOf(this.data()[10]) == -1){
                 totalSales +=  parseInt(ticketPrice.replace("€",""))
-
             }
             transactionCheck.push(this.data()[10]);
 
