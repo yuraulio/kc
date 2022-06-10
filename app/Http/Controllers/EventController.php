@@ -462,17 +462,21 @@ class EventController extends Controller
         if($request->category_id != $request->oldCategory){
             $category = Category::with('topics')->find($request->category_id);
 
-            $event->topic()->detach();
-            //assign all topics with lesson
 
-            foreach($category->topics as $topic){
-               //dd($topic);
-                //$lessons = Topic::with('lessons')->find($topic['id']);
-                //$lessons = $topic->lessonsCategory;
-                $lessons = $topic->lessonsCategory()->wherePivot('category_id',$category->id)->get();
-            
-                foreach($lessons as $lesson){
-                    $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id'],'priority'=>$lesson->pivot->priority]);
+            if($category){
+
+                $event->topic()->detach();
+                //assign all topics with lesson
+
+                foreach($category->topics as $topic){
+                   //dd($topic);
+                    //$lessons = Topic::with('lessons')->find($topic['id']);
+                    //$lessons = $topic->lessonsCategory;
+                    $lessons = $topic->lessonsCategory()->wherePivot('category_id',$category->id)->get();
+                
+                    foreach($lessons as $lesson){
+                        $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id'],'priority'=>$lesson->pivot->priority]);
+                    }
                 }
             }
 

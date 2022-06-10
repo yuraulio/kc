@@ -51,7 +51,7 @@ class UserBalanceStripe extends Command
 
             $paymentMethod = PaymentMethod::find(2);
             //dd($paymentMethod);
-            Stripe::setApiKey($paymentMethod->test_processor_options['secret_key']);
+            Stripe::setApiKey($paymentMethod->processor_options['secret_key']);
             session()->put('payment_method',2);
 
          
@@ -71,7 +71,13 @@ class UserBalanceStripe extends Command
                 $invoice->void();
               }*/
               //dd($user->upcomingInvoice());
-              $user->upcomingInvoice()->markUncollectible();
+              //$user->upcomingInvoice()->markUncollectible();
+              //$user->upcomingInvoice()->void();
+              //dd($user->upcomingInvoice());
+              //$user->upcomingInvoice()->finalize();
+              
+              //dd('fsdfa');
+              
               //$user->upcomingInvoice()->void();
               //$user->applyBalance($user->upcomingInvoice()->total);
              
@@ -86,7 +92,7 @@ class UserBalanceStripe extends Command
                   //dd($invoice);
                   //$inv = $invoice->markUncollectible();
                   //dd($inv);
-                  //$invoice->void(['consume_applied_balance'=>false]);
+                  $invoice->void(['consume_applied_balance'=>false]);
                   //$invoice->save();
                   //print_r('is void = '. $invoice->isVoid());
                   
