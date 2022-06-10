@@ -94,7 +94,8 @@ class CertificateController extends Controller
         $certificate['certification_date'] = $certificate->certification_date;
         $certificate['expiration_date'] = $certificate->expiration_date ? date('F Y',$certificate->expiration_date) : null;
         $certificate['credential'] = $certificate->credential;
-        $certificate['certification_title'] = $certificate->certificate_title;
+        //$certificate['certification_title'] = $certificate->certificate_title;
+        $certificate['certification_title'] = $certificate->event->first() ? $certificate->event->first()->certificate_title : $certificate->certificate_title;
 
         //return view('admin.certificates.kc_diploma_2022a',compact('certificate'));
 
