@@ -1008,7 +1008,7 @@ class Subscription extends Model
     public function cancelNow()
     {
         $this->owner->stripe()->subscriptions->cancel($this->stripe_id, [
-            'prorate' => 'none' === 'create_prorations',
+            'prorate' => 'none',
         ]);
 
         $this->markAsCancelled();
@@ -1025,7 +1025,7 @@ class Subscription extends Model
     {
         $this->owner->stripe()->subscriptions->cancel($this->stripe_id, [
             'invoice_now' => true,
-            'prorate' => 'none' === 'create_prorations',
+            'prorate' => 'none',
         ]);
 
         $this->markAsCancelled();
