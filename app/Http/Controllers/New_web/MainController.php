@@ -82,6 +82,10 @@ class MainController extends Controller
                 $instructor = $modelSlug->slugable;
                 $page = Page::withoutGlobalScope("published")->whereType("Trainer page")->whereDynamic(true)->first();
                 $dynamicPageData = CMS::getInstructorData($instructor);
+            } elseif ($modelSlug && $modelSlug->slugable != null && get_class($modelSlug->slugable) == "App\Model\City") {
+                $city = $modelSlug->slugable;
+                $page = Page::withoutGlobalScope("published")->whereType("City page")->whereDynamic(true)->first();
+                $dynamicPageData = CMS::getCityData($city);
             } else {
                 $page = Page::withoutGlobalScope("published")->whereSlug($slug)->first();
                 $useRedirect = true;

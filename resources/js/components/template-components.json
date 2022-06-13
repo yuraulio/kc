@@ -808,6 +808,17 @@
             }
         ]
     },
+    "city_list" : {
+        "version": 2,
+        "title": "Courses list",
+        "icon": "dripicons-view-list-large",
+        "key": "city_list_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": false,
+        "inputs": [
+        ]
+    },
     "inspirational_teaser" : {
         "version": 3,
         "title": "Info & benefits",
