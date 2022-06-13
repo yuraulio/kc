@@ -5,6 +5,7 @@ namespace App\Library;
 use App\Model\Instructor;
 use Illuminate\Support\Facades\Auth;
 use App\Model\Category;
+use App\Model\City;
 
 class CMS
 {
@@ -245,6 +246,20 @@ class CMS
             }
         }
 
+        return $data;
+    }
+
+    public static function getCityData($page)
+    {
+        $data['content'] = $page;
+
+        $city = City::with('event')->find($page['id']);
+
+        $data['title'] = $city['name'];
+        $data['city'] = $city;
+        $data['openlist'] = $city->event()->with('category', 'slugable', 'city', 'ticket', 'summary1')->where('published', true)->whereIn('status', [0])->orderBy('published_at', 'desc')->get();
+        $data['completedlist'] = $city->event()->with('category', 'slugable', 'city', 'ticket', 'summary1')->where('published', true)->where('status', 3)->orderBy('published_at', 'desc')->get();
+        
         return $data;
     }
 }
