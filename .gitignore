@@ -32,6 +32,7 @@ storage/*.index*
 /public/theme/assets/css/style_ver.css.map
 /public/theme/assets/css/style_ver_new.css
 /public/theme/assets/css/bootstrap5-grid.css
+/public/theme/assets/css/bootstrap.css
 /public/js/blog.js
 /public/new_cart/version/style_ver.css
 /public/theme/assets/js/front.js

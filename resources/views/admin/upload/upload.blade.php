@@ -1,16 +1,57 @@
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary upload-img" data-toggle="modal" data-target="#select_ImageModal">
-Upload Image
-</button>
+<link href="{{ cdn(mix('theme/assets/css/bootstrap.css')) }}" rel="stylesheet" media="all" />
+<link href="{{asset('admin_assets/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
+<link href="{{asset('admin_assets/css/saas/app-limited.css')}} " rel="stylesheet" type="text/css"/>
+
+<style>
+    .ubold .form-control {
+        height: initial!important;
+    }
+    .ubold .search-bar .form-control-light {
+        padding-left: 40px;
+        padding-right: 20px;
+        border-radius: 30px;
+        background-color: #f3f7f9 !important;
+        border-color: #f3f7f9 !important;
+    }
+    .ubold .search-bar span {
+        position: absolute;
+        z-index: 10;
+        font-size: 16px;
+        line-height: calc(1.5em + 0.9rem + 2px);
+        left: 13px;
+        top: -2px;
+        color: #98a6ad;
+    }
+    .ubold .table-action-btn.dropdown-toggle.arrow-none.btn.btn-light.btn-xs::before {
+        display: none;
+    }
+    .ubold .image-input-button {
+        color: #6658dd;
+        background-color: rgba(102, 88, 221, 0.18);
+        border-color: rgba(102, 88, 221, 0.12);
+        border-radius: 0.15rem;
+    }
+    .ubold .image-input-button:hover {
+        color: #fff;
+        background-color: #6658dd;
+    }
+    #version-btn {
+        display: none;
+    }
+</style>
 
 <?php
     if(isset($versions)){
         $versions = json_encode($versions);
     }
- ?>
+?>
 
- <?php //dd($event); ?>
+<div id="app" class="bootstrap-classes ubold mt-5 mb-5 pl-lg-4">
+    <manager-for-old-admin></manager-for-old-admin>
+</div>
 
+<script src="{{asset('js/app.js')}}"></script>
+<script src="{{asset('admin_assets/js/vendor.min.js')}}"></script>
 
 <form method="post" id="upload_form" method="POST" action="{{ route('upload.versionImage', $event) }}" autocomplete="off" enctype="multipart/form-data">
     @csrf
@@ -24,8 +65,9 @@ Upload Image
             }?>">
         </div>
         <input type="hidden" value="{{$event['path'].$event['original_name']}}" id="image_upload" name="image_upload">
+
         @isset($versions)
-        <input type="hidden" value="{{$versions}}" name="versions">
+            <input type="hidden" value="{{$versions}}" name="versions">
         @endisset
 
     @else
@@ -36,98 +78,5 @@ Upload Image
     @endif
 </form>
 
-
-<!-- Modal -->
-<div class="modal fade" id="select_ImageModal" tabindex="-1" role="dialog" aria-labelledby="select_ImageModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            @include('admin.media2.modal')
-        </div>
-        <div class="modal-footer">
-            <button type="button" id="close" class="btn btn-secondary close-modal" data-dismiss="modal">Close</button>
-            <button type="button" id="select-image" class="btn btn-primary">Select</button>
-        </div>
-        </div>
-    </div>
-</div>
-
 @push('js')
-
-{{--<script>
-    $( "#select-image" ).click(function() {
-        path = ''
-        let elem = $('#select_ImageModal .table-info').parent().parent().parent().parent().parent()
-        elem = $(elem).find('.fm-breadcrumb li')
-        $.each( elem, function(key, value) {
-            if(key != 0){
-                path = path+'/'+$(value).text()
-            }
-        })
-
-        name = $('#select_ImageModal .table-info .fm-content-item').text()
-        if(name == ''){
-            name = $('#select_ImageModal .fm-grid-item.active').attr('title')
-        }
-
-        name = name.replace(/\s/g, '')
-        ext = $('#select_ImageModal .table-info td:nth-child(3)').text()
-        ext = ext.replace(/\s/g, '')
-        path = 'uploads'+path +'/'+name+'.'+ext
-        if(name == ''){
-            path = 'uploads'+path +'/'+name
-        }
-        console.log('path = ', path)
-        $('#image_upload').val(path)
-        $('#img-upload').attr('src', path);
-        $(".close").click();
-        //$("#upload_form").submit();
-
-    });
-
-</script>--}}
-
-
-<script>
-    $( "#select-image" ).click(function() {
-        let path = '/uploads/'
-        
-
-        name = $('#select_ImageModal .table-info .fm-content-item').text()
-        if(name == ''){
-            name = $('#select_ImageModal .fm-grid-item.active').attr('title')
-        }
-
-        name = name.replace(/\s/g, '')
-        ext = $('#select_ImageModal .table-info td:nth-child(3)').text()
-        ext = ext.replace(/\s/g, '')
-        console.log('ext1 = ', ext)
-        $("#select_ImageModal .breadcrumb.active-manager .breadcrumb-item.text-truncate span").each(function() {
-
-            path += $(this).text() + '/' ;
-
-        });
-
-        path += name+'.'+ext;
-
-        if (path[path.length-1] === "."){
-            path = path.slice(0,-1);
-
-        }
-
-        $('#image_upload').val(path)
-        $('#img-upload').attr('src', path);
-        $(".close").click();
-        $("#upload_form").submit();
-
-    });
-
-</script>
-
-
 @endpush

@@ -50,7 +50,7 @@
         $blog = $blog->where('title', 'like', '%' . $search_term . '%');
     }
 
-    $blog = $blog->get();
+    $blog = $blog->paginate(10);
     
 @endphp
 
@@ -81,7 +81,7 @@
 </div>
 @endif
 
-<div class="blogpagex dynamic-courses-wrapper">
+<div class="blogpagex dynamic-courses-wrapper mb-3">
     @forelse($blog as $post)
         @include("new_web.blog.index_loop", ["type" => $blog_display["blog_list"], "source" => $blog_display["blog_source"]])
         @empty
@@ -89,4 +89,8 @@
             <div class='alert alert-danger'>No posts!</div>
         </div>
     @endforelse
+</div>
+
+<div class="mb-5 blog-list-pagination">
+    {{ $blog->links() }}
 </div>

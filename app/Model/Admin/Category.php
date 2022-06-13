@@ -47,6 +47,11 @@ class Category extends Model
         return $this->hasMany(Category::class, "parent_id");
     }
 
+    public function parent()
+    {
+        return $this->belongsTo(Category::class, "parent_id");
+    }
+
     public function user()
     {
         return $this->belongsTo(Admin::class, "user_id");
@@ -55,5 +60,10 @@ class Category extends Model
     public function getPagesCountAttribute()
     {
         return $this->pages()->count();
+    }
+
+    public function image()
+    {
+        return $this->belongsTo(MediaFile::class, "image_id");
     }
 }

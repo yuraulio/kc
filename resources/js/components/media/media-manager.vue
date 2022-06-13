@@ -73,6 +73,12 @@
                     <input v-model="link" type="text" id="link" class="form-control">
                 </div>
 
+                <div class="mb-3">
+                    <label for="jpg" class="form-label">Convert image versions to jpg format. (Reduces size.)</label>
+                    <br>
+                    <input v-model="jpg" type="checkbox" id="jpg" class="form-check-input">
+                </div>
+
                 <label class="form-label">Pick a folder</label>
 
                 <vue-nestable v-model="mediaFolders" class="dd-list mb-3">
@@ -380,6 +386,7 @@ export default {
             regFile: null,
             alt_text: "",
             link: "",
+            jpg: false,
             onlyParent: true,
             filesView: false,
             opImage: null,

@@ -86,3 +86,18 @@ Route::domain('admin.' . env('APP_DOMAIN'))->group(function () {
         Route::get('getBlogSource', [PagesController::class, 'getBlogSource']);
     });
 });
+
+// for use in the old admin
+Route::group(['middleware' => ['auth.aboveauthor']], function () {
+    Route::resource('media_manager', Admin_api\MediaController::class)->only([
+        'index', 'store', 'update', 'destroy'
+    ]);
+    Route::post('media_manager/upload_image', [MediaController::class, 'uploadImage']);
+    Route::post('media_manager/edit_image', [MediaController::class, 'editImage']);
+    Route::post('media_manager/upload_reg_file', [MediaController::class, 'uploadRegFile']);
+    Route::get('media_manager/files', [MediaController::class, 'files']);
+    Route::delete('media_manager/file/{id}', [MediaController::class, 'deleteFile']);
+    Route::delete('media_manager/folder/{id}', [MediaController::class, 'deleteFolder']);
+    Route::post('media_manager/folder/edit', [MediaController::class, 'editFolder']);
+    Route::post('media_manager/file/move', [MediaController::class, 'moveFile']);
+});

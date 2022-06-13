@@ -285,3 +285,88 @@
     background: linear-gradient(90deg, rgba(255,120,0,1) 0%, rgba(255,155,52,1) 16%, rgba(255,189,103,1) 100%);
 }
 /* homepage events - end */
+
+.course-list-item-green:before {
+    background: #92cc16!important;
+}
+.course-list-item-green>.row {
+    width: 100%;
+}
+.course-list-item-green .list2-image>img {
+    max-height: 111px;
+}
+.dynamic-courses-wrapper .item {
+    padding-bottom: 40px!important;
+}
+
+.blog-list-pagination nav {
+    justify-content: end;
+    display: flex;
+}
+
+
+.footer-small {
+    padding-top: 40px!important;
+    padding-bottom: 40px!important;
+}
+
+.knowledge-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: 0.25rem;
+}
+.knowledge-card:hover {
+    border-style: solid;
+    border-width: 1px;
+    -webkit-box-shadow: 0 0 0 1px #7fd1de, 0 0 12px 0 #3072ca;
+    box-shadow: 0 0 0 1px #7fd1de, 0 0 12px 0 #3072ca;
+}
+.knowledge-card-image {
+    height: 80px;
+    margin: 10px;
+}
+.knowledge-card .card-body{
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-orient: vertical;
+    -ms-flex-flow: column;
+    flex-flow: column;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    padding: 12px;
+    padding-top: 20px;
+}
+.knowledge-card a:not(.btn), .knowledge-card a:not(.btn):visited, .knowledge-card a:not(.btn):hover, .knowledge-card a:not(.btn):active {
+    color: initial!important;
+    text-decoration: none !important;
+}
+.knowledge-card-column {
+    height: 270px;
+}
+.knowledge-card, .knowledge-card a, .knowledge-card .card-body {
+    height: 100%;
+}
+.knowledge-card-title {
+    font-weight: bold;
+}
+
+footer {
+    margin-top:auto; 
+}
+.page-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+

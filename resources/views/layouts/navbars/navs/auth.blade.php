@@ -97,7 +97,14 @@
 </nav>
 
 @push('js')
-<script src="{{ asset('argon') }}/vendor/sweetalert2/dist/sweetalert2.min.js"></script>
+
+<script>
+    if (!window.Swal) {
+        document.write("<script src='/argon/vendor/sweetalert2/dist/sweetalert2.min.js'><\/script>");
+    }
+</script>
+
+{{-- <script src="{{ asset('argon') }}/vendor/sweetalert2/dist/sweetalert2.min.js"></script> --}}
 <script>
     $(document).on("click", "#update-btn", function(){
 

@@ -128,6 +128,9 @@ class MediaController extends Controller
                 // set image name
                 $tmp = explode('.', $image_name);
                 $extension = end($tmp);
+                if ($request->jpg == "true") {
+                    $extension = "jpg";
+                }
                 $version_name = pathinfo($image_name, PATHINFO_FILENAME);
                 $version_name = $version_name . "-" . $version[0] . "." . $extension;
 
@@ -153,7 +156,7 @@ class MediaController extends Controller
                 $width_offset = $width_offset > 0 ? (int) $width_offset : null;
 
                 $image->crop($crop_width, $crop_height, $width_offset, $height_offset);
-                $image->save(public_path("/uploads" . $path . $version_name));
+                $image->save(public_path("/uploads" . $path . $version_name), 50, $extension);
 
                 // save to db
                 $mfile = $this->storeFile($version_name, $version[0], $imgpath, $mediaFolder->id, $image->filesize(), $mfile_original->id, $request->alt_text, $request->link);
@@ -180,11 +183,23 @@ class MediaController extends Controller
             $mediaFolder = $folder["mediaFolder"];
 
             $image_name = $request->imgname;
-            $imgpath = $path . '' . $image_name;
-            $size = null;
 
             $original_file = MediaFile::findOrFail($request->parent_id);
             $file = MediaFile::where("parent_id", $request->parent_id)->where("version", $request->version)->first();
+
+            $tmp = explode('.', $original_file->name);
+            $extension = end($tmp);
+            if ($request->jpg == "true") {
+                $image_name = str_replace_last($extension, "jpg", $image_name);
+                $extension = "jpg";
+            } else {
+                $tmp = explode('.', $image_name);
+                $curentExtension = end($tmp);
+                $image_name = str_replace_last($curentExtension, $extension, $image_name);
+            }
+
+            $imgpath = $path . '' . $image_name;
+            $size = null;
 
             if ($file) {
                 $file_path = $file->path;
@@ -220,7 +235,7 @@ class MediaController extends Controller
                 $folderPath = ltrim($mediaFolder->path, "/");
                 $folderPath = "/" . $folderPath;
 
-                $image->save(public_path("/uploads" . $folderPath . "/" . $image_name));
+                $image->save(public_path("/uploads" . $folderPath . "/" . $image_name), 50, $extension);
 
                 $size = $image ? $image->filesize() : null;
             }
@@ -332,7 +347,6 @@ class MediaController extends Controller
             return $e->getMessage();
         }
 
-        LOG::debug("job start");
         RenameFile::dispatch($oldUrl, $url, $alttext, $link);
 
         $mediaFile->load(["pages", "siblings", "subfiles"]);
