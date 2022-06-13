@@ -81,7 +81,7 @@ class DashboardController extends Controller
         // if ($request->p == 'HEW7M9hd8xY2gkRk' && rtrim($request->header('referer'), "/") == env("ADMIN_URL")) {
 
         if ($request->p == 'HEW7M9hd8xY2gkRk') {
-            $page = Page::withoutGlobalScope('published')->whereUuid($uuid)->with('template')->firstOrFail();
+            $page = Page::withoutGlobalScopes()->whereUuid($uuid)->with('template')->firstOrFail();
 
             $dynamicPageData = null;
 

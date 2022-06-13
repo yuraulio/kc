@@ -913,6 +913,17 @@
         "inputs": [
         ]
     },
+    "knowledge_list" : {
+        "version": 2,
+        "title": "Knowledge list",
+        "icon": "dripicons-blog",
+        "key": "knowledge_list_component",
+        "tab": "Content",
+        "width": "content",
+        "simple_view": false,
+        "inputs": [
+        ]
+    },
     "blog_search_result" : {
         "version": 2,
         "title": "Blog search result",

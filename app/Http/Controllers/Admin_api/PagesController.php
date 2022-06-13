@@ -262,6 +262,10 @@ class PagesController extends Controller
                     "title" => "List"
                 ],
                 [
+                    "id" => 3,
+                    "title" => "List 2"
+                ],
+                [
                     "id" => 2,
                     "title" => "Grid"
                 ]

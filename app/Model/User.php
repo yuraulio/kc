@@ -186,7 +186,7 @@ class User extends Authenticatable
 
     public function events()
     {
-        return $this->belongsToMany(Event::class, 'event_user')->withPivot('paid', 'expiration', 'comment', 'payment_method')->with('summary1', 'category', 'slugable','dropbox')->wherePivot('paid', true);
+        return $this->belongsToMany(Event::class, 'event_user')->withPivot('paid', 'expiration', 'comment', 'payment_method')->with('summary1', 'category', 'slugable', 'dropbox')->wherePivot('paid', true);
     }
 
 
@@ -774,16 +774,17 @@ class User extends Authenticatable
         return "$this->firstname $this->lastname";
     }
 
-    public function absences(){
+    public function absences()
+    {
         return $this->hasMany(Absence::class);
     }
 
-    public function getAbsencesByEvent(Event $event){
-        
+    public function getAbsencesByEvent(Event $event)
+    {
         $eventId = $event->id;
         $absences = $this->absences()->whereEventId($eventId);
         $event->getTotalHours();
-        if(empty($absences->get())){
+        if (empty($absences->get())) {
             return [];
         }
 
@@ -794,27 +795,23 @@ class User extends Authenticatable
 
         $absencesByDate = [];
        
-        foreach($absences->get()->groupBy('date') as $key => $absence){
-            
+        foreach ($absences->get()->groupBy('date') as $key => $absence) {
             $userM = 0;
             $eventM = 0;
             
-            foreach($absence as $ab){
-            
+            foreach ($absence as $ab) {
                 $userM += $ab->minutes;
                 $eventM += $ab->total_minutes;
-            
             }
 
             $absencesByDate[$key] = ['id'=>$ab->id,'user_minutes' => $userM, 'event_minutes' => $eventM];
-
         }
 
         //$userAbsencesPercent = 100 - ( ( $userMinutes / $eventMinutes ) * 100 );
-        $userAbsencesPercent =  ( $userMinutesAbsences / $eventMinutes ) * 100 ;
+        $userAbsencesPercent =  ($userMinutesAbsences / $eventMinutes) * 100 ;
 
         /*return response()->json([
-            
+
             'absences_by_date' => $absencesByDate,
             'total_user_minutes' => $userMinutes,
             'total_event_minutes' => $eventMinutes,
@@ -825,9 +822,9 @@ class User extends Authenticatable
 
         $class = '';
 
-        if($userAbsencesPercent >= $event->absences_limit ){
+        if ($userAbsencesPercent >= $event->absences_limit) {
             $class = 'dangerous-absences';
-        }else if($event->absences_limit - $userAbsencesPercent <= 2){
+        } elseif ($event->absences_limit - $userAbsencesPercent <= 2) {
             $class = 'warning-absences';
         }
        
@@ -840,7 +837,6 @@ class User extends Authenticatable
         $data['class'] = $class;
 
         return $data;
-        
     }
 
 
@@ -849,7 +845,8 @@ class User extends Authenticatable
         return $this->hasMany(Comment::class, 'user_id', 'id');
     }
 
-    public function waitingList(){
+    public function waitingList()
+    {
         return $this->hasMany(WaitingList::class);
     }
 }

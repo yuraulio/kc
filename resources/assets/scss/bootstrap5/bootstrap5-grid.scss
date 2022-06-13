@@ -17,6 +17,11 @@
   @import "mixins/grid";
   @import "mixins/utilities";
 
+  @import "mixins/transition";
+  @import "mixins/gradients";
+  @import "mixins/pagination";
+  @import "mixins/border-radius";
+
   @import "vendor/rfs";
 
   @import "containers";
@@ -62,6 +67,8 @@
       "padding-start",
     )
   );
+
+  @import "pagination";
 
   @import "utilities/api";
 }
