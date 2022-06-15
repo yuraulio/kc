@@ -648,13 +648,13 @@
                            <div class="left">
                               <div class="location">
                               
-                              You are one of the selected graduates who have access to our annual subscription. Access all of our course's updated videos & files for €199/year. Free trial for 15 days. 
+                              You are one of the selected graduates who have access to our annual subscription. Access all of our course's updated videos & files for €199/year. 
 
                               </div>
                            </div>
                            <div class="right subscription-button">
                            @foreach($plans as $key => $plan)
-                              <a href="/myaccount/subscription/{{$plan->events->first()->title}}/{{ $plan->name }}" class="btn btn--primary btn--lg">START MY TRIAL NOW</a>
+                              <a href="/myaccount/subscription/{{$plan->events->first()->title}}/{{ $plan->name }}" class="btn btn--primary btn--lg">GET ANNUAL ACCESS NOW</a>
                            @endforeach
                            </div>
                         </div>

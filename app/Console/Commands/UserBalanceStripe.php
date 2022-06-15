@@ -51,9 +51,9 @@ class UserBalanceStripe extends Command
         ], []));
       
       
-      //dd($stripe->invoiceItems->all(['pending' => true]));
+      //dd($stripe->invoiceItems->all(['pending' => true,'limit' => 100]));
       
-      	foreach($stripe->invoiceItems->all(['pending' => true]) as $invoice){
+      	foreach($stripe->invoiceItems->all(['pending' => true,'limit' => 100]) as $invoice){
           
           if($invoice->amount < 0){
             //dd($invoice);
