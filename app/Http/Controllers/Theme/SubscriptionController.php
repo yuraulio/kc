@@ -464,7 +464,7 @@ class SubscriptionController extends Controller
         //$data['info']['transaction'] = $this->transaction;
         //$data['info']['statusClass'] = 'success';
 
-        $this->fbp->sendStartTrialEvent();
+        //$this->fbp->sendStartTrialEvent();
 
         return view('theme.myaccount.subscription.subscription-success', $data);
 
