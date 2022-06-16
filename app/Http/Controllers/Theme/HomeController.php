@@ -38,6 +38,7 @@ use \Cart as Cart;
 use Session;
 use App\Services\FBPixelService;
 use App\Model\WaitingList;
+use App\Model\Option;
 
 class HomeController extends Controller
 {
@@ -232,6 +233,34 @@ class HomeController extends Controller
 
             $coockie->save();
         }
+
+
+        if(!$user->kc_id){
+            $KC = "KC-";
+            $time = strtotime(date('Y-m-d'));
+            $MM = date("m",$time);
+            $YY = date("y",$time);
+
+            $optionKC = Option::where('abbr','website_details')->first();
+		    $next = $optionKC->value;
+
+            $next_kc_id = str_pad($next, 4, '0', STR_PAD_LEFT);
+            $knowcrunch_id = $KC.$YY.$MM.$next_kc_id;
+
+            $user->kc_id = $knowcrunch_id;
+            $user->save();
+
+            if ($next == 9999) {
+                $next = 1;
+            }
+            else {
+                $next = $next + 1;
+            }
+    
+            $optionKC->value=$next;
+            $optionKC->save();
+        }
+
 
         $data['user']['first'] = $user->firstname;
         $data['user']['name'] = $user->firstname . ' ' . $user->lastname;

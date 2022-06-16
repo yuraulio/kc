@@ -1261,6 +1261,14 @@
                                  <ul>
                                     <li class="active"><a href="#c-info-inner{{$tab}}">Info</a></li>
                                     <li><a href="#c-watch-inner{{$tab}}">Watch</a></li>
+                                    @if(isset($event['exams']) && count($event['exams']) >0 )
+                                       <li><a href="#c-exams-inner{{$tab}}">Exams</a></li>
+                                    @endif
+
+                                    @if(count($event['certs']) > 0)
+                                       <li><a href="#c-cert-inner{{$tab}}">Certificate</a></li>
+                                    @endif
+
                                     <li><a href="#c-subs-inner{{$tab}}">Subscription</a></li>
                                  </ul>
                               </div>
@@ -1309,6 +1317,65 @@
                                        </div>
                                     </div>
                                  </div>
+
+                                 @if(isset($event['exams']))
+                                 <?php $nowTime = \Carbon\Carbon::now(); ?>
+                                 <div id="c-exams-inner{{$tab}}" class="in-tab-wrapper">
+                                    <div class="bottom">
+                                       @foreach($event['exams'] as $p)
+                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Customer_Access.svg')}}" alt="">Exams activate automatically when you watch 80% </div>
+                                       <div class="right">
+                                          <!-- Feedback 8-12 changed -->
+                                          @if($event['exam_access'] && !$user->hasExamResults($p->id))
+                                          @if($p->islive == 1)
+                                          <a target="_blank" onclick="window.open('{{ route('attempt-exam', [$p->id]) }}', 'newwindow', 'width=1400,height=650'); return false;" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">TAKE EXAM</a>
+                                          @endif
+                                          @elseif($userExam = $user->hasExamResults($p->id))
+                                          @if($nowTime->diffInHours($userExam->end_time) < 48)
+                                          <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md">VIEW RESULT</a>
+                                          @else
+                                          <a target="_blank" href="{{ url('exam-results/' . $p->id) }}?s=1" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md btn--completed">VIEW RESULT</a>
+                                          @endif
+                                          @else
+                                          <div class="right">
+                                             <a href="javascript:void(0)" title="{{$p['exam_name']}}" class="btn btn--secondary btn--md btn--completed">TAKE EXAM</a>
+                                          </div>
+                                          @endif
+                                       </div>
+                                       @endforeach
+                                    </div>
+                                 </div>
+                                 @endif
+
+                                 @if(count($event['certs']) > 0)
+                                 <div id="c-cert-inner{{$tab}}" class="in-tab-wrapper">
+                                    <div class="bottom">
+                                       <div class="location"><img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/Access-Files.svg')}}" alt="">@if(isset($newlayoutExamsEvent[$keyType]) && count($newlayoutExamsEvent[$keyType])>0)Certificate download after completing your exams. @else Your certification is ready @endif</div>
+                                       @foreach($event['certs'] as $certificate)
+                                       <?php
+                                             $expirationMonth = '';
+                                             $expirationYear = '';
+                                             $certUrl = trim(url('/') . '/mycertificate/' . base64_encode(Auth::user()->email."--".$certificate->id));
+                                             if($certificate->expiration_date){
+                                                $expirationMonth = date('m',$certificate->expiration_date);
+                                                $expirationYear = date('Y',$certificate->expiration_date);
+                                             }
+
+                                          ?>
+                                       <div class="right">
+                                          <a  class="btn btn--secondary btn--md" target="_blank" href="/mycertificate/{{base64_encode(Auth::user()->email.'--'.$certificate->id)}}" >DOWNLOAD </a>
+                                          <a class="linkedin-post" title="Add this certification to your LinkedIn profile" target="_blank" href="https://www.linkedin.com/profile/add?startTask={{urlencode(strip_tags($certificate->certificate_title))}}&name={{urlencode(strip_tags($certificate->certificate_title))}}&organizationId=3152129&issueYear={{date('Y',$certificate->create_date)}}
+                                                &issueMonth={{date('m',$certificate->create_date)}}&expirationYear={{$expirationYear}}&expirationMonth={{$expirationMonth}}&certUrl={{$certUrl}}&certId={{$certificate->credential}}">
+                                                <img class="linkdein-image-add" src="{{cdn('theme/assets/images/icons/social/events/Linkedin.svg')}}" alt="LinkedIn Add to Profile button">
+                                          </a>
+                                        </div>
+
+                                      
+                                       @endforeach
+                                    </div>
+                                 </div>
+                                 @endif
+
                                  @if($subscriptionAccess)
                                  <div id="c-subs-inner{{$tab}}" class="in-tab-wrapper">
                                     <div class="bottom">
