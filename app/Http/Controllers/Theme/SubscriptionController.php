@@ -347,7 +347,7 @@ class SubscriptionController extends Controller
             $charge = $user->newSubscription($plan->name, $plan->stripe_plan)
             //->anchorBillingCycleOn($anchor->startOfDay())
             ->noProrate()
-            ->trialDays($plan->trial_days)
+            //->trialDays($plan->trial_days)
             ->create($request->payment_method, ['email' => $user->email]);
             
             $charge->price = $plan->cost;
@@ -374,7 +374,8 @@ class SubscriptionController extends Controller
                 $muser['email'] = $user->email;*/
                 //$muser['event_title'] = $sub->eventable->event->title;
 
-                $subEnds = $plan->trial_days && $plan->trial_days > 0 ? $plan->trial_days : $plan->getDays();
+                //$subEnds = $plan->trial_days && $plan->trial_days > 0 ? $plan->trial_days : $plan->getDays();
+                $subEnds = $plan->getDays();
                 $subEnds=date('d-m-Y', strtotime("+$subEnds days"));
 
                 $data['firstName'] = $user->firstname;

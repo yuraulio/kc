@@ -592,6 +592,7 @@ class StudentController extends Controller
 
         $data['elearningAccess'] = 0;
         $data['masterClassAccess'] = false;
+        $after20Days = null;
         $data['cards'] = [];
         $data['plans'] = Plan::where('published',true)->with('events')->get();
         $data['subscriptionAccess'] = [];
@@ -645,6 +646,7 @@ class StudentController extends Controller
                 $expiration_event = strtotime($expiration_event);
 
                 $now = strtotime(date('Y-m-d'));
+                
                 //dd($now);
                 //dd($expiration_event >= $now);
                 if($expiration_event >= $now || !$expiration_event)
@@ -652,7 +654,20 @@ class StudentController extends Controller
 
                 $data['events'][$event->id]['video_access'] = $video_access;
                
-                if($event->id == 2304 && $video_access){
+                /*if($event->id == 2304 && $video_access){
+                    $data['masterClassAccess'] = true;
+                }*/
+
+                if($expiration_event){
+                    
+                    $after20Days  = strtotime("+20 day");
+                
+                }
+                
+                
+                
+                if( $event->id == 2304 && $after20Days &&  ($expiration_event >= $after20Days) ){
+                    
                     $data['masterClassAccess'] = true;
                 }
 
