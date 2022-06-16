@@ -17,6 +17,7 @@ use Laravel\Cashier\Exceptions\SubscriptionUpdateFailure;
 use LogicException;
 use Stripe\Subscription as StripeSubscription;
 use App\Model\Event;
+use App\Model\Transaction;
 
 /**
  * @property \Laravel\Cashier\Billable|\Illuminate\Database\Eloquent\Model $owner
@@ -1298,6 +1299,10 @@ class Subscription extends Model
 
     public function event(){
         return $this->belongsToMany(Event::class,'subscription_user_event')->withPivot('event_id','expiration')->with('plans');
+    }
+
+    public function transactions(){
+        return $this->morphToMany(Transaction::class, 'transactionable');
     }
 
     public function invoices()

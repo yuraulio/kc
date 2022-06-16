@@ -18,6 +18,7 @@ use Laravel\Cashier\Cashier;
 use Session;
 use App\Notifications\CourseInvoice;
 use App\Model\PaymentMethod;
+use App\Services\FBPixelService;
 
 class WebhookController extends BaseWebhookController
 {
@@ -512,6 +513,23 @@ class WebhookController extends BaseWebhookController
                 
                 });
 
+
+				if($transaction['amount'] - floor($transaction['amount'])>0){
+                    $tr_price = number_format($transaction['amount'] , 2 , '.', '');
+                }else{
+                    $tr_price = number_format($transaction['amount'] , 0 , '.', '');
+                    $tr_price = strval($tr_price);
+                    $tr_price .= ".00";
+                }
+
+				$data['tigran'] = ['OrderSuccess_id' => $transaction->id, 'OrderSuccess_total' => $tr_price, 'Price' =>$tr_price,
+									'Product_id' => $subscription->event->first()->id, 'Product_SKU' => $subscription->event->first()->id,
+                        			'Product_SKU' => $subscription->event->first()->id,'ProductCategory' => 'Video e-learning courses', 
+									'ProductName' =>  $subscription->event->first()->title, 'Quantity' =>1, 'TicketType'=>'Subscription','Event_ID' => 'kc_' . time() 
+                ];
+
+				$fbPixel = new FBPixelService;
+				$fbPixel->sendPurchaseEvent($data);
 
 				$this->sendEmail($elearningInvoice,$pdf,$paymentMethod,true);
 			}
