@@ -66,6 +66,7 @@ class Kernel extends ConsoleKernel
        Commands\FixStatistics::class,
        Commands\UserBalanceStripe::class,
        Commands\ClearInvoices::class,
+       Commands\KCIDToUsers::class,
     ];
 
     /**

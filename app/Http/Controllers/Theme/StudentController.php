@@ -299,6 +299,9 @@ class StudentController extends Controller
                 $data['mySubscriptionEvents'][$key]['videos_seen'] = $event->video_seen($user);
                 $data['mySubscriptionEvents'][$key]['view_tpl'] = $event['view_tpl'];
 
+                $data['mySubscriptionEvents'][$key]['exams'] = $event->getExams();
+                $data['mySubscriptionEvents'][$key]['exam_access'] = $event->examAccess($user,0.8);
+                $data['mySubscriptionEvents'][$key]['certs'] = $event->certificatesByUser($user->id);
                 $data['mySubscriptionEvents'][$key]['mySubscription'] = $user->subscriptions()->where('id',$subEvent['id'])->first();
                 $video_access = false;
                 $expiration_event = $event->pivot['expiration'];
@@ -719,6 +722,10 @@ class StudentController extends Controller
                 $data['mySubscriptionEvents'][$key]['videos_progress'] = intval($event->progress($user));
                 $data['mySubscriptionEvents'][$key]['videos_seen'] = $event->video_seen($user);
                 $data['mySubscriptionEvents'][$key]['view_tpl'] = $event['view_tpl'];
+
+                $data['mySubscriptionEvents'][$key]['certs'] = $event->certificatesByUser($user->id);
+                $data['mySubscriptionEvents'][$key]['exams'] = $event->getExams();
+                $data['mySubscriptionEvents'][$key]['exam_access'] = $event->examAccess($user,0.8);
 
                 $data['mySubscriptionEvents'][$key]['mySubscription'] = $user->subscriptions()->where('id',$subEvent['id'])->first();
                 $data['mySubscriptionEvents'][$key]['plans'] = $event['plans'];
