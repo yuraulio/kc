@@ -14,6 +14,7 @@ use App\Services\FBPixelService;
 use App\Model\PaymentMethod;
 use App\Notifications\SubscriptionWelcome;
 use Carbon\Carbon;
+use Laravel\Cashier\Subscription;
 
 class SubscriptionController extends Controller
 {
@@ -420,6 +421,8 @@ class SubscriptionController extends Controller
                 Session::forget('pay_bill_data');
                 Session::forget('deree_user_data');
 
+                Session::put('subscription-user',$charge['id']);
+
                 return redirect('/myaccount/subscription-success'); 
                 //return redirect('/myaccount'); 
             }else{
@@ -456,6 +459,42 @@ class SubscriptionController extends Controller
 
     public function orderSuccess(){
 
+        //dd(Session::get('subscription-user'));
+
+        $subscription = Subscription::find(Session::get('subscription-user'));
+
+        if($subscription && ($transaction = $subscription->transactions()->first())){
+
+            $categoryScript = 'Video e-learning courses';
+            $thisevent =  $transaction->event()->first();
+
+
+            if($transaction['amount'] - floor($transaction['amount'])>0){
+                $tr_price = number_format($transaction['amount'] , 2 , '.', '');
+            }else{
+                $tr_price = number_format($transaction['amount'] , 0 , '.', '');
+                $tr_price = strval($tr_price);
+                $tr_price .= ".00";
+            }
+
+            $data['tigran'] = ['OrderSuccess_id' => $transaction['id'], 'OrderSuccess_total' => $tr_price, 'Price' =>$tr_price,'Product_id' => $thisevent->id, 'Product_SKU' => $thisevent->id,
+                        'Product_SKU' => $thisevent->id,'ProductCategory' => $categoryScript, 'ProductName' =>  $thisevent->title, 'Quantity' => 1, 'TicketType'=>'subscription','Event_ID' => 'kc_' . time() 
+                ];
+
+        
+            $data['ecommerce'] = [
+                'actionField' => ['id' => $transaction['id'], 'value' => $tr_price, 'currency' => 'EUR', 'coupon' => $transaction->coupon_code], 
+                'products' => ['name' => $thisevent->title, 'id' => $thisevent->id, 'brand'=>'Knowcrunch', 'price' => $tr_price, 
+                                'category' => $categoryScript, 'coupon' => $transaction->coupon_code,'quantity' => 1]
+                                    
+            ];
+
+
+            /*$data['gt3'] = ['gt3' => ['transactionId' => $transaction['id'], 'transactionTotal' => $tr_price], 
+                                    'transactionProducts' => ['name' => $thisevent->title, 'sku' => $thisevent->id, 'price' => $tr_price, 'quantity' => 1, '' =>  $categoryScript] ];*/
+        }
+
+
         //$data['filter_type'] = Category::where('id', 12)->first()->getDescendants()->where('status',1)->where('type',0)->toHierarchy();
         $data['info']['success'] = true;
         $data['info']['title'] = '<h1>Subscription successful</h1>';
@@ -465,7 +504,7 @@ class SubscriptionController extends Controller
         //$data['info']['statusClass'] = 'success';
 
         //$this->fbp->sendStartTrialEvent();
-
+        Session::forget('subscription-user');
         return view('theme.myaccount.subscription.subscription-success', $data);
 
     }
