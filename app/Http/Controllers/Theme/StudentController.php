@@ -609,7 +609,7 @@ class StudentController extends Controller
         $eventSubscriptions = [];
 
         foreach($data['user']['events'] as $key => $event){
-
+            $after20Days = null;
             //if elearning assign progress for this event
             if($event->is_elearning_course()){
 
@@ -659,14 +659,14 @@ class StudentController extends Controller
                 }*/
 
                 if($expiration_event){
-                    
+        
                     $after20Days  = strtotime("+20 day");
                 
                 }
                 
                 
                 
-                if( $event->id == 2304 && $after20Days &&  ($expiration_event >= $after20Days) ){
+                if( $event->id == 2304 && ( ( $after20Days &&  ($expiration_event >= $after20Days) ) || !$expiration_event ) ){
                     
                     $data['masterClassAccess'] = true;
                 }
