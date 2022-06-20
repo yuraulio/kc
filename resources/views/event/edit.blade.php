@@ -912,7 +912,7 @@
 
                     <div class="modal-header">
                         <h6 class="modal-title" id="modal-title-default">Instructor</h6>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
@@ -930,7 +930,7 @@
 
                     <div class="modal-footer">
                         <button type="button" id="lesson_update_btn" class="btn btn-primary">Save changes</button>
-                        <button type="button" class="btn btn-link ml-auto close-modal" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-link ml-auto close-modal" data-bs-dismiss="modal">Close</button>
                     </div>
 
                 </div>
@@ -1003,6 +1003,10 @@
             return l;
         };
 
+        $("#modal-default").on("hide.bs.modal", function () {
+            $("body").removeClass("modal-open").removeAttr("style");
+        });
+
         $(document).on('click','#lesson_update_btn',function(e){
             let start = $('#time_starts').val()
             let date = $('#date').val()
@@ -1063,6 +1067,7 @@
 
                     $('#modal-default').modal()
                     $('.close-modal').click()
+                    $('#modal-default').modal('hide')
 
                 }
             });
