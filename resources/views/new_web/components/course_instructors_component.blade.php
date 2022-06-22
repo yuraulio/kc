@@ -49,7 +49,7 @@
                 @if($inst['status'])
                     <h3><a style="color:#81be00;" href="{{env('NEW_PAGES_LINK') . '/' . $inst['slugable']['slug']}}">{{$inst['title']}} {{$inst['subtitle']}}</a></h3>
                 @else
-                    <h3>{{$inst['title']}}</h3>
+                    <h3 style="color:#81be00;">{{$inst['title']}} {{$inst['subtitle']}}</h3>
                 @endif
                 <p>{{$inst['header']}}, @if($inst['ext_url'] != '')<a style="color:#81be00;" target="_blank" title="{{$inst['header']}}"  href="{{$inst['ext_url']}}"  > {{$field2}}</a>.@endif</p>
                 <ul class="social-wrapper">
