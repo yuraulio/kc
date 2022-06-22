@@ -111,9 +111,9 @@
                                     <li class="nav-item {{ isset($elementName) and $elementName  == 'user1-management' ? 'active' : '' }}">
                                         <a href="#" class="nav-link">{{ __('Error log') }}</a>
                                     </li>
-                                    <li class="nav-item {{ isset($elementName) and $elementName  == 'media-management' ? 'active' : '' }}">
+                                    {{--<li class="nav-item {{ isset($elementName) and $elementName  == 'media-management' ? 'active' : '' }}">
                                         <a href="{{ route('media2.index') }}" class="nav-link">{{ __('Media library') }}</a>
-                                    </li>
+                                    </li>--}}
                                     <li class="nav-item {{ isset($elementName) and $elementName  == 'menu-management' ? 'active' : '' }}">
                                         <a href="{{ route('menu.index') }}" class="nav-link">{{ __('Menus') }}</a>
                                     </li>
