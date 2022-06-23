@@ -222,7 +222,7 @@
        var eventsArray = {};
         // DataTables initialisation
         var table = $('#participants_table').DataTable({
-            order: [[5, 'asc']],
+            order: [[6, 'desc']],
             language: {
                 paginate: {
                 next: '&#187;', // or '→'
