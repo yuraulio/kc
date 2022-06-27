@@ -11,6 +11,7 @@ use \Apifon\Resource\SMSResource;
 use Auth;
 use App\Model\User as DPUser;
 use App\Model\CookiesSMS;
+use App\Model\Admin\Page;
 use App\Model\Pages;
 
 class CheckForSMSCoockie
@@ -55,7 +56,7 @@ class CheckForSMSCoockie
         }
 
         $roles = Auth::user()->role->pluck('name')->toArray();
-        if (in_array('Super Administrator',$roles) || in_array('Administrator',$roles) || in_array('Manager',$roles) || in_array('Author',$roles)) {
+        if (in_array('Author',$roles)) {
            
             return $next($request);
         }else{
@@ -161,8 +162,8 @@ class CheckForSMSCoockie
                 }*/
                 else if(($user->consent == '' || $user->terms == 0) && !$user->instructor->first()){
                     
-                    $page = Pages::find(4754);
-                    $pageSlug = $page->slugable->slug;
+                    $page = Page::find(4);
+                    $pageSlug = $page->slug;
 
                     if($request->is($pageSlug) || $request->is("logmeout") || $request->is("update-consent")) {
                         return $next($request);
