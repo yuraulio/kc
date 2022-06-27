@@ -151,15 +151,15 @@ class CheckForSMSCoockie
                     //return $next($request);
                     return redirect('/sms-verification/' . $cookie );
                 }
-                else if(($user->consent == '' || $user->terms == 0)){
+                /*else if(($user->consent == '' || $user->terms == 0)){
                     if($request->is("data-privacy-policy") || $request->is("logmeout") || $request->is("update-consent")) {
                         return $next($request);
                     }
                     else {
                         return redirect('/data-privacy-policy');
                     }
-                }
-                /*else if(($user->consent == '' || $user->terms == 0) && !$user->instructor->first()){
+                }*/
+                else if(($user->consent == '' || $user->terms == 0) && !$user->instructor->first()){
                     
                     $page = Pages::find(4754);
                     $pageSlug = $page->slugable->slug;
@@ -181,7 +181,7 @@ class CheckForSMSCoockie
                     else {
                         return redirect($pageSlug);
                     }
-                }*/
+                }
             }
             
         }
