@@ -10,8 +10,8 @@
    <section class="section-hero section-hero-small section-hero-blue-bg">
       <div class="container">
          <div class="hero-message">
-         <h1>{{ $page['name'] }}</h1>
-                    <h2>{{ $page['title'] }}</h2>
+         {{--<h1>{{ $page['name'] }}</h1>--}}
+         <h1>{{ $page['title'] }}</h1>
          </div>
       </div>
       <!-- /.section-hero -->
