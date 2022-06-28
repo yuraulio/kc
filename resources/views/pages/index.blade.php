@@ -10,7 +10,11 @@
             @slot('title')
                 {{ __('') }}
             @endslot
+            @slot('filter')
+                <!-- <a href="#" class="btn btn-sm btn-neutral">{{ __('Filters') }}</a> -->
+                <a class="btn btn-sm btn-neutral" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">{{ __('Filters') }}</a>
 
+            @endslot
             <li class="breadcrumb-item"><a href="{{ route('notification.show') }}">{{ __('Pages') }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ __('List') }}</li>
         @endcomponent
@@ -34,6 +38,21 @@
                         </div>
                     </div>
 
+                    <div class="collapse" id="collapseExample">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm-3 filter_col" id="filter_col1" data-column="1">
+                                    <label>Status</label>
+                                    <select data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..."  name="Name" class="column_filter" id="col1_filter">
+                                    <option selected value> -- All -- </option>
+                                    </select>
+                                </div>
+                               
+
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="col-12 mt-2">
                         @include('alerts.success')
                         @include('alerts.errors')
@@ -44,6 +63,7 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col">{{ __('Title') }}</th>
+                                    <th scope="col">{{ __('Status') }}</th>
                                     <th scope="col">{{ __('Created') }}</th>
                                     <th scope="col"></th>
                                 </tr>
@@ -52,7 +72,10 @@
                                 @foreach ($pages as $page)
                                     <tr>
                                         <td><a href="{{ route('pages.edit', $page) }}">{{ $page->name }}</a></td>
+                                        <td>{{ $page->published ? 'Published' : 'Unpublished' }}</td>
                                         <td>{{ $page->created_at->format('d/m/Y H:i') }}</td>
+
+
                                         @can('manage-users', App\Model\User::class)
 					                        <td class="text-right">
                                             <?php //dd($user); ?>
@@ -125,4 +148,39 @@
                 }
             });
     </script>
+
+
+    <script>
+        $( document ).ready(function(){
+            
+            let published = table.column(1).data().unique();
+            
+            $.each(published, function(key, value){
+
+                $('#col1_filter').append(`<option value="${value}">${value}</option>`)
+
+            })
+
+            $('select.column_filter').on('change', function () {
+            filterColumn( $(this).parents('div').attr('data-column') );
+        });
+
+        function filterColumn ( i ) {   
+            
+            if($('#col'+i+'_filter').val() && i != 8){
+                $('#datatable-basic34').DataTable().column( i ).search(
+                    '^'+$('#col'+i+'_filter').val()+'$', true,true
+                ).draw();
+            }else{
+                $('#datatable-basic34').DataTable().column( i ).search(
+                    $('#col'+i+'_filter').val()
+                ).draw();
+            }
+            
+        }
+
+            
+        });
+    </script>
+
 @endpush
