@@ -122,7 +122,9 @@
                                                                         <tr>
                                                                            <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                               <div>
-                                                                                 <p style="margin: 0px;"><span style="font-family: Tahoma, geneva, sans-serif;">You need to <strong>activate your account</strong> and set a password in order to access your course.</span></p>
+                                                                                 
+                                                                                 <p style="margin: 0px;"><span style="font-family: Tahoma, geneva, sans-serif;">You need to <a href="{{ $slug }}" target="_blank" style="color: #3b3f44;"><strong>activate your account</strong></a>  and set a password in order to access your course.</span></p>
+                                                                                                                                                              
                                                                               </div>
                                                                            </td>
                                                                         </tr>
