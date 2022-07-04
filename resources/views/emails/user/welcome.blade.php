@@ -10,7 +10,7 @@
                            <tr>
                               <td class="r2-c" align="center">
                                  <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r3-o" style="table-layout: fixed; width: 100%;">
-                                    <!-- -->
+                                    
                                     <tr class="nl2go-responsive-hide">
                                        <td height="20" style="font-size: 20px; line-height: 20px; background-color: #ffffff;">­</td>
                                     </tr>
@@ -20,7 +20,7 @@
                                              <tr>
                                                 <th width="100%" valign="top" class="r5-c">
                                                    <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r6-o" style="table-layout: fixed; width: 100%;">
-                                                      <!-- -->
+                                                      
                                                       <tr>
                                                          <td class="nl2go-responsive-hide" width="15" style="font-size: 0px; line-height: 1px;">­ </td>
                                                          <td valign="top" class="r7-i">
@@ -59,7 +59,7 @@
                            <tr>
                               <td class="r2-c" align="center">
                                  <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r3-o" style="table-layout: fixed; width: 100%;">
-                                    <!-- -->
+                                   
                                     <tr class="nl2go-responsive-hide">
                                        <td height="20" style="font-size: 20px; line-height: 20px; background-color: #ffffff;">­</td>
                                     </tr>
@@ -69,7 +69,7 @@
                                              <tr>
                                                 <th width="100%" valign="top" class="r5-c">
                                                    <table cellspacing="0" cellpadding="0" border="0" role="presentation" width="100%" class="r6-o" style="table-layout: fixed; width: 100%;">
-                                                      <!-- -->
+                                                     
                                                       <tr>
                                                          <td class="nl2go-responsive-hide" width="10" style="font-size: 0px; line-height: 1px;">­ </td>
                                                          <td valign="top" class="r7-i">
@@ -122,7 +122,9 @@
                                                                         <tr>
                                                                            <td align="left" valign="top" class="r15-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5; text-align: left;">
                                                                               <div>
-                                                                                 <p style="margin: 0px;"><span style="font-family: Tahoma, geneva, sans-serif;">You need to <strong>activate your account</strong> and set a password in order to access your course.</span></p>
+                                                                                 
+                                                                                 <p style="margin: 0px;"><span style="font-family: Tahoma, geneva, sans-serif;">You need to <a href="{{ $slug }}" target="_blank" style="color: #3b3f44;"><strong>activate your account</strong></a>  and set a password in order to access your course.</span></p>
+                                                                                                                                                              
                                                                               </div>
                                                                            </td>
                                                                         </tr>
@@ -148,7 +150,7 @@
 
                                                                            @else
                                                                            @endif
-                                                                              <!--<![endif]--> 
+                                                                             
                                                                            </td>
                                                                         </tr>
                                                                         <tr class="nl2go-responsive-hide">

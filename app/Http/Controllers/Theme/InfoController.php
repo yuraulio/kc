@@ -814,7 +814,7 @@ class InfoController extends Controller
             }
     	}
 
-      
+        
         if($stripe){
             
             $data = [];  
@@ -853,7 +853,23 @@ class InfoController extends Controller
 
                 $data['user'] =  $transaction->user->first();
 
-                $data['user']->notify(new CourseInvoice($data));
+                if($billingEmail){
+                    $sent = Mail::send('emails.user.invoice', $data, function ($m) use ($adminemail, $muser,$pdf,$billingEmail,$fn) {
+
+                        $fullname = $muser['name'];
+                        $first = $muser['first'];
+                        $sub =  'Knowcrunch -' . $first . ' – download your receipt';
+                        $m->from('info@knowcrunch.com', 'Knowcrunch');
+                        $m->to($billingEmail, $fullname);
+                        //$m->to('moulopoulos@lioncode.gr', $fullname);
+                        $m->subject($sub);
+                    
+                    });
+                }else{
+                    $data['user']->notify(new CourseInvoice($data));
+
+                }
+
 
 
             }

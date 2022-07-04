@@ -89,9 +89,12 @@ class WebhookController extends BaseWebhookController
 		
 		if(count($invoices) > 0){
 			$invoice = $invoices->last();
+			$transaction = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first()->transactionsByUser($user->id)->first();
+			$billDet = json_decode($transaction['billing_details'],true);
+        	$billingEmail = isset( $billDet['billemail']) &&  $billDet['billemail'] != '' ?  $billDet['billemail'] : false;
 			//$invoice = $invoices->first();
 			[$pdf,$invoice] = $invoice->generateCronjobInvoice();
-			$this->sendEmail($invoice,$pdf,$paymentMethod);
+			$this->sendEmail($invoice,$pdf,$paymentMethod,false,$billingEmail);
 		}else{
 			if(!Invoice::doesntHave('subscription')->latest()->first()){
 				$invoiceNumber = sprintf('%04u', 1);
@@ -177,9 +180,11 @@ class WebhookController extends BaseWebhookController
                 $elearningInvoice->transaction()->save($transaction);
 				
 				$pdf = $elearningInvoice->generateInvoice();
-
 				
-				$this->sendEmail($elearningInvoice,$pdf,$paymentMethod);
+				$billDet = json_decode($transaction['billing_details'],true);
+        		$billingEmail = isset( $billDet['billemail']) &&  $billDet['billemail'] != '' ?  $billDet['billemail'] : false;
+				
+				$this->sendEmail($elearningInvoice,$pdf,$paymentMethod,false,$billingEmail);
 
 			}
 		}
@@ -531,12 +536,15 @@ class WebhookController extends BaseWebhookController
 				$fbPixel = new FBPixelService;
 				$fbPixel->sendPurchaseEvent($data);
 
-				$this->sendEmail($elearningInvoice,$pdf,$paymentMethod,true);
+				$billDet = json_decode($transaction['billing_details'],true);
+        		$billingEmail = isset( $billDet['billemail']) &&  $billDet['billemail'] != '' ?  $billDet['billemail'] : false;
+
+				$this->sendEmail($elearningInvoice,$pdf,$paymentMethod,true,$billingEmail);
 			}
 	
 	}
 	
-	private function sendEmail($elearningInvoice,$pdf,$paymentMethod = null,$planSubscription = false){
+	private function sendEmail($elearningInvoice, $pdf, $paymentMethod = null, $planSubscription = false, $billingEmail = false){
 
 		$adminemail = ($paymentMethod && $paymentMethod->payment_email) ? $paymentMethod->payment_email : 'info@knowcrunch.com';
 
@@ -568,9 +576,28 @@ class WebhookController extends BaseWebhookController
 		});*/
 
 		$data['slugInvoice'] = encrypt($user->id . '-' . $elearningInvoice->id . '-' . $planSubscription);
-		$user->notify(new CourseInvoice($data));
-
 		$fn = date('Y-m-d') . '-Invoice-' . $elearningInvoice->invoice . '.pdf';
+
+		if($billingEmail){
+			$sent = Mail::send('emails.user.invoice', $data, function ($m) use ($adminemail, $muser,$pdf,$fn, $billingEmail) {
+
+				$fullname = $muser['name'];
+				$first = $muser['first'];
+				$sub =  'Knowcrunch |' . $first .  ' – download your receipt';
+				$m->from('info@knowcrunch.com', 'Knowcrunch');
+				$m->to($billingEmail, $fullname);
+				//$m->to('moulopoulos@lioncode.gr', $fullname);
+				$m->subject($sub);
+				//$m->attachData($pdf, $fn);
+				
+			});
+		}else{
+			$user->notify(new CourseInvoice($data));
+
+		}
+
+
+		
 
 		$sent = Mail::send('emails.admin.elearning_invoice', $data, function ($m) use ($adminemail, $muser,$pdf,$fn) {
 
