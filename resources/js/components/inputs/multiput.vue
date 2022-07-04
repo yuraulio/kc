@@ -40,7 +40,14 @@
             </div>
             <div v-else>
                 <i @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" class="text-muted dripicons-photo d-none image-input-icon" style="font-size: 100px;"></i>
-                <button @click="$set(loadstart, (keyput + 'media'),  true)" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" aria-controls="offcanvasScrolling"  class="btn btn-soft-primary image-input-button">Add Media</button>
+                <button @click="$set(loadstart, (keyput + 'media'),  true)" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" aria-controls="offcanvasScrolling"  class="btn btn-soft-primary image-input-button">
+                    <template v-if="imageEdit">
+                        Edit Media
+                    </template>
+                    <template v-else>
+                        Add Media
+                    </template>
+                </button>
             </div>
         </div>
     </div>
@@ -195,6 +202,7 @@ export default {
         fetch: {
             default: true
         },
+        imageEdit:false,
     },
     data() {
         return {

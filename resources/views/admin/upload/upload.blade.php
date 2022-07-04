@@ -44,10 +44,17 @@
     if(isset($versions)){
         $versions = json_encode($versions);
     }
+    
+    $imageedit = "false";
+    if($event && $event['path'] != null) {
+        $imageedit = "true";
+    }
 ?>
 
 <div id="app" class="bootstrap-classes ubold mt-5 mb-5 pl-lg-4">
-    <manager-for-old-admin></manager-for-old-admin>
+    <manager-for-old-admin
+        imageedit="{{ $imageedit }}"
+    ></manager-for-old-admin>
 </div>
 
 <script src="{{asset('js/app.js')}}"></script>
