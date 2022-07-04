@@ -16,13 +16,7 @@
         $inclassFree[$key]["free"] = true;
     }
     foreach ($elearningEvents as $key => $data) {
-        if($data['view_tpl'] == 'elearning_free'){
-            $elearningEvents[$key]["free"] = true;
-
-        }else{
-            $elearningEvents[$key]["free"] = false;
-
-        }
+        $elearningEvents[$key]["free"] = false;
     }
     foreach ($elearningFree as $key => $data) {
         $elearningFree[$key]["free"] = true;
