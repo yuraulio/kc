@@ -423,8 +423,8 @@ class LessonController extends Controller
 
                 $link = str_replace('https://', '', $link);
                 $link = str_replace('http://', '', $link);
-                $link = str_replace('www.', '', $link);
-                $link = str_replace('www', '', $link);
+                //$link = str_replace('www.', '', $link);
+                //$link = str_replace('www', '', $link);
 
                 $correct_link = strpos($link, 'https://');
 
