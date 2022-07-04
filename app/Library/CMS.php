@@ -204,11 +204,11 @@ class CMS
                 $data['elearningEvents'][$category['id']]['hours'] = $category['hours'];
                 $data['elearningEvents'][$category['id']]['events'] = [];
 
-                $data['elearningFree'][$category['id']]['name'] = $category['name'];
-                $data['elearningFree'][$category['id']]['slug'] = isset($category['slugable']) ? $category['slugable']['slug'] : '';
-                $data['elearningFree'][$category['id']]['description'] = $category['description'];
-                $data['elearningFree'][$category['id']]['hours'] = $category['hours'];
-                $data['elearningFree'][$category['id']]['events'] = [];
+                //$data['elearningFree'][$category['id']]['name'] = $category['name'];
+                //$data['elearningFree'][$category['id']]['slug'] = isset($category['slugable']) ? $category['slugable']['slug'] : '';
+                //$data['elearningFree'][$category['id']]['description'] = $category['description'];
+                //$data['elearningFree'][$category['id']]['hours'] = $category['hours'];
+                //$data['elearningFree'][$category['id']]['events'] = [];
 
                 $data['inclassFree'][$category['id']]['name'] = $category['name'];
                 $data['inclassFree'][$category['id']]['slug'] = isset($category['slugable']) ? $category['slugable']['slug'] : '';
@@ -222,18 +222,19 @@ class CMS
                     continue;
                 }
 
-                if ($event['view_tpl'] == 'elearning_event' || $event['view_tpl'] == 'elearning_pending') {
+                if ($event['view_tpl'] == 'elearning_event' || $event['view_tpl'] == 'elearning_pending' || $event['view_tpl'] == 'elearning_free') {
                     $data['elearningEvents'][$category['id']]['events'][] = $event;
+                    $data['elearningEvents'][$category['id']]['view_tpl'] = $event['view_tpl'];
                 } elseif ($event['view_tpl'] == 'event_free' || $event['view_tpl'] == 'event_free_coupon') {
                     $data['inclassFree'][$category['id']]['events'][] = $event;
-                } elseif ($event['view_tpl'] == 'elearning_free') {
+                } /*elseif ($event['view_tpl'] == 'elearning_free') {
                     $data['elearningFree'][$category['id']]['events'][] = $event;
-                } else {
+                }*/ else {
                     $data['nonElearningEvents'][$category['id']]['events'][] = $event;
                 }
             }
         }
-
+        //dd($data);
         foreach ($data as $key => $categories) {
             foreach ($categories as $key2 => $category) {
                 if (count($category['events']) == 0) {
