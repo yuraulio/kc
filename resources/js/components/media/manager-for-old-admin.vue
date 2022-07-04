@@ -13,6 +13,7 @@
         @inputed="imageSelected($event)"
         :uuid="$uuid.v4()"
         mode="single"
+        :imageEdit="imageedit"
     />
 
 </div>
@@ -21,7 +22,7 @@
 <script>
 export default {
     props: {
-        
+        imageedit: false,
     },
     data() {
         return {
