@@ -294,7 +294,7 @@ class UserController extends Controller
        $transaction->event()->attach($event_id);
 
 
-       if(!Invoice::latest()->doesntHave('subscription')->first()){
+       /*if(!Invoice::latest()->doesntHave('subscription')->first()){
         //if(!Invoice::has('event')->latest()->first()){
             $invoiceNumber = sprintf('%04u', 1);
         }else{
@@ -302,13 +302,14 @@ class UserController extends Controller
             $invoiceNumber = Invoice::latest()->doesntHave('subscription')->first()->invoice;
             $invoiceNumber = (int) $invoiceNumber + 1;
             $invoiceNumber = sprintf('%04u', $invoiceNumber);
-        }
+        }*/
 
-
+        $paymentMethodId = $event->paymentMethod->first() ? $event->paymentMethod->first()->id : -1;
+        
         $elearningInvoice = new Invoice;
         $elearningInvoice->name = isset($billingDetails['billname']) ? $billingDetails['billname'] : '';;
         $elearningInvoice->amount = $price;
-        $elearningInvoice->invoice = $invoiceNumber;
+        $elearningInvoice->invoice = generate_invoice_number($paymentMethodId);;
         $elearningInvoice->date = date('Y-m-d');//Carbon::today()->toDateString();
         $elearningInvoice->instalments_remaining = 1;
         $elearningInvoice->instalments = 1;

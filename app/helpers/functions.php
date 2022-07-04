@@ -8,6 +8,7 @@ use App\Model\Menu;
 use App\Model\Exam;
 use App\Model\Certificate;
 use App\Model\Category;
+use App\Model\PaymentMethod;
 
 function get_social_media(){
     $social_media = Option::where('name', 'social_media')->get();
@@ -399,6 +400,30 @@ if (!function_exists('get_certifation_crendetial')){
             }
     
             return $sumStudents;
+    
+        }
+    }
+
+
+    if (!function_exists('generate_invoice_number')){
+
+        function generate_invoice_number($paymentMethod){
+            
+            $paymentMethod = PaymentMethod::find($paymentMethod);
+
+            if(!$paymentMethod){
+                return 0;
+            }
+
+            $option = Option::where('name','payments_invoice')->first();
+            $invNumber = json_decode($option->settings,true);
+            $invoiceNumber = $paymentMethod->prefix . date('Ymd') . $invNumber[$paymentMethod->id];
+    
+            $invNumber[$paymentMethod->id] = $invNumber[$paymentMethod->id] + 1;
+            $option->settings = json_encode($invNumber);
+            $option->save();
+
+            return $invoiceNumber;
     
         }
     }

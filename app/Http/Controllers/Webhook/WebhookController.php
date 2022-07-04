@@ -97,7 +97,9 @@ class WebhookController extends BaseWebhookController
 			$this->sendEmail($invoice,$pdf,$paymentMethod,false,$billingEmail);
 		}else{
 			if(!Invoice::doesntHave('subscription')->latest()->first()){
-				$invoiceNumber = sprintf('%04u', 1);
+				//$invoiceNumber = sprintf('%04u', 1);
+				$invoiceNumber = generate_invoice_number($subscriptionPaymentMethod->pivot->payment_method);
+				
 			}else{
 
 				//$transaction = $user->events->where('id',$eventId)->first()->transactionsByUser($user->id)->first();
@@ -160,9 +162,11 @@ class WebhookController extends BaseWebhookController
 				}
 			
 				//$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;
-				$invoiceNumber = Invoice::latest()->doesntHave('subscription')->first()->invoice;
+				/*$invoiceNumber = Invoice::latest()->doesntHave('subscription')->first()->invoice;
 				$invoiceNumber = (int) $invoiceNumber + 1;
-				$invoiceNumber = sprintf('%04u', $invoiceNumber);
+				$invoiceNumber = sprintf('%04u', $invoiceNumber);*/
+
+				$invoiceNumber = generate_invoice_number($subscriptionPaymentMethod->pivot->payment_method);
 
 				$elearningInvoice = new Invoice;
                 $elearningInvoice->name = json_decode($transaction->billing_details,true)['billname'];

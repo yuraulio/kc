@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Model\PaymentMethod;
+use App\Model\Option;
 
 class PaymentMethodsController extends Controller
 {
@@ -28,8 +29,18 @@ class PaymentMethodsController extends Controller
     {
         $data = $this->handleSubmits($request);
         
+        $option = Option::where('name','payments_invoice')->first();
+        $invoicesNumber = json_decode($option->settings,true);
+
         $method = PaymentMethod::create($data);
         if ($method) {
+
+            if(!isset($invoicesNumber[$method->id])){
+                $invoicesNumber[$method->id] = 1;
+                $option->settings = json_encode($invoicesNumber);
+                $option->save();
+            }
+
             return redirect('admin/payment-methods/edit/'.$method->id);
         } else {
             return redirect('admin/payment-methods');
@@ -62,6 +73,14 @@ class PaymentMethodsController extends Controller
         
         $data = $this->handleSubmits($request);
         $method->update($data);
+
+        $option = Option::where('name','payments_invoice')->first();
+        $invoicesNumber = json_decode($option->settings,true);
+        if(!isset($invoicesNumber[$method->id])){
+            $invoicesNumber[$method->id] = 1;
+            $option->settings = json_encode($invoicesNumber);
+            $option->save();
+        }
         
         return redirect('admin/payment-methods/edit/'.$method->id);
         

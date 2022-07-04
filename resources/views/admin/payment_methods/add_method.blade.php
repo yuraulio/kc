@@ -92,6 +92,12 @@
                               @include('alerts.feedback', ['field' => 'payment_email'])
                            </div>
 
+                           <div class="form-group{{ $errors->has('footer') ? ' has-danger' : '' }}">
+                              <label class="form-control-label" for="inputprefix">{{ __('Prefix:') }}</label>
+                              <input type="text" name="prefix" id="input-prefix" class="form-control{{ $errors->has('prefix') ? ' is-invalid' : '' }}" placeholder="{{ __('Prefix') }}" value="{{ old('prefix',$method['prefix']) }}" required autofocus>
+                              @include('alerts.feedback', ['field' => 'prefix'])
+                           </div>
+
                            {{--<div class="form-group{{ $errors->has('type') ? ' has-danger' : '' }}">
                               <label class="form-control-label" for="input-status">{{ __('Type') }}</label>
                               <select name="type" id="input-status" class="form-control" placeholder="{{ __('Type') }}">

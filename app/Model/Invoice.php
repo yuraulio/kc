@@ -10,6 +10,7 @@ use App\Model\Event;
 use App\Model\PaymentMethod;
 use Laravel\Cashier\Subscription;
 use PDF;
+use App\Model\Option;
 
 class Invoice extends Model
 {
@@ -239,14 +240,15 @@ class Invoice extends Model
         $this->instalments_remaining = 0;
         $this->save();
     
-        if(!Invoice::latest()->doesntHave('subscription')->first()){
+        /*if(!Invoice::latest()->doesntHave('subscription')->first()){
             $invoiceNumber = sprintf('%04u', 1);
         }else{
             $invoiceNumber = Invoice::latest()->doesntHave('subscription')->first()->invoice;
             $invoiceNumber = (int) $invoiceNumber + 1;
             $invoiceNumber = sprintf('%04u', $invoiceNumber);
-        }
+        }*/
 
+        
         $user = $this->user()->first();
         $event = $this->event()->first();
         $transaction = $this->transaction()->first();
@@ -255,13 +257,14 @@ class Invoice extends Model
 
         $newInvoice->name = $this->name;
         $newInvoice->amount = $this->amount;
-        $newInvoice->invoice = $invoiceNumber;
+        $newInvoice->invoice = generate_invoice_number($paymentMethodId);
         $newInvoice->date = $date;
         $newInvoice->instalments_remaining = $remainingInst;
         $newInvoice->instalments = $this->instalments;
 
         $newInvoice->save();
 
+        
         //$newInvoice->event()->save($this->event()->first());
         //$newInvoice->user()->save($this->user()->first());
         //$newInvoice->transaction()->save($this->transaction()->first());
