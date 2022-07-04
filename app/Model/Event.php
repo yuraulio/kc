@@ -34,6 +34,7 @@ use App\Model\Coupon;
 use App\Model\Video;
 use App\Model\Certificate;
 use App\Model\WaitingList;
+use App\Model\EventInfo;
 
 class Event extends Model
 {
@@ -87,11 +88,11 @@ class Event extends Model
             return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id','instructor_id')->where('instructor_id','!=', NULL)
             ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.priority','asc');
         }else{
-            
+
             return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id','instructor_id')->where('instructor_id','!=', NULL)
             ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.time_starts','asc');
         }
-        
+
     }
 
     //forEventEdit
@@ -101,11 +102,11 @@ class Event extends Model
             return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id','instructor_id')
             ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.priority','asc');
         }else{
-            
+
             return $this->belongsToMany(Topic::class, 'event_topic_lesson_instructor')->select('topics.*','topic_id','instructor_id')
             ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room', 'priority')->with('lessons.instructor')->orderBy('event_topic_lesson_instructor.time_starts','asc');
         }
-        
+
     }
 
     public function topic_edit_instructor()
@@ -128,16 +129,16 @@ class Event extends Model
 
     public function lessons()
     {
-    
+
         if($this->delivery->first() && $this->delivery->first()->id == 143){
-            
+
             return $this->belongsToMany(Lesson::class,'event_topic_lesson_instructor')->where('status',true)->select('lessons.*','topic_id','event_id', 'lesson_id','instructor_id')
             ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room','priority')->orderBy('event_topic_lesson_instructor.priority','asc')->with('type');//priority
         }else{
             return $this->belongsToMany(Lesson::class,'event_topic_lesson_instructor')->where('status',true)->select('lessons.*','topic_id','event_id', 'lesson_id','instructor_id')
             ->withPivot('event_id','topic_id','lesson_id','instructor_id', 'date', 'time_starts', 'time_ends', 'duration', 'room','priority')->orderBy('event_topic_lesson_instructor.time_starts','asc')->with('type');//priority
         }
-        
+
     }
 
     public function plans(){
@@ -258,12 +259,12 @@ class Event extends Model
         $lessons = $this->lessons->groupBy('topic_id');
         $sum1 = 0;
         //162
-        
+
         // sum topic duration
         foreach($lessons as $key => $lesson1){
 
             $sum1 = 0;
-            
+
             foreach($lesson1 as $key1 => $lesson){
                 $sum = 0;
 
@@ -334,10 +335,10 @@ class Event extends Model
 
 
         $instructors = $this->instructors->unique()->groupBy('instructor_id')->toArray();
-        
+
         foreach($this->topic->unique()->groupBy('topic_id') as $key => $topic){
             foreach($topic as $t){
-               
+
                 if(!isset($lessons[$t->id])){
                     continue;
                 }
@@ -359,7 +360,7 @@ class Event extends Model
 
 
         }
-      
+
         $data['topics'] = $topics;
         $data['instructors'] = $instructors;
         foreach($data['topics'] as $key => $topics){
@@ -663,24 +664,24 @@ class Event extends Model
     }
 
     public function getTotalHours(){
-        
+
         $timeStarts = false;
         $timeEnds = false;
         $hours = 0;
-        
+
         foreach($this->lessons as $lesson){
             $timeStarts = false;
             $timeEnds = false;
-            
+
             $timeStarts = (int) date('H', strtotime($lesson->pivot->time_starts));
             $timeEnds = (int) date('H', strtotime($lesson->pivot->time_ends));
 
             if($timeStarts && $timeEnds){
                 $hours += ($timeEnds - $timeStarts) * 60;
             }
-    
+
         }
-   
+
         return $hours;
     }
 
@@ -690,6 +691,11 @@ class Event extends Model
         $value = html_entity_decode($value);
 
         return $value;
+    }
+
+    public function event_info()
+    {
+        return $this->hasOne(EventInfo::class);
     }
 
 }
