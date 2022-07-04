@@ -11,6 +11,116 @@
     margin-bottom: 15px;
 }
 
+/* Event Edit New */
+
+#event_edit_form #input-status {
+    background-color: #5e72e4;
+    color: white;
+}
+
+#event_edit_form #input-status option {
+    background-color: white;
+    color: black;
+}
+
+.visible-item {
+    margin-right: 2px;
+}
+
+#event_edit_form #input-delivery {
+    background-color: #5e72e4;
+    color: white;
+}
+
+#event_edit_form #input-delivery option {
+    background-color: white;
+    color: black;
+}
+
+#event_edit_form #input-city_id {
+    background-color: #5e72e4;
+    color: white;
+}
+
+#event_edit_form #input-city_id option {
+    background-color: white;
+    color: black;
+}
+
+.input-icon-wrapper {
+    margin: -7px 0;
+}
+
+.visible-item {
+    margin-top: 14%;
+}
+
+.visible-label {
+    position: absolute;
+}
+
+
+#event_edit_form #input-method {
+    background-color: #5e72e4;
+    color: white;
+}
+
+#event_edit_form #input-method option {
+    background-color: white;
+    color: black;
+}
+
+.toggle-btn-inline-text {
+    margin-right: 2%;
+}
+
+#access-student {
+    margin-right: 2%;
+}
+
+.form-group .custom-toggle {
+    vertical-align: top;
+}
+
+.custom-published,
+.index-toggle,
+.feed-toggle {
+    margin-top: 1.5rem;
+}
+
+#input-published-input{
+    margin-top: 1rem;
+}
+
+
+.input-icon{
+    border: none;
+}
+
+#event_edit_form #input-syllabus1 {
+    background-color: #5e72e4;
+    color: white;
+}
+
+#event_edit_form #input-syllabus1 option {
+    background-color: white;
+    color: black;
+}
+
+#event_edit_form .select2-selection.select2-selection--single {
+    background-color: #5e72e4;
+    color: white;
+}
+
+#event_edit_form .select2-selection.select2-selection--single option {
+    background-color: white;
+    color: black;
+}
+
+#event_edit_form .course-manager-wrapper .select2-selection__placeholder {
+    color: white;
+}
+
 /***** Search List *****/
 .search {
     display: block !important;
@@ -280,6 +390,22 @@ li.select2-results__option:empty {
 
 .custom-toggle.custom-published {
     width: 100px;
+}
+
+#event_edit_form .custom-toggle.custom-published {
+    width: 120px;
+}
+
+#event_edit_form .custom-toggle.index-toggle {
+    width: 120px !important;
+}
+
+#event_edit_form .custom-toggle.feed-toggle {
+    width: 120px !important;
+}
+
+#event_edit_form .title {
+    color: #324cdd;
 }
 
 .custom-toggle.custom-published input:checked+.custom-toggle-slider::before {

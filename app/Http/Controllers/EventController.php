@@ -25,6 +25,7 @@ use App\Jobs\SendMaiWaitingList;
 use Artisan;
 use Storage;
 use App\Model\Dropbox;
+use App\Model\EventInfo;
 
 class EventController extends Controller
 {
@@ -94,7 +95,7 @@ class EventController extends Controller
         {
             //var_dump($lesson['id']);
             $find = $event->topic()->wherePivot('topic_id', $request->topic_id)->wherePivot('lesson_id', $lesson['id'])->first();
-            
+
             if($find == null && $request->status1 == '0')
             {
                 $a = $event->topic()->attach($request->topic_id,['lesson_id' => $lesson['id']]);
@@ -150,6 +151,35 @@ class EventController extends Controller
 
     }
 
+    public function removePaymentMethod(Request $request, Event $event)
+    {
+
+        /*if(count($event->users) > 0){
+            return response()->json([
+                'success' => false,
+                'message' => 'Payment Method Cannot Changed'
+            ]);
+        }*/
+
+
+        if(count($event->paymentMethod()->get()) != 0){
+            $event->paymentMethod()->detach();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Payment Method Removed'
+            ]);
+        }else{
+            return response()->json([
+                'success' => true,
+                'message' => 'Nothing to remove'
+            ]);
+        }
+
+
+
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -157,7 +187,7 @@ class EventController extends Controller
      */
     public function create()
     {
-        
+
         $user = Auth::user();
 
         $categories = Category::all();
@@ -167,7 +197,7 @@ class EventController extends Controller
         $cities = City::all();
         $partners = Partner::all();
 
-        return view('event.create', ['user' => $user, 'events' => Event::all(), 'categories' => $categories, 'types' => $types, 'delivery' =>$delivery, 
+        return view('event.create', ['user' => $user, 'events' => Event::all(), 'categories' => $categories, 'types' => $types, 'delivery' =>$delivery,
                                         'instructors' => $instructors, 'cities' => $cities,'partners'=>$partners]);
     }
 
@@ -206,31 +236,31 @@ class EventController extends Controller
         $event->createSlug($request->slug ? $request->slug : $request->title);
         $event->createMetas($request->all());
 
-        
+
         if($request->category_id != null){
             $category = Category::with('topics')->find($request->category_id);
 
             $event->category()->attach([$category->id]);
 
             //assign all topics with lesson
-            
+
             foreach($category->topics as $topic){
                //dd($topic);
                 //$lessons = Topic::with('lessons')->find($topic['id']);
                 //$lessons = $topic->lessonsCategory;
                 $lessons = $topic->lessonsCategory()->wherePivot('category_id',$category->id)->get();
-                
+
                 foreach($lessons as $lesson){
-                   
+
                     $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id'],'priority'=>$lesson->pivot->priority]);
-                    
+
                 }
             }
 
         }
 
         $event->city()->sync([$request->city_id]);
-        
+
         $event->partners()->detach();
         foreach((array) $request->partner_id as $partner_id){
             $event->partners()->attach($partner_id);
@@ -238,7 +268,7 @@ class EventController extends Controller
 
 
 
-       
+
         if($request->type_id != null){
             //dd($request->type_id);
             $event->type()->sync($request->type_id);
@@ -333,7 +363,7 @@ class EventController extends Controller
                 $unassigned[$allTopics['id']]['lessons'] = Topic::with('lessonsCategory')->find($allTopics['id'])->lessonsCategory;
                 //$unassigned[$allTopics['id']]['lessons'] =Topic::with('lessonsCategory')->find($allTopics['id'])->lessonsCategory()->wherePivot('category_id',219)->get();
 
-                
+
             }
         }
 
@@ -386,24 +416,162 @@ class EventController extends Controller
         if($li) {
 
             $folders = $li->listContents();
-      
+
             foreach ($folders as $key => $row) {
-                
+
                 if($row['type'] == 'dir') :
                     $data['folders'][$row['basename']] = $row['basename'];
                 endif;
             }
-           
+
             $data['already_assign'] = $event->dropbox;
 
         }
 
-        
+
         //dd($data['topics']);
 
         return view('event.edit', $data);
     }
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Model\Event  $event
+     * @return \Illuminate\Http\Response
+     */
+    public function edit_new(Event $event)
+    {
 
+        //$faq = Faq::find(16);
+        //dd($faq->category);
+
+        $data['sumOfStudents'] = count($event->users);
+        $data['totalRevenue'] = $event->transactions->sum('amount');
+
+        $user = Auth::user();
+        $id = $event['id'];
+        //$event = $event->with('coupons','delivery','category', 'summary1', 'benefits', 'ticket', 'city', 'venues', 'topic', 'lessons', 'instructors', 'users', 'partners', 'sections','paymentMethod','slugable','metable', 'medias', 'sectionVideos');
+        //dd($event['topic']);
+        //dd($event->summary1);
+        //dd($event->medias->details);
+        $categories = Category::all();
+
+        $types = Type::all();
+        $partners = Partner::all();
+
+        //dd($event->category->first());
+        if($event->category->first() != null){
+            $allTopicsByCategory = Category::with('topics')->find($event->category->first()->id);
+        }else{
+            $allTopicsByCategory = Category::with('topics')->first();
+        }
+        //dd($allTopicsByCategory);
+
+
+        //dd($event['lessons']->unique()->groupBy('topic_id'));
+        //$allTopicsByCategory1 = $event['lessons']->unique()->groupBy('topic_id');
+        $allTopicsByCategory1 = $event['lessons']->groupBy('topic_id');
+        //dd($allTopicsByCategory1[185]);
+        $data['instructors1'] = Instructor::with('medias')->where('status', 1)->get()->groupBy('id');
+        $instructors = $event['instructors']->groupBy('lesson_id');
+        //dd($instructors);
+        $topics = $event['allTopics']->unique()->groupBy('topic_id');
+        $unassigned = [];
+        //dd($allTopicsByCategory->topics[1]);
+        //dd($allTopicsByCategory1);
+
+        foreach($allTopicsByCategory->topics as $key => $allTopics){
+
+            $found = false;
+            foreach($allTopicsByCategory1 as $key1 => $assig){
+                //dd($assig);
+                if($allTopics['id'] == $key1){
+                    $found = true;
+                }
+            }
+            if(!$found){
+                $unassigned[$allTopics['id']] = $allTopics;
+
+                $unassigned[$allTopics['id']]['lessons'] = Topic::with('lessonsCategory')->find($allTopics['id'])->lessonsCategory;
+                //$unassigned[$allTopics['id']]['lessons'] =Topic::with('lessonsCategory')->find($allTopics['id'])->lessonsCategory()->wherePivot('category_id',219)->get();
+
+
+            }
+        }
+
+        //dd($unassigned);
+       // dd($event['topic']->groupBy('id'));
+        //dd($allTopicsByCategory);
+        $data['unassigned'] = $unassigned;
+        //dd($data['unassigned']);
+        $data['event'] = $event;
+        //dd($event);
+        $data['categories'] = $categories;
+        $data['cities'] = City::all();
+        $data['partners'] = Partner::all();
+        $data['types'] = $types;
+        $data['user'] = $user;
+        $data['allTopicsByCategory'] = $allTopicsByCategory;
+        $data['lessons'] = $allTopicsByCategory1;
+        //dd($allTopicsByCategory1);
+        $data['instructors'] = $instructors;
+        $data['topics'] = $topics;
+
+        $data['slug'] = $event['slugable'];
+        $data['metas'] = $event['metable'];
+
+        $data['methods'] = PaymentMethod::where('status',1)->get();
+        $data['delivery'] = Delivery::all();
+        $data['isInclassCourse'] = $event->is_inclass_course();
+        $data['eventFaqs'] = $event->faqs->pluck('id')->toArray();
+        $data['eventUsers'] = $event->users;//$event->users->toArray();
+        $data['eventWaitingUsers'] = $event->waitingList()->with('user')->get();
+        $data['coupons'] = Coupon::all();
+        $data['activeMembers'] = 0;
+        $data['sections'] = $event->sections->groupBy('section');
+
+        //if elearning course (id = 143)
+        $elearning_events = Delivery::with('event:id,title')->where('id',143)->whereHas('event', function ($query) {
+            return $query->where('published', true);
+        })->first()->toArray()['event'];
+
+
+        $data['elearning_events'] = $elearning_events;
+
+
+        $today = strtotime(date('Y-m-d'));
+        if(!$data['isInclassCourse']){
+
+            foreach($data['eventUsers'] as $activeUser){
+                if(!$activeUser['pivot']['expiration'] || $today <= strtotime($activeUser['pivot']['expiration'])){
+                    $data['activeMembers'] += 1;
+                }
+            }
+
+
+        }
+
+        $data['folders'] = [];
+        $li = Storage::disk('dropbox');
+        if($li) {
+
+            $folders = $li->listContents();
+
+            foreach ($folders as $key => $row) {
+
+                if($row['type'] == 'dir') :
+                    $data['folders'][$row['basename']] = $row['basename'];
+                endif;
+            }
+
+            $data['already_assign'] = $event->dropbox;
+
+        }
+
+
+        //dd($data['topics']);
+        return view('event.edit_new', $data);
+    }
     /**
      * Update the specified resource in storage.
      *
@@ -413,7 +581,7 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
-        
+
         if($request->published == 'on')
         {
             $published = 1;
@@ -426,10 +594,10 @@ class EventController extends Controller
 
         //dd($request->all());
        //dd($request->release_date_files);
-       
+
        $launchDate = $request->launch_date ? date('Y-m-d',strtotime($request->launch_date)) : $published_at;
 
-        $request->request->add(['published' => $published, 'published_at' => $published_at, 
+        $request->request->add(['published' => $published, 'published_at' => $published_at,
             'release_date_files' => date('Y-m-d', strtotime($request->release_date_files)),
             'launch_date'=>$launchDate,'title'=>$request->eventTitle]);
         $ev = $event->update($request->all());
@@ -445,7 +613,7 @@ class EventController extends Controller
         $event->category()->sync([$request->category_id]);
         $event->city()->sync([$request->city_id]);
 
-       
+
         $event->partners()->detach();
         foreach((array) $request->partner_id as $partner_id){
             $event->partners()->attach($partner_id);
@@ -473,7 +641,7 @@ class EventController extends Controller
                     //$lessons = Topic::with('lessons')->find($topic['id']);
                     //$lessons = $topic->lessonsCategory;
                     $lessons = $topic->lessonsCategory()->wherePivot('category_id',$category->id)->get();
-                
+
                     foreach($lessons as $lesson){
                         $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id'],'priority'=>$lesson->pivot->priority]);
                     }
@@ -496,7 +664,7 @@ class EventController extends Controller
             $event->video()->attach($request->video);
         }
         foreach((array) $request->sections as $key => $sectionn){
-            
+
             if( $section = Section::find($sectionn['id']) ){
                 $section->tab_title = $sectionn['tab_title'];
                 $section->title = $sectionn['title'];
@@ -513,10 +681,10 @@ class EventController extends Controller
                 $section->save();
 
                 $event->sections()->save($section);
-               
+
             }
 
-            
+
         }
 
         if($event->status == 0 && $request->old_status == 5){
@@ -524,10 +692,387 @@ class EventController extends Controller
             dispatch((new SendMaiWaitingList($event->id))->delay(now()->addSeconds(3)));
 
         }
-        
+
         return back()->withStatus(__('Event successfully updated.'));
         //return redirect()->route('events.edit',$event->id)->withStatus(__('Event successfully created.'));
         //return redirect()->route('events.index')->withStatus(__('Event successfully updated.'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Model\Event  $event
+     * @return \Illuminate\Http\Response
+     */
+    public function update_new(Request $request, Event $event)
+    {
+
+        if($request->published == 'on')
+        {
+            $published = 1;
+            $published_at = !$event->published_at ? date("Y-m-d") : $event->published_at;
+        }else
+        {
+            $published = 0;
+            $published_at = $event->published_at;
+        }
+
+        //dd($request->all());
+       //dd($request->release_date_files);
+
+       $launchDate = $request->launch_date ? date('Y-m-d',strtotime($request->launch_date)) : $published_at;
+
+        $request->request->add(['published' => $published, 'published_at' => $published_at,
+            'release_date_files' => date('Y-m-d', strtotime($request->release_date_files)),
+            'launch_date'=>$launchDate,'title'=>$request->eventTitle]);
+        $ev = $event->update($request->all());
+
+        /*if($request->image_upload != null && $ev){
+            $event->updateMedia($request->image_upload);
+        }*/
+
+        if($request->syllabus){
+            $event->syllabus()->sync($request->syllabus);
+        }else{
+            $event->syllabus()->detach();
+        }
+
+        $event->category()->sync([$request->category_id]);
+        $event->city()->sync([$request->city_id]);
+
+
+        if($request->partner_enabled){
+
+            $event->partners()->detach();
+            foreach((array) $request->partner_id as $partner_id){
+                $event->partners()->attach($partner_id);
+            }
+
+        }else{
+            $event->partners()->detach();
+        }
+
+
+        if($request->folder_name != null){
+            $exist_dropbox = Dropbox::where('folder_name', $request->folder_name)->first();
+            if($exist_dropbox){
+                $event->dropbox()->sync([$exist_dropbox->id]);
+            }
+
+        }
+
+        if($request->category_id != $request->oldCategory){
+            $category = Category::with('topics')->find($request->category_id);
+
+
+            if($category){
+
+                $event->topic()->detach();
+                //assign all topics with lesson
+
+                foreach($category->topics as $topic){
+                   //dd($topic);
+                    //$lessons = Topic::with('lessons')->find($topic['id']);
+                    //$lessons = $topic->lessonsCategory;
+                    $lessons = $topic->lessonsCategory()->wherePivot('category_id',$category->id)->get();
+
+                    foreach($lessons as $lesson){
+                        $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id'],'priority'=>$lesson->pivot->priority]);
+                    }
+                }
+            }
+
+        }
+
+
+        $event->type()->sync($request->type_id);
+
+
+        if($request->delivery != null){
+            $event->delivery()->detach();
+
+            $event->delivery()->attach($request->delivery);
+        }
+
+        if($request->video != null){
+            $event->video()->attach($request->video);
+        }
+        foreach((array) $request->sections as $key => $sectionn){
+
+            if( $section = Section::find($sectionn['id']) ){
+                $section->tab_title = $sectionn['tab_title'];
+                $section->title = $sectionn['title'];
+                $section->visible = (isset($sectionn['visible']) && $sectionn['visible'] == 'on') ? true : false;
+                $section->save();
+            }else{
+
+                $section = new Section;
+
+                $section->section = $key;
+                $section->tab_title = $sectionn['tab_title'];
+                $section->title = $sectionn['title'];
+                $section->visible = (isset($sectionn['visible']) && $sectionn['visible'] == 'on') ? true : false;
+                $section->save();
+
+                $event->sections()->save($section);
+
+            }
+
+
+        }
+
+        if(isset($request->partner_enabled)){
+            $partner = true;
+        }else{
+            $partner = false;
+        }
+
+        $event_info = $this->prepareInfo($request->course, $request->status, $request->delivery, $request->absences_limit, $partner, $request->syllabus, $request->certificate_title, $request->city_id);
+
+        //dd($event_info);
+        $this->updateEventInfo($event_info, $event->id);
+
+        if($event->status == 0 && $request->old_status == 5){
+            //SendMaiWaitingList::dispatchAfterResponse($event->id);
+            dispatch((new SendMaiWaitingList($event->id))->delay(now()->addSeconds(3)));
+
+        }
+
+        return back()->withStatus(__('Event successfully updated.'));
+        //return redirect()->route('events.edit',$event->id)->withStatus(__('Event successfully created.'));
+        //return redirect()->route('events.index')->withStatus(__('Event successfully updated.'));
+    }
+
+    public function updateEventInfo($event_info, $event_id)
+    {
+        //dd($event_info);
+        $event = Event::find($event_id);
+
+        if($event->event_info === null){
+            $infos = new EventInfo();
+            $infos->event_id = $event->id;
+            $infos->course_inclass_absences = $event_info['course_inclass_absences'];
+            $infos->course_status = $event_info['course_status'];
+            $infos->course_delivery = $event_info['course_delivery'];
+            $infos->course_hours = $event_info['course_hours'];
+            $infos->course_language = $event_info['course_language'];
+            $infos->course_language_visible = $event_info['course_language_visible'];
+            $infos->course_partner = $event_info['course_partner'];
+            $infos->course_manager = $event_info['course_manager'];
+            $infos->course_certification_name_success = $event_info['course_certification_name_success'];
+            $infos->course_hours_visible = $event_info['course_hours_visible'];
+            $infos->course_inclass_city = $event_info['course_inclass_city'];
+            $infos->course_inclass_dates = $event_info['course_inclass_dates'];
+            $infos->course_inclass_times = $event_info['course_inclass_times'];
+            $infos->course_inclass_days = $event_info['course_inclass_days'];
+            $infos->course_payment_method = $event_info['course_payment_method'];
+            $infos->course_awards = $event_info['course_awards'];
+            $infos->course_awards_text = $event_info['course_awards_text'];
+            $infos->course_certification_name_failure = $event_info['course_certification_name_failure'];
+            $infos->course_certification_type = $event_info['course_certification_type'];
+            $infos->course_certification_visible = $event_info['course_certificate_visible'];
+            $infos->course_students_number = $event_info['course_students_number'];
+            $infos->course_students_text = $event_info['course_students_text'];
+            $infos->course_students_visible = $event_info['course_students_visible'];
+            $infos->course_elearning_access = $event_info['course_elearning_access'];
+
+            $infos->save();
+        }else{
+        }
+
+
+
+
+
+    }
+
+    public function prepareVisibleData($data = false)
+    {
+        $visible_returned_data = ['landing' => 0, 'home' => 0, 'list' => 0, 'invoice' => 0, 'emails' => 0];
+
+        if(!$data){
+            return $visible_returned_data;
+        }
+
+        foreach($data as $key => $item){
+            if(in_array($item,$data)){
+                $visible_returned_data[$key] = 1;
+            }
+        }
+
+        return $visible_returned_data;
+    }
+
+    public function prepareInfo($requestData, $status, $delivery, $absences, $partner, $syllabus, $certification_title, $cityId)
+    {
+        $data = [];
+
+        switch($status){
+            case 1:
+                $status = 'Open';
+                break;
+            case 2:
+                $status = 'Soldout';
+                break;
+            case 3:
+                $status = 'Completed';
+                break;
+            case 4:
+                $status = 'My Account Only';
+                break;
+            case 5:
+                $status = 'Waiting';
+        }
+
+        $delivery = Delivery::find($delivery)['name'];
+        $city = City::find($cityId);
+
+        $data['course_inclass_absences'] = $absences;
+        $data['course_status'] = $status;
+        $data['course_delivery'] = $delivery;
+        $data['course_hours'] = $requestData['hours']['text'];
+
+        $data['course_partner'] = $partner;
+        $data['course_manager'] = ($syllabus != null) ? true : false;
+        $data['course_certification_name_success'] = $certification_title;
+        $data['course_inclass_city'] = ($city) ? $city->name : null;
+
+        if(isset($requestData['hours']['visible'])){
+
+            $visible_loaded_data = $requestData['hours']['visible'];
+            $data['course_hours_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
+
+        }else{
+            $data['course_hours_visible'] = json_encode($this->prepareVisibleData());
+        }
+
+        //Hour Icons
+
+        //end hour icon
+
+        // Language
+        $data['course_language'] = $requestData['language']['text'];
+        if(isset($requestData['language']['visible'])){
+
+            $visible_loaded_data = $requestData['language']['visible'];
+            $data['course_language_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
+
+        }else{
+            $data['course_language_visible'] = json_encode($this->prepareVisibleData());
+        }
+        //Language Icons
+
+        //end language icon
+
+        if(isset($requestData['delivery']['inclass'])){
+            $dates = [];
+            $days = [];
+            $times = [];
+
+
+            // Dates
+            if(isset($requestData['delivery']['inclass']['dates'])){
+                $dates['text'] = $requestData['delivery']['inclass']['dates']['text'];
+
+                if(isset($requestData['delivery']['inclass']['dates']['visible'])){
+                    $visible_loaded_data = $requestData['delivery']['inclass']['dates']['visible'];
+                    $dates['visible'] = $this->prepareVisibleData($visible_loaded_data);
+                }else{
+                    $dates['visible'] = json_encode($this->prepareVisibleData());
+                }
+            }
+            $data['course_inclass_dates'] = json_encode($dates);
+
+            // Days
+            if(isset($requestData['delivery']['inclass']['day'])){
+                $days['text'] = $requestData['delivery']['inclass']['day']['text'];
+
+                if(isset($requestData['delivery']['inclass']['day']['visible'])){
+                    $visible_loaded_data = $requestData['delivery']['inclass']['day']['visible'];
+                    $days['visible'] = $this->prepareVisibleData($visible_loaded_data);
+                }else{
+                    $days['visible'] = $this->prepareVisibleData();
+                }
+            }
+            $data['course_inclass_days'] = json_encode($days);
+
+            // Times
+            if(isset($requestData['delivery']['inclass']['times'])){
+                $times['text'] = $requestData['delivery']['inclass']['times']['text'];
+
+                if(isset($requestData['delivery']['inclass']['times']['visible'])){
+                    $visible_loaded_data = $requestData['delivery']['inclass']['times']['visible'];
+                    $times['visible'] = $this->prepareVisibleData($visible_loaded_data);
+                }else{
+                    $times['visible'] = $this->prepareVisibleData();
+                }
+            }
+            $data['course_inclass_times'] = json_encode($times);
+        }
+
+
+        // Free E-learning
+        if(isset($requestData['free_courses']['list'])){
+            $data['course_elearning_access'] = json_encode($requestData['free_courses']['list']);
+        }else{
+            $data['course_elearning_access'] = null;
+        }
+
+        // Payment
+
+        if(isset($requestData['payment'])){
+            if(isset($requestData['payment']['paid'])){
+                $data['course_payment_method'] = 'paid';
+            }else{
+                $data['course_payment_method'] = 'free';
+            }
+        }else{
+            $data['course_payment_method'] = 'free';
+        }
+
+        // Award
+        if(isset($requestData['awards'])){
+            $data['course_awards'] = true;
+            $data['course_awards_text'] = $requestData['awards']['text'];
+        }else{
+            $data['course_awards'] = false;
+            $data['course_awards_text'] = null;
+        }
+
+        // Certificate
+        if(isset($requestData['certificate'])){
+            $data['course_certification_name_failure'] = $requestData['certificate']['failure_text'];
+            $data['course_certification_type'] = $requestData['certificate']['type'];
+
+            if(isset($requestData['certificate']['visible'])){
+
+                $visible_loaded_data = $requestData['certificate']['visible'];
+                $data['course_certificate_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
+
+            }else{
+                $data['course_certificate_visible'] = json_encode($this->prepareVisibleData());
+            }
+        }
+
+        // Students
+        if(isset($requestData['students'])){
+            $data['course_students_number'] = $requestData['students']['count_start'];
+            $data['course_students_text'] = $requestData['students']['text'];
+
+            if(isset($requestData['students']['visible'])){
+
+                $visible_loaded_data = $requestData['students']['visible'];
+                $data['course_students_visible'] = json_encode($this->prepareVisibleData($visible_loaded_data));
+
+            }else{
+                $data['course_students_visible'] = json_encode($this->prepareVisibleData());
+            }
+        }
+
+
+        return $data;
+
     }
 
     /**
@@ -589,7 +1134,7 @@ class EventController extends Controller
     public function cloneEvent(Request $request, Event $event){
 
         $newEvent = $event->replicate();
-        
+
 
         $newEvent->published = false;
         $newEvent->title = $newEvent->title . ' - clone';
@@ -610,25 +1155,25 @@ class EventController extends Controller
                 $newValues = [];
                 foreach($values as $value){
 
-    
+
                     $valuee = $value->replicate();
                     $valuee->push();
 
                     if($value->medias){
                         $valuee->medias()->delete();
                         //$valuee->createMedia();
-                        
+
                         $medias = $value->medias->replicate();
                         $medias->push();
                         //dd($medias);
                         $valuee->medias()->save($medias);
                     }
-                    
 
-                    $newValues[] = $valuee; 
+
+                    $newValues[] = $valuee;
 
                 }
-                
+
                 $newValues = collect($newValues);
                 $newEvent->{$relationName}()->detach();
 
@@ -639,7 +1184,7 @@ class EventController extends Controller
             }else{
                 $newEvent->{$relationName}()->sync($values);
             }
- 
+
         }
 
 
@@ -649,11 +1194,11 @@ class EventController extends Controller
             }
 
             $newEvent->lessons()->attach($lesson->pivot->lesson_id,['topic_id'=>$lesson->pivot->topic_id, 'date'=>$lesson->pivot->date,
-                'time_starts'=>$lesson->pivot->time_starts,'time_ends'=>$lesson->pivot->time_ends, 'duration' => $lesson->pivot->duration, 
+                'time_starts'=>$lesson->pivot->time_starts,'time_ends'=>$lesson->pivot->time_ends, 'duration' => $lesson->pivot->duration,
                 'room' => $lesson->pivot->room,'instructor_id' => $lesson->pivot->instructor_id, 'priority' => $lesson->pivot->priority]);
         }
 
-        
+
         //$newEvent->lessons()->save($event->lessons());
 
         $newEvent->createMetas();
@@ -672,9 +1217,9 @@ class EventController extends Controller
 
 
     public function deleteExplainerVideo(Request $request, Event $event, $explainerVideo){
-        
+
         $event->sectionVideos()->where('id',$explainerVideo)->detach();
-        
+
         return back();
 
     }
