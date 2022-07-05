@@ -598,12 +598,17 @@ class CronjobsController extends Controller
             }
             
             foreach($transaction['user'] as $user){
-   
+                //dd($event);
+                $expiration = $event->users()->wherePivot('user_id',$user->id)->first();
+                if(!$expiration){
+                    continue;
+                }
+                
                 $data['firstName'] = $user->firstname;
                 $data['eventTitle'] = $event->title;
                 $data['subject'] = 'Knowcrunch - ' . $data['firstName'] .' enjoying ' . $event->title .'?';
                 $data['elearningSlug'] = url('/') . '/myaccount/elearning/' . $event->title;
-                $data['expirationDate'] = date('d-m-Y',strtotime($user->pivot->expiration));
+                $data['expirationDate'] = date('d-m-Y',strtotime($expiration->pivot->expiration));
                 $data['template'] = 'emails.user.elearning_f&qemail';
 
                 $user->notify(new ElearningFQ($data));
