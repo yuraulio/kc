@@ -161,7 +161,7 @@ class MediaController extends Controller
                 // save to db
                 $mfile = $this->storeFile($version_name, $version[0], $imgpath, $mediaFolder->id, $image->filesize(), $mfile_original->id, $request->alt_text, $request->link);
                 $files[] = new MediaFileResource($mfile);
-                
+
                 TinifyImage::dispatch(public_path() . $mfile->full_path, $mfile->id);
             }
 
@@ -427,7 +427,7 @@ class MediaController extends Controller
             $newPath = Str::replaceLast($oldFolderNameSlugify, $newFolderNameSlugify, $oldPath);
 
             RenameFolder::dispatch($oldPath, $newPath, $folder->id, true, $request->name);
-            
+
             return response()->json('success', 200);
         } catch (Exception $e) {
             Log::error("Failed to update pages when renaming folder (controller). " . $e->getMessage());
@@ -464,7 +464,7 @@ class MediaController extends Controller
             $mediaFolder->url = config('app.url') . "/uploads" . $path;
             $mediaFolder->user_id = Auth::user()->id;
             $mediaFolder->save();
-            
+
             $path = $mediaFolder->path . "/";
         }
 

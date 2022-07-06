@@ -429,6 +429,7 @@ export default {
 
     },
     mounted() {
+        console.log('mounted file manager')
         if (this.loadstart) {
             // console.log('setted');
             this.getFolders();

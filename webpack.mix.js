@@ -10,7 +10,6 @@ const mix = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
  */
-
 mix.js('resources/js/app.js', 'public/js')
     .vue({ version: 2 })
    .sass('resources/assets/scss/argon.scss', 'public/css');
@@ -88,7 +87,7 @@ mix.js('resources/js/app.js', 'public/js')
           'public/theme/assets/css/new/core.css',
           'public/theme/assets/js/new_js1/app1.js',
           'public/theme/assets/js/new_js1/burger.js'
-          
+
       ]);
   //});
 

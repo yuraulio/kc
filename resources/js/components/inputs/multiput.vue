@@ -40,7 +40,7 @@
             </div>
             <div v-else>
                 <i @click="$set(loadstart, (keyput + 'media'),  true)" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" class="text-muted dripicons-photo d-none image-input-icon" style="font-size: 100px;"></i>
-                <button @click="$set(loadstart, (keyput + 'media'),  true)" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" aria-controls="offcanvasScrolling"  class="btn btn-soft-primary image-input-button">
+                <button @click="$set(loadstart, (keyput + 'media'),  true)" type="button" data-bs-toggle="offcanvas" :data-bs-target="'#mediaCanvas' + keyput" aria-controls="offcanvasScrolling" id="image-input-button"  class="btn btn-soft-primary image-input-button">
                     <template v-if="imageEdit">
                         Edit Media
                     </template>
@@ -76,7 +76,7 @@
                                 <template v-else>
                                     {{ limit(val.name, 50) }}...
                                 </template>
-                                
+
                             </code>
                             <i @click="removeGalleryImage(index)" class="mdi mdi-delete text-muted vertical-middle"></i>
                         </p>

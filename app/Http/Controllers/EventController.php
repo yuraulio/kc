@@ -144,6 +144,14 @@ class EventController extends Controller
         $event->paymentMethod()->detach();
         $event->paymentMethod()->attach($request->payment_method);
 
+        $info = $event->event_info()->first();
+
+        if($info){
+            $info->update([
+                'course_payment_method' => 'paid'
+            ]);
+        }
+
         return response()->json([
             'success' => true,
             'message' => 'Payment Method Changed'
@@ -164,6 +172,16 @@ class EventController extends Controller
 
         if(count($event->paymentMethod()->get()) != 0){
             $event->paymentMethod()->detach();
+
+            $info = $event->event_info()->first();
+
+            if($info){
+                $info->update([
+                    'course_payment_method' => 'free'
+                ]);
+            }
+
+
 
             return response()->json([
                 'success' => true,
@@ -529,6 +547,7 @@ class EventController extends Controller
         $data['coupons'] = Coupon::all();
         $data['activeMembers'] = 0;
         $data['sections'] = $event->sections->groupBy('section');
+        $data['info'] = $event->event_info;
 
         //if elearning course (id = 143)
         $elearning_events = Delivery::with('event:id,title')->where('id',143)->whereHas('event', function ($query) {
@@ -707,7 +726,7 @@ class EventController extends Controller
      */
     public function update_new(Request $request, Event $event)
     {
-
+        dd($request->all());
         if($request->published == 'on')
         {
             $published = 1;
@@ -725,7 +744,7 @@ class EventController extends Controller
 
         $request->request->add(['published' => $published, 'published_at' => $published_at,
             'release_date_files' => date('Y-m-d', strtotime($request->release_date_files)),
-            'launch_date'=>$launchDate,'title'=>$request->eventTitle]);
+            'launch_date'=>$launchDate,'title'=>$request->eventTitle, 'hours' => intval($request->hours)]);
         $ev = $event->update($request->all());
 
         /*if($request->image_upload != null && $ev){
@@ -844,46 +863,69 @@ class EventController extends Controller
         //return redirect()->route('events.index')->withStatus(__('Event successfully updated.'));
     }
 
+    public function calculateTotalHours($id)
+    {
+        $event = Event::find($id);
+
+        $totalHours = $event->getTotalHours();
+
+
+
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Calculate successfully total hours for this event!',
+            'data'  => $totalHours
+        ]);
+
+    }
+
     public function updateEventInfo($event_info, $event_id)
     {
         //dd($event_info);
         $event = Event::find($event_id);
 
-        if($event->event_info === null){
+        //dd($event->paymentMethod);
+
+        $info = $event->event_info;
+
+        if($info === null){
             $infos = new EventInfo();
             $infos->event_id = $event->id;
-            $infos->course_inclass_absences = $event_info['course_inclass_absences'];
-            $infos->course_status = $event_info['course_status'];
-            $infos->course_delivery = $event_info['course_delivery'];
-            $infos->course_hours = $event_info['course_hours'];
-            $infos->course_language = $event_info['course_language'];
-            $infos->course_language_visible = $event_info['course_language_visible'];
-            $infos->course_partner = $event_info['course_partner'];
-            $infos->course_manager = $event_info['course_manager'];
-            $infos->course_certification_name_success = $event_info['course_certification_name_success'];
-            $infos->course_hours_visible = $event_info['course_hours_visible'];
-            $infos->course_inclass_city = $event_info['course_inclass_city'];
-            $infos->course_inclass_dates = $event_info['course_inclass_dates'];
-            $infos->course_inclass_times = $event_info['course_inclass_times'];
-            $infos->course_inclass_days = $event_info['course_inclass_days'];
-            $infos->course_payment_method = $event_info['course_payment_method'];
-            $infos->course_awards = $event_info['course_awards'];
-            $infos->course_awards_text = $event_info['course_awards_text'];
-            $infos->course_certification_name_failure = $event_info['course_certification_name_failure'];
-            $infos->course_certification_type = $event_info['course_certification_type'];
-            $infos->course_certification_visible = $event_info['course_certificate_visible'];
-            $infos->course_students_number = $event_info['course_students_number'];
-            $infos->course_students_text = $event_info['course_students_text'];
-            $infos->course_students_visible = $event_info['course_students_visible'];
-            $infos->course_elearning_access = $event_info['course_elearning_access'];
-
-            $infos->save();
         }else{
+            $infos = $info;
         }
 
+        $infos->course_inclass_absences = $event_info['course_inclass_absences'];
+        $infos->course_status = $event_info['course_status'];
+        $infos->course_delivery = $event_info['course_delivery'];
+        $infos->course_hours = $event_info['course_hours'];
+        $infos->course_language = $event_info['course_language'];
+        $infos->course_language_visible = $event_info['course_language_visible'];
+        $infos->course_partner = $event_info['course_partner'];
+        $infos->course_manager = $event_info['course_manager'];
+        $infos->course_certification_name_success = $event_info['course_certification_name_success'];
+        $infos->course_hours_visible = $event_info['course_hours_visible'];
+        $infos->course_inclass_city = $event_info['course_inclass_city'];
+        $infos->course_inclass_dates = $event_info['course_inclass_dates'];
+        $infos->course_inclass_times = $event_info['course_inclass_times'];
+        $infos->course_inclass_days = $event_info['course_inclass_days'];
+        $infos->course_payment_method = (isset($event->paymentMethod) && count($event->paymentMethod) != 0) ? 'paid' : 'free';
+        $infos->course_awards = (isset($event_info['course_awards_text']) && $event_info['course_awards_text'] != "") ? true : false;
+        $infos->course_awards_text = $event_info['course_awards_text'];
+        $infos->course_certification_name_failure = $event_info['course_certification_name_failure'];
+        $infos->course_certification_type = $event_info['course_certification_type'];
+        $infos->course_certification_visible = $event_info['course_certificate_visible'];
+        $infos->course_students_number = $event_info['course_students_number'];
+        $infos->course_students_text = $event_info['course_students_text'];
+        $infos->course_students_visible = $event_info['course_students_visible'];
+        $infos->course_elearning_access = $event_info['course_elearning_access'];
 
-
-
+        if($info === null){
+            $infos->save();
+        }else{
+            $infos->update();
+        }
 
     }
 
@@ -979,7 +1021,7 @@ class EventController extends Controller
                     $visible_loaded_data = $requestData['delivery']['inclass']['dates']['visible'];
                     $dates['visible'] = $this->prepareVisibleData($visible_loaded_data);
                 }else{
-                    $dates['visible'] = json_encode($this->prepareVisibleData());
+                    $dates['visible'] = $this->prepareVisibleData();
                 }
             }
             $data['course_inclass_dates'] = json_encode($dates);

@@ -22,17 +22,20 @@
 <script>
 export default {
     props: {
-        imageedit: false,
+        imageedit: false
     },
     data() {
         return {
 
         }
     },
+    mounted()  {
+        console.log('has mounted media model')
+    },
     methods: {
         imageSelected($event) {
-            $('#image_upload').val("/uploads/" + $event.data.path);
-            $("#upload_form").submit();
+            $('#'+current_icon_input).val("/uploads" + $event.data.path);
+            $('#'+current_icon_input_alt_text).val($event.data.alt_text);
         },
     }
 }

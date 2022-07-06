@@ -663,23 +663,56 @@ class Event extends Model
 
     }
 
+    // public function getTotalHours(){
+
+    //     $timeStarts = false;
+    //     $timeEnds = false;
+    //     $hours = 0;
+
+    //     foreach($this->lessons as $lesson){
+    //         $timeStarts = false;
+    //         $timeEnds = false;
+
+    //         $timeStarts = (int) date('H', strtotime($lesson->pivot->time_starts));
+    //         $timeEnds = (int) date('H', strtotime($lesson->pivot->time_ends));
+    //         if($timeStarts && $timeEnds){
+    //             $hours += ($timeEnds - $timeStarts) * 60;
+    //         }
+
+    //     }
+    //     return $hours;
+    // }
+
+
     public function getTotalHours(){
 
-        $timeStarts = false;
-        $timeEnds = false;
         $hours = 0;
-
-        foreach($this->lessons as $lesson){
+        //In class
+        if($this->is_inclass_course()){
             $timeStarts = false;
             $timeEnds = false;
 
-            $timeStarts = (int) date('H', strtotime($lesson->pivot->time_starts));
-            $timeEnds = (int) date('H', strtotime($lesson->pivot->time_ends));
 
-            if($timeStarts && $timeEnds){
-                $hours += ($timeEnds - $timeStarts) * 60;
+            foreach($this->lessons as $lesson){
+                $timeStarts = false;
+                $timeEnds = false;
+
+                $timeStarts = (int) date('H', strtotime($lesson->pivot->time_starts));
+                $timeEnds = (int) date('H', strtotime($lesson->pivot->time_ends));
+                if($timeStarts && $timeEnds){
+                    $hours += ($timeEnds - $timeStarts) * 60;
+                }
+
             }
+        }else{
+            // E-learning
 
+            // Return sec
+
+            $lessons = $this->lessons->groupBy('topic_id');
+            //dd($this->lessons);
+            $totalVimeoSeconds = $this->getSumLessonHours($lessons);
+            $hours = $totalVimeoSeconds;
         }
 
         return $hours;
@@ -696,6 +729,82 @@ class Event extends Model
     public function event_info()
     {
         return $this->hasOne(EventInfo::class);
+    }
+
+    // Return seconds
+    public function getSumLessonHours($lessons){
+        $total = 0;
+        foreach($lessons as $key => $lesson1){
+
+            $sum1 = 0;
+
+            foreach($lesson1 as $key1 => $lesson){
+                $sum = 0;
+
+                if($lesson['vimeo_duration'] != null && $lesson['vimeo_duration'] != '0'){
+
+                    $vimeo_duration = explode(' ', $lesson['vimeo_duration']);
+                    $hour = 0;
+                    $min = 0;
+                    $sec = 0;
+
+                    if(count($vimeo_duration) == 3){
+                        $string_hour = $vimeo_duration[0];
+                        $string_hour = intval(explode('h',$string_hour)[0]);
+                        $hour = $string_hour * 3600;
+
+                        $string_min = $vimeo_duration[1];
+                        $string_min = intval(explode('m',$string_min)[0]);
+                        $min = $string_min * 60;
+
+                        $string_sec = $vimeo_duration[2];
+                        $string_sec = intval(explode('s',$string_sec)[0]);
+                        $sec = $string_sec;
+
+                        $sum = $hour + $min + $sec;
+
+                    }else if(count($vimeo_duration) == 2){
+                        $string_min = $vimeo_duration[0];
+                        $string_min = intval(explode('m',$string_min)[0]);
+                        $min = $string_min * 60;
+
+                        $string_sec = $vimeo_duration[1];
+                        $string_sec = intval(explode('s',$string_sec)[0]);
+                        $sec = $string_sec;
+
+                        $sum = $min + $sec;
+                    }else if(count($vimeo_duration) == 1){
+                        //dd($vimeo_duration);
+                        $a = strpos( $vimeo_duration[0], 's');
+                        //dd($a);
+                        if($a === false ){
+                            $sum = 0;
+                            if(strpos( $vimeo_duration[0], 'm')){
+                                $string_min = $vimeo_duration[0];
+                                $string_min = intval(explode('m',$string_min)[0]);
+                                $min = $string_min * 60;
+                                $sum = $min;
+                            }
+
+                        }else if($a !== false ){
+                            $string_sec = intval(explode('s',$vimeo_duration[0])[0]);
+                            $sec = $string_sec;
+                            $sum = $sec;
+
+                        }
+                    }
+
+                }
+
+                $sum1 = $sum1 + $sum;
+
+            }
+
+            $total = $total + $sum1;
+
+        }
+
+        return $total;
     }
 
 }

@@ -18,8 +18,13 @@
         @include('event.layouts.event_card')
 
     @endcomponent
+
+    <link href="{{asset('admin_assets/css/saas/app-limited.css')}} " rel="stylesheet" type="text/css"/>
+
     <?php //container-fluid mt--6 ?>
-    <div class="">
+    @include('admin.upload.upload_new')
+
+    <div class=""><!-- END TEST -->
         <div class="row">
             <div class="col">
             <div class="">
@@ -268,39 +273,55 @@
 
                                     <div class="form-group col-12">
 
+
+                                        <?php
+
+                                            if(isset($info['course_hours_icon']) && $info['course_hours_icon'] != null){
+                                                $course_hours_icon = $info['course_hours_icon'];
+                                            }else{
+                                                $course_hours_icon = null;
+                                            }
+                                        ?>
+
                                         <div class="input-group">
                                             <h3 class="mb-0 title">{{ __('Course hours') }}</h3>
 
-                                            <span class="input-group-addon input-group-append input-icon-wrapper">
+                                            <span data-infowrapper="hours" class="input-group-addon input-group-append input-icon-wrapper">
                                                 <span class="btn btn-outline-primary input-icon"> <span class="fa fa-hourglass"></span></span>
                                             </span>
+                                            <input type="hidden" value="" id="hours_path" name="course[{{'hours'}}][{{'icon'}}][{{'path'}}]">
+                                            <input type="hidden" value="" id="hours_alt_text" name="course[{{'hours'}}][{{'icon'}}][{{'alt_text'}}]">
                                         </div>
                                     </div>
 
 
 
                                         <div class="form-group{{ $errors->has('hours') ? ' has-danger' : '' }} col-md-2 col-4">
-                                            <input type="text" id="input-hours" class="form-control{{ $errors->has('hours') ? ' is-invalid' : '' }}" placeholder="{{ __('Course Hours') }}" value="{{ old('hours', $event->hours) }}hr" disabled autofocus>
+                                            <input type="text" id="input-hours" name="hours" class="form-control{{ $errors->has('hours') ? ' is-invalid' : '' }}" placeholder="{{ __('Course Hours') }}" value="{{ old('hours', $event->hours) }}hr" autofocus>
                                             @include('alerts.feedback', ['field' => 'hours'])
                                         </div>
 
                                         <div class="form-group col-md-4 col-8">
-                                            <input style="background:aliceblue;" type="text" name="course[{{'hours'}}][{{'text'}}]" id="input-hours-text" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="" autofocus>
+                                            <input style="background:aliceblue;" type="text" name="course[{{'hours'}}][{{'text'}}]" id="input-hours-text" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('hours', ($info != null && $info['course_hours']) ? $info['course_hours'] : '' ) }}" autofocus>
                                         </div>
 
                                         <div class="form-group col-md-4 col-12">
-                                            <button type="button" class="btn btn-primary">Automatically calculate & add lessons hours</button>
+                                            <button id="calculate-total-hours-btn" type="button" class="btn btn-primary">Automatically calculate & add lessons hours</button>
                                         </div>
 
                                     </div>
 
                                     <div class="row">
+
+                                        <?php
+                                            $visible_hours = ($info != null && $info['course_hours_visible']) ? json_decode($info['course_hours_visible'], true) : null;
+                                        ?>
                                         <label class="form-control-label col-12" for="input-hours">{{ __('Visible on:') }}</label>
 
                                         <div class="col-md-2">
 
                                             <div class="custom-control custom-checkbox mb-3">
-                                                <input class="custom-control-input" name="course[{{'hours'}}][{{'visible'}}][{{'landing'}}]" id="hours_landing" type="checkbox">
+                                                <input class="custom-control-input" {{ ($visible_hours != null && $visible_hours['landing']) ? 'checked' : '' }} name="course[{{'hours'}}][{{'visible'}}][{{'landing'}}]" id="hours_landing" type="checkbox">
                                                 <label class="custom-control-label" for="hours_landing">Course landing page (summary)</label>
                                             </div>
 
@@ -309,7 +330,7 @@
                                         <div class="col-md-2">
 
                                             <div class="custom-control custom-checkbox mb-3">
-                                                <input class="custom-control-input" name="course[{{'hours'}}][{{'visible'}}][{{'home'}}]" id="hours_home" type="checkbox">
+                                                <input class="custom-control-input" {{ ($visible_hours != null && $visible_hours['home']) ? 'checked' : '' }} name="course[{{'hours'}}][{{'visible'}}][{{'home'}}]" id="hours_home" type="checkbox">
                                                 <label class="custom-control-label" for="hours_home">Course box in home page</label>
                                             </div>
 
@@ -318,7 +339,7 @@
                                         <div class="col-md-2">
 
                                             <div class="custom-control custom-checkbox mb-3">
-                                                <input class="custom-control-input" name="course[{{'hours'}}][{{'visible'}}][{{'list'}}]" id="hours_list" type="checkbox">
+                                                <input class="custom-control-input" {{ ($visible_hours != null && $visible_hours['list']) ? 'checked' : '' }} name="course[{{'hours'}}][{{'visible'}}][{{'list'}}]" id="hours_list" type="checkbox">
                                                 <label class="custom-control-label" for="hours_list">Course box in list page</label>
                                             </div>
 
@@ -327,7 +348,7 @@
                                         <div class="col-md-2">
 
                                             <div class="custom-control custom-checkbox mb-3">
-                                                <input class="custom-control-input" name="course[{{'hours'}}][{{'visible'}}][{{'invoice'}}]" id="hourls_invoice" type="checkbox">
+                                                <input class="custom-control-input" {{ ($visible_hours != null && $visible_hours['invoice']) ? 'checked' : '' }} name="course[{{'hours'}}][{{'visible'}}][{{'invoice'}}]" id="hourls_invoice" type="checkbox">
                                                 <label class="custom-control-label" for="hourls_invoice">Invoice description</label>
                                             </div>
 
@@ -336,7 +357,7 @@
                                         <div class="col-md-2">
 
                                             <div class="custom-control custom-checkbox mb-3">
-                                                <input class="custom-control-input" name="course[{{'hours'}}][{{'visible'}}][{{'emails'}}]" id="hours_emails" type="checkbox">
+                                                <input class="custom-control-input" {{ ($visible_hours != null && $visible_hours['emails']) ? 'checked' : '' }} name="course[{{'hours'}}][{{'visible'}}][{{'emails'}}]" id="hours_emails" type="checkbox">
                                                 <label class="custom-control-label" for="hours_emails">Automated emails</label>
                                             </div>
 
@@ -347,32 +368,46 @@
 
                                     <hr>
                                     <div class="row">
+                                    <?php
+
+                                        if(isset($info['course_language_icon']) && $info['course_language_icon'] != null){
+                                            $course_language_icon = $info['course_language_icon'];
+                                        }else{
+                                            $course_language_icon = null;
+                                        }
+                                    ?>
 
                                         <div class="form-group col-12">
 
                                             <div class="input-group">
                                             <h3 class="mb-0 title">{{ __('Course language') }}</h3>
-                                                <span class="input-group-addon input-group-append input-icon-wrapper">
+
+                                                <span data-infowrapper="language" class="input-group-addon input-group-append input-icon-wrapper">
                                                     <span class="btn btn-outline-primary input-icon"> <i class="ni ni-world-2"></i></span>
                                                 </span>
+                                                <input type="hidden" value="" id="language_path" name="course[{{'language'}}][{{'icon'}}][{{'path'}}]">
+                                                <input type="hidden" value="" id="language_alt_text" name="course[{{'language'}}][{{'icon'}}][{{'alt_text'}}]">
                                             </div>
                                         </div>
 
 
 
                                         <div class="form-group col-md-2 col-4">
-                                            <input type="text" id="input-language" name="course[{{'language'}}][{{'text'}}]" class="form-control" placeholder="{{ __('Language') }}" autofocus>
+                                            <input type="text" id="input-language" name="course[{{'language'}}][{{'text'}}]" class="form-control" value="{{ old('language',  ($info != null && $info['course_language']) ? $info['course_language'] : '' )}} " placeholder="{{ __('Language') }}" autofocus>
                                         </div>
 
                                     </div>
 
                                     <div class="row">
+                                        <?php
+                                            $visible_language = ($info != null && $info['course_language_visible']) ? json_decode($info['course_language_visible'], true) : null;
+                                        ?>
                                         <label class="form-control-label col-12" for="input-hours">{{ __('Visible on:') }}</label>
 
                                         <div class="col-md-2">
 
                                             <div class="custom-control custom-checkbox mb-3">
-                                                <input class="custom-control-input" name="course[{{'language'}}][{{'visible'}}][{{'landing'}}]" id="language_landing" type="checkbox">
+                                                <input class="custom-control-input" {{ ($visible_language != null && $visible_language['landing']) ? 'checked' : '' }} name="course[{{'language'}}][{{'visible'}}][{{'landing'}}]" id="language_landing" type="checkbox">
                                                 <label class="custom-control-label" for="language_landing">Course landing page (summary)</label>
                                             </div>
 
@@ -381,7 +416,7 @@
                                         <div class="col-md-2">
 
                                             <div class="custom-control custom-checkbox mb-3">
-                                                <input class="custom-control-input" name="course[{{'language'}}][{{'visible'}}][{{'home'}}]" id="language_home" type="checkbox">
+                                                <input class="custom-control-input" {{ ($visible_language != null && $visible_language['home']) ? 'checked' : '' }} name="course[{{'language'}}][{{'visible'}}][{{'home'}}]" id="language_home" type="checkbox">
                                                 <label class="custom-control-label" for="language_home">Course box in home page</label>
                                             </div>
 
@@ -390,7 +425,7 @@
                                         <div class="col-md-2">
 
                                             <div class="custom-control custom-checkbox mb-3">
-                                                <input class="custom-control-input" name="course[{{'language'}}][{{'visible'}}][{{'list'}}]" id="language_list" type="checkbox">
+                                                <input class="custom-control-input" {{ ($visible_language != null && $visible_language['list']) ? 'checked' : '' }} name="course[{{'language'}}][{{'visible'}}][{{'list'}}]" id="language_list" type="checkbox">
                                                 <label class="custom-control-label" for="language_list">Course box in list page</label>
                                             </div>
 
@@ -399,7 +434,7 @@
                                         <div class="col-md-2">
 
                                             <div class="custom-control custom-checkbox mb-3">
-                                                <input class="custom-control-input" name="course[{{'language'}}][{{'visible'}}][{{'invoice'}}]" id="language_invoice" type="checkbox">
+                                                <input class="custom-control-input" {{ ($visible_language != null && $visible_language['invoice']) ? 'checked' : '' }} name="course[{{'language'}}][{{'visible'}}][{{'invoice'}}]" id="language_invoice" type="checkbox">
                                                 <label class="custom-control-label" for="language_invoice">Invoice description</label>
                                             </div>
 
@@ -408,7 +443,7 @@
                                         <div class="col-md-2">
 
                                             <div class="custom-control custom-checkbox mb-3">
-                                                <input class="custom-control-input" name="course[{{'language'}}][{{'visible'}}][{{'emails'}}]" id="language_emails" type="checkbox">
+                                                <input class="custom-control-input" {{ ($visible_language != null && $visible_language['emails']) ? 'checked' : '' }} name="course[{{'language'}}][{{'visible'}}][{{'emails'}}]" id="language_emails" type="checkbox">
                                                 <label class="custom-control-label" for="language_emails">Automated emails</label>
                                             </div>
 
@@ -455,9 +490,7 @@
 
 
 
-
                                         <?php $eventCity = isset($event) && $event->city->first() ? $event->city->first()->id : -1 ?>
-
 
                                         <div class="delivery_child_wrapper @if(!$isInclassCourse) {{'d-none'}} @endif">
                                             <div class="row">
@@ -482,13 +515,29 @@
 
                                             </div>
                                             <div class="row">
+                                                <?php
+                                                    $dates = ($info != null && isset($info['course_inclass_dates'])) ? json_decode($info['course_inclass_dates'], true) : null;
+                                                    $visible_dates = (isset($dates) && isset($dates['visible'])) ? $dates['visible'] : null;
+                                                    //$visible_dates = (isset($dates) && isset($dates['visible'])) ? json_decode($dates['visible'], true) : null;
+                                                ?>
+
+                                                <?php
+
+                                                    if(isset($info['course_inclass_dates_icon']) && $info['course_inclass_dates_icon'] != null){
+                                                        $course_inclass_dates_icon = $info['course_inclass_dates_icon'];
+                                                    }else{
+                                                        $course_inclass_dates_icon = null;
+                                                    }
+                                                ?>
 
                                                 <div class="form-group col-2">
                                                     <div class="input-group">
-                                                        <input type="text" class="form-control" name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'text'}}]" placeholder="Dates(from/to)">
-                                                        <span class="input-group-addon input-group-append">
+                                                        <input type="text" class="form-control" value="{{ (isset($dates) && isset($dates['text']) ) ? $dates['text'] : '' }}" name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'text'}}]" placeholder="Dates(from/to)">
+                                                        <span data-infowrapper="inclass_dates" class="input-group-addon input-group-append input-icon-wrapper-inclass">
                                                             <span class="btn btn-outline-primary input-icon"> <span class="fa fa-calendar"></span></span>
                                                         </span>
+                                                        <input type="hidden" value="" id="inclass_dates_path" name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'icon'}}][{{'path'}}]">
+                                                        <input type="hidden" value="" id="inclass_dates_alt_text" name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'icon'}}][{{'alt_text'}}]">
                                                     </div>
                                                 </div>
 
@@ -496,81 +545,100 @@
                                                 <div class="form-group col-2">
                                                     <label class="form-control-label visible-label" for="input-delivery">{{ __('Visible on:') }}</label>
                                                     <div class="custom-control custom-checkbox mb-3 visible-item">
-                                                        <input class="custom-control-input" name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'visible'}}][{{'landing'}}]" id="input-delivery-landing" type="checkbox">
+                                                        <input class="custom-control-input" {{ ($visible_dates != null && $visible_dates['landing']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'visible'}}][{{'landing'}}]" id="input-delivery-landing" type="checkbox">
                                                         <label class="custom-control-label" for="input-delivery-landing">Course landing page (summary)</label>
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-2">
                                                     <div class="custom-control custom-checkbox mb-3 visible-item">
-                                                        <input class="custom-control-input" name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'visible'}}][{{'home'}}]" id="input-delivery-home" type="checkbox">
+                                                        <input class="custom-control-input" {{ ($visible_dates != null && $visible_dates['home']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'visible'}}][{{'home'}}]" id="input-delivery-home" type="checkbox">
                                                         <label class="custom-control-label" for="input-delivery-home">Course box in home page</label>
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-2">
                                                     <div class="custom-control custom-checkbox mb-3 visible-item">
-                                                        <input class="custom-control-input" name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'visible'}}][{{'list'}}]" id="input-delivery-list" type="checkbox">
+                                                        <input class="custom-control-input" {{ ($visible_dates != null && $visible_dates['list']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'visible'}}][{{'list'}}]" id="input-delivery-list" type="checkbox">
                                                         <label class="custom-control-label" for="input-delivery-list">Course box in list page</label>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group col-2">
                                                     <div class="custom-control custom-checkbox mb-3 visible-item">
-                                                        <input class="custom-control-input" name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'visible'}}][{{'invoice'}}]" id="input-delivery-invoice" type="checkbox">
+                                                        <input class="custom-control-input" {{ ($visible_dates != null && $visible_dates['invoice']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'visible'}}][{{'invoice'}}]" id="input-delivery-invoice" type="checkbox">
                                                         <label class="custom-control-label" for="input-delivery-invoice">Invoice description</label>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group col-2">
                                                     <div class="custom-control custom-checkbox mb-3 visible-item">
-                                                        <input class="custom-control-input" name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'visible'}}][{{'emails'}}]" id="input-delivery-emails" type="checkbox">
+                                                        <input class="custom-control-input" {{ ($visible_dates != null && $visible_dates['emails']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'visible'}}][{{'emails'}}]" id="input-delivery-emails" type="checkbox">
                                                         <label class="custom-control-label" for="input-delivery-emails">Automated emails</label>
                                                     </div>
                                                 </div>
 
                                             </div>
                                             <div class="row">
+                                                <?php
+
+                                                    $days = ($info != null && isset($info['course_inclass_days'])) ? json_decode($info['course_inclass_days'], true) : null;
+                                                    $visible_days = (isset($days) && isset($days['visible'])) ? $days['visible'] : null;
+
+                                                ?>
+                                                <?php
+
+                                                    if(isset($info['course_inclass_day_icon']) && $info['course_inclass_day_icon'] != null){
+                                                        $course_inclass_day_icon = $info['course_inclass_day_icon'];
+                                                    }else{
+                                                        $course_inclass_day_icon = null;
+                                                    }
+                                                ?>
 
                                                 <div class="form-group col-2">
                                                     <div class="input-group">
-                                                        <input type="text" class="form-control" name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'text'}}]" placeholder="Day" >
-                                                        <span class="input-group-addon input-group-append">
+                                                        <input type="text" class="form-control" value="{{ (isset($day) && isset($day['text']) ) ? $day['text'] : '' }}" name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'text'}}]" placeholder="Day" >
+                                                        <span data-infowrapper="inclass_day" class="input-group-addon input-group-append input-icon-wrapper-inclass">
                                                             <span class="btn btn-outline-primary input-icon"> <i class="fas fa-calendar-day"></i></span>
                                                         </span>
+                                                        <input type="hidden" value="" id="inclass_day_path" name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'icon'}}][{{'path'}}]">
+                                                        <input type="hidden" value="" id="inclass_day_alt_text" name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'icon'}}][{{'alt_text'}}]">
                                                     </div>
                                                 </div>
+
+
+
 
 
 
                                                 <div class="form-group col-2">
                                                     <label class="form-control-label visible-label" for="input-delivery">{{ __('Visible on:') }}</label>
                                                     <div class="custom-control custom-checkbox mb-3 visible-item">
-                                                        <input class="custom-control-input" name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'visible'}}][{{'landing'}}]" id="input-day-landing" type="checkbox">
+                                                        <input class="custom-control-input" {{ ($visible_days != null && $visible_days['landing']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'visible'}}][{{'landing'}}]" id="input-day-landing" type="checkbox">
                                                         <label class="custom-control-label" for="input-day-landing">Course landing page (summary)</label>
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-2">
                                                     <div class="custom-control custom-checkbox mb-3 visible-item">
-                                                        <input class="custom-control-input" name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'visible'}}][{{'home'}}]" id="input-day-home" type="checkbox">
+                                                        <input class="custom-control-input" {{ ($visible_days != null && $visible_days['home']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'visible'}}][{{'home'}}]" id="input-day-home" type="checkbox">
                                                         <label class="custom-control-label" for="input-day-home">Course box in home page</label>
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-2">
                                                     <div class="custom-control custom-checkbox mb-3 visible-item">
-                                                        <input class="custom-control-input" name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'visible'}}][{{'list'}}]" id="input-day-list" type="checkbox">
+                                                        <input class="custom-control-input" {{ ($visible_days != null && $visible_days['list']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'visible'}}][{{'list'}}]" id="input-day-list" type="checkbox">
                                                         <label class="custom-control-label" for="input-day-list">Course box in list page</label>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group col-2">
                                                     <div class="custom-control custom-checkbox mb-3 visible-item">
-                                                        <input class="custom-control-input" name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'visible'}}][{{'invoice'}}]" id="input-day-invoice" type="checkbox">
+                                                        <input class="custom-control-input" {{ ($visible_days != null && $visible_days['invoice']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'visible'}}][{{'invoice'}}]" id="input-day-invoice" type="checkbox">
                                                         <label class="custom-control-label" for="input-day-invoice">Invoice description</label>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group col-2">
                                                     <div class="custom-control custom-checkbox mb-3 visible-item">
-                                                        <input class="custom-control-input" name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'visible'}}][{{'emails'}}]" id="input-day-emails" type="checkbox">
+                                                        <input class="custom-control-input" {{ ($visible_days != null && $visible_days['emails']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'visible'}}][{{'emails'}}]" id="input-day-emails" type="checkbox">
                                                         <label class="custom-control-label" for="input-day-emails">Automated emails</label>
                                                     </div>
                                                 </div>
@@ -578,12 +646,32 @@
 
                                             <div class="row">
 
+                                                <?php
+
+                                                    $times = ($info != null && isset($info['course_inclass_times'])) ? json_decode($info['course_inclass_times'], true) : null;
+
+                                                    //$visible_times = (isset($times) && isset($times['visible'])) ? json_decode($times['visible'], true) : null;
+                                                    $visible_times = (isset($times) && isset($times['visible'])) ? $times['visible'] : null;
+                                                ?>
+
+                                                <?php
+
+                                                    if(isset($info['course_inclass_times_icon']) && $info['course_inclass_times_icon'] != null){
+                                                        $course_inclass_times_icon = $info['course_inclass_times_icon'];
+                                                    }else{
+                                                        $course_inclass_times_icon = null;
+                                                    }
+
+                                                ?>
+
                                                 <div class="form-group col-2">
                                                     <div class="input-group">
-                                                        <input type="text" class="form-control" name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'text'}}]" placeholder="Times(from/to)">
-                                                        <span class="input-group-addon input-group-append">
+                                                        <input type="text" class="form-control" value="{{ old('times', (isset($times) && $times['text']) ? $times['text'] : '' ) }}" name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'text'}}]" placeholder="Times(from/to)">
+                                                        <span data-infowrapper="inclass_times" class="input-group-addon input-group-append input-icon-wrapper-inclass">
                                                             <span class="btn btn-outline-primary input-icon"> <span class="ni ni-watch-time"></span></span>
                                                         </span>
+                                                        <input type="hidden" value="" id="inclass_times_path" name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'icon'}}][{{'path'}}]">
+                                                        <input type="hidden" value="" id="inclass_times_alt_text" name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'icon'}}][{{'alt_text'}}]">
                                                     </div>
                                                 </div>
 
@@ -591,33 +679,33 @@
                                                 <div class="form-group col-2">
                                                     <label class="form-control-label visible-label" for="input-delivery">{{ __('Visible on:') }}</label>
                                                     <div class="custom-control custom-checkbox mb-3 visible-item">
-                                                        <input class="custom-control-input" name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'visible'}}][{{'landing'}}]" id="input-times-landing" type="checkbox">
+                                                        <input class="custom-control-input" {{ ($visible_times != null && $visible_times['landing']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'visible'}}][{{'landing'}}]" id="input-times-landing" type="checkbox">
                                                         <label class="custom-control-label" for="input-times-landing">Course landing page (summary)</label>
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-2">
                                                     <div class="custom-control custom-checkbox mb-3 visible-item">
-                                                        <input class="custom-control-input" name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'visible'}}][{{'home'}}]" id="input-times-home" type="checkbox">
+                                                        <input class="custom-control-input" {{ ($visible_times != null && $visible_times['home']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'visible'}}][{{'home'}}]" id="input-times-home" type="checkbox">
                                                         <label class="custom-control-label" for="input-times-home">Course box in home page</label>
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-2">
                                                     <div class="custom-control custom-checkbox mb-3 visible-item">
-                                                        <input class="custom-control-input" name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'visible'}}][{{'list'}}]" id="input-times-list" type="checkbox">
+                                                        <input class="custom-control-input" {{ ($visible_times != null && $visible_times['list']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'visible'}}][{{'list'}}]" id="input-times-list" type="checkbox">
                                                         <label class="custom-control-label" for="input-times-list">Course box in list page</label>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group col-2">
                                                     <div class="custom-control custom-checkbox mb-3 visible-item">
-                                                        <input class="custom-control-input" name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'visible'}}][{{'invoice'}}]" id="input-times-invoice" type="checkbox">
+                                                        <input class="custom-control-input" {{ ($visible_times != null && $visible_times['invoice']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'visible'}}][{{'invoice'}}]" id="input-times-invoice" type="checkbox">
                                                         <label class="custom-control-label" for="input-times-invoice">Invoice description</label>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group col-2">
                                                     <div class="custom-control custom-checkbox mb-3 visible-item">
-                                                        <input class="custom-control-input" name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'visible'}}][{{'emails'}}]" id="input-times-emails" type="checkbox">
+                                                        <input class="custom-control-input" {{ ($visible_times != null && $visible_times['emails']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'visible'}}][{{'emails'}}]" id="input-times-emails" type="checkbox">
                                                         <label class="custom-control-label" for="input-times-emails">Automated emails</label>
                                                     </div>
                                                 </div>
@@ -646,14 +734,26 @@
 
 
                                             <div class="row access-student-wrapper">
+
+                                                <?php
+
+                                                    if(isset($info['course_free_access_icon']) && $info['course_free_access_icon'] != null){
+                                                        $course_free_access_icon = $info['course_free_access_icon'];
+                                                    }else{
+                                                        $course_free_access_icon = null;
+                                                    }
+                                                ?>
+
                                                 <div class="form-group col-12">
 
                                                     <div class="input-group">
                                                         <h3 class="mb-0 title">{{ __('Course access') }}</h3>
 
-                                                        <span class="input-group-addon input-group-append input-icon-wrapper">
+                                                        <span data-infowrapper="free_courses" class="input-group-addon input-group-append input-icon-wrapper">
                                                             <span class="btn btn-outline-primary input-icon"> <span class="fa fa-calendar"></span></span>
                                                         </span>
+                                                        <input type="hidden" value="" id="free_courses_path" name="course[{{'free_courses'}}][{{'icon'}}][{{'path'}}]">
+                                                        <input type="hidden" value="" id="free_courses_alt_text" name="course[{{'free_courses'}}][{{'icon'}}][{{'alt_text'}}]">
                                                     </div>
                                                 </div>
 
@@ -669,13 +769,16 @@
 
 
                                                 @if(count($elearning_events) != 0)
+                                                <?php
+                                                    $access_events = ($info != null && isset($info['course_elearning_access'])) ? json_decode($info['course_elearning_access'], true) : null;
+                                                ?>
                                                 <div class="free-course-wrapper">
 
                                                     <div class="form-group col-12">
                                                         <label class="form-control-label" for="exampleFormControlSelect3">Please select the courses you want to allow free access</label>
                                                         <select multiple="" name="course[{{'free_courses'}}][{{'list'}}][]" class="form-control" id="free_course_list">
                                                         @foreach($elearning_events as $elearning_event)
-                                                            <option value="{{ $elearning_event['id'] }}">{{ $elearning_event['title'] }}</option>
+                                                            <option {{ (isset($access_events) && in_array($elearning_event['id'],$access_events)) ? 'selected' : '' }} value="{{ $elearning_event['id'] }}">{{ $elearning_event['title'] }}</option>
                                                         @endforeach
                                                         </select>
                                                         </div>
@@ -704,14 +807,25 @@
 
                                     <div class="row course-payment-method">
 
+                                        <?php
+
+                                            if(isset($info['course_payment_icon']) && $info['course_payment_icon'] != null){
+                                                $course_payment_icon = $info['course_payment_icon'];
+                                            }else{
+                                                $course_payment_icon = null;
+                                            }
+                                        ?>
+
                                         <div class="form-group col-12">
 
                                             <div class="input-group">
                                                 <h3 class="mb-0 title" for="input-hours">{{ __('Course payment method') }}</h3>
 
-                                                <span class="input-group-addon input-group-append input-icon-wrapper">
+                                                <span data-infowrapper="payment" class="input-group-addon input-group-append input-icon-wrapper">
                                                     <span class="btn btn-outline-primary input-icon"> <span class="fa fa-calendar"></span></span>
                                                 </span>
+                                                <input type="hidden" value="" id="payment_path" name="course[{{'payment'}}][{{'icon'}}][{{'path'}}]">
+                                                <input type="hidden" value="" id="payment_alt_text" name="course[{{'payment'}}][{{'icon'}}][{{'alt_text'}}]">
                                             </div>
                                         </div>
 
@@ -746,15 +860,26 @@
 
                                     <div class="row course-partner-wrapper">
 
+                                        <?php
+
+                                            if(isset($info['course_partner_icon']) && $info['course_partner_icon'] != null){
+                                                $course_partner_icon = $info['course_partner_icon'];
+                                            }else{
+                                                $course_partner_icon = null;
+                                            }
+                                        ?>
+
 
                                         <div class="form-group col-12">
 
                                             <div class="input-group">
                                                 <h3 class="mb-0 title" for="input-hours">{{ __('Course partners') }}</h3>
 
-                                                <span class="input-group-addon input-group-append input-icon-wrapper">
+                                                <span data-infowrapper="partner" class="input-group-addon input-group-append input-icon-wrapper">
                                                     <span class="btn btn-outline-primary input-icon"> <span class="fa fa-calendar"></span></span>
                                                 </span>
+                                                <input type="hidden" value="" id="partner_path" name="course[{{'partner'}}][{{'icon'}}][{{'path'}}]">
+                                                <input type="hidden" value="" id="partner_alt_text" name="course[{{'partner'}}][{{'icon'}}][{{'alt_text'}}]">
                                             </div>
                                         </div>
 
@@ -834,14 +959,24 @@
                                     <hr>
 
                                     <div class="row course-manager-wrapper">
+                                        <?php
+
+                                            if(isset($info['course_manager_icon']) && $info['course_manager_icon'] != null){
+                                                $course_manager_icon = $info['course_manager_icon'];
+                                            }else{
+                                                $course_manager_icon = null;
+                                            }
+                                        ?>
                                         <div class="form-group col-12">
 
                                             <div class="input-group">
                                                 <h3 class="mb-0 title" >{{ __('Course manager') }}</h3>
 
-                                                <span class="input-group-addon input-group-append input-icon-wrapper">
+                                                <span data-infowrapper="manager" class="input-group-addon input-group-append input-icon-wrapper">
                                                     <span class="btn btn-outline-primary input-icon"> <span class="fa fa-calendar"></span></span>
                                                 </span>
+                                                <input type="hidden" value="" id="manager_path" name="course[{{'manager'}}][{{'icon'}}][{{'path'}}]">
+                                                <input type="hidden" value="" id="manager_alt_text" name="course[{{'manager'}}][{{'icon'}}][{{'alt_text'}}]">
                                             </div>
                                         </div>
 
@@ -890,28 +1025,37 @@
 
                                     <div class="row course-awards-wrapper">
 
+                                        <?php
+
+                                            if(isset($info['course_awards_icon']) && $info['course_awards_icon'] != null){
+                                                $course_awards_icon = $info['course_awards_icon'];
+                                            }else{
+                                                $course_awards_icon = null;
+                                            }
+                                        ?>
+
                                         <div class="form-group col-12">
 
                                             <div class="input-group">
                                                 <h3 class="mb-0 title">{{ __('Course awards & badges') }}</h3>
 
-                                                <span class="input-group-addon input-group-append input-icon-wrapper">
+                                                <span data-infowrapper="awards" class="input-group-addon input-group-append input-icon-wrapper">
                                                     <span class="btn btn-outline-primary input-icon"> <span class="fa fa-calendar"></span></span>
                                                 </span>
+                                                <input type="hidden" value="" id="awards_path" name="course[{{'awards'}}][{{'icon'}}][{{'path'}}]">
+                                                <input type="hidden" value="" id="awards_alt_text" name="course[{{'awards'}}][{{'icon'}}][{{'alt_text'}}]">
                                             </div>
                                         </div>
-
-
                                         <div class="form-group col-12">
                                             <span class="toggle-btn-inline-text">Does this course have some award?</span>
                                             <label class="custom-toggle">
-                                                <input id="award-toggle" type="checkbox">
+                                                <input id="award-toggle" {{ ($info != null && $info['course_awards_text'] != null) ? 'checked' : ''}} type="checkbox">
                                                 <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                             </label>
                                         </div>
 
-                                        <div class="form-group col-md-4 col-8 award-text d-none">
-                                            <input style="background:aliceblue;" type="text" name="course[{{'awards'}}][{{'text'}}]" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="" autofocus>
+                                        <div class="form-group col-md-4 col-8 award-text {{ ($info != null && $info['course_awards_text'] != null) ? '' : 'd-none'}}">
+                                            <input style="background:aliceblue;" id="input-award-text" type="text" name="course[{{'awards'}}][{{'text'}}]" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('hours', ($info != null && $info['course_awards_text']) ? $info['course_awards_text'] : '' ) }}" autofocus>
                                         </div>
                                     </div>
 
@@ -922,46 +1066,65 @@
 
                                     <div class="row course-certification-wrapper">
 
+                                        <?php
+
+                                            if(isset($info['course_certification_icon']) && $info['course_certification_icon'] != null){
+                                                $course_certification_icon = $info['course_certification_icon'];
+                                            }else{
+                                                $course_certification_icon = null;
+                                            }
+                                        ?>
+
                                         <div class="form-group col-12">
 
                                             <div class="input-group">
                                                 <h3 class="mb-0 title">{{ __('Course certification') }}</h3>
 
-                                                <span class="input-group-addon input-group-append input-icon-wrapper">
+                                                <span data-infowrapper="certificate" class="input-group-addon input-group-append input-icon-wrapper">
                                                     <span class="btn btn-outline-primary input-icon"> <span class="fa fa-calendar"></span></span>
                                                 </span>
+                                                <input type="hidden" value="" id="certificate_path" name="course[{{'certificate'}}]['icon'][{{'path'}}]">
+                                                <input type="hidden" value="" id="certificate_alt_text" name="course[{{'certificate'}}]['icon'][{{'alt_text'}}]">
                                             </div>
                                         </div>
-
 
 
                                         <div class="form-group col-12">
                                             <span class="toggle-btn-inline-text">Does this course offer a certification? </span>
                                             <label class="custom-toggle">
-                                                <input id="certification-toggle" type="checkbox">
+                                                <input id="certification-toggle" {{(isset($event->certificate_title)) ? 'checked' : '' }} type="checkbox">
                                                 <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                             </label>
                                         </div>
 
+                                        <?php
 
-                                        <div class="form-group col-12 course-certification-visible-wrapper d-none">
+                                            $visible_certification = ($info != null && isset($info['course_certification_visible'])) ? json_decode($info['course_certification_visible'], true) : null;
+
+                                        ?>
+
+
+
+                                        <div class="form-group col-12 course-certification-visible-wrapper {{(isset($event->certificate_title)) ? '' : 'd-none' }}">
                                             <div class="row">
-                                                <div class="col-md-4 form-group{{ $errors->has('fb_') ? ' has-danger' : '' }}">
+                                                <div class="col-md-6 form-group{{ $errors->has('fb_') ? ' has-danger' : '' }}">
                                                     <label class="form-control-label" for="input-hours">{{ __('Certificate Title') }}</label>
-                                                    <input type="text" name="certificate_title" id="input-certificate_title" class="form-control{{ $errors->has('certificate_title') ? ' is-invalid' : '' }}" placeholder="{{ __('alphanumeric text ') }}" value="{{ old('certificate_title', $event->certificate_title) }}" autofocus/>
+
+                                                    <textarea type="text" name="certificate_title" id="input-certificate_title" class="ckeditor form-control{{ $errors->has('certificate_title') ? ' is-invalid' : '' }}" placeholder="{{ __('alphanumeric text ') }}" autofocus>{{ old('certificate_title', $event->certificate_title) }}</textarea>
 
                                                     @include('alerts.feedback', ['field' => 'certificate_title'])
                                                 </div>
 
-                                                <div class="col-md-4 form-group">
+                                                <div class="col-md-6 form-group">
                                                     <label class="form-control-label" for="input-hours">{{ __('Title of certification (in case of exams failure)') }}</label>
-                                                    <input type="text" name="course[{{'certificate'}}][{{'failure_text'}}]" id="input-certificate_text_failure" class="form-control" placeholder="{{ __('alphanumeric text ') }}" value="" autofocus/>
+
+                                                    <textarea type="text" name="course[{{'certificate'}}][{{'failure_text'}}]" id="input-certificate_text_failure" class="form-control ckeditor" placeholder="{{ __('alphanumeric text ') }}"  autofocus>{{old('certificate_failure',($info != null && isset($info['course_certification_name_failure'])) ? $info['course_certification_name_failure'] : '' )}}</textarea>
 
                                                 </div>
 
-                                                <div class="col-md-4 form-group">
+                                                <div class="col-md-6 form-group">
                                                     <label class="form-control-label" for="input-hours">{{ __('Certificate type') }}</label>
-                                                    <input type="text" name="course[{{'certificate'}}][{{'type'}}]" id="input-certificate_type" class="form-control" placeholder="{{ __('alphanumeric text ') }}" value="" autofocus/>
+                                                    <input type="text" name="course[{{'certificate'}}][{{'type'}}]" id="input-certificate_type" class="form-control" placeholder="{{ __('alphanumeric text ') }}" value="{{old('certificate_failure',($info != null && isset($info['course_certification_type'])) ? $info['course_certification_type'] : '' )}}" autofocus/>
 
                                                 </div>
                                             </div>
@@ -971,7 +1134,7 @@
                                                     <div class="col-md-2">
 
                                                         <div class="custom-control custom-checkbox mb-3">
-                                                            <input class="custom-control-input" name="course[{{'certificate'}}][{{'visible'}}][{{'landing'}}]" id="input-certificate-landing" type="checkbox">
+                                                            <input class="custom-control-input" {{ ($visible_certification != null && $visible_certification['landing']) ? 'checked' : '' }} name="course[{{'certificate'}}][{{'visible'}}][{{'landing'}}]" id="input-certificate-landing" type="checkbox">
                                                             <label class="custom-control-label" for="input-certificate-landing">Course landing page (summary)</label>
                                                         </div>
 
@@ -980,7 +1143,7 @@
                                                     <div class="col-md-2">
 
                                                         <div class="custom-control custom-checkbox mb-3">
-                                                            <input class="custom-control-input" name="course[{{'certificate'}}][{{'visible'}}][{{'home'}}]" id="input-certificate-home" type="checkbox">
+                                                            <input class="custom-control-input" {{ ($visible_certification != null && $visible_certification['home']) ? 'checked' : '' }} name="course[{{'certificate'}}][{{'visible'}}][{{'home'}}]" id="input-certificate-home" type="checkbox">
                                                             <label class="custom-control-label" for="input-certificate-home">Course box in home page</label>
                                                         </div>
 
@@ -989,7 +1152,7 @@
                                                     <div class="col-md-2">
 
                                                         <div class="custom-control custom-checkbox mb-3">
-                                                            <input class="custom-control-input" name="course[{{'certificate'}}][{{'visible'}}][{{'list'}}]" id="input-certificate-list" type="checkbox">
+                                                            <input class="custom-control-input" {{ ($visible_certification != null && $visible_certification['list']) ? 'checked' : '' }} name="course[{{'certificate'}}][{{'visible'}}][{{'list'}}]" id="input-certificate-list" type="checkbox">
                                                             <label class="custom-control-label" for="input-certificate-list">Course box in list page</label>
                                                         </div>
 
@@ -998,7 +1161,7 @@
                                                     <div class="col-md-2">
 
                                                         <div class="custom-control custom-checkbox mb-3">
-                                                            <input class="custom-control-input" name="course[{{'certificate'}}][{{'visible'}}][{{'invoice'}}]" id="input-certificate-invoice" type="checkbox">
+                                                            <input class="custom-control-input" {{ ($visible_certification != null && $visible_certification['invoice']) ? 'checked' : '' }} name="course[{{'certificate'}}][{{'visible'}}][{{'invoice'}}]" id="input-certificate-invoice" type="checkbox">
                                                             <label class="custom-control-label" for="input-certificate-invoice">Invoice description</label>
                                                         </div>
 
@@ -1007,7 +1170,7 @@
                                                     <div class="col-md-2">
 
                                                         <div class="custom-control custom-checkbox mb-3">
-                                                            <input class="custom-control-input" name="course[{{'certificate'}}][{{'visible'}}][{{'emails'}}]" id="input-certificate-emails" type="checkbox">
+                                                            <input class="custom-control-input" {{ ($visible_hours != null && $visible_hours['emails']) ? 'checked' : '' }} name="course[{{'certificate'}}][{{'visible'}}][{{'emails'}}]" id="input-certificate-emails" type="checkbox">
                                                             <label class="custom-control-label" for="input-certificate-emails">Automated emails</label>
                                                         </div>
 
@@ -1030,26 +1193,35 @@
 
                                     <div class="row course-student-wrapper">
 
-
+                                        <?php
+                                        //dd($info);
+                                            if(isset($info['course_students_icon']) && $info['course_students_icon'] != null){
+                                                $course_students_icon = $info['course_students_icon'];
+                                            }else{
+                                                $course_students_icon = null;
+                                            }
+                                        ?>
                                         <div class="form-group col-12">
 
                                             <div class="input-group">
                                                 <h3 class="mb-0 title">{{ __('Course students') }}</h3>
-                                                <span class="input-group-addon input-group-append input-icon-wrapper">
+                                                <span data-infowrapper="students" class="input-group-addon input-group-append input-icon-wrapper">
                                                     <span class="btn btn-outline-primary input-icon"> <span class="fa fa-calendar"></span></span>
                                                 </span>
+                                                <input type="hidden" value="" id="students_path" name="course[{{'students'}}][{{'icon'}}][{{'path'}}]">
+                                                <input type="hidden" value="" id="students_alt_text" name="course[{{'students'}}][{{'icon'}}][{{'alt_text'}}]">
                                             </div>
                                         </div>
 
                                         <div calss="col-4">
                                             <div class="form-group col-auto">
                                                 <label class="form-control-label" for="input-hours">{{ __('Student should start count from this number:') }}</label>
-                                                <input type="text" name="course[{{'students'}}][{{'count_start'}}]" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="" autofocus>
+                                                <input type="text" name="course[{{'students'}}][{{'count_start'}}]" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('count_start', ($info != null && $info['course_students_number']) ? $info['course_students_number'] : '' ) }}" autofocus>
                                             </div>
 
                                             <div class="form-group col-auto">
                                                 <label class="form-control-label" for="input-hours">{{ __('Text after the number of students:') }}</label>
-                                                <input style="background:aliceblue;" name="course[{{'students'}}][{{'text'}}]" type="text" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="" autofocus>
+                                                <input style="background:aliceblue;" name="course[{{'students'}}][{{'text'}}]" type="text" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('count_text', ($info != null && $info['course_students_text']) ? $info['course_students_text'] : '' ) }}" autofocus>
                                             </div>
                                         </div>
 
@@ -1057,12 +1229,17 @@
 
                                     </div>
                                     <div class="row">
+                                        <?php
+
+                                            $visible_students = ($info != null && isset($info['course_students_visible'])) ? json_decode($info['course_students_visible'], true) : null;
+
+                                        ?>
                                         <label class="form-control-label col-12" for="input-hours">{{ __('Visible on:') }}</label>
 
                                         <div class="col-md-2">
 
                                             <div class="custom-control custom-checkbox mb-3">
-                                                <input class="custom-control-input" name="course[{{'students'}}][{{'visible'}}][{{'landing'}}]" id="input-students-landing" type="checkbox">
+                                                <input class="custom-control-input" {{ ($visible_students != null && $visible_students['landing']) ? 'checked' : '' }} name="course[{{'students'}}][{{'visible'}}][{{'landing'}}]" id="input-students-landing" type="checkbox">
                                                 <label class="custom-control-label" for="input-students-landing">Course landing page (summary)</label>
                                             </div>
 
@@ -1071,7 +1248,7 @@
                                         <div class="col-md-2">
 
                                             <div class="custom-control custom-checkbox mb-3">
-                                                <input class="custom-control-input" name="course[{{'students'}}][{{'visible'}}][{{'home'}}]" id="input-students-home" type="checkbox">
+                                                <input class="custom-control-input" {{ ($visible_students != null && $visible_students['home']) ? 'checked' : '' }} name="course[{{'students'}}][{{'visible'}}][{{'home'}}]" id="input-students-home" type="checkbox">
                                                 <label class="custom-control-label" for="input-students-home">Course box in home page</label>
                                             </div>
 
@@ -1080,7 +1257,7 @@
                                         <div class="col-md-2">
 
                                             <div class="custom-control custom-checkbox mb-3">
-                                                <input class="custom-control-input" name="course[{{'students'}}][{{'visible'}}][{{'list'}}]" id="input-students-list" type="checkbox">
+                                                <input class="custom-control-input" {{ ($visible_students != null && $visible_students['list']) ? 'checked' : '' }} name="course[{{'students'}}][{{'visible'}}][{{'list'}}]" id="input-students-list" type="checkbox">
                                                 <label class="custom-control-label" for="input-students-list">Course box in list page</label>
                                             </div>
 
@@ -1089,7 +1266,7 @@
                                         <div class="col-md-2">
 
                                             <div class="custom-control custom-checkbox mb-3">
-                                                <input class="custom-control-input" name="course[{{'students'}}][{{'visible'}}][{{'invoice'}}]" id="input-students-invoice" type="checkbox">
+                                                <input class="custom-control-input" {{ ($visible_students != null && $visible_students['invoice']) ? 'checked' : '' }} name="course[{{'students'}}][{{'visible'}}][{{'invoice'}}]" id="input-students-invoice" type="checkbox">
                                                 <label class="custom-control-label" for="input-students-invoice">Invoice description</label>
                                             </div>
 
@@ -1098,7 +1275,7 @@
                                         <div class="col-md-2">
 
                                             <div class="custom-control custom-checkbox mb-3">
-                                                <input class="custom-control-input" name="course[{{'students'}}][{{'visible'}}][{{'emails'}}]" id="input-students-emails" type="checkbox">
+                                                <input class="custom-control-input" {{ ($visible_hours != null && $visible_hours['emails']) ? 'checked' : '' }} name="course[{{'students'}}][{{'visible'}}][{{'emails'}}]" id="input-students-emails" type="checkbox">
                                                 <label class="custom-control-label" for="input-students-emails">Automated emails</label>
                                             </div>
 
@@ -1644,6 +1821,8 @@
             </div>
 
         </div>
+        {{--<script src="{{asset('js/app.js')}}"></script>
+        <script src="{{asset('admin_assets/js/vendor.min.js')}}"></script>--}}
         @include('layouts.footers.auth')
     </div>
 
@@ -1682,6 +1861,10 @@
         </div>
     </div>
 
+
+    <!-- <script src="{{asset('js/app.js')}}"></script>
+    <script src="{{asset('admin_assets/js/vendor.min.js')}}"></script> -->
+
 @endsection
 
 @push('css')
@@ -1702,7 +1885,8 @@
 <script>
 
     var eventPartners = @json($eventPartners);
-
+    var eventCertificationTitle = @json($event->certificate_title);
+    var eventInfos = @json($info)
 
     if('{{$event->syllabus}}' != '[]'){
         var eventSyllabus = @json('{{$event->syllabus[0]}}');
@@ -1775,19 +1959,49 @@
         let status = $(this).prop('checked');
 
         if(status){
+
             $('.award-text').removeClass('d-none');
+            if(eventInfos !== undefined){
+                $('#input-award-text').val(eventInfos.course_awards_text);
+            }
+
         }else{
             $('.award-text').addClass('d-none');
+            $('#input-award-text').val('');
         }
     })
 
     $('#certification-toggle').change(function() {
         let status = $(this).prop('checked');
 
+
         if(status){
             $('.course-certification-visible-wrapper').removeClass('d-none');
+            $('#input-certificate_title').val(eventCertificationTitle)
+            CKEDITOR.instances['input-certificate_title'].setData(eventCertificationTitle)
+
+
+            if(eventInfos !== undefined){
+                CKEDITOR.instances['input-certificate_text_failure'].setData(eventInfos.course_certification_name_failure)
+                $('#input-certificate_text_failure').val(eventInfos.course_certification_name_failure)
+            }
+
+
+            $('#input-certificate_type').val('test')
         }else{
             $('.course-certification-visible-wrapper').addClass('d-none');
+
+            //$('#input-certificate_title').val("")
+
+            CKEDITOR.instances['input-certificate_title'].setData('')
+            CKEDITOR.instances['input-certificate_text_failure'].setData('')
+            $('#input-certificate_title').val("")
+            $('#input-certificate_text_failure').val("")
+            $('#input-certificate_title').text("")
+            $('#input-certificate_text_failure').text("")
+
+            $('#input-certificate_type').val('')
+
         }
     });
 
@@ -1813,6 +2027,46 @@
                 $('.free-course-wrapper').addClass('d-none')
                 $('#free_course_list').val("")
             }
+        })
+
+        $(document).on('click', '#calculate-total-hours-btn', function() {
+            $.ajax({
+                    headers: {
+                       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+   			        type: 'GET',
+   			        url: '/admin/events/totalHours/' + "{{$event->id}}",
+   			        success: function (data) {
+
+                        console.log('data:', data)
+
+                        if(data.success){
+                            $(".success-message p").html(data.message);
+   	                        $(".success-message").show();
+
+
+
+                            $('#input-hours').val(Math.ceil(data.data/3600)+'hr')
+
+                           setTimeout(function(){
+                            $(".close-message").click();
+                           }, 2000)
+                        }else{
+                            $(".error-message p").html(data.message);
+   	                        $(".error-message").show();
+
+                           setTimeout(function(){
+                            $(".close-message").click();
+                           }, 2000)
+                        }
+
+
+
+   			        },
+   			        error: function() {
+   			             //console.log(data);
+   			        }
+   			    });
         })
 
         $(document).on('click', '#payment-method-toggle', function() {
@@ -2379,6 +2633,8 @@ var datePickerOptions = {
 </script>--}}
 
 <script>
+    var current_icon_input = null
+    var current_icon_input_alt_text = null
     $(document).on('click','button',function(){
         if($(this).hasClass('seo')){
             $(".form_event_btn").hide();
@@ -2386,6 +2642,22 @@ var datePickerOptions = {
             $(".form_event_btn").show();
         }
     });
+
+    $(document).on('click', '.input-icon-wrapper, .input-icon-wrapper-inclass', function() {
+
+        let btn = $(this).data('infowrapper')
+
+        if(btn === undefined){
+            return false;
+        }
+
+        document.getElementById('image-input-button').click();
+
+        current_icon_input = btn+'_path';
+        current_icon_input_alt_text = btn+'_alt_text';
+
+    })
+
 </script>
 
 @endpush

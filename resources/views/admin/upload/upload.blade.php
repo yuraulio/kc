@@ -44,7 +44,7 @@
     if(isset($versions)){
         $versions = json_encode($versions);
     }
-    
+
     $imageedit = "false";
     if($event && $event['path'] != null) {
         $imageedit = "true";

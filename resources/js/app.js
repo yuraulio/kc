@@ -85,6 +85,7 @@ Vue.component('admins', require('./components/admins.vue').default);
 
 Vue.component('settings', require('./components/settings.vue').default);
 Vue.component('manager-for-old-admin', require('./components/media/manager-for-old-admin.vue').default);
+Vue.component('manager-for-old-admin-new', require('./components/media/manager-for-old-admin-new.vue').default);
 
 import VuetableFieldCheckbox from 'vuetable-2/src/components/VuetableFieldCheckbox.vue';
 Vue.component('vuetable-field-checkbox', VuetableFieldCheckbox);
