@@ -52,7 +52,7 @@ class FixEventInfoTable extends Command
             $delivery =  $event->delivery->first() ? $event->delivery->first()->id : -1;
             $paymentMethod = $event->paymentMethod->first() ? $event->paymentMethod->first()->id : false;
             $status = $event->status;
-            $absences =  $event->absences;
+            $absences =  $event->absences_limit;
             $partner = count($event->partners) > 0;
             $syllabus =$event->syllabus->first();
             $certification_title = $event->certificate_title;

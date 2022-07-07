@@ -46,6 +46,9 @@ class EnrollStudentsToElearningEvents implements ShouldQueue
                 $elearningEvent->users()->wherePivotIn('user_id',$students)->wherePivot('comment','enroll from ' . $this->event->id)->detach();
             }
 
+            $this->event->enroll = false;
+            $this->event->save();
+
         }else{
 
             $students = $thiss->event->users()->pluck('user_id')->toArray();

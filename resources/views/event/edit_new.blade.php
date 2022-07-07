@@ -647,9 +647,9 @@
                                             <div class="row">
 
                                                 <?php
-
+                                                    
                                                     $times = ($info != null && isset($info['course_inclass_times'])) ? json_decode($info['course_inclass_times'], true) : null;
-
+                                            
                                                     //$visible_times = (isset($times) && isset($times['visible'])) ? json_decode($times['visible'], true) : null;
                                                     $visible_times = (isset($times) && isset($times['visible'])) ? $times['visible'] : null;
                                                 ?>
@@ -666,7 +666,7 @@
 
                                                 <div class="form-group col-2">
                                                     <div class="input-group">
-                                                        <input type="text" class="form-control" value="{{ old('times', (isset($times) && $times['text']) ? $times['text'] : '' ) }}" name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'text'}}]" placeholder="Times(from/to)">
+                                                        <input type="text" class="form-control" value="{{ old('times', (isset($times['text']) && $times['text']) ? $times['text'] : '' ) }}" name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'text'}}]" placeholder="Times(from/to)">
                                                         <span data-infowrapper="inclass_times" class="input-group-addon input-group-append input-icon-wrapper-inclass">
                                                             <span class="btn btn-outline-primary input-icon"> <span class="ni ni-watch-time"></span></span>
                                                         </span>
