@@ -410,7 +410,7 @@ li.select2-results__option:empty {
 
 .custom-toggle.custom-published input:checked+.custom-toggle-slider::before {
     background: #5e72e4;
-    transform: translateX(71px);
+    transform: translateX(95px);
 }
 
 .custom-toggle.custom-published input:checked+.custom-toggle-slider::after {

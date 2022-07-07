@@ -68,6 +68,7 @@ class Kernel extends ConsoleKernel
        Commands\ClearInvoices::class,
        Commands\KCIDToUsers::class,
        Commands\LessonLinksFixed::class,
+       Commands\FixEventInfoTable::class
     ];
 
     /**

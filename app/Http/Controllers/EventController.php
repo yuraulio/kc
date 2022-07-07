@@ -26,6 +26,7 @@ use Artisan;
 use Storage;
 use App\Model\Dropbox;
 use App\Model\EventInfo;
+use App\Jobs\EnrollStudentsToElearningEvents;
 
 class EventController extends Controller
 {
@@ -858,6 +859,15 @@ class EventController extends Controller
 
         }
 
+
+        if(isset($requestData['free_courses']['list'])){
+            
+            dispatch((new EnrollStudentsToElearningEvents($event->id,$requestData['free_courses']['list']))->delay(now()->addSeconds(3)));
+
+        }else{
+            dispatch((new EnrollStudentsToElearningEvents($event->id,null))->delay(now()->addSeconds(3)));
+        }
+
         return back()->withStatus(__('Event successfully updated.'));
         //return redirect()->route('events.edit',$event->id)->withStatus(__('Event successfully created.'));
         //return redirect()->route('events.index')->withStatus(__('Event successfully updated.'));
@@ -951,8 +961,11 @@ class EventController extends Controller
         $data = [];
 
         switch($status){
-            case 1:
+            case 0:
                 $status = 'Open';
+                break;
+            case 1:
+                $status = 'Close';
                 break;
             case 2:
                 $status = 'Soldout';

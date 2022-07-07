@@ -23,7 +23,7 @@ body
 
 .plan .custom-toggle input:checked + .custom-toggle-slider:before {
   background: #5e72e4;
-  transform: translateX(71px);
+  transform: translateX(95px);
 }
 
 .plan .custom-toggle input:checked + .custom-toggle-slider:after {
@@ -85,7 +85,7 @@ button#move-lesson {
 }
 
 .enroll-toggle input:checked + .custom-toggle-slider:before, .index-toggle input:checked + .custom-toggle-slider:before, .feed-toggle input:checked + .custom-toggle-slider:before {
-  transform: translateX(55px)!important;
+  transform: translateX(95px)!important;
 }
 
 .enroll-toggle, .index-toggle, .feed-toggle {
