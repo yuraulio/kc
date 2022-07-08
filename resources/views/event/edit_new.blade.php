@@ -703,7 +703,7 @@
 
                                                     <div class="form-group col-sm-12 col-md-6 col-lg-3">
                                                         <div class="input-group">
-                                                            <input type="text" class="form-control" value="{{ old('times', (isset($times) && $times['text']) ? $times['text'] : '' ) }}" name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'text'}}]" placeholder="Times(from/to)">
+                                                            <input type="text" class="form-control" value="{{ old('times', (isset($times['text']) && $times['text']) ? $times['text'] : '' ) }}" name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'text'}}]" placeholder="Times(from/to)">
                                                             <span data-infowrapper="inclass_times" class="input-group-addon input-group-append input-icon-wrapper-inclass">
                                                                 <span class="btn btn-outline-primary input-icon">
 

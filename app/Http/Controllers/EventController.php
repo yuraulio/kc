@@ -859,12 +859,13 @@ class EventController extends Controller
 
         }
 
-
-        if(isset($requestData['free_courses']['list'])){
-            
-            dispatch((new EnrollStudentsToElearningEvents($event->id,$requestData['free_courses']['list']))->delay(now()->addSeconds(3)));
+        
+        if(isset($infoData['free_courses']['list'])){
+           
+            dispatch((new EnrollStudentsToElearningEvents($event->id,$infoData['free_courses']['list']))->delay(now()->addSeconds(3)));
 
         }else{
+            
             dispatch((new EnrollStudentsToElearningEvents($event->id,null))->delay(now()->addSeconds(3)));
         }
 

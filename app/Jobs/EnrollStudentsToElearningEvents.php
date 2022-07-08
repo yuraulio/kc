@@ -37,21 +37,30 @@ class EnrollStudentsToElearningEvents implements ShouldQueue
      */
     public function handle()
     {
-        
+
+        $students = $this->event->users()->get();
+        foreach($students as $student){
+           
+            $student->events()->wherePivot('comment','enroll from ' . $this->event->id)->detach();
+        }
+
+        $this->event->enroll = false;
+        $this->event->save();
+    
         if(!$this->eventsToEnroll){
 
-            $students = $this->event->users()->pluck('user_id')->toArray();
-            foreach($this->eventsToEnroll as $eventToEnroll){
+            /*$students = $this->event->users()->pluck('user_id')->toArray();
+            foreach($students as $student){
                 $elearningEvent = Event::find($eventToEnroll);
                 $elearningEvent->users()->wherePivotIn('user_id',$students)->wherePivot('comment','enroll from ' . $this->event->id)->detach();
             }
 
             $this->event->enroll = false;
-            $this->event->save();
+            $this->event->save();*/
 
         }else{
 
-            $students = $thiss->event->users()->pluck('user_id')->toArray();
+            $students = $this->event->users()->pluck('user_id')->toArray();
             
 
             foreach($this->eventsToEnroll as $eventToEnroll){
