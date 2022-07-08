@@ -683,13 +683,13 @@
 
                                                 <div class="row">
 
-                                                <?php
-                                                    
-                                                    $times = ($info != null && isset($info['course_inclass_times'])) ? json_decode($info['course_inclass_times'], true) : null;
-                                            
-                                                    //$visible_times = (isset($times) && isset($times['visible'])) ? json_decode($times['visible'], true) : null;
-                                                    $visible_times = (isset($times) && isset($times['visible'])) ? $times['visible'] : null;
-                                                ?>
+                                                    <?php
+
+                                                        $times = ($info != null && isset($info['course_inclass_times'])) ? json_decode($info['course_inclass_times'], true) : null;
+
+                                                        //$visible_times = (isset($times) && isset($times['visible'])) ? json_decode($times['visible'], true) : null;
+                                                        $visible_times = (isset($times) && isset($times['visible'])) ? $times['visible'] : null;
+                                                    ?>
 
                                                     <?php
 
@@ -701,14 +701,22 @@
 
                                                     ?>
 
-                                                <div class="form-group col-2">
-                                                    <div class="input-group">
-                                                        <input type="text" class="form-control" value="{{ old('times', (isset($times['text']) && $times['text']) ? $times['text'] : '' ) }}" name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'text'}}]" placeholder="Times(from/to)">
-                                                        <span data-infowrapper="inclass_times" class="input-group-addon input-group-append input-icon-wrapper-inclass">
-                                                            <span class="btn btn-outline-primary input-icon"> <span class="ni ni-watch-time"></span></span>
-                                                        </span>
-                                                        <input type="hidden" value="" id="inclass_times_path" name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'icon'}}][{{'path'}}]">
-                                                        <input type="hidden" value="" id="inclass_times_alt_text" name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'icon'}}][{{'alt_text'}}]">
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-3">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" value="{{ old('times', (isset($times) && $times['text']) ? $times['text'] : '' ) }}" name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'text'}}]" placeholder="Times(from/to)">
+                                                            <span data-infowrapper="inclass_times" class="input-group-addon input-group-append input-icon-wrapper-inclass">
+                                                                <span class="btn btn-outline-primary input-icon">
+
+                                                                    @if($course_inclass_times_icon != null && $course_inclass_times_icon['path'] != null)
+                                                                        <img src="{{ asset($course_inclass_times_icon['path']) }}"/>
+                                                                    @else
+                                                                        <span class="ni ni-watch-time"></span>
+                                                                    @endif
+                                                                </span>
+                                                            </span>
+                                                            <input type="hidden" value="{{ old('inclass_times_icon_path', ($course_inclass_times_icon != null && $course_inclass_times_icon['path'] != '') ? $course_inclass_times_icon['path'] : '' ) }}" id="inclass_times_path" name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'icon'}}][{{'path'}}]">
+                                                            <input type="hidden" value="{{ old('inclass_times_icon_alt_text', ($course_inclass_times_icon != null && $course_inclass_times_icon['alt_text'] != '') ? $course_inclass_times_icon['alt_text'] : '' ) }}" id="inclass_times_alt_text" name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'icon'}}][{{'alt_text'}}]">
+                                                        </div>
                                                     </div>
 
 
