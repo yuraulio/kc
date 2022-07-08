@@ -13,12 +13,14 @@
 
 /* Event Edit New */
 
-#event_edit_form #input-status {
+#event_edit_form #input-status,
+#event_create_form #input-status {
     background-color: #5e72e4;
     color: white;
 }
 
-#event_edit_form #input-status option {
+#event_edit_form #input-status option,
+#event_create_form #input-status option {
     background-color: white;
     color: black;
 }
@@ -27,22 +29,26 @@
     margin-right: 2px;
 }
 
-#event_edit_form #input-delivery {
+#event_edit_form #input-delivery,
+#event_create_form #input-delivery {
     background-color: #5e72e4;
     color: white;
 }
 
-#event_edit_form #input-delivery option {
+#event_edit_form #input-delivery option,
+#event_create_form #input-delivery option {
     background-color: white;
     color: black;
 }
 
-#event_edit_form #input-city_id {
+#event_edit_form #input-city_id,
+#event_create_form #input-city_id {
     background-color: #5e72e4;
     color: white;
 }
 
-#event_edit_form #input-city_id option {
+#event_edit_form #input-city_id option,
+#event_create_form #input-city_id option {
     background-color: white;
     color: black;
 }
@@ -51,7 +57,8 @@
     margin: -7px 0;
 }
 
-#event_edit_form .input-icon img{
+#event_edit_form .input-icon img,
+#event_create_form .input-icon img{
     max-width: 20px;
     max-height: 20px;
 }
@@ -69,12 +76,14 @@
 }
 
 
-#event_edit_form #input-method {
+#event_edit_form #input-method,
+#event_create_form #input-method {
     background-color: #5e72e4;
     color: white;
 }
 
-#event_edit_form #input-method option {
+#event_edit_form #input-method option,
+#event_create_form #input-method option {
     background-color: white;
     color: black;
 }
@@ -413,7 +422,8 @@ li.select2-results__option:empty {
     width: 120px !important;
 }
 
-#event_edit_form .title {
+#event_edit_form .title,
+#event_create_form .title {
     color: #324cdd;
 }
 

@@ -21,13 +21,13 @@
         @include('event.layouts.cards')
     @endcomponent
 
-    
+
 
     <div class="container-fluid mt--6">
         <div class="row">
             <div class="col">
 
-            
+
 
                 <div class="card">
                     <div class="card-header">
@@ -38,6 +38,7 @@
                             @can('create', App\Model\User::class)
                                 <div class="col-4 text-right">
                                     <a href="{{ route('events.create') }}" class="btn btn-sm btn-primary">{{ __('Add Event') }}</a>
+                                    <a href="{{ route('events.create_new') }}" class="btn btn-sm btn-primary">{{ __('Add Event_new') }}</a>
                                 </div>
                             @endcan
                         </div>
@@ -65,7 +66,7 @@
                                 <option selected value> -- All -- </option>
                                 </select>
                             </div>
-                       
+
                         </div>
                     </div>
                 </div>
@@ -75,11 +76,11 @@
                         @include('alerts.errors')
                     </div>
 
-                    
+
 
                     <div class="table-responsive py-4">
 
-                    
+
 
                         <table class="table align-items-center table-flush"  id="datatable-basic26">
                             <thead class="thead-light">
@@ -152,7 +153,7 @@
 
                                                     <form action="{{ route('event.clone', $event) }}" method="post">
                                                         @csrf
-                                                        
+
                                                         <button type="sumbit" class="dropdown-item">
                                                             {{ __('Clone') }}
                                                         </button>
@@ -248,7 +249,7 @@
     <script>
 
         $( document ).ready(function(){
-            
+
             let published = table.column(1).data().unique();
             let status = table.column(2).data().unique();
             let delivery = table.column(6).data().unique();
@@ -277,8 +278,8 @@
             filterColumn( $(this).parents('div').attr('data-column') );
         });
 
-        function filterColumn ( i ) {   
-            
+        function filterColumn ( i ) {
+
             if($('#col'+i+'_filter').val() && i != 8){
                 $('#datatable-basic26').DataTable().column( i ).search(
                     '^'+$('#col'+i+'_filter').val()+'$', true,true
@@ -288,9 +289,9 @@
                     $('#col'+i+'_filter').val()
                 ).draw();
             }
-            
+
         }
-    
+
     </script>
 
 

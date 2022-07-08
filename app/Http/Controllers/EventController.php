@@ -221,6 +221,34 @@ class EventController extends Controller
     }
 
     /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create_new()
+    {
+        $user = Auth::user();
+
+        $categories = Category::all();
+        $types = Type::all();
+        $delivery = Delivery::all();
+        $instructors = Instructor::with('medias')->where('status', 1)->get()->groupBy('id');
+        $cities = City::all();
+        $partners = Partner::all();
+
+        //if elearning course (id = 143)
+        $elearning_events = Delivery::with('event:id,title')->where('id',143)->whereHas('event', function ($query) {
+            return $query->where('published', true);
+        })->first()->toArray()['event'];
+
+
+        $elearning_events;
+
+        return view('event.create_new', ['user' => $user, 'events' => Event::all(), 'categories' => $categories, 'types' => $types, 'delivery' =>$delivery,
+                                        'instructors' => $instructors, 'cities' => $cities,'partners'=>$partners, 'elearning_events' => $elearning_events]);
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
