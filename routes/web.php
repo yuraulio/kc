@@ -57,6 +57,11 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     Route::get('/events/{event}/edit_new', 'EventController@edit_new')->name('event.update_new');
     Route::post('/events/{event}/update_new', 'EventController@update_new')->name('event.update_newpost');
 
+    // New Create Event
+    Route::get('/events/create_new', 'EventController@create_new')->name('events.create_new');
+    Route::post('/events/store_new', 'EventController@store_new')->name('events.store_new');
+    Route::post('/events/{event}/update_new', 'EventController@update_new')->name('event.update_newpost');
+
 
 
     // Total hours

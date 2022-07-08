@@ -242,7 +242,6 @@
 
                                         </div>
 
-
                                         <hr>
 
                                         <div class="row">
@@ -309,7 +308,7 @@
                                                 <input style="background:aliceblue;" type="text" name="course[{{'hours'}}][{{'text'}}]" id="input-hours-text" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('hours', ($info != null && $info['course_hours']) ? $info['course_hours'] : '' ) }}" autofocus>
                                             </div>
 
-                                            <div class="form-group col-sm-12 col-md-12 col-lg-7">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-7">
                                                 <button id="calculate-total-hours-btn" type="button" class="btn btn-primary">Automatically calculate & add lessons hours</button>
                                             </div>
 
@@ -322,7 +321,7 @@
                                             ?>
                                             <label class="form-control-label col-12" for="input-hours">{{ __('Visible on:') }}</label>
 
-                                            <div class="col-sm-12 col-md-2">
+                                            <div class="col-sm-12 col-md-6 col-lg-2">
 
                                                 <div class="custom-control custom-checkbox mb-3">
                                                     <input class="custom-control-input" {{ ($visible_hours != null && $visible_hours['landing']) ? 'checked' : '' }} name="course[{{'hours'}}][{{'visible'}}][{{'landing'}}]" id="hours_landing" type="checkbox">
@@ -331,7 +330,7 @@
 
                                             </div>
 
-                                            <div class="col-sm-12 col-md-2">
+                                            <div class="col-sm-12 col-md-6 col-lg-2">
 
                                                 <div class="custom-control custom-checkbox mb-3">
                                                     <input class="custom-control-input" {{ ($visible_hours != null && $visible_hours['home']) ? 'checked' : '' }} name="course[{{'hours'}}][{{'visible'}}][{{'home'}}]" id="hours_home" type="checkbox">
@@ -340,7 +339,7 @@
 
                                             </div>
 
-                                            <div class="col-sm-12 col-md-2">
+                                            <div class="col-sm-12 col-md-6 col-lg-2">
 
                                                 <div class="custom-control custom-checkbox mb-3">
                                                     <input class="custom-control-input" {{ ($visible_hours != null && $visible_hours['list']) ? 'checked' : '' }} name="course[{{'hours'}}][{{'visible'}}][{{'list'}}]" id="hours_list" type="checkbox">
@@ -349,7 +348,7 @@
 
                                             </div>
 
-                                            <div class="col-sm-12 col-md-2">
+                                            <div class="col-sm-12 col-md-6 col-lg-2">
 
                                                 <div class="custom-control custom-checkbox mb-3">
                                                     <input class="custom-control-input" {{ ($visible_hours != null && $visible_hours['invoice']) ? 'checked' : '' }} name="course[{{'hours'}}][{{'visible'}}][{{'invoice'}}]" id="hourls_invoice" type="checkbox">
@@ -358,7 +357,7 @@
 
                                             </div>
 
-                                            <div class="col-sm-12 col-md-2">
+                                            <div class="col-sm-12 col-md-6 col-lg-2">
 
                                                 <div class="custom-control custom-checkbox mb-3">
                                                     <input class="custom-control-input" {{ ($visible_hours != null && $visible_hours['emails']) ? 'checked' : '' }} name="course[{{'hours'}}][{{'visible'}}][{{'emails'}}]" id="hours_emails" type="checkbox">
@@ -397,7 +396,7 @@
                                                         </span>
                                                     </span>
                                                     <input type="hidden" value="{{ old('language_icon_path', ($course_language_icon != null) ? $course_hours_icon['path'] : '' ) }}" id="language_path" name="course[{{'language'}}][{{'icon'}}][{{'path'}}]">
-                                                    <input type="hidden" value="{{ old('language_icon_path', ($course_language_icon != null) ? $course_language_icon['path'] : '' ) }}" id="language_alt_text" name="course[{{'language'}}][{{'icon'}}][{{'alt_text'}}]">
+                                                    <input type="hidden" value="{{ old('language_icon_alt_text', ($course_language_icon != null) ? $course_language_icon['alt_text'] : '' ) }}" id="language_alt_text" name="course[{{'language'}}][{{'icon'}}][{{'alt_text'}}]">
                                                 </div>
                                             </div>
 
@@ -415,7 +414,7 @@
                                             ?>
                                             <label class="form-control-label col-12" for="input-hours">{{ __('Visible on:') }}</label>
 
-                                            <div class="col-md-2">
+                                            <div class="col-sm-12 col-md-6 col-lg-2">
 
                                                 <div class="custom-control custom-checkbox mb-3">
                                                     <input class="custom-control-input" {{ ($visible_language != null && $visible_language['landing']) ? 'checked' : '' }} name="course[{{'language'}}][{{'visible'}}][{{'landing'}}]" id="language_landing" type="checkbox">
@@ -424,7 +423,7 @@
 
                                             </div>
 
-                                            <div class="col-md-2">
+                                            <div class="col-sm-12 col-md-6 col-lg-2">
 
                                                 <div class="custom-control custom-checkbox mb-3">
                                                     <input class="custom-control-input" {{ ($visible_language != null && $visible_language['home']) ? 'checked' : '' }} name="course[{{'language'}}][{{'visible'}}][{{'home'}}]" id="language_home" type="checkbox">
@@ -433,7 +432,7 @@
 
                                             </div>
 
-                                            <div class="col-md-2">
+                                            <div class="col-sm-12 col-md-6 col-lg-2">
 
                                                 <div class="custom-control custom-checkbox mb-3">
                                                     <input class="custom-control-input" {{ ($visible_language != null && $visible_language['list']) ? 'checked' : '' }} name="course[{{'language'}}][{{'visible'}}][{{'list'}}]" id="language_list" type="checkbox">
@@ -442,7 +441,7 @@
 
                                             </div>
 
-                                            <div class="col-md-2">
+                                            <div class="col-sm-12 col-md-6 col-lg-2">
 
                                                 <div class="custom-control custom-checkbox mb-3">
                                                     <input class="custom-control-input" {{ ($visible_language != null && $visible_language['invoice']) ? 'checked' : '' }} name="course[{{'language'}}][{{'visible'}}][{{'invoice'}}]" id="language_invoice" type="checkbox">
@@ -451,7 +450,7 @@
 
                                             </div>
 
-                                            <div class="col-md-2">
+                                            <div class="col-sm-12 col-md-6 col-lg-2">
 
                                                 <div class="custom-control custom-checkbox mb-3">
                                                     <input class="custom-control-input" {{ ($visible_language != null && $visible_language['emails']) ? 'checked' : '' }} name="course[{{'language'}}][{{'visible'}}][{{'emails'}}]" id="language_emails" type="checkbox">
@@ -513,8 +512,8 @@
                                             ?>
 
                                             <div class="col-12 delivery_child_wrapper <?= $event->is_inclass_course() ? '' : 'd-none' ?>">
-                                                <div class="row col-sm-12 col-md-12 col-lg-3">
-                                                    <div class="form-group{{ $errors->has('city_id') ? ' has-danger' : '' }} ">
+                                                <div class="row">
+                                                    <div class="col-10 form-group{{ $errors->has('city_id') ? ' has-danger' : '' }} ">
                                                         <select name="city_id" id="input-city_id" class="form-control" placeholder="{{ __('Please select the city of this course') }}" >
                                                             <option selected disabled value="">Please select the city of this course</option>
                                                             @foreach ($cities as $city)
@@ -554,7 +553,7 @@
                                                         }
                                                     ?>
 
-                                                    <div class="form-group col-sm-12 col-md-6 col-lg-3">
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-3">
                                                         <div class="input-group">
                                                             <input type="text" class="form-control" value="{{ (isset($dates) && isset($dates['text']) ) ? $dates['text'] : '' }}" name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'text'}}]" placeholder="Dates(from/to)">
                                                             <span data-infowrapper="inclass_dates" class="input-group-addon input-group-append input-icon-wrapper-inclass">
@@ -572,34 +571,34 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="form-group col-sm-12 col-md-2">
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-2">
                                                         <label class="form-control-label visible-label" for="input-delivery">{{ __('Visible on:') }}</label>
                                                         <div class="custom-control custom-checkbox mb-3 visible-item">
                                                             <input class="custom-control-input" {{ ($visible_dates != null && $visible_dates['landing']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'visible'}}][{{'landing'}}]" id="input-delivery-landing" type="checkbox">
                                                             <label class="custom-control-label" for="input-delivery-landing">Course landing page (summary)</label>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group col-sm-12 col-md-2">
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-2">
                                                         <div class="custom-control custom-checkbox mb-3 visible-item">
                                                             <input class="custom-control-input" {{ ($visible_dates != null && $visible_dates['home']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'visible'}}][{{'home'}}]" id="input-delivery-home" type="checkbox">
                                                             <label class="custom-control-label" for="input-delivery-home">Course box in home page</label>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group col-sm-12 col-md-2">
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-2">
                                                         <div class="custom-control custom-checkbox mb-3 visible-item">
                                                             <input class="custom-control-input" {{ ($visible_dates != null && $visible_dates['list']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'visible'}}][{{'list'}}]" id="input-delivery-list" type="checkbox">
                                                             <label class="custom-control-label" for="input-delivery-list">Course box in list page</label>
                                                         </div>
                                                     </div>
 
-                                                    <div class="form-group col-sm-12 col-md-2">
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-2">
                                                         <div class="custom-control custom-checkbox mb-3 visible-item">
                                                             <input class="custom-control-input" {{ ($visible_dates != null && $visible_dates['invoice']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'visible'}}][{{'invoice'}}]" id="input-delivery-invoice" type="checkbox">
                                                             <label class="custom-control-label" for="input-delivery-invoice">Invoice description</label>
                                                         </div>
                                                     </div>
 
-                                                    <div class="form-group col-sm-12 col-md-2">
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-2">
                                                         <div class="custom-control custom-checkbox mb-3 visible-item">
                                                             <input class="custom-control-input" {{ ($visible_dates != null && $visible_dates['emails']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'visible'}}][{{'emails'}}]" id="input-delivery-emails" type="checkbox">
                                                             <label class="custom-control-label" for="input-delivery-emails">Automated emails</label>
@@ -623,7 +622,7 @@
                                                         }
                                                     ?>
 
-                                                    <div class="form-group col-sm-12 col-md-6 col-lg-3">
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-3">
                                                         <div class="input-group">
                                                             <input type="text" class="form-control" value="{{ (isset($day) && isset($day['text']) ) ? $day['text'] : '' }}" name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'text'}}]" placeholder="Day" >
                                                             <span data-infowrapper="inclass_day" class="input-group-addon input-group-append input-icon-wrapper-inclass">
@@ -701,7 +700,7 @@
 
                                                     ?>
 
-                                                    <div class="form-group col-sm-12 col-md-6 col-lg-3">
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-3">
                                                         <div class="input-group">
                                                             <input type="text" class="form-control" value="{{ old('times', (isset($times) && $times['text']) ? $times['text'] : '' ) }}" name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'text'}}]" placeholder="Times(from/to)">
                                                             <span data-infowrapper="inclass_times" class="input-group-addon input-group-append input-icon-wrapper-inclass">
@@ -754,7 +753,9 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="form-group col-sm-12 col-md-2">
+                                                </div>
+                                                <div class="row">
+                                                    <div class="form-group col-sm-12 col-md-4">
                                                         <label class="form-control-label" for="input-hours">{{ __('Absences Limit(%)') }}</label>
                                                         <div class="input-group">
                                                             <input type="text" name="course[{{'delivery'}}][{{'inclass'}}][{{'absences'}}]" id="input-absences_limit" class="form-control{{ $errors->has('Absences Limit(%)') ? ' is-invalid' : '' }}" placeholder="{{ __('absences_limit') }}" value="{{ old('$course_inclass_absences', ($info != null && $info['course_inclass_absences'] != '') ? $info['course_inclass_absences'] : 0 ) }}"autofocus>
@@ -764,9 +765,6 @@
                                                         </div>
                                                         {{--@include('alerts.feedback', ['field' => 'absences_imit'])--}}
                                                     </div>
-
-
-
                                                 </div>
 
                                                 <div class="row">
@@ -985,7 +983,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-group">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-4">
                                                 <label for="exampleFormControlSelect1">Select Dropbox Folder</label>
                                                 <select class="form-control" name="folder_name" id="folder_name">
 
@@ -1009,7 +1007,7 @@
                                                 @include('alerts.feedback', ['field' => 'dropbox'])
                                             </div>
 
-                                            <div class="form-group{{ $errors->has('release_date_files') ? ' has-danger' : '' }}">
+                                            <div class="col-sm-12 col-md-6 col-lg-3 form-group{{ $errors->has('release_date_files') ? ' has-danger' : '' }}">
                                                 <label class="form-control-label" for="input-delivery">{{ __('Access to files until') }}</label>
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
@@ -1176,7 +1174,7 @@
                                             <div class="form-group col-12">
                                                 <span class="toggle-btn-inline-text">Does this course offer a certification? </span>
                                                 <label class="custom-toggle">
-                                                    <input id="certification-toggle" {{(isset($event->certificate_title)) ? 'checked' : '' }} type="checkbox">
+                                                    <input id="certification-toggle" {{($info != null && isset($info['course_certification_name_success'])) ? 'checked' : '' }} type="checkbox">
                                                     <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                                 </label>
                                             </div>
@@ -1189,7 +1187,7 @@
 
 
 
-                                            <div class="form-group col-12 course-certification-visible-wrapper {{(isset($event->certificate_title)) ? '' : 'd-none' }}">
+                                            <div class="form-group col-12 course-certification-visible-wrapper {{ ($info != null && isset($info['course_certification_name_success'])) ? '' : 'd-none' }}">
                                                 <div class="row">
                                                     <div class="col-sm-12 col-md-6 form-group{{ $errors->has('fb_') ? ' has-danger' : '' }}">
                                                         <label class="form-control-label" for="input-hours">{{ __('Certificate Title') }}</label>
@@ -1215,7 +1213,7 @@
                                                     <div class="row">
                                                         <label class="form-control-label col-12" for="input-hours">{{ __('Visible on:') }}</label>
 
-                                                        <div class="col-md-2">
+                                                        <div class="col-sm-12 col-md-6 col-lg-2">
 
                                                             <div class="custom-control custom-checkbox mb-3">
                                                                 <input class="custom-control-input" {{ ($visible_certification != null && $visible_certification['landing']) ? 'checked' : '' }} name="course[{{'certificate'}}][{{'visible'}}][{{'landing'}}]" id="input-certificate-landing" type="checkbox">
@@ -1224,7 +1222,7 @@
 
                                                         </div>
 
-                                                        <div class="col-md-2">
+                                                        <div class="col-sm-12 col-md-6 col-lg-2">
 
                                                             <div class="custom-control custom-checkbox mb-3">
                                                                 <input class="custom-control-input" {{ ($visible_certification != null && $visible_certification['home']) ? 'checked' : '' }} name="course[{{'certificate'}}][{{'visible'}}][{{'home'}}]" id="input-certificate-home" type="checkbox">
@@ -1233,7 +1231,7 @@
 
                                                         </div>
 
-                                                        <div class="col-md-2">
+                                                        <div class="col-sm-12 col-md-6 col-lg-2">
 
                                                             <div class="custom-control custom-checkbox mb-3">
                                                                 <input class="custom-control-input" {{ ($visible_certification != null && $visible_certification['list']) ? 'checked' : '' }} name="course[{{'certificate'}}][{{'visible'}}][{{'list'}}]" id="input-certificate-list" type="checkbox">
@@ -1242,7 +1240,7 @@
 
                                                         </div>
 
-                                                        <div class="col-md-2">
+                                                        <div class="col-sm-12 col-md-6 col-lg-2">
 
                                                             <div class="custom-control custom-checkbox mb-3">
                                                                 <input class="custom-control-input" {{ ($visible_certification != null && $visible_certification['invoice']) ? 'checked' : '' }} name="course[{{'certificate'}}][{{'visible'}}][{{'invoice'}}]" id="input-certificate-invoice" type="checkbox">
@@ -1251,7 +1249,7 @@
 
                                                         </div>
 
-                                                        <div class="col-md-2">
+                                                        <div class="col-sm-12 col-md-6 col-lg-2">
 
                                                             <div class="custom-control custom-checkbox mb-3">
                                                                 <input class="custom-control-input" {{ ($visible_hours != null && $visible_hours['emails']) ? 'checked' : '' }} name="course[{{'certificate'}}][{{'visible'}}][{{'emails'}}]" id="input-certificate-emails" type="checkbox">
@@ -1323,7 +1321,7 @@
                                             ?>
                                             <label class="form-control-label col-12" for="input-hours">{{ __('Visible on:') }}</label>
 
-                                            <div class="col-md-2">
+                                            <div class="col-sm-12 col-md-6 col-lg-2">
 
                                                 <div class="custom-control custom-checkbox mb-3">
                                                     <input class="custom-control-input" {{ ($visible_students != null && $visible_students['landing']) ? 'checked' : '' }} name="course[{{'students'}}][{{'visible'}}][{{'landing'}}]" id="input-students-landing" type="checkbox">
@@ -1332,7 +1330,7 @@
 
                                             </div>
 
-                                            <div class="col-md-2">
+                                            <div class="col-sm-12 col-md-6 col-lg-2">
 
                                                 <div class="custom-control custom-checkbox mb-3">
                                                     <input class="custom-control-input" {{ ($visible_students != null && $visible_students['home']) ? 'checked' : '' }} name="course[{{'students'}}][{{'visible'}}][{{'home'}}]" id="input-students-home" type="checkbox">
@@ -1341,7 +1339,7 @@
 
                                             </div>
 
-                                            <div class="col-md-2">
+                                            <div class="col-sm-12 col-md-6 col-lg-2">
 
                                                 <div class="custom-control custom-checkbox mb-3">
                                                     <input class="custom-control-input" {{ ($visible_students != null && $visible_students['list']) ? 'checked' : '' }} name="course[{{'students'}}][{{'visible'}}][{{'list'}}]" id="input-students-list" type="checkbox">
@@ -1350,7 +1348,7 @@
 
                                             </div>
 
-                                            <div class="col-md-2">
+                                            <div class="col-sm-12 col-md-6 col-lg-2">
 
                                                 <div class="custom-control custom-checkbox mb-3">
                                                     <input class="custom-control-input" {{ ($visible_students != null && $visible_students['invoice']) ? 'checked' : '' }} name="course[{{'students'}}][{{'visible'}}][{{'invoice'}}]" id="input-students-invoice" type="checkbox">
@@ -1359,7 +1357,7 @@
 
                                             </div>
 
-                                            <div class="col-md-2">
+                                            <div class="col-sm-12 col-md-6 col-lg-2">
 
                                                 <div class="custom-control custom-checkbox mb-3">
                                                     <input class="custom-control-input" {{ ($visible_hours != null && $visible_hours['emails']) ? 'checked' : '' }} name="course[{{'students'}}][{{'visible'}}][{{'emails'}}]" id="input-students-emails" type="checkbox">
