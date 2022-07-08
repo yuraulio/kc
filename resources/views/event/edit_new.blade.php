@@ -807,21 +807,21 @@
                                                     </div>
 
                                                     <label class="form-control-label col-12" for="input-hours">{{ __('Add students to another course') }}</label>
-
+                                                    <?php
+                                                        $access_events = ($info != null && isset($info['course_elearning_access'])) ? json_decode($info['course_elearning_access'], true) : null;
+                                                    ?>
                                                     <div class="form-group col-12">
                                                         <span class="toggle-btn-inline-text">Would you like to let students access an e-learning course for free?</span>
                                                         <label id="access-student-toggle" class="custom-toggle">
-                                                            <input id="access-student" name="course[{{'free_courses'}}][{{'enabled'}}]" type="checkbox" checked="">
+                                                            <input id="access-student" name="course[{{'free_courses'}}][{{'enabled'}}]" type="checkbox" {{ (isset($access_events) && count($access_events) != 0) ? '' : 'd-none'}}>
                                                             <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                                         </label>
                                                     </div>
 
 
                                                     @if(count($elearning_events) != 0)
-                                                    <?php
-                                                        $access_events = ($info != null && isset($info['course_elearning_access'])) ? json_decode($info['course_elearning_access'], true) : null;
-                                                    ?>
-                                                    <div class="free-course-wrapper">
+
+                                                    <div class="free-course-wrapper {{ (isset($access_events) && count($access_events) != 0) ? '' : 'd-none'}}">
 
                                                         <div class="form-group col-12">
                                                             <label class="form-control-label" for="exampleFormControlSelect3">Please select the courses you want to allow free access</label>
@@ -977,9 +977,13 @@
                                                 <div class="input-group">
                                                     <h3 class="mb-0 title" for="input-hours">{{ __('Course files') }}</h3>
 
-                                                    <span class="input-group-addon input-group-append input-icon-wrapper">
-                                                        <span class="btn btn-outline-primary input-icon"> <span class="fa fa-calendar"></span></span>
+                                                    <span data-infowrapper="files" class="input-group-addon input-group-append input-icon-wrapper">
+                                                        <span class="btn btn-outline-primary input-icon">
+                                                            <span class="fa fa-calendar"></span>
+                                                        </span>
                                                     </span>
+                                                    <input type="hidden" value="" id="files_path" name="course[{{'files'}}][{{'icon'}}][{{'path'}}]">
+                                                    <input type="hidden" value="" id="files_alt_text" name="course[{{'files'}}][{{'icon'}}][{{'alt_text'}}]">
                                                 </div>
                                             </div>
 
@@ -1131,7 +1135,7 @@
                                             </div>
 
                                             <div class="col-sm-12 col-md-6 col-lg-3 form-group award-text {{ ($info != null && $info['course_awards_text'] != null) ? '' : 'd-none'}}">
-                                                <input style="background:aliceblue;" id="input-award-text" type="text" name="course[{{'awards'}}][{{'text'}}]" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('hours', ($info != null && $info['course_awards_text']) ? $info['course_awards_text'] : '' ) }}" autofocus>
+                                                <input style="background:aliceblue;" id="input-award-text" type="text" name="course[{{'awards'}}][{{'text'}}]" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('awards', ($info != null && $info['course_awards_text']) ? $info['course_awards_text'] : '' ) }}" autofocus>
                                             </div>
                                         </div>
 
@@ -1206,7 +1210,7 @@
 
                                                     <div class="col-sm-12 col-md-6 form-group">
                                                         <label class="form-control-label" for="input-hours">{{ __('Certificate type') }}</label>
-                                                        <input type="text" name="course[{{'certificate'}}][{{'type'}}]" id="input-certificate_type" class="form-control" placeholder="{{ __('alphanumeric text ') }}" value="{{old('certificate_failure',($info != null && isset($info['course_certification_type'])) ? $info['course_certification_type'] : '' )}}" autofocus/>
+                                                        <input type="text" name="course[{{'certificate'}}][{{'type'}}]" id="input-certificate_type" class="form-control" placeholder="{{ __('alphanumeric text ') }}" value="{{old('certificate_type',($info != null && isset($info['course_certification_type'])) ? $info['course_certification_type'] : '' )}}" autofocus/>
 
                                                     </div>
                                                 </div>
@@ -2073,7 +2077,7 @@
             }
 
 
-            $('#input-certificate_type').val('test')
+            $('#input-certificate_type').val('')
         }else{
             $('.course-certification-visible-wrapper').addClass('d-none');
 

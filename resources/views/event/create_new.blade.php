@@ -92,7 +92,7 @@
                                 </div>
 
                                 <div class="form-group{{ $errors->has('hours') ? ' has-danger' : '' }} col-sm-12 col-md-2 col-lg-2">
-                                    <input type="text" id="input-hours" name="hours" class="form-control{{ $errors->has('hours') ? ' is-invalid' : '' }}" placeholder="{{ __('Course Hours') }}" value="{{ old('hours') }}hr" autofocus>
+                                    <input type="text" id="input-hours" name="hours" class="form-control{{ $errors->has('hours') ? ' is-invalid' : '' }}" placeholder="{{ __('Course Hours') }}" value="{{ old('hours') }}" autofocus>
                                     @include('alerts.feedback', ['field' => 'hours'])
                                 </div>
 
@@ -489,14 +489,14 @@
                                         <div class="form-group col-12">
                                             <span class="toggle-btn-inline-text">Would you like to let students access an e-learning course for free?</span>
                                             <label id="access-student-toggle" class="custom-toggle">
-                                                <input id="access-student" name="course[{{'free_courses'}}][{{'enabled'}}]" type="checkbox" checked="">
+                                                <input id="access-student" name="course[{{'free_courses'}}][{{'enabled'}}]" type="checkbox">
                                                 <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
                                             </label>
                                         </div>
 
 
                                         @if(count($elearning_events) != 0)
-                                        <div class="free-course-wrapper">
+                                        <div class="free-course-wrapper d-none">
 
                                             <div class="form-group col-12">
                                                 <label class="form-control-label" for="exampleFormControlSelect3">Please select the courses you want to allow free access</label>
@@ -578,9 +578,13 @@
                                     <div class="input-group">
                                         <h3 class="mb-0 title" for="input-hours">{{ __('Course files') }}</h3>
 
-                                        <span class="input-group-addon input-group-append input-icon-wrapper">
-                                            <span class="btn btn-outline-primary input-icon"> <span class="fa fa-calendar"></span></span>
+                                        <span data-infowrapper="files" class="input-group-addon input-group-append input-icon-wrapper">
+                                            <span class="btn btn-outline-primary input-icon">
+                                                <span class="fa fa-calendar"></span>
+                                            </span>
                                         </span>
+                                        <input type="hidden" value="" id="files_path" name="course[{{'files'}}][{{'icon'}}][{{'path'}}]">
+                                        <input type="hidden" value="" id="files_alt_text" name="course[{{'files'}}][{{'icon'}}][{{'alt_text'}}]">
                                     </div>
                                 </div>
 
@@ -600,6 +604,233 @@
 
                             <hr>
 
+                            <div class="row course-manager-wrapper">
+
+                                <div class="form-group col-12">
+
+                                    <div class="input-group">
+                                        <h3 class="mb-0 title" >{{ __('Course manager') }}</h3>
+
+                                        <span data-infowrapper="manager" class="input-group-addon input-group-append input-icon-wrapper">
+                                            <span class="btn btn-outline-primary input-icon">
+
+                                                <span class="fa fa-calendar"></span>
+
+                                            </span>
+                                        </span>
+                                        <input type="hidden" value="{{ old('course_manager_icon_path') }}" id="manager_path" name="course[{{'manager'}}][{{'icon'}}][{{'path'}}]">
+                                        <input type="hidden" value="{{ old('course_manager_icon_alt_text') }}" id="manager_alt_text" name="course[{{'manager'}}][{{'icon'}}][{{'alt_text'}}]">
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group col-12">
+                                    <span class="toggle-btn-inline-text">Does this course have a visible manager?</span>
+                                    <label class="custom-toggle">
+                                        <input id="manager-toggle" name="manager-enabled" type="checkbox">
+                                        <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
+                                    </label>
+                                </div>
+
+                                @if(count($instructors) != 0)
+                                <div class="col-sm-12 col-md-6 col-lg-3 course-manager-list form-group{{ $errors->has('syllabus') ? ' has-danger' : '' }} d-none">
+                                    <select name="syllabus" data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." id="input-syllabus1" class="form-control" placeholder="{{ __('Syllabus Manager') }}">
+                                        <option value=""></option>
+
+
+                                        @foreach ($instructors as $key => $instructor)
+
+                                            <option
+
+                                            @if($instructors[$key][0]->medias != null)
+                                                ext="{{$instructors[$key][0]->medias['ext']}}" original_name="{{$instructors[$key][0]->medias['original_name']}}" name="{{$instructors[$key][0]->medias['name']}}" path="{{$instructors[$key][0]->medias['path']}}" value="{{$key}}">{{ $instructors[$key][0]['title'] }} {{ $instructors[$key][0]['subtitle'] }}</option>
+                                            @else
+                                            ext="null" original_name="null" name="null" path="null" value="{{$key}}">{{ $instructors[$key][0]['title'] }} {{ $instructors[$key][0]['subtitle'] }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+
+                                    @include('alerts.feedback', ['field' => 'syllabus'])
+                                </div>
+                                @endif
+                            </div>
+
+                            <hr>
+
+                            <div class="row course-awards-wrapper">
+
+                                <div class="form-group col-12">
+
+                                    <div class="input-group">
+                                        <h3 class="mb-0 title">{{ __('Course awards & badges') }}</h3>
+
+                                        <span data-infowrapper="awards" class="input-group-addon input-group-append input-icon-wrapper">
+                                            <span class="btn btn-outline-primary input-icon">
+                                                <span class="fa fa-calendar"></span>
+                                            </span>
+                                        </span>
+                                        <input type="hidden" value="{{ old('course_awards_icon_path') }}" id="awards_path" name="course[{{'awards'}}][{{'icon'}}][{{'path'}}]">
+                                        <input type="hidden" value="{{ old('course_awards_icon_alt_text') }}" id="awards_alt_text" name="course[{{'awards'}}][{{'icon'}}][{{'alt_text'}}]">
+                                    </div>
+                                </div>
+                                <div class="form-group col-12">
+                                    <span class="toggle-btn-inline-text">Does this course have some award?</span>
+                                    <label class="custom-toggle">
+                                        <input id="award-toggle" type="checkbox">
+                                        <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
+                                    </label>
+                                </div>
+
+                                <div class="col-sm-12 col-md-6 col-lg-3 form-group award-text d-none">
+                                    <input style="background:aliceblue;" id="input-award-text" type="text" name="course[{{'awards'}}][{{'text'}}]" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('awards') }}" autofocus>
+                                </div>
+                            </div>
+
+
+                            <hr>
+
+                            <div class="row course-certification-wrapper">
+
+                                <div class="form-group col-12">
+
+                                    <div class="input-group">
+                                        <h3 class="mb-0 title">{{ __('Course certification') }}</h3>
+
+                                        <span data-infowrapper="certificate" class="input-group-addon input-group-append input-icon-wrapper">
+                                            <span class="btn btn-outline-primary input-icon">
+                                                <span class="fa fa-calendar"></span>
+                                            </span>
+                                        </span>
+                                        <input type="hidden" value="{{ old('course_certification_icon_path') }}" id="certificate_path" name="course[{{'certificate'}}][{{'icon'}}][{{'path'}}]">
+                                        <input type="hidden" value="{{ old('course_certification_icon_alt_text') }}" id="certificate_alt_text" name="course[{{'certificate'}}][{{'icon'}}][{{'alt_text'}}]">
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group col-12">
+                                    <span class="toggle-btn-inline-text">Does this course offer a certification? </span>
+                                    <label class="custom-toggle">
+                                        <input id="certification-toggle" type="checkbox">
+                                        <span class="custom-toggle-slider rounded-circle" data-label-off="No" data-label-on="Yes"></span>
+                                    </label>
+                                </div>
+
+                                <div class="form-group col-12 course-certification-visible-wrapper d-none">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-6 form-group{{ $errors->has('fb_') ? ' has-danger' : '' }}">
+                                            <label class="form-control-label" for="input-hours">{{ __('Certificate Title') }}</label>
+
+                                            <textarea type="text" name="course[{{'certificate'}}][{{'success_text'}}]" id="input-certificate_title" class="ckeditor form-control" autofocus>{{ old('certificate_title') }}</textarea>
+
+                                            @include('alerts.feedback', ['field' => 'certificate_title'])
+                                        </div>
+
+                                        <div class="col-sm-12 col-md-6 form-group">
+                                            <label class="form-control-label" for="input-hours">{{ __('Title of certification (in case of exams failure)') }}</label>
+
+                                            <textarea type="text" name="course[{{'certificate'}}][{{'failure_text'}}]" id="input-certificate_text_failure" class="form-control ckeditor"  autofocus>{{old('certificate_failure')}}</textarea>
+
+                                        </div>
+
+                                        <div class="col-sm-12 col-md-6 form-group">
+                                            <label class="form-control-label" for="input-hours">{{ __('Certificate type') }}</label>
+                                            <input type="text" name="course[{{'certificate'}}][{{'type'}}]" id="input-certificate_type" class="form-control" placeholder="{{ __('alphanumeric text ') }}" value="{{old('certificate_type')}}" autofocus/>
+
+                                        </div>
+                                    </div>
+                                        <div class="row">
+                                            <label class="form-control-label col-12" for="input-hours">{{ __('Visible on:') }}</label>
+
+                                            <div class="col-sm-12 col-md-6 col-lg-2">
+
+                                                <div class="custom-control custom-checkbox mb-3">
+                                                    <input class="custom-control-input" name="course[{{'certificate'}}][{{'visible'}}][{{'landing'}}]" id="input-certificate-landing" type="checkbox">
+                                                    <label class="custom-control-label" for="input-certificate-landing">Course landing page (summary)</label>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col-sm-12 col-md-6 col-lg-2">
+
+                                                <div class="custom-control custom-checkbox mb-3">
+                                                    <input class="custom-control-input" name="course[{{'certificate'}}][{{'visible'}}][{{'home'}}]" id="input-certificate-home" type="checkbox">
+                                                    <label class="custom-control-label" for="input-certificate-home">Course box in home page</label>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col-sm-12 col-md-6 col-lg-2">
+
+                                                <div class="custom-control custom-checkbox mb-3">
+                                                    <input class="custom-control-input" name="course[{{'certificate'}}][{{'visible'}}][{{'list'}}]" id="input-certificate-list" type="checkbox">
+                                                    <label class="custom-control-label" for="input-certificate-list">Course box in list page</label>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col-sm-12 col-md-6 col-lg-2">
+
+                                                <div class="custom-control custom-checkbox mb-3">
+                                                    <input class="custom-control-input" name="course[{{'certificate'}}][{{'visible'}}][{{'invoice'}}]" id="input-certificate-invoice" type="checkbox">
+                                                    <label class="custom-control-label" for="input-certificate-invoice">Invoice description</label>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col-sm-12 col-md-6 col-lg-2">
+
+                                                <div class="custom-control custom-checkbox mb-3">
+                                                    <input class="custom-control-input" name="course[{{'certificate'}}][{{'visible'}}][{{'emails'}}]" id="input-certificate-emails" type="checkbox">
+                                                    <label class="custom-control-label" for="input-certificate-emails">Automated emails</label>
+                                                </div>
+
+                                            </div>
+
+
+                                        </div>
+                                </div>
+
+
+
+
+                            </div>
+
+
+
+                            <hr>
+
+                            <div class="row course-student-wrapper">
+                                <div class="form-group col-12">
+
+                                    <div class="input-group">
+                                        <h3 class="mb-0 title">{{ __('Course students') }}</h3>
+                                        <span data-infowrapper="students" class="input-group-addon input-group-append input-icon-wrapper">
+                                            <span class="btn btn-outline-primary input-icon">
+                                                <span class="fa fa-calendar"></span>
+                                            </span>
+                                        </span>
+                                        <input type="hidden" value="{{ old('course_students_icon_path') }}" id="students_path" name="course[{{'students'}}][{{'icon'}}][{{'path'}}]">
+                                        <input type="hidden" value="{{ old('course_students_icon_alt_text') }}" id="students_alt_text" name="course[{{'students'}}][{{'icon'}}][{{'alt_text'}}]">
+                                    </div>
+                                </div>
+
+                                <div calss="col-sm-12 col-md-6 col-lg-3">
+                                    <div class="form-group col-auto">
+                                        <label class="form-control-label" for="input-hours">{{ __('Student should start count from this number:') }}</label>
+                                        <input type="text" name="course[{{'students'}}][{{'count_start'}}]" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('count_start') }}" autofocus>
+                                    </div>
+
+                                    <div class="form-group col-auto">
+                                        <label class="form-control-label" for="input-hours">{{ __('Text after the number of students:') }}</label>
+                                        <input style="background:aliceblue;" name="course[{{'students'}}][{{'text'}}]" type="text" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('count_text') }}" autofocus>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+
+                            <hr>
 
 
 
@@ -692,26 +923,26 @@
                                     @include('alerts.feedback', ['field' => 'subtitle'])
                                 </div>
 
-                                {{{--<div class="form-group{{ $errors->has('header') ? ' has-danger' : '' }}">
+                                {{--<div class="form-group{{ $errors->has('header') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-header">{{ __('Header') }}</label>
                                     <input type="text" name="header" id="input-header" class="form-control{{ $errors->has('header') ? ' is-invalid' : '' }}" placeholder="{{ __('Header') }}" value="{{ old('header') }}" autofocus>
 
                                     @include('alerts.feedback', ['field' => 'header'])
                                 </div>--}}
 
-                                <div class="form-group{{ $errors->has('summary') ? ' has-danger' : '' }}">
+                                {{--<div class="form-group{{ $errors->has('summary') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-summary">{{ __('Summary') }}</label>
                                     <textarea name="summary" id="input-summary"  class="ckeditor form-control{{ $errors->has('summary') ? ' is-invalid' : '' }}" placeholder="{{ __('Summary') }}"  required autofocus></textarea>
 
                                     @include('alerts.feedback', ['field' => 'summary'])
-                                </div>
+                                </div>--}}
 
-                                <div class="form-group{{ $errors->has('body') ? ' has-danger' : '' }}">
+                                {{--<div class="form-group{{ $errors->has('body') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-body">{{ __('Body') }}</label>
                                     <textarea name="body" id="input-body"  class="ckeditor form-control{{ $errors->has('body') ? ' is-invalid' : '' }}" placeholder="{{ __('Body') }}"  required autofocus></textarea>
 
                                     @include('alerts.feedback', ['field' => 'body'])
-                                </div>
+                                </div>--}}
 
                                 <div class="form-group{{ $errors->has('view_tpl') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-view_tpl">{{ __('View tpl') }}</label>
@@ -726,7 +957,7 @@
 
                                 <?php //dd($instructors[10][0]); ?>
 
-                                <div class="form-group{{ $errors->has('syllabus') ? ' has-danger' : '' }}">
+                                {{--<div class="form-group{{ $errors->has('syllabus') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-syllabus">{{ __('Syllabus Manager') }}</label>
                                     <select name="syllabus" data-toggle="select" data-live-search="true" data-live-search-placeholder="Search ..." id="input-syllabus" class="form-control" placeholder="{{ __('Syllabus Manager') }}">
                                         <option value=""></option>
@@ -742,7 +973,7 @@
                                     </select>
 
                                     @include('alerts.feedback', ['field' => 'syllabus'])
-                                </div>
+                                </div>--}}
 
                                     <input type="hidden" name="creator_id" id="input-creator_id" class="form-control" value="{{$user->id}}">
                                     <input type="hidden" name="author_id" id="input-author_id" class="form-control" value="{{$user->id}}">
@@ -774,11 +1005,18 @@
     instructors = @json($instructors);
 
     $(document).ready(function(){
-        $("#input-syllabus").select2({
-            templateResult: formatOptions,
-            templateSelection: formatOptions
+        // $("#input-syllabus").select2({
+        //     templateResult: formatOptions,
+        //     templateSelection: formatOptions
+        //     });
+            $("#input-syllabus1").select2({
+                templateResult: formatOptions,
+                templateSelection: formatOptions,
+                placeholder: "Please select the instructor/manager of this course",
             });
         });
+
+
 
         function formatOptions (state) {
         if (!state.id) {
@@ -833,6 +1071,80 @@
             $('#input-partner_id').val([])
         }
     });
+
+    $(document).on('click', '#access-student', function() {
+        let status = $(this).prop('checked')
+
+        if(status){
+            $('.free-course-wrapper').removeClass('d-none')
+        }else{
+            $('.free-course-wrapper').addClass('d-none')
+            $('#free_course_list').val("")
+        }
+    })
+
+    $('#manager-toggle').change(function() {
+        let status = $(this).prop('checked')
+
+        if(status){
+            $('.course-manager-list').removeClass('d-none');
+            $('#input-syllabus1').val('').trigger('change');
+
+
+        }else{
+            $('.course-manager-list').addClass('d-none');
+            $('#input-syllabus1').val('').trigger('change');
+
+        }
+    });
+
+    $('#certification-toggle').change(function() {
+        let status = $(this).prop('checked');
+
+
+        if(status){
+            $('.course-certification-visible-wrapper').removeClass('d-none');
+
+
+
+            $('#input-certificate_title').val('')
+            CKEDITOR.instances['input-certificate_title'].setData('')
+
+            CKEDITOR.instances['input-certificate_text_failure'].setData('')
+            $('#input-certificate_text_failure').val('')
+
+
+            $('#input-certificate_type').val('')
+        }else{
+            $('.course-certification-visible-wrapper').addClass('d-none');
+
+            //$('#input-certificate_title').val("")
+
+            CKEDITOR.instances['input-certificate_title'].setData('')
+            CKEDITOR.instances['input-certificate_text_failure'].setData('')
+            $('#input-certificate_title').val("")
+            $('#input-certificate_text_failure').val("")
+            $('#input-certificate_title').text("")
+            $('#input-certificate_text_failure').text("")
+
+            $('#input-certificate_type').val('')
+
+        }
+    });
+
+    $('#award-toggle').change(function() {
+        let status = $(this).prop('checked');
+
+        if(status){
+
+            $('.award-text').removeClass('d-none');
+            $('#input-award-text').val('');
+
+        }else{
+            $('.award-text').addClass('d-none');
+            $('#input-award-text').val('');
+        }
+    })
 </script>
 
 <script>

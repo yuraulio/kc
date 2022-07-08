@@ -338,6 +338,111 @@ class EventController extends Controller
     }
 
     /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store_new(EventRequest $request, Event $model)
+    {
+        if($request->published == 'on')
+        {
+            $published = 1;
+            $published_at = date("Y-m-d");
+        }else
+        {
+            $published = 0;
+            $published_at = null;
+        }
+
+        $launchDate = $request->launch_date ? date('Y-m-d',strtotime($request->launch_date)) : $published_at;
+
+        $request->request->add(['published' => $published, 'published_at' => $published_at, 'release_date_files' => date('Y-m-d', strtotime($request->release_date_files)),'launch_date'=>$launchDate]);
+        $event = $model->create($request->all());
+
+        /*if($event && $request->image_upload){
+            $event->createMedia($request->image_upload);
+        }*/
+        $event->createMedia();
+        if($request->syllabus){
+            $event->syllabus()->attach(['instructor_id' => $request->syllabus]);
+        }
+        //dd($request->all());
+
+        $event->createSlug($request->slug ? $request->slug : $request->title);
+        $event->createMetas($request->all());
+
+
+        if($request->category_id != null){
+            $category = Category::with('topics')->find($request->category_id);
+
+            $event->category()->attach([$category->id]);
+
+            //assign all topics with lesson
+
+            foreach($category->topics as $topic){
+               //dd($topic);
+                //$lessons = Topic::with('lessons')->find($topic['id']);
+                //$lessons = $topic->lessonsCategory;
+                $lessons = $topic->lessonsCategory()->wherePivot('category_id',$category->id)->get();
+
+                foreach($lessons as $lesson){
+
+                    $event->topic()->attach($topic['id'],['lesson_id' => $lesson['id'],'priority'=>$lesson->pivot->priority]);
+
+                }
+            }
+
+        }
+
+        $event->city()->sync([$request->city_id]);
+
+        $event->partners()->detach();
+        foreach((array) $request->partner_id as $partner_id){
+            $event->partners()->attach($partner_id);
+        }
+
+
+
+
+        if($request->type_id != null){
+            //dd($request->type_id);
+            $event->type()->sync($request->type_id);
+        }
+
+        if($request->delivery != null){
+            $event->delivery()->attach($request->delivery);
+
+        }
+
+        $priority = 0;
+
+
+
+        if($event->category()->first() != null){
+            foreach($event->category->first()->faqs as $faq){
+                $event->faqs()->attach($faq,['priority'=> $priority]);
+                $priority += 1;
+            }
+        }
+
+
+
+        if(isset($request->partner_enabled)){
+            $partner = true;
+        }else{
+            $partner = false;
+        }
+
+        $infoData = $request->course;
+
+        $event_info = $this->prepareInfo($infoData, $request->status, $request->delivery, $partner, $request->syllabus, $request->city_id);
+        $this->updateEventInfo($event_info, $event->id);
+
+        return redirect()->route('events.edit_new',$event->id)->withStatus(__('Event successfully created.'));
+    }
+
+    /**
      * Display the specified resource.
      *
      * @param  \App\Model\Event  $event
@@ -869,12 +974,7 @@ class EventController extends Controller
             $partner = false;
         }
 
-        //dd();
         $infoData = $request->course;
-        // if(!$event->is_inclass_course()){
-
-        //     unset($infoData['delivery']['inclass']);
-        // }
 
         $event_info = $this->prepareInfo($infoData, $request->status, $request->delivery, $partner, $request->syllabus, $request->city_id);
 
@@ -887,13 +987,13 @@ class EventController extends Controller
 
         }
 
-        
+
         if(isset($infoData['free_courses']['list'])){
-           
+
             dispatch((new EnrollStudentsToElearningEvents($event->id,$infoData['free_courses']['list']))->delay(now()->addSeconds(3)));
 
         }else{
-            
+
             dispatch((new EnrollStudentsToElearningEvents($event->id,null))->delay(now()->addSeconds(3)));
         }
 
@@ -1091,7 +1191,9 @@ class EventController extends Controller
             $data['course_payment_method'] = 'free';
         }
 
-        $data['course_payment_icon'] = json_encode($requestData['payment']['icon']);
+        if(isset($requestData['payment'])){
+            $data['course_payment_icon'] = json_encode($requestData['payment']['icon']);
+        }
 
 
 
@@ -1212,8 +1314,11 @@ class EventController extends Controller
         }
 
 
-        $infos->course_payment_method = (isset($event->paymentMethod) && count($event->paymentMethod) != 0) ? 'paid' : 'free';
-        $infos->course_payment_icon = $event_info['course_payment_icon'];
+        if($event->paymentMethod()->first()){
+            $infos->course_payment_method = (isset($event->paymentMethod) && count($event->paymentMethod) != 0) ? 'paid' : 'free';
+            $infos->course_payment_icon = $event_info['course_payment_icon'];
+        }
+
 
         $infos->course_awards = (isset($event_info['course_awards_text']) && $event_info['course_awards_text'] != "") ? true : false;
         $infos->course_awards_text = $event_info['course_awards_text'];

@@ -115,27 +115,32 @@
     border: none;
 }
 
-#event_edit_form #input-syllabus1 {
+#event_edit_form #input-syllabus1,
+#event_create_form #input-syllabus1 {
     background-color: #5e72e4;
     color: white;
 }
 
-#event_edit_form #input-syllabus1 option {
+#event_edit_form #input-syllabus1 option,
+#event_create_form #input-syllabus1 option {
     background-color: white;
     color: black;
 }
 
-#event_edit_form .select2-selection.select2-selection--single {
+#event_edit_form .select2-selection.select2-selection--single,
+#event_create_form .select2-selection.select2-selection--single {
     background-color: #5e72e4;
     color: white;
 }
 
-#event_edit_form .select2-selection.select2-selection--single option {
+#event_edit_form .select2-selection.select2-selection--single option,
+#event_create_form .select2-selection.select2-selection--single option {
     background-color: white;
     color: black;
 }
 
-#event_edit_form .course-manager-wrapper .select2-selection__placeholder {
+#event_edit_form .course-manager-wrapper .select2-selection__placeholder,
+#event_create_form .course-manager-wrapper .select2-selection__placeholder {
     color: white;
 }
 
