@@ -718,16 +718,9 @@ class EventController extends Controller
         //return redirect()->route('events.index')->withStatus(__('Event successfully updated.'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\Event  $event
-     * @return \Illuminate\Http\Response
-     */
+
     public function update_new(Request $request, Event $event)
     {
-        dd($request->all());
         if($request->published == 'on')
         {
             $published = 1;
@@ -848,7 +841,14 @@ class EventController extends Controller
             $partner = false;
         }
 
-        $event_info = $this->prepareInfo($request->course, $request->status, $request->delivery, $request->absences_limit, $partner, $request->syllabus, $request->certificate_title, $request->city_id);
+        //dd();
+        $infoData = $request->course;
+        // if(!$event->is_inclass_course()){
+
+        //     unset($infoData['delivery']['inclass']);
+        // }
+
+        $event_info = $this->prepareInfo($infoData, $request->status, $request->delivery, $partner, $request->syllabus, $request->city_id);
 
         //dd($event_info);
         $this->updateEventInfo($event_info, $event->id);
@@ -890,73 +890,11 @@ class EventController extends Controller
 
     }
 
-    public function updateEventInfo($event_info, $event_id)
-    {
-        //dd($event_info);
-        $event = Event::find($event_id);
 
-        //dd($event->paymentMethod);
 
-        $info = $event->event_info;
 
-        if($info === null){
-            $infos = new EventInfo();
-            $infos->event_id = $event->id;
-        }else{
-            $infos = $info;
-        }
 
-        $infos->course_inclass_absences = $event_info['course_inclass_absences'];
-        $infos->course_status = $event_info['course_status'];
-        $infos->course_delivery = $event_info['course_delivery'];
-        $infos->course_hours = $event_info['course_hours'];
-        $infos->course_language = $event_info['course_language'];
-        $infos->course_language_visible = $event_info['course_language_visible'];
-        $infos->course_partner = $event_info['course_partner'];
-        $infos->course_manager = $event_info['course_manager'];
-        $infos->course_certification_name_success = $event_info['course_certification_name_success'];
-        $infos->course_hours_visible = $event_info['course_hours_visible'];
-        $infos->course_inclass_city = $event_info['course_inclass_city'];
-        $infos->course_inclass_dates = $event_info['course_inclass_dates'];
-        $infos->course_inclass_times = $event_info['course_inclass_times'];
-        $infos->course_inclass_days = $event_info['course_inclass_days'];
-        $infos->course_payment_method = (isset($event->paymentMethod) && count($event->paymentMethod) != 0) ? 'paid' : 'free';
-        $infos->course_awards = (isset($event_info['course_awards_text']) && $event_info['course_awards_text'] != "") ? true : false;
-        $infos->course_awards_text = $event_info['course_awards_text'];
-        $infos->course_certification_name_failure = $event_info['course_certification_name_failure'];
-        $infos->course_certification_type = $event_info['course_certification_type'];
-        $infos->course_certification_visible = $event_info['course_certificate_visible'];
-        $infos->course_students_number = $event_info['course_students_number'];
-        $infos->course_students_text = $event_info['course_students_text'];
-        $infos->course_students_visible = $event_info['course_students_visible'];
-        $infos->course_elearning_access = $event_info['course_elearning_access'];
-
-        if($info === null){
-            $infos->save();
-        }else{
-            $infos->update();
-        }
-
-    }
-
-    public function prepareVisibleData($data = false)
-    {
-        $visible_returned_data = ['landing' => 0, 'home' => 0, 'list' => 0, 'invoice' => 0, 'emails' => 0];
-
-        if(!$data){
-            return $visible_returned_data;
-        }
-
-        foreach($data as $key => $item){
-            if(in_array($item,$data)){
-                $visible_returned_data[$key] = 1;
-            }
-        }
-
-        return $visible_returned_data;
-    }
-
-    public function prepareInfo($requestData, $status, $delivery, $absences, $partner, $syllabus, $certification_title, $cityId)
+    public function prepareInfo($requestData, $status, $delivery, $partner, $syllabus, $cityId)
     {
         $data = [];
 
@@ -983,16 +921,28 @@ class EventController extends Controller
         $delivery = Delivery::find($delivery)['name'];
         $city = City::find($cityId);
 
-        $data['course_inclass_absences'] = $absences;
+
+        $data['course_inclass_absences'] = $requestData['delivery']['inclass']['absences'];
+
         $data['course_status'] = $status;
         $data['course_delivery'] = $delivery;
         $data['course_hours'] = $requestData['hours']['text'];
 
         $data['course_partner'] = $partner;
         $data['course_manager'] = ($syllabus != null) ? true : false;
-        $data['course_certification_name_success'] = $certification_title;
-        $data['course_inclass_city'] = ($city) ? $city->name : null;
 
+
+        // Delivery Inclass City
+        if(isset($requestData['delivery']['inclass'])){
+            $data['course_inclass_city'] = ($city) ? $city->name : null;
+            $data['course_inclass_city_icon'] = json_encode($requestData['delivery']['inclass']['city']['icon']);
+        }
+
+
+
+        /////////////
+
+        // Course
         if(isset($requestData['hours']['visible'])){
 
             $visible_loaded_data = $requestData['hours']['visible'];
@@ -1002,9 +952,10 @@ class EventController extends Controller
             $data['course_hours_visible'] = json_encode($this->prepareVisibleData());
         }
 
-        //Hour Icons
 
-        //end hour icon
+        $data['course_hours_icon'] = json_encode($requestData['hours']['icon']);
+        /////////////////
+
 
         // Language
         $data['course_language'] = $requestData['language']['text'];
@@ -1016,9 +967,17 @@ class EventController extends Controller
         }else{
             $data['course_language_visible'] = json_encode($this->prepareVisibleData());
         }
-        //Language Icons
 
-        //end language icon
+        $data['course_language_icon'] = json_encode($requestData['language']['icon']);
+        ///////////////
+
+        // Partner
+
+        $data['course_partner_icon'] = json_encode($requestData['partner']['icon']);
+
+
+
+        //////////////////////////
 
         if(isset($requestData['delivery']['inclass'])){
             $dates = [];
@@ -1036,6 +995,10 @@ class EventController extends Controller
                 }else{
                     $dates['visible'] = $this->prepareVisibleData();
                 }
+
+                $dates['icon'] = $requestData['delivery']['inclass']['dates']['icon'];
+
+
             }
             $data['course_inclass_dates'] = json_encode($dates);
 
@@ -1049,6 +1012,8 @@ class EventController extends Controller
                 }else{
                     $days['visible'] = $this->prepareVisibleData();
                 }
+
+                $days['icon'] = $requestData['delivery']['inclass']['day']['icon'];
             }
             $data['course_inclass_days'] = json_encode($days);
 
@@ -1062,9 +1027,18 @@ class EventController extends Controller
                 }else{
                     $times['visible'] = $this->prepareVisibleData();
                 }
+
+
+                $times['icon'] = $requestData['delivery']['inclass']['times']['icon'];
             }
             $data['course_inclass_times'] = json_encode($times);
         }
+
+        // Manager
+
+        $data['course_manager_icon'] = json_encode($requestData['manager']['icon']);
+
+        //////////////////////////
 
 
         // Free E-learning
@@ -1073,6 +1047,8 @@ class EventController extends Controller
         }else{
             $data['course_elearning_access'] = null;
         }
+
+        $data['course_elearning_access_icon'] = json_encode($requestData['free_courses']['icon']);
 
         // Payment
 
@@ -1086,17 +1062,28 @@ class EventController extends Controller
             $data['course_payment_method'] = 'free';
         }
 
+        $data['course_payment_icon'] = json_encode($requestData['payment']['icon']);
+
+
+
         // Award
         if(isset($requestData['awards'])){
+
             $data['course_awards'] = true;
             $data['course_awards_text'] = $requestData['awards']['text'];
+
         }else{
             $data['course_awards'] = false;
             $data['course_awards_text'] = null;
         }
 
+        $data['course_awards_icon'] = json_encode($requestData['awards']['icon']);
+
+
+
         // Certificate
         if(isset($requestData['certificate'])){
+            $data['course_certification_name_success'] = $requestData['certificate']['success_text'];
             $data['course_certification_name_failure'] = $requestData['certificate']['failure_text'];
             $data['course_certification_type'] = $requestData['certificate']['type'];
 
@@ -1108,7 +1095,13 @@ class EventController extends Controller
             }else{
                 $data['course_certificate_visible'] = json_encode($this->prepareVisibleData());
             }
+
+            //dd($requestData['certificate']);
+
+            $data['course_certificate_icon'] = json_encode($requestData['certificate']['icon']);
         }
+
+
 
         // Students
         if(isset($requestData['students'])){
@@ -1123,10 +1116,99 @@ class EventController extends Controller
             }else{
                 $data['course_students_visible'] = json_encode($this->prepareVisibleData());
             }
+
+            $data['course_students_icon'] = json_encode($requestData['students']['icon']);
         }
 
 
         return $data;
+
+    }
+    public function prepareVisibleData($data = false)
+    {
+        $visible_returned_data = ['landing' => 0, 'home' => 0, 'list' => 0, 'invoice' => 0, 'emails' => 0];
+
+        if(!$data){
+            return $visible_returned_data;
+        }
+
+        foreach($data as $key => $item){
+            if(in_array($item,$data)){
+                $visible_returned_data[$key] = 1;
+            }
+        }
+
+        return $visible_returned_data;
+    }
+    public function updateEventInfo($event_info, $event_id)
+    {
+        //dd($event_info);
+        $event = Event::find($event_id);
+
+        //dd($event->paymentMethod);
+
+        $info = $event->event_info;
+
+        if($info === null){
+            $infos = new EventInfo();
+            $infos->event_id = $event->id;
+        }else{
+            $infos = $info;
+        }
+
+        $infos->course_inclass_absences = $event_info['course_inclass_absences'];
+        $infos->course_status = $event_info['course_status'];
+        $infos->course_delivery = $event_info['course_delivery'];
+
+        $infos->course_hours = $event_info['course_hours'];
+        $infos->course_hours_visible = $event_info['course_hours_visible'];
+        $infos->course_hours_icon = $event_info['course_hours_icon'];
+
+        $infos->course_language = $event_info['course_language'];
+        $infos->course_language_visible = $event_info['course_language_visible'];
+        $infos->course_language_icon = $event_info['course_language_icon'];
+
+        $infos->course_partner = $event_info['course_partner'];
+        $infos->course_partner_icon = $event_info['course_partner_icon'];
+
+        $infos->course_manager = $event_info['course_manager'];
+        $infos->course_manager_icon = $event_info['course_manager_icon'];
+
+        if($event->is_inclass_course()){
+            $infos->course_inclass_city = $event_info['course_inclass_city'];
+            $infos->course_inclass_city_icon = $event_info['course_inclass_city_icon'];
+            $infos->course_inclass_dates = $event_info['course_inclass_dates'];
+            $infos->course_inclass_times = $event_info['course_inclass_times'];
+            $infos->course_inclass_days = $event_info['course_inclass_days'];
+        }
+
+
+        $infos->course_payment_method = (isset($event->paymentMethod) && count($event->paymentMethod) != 0) ? 'paid' : 'free';
+        $infos->course_payment_icon = $event_info['course_payment_icon'];
+
+        $infos->course_awards = (isset($event_info['course_awards_text']) && $event_info['course_awards_text'] != "") ? true : false;
+        $infos->course_awards_text = $event_info['course_awards_text'];
+        $infos->course_awards_icon = $event_info['course_awards_icon'];
+
+        $infos->course_certification_name_success = $event_info['course_certification_name_success'];
+        $infos->course_certification_name_failure = $event_info['course_certification_name_failure'];
+        $infos->course_certification_type = $event_info['course_certification_type'];
+        $infos->course_certification_visible = $event_info['course_certificate_visible'];
+        $infos->course_certification_icon = $event_info['course_certificate_icon'];
+
+        $infos->course_students_number = $event_info['course_students_number'];
+        $infos->course_students_text = $event_info['course_students_text'];
+        $infos->course_students_visible = $event_info['course_students_visible'];
+        $infos->course_students_icon = $event_info['course_students_icon'];
+
+        $infos->course_elearning_access = $event_info['course_elearning_access'];
+        $infos->course_elearning_access_icon = $event_info['course_elearning_access_icon'];
+
+        if($info === null){
+            $infos->save();
+        }else{
+            $infos->update();
+        }
 
     }
 
@@ -1271,11 +1353,24 @@ class EventController extends Controller
     }
 
 
-    public function deleteExplainerVideo(Request $request, Event $event, $explainerVideo){
+    public function deleteExplainerVideo(Request $request, $eventId, $explainerVideo){
 
-        $event->sectionVideos()->where('id',$explainerVideo)->detach();
+        $event = Event::find($eventId);
 
-        return back();
+        $detach = $event->sectionVideos()->where('id',$explainerVideo)->detach();
+
+        if($detach){
+            return response()->json([
+                'success' => true,
+                'message' => 'Removed successfully',
+            ]);
+        }else{
+            return response()->json([
+                'success' => false,
+                'message' => 'Removed failed'
+            ]);
+        }
+
 
     }
 

@@ -51,17 +51,12 @@
 
 
 
-<div id="app" class="bootstrap-classes ubold mt-5 mb-5 pl-lg-4">
+<div id="app" class="bootstrap-classes ubold mt-5 mb-5 pl-lg-4 {{$from}}">
     <manager-for-old-admin-new
         imageedit="{{ $imageedit }}"
     ></manager-for-old-admin-new>
 </div>
 
-<!-- <script src="{{asset('js/app_new.js')}}"></script>
-<script src="{{asset('admin_assets/js/vendor.min.js')}}"></script> -->
-
-
-</form>
 
 @push('js')
 @endpush

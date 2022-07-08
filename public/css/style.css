@@ -51,6 +51,15 @@
     margin: -7px 0;
 }
 
+#event_edit_form .input-icon img{
+    max-width: 20px;
+    max-height: 20px;
+}
+
+.bootstrap-classes.ubold.event_info #image-input-button{
+    display: none;
+}
+
 .visible-item {
     margin-top: 14%;
 }
@@ -561,3 +570,27 @@ li.select2-results__option:empty {
         margin-top: 5rem;
     }
 }
+
+
+/* For 1024 Resolution */
+@media only screen
+and (min-device-width : 768px)
+and (max-device-width : 1024px)
+{
+
+}
+/* For 1366 Resolution */
+@media only screen
+and (min-width: 1030px)
+and (max-width: 1366px)
+{
+
+}
+
+@media only screen
+and (min-width: 1370px)
+and (max-width: 1605px)
+{
+
+}
+

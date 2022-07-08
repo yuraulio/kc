@@ -26,6 +26,8 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
 
     Route::get('/', 'HomeController@index')->name('home');
 
+
+
     Route::resource('category', 'CategoryController', ['except' => ['show']]);
     Route::resource('tag', 'TagController', ['except' => ['show']]);
     Route::resource('item', 'ItemController', ['except' => ['show']]);
@@ -53,7 +55,9 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
 
     // New Edit Event
     Route::get('/events/{event}/edit_new', 'EventController@edit_new')->name('event.update_new');
-    Route::post('/events/{event}/update_new', 'EventController@update_new')->name('events.update_new_post');
+    Route::post('/events/{event}/update_new', 'EventController@update_new')->name('event.update_newpost');
+
+
 
     // Total hours
     Route::get('/events/totalHours/{id}', 'EventController@calculateTotalHours')->name('event.total_hours');
@@ -131,7 +135,7 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     Route::put('video/update/{video}', ['as' => 'video.update', 'uses' => 'VideoController@update']);
     Route::get('video/fetchAllVideos', ['as' => 'video.fetchAllVideos', 'uses' => 'VideoController@fetchAllVideos']);
     Route::post('video/store_event', ['as' => 'video.store_event', 'uses' => 'VideoController@store_event']);
-    Route::delete('/delete-explainer-video/{event}/{explainerVideo}', 'EventController@deleteExplainerVideo')->name('events.video.destroy');
+    Route::delete('/delete-explainer-video/{eventId}/{explainerVideo}', 'EventController@deleteExplainerVideo')->name('events.video.destroy');
 
     //Custom Ticket
     //ticket.edit

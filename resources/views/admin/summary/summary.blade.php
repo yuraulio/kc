@@ -71,48 +71,48 @@
 <div class="modal fade" id="summaryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">{{ __('Create summary') }}</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <h6 class="heading-small text-muted mb-4">{{ __('Summary information') }}</h6>
-            <div class="pl-lg-4">
-                <form id="sum_create">
-                    <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
-                        <label class="form-control-label" for="input-title-summary">{{ __('Title') }}</label>
-                        <input type="text" name="title" id="input-title-summary" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title') }}" required autofocus>
-                        @include('alerts.feedback', ['field' => 'title'])
-                    </div>
-                    <div class="form-group{{ $errors->has('description2') ? ' has-danger' : '' }}">
-                        <label class="form-control-label" for="input-description4">{{ __('Description') }}</label>
-                        <textarea name="description4" id="input-description4" class="ckeditor form-control{{ $errors->has('description2') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}"></textarea>
-                        @include('alerts.feedback', ['field' => 'description4'])
-                    </div>
-                    <div class="form-group{{ $errors->has('section_sum') ? ' has-danger' : '' }}">
-                        <label class="form-control-label" for="input-section_sum">{{ __('Section') }}</label>
-
-                        <select name="section_sum" id="input-section_sum" class="form-control" placeholder="{{ __('Section') }}">
-                            <option value="date">Date</option>
-                            <option value="language">Language</option>
-                            <option value="duration">Duration</option>
-                            <option value="students"> Students</option>
-                            <option value="access"> Access </option>
-                            <option value="diploma"> Diploma </option>
-                            <option value="exams"> Exams</option>
-                        </select>
-                        @include('alerts.feedback', ['field' => 'section_sum'])
-                    </div>
-
-                </form>
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">{{ __('Create summary') }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary close_modal" data-dismiss="modal">Close</button>
-            <button type="button" id="save_summary" class="btn btn-primary">Save changes</button>
-        </div>
+            <div class="modal-body">
+                <h6 class="heading-small text-muted mb-4">{{ __('Summary information') }}</h6>
+                <div class="pl-lg-4">
+                    <form id="sum_create">
+                        <div class="form-group{{ $errors->has('title') ? ' has-danger' : '' }}">
+                            <label class="form-control-label" for="input-title-summary">{{ __('Title') }}</label>
+                            <input type="text" name="title" id="input-title-summary" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" placeholder="{{ __('Title') }}" value="{{ old('title') }}" required autofocus>
+                            @include('alerts.feedback', ['field' => 'title'])
+                        </div>
+                        <div class="form-group{{ $errors->has('description2') ? ' has-danger' : '' }}">
+                            <label class="form-control-label" for="input-description4">{{ __('Description') }}</label>
+                            <textarea name="description4" id="input-description4" class="ckeditor form-control{{ $errors->has('description2') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}"></textarea>
+                            @include('alerts.feedback', ['field' => 'description4'])
+                        </div>
+                        <div class="form-group{{ $errors->has('section_sum') ? ' has-danger' : '' }}">
+                            <label class="form-control-label" for="input-section_sum">{{ __('Section') }}</label>
+
+                            <select name="section_sum" id="input-section_sum" class="form-control" placeholder="{{ __('Section') }}">
+                                <option value="date">Date</option>
+                                <option value="language">Language</option>
+                                <option value="duration">Duration</option>
+                                <option value="students"> Students</option>
+                                <option value="access"> Access </option>
+                                <option value="diploma"> Diploma </option>
+                                <option value="exams"> Exams</option>
+                            </select>
+                            @include('alerts.feedback', ['field' => 'section_sum'])
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary close_modal" data-dismiss="modal">Close</button>
+                <button type="button" id="save_summary" class="btn btn-primary">Save changes</button>
+            </div>
         </div>
     </div>
 </div>
@@ -267,7 +267,7 @@
         // if open second modal(file-manager) no pass data
         if(id != null){
 
-    
+
             //title = e.relatedTarget.dataset.title,
             //description =e.relatedTarget.dataset.description;
             title = $("#title-"+id).text(),
