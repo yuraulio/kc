@@ -439,7 +439,7 @@ class EventController extends Controller
         $event_info = $this->prepareInfo($infoData, $request->status, $request->delivery, $partner, $request->syllabus, $request->city_id);
         $this->updateEventInfo($event_info, $event->id);
 
-        return redirect()->route('events.edit_new',$event->id)->withStatus(__('Event successfully created.'));
+        return redirect()->route('event.edit_new',$event->id)->withStatus(__('Event successfully created.'));
     }
 
     /**
