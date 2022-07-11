@@ -513,8 +513,8 @@
 
                                             <div class="col-12 delivery_child_wrapper <?= $event->is_inclass_course() ? '' : 'd-none' ?>">
                                                 <div class="row">
-                                                    <div style="display:flex;" class="col-sm-12 col-md-6 col-lg-3 form-group{{ $errors->has('city_id') ? ' has-danger' : '' }} ">
-                                                    <!-- <div class="col-sm-12 col-md-6 col-lg-3 form-group{{ $errors->has('city_id') ? ' has-danger' : '' }} "> -->
+                                                    <div style="display:flex;" class="col-9 col-sm-12 col-md-6 col-lg-3 form-group{{ $errors->has('city_id') ? ' has-danger' : '' }} ">
+                                                        <!-- <div class="col-sm-12 col-md-6 col-lg-3 form-group{{ $errors->has('city_id') ? ' has-danger' : '' }} "> -->
                                                         <select name="city_id" id="input-city_id" class="form-control" placeholder="{{ __('Please select the city of this course') }}" >
                                                             <option selected disabled value="">Please select the city of this course</option>
                                                             @foreach ($cities as $city)
@@ -523,15 +523,16 @@
 
                                                             @endforeach
                                                         </select>
-                                                        <span class="input-icon-wrapper-city" data-infowrapper="inclass_city">
-                                                            <span class="btn btn-outline-primary input-icon">
-                                                                <i class="fa fa-plane-departure"></i>
-                                                            </span>
+
+                                                    </div>
+                                                    <span class="col-2 input-icon-wrapper-city" data-infowrapper="inclass_city">
+                                                        <span class="btn btn-outline-primary input-icon">
+                                                            <i class="fa fa-plane-departure"></i>
+                                                        </span>
 
                                                     </span>
-                                                    </div>
 
-                                                    
+
                                                     <input type="hidden" value="{{ old('inclass_city_icon_path', ($course_inclass_city_icon != null && $course_inclass_city_icon['path'] != '') ? $course_hours_icon['path'] : '' ) }}" id="inclass_city_path" name="course[{{'delivery'}}][{{'inclass'}}][{{'city'}}][{{'icon'}}][{{'path'}}]">
                                                     <input type="hidden" value="{{ old('inclass_city_icon_path', ($course_inclass_city_icon != null && $course_inclass_city_icon['alt_text'] != '') ? $course_hours_icon['alt_text'] : '' ) }}" id="inclass_city_alt_text" name="course[{{'delivery'}}][{{'inclass'}}][{{'city'}}][{{'icon'}}][{{'alt_text'}}]">
 
@@ -573,38 +574,46 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-2">
-                                                        <label class="form-control-label visible-label" for="input-delivery">{{ __('Visible on:') }}</label>
-                                                        <div class="custom-control custom-checkbox mb-3 visible-item">
-                                                            <input class="custom-control-input" {{ ($visible_dates != null && $visible_dates['landing']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'visible'}}][{{'landing'}}]" id="input-delivery-landing" type="checkbox">
-                                                            <label class="custom-control-label" for="input-delivery-landing">Course landing page (summary)</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-2">
-                                                        <div class="custom-control custom-checkbox mb-3 visible-item">
-                                                            <input class="custom-control-input" {{ ($visible_dates != null && $visible_dates['home']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'visible'}}][{{'home'}}]" id="input-delivery-home" type="checkbox">
-                                                            <label class="custom-control-label" for="input-delivery-home">Course box in home page</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-2">
-                                                        <div class="custom-control custom-checkbox mb-3 visible-item">
-                                                            <input class="custom-control-input" {{ ($visible_dates != null && $visible_dates['list']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'visible'}}][{{'list'}}]" id="input-delivery-list" type="checkbox">
-                                                            <label class="custom-control-label" for="input-delivery-list">Course box in list page</label>
-                                                        </div>
-                                                    </div>
+                                                    <!-- TEST -->
 
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-2">
-                                                        <div class="custom-control custom-checkbox mb-3 visible-item">
-                                                            <input class="custom-control-input" {{ ($visible_dates != null && $visible_dates['invoice']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'visible'}}][{{'invoice'}}]" id="input-delivery-invoice" type="checkbox">
-                                                            <label class="custom-control-label" for="input-delivery-invoice">Invoice description</label>
-                                                        </div>
-                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-7 col-lg-10">
+                                                        <div class="row">
 
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-2">
-                                                        <div class="custom-control custom-checkbox mb-3 visible-item">
-                                                            <input class="custom-control-input" {{ ($visible_dates != null && $visible_dates['emails']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'visible'}}][{{'emails'}}]" id="input-delivery-emails" type="checkbox">
-                                                            <label class="custom-control-label" for="input-delivery-emails">Automated emails</label>
+                                                            <div class="form-group col-sm-2 col-md-6 col-lg-2">
+                                                                <label class="form-control-label visible-label" for="input-delivery">{{ __('Visible on:') }}</label>
+                                                                <div class="custom-control custom-checkbox mb-3 visible-item">
+                                                                    <input class="custom-control-input" {{ ($visible_dates != null && $visible_dates['landing']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'visible'}}][{{'landing'}}]" id="input-delivery-landing" type="checkbox">
+                                                                    <label class="custom-control-label" for="input-delivery-landing">Course landing page (summary)</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group col-sm-2 col-md-6 col-lg-2">
+                                                                <div class="custom-control custom-checkbox mb-3 visible-item">
+                                                                    <input class="custom-control-input" {{ ($visible_dates != null && $visible_dates['home']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'visible'}}][{{'home'}}]" id="input-delivery-home" type="checkbox">
+                                                                    <label class="custom-control-label" for="input-delivery-home">Course box in home page</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group col-sm-2 col-md-6 col-lg-2">
+                                                                <div class="custom-control custom-checkbox mb-3 visible-item">
+                                                                    <input class="custom-control-input" {{ ($visible_dates != null && $visible_dates['list']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'visible'}}][{{'list'}}]" id="input-delivery-list" type="checkbox">
+                                                                    <label class="custom-control-label" for="input-delivery-list">Course box in list page</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group col-sm-2 col-md-6 col-lg-2">
+                                                                <div class="custom-control custom-checkbox mb-3 visible-item">
+                                                                    <input class="custom-control-input" {{ ($visible_dates != null && $visible_dates['invoice']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'visible'}}][{{'invoice'}}]" id="input-delivery-invoice" type="checkbox">
+                                                                    <label class="custom-control-label" for="input-delivery-invoice">Invoice description</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group col-sm-2 col-md-6 col-lg-2">
+                                                                <div class="custom-control custom-checkbox mb-3 visible-item">
+                                                                    <input class="custom-control-input" {{ ($visible_dates != null && $visible_dates['emails']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'visible'}}][{{'emails'}}]" id="input-delivery-emails" type="checkbox">
+                                                                    <label class="custom-control-label" for="input-delivery-emails">Automated emails</label>
+                                                                </div>
+                                                            </div>
                                                         </div>
+
                                                     </div>
 
                                                 </div>
@@ -644,42 +653,48 @@
 
 
 
+                                                    <div class="form-group col-sm-12 col-md-7 col-lg-10">
+                                                        <div class="row">
+                                                            <div class="form-group col-sm-12 col-md-6 col-lg-2">
+                                                                <label class="form-control-label visible-label" for="input-delivery">{{ __('Visible on:') }}</label>
+                                                                <div class="custom-control custom-checkbox mb-3 visible-item">
+                                                                    <input class="custom-control-input" {{ ($visible_days != null && $visible_days['landing']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'visible'}}][{{'landing'}}]" id="input-day-landing" type="checkbox">
+                                                                    <label class="custom-control-label" for="input-day-landing">Course landing page (summary)</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group col-sm-12 col-md-6 col-lg-2">
+                                                                <div class="custom-control custom-checkbox mb-3 visible-item">
+                                                                    <input class="custom-control-input" {{ ($visible_days != null && $visible_days['home']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'visible'}}][{{'home'}}]" id="input-day-home" type="checkbox">
+                                                                    <label class="custom-control-label" for="input-day-home">Course box in home page</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group col-sm-12 col-md-6 col-lg-2">
+                                                                <div class="custom-control custom-checkbox mb-3 visible-item">
+                                                                    <input class="custom-control-input" {{ ($visible_days != null && $visible_days['list']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'visible'}}][{{'list'}}]" id="input-day-list" type="checkbox">
+                                                                    <label class="custom-control-label" for="input-day-list">Course box in list page</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group col-sm-12 col-md-6 col-lg-2">
+                                                                <div class="custom-control custom-checkbox mb-3 visible-item">
+                                                                    <input class="custom-control-input" {{ ($visible_days != null && $visible_days['invoice']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'visible'}}][{{'invoice'}}]" id="input-day-invoice" type="checkbox">
+                                                                    <label class="custom-control-label" for="input-day-invoice">Invoice description</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group col-sm-12 col-md-6 col-lg-2">
+                                                                <div class="custom-control custom-checkbox mb-3 visible-item">
+                                                                    <input class="custom-control-input" {{ ($visible_days != null && $visible_days['emails']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'visible'}}][{{'emails'}}]" id="input-day-emails" type="checkbox">
+                                                                    <label class="custom-control-label" for="input-day-emails">Automated emails</label>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
 
 
 
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-2">
-                                                        <label class="form-control-label visible-label" for="input-delivery">{{ __('Visible on:') }}</label>
-                                                        <div class="custom-control custom-checkbox mb-3 visible-item">
-                                                            <input class="custom-control-input" {{ ($visible_days != null && $visible_days['landing']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'visible'}}][{{'landing'}}]" id="input-day-landing" type="checkbox">
-                                                            <label class="custom-control-label" for="input-day-landing">Course landing page (summary)</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-2">
-                                                        <div class="custom-control custom-checkbox mb-3 visible-item">
-                                                            <input class="custom-control-input" {{ ($visible_days != null && $visible_days['home']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'visible'}}][{{'home'}}]" id="input-day-home" type="checkbox">
-                                                            <label class="custom-control-label" for="input-day-home">Course box in home page</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-2">
-                                                        <div class="custom-control custom-checkbox mb-3 visible-item">
-                                                            <input class="custom-control-input" {{ ($visible_days != null && $visible_days['list']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'visible'}}][{{'list'}}]" id="input-day-list" type="checkbox">
-                                                            <label class="custom-control-label" for="input-day-list">Course box in list page</label>
-                                                        </div>
-                                                    </div>
 
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-2">
-                                                        <div class="custom-control custom-checkbox mb-3 visible-item">
-                                                            <input class="custom-control-input" {{ ($visible_days != null && $visible_days['invoice']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'visible'}}][{{'invoice'}}]" id="input-day-invoice" type="checkbox">
-                                                            <label class="custom-control-label" for="input-day-invoice">Invoice description</label>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-2">
-                                                        <div class="custom-control custom-checkbox mb-3 visible-item">
-                                                            <input class="custom-control-input" {{ ($visible_days != null && $visible_days['emails']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'visible'}}][{{'emails'}}]" id="input-day-emails" type="checkbox">
-                                                            <label class="custom-control-label" for="input-day-emails">Automated emails</label>
-                                                        </div>
-                                                    </div>
                                                 </div>
 
                                                 <div class="row">
@@ -720,40 +735,48 @@
                                                         </div>
                                                     </div>
 
+                                                    <div class="form-group col-sm-12 col-md-7 col-lg-10">
+                                                        <div class="row">
+                                                            <div class="form-group col-sm-12 col-md-6 col-lg-2">
+                                                                <label class="form-control-label visible-label" for="input-delivery">{{ __('Visible on:') }}</label>
+                                                                <div class="custom-control custom-checkbox mb-3 visible-item">
+                                                                    <input class="custom-control-input" {{ ($visible_times != null && $visible_times['landing']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'visible'}}][{{'landing'}}]" id="input-times-landing" type="checkbox">
+                                                                    <label class="custom-control-label" for="input-times-landing">Course landing page (summary)</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group col-sm-12 col-md-6 col-lg-2">
+                                                                <div class="custom-control custom-checkbox mb-3 visible-item">
+                                                                    <input class="custom-control-input" {{ ($visible_times != null && $visible_times['home']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'visible'}}][{{'home'}}]" id="input-times-home" type="checkbox">
+                                                                    <label class="custom-control-label" for="input-times-home">Course box in home page</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group col-sm-12 col-md-6 col-lg-2">
+                                                                <div class="custom-control custom-checkbox mb-3 visible-item">
+                                                                    <input class="custom-control-input" {{ ($visible_times != null && $visible_times['list']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'visible'}}][{{'list'}}]" id="input-times-list" type="checkbox">
+                                                                    <label class="custom-control-label" for="input-times-list">Course box in list page</label>
+                                                                </div>
+                                                            </div>
 
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-2">
-                                                        <label class="form-control-label visible-label" for="input-delivery">{{ __('Visible on:') }}</label>
-                                                        <div class="custom-control custom-checkbox mb-3 visible-item">
-                                                            <input class="custom-control-input" {{ ($visible_times != null && $visible_times['landing']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'visible'}}][{{'landing'}}]" id="input-times-landing" type="checkbox">
-                                                            <label class="custom-control-label" for="input-times-landing">Course landing page (summary)</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-2">
-                                                        <div class="custom-control custom-checkbox mb-3 visible-item">
-                                                            <input class="custom-control-input" {{ ($visible_times != null && $visible_times['home']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'visible'}}][{{'home'}}]" id="input-times-home" type="checkbox">
-                                                            <label class="custom-control-label" for="input-times-home">Course box in home page</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-2">
-                                                        <div class="custom-control custom-checkbox mb-3 visible-item">
-                                                            <input class="custom-control-input" {{ ($visible_times != null && $visible_times['list']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'visible'}}][{{'list'}}]" id="input-times-list" type="checkbox">
-                                                            <label class="custom-control-label" for="input-times-list">Course box in list page</label>
+                                                            <div class="form-group col-sm-12 col-md-6 col-lg-2">
+                                                                <div class="custom-control custom-checkbox mb-3 visible-item">
+                                                                    <input class="custom-control-input" {{ ($visible_times != null && $visible_times['invoice']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'visible'}}][{{'invoice'}}]" id="input-times-invoice" type="checkbox">
+                                                                    <label class="custom-control-label" for="input-times-invoice">Invoice description</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group col-sm-12 col-md-6 col-lg-2">
+                                                                <div class="custom-control custom-checkbox mb-3 visible-item">
+                                                                    <input class="custom-control-input" {{ ($visible_times != null && $visible_times['emails']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'visible'}}][{{'emails'}}]" id="input-times-emails" type="checkbox">
+                                                                    <label class="custom-control-label" for="input-times-emails">Automated emails</label>
+                                                                </div>
+                                                            </div>
+
+
                                                         </div>
                                                     </div>
 
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-2">
-                                                        <div class="custom-control custom-checkbox mb-3 visible-item">
-                                                            <input class="custom-control-input" {{ ($visible_times != null && $visible_times['invoice']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'visible'}}][{{'invoice'}}]" id="input-times-invoice" type="checkbox">
-                                                            <label class="custom-control-label" for="input-times-invoice">Invoice description</label>
-                                                        </div>
-                                                    </div>
 
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-2">
-                                                        <div class="custom-control custom-checkbox mb-3 visible-item">
-                                                            <input class="custom-control-input" {{ ($visible_times != null && $visible_times['emails']) ? 'checked' : '' }} name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'visible'}}][{{'emails'}}]" id="input-times-emails" type="checkbox">
-                                                            <label class="custom-control-label" for="input-times-emails">Automated emails</label>
-                                                        </div>
-                                                    </div>
+
 
                                                 </div>
                                                 <div class="row">

@@ -148,6 +148,10 @@
     color: white;
 }
 
+.input-icon-wrapper-city .input-icon{
+    margin-top: 0.2rem;
+}
+
 /***** Search List *****/
 .search {
     display: block !important;
