@@ -38,46 +38,42 @@ class EnrollStudentsToElearningEvents implements ShouldQueue
     public function handle()
     {
 
-        
+        $students = $this->event->users()->get();
+        foreach($students as $student){
+           
+            $student->events()->wherePivot('comment','enroll from ' . $this->event->id)->detach();
+        }
+
+        $this->event->enroll = false;
+        $this->event->save();
     
         if(!$this->eventsToEnroll){
-           
-            $students = $this->event->users()->get();
+
+            /*$students = $this->event->users()->pluck('user_id')->toArray();
             foreach($students as $student){
-            
-                $student->events()->wherePivot('comment','enroll from ' . $this->event->id)->detach();
+                $elearningEvent = Event::find($eventToEnroll);
+                $elearningEvent->users()->wherePivotIn('user_id',$students)->wherePivot('comment','enroll from ' . $this->event->id)->detach();
             }
 
             $this->event->enroll = false;
-            $this->event->save();
+            $this->event->save();*/
 
         }else{
-            
+
             $students = $this->event->users()->pluck('user_id')->toArray();
             
 
-            foreach($students as $student){
-                $user = User::find($student);
-                
-                $user->events()->wherePivotNotIn('event_id',$this->eventsToEnroll)->wherePivot('comment','enroll from ' . $this->event->id)->detach();
-
-            }
-
-            //dd($this->eventsToEnroll);
             foreach($this->eventsToEnroll as $eventToEnroll){
-
-
                 $elearningEvent = Event::find($eventToEnroll);
                 $existsStudent = $elearningEvent->users()->pluck('user_id')->toArray();
             
-                $students1 = array_diff(  $students, $existsStudent );
+                $students = array_diff(  $students, $existsStudent );
                 $today = date('Y/m/d');
                 $monthsExp2 = '+' . $elearningEvent->expiration .' months';
 
-              
-                foreach($students1 as $student){
-                    $user = User::find($student);
-                   
+
+                foreach($students as $student){
+        
                     $elearningEvent->users()->attach($student,
                             [
                                 'comment'=>'enroll from ' . $this->event->id ,
