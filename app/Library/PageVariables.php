@@ -15,7 +15,6 @@ class PageVariables
             $admin_name = ucfirst($admin->firstname) . " " . ucfirst($admin->lastname);
             $text = str_replace("@author", $admin_name, $text);
         }
-
         // course details
         if (strpos($text, "@course_details") !== false) {
             if ($dynamic_page_data) {

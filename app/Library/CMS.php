@@ -29,7 +29,7 @@ class CMS
         $data['showSpecial'] = false;
         $data['showAlumni'] = $event->ticket()->where('type', 'Alumni')->where('active', true)->first() ? true : false;
         $data['partners'] = $event->partners;
-        
+
 
 
         if ($event->ticket()->where('type', 'Early Bird')->first()) {
@@ -40,7 +40,7 @@ class CMS
             $data['showSpecial'] = $event->ticket()->where('type', 'Special')->first() ? $event->ticket()->where('type', 'Special')->first()->pivot->active  : false;
         }
 
-        
+
 
         $price = -1;
 
@@ -54,7 +54,74 @@ class CMS
             $price = (float) 0;
         }
         $categoryScript = $event->delivery->first() && $event->delivery->first()->id == 143 ? 'Video e-learning courses' : 'In-class courses'; //$event->category->first() ? 'Event > ' . $event->category->first()->name : '';
-        
+
+        $tr_price = $price;
+        if ($tr_price - floor($tr_price)>0) {
+            $tr_price = number_format($tr_price, 2, '.', '');
+        } else {
+            $tr_price = number_format($tr_price, 0, '.', '');
+            $tr_price = strval($tr_price);
+            $tr_price .= ".00";
+        }
+
+        $data['tigran'] = ['Price' => $tr_price,'Product_id' => $event->id,'Product_SKU' => $event->id,'ProductCategory' => $categoryScript, 'ProductName' =>  $event->title,'Event_ID' => 'kc_' . time() ];
+
+        if (Auth::user() && count(Auth::user()->events->where('id', $event->id)) > 0) {
+            $data['is_event_paid'] = 1;
+        } elseif (Auth::user() && $event->waitingList()->where('user_id', Auth::user()->id)->first()) {
+            $data['is_joined_waiting_list'] = 1;
+        }
+
+        return $data;
+    }
+
+    public static function getEventDataNew($event)
+    {
+        $data = $event->topicsLessonsInstructors();
+        $data['event'] = $event;
+        $data['benefits'] = $event->benefits->toArray();
+        $data['summary'] = $event->summary1()->get()->toArray();
+        $data['sections'] = $event->sections->groupBy('section');
+        $data['section_fullvideo'] = $event->sectionVideos->first();
+        $data['faqs'] = $event->getFaqs();
+        $data['testimonials'] = isset($event->category->toArray()[0]) ? $event->category->toArray()[0]['testimonials'] : [];
+        shuffle($data['testimonials']);
+        $data['tickets'] = $event->ticket()->where('price', '>', 0)->where('active', true)->get()->toArray();
+        $data['venues'] = $event->venues->toArray();
+        $data['syllabus'] = $event->syllabus->toArray();
+        $data['is_event_paid'] = 0;
+        $data['is_joined_waiting_list'] = 0;
+        $data['sumStudents'] = get_sum_students_course($event->category->first());//isset($event->category[0]) ? $event->category[0]->getSumOfStudents() : 0;
+        $data['showSpecial'] = false;
+        $data['showAlumni'] = $event->ticket()->where('type', 'Alumni')->where('active', true)->first() ? true : false;
+        $data['partners'] = $event->partners;
+        $data['info'] = $event->event_info;
+
+
+
+        if ($event->ticket()->where('type', 'Early Bird')->first()) {
+            $data['showSpecial'] = ($event->ticket()->where('type', 'Early Bird')->first() && $event->ticket()->where('type', 'Special')->first())  ?
+                                    ($event->ticket()->where('type', 'Special')->first()->pivot->active
+                                        || ($event->ticket()->where('type', 'Early Bird')->first()->pivot->quantity > 0)) : false;
+        } else {
+            $data['showSpecial'] = $event->ticket()->where('type', 'Special')->first() ? $event->ticket()->where('type', 'Special')->first()->pivot->active  : false;
+        }
+
+
+
+        $price = -1;
+
+        foreach ($data['tickets'] as $ticket) {
+            if ($ticket['pivot']['price'] && $ticket['pivot']['price'] > $price) {
+                $price = $ticket['pivot']['price'];
+            }
+        }
+
+        if ($price <= 0) {
+            $price = (float) 0;
+        }
+        $categoryScript = $event->delivery->first() && $event->delivery->first()->id == 143 ? 'Video e-learning courses' : 'In-class courses'; //$event->category->first() ? 'Event > ' . $event->category->first()->name : '';
+
         $tr_price = $price;
         if ($tr_price - floor($tr_price)>0) {
             $tr_price = number_format($tr_price, 2, '.', '');
@@ -82,7 +149,7 @@ class CMS
         $lessons = [];
         $instructor = Instructor::with('eventInstructorPage.category', 'mediable', 'eventInstructorPage.lessons', 'eventInstructorPage.slugable', 'eventInstructorPage.city', 'eventInstructorPage.summary1')->where('status', 1)->find($page['id']);
         $data['instructor'] = $instructor;
-        
+
         if (!$instructor) {
             abort(404);
         }
@@ -99,7 +166,7 @@ class CMS
             $data['title'] .= ' '.$instructor['subtitle'];
         }
         $data['title'] = trim($data['title']);
-       
+
         foreach ($instructor['eventInstructorPage'] as $key => $event) {
             if (($event['status'] == 0 || $event['status'] == 2) && $event->is_inclass_course()) {
                 foreach ($event['lessons'] as $lesson) {
@@ -161,7 +228,7 @@ class CMS
         $data['completedlist'] = $delivery->event()->has('slugable')->with('category', 'slugable', 'city', 'ticket')->where('published', true)->where('status', 3)->orderBy('created_at', 'desc')->get();
 
         $data['openlist'] = [];
-        
+
         foreach ($data['openlistt'] as $openlist) {
             if ($openlist->category->first() == null) {
                 $index = 0;
@@ -171,7 +238,7 @@ class CMS
             while (in_array($index, array_keys($data['openlist']))) {
                 $index++;
             }
-            
+
             $data['openlist'][$index] = $openlist;
         }
         ksort($data['openlist']);
@@ -260,7 +327,7 @@ class CMS
         $data['city'] = $city;
         $data['openlist'] = $city->event()->with('category', 'slugable', 'city', 'ticket', 'summary1')->where('published', true)->whereIn('status', [0])->orderBy('published_at', 'desc')->get();
         $data['completedlist'] = $city->event()->with('category', 'slugable', 'city', 'ticket', 'summary1')->where('published', true)->where('status', 3)->orderBy('published_at', 'desc')->get();
-        
+
         return $data;
     }
 }

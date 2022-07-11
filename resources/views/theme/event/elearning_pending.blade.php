@@ -42,7 +42,7 @@
                      <div id="courses-explain-video" class="responsive-fb-video">
                         {!! $section_fullvideo->body !!}
                      </div>
-                     
+
                      @else
                      <div id="courses-explain-video" class="responsive-fb-video">
                         <img src="{{cdn(get_image($event->mediable,'header-image'))}}">
@@ -84,11 +84,11 @@
                            <a target="_blank" title="Share on facebook" href="http://www.facebook.com/sharer.php?u={{ Request::url() }}" onclick="javascript:window.open(this.href,
                               '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=300');return false;">
                               <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/events/Facebook.svg')}}" width="23" alt="Share on facebook"></a></li>
-                           
+
                            <a target="_blank" title="Share on Twitter" href="http://twitter.com/share?text={{ $event->title }}&amp;url={{ Request::url() }}&amp;via=Knowcrunch" onclick="javascript:window.open(this.href,
                               '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;">
                               <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/events/Twitter.svg')}}" width="23" alt="Share on Twitter"></a></li>
-                           
+
                            <a target="_blank" title="Share on LinkedIn" href="https://www.linkedin.com/shareArticle?mini=true&amp;url={{ Request::url() }}&amp;title={{ $event->title }}
                               &amp;summary={{ $event->summary }}&amp;source=Knowcrunch" onclick="javascript:window.open(this.href,
                               '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;">
@@ -97,8 +97,8 @@
                      </div>
                               <div class="course-overview clearfix">
                                  <div class="course-tab-text" itemprop="abstract">
-                            
-              
+
+
                                     {!! $event->body !!}
                                     <!-- /.course-overview-text -->
                                  </div>
@@ -128,7 +128,7 @@
                                           @else
                                              <p>{{$sumStudents}} {{preg_replace('/[0-9]+/', '', $sum['title'])}}</br></p>
                                           @endif
-                                       
+
                                     </div>
                                  </li>
 
@@ -184,7 +184,7 @@
    /// set link to syllabus manager image
    let syllabusLink = $('.info-text').find('a').attr('href');
    document.getElementById('syllabus-link').setAttribute('href',syllabusLink);
-   
+
 </script>
 <script src="{{cdn('new_cart/js/cart.js')}}" type="text/javascript" charset="utf-8" async defer></script>
 @stop

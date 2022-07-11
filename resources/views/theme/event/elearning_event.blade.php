@@ -102,11 +102,11 @@
                            <a target="_blank" title="Share on facebook" href="http://www.facebook.com/sharer.php?u={{ Request::url() }}" onclick="javascript:window.open(this.href,
                               '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=300');return false;">
                               <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/events/Facebook.svg')}}" width="23" alt="Share on facebook"></a></li>
-                           
+
                            <a target="_blank" title="Share on Twitter" href="http://twitter.com/share?text={{ $event->title }}&amp;url={{ Request::url() }}&amp;via=Knowcrunch" onclick="javascript:window.open(this.href,
                               '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;">
                               <img class="replace-with-svg" src="{{cdn('/theme/assets/images/icons/social/events/Twitter.svg')}}" width="23" alt="Share on Twitter"></a></li>
-                           
+
                            <a target="_blank" title="Share on LinkedIn" href="https://www.linkedin.com/shareArticle?mini=true&amp;url={{ Request::url() }}&amp;title={{ $event->title }}
                               &amp;summary={{ $event->summary }}&amp;source=Knowcrunch" onclick="javascript:window.open(this.href,
                               '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;">
@@ -129,10 +129,10 @@
 
                      <?php switch ($estatus) {
                         case 0:
-                        case 2: 
+                        case 2:
                         case 5:
                      ?>
-                        
+
                      <div class="course-overview clearfix">
                         <div class="course-tab-text" itemprop="abstract">
                         <h2 class="tab-title">{{$title}}</h2>
@@ -170,7 +170,7 @@
                                           $alt=$partner->name;
                                           $img = get_image($partner['mediable']);
 
-                                          
+
 
                                        ?>
                                        <div class="ibox-img">
@@ -214,7 +214,7 @@
                                           @else
                                              <p>{{$sumStudents}} {{preg_replace('/[0-9]+/', '', $sum['title'])}}</br></p>
                                           @endif
-                                       
+
                                     </div>
                                  </li>
 
@@ -258,7 +258,7 @@
                   </div>
                   <!-- /.tab-content-wrapper -->
                </div>
-               
+
                <div id="benefits" class="tab-content-wrapper">
                   <div class="course-benefits-text">
                      <div class="container">
@@ -406,25 +406,25 @@
                               $instagram = isset($socialMedia['instagram']) ? $socialMedia['instagram'] : '';
                               $linkedIn = isset($socialMedia['linkedin']) ? $socialMedia['linkedin']: '';
                               $yt = isset($socialMedia['youtube']) ? $socialMedia['youtube'] : '';
-                                                      
+
                               $field2 = $inst['company'];
                               /*if(isset($inst['ext_url'])){
-                              
+
                                  $field2 = $inst['ext_url'];
                                  $field2 = str_replace ( "https://www.", "", $field2 );
                                  $field2 = str_replace ( "https://.", "", $field2 );
-                                 $field2 = str_replace ( "http://www.", "", $field2 );  
+                                 $field2 = str_replace ( "http://www.", "", $field2 );
                                  $field2 = str_replace ( "https:", "", $field2 );
                                  $field2 = str_replace ( "http:", "", $field2 );
                                  $field2 = str_replace ( "/", "", $field2 );
-                              
+
                               }*/
-                              
+
                               ?>
                               <div class="col-3 col-md-4 col-sm-6 col-xs-12">
                                  <div class="instructor-box">
                                     <div class="instructor-inner">
-                              
+
                                        <div class="profile-img">
                                          @if($inst['status'])
                                              <a href="{{$inst['slugable']['slug']}}"><img src="{{cdn(get_image($inst['mediable'],'instructors-testimonials'))}}"  title="{{$inst['title']}}" alt="{{$inst['title']}}"></a>
@@ -454,7 +454,7 @@
                                           @if($yt !='')
                                           <li><a target="_blank" href="{{$yt}}"><img class="replace-with-svg"  src="{{cdn('/theme/assets/images/icons/social/Youtube.svg')}}" width="16" alt="Visit"></a></li>
                                           @endif
-                              
+
                                        </ul>
                                        <!-- /.instructor-inner -->
                                     </div>
@@ -580,7 +580,7 @@
                   </div>
                   <!-- /.tab-content-wrapper -->
                </div>
-               
+
 
 
                <div id="faq" class="tab-content-wrapper">
@@ -728,7 +728,7 @@ window.fbAsyncInit = function() {
 </script>
 
 <script>
-   
+
    $(document).ready(function(){
       dataLayer.push({ ecommerce: null });  // Clear the previous ecommerce object.
       dataLayer.push({
@@ -746,7 +746,7 @@ window.fbAsyncInit = function() {
       });
    })
 
-  
+
 
 
 </script>
