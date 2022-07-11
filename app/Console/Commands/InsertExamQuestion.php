@@ -55,8 +55,12 @@ class InsertExamQuestion extends Command
             if($key == 0 || !$line[1]){
                 continue;
             }
-
-            $questions[] = ['question' => $line[1], 'answer-credit' => 1, 'answers' => [$line[2],$line[3],$line[4],$line[5]], 'question-type' => "radio buttons", 'correct_answer' => [$line[3]]];
+            
+            $questions[] = ['question' => trim(str_replace(['"',"'"], "", $line[1])), 'answer-credit' => 1, 
+                            'answers' => [trim(str_replace(['"',"'"], "", $line[2])),trim(str_replace(['"',"'"], "", $line[3])),trim(str_replace(['"',"'"], "", $line[4])),trim(str_replace(['"',"'"], "", $line[5]))], 
+                            'question-type' => "radio buttons", 
+                            'correct_answer' => [trim(str_replace(['"',"'"], "", $line[3]))]
+                        ];
                     
         }
         //dd($questions);
