@@ -42,9 +42,10 @@
         <div class="tabs-wrapper fixed-tab-controls">
             <div class="tab-controls">
                 <div class="container tabs-container">
-
-                            <a href="#" class="mobile-tabs-menu">Overview</a>
+                            <a href="#" class="mobile-tabs-menu">Menu</a>
                             <ul class="clearfix tab-controls-list">
+                                @if(isset($sections['overview']) && $sections['overview']->first())<li><a href="#overview" class="active">{{$sections['overview']->first()->tab_title}}</a></li>@endif
+
                                 @if ($estatus == 0 || $estatus == 2 || $estatus == 5)
                                     @foreach ($tabs["tabs"]["tabs"] as $index=>$tab)
                                         @if (checkTabContent($tab, $dynamic_page_data, $tabs))
