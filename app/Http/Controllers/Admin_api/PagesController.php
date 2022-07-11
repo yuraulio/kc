@@ -39,7 +39,7 @@ class PagesController extends Controller
                 ->tableSort($request);
 
             $pages = $this->filters($request, $pages);
-            
+
             $pages = $pages->paginate($request->per_page ?? 50);
             return PageResource::collection($pages);
         } catch (Exception $e) {
@@ -385,7 +385,7 @@ class PagesController extends Controller
     {
         try {
             $ids = $request->selected;
-        
+
             // authorize action
             $categories = Page::withoutGlobalScopes()->findOrFail($ids);
             foreach ($categories as $category) {

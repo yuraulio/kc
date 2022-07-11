@@ -190,8 +190,8 @@ class HomeController extends Controller
         if ($published == 0) {
             return false;
         }
-        
-        
+
+
         $data['user']['createAccount'] = false;
 
         if (!($user = Auth::user()) && !($user = User::where('email', request()->email[0])->first())) {
@@ -203,13 +203,13 @@ class HomeController extends Controller
             unset($formData['terms_condition']);
             unset($formData['update']);
             unset($formData['type']);
-            
+
             foreach ($formData as $key => $value) {
                 $input[$key] = $value[0];
             }
 
             $input['password'] = Hash::make(date('Y-m-dTH:i:s'));
-            
+
             $user = User::create($input);
 
             $code = Activation::create([
@@ -223,7 +223,7 @@ class HomeController extends Controller
 
             $cookieValue = base64_encode($user->id . date("H:i"));
             setcookie('auth-'.$user->id, $cookieValue, time() + (1 * 365 * 86400), "/"); // 86400 = 1 day
-        
+
             $coockie = new CookiesSMS;
             $coockie->coockie_name = 'auth-'.$user->id;
             $coockie->coockie_value = $cookieValue;
@@ -256,7 +256,7 @@ class HomeController extends Controller
             else {
                 $next = $next + 1;
             }
-    
+
             $optionKC->value=$next;
             $optionKC->save();
         }
@@ -271,7 +271,7 @@ class HomeController extends Controller
         $data['eventSlug'] =  url('/') . '/' . $content->getSlug();
         $user->notify(new WelcomeEmail($user, $data));
 
-        
+
         $student = $user->events->where('id', $content->id)->first();
         if (!$student) {
 
@@ -343,7 +343,7 @@ class HomeController extends Controller
                 $content->users()->save($user, ['comment'=>'free','expiration'=>$expiration_date,'paid'=>true]);
             }
         }
-        
+
         Cart::instance('default')->destroy();
         Session::forget('pay_seats_data');
         Session::forget('transaction_id');
@@ -367,14 +367,14 @@ class HomeController extends Controller
         $data['event']['facebook'] = url('/') . '/' .$content->slugable->slug .'?utm_source=Facebook&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&quote='.urlencode("Proudly participating in ". $content->title . " by Knowcrunch.");
         $data['event']['twitter'] = urlencode("Proudly participating in ". $content->title . " by Knowcrunch. 💙");
         $data['event']['linkedin'] = urlencode(url('/') . '/' .$content->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $content->title . " by Knowcrunch. 💙");
-        
+
         Session::put('thankyouData', $data);
         return redirect('/thankyou');
         //return view('theme.cart.new_cart.thank_you_free',$data);
     }
 
     public function enrollToWaitingList(Event $content){
-        
+
         $published = $content->published;
         $status = $content->status;
         if($published == 0 || $status != 5){
@@ -394,9 +394,9 @@ class HomeController extends Controller
 
             return false;
         }
-        
 
-        
+
+
         $data['user']['createAccount'] = false;
 
         if( !($user = Auth::user()) && !($user = User::where('email',request()->email[0])->first()) ){
@@ -409,13 +409,13 @@ class HomeController extends Controller
             unset($formData['terms_condition']);
             unset($formData['update']);
             unset($formData['type']);
-            
+
             foreach($formData as $key => $value){
                 $input[$key] = $value[0];
             }
 
             $input['password'] = Hash::make(date('Y-m-dTH:i:s'));
-            
+
             $user = User::create($input);
 
             $code = Activation::create([
@@ -429,7 +429,7 @@ class HomeController extends Controller
 
             $cookieValue = base64_encode($user->id . date("H:i"));
             setcookie('auth-'.$user->id, $cookieValue, time() + (1 * 365 * 86400), "/"); // 86400 = 1 day
-        
+
             $coockie = new CookiesSMS;
             $coockie->coockie_name = 'auth-'.$user->id;
             $coockie->coockie_value = $cookieValue;
@@ -472,8 +472,8 @@ class HomeController extends Controller
         $data['eventSlug'] =  url('/') . '/' . $content->getSlug();
         $user->notify(new WelcomeEmail($user,$data));
 
-        
-       
+
+
         Cart::instance('default')->destroy();
         Session::forget('pay_seats_data');
         Session::forget('transaction_id');
@@ -497,7 +497,7 @@ class HomeController extends Controller
         $data['event']['facebook'] = url('/') . '/' .$content->slugable->slug .'?utm_source=Facebook&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&quote='.urlencode("Proudly participating in ". $content->title . " by Knowcrunch.");
         $data['event']['twitter'] = urlencode("Proudly participating in ". $content->title . " by Knowcrunch. 💙");
         $data['event']['linkedin'] = urlencode(url('/') . '/' .$content->slugable->slug .'?utm_source=LinkedIn&utm_medium=Post_Student&utm_campaign=KNOWCRUNCH_BRANDING&title='."Proudly participating in ". $content->title . " by Knowcrunch. 💙");
-        
+
         Session::put('thankyouData',$data);
         return redirect('/thankyou');
         //return view('theme.cart.new_cart.thank_you_free',$data);
@@ -522,7 +522,7 @@ class HomeController extends Controller
     private function instructor($page)
     {
         $data = CMS::getInstructorData($page);
-        
+
         return view('theme.pages.instructor_page', $data);
     }
 
@@ -598,27 +598,27 @@ class HomeController extends Controller
         $data['venues'] = $event->venues->toArray();
         $data['syllabus'] = $event->syllabus->toArray();
         $data['is_event_paid'] = 0;
-        $data['sumStudents'] = get_sum_students_course($event->category->first());//isset($event->category[0]) ? $event->category[0]->getSumOfStudents() : 0; 
+        $data['sumStudents'] = get_sum_students_course($event->category->first());//isset($event->category[0]) ? $event->category[0]->getSumOfStudents() : 0;
         $data['showSpecial'] = false;
         $data['showAlumni'] = $event->ticket()->where('type','Alumni')->where('active',true)->first() ? true : false;;
         $data['is_joined_waiting_list'] = 0;
         $data['partners'] = $event->partners;
 
         if($event->ticket()->where('type','Early Bird')->first()){
-            $data['showSpecial'] = ($event->ticket()->where('type','Early Bird')->first() && $event->ticket()->where('type','Special')->first())  ? 
-                                    ($event->ticket()->where('type','Special')->first()->pivot->active 
+            $data['showSpecial'] = ($event->ticket()->where('type','Early Bird')->first() && $event->ticket()->where('type','Special')->first())  ?
+                                    ($event->ticket()->where('type','Special')->first()->pivot->active
                                         || ($event->ticket()->where('type','Early Bird')->first()->pivot->quantity > 0)) : false;
         }else{
-            
+
             $data['showSpecial'] = $event->ticket()->where('type','Special')->first() ? $event->ticket()->where('type','Special')->first()->pivot->active  : false;
         }
 
-        
+
 
         $price = -1;
 
         foreach($data['tickets'] as $ticket){
-            
+
             if($ticket['pivot']['price'] && $ticket['pivot']['price'] > $price){
                 $price = $ticket['pivot']['price'];
             }
@@ -628,7 +628,7 @@ class HomeController extends Controller
             $price = (float) 0;
         }
         $categoryScript = $event->delivery->first() && $event->delivery->first()->id == 143 ? 'Video e-learning courses' : 'In-class courses'; //$event->category->first() ? 'Event > ' . $event->category->first()->name : '';
-        
+
         $tr_price = $price;
         if($tr_price - floor($tr_price)>0){
             $tr_price = number_format($tr_price , 2 , '.', '');
@@ -636,7 +636,7 @@ class HomeController extends Controller
             $tr_price = number_format($tr_price , 0 , '.', '');
             $tr_price = strval($tr_price);
             $tr_price .= ".00";
-            
+
         }
 
         $data['tigran'] = ['Price' => $tr_price,'Product_id' => $event->id,'Product_SKU' => $event->id,'ProductCategory' => $categoryScript, 'ProductName' =>  $event->title,'Event_ID' => 'kc_' . time() ];
@@ -649,7 +649,7 @@ class HomeController extends Controller
             }
         }
 
-        
+
 
         if(Auth::user() && count(Auth::user()->events->where('id',$event->id)) > 0){
             $data['is_event_paid'] = 1;
@@ -694,10 +694,10 @@ class HomeController extends Controller
 
         $data['is_event_paid'] = 1;
         $data['desc'] = $topicDescription;
-        
+
         $pdf = PDF::loadView('theme.event.syllabus_print', $data)->setPaper('a4', 'landscape');
         $fn = $slug->slugable->title . '.pdf';
-        
+
         return $pdf->stream($fn);
     }
 

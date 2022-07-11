@@ -142,7 +142,7 @@ class TemplatesController extends Controller
     {
         try {
             $ids = $request->selected;
-        
+
             // authorize action
             $categories = Template::findOrFail($ids);
             foreach ($categories as $category) {

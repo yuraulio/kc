@@ -84,8 +84,6 @@ class PagesController extends Controller
         $data['metas'] = $page->metable;
         $data['media'] = $page->mediable;
 
-        
-  
         if($page->template == "corporate-template"){
             $data['brands'] = Logos::with('medias')->where('type', 'corporate_brands')->get();
             return view('admin.pages.create_corporate',$data);
@@ -123,11 +121,11 @@ class PagesController extends Controller
                     $user->terms = $request->terms;
                     $user->save();
                 }
-                
+
             }
 
         }elseif($page->id == 4753){
-            
+
             $users = User::all();
             foreach($users as $user){
                 if(!$user->instructor->first()){
