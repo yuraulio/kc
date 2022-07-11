@@ -410,7 +410,7 @@ if (!function_exists('get_certifation_crendetial')){
         function generate_invoice_number($paymentMethod){
             
             $paymentMethod = PaymentMethod::find($paymentMethod);
-
+            //dd($paymentMethod);
             if(!$paymentMethod){
                 return 0;
             }

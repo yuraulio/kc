@@ -471,7 +471,7 @@ class WebhookController extends BaseWebhookController
 			//$invoiceNumber = Invoice::has('event')->latest()->first()->invoice;
 			if($sub['amount']/100 > 0){
 
-				if(!Invoice::latest()->has('subscription')->first()){
+				/*if(!Invoice::latest()->has('subscription')->first()){
 					$invoiceNumber = sprintf('%04u', 1);
 				}else{
 
@@ -479,13 +479,14 @@ class WebhookController extends BaseWebhookController
 					$invoiceNumber = preg_replace('/[^0-9.]+/', '', $invoiceNumber);
 					$invoiceNumber = (int) $invoiceNumber + 1;
 					$invoiceNumber = sprintf('%04u', $invoiceNumber);
-				}
-
+				}*/
+				$invoiceNumber = generate_invoice_number($paymentMethod->id);
 				$elearningInvoice = new Invoice;
 				$elearningInvoice->name = isset(json_decode($transaction->billing_details,true)['billname']) ? 
 						json_decode($transaction->billing_details,true)['billname'] : $user->firstname . ' '. $user->lastname;
 				$elearningInvoice->amount = $transaction->amount ;
-				$elearningInvoice->invoice = 'S' . $invoiceNumber;
+				//$elearningInvoice->invoice = 'S' . $invoiceNumber;
+				$elearningInvoice->invoice = $invoiceNumber;
 				$elearningInvoice->date = Carbon::today()->toDateString();
 				$elearningInvoice->instalments_remaining =1 ;
 				$elearningInvoice->instalments = 1;
