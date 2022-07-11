@@ -44,7 +44,7 @@
 
 
     $imageedit = "false";
-    if($event && $event['path'] != null) {
+    if(isset($event) && $event && $event['path'] != null) {
         $imageedit = "true";
     }
 ?>

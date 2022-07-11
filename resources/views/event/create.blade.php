@@ -149,7 +149,7 @@
                                     @include('alerts.feedback', ['field' => 'subtitle'])
                                 </div>
 
-                                {{{--<div class="form-group{{ $errors->has('header') ? ' has-danger' : '' }}">
+                                {{--<div class="form-group{{ $errors->has('header') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-header">{{ __('Header') }}</label>
                                     <input type="text" name="header" id="input-header" class="form-control{{ $errors->has('header') ? ' is-invalid' : '' }}" placeholder="{{ __('Header') }}" value="{{ old('header') }}" autofocus>
 
