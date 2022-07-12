@@ -99,16 +99,22 @@
         <textarea :id="keyput" v-model="editorData" class="form-control" maxlength="10000" rows="3" placeholder=""></textarea>
     </div>
 
-    <!-- <div v-if="type == 'image'" class="">
-        <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
-        <uploadImage @updatedimage="updatedimage" :key="keyput" :prevalue="value"  :keyput="keyput"></uploadImage>
-    </div> -->
-
     <div v-if="type == 'text_editor'" class="text-editor-input">
         <label v-if="label" :for="keyput" class="form-label">{{ label }}</label>
-        <ckeditor v-if="texteditor == 'ck'" :height="300" :editor="editor" :id="keyput" v-model="editorData" :config="editorConfig"></ckeditor>
 
-        <editor-content v-if="texteditor == 'tiny'" :editor="editorT" />
+        <editor 
+            :height="300" 
+            :id="keyput" 
+            v-model="editorData"
+            api-key="a1kixngfovaz95jof9wofnkhlbcaheix0nf2uvz4zlyy26ia"
+            :init="{
+                plugins: 'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons',
+                toolbar: 'fullscreen styles | undo redo | h1 h2 h3 h4 h5 h6 | bold italic underline strikethrough | fontfamily fontsize blocks | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | preview print | insertfile image media link anchor codesample | ltr rtl',
+                toolbar_sticky: true,
+                toolbar_mode: 'wrap',
+                height: 300,
+            }"
+        ></editor>
     </div>
 
     <div v-if="type == 'contentComponent'" class="">
@@ -158,22 +164,18 @@
 <script>
 
 import uploadImage from './upload-image.vue'
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import contentComponent from './content-components.vue'
-import { Editor, EditorContent } from '@tiptap/vue-2'
-import StarterKit from '@tiptap/starter-kit'
 import multidropdown from './multidropdown.vue'
 import MediaManager from '../media/media-manager.vue';
-
+import Editor from '@tinymce/tinymce-vue'
 
 export default {
     components: {
         uploadImage,
-        ClassicEditor,
         contentComponent,
-        EditorContent,
         multidropdown,
-        MediaManager
+        MediaManager,
+        Editor,
     },
     props: {
         type: {
@@ -207,51 +209,7 @@ export default {
     data() {
         return {
             loadstart: {},
-            texteditor: 'ck',
-            editor: ClassicEditor,
             editorData: this.value,
-            editorT: null,
-            editorConfig: {
-                height: 300,
-                toolbar: {
-                    items: [
-                        'heading', '|',
-                        'fontfamily', 'fontsize', '|',
-                        'alignment', '|',
-                        'fontColor', 'fontBackgroundColor', '|',
-                        'bold', 'italic', 'strikethrough', 'underline', 'subscript', 'superscript', '|',
-                        'link', '|',
-                        'outdent', 'indent', '|',
-                        'bulletedList', 'numberedList', 'todoList', '|',
-                        'code', 'codeBlock', '|',
-                        'insertTable', '|',
-                        'uploadImage', 'blockQuote', '|',
-                        'undo', 'redo'
-                    ],
-                    shouldNotGroupWhenFull: true
-                },
-                heading: {
-                    options: [
-                        { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-                        { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-                        { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-                        { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
-                        { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
-                        { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
-                        {
-                            model: 'subtitle',
-                            view: {
-                                name: 'p',
-                                classes: 'editor-subtitle'
-                            },
-                            title: 'Subtitle',
-                            class: 'ck-heading_subtitle',
-                            converterPriority: 'high'
-                        }
-                    ]
-                }
-                // The configuration of the editor.
-            },
         };
     },
     methods: {
@@ -329,44 +287,34 @@ export default {
         if (this.value) {
             this.editorData = this.value;
         }
-        this.editorT = new Editor({
-            content: this.editorData,
-            extensions: [
-                StarterKit,
-            ],
-        })
     },
     beforeDestroy() {
-        this.editorT.destroy()
     },
 }
 </script>
 
 <style>
-    .ck.ck-editor__main>.ck-editor__editable {
-        min-height: 200px;
+    .tox-statusbar__branding {
+        display: none;
     }
 
-    .page-edit-simple .ck-editor:not(:hover) .ck-editor__top{
+    .tox.tox-tinymce, .tox.tox-tinymce div {
+        border: 0px!important;
+    }
+    .tox-toolbar, .tox-menubar {
+        background: none!important;
+        background-color: #fff!important;
+    }
+    /*
+    .page-edit-simple .tox.tox-tinymce:not(:hover) .tox-editor-header {
         visibility: hidden;
     }
-    .page-edit-simple .ck-editor .ck-editor__top * {
-        border: 0px;
+    */
+    .tox-tinymce--toolbar-sticky-on .tox-editor-header {
+        top: 75px!important;
     }
-    .page-edit-simple .ck-editor .ck-toolbar {
-        background-color: transparent;
-    }
-    .page-edit-simple .ck-editor:not(:hover) .ck-content {
-        border: 0px;
-        box-shadow: none;
-    }
-    .page-edit-simple .ck-editor .ck-content {
-        border: 0px;
-    }
-    .page-edit-simple .ck.ck-editor__editable:not(.ck-editor__nested-editable).ck-focused {
-        outline: none;
-        border: 0px;
-        box-shadow: none;
+    .tox-fullscreen .navbar-custom {
+        display: none;
     }
 </style>
 
