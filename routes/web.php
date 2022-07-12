@@ -51,6 +51,10 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
     Route::resource('delivery', 'DeliveryController', ['except' => ['show']]);
     Route::resource('menu', 'MenuController', ['except' => ['show']]);
 
+    // New Edit Event
+    Route::get('/events/{event}/edit_new', 'EventController@edit_new')->name('event.update_new');
+    Route::post('/events/{event}/update_new', 'EventController@update_new')->name('events.update_new_post');
+
     Route::post('/summary/update/{summary}', 'SummaryController@update')->name('summary.update');
 
     //Participants
@@ -201,6 +205,9 @@ Route::group(['middleware' => 'auth.aboveauthor', 'prefix' => 'admin'], function
 
     //Event assign method
     Route::post('events/assing-method/{event}', 'EventController@assignPaymentMethod')->name('event.assing-method');
+
+    //Event remove method
+    Route::post('events/remove-method/{event}', 'EventController@removePaymentMethod')->name('event.remove-method');
 
     //EventAssingCoupon
     Route::post('events/assing-coupon/{event}/{coupon}', 'EventController@assignCoupon')->name('event.assign_coupon');
