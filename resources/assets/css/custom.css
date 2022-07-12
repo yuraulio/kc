@@ -84,13 +84,13 @@
     max-width: none!important;
 }
 .form-overlap {
-    margin-top: -170px!important; 
+    margin-top: -170px!important;
     margin-bottom: 20px!important;
 }
 
 @media only screen and (max-width: 767px) {
     .form-overlap {
-        margin-top: 0px!important; 
+        margin-top: 0px!important;
     }
 }
 
@@ -198,12 +198,12 @@
 }
 
 /* homepage events - start */
-.homepage-events .section-text-carousel, 
-.homepage-events .carousel-column, 
-.homepage-events .carousel-wrapper, 
-.homepage-events .boxes-carousel, 
-.homepage-events .owl-stage-outer, 
-.homepage-events .owl-stage, 
+.homepage-events .section-text-carousel,
+.homepage-events .carousel-column,
+.homepage-events .carousel-wrapper,
+.homepage-events .boxes-carousel,
+.homepage-events .owl-stage-outer,
+.homepage-events .owl-stage,
 .homepage-events .owl-item {
     width: 100%!important;
     height: 100%!important;
@@ -262,7 +262,14 @@
 .homepage-events .slide .box-text h3 a:hover{ color: #000000; text-decoration: underline; }
 .homepage-events .slide .box-text .location{letter-spacing: 1px;font-size: 12px;color: #81be00;display: block;line-height: 1.2;margin-bottom: 0;text-transform: uppercase;}
 .homepage-events .slide .box-text .location:hover{color: #5b8600;}
-.homepage-events .slide .box-text .date{ letter-spacing: 1px; font-size: 12px; text-transform: uppercase; color: #ff9000; display: block; margin-bottom: 12px; }
+.homepage-events .slide .box-text .hours,
+.homepage-events .slide .box-text .language,
+.homepage-events .slide .box-text .certificate,
+.homepage-events .slide .box-text .students,
+.homepage-events .slide .box-text .dates,
+.homepage-events .slide .box-text .days,
+.homepage-events .slide .box-text .times
+{ letter-spacing: 1px; font-size: 12px; text-transform: uppercase; color: #ff9000; display: block; margin-bottom: 12px; }
 .homepage-events .slide .box-text .btn{ font-size: 13px; }
 
 @media (min-width: 990px) and (max-width: 1200px) {
@@ -362,7 +369,7 @@
 }
 
 footer {
-    margin-top:auto; 
+    margin-top:auto;
 }
 .page-wrapper {
     min-height: 100vh;

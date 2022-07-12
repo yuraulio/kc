@@ -94,12 +94,12 @@
                                 </div>
 
                                 <div class="form-group{{ $errors->has('hours') ? ' has-danger' : '' }} col-sm-12 col-md-2 col-lg-2">
-                                    <input type="text" id="input-hours" name="hours" class="form-control{{ $errors->has('hours') ? ' is-invalid' : '' }}" placeholder="{{ __('Course Hours') }}" value="{{ old('hours') }}" autofocus>
-                                    @include('alerts.feedback', ['field' => 'hours'])
+                                    <input type="text" id="input-hours" name="course[{{'hours'}}][{{'hour'}}]" class="form-control{{ $errors->has('hours') ? ' is-invalid' : '' }}" placeholder="{{ __('Course Hours') }}" value="{{ old('hours') }}" autofocus>
+                                    {{--@include('alerts.feedback', ['field' => 'hours'])--}}
                                 </div>
 
                                 <div class="form-group col-sm-12 col-md-4 col-lg-3">
-                                    <input style="background:aliceblue;" type="text" name="course[{{'hours'}}][{{'text'}}]" id="input-hours-text" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('hours') }}" autofocus>
+                                    <input style="background:aliceblue;" type="text" name="course[{{'hours'}}][{{'text'}}]" id="input-hours-text" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('hours_text') }}" autofocus>
                                 </div>
 
 
@@ -578,7 +578,7 @@
 
                                 <div class="col-sm-12 col-md-6 col-lg-4 form-group{{ $errors->has('partner_id') ? ' has-danger' : '' }} course-partner-list d-none ">
 
-                                    <select multiple name="partner_id[]" id="input-partner_id" class="form-control" placeholder="{{ __('Partner') }}" required>
+                                    <select multiple name="partner_id[]" id="input-partner_id" class="form-control" placeholder="{{ __('Partner') }}">
                                         @foreach ($partners as $partner)
                                             <option value="{{ $partner->id }}" >{{ $partner->name }}</option>
                                         @endforeach
@@ -718,7 +718,7 @@
 
                                         <span data-infowrapper="certificate" class="input-group-addon input-group-append input-icon-wrapper">
                                             <span class="btn btn-outline-primary input-icon">
-                                                <span class="fa fa-calendar"></span>
+                                                <img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Level.svg" alt="">
                                             </span>
                                         </span>
                                         <input type="hidden" value="{{ old('course_certification_icon_path') }}" id="certificate_path" name="course[{{'certificate'}}][{{'icon'}}][{{'path'}}]">
@@ -826,7 +826,8 @@
                                         <h3 class="mb-0 title">{{ __('Course students') }}</h3>
                                         <span data-infowrapper="students" class="input-group-addon input-group-append input-icon-wrapper">
                                             <span class="btn btn-outline-primary input-icon">
-                                                <span class="fa fa-calendar"></span>
+                                                {{--<span class="fa fa-calendar"></span>--}}
+                                                <img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Group_User.1.svg" alt="">
                                             </span>
                                         </span>
                                         <input type="hidden" value="{{ old('course_students_icon_path') }}" id="students_path" name="course[{{'students'}}][{{'icon'}}][{{'path'}}]">
@@ -863,7 +864,7 @@
 
 
 
-                                {{--<div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
+                                <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
                                     <select name="category_id" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}">
                                         <option value="">-</option>
@@ -873,7 +874,7 @@
                                     </select>
 
                                     @include('alerts.feedback', ['field' => 'category_id'])
-                                </div>--}}
+                                </div>
 
                                 {{--@include('admin.city.event.index')--}}
                                 {{--@include('admin.partner.event.index')--}}

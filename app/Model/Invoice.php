@@ -40,7 +40,7 @@ class Invoice extends Model
 
     public function scopeFilterInvoiceElearning($query, $filters)
     {
-        
+
 
         if (isset($filters['status']) && $filters['status'] != 'any') {
 
@@ -48,23 +48,23 @@ class Invoice extends Model
 
             $query->whereIn('trans_id',  $transactions);
         }
-     
+
         if (isset($filters['event']) && $filters['event'] != 'any') {
             $query->where('event_id', '=' ,$filters['event']);
         }
 
 
         if (isset($filters['search_term']) && strlen($filters['search_term']) > 1) {
-           
+
             $search_term_str = '%'.implode("%", explode(" ", $filters['search_term'])).'%';
             $query->where('name', 'like', $search_term_str);
 
-            
+
         }
 
 
         /*if (isset($filters['search_term']) && strlen($filters['search_term']) > 1) {
-            
+
                 $search_term_str = '%'.implode("%", explode(" ", $filters['search_term'])).'%';
                 $events = Content::where('title', 'like', $search_term_str)
                     ->orWhere('slug', 'like', $search_term_str)
@@ -77,7 +77,7 @@ class Invoice extends Model
 
         }*/
 
-        
+
         return $query;
     }
 
@@ -86,17 +86,17 @@ class Invoice extends Model
 
 
         $data=[];
-        
+
         $eventId = $this->event->first() ? $this->event->first()->id : -1;
         $paymentMethodId = 2;
         if( $user = $this->user->first() ){
-        
+
             if($event = $user->events()->wherePivot('event_id',$eventId)->first()){
-            //if($event = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first()){  
+            //if($event = $user->events_for_user_list()->wherePivot('event_id',$eventId)->first()){
                 $paymentMethodId = $event->pivot->payment_method;
 
             }
-        
+
         }
 
         $billing = json_decode($this->transaction->first()->billing_details,true);
@@ -125,14 +125,14 @@ class Invoice extends Model
         if(isset($billing['billafm'])){
             $billafm = $billing['billafm'];
         }
-    
+
         if($this->amount - floor($this->amount)>0){
             $data['amount'] = number_format ($this->amount , 2 , ',', '.');
         }else{
             $data['amount'] = number_format ($this->amount , 0 , ',', '.');
         }
 
-        
+
         $data['date'] = date('d') . '-' . date('F') . '-' . date('Y');
         $data['title'] = $this->event->first()->title;
         $data['name'] = $this->name;
@@ -155,7 +155,7 @@ class Invoice extends Model
         $data['installments']= ($this->instalments > 1) ? ($this->instalments - $this->instalments_remaining) . ' of ' . $this->instalments : '';
 
         //dd($data);
-        
+
         $contxt = stream_context_create([
             'ssl' => [
             'verify_peer' => FALSE,
@@ -167,7 +167,7 @@ class Invoice extends Model
         $pdf = PDF::setOptions([
             'isHtml5ParserEnabled'=> true,
             'isRemoteEnabled' => true,
-           
+
           ]);
 
           $pdf->getDomPDF()->setHttpContext($contxt);
@@ -175,7 +175,7 @@ class Invoice extends Model
          //$fn = 'myinvoice' . '.pdf';
          $fn = date('Y-m-d',strtotime($this->created_at)) . ' - Invoice - ' . $this->invoice . '.pdf';
         return $pdf;
-    
+
     }
 
     public function generateCronjobInvoice(){
@@ -184,18 +184,18 @@ class Invoice extends Model
         $data=[];
         $remainingInst=0;
         $date = '-';
-       
+
 
         $eventId = $this->event->first() ? $this->event->first()->id : -1;
         $paymentMethodId = 2;
         if( $user = $this->user->first() ){
-        
+
             if($event = $user->events()->wherePivot('event_id',$eventId)->first()){
 
                 $paymentMethodId = $event->pivot->payment_method;
 
             }
-        
+
         }
 
         $billing = json_decode($this->transaction()->first()->billing_details,true);
@@ -224,8 +224,8 @@ class Invoice extends Model
         if(isset($billing['billafm'])){
             $billafm = $billing['billafm'];
         }
-    
-    
+
+
         /*$this->instalments_remaining = $this->instalments_remaining - 1;
         if( $this->instalments_remaining >=1){
             //$this->date = date('d-m-Y', strtotime('+1 month', strtotime($this->date)));
@@ -239,7 +239,7 @@ class Invoice extends Model
         }
         $this->instalments_remaining = 0;
         $this->save();
-    
+
         /*if(!Invoice::latest()->doesntHave('subscription')->first()){
             $invoiceNumber = sprintf('%04u', 1);
         }else{
@@ -248,7 +248,7 @@ class Invoice extends Model
             $invoiceNumber = sprintf('%04u', $invoiceNumber);
         }*/
 
-        
+
         $user = $this->user()->first();
         $event = $this->event()->first();
         $transaction = $this->transaction()->first();
@@ -264,7 +264,7 @@ class Invoice extends Model
 
         $newInvoice->save();
 
-        
+
         //$newInvoice->event()->save($this->event()->first());
         //$newInvoice->user()->save($this->user()->first());
         //$newInvoice->transaction()->save($this->transaction()->first());
@@ -278,7 +278,7 @@ class Invoice extends Model
         }else{
             $data['amount'] = number_format ($newInvoice->amount , 0 , ',', '.');
         }
-  
+
         $data['date'] = date('d') . '-' . date('F') . '-' . date('Y');
         $data['title'] = $newInvoice->event->first()->title;
         $data['name'] = $newInvoice->name;
@@ -301,7 +301,7 @@ class Invoice extends Model
         $pdf = PDF::setOptions([
             'isHtml5ParserEnabled'=> true,
             'isRemoteEnabled' => true,
-           
+
           ]);
 
           $pdf->getDomPDF()->setHttpContext($contxt);
@@ -309,26 +309,26 @@ class Invoice extends Model
         //$fn = 'myinvoice' . '.pdf';
         $fn = date('Y-m-d',strtotime($this->created_at)) . ' - Invoice - ' . $this->invoice . '.pdf';
         return [$pdf,$newInvoice];
-    
+
     }
 
     public function getInvoice($planDecription = false){
-              
+
         $data=[];
 
         $eventId = $this->event->first() ? $this->event->first()->id : -1;
         $paymentMethodId = 2;
         if( $user = $this->user->first() ){
-        
+
             if($event = $user->events()->wherePivot('event_id',$eventId)->first()){
 
                 $paymentMethodId = $event->pivot->payment_method;
 
             }
-        
+
         }
 
-       
+
         $billing = json_decode($this->transaction->first()->billing_details,true);
         //$billing = json_decode($this->user->first()->billing_details,true);
 
@@ -376,9 +376,58 @@ class Invoice extends Model
             $plan = $this->event->first()->plans->first();
             $data['description'] = $plan->invoice_text ? $plan->invoice_text : $plan->name;
 
-            
+
         }else{
-            $data['description'] = $this->event->first()->summary1->where('section','date')->first() ? $this->event->first()->summary1->where('section','date')->first()->title : '';
+            //dd($this->event->first()->summary1->where('section','date')->first()->title);
+            //$data['description'] = $this->event->first()->summary1->where('section','date')->first() ? $this->event->first()->summary1->where('section','date')->first()->title : '';
+
+            $data['description'] = '';
+            if($this->event->first()->event_info != null){
+                $info = $this->event->first()->event_info->formedData();
+
+                $hours = $info['hours'];
+                $hours_visible = $hours['visible'];
+                $language_visible = $info['language']['visible'];
+                $certificate_visible = $info['certificate']['visible'];
+                $students_visible = $info['students']['visible'];
+
+                if(isset($info['inclass'])){
+                    $inclass_dates = $info['inclass']['dates'];
+                    $inclass_days = $info['inclass']['days'];
+                    $inclass_times = $info['inclass']['times'];
+                }
+
+                if($hours_visible['invoice'] && $hours['hour'] != null){
+                    $data['description'] = $data['description'] .$hours['hour'].' '. ($hours['text'] != null ? $hours['text'] : '').', ';
+                }
+
+
+                if($language_visible['invoice'] && $info['language']['text'] != null){
+                    $data['description'] =  $data['description'] .$info['language']['text'].', ';
+                }
+                if($certificate_visible['invoice'] && $info['certificate']['type'] != null){
+                    $data['description'] =  $data['description'] . $info['certificate']['type'].', ';
+                }
+
+                if($students_visible['invoice'] && get_sum_students_course($event->category->first()) > (int)$info['students']['number']){
+                    $data['description'] =  $data['description'] . get_sum_students_course($event->category->first()). ($info['students']['text'] != null ? $info['students']['text'].', ' : ', ');
+                }
+
+                if(isset($info['inclass'])){
+                    if($inclass_dates['visible']['invoice'] && $inclass_dates['text'] != null){
+                        $data['description'] =  $data['description'] . $inclass_dates['text'] .', ';
+                    }
+                    if($inclass_days['visible']['invoice'] && $inclass_days['text'] != null){
+                        $data['description'] =  $data['description'] . $inclass_days['text'].', ';
+                    }
+                    if($inclass_times['visible']['invoice'] && $inclass_times['text'] != null){
+                        $data['description'] =  $data['description'] . $inclass_times['text'].', ';
+                    }
+
+                }
+                $data['description'] = rtrim($data['description'], ', ');
+
+            }
 
         }
 
@@ -395,7 +444,7 @@ class Invoice extends Model
         $pdf = PDF::setOptions([
             'isHtml5ParserEnabled'=> true,
             'isRemoteEnabled' => true,
-           
+
           ]);
 
           $pdf->getDomPDF()->setHttpContext($contxt);
@@ -404,7 +453,7 @@ class Invoice extends Model
          //$fn = 'myinvoice' . '.pdf';
          $fn = date('Y-m-d',strtotime($this->created_at)) . '-Invoice-' . $this->invoice . '.pdf';
         return $pdf->stream($fn);
-    
+
     }
 
     function getZipOfInvoices($zip, $planDecription = false,$invoicesNumber){
@@ -415,7 +464,7 @@ class Invoice extends Model
         $eventId = $this->event->first() ? $this->event->first()->id : -1;
         $paymentMethodId = 2;
         if( $user = $this->user->first() ){
-        
+
             if($event = $user->events()->wherePivot('event_id',$eventId)->first()){
 
                 if(!isset($invoicesNumber[$user->id.'-'.$eventId])){
@@ -426,10 +475,10 @@ class Invoice extends Model
                 $paymentMethodId = $event->pivot->payment_method;
 
             }
-        
+
         }
 
-       
+
         $billing = json_decode($this->transaction->first()->billing_details,true);
         //$billing = json_decode($this->user->first()->billing_details,true);
 
@@ -477,7 +526,7 @@ class Invoice extends Model
             $plan = $this->event->first()->plans->first();
             $data['description'] = $plan->invoice_text ? $plan->invoice_text : $plan->name;
 
-            
+
         }else{
             $data['description'] = $this->event->first()->summary1->where('section','date')->first() ? $this->event->first()->summary1->where('section','date')->first()->title : '';
 
@@ -491,20 +540,20 @@ class Invoice extends Model
             'allow_self_signed'=> TRUE
             ]
           ]);
-  
+
           $pdf = PDF::setOptions([
             'isHtml5ParserEnabled'=> true,
             'isRemoteEnabled' => true,
-          
+
           ]);
-  
-         
+
+
           $pdf->getDomPDF()->setHttpContext($contxt);
-  
+
           $pdf;
 
           //$fn = 'myinvoice' . '.pdf';
-          $fn = date('Y-m-d',strtotime($this->created_at)) . '-Invoice-' . $this->invoice . '.pdf';        
+          $fn = date('Y-m-d',strtotime($this->created_at)) . '-Invoice-' . $this->invoice . '.pdf';
           $pdf->loadView('admin.invoices.elearning_invoice',compact('data'))->setPaper('a4', 'portrait')->save(public_path('invoices_folder/'.$fn))->stream($fn);
 
           $zip->addFile(public_path('invoices_folder/'.$fn), $fn);

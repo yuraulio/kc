@@ -439,7 +439,7 @@ class EventController extends Controller
         $event_info = $this->prepareInfo($infoData, $request->status, $request->delivery, $partner, $request->syllabus, $request->city_id);
         $this->updateEventInfo($event_info, $event->id);
 
-        return redirect()->route('event.edit_new',$event->id)->withStatus(__('Event successfully created.'));
+        return redirect()->route('event.update_new',$event->id)->withStatus(__('Event successfully created.'));
     }
 
     /**
@@ -1027,26 +1027,6 @@ class EventController extends Controller
     {
         $data = [];
 
-        switch($status){
-            case 0:
-                $status = 'Open';
-                break;
-            case 1:
-                $status = 'Close';
-                break;
-            case 2:
-                $status = 'Soldout';
-                break;
-            case 3:
-                $status = 'Completed';
-                break;
-            case 4:
-                $status = 'My Account Only';
-                break;
-            case 5:
-                $status = 'Waiting';
-        }
-
         $delivery = Delivery::find($delivery)['name'];
         $city = City::find($cityId);
 
@@ -1055,7 +1035,8 @@ class EventController extends Controller
 
         $data['course_status'] = $status;
         $data['course_delivery'] = $delivery;
-        $data['course_hours'] = $requestData['hours']['text'];
+        $data['course_hours_text'] = $requestData['hours']['text'];
+        $data['course_hours_hour'] = $requestData['hours']['hour'];
 
         $data['course_partner'] = $partner;
         $data['course_manager'] = ($syllabus != null) ? true : false;
@@ -1255,6 +1236,7 @@ class EventController extends Controller
         return $data;
 
     }
+
     public function prepareVisibleData($data = false)
     {
         $visible_returned_data = ['landing' => 0, 'home' => 0, 'list' => 0, 'invoice' => 0, 'emails' => 0];
@@ -1291,7 +1273,8 @@ class EventController extends Controller
         $infos->course_status = $event_info['course_status'];
         $infos->course_delivery = $event_info['course_delivery'];
 
-        $infos->course_hours = $event_info['course_hours'];
+        $infos->course_hours = $event_info['course_hours_hour'];
+        $infos->course_hours_text = $event_info['course_hours_text'];
         $infos->course_hours_visible = $event_info['course_hours_visible'];
         $infos->course_hours_icon = $event_info['course_hours_icon'];
 

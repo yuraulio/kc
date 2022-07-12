@@ -10,7 +10,7 @@ class InvoiceController extends Controller
 {
     public function getInvoice($invoice){
 
-       
+
         $invoice = Invoice::where('id',$invoice)->first();
 
 

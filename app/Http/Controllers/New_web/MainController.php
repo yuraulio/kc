@@ -60,45 +60,6 @@ class MainController extends Controller
         ]);
     }
 
-    public function getEventInfo($event)
-    {
-        $infos = $event->event_info;
-        $data = [];
-
-        $data['status'] = $infos['course_status'];
-
-        $data['hours']['text'] = $infos['course_hours'];
-        $data['hours']['icon'] = json_decode($infos['course_hours_icon']);
-        $data['hours']['visible'] = json_decode($infos['course_hours_visible']);
-
-        $data['hours']['text'] = $infos['course_hours'];
-        $data['hours']['icon'] = json_decode($infos['course_icon'], true);
-        $data['hours']['visible'] = $infos['course_visible'];
-
-        $data['language']['language'] = $infos['course_language'];
-        $data['language']['icon'] = json_decode($infos['course_language'], true);
-        $data['language']['visible'] = $infos['course_language_visible'];
-
-        $data['delivery'] = $infos['course_delivery'];
-
-        if($event->is_inclass_course()){
-            $data['delivery']['inclass']['city']['text'] = $infos['course_inclass_city'];
-            $data['delivery']['inclass']['city']['icon'] = $infos['course_inclass_city_icon'];
-
-            $data['delivery']['inclass']['dates']['text'] = $infos['course_inclass_dates'];
-
-            /// SOON
-        }
-
-
-
-
-
-
-
-        return $data;
-    }
-
     /**
      * Show page
      *
@@ -117,8 +78,7 @@ class MainController extends Controller
                 $event = $modelSlug->slugable;
                 $page = Page::withoutGlobalScope("published")->whereType("Course page")->whereDynamic(true)->first();
                 $dynamicPageData = CMS::getEventDataNew($event);
-                $dynamicPageData['info'] = $this->getEventInfo($event);
-                dd($dynamicPageData);
+                $dynamicPageData['info'] = $event->event_info->formedData();
             } elseif ($modelSlug && $modelSlug->slugable != null && get_class($modelSlug->slugable) == "App\Model\Instructor") {
                 $instructor = $modelSlug->slugable;
                 $page = Page::withoutGlobalScope("published")->whereType("Trainer page")->whereDynamic(true)->first();

@@ -33,6 +33,7 @@
 @endphp
 
 @if($homepage["event_types"]->id == 1)
+<p>111111111</p>
     <div class="row homepage-events mt-5">
         @foreach($inclassEvents as $data)
             @foreach($data['events'] as $event)
@@ -63,9 +64,39 @@
                                 <a href="{{ $event['city'][0]['slugable']['slug'] }}" class="location">{{ $event['city'][0]['name'] }}</a>
                                 @endif
                                 <?php $dateLaunch = !$event['launch_date'] ? date('F Y', strtotime($event['published_at'])) : date('F Y', strtotime($event['launch_date']));?>
-                                <span class="date">{{$dateLaunch}}, {{ $event['hours'] }} hours</span>
+
+
+                                <?php
+                                    if($event['event_info'] != null ){
+
+                                        $hours_visible = json_decode($event['event_info']['course_hours_visible'], true);
+                                        $language_visible = json_decode($event['event_info']['course_language_visible'], true);
+
+                                        $inclass_dates = json_decode($event['event_info']['course_inclass_dates'], true);
+                                        $inclass_times = json_decode($event['event_info']['course_inclass_times'], true);
+                                        $inclass_days = json_decode($event['event_info']['course_inclass_days'], true);
+
+                                        $certificate_visible = json_decode($event['event_info']['course_certification_visible'], true);
+                                        $students_visible = json_decode($event['event_info']['course_students_visible'], true);
+
+                                        //dd($inclass_dates);
+
+                                    }
+
+                                ?>
+
+                                <span class="date">{{$dateLaunch}} </span>
+                                <span class="hours">@if($hours_visible['home']) {{ $event['event_info']['course_hours'] }} {{ ($event['event_info']['course_hours_text'] != null) ? $event['event_info']['course_hours_text'] : '' }}@endif</span>
+                                <span class="language">@if($language_visible['home'] && $event['event_info']['course_language'] != null) {{ $event['event_info']['course_language'] }} @endif</span>
+                                <span class="certificate">@if($certificate_visible['home'] && $event['event_info']['course_certification_type'] != null) {{ $event['event_info']['course_certification_type'] }} @endif</span>
+
+                                <span class="dates">@if($inclass_dates['visible']['home']) {{ $inclass_dates['text'] }} @endif</span>
+                                <span class="days">@if($inclass_days['visible']['home']) {{ $inclass_days['text'] }} @endif</span>
+                                <span class="times">@if($inclass_times['visible']['home']) {{ $inclass_times['text'] }} @endif</span>
+
+                                <span class="students">@if($students_visible['home'] && $event['sumStudents'] > (int)$event['event_info']['course_students_number']) {{ $event['sumStudents'] }} {{ ($event['event_info']['course_students_text'] != null ? $event['event_info']['course_students_text'] : '')}} @endif</span>
                                 @if(isset($event['slugable']) && $event['slugable']['slug'] != '')
-                                    @if ($data["free"])
+                                    @if ($event['event_info']['course_payment_method'] == 'free')
                                         <a href="{{ $event['slugable']['slug'] }}" class="btn btn--sm btn--secondary">enroll for free</a>
                                     @elseif($event['status'] != 0 && $event['status'] != 5)
                                         <a href="{{ $event['slugable']['slug'] }}" class="btn btn--sm btn--secondary btn--sold-out">sold out</a>
@@ -85,6 +116,7 @@
 @endif
 
 @if($homepage["event_types"]->id == 2)
+<p>222222222222</p>
     <div class="row homepage-events mt-5">
         @foreach($elearningEvents as $data)
             @foreach($data['events'] as $event)
@@ -122,12 +154,28 @@
                                 $url = url($slug);
                             ?>
 
+                            <?php
+
+                                if($event['event_info'] != null ){
+
+                                    $hours_visible = json_decode($event['event_info']['course_hours_visible'], true);
+                                    $language_visible = json_decode($event['event_info']['course_language_visible'], true);
+
+                                    $certificate_visible = json_decode($event['event_info']['course_certification_visible'], true);
+                                    $students_visible = json_decode($event['event_info']['course_students_visible'], true);
+
+                                }
+                            ?>
                             <h3><a href="{{$url}}">{{ $until }}</a></h3>
                             <div class="box-footer">
                                 <a href="/video-on-demand-courses" class="location"> VIDEO E-LEARNING COURSES</a>
-                                <span class="date">{{ $event['hours'] }} hours</span>
+                                <span class="hours">@if($hours_visible['home'] && $event['event_info']['course_hours'] != null) {{ $event['event_info']['course_hours'] }} {{ $event['event_info']['course_hours_text'] }} @endif</span>
+                                <span class="language">@if($language_visible['home'] && $event['event_info']['course_language'] != null) {{ $event['event_info']['course_language'] }} @endif</span>
+                                <span class="certificate">@if($certificate_visible['home'] && $event['event_info']['course_certification_type'] != null) {{ $event['event_info']['course_certification_type'] }} @endif</span>
+
+                                <span class="students">@if($students_visible['home'] && $event['sumStudents'] > (int)$event['event_info']['course_students_number']) {{ $event['sumStudents'] }} {{ ($event['event_info']['course_students_text'] != null ? $event['event_info']['course_students_text'] : '')}} @endif</span>
                                 @if(isset($event['slugable']) && $event['slugable']['slug'] != '')
-                                    @if ($data["free"])
+                                    @if ($event['event_info']['course_payment_method'] == 'free')
                                         <a href="{{ $event['slugable']['slug'] }}" class="btn btn--sm btn--secondary">enroll for free</a>
                                     @elseif($event['status'] != 0 && $event['status'] != 5)
                                         <a href="{{ $event['slugable']['slug'] }}" class="btn btn--sm btn--secondary btn--sold-out">sold out</a>

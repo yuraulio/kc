@@ -21,8 +21,8 @@
 
     <main id="main-area" role="main" class="bootstrap-classes">
         <div id="app">
-            @foreach ($content as $data)
 
+            @foreach ($content as $data)
                 @include("new_web.layouts.rows")
 
             @endforeach

@@ -4,6 +4,7 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Model\Event;
 
 class EventInfo extends Model
 {
@@ -15,6 +16,7 @@ class EventInfo extends Model
         'event_id',
         'course_status',
         'course_hours',
+        'course_hours_text',
         'course_hours_visible',
         'course_hours_icon',
         'course_language',
@@ -46,4 +48,53 @@ class EventInfo extends Model
         'course_students_visible',
         'course_students_icon',
     ];
+
+    public function formedData()
+    {
+        $infos = $this;
+        $data = [];
+
+        $data['status'] = $infos['course_status'];
+
+        $data['hours']['hour'] = $infos['course_hours'];
+        $data['hours']['text'] = $infos['course_hours_text'];
+        $data['hours']['icon'] = json_decode($infos['course_hours_icon'],true);
+        $data['hours']['visible'] = json_decode($infos['course_hours_visible'], true);
+
+        $data['language']['text'] = $infos['course_language'];
+        $data['language']['icon'] = json_decode($infos['course_language_icon'], true);
+        $data['language']['visible'] = json_decode($infos['course_language_visible'], true);
+
+        $data['delivery'] = $infos['course_delivery'];
+
+        if($this->event->is_inclass_course()){
+
+            //dd($infos['course_inclass_city']);
+            $data['inclass']['city']['text'] = $infos['course_inclass_city'];
+            $data['inclass']['city']['icon'] = json_decode($infos['course_inclass_city_icon'], true);
+
+            $data['inclass']['dates'] = json_decode($infos['course_inclass_dates'], true);
+            $data['inclass']['days'] = json_decode($infos['course_inclass_days'], true);
+            $data['inclass']['times'] = json_decode($infos['course_inclass_times'], true);
+
+        }
+
+        $data['certificate']['messages']['success'] = $infos['course_certification_name_success'];
+        $data['certificate']['messages']['failure'] = $infos['course_certification_name_failure'];
+        $data['certificate']['type'] = $infos['course_certification_type'];
+        $data['certificate']['visible'] = json_decode($infos['course_certification_visible'], true);
+        $data['certificate']['icon'] = json_decode($infos['course_certification_icon'], true);
+
+        $data['students']['number'] = (int)$infos['course_students_number'];
+        $data['students']['text'] = $infos['course_students_text'];
+        $data['students']['visible'] = json_decode($infos['course_students_visible'], true);
+        $data['students']['icon'] = json_decode($infos['course_students_icon'], true);
+
+        return $data;
+    }
+
+    public function event()
+    {
+        return $this->hasOne(Event::class, 'id','event_id');
+    }
 }

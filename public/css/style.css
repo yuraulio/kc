@@ -423,7 +423,8 @@ li.select2-results__option:empty {
     width: 100px;
 }
 
-#event_edit_form .custom-toggle.custom-published {
+#event_edit_form .custom-toggle.custom-published,
+#event_create_form .custom-toggle.custom-published {
     width: 120px;
 }
 

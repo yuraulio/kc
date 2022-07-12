@@ -91,7 +91,7 @@ if (!function_exists('get_status_by_slug')){
         else if($slug && $slug->slugable && (get_class($slug->slugable) == 'App\\Model\\Category')){
             return count($slug->slugable->events()->where('published',1)->where('status',0)->get()) > 0;
         }
-        
+
         return true;
 
     }
@@ -171,8 +171,8 @@ if (!function_exists('cdnPath')){
 
 if (!function_exists('get_image')){
     function get_image($media, $version = null) {
-         
-        
+
+
         if($version){
 
             $image = isset($media['name']) ? $media['path']  . $media['name'] : '';
@@ -325,7 +325,7 @@ if (!function_exists('get_certifation_crendetial')){
 
         $certCount = ( $certCount = Certificate::where('create_date','>=',$fromDate)->where('create_date','<=',$toDate)->count()) > 0 ? ($certCount + 1) : 1;
         $certCount = str_pad($certCount, 6, '0', STR_PAD_LEFT);
-        
+
         $certificateNumber =  date('m',$date) . date('y',$date) . $certCount;
 
         return $certificateNumber;
@@ -335,13 +335,13 @@ if (!function_exists('get_certifation_crendetial')){
     if (!function_exists('get_certifation_crendetial2')){
 
         function get_certifation_crendetial2($date = null){
-    
+
             if(!$date){
                 $date = date('Y-m');
             }
-    
+
             $index = 1;
-    
+
             $certNumber = $date . str_pad($index, 6, '0', STR_PAD_LEFT);
 
             while(Certificate::where('credential',$certNumber)->first()){
@@ -349,23 +349,26 @@ if (!function_exists('get_certifation_crendetial')){
                 $certNumber = $date . str_pad($index, 6, '0', STR_PAD_LEFT);
             }
 
-            
+
             $certificateNumber =  $certNumber = $date . str_pad($index, 6, '0', STR_PAD_LEFT);
-    
+
             return $certificateNumber;
-    
+
         }
     }
 
+    if (!function_exists('get_sum_students_course_new')){
 
-    if (!function_exists('get_sum_students_course')){
+        function get_sum_students_course_new($category){
+            if(gettype($category) == 'array'){
 
-        function get_sum_students_course($category){
-            //dd($category);
+                $category = Category::find($category['id']);
+            }
+
             if(!$category){
                 return 0;
             }
-            
+
             $sumStudents = $category->getSumOfStudents();
 
            if($category->id == 276){
@@ -398,9 +401,56 @@ if (!function_exists('get_certifation_crendetial')){
                 }
 
             }
-    
+
             return $sumStudents;
-    
+
+        }
+    }
+
+
+    if (!function_exists('get_sum_students_course')){
+
+        function get_sum_students_course($category){
+
+            if(!$category){
+                return 0;
+            }
+
+            $sumStudents = $category->getSumOfStudents();
+
+           if($category->id == 276){
+                $category = Category::find(49);
+
+                if($category){
+                    $sumStudents += $category->getSumOfStudents();
+                }
+
+           }else if($category->id == 219){
+                $categories = Category::whereIn('id',[104,268])->get();
+
+                foreach($categories as $category){
+                    $sumStudents += $category->getSumOfStudents();
+                }
+
+            }
+            else if($category->id == 183){
+                $categories = Category::whereIn('id',[277])->get();
+
+                foreach($categories as $category){
+                    $sumStudents += $category->getSumOfStudents();
+                }
+
+            }else if($category->id == 250){
+                $categories = Category::whereIn('id',[50,244])->get();
+
+                foreach($categories as $category){
+                    $sumStudents += $category->getSumOfStudents();
+                }
+
+            }
+
+            return $sumStudents;
+
         }
     }
 
@@ -408,7 +458,7 @@ if (!function_exists('get_certifation_crendetial')){
     if (!function_exists('generate_invoice_number')){
 
         function generate_invoice_number($paymentMethod){
-            
+
             $paymentMethod = PaymentMethod::find($paymentMethod);
             //dd($paymentMethod);
             if(!$paymentMethod){
@@ -418,13 +468,13 @@ if (!function_exists('get_certifation_crendetial')){
             $option = Option::where('name','payments_invoice')->first();
             $invNumber = json_decode($option->settings,true);
             $invoiceNumber = $paymentMethod->prefix . date('Ymd') . $invNumber[$paymentMethod->id];
-    
+
             $invNumber[$paymentMethod->id] = $invNumber[$paymentMethod->id] + 1;
             $option->settings = json_encode($invNumber);
             $option->save();
 
             return $invoiceNumber;
-    
+
         }
     }
 

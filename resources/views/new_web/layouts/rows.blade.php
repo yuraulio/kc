@@ -1,5 +1,4 @@
 @if(isset($data->width) && $data->width == "full")
-
     <div class="background-{{$data->color}}">
         <div class="container-fluid">
             <div class="row">
@@ -39,10 +38,15 @@
         <div class="container ps-4 pe-4">
             <div class="row">
                 @foreach ($data->columns as $column)
+                {{$column->template->key}}
                     <div class="col-md-{{ isset($column->width) ? ($column->width * 2) : (12 / count($data->columns)) }}">
                         {{--@includeIf("new_web.components." . $column->template->key)--}}
                         @if($column->template->key == 'course_details_component')
                             @includeIf("new_web.components." . $column->template->key.'_new')
+                        @elseif($column->template->key == 'homepage_events_component')
+                            @includeIf("new_web.components.". $column->template->key .'_new')
+                        @elseif($column->template->key == 'events_list_component')
+                            @includeIf("new_web.components.". $column->template->key .'_new')
                         @else
                             @includeIf("new_web.components." . $column->template->key)
                         @endif
@@ -53,6 +57,7 @@
     </div>
 @else
     @foreach ($data->columns as $column)
+    {{'1'}}
         {{--@includeIf("new_web.components." . $column->template->key)--}}
         @if($column->template->key == 'course_details_component')
             @includeIf("new_web.components." . $column->template->key.'_new')

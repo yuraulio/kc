@@ -300,12 +300,12 @@
 
 
                                             <div class="form-group{{ $errors->has('hours') ? ' has-danger' : '' }} col-sm-12 col-md-2 col-lg-2">
-                                                <input type="text" id="input-hours" name="hours" class="form-control{{ $errors->has('hours') ? ' is-invalid' : '' }}" placeholder="{{ __('Course Hours') }}" value="{{ old('hours', $event->hours) }}hr" autofocus>
-                                                @include('alerts.feedback', ['field' => 'hours'])
+                                                <input type="text" id="input-hours" name="course[{{'hours'}}][{{'hour'}}]" class="form-control{{ $errors->has('hours') ? ' is-invalid' : '' }}" placeholder="{{ __('Course Hours') }}" value="{{ old('hours', ($info != null && $info['course_hours']) ? $info['course_hours'] : '' ) }}" autofocus>
+                                                {{--@include('alerts.feedback', ['field' => 'hours'])--}}
                                             </div>
 
                                             <div class="form-group col-sm-12 col-md-4 col-lg-3">
-                                                <input style="background:aliceblue;" type="text" name="course[{{'hours'}}][{{'text'}}]" id="input-hours-text" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('hours', ($info != null && $info['course_hours']) ? $info['course_hours'] : '' ) }}" autofocus>
+                                                <input style="background:aliceblue;" type="text" name="course[{{'hours'}}][{{'text'}}]" id="input-hours-text" class="form-control" placeholder="{{ __('alphanumeric text') }}" value="{{ old('hours', ($info != null && $info['course_hours_text']) ? $info['course_hours_text'] : '' ) }}" autofocus>
                                             </div>
 
                                             <div class="form-group col-sm-12 col-md-6 col-lg-7">
@@ -635,7 +635,7 @@
 
                                                     <div class="form-group col-sm-12 col-md-5 col-lg-2">
                                                         <div class="input-group">
-                                                            <input type="text" class="form-control" value="{{ (isset($day) && isset($day['text']) ) ? $day['text'] : '' }}" name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'text'}}]" placeholder="Day" >
+                                                            <input type="text" class="form-control" value="{{ (isset($days) && isset($days['text']) ) ? $days['text'] : '' }}" name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'text'}}]" placeholder="Day" >
                                                             <span data-infowrapper="inclass_day" class="input-group-addon input-group-append input-icon-wrapper-inclass">
                                                                 <span class="btn btn-outline-primary input-icon">
 
@@ -1190,7 +1190,8 @@
                                                             @if($course_certification_icon  != null && $course_certification_icon ['path'] != null)
                                                                 <img src="{{ asset($course_certification_icon ['path']) }}"/>
                                                             @else
-                                                                <span class="fa fa-calendar"></span>
+                                                                {{--<span class="fa fa-calendar"></span>--}}
+                                                                <img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Level.svg" alt="">
                                                             @endif
                                                         </span>
                                                     </span>
@@ -1416,8 +1417,10 @@
 
                                         @endif
 
+                                        <hr>
 
-                                        {{--<div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
+
+                                        <div class="form-group{{ $errors->has('category_id') ? ' has-danger' : '' }}">
                                             <input id="old-category" name="oldCategory" value="{{isset($event->category[0]) ? $event->category[0]->id : -1}}" hidden>
                                             <label class="form-control-label" for="input-category_id">{{ __('Category') }}</label>
                                             <select name="category_id" id="input-category_id" class="form-control" placeholder="{{ __('Category') }}" required>
@@ -1435,7 +1438,7 @@
                                             </select>
 
                                             @include('alerts.feedback', ['field' => 'category_id'])
-                                        </div>--}}
+                                        </div>
 
                                         {{--<div class="form-group{{ $errors->has('type_id') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="input-type_id">{{ __('Type') }}</label>

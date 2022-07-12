@@ -95,7 +95,7 @@ class CMS
         $data['showSpecial'] = false;
         $data['showAlumni'] = $event->ticket()->where('type', 'Alumni')->where('active', true)->first() ? true : false;
         $data['partners'] = $event->partners;
-        $data['info'] = $event->event_info;
+        //$data['info'] = $event->event_info;
 
 
 
@@ -255,8 +255,9 @@ class CMS
         $data['elearningFree'] = [];
         $data['inclassFree'] = [];
 
-        $categories =Category::with('slugable', 'events.slugable', 'events.city', 'events', 'events.mediable')->orderBy('priority', 'asc')->get()->toArray();
+        $categories =Category::with('slugable', 'events.slugable', 'events.city', 'events', 'events.mediable', 'events.event_info', 'events.category')->orderBy('priority', 'asc')->get()->toArray();
 
+        //dd($categories);
         foreach ($categories as $category) {
             if (!key_exists($category['id'], $data['nonElearningEvents'])) {
                 $data['nonElearningEvents'][$category['id']]['name'] = $category['name'];
@@ -289,19 +290,30 @@ class CMS
                     continue;
                 }
 
+                //dd($event);
+
                 if ($event['view_tpl'] == 'elearning_event' || $event['view_tpl'] == 'elearning_pending' || $event['view_tpl'] == 'elearning_free') {
+                    $event['sumStudents'] = get_sum_students_course_new((isset($event['category']) ? $event['category'][0] : null));
                     $data['elearningEvents'][$category['id']]['events'][] = $event;
                     $data['elearningEvents'][$category['id']]['view_tpl'] = $event['view_tpl'];
+
+                    //dd($event);
+
+
                 } elseif ($event['view_tpl'] == 'event_free' || $event['view_tpl'] == 'event_free_coupon') {
+                    $event['sumStudents'] = get_sum_students_course_new((isset($event['category']) ? $event['category'][0] : null));
                     $data['inclassFree'][$category['id']]['events'][] = $event;
+                    //$data['inclassFree'][$category['id']]['events'][]['sumStudents'] = get_sum_students_course((isset($event['category']) ? $event['category'][0] : null));
                 } /*elseif ($event['view_tpl'] == 'elearning_free') {
                     $data['elearningFree'][$category['id']]['events'][] = $event;
                 }*/ else {
+                    $event['sumStudents'] = get_sum_students_course_new((isset($event['category']) ? $event['category'][0] : null));
                     $data['nonElearningEvents'][$category['id']]['events'][] = $event;
+                    //$data['nonElearningEvents'][$category['id']]['events'][]['sumStudents'] = get_sum_students_course((isset($event['category']) ? $event['category'][0] : null));
                 }
             }
+
         }
-        //dd($data);
         foreach ($data as $key => $categories) {
             foreach ($categories as $key2 => $category) {
                 if (count($category['events']) == 0) {
@@ -313,6 +325,8 @@ class CMS
                 unset($data[$key]);
             }
         }
+
+        //dd($data);
 
         return $data;
     }
