@@ -29,9 +29,7 @@ import 'vue-toast-notification/dist/theme-sugar.css';
 
 Vue.use(VueToast);
 import Multiselect from 'vue-multiselect'
-import CKEditor from '@ckeditor/ckeditor5-vue2';
 
-Vue.use(CKEditor);
 // register globally
 Vue.component('multiselect', Multiselect)
 //Vue.$toast.open({/*
