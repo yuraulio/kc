@@ -255,7 +255,7 @@ class CMS
         $data['elearningFree'] = [];
         $data['inclassFree'] = [];
 
-        $categories =Category::with('slugable', 'events.slugable', 'events.city', 'events', 'events.mediable', 'events.event_info', 'events.category')->orderBy('priority', 'asc')->get()->toArray();
+        $categories =Category::with('slugable', 'events.slugable', 'events.city', 'events', 'events.mediable', 'events.event_info')->orderBy('priority', 'asc')->get()->toArray();
 
         //dd($categories);
         foreach ($categories as $category) {

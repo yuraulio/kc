@@ -33,7 +33,7 @@
 @endphp
 
 @if($homepage["event_types"]->id == 1)
-<p>111111111</p>
+
     <div class="row homepage-events mt-5">
         @foreach($inclassEvents as $data)
             @foreach($data['events'] as $event)
