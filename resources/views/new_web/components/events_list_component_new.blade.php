@@ -80,22 +80,22 @@
 
 
 
-                                        @if($info['hours']['visible']['list'] && $info['hours']['hour'] != null)
-                                            <div class="duration">@if($info['hours']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['hours']['icon']['path'])}}" alt="{{$info['hours']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt=""> @endif{{ $info['hours']['hour'] }} {{ ($info['hours']['text'] != null) ? $info['hours']['text'] : '' }}</div>
+                                        @if(isset($info['hours']['visible']) && $info['hours']['visible']['list'] && $info['hours']['hour'] != null)
+                                            <div class="duration">@if(isset($info['hours']['icon']) && $info['hours']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['hours']['icon']['path'])}}" alt="{{$info['hours']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt=""> @endif{{ $info['hours']['hour'] }} {{ ($info['hours']['text'] != null) ? $info['hours']['text'] : '' }}</div>
                                         @endif
 
 
-                                        @if($info['language']['visible']['list'] && $info['language']['text'] != null)
-                                            <div class="duration">@if($info['language']['icon'] != null &&  $info['language']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['language']['icon']['path'])}}" alt="{{ $info['language']['icon']['alt_text'] }}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Language.svg" alt=""> @endif {{ $info['language']['text'] }}</div>
+                                        @if(isset($info['language']['visible']) && $info['language']['visible']['list'] && $info['language']['text'] != null)
+                                            <div class="duration">@if(isset($info['language']) && $info['language']['icon'] != null &&  $info['language']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['language']['icon']['path'])}}" alt="{{ $info['language']['icon']['alt_text'] }}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Language.svg" alt=""> @endif {{ $info['language']['text'] }}</div>
                                         @endif
 
 
-                                        @if($info['certificate']['visible']['list'] && $info['certificate'] != null && $info['certificate']['type'] != null)
-                                        <div class="duration">@if($info['certificate']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['certificate']['icon']['path'])}}" alt="{{$info['certificate']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Level.svg" alt=""> @endif {{ $info['certificate']['type'] }}</div>
+                                        @if(isset($info['certificate']['visible']) && $info['certificate']['visible']['list'] && $info['certificate'] != null && $info['certificate']['type'] != null)
+                                        <div class="duration">@if(isset($info['certificate']) && $info['certificate']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['certificate']['icon']['path'])}}" alt="{{$info['certificate']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Level.svg" alt=""> @endif {{ $info['certificate']['type'] }}</div>
                                         @endif
 
-                                        @if($info['students']['visible']['list'] && get_sum_students_course($row->category->first()) > $info['students']['number'])
-                                            <div class="duration">@if($info['students']['icon'] != null && $info['students']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['students']['icon']['path'])}}" alt="{{$info['students']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Group_User.1.svg" alt=""> @endif {{ get_sum_students_course($row->category->first()) }} {{ $info['students']['text'] }}</div>
+                                        @if(isset($info['students']['visible']) && $info['students']['visible']['list'] && get_sum_students_course($row->category->first()) > $info['students']['number'])
+                                            <div class="duration">@if(isset($info['students']) && $info['students']['icon'] != null && $info['students']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['students']['icon']['path'])}}" alt="{{$info['students']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Group_User.1.svg" alt=""> @endif {{ get_sum_students_course($row->category->first()) }} {{ $info['students']['text'] }}</div>
                                         @endif
                                     </div>
                                 </div>
@@ -125,7 +125,7 @@
                                         }
                                     ?>
 
-                                    @if($row['event_info']['course_payment_method'] == 'free')
+                                    @if(isset($row['event_info']['course_payment_method']) && $row['event_info']['course_payment_method'] == 'free')
                                         <div class="price">free</div>
                                         <a href="{{ $slug }}" class="btn btn--secondary btn--md">Enroll For Free</a>
                                     @elseif($row->view_tpl == 'elearning_pending')
@@ -185,36 +185,36 @@
                                         @endif
 
 
-                                        @if($info['hours']['visible']['list'] && $info['hours']['hour'] != null)
-                                            <div class="expire-date">@if($info['hours']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['hours']['icon']['path'])}}" alt="{{$info['hours']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt=""> @endif{{ $info['hours']['hour'] }} {{ ($info['hours']['text'] != null) ? $info['hours']['text'] : '' }}</div>
+                                        @if(isset($info['hours']['visible']) && $info['hours']['visible']['list'] && $info['hours']['hour'] != null)
+                                            <div class="expire-date">@if(isset($info['hours']['icon']) && $info['hours']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['hours']['icon']['path'])}}" alt="{{$info['hours']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt=""> @endif{{ $info['hours']['hour'] }} {{ ($info['hours']['text'] != null) ? $info['hours']['text'] : '' }}</div>
                                         @endif
 
-                                        @if($info['language']['visible']['list'] && $info['language']['text'] != null)
-                                            <div class="language">@if($info['language']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['language']['icon']['path'])}}" alt="{{$info['language']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="theme/assets/images/icons/Language.svg" alt=""> @endif {{ $info['language']['text'] }}</div>
+                                        @if(isset($info['language']['visible']) && $info['language']['visible']['list'] && $info['language']['text'] != null)
+                                            <div class="language">@if(isset($info['language']['icon']) && $info['language']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['language']['icon']['path'])}}" alt="{{$info['language']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="theme/assets/images/icons/Language.svg" alt=""> @endif {{ $info['language']['text'] }}</div>
                                         @endif
 
-                                        @if($info['certificate']['visible']['list'] && $info['certificate'] != null && $info['certificate']['type'] != null)
-                                        <div class="certification_type">@if($info['certificate']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['certificate']['icon']['path'])}}" alt="{{$$info['certificate']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Level.svg" alt=""> @endif {{ $info['certificate']['type'] }}</div>
+                                        @if(isset($info['certificate']['visible']) && $info['certificate']['visible']['list'] && $info['certificate'] != null && $info['certificate']['type'] != null)
+                                        <div class="certification_type">@if(isset($info['certificate']['icon']) && $info['certificate']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['certificate']['icon']['path'])}}" alt="{{$$info['certificate']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Level.svg" alt=""> @endif {{ $info['certificate']['type'] }}</div>
                                         @endif
 
-                                        @if($info['students']['visible']['list'] && get_sum_students_course($row->category->first()) > $info['students']['number'])
-                                            <div class="students">@if($info['students']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['students']['icon']['path'])}}" alt="{{$info['students']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Group_User.1.svg" alt=""> @endif {{ get_sum_students_course($row->category->first()) }} {{ $info['students']['text'] }}</div>
+                                        @if(isset($info['students']['visible']) && $info['students']['visible']['list'] && get_sum_students_course($row->category->first()) > $info['students']['number'])
+                                            <div class="students">@if(isset($info['students']['icon']) && $info['students']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['students']['icon']['path'])}}" alt="{{$info['students']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Group_User.1.svg" alt=""> @endif {{ get_sum_students_course($row->category->first()) }} {{ $info['students']['text'] }}</div>
                                         @endif
 
 
 
-                                        @if($info['inclass']['dates']['visible']['list'] && $info['inclass']['dates']['text'] != null)
+                                        @if(isset($info['inclass']['dates']['visible']) && $info['inclass']['dates']['visible']['list'] && $info['inclass']['dates']['text'] != null)
 
-                                            <div class="dates">@if($info['inclass']['dates']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['inclass']['dates']['icon']['path'])}}" alt="{{$info['inclass']['dates']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt=""> @endif {{ $info['inclass']['dates']['text'] }}</div>
+                                            <div class="dates">@if(isset($info['inclass']['dates']['icon']) && $info['inclass']['dates']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['inclass']['dates']['icon']['path'])}}" alt="{{$info['inclass']['dates']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt=""> @endif {{ $info['inclass']['dates']['text'] }}</div>
 
                                         @endif
-                                        @if($info['inclass']['days']['visible']['list'] && $info['inclass']['days']['text'] != null)
-                                            <div class="days">@if($info['inclass']['days']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['inclass']['days']['icon']['path'])}}" alt="{{$info['inclass']['days']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt=""> @endif {{ $info['inclass']['days']['text'] }}</div>
+                                        @if(isset($info['inclass']['days']['visible']) && $info['inclass']['days']['visible']['list'] && $info['inclass']['days']['text'] != null)
+                                            <div class="days">@if(isset($info['inclass']['days']['icon']) && $info['inclass']['days']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['inclass']['days']['icon']['path'])}}" alt="{{$info['inclass']['days']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt=""> @endif {{ $info['inclass']['days']['text'] }}</div>
                                         @endif
 
-                                        @if($info['inclass']['times']['visible']['list'] && $info['inclass']['times']['text'] != null)
+                                        @if(isset($info['inclass']['times']['visible']) && $info['inclass']['times']['visible']['list'] && $info['inclass']['times']['text'] != null)
 
-                                            <div class="times">@if($info['inclass']['times']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['inclass']['times']['icon']['path'])}}" alt="{{$info['inclass']['times']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt=""> @endif {{ $info['inclass']['times']['text'] }}</div>
+                                            <div class="times">@if(isset($info['inclass']['times']['icon']) && $info['inclass']['times']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['inclass']['times']['icon']['path'])}}" alt="{{$info['inclass']['times']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt=""> @endif {{ $info['inclass']['times']['text'] }}</div>
 
                                         @endif
 
@@ -252,7 +252,7 @@
                                         <?php $etstatus = $row['status']; ?>
                                     @endif
 
-                                    @if($row['event_info']['course_payment_method'] == 'free')
+                                    @if(isset($row['event_info']['course_payment_method']) && $row['event_info']['course_payment_method'] == 'free')
                                     <div class="price">free</div>
                                     <a href="{{ $slug }}" class="btn btn--secondary btn--md">Enroll For Free</a>
                                     @elseif($row->view_tpl == 'elearning_pending')
@@ -323,36 +323,36 @@
                                             @endforeach
                                         @endif
 
-                                        @if($info['hours']['visible']['list'] && $info['hours']['hour'] != null)
-                                            <div class="expire-date">@if($info['hours']['icon'] != null && $info['hours']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['hours']['icon']['path'])}}" alt="{{$info['hours']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt=""> @endif{{ $info['hours']['hour'] }} {{ ($info['hours']['text'] != null) ? $info['hours']['text'] : '' }}</div>
+                                        @if(isset($info['hours']['visible']) && $info['hours']['visible']['list'] && isset($info['hours']['hour']) && $info['hours']['hour'] != null)
+                                            <div class="expire-date">@if(isset($info['hours']['icon']) && $info['hours']['icon'] != null && $info['hours']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['hours']['icon']['path'])}}" alt="{{$info['hours']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt=""> @endif{{ $info['hours']['hour'] }} {{ ($info['hours']['text'] != null) ? $info['hours']['text'] : '' }}</div>
                                         @endif
 
-                                        @if($info['language']['visible']['list'] && $info['language']['text'] != null)
-                                            <div class="language">@if($info['language']['icon'] != null && $info['language']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['language']['icon']['path'])}}" alt="{{$info['language']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Language.svg" alt=""> @endif {{ $row['event_info']['course_language'] }}</div>
+                                        @if(isset($info['language']['visible']) && $info['language']['visible']['list'] && isset($info['language']['text']) && $info['language']['text'] != null)
+                                            <div class="language">@if(isset($info['language']['icon']) && $info['language']['icon'] != null && $info['language']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['language']['icon']['path'])}}" alt="{{$info['language']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Language.svg" alt=""> @endif {{ $row['event_info']['course_language'] }}</div>
                                         @endif
 
-                                        @if($info['certificate']['visible']['list'] && $info['certificate'] != null && $info['certificate']['type'] != null)
-                                        <div class="certification_type">@if($info['certificate']['icon'] != null && $info['certificate']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['certificate']['icon']['path'])}}" alt="{{$info['certificate']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Level.svg" alt=""> @endif {{ $row['event_info']['course_certification_type'] }}</div>
+                                        @if(isset($info['certificate']['visible']) && $info['certificate']['visible']['list'] && isset($info['certificate']) && $info['certificate'] != null && $info['certificate']['type'] != null)
+                                        <div class="certification_type">@if(isset($info['certificate']['icon']) && isset($info['certificate']['icon']) && $info['certificate']['icon'] != null && $info['certificate']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['certificate']['icon']['path'])}}" alt="{{$info['certificate']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Level.svg" alt=""> @endif {{ $row['event_info']['course_certification_type'] }}</div>
                                         @endif
 
-                                        @if($info['students']['visible']['list'] && get_sum_students_course($row->category->first()) > $info['students']['number'])
-                                            <div class="students">@if($info['students']['icon'] != null && $info['students']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['students']['icon']['path'])}}" alt="{{$info['students']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Group_User.1.svg" alt=""> @endif {{ get_sum_students_course($row->category->first()) }} {{ $row['event_info']['course_students_text'] }}</div>
+                                        @if(isset($info['students']['visible']) && $info['students']['visible']['list'] && get_sum_students_course($row->category->first()) > $info['students']['number'])
+                                            <div class="students">@if(isset($info['students']['icon']) && isset($info['students']['icon']) && $info['students']['icon'] != null && $info['students']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['students']['icon']['path'])}}" alt="{{$info['students']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Group_User.1.svg" alt=""> @endif {{ get_sum_students_course($row->category->first()) }} {{ $row['event_info']['course_students_text'] }}</div>
                                         @endif
 
 
 
-                                        @if($info['inclass']['times'] != null && $info['inclass']['dates']['visible']['list'] && $info['inclass']['dates']['text'] != null)
+                                        @if(isset($info['inclass']['dates']) && $info['inclass']['dates'] != null && $info['inclass']['dates']['visible']['list'] && isset($info['inclass']['dates']['text']) && $info['inclass']['dates']['text'] != null)
 
-                                            <div class="certification_type">@if($info['inclass']['dates']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['inclass']['dates']['icon']['path'])}}" alt="{{$info['inclass']['dates']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt=""> @endif {{ $info['inclass']['dates']['text'] }}</div>
+                                            <div class="dates">@if(isset($info['inclass']['dates']['icon']) && isset($info['inclass']['dates']['icon']['path']) && $info['inclass']['dates']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['inclass']['dates']['icon']['path'])}}" alt="{{$info['inclass']['dates']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt=""> @endif {{ $info['inclass']['dates']['text'] }}</div>
 
                                         @endif
-                                        @if($info['inclass']['times'] != null && $info['inclass']['days']['visible']['list'] && $info['inclass']['days']['text'] != null)
-                                            <div class="certification_type">@if($info['inclass']['days']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['inclass']['days']['icon']['path'])}}" alt="{{$info['inclass']['days']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt=""> @endif {{ $info['inclass']['days']['text'] }}</div>
+                                        @if(isset($info['inclass']['days']) && $info['inclass']['days'] != null && $info['inclass']['days']['visible']['list'] && $info['inclass']['days']['text'] != null)
+                                            <div class="dates">@if(isset($info['inclass']['days']['icon']) && isset($info['inclass']['days']['icon']['path']) && $info['inclass']['days']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['inclass']['days']['icon']['path'])}}" alt="{{$info['inclass']['days']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt=""> @endif {{ $info['inclass']['days']['text'] }}</div>
                                         @endif
 
-                                        @if($info['inclass']['times'] != null && $info['inclass']['times']['visible']['list'] && $info['inclass']['times']['text'] != null)
+                                        @if(isset($info['inclass']['times']) && $info['inclass']['times'] != null && $info['inclass']['times']['visible']['list'] && isset($info['inclass']['times']['text']) && $info['inclass']['times']['text'] != null)
 
-                                            <div class="certification_type">@if($info['inclass']['times']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['inclass']['times']['icon']['path'])}}" alt="{{$info['inclass']['times']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt=""> @endif {{ $info['inclass']['times']['text'] }}</div>
+                                            <div class="times">@if(isset($info['inclass']['times']['icon']) && $info['inclass']['times']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['inclass']['times']['icon']['path'])}}" alt="{{$info['inclass']['times']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Start-Finish.svg" alt=""> @endif {{ $info['inclass']['times']['text'] }}</div>
 
                                         @endif
 
