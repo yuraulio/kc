@@ -66,8 +66,9 @@
                                     <?php
 
 
-                                        if($row->event_info != null){
-                                            $info = $row->event_info->formedData();
+                                        if($row->event_info() != null){
+                                            $info = $row->event_info();
+                                            //dd($info);
                                         }
 
                                     ?>
@@ -95,8 +96,8 @@
                                         <div class="certification_type">@if(isset($info['certificate']['icon']['path']) && $info['certificate']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['certificate']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Level.svg'" alt="{{$$info['certificate']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Level.svg" alt=""> @endif {{ $info['certificate']['type'] }}</div>
                                         @endif
 
-                                        @if(isset($info['students']['visible']['list']) && $info['students']['visible']['list'] && isset($info['students']['number']) && get_sum_students_course($row->category->first()) > (int)$info['students']['number'])
-                                            <div class="students">@if(isset($info['students']['icon']['path']) && $info['students']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['students']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Group_User.1.svg'" alt="{{$info['students']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Group_User.1.svg" alt=""> @endif {{ get_sum_students_course($row->category->first()) }} {{ $info['students']['text'] }}</div>
+                                        @if(isset($info['students']['visible']['list']) && $info['students']['visible']['list'] && isset($info['students']['number']) && isset($row['category'][0]) && get_sum_students_course($row['category'][0]) > (int)$info['students']['number'])
+                                            <div class="students">@if(isset($info['students']['icon']['path']) && $info['students']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['students']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Group_User.1.svg'" alt="{{$info['students']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Group_User.1.svg" alt=""> @endif {{ get_sum_students_course($row['category'][0]) }} {{ $info['students']['text'] }}</div>
                                         @endif
                                     </div>
                                 </div>
@@ -126,7 +127,7 @@
                                         }
                                     ?>
 
-                                    @if(isset($row['event_info']['course_payment_method']) && $row['event_info']['course_payment_method'] == 'free')
+                                    @if(isset($info['payment_method']) && $info['payment_method'] == 'free')
                                         <div class="price">free</div>
                                         <a href="{{ $slug }}" class="btn btn--secondary btn--md">Enroll For Free</a>
                                     @elseif($row->view_tpl == 'elearning_pending')
@@ -173,8 +174,8 @@
                                     <?php
 
 
-                                        if($row->event_info != null){
-                                            $info = $row->event_info->formedData();
+                                        if($row->event_info() != null){
+                                            $info = $row->event_info();
                                         }
 
 
@@ -201,9 +202,8 @@
                                         @if(isset($info['certificate']['visible']['list']) && $info['certificate']['visible']['list'] && $info['certificate'] != null && $info['certificate']['type'] != null)
                                         <div class="certification_type">@if(isset($info['certificate']['icon']['path']) && $info['certificate']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['certificate']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Level.svg'" alt="{{$$info['certificate']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Level.svg" alt=""> @endif {{ $info['certificate']['type'] }}</div>
                                         @endif
-
-                                        @if(isset($info['students']['visible']['list']) && $info['students']['visible']['list'] && isset($info['students']['number']) && get_sum_students_course($row->category->first()) > (int)$info['students']['number'])
-                                            <div class="students">@if(isset($info['students']['icon']['path']) && $info['students']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['students']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Group_User.1.svg'" alt="{{$info['students']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Group_User.1.svg" alt=""> @endif {{ get_sum_students_course($row->category->first()) }} {{ $info['students']['text'] }}</div>
+                                        @if(isset($info['students']['visible']['list']) && $info['students']['visible']['list'] && isset($info['students']['number']) && isset($row['category'][0]) && get_sum_students_course($row['category'][0]) > (int)$info['students']['number'])
+                                            <div class="students">@if(isset($info['students']['icon']['path']) && $info['students']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['students']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Group_User.1.svg'" alt="{{$info['students']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Group_User.1.svg" alt=""> @endif {{ get_sum_students_course($row['category'][0]) }} {{ $info['students']['text'] }}</div>
                                         @endif
 
 
@@ -257,7 +257,7 @@
                                         <?php $etstatus = $row['status']; ?>
                                     @endif
 
-                                    @if(isset($row['event_info']['course_payment_method']) && $row['event_info']['course_payment_method'] == 'free')
+                                    @if(isset($info['payment_method']) && $info['payment_method'] == 'free')
                                     <div class="price">free</div>
                                     <a href="{{ $slug }}" class="btn btn--secondary btn--md">Enroll For Free</a>
                                     @elseif($row->view_tpl == 'elearning_pending')
@@ -316,8 +316,8 @@
                                     <?php
 
 
-                                        if($row->event_info != null){
-                                            $info = $row->event_info->formedData();
+                                        if($row->event_info() != null){
+                                            $info = $row->event_info();
                                         }
 
                                    ?>
@@ -343,8 +343,8 @@
                                         <div class="certification_type">@if(isset($info['certificate']['icon']['path']) && $info['certificate']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['certificate']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Level.svg'" alt="{{$$info['certificate']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Level.svg" alt=""> @endif {{ $info['certificate']['type'] }}</div>
                                         @endif
 
-                                        @if(isset($info['students']['visible']['list']) && $info['students']['visible']['list'] && isset($info['students']['number']) && get_sum_students_course($row->category->first()) > (int)$info['students']['number'])
-                                            <div class="students">@if(isset($info['students']['icon']['path']) && $info['students']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['students']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Group_User.1.svg'" alt="{{$info['students']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Group_User.1.svg" alt=""> @endif {{ get_sum_students_course($row->category->first()) }} {{ $info['students']['text'] }}</div>
+                                        @if(isset($info['students']['visible']['list']) && $info['students']['visible']['list'] && isset($info['students']['number']) && isset($row['category'][0]) && get_sum_students_course($row['category'][0]) > (int)$info['students']['number'])
+                                            <div class="students">@if(isset($info['students']['icon']['path']) && $info['students']['icon']['path'] != null) <img class="replace-with-svg" width="20" src="{{cdn($info['students']['icon']['path'])}}" onerror="this.onerror=null;this.src='/theme/assets/images/icons/Group_User.1.svg'" alt="{{$info['students']['icon']['alt_text']}}"> @else<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Group_User.1.svg" alt=""> @endif {{ get_sum_students_course($row['category'][0]) }} {{ $info['students']['text'] }}</div>
                                         @endif
 
 

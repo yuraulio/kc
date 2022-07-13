@@ -30,7 +30,6 @@ export default {
         }
     },
     mounted()  {
-        console.log('has mounted media model')
     },
     methods: {
         imageSelected($event) {

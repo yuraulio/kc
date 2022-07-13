@@ -303,7 +303,8 @@
                                                 <input type="text" class="form-control" value="{{ old('inclass_dates') }}" name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'text'}}]" placeholder="Dates(from/to)">
                                                 <span data-infowrapper="inclass_dates" class="input-group-addon input-group-append input-icon-wrapper-inclass">
                                                     <span class="btn btn-outline-primary input-icon">
-                                                        <span class="fa fa-calendar"></span>
+                                                        {{--<span class="fa fa-calendar"></span>--}}
+                                                        <img class="replace-with-svg" width="20" src="/theme/assets/img/summary_icons/Duration_Hours.svg" alt="">
                                                     </span>
                                                 </span>
                                                 <input type="hidden" value="{{ old('inclass_dates_icon_path') }}" id="inclass_dates_path" name="course[{{'delivery'}}][{{'inclass'}}][{{'dates'}}][{{'icon'}}][{{'path'}}]">
@@ -359,7 +360,7 @@
                                                 <input type="text" class="form-control" value="{{ old('inclass_day')}}" name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'text'}}]" placeholder="Day" >
                                                 <span data-infowrapper="inclass_day" class="input-group-addon input-group-append input-icon-wrapper-inclass">
                                                     <span class="btn btn-outline-primary input-icon">
-                                                        <span class="fa fa-calendar"></span>
+                                                    <img class="replace-with-svg" width="20" src="/theme/assets/img/summary_icons/Days-Week.svg" alt="">
                                                     </span>
                                                 </span>
                                                 <input type="hidden" value="{{ old('inclass_day_icon_path') }}" id="inclass_day_path" name="course[{{'delivery'}}][{{'inclass'}}][{{'day'}}][{{'icon'}}][{{'path'}}]">
@@ -419,7 +420,7 @@
                                                 <input type="text" class="form-control" value="{{ old('times')}}" name="course[{{'delivery'}}][{{'inclass'}}][{{'times'}}][{{'text'}}]" placeholder="Times(from/to)">
                                                 <span data-infowrapper="inclass_times" class="input-group-addon input-group-append input-icon-wrapper-inclass">
                                                     <span class="btn btn-outline-primary input-icon">
-                                                        <span class="ni ni-watch-time"></span>
+                                                    <img class="replace-with-svg" width="20" src="/theme/assets/img/summary_icons/time.svg" alt="">
 
                                                     </span>
                                                 </span>
@@ -537,15 +538,64 @@
 
                                 <div id="exp_input" class="col-sm-12 col-md-6 col-lg-3 form-group{{ $errors->has('expiration') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-expiration">{{ __('Months access') }}</label>
-                                    <input type="number" min="1" name="expiration" id="input-expiration" class="form-control{{ $errors->has('expiration') ? ' is-invalid' : '' }}" placeholder="{{ __('Enter number of months') }}" value="{{ old('expiration') }}"autofocus>
+                                    <div class="input-group">
+                                        <input type="number" min="1" name="expiration" id="input-expiration" class="form-control{{ $errors->has('expiration') ? ' is-invalid' : '' }}" placeholder="{{ __('Enter number of months') }}" value="{{ old('expiration') }}"autofocus>
+                                        <span data-infowrapper="elearning" class="input-group-addon input-group-append input-icon-wrapper-inclass">
+                                            <span class="btn btn-outline-primary input-icon">
+                                                <img class="replace-with-svg" width="20" src="/theme/assets/img/summary_icons/Duration_Hours.svg" alt="">
+                                            </span>
+                                        </span>
 
-                                    @include('alerts.feedback', ['field' => 'expiration'])
+                                        <input type="hidden" value="{{ old('elearning_icon_path') }}" id="elearning_path" name="course[{{'delivery'}}][{{'elearning'}}][{{'icon'}}][{{'path'}}]">
+                                        <input type="hidden" value="{{ old('elearning_icon_alt_text') }}" id="elearning_alt_text" id="elearning_alt_text" name="course[{{'delivery'}}][{{'elearning'}}][{{'icon'}}][{{'alt_text'}}]">
+                                    </div>
+
+                                    {{--@include('alerts.feedback', ['field' => 'expiration'])--}}
+                                </div>
+                            </div>
+
+                            <div class="row elearning_visible_wrapper d-none">
+
+                                <label class="form-control-label col-12" for="input-delivery">{{ __('Visible on:') }}</label>
+                                <div class="col-sm-12 col-md-6 col-lg-2">
+
+                                    <div class="custom-control custom-checkbox mb-3">
+                                        <input class="custom-control-input" name="course[{{'delivery'}}][{{'elearning'}}][{{'visible'}}][{{'landing'}}]" id="input-elearning-landing" type="checkbox">
+                                        <label class="custom-control-label" for="input-elearning-landing">Course landing page (summary)</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-6 col-lg-2">
+                                    <div class="custom-control custom-checkbox mb-3">
+                                        <input class="custom-control-input" name="course[{{'delivery'}}][{{'elearning'}}][{{'visible'}}][{{'home'}}]" id="input-elearning-home" type="checkbox">
+                                        <label class="custom-control-label" for="input-elearning-home">Course box in home page</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-6 col-lg-2">
+                                    <div class="custom-control custom-checkbox mb-3">
+                                        <input class="custom-control-input" name="course[{{'delivery'}}][{{'elearning'}}][{{'visible'}}][{{'list'}}]" id="input-elearning-list" type="checkbox">
+                                        <label class="custom-control-label" for="input-elearning-list">Course box in list page</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 col-md-6 col-lg-2">
+                                    <div class="custom-control custom-checkbox mb-3">
+                                        <input class="custom-control-input" name="course[{{'delivery'}}][{{'elearning'}}][{{'visible'}}][{{'invoice'}}]" id="input-elearning-invoice" type="checkbox">
+                                        <label class="custom-control-label" for="input-elearning-invoice">Invoice description</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 col-md-6 col-lg-2">
+                                    <div class="custom-control custom-checkbox mb-3">
+                                        <input class="custom-control-input" name="course[{{'delivery'}}][{{'elearning'}}][{{'visible'}}][{{'emails'}}]" id="input-elearning-emails" type="checkbox">
+                                        <label class="custom-control-label" for="input-elearning-emails">Automated emails</label>
+                                    </div>
                                 </div>
 
 
 
-
                             </div>
+
+
 
                             <hr>
 
@@ -826,8 +876,8 @@
                                         <h3 class="mb-0 title">{{ __('Course students') }}</h3>
                                         <span data-infowrapper="students" class="input-group-addon input-group-append input-icon-wrapper">
                                             <span class="btn btn-outline-primary input-icon">
-                                                {{--<span class="fa fa-calendar"></span>--}}
-                                                <img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Group_User.1.svg" alt="">
+                                                <span class="fa fa-users"></span>
+                                                {{--<img class="replace-with-svg" width="20" src="/theme/assets/images/icons/Group_User.1.svg" alt="">--}}
                                             </span>
                                         </span>
                                         <input type="hidden" value="{{ old('course_students_icon_path') }}" id="students_path" name="course[{{'students'}}][{{'icon'}}][{{'path'}}]">
@@ -847,6 +897,57 @@
                                     </div>
                                 </div>
 
+
+
+                            </div>
+                            <div class="row">
+
+                                <label class="form-control-label col-12" for="input-hours">{{ __('Visible on:') }}</label>
+
+                                <div class="col-sm-12 col-md-6 col-lg-2">
+
+                                    <div class="custom-control custom-checkbox mb-3">
+                                        <input class="custom-control-input" name="course[{{'students'}}][{{'visible'}}][{{'landing'}}]" id="input-students-landing" type="checkbox">
+                                        <label class="custom-control-label" for="input-students-landing">Course landing page (summary)</label>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-sm-12 col-md-6 col-lg-2">
+
+                                    <div class="custom-control custom-checkbox mb-3">
+                                        <input class="custom-control-input" name="course[{{'students'}}][{{'visible'}}][{{'home'}}]" id="input-students-home" type="checkbox">
+                                        <label class="custom-control-label" for="input-students-home">Course box in home page</label>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-sm-12 col-md-6 col-lg-2">
+
+                                    <div class="custom-control custom-checkbox mb-3">
+                                        <input class="custom-control-input" name="course[{{'students'}}][{{'visible'}}][{{'list'}}]" id="input-students-list" type="checkbox">
+                                        <label class="custom-control-label" for="input-students-list">Course box in list page</label>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-sm-12 col-md-6 col-lg-2">
+
+                                    <div class="custom-control custom-checkbox mb-3">
+                                        <input class="custom-control-input" name="course[{{'students'}}][{{'visible'}}][{{'invoice'}}]" id="input-students-invoice" type="checkbox">
+                                        <label class="custom-control-label" for="input-students-invoice">Invoice description</label>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-sm-12 col-md-6 col-lg-2">
+
+                                    <div class="custom-control custom-checkbox mb-3">
+                                        <input class="custom-control-input" name="course[{{'students'}}][{{'visible'}}][{{'emails'}}]" id="input-students-emails" type="checkbox">
+                                        <label class="custom-control-label" for="input-students-emails">Automated emails</label>
+                                    </div>
+
+                                </div>
 
 
                             </div>
@@ -902,12 +1003,12 @@
                                     @include('alerts.feedback', ['field' => 'delivery'])
                                 </div>--}}
 
-                                <div id="exp_input" class="form-group{{ $errors->has('expiration') ? ' has-danger' : '' }}">
+                                {{--<div id="exp_input" class="form-group{{ $errors->has('expiration') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-expiration">{{ __('Months access') }}</label>
                                     <input type="number" min="1" name="expiration" id="input-expiration" class="form-control{{ $errors->has('expiration') ? ' is-invalid' : '' }}" placeholder="{{ __('Enter number of months') }}"autofocus>
 
                                     @include('alerts.feedback', ['field' => 'expiration'])
-                                </div>
+                                </div>--}}
 
 
 
@@ -1075,8 +1176,10 @@
     $( "#input-delivery" ).change(function() {
         if($(this).val() == 139){
             $('.delivery_child_wrapper').removeClass('d-none')
+            $('.elearning_visible_wrapper').addClass('d-none')
         }else{
             $('.delivery_child_wrapper').addClass('d-none')
+            $('.elearning_visible_wrapper').removeClass('d-none')
         }
     });
 
