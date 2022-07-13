@@ -87,15 +87,31 @@ class CertificateController extends Controller
          
         ]);
 
+
        //return view($view,compact('certificate'));
         
+
+        $certificateTitle = $certificate->certificate_title;
+        //dd($certificate->event->first()->event_info()['certificate']);
+        if($certificate->event->first() && isset($certificate->event->first()->event_info()['certificate']['messages'])){
+          
+          if($certificate->success && isset($certificate->event->first()->event_info()['certificate']['messages']['success'])){
+            
+            $certificateTitle = $certificate->event->first()->event_info()['certificate']['messages']['success'];
+          }else if(!$certificate->success && isset($certificate->event->first()->event_info()['certificate']['messages']['failure'])){
+            
+            $certificateTitle = $certificate->event->first()->event_info()['certificate']['messages']['failure'];
+          }
+
+        }
+
         $certificate['firstname'] = $certificate->firstname;
         $certificate['lastname'] = $certificate->lastname;
         $certificate['certification_date'] = $certificate->certification_date;
         $certificate['expiration_date'] = $certificate->expiration_date ? date('F Y',$certificate->expiration_date) : null;
         $certificate['credential'] = $certificate->credential;
         //$certificate['certification_title'] = $certificate->certificate_title;
-        $certificate['certification_title'] = $certificate->event->first() ? $certificate->event->first()->certificate_title : $certificate->certificate_title;
+        $certificate['certification_title'] = $certificateTitle;
 
         //return view('admin.certificates.kc_diploma_2022a',compact('certificate'));
 

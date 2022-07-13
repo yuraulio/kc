@@ -269,20 +269,11 @@
                                                                         </tr>
                                                                         <tr>
                                                                            <td height="18" align="center" valign="top" class="r17-i nl2go-default-textstyle" style="color: #3b3f44; font-family: arial,helvetica,sans-serif; font-size: 16px; line-height: 1.5;">
-                                                                              <!--[if mso]> 
-                                                                              <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://knowcrunch.com/?utm_source=Knowcrunch.com&utm_medium=Information_Email" style="v-text-anchor:middle; height: 41px; width: 279px;" arcsize="10%" fillcolor="#c8d151" strokecolor="#c8d151" strokeweight="1px" data-btn="1">
-                                                                                 <w:anchorlock/>
-                                                                                 <div style="display:none;">
-                                                                                    <center class="default-button">
-                                                                                       <p><span style="color:#000000;"><strong>Keep watching</strong></span></p>
-                                                                                    </center>
-                                                                                 </div>
-                                                                              </v:roundrect>
-                                                                              <![endif]-->  <!--[if !mso]><!-- --> 
+                                                                             
                                                                               <a href="{{$elearningSlug}}?utm_source=Knowcrunch.com&utm_medium=Information_Email" class="r18-r default-button" target="_blank" data-btn="1" style="line-height: 1.15; text-decoration: none; border-style: solid; display: inline-block; -webkit-text-size-adjust: none; mso-hide: all; background-color: #c8d151; border-color: #c8d151; border-radius: 4px; border-width: 0px; color: #ffffff; font-family: arial,helvetica,sans-serif; font-size: 16px; height: 18px; padding-bottom: 12px; padding-left: 5px; padding-right: 5px; padding-top: 12px; width: 270px;">
                                                                                  <p style="margin: 0px;"><span style="color: #000000;"><strong>Keep watching</strong></span></p>
                                                                               </a>
-                                                                              <!--<![endif]--> 
+                                                                              
                                                                            </td>
                                                                         </tr>
                                                                         <tr class="nl2go-responsive-hide">
