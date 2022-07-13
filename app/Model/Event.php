@@ -725,6 +725,10 @@ class Event extends Model
 
         return $value;
     }
+    public function event_info1()
+    {
+        return $this->hasOne(EventInfo::class);
+    }
 
     public function event_info()
     {
